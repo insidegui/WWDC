@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="VideosHeaderViewController" customModule="WWDC" customModuleProvider="target">
+            <connections>
+                <outlet property="searchBarBottomConstraint" destination="chf-J6-vT8" id="Jo2-nw-awi"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY" customClass="HeaderView" customModule="WWDC" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="62"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" material="appearanceBased" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="Xsh-VS-dnl">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="62"/>
+                    <subviews>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="4Ep-ss-fl8" customClass="GRWindowMovingView">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="62"/>
+                        </customView>
+                        <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GHc-IG-Ous">
+                            <rect key="frame" x="20" y="12" width="440" height="22"/>
+                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" recentsAutosaveName="search" id="aor-jz-ssL">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </searchFieldCell>
+                            <connections>
+                                <action selector="search:" target="-2" id="jXV-sq-hUa"/>
+                            </connections>
+                        </searchField>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="RU1-af-9gf" customClass="SeparatorView" customModule="WWDC" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="1"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="AHg-f6-Ks2"/>
+                            </constraints>
+                        </customView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="RU1-af-9gf" firstAttribute="leading" secondItem="Xsh-VS-dnl" secondAttribute="leading" id="19N-oM-RD2"/>
+                        <constraint firstItem="4Ep-ss-fl8" firstAttribute="leading" secondItem="Xsh-VS-dnl" secondAttribute="leading" id="Euu-5Z-xec"/>
+                        <constraint firstAttribute="trailing" secondItem="4Ep-ss-fl8" secondAttribute="trailing" id="Qbr-Bv-WuF"/>
+                        <constraint firstAttribute="trailing" secondItem="RU1-af-9gf" secondAttribute="trailing" id="Vko-6B-sro"/>
+                        <constraint firstAttribute="bottom" secondItem="GHc-IG-Ous" secondAttribute="bottom" constant="12" id="chf-J6-vT8"/>
+                        <constraint firstAttribute="bottom" secondItem="4Ep-ss-fl8" secondAttribute="bottom" id="pSz-pJ-UTc"/>
+                        <constraint firstItem="GHc-IG-Ous" firstAttribute="leading" secondItem="Xsh-VS-dnl" secondAttribute="leading" constant="20" id="rTU-MS-ySg"/>
+                        <constraint firstItem="4Ep-ss-fl8" firstAttribute="top" secondItem="Xsh-VS-dnl" secondAttribute="top" id="sjS-hm-kSe"/>
+                        <constraint firstAttribute="trailing" secondItem="GHc-IG-Ous" secondAttribute="trailing" constant="20" id="sx0-2i-IeC"/>
+                        <constraint firstAttribute="bottom" secondItem="RU1-af-9gf" secondAttribute="bottom" id="tx3-6Z-2UB"/>
+                    </constraints>
+                </visualEffectView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Xsh-VS-dnl" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="7dn-xL-yMm"/>
+                <constraint firstItem="Xsh-VS-dnl" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="Ned-Eq-vUI"/>
+                <constraint firstAttribute="trailing" secondItem="Xsh-VS-dnl" secondAttribute="trailing" id="c8G-90-KQe"/>
+                <constraint firstAttribute="bottom" secondItem="Xsh-VS-dnl" secondAttribute="bottom" id="shr-vE-haq"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="7531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="VideoWindowController" customModule="WWDC" customModuleProvider="target">
+            <connections>
+                <outlet property="playerView" destination="A94-Zf-dtb" id="Zw4-dO-C8R"/>
+                <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="documentWindow" id="F0z-JX-Cv5" customClass="GRPlayerWindow">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="610" y="360" width="640" height="360"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <view key="contentView" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="0.0" width="640" height="360"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <avPlayerView controlsStyle="floating" translatesAutoresizingMaskIntoConstraints="NO" id="A94-Zf-dtb" customClass="GRPlayerView">
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="360"/>
+                    </avPlayerView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="A94-Zf-dtb" secondAttribute="trailing" id="MBx-iq-7KK"/>
+                    <constraint firstAttribute="bottom" secondItem="A94-Zf-dtb" secondAttribute="bottom" id="Vr4-Zf-jlv"/>
+                    <constraint firstItem="A94-Zf-dtb" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="mDh-RQ-2Ob"/>
+                    <constraint firstItem="A94-Zf-dtb" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="vjL-91-PKL"/>
+                </constraints>
+            </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
+            </connections>
+            <point key="canvasLocation" x="390" y="360"/>
+        </window>
+    </objects>
+</document>
