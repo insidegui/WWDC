@@ -10,6 +10,8 @@ import Foundation
 
 private let _internalServiceURL = "http://wwdc.guilhermerambo.me/index.json"
 private let _SharedStore = DataStore()
+private let _MemoryCacheSize = 500*1024*1024
+private let _DiskCacheSize = 1024*1024*1024
 
 class DataStore: NSObject {
     
@@ -17,15 +19,20 @@ class DataStore: NSObject {
         return _SharedStore
     }
     
+    private let sharedCache = NSURLCache(memoryCapacity: _MemoryCacheSize, diskCapacity: _DiskCacheSize, diskPath: nil)
+    
+    override init() {
+        NSURLCache.setSharedURLCache(sharedCache)
+    }
+    
     typealias fetchSessionsCompletionHandler = (Bool, [Session]) -> Void
     
-//    var cachedAppleURL: NSURL? = NSUserDefaults.standardUserDefaults().URLForKey("Apple URL")
-    var cachedAppleURL: NSURL? = nil
+    var appleSessionsURL: NSURL? = nil
     
     let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
     
     func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
-        if let appleURL = cachedAppleURL {
+        if let appleURL = appleSessionsURL {
             doFetchSessions(completionHandler)
         } else {
             let internalServiceURL = NSURL(string: _internalServiceURL)
@@ -41,7 +48,7 @@ class DataStore: NSObject {
                 
                 NSUserDefaults.standardUserDefaults().setURL(NSURL(string: appleURL)!, forKey: "Apple URL")
                 NSUserDefaults.standardUserDefaults().synchronize()
-                self.cachedAppleURL = NSURL(string: appleURL)!
+                self.appleSessionsURL = NSURL(string: appleURL)!
                 
                 self.doFetchSessions(completionHandler)
             }).resume()
@@ -49,7 +56,7 @@ class DataStore: NSObject {
     }
     
     func doFetchSessions(completionHandler: fetchSessionsCompletionHandler) {
-        session.dataTaskWithURL(cachedAppleURL!, completionHandler: { data, response, error in
+        session.dataTaskWithURL(appleSessionsURL!, completionHandler: { data, response, error in
             if data == nil {
                 completionHandler(false, [])
                 return
