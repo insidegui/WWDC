@@ -29,7 +29,7 @@ class DataStore: NSObject {
     
     var appleSessionsURL: NSURL? = nil
     
-    let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+    let URLSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
     
     func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
         if let appleURL = appleSessionsURL {
@@ -37,7 +37,7 @@ class DataStore: NSObject {
         } else {
             let internalServiceURL = NSURL(string: _internalServiceURL)
             
-            session.dataTaskWithURL(internalServiceURL!, completionHandler: { [unowned self] data, response, error in
+            URLSession.dataTaskWithURL(internalServiceURL!, completionHandler: { [unowned self] data, response, error in
                 if data == nil {
                     completionHandler(false, [])
                     return
@@ -54,7 +54,7 @@ class DataStore: NSObject {
     }
     
     func doFetchSessions(completionHandler: fetchSessionsCompletionHandler) {
-        session.dataTaskWithURL(appleSessionsURL!, completionHandler: { data, response, error in
+        URLSession.dataTaskWithURL(appleSessionsURL!, completionHandler: { data, response, error in
             if data == nil {
                 completionHandler(false, [])
                 return
@@ -89,6 +89,22 @@ class DataStore: NSObject {
                 completionHandler(false, [])
             }
         }).resume()
+    }
+    
+    func downloadSessionSlides(session: Session, completionHandler: (Bool, NSData?) -> Void) {
+        if session.slides == nil {
+            completionHandler(false, nil)
+            return
+        }
+        
+        let task = URLSession.dataTaskWithURL(NSURL(string: session.slides!)!) { data, response, error in
+            if data != nil {
+                completionHandler(true, data)
+            } else {
+                completionHandler(false, nil)
+            }
+        }
+        task.resume()
     }
     
     let defaults = NSUserDefaults.standardUserDefaults()

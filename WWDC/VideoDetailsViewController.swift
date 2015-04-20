@@ -10,7 +10,7 @@ import Cocoa
 
 class VideoDetailsViewController: NSViewController {
     
-    var players: [VideoWindowController] = []
+    var auxWindowControllers: [NSWindowController] = []
     
     var session: Session? {
         didSet {
@@ -46,18 +46,20 @@ class VideoDetailsViewController: NSViewController {
     
     @IBAction func watchVideo(sender: NSButton) {
         let playerVC = VideoWindowController(session: session!)
-        players.append(playerVC)
+        auxWindowControllers.append(playerVC)
         playerVC.showWindow(sender)
         
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserverForName(NSWindowWillCloseNotification, object: playerVC.window!, queue: nil) { _ in
-            self.players.removeObject(playerVC)
+            self.auxWindowControllers.removeObject(playerVC)
         }
     }
     
     @IBAction func viewSlides(sender: NSButton) {
-        if let url = NSURL(string: session!.slides!) {
-            NSWorkspace.sharedWorkspace().openURL(url)
+        if session!.slides != nil {
+            let pdfVC = PDFWindowController(session: session!)
+            auxWindowControllers.append(pdfVC)
+            pdfVC.showWindow(sender)
         }
     }
     

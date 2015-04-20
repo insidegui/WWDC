@@ -24,6 +24,8 @@
 		DD4F6E761AE2D82A0099BEB5 /* VideosHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E741AE2D82A0099BEB5 /* VideosHeaderViewController.swift */; };
 		DD4F6E771AE2D82A0099BEB5 /* VideosHeaderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */; };
 		DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */; };
+		DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC049CE1AE564F20008D41A /* PDFWindowController.swift */; };
+		DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC049CF1AE564F20008D41A /* PDFWindowController.xib */; };
 		DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4321AE2DF14000A0102 /* Theme.swift */; };
 		DDD7A4351AE2E02A000A0102 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */; };
 		DDD7A4381AE2E265000A0102 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4371AE2E265000A0102 /* Session.swift */; };
@@ -81,6 +83,8 @@
 		DD4F6E741AE2D82A0099BEB5 /* VideosHeaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosHeaderViewController.swift; sourceTree = "<group>"; };
 		DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideosHeaderViewController.xib; sourceTree = "<group>"; };
 		DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		DDC049CE1AE564F20008D41A /* PDFWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWindowController.swift; sourceTree = "<group>"; };
+		DDC049CF1AE564F20008D41A /* PDFWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PDFWindowController.xib; sourceTree = "<group>"; };
 		DDD7A4321AE2DF14000A0102 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		DDD7A4371AE2E265000A0102 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
@@ -168,6 +172,7 @@
 				DD4F6E701AE2D1C60099BEB5 /* VideoDetailsViewController.swift */,
 				DD4F6E531AE2D11D0099BEB5 /* VideosViewController.swift */,
 				DD2016731AE411C800DD8155 /* VideoWindowController.swift */,
+				DDC049CE1AE564F20008D41A /* PDFWindowController.swift */,
 			);
 			name = "Main Controllers";
 			sourceTree = "<group>";
@@ -184,6 +189,7 @@
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DDC049CF1AE564F20008D41A /* PDFWindowController.xib */,
 				DD2016741AE411C800DD8155 /* VideoWindowController.xib */,
 				DD4F6E571AE2D11D0099BEB5 /* Main.storyboard */,
 				DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */,
@@ -295,6 +301,7 @@
 			files = (
 				DD4F6E561AE2D11D0099BEB5 /* Images.xcassets in Resources */,
 				DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */,
+				DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */,
 				DD4F6E591AE2D11D0099BEB5 /* Main.storyboard in Resources */,
 				DD4F6E771AE2D82A0099BEB5 /* VideosHeaderViewController.xib in Resources */,
 			);
@@ -320,6 +327,7 @@
 				DD4F6E731AE2D5980099BEB5 /* VideoTableCellView.swift in Sources */,
 				DD4F6E711AE2D1C60099BEB5 /* VideoDetailsViewController.swift in Sources */,
 				DD4F6E6F1AE2D14A0099BEB5 /* MainWindowController.swift in Sources */,
+				DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */,
 				DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */,
 				DDD7A4381AE2E265000A0102 /* Session.swift in Sources */,
 				DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */,

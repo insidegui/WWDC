@@ -18,4 +18,5 @@ FOUNDATION_EXPORT const unsigned char ViewUtilsVersionString[];
 
 #import <ViewUtils/GRWindowMovingView.h>
 #import <ViewUtils/GRPlayerWindow.h>
+#import <ViewUtils/GRReadingWindow.h>
 #import <ViewUtils/GRPlayerView.h>
