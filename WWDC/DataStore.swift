@@ -45,9 +45,7 @@ class DataStore: NSObject {
                 
                 let internalServiceJSON = JSON(data: data!).dictionary!
                 let appleURL = internalServiceJSON["url"]!.string!
-                
-                NSUserDefaults.standardUserDefaults().setURL(NSURL(string: appleURL)!, forKey: "Apple URL")
-                NSUserDefaults.standardUserDefaults().synchronize()
+
                 self.appleSessionsURL = NSURL(string: appleURL)!
                 
                 self.doFetchSessions(completionHandler)
