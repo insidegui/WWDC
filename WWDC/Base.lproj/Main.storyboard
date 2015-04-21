@@ -644,7 +644,7 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WWDC" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="0.0"/>
+            <point key="canvasLocation" x="-10" y="-94"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -653,9 +653,9 @@
                     <window key="window" title="WWDC" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="609" y="346" width="480" height="270"/>
+                        <rect key="contentRect" x="609" y="314" width="792" height="443"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <value key="minSize" type="size" width="575" height="316"/>
                     </window>
                     <connections>
                         <segue destination="L88-Pe-Ufl" kind="relationship" relationship="window.shadowedContentViewController" id="B7l-mW-WO4"/>
@@ -663,7 +663,7 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="250"/>
+            <point key="canvasLocation" x="73" y="206.5"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="p06-BB-u7j">
@@ -804,6 +804,7 @@
                                     </scrollView>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="TBi-A8-b66"/>
                                     <constraint firstItem="TKd-X0-CX9" firstAttribute="top" secondItem="Rg6-r5-kXz" secondAttribute="top" id="UVo-UU-35P"/>
                                     <constraint firstAttribute="bottom" secondItem="TKd-X0-CX9" secondAttribute="bottom" id="Vij-AN-flu"/>
                                     <constraint firstAttribute="trailing" secondItem="TKd-X0-CX9" secondAttribute="trailing" id="dBt-00-1Ko"/>
@@ -831,20 +832,20 @@
         <scene sceneID="NVU-yy-jec">
             <objects>
                 <viewController id="PTx-VW-9eO" customClass="VideoDetailsViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" wantsLayer="YES" id="lmc-yJ-Qdy" customClass="ContentBackgroundView" customModule="WWDC" customModuleProvider="target">
+                    <view key="view" wantsLayer="YES" horizontalCompressionResistancePriority="250" id="lmc-yJ-Qdy" customClass="ContentBackgroundView" customModule="WWDC" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="323"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="yfT-Gv-ICD" customClass="GRWindowMovingView">
+                            <customView horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yfT-Gv-ICD" customClass="GRWindowMovingView">
                                 <rect key="frame" x="0.0" y="261" width="450" height="62"/>
                                 <subviews>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="unj-WU-zmU" customClass="SeparatorView" customModule="WWDC" customModuleProvider="target">
+                                    <customView horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="unj-WU-zmU" customClass="SeparatorView" customModule="WWDC" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="450" height="1"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="4FJ-B6-QQc"/>
                                         </constraints>
                                     </customView>
-                                    <textField horizontalHuggingPriority="230" verticalHuggingPriority="750" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" translatesAutoresizingMaskIntoConstraints="NO" id="OTC-kh-gjR">
+                                    <textField horizontalHuggingPriority="230" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="500" translatesAutoresizingMaskIntoConstraints="NO" id="OTC-kh-gjR">
                                         <rect key="frame" x="18" y="28" width="414" height="18"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No session selected" id="UU1-bR-82g">
                                             <font key="font" metaFont="systemBold" size="15"/>
@@ -883,7 +884,7 @@
                                 <rect key="frame" x="18" y="49" width="414" height="204"/>
                                 <textFieldCell key="cell" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" id="IeT-9W-1pW">
                                     <font key="font" metaFont="system"/>
-                                    <mutableString key="title">Automation in OS X has always been about power and choice. Scriptable applications, including Pages, Keynote, Numbers, and the Finder, can already be automated using a variety of languages, including AppleScript, Objective-C, Perl, Python, and Ruby. With OS X Yosemite, application scripting support has been added to another popular language, JavaScript. JavaScript for Automation (JXA) extends the standard JavaScript environment provided by the JavaScriptCore framework with support for querying and controlling all of the scriptable applications running in OS X.  JXA scripts are supported at all layers of the system and can be invoked from the command-line, from the system-wide Script Menu, and can even be distributed as code-signed applications.</mutableString>
+                                    <string key="title">Automation in OS X has always been about power and choice. Scriptable applications, including Pages, Keynote, Numbers, and the Finder, can already be automated using a variety of languages, including AppleScript, Objective-C, Perl, Python, and Ruby. With OS X Yosemite, application scripting support has been added to another popular language, JavaScript. JavaScript for Automation (JXA) extends the standard JavaScript environment provided by the JavaScriptCore framework with support for querying and controlling all of the scriptable applications running in OS X.  JXA scripts are supported at all layers of the system and can be invoked from the command-line, from the system-wide Script Menu, and can even be distributed as code-signed applications.</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
