@@ -45,21 +45,28 @@ class VideoDetailsViewController: NSViewController {
     @IBOutlet weak var markAsUnwatchedButton: NSButton!
     
     @IBAction func watchVideo(sender: NSButton) {
-        let playerVC = VideoWindowController(session: session!)
-        auxWindowControllers.append(playerVC)
-        playerVC.showWindow(sender)
-        
-        let nc = NSNotificationCenter.defaultCenter()
-        nc.addObserverForName(NSWindowWillCloseNotification, object: playerVC.window!, queue: nil) { _ in
-            self.auxWindowControllers.removeObject(playerVC)
-        }
+        let playerWindowController = VideoWindowController(session: session!)
+        playerWindowController.showWindow(sender)
+        followWindowLifecycle(playerWindowController.window)
+        auxWindowControllers.append(playerWindowController)
     }
     
     @IBAction func viewSlides(sender: NSButton) {
         if session!.slides != nil {
-            let pdfVC = PDFWindowController(session: session!)
-            auxWindowControllers.append(pdfVC)
-            pdfVC.showWindow(sender)
+            let slidesWindowController = PDFWindowController(session: session!)
+            slidesWindowController.showWindow(sender)
+            followWindowLifecycle(slidesWindowController.window)
+            auxWindowControllers.append(slidesWindowController)
+        }
+    }
+    
+    private func followWindowLifecycle(window: NSWindow!) {
+        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: window, queue: nil) { note in
+            if let window = note.object as? NSWindow {
+                if let controller = window.windowController() as? NSWindowController {
+                    self.auxWindowControllers.removeObject(controller)
+                }
+            }
         }
     }
     

@@ -42,7 +42,7 @@ class VideoWindowController: NSWindowController {
         }
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
-            player?.pause()
+//            player?.pause()
         }
     }
     

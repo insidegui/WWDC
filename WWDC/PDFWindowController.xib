@@ -14,7 +14,7 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="documentWindow" id="F0z-JX-Cv5" customClass="GRReadingWindow">
+        <window allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" visibleAtLaunch="NO" animationBehavior="documentWindow" id="F0z-JX-Cv5" customClass="GRReadingWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <rect key="contentRect" x="583" y="319" width="800" height="500"/>
@@ -23,7 +23,7 @@
                 <rect key="frame" x="0.0" y="-1" width="800" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <pdfView autoresizesSubviews="NO" wantsLayer="YES" scaleFactor="1.2661290322580645" autoScales="YES" translatesAutoresizingMaskIntoConstraints="NO" id="94e-7J-iof">
+                    <pdfView autoresizesSubviews="NO" wantsLayer="YES" autoScales="YES" translatesAutoresizingMaskIntoConstraints="NO" id="94e-7J-iof">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="500"/>
                     </pdfView>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="HYm-PC-Lux" customClass="ContentBackgroundView" customModule="WWDC" customModuleProvider="target">
