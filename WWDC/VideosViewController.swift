@@ -87,6 +87,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         let session = displayedSessions[row]
         cell.titleField.stringValue = session.title
+        cell.trackField.stringValue = session.track
+        cell.platformsField.stringValue = ", ".join(session.focus)
         cell.detailsField.stringValue = "\(session.year) - Session \(session.id)"
         cell.progressView.progress = DataStore.SharedStore.fetchSessionProgress(session)
         
