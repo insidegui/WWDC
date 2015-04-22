@@ -13,5 +13,7 @@ class VideoTableCellView: NSTableCellView {
     @IBOutlet weak var titleField: NSTextField!
     @IBOutlet weak var detailsField: NSTextField!
     @IBOutlet weak var progressView: SessionProgressView!
+    @IBOutlet weak var trackField: NSTextField!
+    @IBOutlet weak var platformsField: NSTextField!
     
 }
