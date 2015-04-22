@@ -8,6 +8,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="VideoWindowController" customModule="WWDC" customModuleProvider="target">
             <connections>
                 <outlet property="playerView" destination="A94-Zf-dtb" id="Zw4-dO-C8R"/>
+                <outlet property="progressIndicator" destination="M25-n0-Ib8" id="mA2-Lo-P4P"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -17,18 +18,32 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="610" y="360" width="640" height="360"/>
+            <rect key="contentRect" x="610" y="360" width="900" height="506"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
-            <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="640" height="360"/>
+            <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="-2" width="900" height="506"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <avPlayerView controlsStyle="floating" translatesAutoresizingMaskIntoConstraints="NO" id="A94-Zf-dtb" customClass="GRPlayerView">
-                        <rect key="frame" x="0.0" y="0.0" width="640" height="360"/>
+                        <rect key="frame" x="0.0" y="0.0" width="900" height="506"/>
                     </avPlayerView>
+                    <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="M25-n0-Ib8">
+                        <rect key="frame" x="434" y="237" width="32" height="32"/>
+                        <contentFilters>
+                            <ciFilter name="CIFalseColor">
+                                <configuration>
+                                    <ciColor key="inputColor0" red="0.70124311919851379" green="0.90122279117702297" blue="1" alpha="1"/>
+                                    <ciColor key="inputColor1" red="0.0" green="0.39526246691436201" blue="0.9972493052482605" alpha="1"/>
+                                    <null key="inputImage"/>
+                                </configuration>
+                            </ciFilter>
+                        </contentFilters>
+                    </progressIndicator>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="A94-Zf-dtb" secondAttribute="trailing" id="MBx-iq-7KK"/>
+                    <constraint firstAttribute="centerX" secondItem="M25-n0-Ib8" secondAttribute="centerX" id="Nfd-q2-9eb"/>
+                    <constraint firstAttribute="centerY" secondItem="M25-n0-Ib8" secondAttribute="centerY" id="NiE-gG-jVx"/>
                     <constraint firstAttribute="bottom" secondItem="A94-Zf-dtb" secondAttribute="bottom" id="Vr4-Zf-jlv"/>
                     <constraint firstItem="A94-Zf-dtb" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="mDh-RQ-2Ob"/>
                     <constraint firstItem="A94-Zf-dtb" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="vjL-91-PKL"/>
@@ -37,7 +52,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="390" y="360"/>
+            <point key="canvasLocation" x="520" y="433"/>
         </window>
     </objects>
 </document>

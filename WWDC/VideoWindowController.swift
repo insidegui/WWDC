@@ -20,29 +20,36 @@ class VideoWindowController: NSWindowController {
     }
     
     @IBOutlet weak var playerView: AVPlayerView!
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
     var player: AVPlayer?
     
     override func windowDidLoad() {
         super.windowDidLoad()
 
+        progressIndicator.startAnimation(nil)
         window?.backgroundColor = NSColor.blackColor()
         
         if let session = session {
             if let url = NSURL(string: session.url) {
                 player = AVPlayer(URL: url)
                 playerView.player = player
-                setupTimeObserver()
-                if session.currentPosition > 0 {
-                    player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
+                player?.currentItem.asset.loadValuesAsynchronouslyForKeys(["duration"]) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.setupTimeObserver()
+                        if session.currentPosition > 0 {
+                            self.player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
+                        }
+                        self.player?.play()
+                        self.progressIndicator.stopAnimation(nil)
+                    }
                 }
-                player?.play()
             }
             
             window?.title = "WWDC \(session.year) | \(session.title)"
         }
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
-//            player?.pause()
+            player?.pause()
         }
     }
     
