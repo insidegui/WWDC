@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
     </dependencies>
@@ -728,7 +728,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="FAi-An-gn9">
-                                                                            <rect key="frame" x="32" y="3" width="414" height="14"/>
+                                                                            <rect key="frame" x="32" y="3" width="363" height="14"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Esf-0p-W24">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -741,14 +741,6 @@
                                                                                 <constraint firstAttribute="height" constant="1" id="XV5-al-Fj3"/>
                                                                             </constraints>
                                                                         </customView>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="3v3-8v-AJg">
-                                                                            <rect key="frame" x="32" y="20" width="414" height="17"/>
-                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="60g-VP-PLg">
-                                                                                <font key="font" metaFont="system"/>
-                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                        </textField>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="iCs-Z3-5sc" customClass="SessionProgressView" customModule="WWDC" customModuleProvider="target">
                                                                             <rect key="frame" x="6" y="10" width="20" height="20"/>
                                                                             <constraints>
@@ -761,15 +753,43 @@
                                                                                 </userDefinedRuntimeAttribute>
                                                                             </userDefinedRuntimeAttributes>
                                                                         </customView>
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kWg-DM-UNh">
+                                                                            <rect key="frame" x="397" y="18" width="49" height="17"/>
+                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Platform" id="QG9-E2-JGn">
+                                                                                <font key="font" metaFont="miniSystem"/>
+                                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4gh-pE-Uly">
+                                                                            <rect key="frame" x="383" y="6" width="63" height="17"/>
+                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Track" id="cm6-vo-QkU">
+                                                                                <font key="font" metaFont="miniSystem"/>
+                                                                                <color key="textColor" red="0.64508364898989901" green="0.64508364898989901" blue="0.64508364898989901" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
+                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
+                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="3v3-8v-AJg">
+                                                                            <rect key="frame" x="32" y="20" width="363" height="17"/>
+                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="60g-VP-PLg">
+                                                                                <font key="font" metaFont="system"/>
+                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
                                                                     </subviews>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="3v3-8v-AJg" secondAttribute="trailing" constant="3" id="B06-fi-J9M"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="3v3-8v-AJg" secondAttribute="trailing" constant="54" id="B06-fi-J9M"/>
                                                                         <constraint firstAttribute="trailing" secondItem="r6O-fv-UNG" secondAttribute="trailing" id="BPv-mW-cPD"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="FAi-An-gn9" secondAttribute="trailing" constant="3" id="Co4-3G-NO7"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="FAi-An-gn9" secondAttribute="trailing" constant="54" id="Co4-3G-NO7"/>
                                                                         <constraint firstItem="iCs-Z3-5sc" firstAttribute="leading" secondItem="P0q-1C-AQy" secondAttribute="leading" constant="6" id="FBF-CI-xza"/>
                                                                         <constraint firstItem="FAi-An-gn9" firstAttribute="top" secondItem="3v3-8v-AJg" secondAttribute="bottom" constant="3" id="Fb8-Or-x5z"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="kWg-DM-UNh" secondAttribute="trailing" constant="3" id="O5P-bY-6oG"/>
+                                                                        <constraint firstItem="4gh-pE-Uly" firstAttribute="top" secondItem="P0q-1C-AQy" secondAttribute="top" constant="17" id="SBo-8q-cKT"/>
                                                                         <constraint firstAttribute="centerY" secondItem="iCs-Z3-5sc" secondAttribute="centerY" id="UiE-Nu-aEl"/>
                                                                         <constraint firstAttribute="bottom" secondItem="r6O-fv-UNG" secondAttribute="bottom" id="jJ1-SW-9RG"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="4gh-pE-Uly" secondAttribute="trailing" constant="3" id="kcX-eF-mWF"/>
+                                                                        <constraint firstItem="kWg-DM-UNh" firstAttribute="top" secondItem="P0q-1C-AQy" secondAttribute="top" constant="5" id="kvb-BG-Hk9"/>
                                                                         <constraint firstItem="3v3-8v-AJg" firstAttribute="leading" secondItem="P0q-1C-AQy" secondAttribute="leading" constant="34" id="oOE-BX-ZKC"/>
                                                                         <constraint firstItem="FAi-An-gn9" firstAttribute="leading" secondItem="P0q-1C-AQy" secondAttribute="leading" constant="34" id="pC8-LR-Xy0"/>
                                                                         <constraint firstItem="r6O-fv-UNG" firstAttribute="leading" secondItem="P0q-1C-AQy" secondAttribute="leading" id="sVx-Vo-NtU"/>
@@ -777,9 +797,11 @@
                                                                     </constraints>
                                                                     <connections>
                                                                         <outlet property="detailsField" destination="FAi-An-gn9" id="pJS-2A-zKx"/>
+                                                                        <outlet property="platformsField" destination="kWg-DM-UNh" id="RuU-Mi-4K8"/>
                                                                         <outlet property="progressView" destination="iCs-Z3-5sc" id="lmA-ez-Zek"/>
                                                                         <outlet property="textField" destination="3v3-8v-AJg" id="vvt-wQ-fBZ"/>
                                                                         <outlet property="titleField" destination="3v3-8v-AJg" id="doE-zP-w64"/>
+                                                                        <outlet property="trackField" destination="4gh-pE-Uly" id="BtF-LQ-8X4"/>
                                                                     </connections>
                                                                 </tableCellView>
                                                             </prototypeCellViews>

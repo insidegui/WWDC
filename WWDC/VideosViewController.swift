@@ -87,6 +87,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         let session = displayedSessions[row]
         cell.titleField.stringValue = session.title
+        cell.trackField.stringValue = session.track
+        cell.platformsField.stringValue = ", ".join(session.focus)
         cell.detailsField.stringValue = "\(session.year) - Session \(session.id)"
         cell.progressView.progress = DataStore.SharedStore.fetchSessionProgress(session)
         
@@ -141,21 +143,46 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             if let term = currentSearchTerm {
                 var term = term
                 if term != "" {
+                    var qualifiers = term.qualifierSearchParser_parseQualifiers(["year", "focus", "track"])
                     indexOfLastSelectedRow = -1
                     return sessions.filter { session in
-                        if term.lowercaseString == "osx" || term.lowercaseString == "os x" {
-                            term = "OS X"
-                        } else if term.lowercaseString == "ios" {
-                            term = "iOS"
+                        
+                        if let year: String = qualifiers["year"] as? String {
+                            if session.year != year.toInt() {
+                                return false
+                            }
                         }
-                        if contains(session.focus, term) {
-                            return true
+                        
+                        if let focus: String = qualifiers["focus"] as? String {
+                            var fixedFocus: String = focus
+                            if focus.lowercaseString == "osx" || focus.lowercaseString == "os x" {
+                                fixedFocus = "OS X"
+                            } else if focus.lowercaseString == "ios" {
+                                fixedFocus = "iOS"
+                            }
+                            
+                            if !contains(session.focus, fixedFocus) {
+                                return false
+                            }
                         }
-                        if let range = session.title.rangeOfString(term, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) {
-                            return true
-                        } else {
-                            return false
+                        
+                        if let track: String = qualifiers["track"] as? String {
+                            if session.track.lowercaseString != track.lowercaseString {
+                                return false
+                            }
                         }
+                        
+                        if let query: String = qualifiers["_query"] as? String {
+                            if query != "" {
+                                if let range = session.title.rangeOfString(query, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) {
+                                    //Nothing here...
+                                } else {
+                                    return false
+                                }
+                            }
+                        }
+                        
+                        return true
                     }
                 } else {
                     return sessions
