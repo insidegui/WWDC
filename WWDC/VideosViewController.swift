@@ -183,20 +183,6 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                         }
                         
                         return true
-  
-//                        if term.lowercaseString == "osx" || term.lowercaseString == "os x" {
-//                            term = "OS X"
-//                        } else if term.lowercaseString == "ios" {
-//                            term = "iOS"
-//                        }
-//                        if contains(session.focus, term) {
-//                            return true
-//                        }
-//                        if let range = session.title.rangeOfString(term, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) {
-//                            return true
-//                        } else {
-//                            return false
-//                        }
                     }
                 } else {
                     return sessions
