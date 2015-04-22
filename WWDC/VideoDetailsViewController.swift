@@ -22,6 +22,7 @@ class VideoDetailsViewController: NSViewController {
     @IBOutlet weak var subtitleLabel: NSTextField!
     @IBOutlet weak var descriptionLabel: NSTextField!
     @IBOutlet weak var watchVideoButton: NSButton!
+    @IBOutlet weak var watchHDVideoButton: NSButton!
     @IBOutlet weak var viewSlidesButton: NSButton!
     @IBOutlet weak var markAsUnwatchedButton: NSButton!
     
@@ -33,6 +34,7 @@ class VideoDetailsViewController: NSViewController {
             descriptionLabel.stringValue = session.description
             descriptionLabel.hidden = false
             watchVideoButton.hidden = false
+            watchHDVideoButton.hidden = false
             if session.slides != nil {
                 viewSlidesButton.hidden = false
             } else {
@@ -43,6 +45,11 @@ class VideoDetailsViewController: NSViewController {
             } else {
                 markAsUnwatchedButton.hidden = true
             }
+            if session.hd_url != nil {
+                watchHDVideoButton.enabled = true
+            } else {
+                watchHDVideoButton.enabled = false
+            }
         } else {
             titleLabel.stringValue = "No session selected"
             subtitleLabel.stringValue = "Select a session to see It here"
@@ -50,11 +57,22 @@ class VideoDetailsViewController: NSViewController {
             watchVideoButton.hidden = true
             viewSlidesButton.hidden = true
             markAsUnwatchedButton.hidden = true
+            watchHDVideoButton.hidden = true
         }
     }
     
     @IBAction func watchVideo(sender: NSButton) {
-        let playerWindowController = VideoWindowController(session: session!)
+        doWatchVideo(sender, url: session!.url)
+    }
+    @IBAction func watchHDVideo(sender: NSButton) {
+        if session!.hd_url != nil {
+            doWatchVideo(sender, url: session!.hd_url!)
+        }
+    }
+    
+    private func doWatchVideo(sender: AnyObject?, url: String)
+    {
+        let playerWindowController = VideoWindowController(session: session!, videoURL: url)
         playerWindowController.showWindow(sender)
         followWindowLifecycle(playerWindowController.window)
         auxWindowControllers.append(playerWindowController)

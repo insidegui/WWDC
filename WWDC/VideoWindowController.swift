@@ -13,10 +13,12 @@ import AVKit
 class VideoWindowController: NSWindowController {
 
     var session: Session?
+    var videoURL: String?
     
-    convenience init(session: Session) {
+    convenience init(session: Session, videoURL: String) {
         self.init(windowNibName: "VideoWindowController")
         self.session = session
+        self.videoURL = videoURL
     }
     
     @IBOutlet weak var playerView: AVPlayerView!
@@ -30,7 +32,7 @@ class VideoWindowController: NSWindowController {
         window?.backgroundColor = NSColor.blackColor()
         
         if let session = session {
-            if let url = NSURL(string: session.url) {
+            if let url = NSURL(string: videoURL!) {
                 player = AVPlayer(URL: url)
                 playerView.player = player
                 player?.currentItem.asset.loadValuesAsynchronouslyForKeys(["duration"]) {

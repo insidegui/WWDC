@@ -79,7 +79,8 @@ class DataStore: NSObject {
                         title: jsonSession["title"].string!,
                         track: jsonSession["track"].string!,
                         url: jsonSession["url"].string!,
-                        year: jsonSession["year"].int!)
+                        year: jsonSession["year"].int!,
+                        hd_url: jsonSession["download_hd"].string)
                     
                     sessions.append(session)
                 }

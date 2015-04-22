@@ -21,6 +21,7 @@ struct Session {
     var track: String
     var url: String
     var year: Int
+    var hd_url: String?
     
     var progress: Double {
         get {
@@ -52,7 +53,7 @@ struct Session {
         }
     }
     
-    init(date: String?, description: String, focus: [String], id: Int, slides: String?, title: String, track: String, url: String, year: Int)
+    init(date: String?, description: String, focus: [String], id: Int, slides: String?, title: String, track: String, url: String, year: Int, hd_url: String?)
     {
         self.date = date
         self.description = description
@@ -63,6 +64,7 @@ struct Session {
         self.track = track
         self.url = url
         self.year = year
+        self.hd_url = hd_url
     }
     
 }
