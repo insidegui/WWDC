@@ -26,7 +26,7 @@
                                       options:NSRegularExpressionCaseInsensitive
                                       error:&error];
         
-        [regEx enumerateMatchesInString:self
+        [regEx enumerateMatchesInString:weakSelf
                                 options:kNilOptions
                                   range:NSMakeRange(0, weakSelf.length)
                              usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
