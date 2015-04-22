@@ -55,6 +55,10 @@ class VideoWindowController: NSWindowController {
         }
     }
     
+    func toggleFullScreen(sender: AnyObject?) {
+        window!.toggleFullScreen(sender)
+    }
+    
     var timeObserver: AnyObject?
     
     func setupTimeObserver() {

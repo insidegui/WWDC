@@ -64,6 +64,17 @@
     [self hideTitlebar];
 }
 
+- (void)mouseUp:(NSEvent *)theEvent
+{
+    [super mouseUp:theEvent];
+    
+    if (theEvent.clickCount == 2) {
+        if ([self.window.windowController respondsToSelector:@selector(toggleFullScreen:)]) {
+            [self.window.windowController toggleFullScreen:self];
+        }
+    }
+}
+
 - (GRPlayerWindow *)playerWindow
 {
     return (GRPlayerWindow *)self.window;
