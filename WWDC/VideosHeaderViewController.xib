@@ -6,6 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="VideosHeaderViewController" customModule="WWDC" customModuleProvider="target">
             <connections>
+                <outlet property="searchBar" destination="GHc-IG-Ous" id="C0F-uM-3AN"/>
                 <outlet property="searchBarBottomConstraint" destination="chf-J6-vT8" id="Jo2-nw-awi"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>

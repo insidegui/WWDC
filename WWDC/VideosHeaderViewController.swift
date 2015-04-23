@@ -10,6 +10,7 @@ import Cocoa
 
 class VideosHeaderViewController: NSViewController {
     
+    @IBOutlet weak var searchBar: NSSearchField!
     @IBOutlet weak var searchBarBottomConstraint: NSLayoutConstraint!
     
     var performSearch: ((term: String) -> Void)?
@@ -20,6 +21,8 @@ class VideosHeaderViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchBar.enabled = false
     }
     
     override func viewDidAppear() {
@@ -33,6 +36,10 @@ class VideosHeaderViewController: NSViewController {
         nc.addObserverForName(NSWindowWillExitFullScreenNotification, object: view.window!, queue: nil) { object in
             self.searchBarBottomConstraint.constant = 12
         }
+    }
+    
+    func enable() {
+        searchBar.enabled = true
     }
     
     @IBAction func search(sender: NSSearchField) {

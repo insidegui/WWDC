@@ -54,6 +54,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
 
     var sessions: [Session]! {
         didSet {
+            if sessions != nil {
+                headerController.enable()
+            }
             reloadTablePreservingSelection()
         }
     }
