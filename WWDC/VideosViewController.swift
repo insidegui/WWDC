@@ -153,7 +153,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             if let term = currentSearchTerm {
                 var term = term
                 if term != "" {
-                    var qualifiers = term.qualifierSearchParser_parseQualifiers(["year", "focus", "track"])
+                    var qualifiers = term.qualifierSearchParser_parseQualifiers(["year", "focus", "track", "downloaded"])
                     indexOfLastSelectedRow = -1
                     return sessions.filter { session in
                         
@@ -178,6 +178,14 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                         
                         if let track: String = qualifiers["track"] as? String {
                             if session.track.lowercaseString != track.lowercaseString {
+                                return false
+                            }
+                        }
+                        
+                        if let downloaded: String = qualifiers["downloaded"] as? String {
+                            if let url = session.hd_url {
+                                return (VideoStore.SharedStore().hasVideo(url) == downloaded.boolValue)
+                            } else {
                                 return false
                             }
                         }
