@@ -64,7 +64,7 @@ class VideoWindowController: NSWindowController {
     func setupTimeObserver() {
         timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(5, 1), queue: dispatch_get_main_queue()) { [unowned self] currentTime in
             let progress = Double(CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(self.player!.currentItem.duration))
-            println("p: \(progress)")
+
             self.session!.progress = progress
             self.session!.currentPosition = CMTimeGetSeconds(currentTime)
         }
