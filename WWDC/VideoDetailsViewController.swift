@@ -117,6 +117,7 @@ class VideoDetailsViewController: NSViewController {
     
     @IBAction func markAsUnwatched(sender: NSButton) {
         session?.progress = 0
+        session?.currentPosition = 0
         sender.hidden = true
     }
     
