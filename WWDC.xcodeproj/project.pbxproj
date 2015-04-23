@@ -15,6 +15,7 @@
 		DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016731AE411C800DD8155 /* VideoWindowController.swift */; };
 		DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2016741AE411C800DD8155 /* VideoWindowController.xib */; };
 		DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016771AE4141900DD8155 /* ArrayExtensions.swift */; };
+		DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD373A891AE871AB00DAC19B /* VideoStore.swift */; };
 		DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E511AE2D11D0099BEB5 /* AppDelegate.swift */; };
 		DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E531AE2D11D0099BEB5 /* VideosViewController.swift */; };
 		DD4F6E561AE2D11D0099BEB5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD4F6E551AE2D11D0099BEB5 /* Images.xcassets */; };
@@ -32,6 +33,7 @@
 		DDD7A4381AE2E265000A0102 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4371AE2E265000A0102 /* Session.swift */; };
 		DDD7A43A1AE2E305000A0102 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4391AE2E305000A0102 /* DataStore.swift */; };
 		DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A43C1AE2E39A000A0102 /* SwiftyJSON.swift */; };
+		DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +77,7 @@
 		DD2016731AE411C800DD8155 /* VideoWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoWindowController.swift; sourceTree = "<group>"; };
 		DD2016741AE411C800DD8155 /* VideoWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoWindowController.xib; sourceTree = "<group>"; };
 		DD2016771AE4141900DD8155 /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		DD373A891AE871AB00DAC19B /* VideoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoStore.swift; sourceTree = "<group>"; };
 		DD4F6E4C1AE2D11D0099BEB5 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD4F6E501AE2D11D0099BEB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD4F6E511AE2D11D0099BEB5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +97,7 @@
 		DDD7A4371AE2E265000A0102 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		DDD7A4391AE2E305000A0102 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		DDD7A43C1AE2E39A000A0102 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +190,7 @@
 			children = (
 				DD4F6E741AE2D82A0099BEB5 /* VideosHeaderViewController.swift */,
 				DD4F6E6E1AE2D14A0099BEB5 /* MainWindowController.swift */,
+				DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */,
 			);
 			name = "Aux View Controllers";
 			sourceTree = "<group>";
@@ -213,6 +218,7 @@
 		DDD7A4361AE2E253000A0102 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DD373A891AE871AB00DAC19B /* VideoStore.swift */,
 				DDD7A4371AE2E265000A0102 /* Session.swift */,
 				DDD7A4391AE2E305000A0102 /* DataStore.swift */,
 			);
@@ -324,6 +330,7 @@
 				DD20166E1AE40D0100DD8155 /* ContentBackgroundView.swift in Sources */,
 				DDD7A4351AE2E02A000A0102 /* SeparatorView.swift in Sources */,
 				DD4F6E761AE2D82A0099BEB5 /* VideosHeaderViewController.swift in Sources */,
+				DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */,
 				DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */,
 				DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */,
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,
@@ -339,6 +346,7 @@
 				DDD7A4381AE2E265000A0102 /* Session.swift in Sources */,
 				1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */,
 				DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */,
+				DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

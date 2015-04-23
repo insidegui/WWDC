@@ -26,7 +26,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         loadSessions()
         
-        NSNotificationCenter.defaultCenter().addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil) { _ in
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil) { _ in
+            self.reloadTablePreservingSelection()
+        }
+        nc.addObserverForName(VideoStoreFinishedDownloadNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
             self.reloadTablePreservingSelection()
         }
     }
@@ -91,6 +95,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         cell.platformsField.stringValue = ", ".join(session.focus)
         cell.detailsField.stringValue = "\(session.year) - Session \(session.id)"
         cell.progressView.progress = DataStore.SharedStore.fetchSessionProgress(session)
+        if let url = session.hd_url {
+            cell.downloadedImage.hidden = !VideoStore.SharedStore().hasVideo(url)
+        }
         
         return cell
     }

@@ -784,14 +784,24 @@
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
+                                                                        <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zgY-Cr-45f" userLabel="Downloaded Image">
+                                                                            <rect key="frame" x="437" y="4" width="7" height="7"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="7" id="1bt-cA-tos"/>
+                                                                                <constraint firstAttribute="height" constant="7" id="9ZR-jM-oVh"/>
+                                                                            </constraints>
+                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="downloaded" id="mXp-n9-kA8"/>
+                                                                        </imageView>
                                                                     </subviews>
                                                                     <constraints>
+                                                                        <constraint firstItem="zgY-Cr-45f" firstAttribute="top" secondItem="4gh-pE-Uly" secondAttribute="bottom" constant="1" id="7zd-xN-tQl"/>
                                                                         <constraint firstAttribute="trailing" secondItem="3v3-8v-AJg" secondAttribute="trailing" constant="54" id="B06-fi-J9M"/>
                                                                         <constraint firstAttribute="trailing" secondItem="r6O-fv-UNG" secondAttribute="trailing" id="BPv-mW-cPD"/>
                                                                         <constraint firstAttribute="trailing" secondItem="FAi-An-gn9" secondAttribute="trailing" constant="54" id="Co4-3G-NO7"/>
                                                                         <constraint firstItem="iCs-Z3-5sc" firstAttribute="leading" secondItem="P0q-1C-AQy" secondAttribute="leading" constant="6" id="FBF-CI-xza"/>
                                                                         <constraint firstItem="FAi-An-gn9" firstAttribute="top" secondItem="3v3-8v-AJg" secondAttribute="bottom" constant="3" id="Fb8-Or-x5z"/>
                                                                         <constraint firstAttribute="trailing" secondItem="kWg-DM-UNh" secondAttribute="trailing" constant="3" id="O5P-bY-6oG"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="zgY-Cr-45f" secondAttribute="trailing" constant="3" id="QuX-3c-spi"/>
                                                                         <constraint firstItem="4gh-pE-Uly" firstAttribute="top" secondItem="P0q-1C-AQy" secondAttribute="top" constant="17" id="SBo-8q-cKT"/>
                                                                         <constraint firstAttribute="centerY" secondItem="iCs-Z3-5sc" secondAttribute="centerY" id="UiE-Nu-aEl"/>
                                                                         <constraint firstAttribute="bottom" secondItem="r6O-fv-UNG" secondAttribute="bottom" id="jJ1-SW-9RG"/>
@@ -804,6 +814,7 @@
                                                                     </constraints>
                                                                     <connections>
                                                                         <outlet property="detailsField" destination="FAi-An-gn9" id="pJS-2A-zKx"/>
+                                                                        <outlet property="downloadedImage" destination="zgY-Cr-45f" id="x5B-ym-qyn"/>
                                                                         <outlet property="platformsField" destination="kWg-DM-UNh" id="RuU-Mi-4K8"/>
                                                                         <outlet property="progressView" destination="iCs-Z3-5sc" id="lmA-ez-Zek"/>
                                                                         <outlet property="textField" destination="3v3-8v-AJg" id="vvt-wQ-fBZ"/>
@@ -861,7 +872,7 @@
         <scene sceneID="NVU-yy-jec">
             <objects>
                 <viewController id="PTx-VW-9eO" customClass="VideoDetailsViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" wantsLayer="YES" horizontalCompressionResistancePriority="250" id="lmc-yJ-Qdy" customClass="ContentBackgroundView" customModule="WWDC" customModuleProvider="target">
+                    <view key="view" horizontalCompressionResistancePriority="250" id="lmc-yJ-Qdy" customClass="ContentBackgroundView" customModule="WWDC" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="559" height="323"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
@@ -875,7 +886,7 @@
                                         </constraints>
                                     </customView>
                                     <textField horizontalHuggingPriority="230" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="500" translatesAutoresizingMaskIntoConstraints="NO" id="OTC-kh-gjR">
-                                        <rect key="frame" x="18" y="28" width="523" height="18"/>
+                                        <rect key="frame" x="18" y="28" width="492" height="18"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No session selected" id="UU1-bR-82g">
                                             <font key="font" metaFont="systemBold" size="15"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -883,24 +894,48 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="230" verticalHuggingPriority="750" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" translatesAutoresizingMaskIntoConstraints="NO" id="Q3D-NN-RLa">
-                                        <rect key="frame" x="18" y="12" width="523" height="14"/>
+                                        <rect key="frame" x="18" y="12" width="492" height="14"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select a session to see It here" id="Jni-0L-ArF">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="P5u-9c-sQG">
+                                        <rect key="frame" x="516" y="21" width="23" height="21"/>
+                                        <subviews>
+                                            <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" bezeled="NO" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Rfp-dR-Pi4">
+                                                <rect key="frame" x="3" y="2" width="16" height="16"/>
+                                            </progressIndicator>
+                                            <button toolTip="Download Video" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZoQ-nZ-mjo">
+                                                <rect key="frame" x="0.0" y="0.0" width="23" height="21"/>
+                                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="download" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="RiF-Dk-hCV">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="download:" target="SkJ-kP-aeS" id="SHa-Ir-8uc"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="23" id="8W0-t9-9fn"/>
+                                            <constraint firstAttribute="height" constant="21" id="k8n-hE-P55"/>
+                                        </constraints>
+                                    </customView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="Q3D-NN-RLa" secondAttribute="trailing" constant="20" id="3sD-yN-Bx1"/>
+                                    <constraint firstAttribute="centerY" secondItem="P5u-9c-sQG" secondAttribute="centerY" constant="0.5" id="6ZD-H2-xIa"/>
+                                    <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="OTC-kh-gjR" secondAttribute="trailing" constant="8" id="ACr-pW-fNA"/>
                                     <constraint firstItem="unj-WU-zmU" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" id="E2h-q6-l5g"/>
                                     <constraint firstAttribute="trailing" secondItem="unj-WU-zmU" secondAttribute="trailing" id="Eou-ym-IEC"/>
+                                    <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="Q3D-NN-RLa" secondAttribute="trailing" constant="8" id="Imi-GT-WHS"/>
                                     <constraint firstAttribute="bottom" secondItem="unj-WU-zmU" secondAttribute="bottom" id="QEa-2T-MZF"/>
+                                    <constraint firstAttribute="trailing" secondItem="P5u-9c-sQG" secondAttribute="trailing" constant="20" id="U8f-pZ-DIf"/>
                                     <constraint firstItem="Q3D-NN-RLa" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" constant="20" id="Zca-OP-8uv"/>
                                     <constraint firstItem="Q3D-NN-RLa" firstAttribute="top" secondItem="OTC-kh-gjR" secondAttribute="bottom" constant="2" id="cDD-E4-tFM"/>
                                     <constraint firstItem="OTC-kh-gjR" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="top" constant="16" id="fGc-c6-zbn"/>
                                     <constraint firstAttribute="height" constant="62" id="hPH-mv-MND"/>
-                                    <constraint firstAttribute="trailing" secondItem="OTC-kh-gjR" secondAttribute="trailing" constant="20" id="hpP-Kk-ayY"/>
                                     <constraint firstItem="OTC-kh-gjR" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" constant="20" id="z1a-ii-utb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -978,6 +1013,7 @@
                     </view>
                     <connections>
                         <outlet property="descriptionLabel" destination="TO1-x6-ead" id="zeU-Ec-TF1"/>
+                        <outlet property="downloadController" destination="SkJ-kP-aeS" id="dW2-ke-WsS"/>
                         <outlet property="markAsUnwatchedButton" destination="Zfu-UV-fL8" id="HVc-P7-JPe"/>
                         <outlet property="subtitleLabel" destination="Q3D-NN-RLa" id="pFP-8H-gdR"/>
                         <outlet property="titleLabel" destination="OTC-kh-gjR" id="VaE-Md-v3f"/>
@@ -987,8 +1023,19 @@
                     </connections>
                 </viewController>
                 <customObject id="ztN-pJ-8Sm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="SkJ-kP-aeS" customClass="DownloadProgressViewController" customModule="WWDC" customModuleProvider="target">
+                    <connections>
+                        <outlet property="downloadButton" destination="ZoQ-nZ-mjo" id="ute-Zj-K3T"/>
+                        <outlet property="progressIndicator" destination="Rfp-dR-Pi4" id="ZNm-pc-dhj"/>
+                        <outlet property="view" destination="P5u-9c-sQG" id="NIz-ou-mqu"/>
+                    </connections>
+                </customObject>
             </objects>
             <point key="canvasLocation" x="795.5" y="927.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="download" width="23" height="21"/>
+        <image name="downloaded" width="7" height="7"/>
+    </resources>
 </document>

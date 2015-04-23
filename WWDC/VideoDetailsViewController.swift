@@ -25,6 +25,7 @@ class VideoDetailsViewController: NSViewController {
     @IBOutlet weak var watchHDVideoButton: NSButton!
     @IBOutlet weak var viewSlidesButton: NSButton!
     @IBOutlet weak var markAsUnwatchedButton: NSButton!
+    @IBOutlet var downloadController: DownloadProgressViewController!
     
     private func updateUI()
     {
@@ -35,6 +36,7 @@ class VideoDetailsViewController: NSViewController {
             descriptionLabel.hidden = false
             watchVideoButton.hidden = false
             watchHDVideoButton.hidden = false
+            
             if session.slides != nil {
                 viewSlidesButton.hidden = false
             } else {
@@ -47,8 +49,20 @@ class VideoDetailsViewController: NSViewController {
             }
             if session.hd_url != nil {
                 watchHDVideoButton.enabled = true
+                if VideoStore.SharedStore().hasVideo(session.hd_url!) {
+                    watchHDVideoButton.toolTip = "Watch the downloaded video in HD"
+                    watchVideoButton.enabled = false
+                } else {
+                    watchHDVideoButton.toolTip = "Stream the video in HD"
+                    watchVideoButton.enabled = true
+                }
             } else {
                 watchHDVideoButton.enabled = false
+            }
+            
+            downloadController.session = session
+            downloadController.downloadFinishedCallback = { [unowned self] in
+                self.updateUI()
             }
         } else {
             titleLabel.stringValue = "No session selected"
@@ -66,7 +80,11 @@ class VideoDetailsViewController: NSViewController {
     }
     @IBAction func watchHDVideo(sender: NSButton) {
         if session!.hd_url != nil {
-            doWatchVideo(sender, url: session!.hd_url!)
+            if VideoStore.SharedStore().hasVideo(session!.hd_url!) {
+                doWatchVideo(sender, url: VideoStore.SharedStore().localVideoAbsoluteURLString(session!.hd_url!))
+            } else {
+                doWatchVideo(sender, url: session!.hd_url!)
+            }
         }
     }
     
@@ -107,5 +125,7 @@ class VideoDetailsViewController: NSViewController {
         
         updateUI()
     }
+    
+    
     
 }
