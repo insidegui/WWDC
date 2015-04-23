@@ -589,6 +589,12 @@
                                                 <action selector="toggleFullScreen:" target="Ady-hI-5gd" id="3PK-9d-zcd"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Transcript" keyEquivalent="t" id="HWz-x7-yjd">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="showTranscriptWindow:" target="Ady-hI-5gd" id="aev-Jc-EbN"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Uij-Id-KXF"/>
                                         <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>

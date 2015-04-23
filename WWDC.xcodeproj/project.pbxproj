@@ -26,6 +26,11 @@
 		DD4F6E761AE2D82A0099BEB5 /* VideosHeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E741AE2D82A0099BEB5 /* VideosHeaderViewController.swift */; };
 		DD4F6E771AE2D82A0099BEB5 /* VideosHeaderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */; };
 		DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */; };
+		DD7F6F911AE97C99007A4E5E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7F6F901AE97C99007A4E5E /* WebKit.framework */; };
+		DD92EAA61AE978EC00D503AE /* ASCIIwwdc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */; };
+		DD92EAA71AE978EC00D503AE /* ASCIIwwdc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */; };
+		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
 		DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC049CE1AE564F20008D41A /* PDFWindowController.swift */; };
 		DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC049CF1AE564F20008D41A /* PDFWindowController.xib */; };
 		DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4321AE2DF14000A0102 /* Theme.swift */; };
@@ -52,6 +57,20 @@
 			remoteGlobalIDString = DD2016401AE401B500DD8155;
 			remoteInfo = ViewUtils;
 		};
+		DD92EAA31AE978DC00D503AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DD92EA511AE9611B00D503AE;
+			remoteInfo = ASCIIwwdc;
+		};
+		DD92EAA81AE978EC00D503AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = DD92EA501AE9611B00D503AE;
+			remoteInfo = ASCIIwwdc;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,6 +81,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				DD2016691AE402B400DD8155 /* ViewUtils.framework in Embed Frameworks */,
+				DD92EAA71AE978EC00D503AE /* ASCIIwwdc.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -91,6 +111,10 @@
 		DD4F6E741AE2D82A0099BEB5 /* VideosHeaderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosHeaderViewController.swift; sourceTree = "<group>"; };
 		DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideosHeaderViewController.xib; sourceTree = "<group>"; };
 		DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		DD7F6F901AE97C99007A4E5E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ASCIIwwdc.xcodeproj; path = ASCIIwwdc/ASCIIwwdc.xcodeproj; sourceTree = "<group>"; };
+		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
+		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
 		DDC049CE1AE564F20008D41A /* PDFWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWindowController.swift; sourceTree = "<group>"; };
 		DDC049CF1AE564F20008D41A /* PDFWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PDFWindowController.xib; sourceTree = "<group>"; };
 		DDD7A4321AE2DF14000A0102 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -107,7 +131,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD7F6F911AE97C99007A4E5E /* WebKit.framework in Frameworks */,
 				DD2016681AE402B400DD8155 /* ViewUtils.framework in Frameworks */,
+				DD92EAA61AE978EC00D503AE /* ASCIIwwdc.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +151,8 @@
 		DD4F6E431AE2D11D0099BEB5 = {
 			isa = PBXGroup;
 			children = (
+				DD7F6F901AE97C99007A4E5E /* WebKit.framework */,
+				DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */,
 				DD2016611AE4029100DD8155 /* ViewUtils.xcodeproj */,
 				DD4F6E4E1AE2D11D0099BEB5 /* WWDC */,
 				DD4F6E4D1AE2D11D0099BEB5 /* Products */,
@@ -164,6 +192,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DD92EAA01AE978DC00D503AE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		DDD7A42D1AE2DECE000A0102 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -183,6 +219,7 @@
 				DD4F6E531AE2D11D0099BEB5 /* VideosViewController.swift */,
 				DD2016731AE411C800DD8155 /* VideoWindowController.swift */,
 				DDC049CE1AE564F20008D41A /* PDFWindowController.swift */,
+				DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */,
 			);
 			name = "Main Controllers";
 			sourceTree = "<group>";
@@ -200,6 +237,7 @@
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */,
 				DDC049CF1AE564F20008D41A /* PDFWindowController.xib */,
 				DD2016741AE411C800DD8155 /* VideoWindowController.xib */,
 				DD4F6E571AE2D11D0099BEB5 /* Main.storyboard */,
@@ -255,6 +293,7 @@
 			);
 			dependencies = (
 				DD20166B1AE402B400DD8155 /* PBXTargetDependency */,
+				DD92EAA91AE978EC00D503AE /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			productName = WWDC;
@@ -289,6 +328,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = DD92EAA01AE978DC00D503AE /* Products */;
+					ProjectRef = DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */;
+				},
+				{
 					ProductGroup = DD2016621AE4029100DD8155 /* Products */;
 					ProjectRef = DD2016611AE4029100DD8155 /* ViewUtils.xcodeproj */;
 				},
@@ -308,6 +351,13 @@
 			remoteRef = DD2016651AE4029100DD8155 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ASCIIwwdc.framework;
+			remoteRef = DD92EAA31AE978DC00D503AE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -318,6 +368,7 @@
 				DD4F6E561AE2D11D0099BEB5 /* Images.xcassets in Resources */,
 				DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */,
 				DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */,
+				DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */,
 				DD4F6E591AE2D11D0099BEB5 /* Main.storyboard in Resources */,
 				DD4F6E771AE2D82A0099BEB5 /* VideosHeaderViewController.xib in Resources */,
 			);
@@ -336,6 +387,7 @@
 				DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */,
 				DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */,
 				DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */,
+				DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */,
 				DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */,
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
@@ -361,6 +413,11 @@
 			isa = PBXTargetDependency;
 			name = ViewUtils;
 			targetProxy = DD20166A1AE402B400DD8155 /* PBXContainerItemProxy */;
+		};
+		DD92EAA91AE978EC00D503AE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ASCIIwwdc;
+			targetProxy = DD92EAA81AE978EC00D503AE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
