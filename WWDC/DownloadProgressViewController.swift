@@ -44,15 +44,7 @@ class DownloadProgressViewController: NSViewController {
     {
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserverForName(VideoStoreStartedDownloadNotification, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if self.session.hd_url == nil {
-                return
-            }
-            
-            if let url = note.object as? String {
-                if url != self.session.hd_url! {
-                    return
-                }
-            } else {
+            if !self.isThisNotificationForMe(note) {
                 return
             }
             
@@ -60,15 +52,7 @@ class DownloadProgressViewController: NSViewController {
             self.downloadButton.hidden = true
         }
         nc.addObserverForName(VideoStoreFinishedDownloadNotification, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if self.session.hd_url == nil {
-                return
-            }
-            
-            if let url = note.object as? String {
-                if url != self.session.hd_url! {
-                    return
-                }
-            } else {
+            if !self.isThisNotificationForMe(note) {
                 return
             }
             
@@ -78,15 +62,7 @@ class DownloadProgressViewController: NSViewController {
             self.downloadFinishedCallback()
         }
         nc.addObserverForName(VideoStoreDownloadProgressedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if self.session.hd_url == nil {
-                return
-            }
-            
-            if let url = note.object as? String {
-                if url != self.session.hd_url! {
-                    return
-                }
-            } else {
+            if !self.isThisNotificationForMe(note) {
                 return
             }
             
@@ -115,6 +91,26 @@ class DownloadProgressViewController: NSViewController {
                 self.downloadButton.hidden = false
             }
         }
+    }
+    
+    private func isThisNotificationForMe(note: NSNotification!) -> Bool {
+        // we don't have a downloadable session, so this is clearly not for us
+        if session.hd_url == nil {
+            return false
+        }
+        
+        if let url = note.object as? String {
+            if url != session.hd_url! {
+                // notification's URL doesn't match our session's URL
+                return false
+            }
+        } else {
+            // notification's object is not a valid string
+            return false
+        }
+        
+        // this is for us
+        return true
     }
     
     @IBAction func download(sender: NSButton) {
