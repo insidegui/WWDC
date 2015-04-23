@@ -944,17 +944,8 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </customView>
-                            <textField hidden="YES" horizontalHuggingPriority="230" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="500" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TO1-x6-ead">
-                                <rect key="frame" x="18" y="83" width="523" height="170"/>
-                                <textFieldCell key="cell" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" id="IeT-9W-1pW">
-                                    <font key="font" metaFont="system"/>
-                                    <string key="title">Automation in OS X has always been about power and choice. Scriptable applications, including Pages, Keynote, Numbers, and the Finder, can already be automated using a variety of languages, including AppleScript, Objective-C, Perl, Python, and Ruby. With OS X Yosemite, application scripting support has been added to another popular language, JavaScript. JavaScript for Automation (JXA) extends the standard JavaScript environment provided by the JavaScriptCore framework with support for querying and controlling all of the scriptable applications running in OS X.  JXA scripts are supported at all layers of the system and can be invoked from the command-line, from the system-wide Script Menu, and can even be distributed as code-signed applications.</string>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button hidden="YES" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
-                                <rect key="frame" x="155" y="47" width="118" height="32"/>
+                            <button hidden="YES" verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
+                                <rect key="frame" x="155" y="200" width="118" height="32"/>
                                 <buttonCell key="cell" type="push" title="Watch Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xjs-Oy-GhI">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -963,8 +954,8 @@
                                     <action selector="watchVideo:" target="PTx-VW-9eO" id="zao-l3-ayW"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
-                                <rect key="frame" x="273" y="47" width="111" height="32"/>
+                            <button hidden="YES" verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
+                                <rect key="frame" x="273" y="200" width="111" height="32"/>
                                 <buttonCell key="cell" type="push" title="View Slides" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UpZ-Ii-Qdp">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -973,8 +964,8 @@
                                     <action selector="viewSlides:" target="PTx-VW-9eO" id="ZvI-6E-Suo"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
-                                <rect key="frame" x="384" y="47" width="161" height="32"/>
+                            <button hidden="YES" verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
+                                <rect key="frame" x="384" y="200" width="161" height="32"/>
                                 <buttonCell key="cell" type="push" title="Mark as unwatched" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pEg-S2-YVS">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -983,8 +974,8 @@
                                     <action selector="markAsUnwatched:" target="PTx-VW-9eO" id="RjF-aK-gYz"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
-                                <rect key="frame" x="14" y="47" width="141" height="32"/>
+                            <button hidden="YES" verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
+                                <rect key="frame" x="14" y="200" width="141" height="32"/>
                                 <buttonCell key="cell" type="push" title="Watch HD Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D3d-bZ-Zck">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -993,22 +984,29 @@
                                     <action selector="watchHDVideo:" target="PTx-VW-9eO" id="Rlg-jP-OFg"/>
                                 </connections>
                             </button>
+                            <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="TO1-x6-ead" customClass="GRTextField">
+                                <rect key="frame" x="18" y="236" width="190" height="17"/>
+                                <textFieldCell key="cell" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Session description goes here" id="IeT-9W-1pW">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="COw-ui-l2a" firstAttribute="centerY" secondItem="Ff7-FM-rkW" secondAttribute="centerY" id="3h0-Kr-stP"/>
                             <constraint firstItem="yfT-Gv-ICD" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" id="5er-Ai-Ouu"/>
-                            <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="Jf5-fu-85o"/>
-                            <constraint firstItem="KY0-ql-QWs" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="8" id="NZE-NL-zDj"/>
-                            <constraint firstItem="COw-ui-l2a" firstAttribute="leading" secondItem="KY0-ql-QWs" secondAttribute="trailing" constant="12" id="aA8-C5-PMb"/>
-                            <constraint firstItem="KY0-ql-QWs" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="aBs-CC-M0F"/>
-                            <constraint firstItem="TO1-x6-ead" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" constant="70" id="cfP-oJ-WTW"/>
-                            <constraint firstItem="Zfu-UV-fL8" firstAttribute="leading" secondItem="Ff7-FM-rkW" secondAttribute="trailing" constant="12" id="do2-UX-hD0"/>
+                            <constraint firstItem="KY0-ql-QWs" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="8" id="8EV-gF-4ZG"/>
+                            <constraint firstItem="Ff7-FM-rkW" firstAttribute="centerY" secondItem="Zfu-UV-fL8" secondAttribute="centerY" id="P19-at-cjj"/>
+                            <constraint firstItem="KY0-ql-QWs" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="VAy-dh-rHO"/>
+                            <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="cEn-gz-ug5"/>
                             <constraint firstAttribute="trailing" secondItem="yfT-Gv-ICD" secondAttribute="trailing" id="f7O-Ap-dUq"/>
                             <constraint firstItem="yfT-Gv-ICD" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" id="fMG-0T-AOE"/>
-                            <constraint firstItem="COw-ui-l2a" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="8" id="lIV-YE-poB"/>
-                            <constraint firstItem="Ff7-FM-rkW" firstAttribute="leading" secondItem="COw-ui-l2a" secondAttribute="trailing" constant="12" id="obI-3n-anU"/>
-                            <constraint firstItem="Zfu-UV-fL8" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="8" id="ouh-GP-NbK"/>
-                            <constraint firstAttribute="trailing" secondItem="TO1-x6-ead" secondAttribute="trailing" constant="20" id="qC3-WN-jmA"/>
-                            <constraint firstItem="Ff7-FM-rkW" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="8" id="tYr-np-D6F"/>
+                            <constraint firstItem="Zfu-UV-fL8" firstAttribute="leading" secondItem="Ff7-FM-rkW" secondAttribute="trailing" constant="12" id="g2G-3L-rdz"/>
+                            <constraint firstItem="Ff7-FM-rkW" firstAttribute="leading" secondItem="COw-ui-l2a" secondAttribute="trailing" constant="12" id="may-nR-bve"/>
+                            <constraint firstItem="COw-ui-l2a" firstAttribute="leading" secondItem="KY0-ql-QWs" secondAttribute="trailing" constant="12" id="odA-m7-jmV"/>
+                            <constraint firstItem="COw-ui-l2a" firstAttribute="centerY" secondItem="KY0-ql-QWs" secondAttribute="centerY" id="t4y-5z-pJw"/>
+                            <constraint firstItem="TO1-x6-ead" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="bottom" constant="8" id="uSJ-UI-Mhf"/>
                         </constraints>
                     </view>
                     <connections>

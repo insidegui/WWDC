@@ -14,6 +14,8 @@
 		DD20167C1AE4158100DD8155 /* GRPlayerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = DD20167A1AE4158100DD8155 /* GRPlayerWindow.m */; };
 		DD20167F1AE41DD600DD8155 /* GRPlayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD20167D1AE41DD600DD8155 /* GRPlayerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD2016801AE41DD600DD8155 /* GRPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD20167E1AE41DD600DD8155 /* GRPlayerView.m */; };
+		DD75A9321AE9387700C12D31 /* GRTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = DD75A9301AE9387700C12D31 /* GRTextField.h */; };
+		DD75A9331AE9387700C12D31 /* GRTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = DD75A9311AE9387700C12D31 /* GRTextField.m */; };
 		DDC049D61AE56A710008D41A /* GRReadingWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = DDC049D41AE56A710008D41A /* GRReadingWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDC049D71AE56A710008D41A /* GRReadingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC049D51AE56A710008D41A /* GRReadingWindow.m */; };
 		DDC049DA1AE56AA10008D41A /* GRWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = DDC049D81AE56AA10008D41A /* GRWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -30,6 +32,8 @@
 		DD20167A1AE4158100DD8155 /* GRPlayerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRPlayerWindow.m; sourceTree = "<group>"; };
 		DD20167D1AE41DD600DD8155 /* GRPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRPlayerView.h; sourceTree = "<group>"; };
 		DD20167E1AE41DD600DD8155 /* GRPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRPlayerView.m; sourceTree = "<group>"; };
+		DD75A9301AE9387700C12D31 /* GRTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRTextField.h; sourceTree = "<group>"; };
+		DD75A9311AE9387700C12D31 /* GRTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRTextField.m; sourceTree = "<group>"; };
 		DDC049D41AE56A710008D41A /* GRReadingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRReadingWindow.h; sourceTree = "<group>"; };
 		DDC049D51AE56A710008D41A /* GRReadingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRReadingWindow.m; sourceTree = "<group>"; };
 		DDC049D81AE56AA10008D41A /* GRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRWindow.h; sourceTree = "<group>"; };
@@ -78,6 +82,8 @@
 				DDC049D51AE56A710008D41A /* GRReadingWindow.m */,
 				DDC049D81AE56AA10008D41A /* GRWindow.h */,
 				DDC049D91AE56AA10008D41A /* GRWindow.m */,
+				DD75A9301AE9387700C12D31 /* GRTextField.h */,
+				DD75A9311AE9387700C12D31 /* GRTextField.m */,
 			);
 			path = ViewUtils;
 			sourceTree = "<group>";
@@ -102,6 +108,7 @@
 				DDC049D61AE56A710008D41A /* GRReadingWindow.h in Headers */,
 				DDC049DA1AE56AA10008D41A /* GRWindow.h in Headers */,
 				DD20167B1AE4158100DD8155 /* GRPlayerWindow.h in Headers */,
+				DD75A9321AE9387700C12D31 /* GRTextField.h in Headers */,
 				DD2016471AE401B500DD8155 /* ViewUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -177,6 +184,7 @@
 				DD20167C1AE4158100DD8155 /* GRPlayerWindow.m in Sources */,
 				DD2016601AE401C200DD8155 /* GRWindowMovingView.m in Sources */,
 				DDC049DB1AE56AA10008D41A /* GRWindow.m in Sources */,
+				DD75A9331AE9387700C12D31 /* GRTextField.m in Sources */,
 				DDC049D71AE56A710008D41A /* GRReadingWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
