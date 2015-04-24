@@ -23,6 +23,12 @@ struct Session {
     var year: Int
     var hd_url: String?
     
+    var sessionDescription: String {
+        get {
+            return year.description + "," + id.description + "," + track + "," + title + "," + ",".join(focus)
+        }
+    }
+    
     var progress: Double {
         get {
             return DataStore.SharedStore.fetchSessionProgress(self)

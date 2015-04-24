@@ -192,10 +192,14 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                         
                         if let query: String = qualifiers["_query"] as? String {
                             if query != "" {
-                                if let range = session.title.rangeOfString(query, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) {
-                                    //Nothing here...
-                                } else {
-                                    return false
+                                for term in query.componentsSeparatedByString(",") {
+                                    if term.isEmpty {
+                                        continue
+                                    } else if let range = session.sessionDescription.rangeOfString(term, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) {
+                                        //Nothing here...
+                                    } else {
+                                        return false
+                                    }
                                 }
                             }
                         }
