@@ -53,9 +53,7 @@ class VideoWindowController: NSWindowController {
         }
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
-            if self.transcriptWC.window != nil {
-               self.transcriptWC.close()
-            }
+            self.transcriptWC?.close()
             
             self.player?.pause()
         }
