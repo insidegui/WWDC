@@ -100,6 +100,10 @@ class VideoWindowController: NSWindowController {
     var boundaryObserver: AnyObject?
     
     func setupTranscriptSync(transcript: WWDCSessionTranscript) {
+        if self.transcriptWC == nil {
+            return
+        }
+        
         boundaryObserver = player?.addBoundaryTimeObserverForTimes(transcript.timecodes, queue: dispatch_get_main_queue()) { [unowned self] in
             if self.transcriptWC == nil {
                 return
