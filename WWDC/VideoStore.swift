@@ -8,9 +8,9 @@
 
 import Cocoa
 
-public let VideoStoreStartedDownloadNotification = "VideoStoreStartedDownloadNotification"
-public let VideoStoreFinishedDownloadNotification = "VideoStoreFinishedDownloadNotification"
-public let VideoStoreDownloadProgressedNotification = "VideoStoreDownloadProgressedNotification"
+public let VideoStoreNotificationDownloadStarted = "VideoStoreNotificationDownloadStarted"
+public let VideoStoreNotificationDownloadFinished = "VideoStoreNotificationDownloadFinished"
+public let VideoStoreNotificationDownloadProgressChanged = "VideoStoreNotificationDownloadProgressChanged"
 
 private let _SharedVideoStore = VideoStore()
 private let _BackgroundSessionIdentifier = "WWDC Video Downloader"
@@ -50,19 +50,42 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         }
         
         let task = backgroundSession.downloadTaskWithURL(NSURL(string: url)!)
+		if let key = task.originalRequest.URL!.absoluteString {
+			self.downloadTasks[key] = task
+		}
         task.resume()
-        
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreStartedDownloadNotification, object: url)
+		
+        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadStarted, object: url)
     }
     
-    func pauseDownload(url: String) {
+    func pauseDownload(url: String) -> Bool {
         if let task = downloadTasks[url] {
-            println("VideoStore pauseDownload is not implemented yet")
-        } else {
-            println("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
+			task.suspend()
+			return true
         }
+		println("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
+		return false
     }
-    
+	
+	func resumeDownload(url: String) -> Bool {
+		if let task = downloadTasks[url] {
+			task.resume()
+			return true
+		}
+		println("VideoStore was asked to resume downloading URL \(url), but there's no task for that URL")
+		return false
+	}
+	
+	func cancelDownload(url: String) -> Bool {
+		if let task = downloadTasks[url] {
+			task.cancel()
+			self.downloadTasks.removeValueForKey(url)
+			return true
+		}
+		println("VideoStore was asked to cancel downloading URL \(url), but there's no task for that URL")
+		return false
+	}
+	
     func isDownloading(url: String) -> Bool {
         let downloading = downloadTasks.keys.filter { taskURL in
             return url == taskURL
@@ -103,14 +126,14 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         
         downloadTasks.removeValueForKey(originalAbsoluteURLString)
         
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreFinishedDownloadNotification, object: originalAbsoluteURLString)
+        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadFinished, object: originalAbsoluteURLString)
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         let originalURL = downloadTask.originalRequest.URL!.absoluteString!
 
         let info = ["totalBytesWritten": Int(totalBytesWritten), "totalBytesExpectedToWrite": Int(totalBytesExpectedToWrite)]
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadProgressedNotification, object: originalURL, userInfo: info)
+        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadProgressChanged, object: originalURL, userInfo: info)
     }
     
 }
