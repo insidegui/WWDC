@@ -620,6 +620,11 @@
                                                 <action selector="performMiniaturize:" target="Ady-hI-5gd" id="VwT-WD-YPe"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Downloads" keyEquivalent="d" id="QVO-lm-fKQ">
+                                            <connections>
+                                                <action selector="showDownloadListWindow:" target="Voe-Tx-rLC" id="gbg-wD-ZpW"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Zoom" id="R4o-n2-Eq4">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -937,14 +942,14 @@
                                         <rect key="frame" x="458" y="19" width="50" height="19"/>
                                         <buttonCell key="cell" type="roundRect" title="Pause" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yvu-jl-S2a">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="controlContent"/>
+                                            <font key="font" metaFont="cellTitle"/>
                                         </buttonCell>
                                     </button>
                                     <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eHr-1y-PKq">
                                         <rect key="frame" x="396" y="19" width="54" height="19"/>
                                         <buttonCell key="cell" type="roundRect" title="Cancel" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aG0-ZB-IOP">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="controlContent"/>
+                                            <font key="font" metaFont="cellTitle"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="cancelDownload:" target="SkJ-kP-aeS" id="xqz-SV-QHd"/>

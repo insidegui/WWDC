@@ -11,9 +11,8 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-
-
     var window: NSWindow?
+	private var downloadListWindow: DownloadListWindowController?
 	
     func applicationOpenUntitledFile(sender: NSApplication) -> Bool {
         window?.makeKeyAndOrderFront(nil)
@@ -31,6 +30,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
 
+	@IBAction func showDownloadListWindow(sender: NSMenuItem) {
+		if self.downloadListWindow == nil {
+			self.downloadListWindow = DownloadListWindowController()
+		}
+		self.downloadListWindow?.showWindow(self);
+	}
+	
 
 }
 

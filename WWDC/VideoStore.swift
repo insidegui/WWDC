@@ -9,6 +9,9 @@
 import Cocoa
 
 public let VideoStoreNotificationDownloadStarted = "VideoStoreNotificationDownloadStarted"
+public let VideoStoreNotificationDownloadCancelled = "VideoStoreNotificationDownloadCancelled"
+public let VideoStoreNotificationDownloadPaused = "VideoStoreNotificationDownloadPaused"
+public let VideoStoreNotificationDownloadResumed = "VideoStoreNotificationDownloadResumed"
 public let VideoStoreNotificationDownloadFinished = "VideoStoreNotificationDownloadFinished"
 public let VideoStoreNotificationDownloadProgressChanged = "VideoStoreNotificationDownloadProgressChanged"
 
@@ -21,7 +24,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     private var backgroundSession: NSURLSession!
     private var downloadTasks: [String : NSURLSessionDownloadTask] = [:]
     private let defaults = NSUserDefaults.standardUserDefaults()
-    
+	
     let localVideoStoragePath = NSString.pathWithComponents([NSHomeDirectory(), "Library", "Application Support", "WWDC"])
     
     class func SharedStore() -> VideoStore
@@ -43,7 +46,11 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     }
     
     // MARK: Public interface
-    
+	
+	func allTasks() -> [NSURLSessionDownloadTask] {
+		return Array(self.downloadTasks.values)
+	}
+	
     func download(url: String) {
         if isDownloading(url) {
             return
@@ -61,6 +68,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     func pauseDownload(url: String) -> Bool {
         if let task = downloadTasks[url] {
 			task.suspend()
+			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadPaused, object: url)
 			return true
         }
 		println("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
@@ -70,6 +78,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 	func resumeDownload(url: String) -> Bool {
 		if let task = downloadTasks[url] {
 			task.resume()
+			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadResumed, object: url)
 			return true
 		}
 		println("VideoStore was asked to resume downloading URL \(url), but there's no task for that URL")
@@ -80,6 +89,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 		if let task = downloadTasks[url] {
 			task.cancel()
 			self.downloadTasks.removeValueForKey(url)
+			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadCancelled, object: url)
 			return true
 		}
 		println("VideoStore was asked to cancel downloading URL \(url), but there's no task for that URL")

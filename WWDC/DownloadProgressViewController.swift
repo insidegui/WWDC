@@ -12,6 +12,7 @@ enum DownloadProgressViewButtonState : Int {
 	case NoDownload
 	case Downloaded
 	case Downloading
+	case Paused
 }
 
 class DownloadProgressViewController: NSViewController {
@@ -30,6 +31,9 @@ class DownloadProgressViewController: NSViewController {
 	private var downloadStartedHndl: AnyObject?
 	private var downloadFinishedHndl: AnyObject?
 	private var downloadChangedHndl: AnyObject?
+	private var downloadCancelledHndl: AnyObject?
+	private var downloadPausedHndl: AnyObject?
+	private var downloadResumedHndl: AnyObject?
 	private var subscribed: Bool = false
 	
 	var downloadFinishedCallback: () -> () = {}
@@ -43,6 +47,9 @@ class DownloadProgressViewController: NSViewController {
 		NSNotificationCenter.defaultCenter().removeObserver(self.downloadStartedHndl!)
 		NSNotificationCenter.defaultCenter().removeObserver(self.downloadFinishedHndl!)
 		NSNotificationCenter.defaultCenter().removeObserver(self.downloadChangedHndl!)
+		NSNotificationCenter.defaultCenter().removeObserver(self.downloadCancelledHndl!)
+		NSNotificationCenter.defaultCenter().removeObserver(self.downloadPausedHndl!)
+		NSNotificationCenter.defaultCenter().removeObserver(self.downloadResumedHndl!)
 	}
 	
 	private func updateUI()
@@ -76,6 +83,11 @@ class DownloadProgressViewController: NSViewController {
 			self.downloadButton.hidden = true
 			self.statusButton.hidden = false
 			self.cancelButton.hidden = false
+			self.statusButton.title = NSLocalizedString("Pause", comment: "pause title in video download view")
+			self.statusButton.action = "pauseDownload:"
+		case .Paused:
+			self.statusButton.title = NSLocalizedString("Resume", comment: "resume title in video download view")
+			self.statusButton.action = "resumeDownload:"
 		}
 	}
 	
@@ -107,6 +119,15 @@ class DownloadProgressViewController: NSViewController {
 					self.progressIndicator.doubleValue = Double(totalBytesWritten)
 				}
 			}
+		}
+		self.downloadCancelledHndl = nc.addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+			self.updateButtonVisibility(.NoDownload)
+		}
+		self.downloadPausedHndl = nc.addObserverForName(VideoStoreNotificationDownloadPaused, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+			self.updateButtonVisibility(.Paused)
+		}
+		self.downloadResumedHndl = nc.addObserverForName(VideoStoreNotificationDownloadResumed, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+			self.updateButtonVisibility(.Downloading)
 		}
 		self.subscribed = true
 	}
@@ -158,8 +179,7 @@ class DownloadProgressViewController: NSViewController {
 	func pauseDownload(sender: NSButton) {
 		if let url = session.hd_url {
 			if VideoStore.SharedStore().pauseDownload(url) {
-				sender.title = NSLocalizedString("Resume", comment: "resume title in video download view")
-				sender.action = "resumeDownload:"
+				self.updateButtonVisibility(.Paused)
 			}
 		}
 	}
@@ -167,8 +187,7 @@ class DownloadProgressViewController: NSViewController {
 	func resumeDownload(sender: NSButton) {
 		if let url = session.hd_url {
 			if VideoStore.SharedStore().resumeDownload(url) {
-				sender.title = NSLocalizedString("Pause", comment: "pause title in video download view")
-				sender.action = "pauseDownload:"
+				self.updateButtonVisibility(.Downloading)
 			}
 		}
 	}
