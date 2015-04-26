@@ -880,7 +880,7 @@
                 <viewController id="PTx-VW-9eO" customClass="VideoDetailsViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" horizontalCompressionResistancePriority="250" id="lmc-yJ-Qdy" customClass="ContentBackgroundView" customModule="WWDC" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="559" height="323"/>
-                        <autoresizingMask key="autoresizingMask"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <customView horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yfT-Gv-ICD" customClass="GRWindowMovingView">
                                 <rect key="frame" x="0.0" y="261" width="559" height="62"/>
@@ -911,7 +911,7 @@
                                         <rect key="frame" x="516" y="21" width="23" height="21"/>
                                         <subviews>
                                             <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Rfp-dR-Pi4">
-                                                <rect key="frame" x="3" y="2" width="16" height="16"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
                                             </progressIndicator>
                                             <button toolTip="Download Video" translatesAutoresizingMaskIntoConstraints="NO" id="ZoQ-nZ-mjo">
                                                 <rect key="frame" x="0.0" y="0.0" width="23" height="21"/>
@@ -925,54 +925,48 @@
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="Rfp-dR-Pi4" firstAttribute="centerY" secondItem="ZoQ-nZ-mjo" secondAttribute="centerY" id="25o-FO-vzs"/>
-                                            <constraint firstItem="ZoQ-nZ-mjo" firstAttribute="leading" secondItem="P5u-9c-sQG" secondAttribute="leading" id="5QZ-OH-Xv5"/>
+                                            <constraint firstItem="Rfp-dR-Pi4" firstAttribute="leading" secondItem="ZoQ-nZ-mjo" secondAttribute="leading" id="0hI-Lc-wPf"/>
+                                            <constraint firstItem="ZoQ-nZ-mjo" firstAttribute="leading" secondItem="P5u-9c-sQG" secondAttribute="leading" id="5Mq-V8-iXo"/>
                                             <constraint firstAttribute="width" constant="23" id="8W0-t9-9fn"/>
-                                            <constraint firstItem="ZoQ-nZ-mjo" firstAttribute="top" secondItem="P5u-9c-sQG" secondAttribute="top" id="S6r-86-mws"/>
-                                            <constraint firstItem="Rfp-dR-Pi4" firstAttribute="centerX" secondItem="ZoQ-nZ-mjo" secondAttribute="centerX" id="k35-Cq-wIU"/>
+                                            <constraint firstItem="Rfp-dR-Pi4" firstAttribute="bottom" secondItem="ZoQ-nZ-mjo" secondAttribute="bottom" id="XxH-et-djz"/>
                                             <constraint firstAttribute="height" constant="21" id="k8n-hE-P55"/>
+                                            <constraint firstItem="ZoQ-nZ-mjo" firstAttribute="top" secondItem="P5u-9c-sQG" secondAttribute="top" id="rl9-VN-qPu"/>
                                         </constraints>
                                     </customView>
-                                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5V7-Km-g7l">
-                                        <rect key="frame" x="454" y="20" width="59" height="19"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="59" id="y0w-r5-DHT"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="roundRect" title="Pause" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7sY-92-TYZ">
+                                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dJk-KM-Mdl">
+                                        <rect key="frame" x="458" y="19" width="50" height="19"/>
+                                        <buttonCell key="cell" type="roundRect" title="Pause" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yvu-jl-S2a">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="controlContent"/>
                                         </buttonCell>
                                     </button>
-                                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eey-sf-c8F">
-                                        <rect key="frame" x="387" y="20" width="59" height="19"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="59" id="M3F-PO-xyB"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="roundRect" title="Cancel" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Wlk-jQ-mPr">
+                                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eHr-1y-PKq">
+                                        <rect key="frame" x="396" y="19" width="54" height="19"/>
+                                        <buttonCell key="cell" type="roundRect" title="Cancel" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aG0-ZB-IOP">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="controlContent"/>
                                         </buttonCell>
                                         <connections>
-                                            <action selector="cancelDownload:" target="SkJ-kP-aeS" id="30z-cP-PuZ"/>
+                                            <action selector="cancelDownload:" target="SkJ-kP-aeS" id="xqz-SV-QHd"/>
                                         </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="5V7-Km-g7l" firstAttribute="bottom" secondItem="P5u-9c-sQG" secondAttribute="bottom" id="0OT-Rb-cLY"/>
                                     <constraint firstAttribute="centerY" secondItem="P5u-9c-sQG" secondAttribute="centerY" constant="0.5" id="6ZD-H2-xIa"/>
+                                    <constraint firstItem="eHr-1y-PKq" firstAttribute="baseline" secondItem="dJk-KM-Mdl" secondAttribute="baseline" id="9Ix-BQ-ILf"/>
                                     <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="OTC-kh-gjR" secondAttribute="trailing" constant="8" id="ACr-pW-fNA"/>
                                     <constraint firstItem="unj-WU-zmU" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" id="E2h-q6-l5g"/>
                                     <constraint firstAttribute="trailing" secondItem="unj-WU-zmU" secondAttribute="trailing" id="Eou-ym-IEC"/>
                                     <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="Q3D-NN-RLa" secondAttribute="trailing" constant="8" id="Imi-GT-WHS"/>
-                                    <constraint firstItem="5V7-Km-g7l" firstAttribute="leading" secondItem="eey-sf-c8F" secondAttribute="trailing" constant="8" symbolic="YES" id="NJI-vm-8Gc"/>
                                     <constraint firstAttribute="bottom" secondItem="unj-WU-zmU" secondAttribute="bottom" id="QEa-2T-MZF"/>
-                                    <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="5V7-Km-g7l" secondAttribute="trailing" constant="3" id="Qox-Ve-RVN"/>
                                     <constraint firstAttribute="trailing" secondItem="P5u-9c-sQG" secondAttribute="trailing" constant="20" id="U8f-pZ-DIf"/>
+                                    <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="dJk-KM-Mdl" secondAttribute="trailing" constant="8" symbolic="YES" id="ZGB-9O-wca"/>
                                     <constraint firstItem="Q3D-NN-RLa" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" constant="20" id="Zca-OP-8uv"/>
+                                    <constraint firstAttribute="bottom" secondItem="eHr-1y-PKq" secondAttribute="bottom" constant="20" symbolic="YES" id="Zz8-B2-mGp"/>
                                     <constraint firstItem="Q3D-NN-RLa" firstAttribute="top" secondItem="OTC-kh-gjR" secondAttribute="bottom" constant="2" id="cDD-E4-tFM"/>
                                     <constraint firstItem="OTC-kh-gjR" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="top" constant="16" id="fGc-c6-zbn"/>
                                     <constraint firstAttribute="height" constant="62" id="hPH-mv-MND"/>
-                                    <constraint firstItem="5V7-Km-g7l" firstAttribute="baseline" secondItem="eey-sf-c8F" secondAttribute="baseline" id="oTJ-GE-fJW"/>
+                                    <constraint firstItem="dJk-KM-Mdl" firstAttribute="leading" secondItem="eHr-1y-PKq" secondAttribute="trailing" constant="8" symbolic="YES" id="lXh-V4-lc9"/>
                                     <constraint firstItem="OTC-kh-gjR" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" constant="20" id="z1a-ii-utb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -981,94 +975,115 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </customView>
-                            <button hidden="YES" verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
-                                <rect key="frame" x="155" y="200" width="118" height="32"/>
-                                <buttonCell key="cell" type="push" title="Watch Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xjs-Oy-GhI">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="watchVideo:" target="PTx-VW-9eO" id="zao-l3-ayW"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
-                                <rect key="frame" x="273" y="200" width="111" height="32"/>
-                                <buttonCell key="cell" type="push" title="View Slides" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UpZ-Ii-Qdp">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="viewSlides:" target="PTx-VW-9eO" id="ZvI-6E-Suo"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
-                                <rect key="frame" x="384" y="200" width="161" height="32"/>
-                                <buttonCell key="cell" type="push" title="Mark as unwatched" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pEg-S2-YVS">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="markAsUnwatched:" target="PTx-VW-9eO" id="RjF-aK-gYz"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
-                                <rect key="frame" x="14" y="200" width="141" height="32"/>
-                                <buttonCell key="cell" type="push" title="Watch HD Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D3d-bZ-Zck">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="watchHDVideo:" target="PTx-VW-9eO" id="Rlg-jP-OFg"/>
-                                </connections>
-                            </button>
                             <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="TO1-x6-ead" customClass="GRTextField">
-                                <rect key="frame" x="18" y="236" width="190" height="17"/>
+                                <rect key="frame" x="18" y="224" width="190" height="17"/>
                                 <textFieldCell key="cell" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Session description goes here" id="IeT-9W-1pW">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <stackView orientation="horizontal" alignment="centerY" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="NDa-qd-DsL">
+                                <rect key="frame" x="20" y="182" width="519" height="22"/>
+                                <beginningViews>
+                                    <button verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
+                                        <rect key="frame" x="14" y="200" width="141" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Watch HD Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D3d-bZ-Zck">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="watchHD:" target="1s0-2L-R2i" id="xqm-Kv-PmK"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="50" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
+                                        <rect key="frame" x="155" y="200" width="118" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Watch Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xjs-Oy-GhI">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="watch:" target="1s0-2L-R2i" id="d1x-9M-a2C"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="50" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
+                                        <rect key="frame" x="273" y="200" width="111" height="32"/>
+                                        <buttonCell key="cell" type="push" title="View Slides" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UpZ-Ii-Qdp">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="watchSlides:" target="1s0-2L-R2i" id="Bt3-zs-bNR"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="50" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
+                                        <rect key="frame" x="384" y="200" width="161" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Mark as watched" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pEg-S2-YVS">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="toggleWatched:" target="1s0-2L-R2i" id="nkN-wY-mg5"/>
+                                        </connections>
+                                    </button>
+                                </beginningViews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="p7G-TF-dB4"/>
+                                </constraints>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <real value="500"/>
+                                    <real value="250"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="COw-ui-l2a" firstAttribute="centerY" secondItem="Ff7-FM-rkW" secondAttribute="centerY" id="3h0-Kr-stP"/>
-                            <constraint firstItem="yfT-Gv-ICD" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" id="5er-Ai-Ouu"/>
-                            <constraint firstItem="KY0-ql-QWs" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="8" id="8EV-gF-4ZG"/>
-                            <constraint firstItem="Ff7-FM-rkW" firstAttribute="centerY" secondItem="Zfu-UV-fL8" secondAttribute="centerY" id="P19-at-cjj"/>
-                            <constraint firstItem="KY0-ql-QWs" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="VAy-dh-rHO"/>
-                            <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="cEn-gz-ug5"/>
-                            <constraint firstAttribute="trailing" secondItem="yfT-Gv-ICD" secondAttribute="trailing" id="f7O-Ap-dUq"/>
-                            <constraint firstItem="yfT-Gv-ICD" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" id="fMG-0T-AOE"/>
-                            <constraint firstItem="Zfu-UV-fL8" firstAttribute="leading" secondItem="Ff7-FM-rkW" secondAttribute="trailing" constant="12" id="g2G-3L-rdz"/>
-                            <constraint firstItem="Ff7-FM-rkW" firstAttribute="leading" secondItem="COw-ui-l2a" secondAttribute="trailing" constant="12" id="may-nR-bve"/>
-                            <constraint firstItem="COw-ui-l2a" firstAttribute="leading" secondItem="KY0-ql-QWs" secondAttribute="trailing" constant="12" id="odA-m7-jmV"/>
-                            <constraint firstItem="COw-ui-l2a" firstAttribute="centerY" secondItem="KY0-ql-QWs" secondAttribute="centerY" id="t4y-5z-pJw"/>
-                            <constraint firstItem="TO1-x6-ead" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="bottom" constant="8" id="uSJ-UI-Mhf"/>
+                            <constraint firstItem="yfT-Gv-ICD" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" id="5X2-FA-2RR"/>
+                            <constraint firstItem="NDa-qd-DsL" firstAttribute="centerX" secondItem="yfT-Gv-ICD" secondAttribute="centerX" id="9Ru-8q-Cjg"/>
+                            <constraint firstItem="NDa-qd-DsL" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="20" id="A0o-bD-Ab8"/>
+                            <constraint firstItem="yfT-Gv-ICD" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" id="FKh-9G-PHE"/>
+                            <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="NDa-qd-DsL" secondAttribute="leading" id="MYD-oP-EUZ"/>
+                            <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" symbolic="YES" id="Nl7-wk-Yx9"/>
+                            <constraint firstAttribute="trailing" secondItem="NDa-qd-DsL" secondAttribute="trailing" constant="20" symbolic="YES" id="lf1-15-Oqn"/>
+                            <constraint firstItem="TO1-x6-ead" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="bottom" constant="20" id="uSJ-UI-Mhf"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="actionButtonsController" destination="1s0-2L-R2i" id="ygo-iC-BIf"/>
                         <outlet property="descriptionLabel" destination="TO1-x6-ead" id="zeU-Ec-TF1"/>
                         <outlet property="downloadController" destination="SkJ-kP-aeS" id="dW2-ke-WsS"/>
-                        <outlet property="markAsUnwatchedButton" destination="Zfu-UV-fL8" id="HVc-P7-JPe"/>
                         <outlet property="subtitleLabel" destination="Q3D-NN-RLa" id="pFP-8H-gdR"/>
                         <outlet property="titleLabel" destination="OTC-kh-gjR" id="VaE-Md-v3f"/>
-                        <outlet property="viewSlidesButton" destination="Ff7-FM-rkW" id="SUe-PC-LLQ"/>
-                        <outlet property="watchHDVideoButton" destination="KY0-ql-QWs" id="b0A-R2-YFb"/>
-                        <outlet property="watchVideoButton" destination="COw-ui-l2a" id="n5c-Qh-nHp"/>
                     </connections>
                 </viewController>
                 <customObject id="ztN-pJ-8Sm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <customObject id="SkJ-kP-aeS" customClass="DownloadProgressViewController" customModule="WWDC" customModuleProvider="target">
                     <connections>
-                        <outlet property="cancelButton" destination="eey-sf-c8F" id="OQH-19-e68"/>
+                        <outlet property="cancelButton" destination="eHr-1y-PKq" id="5fk-3o-NmF"/>
                         <outlet property="downloadButton" destination="ZoQ-nZ-mjo" id="ute-Zj-K3T"/>
                         <outlet property="progressIndicator" destination="Rfp-dR-Pi4" id="ZNm-pc-dhj"/>
-                        <outlet property="statusButton" destination="5V7-Km-g7l" id="OE6-eb-3bU"/>
+                        <outlet property="statusButton" destination="dJk-KM-Mdl" id="VQV-a8-kZL"/>
                         <outlet property="view" destination="P5u-9c-sQG" id="NIz-ou-mqu"/>
                     </connections>
                 </customObject>
+                <customObject id="1s0-2L-R2i" customClass="ActionButtonsViewController" customModule="WWDC" customModuleProvider="target">
+                    <connections>
+                        <outlet property="progressButton" destination="Zfu-UV-fL8" id="Hca-lm-RsH"/>
+                        <outlet property="slidesButton" destination="Ff7-FM-rkW" id="hfa-nz-gFw"/>
+                        <outlet property="view" destination="NDa-qd-DsL" id="omw-Dt-wTd"/>
+                        <outlet property="watchButton" destination="COw-ui-l2a" id="p4q-Gw-aq7"/>
+                        <outlet property="watchHDButton" destination="KY0-ql-QWs" id="gTk-7D-gVG"/>
+                    </connections>
+                </customObject>
             </objects>
-            <point key="canvasLocation" x="795.5" y="927.5"/>
+            <point key="canvasLocation" x="715.5" y="931.5"/>
         </scene>
     </scenes>
     <resources>

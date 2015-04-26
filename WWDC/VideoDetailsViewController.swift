@@ -21,44 +21,19 @@ class VideoDetailsViewController: NSViewController {
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var subtitleLabel: NSTextField!
     @IBOutlet weak var descriptionLabel: NSTextField!
-    @IBOutlet weak var watchVideoButton: NSButton!
-    @IBOutlet weak var watchHDVideoButton: NSButton!
-    @IBOutlet weak var viewSlidesButton: NSButton!
-    @IBOutlet weak var markAsUnwatchedButton: NSButton!
     @IBOutlet var downloadController: DownloadProgressViewController!
+    @IBOutlet var actionButtonsController: ActionButtonsViewController!
     
     private func updateUI()
     {
+        actionButtonsController.session = session
+        setupActionCallbacks()
+        
         if let session = self.session {
             titleLabel.stringValue = session.title
             subtitleLabel.stringValue = "\(session.track) | Session \(session.id)"
             descriptionLabel.stringValue = session.description
             descriptionLabel.hidden = false
-            watchVideoButton.hidden = false
-            watchHDVideoButton.hidden = false
-            
-            if session.slides != nil {
-                viewSlidesButton.hidden = false
-            } else {
-                viewSlidesButton.hidden = true
-            }
-            if session.progress > 0 && session.progress < 1 {
-                markAsUnwatchedButton.hidden = false
-            } else {
-                markAsUnwatchedButton.hidden = true
-            }
-            if session.hd_url != nil {
-                watchHDVideoButton.enabled = true
-                if VideoStore.SharedStore().hasVideo(session.hd_url!) {
-                    watchHDVideoButton.toolTip = "Watch the downloaded video in HD"
-                    watchVideoButton.enabled = false
-                } else {
-                    watchHDVideoButton.toolTip = "Stream the video in HD"
-                    watchVideoButton.enabled = true
-                }
-            } else {
-                watchHDVideoButton.enabled = false
-            }
             
             downloadController.session = session
             downloadController.downloadFinishedCallback = { [unowned self] in
@@ -68,23 +43,40 @@ class VideoDetailsViewController: NSViewController {
             titleLabel.stringValue = "No session selected"
             subtitleLabel.stringValue = "Select a session to see It here"
             descriptionLabel.hidden = true
-            watchVideoButton.hidden = true
-            viewSlidesButton.hidden = true
-            markAsUnwatchedButton.hidden = true
-            watchHDVideoButton.hidden = true
         }
     }
     
-    @IBAction func watchVideo(sender: NSButton) {
-        doWatchVideo(sender, url: session!.url)
-    }
-    @IBAction func watchHDVideo(sender: NSButton) {
-        if session!.hd_url != nil {
-            if VideoStore.SharedStore().hasVideo(session!.hd_url!) {
-                doWatchVideo(sender, url: VideoStore.SharedStore().localVideoAbsoluteURLString(session!.hd_url!))
-            } else {
-                doWatchVideo(sender, url: session!.hd_url!)
+    private func setupActionCallbacks()
+    {
+        actionButtonsController.watchHDVideoCallback = { [unowned self] in
+            if self.session!.hd_url != nil {
+                if VideoStore.SharedStore().hasVideo(self.session!.hd_url!) {
+                    self.doWatchVideo(nil, url: VideoStore.SharedStore().localVideoAbsoluteURLString(self.session!.hd_url!))
+                } else {
+                    self.doWatchVideo(nil, url: self.session!.hd_url!)
+                }
             }
+        }
+        
+        actionButtonsController.watchVideoCallback = { [unowned self] in
+            self.doWatchVideo(nil, url: self.session!.url)
+        }
+        
+        actionButtonsController.showSlidesCallback = { [unowned self] in
+            if self.session!.slides != nil {
+                let slidesWindowController = PDFWindowController(session: self.session!)
+                slidesWindowController.showWindow(nil)
+                self.followWindowLifecycle(slidesWindowController.window)
+                self.auxWindowControllers.append(slidesWindowController)
+            }
+        }
+        
+        actionButtonsController.toggleWatchedCallback = { [unowned self] in
+            self.session!.progress = 100
+        }
+        
+        actionButtonsController.afterCallback = { [unowned self] in
+            self.actionButtonsController.session = self.session
         }
     }
     
@@ -96,15 +88,6 @@ class VideoDetailsViewController: NSViewController {
         auxWindowControllers.append(playerWindowController)
     }
     
-    @IBAction func viewSlides(sender: NSButton) {
-        if session!.slides != nil {
-            let slidesWindowController = PDFWindowController(session: session!)
-            slidesWindowController.showWindow(sender)
-            followWindowLifecycle(slidesWindowController.window)
-            auxWindowControllers.append(slidesWindowController)
-        }
-    }
-    
     private func followWindowLifecycle(window: NSWindow!) {
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: window, queue: nil) { note in
             if let window = note.object as? NSWindow {
@@ -113,12 +96,6 @@ class VideoDetailsViewController: NSViewController {
                 }
             }
         }
-    }
-    
-    @IBAction func markAsUnwatched(sender: NSButton) {
-        session?.progress = 0
-        session?.currentPosition = 0
-        sender.hidden = true
     }
     
     override func viewDidLoad() {
