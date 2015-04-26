@@ -31,28 +31,30 @@ class DataStore: NSObject {
     
     let URLSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
     
-    func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
-        if let appleURL = appleSessionsURL {
-            doFetchSessions(completionHandler)
-        } else {
-            let internalServiceURL = NSURL(string: _internalServiceURL)
-            
-            URLSession.dataTaskWithURL(internalServiceURL!, completionHandler: { [unowned self] data, response, error in
-                if data == nil {
-                    completionHandler(false, [])
-                    return
-                }
-                
-                let internalServiceJSON = JSON(data: data!).dictionary!
-                let appleURL = internalServiceJSON["url"]!.string!
-
-                self.appleSessionsURL = NSURL(string: appleURL)!
-                
-                self.doFetchSessions(completionHandler)
-            }).resume()
-        }
-    }
-    
+	func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
+		if let appleURL = appleSessionsURL {
+			doFetchSessions(completionHandler)
+		} else {
+			let internalServiceURL = NSURL(string: _internalServiceURL)
+			
+			URLSession.dataTaskWithURL(internalServiceURL!, completionHandler: { [unowned self] data, response, error in
+				if data == nil {
+					completionHandler(false, [])
+					return
+				}
+				let parsedJSON: JSON? = JSON(data: data)
+				if let json = parsedJSON, dictionary = json.dictionary {
+					let appleURL = dictionary["url"]!.string!
+					self.appleSessionsURL = NSURL(string: appleURL)!
+				} else {
+					completionHandler(false, [])
+					return
+				}
+				self.doFetchSessions(completionHandler)
+				}).resume()
+		}
+	}
+	
     func doFetchSessions(completionHandler: fetchSessionsCompletionHandler) {
         URLSession.dataTaskWithURL(appleSessionsURL!, completionHandler: { data, response, error in
             if data == nil {
