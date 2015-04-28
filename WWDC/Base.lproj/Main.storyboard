@@ -939,39 +939,30 @@
                                         </constraints>
                                     </customView>
                                     <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dJk-KM-Mdl">
-                                        <rect key="frame" x="458" y="19" width="50" height="19"/>
-                                        <buttonCell key="cell" type="roundRect" title="Pause" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yvu-jl-S2a">
+                                        <rect key="frame" x="435" y="13" width="79" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Pause" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="yvu-jl-S2a">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="cellTitle"/>
-                                        </buttonCell>
-                                    </button>
-                                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eHr-1y-PKq">
-                                        <rect key="frame" x="396" y="19" width="54" height="19"/>
-                                        <buttonCell key="cell" type="roundRect" title="Cancel" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aG0-ZB-IOP">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="cellTitle"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
-                                            <action selector="cancelDownload:" target="SkJ-kP-aeS" id="xqz-SV-QHd"/>
+                                            <action selector="pauseDownload:" target="SkJ-kP-aeS" id="Tzq-2C-tkG"/>
                                         </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="centerY" secondItem="P5u-9c-sQG" secondAttribute="centerY" constant="0.5" id="6ZD-H2-xIa"/>
-                                    <constraint firstItem="eHr-1y-PKq" firstAttribute="baseline" secondItem="dJk-KM-Mdl" secondAttribute="baseline" id="9Ix-BQ-ILf"/>
                                     <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="OTC-kh-gjR" secondAttribute="trailing" constant="8" id="ACr-pW-fNA"/>
                                     <constraint firstItem="unj-WU-zmU" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" id="E2h-q6-l5g"/>
                                     <constraint firstAttribute="trailing" secondItem="unj-WU-zmU" secondAttribute="trailing" id="Eou-ym-IEC"/>
                                     <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="Q3D-NN-RLa" secondAttribute="trailing" constant="8" id="Imi-GT-WHS"/>
+                                    <constraint firstItem="dJk-KM-Mdl" firstAttribute="top" secondItem="P5u-9c-sQG" secondAttribute="top" constant="1" id="Nxe-gJ-oS9"/>
                                     <constraint firstAttribute="bottom" secondItem="unj-WU-zmU" secondAttribute="bottom" id="QEa-2T-MZF"/>
                                     <constraint firstAttribute="trailing" secondItem="P5u-9c-sQG" secondAttribute="trailing" constant="20" id="U8f-pZ-DIf"/>
                                     <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="dJk-KM-Mdl" secondAttribute="trailing" constant="8" symbolic="YES" id="ZGB-9O-wca"/>
                                     <constraint firstItem="Q3D-NN-RLa" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" constant="20" id="Zca-OP-8uv"/>
-                                    <constraint firstAttribute="bottom" secondItem="eHr-1y-PKq" secondAttribute="bottom" constant="20" symbolic="YES" id="Zz8-B2-mGp"/>
                                     <constraint firstItem="Q3D-NN-RLa" firstAttribute="top" secondItem="OTC-kh-gjR" secondAttribute="bottom" constant="2" id="cDD-E4-tFM"/>
                                     <constraint firstItem="OTC-kh-gjR" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="top" constant="16" id="fGc-c6-zbn"/>
                                     <constraint firstAttribute="height" constant="62" id="hPH-mv-MND"/>
-                                    <constraint firstItem="dJk-KM-Mdl" firstAttribute="leading" secondItem="eHr-1y-PKq" secondAttribute="trailing" constant="8" symbolic="YES" id="lXh-V4-lc9"/>
                                     <constraint firstItem="OTC-kh-gjR" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" constant="20" id="z1a-ii-utb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -1071,7 +1062,6 @@
                 <customObject id="ztN-pJ-8Sm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <customObject id="SkJ-kP-aeS" customClass="DownloadProgressViewController" customModule="WWDC" customModuleProvider="target">
                     <connections>
-                        <outlet property="cancelButton" destination="eHr-1y-PKq" id="5fk-3o-NmF"/>
                         <outlet property="downloadButton" destination="ZoQ-nZ-mjo" id="ute-Zj-K3T"/>
                         <outlet property="progressIndicator" destination="Rfp-dR-Pi4" id="ZNm-pc-dhj"/>
                         <outlet property="statusButton" destination="dJk-KM-Mdl" id="VQV-a8-kZL"/>

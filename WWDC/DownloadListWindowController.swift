@@ -12,18 +12,20 @@ private class DownloadListItem : NSObject {
 	
 	var url: String?
 	var progress: Double?
+	var session: Session?
 	var task: NSURLSessionDownloadTask?
 	
-	convenience init(url: String, progress: Double, task: NSURLSessionDownloadTask) {
+	convenience init(url: String, progress: Double, session: Session, task: NSURLSessionDownloadTask) {
 		self.init()
 		self.url = url
 		self.progress = progress
+		self.session = session
 		self.task = task
 	}
 }
 
-let DownloadListIdentifierURL = "url"
-let DownloadListIdentifierProgress = "progress"
+private let DownloadListIdentifierURL = "url"
+private let DownloadListIdentifierProgress = "progress"
 
 class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NSTableViewDataSource {
 	
@@ -41,6 +43,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 		super.windowDidLoad()
 		self.tableView.setDelegate(self)
 		self.tableView.setDataSource(self)
+		self.tableView.columnAutoresizingStyle = .FirstColumnOnlyAutoresizingStyle
 		let nc = NSNotificationCenter.defaultCenter()
 		self.downloadStartedHndl = nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { note in
 			let url = note.object as! String?
@@ -52,7 +55,9 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 				let tasks = self.videoStore.allTasks()
 				for task in tasks {
 					if let _url = task.originalRequest.URL?.absoluteString where _url == url {
-						var item = DownloadListItem(url: url!, progress: 0, task: task)
+						let sessions = DataStore.SharedStore.cachedSessions!
+						let session = sessions.filter { $0.hd_url == url }.first
+						var item = DownloadListItem(url: url!, progress: 0, session: session!, task: task)
 						self.items.append(item)
 						self.tableView.insertRowsAtIndexes(NSIndexSet(index: self.items.count), withAnimation: .SlideUp)
 					}
@@ -138,9 +143,11 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 		super.showWindow(sender)
 		self.items.removeAll(keepCapacity: false)
 		let tasks = self.videoStore.allTasks()
+		let sessions = DataStore.SharedStore.cachedSessions!
 		for task in tasks {
 			if let url = task.originalRequest.URL?.absoluteString {
-				var item = DownloadListItem(url: url, progress: 0, task: task)
+				let session = sessions.filter { $0.hd_url == url }.first
+				var item = DownloadListItem(url: url, progress: 0, session: session!, task: task)
 				self.items.append(item)
 			}
 		}
@@ -163,10 +170,10 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 	
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		let identifier = tableColumn?.identifier
-		var cellView: NSTableCellView = tableView.makeViewWithIdentifier(identifier!, owner: self) as! NSTableCellView
+		var cellView = tableView.makeViewWithIdentifier(identifier!, owner: self) as! DownloadListCellView
 		let item = self.items[row]
 		if identifier == DownloadListIdentifierURL {
-			cellView.textField?.stringValue = item.url!
+			cellView.textField?.stringValue = item.session!.title
 		} else if identifier == DownloadListIdentifierProgress {
 			let progressCell = cellView as! DownloadListProgressCellView
 			if item.progress > 0 {
@@ -176,21 +183,16 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 				progressCell.progressIndicator.doubleValue = item.progress!
 			}
 			progressCell.item = item
-			progressCell.cancelBlock = { [weak self] item, cell in
-				let listItem = item as! DownloadListItem
-				if let url = listItem.url {
-					self?.videoStore.cancelDownload(url)
-				}
-			}
 			progressCell.statusBlock = { [weak self] item, cell in
+				let progressCell = cell as! DownloadListProgressCellView
 				let listItem = item as! DownloadListItem
 				let task = listItem.task
 				switch task!.state {
 				case .Running:
-					cell.statusBtn.title = NSLocalizedString("Resume", comment: "resume title in video download view")
+					progressCell.statusBtn.title = NSLocalizedString("Resume", comment: "resume title in video download view")
 					self?.videoStore.pauseDownload(listItem.url!)
 				case .Suspended:
-					cell.statusBtn.title = NSLocalizedString("Pause", comment: "pause title in video download view")
+					progressCell.statusBtn.title = NSLocalizedString("Pause", comment: "pause title in video download view")
 					self?.videoStore.resumeDownload(listItem.url!)
 				default: break
 				}
@@ -204,6 +206,23 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 			}
 		}
 		return cellView
+	}
+	
+	@IBAction func tableViewDidSelectRow(sender: AnyObject) {
+//		let tableView = sender as! NSTableView
+//		let selRowIdx = tableView.selectedRow
+//		if selRowIdx > self.items.count {
+//			return
+//		}
+//		var menu = NSMenu(title: NSLocalizedString("Menu", comment: "contextual menu title in download manager"))
+//		menu.insertItemWithTitle(NSLocalizedString("Pause", comment: "pause title in video download view"), action: "statusBtnPressed", keyEquivalent: "", atIndex: 0)
+//		menu.insertItemWithTitle(NSLocalizedString("Cancel", comment: "cancel title in video download view"), action: "cancelBtnPressed", keyEquivalent: "", atIndex: 1)
+//		//get mouse position in Window
+//		let window = self.window
+//		var mousePosition = window?.mouseLocationOutsideOfEventStream
+//		//convert to View
+//		mousePosition = tableView.convertPoint(mousePosition!, fromView: nil)
+//		menu.popUpMenuPositioningItem(nil, atLocation: mousePosition!, inView: sender as! NSTableView)
 	}
 	
 }

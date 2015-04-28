@@ -26,7 +26,6 @@ class DownloadProgressViewController: NSViewController {
 	@IBOutlet var downloadButton: NSButton!
 	@IBOutlet var progressIndicator: NSProgressIndicator!
 	@IBOutlet var statusButton: NSButton!
-	@IBOutlet var cancelButton: NSButton!
 	
 	private var downloadStartedHndl: AnyObject?
 	private var downloadFinishedHndl: AnyObject?
@@ -72,17 +71,14 @@ class DownloadProgressViewController: NSViewController {
 			self.progressIndicator.hidden = true
 			self.downloadButton.hidden = false
 			self.statusButton.hidden = true
-			self.cancelButton.hidden = true
 		case .Downloaded:
 			self.progressIndicator.hidden = true
 			self.downloadButton.hidden = true
 			self.statusButton.hidden = true
-			self.cancelButton.hidden = true
 		case .Downloading:
 			self.progressIndicator.hidden = false
 			self.downloadButton.hidden = true
 			self.statusButton.hidden = false
-			self.cancelButton.hidden = false
 			self.statusButton.title = NSLocalizedString("Pause", comment: "pause title in video download view")
 			self.statusButton.action = "pauseDownload:"
 		case .Paused:
@@ -171,12 +167,10 @@ class DownloadProgressViewController: NSViewController {
 	@IBAction func download(sender: NSButton) {
 		if let url = session.hd_url {
 			VideoStore.SharedStore().download(url)
-			self.statusButton.target = self
-			self.statusButton.action = "pauseDownload:"
 		}
 	}
 	
-	func pauseDownload(sender: NSButton) {
+	@IBAction func pauseDownload(sender: NSButton) {
 		if let url = session.hd_url {
 			if VideoStore.SharedStore().pauseDownload(url) {
 				self.updateButtonVisibility(.Paused)

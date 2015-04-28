@@ -6,7 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DownloadListWindowController" customModule="WWDC" customModuleProvider="target">
             <connections>
-                <outlet property="tableView" destination="gF9-Rx-KcB" id="xKI-yV-AdU"/>
+                <outlet property="tableView" destination="gF9-Rx-KcB" id="z7B-Nw-Xi6"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="ARf-ap-SiO"/>
             </connections>
         </customObject>
@@ -21,20 +21,20 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ys0-n0-Nao">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="40" horizontalPageScroll="10" verticalLineScroll="40" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ys0-n0-Nao">
                         <rect key="frame" x="-1" y="-1" width="482" height="272"/>
                         <clipView key="contentView" id="BFh-ZO-0hN">
                             <rect key="frame" x="1" y="17" width="238" height="117"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="XbN-fT-3fN" viewBased="YES" id="gF9-Rx-KcB">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="gF9-Rx-KcB">
                                     <rect key="frame" x="0.0" y="0.0" width="480" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <size key="intercellSpacing" width="3" height="23"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="url" width="116" minWidth="40" maxWidth="1000" id="7n3-G6-wrh">
+                                        <tableColumn identifier="url" width="208" minWidth="40" maxWidth="208" id="7n3-G6-wrh">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="URL">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -45,15 +45,15 @@
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
-                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView identifier="url" id="Ach-zB-dr6">
-                                                    <rect key="frame" x="1" y="1" width="116" height="17"/>
+                                                <tableCellView identifier="url" id="Ach-zB-dr6" customClass="DownloadListTextCellView" customModule="WWDC" customModuleProvider="target">
+                                                    <rect key="frame" x="1" y="11" width="208" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="N9T-fG-7JE">
-                                                            <rect key="frame" x="0.0" y="0.0" width="100" height="17"/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="RXa-L2-gqS">
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N9T-fG-7JE">
+                                                            <rect key="frame" x="0.0" y="0.0" width="207" height="17"/>
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" usesSingleLineMode="YES" id="RXa-L2-gqS">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -61,7 +61,7 @@
                                                         </textField>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="trailing" secondItem="N9T-fG-7JE" secondAttribute="trailing" constant="18" id="fhZ-p9-u2J"/>
+                                                        <constraint firstAttribute="trailing" secondItem="N9T-fG-7JE" secondAttribute="trailing" constant="3" id="fhZ-p9-u2J"/>
                                                         <constraint firstItem="N9T-fG-7JE" firstAttribute="leading" secondItem="Ach-zB-dr6" secondAttribute="leading" constant="2" id="gYx-5r-SN9"/>
                                                         <constraint firstItem="N9T-fG-7JE" firstAttribute="centerY" secondItem="Ach-zB-dr6" secondAttribute="centerY" id="qKp-TW-95w"/>
                                                     </constraints>
@@ -71,7 +71,7 @@
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn identifier="progress" width="358" minWidth="40" maxWidth="1000" id="6VK-Zn-aSJ">
+                                        <tableColumn identifier="progress" width="358" minWidth="40" maxWidth="358" id="6VK-Zn-aSJ">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Progress">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -88,30 +88,17 @@
                                                     <rect key="frame" x="120" y="1" width="358" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <progressIndicator maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nE7-j1-XhG">
-                                                            <rect key="frame" x="3" y="-2" width="226" height="20"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="226" id="Qev-yz-CJ6"/>
-                                                            </constraints>
+                                                        <progressIndicator horizontalCompressionResistancePriority="250" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nE7-j1-XhG">
+                                                            <rect key="frame" x="3" y="-2" width="189" height="20"/>
                                                         </progressIndicator>
-                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9yd-MP-wg4">
-                                                            <rect key="frame" x="237" y="-2" width="58" height="19"/>
-                                                            <buttonCell key="cell" type="roundRect" title="Cancel" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="guW-yY-Zcw">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="controlContent"/>
-                                                            </buttonCell>
-                                                            <connections>
-                                                                <action selector="cancelBtnPressed:" target="zis-LR-fCE" id="uhB-j9-fCe"/>
-                                                            </connections>
-                                                        </button>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vej-TX-JZl">
-                                                            <rect key="frame" x="303" y="-2" width="52" height="19"/>
+                                                            <rect key="frame" x="198" y="-4" width="63" height="21"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="52" id="qTg-X1-tfd"/>
+                                                                <constraint firstAttribute="height" constant="16" id="DRv-mf-JSk"/>
                                                             </constraints>
-                                                            <buttonCell key="cell" type="roundRect" title="Pause" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gNM-ls-yQy">
+                                                            <buttonCell key="cell" type="bevel" title="Pause" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gNM-ls-yQy">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="controlContent"/>
+                                                                <font key="font" metaFont="system"/>
                                                             </buttonCell>
                                                             <connections>
                                                                 <action selector="statusBtnPressed:" target="zis-LR-fCE" id="C7i-Ug-Ft6"/>
@@ -119,16 +106,13 @@
                                                         </button>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="nE7-j1-XhG" firstAttribute="centerY" secondItem="zis-LR-fCE" secondAttribute="centerY" id="7f8-Go-I8c"/>
-                                                        <constraint firstItem="nE7-j1-XhG" firstAttribute="leading" secondItem="zis-LR-fCE" secondAttribute="leading" constant="3" id="UOl-GZ-CCB"/>
-                                                        <constraint firstItem="nE7-j1-XhG" firstAttribute="top" secondItem="9yd-MP-wg4" secondAttribute="top" id="f8m-my-baz"/>
-                                                        <constraint firstItem="9yd-MP-wg4" firstAttribute="leading" secondItem="nE7-j1-XhG" secondAttribute="trailing" constant="8" symbolic="YES" id="pAv-CL-c96"/>
-                                                        <constraint firstItem="nE7-j1-XhG" firstAttribute="top" secondItem="vej-TX-JZl" secondAttribute="top" id="pF8-6k-bZn"/>
-                                                        <constraint firstItem="vej-TX-JZl" firstAttribute="leading" secondItem="9yd-MP-wg4" secondAttribute="trailing" constant="8" symbolic="YES" id="v2y-VO-x72"/>
-                                                        <constraint firstAttribute="trailing" secondItem="vej-TX-JZl" secondAttribute="trailing" constant="3" id="wPC-Db-BsM"/>
+                                                        <constraint firstAttribute="trailing" secondItem="vej-TX-JZl" secondAttribute="trailing" constant="99" id="6ti-BV-lIk"/>
+                                                        <constraint firstItem="vej-TX-JZl" firstAttribute="centerY" secondItem="nE7-j1-XhG" secondAttribute="centerY" constant="1" id="9bm-Lv-nYM"/>
+                                                        <constraint firstItem="vej-TX-JZl" firstAttribute="leading" secondItem="nE7-j1-XhG" secondAttribute="trailing" constant="8" symbolic="YES" id="BgP-Ei-agk"/>
+                                                        <constraint firstItem="nE7-j1-XhG" firstAttribute="centerY" secondItem="zis-LR-fCE" secondAttribute="centerY" id="mFx-FT-rQZ"/>
+                                                        <constraint firstItem="nE7-j1-XhG" firstAttribute="leading" secondItem="zis-LR-fCE" secondAttribute="leading" constant="3" id="tmA-E9-vJy"/>
                                                     </constraints>
                                                     <connections>
-                                                        <outlet property="cancelBtn" destination="9yd-MP-wg4" id="AaA-Rc-Nrd"/>
                                                         <outlet property="progressIndicator" destination="nE7-j1-XhG" id="t9e-mn-OAV"/>
                                                         <outlet property="statusBtn" destination="vej-TX-JZl" id="lnL-Cw-0R7"/>
                                                     </connections>
@@ -136,6 +120,9 @@
                                             </prototypeCellViews>
                                         </tableColumn>
                                     </tableColumns>
+                                    <connections>
+                                        <action selector="tableViewDidSelectRow:" target="OzI-ZE-fhZ" id="xii-Xt-hzu"/>
+                                    </connections>
                                 </tableView>
                             </subviews>
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -148,20 +135,17 @@
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <tableHeaderView key="headerView" id="XbN-fT-3fN">
-                            <rect key="frame" x="0.0" y="0.0" width="238" height="17"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </tableHeaderView>
                     </scrollView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="Ys0-n0-Nao" secondAttribute="bottom" constant="-1" id="2Bf-iE-WHP"/>
-                    <constraint firstItem="Ys0-n0-Nao" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="-1" id="2bW-pq-hq7"/>
-                    <constraint firstItem="Ys0-n0-Nao" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="-1" id="CK9-PV-0jh"/>
-                    <constraint firstAttribute="trailing" secondItem="Ys0-n0-Nao" secondAttribute="trailing" constant="-1" id="cXL-ed-Gfh"/>
+                    <constraint firstItem="Ys0-n0-Nao" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="-1" id="95I-xO-S9z"/>
+                    <constraint firstAttribute="trailing" secondItem="Ys0-n0-Nao" secondAttribute="trailing" constant="-1" id="Mds-RO-kLa"/>
+                    <constraint firstItem="Ys0-n0-Nao" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="-1" id="eK2-gF-CIP"/>
+                    <constraint firstAttribute="bottom" secondItem="Ys0-n0-Nao" secondAttribute="bottom" constant="-1" id="j7Y-n5-3gB"/>
                 </constraints>
             </view>
             <point key="canvasLocation" x="275" y="248"/>
         </window>
+        <customObject id="OzI-ZE-fhZ" customClass="DownloadListWindowController" customModule="WWDC" customModuleProvider="target"/>
     </objects>
 </document>
