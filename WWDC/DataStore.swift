@@ -36,7 +36,7 @@ class DataStore: NSObject {
 			doFetchSessions(completionHandler)
 		} else {
 			let internalServiceURL = NSURL(string: _internalServiceURL)
-			
+
 			URLSession.dataTaskWithURL(internalServiceURL!, completionHandler: { [unowned self] data, response, error in
 				if data == nil {
 					completionHandler(false, [])
@@ -86,7 +86,15 @@ class DataStore: NSObject {
                     
                     sessions.append(session)
                 }
-                
+				
+				sessions = sessions.sorted({ (sessionA: Session, sessionB: Session) -> Bool in
+					if(sessionA.year == sessionB.year) {
+						return sessionA.id < sessionB.id
+					} else {
+						return sessionA.year > sessionB.year
+					}
+				})
+
                 completionHandler(true, sessions)
             } else {
                 completionHandler(false, [])
