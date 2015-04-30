@@ -39,8 +39,6 @@
     }
     
     _cachedHTMLString = [NSString stringWithFormat:_baseHTMLString, html];
-    
-    [_cachedHTMLString writeToFile:@"/Users/inside/Desktop/transcript.html" atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 - (NSArray *)timecodes
