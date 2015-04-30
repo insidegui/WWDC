@@ -102,13 +102,13 @@ class DataStore: NSObject {
                     sessions.append(session)
                 }
 				
-				sessions = sessions.sorted({ (sessionA: Session, sessionB: Session) -> Bool in
+                sessions = sessions.sorted { sessionA, sessionB in
 					if(sessionA.year == sessionB.year) {
 						return sessionA.id < sessionB.id
 					} else {
 						return sessionA.year > sessionB.year
 					}
-				})
+				}
 				self.cachedSessions = sessions
                 completionHandler(true, sessions)
             } else {

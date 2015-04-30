@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Crashlytics
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -22,8 +23,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Keep a reference to the main application window
         window = NSApplication.sharedApplication().windows.last as! NSWindow?
+        
         // continue any paused downloads
         VideoStore.SharedStore().initialize()
+        
+        // initialize Crashlytics
+        GRCrashlyticsHelper.install()
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
