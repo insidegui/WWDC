@@ -116,6 +116,7 @@
 		DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideosHeaderViewController.xib; sourceTree = "<group>"; };
 		DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		DD7F6F901AE97C99007A4E5E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		DD829F1B1AF26D3C00B5977B /* Crashlytics.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Crashlytics.sh; sourceTree = "<group>"; };
 		DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ASCIIwwdc.xcodeproj; path = ASCIIwwdc/ASCIIwwdc.xcodeproj; sourceTree = "<group>"; };
 		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
@@ -220,6 +221,7 @@
 				DDCC5D7B1AF156EF00F24F55 /* GRCrashlyticsCredentials.m */,
 				DDCC5D741AF1532600F24F55 /* GRCrashlyticsHelper.h */,
 				DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */,
+				DD829F1B1AF26D3C00B5977B /* Crashlytics.sh */,
 			);
 			name = Crashlytics;
 			sourceTree = "<group>";
@@ -414,8 +416,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Release\" ]; then\n./Crashlytics.framework/run 69b44b9b0e1f177a7fb1b6199e9a040897e9dfc0 22ecca766b464658a34a8526d5dad0b7a255f04ed7c47ac02769feb213488d25\nfi";
+			shellPath = /bin/bash;
+			shellScript = "if [ -f \"./WWDC/Crashlytics.sh\" ] && [ \"${CONFIGURATION}\" = \"Release\" ]; then\n./WWDC/Crashlytics.sh\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
