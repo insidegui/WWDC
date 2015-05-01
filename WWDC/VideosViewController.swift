@@ -159,12 +159,14 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                     var qualifiers = term.qualifierSearchParser_parseQualifiers(["year", "focus", "track", "downloaded"])
                     indexOfLastSelectedRow = -1
                     return sessions.filter { session in
-                        
+
                         if let year: String = qualifiers["year"] as? String {
 							let yearStr = "\(session.year)"
-							if !(yearStr as NSString).containsString(year) {
-								return false
+							let result = (yearStr as NSString).rangeOfString(year, options: .CaseInsensitiveSearch)
+							if result.location + result.length == count(yearStr) {
+								return true
 							}
+							return false
                         }
                         
                         if let focus: String = qualifiers["focus"] as? String {
