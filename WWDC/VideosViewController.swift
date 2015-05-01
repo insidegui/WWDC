@@ -30,7 +30,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         nc.addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil) { _ in
             self.reloadTablePreservingSelection()
         }
-        nc.addObserverForName(VideoStoreFinishedDownloadNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
+        nc.addObserverForName(VideoStoreNotificationDownloadFinished, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
             self.reloadTablePreservingSelection()
         }
         nc.addObserverForName(VideoStoreDownloadedFilesChangedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in

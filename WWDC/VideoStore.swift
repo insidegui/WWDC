@@ -8,10 +8,14 @@
 
 import Cocoa
 
-public let VideoStoreStartedDownloadNotification = "VideoStoreStartedDownloadNotification"
-public let VideoStoreFinishedDownloadNotification = "VideoStoreFinishedDownloadNotification"
-public let VideoStoreDownloadProgressedNotification = "VideoStoreDownloadProgressedNotification"
+
 public let VideoStoreDownloadedFilesChangedNotification = "VideoStoreDownloadedFilesChangedNotification"
+public let VideoStoreNotificationDownloadStarted = "VideoStoreNotificationDownloadStarted"
+public let VideoStoreNotificationDownloadCancelled = "VideoStoreNotificationDownloadCancelled"
+public let VideoStoreNotificationDownloadPaused = "VideoStoreNotificationDownloadPaused"
+public let VideoStoreNotificationDownloadResumed = "VideoStoreNotificationDownloadResumed"
+public let VideoStoreNotificationDownloadFinished = "VideoStoreNotificationDownloadFinished"
+public let VideoStoreNotificationDownloadProgressChanged = "VideoStoreNotificationDownloadProgressChanged"
 
 private let _SharedVideoStore = VideoStore()
 private let _BackgroundSessionIdentifier = "WWDC Video Downloader"
@@ -22,7 +26,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     private var backgroundSession: NSURLSession!
     private var downloadTasks: [String : NSURLSessionDownloadTask] = [:]
     private let defaults = NSUserDefaults.standardUserDefaults()
-    
+	
     let localVideoStoragePath = NSString.pathWithComponents([NSHomeDirectory(), "Library", "Application Support", "WWDC"])
     
     class func SharedStore() -> VideoStore
@@ -46,26 +50,56 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     }
     
     // MARK: Public interface
-    
+	
+	func allTasks() -> [NSURLSessionDownloadTask] {
+		return Array(self.downloadTasks.values)
+	}
+	
     func download(url: String) {
         if isDownloading(url) {
             return
         }
         
         let task = backgroundSession.downloadTaskWithURL(NSURL(string: url)!)
+		if let key = task.originalRequest.URL!.absoluteString {
+			self.downloadTasks[key] = task
+		}
         task.resume()
-        
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreStartedDownloadNotification, object: url)
+		
+        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadStarted, object: url)
     }
     
-    func pauseDownload(url: String) {
+    func pauseDownload(url: String) -> Bool {
         if let task = downloadTasks[url] {
-            println("VideoStore pauseDownload is not implemented yet")
-        } else {
-            println("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
+			task.suspend()
+			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadPaused, object: url)
+			return true
         }
+		println("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
+		return false
     }
-    
+	
+	func resumeDownload(url: String) -> Bool {
+		if let task = downloadTasks[url] {
+			task.resume()
+			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadResumed, object: url)
+			return true
+		}
+		println("VideoStore was asked to resume downloading URL \(url), but there's no task for that URL")
+		return false
+	}
+	
+	func cancelDownload(url: String) -> Bool {
+		if let task = downloadTasks[url] {
+			task.cancel()
+			self.downloadTasks.removeValueForKey(url)
+			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadCancelled, object: url)
+			return true
+		}
+		println("VideoStore was asked to cancel downloading URL \(url), but there's no task for that URL")
+		return false
+	}
+	
     func isDownloading(url: String) -> Bool {
         let downloading = downloadTasks.keys.filter { taskURL in
             return url == taskURL
@@ -106,14 +140,14 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         
         downloadTasks.removeValueForKey(originalAbsoluteURLString)
         
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreFinishedDownloadNotification, object: originalAbsoluteURLString)
+        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadFinished, object: originalAbsoluteURLString)
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         let originalURL = downloadTask.originalRequest.URL!.absoluteString!
 
         let info = ["totalBytesWritten": Int(totalBytesWritten), "totalBytesExpectedToWrite": Int(totalBytesExpectedToWrite)]
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadProgressedNotification, object: originalURL, userInfo: info)
+        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadProgressChanged, object: originalURL, userInfo: info)
     }
     
     // MARK: File observation

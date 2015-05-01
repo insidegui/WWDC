@@ -10,6 +10,8 @@ import Cocoa
 
 class MainWindowController: NSWindowController {
 
+    private var downloadListWindowController: DownloadListWindowController?
+    
     override func windowDidLoad() {
         super.windowDidLoad()
     
@@ -20,6 +22,14 @@ class MainWindowController: NSWindowController {
         window?.styleMask |= NSFullSizeContentViewWindowMask
         window?.titleVisibility = .Hidden
         window?.titlebarAppearsTransparent = true
+    }
+    
+    @IBAction func showDownloadsWindow(sender: AnyObject?) {
+        if downloadListWindowController == nil {
+            downloadListWindowController = DownloadListWindowController()
+        }
+        
+        downloadListWindowController?.showWindow(self)
     }
 
 }

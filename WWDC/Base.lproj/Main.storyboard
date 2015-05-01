@@ -155,6 +155,9 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Delete" id="pa3-QI-u2k">
+                                            <string key="keyEquivalent" base64-UTF8="YES">
+CA
+</string>
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="delete:" target="Ady-hI-5gd" id="0Mk-Ml-PaM"/>
@@ -620,6 +623,11 @@
                                                 <action selector="performMiniaturize:" target="Ady-hI-5gd" id="VwT-WD-YPe"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Downloads" keyEquivalent="d" id="QVO-lm-fKQ">
+                                            <connections>
+                                                <action selector="showDownloadsWindow:" target="Ady-hI-5gd" id="Orl-jy-Khh"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Zoom" id="R4o-n2-Eq4">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -910,10 +918,10 @@
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="P5u-9c-sQG">
                                         <rect key="frame" x="516" y="21" width="23" height="21"/>
                                         <subviews>
-                                            <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" bezeled="NO" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Rfp-dR-Pi4">
+                                            <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Rfp-dR-Pi4" customClass="GRActionableProgressIndicator">
                                                 <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
                                             </progressIndicator>
-                                            <button toolTip="Download Video" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZoQ-nZ-mjo">
+                                            <button toolTip="Download Video" translatesAutoresizingMaskIntoConstraints="NO" id="ZoQ-nZ-mjo">
                                                 <rect key="frame" x="0.0" y="0.0" width="23" height="21"/>
                                                 <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="download" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="RiF-Dk-hCV">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -925,8 +933,12 @@
                                             </button>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="Rfp-dR-Pi4" firstAttribute="leading" secondItem="ZoQ-nZ-mjo" secondAttribute="leading" id="0hI-Lc-wPf"/>
+                                            <constraint firstItem="ZoQ-nZ-mjo" firstAttribute="leading" secondItem="P5u-9c-sQG" secondAttribute="leading" id="5Mq-V8-iXo"/>
                                             <constraint firstAttribute="width" constant="23" id="8W0-t9-9fn"/>
+                                            <constraint firstItem="Rfp-dR-Pi4" firstAttribute="bottom" secondItem="ZoQ-nZ-mjo" secondAttribute="bottom" id="XxH-et-djz"/>
                                             <constraint firstAttribute="height" constant="21" id="k8n-hE-P55"/>
+                                            <constraint firstItem="ZoQ-nZ-mjo" firstAttribute="top" secondItem="P5u-9c-sQG" secondAttribute="top" id="rl9-VN-qPu"/>
                                         </constraints>
                                     </customView>
                                 </subviews>
@@ -961,7 +973,7 @@
                             <stackView orientation="horizontal" alignment="centerY" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="NDa-qd-DsL">
                                 <rect key="frame" x="20" y="182" width="519" height="22"/>
                                 <beginningViews>
-                                    <button verticalHuggingPriority="50" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
+                                    <button verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
                                         <rect key="frame" x="14" y="200" width="141" height="32"/>
                                         <buttonCell key="cell" type="push" title="Watch HD Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D3d-bZ-Zck">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -971,7 +983,7 @@
                                             <action selector="watchHD:" target="1s0-2L-R2i" id="xqm-Kv-PmK"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
+                                    <button verticalHuggingPriority="50" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
                                         <rect key="frame" x="155" y="200" width="118" height="32"/>
                                         <buttonCell key="cell" type="push" title="Watch Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xjs-Oy-GhI">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -981,7 +993,7 @@
                                             <action selector="watch:" target="1s0-2L-R2i" id="d1x-9M-a2C"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
+                                    <button verticalHuggingPriority="50" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
                                         <rect key="frame" x="273" y="200" width="111" height="32"/>
                                         <buttonCell key="cell" type="push" title="View Slides" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UpZ-Ii-Qdp">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -991,7 +1003,7 @@
                                             <action selector="watchSlides:" target="1s0-2L-R2i" id="Bt3-zs-bNR"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
+                                    <button verticalHuggingPriority="50" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
                                         <rect key="frame" x="384" y="200" width="161" height="32"/>
                                         <buttonCell key="cell" type="push" title="Mark as watched" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pEg-S2-YVS">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1020,13 +1032,13 @@
                             </stackView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="yfT-Gv-ICD" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" id="5er-Ai-Ouu"/>
+                            <constraint firstItem="yfT-Gv-ICD" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" id="5X2-FA-2RR"/>
+                            <constraint firstItem="NDa-qd-DsL" firstAttribute="centerX" secondItem="yfT-Gv-ICD" secondAttribute="centerX" id="9Ru-8q-Cjg"/>
                             <constraint firstItem="NDa-qd-DsL" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="20" id="A0o-bD-Ab8"/>
-                            <constraint firstAttribute="trailing" secondItem="NDa-qd-DsL" secondAttribute="trailing" constant="20" id="FBM-Li-kPC"/>
-                            <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="cEn-gz-ug5"/>
-                            <constraint firstAttribute="trailing" secondItem="yfT-Gv-ICD" secondAttribute="trailing" id="f7O-Ap-dUq"/>
-                            <constraint firstItem="yfT-Gv-ICD" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" id="fMG-0T-AOE"/>
-                            <constraint firstItem="NDa-qd-DsL" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="lPo-n4-AHE"/>
+                            <constraint firstItem="yfT-Gv-ICD" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" id="FKh-9G-PHE"/>
+                            <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="NDa-qd-DsL" secondAttribute="leading" id="MYD-oP-EUZ"/>
+                            <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" symbolic="YES" id="Nl7-wk-Yx9"/>
+                            <constraint firstAttribute="trailing" secondItem="NDa-qd-DsL" secondAttribute="trailing" constant="20" symbolic="YES" id="lf1-15-Oqn"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="bottom" constant="20" id="uSJ-UI-Mhf"/>
                         </constraints>
                     </view>
@@ -1056,7 +1068,7 @@
                     </connections>
                 </customObject>
             </objects>
-            <point key="canvasLocation" x="795.5" y="927.5"/>
+            <point key="canvasLocation" x="715.5" y="931.5"/>
         </scene>
     </scenes>
     <resources>

@@ -12,8 +12,6 @@ import Crashlytics
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-
-
     var window: NSWindow?
 	
     func applicationOpenUntitledFile(sender: NSApplication) -> Bool {
@@ -35,7 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
     }
-
+	
 
 }
 
