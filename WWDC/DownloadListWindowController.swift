@@ -96,7 +96,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 				let (item, idx) = self.listItemForURL(url)
 				if item != nil {
 					self.items.removeObject(item!)
-					self.tableView.removeRowsAtIndexes(NSIndexSet(index: idx), withAnimation: .SlideDown)
+					self.tableView.removeRowsAtIndexes(NSIndexSet(index: self.tableView.selectedRow), withAnimation: .EffectGap)
 				}
 			}
 		}
@@ -214,9 +214,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
     func delete(sender: AnyObject?) {
         let item = self.items[tableView.selectedRow]
         if let task = item.task {
-            task.cancel()
-            items.removeObject(item)
-            tableView.removeRowsAtIndexes(NSIndexSet(index: tableView.selectedRow), withAnimation: .EffectGap)
+			self.videoStore.cancelDownload(item.url!)
         }
     }
 	
