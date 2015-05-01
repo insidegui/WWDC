@@ -13,6 +13,10 @@ class DownloadListCellView: NSTableCellView {
 	weak var item: AnyObject?
 	var statusBlock: ((AnyObject?, DownloadListCellView) -> Void)?
 	var cancelBlock: ((AnyObject?, DownloadListCellView) -> Void)?
+	var started: Bool = false
+	
+	@IBOutlet weak var progressIndicator: NSProgressIndicator!
+	@IBOutlet weak var statusBtn: NSButton!
 	
 	@IBAction func statusBtnPressed(sender: NSButton) {
 		if let block = self.statusBlock {
@@ -20,24 +24,11 @@ class DownloadListCellView: NSTableCellView {
 		}
 	}
 	
-	func cancelBtnPressed(sender: NSButton) {
+	@IBAction func cancelBtnPressed(sender: NSButton) {
 		if let block = self.cancelBlock {
 			block(self.item, self)
 		}
 	}
-	
-}
-
-class DownloadListTextCellView: DownloadListCellView {
-	
-}
-
-class DownloadListProgressCellView: DownloadListCellView {
-
-	var started: Bool = false
-
-	@IBOutlet weak var progressIndicator: NSProgressIndicator!
-	@IBOutlet weak var statusBtn: NSButton!
 	
 	override func awakeFromNib() {
 		super.awakeFromNib()
@@ -53,5 +44,5 @@ class DownloadListProgressCellView: DownloadListCellView {
 		self.progressIndicator.indeterminate = false
 		self.started = true
 	}
-
+	
 }
