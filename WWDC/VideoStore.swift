@@ -11,6 +11,7 @@ import Cocoa
 public let VideoStoreStartedDownloadNotification = "VideoStoreStartedDownloadNotification"
 public let VideoStoreFinishedDownloadNotification = "VideoStoreFinishedDownloadNotification"
 public let VideoStoreDownloadProgressedNotification = "VideoStoreDownloadProgressedNotification"
+public let VideoStoreDownloadedFilesChangedNotification = "VideoStoreDownloadedFilesChangedNotification"
 
 private let _SharedVideoStore = VideoStore()
 private let _BackgroundSessionIdentifier = "WWDC Video Downloader"
@@ -40,6 +41,8 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
                 }
             }
         }
+        
+        monitorDownloadsFolder()
     }
     
     // MARK: Public interface
@@ -111,6 +114,25 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 
         let info = ["totalBytesWritten": Int(totalBytesWritten), "totalBytesExpectedToWrite": Int(totalBytesExpectedToWrite)]
         NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadProgressedNotification, object: originalURL, userInfo: info)
+    }
+    
+    // MARK: File observation
+    
+    var folderMonitor: DTFolderMonitor!
+    
+    func monitorDownloadsFolder() {
+        folderMonitor = DTFolderMonitor(forURL: NSURL(fileURLWithPath: localVideoStoragePath)!) {
+            NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadedFilesChangedNotification, object: nil)
+        }
+        folderMonitor.startMonitoring()
+    }
+    
+    // MARK: Teardown
+    
+    deinit {
+        if folderMonitor != nil {
+            folderMonitor.stopMonitoring()
+        }
     }
     
 }

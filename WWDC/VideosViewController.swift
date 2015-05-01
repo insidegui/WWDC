@@ -33,6 +33,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         nc.addObserverForName(VideoStoreFinishedDownloadNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
             self.reloadTablePreservingSelection()
         }
+        nc.addObserverForName(VideoStoreDownloadedFilesChangedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
+            self.reloadTablePreservingSelection()
+        }
     }
     
     func setupScrollView() {
