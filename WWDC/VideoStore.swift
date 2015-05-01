@@ -11,9 +11,12 @@ import Cocoa
 public let VideoStoreStartedDownloadNotification = "VideoStoreStartedDownloadNotification"
 public let VideoStoreFinishedDownloadNotification = "VideoStoreFinishedDownloadNotification"
 public let VideoStoreDownloadProgressedNotification = "VideoStoreDownloadProgressedNotification"
+public let VideoStoreChangedLocalStoragePathNotification = "VideoStoreChangedLocalStoragePathNotification"
 
 private let _SharedVideoStore = VideoStore()
 private let _BackgroundSessionIdentifier = "WWDC Video Downloader"
+
+private let VideoStoragePathKey = "VIDEO_STORAGE_PATH_KEY"
 
 class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 
@@ -22,7 +25,20 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     private var downloadTasks: [String : NSURLSessionDownloadTask] = [:]
     private let defaults = NSUserDefaults.standardUserDefaults()
     
-    let localVideoStoragePath = NSString.pathWithComponents([NSHomeDirectory(), "Library", "Application Support", "WWDC"])
+    
+    
+    private var localVideoStoragePath = NSUserDefaults.standardUserDefaults().objectForKey(VideoStoragePathKey) as? String ?? NSString.pathWithComponents([NSHomeDirectory(), "Library", "Application Support", "WWDC"])
+    
+    
+    func setLocalVideoStoragePath(url: NSURL) {
+        localVideoStoragePath = url.path!
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(url.path!, forKey: VideoStoragePathKey)
+        defaults.synchronize()
+        
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreChangedLocalStoragePathNotification, object: url)
+    }
     
     class func SharedStore() -> VideoStore
     {
