@@ -161,9 +161,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                     return sessions.filter { session in
                         
                         if let year: String = qualifiers["year"] as? String {
-                            if session.year != year.toInt() {
-                                return false
-                            }
+							let yearStr = "\(session.year)"
+							if !(yearStr as NSString).containsString(year) {
+								return false
+							}
                         }
                         
                         if let focus: String = qualifiers["focus"] as? String {
