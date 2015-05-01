@@ -19,6 +19,8 @@
 		DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2016741AE411C800DD8155 /* VideoWindowController.xib */; };
 		DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016771AE4141900DD8155 /* ArrayExtensions.swift */; };
 		DD2CC38C1AF4161700FC5F68 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2CC38B1AF4161700FC5F68 /* Preferences.swift */; };
+		DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2CC38D1AF419F500FC5F68 /* PreferencesWindowController.swift */; };
+		DD2CC3901AF419F500FC5F68 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2CC38E1AF419F500FC5F68 /* PreferencesWindowController.xib */; };
 		DD3081781AF3DC370009D412 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3081771AF3DC370009D412 /* DTFolderMonitor.m */; };
 		DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD373A891AE871AB00DAC19B /* VideoStore.swift */; };
 		DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E511AE2D11D0099BEB5 /* AppDelegate.swift */; };
@@ -111,6 +113,8 @@
 		DD2016741AE411C800DD8155 /* VideoWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoWindowController.xib; sourceTree = "<group>"; };
 		DD2016771AE4141900DD8155 /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		DD2CC38B1AF4161700FC5F68 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		DD2CC38D1AF419F500FC5F68 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
+		DD2CC38E1AF419F500FC5F68 /* PreferencesWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesWindowController.xib; sourceTree = "<group>"; };
 		DD3081761AF3DC370009D412 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
 		DD3081771AF3DC370009D412 /* DTFolderMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderMonitor.m; sourceTree = "<group>"; };
 		DD373A891AE871AB00DAC19B /* VideoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoStore.swift; sourceTree = "<group>"; };
@@ -265,6 +269,7 @@
 				DDC049CE1AE564F20008D41A /* PDFWindowController.swift */,
 				DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */,
 				C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */,
+				DD2CC38D1AF419F500FC5F68 /* PreferencesWindowController.swift */,
 			);
 			name = "Main Controllers";
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DD2CC38E1AF419F500FC5F68 /* PreferencesWindowController.xib */,
 				DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */,
 				DDC049CF1AE564F20008D41A /* PDFWindowController.xib */,
 				DD2016741AE411C800DD8155 /* VideoWindowController.xib */,
@@ -416,6 +422,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD2CC3901AF419F500FC5F68 /* PreferencesWindowController.xib in Resources */,
 				C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */,
 				DD4F6E561AE2D11D0099BEB5 /* Images.xcassets in Resources */,
 				DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */,
@@ -462,6 +469,7 @@
 				DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */,
 				DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */,
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,
+				DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */,
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
 				DDD7A43A1AE2E305000A0102 /* DataStore.swift in Sources */,

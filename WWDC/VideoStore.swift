@@ -46,6 +46,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         
         NSNotificationCenter.defaultCenter().addObserverForName(LocalVideoStoragePathPreferenceChangedNotification, object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
+            NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadedFilesChangedNotification, object: nil)
         }
         
         monitorDownloadsFolder()
