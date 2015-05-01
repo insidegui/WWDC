@@ -10,10 +10,19 @@
 
 @class WWDCSessionTranscript;
 
+typedef void (^ASCIIWWDCClientCallback)(BOOL, WWDCSessionTranscript * __nullable);
+typedef void (^ASCIIWWDCClientArrayCallback)(BOOL, NSArray * __nullable);
+
+NS_ASSUME_NONNULL_BEGIN
 @interface ASCIIWWDCClient : NSObject
 
 + (ASCIIWWDCClient *)sharedClient;
 
-- (void)fetchTranscriptForYear:(int)year session:(int)session completionHandler:(void (^)(BOOL success, WWDCSessionTranscript *transcript))callback;
+- (void)fetchTranscriptForYear:(NSInteger)year
+					 sessionID:(NSInteger)sessionID
+			 completionHandler:(ASCIIWWDCClientCallback)callback;
+- (void)fetchTranscriptsForQuery:(NSString *)query
+			   completionHandler:(ASCIIWWDCClientArrayCallback)callback;
 
 @end
+NS_ASSUME_NONNULL_END

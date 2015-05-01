@@ -12,13 +12,13 @@
 
 @interface WWDCTranscriptViewController : NSViewController
 
-@property (nonatomic, assign) int year;
-@property (nonatomic, assign) int session;
+@property (nonatomic, assign) NSInteger year;
+@property (nonatomic, assign) NSInteger session;
 
 @property (nonatomic, copy) void (^jumpToTimecodeCallback)(double timecode);
 @property (nonatomic, copy) void (^transcriptAvailableCallback)(WWDCSessionTranscript *transcript);
 
-+ (WWDCTranscriptViewController *)transcriptViewControllerWithYear:(int)year session:(int)session;
++ (WWDCTranscriptViewController *)transcriptViewControllerWithYear:(NSInteger)year session:(NSInteger)session;
 
 - (void)highlightLineAt:(NSString *)roundedTimecode;
 - (void)searchFor:(NSString *)term;

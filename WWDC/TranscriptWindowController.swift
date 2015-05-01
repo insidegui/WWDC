@@ -38,7 +38,7 @@ class TranscriptWindowController: NSWindowController {
     override func windowDidLoad() {
         super.windowDidLoad()
 
-        transcriptController = WWDCTranscriptViewController(year: Int32(session.year), session: Int32(session.id))
+        transcriptController = WWDCTranscriptViewController(year: session.year, session: session.id)
         transcriptController.view.frame = NSMakeRect(0, 0, NSWidth(self.window!.contentView.frame), NSHeight(self.window!.contentView.frame))
         transcriptController.view.autoresizingMask = .ViewHeightSizable | .ViewWidthSizable
 

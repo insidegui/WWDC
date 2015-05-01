@@ -19,6 +19,9 @@
     __strong NSString *_cachedHTMLString;
 }
 
+// FIXME: somehow there's an NSInvalidArgumentException if not to synthesize _this_ property
+@synthesize sessionID;
+
 - (NSString *)htmlString
 {
     if (!_cachedHTMLString) [self _computeHTMLString];

@@ -19,3 +19,4 @@ FOUNDATION_EXPORT const unsigned char ASCIIwwdcVersionString[];
 #import <ASCIIwwdc/WWDCTranscriptViewController.h>
 #import <ASCIIwwdc/WWDCSessionTranscript.h>
 #import <ASCIIwwdc/WWDCTranscriptLine.h>
+#import <ASCIIwwdc/ASCIIWWDCClient.h>

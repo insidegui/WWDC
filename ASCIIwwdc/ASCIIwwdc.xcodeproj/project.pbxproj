@@ -15,7 +15,7 @@
 		DD92EA811AE962FE00D503AE /* WWDCSessionTranscript.m in Sources */ = {isa = PBXBuildFile; fileRef = DD92EA7F1AE962FE00D503AE /* WWDCSessionTranscript.m */; };
 		DD92EA841AE9630F00D503AE /* WWDCTranscriptLine.h in Headers */ = {isa = PBXBuildFile; fileRef = DD92EA821AE9630F00D503AE /* WWDCTranscriptLine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD92EA851AE9630F00D503AE /* WWDCTranscriptLine.m in Sources */ = {isa = PBXBuildFile; fileRef = DD92EA831AE9630F00D503AE /* WWDCTranscriptLine.m */; };
-		DD92EA891AE963D200D503AE /* ASCIIWWDCClient.h in Headers */ = {isa = PBXBuildFile; fileRef = DD92EA871AE963D200D503AE /* ASCIIWWDCClient.h */; };
+		DD92EA891AE963D200D503AE /* ASCIIWWDCClient.h in Headers */ = {isa = PBXBuildFile; fileRef = DD92EA871AE963D200D503AE /* ASCIIWWDCClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD92EA8A1AE963D200D503AE /* ASCIIWWDCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = DD92EA881AE963D200D503AE /* ASCIIWWDCClient.m */; };
 		DD92EA981AE96CC300D503AE /* transcript.css in Resources */ = {isa = PBXBuildFile; fileRef = DD92EA961AE96CC300D503AE /* transcript.css */; };
 		DD92EA991AE96CC300D503AE /* transcript.html in Resources */ = {isa = PBXBuildFile; fileRef = DD92EA971AE96CC300D503AE /* transcript.html */; };
@@ -138,10 +138,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD92EA891AE963D200D503AE /* ASCIIWWDCClient.h in Headers */,
 				DD92EA801AE962FE00D503AE /* WWDCSessionTranscript.h in Headers */,
 				DD92EA7A1AE9616900D503AE /* WWDCTranscriptViewController.h in Headers */,
 				DD92EA841AE9630F00D503AE /* WWDCTranscriptLine.h in Headers */,
+				DD92EA891AE963D200D503AE /* ASCIIWWDCClient.h in Headers */,
 				DD92EA9C1AE96D4300D503AE /* WWDCTranscriptWebUtils.h in Headers */,
 				DD92EA571AE9611B00D503AE /* ASCIIwwdc.h in Headers */,
 			);
