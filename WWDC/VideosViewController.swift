@@ -26,13 +26,15 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         loadSessions()
         
+        
+        let reloadDiscardNote: NSNotification! -> Void = { _ in
+            self.reloadTablePreservingSelection()
+        }
+        
         let nc = NSNotificationCenter.defaultCenter()
-        nc.addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil) { _ in
-            self.reloadTablePreservingSelection()
-        }
-        nc.addObserverForName(VideoStoreFinishedDownloadNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
-            self.reloadTablePreservingSelection()
-        }
+        nc.addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil, usingBlock: reloadDiscardNote)
+        nc.addObserverForName(VideoStoreFinishedDownloadNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: reloadDiscardNote)
+        nc.addObserverForName(VideoStoreChangedLocalStoragePathNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: reloadDiscardNote)
     }
     
     func setupScrollView() {

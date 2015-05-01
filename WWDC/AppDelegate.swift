@@ -35,6 +35,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
     }
+    
+    
+    @IBAction func openVideosLocationPressed(sender: NSMenuItem) {
+        
+        let panel = NSOpenPanel()
+        panel.canChooseDirectories = true
+        panel.canChooseFiles = false
+        
+        let clickResult = panel.runModal()
+        
+        if clickResult == NSFileHandlingPanelOKButton {
+            for url in panel.URLs {
+                VideoStore.SharedStore().setLocalVideoStoragePath(url as! NSURL)
+            }
+        }
+    }
+    
 
 
 }
