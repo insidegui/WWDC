@@ -26,8 +26,6 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     private var backgroundSession: NSURLSession!
     private var downloadTasks: [String : NSURLSessionDownloadTask] = [:]
     private let defaults = NSUserDefaults.standardUserDefaults()
-	
-    let localVideoStoragePath = NSString.pathWithComponents([NSHomeDirectory(), "Library", "Application Support", "WWDC"])
     
     class func SharedStore() -> VideoStore
     {
@@ -44,6 +42,10 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
                     }
                 }
             }
+        }
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(LocalVideoStoragePathPreferenceChangedNotification, object: nil, queue: nil) { _ in
+            self.monitorDownloadsFolder()
         }
         
         monitorDownloadsFolder()
@@ -109,7 +111,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     }
     
     func localVideoPath(remoteURL: String) -> String {
-        return localVideoStoragePath.stringByAppendingPathComponent(remoteURL.lastPathComponent)
+        return Preferences.SharedPreferences().localVideoStoragePath.stringByAppendingPathComponent(remoteURL.lastPathComponent)
     }
     
     func localVideoAbsoluteURLString(remoteURL: String) -> String {
@@ -128,8 +130,8 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 
         let fileManager = NSFileManager.defaultManager()
         
-        if (fileManager.fileExistsAtPath(localVideoStoragePath) == false) {
-            fileManager.createDirectoryAtPath(localVideoStoragePath, withIntermediateDirectories: false, attributes: nil, error: nil)
+        if (fileManager.fileExistsAtPath(Preferences.SharedPreferences().localVideoStoragePath) == false) {
+            fileManager.createDirectoryAtPath(Preferences.SharedPreferences().localVideoStoragePath, withIntermediateDirectories: false, attributes: nil, error: nil)
         }
         
         let localURL = NSURL(fileURLWithPath: localVideoPath(originalAbsoluteURLString))!
@@ -155,7 +157,12 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     var folderMonitor: DTFolderMonitor!
     
     func monitorDownloadsFolder() {
-        folderMonitor = DTFolderMonitor(forURL: NSURL(fileURLWithPath: localVideoStoragePath)!) {
+        if folderMonitor != nil {
+            folderMonitor.stopMonitoring()
+            folderMonitor = nil
+        }
+        
+        folderMonitor = DTFolderMonitor(forURL: NSURL(fileURLWithPath: Preferences.SharedPreferences().localVideoStoragePath)!) {
             NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadedFilesChangedNotification, object: nil)
         }
         folderMonitor.startMonitoring()

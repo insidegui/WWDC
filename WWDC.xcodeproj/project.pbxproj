@@ -18,6 +18,7 @@
 		DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016731AE411C800DD8155 /* VideoWindowController.swift */; };
 		DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2016741AE411C800DD8155 /* VideoWindowController.xib */; };
 		DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016771AE4141900DD8155 /* ArrayExtensions.swift */; };
+		DD2CC38C1AF4161700FC5F68 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2CC38B1AF4161700FC5F68 /* Preferences.swift */; };
 		DD3081781AF3DC370009D412 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3081771AF3DC370009D412 /* DTFolderMonitor.m */; };
 		DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD373A891AE871AB00DAC19B /* VideoStore.swift */; };
 		DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E511AE2D11D0099BEB5 /* AppDelegate.swift */; };
@@ -109,6 +110,7 @@
 		DD2016731AE411C800DD8155 /* VideoWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoWindowController.swift; sourceTree = "<group>"; };
 		DD2016741AE411C800DD8155 /* VideoWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoWindowController.xib; sourceTree = "<group>"; };
 		DD2016771AE4141900DD8155 /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
+		DD2CC38B1AF4161700FC5F68 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		DD3081761AF3DC370009D412 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
 		DD3081771AF3DC370009D412 /* DTFolderMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderMonitor.m; sourceTree = "<group>"; };
 		DD373A891AE871AB00DAC19B /* VideoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoStore.swift; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 				DD373A891AE871AB00DAC19B /* VideoStore.swift */,
 				DDD7A4371AE2E265000A0102 /* Session.swift */,
 				DDD7A4391AE2E305000A0102 /* DataStore.swift */,
+				DD2CC38B1AF4161700FC5F68 /* Preferences.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -470,6 +473,7 @@
 				DD4F6E6F1AE2D14A0099BEB5 /* MainWindowController.swift in Sources */,
 				DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */,
 				DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */,
+				DD2CC38C1AF4161700FC5F68 /* Preferences.swift in Sources */,
 				DDD7A4381AE2E265000A0102 /* Session.swift in Sources */,
 				1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */,
 				DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */,
