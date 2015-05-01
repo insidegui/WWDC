@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C967BA91AE7EB27003662B2 /* NSString+QualifierSearchParser.m */; };
+		C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */; };
+		C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */; };
+		C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */; };
 		DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016051AE3FA6600DD8155 /* SessionProgressView.swift */; };
 		DD2016681AE402B400DD8155 /* ViewUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2016661AE4029100DD8155 /* ViewUtils.framework */; };
 		DD2016691AE402B400DD8155 /* ViewUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD2016661AE4029100DD8155 /* ViewUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -37,7 +40,6 @@
 		DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC049CF1AE564F20008D41A /* PDFWindowController.xib */; };
 		DDCC5D721AF1518A00F24F55 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */; };
 		DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */; };
-		DDCC5D7C1AF156EF00F24F55 /* GRCrashlyticsCredentials.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCC5D7B1AF156EF00F24F55 /* GRCrashlyticsCredentials.m */; };
 		DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4321AE2DF14000A0102 /* Theme.swift */; };
 		DDD7A4351AE2E02A000A0102 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */; };
 		DDD7A4381AE2E265000A0102 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4371AE2E265000A0102 /* Session.swift */; };
@@ -98,6 +100,9 @@
 		1C967BA81AE7EB27003662B2 /* NSString+QualifierSearchParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+QualifierSearchParser.h"; sourceTree = "<group>"; };
 		1C967BA91AE7EB27003662B2 /* NSString+QualifierSearchParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+QualifierSearchParser.m"; sourceTree = "<group>"; };
 		1C967BAB1AE7EB5C003662B2 /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
+		C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadListWindowController.xib; sourceTree = "<group>"; };
+		C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListWindowController.swift; sourceTree = "<group>"; };
+		C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListProgressCellView.swift; sourceTree = "<group>"; };
 		DD2016051AE3FA6600DD8155 /* SessionProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgressView.swift; sourceTree = "<group>"; };
 		DD2016611AE4029100DD8155 /* ViewUtils.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ViewUtils.xcodeproj; path = ViewUtils/ViewUtils.xcodeproj; sourceTree = "<group>"; };
 		DD20166D1AE40D0100DD8155 /* ContentBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBackgroundView.swift; sourceTree = "<group>"; };
@@ -130,8 +135,6 @@
 		DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DDCC5D741AF1532600F24F55 /* GRCrashlyticsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRCrashlyticsHelper.h; sourceTree = "<group>"; };
 		DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRCrashlyticsHelper.m; sourceTree = "<group>"; };
-		DDCC5D7A1AF156EF00F24F55 /* GRCrashlyticsCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRCrashlyticsCredentials.h; sourceTree = "<group>"; };
-		DDCC5D7B1AF156EF00F24F55 /* GRCrashlyticsCredentials.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRCrashlyticsCredentials.m; sourceTree = "<group>"; };
 		DDD7A4321AE2DF14000A0102 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		DDD7A4371AE2E265000A0102 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
@@ -231,8 +234,6 @@
 		DDCC5D731AF1530800F24F55 /* Crashlytics */ = {
 			isa = PBXGroup;
 			children = (
-				DDCC5D7A1AF156EF00F24F55 /* GRCrashlyticsCredentials.h */,
-				DDCC5D7B1AF156EF00F24F55 /* GRCrashlyticsCredentials.m */,
 				DDCC5D741AF1532600F24F55 /* GRCrashlyticsHelper.h */,
 				DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */,
 				DD829F1B1AF26D3C00B5977B /* Crashlytics.sh */,
@@ -243,6 +244,7 @@
 		DDD7A42D1AE2DECE000A0102 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */,
 				DD4F6E721AE2D5980099BEB5 /* VideoTableCellView.swift */,
 				DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */,
 				DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */,
@@ -260,6 +262,7 @@
 				DD2016731AE411C800DD8155 /* VideoWindowController.swift */,
 				DDC049CE1AE564F20008D41A /* PDFWindowController.swift */,
 				DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */,
+				C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */,
 			);
 			name = "Main Controllers";
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				DD2016741AE411C800DD8155 /* VideoWindowController.xib */,
 				DD4F6E571AE2D11D0099BEB5 /* Main.storyboard */,
 				DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */,
+				C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -409,6 +413,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */,
 				DD4F6E561AE2D11D0099BEB5 /* Images.xcassets in Resources */,
 				DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */,
 				DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */,
@@ -443,6 +448,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */,
 				DD20166E1AE40D0100DD8155 /* ContentBackgroundView.swift in Sources */,
 				DDD7A4351AE2E02A000A0102 /* SeparatorView.swift in Sources */,
 				DD4F6E761AE2D82A0099BEB5 /* VideosHeaderViewController.swift in Sources */,
@@ -450,7 +456,6 @@
 				DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */,
 				DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */,
 				DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */,
-				DDCC5D7C1AF156EF00F24F55 /* GRCrashlyticsCredentials.m in Sources */,
 				DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */,
 				DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */,
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,
@@ -458,6 +463,7 @@
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
 				DDD7A43A1AE2E305000A0102 /* DataStore.swift in Sources */,
 				DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */,
+				C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */,
 				DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */,
 				DD4F6E731AE2D5980099BEB5 /* VideoTableCellView.swift in Sources */,
 				DD4F6E711AE2D1C60099BEB5 /* VideoDetailsViewController.swift in Sources */,
@@ -584,7 +590,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -603,7 +608,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

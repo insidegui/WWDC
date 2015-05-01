@@ -28,7 +28,22 @@ class DataStore: NSObject {
     typealias fetchSessionsCompletionHandler = (Bool, [Session]) -> Void
     
     var appleSessionsURL: NSURL? = nil
-    
+	private var _cachedSessions: [Session]? = nil
+	
+	private(set) var cachedSessions: [Session]? {
+		get {
+			if _cachedSessions == nil {
+				self.fetchSessions({ (_, sessions) -> Void in
+					return sessions
+				})
+			}
+			return _cachedSessions
+		}
+		set {
+			_cachedSessions = newValue
+		}
+	}
+	
     let URLSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
     
 	func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
@@ -94,7 +109,7 @@ class DataStore: NSObject {
 						return sessionA.year > sessionB.year
 					}
 				}
-
+				self.cachedSessions = sessions
                 completionHandler(true, sessions)
             } else {
                 completionHandler(false, [])
