@@ -21,6 +21,12 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
+                                        <menuItem title="Check for Updates..." id="yfS-os-kny">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="checkForUpdates:" target="Ady-hI-5gd" id="DZ3-Vn-5ve"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
                                             <connections>
                                                 <action selector="showPreferencesWindow:" target="Ady-hI-5gd" id="wCD-N1-mDY"/>

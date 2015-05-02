@@ -35,6 +35,8 @@
 		DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */; };
 		DD7F6F911AE97C99007A4E5E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7F6F901AE97C99007A4E5E /* WebKit.framework */; };
 		DD829F221AF271DF00B5977B /* index.json in Resources */ = {isa = PBXBuildFile; fileRef = DD829F211AF271DF00B5977B /* index.json */; };
+		DD89EA0C1AF48A4C0073B845 /* Updater.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD89EA0B1AF48A300073B845 /* Updater.framework */; };
+		DD89EA0D1AF48A4C0073B845 /* Updater.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD89EA0B1AF48A300073B845 /* Updater.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD92EAA61AE978EC00D503AE /* ASCIIwwdc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */; };
 		DD92EAA71AE978EC00D503AE /* ASCIIwwdc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */; };
@@ -68,6 +70,20 @@
 			remoteGlobalIDString = DD2016401AE401B500DD8155;
 			remoteInfo = ViewUtils;
 		};
+		DD89EA0A1AF48A300073B845 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD89EA061AF48A300073B845 /* Updater.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DD89E9B91AF4255F0073B845;
+			remoteInfo = Updater;
+		};
+		DD89EA0E1AF48A4C0073B845 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD89EA061AF48A300073B845 /* Updater.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = DD89E9B81AF4255F0073B845;
+			remoteInfo = Updater;
+		};
 		DD92EAA31AE978DC00D503AE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */;
@@ -93,6 +109,7 @@
 			files = (
 				DD2016691AE402B400DD8155 /* ViewUtils.framework in Embed Frameworks */,
 				DD92EAA71AE978EC00D503AE /* ASCIIwwdc.framework in Embed Frameworks */,
+				DD89EA0D1AF48A4C0073B845 /* Updater.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -133,6 +150,7 @@
 		DD7F6F901AE97C99007A4E5E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		DD829F1B1AF26D3C00B5977B /* Crashlytics.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Crashlytics.sh; sourceTree = "<group>"; };
 		DD829F211AF271DF00B5977B /* index.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = index.json; sourceTree = "<group>"; };
+		DD89EA061AF48A300073B845 /* Updater.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Updater.xcodeproj; path = Updater/Updater.xcodeproj; sourceTree = "<group>"; };
 		DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ASCIIwwdc.xcodeproj; path = ASCIIwwdc/ASCIIwwdc.xcodeproj; sourceTree = "<group>"; };
 		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
@@ -156,6 +174,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD89EA0C1AF48A4C0073B845 /* Updater.framework in Frameworks */,
 				DD7F6F911AE97C99007A4E5E /* WebKit.framework in Frameworks */,
 				DD2016681AE402B400DD8155 /* ViewUtils.framework in Frameworks */,
 				DDCC5D721AF1518A00F24F55 /* Crashlytics.framework in Frameworks */,
@@ -177,6 +196,7 @@
 		DD4F6E431AE2D11D0099BEB5 = {
 			isa = PBXGroup;
 			children = (
+				DD89EA061AF48A300073B845 /* Updater.xcodeproj */,
 				DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */,
 				DD7F6F901AE97C99007A4E5E /* WebKit.framework */,
 				DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */,
@@ -227,6 +247,14 @@
 				DD829F211AF271DF00B5977B /* index.json */,
 			);
 			name = Service;
+			sourceTree = "<group>";
+		};
+		DD89EA071AF48A300073B845 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DD89EA0B1AF48A300073B845 /* Updater.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		DD92EAA01AE978DC00D503AE /* Products */ = {
@@ -351,6 +379,7 @@
 			dependencies = (
 				DD20166B1AE402B400DD8155 /* PBXTargetDependency */,
 				DD92EAA91AE978EC00D503AE /* PBXTargetDependency */,
+				DD89EA0F1AF48A4C0073B845 /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			productName = WWDC;
@@ -389,6 +418,10 @@
 					ProjectRef = DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */;
 				},
 				{
+					ProductGroup = DD89EA071AF48A300073B845 /* Products */;
+					ProjectRef = DD89EA061AF48A300073B845 /* Updater.xcodeproj */;
+				},
+				{
 					ProductGroup = DD2016621AE4029100DD8155 /* Products */;
 					ProjectRef = DD2016611AE4029100DD8155 /* ViewUtils.xcodeproj */;
 				},
@@ -406,6 +439,13 @@
 			fileType = wrapper.framework;
 			path = ViewUtils.framework;
 			remoteRef = DD2016651AE4029100DD8155 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DD89EA0B1AF48A300073B845 /* Updater.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Updater.framework;
+			remoteRef = DD89EA0A1AF48A300073B845 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */ = {
@@ -497,6 +537,11 @@
 			isa = PBXTargetDependency;
 			name = ViewUtils;
 			targetProxy = DD20166A1AE402B400DD8155 /* PBXContainerItemProxy */;
+		};
+		DD89EA0F1AF48A4C0073B845 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Updater;
+			targetProxy = DD89EA0E1AF48A4C0073B845 /* PBXContainerItemProxy */;
 		};
 		DD92EAA91AE978EC00D503AE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
