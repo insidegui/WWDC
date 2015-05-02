@@ -11,13 +11,7 @@ import Foundation
 extension String {
     
     var boolValue: Bool {
-        get {
-            if self.lowercaseString == "yes" || self.lowercaseString == "true" || self.toInt() > 0 {
-                return true
-            } else {
-                return false
-            }
-        }
+        return (self as NSString).boolValue
     }
     
 }
