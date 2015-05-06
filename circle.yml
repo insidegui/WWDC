@@ -1,0 +1,10 @@
+machine:
+  environment:
+    LANG: en_US.UTF-8
+    LC_CTYPE: en_US.UTF-8
+  xcode:
+    version: "6.3.1"
+test:
+  override:
+    - set -o pipefail && xcodebuild -project 'WWDC.xcodeproj' -scheme 'WWDC' 
+      clean build | xcpretty -c
