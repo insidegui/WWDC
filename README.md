@@ -1,5 +1,7 @@
 # WWDC app for OS X
 
+[![Circle CI](https://circleci.com/gh/insidegui/WWDC.svg?style=svg)](https://circleci.com/gh/insidegui/WWDC)
+
 Don't like WWDC's website? Use this app to watch WWDC sessions on your Mac.
 
 To download the latest release, [click here](https://github.com/insidegui/WWDC/blob/master/Releases/WWDC_latest.zip?raw=true).
