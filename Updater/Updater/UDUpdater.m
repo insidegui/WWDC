@@ -92,6 +92,7 @@
             #ifdef DEBUG
             NSLog(@"Latest release is prerelease or draft, ignoring.");
             #endif
+            return;
         }
         
         if ([latestRelease isGreaterThan:[NSApplication sharedApplication].ud_currentRelease]) {
