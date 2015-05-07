@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7702" systemVersion="14E7f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
@@ -15,7 +15,7 @@
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="Prefs Window" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <rect key="contentRect" x="196" y="240" width="486" height="105"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
             <view key="contentView" id="se5-gp-TjO">
                 <rect key="frame" x="0.0" y="5" width="486" height="105"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -70,6 +70,8 @@
                     <constraint firstItem="pcR-R1-B9x" firstAttribute="top" secondItem="iYN-Yq-tAu" secondAttribute="bottom" constant="8" id="BIK-mE-VP8"/>
                     <constraint firstItem="iYN-Yq-tAu" firstAttribute="baseline" secondItem="rBt-da-KnE" secondAttribute="baseline" id="Bhv-4x-woK"/>
                     <constraint firstItem="pcR-R1-B9x" firstAttribute="trailing" secondItem="iYN-Yq-tAu" secondAttribute="trailing" id="Oef-w0-Lg3"/>
+                    <constraint firstAttribute="trailing" secondItem="iYN-Yq-tAu" secondAttribute="trailing" constant="20" id="REh-3F-42k"/>
+                    <constraint firstAttribute="trailing" secondItem="pcR-R1-B9x" secondAttribute="trailing" constant="20" id="Se9-0t-Y9K"/>
                     <constraint firstItem="pcR-R1-B9x" firstAttribute="leading" secondItem="ADy-Xn-vCs" secondAttribute="trailing" constant="12" id="gP8-cB-6Yo"/>
                     <constraint firstItem="rBt-da-KnE" firstAttribute="top" secondItem="0fF-2B-C09" secondAttribute="bottom" constant="5" id="kMJ-M9-svp"/>
                     <constraint firstItem="rBt-da-KnE" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" id="s3d-ww-MCC"/>
