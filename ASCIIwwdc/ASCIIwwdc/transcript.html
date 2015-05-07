@@ -6,12 +6,41 @@
 	<script>
         var autoScrollEnabled = true
         function setAutoScrollEnabled(enabled) {
+            controller.jsLog("setAutoScrollEnabled: "+enabled)
+            
             autoScrollEnabled = enabled
         }
         function getAutoScrollEnabled() {
             return autoScrollEnabled
         }
-        
+    
+        function setFontSize(size) {
+            controller.jsLog("setFontSize: "+size)
+            
+            document.body.style.fontSize = size+"px"
+        }
+    
+        function setTextColor(color) {
+            controller.jsLog("setTextColor: "+color)
+            
+            var links = document.getElementsByTagName("a")
+            for (var i = 0; i < links.length; i++) {
+                links[i].style.color = "#"+color
+            }
+        }
+    
+        function setBackgroundColor(color) {
+            controller.jsLog("setBackgroundColor: "+color)
+            
+            document.body.style.backgroundColor = "#"+color
+        }
+    
+        function setFontName(newName) {
+            controller.jsLog("setFontName: "+newName)
+            
+            document.body.style.fontFamily = newName
+        }
+    
         function highlightLineWithTimecode(timecode) {
             var active = document.querySelector(".active")
             if (active) active.className = ""

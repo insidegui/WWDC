@@ -13,6 +13,8 @@
 #import "WWDCTranscriptLine.h"
 #import "WWDCTranscriptWebUtils.h"
 
+#import "NSColor+CSS.h"
+
 @import WebKit;
 
 @interface WWDCTranscriptViewController ()
@@ -91,6 +93,8 @@
     
     [self setAutoscrollingEnabled:(self.autoscrollingCheckbox.state == NSOnState)];
     self.searchField.enabled = YES;
+    
+    [self updateWebviewLook];
 }
 
 + (BOOL)isSelectorExcludedFromWebScript:(SEL)aSelector
@@ -103,8 +107,18 @@
     if (selector == @selector(jumpToTimecode:)) {
         return @"jumpToTimecode";
     }
+    if (selector == @selector(jsLog:)) {
+        return @"jsLog";
+    }
     
     return nil;
+}
+
+- (void)jsLog:(NSString *)message
+{
+    #ifdef DEBUG
+    NSLog(@"[JSLOG] %@", message);
+    #endif
 }
 
 - (void)jumpToTimecode:(id)timecode
@@ -142,6 +156,38 @@
         [self setAutoscrollingEnabled:NO];
     }
     [self searchFor:self.searchField.stringValue];
+}
+
+- (void)setFont:(NSFont *)font
+{
+    _font = [font copy];
+    
+    [self updateWebviewLook];
+}
+
+- (void)setTextColor:(NSColor *)textColor
+{
+    _textColor = [textColor copy];
+    
+    [self updateWebviewLook];
+}
+
+- (void)setBackgroundColor:(NSColor *)backgroundColor
+{
+    _backgroundColor = [backgroundColor copy];
+    
+    [self updateWebviewLook];
+}
+
+- (void)updateWebviewLook
+{
+    NSMutableString *script = [NSMutableString new];
+    [script appendFormat:@"setFontSize(%.0f);\n", self.font.pointSize];
+    [script appendFormat:@"setFontName(\"%@\");", self.font.familyName];
+    [script appendFormat:@"setTextColor(\"%@\");", [self.textColor cssColor]];
+    [script appendFormat:@"setBackgroundColor(\"%@\");", [self.backgroundColor cssColor]];
+    
+    [self.webView.windowScriptObject evaluateWebScript:script];
 }
 
 @end

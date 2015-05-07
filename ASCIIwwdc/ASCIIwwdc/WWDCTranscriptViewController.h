@@ -23,4 +23,8 @@
 - (void)highlightLineAt:(NSString *)roundedTimecode;
 - (void)searchFor:(NSString *)term;
 
+@property (nonatomic, copy) NSFont *font;
+@property (nonatomic, copy) NSColor *textColor;
+@property (nonatomic, copy) NSColor *backgroundColor;
+
 @end

@@ -21,6 +21,8 @@
 		DD92EA991AE96CC300D503AE /* transcript.html in Resources */ = {isa = PBXBuildFile; fileRef = DD92EA971AE96CC300D503AE /* transcript.html */; };
 		DD92EA9C1AE96D4300D503AE /* WWDCTranscriptWebUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DD92EA9A1AE96D4300D503AE /* WWDCTranscriptWebUtils.h */; };
 		DD92EA9D1AE96D4300D503AE /* WWDCTranscriptWebUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DD92EA9B1AE96D4300D503AE /* WWDCTranscriptWebUtils.m */; };
+		DD97216A1AFBEB3E00166FBA /* NSColor+CSS.h in Headers */ = {isa = PBXBuildFile; fileRef = DD9721681AFBEB3E00166FBA /* NSColor+CSS.h */; };
+		DD97216B1AFBEB3E00166FBA /* NSColor+CSS.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9721691AFBEB3E00166FBA /* NSColor+CSS.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,8 @@
 		DD92EA971AE96CC300D503AE /* transcript.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = transcript.html; sourceTree = "<group>"; };
 		DD92EA9A1AE96D4300D503AE /* WWDCTranscriptWebUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWDCTranscriptWebUtils.h; sourceTree = "<group>"; };
 		DD92EA9B1AE96D4300D503AE /* WWDCTranscriptWebUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWDCTranscriptWebUtils.m; sourceTree = "<group>"; };
+		DD9721681AFBEB3E00166FBA /* NSColor+CSS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+CSS.h"; sourceTree = "<group>"; };
+		DD9721691AFBEB3E00166FBA /* NSColor+CSS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+CSS.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				DD92EA551AE9611B00D503AE /* Info.plist */,
+				DD9721681AFBEB3E00166FBA /* NSColor+CSS.h */,
+				DD9721691AFBEB3E00166FBA /* NSColor+CSS.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -144,6 +150,7 @@
 				DD92EA841AE9630F00D503AE /* WWDCTranscriptLine.h in Headers */,
 				DD92EA9C1AE96D4300D503AE /* WWDCTranscriptWebUtils.h in Headers */,
 				DD92EA571AE9611B00D503AE /* ASCIIwwdc.h in Headers */,
+				DD97216A1AFBEB3E00166FBA /* NSColor+CSS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +228,7 @@
 				DD92EA7B1AE9616900D503AE /* WWDCTranscriptViewController.m in Sources */,
 				DD92EA8A1AE963D200D503AE /* ASCIIWWDCClient.m in Sources */,
 				DD92EA851AE9630F00D503AE /* WWDCTranscriptLine.m in Sources */,
+				DD97216B1AFBEB3E00166FBA /* NSColor+CSS.m in Sources */,
 				DD92EA811AE962FE00D503AE /* WWDCSessionTranscript.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
