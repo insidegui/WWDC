@@ -15,6 +15,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow?
 	
+    private var downloadListWindowController: DownloadListWindowController?
+    private var preferencesWindowController: PreferencesWindowController?
+    
     func applicationOpenUntitledFile(sender: NSApplication) -> Bool {
         window?.makeKeyAndOrderFront(nil)
         return false
@@ -64,6 +67,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
+    }
+    
+    @IBAction func showDownloadsWindow(sender: AnyObject?) {
+        if downloadListWindowController == nil {
+            downloadListWindowController = DownloadListWindowController()
+        }
+        
+        downloadListWindowController?.showWindow(self)
+    }
+    
+    @IBAction func showPreferencesWindow(sender: AnyObject?) {
+        if preferencesWindowController == nil {
+            preferencesWindowController = PreferencesWindowController()
+        }
+        
+        preferencesWindowController?.showWindow(self)
     }
 
 }
