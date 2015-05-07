@@ -42,6 +42,13 @@
 
 - (void)checkForUpdatesWithCompletionHandler:(void (^)(UDRelease *latestRelease))callback
 {
+    if ([[NSProcessInfo processInfo].arguments containsObject:@"disable-updates"]) {
+        #ifdef DEBUG
+        NSLog(@"Updater: disable-updates argument is present, automatic updates disabled");
+        #endif
+        return;
+    }
+    
     [[self.session dataTaskWithURL:self.releasesURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (error) {
             #ifdef DEBUG
