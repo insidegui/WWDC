@@ -1,12 +1,24 @@
 # Change Log
 
-## [Unreleased](https://github.com/insidegui/WWDC/tree/HEAD)
+## [1.6.2](https://github.com/insidegui/WWDC/tree/1.6.2) (2015-05-07)
 
-[Full Changelog](https://github.com/insidegui/WWDC/compare/1.6.1...HEAD)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/1.6.1...1.6.2)
 
 **Implemented enhancements:**
 
 - Check for Updates option in App Menu [\#31](https://github.com/insidegui/WWDC/issues/31)
+
+**Fixed bugs:**
+
+- preferences are cut off [\#37](https://github.com/insidegui/WWDC/issues/37)
+
+**Merged pull requests:**
+
+- \[CI\] Build with CircleCI [\#41](https://github.com/insidegui/WWDC/pull/41) ([jhersh](https://github.com/jhersh))
+
+- - Fixed cut off of preferences [\#40](https://github.com/insidegui/WWDC/pull/40) ([nyanev](https://github.com/nyanev))
+
+- Add change log file. [\#39](https://github.com/insidegui/WWDC/pull/39) ([skywinder](https://github.com/skywinder))
 
 ## [1.6.1](https://github.com/insidegui/WWDC/tree/1.6.1) (2015-05-02)
 
