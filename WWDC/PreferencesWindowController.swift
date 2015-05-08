@@ -26,6 +26,10 @@ class PreferencesWindowController: NSWindowController {
         if let familyName = prefs.transcriptFont.familyName {
             fontPopUp.selectItemWithTitle(familyName)
         }
+        
+        let size = "\(Int(prefs.transcriptFont.pointSize))"
+        sizePopUp.selectItemWithTitle(size)
+        
         textColorWell.color = prefs.transcriptTextColor
         bgColorWell.color = prefs.transcriptBgColor
     }
@@ -60,6 +64,7 @@ class PreferencesWindowController: NSWindowController {
     // MARK: Transcript appearance
     
     @IBOutlet weak var fontPopUp: NSPopUpButton!
+    @IBOutlet weak var sizePopUp: NSPopUpButton!
     @IBOutlet weak var textColorWell: NSColorWell!
     @IBOutlet weak var bgColorWell: NSColorWell!
     
@@ -67,6 +72,11 @@ class PreferencesWindowController: NSWindowController {
         if let newFont = NSFont(name: fontPopUp.selectedItem!.title, size: prefs.transcriptFont.pointSize) {
             prefs.transcriptFont = newFont
         }
+    }
+    
+    @IBAction func sizePopUpAction(sender: NSPopUpButton) {
+        let size = NSString(string: sizePopUp.selectedItem!.title).doubleValue
+        prefs.transcriptFont = NSFont(name: prefs.transcriptFont.fontName, size: CGFloat(size))!
     }
     
     @IBAction func textColorWellAction(sender: NSColorWell) {
