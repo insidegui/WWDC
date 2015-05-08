@@ -14,6 +14,8 @@
 		DD20167C1AE4158100DD8155 /* GRPlayerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = DD20167A1AE4158100DD8155 /* GRPlayerWindow.m */; };
 		DD20167F1AE41DD600DD8155 /* GRPlayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD20167D1AE41DD600DD8155 /* GRPlayerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD2016801AE41DD600DD8155 /* GRPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD20167E1AE41DD600DD8155 /* GRPlayerView.m */; };
+		DD38A2A41AFD075100FE0869 /* GRLoadingView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD38A2A21AFD075100FE0869 /* GRLoadingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DD38A2A51AFD075100FE0869 /* GRLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD38A2A31AFD075100FE0869 /* GRLoadingView.m */; };
 		DD75A9321AE9387700C12D31 /* GRTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = DD75A9301AE9387700C12D31 /* GRTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD75A9331AE9387700C12D31 /* GRTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = DD75A9311AE9387700C12D31 /* GRTextField.m */; };
 		DD88146F1AF3ED1F00C13E67 /* GRActionableProgressIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = DD88146D1AF3ED1F00C13E67 /* GRActionableProgressIndicator.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -34,6 +36,8 @@
 		DD20167A1AE4158100DD8155 /* GRPlayerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRPlayerWindow.m; sourceTree = "<group>"; };
 		DD20167D1AE41DD600DD8155 /* GRPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRPlayerView.h; sourceTree = "<group>"; };
 		DD20167E1AE41DD600DD8155 /* GRPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRPlayerView.m; sourceTree = "<group>"; };
+		DD38A2A21AFD075100FE0869 /* GRLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRLoadingView.h; sourceTree = "<group>"; };
+		DD38A2A31AFD075100FE0869 /* GRLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRLoadingView.m; sourceTree = "<group>"; };
 		DD75A9301AE9387700C12D31 /* GRTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRTextField.h; sourceTree = "<group>"; };
 		DD75A9311AE9387700C12D31 /* GRTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRTextField.m; sourceTree = "<group>"; };
 		DD88146D1AF3ED1F00C13E67 /* GRActionableProgressIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRActionableProgressIndicator.h; sourceTree = "<group>"; };
@@ -90,6 +94,8 @@
 				DD75A9311AE9387700C12D31 /* GRTextField.m */,
 				DD88146D1AF3ED1F00C13E67 /* GRActionableProgressIndicator.h */,
 				DD88146E1AF3ED1F00C13E67 /* GRActionableProgressIndicator.m */,
+				DD38A2A21AFD075100FE0869 /* GRLoadingView.h */,
+				DD38A2A31AFD075100FE0869 /* GRLoadingView.m */,
 			);
 			path = ViewUtils;
 			sourceTree = "<group>";
@@ -111,6 +117,7 @@
 			files = (
 				DD20165F1AE401C200DD8155 /* GRWindowMovingView.h in Headers */,
 				DD20167F1AE41DD600DD8155 /* GRPlayerView.h in Headers */,
+				DD38A2A41AFD075100FE0869 /* GRLoadingView.h in Headers */,
 				DD88146F1AF3ED1F00C13E67 /* GRActionableProgressIndicator.h in Headers */,
 				DDC049D61AE56A710008D41A /* GRReadingWindow.h in Headers */,
 				DD75A9321AE9387700C12D31 /* GRTextField.h in Headers */,
@@ -191,6 +198,7 @@
 				DD20167C1AE4158100DD8155 /* GRPlayerWindow.m in Sources */,
 				DD8814701AF3ED1F00C13E67 /* GRActionableProgressIndicator.m in Sources */,
 				DD2016601AE401C200DD8155 /* GRWindowMovingView.m in Sources */,
+				DD38A2A51AFD075100FE0869 /* GRLoadingView.m in Sources */,
 				DDC049DB1AE56AA10008D41A /* GRWindow.m in Sources */,
 				DD75A9331AE9387700C12D31 /* GRTextField.m in Sources */,
 				DDC049D71AE56A710008D41A /* GRReadingWindow.m in Sources */,

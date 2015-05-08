@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import ViewUtils
 
 class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
@@ -14,6 +15,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBOutlet weak var tableView: NSTableView!
     
     var indexOfLastSelectedRow = -1
+    var finishedInitialSetup = false
     
     lazy var headerController: VideosHeaderViewController! = VideosHeaderViewController.loadDefaultController()
     
@@ -36,6 +38,18 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         nc.addObserverForName(VideoStoreDownloadedFilesChangedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
             self.reloadTablePreservingSelection()
         }
+    }
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        if finishedInitialSetup {
+            return
+        }
+        
+        GRLoadingView.showInWindow(self.view.window!)
+        
+        finishedInitialSetup = true
     }
     
     func setupScrollView() {
@@ -67,9 +81,14 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     // MARK: Session loading
     
     func loadSessions() {
+        if let window = view.window {
+            GRLoadingView.showInWindow(window)
+        }
+        
         DataStore.SharedStore.fetchSessions() { success, sessions in
             dispatch_async(dispatch_get_main_queue()) {
                 self.sessions = sessions
+                GRLoadingView.dismissAll()
             }
         }
     }

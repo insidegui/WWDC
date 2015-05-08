@@ -22,3 +22,4 @@ FOUNDATION_EXPORT const unsigned char ViewUtilsVersionString[];
 #import <ViewUtils/GRPlayerView.h>
 #import <ViewUtils/GRActionableProgressIndicator.h>
 #import <ViewUtils/GRTextField.h>
+#import <ViewUtils/GRLoadingView.h>
