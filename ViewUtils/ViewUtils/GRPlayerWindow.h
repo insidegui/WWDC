@@ -10,4 +10,6 @@
 
 @interface GRPlayerWindow : GRWindow
 
+- (void)sizeToFitVideoSize:(NSSize)videoSize ignoringScreenSize:(BOOL)ignoreScreen animated:(BOOL)animate;
+
 @end

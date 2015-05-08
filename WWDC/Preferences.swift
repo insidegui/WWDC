@@ -25,6 +25,7 @@ class Preferences {
     // keys for NSUserDefault's dictionary
     private struct Keys {
         static let localVideoStoragePath = "localVideoStoragePath"
+        static let lastVideoWindowScale = "lastVideoWindowScale"
         
         struct transcript {
             static let font = "transcript.font"
@@ -36,6 +37,7 @@ class Preferences {
     // default values if preferences were not set
     private struct DefaultValues {
         static let localVideoStoragePath = NSString.pathWithComponents([NSHomeDirectory(), "Library", "Application Support", "WWDC"])
+        static let lastVideoWindowScale = CGFloat(100.0)
         
         struct transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
@@ -119,6 +121,20 @@ class Preferences {
             } else {
                 return DefaultValues.transcript.bgColor
             }
+        }
+    }
+    
+    // the last scale selected for the video window
+    var lastVideoWindowScale: CGFloat {
+        get {
+            if let scale = defaults.objectForKey(Keys.lastVideoWindowScale) as? NSNumber {
+                return CGFloat(scale.doubleValue)
+            } else {
+                return DefaultValues.lastVideoWindowScale
+            }
+        }
+        set {
+            defaults.setObject(NSNumber(double: Double(newValue)), forKey: Keys.lastVideoWindowScale)
         }
     }
     

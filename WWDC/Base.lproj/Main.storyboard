@@ -628,6 +628,22 @@ CA
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
                                     <items>
+                                        <menuItem title="Max size" keyEquivalent="1" id="5i6-9h-bLb">
+                                            <connections>
+                                                <action selector="sizeWindowToFill:" target="Ady-hI-5gd" id="1od-zi-4XS"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Half size" keyEquivalent="2" id="OXx-ig-XIj">
+                                            <connections>
+                                                <action selector="sizeWindowToHalfSize:" target="Ady-hI-5gd" id="Mtu-h2-9mV"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Quarter size" keyEquivalent="4" id="TOa-rj-RkP">
+                                            <connections>
+                                                <action selector="sizeWindowToQuarterSize:" target="Ady-hI-5gd" id="55t-gH-E4A"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="zVP-Fh-xQ4"/>
                                         <menuItem title="Minimize" keyEquivalent="m" id="OY7-WF-poV">
                                             <connections>
                                                 <action selector="performMiniaturize:" target="Ady-hI-5gd" id="VwT-WD-YPe"/>

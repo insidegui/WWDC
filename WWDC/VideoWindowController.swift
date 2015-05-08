@@ -10,12 +10,19 @@ import Cocoa
 import AVFoundation
 import AVKit
 import ASCIIwwdc
+import ViewUtils
 
 class VideoWindowController: NSWindowController {
 
     var session: Session?
     var videoURL: String?
     var transcriptWC: TranscriptWindowController!
+    var playerWindow: GRPlayerWindow {
+        get {
+            return window as! GRPlayerWindow
+        }
+    }
+    var videoNaturalSize = CGSizeZero
     
     convenience init(session: Session, videoURL: String) {
         self.init(windowNibName: "VideoWindowController")
@@ -37,8 +44,9 @@ class VideoWindowController: NSWindowController {
             if let url = NSURL(string: videoURL!) {
                 player = AVPlayer(URL: url)
                 playerView.player = player
-                player?.currentItem.asset.loadValuesAsynchronouslyForKeys(["duration"]) {
+                player?.currentItem.asset.loadValuesAsynchronouslyForKeys(["tracks"]) {
                     dispatch_async(dispatch_get_main_queue()) {
+                        self.setupWindowSizing()
                         self.setupTimeObserver()
                         if session.currentPosition > 0 {
                             self.player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
@@ -112,6 +120,62 @@ class VideoWindowController: NSWindowController {
             let roundedTimecode = WWDCTranscriptLine.roundedStringFromTimecode(CMTimeGetSeconds(self.player!.currentTime()))
             self.transcriptWC.highlightLineAt(roundedTimecode)
         }
+    }
+    
+    func setupWindowSizing()
+    {
+        // get video dimensions and set window aspect ratio
+        if let tracks = player?.currentItem.asset.tracksWithMediaType(AVMediaTypeVideo) as? [AVAssetTrack] {
+            if tracks.count > 0 {
+                let track = tracks[0]
+                videoNaturalSize = track.naturalSize
+                playerWindow.aspectRatio = videoNaturalSize
+            }
+        }
+        
+        // get saved scale
+        let lastScale = Preferences.SharedPreferences().lastVideoWindowScale
+        
+        if lastScale != 100.0 {
+            // saved scale matters, resize to preference
+            sizeWindowTo(lastScale)
+        } else {
+            // saved scale is default, size to fit screen (default sizing)
+            sizeWindowToFill(nil)
+        }
+    }
+    
+    // resizes the window so the video fills the entire screen without cropping
+    @IBAction func sizeWindowToFill(sender: AnyObject?)
+    {
+        if (videoNaturalSize == CGSizeZero) {
+            return
+        }
+        
+        Preferences.SharedPreferences().lastVideoWindowScale = 100.0
+        
+        playerWindow.sizeToFitVideoSize(videoNaturalSize, ignoringScreenSize: false, animated: false)
+    }
+    
+    // resizes the window to a fraction of the video's size
+    func sizeWindowTo(fraction: CGFloat)
+    {
+        if (videoNaturalSize == CGSizeZero) {
+            return
+        }
+        
+        Preferences.SharedPreferences().lastVideoWindowScale = fraction
+        
+        let scaledSize = CGSize(width: videoNaturalSize.width*fraction, height: videoNaturalSize.height*fraction)
+        playerWindow.sizeToFitVideoSize(scaledSize, ignoringScreenSize: true, animated: true)
+    }
+    
+    @IBAction func sizeWindowToHalfSize(sender: AnyObject?) {
+        sizeWindowTo(0.5)
+    }
+    
+    @IBAction func sizeWindowToQuarterSize(sender: AnyObject?) {
+        sizeWindowTo(0.25)
     }
     
     deinit {
