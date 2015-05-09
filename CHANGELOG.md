@@ -1,5 +1,23 @@
 # Change Log
 
+## [1.7](https://github.com/insidegui/WWDC/tree/1.7) (2015-05-09)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/1.6.2...1.7)
+
+**Implemented enhancements:**
+
+- Ability to customize transcript text [\#35](https://github.com/insidegui/WWDC/issues/35)
+
+- Ability to set video window size. [\#34](https://github.com/insidegui/WWDC/issues/34)
+
+- Simple loading NSProgressIndicator on load [\#20](https://github.com/insidegui/WWDC/issues/20)
+
+**Merged pull requests:**
+
+- Remove unnecessary menus from main menu [\#45](https://github.com/insidegui/WWDC/pull/45) ([josh-](https://github.com/josh-))
+
+- Allow platform sidebar text color to be inverted on selection [\#44](https://github.com/insidegui/WWDC/pull/44) ([josh-](https://github.com/josh-))
+
 ## [1.6.2](https://github.com/insidegui/WWDC/tree/1.6.2) (2015-05-07)
 
 [Full Changelog](https://github.com/insidegui/WWDC/compare/1.6.1...1.6.2)
