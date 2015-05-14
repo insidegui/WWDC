@@ -15,13 +15,15 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBOutlet weak var tableView: NSTableView!
     
     var indexOfLastSelectedRow = -1
+    let savedSearchTerm = Preferences.SharedPreferences().searchTerm
     var finishedInitialSetup = false
+    var restoredSelection = false
     
     lazy var headerController: VideosHeaderViewController! = VideosHeaderViewController.loadDefaultController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupScrollView()
         
         tableView.gridColor = Theme.WWDCTheme.separatorColor
@@ -67,14 +69,26 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             headerController.view.autoresizingMask = NSAutoresizingMaskOptions.ViewWidthSizable | NSAutoresizingMaskOptions.ViewMinYMargin
             headerController.performSearch = search
         }
+        
+        // show search term from previous launch in search bar
+        headerController.searchBar.stringValue = savedSearchTerm
     }
 
     var sessions: [Session]! {
         didSet {
             if sessions != nil {
                 headerController.enable()
+                
+                // restore search from previous launch
+                if  savedSearchTerm != "" {
+                    search(savedSearchTerm)
+                    indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
+                }
             }
-            reloadTablePreservingSelection()
+            
+            if savedSearchTerm == "" {
+                reloadTablePreservingSelection()
+            }
         }
     }
 
@@ -97,6 +111,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     func reloadTablePreservingSelection() {
         tableView.reloadData()
+        
+        if !restoredSelection {
+            indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
+            restoredSelection = true
+        }
         
         if indexOfLastSelectedRow > -1 {
             tableView.selectRowIndexes(NSIndexSet(index: indexOfLastSelectedRow), byExtendingSelection: false)
@@ -145,8 +164,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     func tableViewSelectionDidChange(notification: NSNotification) {
         if tableView.selectedRow >= 0 {
-            indexOfLastSelectedRow = tableView.selectedRow
+
+            Preferences.SharedPreferences().selectedSession = tableView.selectedRow
             
+            indexOfLastSelectedRow = tableView.selectedRow
+
             let session = displayedSessions[tableView.selectedRow]
             if let detailsVC = detailsViewController {
                 detailsVC.session = session
@@ -162,6 +184,12 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     var currentSearchTerm: String? {
         didSet {
+            if currentSearchTerm != nil {
+                Preferences.SharedPreferences().searchTerm = currentSearchTerm!
+            } else {
+                Preferences.SharedPreferences().searchTerm = ""
+            }
+            
             reloadTablePreservingSelection()
         }
     }

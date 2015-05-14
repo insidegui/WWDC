@@ -33,6 +33,11 @@ class Preferences {
             static let textColor = "transcript.textColor"
             static let bgColor = "transcript.bgColor"
         }
+        
+        struct VideosController {
+            static let selectedItem = "VideosController.selectedItem"
+            static let searchTerm = "VideosController.searchTerm"
+        }
     }
     
     // default values if preferences were not set
@@ -44,6 +49,11 @@ class Preferences {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
             static let textColor = NSColor.blackColor()
             static let bgColor = NSColor.whiteColor()
+        }
+        
+        struct VideosController {
+            static let selectedItem = -1
+            static let searchTerm = ""
         }
     }
     
@@ -57,6 +67,34 @@ class Preferences {
                 return NSRectFromString(rectString)
             } else {
                 return NSZeroRect
+            }
+        }
+    }
+    
+    // the selected session on the list
+    var selectedSession: Int {
+        set {
+            defaults.setObject(newValue, forKey: Keys.VideosController.selectedItem)
+        }
+        get {
+            if let item = defaults.objectForKey(Keys.VideosController.selectedItem) as? Int {
+                return item
+            } else {
+                return DefaultValues.VideosController.selectedItem
+            }
+        }
+    }
+    
+    // the search term
+    var searchTerm: String {
+        set {
+            defaults.setObject(newValue, forKey: Keys.VideosController.searchTerm)
+        }
+        get {
+            if let term = defaults.objectForKey(Keys.VideosController.searchTerm) as? String {
+                return term
+            } else {
+                return DefaultValues.VideosController.searchTerm
             }
         }
     }
