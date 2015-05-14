@@ -53,6 +53,7 @@
 		DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */; };
 		DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */; };
 		DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */; };
+		DDF9D1931B04F361006F0953 /* SplitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF9D1921B04F361006F0953 /* SplitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +168,7 @@
 		DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonsViewController.swift; sourceTree = "<group>"; };
 		DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressViewController.swift; sourceTree = "<group>"; };
 		DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		DDF9D1921B04F361006F0953 /* SplitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,7 +225,7 @@
 				DDD7A4361AE2E253000A0102 /* Models */,
 				DDD7A4311AE2DF06000A0102 /* Helpers */,
 				DDD7A4301AE2DEFD000A0102 /* Resources */,
-				DDD7A42F1AE2DEF2000A0102 /* Aux View Controllers */,
+				DDD7A42F1AE2DEF2000A0102 /* Aux Controllers */,
 				DDD7A42E1AE2DEDD000A0102 /* Main Controllers */,
 				DDD7A42D1AE2DECE000A0102 /* Views */,
 				DD4F6E511AE2D11D0099BEB5 /* AppDelegate.swift */,
@@ -302,15 +304,16 @@
 			name = "Main Controllers";
 			sourceTree = "<group>";
 		};
-		DDD7A42F1AE2DEF2000A0102 /* Aux View Controllers */ = {
+		DDD7A42F1AE2DEF2000A0102 /* Aux Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				DD4F6E741AE2D82A0099BEB5 /* VideosHeaderViewController.swift */,
 				DD4F6E6E1AE2D14A0099BEB5 /* MainWindowController.swift */,
 				DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */,
 				DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */,
+				DDF9D1921B04F361006F0953 /* SplitManager.swift */,
 			);
-			name = "Aux View Controllers";
+			name = "Aux Controllers";
 			sourceTree = "<group>";
 		};
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
@@ -506,6 +509,7 @@
 				DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */,
 				DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */,
 				DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */,
+				DDF9D1931B04F361006F0953 /* SplitManager.swift in Sources */,
 				DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */,
 				DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */,
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,

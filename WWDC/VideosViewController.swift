@@ -14,6 +14,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBOutlet weak var scrollView: NSScrollView!
     @IBOutlet weak var tableView: NSTableView!
     
+    var splitManager: SplitManager!
+    
     var indexOfLastSelectedRow = -1
     let savedSearchTerm = Preferences.SharedPreferences().searchTerm
     var finishedInitialSetup = false
@@ -24,6 +26,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let splitViewController = parentViewController as? NSSplitViewController {
+            splitManager = SplitManager(splitView: splitViewController.splitView)
+        }
+        
         setupScrollView()
         
         tableView.gridColor = Theme.WWDCTheme.separatorColor
@@ -103,6 +109,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             dispatch_async(dispatch_get_main_queue()) {
                 self.sessions = sessions
                 GRLoadingView.dismissAll()
+                self.splitManager.restoreSidebarWidth()
             }
         }
     }

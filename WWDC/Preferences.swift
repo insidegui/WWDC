@@ -37,6 +37,7 @@ class Preferences {
         struct VideosController {
             static let selectedItem = "VideosController.selectedItem"
             static let searchTerm = "VideosController.searchTerm"
+            static let sidebarWidth = "VideosController.sidebarWidth"
         }
     }
     
@@ -54,6 +55,7 @@ class Preferences {
         struct VideosController {
             static let selectedItem = -1
             static let searchTerm = ""
+            static let sidebarWidth = 260.0
         }
     }
     
@@ -81,6 +83,20 @@ class Preferences {
                 return item
             } else {
                 return DefaultValues.VideosController.selectedItem
+            }
+        }
+    }
+    
+    // the sidebar's width
+    var sidebarWidth: CGFloat {
+        set {
+            defaults.setObject(NSNumber(double: Double(newValue)), forKey: Keys.VideosController.sidebarWidth)
+        }
+        get {
+            if let width = defaults.objectForKey(Keys.VideosController.sidebarWidth) as? NSNumber {
+                return CGFloat(width.doubleValue)
+            } else {
+                return CGFloat(DefaultValues.VideosController.sidebarWidth)
             }
         }
     }
