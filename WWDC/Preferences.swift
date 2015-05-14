@@ -24,6 +24,7 @@ class Preferences {
     
     // keys for NSUserDefault's dictionary
     private struct Keys {
+        static let mainWindowFrame = "mainWindowFrame"
         static let localVideoStoragePath = "localVideoStoragePath"
         static let lastVideoWindowScale = "lastVideoWindowScale"
         
@@ -43,6 +44,20 @@ class Preferences {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
             static let textColor = NSColor.blackColor()
             static let bgColor = NSColor.whiteColor()
+        }
+    }
+    
+    // the main window's frame
+    var mainWindowFrame: NSRect {
+        set {
+            defaults.setObject(NSStringFromRect(newValue), forKey: Keys.mainWindowFrame)
+        }
+        get {
+            if let rectString = defaults.objectForKey(Keys.mainWindowFrame) as? String {
+                return NSRectFromString(rectString)
+            } else {
+                return NSZeroRect
+            }
         }
     }
     
