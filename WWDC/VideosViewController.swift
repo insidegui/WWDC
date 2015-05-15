@@ -28,6 +28,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
 
         if let splitViewController = parentViewController as? NSSplitViewController {
             splitManager = SplitManager(splitView: splitViewController.splitView)
+            splitViewController.splitView.delegate = splitManager
         }
         
         setupScrollView()
@@ -108,8 +109,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         DataStore.SharedStore.fetchSessions() { success, sessions in
             dispatch_async(dispatch_get_main_queue()) {
                 self.sessions = sessions
+                self.splitManager.restoreDividerPosition()
                 GRLoadingView.dismissAll()
-                self.splitManager.restoreSidebarWidth()
             }
         }
     }

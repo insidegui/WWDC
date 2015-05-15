@@ -37,7 +37,7 @@ class Preferences {
         struct VideosController {
             static let selectedItem = "VideosController.selectedItem"
             static let searchTerm = "VideosController.searchTerm"
-            static let sidebarWidth = "VideosController.sidebarWidth"
+            static let dividerPosition = "VideosController.dividerPosition"
         }
     }
     
@@ -55,7 +55,7 @@ class Preferences {
         struct VideosController {
             static let selectedItem = -1
             static let searchTerm = ""
-            static let sidebarWidth = 260.0
+            static let dividerPosition = 260.0
         }
     }
     
@@ -87,16 +87,16 @@ class Preferences {
         }
     }
     
-    // the sidebar's width
-    var sidebarWidth: CGFloat {
+    // the splitView's divider position
+    var dividerPosition: CGFloat {
         set {
-            defaults.setObject(NSNumber(double: Double(newValue)), forKey: Keys.VideosController.sidebarWidth)
+            defaults.setObject(NSNumber(double: Double(newValue)), forKey: Keys.VideosController.dividerPosition)
         }
         get {
-            if let width = defaults.objectForKey(Keys.VideosController.sidebarWidth) as? NSNumber {
+            if let width = defaults.objectForKey(Keys.VideosController.dividerPosition) as? NSNumber {
                 return CGFloat(width.doubleValue)
             } else {
-                return CGFloat(DefaultValues.VideosController.sidebarWidth)
+                return CGFloat(DefaultValues.VideosController.dividerPosition)
             }
         }
     }
