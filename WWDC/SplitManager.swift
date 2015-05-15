@@ -8,43 +8,34 @@
 
 import Cocoa
 
-private extension NSSplitView {
-    
-    var currentDividerPosition: CGFloat {
-        get {
-            let dividerDelta = dividerThickness/2
-            if let sideView = self.subviews[0] as? NSView {
-                return CGFloat(round(sideView.frame.size.width+dividerDelta))
-            } else {
-                return 0.0
-            }
-        }
-    }
-    
-}
-
 class SplitManager: NSObject, NSSplitViewDelegate {
 
     var splitView: NSSplitView
-    var didRestoreDividerPosition = false
+
+    var isSavingDividerPosition = false
     
     init(splitView: NSSplitView) {
         self.splitView = splitView
     }
     
-    func splitViewDidResizeSubviews(notification: NSNotification) {
-        if !didRestoreDividerPosition {
-            return
+    func startSavingDividerPosition()
+    {
+        isSavingDividerPosition = true
+    }
+    
+    func splitView(splitView: NSSplitView, constrainSplitPosition proposedPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+        if isSavingDividerPosition {
+            Preferences.SharedPreferences().dividerPosition = proposedPosition
+            
+            return proposedPosition
+        } else {
+            return Preferences.SharedPreferences().dividerPosition
         }
-        
-        Preferences.SharedPreferences().dividerPosition = splitView.currentDividerPosition
     }
     
     func restoreDividerPosition()
     {
         splitView.setPosition(Preferences.SharedPreferences().dividerPosition, ofDividerAtIndex: 0)
-        
-        didRestoreDividerPosition = true
     }
     
 }

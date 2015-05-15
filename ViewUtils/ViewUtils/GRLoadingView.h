@@ -14,6 +14,7 @@
 
 + (GRLoadingView *)showInWindow:(NSWindow *)window;
 + (void)dismissAll;
++ (void)dismissAllAfterDelay:(NSTimeInterval)delay;
 
 - (void)dismiss;
 

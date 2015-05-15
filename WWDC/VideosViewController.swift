@@ -14,22 +14,35 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBOutlet weak var scrollView: NSScrollView!
     @IBOutlet weak var tableView: NSTableView!
     
-    var splitManager: SplitManager!
+    var splitManager: SplitManager?
     
     var indexOfLastSelectedRow = -1
     let savedSearchTerm = Preferences.SharedPreferences().searchTerm
     var finishedInitialSetup = false
     var restoredSelection = false
+    var loadedStoryboard = false
     
     lazy var headerController: VideosHeaderViewController! = VideosHeaderViewController.loadDefaultController()
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        if splitManager == nil && loadedStoryboard {
+            if let splitViewController = parentViewController as? NSSplitViewController {
+                splitManager = SplitManager(splitView: splitViewController.splitView)
+                splitViewController.splitView.delegate = self.splitManager
+            }
+        }
+        
+        loadedStoryboard = true
+    }
+    
+    override func awakeAfterUsingCoder(aDecoder: NSCoder) -> AnyObject? {
+        return super.awakeAfterUsingCoder(aDecoder)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if let splitViewController = parentViewController as? NSSplitViewController {
-            splitManager = SplitManager(splitView: splitViewController.splitView)
-            splitViewController.splitView.delegate = splitManager
-        }
         
         setupScrollView()
         
@@ -109,8 +122,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         DataStore.SharedStore.fetchSessions() { success, sessions in
             dispatch_async(dispatch_get_main_queue()) {
                 self.sessions = sessions
-                self.splitManager.restoreDividerPosition()
-                GRLoadingView.dismissAll()
+                
+                self.splitManager?.restoreDividerPosition()
+                self.splitManager?.startSavingDividerPosition()
+                
+                GRLoadingView.dismissAllAfterDelay(0.3)
             }
         }
     }
