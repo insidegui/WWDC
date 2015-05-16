@@ -24,6 +24,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        // start checking for live event
+        LiveEventObserver.SharedObserver().start()
+        
         // check for updates
         checkForUpdates(nil)
         

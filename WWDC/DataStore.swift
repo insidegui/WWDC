@@ -9,6 +9,7 @@
 import Foundation
 
 private let _internalServiceURL = "http://wwdc.guilhermerambo.me/index.json"
+private let _liveServiceURL = "http://wwdc.guilhermerambo.me/live.json"
 private let _SharedStore = DataStore()
 private let _MemoryCacheSize = 500*1024*1024
 private let _DiskCacheSize = 1024*1024*1024
@@ -149,6 +150,32 @@ class DataStore: NSObject {
     
     func putSessionCurrentPosition(session: Session, position: Double) {
         defaults.setDouble(position, forKey: session.currentPositionKey)
+    }
+    
+    private var liveURL: NSURL {
+        get {
+            // adds a random number as a parameter to completely prevent any caching
+            return NSURL(string: "\(_liveServiceURL)?t=\(rand())")!
+        }
+    }
+    
+    func checkForLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
+        let task = URLSession.dataTaskWithURL(liveURL) { data, response, error in
+            if data == nil {
+                completionHandler(false, nil)
+                return
+            }
+            
+            let jsonData = JSON(data: data)
+            let event = LiveEvent(jsonObject: jsonData)
+            
+            if event.isLiveRightNow || event.willBeLiveSoon {
+                completionHandler(true, event)
+            } else {
+                completionHandler(false, nil)
+            }
+        }
+        task.resume()
     }
     
 }
