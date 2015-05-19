@@ -15,7 +15,7 @@ struct LiveEvent {
     var title: String
     var startsAt: NSDate
     var description: String
-    var stream: NSURL
+    var stream: NSURL?
     var isLiveRightNow: Bool
     
     private struct Keys {
@@ -31,7 +31,7 @@ struct LiveEvent {
         id = jsonObject[Keys.id].intValue
         title = jsonObject[Keys.title].string!
         description = jsonObject[Keys.description].string!
-        stream = NSURL(string: jsonObject[Keys.stream].string!)!
+        stream = NSURL(string: jsonObject[Keys.stream].string!)
         isLiveRightNow = jsonObject[Keys.isLiveRightNow].boolValue
         
         let formatter = NSDateFormatter()

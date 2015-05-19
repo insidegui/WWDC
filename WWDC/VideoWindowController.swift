@@ -12,9 +12,13 @@ import AVKit
 import ASCIIwwdc
 import ViewUtils
 
+private let _nibName = "VideoWindowController"
+
 class VideoWindowController: NSWindowController {
 
     var session: Session?
+    var event: LiveEvent?
+    
     var videoURL: String?
     var transcriptWC: TranscriptWindowController!
     var playerWindow: GRPlayerWindow {
@@ -23,10 +27,16 @@ class VideoWindowController: NSWindowController {
         }
     }
     var videoNaturalSize = CGSizeZero
-    
+
     convenience init(session: Session, videoURL: String) {
-        self.init(windowNibName: "VideoWindowController")
+        self.init(windowNibName: _nibName)
         self.session = session
+        self.videoURL = videoURL
+    }
+    
+    convenience init(event: LiveEvent, videoURL: String) {
+        self.init(windowNibName: _nibName)
+        self.event = event
         self.videoURL = videoURL
     }
     
@@ -39,25 +49,38 @@ class VideoWindowController: NSWindowController {
 
         progressIndicator.startAnimation(nil)
         window?.backgroundColor = NSColor.blackColor()
-        
-        if let session = session {
-            if let url = NSURL(string: videoURL!) {
-                player = AVPlayer(URL: url)
-                playerView.player = player
-                player?.currentItem.asset.loadValuesAsynchronouslyForKeys(["tracks"]) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.setupWindowSizing()
-                        self.setupTimeObserver()
+
+        if let url = NSURL(string: videoURL!) {
+            player = AVPlayer(URL: url)
+            playerView.player = player
+            player?.currentItem.asset.loadValuesAsynchronouslyForKeys(["tracks"]) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.setupWindowSizing()
+                    self.setupTimeObserver()
+                    
+                    if let session = self.session {
                         if session.currentPosition > 0 {
                             self.player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
                         }
-                        self.player?.play()
-                        self.progressIndicator.stopAnimation(nil)
                     }
+                    
+                    self.player?.play()
+                    self.progressIndicator.stopAnimation(nil)
                 }
             }
-            
+        }
+        
+        if let session = self.session {
             window?.title = "WWDC \(session.year) | \(session.title)"
+            
+            // pause playback when a live event starts playing
+            NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { _ in
+                self.player?.pause()
+            }
+        }
+        
+        if let event = self.event {
+            window?.title = "\(event.title) (live)"
         }
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
@@ -72,6 +95,10 @@ class VideoWindowController: NSWindowController {
     }
     
     func showTranscriptWindow(sender: AnyObject?) {
+        if session == nil {
+            return
+        }
+        
         if transcriptWC != nil {
             if let window = transcriptWC.window {
                 window.orderFront(sender)
@@ -97,6 +124,10 @@ class VideoWindowController: NSWindowController {
     var timeObserver: AnyObject?
     
     func setupTimeObserver() {
+        if session == nil {
+            return
+        }
+        
         timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(5, 1), queue: dispatch_get_main_queue()) { [unowned self] currentTime in
             let progress = Double(CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(self.player!.currentItem.duration))
 

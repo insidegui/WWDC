@@ -27,6 +27,8 @@ class Preferences {
         static let mainWindowFrame = "mainWindowFrame"
         static let localVideoStoragePath = "localVideoStoragePath"
         static let lastVideoWindowScale = "lastVideoWindowScale"
+        static let autoplayLiveEvents = "autoplayLiveEvents"
+        static let liveEventCheckInterval = "liveEventCheckInterval"
         
         struct transcript {
             static let font = "transcript.font"
@@ -45,6 +47,8 @@ class Preferences {
     private struct DefaultValues {
         static let localVideoStoragePath = NSString.pathWithComponents([NSHomeDirectory(), "Library", "Application Support", "WWDC"])
         static let lastVideoWindowScale = CGFloat(100.0)
+        static let autoplayLiveEvents = true
+        static let liveEventCheckInterval = 15.0
         
         struct transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
@@ -204,6 +208,35 @@ class Preferences {
         }
         set {
             defaults.setObject(NSNumber(double: Double(newValue)), forKey: Keys.lastVideoWindowScale)
+        }
+    }
+    
+    // play live events automatically or not
+    // TODO: expose this preference to the user
+    var autoplayLiveEvents: Bool {
+        get {
+            if let object = defaults.objectForKey(Keys.autoplayLiveEvents) as? NSNumber {
+                return object.boolValue
+            } else {
+                return DefaultValues.autoplayLiveEvents
+            }
+        }
+        set {
+            defaults.setObject(NSNumber(bool: newValue), forKey: Keys.autoplayLiveEvents)
+        }
+    }
+    
+    // how often to check for live events (in seconds)
+    var liveEventCheckInterval: Double {
+        get {
+            if let object = defaults.objectForKey(Keys.liveEventCheckInterval) as? NSNumber {
+                return object.doubleValue
+            } else {
+                return DefaultValues.liveEventCheckInterval
+            }
+        }
+        set {
+            defaults.setObject(NSNumber(double: newValue), forKey: Keys.liveEventCheckInterval)
         }
     }
     
