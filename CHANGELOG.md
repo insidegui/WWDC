@@ -1,5 +1,27 @@
 # Change Log
 
+## [1.8](https://github.com/insidegui/WWDC/tree/1.8) (2015-05-19)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/1.7...1.8)
+
+**Implemented enhancements:**
+
+- Save Window Size [\#48](https://github.com/insidegui/WWDC/issues/48)
+
+**Fixed bugs:**
+
+- Save split size between launches [\#49](https://github.com/insidegui/WWDC/issues/49)
+
+**Closed issues:**
+
+- Cannot open interface builder [\#53](https://github.com/insidegui/WWDC/issues/53)
+
+**Merged pull requests:**
+
+- Fix the crash when video is missing transcript [\#47](https://github.com/insidegui/WWDC/pull/47) ([0x8badf00d](https://github.com/0x8badf00d))
+
+- \[Circle\] Badge dat readme [\#42](https://github.com/insidegui/WWDC/pull/42) ([jhersh](https://github.com/jhersh))
+
 ## [1.7](https://github.com/insidegui/WWDC/tree/1.7) (2015-05-09)
 
 [Full Changelog](https://github.com/insidegui/WWDC/compare/1.6.2...1.7)
