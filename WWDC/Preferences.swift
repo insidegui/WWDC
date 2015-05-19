@@ -29,6 +29,7 @@ class Preferences {
         static let lastVideoWindowScale = "lastVideoWindowScale"
         static let autoplayLiveEvents = "autoplayLiveEvents"
         static let liveEventCheckInterval = "liveEventCheckInterval"
+        static let userKnowsLiveEventThing = "userKnowsLiveEventThing"
         
         struct transcript {
             static let font = "transcript.font"
@@ -49,6 +50,7 @@ class Preferences {
         static let lastVideoWindowScale = CGFloat(100.0)
         static let autoplayLiveEvents = true
         static let liveEventCheckInterval = 15.0
+        static let userKnowsLiveEventThing = false
         
         struct transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
@@ -237,6 +239,20 @@ class Preferences {
         }
         set {
             defaults.setObject(NSNumber(double: newValue), forKey: Keys.liveEventCheckInterval)
+        }
+    }
+    
+    // user was informed about the possibility to watch the live keynote here :)
+    var userKnowsLiveEventThing: Bool {
+        get {
+            if let object = defaults.objectForKey(Keys.userKnowsLiveEventThing) as? NSNumber {
+                return object.boolValue
+            } else {
+                return DefaultValues.userKnowsLiveEventThing
+            }
+        }
+        set {
+            defaults.setObject(NSNumber(bool: newValue), forKey: Keys.userKnowsLiveEventThing)
         }
     }
     
