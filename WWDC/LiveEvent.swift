@@ -16,25 +16,7 @@ struct LiveEvent {
     var startsAt: NSDate
     var description: String
     var stream: NSURL
-
-    var willBeLiveSoon: Bool {
-        get {
-            // TODO: return whether the live event will start "soon" (half an hour? fifteen minutes?)
-            return false
-        }
-    }
-    
-    var waitTime: Int {
-        // TODO: return how many seconds It will take for the live event to start
-        return 0
-    }
-    
-    var isLiveRightNow: Bool {
-        get {
-            // TODO: return true if the event is currently live
-            return false
-        }
-    }
+    var isLiveRightNow: Bool
     
     private struct Keys {
         static let id = "id"
@@ -42,6 +24,7 @@ struct LiveEvent {
         static let description = "description"
         static let stream = "stream"
         static let startsAt = "starts_at"
+        static let isLiveRightNow = "isLiveRightNow"
     }
     
     init(jsonObject: JSON) {
@@ -49,6 +32,7 @@ struct LiveEvent {
         title = jsonObject[Keys.title].string!
         description = jsonObject[Keys.description].string!
         stream = NSURL(string: jsonObject[Keys.stream].string!)!
+        isLiveRightNow = jsonObject[Keys.isLiveRightNow].boolValue
         
         let formatter = NSDateFormatter()
         formatter.dateFormat = _dateFormat

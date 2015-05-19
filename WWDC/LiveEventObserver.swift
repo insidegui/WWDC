@@ -25,8 +25,9 @@ class LiveEventObserver: NSObject {
     
     func checkNow() {
         DataStore.SharedStore.checkForLiveEvent { available, event in
-            // TODO: do something when available == true (maybe just open a player window and start streaming)
-            println("Live event: \(available)")
+            if available {
+                println("Live event available: \(event)")
+            }
         }
     }
     

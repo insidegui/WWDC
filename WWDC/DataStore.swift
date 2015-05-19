@@ -154,6 +154,7 @@ class DataStore: NSObject {
     
     private var liveURL: NSURL {
         get {
+            sranddev()
             // adds a random number as a parameter to completely prevent any caching
             return NSURL(string: "\(_liveServiceURL)?t=\(rand())")!
         }
@@ -169,7 +170,7 @@ class DataStore: NSObject {
             let jsonData = JSON(data: data)
             let event = LiveEvent(jsonObject: jsonData)
             
-            if event.isLiveRightNow || event.willBeLiveSoon {
+            if event.isLiveRightNow {
                 completionHandler(true, event)
             } else {
                 completionHandler(false, nil)
