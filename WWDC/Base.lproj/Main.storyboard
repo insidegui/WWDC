@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -750,7 +750,7 @@ CA
                             <stackView orientation="horizontal" alignment="centerY" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="NDa-qd-DsL">
                                 <rect key="frame" x="20" y="182" width="519" height="22"/>
                                 <beginningViews>
-                                    <button verticalHuggingPriority="50" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
+                                    <button verticalHuggingPriority="50" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
                                         <rect key="frame" x="14" y="200" width="141" height="32"/>
                                         <buttonCell key="cell" type="push" title="Watch HD Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D3d-bZ-Zck">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -760,7 +760,7 @@ CA
                                             <action selector="watchHD:" target="1s0-2L-R2i" id="xqm-Kv-PmK"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
+                                    <button verticalHuggingPriority="50" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
                                         <rect key="frame" x="155" y="200" width="118" height="32"/>
                                         <buttonCell key="cell" type="push" title="Watch Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xjs-Oy-GhI">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -770,7 +770,7 @@ CA
                                             <action selector="watch:" target="1s0-2L-R2i" id="d1x-9M-a2C"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
+                                    <button verticalHuggingPriority="50" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
                                         <rect key="frame" x="273" y="200" width="111" height="32"/>
                                         <buttonCell key="cell" type="push" title="View Slides" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UpZ-Ii-Qdp">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -780,7 +780,7 @@ CA
                                             <action selector="watchSlides:" target="1s0-2L-R2i" id="Bt3-zs-bNR"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
+                                    <button verticalHuggingPriority="50" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
                                         <rect key="frame" x="384" y="200" width="161" height="32"/>
                                         <buttonCell key="cell" type="push" title="Mark as watched" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pEg-S2-YVS">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -792,6 +792,7 @@ CA
                                     </button>
                                 </beginningViews>
                                 <constraints>
+                                    <constraint firstItem="KY0-ql-QWs" firstAttribute="leading" secondItem="NDa-qd-DsL" secondAttribute="leading" id="ncR-c9-Wff"/>
                                     <constraint firstAttribute="height" constant="22" id="p7G-TF-dB4"/>
                                 </constraints>
                                 <visibilityPriorities>
