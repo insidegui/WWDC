@@ -51,6 +51,7 @@
 		DDD7A43A1AE2E305000A0102 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4391AE2E305000A0102 /* DataStore.swift */; };
 		DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A43C1AE2E39A000A0102 /* SwiftyJSON.swift */; };
 		DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */; };
+		DDEC0DF91B0E73FA001752CA /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDEC0DF81B0E73FA001752CA /* Fabric.framework */; };
 		DDF6153D1B07BAB1002C8667 /* LiveEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF6153C1B07BAB1002C8667 /* LiveEvent.swift */; };
 		DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */; };
 		DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */; };
@@ -168,6 +169,7 @@
 		DDD7A4391AE2E305000A0102 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		DDD7A43C1AE2E39A000A0102 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonsViewController.swift; sourceTree = "<group>"; };
+		DDEC0DF81B0E73FA001752CA /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DDF6153C1B07BAB1002C8667 /* LiveEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEvent.swift; sourceTree = "<group>"; };
 		DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEventObserver.swift; sourceTree = "<group>"; };
 		DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressViewController.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				DD2016681AE402B400DD8155 /* ViewUtils.framework in Frameworks */,
 				DDCC5D721AF1518A00F24F55 /* Crashlytics.framework in Frameworks */,
 				DD92EAA61AE978EC00D503AE /* ASCIIwwdc.framework in Frameworks */,
+				DDEC0DF91B0E73FA001752CA /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +205,7 @@
 		DD4F6E431AE2D11D0099BEB5 = {
 			isa = PBXGroup;
 			children = (
+				DDEC0DF81B0E73FA001752CA /* Fabric.framework */,
 				DD89EA061AF48A300073B845 /* Updater.xcodeproj */,
 				DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */,
 				DD7F6F901AE97C99007A4E5E /* WebKit.framework */,
@@ -498,7 +502,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "if [ -f \"./WWDC/Crashlytics.sh\" ] && [ \"${CONFIGURATION}\" = \"Release\" ]; then\n./WWDC/Crashlytics.sh\nfi";
+			shellScript = "if [ -f \"./WWDC/Crashlytics.sh\" ]; then\n./WWDC/Crashlytics.sh\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

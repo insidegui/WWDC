@@ -15,6 +15,4 @@ profile
 *.moved-aside
 DerivedData
 .idea/
-GRCrashlyticsCredentials.h
-GRCrashlyticsCredentials.m
 Crashlytics.sh

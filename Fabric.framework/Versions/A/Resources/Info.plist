@@ -5,23 +5,23 @@
 	<key>BuildMachineOSBuild</key>
 	<string>13F34</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<string>en</string>
 	<key>CFBundleExecutable</key>
-	<string>Crashlytics</string>
+	<string>Fabric</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.twitter.crashlytics.mac</string>
+	<string>io.fabric.sdk.mac</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Crashlytics</string>
+	<string>Fabric</string>
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>3.0.8</string>
+	<string>1.2.4</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>50</string>
+	<string>15</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
@@ -37,10 +37,6 @@
 	<key>DTXcodeBuild</key>
 	<string>6A2008a</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2015 Crashlytics, Inc. All rights reserved.</string>
-	<key>UIDeviceFamily</key>
-	<array>
-		<integer>1</integer>
-	</array>
+	<string>Copyright © 2015 Twitter. All rights reserved.</string>
 </dict>
 </plist>

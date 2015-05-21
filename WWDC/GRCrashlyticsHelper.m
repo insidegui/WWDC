@@ -10,26 +10,16 @@
 
 @import Crashlytics;
 
-#define kCredentialsClassName @"GRCrashlyticsCredentials"
+#define kCrashlyticsKey @"69b44b9b0e1f177a7fb1b6199e9a040897e9dfc0"
 
 @implementation GRCrashlyticsHelper
 
 + (void)install
 {
-    #ifndef DEBUG
-    [Crashlytics startWithAPIKey:[self apiKey] afterDelay:1.0f];
-    #endif
-}
-
-+ (NSString *)apiKey
-{
-    Class credentialsClass = NSClassFromString(kCredentialsClassName);
-    id instance = [[credentialsClass alloc] init];
-    if ([instance respondsToSelector:@selector(apiKey)]) {
-        return [instance apiKey];
-    } else {
-        return @"";
-    }
+    id crashlyticsClass = NSClassFromString(@"Crashlytics");
+    if (!crashlyticsClass) return;
+    
+    [Crashlytics startWithAPIKey:kCrashlyticsKey];
 }
 
 @end
