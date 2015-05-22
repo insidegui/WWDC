@@ -12,6 +12,17 @@ class VideoDetailsViewController: NSViewController {
     
     var auxWindowControllers: [NSWindowController] = []
     
+    
+    var selectedCount = 1 {
+        didSet {
+            updateUI()
+        }
+    }
+    var multipleSelection: Bool {
+        get {
+            return selectedCount > 1
+        }
+    }
     var session: Session? {
         didSet {
             updateUI()
@@ -26,6 +37,14 @@ class VideoDetailsViewController: NSViewController {
     
     private func updateUI()
     {
+        if multipleSelection {
+            handleMultipleSelection()
+            return
+        }
+        
+        actionButtonsController.view.hidden = false
+        downloadController.view.hidden = false
+        
         actionButtonsController.session = session
         setupActionCallbacks()
         
@@ -44,6 +63,15 @@ class VideoDetailsViewController: NSViewController {
             subtitleLabel.stringValue = "Select a session to see It here"
             descriptionLabel.hidden = true
         }
+    }
+    
+    private func handleMultipleSelection()
+    {
+        titleLabel.stringValue = "\(selectedCount) sessions selected"
+        subtitleLabel.stringValue = ""
+        descriptionLabel.hidden = true
+        actionButtonsController.view.hidden = true
+        downloadController.view.hidden = true
     }
     
     private func setupActionCallbacks()

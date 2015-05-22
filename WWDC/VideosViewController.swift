@@ -174,6 +174,30 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         return 40.0
     }
     
+    // MARK: Table Menu
+
+    @IBAction func markAsWatchedMenuAction(sender: NSMenuItem) {
+        doMassiveSessionProgressUpdate(100)
+    }
+    
+    @IBAction func markAsUnwatchedMenuAction(sender: NSMenuItem) {
+        doMassiveSessionProgressUpdate(0)
+    }
+    
+    private let userInitiatedQ = dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.value), 0)
+    // changes the progress of all selected sessions to "progress"
+    private func doMassiveSessionProgressUpdate(progress: Double) {
+        dispatch_async(userInitiatedQ) {
+            self.tableView.selectedRowIndexes.enumerateIndexesUsingBlock { idx, _ in
+                var session = self.displayedSessions[idx]
+                session.setProgressWithoutSendingNotification(progress)
+            }
+            dispatch_async(dispatch_get_main_queue()) {
+                self.reloadTablePreservingSelection()
+            }
+        }
+    }
+
     // MARK: Navigation
 
     var detailsViewController: VideoDetailsViewController? {
@@ -187,6 +211,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     func tableViewSelectionDidChange(notification: NSNotification) {
+        if let detailsVC = detailsViewController {
+            detailsVC.selectedCount = tableView.selectedRowIndexes.count
+        }
+        
         if tableView.selectedRow >= 0 {
 
             Preferences.SharedPreferences().selectedSession = tableView.selectedRow

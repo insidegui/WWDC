@@ -67,4 +67,8 @@ struct Session {
         self.hd_url = hd_url
     }
     
+    func setProgressWithoutSendingNotification(progress: Double) {
+        DataStore.SharedStore.putSessionProgress(self, progress: progress)
+    }
+    
 }
