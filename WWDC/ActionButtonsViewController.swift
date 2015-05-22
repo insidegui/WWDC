@@ -94,13 +94,23 @@ class ActionButtonsViewController: NSViewController {
             progressButton.removeFromSuperviewWithoutNeedingDisplay()
         }
     }
+    
+    private struct ProgressButtonTitles {
+        static let MarkAsWatched = NSLocalizedString("Mark as Watched", comment: "mark as watched button title")
+        static let MarkAsUnwatched = NSLocalizedString("Mark as Unwatched", comment: "mark as unwatched button title")
+    }
+    
     private func reflectSessionProgress() {
         if session.progress < 100 {
+            progressButton.title = ProgressButtonTitles.MarkAsWatched
             if progressButton.superview == nil {
                 stackView.addView(progressButton, inGravity: .Top)
             }
         } else {
-            hideProgressButton()
+            progressButton.title = ProgressButtonTitles.MarkAsUnwatched
+            if progressButton.superview == nil {
+                stackView.addView(progressButton, inGravity: .Top)
+            }
         }
     }
     

@@ -72,7 +72,11 @@ class VideoDetailsViewController: NSViewController {
         }
         
         actionButtonsController.toggleWatchedCallback = { [unowned self] in
-            self.session!.progress = 100
+            if self.session!.progress < 100 {
+                self.session!.progress = 100
+            } else {
+                self.session!.progress = 0
+            }
         }
         
         actionButtonsController.afterCallback = { [unowned self] in
