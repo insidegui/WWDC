@@ -68,7 +68,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 				let url = object as String
 				let (item, idx) = self.listItemForURL(url)
 				if item != nil {
-					self.items.removeObject(item!)
+					self.items.remove(item!)
 					self.tableView.removeRowsAtIndexes(NSIndexSet(index: idx), withAnimation: .SlideDown)
 				}
 			}
@@ -95,7 +95,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 				let url = object as String
 				let (item, idx) = self.listItemForURL(url)
 				if item != nil {
-					self.items.removeObject(item!)
+					self.items.remove(item!)
 					self.tableView.removeRowsAtIndexes(NSIndexSet(index: self.tableView.selectedRow), withAnimation: .EffectGap)
 				}
 			}

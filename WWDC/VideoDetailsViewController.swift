@@ -124,7 +124,7 @@ class VideoDetailsViewController: NSViewController {
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: window, queue: nil) { note in
             if let window = note.object as? NSWindow {
                 if let controller = window.windowController() as? NSWindowController {
-                    self.auxWindowControllers.removeObject(controller)
+                    self.auxWindowControllers.remove(controller)
                 }
             }
         }
