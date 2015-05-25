@@ -9,6 +9,7 @@
 import Foundation
 
 let SessionProgressDidChangeNotification = "SessionProgressDidChangeNotification"
+let SessionFavoriteStatusDidChangeNotification = "SessionFavoriteStatusDidChangeNotification"
 
 struct Session {
     
@@ -42,14 +43,29 @@ struct Session {
         }
     }
     
+    var favorite: Bool {
+        get {
+            return DataStore.SharedStore.fetchSessionIsFavorite(self)
+        }
+        set {
+            DataStore.SharedStore.putSessionIsFavorite(self, favorite: newValue)
+            NSNotificationCenter.defaultCenter().postNotificationName(SessionFavoriteStatusDidChangeNotification, object: self.uniqueKey)
+        }
+    }
+    
+    var uniqueKey: String {
+        get {
+            return "\(year)-\(id)"
+        }
+    }
     var progressKey: String {
         get {
-            return "\(year)-\(id)-progress"
+            return "\(uniqueKey)-progress"
         }
     }
     var currentPositionKey: String {
         get {
-            return "\(year)-\(id)-currentPosition"
+            return "\(uniqueKey)-currentPosition"
         }
     }
     
@@ -71,4 +87,14 @@ struct Session {
         DataStore.SharedStore.putSessionProgress(self, progress: progress)
     }
     
+    func setFavoriteWithoutSendingNotification(favorite: Bool) {
+        DataStore.SharedStore.putSessionIsFavorite(self, favorite: favorite)
+    }
+    
+}
+
+extension Session: Equatable {}
+
+func ==(lhs: Session, rhs: Session) -> Bool {
+    return lhs.uniqueKey == rhs.uniqueKey
 }

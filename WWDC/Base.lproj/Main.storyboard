@@ -540,10 +540,10 @@ CA
                                                                             </constraints>
                                                                         </customView>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="iCs-Z3-5sc" customClass="SessionProgressView" customModule="WWDC" customModuleProvider="target">
-                                                                            <rect key="frame" x="6" y="10" width="20" height="20"/>
+                                                                            <rect key="frame" x="6" y="10" width="21" height="21"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="width" constant="20" id="1gA-H0-9lb"/>
-                                                                                <constraint firstAttribute="height" constant="20" id="RIX-Rs-Edf"/>
+                                                                                <constraint firstAttribute="width" constant="21" id="1gA-H0-9lb"/>
+                                                                                <constraint firstAttribute="height" constant="21" id="RIX-Rs-Edf"/>
                                                                             </constraints>
                                                                             <userDefinedRuntimeAttributes>
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="progress">
@@ -669,6 +669,19 @@ CA
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="markAsUnwatchedMenuAction:" target="LMR-Ze-kQp" id="jhb-v4-YPP"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem isSeparatorItem="YES" id="CWV-72-iIR"/>
+                        <menuItem title="Add to Favorites" id="C1r-Bf-iTX">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="addToFavoritesMenuAction:" target="LMR-Ze-kQp" id="ZyF-PH-44h"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Remove from Favorites" id="P4z-pJ-BdQ">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="removeFromFavoritesMenuAction:" target="LMR-Ze-kQp" id="2TC-br-yIJ"/>
                             </connections>
                         </menuItem>
                     </items>
