@@ -50,33 +50,33 @@ class DataStore: NSObject {
 	
     let URLSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
     
-	func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
-		if let appleURL = appleSessionsURL {
-			doFetchSessions(completionHandler)
-		} else {
-			let internalServiceURL = NSURL(string: _internalServiceURL)
-
-			URLSession.dataTaskWithURL(internalServiceURL!, completionHandler: { [unowned self] data, response, error in
-				if data == nil {
-					completionHandler(false, [])
-					return
-				}
-				let parsedJSON: JSON? = JSON(data: data)
-				if let json = parsedJSON, dictionary = json.dictionary {
-					let appleURL = dictionary["url"]!.string!
-					self.appleSessionsURL = NSURL(string: appleURL)!
-				} else {
-					completionHandler(false, [])
-					return
-				}
-				self.doFetchSessions(completionHandler)
-				}).resume()
-		}
-	}
-	
+    func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
+        if let appleURL = appleSessionsURL {
+            doFetchSessions(completionHandler)
+        } else {
+            let internalServiceURL = NSURL(string: _internalServiceURL)
+            
+            URLSession.dataTaskWithURL(internalServiceURL!, completionHandler: { [unowned self] data, response, error in
+                if data == nil || error != nil {
+                    completionHandler(false, [])
+                    return
+                }
+                let parsedJSON: JSON? = JSON(data: data)
+                if let json = parsedJSON, dictionary = json.dictionary {
+                    let appleURL = dictionary["url"]!.string!
+                    self.appleSessionsURL = NSURL(string: appleURL)!
+                } else {
+                    completionHandler(false, [])
+                    return
+                }
+                self.doFetchSessions(completionHandler)
+                }).resume()
+        }
+    }
+    
     func doFetchSessions(completionHandler: fetchSessionsCompletionHandler) {
         URLSession.dataTaskWithURL(appleSessionsURL!, completionHandler: { data, response, error in
-            if data == nil {
+            if data == nil || error != nil {
                 completionHandler(false, [])
                 return
             }
@@ -128,7 +128,7 @@ class DataStore: NSObject {
         }
         
         let task = URLSession.dataTaskWithURL(NSURL(string: session.slides!)!) { data, response, error in
-            if data != nil {
+            if data != nil && error == nil {
                 completionHandler(true, data)
             } else {
                 completionHandler(false, nil)
@@ -189,18 +189,21 @@ class DataStore: NSObject {
     
     func checkForLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
         let task = URLSession.dataTaskWithURL(liveURL) { data, response, error in
-            if data == nil {
-                completionHandler(false, nil)
-                return
-            }
-            
-            let jsonData = JSON(data: data)
-            let event = LiveEvent(jsonObject: jsonData)
-            
-            if event.isLiveRightNow {
-                completionHandler(true, event)
-            } else {
-                completionHandler(false, nil)
+            // Check for HTTP status code, data and error
+            if let httpStatusCode = response as? NSHTTPURLResponse {
+                if data == nil || error != nil || httpStatusCode.statusCode != 200 {
+                    completionHandler(false, nil)
+                    return
+                }
+                
+                let jsonData = JSON(data: data)
+                let event = LiveEvent(jsonObject: jsonData)
+                
+                if event.isLiveRightNow {
+                    completionHandler(true, event)
+                } else {
+                    completionHandler(false, nil)
+                }
             }
         }
         task.resume()
