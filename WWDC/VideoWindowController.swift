@@ -43,6 +43,8 @@ class VideoWindowController: NSWindowController {
     @IBOutlet weak var playerView: AVPlayerView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     var player: AVPlayer?
+    var notificationObservers: [AnyObject] = []
+    var playbackObserver: Bool = false
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -72,25 +74,50 @@ class VideoWindowController: NSWindowController {
             }
 
             player?.addObserver(self, forKeyPath: "rate", options: .New, context: nil)
+            playbackObserver = true
         }
         
         if let session = self.session {
             window?.title = "WWDC \(session.year) | \(session.title)"
             
             // pause playback when a live event starts playing
-            NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { _ in
+            self.notificationObservers.append(NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { _ in
                 self.player?.pause()
-            }
+            })
         }
         
         if let event = self.event {
             window?.title = "\(event.title) (live)"
         }
         
-        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
+        self.notificationObservers.append(NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
             self.transcriptWC?.close()
             
             self.player?.pause()
+            
+            self.removeAllObservers()
+        })
+    }
+
+    func removeAllObservers() {
+        let defaultCenter = NSNotificationCenter.defaultCenter()
+        for observer in self.notificationObservers {
+            defaultCenter.removeObserver(observer)
+        }
+        self.notificationObservers.removeAll(keepCapacity: false)
+        
+        if let observer: AnyObject = timeObserver {
+            player?.removeTimeObserver(observer)
+            timeObserver = nil
+        }
+        if let observer: AnyObject = boundaryObserver {
+            player?.removeTimeObserver(observer)
+            boundaryObserver = nil
+        }
+        
+        if playbackObserver {
+            player?.removeObserver(self, forKeyPath: "rate", context: nil)
+            playbackObserver = false
         }
     }
     
@@ -266,18 +293,4 @@ class VideoWindowController: NSWindowController {
             }
         }
     }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        
-        if let observer: AnyObject = timeObserver {
-            player?.removeTimeObserver(observer)
-        }
-        if let observer: AnyObject = boundaryObserver {
-            player?.removeTimeObserver(observer)
-        }
-        
-        player?.removeObserver(self, forKeyPath: "rate", context: nil)
-    }
-    
 }
