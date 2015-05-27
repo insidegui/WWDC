@@ -14,10 +14,6 @@ import ViewUtils
 
 private let _nibName = "VideoWindowController"
 
-enum FloatOnTopStyle: Int {
-    case Never = 0, WhilePlaying = 1, Always = 2
-}
-
 class VideoWindowController: NSWindowController {
 
     var session: Session?
@@ -47,8 +43,6 @@ class VideoWindowController: NSWindowController {
     @IBOutlet weak var playerView: AVPlayerView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     var player: AVPlayer?
-    let kFloatOnTopStyle = "Float on Top Style"
-    var floatOnTopStyle: FloatOnTopStyle = .Never
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -56,12 +50,7 @@ class VideoWindowController: NSWindowController {
         progressIndicator.startAnimation(nil)
         window?.backgroundColor = NSColor.blackColor()
 
-        if let floatOnTopStyle = FloatOnTopStyle(rawValue: NSUserDefaults.standardUserDefaults().integerForKey(kFloatOnTopStyle)) {
-            self.floatOnTopStyle = floatOnTopStyle
-            if let mainMenu = NSApplication.sharedApplication().mainMenu {
-                self.updateFloatOnTopMenuState(inMenu: mainMenu)
-            }
-        }
+        self.updateFloatOnTopMenuState()
         
         if let url = NSURL(string: videoURL!) {
             player = AVPlayer(URL: url)
@@ -226,21 +215,23 @@ class VideoWindowController: NSWindowController {
 
     @IBAction func changeFloatOnTop(sender: AnyObject?) {
         if let menuItem = sender as? NSMenuItem {
-            menuItem.state = NSOnState
-            if let floatOnTopStyle = FloatOnTopStyle(rawValue: menuItem.tag) {
-                self.floatOnTopStyle = floatOnTopStyle
-                NSUserDefaults.standardUserDefaults().setInteger(self.floatOnTopStyle.rawValue, forKey: kFloatOnTopStyle)
+            if let floatOnTopStyle = Preferences.WindowFloatOnTopStyle(rawValue: menuItem.tag) {
+                Preferences.SharedPreferences().floatOnTopStyle = floatOnTopStyle
 
                 self.updateFloatOnTopWindowState()
-                if let mainMenu = NSApplication.sharedApplication().mainMenu {
-                    self.updateFloatOnTopMenuState(inMenu: mainMenu)
-                }
+                self.updateFloatOnTopMenuState()
             }
+        }
+    }
+    
+    func updateFloatOnTopMenuState() {
+        if let mainMenu = NSApplication.sharedApplication().mainMenu {
+            self.updateFloatOnTopMenuState(inMenu: mainMenu)
         }
     }
 
     func updateFloatOnTopMenuState(inMenu menu: NSMenu) {
-        var floatOnTopStyle = self.floatOnTopStyle.rawValue
+        var floatOnTopStyle = Preferences.SharedPreferences().floatOnTopStyle.rawValue
         for subAnyItem in menu.itemArray {
             if let subItem = subAnyItem as? NSMenuItem {
                 if subItem.submenu != nil {
@@ -254,7 +245,7 @@ class VideoWindowController: NSWindowController {
     }
     
     func updateFloatOnTopWindowState() {
-        switch self.floatOnTopStyle {
+        switch Preferences.SharedPreferences().floatOnTopStyle {
         case .Never:
             self.window?.level = Int(CGWindowLevelForKey(Int32(kCGNormalWindowLevelKey)));
         case .Always:
