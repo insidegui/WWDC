@@ -24,6 +24,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        // start checking for live event
+        LiveEventObserver.SharedObserver().start()
+        
         // check for updates
         checkForUpdates(nil)
         
@@ -35,6 +38,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // initialize Crashlytics
         GRCrashlyticsHelper.install()
+        
+        // tell the user he can watch the live keynote using the app, only once
+        if !Preferences.SharedPreferences().userKnowsLiveEventThing {
+            tellUserAboutTheLiveEventThing()
+        }
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -83,6 +91,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         preferencesWindowController?.showWindow(self)
+    }
+    
+    private func tellUserAboutTheLiveEventThing() {
+        let alert = NSAlert()
+        alert.messageText = "Did you know?"
+        alert.informativeText = "You can watch live WWDC events using this app! Just open the app while the event is live and It will start playing automatically."
+        alert.addButtonWithTitle("Got It!")
+        alert.runModal()
+        
+        Preferences.SharedPreferences().userKnowsLiveEventThing = true
     }
 
 }

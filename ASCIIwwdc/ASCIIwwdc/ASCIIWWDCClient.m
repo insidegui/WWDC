@@ -47,10 +47,18 @@
         NSDictionary *transcriptInfo = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonSerializationError];
         if (jsonSerializationError) {
             callback(NO, nil);
+            return;
         }
         
         NSArray *annotations = transcriptInfo[@"annotations"];
         NSArray *timecodes = transcriptInfo[@"timecodes"];
+        
+        // For transcripts that are unavailable objects for keys annotations, timecodes are nil values represented using NSNull. Causing the app to crash when lines mutable array is initialized with null object count
+        if ([annotations isKindOfClass:[NSNull class]] || [timecodes isKindOfClass:[NSNull class]]) {
+            callback(NO, nil);
+            return;
+        }
+        
         NSMutableArray *lines = [[NSMutableArray alloc] initWithCapacity:annotations.count];
         
         for (NSString *annotation in annotations) {

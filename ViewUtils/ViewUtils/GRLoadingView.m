@@ -14,6 +14,7 @@
 - (void)addLoadingView:(GRLoadingView *)view;
 - (void)removeLoadingView:(GRLoadingView *)view;
 - (void)dismissAll;
+- (void)dismissAllAfterDelay:(NSTimeInterval)delay;
 
 @end
 
@@ -45,6 +46,11 @@
 + (void)dismissAll
 {
     [[GRLoadingViewCoordinator sharedCoordinator] dismissAll];
+}
+
++ (void)dismissAllAfterDelay:(NSTimeInterval)delay
+{
+    [[GRLoadingViewCoordinator sharedCoordinator] dismissAllAfterDelay:delay];
 }
 
 - (void)open
@@ -143,6 +149,13 @@
 - (void)dismissAll
 {
     [_loadingViews makeObjectsPerformSelector:@selector(dismiss)];
+}
+
+- (void)dismissAllAfterDelay:(NSTimeInterval)delay
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self dismissAll];
+    });
 }
 
 @end

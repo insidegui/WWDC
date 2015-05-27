@@ -51,8 +51,12 @@
 		DDD7A43A1AE2E305000A0102 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4391AE2E305000A0102 /* DataStore.swift */; };
 		DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A43C1AE2E39A000A0102 /* SwiftyJSON.swift */; };
 		DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */; };
+		DDEC0DF91B0E73FA001752CA /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDEC0DF81B0E73FA001752CA /* Fabric.framework */; };
+		DDF6153D1B07BAB1002C8667 /* LiveEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF6153C1B07BAB1002C8667 /* LiveEvent.swift */; };
+		DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */; };
 		DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */; };
 		DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */; };
+		DDF9D1931B04F361006F0953 /* SplitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF9D1921B04F361006F0953 /* SplitManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,8 +169,12 @@
 		DDD7A4391AE2E305000A0102 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		DDD7A43C1AE2E39A000A0102 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonsViewController.swift; sourceTree = "<group>"; };
+		DDEC0DF81B0E73FA001752CA /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		DDF6153C1B07BAB1002C8667 /* LiveEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEvent.swift; sourceTree = "<group>"; };
+		DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEventObserver.swift; sourceTree = "<group>"; };
 		DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressViewController.swift; sourceTree = "<group>"; };
 		DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		DDF9D1921B04F361006F0953 /* SplitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +187,7 @@
 				DD2016681AE402B400DD8155 /* ViewUtils.framework in Frameworks */,
 				DDCC5D721AF1518A00F24F55 /* Crashlytics.framework in Frameworks */,
 				DD92EAA61AE978EC00D503AE /* ASCIIwwdc.framework in Frameworks */,
+				DDEC0DF91B0E73FA001752CA /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,6 +205,7 @@
 		DD4F6E431AE2D11D0099BEB5 = {
 			isa = PBXGroup;
 			children = (
+				DDEC0DF81B0E73FA001752CA /* Fabric.framework */,
 				DD89EA061AF48A300073B845 /* Updater.xcodeproj */,
 				DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */,
 				DD7F6F901AE97C99007A4E5E /* WebKit.framework */,
@@ -223,7 +233,7 @@
 				DDD7A4361AE2E253000A0102 /* Models */,
 				DDD7A4311AE2DF06000A0102 /* Helpers */,
 				DDD7A4301AE2DEFD000A0102 /* Resources */,
-				DDD7A42F1AE2DEF2000A0102 /* Aux View Controllers */,
+				DDD7A42F1AE2DEF2000A0102 /* Aux Controllers */,
 				DDD7A42E1AE2DEDD000A0102 /* Main Controllers */,
 				DDD7A42D1AE2DECE000A0102 /* Views */,
 				DD4F6E511AE2D11D0099BEB5 /* AppDelegate.swift */,
@@ -302,15 +312,17 @@
 			name = "Main Controllers";
 			sourceTree = "<group>";
 		};
-		DDD7A42F1AE2DEF2000A0102 /* Aux View Controllers */ = {
+		DDD7A42F1AE2DEF2000A0102 /* Aux Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				DD4F6E741AE2D82A0099BEB5 /* VideosHeaderViewController.swift */,
 				DD4F6E6E1AE2D14A0099BEB5 /* MainWindowController.swift */,
 				DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */,
 				DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */,
+				DDF9D1921B04F361006F0953 /* SplitManager.swift */,
+				DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */,
 			);
-			name = "Aux View Controllers";
+			name = "Aux Controllers";
 			sourceTree = "<group>";
 		};
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
@@ -345,6 +357,7 @@
 				DDD7A4371AE2E265000A0102 /* Session.swift */,
 				DDD7A4391AE2E305000A0102 /* DataStore.swift */,
 				DD2CC38B1AF4161700FC5F68 /* Preferences.swift */,
+				DDF6153C1B07BAB1002C8667 /* LiveEvent.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -489,7 +502,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "if [ -f \"./WWDC/Crashlytics.sh\" ] && [ \"${CONFIGURATION}\" = \"Release\" ]; then\n./WWDC/Crashlytics.sh\nfi";
+			shellScript = "if [ -f \"./WWDC/Crashlytics.sh\" ]; then\n./WWDC/Crashlytics.sh\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -506,12 +519,15 @@
 				DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */,
 				DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */,
 				DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */,
+				DDF9D1931B04F361006F0953 /* SplitManager.swift in Sources */,
 				DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */,
 				DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */,
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,
+				DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */,
 				DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */,
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
+				DDF6153D1B07BAB1002C8667 /* LiveEvent.swift in Sources */,
 				DDD7A43A1AE2E305000A0102 /* DataStore.swift in Sources */,
 				DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */,
 				C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */,

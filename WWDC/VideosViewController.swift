@@ -14,10 +14,32 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBOutlet weak var scrollView: NSScrollView!
     @IBOutlet weak var tableView: NSTableView!
     
+    var splitManager: SplitManager?
+    
     var indexOfLastSelectedRow = -1
+    let savedSearchTerm = Preferences.SharedPreferences().searchTerm
     var finishedInitialSetup = false
+    var restoredSelection = false
+    var loadedStoryboard = false
     
     lazy var headerController: VideosHeaderViewController! = VideosHeaderViewController.loadDefaultController()
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        if splitManager == nil && loadedStoryboard {
+            if let splitViewController = parentViewController as? NSSplitViewController {
+                splitManager = SplitManager(splitView: splitViewController.splitView)
+                splitViewController.splitView.delegate = self.splitManager
+            }
+        }
+        
+        loadedStoryboard = true
+    }
+    
+    override func awakeAfterUsingCoder(aDecoder: NSCoder) -> AnyObject? {
+        return super.awakeAfterUsingCoder(aDecoder)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +52,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil) { _ in
+            self.reloadTablePreservingSelection()
+        }
+        nc.addObserverForName(SessionFavoriteStatusDidChangeNotification, object: nil, queue: nil) { _ in
             self.reloadTablePreservingSelection()
         }
         nc.addObserverForName(VideoStoreNotificationDownloadFinished, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
@@ -67,14 +92,26 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             headerController.view.autoresizingMask = NSAutoresizingMaskOptions.ViewWidthSizable | NSAutoresizingMaskOptions.ViewMinYMargin
             headerController.performSearch = search
         }
+        
+        // show search term from previous launch in search bar
+        headerController.searchBar.stringValue = savedSearchTerm
     }
 
     var sessions: [Session]! {
         didSet {
             if sessions != nil {
                 headerController.enable()
+                
+                // restore search from previous launch
+                if  savedSearchTerm != "" {
+                    search(savedSearchTerm)
+                    indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
+                }
             }
-            reloadTablePreservingSelection()
+            
+            if savedSearchTerm == "" {
+                reloadTablePreservingSelection()
+            }
         }
     }
 
@@ -88,7 +125,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         DataStore.SharedStore.fetchSessions() { success, sessions in
             dispatch_async(dispatch_get_main_queue()) {
                 self.sessions = sessions
-                GRLoadingView.dismissAll()
+                
+                self.splitManager?.restoreDividerPosition()
+                self.splitManager?.startSavingDividerPosition()
+                
+                GRLoadingView.dismissAllAfterDelay(0.3)
             }
         }
     }
@@ -97,6 +138,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     func reloadTablePreservingSelection() {
         tableView.reloadData()
+        
+        if !restoredSelection {
+            indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
+            restoredSelection = true
+        }
         
         if indexOfLastSelectedRow > -1 {
             tableView.selectRowIndexes(NSIndexSet(index: indexOfLastSelectedRow), byExtendingSelection: false)
@@ -119,7 +165,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         cell.trackField.stringValue = session.track
         cell.platformsField.stringValue = ", ".join(session.focus)
         cell.detailsField.stringValue = "\(session.year) - Session \(session.id)"
-        cell.progressView.progress = DataStore.SharedStore.fetchSessionProgress(session)
+        cell.progressView.progress = session.progress
+        cell.progressView.favorite = session.favorite
+        
         if let url = session.hd_url {
             cell.downloadedImage.hidden = !VideoStore.SharedStore().hasVideo(url)
         }
@@ -131,6 +179,71 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         return 40.0
     }
     
+    // MARK: Table Menu
+
+    @IBAction func markAsWatchedMenuAction(sender: NSMenuItem) {
+        // if there is only one row selected, change the status of the clicked row instead of using the selection
+        if tableView.selectedRowIndexes.count < 2 {
+            var session = displayedSessions[tableView.clickedRow]
+            session.progress = 100
+        } else {
+            doMassiveSessionPropertyUpdate(.Progress(100))
+        }
+    }
+    
+    @IBAction func markAsUnwatchedMenuAction(sender: NSMenuItem) {
+        // if there is only one row selected, change the status of the clicked row instead of using the selection
+        if tableView.selectedRowIndexes.count < 2 {
+            var session = displayedSessions[tableView.clickedRow]
+            session.progress = 0
+        } else {
+            doMassiveSessionPropertyUpdate(.Progress(0))
+        }
+    }
+    
+    @IBAction func addToFavoritesMenuAction(sender: NSMenuItem) {
+        // if there is only one row selected, change the status of the clicked row instead of using the selection
+        if tableView.selectedRowIndexes.count < 2 {
+            var session = displayedSessions[tableView.clickedRow]
+            session.favorite = true
+        } else {
+            doMassiveSessionPropertyUpdate(.Favorite(true))
+        }
+    }
+    
+    @IBAction func removeFromFavoritesMenuAction(sender: NSMenuItem) {
+        // if there is only one row selected, change the status of the clicked row instead of using the selection
+        if tableView.selectedRowIndexes.count < 2 {
+            var session = displayedSessions[tableView.clickedRow]
+            session.favorite = false
+        } else {
+            doMassiveSessionPropertyUpdate(.Favorite(false))
+        }
+    }
+    
+    private let userInitiatedQ = dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.value), 0)
+    private enum MassiveUpdateProperty {
+        case Progress(Double)
+        case Favorite(Bool)
+    }
+    // changes the property of all selected sessions on a background queue
+    private func doMassiveSessionPropertyUpdate(property: MassiveUpdateProperty) {
+        dispatch_async(userInitiatedQ) {
+            self.tableView.selectedRowIndexes.enumerateIndexesUsingBlock { idx, _ in
+                var session = self.displayedSessions[idx]
+                switch property {
+                case .Progress(let progress):
+                    session.setProgressWithoutSendingNotification(progress)
+                case .Favorite(let favorite):
+                    session.setFavoriteWithoutSendingNotification(favorite)
+                }
+            }
+            dispatch_async(dispatch_get_main_queue()) {
+                self.reloadTablePreservingSelection()
+            }
+        }
+    }
+
     // MARK: Navigation
 
     var detailsViewController: VideoDetailsViewController? {
@@ -144,9 +257,16 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     func tableViewSelectionDidChange(notification: NSNotification) {
+        if let detailsVC = detailsViewController {
+            detailsVC.selectedCount = tableView.selectedRowIndexes.count
+        }
+        
         if tableView.selectedRow >= 0 {
-            indexOfLastSelectedRow = tableView.selectedRow
+
+            Preferences.SharedPreferences().selectedSession = tableView.selectedRow
             
+            indexOfLastSelectedRow = tableView.selectedRow
+
             let session = displayedSessions[tableView.selectedRow]
             if let detailsVC = detailsViewController {
                 detailsVC.session = session
@@ -162,6 +282,12 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     var currentSearchTerm: String? {
         didSet {
+            if currentSearchTerm != nil {
+                Preferences.SharedPreferences().searchTerm = currentSearchTerm!
+            } else {
+                Preferences.SharedPreferences().searchTerm = ""
+            }
+            
             reloadTablePreservingSelection()
         }
     }

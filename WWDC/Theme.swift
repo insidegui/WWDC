@@ -20,4 +20,38 @@ class Theme: NSObject {
     let backgroundColor = NSColor.whiteColor()
     let fillColor = NSColor(calibratedRed: 0, green: 0.49, blue: 1, alpha: 1)
     
+    private var cachedImages: [String:CGImage] = [:]
+    
+    private let starImageName = "star"
+    private let starOutlineImageName = "star-outline"
+    
+    var starImage: CGImage {
+        get {
+            return getImage(starImageName)
+        }
+    }
+    var starOutlineImage: CGImage {
+        get {
+            return getImage(starOutlineImageName)
+        }
+    }
+    
+    private func getImage(name: String) -> CGImage {
+        if let image = cachedImages[name] {
+            return image
+        } else {
+            cachedImages[name] = NSImage(named: name)?.CGImage
+            return cachedImages[name]!
+        }
+    }
+    
+}
+
+private extension NSImage {
+    var CGImage: CGImageRef {
+        get {
+            let source = CGImageSourceCreateWithData(self.TIFFRepresentation as! CFDataRef, nil)
+            return CGImageSourceCreateImageAtIndex(source, Int(0), nil)
+        }
+    }
 }

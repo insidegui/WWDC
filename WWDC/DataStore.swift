@@ -9,6 +9,7 @@
 import Foundation
 
 private let _internalServiceURL = "http://wwdc.guilhermerambo.me/index.json"
+private let _liveServiceURL = "http://wwdc.guilhermerambo.me/live.json"
 private let _SharedStore = DataStore()
 private let _MemoryCacheSize = 500*1024*1024
 private let _DiskCacheSize = 1024*1024*1024
@@ -22,7 +23,10 @@ class DataStore: NSObject {
     private let sharedCache = NSURLCache(memoryCapacity: _MemoryCacheSize, diskCapacity: _DiskCacheSize, diskPath: nil)
     
     override init() {
+        super.init()
+        
         NSURLCache.setSharedURLCache(sharedCache)
+        loadFavorites()
     }
     
     typealias fetchSessionsCompletionHandler = (Bool, [Session]) -> Void
@@ -149,6 +153,57 @@ class DataStore: NSObject {
     
     func putSessionCurrentPosition(session: Session, position: Double) {
         defaults.setDouble(position, forKey: session.currentPositionKey)
+    }
+    
+    private var favorites: [String] = []
+    
+    private let favoritesKey = "Favorites"
+    private func loadFavorites() {
+        if let faves = defaults.arrayForKey(favoritesKey) as? [String] {
+            favorites = faves
+        }
+    }
+    private func storeFavorites() {
+        defaults.setObject(favorites, forKey: favoritesKey)
+    }
+    
+    func fetchSessionIsFavorite(session: Session) -> Bool {
+        return favorites.contains(session.uniqueKey)
+    }
+    func putSessionIsFavorite(session: Session, favorite: Bool) {
+        if favorite {
+            favorites.append(session.uniqueKey)
+        } else {
+            favorites.remove(session.uniqueKey)
+        }
+        storeFavorites()
+    }
+    
+    private var liveURL: NSURL {
+        get {
+            sranddev()
+            // adds a random number as a parameter to completely prevent any caching
+            return NSURL(string: "\(_liveServiceURL)?t=\(rand())")!
+        }
+    }
+    
+    func checkForLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
+        let task = URLSession.dataTaskWithURL(liveURL) { data, response, error in
+            if data == nil {
+                completionHandler(false, nil)
+                return
+            }
+            
+            let jsonData = JSON(data: data)
+            let event = LiveEvent(jsonObject: jsonData)
+            
+            if event.isLiveRightNow {
+                completionHandler(true, event)
+            } else {
+                completionHandler(false, nil)
+            }
+        }
+        task.resume()
     }
     
 }

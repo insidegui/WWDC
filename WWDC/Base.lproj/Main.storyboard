@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -501,7 +501,7 @@ CA
                                             <rect key="frame" x="1" y="17" width="238" height="117"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="40" rowSizeStyle="automatic" viewBased="YES" id="hE6-m5-F6H">
+                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="40" rowSizeStyle="automatic" viewBased="YES" id="hE6-m5-F6H">
                                                     <rect key="frame" x="0.0" y="0.0" width="450" height="0.0"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -540,10 +540,10 @@ CA
                                                                             </constraints>
                                                                         </customView>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="iCs-Z3-5sc" customClass="SessionProgressView" customModule="WWDC" customModuleProvider="target">
-                                                                            <rect key="frame" x="6" y="10" width="20" height="20"/>
+                                                                            <rect key="frame" x="6" y="10" width="21" height="21"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="width" constant="20" id="1gA-H0-9lb"/>
-                                                                                <constraint firstAttribute="height" constant="20" id="RIX-Rs-Edf"/>
+                                                                                <constraint firstAttribute="width" constant="21" id="1gA-H0-9lb"/>
+                                                                                <constraint firstAttribute="height" constant="21" id="RIX-Rs-Edf"/>
                                                                             </constraints>
                                                                             <userDefinedRuntimeAttributes>
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="progress">
@@ -563,7 +563,7 @@ CA
                                                                             <rect key="frame" x="418" y="12" width="28" height="11"/>
                                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Track" id="cm6-vo-QkU">
                                                                                 <font key="font" metaFont="miniSystem"/>
-                                                                                <color key="textColor" red="0.64508364898989901" green="0.64508364898989901" blue="0.64508364898989901" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
+                                                                                <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
@@ -619,6 +619,7 @@ CA
                                                     <connections>
                                                         <outlet property="dataSource" destination="LMR-Ze-kQp" id="gT7-N9-uZE"/>
                                                         <outlet property="delegate" destination="LMR-Ze-kQp" id="FqY-hw-Oxh"/>
+                                                        <outlet property="menu" destination="RkM-qz-Jmu" id="C00-uV-5WL"/>
                                                     </connections>
                                                 </tableView>
                                             </subviews>
@@ -656,6 +657,35 @@ CA
                     </connections>
                 </viewController>
                 <customObject id="gRz-vj-pED" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu id="RkM-qz-Jmu">
+                    <items>
+                        <menuItem title="Mark as Watched" id="pY8-mq-Opi">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="markAsWatchedMenuAction:" target="LMR-Ze-kQp" id="HUJ-cj-6ob"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Mark as Unwatched" id="UNa-GB-piq">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="markAsUnwatchedMenuAction:" target="LMR-Ze-kQp" id="jhb-v4-YPP"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem isSeparatorItem="YES" id="CWV-72-iIR"/>
+                        <menuItem title="Add to Favorites" id="C1r-Bf-iTX">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="addToFavoritesMenuAction:" target="LMR-Ze-kQp" id="ZyF-PH-44h"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Remove from Favorites" id="P4z-pJ-BdQ">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="removeFromFavoritesMenuAction:" target="LMR-Ze-kQp" id="2TC-br-yIJ"/>
+                            </connections>
+                        </menuItem>
+                    </items>
+                </menu>
             </objects>
             <point key="canvasLocation" x="741" y="428"/>
         </scene>
