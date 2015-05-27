@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
@@ -393,6 +393,31 @@ CA
                                             <connections>
                                                 <action selector="sizeWindowToQuarterSize:" target="Ady-hI-5gd" id="55t-gH-E4A"/>
                                             </connections>
+                                        </menuItem>
+                                        <menuItem title="Float on Top" id="hsd-ux-aLS">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Float on Top" id="etO-QP-oJj">
+                                                <items>
+                                                    <menuItem title="Never" id="AyI-rX-ClV">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="changeFloatOnTop:" target="Ady-hI-5gd" id="Wkl-9b-FuH"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="While Playing" tag="1" id="nf9-bJ-o1J">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="changeFloatOnTop:" target="Ady-hI-5gd" id="P0H-cm-haF"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Always" tag="2" id="a3w-T9-MDM">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="changeFloatOnTop:" target="Ady-hI-5gd" id="uIx-LV-ZXQ"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="zVP-Fh-xQ4"/>
                                         <menuItem title="Minimize" keyEquivalent="m" id="OY7-WF-poV">
