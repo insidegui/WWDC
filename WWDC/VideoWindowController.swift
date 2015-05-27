@@ -44,7 +44,7 @@ class VideoWindowController: NSWindowController {
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     var player: AVPlayer?
     var notificationObservers: [AnyObject] = []
-    var playbackObserver: Bool = false
+    var playbackStateObserver: AVPlayerPlaybackStateObserver?
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -73,8 +73,12 @@ class VideoWindowController: NSWindowController {
                 }
             }
 
-            player?.addObserver(self, forKeyPath: "rate", options: .New, context: nil)
-            playbackObserver = true
+            if player != nil {
+                self.updateFloatOnTopWindowState()
+                self.playbackStateObserver = AVPlayerPlaybackStateObserver(player: player!, period: 1.0) { isPlaying in
+                    self.updateFloatOnTopWindowState()
+                }
+            }
         }
         
         if let session = self.session {
@@ -115,9 +119,9 @@ class VideoWindowController: NSWindowController {
             boundaryObserver = nil
         }
         
-        if playbackObserver {
-            player?.removeObserver(self, forKeyPath: "rate", context: nil)
-            playbackObserver = false
+        if let observer = playbackStateObserver {
+            observer.disposeObserver()
+            playbackStateObserver = nil
         }
     }
     
@@ -164,6 +168,10 @@ class VideoWindowController: NSWindowController {
 
             self.session!.progress = progress
             self.session!.currentPosition = CMTimeGetSeconds(currentTime)
+
+            if Preferences.SharedPreferences().floatOnTopStyle == .WhilePlaying {
+                self.playbackStateObserver?.startObserving()
+            }
         }
     }
     
@@ -247,6 +255,13 @@ class VideoWindowController: NSWindowController {
 
                 self.updateFloatOnTopWindowState()
                 self.updateFloatOnTopMenuState()
+
+                if floatOnTopStyle == .WhilePlaying {
+                    self.playbackStateObserver?.startObserving()
+                }
+                else {
+                    self.playbackStateObserver?.stopObserving()
+                }
             }
         }
     }
@@ -282,14 +297,6 @@ class VideoWindowController: NSWindowController {
                 let isPlaying = player.rate != 0
                 self.window?.level = isPlaying ? Int(CGWindowLevelForKey(Int32(kCGMainMenuWindowLevelKey)))
                                                : Int(CGWindowLevelForKey(Int32(kCGNormalWindowLevelKey)))
-            }
-        }
-    }
-    
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if let player = self.player {
-            if player == object as! NSObject {
-                self.updateFloatOnTopWindowState()
             }
         }
     }
