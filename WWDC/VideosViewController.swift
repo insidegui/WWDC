@@ -251,7 +251,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             var session = displayedSessions[tableView.clickedRow]
             stringToCopy = session.shareURL
         } else {
-            
+            stringToCopy = ""
+            for idx in tableView.selectedRowIndexes {
+                let session = self.displayedSessions[idx]
+                stringToCopy? += session.shareURL + "\n"
+            }
         }
         
         if let string = stringToCopy {
