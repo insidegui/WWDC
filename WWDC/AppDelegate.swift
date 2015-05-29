@@ -27,9 +27,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // start checking for live event
         LiveEventObserver.SharedObserver().start()
         
-        // register custom URL scheme handler
-        URLSchemeHandler.SharedHandler().register()
-        
         // check for updates
         checkForUpdates(nil)
         
@@ -46,6 +43,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !Preferences.SharedPreferences().userKnowsLiveEventThing {
             tellUserAboutTheLiveEventThing()
         }
+    }
+    
+    func applicationWillFinishLaunching(notification: NSNotification) {
+        // register custom URL scheme handler
+        URLSchemeHandler.SharedHandler().register()
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
