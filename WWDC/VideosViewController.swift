@@ -301,7 +301,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             if let term = currentSearchTerm {
                 var term = term
                 if term != "" {
-                    var qualifiers = term.qualifierSearchParser_parseQualifiers(["year", "focus", "track", "downloaded"])
+                    var qualifiers = term.qualifierSearchParser_parseQualifiers(["year", "focus", "track", "downloaded", "description"])
                     indexOfLastSelectedRow = -1
                     return sessions.filter { session in
 
@@ -329,6 +329,14 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                         
                         if let track: String = qualifiers["track"] as? String {
                             if session.track.lowercaseString != track.lowercaseString {
+                                return false
+                            }
+                        }
+                        
+                        if let description: String = qualifiers["description"] as? String {
+                            if let range = session.description.rangeOfString(description, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) {
+                                // continue...
+                            } else {
                                 return false
                             }
                         }
