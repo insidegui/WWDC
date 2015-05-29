@@ -15,6 +15,10 @@ private let _SharedPreferences = Preferences();
 
 class Preferences {
     
+    enum WindowFloatOnTopStyle: Int {
+        case Never = 0, WhilePlaying = 1, Always = 2
+    }
+
     class func SharedPreferences() -> Preferences {
         return _SharedPreferences
     }
@@ -30,6 +34,7 @@ class Preferences {
         static let autoplayLiveEvents = "autoplayLiveEvents"
         static let liveEventCheckInterval = "liveEventCheckInterval"
         static let userKnowsLiveEventThing = "userKnowsLiveEventThing"
+        static let floatOnTopStyle = "floatOnTopStyle"
         
         struct transcript {
             static let font = "transcript.font"
@@ -51,6 +56,7 @@ class Preferences {
         static let autoplayLiveEvents = true
         static let liveEventCheckInterval = 15.0
         static let userKnowsLiveEventThing = false
+        static let floatOnTopStyle = WindowFloatOnTopStyle.Never
         
         struct transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
@@ -256,4 +262,18 @@ class Preferences {
         }
     }
     
+    var floatOnTopStyle: WindowFloatOnTopStyle {
+        get {
+            if let value = defaults.objectForKey(Keys.floatOnTopStyle) as? Int {
+                if let style = WindowFloatOnTopStyle(rawValue: value) {
+                    return style
+                }
+            }
+            
+            return DefaultValues.floatOnTopStyle
+        }
+        set {
+            defaults.setObject(newValue.rawValue, forKey: Keys.floatOnTopStyle)
+        }
+    }
 }

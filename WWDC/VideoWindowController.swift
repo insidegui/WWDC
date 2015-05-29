@@ -43,6 +43,8 @@ class VideoWindowController: NSWindowController {
     @IBOutlet weak var playerView: AVPlayerView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     var player: AVPlayer?
+    var notificationObservers: [AnyObject] = []
+    var playbackStateObserver: AVPlayerPlaybackStateObserver?
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -50,6 +52,8 @@ class VideoWindowController: NSWindowController {
         progressIndicator.startAnimation(nil)
         window?.backgroundColor = NSColor.blackColor()
 
+        self.updateFloatOnTopMenuState()
+        
         if let url = NSURL(string: videoURL!) {
             player = AVPlayer(URL: url)
             playerView.player = player
@@ -68,25 +72,56 @@ class VideoWindowController: NSWindowController {
                     self.progressIndicator.stopAnimation(nil)
                 }
             }
+
+            if player != nil {
+                self.updateFloatOnTopWindowState()
+                self.playbackStateObserver = AVPlayerPlaybackStateObserver(player: player!, period: 1.0) { isPlaying in
+                    self.updateFloatOnTopWindowState()
+                }
+            }
         }
         
         if let session = self.session {
             window?.title = "WWDC \(session.year) | \(session.title)"
             
             // pause playback when a live event starts playing
-            NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { _ in
+            self.notificationObservers.append(NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { _ in
                 self.player?.pause()
-            }
+            })
         }
         
         if let event = self.event {
             window?.title = "\(event.title) (live)"
         }
         
-        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
+        self.notificationObservers.append(NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
             self.transcriptWC?.close()
             
             self.player?.pause()
+            
+            self.removeAllObservers()
+        })
+    }
+
+    func removeAllObservers() {
+        let defaultCenter = NSNotificationCenter.defaultCenter()
+        for observer in self.notificationObservers {
+            defaultCenter.removeObserver(observer)
+        }
+        self.notificationObservers.removeAll(keepCapacity: false)
+        
+        if let observer: AnyObject = timeObserver {
+            player?.removeTimeObserver(observer)
+            timeObserver = nil
+        }
+        if let observer: AnyObject = boundaryObserver {
+            player?.removeTimeObserver(observer)
+            boundaryObserver = nil
+        }
+        
+        if let observer = playbackStateObserver {
+            observer.disposeObserver()
+            playbackStateObserver = nil
         }
     }
     
@@ -133,6 +168,10 @@ class VideoWindowController: NSWindowController {
 
             self.session!.progress = progress
             self.session!.currentPosition = CMTimeGetSeconds(currentTime)
+
+            if Preferences.SharedPreferences().floatOnTopStyle == .WhilePlaying {
+                self.playbackStateObserver?.startObserving()
+            }
         }
     }
     
@@ -208,16 +247,57 @@ class VideoWindowController: NSWindowController {
     @IBAction func sizeWindowToQuarterSize(sender: AnyObject?) {
         sizeWindowTo(0.25)
     }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        
-        if let observer: AnyObject = timeObserver {
-            player?.removeTimeObserver(observer)
-        }
-        if let observer: AnyObject = boundaryObserver {
-            player?.removeTimeObserver(observer)
+
+    @IBAction func changeFloatOnTop(sender: AnyObject?) {
+        if let menuItem = sender as? NSMenuItem {
+            if let floatOnTopStyle = Preferences.WindowFloatOnTopStyle(rawValue: menuItem.tag) {
+                Preferences.SharedPreferences().floatOnTopStyle = floatOnTopStyle
+
+                self.updateFloatOnTopWindowState()
+                self.updateFloatOnTopMenuState()
+
+                if floatOnTopStyle == .WhilePlaying {
+                    self.playbackStateObserver?.startObserving()
+                }
+                else {
+                    self.playbackStateObserver?.stopObserving()
+                }
+            }
         }
     }
     
+    func updateFloatOnTopMenuState() {
+        if let mainMenu = NSApplication.sharedApplication().mainMenu {
+            self.updateFloatOnTopMenuState(inMenu: mainMenu)
+        }
+    }
+
+    func updateFloatOnTopMenuState(inMenu menu: NSMenu) {
+        var floatOnTopStyle = Preferences.SharedPreferences().floatOnTopStyle.rawValue
+        for subAnyItem in menu.itemArray {
+            if let subItem = subAnyItem as? NSMenuItem {
+                if subItem.submenu != nil {
+                    updateFloatOnTopMenuState(inMenu: subItem.submenu!)
+                }
+                else if subItem.action == "changeFloatOnTop:" {
+                    subItem.state = subItem.tag == floatOnTopStyle ? NSOnState : NSOffState
+                }
+            }
+        }
+    }
+    
+    func updateFloatOnTopWindowState() {
+        switch Preferences.SharedPreferences().floatOnTopStyle {
+        case .Never:
+            self.window?.level = Int(CGWindowLevelForKey(Int32(kCGNormalWindowLevelKey)));
+        case .Always:
+            self.window?.level = Int(CGWindowLevelForKey(Int32(kCGMainMenuWindowLevelKey)))
+        case .WhilePlaying:
+            if let player = self.player {
+                let isPlaying = player.rate != 0
+                self.window?.level = isPlaying ? Int(CGWindowLevelForKey(Int32(kCGMainMenuWindowLevelKey)))
+                                               : Int(CGWindowLevelForKey(Int32(kCGNormalWindowLevelKey)))
+            }
+        }
+    }
 }
