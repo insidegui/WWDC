@@ -684,6 +684,13 @@ CA
                                 <action selector="removeFromFavoritesMenuAction:" target="LMR-Ze-kQp" id="2TC-br-yIJ"/>
                             </connections>
                         </menuItem>
+                        <menuItem isSeparatorItem="YES" id="oIk-GT-MRy"/>
+                        <menuItem title="Copy URL" id="gMC-Ry-Aci">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="copyURL:" target="LMR-Ze-kQp" id="Qyg-vB-6AN"/>
+                            </connections>
+                        </menuItem>
                     </items>
                 </menu>
             </objects>

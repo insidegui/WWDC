@@ -244,6 +244,23 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
 
+    @IBAction func copyURL(sender: NSMenuItem) {
+        var stringToCopy:String?
+        
+        if tableView.selectedRowIndexes.count < 2 {
+            var session = displayedSessions[tableView.clickedRow]
+            stringToCopy = session.shareURL
+        } else {
+            
+        }
+        
+        if let string = stringToCopy {
+            let pb = NSPasteboard.generalPasteboard()
+            pb.clearContents()
+            pb.writeObjects([string])
+        }
+    }
+    
     // MARK: Navigation
 
     var detailsViewController: VideoDetailsViewController? {

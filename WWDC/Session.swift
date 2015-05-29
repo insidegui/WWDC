@@ -53,6 +53,12 @@ struct Session {
         }
     }
     
+    var shareURL: String {
+        get {
+            return "wwdc://\(year)/\(id)"
+        }
+    }
+    
     var uniqueKey: String {
         get {
             return "\(year)-\(id)"
@@ -89,6 +95,10 @@ struct Session {
     
     func setFavoriteWithoutSendingNotification(favorite: Bool) {
         DataStore.SharedStore.putSessionIsFavorite(self, favorite: favorite)
+    }
+    
+    func shareURL(time: Double) -> String {
+        return "\(shareURL)?t=\(time)"
     }
     
 }

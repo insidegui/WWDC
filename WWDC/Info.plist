@@ -48,5 +48,16 @@
 	<string>insidegui</string>
 	<key>UDRepoName</key>
 	<string>WWDC</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>WWDC Session Video</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>wwdc</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

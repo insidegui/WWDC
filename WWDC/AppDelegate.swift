@@ -27,6 +27,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // start checking for live event
         LiveEventObserver.SharedObserver().start()
         
+        // register custom URL scheme handler
+        URLSchemeHandler.SharedHandler().register()
+        
         // check for updates
         checkForUpdates(nil)
         
