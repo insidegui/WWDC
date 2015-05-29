@@ -26,7 +26,7 @@ Example searches:
 	
 ## Sharing
 
-You can share direct links to specific session videos. Just select the session on the list and ⌘C to copy It's URL, or use the right-click menu.
+You can share direct links to specific session videos. Just select the session on the list and ⌘C to copy It's URL, or use the right-click menu. For instance, [this link](wwdc://2014/101) opens up the 2014 keynote.
 
 ![rightmenushare](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/rightmenushare.png)
 
