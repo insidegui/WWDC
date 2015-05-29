@@ -10,7 +10,7 @@ To download the latest release, [click here](https://github.com/insidegui/WWDC/b
 
 ## Searching
 
-You can perform an advanced search using the qualifiers "year", "focus" and "track".
+You can perform an advanced search using the qualifiers "year", "focus", "track", "downloaded" and "description".
 
 Example searches:
 
@@ -19,6 +19,10 @@ Example searches:
 	year:2014 track:frameworks cocoa
 
 	track:frameworks core
+	
+	year:2014 downloaded:yes
+	
+	description:iwork
 
 ## Reading
 
