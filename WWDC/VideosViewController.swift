@@ -247,14 +247,17 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBAction func copyURL(sender: NSMenuItem) {
         var stringToCopy:String?
         
-        if tableView.selectedRowIndexes.count < 2 {
+        if tableView.selectedRowIndexes.count < 2 && tableView.clickedRow >= 0 {
             var session = displayedSessions[tableView.clickedRow]
             stringToCopy = session.shareURL
         } else {
             stringToCopy = ""
             for idx in tableView.selectedRowIndexes {
                 let session = self.displayedSessions[idx]
-                stringToCopy? += session.shareURL + "\n"
+                stringToCopy? += session.shareURL
+                if tableView.selectedRowIndexes.lastIndex != idx {
+                    stringToCopy? += "\n"
+                }
             }
         }
         
@@ -263,6 +266,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             pb.clearContents()
             pb.writeObjects([string])
         }
+    }
+    
+    @IBAction func copy(sender: NSMenuItem) {
+        copyURL(sender)
     }
     
     // MARK: Navigation
