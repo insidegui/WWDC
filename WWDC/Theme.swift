@@ -50,8 +50,11 @@ class Theme: NSObject {
 private extension NSImage {
     var CGImage: CGImageRef {
         get {
-            let source = CGImageSourceCreateWithData(self.TIFFRepresentation as! CFDataRef, nil)
-            return CGImageSourceCreateImageAtIndex(source, Int(0), nil)
+            var rect = NSMakeRect(0, 0, self.size.width, self.size.height)
+            
+            var iref = self.CGImageForProposedRect(&rect, context: nil, hints: nil)
+            
+            return iref!.takeRetainedValue()
         }
     }
 }
