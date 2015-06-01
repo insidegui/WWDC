@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.9](https://github.com/insidegui/WWDC/tree/1.9) (2015-06-01)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/1.8...1.9)
+
+**Implemented enhancements:**
+
+- Ability to mark a video as Unwatched [\#52](https://github.com/insidegui/WWDC/issues/52)
+
+- Ability to mark many selections as watched. [\#46](https://github.com/insidegui/WWDC/issues/46)
+
+- Add ability to mark videos as favorite/bookmarked [\#27](https://github.com/insidegui/WWDC/issues/27)
+
 ## [1.8](https://github.com/insidegui/WWDC/tree/1.8) (2015-05-19)
 
 [Full Changelog](https://github.com/insidegui/WWDC/compare/1.7...1.8)
