@@ -17,11 +17,22 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.8</string>
+	<string>1.9</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>WWDC Session Video</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wwdc</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>30</string>
+	<string>35</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -48,16 +59,5 @@
 	<string>insidegui</string>
 	<key>UDRepoName</key>
 	<string>WWDC</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleURLName</key>
-            <string>WWDC Session Video</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>wwdc</string>
-            </array>
-        </dict>
-    </array>
 </dict>
 </plist>
