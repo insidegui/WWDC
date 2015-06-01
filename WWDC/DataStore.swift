@@ -73,6 +73,17 @@ class DataStore: NSObject {
 				}).resume()
 		}
 	}
+    
+    func fetchSessions(completionHandler: fetchSessionsCompletionHandler, disableCache: Bool) {
+        if disableCache {
+            if let url = appleSessionsURL {
+                sranddev()
+                appleSessionsURL = NSURL(string: "\(url.absoluteString!)?\(rand())")
+            }
+        }
+        
+        fetchSessions(completionHandler)
+    }
 	
     func doFetchSessions(completionHandler: fetchSessionsCompletionHandler) {
         URLSession.dataTaskWithURL(appleSessionsURL!, completionHandler: { data, response, error in

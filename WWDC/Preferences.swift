@@ -10,6 +10,7 @@ import Cocoa
 
 let LocalVideoStoragePathPreferenceChangedNotification = "LocalVideoStoragePathPreferenceChangedNotification"
 let TranscriptPreferencesChangedNotification = "TranscriptPreferencesChangedNotification"
+let AutomaticRefreshPreferenceChangedNotification = "AutomaticRefreshPreferenceChangedNotification"
 
 private let _SharedPreferences = Preferences();
 
@@ -30,6 +31,7 @@ class Preferences {
         static let autoplayLiveEvents = "autoplayLiveEvents"
         static let liveEventCheckInterval = "liveEventCheckInterval"
         static let userKnowsLiveEventThing = "userKnowsLiveEventThing"
+        static let automaticRefreshEnabled = "automaticRefreshEnabled"
         
         struct transcript {
             static let font = "transcript.font"
@@ -51,6 +53,8 @@ class Preferences {
         static let autoplayLiveEvents = true
         static let liveEventCheckInterval = 15.0
         static let userKnowsLiveEventThing = false
+        static let automaticRefreshEnabled = true
+        static let automaticRefreshInterval = 60.0
         
         struct transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
@@ -253,6 +257,27 @@ class Preferences {
         }
         set {
             defaults.setObject(NSNumber(bool: newValue), forKey: Keys.userKnowsLiveEventThing)
+        }
+    }
+    
+    // periodically refresh the list of sessions
+    var automaticRefreshEnabled: Bool {
+        get {
+            if let object = defaults.objectForKey(Keys.automaticRefreshEnabled) as? NSNumber {
+                return object.boolValue
+            } else {
+                return DefaultValues.automaticRefreshEnabled
+            }
+        }
+        set {
+            defaults.setObject(NSNumber(bool: newValue), forKey: Keys.automaticRefreshEnabled)
+            nc.postNotificationName(AutomaticRefreshPreferenceChangedNotification, object: nil)
+        }
+    }
+    
+    var automaticRefreshInterval: Double {
+        get {
+            return DefaultValues.automaticRefreshInterval
         }
     }
     

@@ -23,6 +23,8 @@ class PreferencesWindowController: NSWindowController {
         
         downloadsFolderLabel.stringValue = prefs.localVideoStoragePath
         
+        automaticRefreshEnabledCheckbox.state = prefs.automaticRefreshEnabled ? NSOnState : NSOffState
+        
         if let familyName = prefs.transcriptFont.familyName {
             fontPopUp.selectItemWithTitle(familyName)
         }
@@ -59,6 +61,14 @@ class PreferencesWindowController: NSWindowController {
         let path = Preferences.SharedPreferences().localVideoStoragePath
         let root = path.stringByDeletingLastPathComponent
         NSWorkspace.sharedWorkspace().selectFile(path, inFileViewerRootedAtPath: root)
+    }
+    
+    // MARK: Session refresh
+    
+    @IBOutlet weak var automaticRefreshEnabledCheckbox: NSButton!
+    
+    @IBAction func automaticRefreshCheckboxAction(sender: NSButton) {
+        prefs.automaticRefreshEnabled = (sender.state == NSOnState)
     }
     
     // MARK: Transcript appearance

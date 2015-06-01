@@ -347,6 +347,12 @@ CA
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="View" id="HyV-fh-RgO">
                                     <items>
+                                        <menuItem title="Reload Sessions" keyEquivalent="r" id="pIQ-Lc-aWD">
+                                            <connections>
+                                                <action selector="refresh:" target="Ady-hI-5gd" id="Mrv-yl-CDH"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="QpR-6l-qV3"/>
                                         <menuItem title="Fullscreen" keyEquivalent="f" id="LEB-rd-XCC">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
