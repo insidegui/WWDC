@@ -161,7 +161,11 @@ class VideoWindowController: NSWindowController {
                 let track = tracks[0]
                 videoNaturalSize = track.naturalSize
                 playerWindow.aspectRatio = videoNaturalSize
+            } else {
+                return
             }
+        } else {
+            return
         }
         
         // get saved scale
