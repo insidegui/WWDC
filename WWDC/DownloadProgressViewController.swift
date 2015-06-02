@@ -162,6 +162,10 @@ class DownloadProgressViewController: NSViewController {
 	}
 	
 	@IBAction func download(sender: NSButton) {
+        if session == nil {
+            return
+        }
+        
 		if let url = session.hd_url {
 			VideoStore.SharedStore().download(url)
 		}
