@@ -13,7 +13,7 @@ private let _dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'ZZZZ"
 struct LiveEvent {
     var id: Int
     var title: String
-    var startsAt: NSDate
+    var startsAt: NSDate?
     var description: String
     var stream: NSURL?
     var isLiveRightNow: Bool
@@ -36,6 +36,8 @@ struct LiveEvent {
         
         let formatter = NSDateFormatter()
         formatter.dateFormat = _dateFormat
-        startsAt = formatter.dateFromString(jsonObject[Keys.startsAt].string!)!
+        if let startsAtString = jsonObject[Keys.startsAt].string {
+            startsAt = formatter.dateFromString(startsAtString)
+        }
     }
 }
