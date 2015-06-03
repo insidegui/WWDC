@@ -42,6 +42,7 @@ class Preferences {
         struct VideosController {
             static let selectedItem = "VideosController.selectedItem"
             static let searchTerm = "VideosController.searchTerm"
+            static let searchFilter = "VideosController.searchFilter"
             static let dividerPosition = "VideosController.dividerPosition"
         }
     }
@@ -122,6 +123,18 @@ class Preferences {
             } else {
                 return DefaultValues.VideosController.searchTerm
             }
+        }
+    }
+
+    // the search filter
+    var searchFilter: SearchFilter {
+        set {
+            defaults.setInteger(newValue.rawValue, forKey: Keys.VideosController.searchFilter)
+        }
+        get {
+            // No need for a default value because integerForKey returns 0 which maps to All if not found
+            let rawFilter = defaults.integerForKey(Keys.VideosController.searchFilter)
+            return SearchFilter(rawValue: rawFilter)!
         }
     }
     

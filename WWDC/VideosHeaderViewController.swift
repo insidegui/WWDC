@@ -8,12 +8,19 @@
 
 import Cocoa
 
+enum SearchFilter: Int {
+    case All = 0
+    case Unwatched
+    case Watched
+}
+
 class VideosHeaderViewController: NSViewController {
     
     @IBOutlet weak var searchBar: NSSearchField!
-    @IBOutlet weak var searchBarBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var segmentedControl: NSSegmentedControl!
+    @IBOutlet weak var segmentBottomConstraint: NSLayoutConstraint!
     
-    var performSearch: ((term: String) -> Void)?
+    var performSearch: ((term: String, filter: SearchFilter) -> Void)?
     
     class func loadDefaultController() -> VideosHeaderViewController? {
         return VideosHeaderViewController(nibName: "VideosHeaderViewController", bundle: nil)
@@ -31,10 +38,10 @@ class VideosHeaderViewController: NSViewController {
         let nc = NSNotificationCenter.defaultCenter()
         
         nc.addObserverForName(NSWindowWillEnterFullScreenNotification, object: view.window!, queue: nil) { object in
-            self.searchBarBottomConstraint.constant = 19
+            self.segmentBottomConstraint.constant = 19
         }
         nc.addObserverForName(NSWindowWillExitFullScreenNotification, object: view.window!, queue: nil) { object in
-            self.searchBarBottomConstraint.constant = 12
+            self.segmentBottomConstraint.constant = 12
         }
     }
     
@@ -43,8 +50,27 @@ class VideosHeaderViewController: NSViewController {
     }
     
     @IBAction func search(sender: NSSearchField) {
+        updateSearch()
+    }
+
+    @IBAction func filterChanged(sender: NSSegmentedControl) {
+        updateSearch()
+    }
+
+    private func updateSearch() {
         if let callback = performSearch {
-            callback(term: sender.stringValue)
+            var filter = SearchFilter.All
+
+            switch segmentedControl.selectedSegment {
+            case 1:
+                filter = .Unwatched
+            case 2:
+                filter = .Watched
+            default:
+                break
+            }
+
+            callback(term: searchBar.stringValue, filter: filter)
         }
     }
 }

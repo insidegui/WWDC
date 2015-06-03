@@ -18,6 +18,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     var indexOfLastSelectedRow = -1
     let savedSearchTerm = Preferences.SharedPreferences().searchTerm
+    let savedSearchFilter = Preferences.SharedPreferences().searchFilter
+
     var finishedInitialSetup = false
     var restoredSelection = false
     var loadedStoryboard = false
@@ -107,7 +109,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                 
                 // restore search from previous launch
                 if  savedSearchTerm != "" {
-                    search(savedSearchTerm)
+                    search(savedSearchTerm, filter: savedSearchFilter)
                     indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
                 }
             }
@@ -351,9 +353,18 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             reloadTablePreservingSelection()
         }
     }
+
+    var currentSearchFilter: SearchFilter = Preferences.SharedPreferences().searchFilter {
+        didSet {
+            Preferences.SharedPreferences().searchFilter = currentSearchFilter
+
+            reloadTablePreservingSelection()
+        }
+    }
     
-    func search(term: String) {
+    func search(term: String, filter: SearchFilter) {
         currentSearchTerm = term
+        currentSearchFilter = filter
     }
     
     var displayedSessions: [Session]! {
@@ -364,6 +375,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                     var qualifiers = term.qualifierSearchParser_parseQualifiers(["year", "focus", "track", "downloaded", "description"])
                     indexOfLastSelectedRow = -1
                     return sessions.filter { session in
+
+                        if (self.currentSearchFilter == .Unwatched && session.progress >= 1) || (self.currentSearchFilter == .Watched && session.progress < 1) {
+                            return false
+                        }
 
                         if let year: String = qualifiers["year"] as? String {
 							let yearStr = "\(session.year)"
