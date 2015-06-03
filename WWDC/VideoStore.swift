@@ -122,6 +122,17 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     func hasVideo(url: String) -> Bool {
         return (NSFileManager.defaultManager().fileExistsAtPath(localVideoPath(url)))
     }
+
+    func deleteLocalVideo(session: Session) -> Bool {
+        if let hd_url = session.hd_url where hasVideo(hd_url) {
+            return NSFileManager.defaultManager().removeItemAtPath(localVideoPath(hd_url), error: nil)
+        } else if hasVideo(session.url) {
+            return NSFileManager.defaultManager().removeItemAtPath(localVideoPath(session.url), error: nil)
+        } else {
+            // No local video to delete
+            return false
+        }
+    }
     
     // MARK: URL Session
     
