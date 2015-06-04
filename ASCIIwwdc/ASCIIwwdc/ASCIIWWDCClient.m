@@ -62,9 +62,12 @@
         NSMutableArray *lines = [[NSMutableArray alloc] initWithCapacity:annotations.count];
         
         for (NSString *annotation in annotations) {
+            id timecode = [timecodes objectAtIndex:[annotations indexOfObject:annotation]];
+            if ([timecode isKindOfClass:[NSNull class]]) continue;
+            
             WWDCTranscriptLine *line = [[WWDCTranscriptLine alloc] init];
             line.text = annotation;
-            line.timecode = [[timecodes objectAtIndex:[annotations indexOfObject:annotation]] doubleValue];
+            line.timecode = [timecode doubleValue];
             [lines addObject:line];
         }
         

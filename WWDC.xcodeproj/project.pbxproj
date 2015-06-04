@@ -44,6 +44,7 @@
 		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
 		DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC049CE1AE564F20008D41A /* PDFWindowController.swift */; };
 		DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC049CF1AE564F20008D41A /* PDFWindowController.xib */; };
+		DDCB0D691B20D63A00D4DA32 /* TranscriptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCB0D681B20D63A00D4DA32 /* TranscriptStore.swift */; };
 		DDCC5D721AF1518A00F24F55 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */; };
 		DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */; };
 		DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4321AE2DF14000A0102 /* Theme.swift */; };
@@ -102,6 +103,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = DD92EA501AE9611B00D503AE;
 			remoteInfo = ASCIIwwdc;
+		};
+		DDCB0D6B1B20D63B00D4DA32 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DDCB0CE11B20C64E00D4DA32;
+			remoteInfo = wwdctranscriptindex;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -162,6 +170,7 @@
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
 		DDC049CE1AE564F20008D41A /* PDFWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWindowController.swift; sourceTree = "<group>"; };
 		DDC049CF1AE564F20008D41A /* PDFWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PDFWindowController.xib; sourceTree = "<group>"; };
+		DDCB0D681B20D63A00D4DA32 /* TranscriptStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptStore.swift; sourceTree = "<group>"; };
 		DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DDCC5D741AF1532600F24F55 /* GRCrashlyticsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRCrashlyticsHelper.h; sourceTree = "<group>"; };
 		DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRCrashlyticsHelper.m; sourceTree = "<group>"; };
@@ -273,6 +282,7 @@
 			isa = PBXGroup;
 			children = (
 				DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */,
+				DDCB0D6C1B20D63B00D4DA32 /* wwdctranscriptindex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -361,6 +371,7 @@
 				DDD7A4391AE2E305000A0102 /* DataStore.swift */,
 				DD2CC38B1AF4161700FC5F68 /* Preferences.swift */,
 				DDF6153C1B07BAB1002C8667 /* LiveEvent.swift */,
+				DDCB0D681B20D63A00D4DA32 /* TranscriptStore.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -471,6 +482,13 @@
 			remoteRef = DD92EAA31AE978DC00D503AE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		DDCB0D6C1B20D63B00D4DA32 /* wwdctranscriptindex */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = wwdctranscriptindex;
+			remoteRef = DDCB0D6B1B20D63B00D4DA32 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -537,6 +555,7 @@
 				DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */,
 				DD4F6E731AE2D5980099BEB5 /* VideoTableCellView.swift in Sources */,
 				DD4F6E711AE2D1C60099BEB5 /* VideoDetailsViewController.swift in Sources */,
+				DDCB0D691B20D63A00D4DA32 /* TranscriptStore.swift in Sources */,
 				DD4F6E6F1AE2D14A0099BEB5 /* MainWindowController.swift in Sources */,
 				DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */,
 				DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */,

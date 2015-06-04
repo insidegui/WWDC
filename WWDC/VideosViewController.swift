@@ -103,6 +103,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     var sessions: [Session]! {
         didSet {
             if sessions != nil {
+                // run transcript indexing service if needed
+                TranscriptStore.SharedStore.runIndexerIfNeeded(sessions)
+                
                 headerController.enable()
                 
                 // restore search from previous launch
