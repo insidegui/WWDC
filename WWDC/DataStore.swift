@@ -200,7 +200,7 @@ class DataStore: NSObject {
     
     func checkForLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
         let task = URLSession.dataTaskWithURL(liveURL) { data, response, error in
-            if data == nil {
+            if data == nil || data.length == 0 {
                 completionHandler(false, nil)
                 return
             }
