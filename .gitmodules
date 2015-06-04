@@ -1,3 +1,6 @@
 [submodule "ASCIIwwdc/Submodules/YapDatabase"]
 	path = ASCIIwwdc/Submodules/YapDatabase
 	url = https://github.com/yapstudios/YapDatabase.git
+[submodule "ASCIIwwdc/Submodules/NTBTask"]
+	path = ASCIIwwdc/Submodules/NTBTask
+	url = https://github.com/kareman/NTBTask.git
