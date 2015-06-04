@@ -35,3 +35,11 @@ You can share direct links to specific session videos. Just select the session o
 WWDC for OS X is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can see and search through transcripts of the sessions while watching the videos.
 
 ![screenshot2](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/screenshot2.png)
+
+## Build Instructions
+
+The only steps required before you build is to pull down the code and submodules:
+
+	$ git clone https://github.com/insidegui/WWDC.git
+	$ cd WWDC/
+	$ git submodule update --init --recursive
