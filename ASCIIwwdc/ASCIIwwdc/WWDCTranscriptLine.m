@@ -28,4 +28,27 @@
     return [WWDCTranscriptLine roundedStringFromTimecode:self.timecode];
 }
 
+#pragma mark NSSecureCoding
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (!(self = [super init])) return nil;
+    
+    self.text = [aDecoder decodeObjectForKey:@"text"];
+    self.timecode = [aDecoder decodeDoubleForKey:@"timecode"];
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.text forKey:@"text"];
+    [aCoder encodeDouble:self.timecode forKey:@"timecode"];
+}
+
 @end

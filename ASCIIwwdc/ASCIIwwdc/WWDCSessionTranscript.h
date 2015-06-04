@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@interface WWDCSessionTranscript : NSObject
+@interface WWDCSessionTranscript : NSObject <NSSecureCoding>
 
 @property (assign) int year;
 @property (assign) int session;
 @property (strong) NSArray *lines;
 
+@property (readonly) NSString *fullText;
 @property (readonly) NSString *htmlString;
 
 @property (readonly) NSArray *timecodes;

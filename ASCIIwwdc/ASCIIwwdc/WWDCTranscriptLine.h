@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface WWDCTranscriptLine : NSObject
+@interface WWDCTranscriptLine : NSObject <NSSecureCoding>
 
 @property (copy) NSString *text;
 @property (nonatomic, assign) double timecode;

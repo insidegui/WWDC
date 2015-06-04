@@ -41,6 +41,11 @@
     _cachedHTMLString = [NSString stringWithFormat:_baseHTMLString, html];
 }
 
+- (NSString *)fullText
+{
+    return [self.lines componentsJoinedByString:@" "];
+}
+
 - (NSArray *)timecodes
 {
     NSMutableArray *timecodes = [[NSMutableArray alloc] initWithCapacity:self.lines.count];
@@ -50,6 +55,31 @@
     }
     
     return [timecodes copy];
+}
+
+#pragma mark NSSecureCoding
+
++ (BOOL)supportsSecureCoding
+{
+    return YES;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if (!(self = [super init])) return nil;
+    
+    self.year = [aDecoder decodeIntForKey:@"year"];
+    self.session = [aDecoder decodeIntForKey:@"session"];
+    self.lines = [aDecoder decodeObjectForKey:@"lines"];
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeInt:self.year forKey:@"year"];
+    [aCoder encodeInt:self.session forKey:@"session"];
+    [aCoder encodeObject:self.lines forKey:@"lines"];
 }
 
 @end
