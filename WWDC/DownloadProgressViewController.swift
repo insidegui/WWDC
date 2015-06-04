@@ -180,8 +180,16 @@ class DownloadProgressViewController: NSViewController {
 	}
 
     @IBAction func delete(sender: NSButton) {
-        if VideoStore.SharedStore().deleteLocalVideo(session) {
-            updateDownloadStatus()
-        }
+        let alertPanel = NSAlert()
+        alertPanel.informativeText = "You will still be able to stream or redownload it."
+        alertPanel.messageText = "Delete session video?"
+        alertPanel.addButtonWithTitle("Delete")
+        alertPanel.addButtonWithTitle("Cancel")
+
+        alertPanel.beginSheetModalForWindow(view.window!, completionHandler: { (response) -> Void in
+            if response == NSAlertFirstButtonReturn && VideoStore.SharedStore().deleteLocalVideo(self.session) {
+                self.updateDownloadStatus()
+            }
+        })
     }
 }
