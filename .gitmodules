@@ -1,0 +1,3 @@
+[submodule "ASCIIwwdc/Submodules/YapDatabase"]
+	path = ASCIIwwdc/Submodules/YapDatabase
+	url = https://github.com/yapstudios/YapDatabase.git
