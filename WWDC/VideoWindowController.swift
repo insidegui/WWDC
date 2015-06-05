@@ -155,12 +155,16 @@ class VideoWindowController: NSWindowController {
     
     func setupWindowSizing()
     {
-        // get video dimensions and set window aspect ratio
-        if let tracks = player?.currentItem.asset.tracksWithMediaType(AVMediaTypeVideo) as? [AVAssetTrack] {
-            if tracks.count > 0 {
-                let track = tracks[0]
-                videoNaturalSize = track.naturalSize
-                playerWindow.aspectRatio = videoNaturalSize
+        if let asset = player?.currentItem?.asset {
+            // get video dimensions and set window aspect ratio
+            if let tracks = asset.tracksWithMediaType(AVMediaTypeVideo) as? [AVAssetTrack] {
+                if tracks.count > 0 {
+                    let track = tracks[0]
+                    videoNaturalSize = track.naturalSize
+                    playerWindow.aspectRatio = videoNaturalSize
+                } else {
+                    return
+                }
             } else {
                 return
             }
