@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="7531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.WebKitIBPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="WWDCTranscriptViewController">
@@ -23,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <webView maintainsBackForwardList="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zMD-1v-Lxr">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+                    <rect key="frame" x="0.0" y="54" width="480" height="218"/>
                     <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" plugInsEnabled="NO" javaEnabled="NO" javaScriptCanOpenWindowsAutomatically="NO" loadsImagesAutomatically="NO" allowsAnimatedImages="NO" allowsAnimatedImageLooping="NO">
                         <nil key="identifier"/>
                     </webPreferences>
@@ -78,7 +78,6 @@
             </subviews>
             <constraints>
                 <constraint firstAttribute="centerX" secondItem="mFN-12-zaN" secondAttribute="centerX" constant="-0.5" id="DKe-RV-GkW"/>
-                <constraint firstAttribute="bottom" secondItem="zMD-1v-Lxr" secondAttribute="bottom" id="Gnq-IR-TG8"/>
                 <constraint firstAttribute="bottom" secondItem="aPr-Ga-vQa" secondAttribute="bottom" id="ITE-Nb-yLl"/>
                 <constraint firstAttribute="trailing" secondItem="aPr-Ga-vQa" secondAttribute="trailing" id="NGI-r2-5c0"/>
                 <constraint firstAttribute="trailing" secondItem="zMD-1v-Lxr" secondAttribute="trailing" id="Npb-fB-xM2"/>
@@ -87,6 +86,7 @@
                 <constraint firstItem="zMD-1v-Lxr" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="iUF-b9-oqz"/>
                 <constraint firstAttribute="centerY" secondItem="Toa-Ev-faG" secondAttribute="centerY" id="kXP-bT-0pA"/>
                 <constraint firstAttribute="centerY" secondItem="mFN-12-zaN" secondAttribute="centerY" constant="0.5" id="q0C-Ra-qUU"/>
+                <constraint firstItem="aPr-Ga-vQa" firstAttribute="top" secondItem="zMD-1v-Lxr" secondAttribute="bottom" id="rvW-2d-NNd"/>
                 <constraint firstItem="aPr-Ga-vQa" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="uey-eS-Mmd"/>
             </constraints>
         </customView>
