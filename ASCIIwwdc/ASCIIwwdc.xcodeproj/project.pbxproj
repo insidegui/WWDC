@@ -1562,6 +1562,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				INSTALL_PATH = "";
 				LD_RUNPATH_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1571,6 +1572,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
+				INSTALL_PATH = "";
 				LD_RUNPATH_SEARCH_PATHS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
