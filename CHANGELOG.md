@@ -1,5 +1,23 @@
 # Change Log
 
+## [2.0](https://github.com/insidegui/WWDC/tree/2.0) (2015-06-08)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/1.9.1...2.0)
+
+**Fixed bugs:**
+
+- Scroll Indicator on Transcript Window Goes Beyond Search Field [\#54](https://github.com/insidegui/WWDC/issues/54)
+
+**Merged pull requests:**
+
+- Inset transcript web view so it doesn't hide behind the effect view -… [\#61](https://github.com/insidegui/WWDC/pull/61) ([TimothyChilvers](https://github.com/TimothyChilvers))
+
+- Fix crash when computer sleeps [\#59](https://github.com/insidegui/WWDC/pull/59) ([amayers](https://github.com/amayers))
+
+## [1.9.1](https://github.com/insidegui/WWDC/tree/1.9.1) (2015-06-02)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/1.9...1.9.1)
+
 ## [1.9](https://github.com/insidegui/WWDC/tree/1.9) (2015-06-01)
 
 [Full Changelog](https://github.com/insidegui/WWDC/compare/1.8...1.9)
