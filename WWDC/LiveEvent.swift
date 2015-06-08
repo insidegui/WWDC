@@ -29,9 +29,23 @@ struct LiveEvent {
     
     init(jsonObject: JSON) {
         id = jsonObject[Keys.id].intValue
-        title = jsonObject[Keys.title].string!
-        description = jsonObject[Keys.description].string!
-        stream = NSURL(string: jsonObject[Keys.stream].string!)
+        
+        if let title = jsonObject[Keys.title].string {
+            self.title = title
+        } else {
+            self.title = ""
+        }
+        
+        if let description = jsonObject[Keys.description].string {
+            self.description = description
+        } else {
+            self.description = ""
+        }
+        
+        if let streamURL = jsonObject[Keys.stream].string {
+            self.stream = NSURL(string: streamURL)
+        }
+        
         isLiveRightNow = jsonObject[Keys.isLiveRightNow].boolValue
         
         let formatter = NSDateFormatter()
