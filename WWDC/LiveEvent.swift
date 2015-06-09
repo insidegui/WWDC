@@ -17,6 +17,7 @@ struct LiveEvent {
     var startsAt: NSDate?
     var description: String
     var stream: NSURL?
+    var stream2: NSURL?
     var isLiveRightNow: Bool
     
     private struct Keys {
@@ -24,6 +25,7 @@ struct LiveEvent {
         static let title = "title"
         static let description = "description"
         static let stream = "stream"
+        static let stream2 = "stream_elcapitan"
         static let startsAt = "starts_at"
         static let isLiveRightNow = "isLiveRightNow"
     }
@@ -45,6 +47,10 @@ struct LiveEvent {
         
         if let streamURL = jsonObject[Keys.stream].string {
             self.stream = NSURL(string: streamURL)
+        }
+        
+        if let streamURL2 = jsonObject[Keys.stream2].string {
+            self.stream2 = NSURL(string: streamURL2)
         }
         
         isLiveRightNow = jsonObject[Keys.isLiveRightNow].boolValue

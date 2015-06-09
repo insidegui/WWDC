@@ -112,7 +112,7 @@ class VideoWindowController: NSWindowController {
     }
     
     private func loadEventVideo() {
-        if let url = NSURL(string: videoURL!) {
+        if let url = event!.appropriateURL {
             
             println("LIVE EVENT URL: \(url)")
             
@@ -297,4 +297,17 @@ class VideoWindowController: NSWindowController {
         }
     }
     
+}
+
+private extension LiveEvent {
+    var appropriateURL: NSURL? {
+        get {
+            let v = NSProcessInfo.processInfo().operatingSystemVersion
+            if (v.majorVersion == 10 && v.minorVersion >= 11) && stream2 != nil {
+                return stream2
+            } else {
+                return stream
+            }
+        }
+    }
 }

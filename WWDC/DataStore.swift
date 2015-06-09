@@ -50,6 +50,7 @@ class DataStore: NSObject {
 	}
 	
     let URLSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+    let URLSession2 = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
     
 	func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
 		if let appleURL = appleSessionsURL {
@@ -210,7 +211,7 @@ class DataStore: NSObject {
     }
     
     func checkForLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
-        let task = URLSession.dataTaskWithURL(liveURL) { data, response, error in
+        let task = URLSession2.dataTaskWithURL(liveURL) { data, response, error in
             if data == nil || data.length == 0 {
                 completionHandler(false, nil)
                 return
@@ -229,7 +230,7 @@ class DataStore: NSObject {
     }
     
     func fetchNextLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
-        let task = URLSession.dataTaskWithURL(liveNextURL) { data, response, error in
+        let task = URLSession2.dataTaskWithURL(liveNextURL) { data, response, error in
             if data == nil || data.length == 0 {
                 completionHandler(false, nil)
                 return
