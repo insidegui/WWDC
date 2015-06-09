@@ -8,12 +8,18 @@
 
 import Cocoa
 
+public let LiveEventNextInfoChangedNotification = "LiveEventNextInfoChangedNotification"
 public let LiveEventTitleAvailableNotification = "LiveEventTitleAvailableNotification"
 public let LiveEventWillStartPlayingNotification = "LiveEventWillStartPlayingNotification"
 private let _sharedInstance = LiveEventObserver()
 
 class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
 
+    var nextEvent: LiveEvent? {
+        didSet {
+            NSNotificationCenter.defaultCenter().postNotificationName(LiveEventNextInfoChangedNotification, object: nil)
+        }
+    }
     private var lastEventFound: LiveEvent?
     private var timer: NSTimer?
     private var liveEventPlayerController: VideoWindowController?
@@ -43,6 +49,12 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
                     self.lastEventFound = event
                     self.playEvent(event!)
                 }
+            }
+        }
+        
+        DataStore.SharedStore.fetchNextLiveEvent { available, event in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.nextEvent = event
             }
         }
     }

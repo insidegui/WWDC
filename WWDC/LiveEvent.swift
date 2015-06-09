@@ -8,6 +8,7 @@
 
 import Foundation
 
+private let _dateTimezone = "GMT"
 private let _dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'ZZZZ"
 
 struct LiveEvent {
@@ -51,7 +52,8 @@ struct LiveEvent {
         let formatter = NSDateFormatter()
         formatter.dateFormat = _dateFormat
         if let startsAtString = jsonObject[Keys.startsAt].string {
-            startsAt = formatter.dateFromString(startsAtString)
+            let startsAtWithZone = startsAtString+_dateTimezone
+            startsAt = formatter.dateFromString(startsAtWithZone)
         }
     }
 }

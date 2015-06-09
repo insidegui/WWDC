@@ -44,6 +44,8 @@
 		DD92EAA71AE978EC00D503AE /* ASCIIwwdc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD92EAA41AE978DC00D503AE /* ASCIIwwdc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */; };
 		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
+		DD945ED91B26A42300CE7B7D /* LiveEventBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD945ED81B26A42300CE7B7D /* LiveEventBannerViewController.swift */; };
+		DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */; };
 		DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC049CE1AE564F20008D41A /* PDFWindowController.swift */; };
 		DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC049CF1AE564F20008D41A /* PDFWindowController.xib */; };
 		DDCB0D691B20D63A00D4DA32 /* TranscriptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCB0D681B20D63A00D4DA32 /* TranscriptStore.swift */; };
@@ -172,6 +174,8 @@
 		DD92EA9F1AE978DC00D503AE /* ASCIIwwdc.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ASCIIwwdc.xcodeproj; path = ASCIIwwdc/ASCIIwwdc.xcodeproj; sourceTree = "<group>"; };
 		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
+		DD945ED81B26A42300CE7B7D /* LiveEventBannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEventBannerViewController.swift; sourceTree = "<group>"; };
+		DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveEventBannerViewController.xib; sourceTree = "<group>"; };
 		DDC049CE1AE564F20008D41A /* PDFWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWindowController.swift; sourceTree = "<group>"; };
 		DDC049CF1AE564F20008D41A /* PDFWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PDFWindowController.xib; sourceTree = "<group>"; };
 		DDCB0D681B20D63A00D4DA32 /* TranscriptStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptStore.swift; sourceTree = "<group>"; };
@@ -339,6 +343,7 @@
 				DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */,
 				DD0974DE1B18AAA8006A3C77 /* URLSchemeHandler.swift */,
 				DD259FCF1B220D96003EB3E5 /* SearchController.swift */,
+				DD945ED81B26A42300CE7B7D /* LiveEventBannerViewController.swift */,
 			);
 			name = "Aux Controllers";
 			sourceTree = "<group>";
@@ -353,6 +358,7 @@
 				DD4F6E571AE2D11D0099BEB5 /* Main.storyboard */,
 				DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */,
 				C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */,
+				DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -507,6 +513,7 @@
 				DD4F6E561AE2D11D0099BEB5 /* Images.xcassets in Resources */,
 				DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */,
 				DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */,
+				DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */,
 				DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */,
 				DD829F221AF271DF00B5977B /* index.json in Resources */,
 				DD4F6E591AE2D11D0099BEB5 /* Main.storyboard in Resources */,
@@ -559,6 +566,7 @@
 				DDD7A43A1AE2E305000A0102 /* DataStore.swift in Sources */,
 				DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */,
 				C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */,
+				DD945ED91B26A42300CE7B7D /* LiveEventBannerViewController.swift in Sources */,
 				DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */,
 				DD4F6E731AE2D5980099BEB5 /* VideoTableCellView.swift in Sources */,
 				DD4F6E711AE2D1C60099BEB5 /* VideoDetailsViewController.swift in Sources */,

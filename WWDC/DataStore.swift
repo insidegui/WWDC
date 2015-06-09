@@ -10,6 +10,7 @@ import Foundation
 
 private let _internalServiceURL = "http://wwdc.guilhermerambo.me/index.json"
 private let _liveServiceURL = "http://wwdc.guilhermerambo.me/live.json"
+private let _liveNextServiceURL = "http://wwdc.guilhermerambo.me/next.json"
 private let _SharedStore = DataStore()
 private let _MemoryCacheSize = 500*1024*1024
 private let _DiskCacheSize = 1024*1024*1024
@@ -197,6 +198,14 @@ class DataStore: NSObject {
             return NSURL(string: "\(_liveServiceURL)?t=\(rand())")!
         }
     }
+
+    private var liveNextURL: NSURL {
+        get {
+            sranddev()
+            // adds a random number as a parameter to completely prevent any caching
+            return NSURL(string: "\(_liveNextServiceURL)?t=\(rand())")!
+        }
+    }
     
     func checkForLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
         let task = URLSession.dataTaskWithURL(liveURL) { data, response, error in
@@ -209,6 +218,25 @@ class DataStore: NSObject {
             let event = LiveEvent(jsonObject: jsonData)
             
             if event.isLiveRightNow {
+                completionHandler(true, event)
+            } else {
+                completionHandler(false, nil)
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchNextLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
+        let task = URLSession.dataTaskWithURL(liveNextURL) { data, response, error in
+            if data == nil || data.length == 0 {
+                completionHandler(false, nil)
+                return
+            }
+            
+            let jsonData = JSON(data: data)
+            let event = LiveEvent(jsonObject: jsonData)
+            
+            if event.title != "" {
                 completionHandler(true, event)
             } else {
                 completionHandler(false, nil)
