@@ -38,6 +38,11 @@ class VideoWindowController: NSWindowController {
         self.init(windowNibName: _nibName)
         self.event = event
         self.videoURL = videoURL
+        NSNotificationCenter.defaultCenter().addObserverForName(LiveEventTitleAvailableNotification, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+            if let title = note.object as? String {
+                self.window?.title = "\(title) (Live)"
+            }
+        }
     }
     
     @IBOutlet weak var playerView: AVPlayerView!
@@ -80,7 +85,7 @@ class VideoWindowController: NSWindowController {
         }
         
         if let event = self.event {
-            window?.title = "\(event.title) (live)"
+            window?.title = "\(event.title) (Live)"
         }
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in

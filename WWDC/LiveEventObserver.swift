@@ -8,6 +8,7 @@
 
 import Cocoa
 
+public let LiveEventTitleAvailableNotification = "LiveEventTitleAvailableNotification"
 public let LiveEventWillStartPlayingNotification = "LiveEventWillStartPlayingNotification"
 private let _sharedInstance = LiveEventObserver()
 
@@ -57,6 +58,7 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
     private func doPlayEvent(event: LiveEvent) {
         // we already have a live event playing, just return
         if liveEventPlayerController != nil {
+            NSNotificationCenter.defaultCenter().postNotificationName(LiveEventTitleAvailableNotification, object: event.title)
             return
         }
         
