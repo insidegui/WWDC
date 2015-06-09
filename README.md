@@ -8,6 +8,10 @@ To download the latest release, [click here](https://github.com/insidegui/WWDC/b
 
 ![screenshot](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/screenshot.png)
 
+## El Capitan support
+
+Almost everything works fine on El Capitan, but live sessions currently only play the audio, this seems to be a bug in AVFoundation and I'm currently trying to fix it. 
+
 ## Searching
 
 You can perform an advanced search using the qualifiers "year", "focus", "track", "downloaded" and "description".
