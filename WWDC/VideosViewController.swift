@@ -30,7 +30,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         if splitManager == nil && loadedStoryboard {
             if let splitViewController = parentViewController as? NSSplitViewController {
                 splitManager = SplitManager(splitView: splitViewController.splitView)
-                splitViewController.splitView.delegate = self.splitManager
+//                this caused a crash when running on 10.11...
+//                splitViewController.splitView.delegate = self.splitManager
             }
         }
         
