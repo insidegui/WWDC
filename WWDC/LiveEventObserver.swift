@@ -38,9 +38,8 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
     func checkNow() {
         DataStore.SharedStore.checkForLiveEvent { available, event in
             dispatch_async(dispatch_get_main_queue()) {
-                // if we are currently playing an event and the event becomes unavailable, close the player
                 if !available && self.liveEventPlayerController != nil {
-                    self.liveEventPlayerController?.close()
+//                    self.liveEventPlayerController?.close()
                     return
                 }
                 

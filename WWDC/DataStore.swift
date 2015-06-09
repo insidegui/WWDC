@@ -197,7 +197,7 @@ class DataStore: NSObject {
         get {
             sranddev()
             // adds a random number as a parameter to completely prevent any caching
-            return NSURL(string: "\(_liveServiceURL)?t=\(rand())")!
+            return NSURL(string: "\(_liveServiceURL)?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())")!
         }
     }
 
@@ -205,7 +205,7 @@ class DataStore: NSObject {
         get {
             sranddev()
             // adds a random number as a parameter to completely prevent any caching
-            return NSURL(string: "\(_liveNextServiceURL)?t=\(rand())")!
+            return NSURL(string: "\(_liveNextServiceURL)?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())")!
         }
     }
     

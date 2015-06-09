@@ -20,6 +20,10 @@ class VideoWindowController: NSWindowController {
     var event: LiveEvent?
     
     var videoURL: String?
+    
+    var asset: AVAsset!
+    var item: AVPlayerItem!
+    
     var transcriptWC: TranscriptWindowController!
     var playerWindow: GRPlayerWindow {
         get {
@@ -56,21 +60,25 @@ class VideoWindowController: NSWindowController {
         window?.backgroundColor = NSColor.blackColor()
 
         if let url = NSURL(string: videoURL!) {
-            player = AVPlayer(URL: url)
-            playerView.player = player
-            player?.currentItem.asset.loadValuesAsynchronouslyForKeys(["tracks"]) {
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.setupWindowSizing()
-                    self.setupTimeObserver()
-                    
-                    if let session = self.session {
-                        if session.currentPosition > 0 {
-                            self.player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
+            if event == nil {
+                player = AVPlayer(URL: url)
+                playerView.player = player
+                
+                // SESSION
+                player?.currentItem.asset.loadValuesAsynchronouslyForKeys(["tracks"]) {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.setupWindowSizing()
+                        self.setupTimeObserver()
+                        
+                        if let session = self.session {
+                            if session.currentPosition > 0 {
+                                self.player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
+                            }
                         }
+                        
+                        self.player?.play()
+                        self.progressIndicator.stopAnimation(nil)
                     }
-                    
-                    self.player?.play()
-                    self.progressIndicator.stopAnimation(nil)
                 }
             }
         }
@@ -86,12 +94,68 @@ class VideoWindowController: NSWindowController {
         
         if let event = self.event {
             window?.title = "\(event.title) (Live)"
+            
+            loadEventVideo()
         }
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
+            if self.event != nil {
+                if self.item != nil {
+                    self.item.removeObserver(self, forKeyPath: "status")
+                }
+            }
+            
             self.transcriptWC?.close()
             
             self.player?.pause()
+        }
+    }
+    
+    private func loadEventVideo() {
+        if let url = NSURL(string: videoURL!) {
+            
+            println("LIVE EVENT URL: \(url)")
+            
+            if let asset = AVURLAsset(URL: url, options: nil) {
+                self.asset = asset
+                let keys = ["playable", "tracks"]
+                asset.loadValuesAsynchronouslyForKeys(keys) {
+                    for key in keys {
+                        var error: NSError?
+                        let status = asset.statusOfValueForKey(key, error: &error)
+                        if status == .Failed {
+                            println("[Live Session Playback] Failed to load status for key \(key) \(error)")
+                            return
+                        }
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.playEventVideo()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func playEventVideo() {
+        if let playerItem = AVPlayerItem(asset: self.asset) {
+            self.item = playerItem
+            self.player = AVPlayer(playerItem: self.item)
+            self.playerView.player = self.player
+            self.item.addObserver(self, forKeyPath: "status", options: .Initial | .New, context: nil)
+        }
+    }
+    
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        if keyPath == "status" {
+            if item.status == .ReadyToPlay {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.progressIndicator.stopAnimation(nil)
+                    self.player?.play()
+                }
+            }
+        } else {
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
     }
     
