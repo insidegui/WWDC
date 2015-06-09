@@ -104,18 +104,20 @@ class DataStore: NSObject {
                         focuses.append(focus.string!)
                     }
                     
-                    let session = Session(date: jsonSession["date"].string,
-                        description: jsonSession["description"].string!,
-                        focus: focuses,
-                        id: jsonSession["id"].int!,
-                        slides: jsonSession["slides"].string,
-                        title: jsonSession["title"].string!,
-                        track: jsonSession["track"].string!,
-                        url: jsonSession["url"].string!,
-                        year: jsonSession["year"].int!,
-                        hd_url: jsonSession["download_hd"].string)
-                    
-                    sessions.append(session)
+                    if jsonSession["title"].string != nil && jsonSession["id"].int != nil && jsonSession["year"].int != nil {
+                        let session = Session(date: jsonSession["date"].string,
+                            description: jsonSession["description"].string!,
+                            focus: focuses,
+                            id: jsonSession["id"].int!,
+                            slides: jsonSession["slides"].string,
+                            title: jsonSession["title"].string!,
+                            track: (jsonSession["track"].string != nil) ? jsonSession["track"].string! : "",
+                            url: (jsonSession["url"].string != nil) ? jsonSession["url"].string! : "",
+                            year: jsonSession["year"].int!,
+                            hd_url: jsonSession["download_hd"].string)
+                        
+                        sessions.append(session)
+                    }
                 }
 				
                 sessions = sessions.sorted { sessionA, sessionB in
