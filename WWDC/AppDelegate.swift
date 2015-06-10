@@ -60,21 +60,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if newRelease != nil {
                 if sender != nil {
                     let alert = NSAlert()
-                    alert.messageText = "New version available"
-                    alert.informativeText = "Version \(newRelease.version) is now available. It will be installed automatically the next time you launch the app."
-                    alert.addButtonWithTitle("Ok")
+                    alert.messageText = NSLocalizedString("New version available", comment: "new version available")
+                    alert.informativeText = NSString.localizedStringWithFormat(NSLocalizedString("Version %s is now available. It will be installed automatically the next time you launch the app.", comment: "new version available subtitle"), newRelease.version) as String
+
+                  alert.addButtonWithTitle(NSLocalizedString("Ok", comment:"updater new version ok button"))
                     alert.runModal()
                 } else {
                     let notification = NSUserNotification()
-                    notification.title = "New version available"
-                    notification.informativeText = "A new version is available, relaunch the app to update"
+                    notification.title = NSLocalizedString("New version available", comment: "new version available")
+                  notification.informativeText = NSLocalizedString("A new version is available, relaunch the app to update", comment: "updater notification information text")
                     NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
                 }
             } else {
                 if sender != nil {
                     let alert = NSAlert()
-                    alert.messageText = "You're up to date!"
-                    alert.informativeText = "You have the newest version"
+                  alert.messageText = NSLocalizedString("You're up to date!", comment: "You're up to date!")
+                  alert.informativeText = NSLocalizedString("You have the newest version", comment: "You have the newest version")
                     alert.addButtonWithTitle("Ok")
                     alert.runModal()
                 }
@@ -100,12 +101,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private func tellUserAboutTheLiveEventThing() {
         let alert = NSAlert()
-        alert.messageText = "Did you know?"
-        alert.informativeText = "You can watch live WWDC events using this app! Just open the app while the event is live and It will start playing automatically."
-        alert.addButtonWithTitle("Got It!")
-        alert.runModal()
+      alert.messageText = NSLocalizedString("Did you know?", comment: "Did you know?")
+      alert.informativeText = NSLocalizedString("You can watch live WWDC events using this app! Just open the app while the event is live and It will start playing automatically.", comment: "You can watch live WWDC events using this app! Just open the app while the event is live and It will start playing automatically.")
+      alert.addButtonWithTitle(NSLocalizedString("Got It!", comment: "Got It!"))
+      alert.runModal()
         
-        Preferences.SharedPreferences().userKnowsLiveEventThing = true
+      Preferences.SharedPreferences().userKnowsLiveEventThing = true
     }
 
 }

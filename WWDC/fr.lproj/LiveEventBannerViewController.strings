@@ -1,0 +1,12 @@
+
+/* Class = "NSTextFieldCell"; title = "Live sessions start playing automatically as soon as they're available"; ObjectID = "29V-DN-vKa"; */
+"29V-DN-vKa.title" = "Les sessions en direct commencerons dès qu'elles seront disponnibles";
+
+/* Class = "NSTextFieldCell"; title = "Blabla"; ObjectID = "hrD-Yu-GNJ"; */
+"hrD-Yu-GNJ.title" = "Blabla";
+
+/* Class = "NSTextFieldCell"; title = "Next live session:"; ObjectID = "k5N-eo-Bld"; */
+"k5N-eo-Bld.title" = "Prochaine session en direct:";
+
+/* Class = "NSTextFieldCell"; title = "Blabla"; ObjectID = "xuW-8X-rwL"; */
+"xuW-8X-rwL.title" = "Blabla";

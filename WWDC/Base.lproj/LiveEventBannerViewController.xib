@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E26a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E33b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
@@ -18,9 +18,9 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <customView horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="c22-O7-iKe" customClass="GRBannerView">
-                    <rect key="frame" x="0.0" y="-5" width="499" height="112"/>
+                    <rect key="frame" x="0.0" y="0.0" width="499" height="112"/>
                     <subviews>
-                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qgg-QG-GHS">
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" verticalCompressionResistancePriority="756" translatesAutoresizingMaskIntoConstraints="NO" id="qgg-QG-GHS">
                             <rect key="frame" x="18" y="82" width="119" height="17"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Next live session:" id="k5N-eo-Bld">
                                 <font key="font" metaFont="systemBold"/>
@@ -36,11 +36,8 @@
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                         </textField>
-                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1vp-Xn-uVB">
+                        <textField verticalHuggingPriority="749" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1vp-Xn-uVB">
                             <rect key="frame" x="18" y="39" width="463" height="35"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="35" id="NHY-Bj-5Bf"/>
-                            </constraints>
                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Blabla" id="hrD-Yu-GNJ">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
@@ -62,8 +59,9 @@
                         <constraint firstItem="1vp-Xn-uVB" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="4au-vb-fpL"/>
                         <constraint firstItem="qgg-QG-GHS" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="MdK-o6-Wrn"/>
                         <constraint firstAttribute="trailing" secondItem="LbS-O7-ncv" secondAttribute="trailing" constant="20" id="N9D-EG-1dh"/>
+                        <constraint firstItem="liF-5s-bPQ" firstAttribute="top" secondItem="1vp-Xn-uVB" secondAttribute="bottom" constant="8" symbolic="YES" id="UQy-X7-xmu"/>
                         <constraint firstItem="qgg-QG-GHS" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="13" id="fGw-Us-9OG"/>
-                        <constraint firstItem="liF-5s-bPQ" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="81" id="rcl-aL-kZS"/>
+                        <constraint firstItem="liF-5s-bPQ" firstAttribute="top" relation="greaterThanOrEqual" secondItem="c22-O7-iKe" secondAttribute="top" constant="81" id="rcl-aL-kZS"/>
                         <constraint firstItem="liF-5s-bPQ" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="uHL-IW-UFb"/>
                         <constraint firstItem="LbS-O7-ncv" firstAttribute="leading" secondItem="qgg-QG-GHS" secondAttribute="trailing" constant="8" id="uPf-4n-6Yz"/>
                         <constraint firstItem="LbS-O7-ncv" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="13" id="utx-nP-fvh"/>

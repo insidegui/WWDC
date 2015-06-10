@@ -1,0 +1,66 @@
+
+/* Class = "NSMenuItem"; title = "22"; ObjectID = "1Ie-jS-Vk1"; */
+"1Ie-jS-Vk1.title" = "22";
+
+/* Class = "NSMenuItem"; title = "26"; ObjectID = "2Qx-I7-i4M"; */
+"2Qx-I7-i4M.title" = "26";
+
+/* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "2lm-Nl-ETv"; */
+"2lm-Nl-ETv.title" = "Couleur:";
+
+/* Class = "NSTextFieldCell"; title = "/Users/johndoe/Library/Application Support/WWDC"; ObjectID = "DzB-Gv-XkK"; */
+"DzB-Gv-XkK.title" = "/Users/johndoe/Library/Application Support/WWDC";
+
+/* Class = "NSWindow"; title = "Preferences"; ObjectID = "F0z-JX-Cv5"; */
+"F0z-JX-Cv5.title" = "Préférences";
+
+/* Class = "NSButtonCell"; title = "Reveal in Finder"; ObjectID = "ItQ-hs-aPY"; */
+"ItQ-hs-aPY.title" = "Afficher dans Finder";
+
+/* Class = "NSButtonCell"; title = "Refresh automatically"; ObjectID = "MLK-7c-2YH"; */
+"MLK-7c-2YH.title" = "Actualisation automatique";
+
+/* Class = "NSMenuItem"; title = "8"; ObjectID = "V41-YR-87r"; */
+"V41-YR-87r.title" = "8";
+
+/* Class = "NSTextFieldCell"; title = "IMPORTANT: Create a folder just for the videos, don't use an existing folder"; ObjectID = "WCV-5W-tgW"; */
+"WCV-5W-tgW.title" = "IMPORTANT: Créez un nouveau dossier pour les vidéos, n'utilisez pas un dossier existant";
+
+/* Class = "NSTextFieldCell"; title = "Downloaded videos folder:"; ObjectID = "X1P-de-lXQ"; */
+"X1P-de-lXQ.title" = "Dossier des vidéos téléchargées:";
+
+/* Class = "NSMenuItem"; title = "12"; ObjectID = "aHI-bd-EPd"; */
+"aHI-bd-EPd.title" = "12";
+
+/* Class = "NSMenuItem"; title = "18"; ObjectID = "bgq-bg-QUl"; */
+"bgq-bg-QUl.title" = "18";
+
+/* Class = "NSTextFieldCell"; title = "Useful on WWDC week"; ObjectID = "bvI-ck-xdw"; */
+"bvI-ck-xdw.title" = "Utile pendant la semaine du WWDC";
+
+/* Class = "NSMenuItem"; title = "16"; ObjectID = "eYt-dS-0NJ"; */
+"eYt-dS-0NJ.title" = "16";
+
+/* Class = "NSMenuItem"; title = "14"; ObjectID = "efB-K3-45C"; */
+"efB-K3-45C.title" = "14";
+
+/* Class = "NSTextFieldCell"; title = "Session list:"; ObjectID = "hkF-KE-SW7"; */
+"hkF-KE-SW7.title" = "Liste des sessions:";
+
+/* Class = "NSTextFieldCell"; title = "Transcript font:"; ObjectID = "jWR-Cg-MqN"; */
+"jWR-Cg-MqN.title" = "Police de transcription:";
+
+/* Class = "NSMenuItem"; title = "30"; ObjectID = "nha-yB-gJg"; */
+"nha-yB-gJg.title" = "30";
+
+/* Class = "NSMenuItem"; title = "10"; ObjectID = "q8Z-lb-AYy"; */
+"q8Z-lb-AYy.title" = "10";
+
+/* Class = "NSButtonCell"; title = "Change..."; ObjectID = "qp6-R6-Y5V"; */
+"qp6-R6-Y5V.title" = "Changer...";
+
+/* Class = "NSMenuItem"; title = "36"; ObjectID = "szF-kD-MQr"; */
+"szF-kD-MQr.title" = "36";
+
+/* Class = "NSTextFieldCell"; title = "Size:"; ObjectID = "yA6-Ff-IMy"; */
+"yA6-Ff-IMy.title" = "Taille:";

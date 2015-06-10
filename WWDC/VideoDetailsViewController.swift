@@ -67,7 +67,9 @@ class VideoDetailsViewController: NSViewController {
     
     private func handleMultipleSelection()
     {
-        titleLabel.stringValue = "\(selectedCount) sessions selected"
+        let title = NSString.localizedStringWithFormat(NSLocalizedString("%d sessions selected", comment: "title in video details view with multple selection"), selectedCount) as String
+      
+        titleLabel.stringValue = title //"\(selectedCount) sessions selected"
         subtitleLabel.stringValue = ""
         descriptionLabel.hidden = true
         actionButtonsController.view.hidden = true
