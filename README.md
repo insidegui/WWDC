@@ -44,6 +44,4 @@ WWDC for OS X is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can s
 
 The only steps required before you build is to pull down the code and submodules:
 
-	$ git clone https://github.com/insidegui/WWDC.git
-	$ cd WWDC/
-	$ git submodule update --init --recursive
+	$ git clone --recursive https://github.com/insidegui/WWDC.git
