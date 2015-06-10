@@ -6,6 +6,9 @@ Don't like WWDC's website? Use this app to watch WWDC sessions on your Mac.
 
 To download the latest release, [click here](https://github.com/insidegui/WWDC/blob/master/Releases/WWDC_latest.zip?raw=true).
 
+You can also install using [Homebrew Cask](http://caskroom.io):
+	$ brew cask install wwdc
+
 ![screenshot](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/screenshot.png)
 
 ## El Capitan support
