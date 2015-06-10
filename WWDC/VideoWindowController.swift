@@ -51,7 +51,17 @@ class VideoWindowController: NSWindowController {
     
     @IBOutlet weak var playerView: AVPlayerView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
-    var player: AVPlayer?
+    var player: AVPlayer? {
+        didSet {
+            if let player = player {
+                if let args = NSProcessInfo.processInfo().arguments as? [String] {
+                    if args.contains("zerovolume") {
+                        player.volume = 0
+                    }
+                }
+            }
+        }
+    }
     
     override func windowDidLoad() {
         super.windowDidLoad()
