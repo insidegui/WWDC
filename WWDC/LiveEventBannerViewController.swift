@@ -16,7 +16,6 @@ class LiveEventBannerViewController: NSViewController {
 
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var descriptionLabel: NSTextField!
-
     var barHeight: CGFloat {
         get {
             if view.hidden {
@@ -45,6 +44,14 @@ class LiveEventBannerViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        var observer: NSObjectProtocol?
+        observer = NSNotificationCenter.defaultCenter().addObserverForName(NSCurrentLocaleDidChangeNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [weak self] (notification) -> Void in
+            if let this = self {
+                this.updateUI()
+            } else if let observer = observer {
+                NSNotificationCenter.defaultCenter().removeObserver(observer)
+            }
+        }
     }
     
     private func updateUI() {
@@ -53,8 +60,10 @@ class LiveEventBannerViewController: NSViewController {
             NSNotificationCenter.defaultCenter().postNotificationName(LiveEventBannerVisibilityChangedNotification, object: nil)
             if let date = event.startsAt {
                 let formatter = NSDateFormatter()
-                formatter.dateFormat = NSLocalizedString("MM-dd @ HH:mm", comment: "date format")
-              
+                let dateFormat = NSDateFormatter.dateFormatFromTemplate("Md", options: 0, locale: NSLocale.currentLocale()) ?? "M-d"
+                let timeFormat = NSDateFormatter.dateFormatFromTemplate("jjmm", options: 0, locale: NSLocale.currentLocale()) ?? "HH':'mm"
+                formatter.dateFormat = "\(dateFormat) '@' \(timeFormat)"
+                
                 titleLabel.stringValue = "\(event.title) (\(formatter.stringFromDate(date)))"
             } else {
                 titleLabel.stringValue = "\(event.title)"
