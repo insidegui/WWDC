@@ -61,9 +61,7 @@ class PreferencesWindowController: NSWindowController {
     }
     
     @IBAction func downloadAllSessions(sender: AnyObject) {
-        let nc = NSNotificationCenter.defaultCenter()
-        
-
+    
         
         let completionHandler: DataStore.fetchSessionsCompletionHandler = { success, sessions in
             dispatch_async(dispatch_get_main_queue()) {
