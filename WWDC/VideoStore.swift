@@ -24,7 +24,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 
     private let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(_BackgroundSessionIdentifier)
     private var backgroundSession: NSURLSession!
-    var downloadTasks: [String : NSURLSessionDownloadTask] = [:]
+    private var downloadTasks: [String : NSURLSessionDownloadTask] = [:]
     private let defaults = NSUserDefaults.standardUserDefaults()
     
     class func SharedStore() -> VideoStore

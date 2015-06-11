@@ -42,13 +42,8 @@ class DownloadVideosBatch: NSObject {
         super.init()
         addNotifications()
     }
-    func stopDownloadingAnything() {
-        //[String : NSURLSessionDownloadTask]
-        for (name, task) in VideoStore.SharedStore().downloadTasks {
-            task.cancel()
-//            VideoStore.SharedStore().pauseDownload()
-        }
-    }
+
+    
     func startDownloading() {
         if self.sessions.count == 0 {
             println("ALL VIDEOS DOWNLOADED")
@@ -56,7 +51,6 @@ class DownloadVideosBatch: NSObject {
             return
         }
         if let firstSession = sessions.first, let url = firstSession.hd_url {
-//            stopDownloadingAnything()
             self.currentlyDownloadedSession = firstSession.title
             
             VideoStore.SharedStore().download(url)
