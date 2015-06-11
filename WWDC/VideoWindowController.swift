@@ -150,14 +150,17 @@ class VideoWindowController: NSWindowController {
     
     private func playEventVideo() {
         if let playerItem = AVPlayerItem(asset: self.asset) {
-            self.playerView.hidden = true
-            self.customPlayerView.hidden = false
-            
             self.item = playerItem
             self.player = AVPlayer(playerItem: self.item)
-            self.customPlayerView.player = self.player
             self.item.addObserver(self, forKeyPath: "status", options: .Initial | .New, context: nil)
-            self.customPlayerView.becomeFirstResponder()
+            
+            if NSProcessInfo.processInfo().isElCapitan {
+                self.playerView.hidden = true
+                self.customPlayerView.hidden = false
+                self.customPlayerView.player = self.player
+            } else {
+                self.playerView.player = player
+            }
         }
     }
     
@@ -314,11 +317,19 @@ class VideoWindowController: NSWindowController {
     
 }
 
+private extension NSProcessInfo {
+    var isElCapitan: Bool {
+        get {
+            let v = self.operatingSystemVersion
+            return (v.majorVersion == 10 && v.minorVersion >= 11)
+        }
+    }
+}
+
 private extension LiveEvent {
     var appropriateURL: NSURL? {
         get {
-            let v = NSProcessInfo.processInfo().operatingSystemVersion
-            if (v.majorVersion == 10 && v.minorVersion >= 11) && stream2 != nil {
+            if NSProcessInfo.processInfo().isElCapitan && stream2 != nil {
                 return stream2
             } else {
                 return stream
