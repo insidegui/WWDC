@@ -49,6 +49,7 @@ class VideoWindowController: NSWindowController {
         }
     }
     
+    @IBOutlet weak var customPlayerView: GRCustomPlayerView!
     @IBOutlet weak var playerView: AVPlayerView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     var player: AVPlayer? {
@@ -149,10 +150,14 @@ class VideoWindowController: NSWindowController {
     
     private func playEventVideo() {
         if let playerItem = AVPlayerItem(asset: self.asset) {
+            self.playerView.hidden = true
+            self.customPlayerView.hidden = false
+            
             self.item = playerItem
             self.player = AVPlayer(playerItem: self.item)
-            self.playerView.player = self.player
+            self.customPlayerView.player = self.player
             self.item.addObserver(self, forKeyPath: "status", options: .Initial | .New, context: nil)
+            self.customPlayerView.becomeFirstResponder()
         }
     }
     
