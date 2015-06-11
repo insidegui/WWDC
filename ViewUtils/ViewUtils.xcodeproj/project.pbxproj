@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		51B156461B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.h in Headers */ = {isa = PBXBuildFile; fileRef = 51B156441B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		51B156471B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 51B156451B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.m */; };
 		DD2016471AE401B500DD8155 /* ViewUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DD2016461AE401B500DD8155 /* ViewUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD20165F1AE401C200DD8155 /* GRWindowMovingView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD20165D1AE401C200DD8155 /* GRWindowMovingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD2016601AE401C200DD8155 /* GRWindowMovingView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD20165E1AE401C200DD8155 /* GRWindowMovingView.m */; };
@@ -22,6 +24,8 @@
 		DD8814701AF3ED1F00C13E67 /* GRActionableProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = DD88146E1AF3ED1F00C13E67 /* GRActionableProgressIndicator.m */; };
 		DD945EDD1B26A47C00CE7B7D /* GRBannerView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD945EDB1B26A47C00CE7B7D /* GRBannerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD945EDE1B26A47C00CE7B7D /* GRBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD945EDC1B26A47C00CE7B7D /* GRBannerView.m */; };
+		DD9F259F1B28F95200E4F5AB /* GRCustomPlayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = DD9F259D1B28F95200E4F5AB /* GRCustomPlayerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DD9F25A01B28F95200E4F5AB /* GRCustomPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9F259E1B28F95200E4F5AB /* GRCustomPlayerView.m */; };
 		DDC049D61AE56A710008D41A /* GRReadingWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = DDC049D41AE56A710008D41A /* GRReadingWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDC049D71AE56A710008D41A /* GRReadingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC049D51AE56A710008D41A /* GRReadingWindow.m */; };
 		DDC049DA1AE56AA10008D41A /* GRWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = DDC049D81AE56AA10008D41A /* GRWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -29,6 +33,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		51B156441B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRTitlebarVisibilityControllingView.h; sourceTree = "<group>"; };
+		51B156451B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRTitlebarVisibilityControllingView.m; sourceTree = "<group>"; };
 		DD2016411AE401B500DD8155 /* ViewUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ViewUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD2016451AE401B500DD8155 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD2016461AE401B500DD8155 /* ViewUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewUtils.h; sourceTree = "<group>"; };
@@ -46,6 +52,8 @@
 		DD88146E1AF3ED1F00C13E67 /* GRActionableProgressIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRActionableProgressIndicator.m; sourceTree = "<group>"; };
 		DD945EDB1B26A47C00CE7B7D /* GRBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRBannerView.h; sourceTree = "<group>"; };
 		DD945EDC1B26A47C00CE7B7D /* GRBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRBannerView.m; sourceTree = "<group>"; };
+		DD9F259D1B28F95200E4F5AB /* GRCustomPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRCustomPlayerView.h; sourceTree = "<group>"; };
+		DD9F259E1B28F95200E4F5AB /* GRCustomPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRCustomPlayerView.m; sourceTree = "<group>"; };
 		DDC049D41AE56A710008D41A /* GRReadingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRReadingWindow.h; sourceTree = "<group>"; };
 		DDC049D51AE56A710008D41A /* GRReadingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRReadingWindow.m; sourceTree = "<group>"; };
 		DDC049D81AE56AA10008D41A /* GRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRWindow.h; sourceTree = "<group>"; };
@@ -82,6 +90,8 @@
 		DD2016431AE401B500DD8155 /* ViewUtils */ = {
 			isa = PBXGroup;
 			children = (
+				51B156441B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.h */,
+				51B156451B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.m */,
 				DD2016791AE4158100DD8155 /* GRPlayerWindow.h */,
 				DD20167A1AE4158100DD8155 /* GRPlayerWindow.m */,
 				DD20165D1AE401C200DD8155 /* GRWindowMovingView.h */,
@@ -102,6 +112,8 @@
 				DD38A2A31AFD075100FE0869 /* GRLoadingView.m */,
 				DD945EDB1B26A47C00CE7B7D /* GRBannerView.h */,
 				DD945EDC1B26A47C00CE7B7D /* GRBannerView.m */,
+				DD9F259D1B28F95200E4F5AB /* GRCustomPlayerView.h */,
+				DD9F259E1B28F95200E4F5AB /* GRCustomPlayerView.m */,
 			);
 			path = ViewUtils;
 			sourceTree = "<group>";
@@ -126,7 +138,9 @@
 				DD38A2A41AFD075100FE0869 /* GRLoadingView.h in Headers */,
 				DD88146F1AF3ED1F00C13E67 /* GRActionableProgressIndicator.h in Headers */,
 				DD945EDD1B26A47C00CE7B7D /* GRBannerView.h in Headers */,
+				DD9F259F1B28F95200E4F5AB /* GRCustomPlayerView.h in Headers */,
 				DDC049D61AE56A710008D41A /* GRReadingWindow.h in Headers */,
+				51B156461B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.h in Headers */,
 				DD75A9321AE9387700C12D31 /* GRTextField.h in Headers */,
 				DDC049DA1AE56AA10008D41A /* GRWindow.h in Headers */,
 				DD20167B1AE4158100DD8155 /* GRPlayerWindow.h in Headers */,
@@ -202,9 +216,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD2016801AE41DD600DD8155 /* GRPlayerView.m in Sources */,
+				DD9F25A01B28F95200E4F5AB /* GRCustomPlayerView.m in Sources */,
 				DD20167C1AE4158100DD8155 /* GRPlayerWindow.m in Sources */,
 				DD8814701AF3ED1F00C13E67 /* GRActionableProgressIndicator.m in Sources */,
 				DD945EDE1B26A47C00CE7B7D /* GRBannerView.m in Sources */,
+				51B156471B28FCC300FAE792 /* GRTitlebarVisibilityControllingView.m in Sources */,
 				DD2016601AE401C200DD8155 /* GRWindowMovingView.m in Sources */,
 				DD38A2A51AFD075100FE0869 /* GRLoadingView.m in Sources */,
 				DDC049DB1AE56AA10008D41A /* GRWindow.m in Sources */,
