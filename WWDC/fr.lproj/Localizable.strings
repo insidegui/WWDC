@@ -1,0 +1,50 @@
+/* video downloading status in downloads window */
+"Downloading" = "En cours de téléchargement";
+
+/* mark as unwatched button title */
+"Mark as Unwatched" = "Marquer comme non vu";
+
+/* mark as watched button title */
+"Mark as Watched" = "Marquer comme vu";
+
+/* pause button tooltip in downloads window */
+"Pause" = "Mettre en pause";
+
+/* video paused status in downloads window */
+"Paused" = "Pause";
+
+/* resume button tooltip in downloads window */
+"Resume" = "Reprendre";
+
+/* title in video details view with multple selection */
+"%d sessions selected" = "%d sessions sélectionnées";
+
+/* date format */
+"MM-dd @ HH:mm" = "dd-MM @ HH:mm";
+
+/* new version available */
+"New version available" = "Une nouvelle version est disponible";
+
+/* new version available subtitle */
+"Version %s is now available. It will be installed automatically the next time you launch" = "Version %s est maintenant disponible. Elle sera installé lors du prochain lancement de l'application";
+
+/* updater notification information text */
+"A new version is available, relaunch the app to update" = "Une nouvelle version est disponnible, relancez l'application pour la mettre à jour";
+
+/* You're up to date! */
+"You're up to date!" = "Vous êtes à jour";
+
+/* You have the newest version */
+"You have the newest version" = "Vous disposez de la dernière version";
+
+/* Did you know? */
+"Did you know?" = "Le saviez-vous?";
+
+/* You can watch live WWDC events using this app! Just open the app while the event is live and It will start playing automatically. */
+"You can watch live WWDC events using this app! Just open the app while the event is live and It will start playing automatically." = "Vous pouvez regarder en direct les evénements de la WWDC! Lancez l'appication et dès qu'un évenement est diffusé, la vidéo se lancera automatiquement.";
+
+/* Got It! */
+"Got It!" = "J'ai compris";
+
+/* updater new version ok button */
+"Ok" = "Mettre à jour";

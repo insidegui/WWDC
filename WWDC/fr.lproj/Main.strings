@@ -1,0 +1,330 @@
+/* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "1UK-8n-QPP"; */
+"1UK-8n-QPP.title" = "Personnaliser la barre d'outils";
+
+/* Class = "NSMenuItem"; title = "WWDC"; ObjectID = "1Xt-HY-uBw"; */
+"1Xt-HY-uBw.title" = "WWDC";
+
+/* Class = "NSMenu"; title = "Find"; ObjectID = "1b7-l0-nxx"; */
+"1b7-l0-nxx.title" = "Chercher";
+
+/* Class = "NSMenuItem"; title = "Lower"; ObjectID = "1tx-W0-xDw"; */
+"1tx-W0-xDw.title" = "Baisser";
+
+/* Class = "NSMenuItem"; title = "Raise"; ObjectID = "2h7-ER-AoG"; */
+"2h7-ER-AoG.title" = "Augmernter";
+
+/* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "3Om-Ey-2VK"; */
+"3Om-Ey-2VK.title" = "Par Défault";
+
+/* Class = "NSMenu"; title = "Speech"; ObjectID = "3rS-ZA-NoH"; */
+"3rS-ZA-NoH.title" = "Dictée";
+
+/* Class = "NSMenuItem"; title = "Find"; ObjectID = "4EN-yA-p0u"; */
+"4EN-yA-p0u.title" = "Chercher";
+
+/* Class = "NSMenuItem"; title = "Quit WWDC"; ObjectID = "4sb-4s-VLi"; */
+"4sb-4s-VLi.title" = "Quitter WWDC";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "5QF-Oa-p0T"; */
+"5QF-Oa-p0T.title" = "Edition";
+
+/* Class = "NSMenuItem"; title = "Copy Style"; ObjectID = "5Vv-lz-BsD"; */
+"5Vv-lz-BsD.title" = "Copier le style";
+
+/* Class = "NSMenuItem"; title = "Max size"; ObjectID = "5i6-9h-bLb"; */
+"5i6-9h-bLb.title" = "Taille maximale";
+
+/* Class = "NSMenuItem"; title = "About WWDC"; ObjectID = "5kV-Vb-QxS"; */
+"5kV-Vb-QxS.title" = "A propos de WWDC";
+
+/* Class = "NSMenuItem"; title = "Redo"; ObjectID = "6dh-zS-Vam"; */
+"6dh-zS-Vam.title" = "Rétablir";
+
+/* Class = "NSMenuItem"; title = "Tighten"; ObjectID = "46P-cB-AYj"; */
+"46P-cB-AYj.title" = "Resserer";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "60g-VP-PLg"; */
+"60g-VP-PLg.title" = "Table View Cell";
+
+/* Class = "NSMenu"; title = "Main Menu"; ObjectID = "AYu-sK-qS6"; */
+"AYu-sK-qS6.title" = "Main Menu";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "BOF-NM-1cW"; */
+"BOF-NM-1cW.title" = "Préférences";
+
+/* Class = "NSMenuItem"; title = "Add to Favorites"; ObjectID = "C1r-Bf-iTX"; */
+"C1r-Bf-iTX.title" = "Ajouter aux favoris";
+
+/* Class = "NSButtonCell"; title = "Watch HD Video"; ObjectID = "D3d-bZ-Zck"; */
+"D3d-bZ-Zck.title" = "Regarder la vidéo en HD";
+
+/* Class = "NSMenuItem"; title = "Close"; ObjectID = "DVo-aG-piG"; */
+"DVo-aG-piG.title" = "Fermer";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "Esf-0p-W24"; */
+"Esf-0p-W24.title" = "Table View Cell";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "F2S-fz-NVQ"; */
+"F2S-fz-NVQ.title" = "Aide";
+
+/* Class = "NSMenuItem"; title = "WWDC Help"; ObjectID = "FKE-Sm-Kum"; */
+"FKE-Sm-Kum.title" = "Aide WWDC";
+
+/* Class = "NSMenuItem"; title = "Bold"; ObjectID = "GB9-OM-e27"; */
+"GB9-OM-e27.title" = "Gras";
+
+/* Class = "NSMenu"; title = "Format"; ObjectID = "GEO-Iw-cKr"; */
+"GEO-Iw-cKr.title" = "Format";
+
+/* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "GUa-eO-cwY"; */
+"GUa-eO-cwY.title" = "Par Défault";
+
+/* Class = "NSMenuItem"; title = "Font"; ObjectID = "Gi5-1S-RQB"; */
+"Gi5-1S-RQB.title" = "Police de caractère";
+
+/* Class = "NSMenuItem"; title = "View"; ObjectID = "H8h-7b-M4v"; */
+"H8h-7b-M4v.title" = "Vue";
+
+/* Class = "NSMenuItem"; title = "Transcript"; ObjectID = "HWz-x7-yjd"; */
+"HWz-x7-yjd.title" = "Transcription";
+
+/* Class = "NSMenu"; title = "View"; ObjectID = "HyV-fh-RgO"; */
+"HyV-fh-RgO.title" = "Vue";
+
+/* Class = "NSMenuItem"; title = "Subscript"; ObjectID = "I0S-gh-46l"; */
+"I0S-gh-46l.title" = "Indice";
+
+/* Class = "NSMenuItem"; title = "Open…"; ObjectID = "IAo-SY-fd9"; */
+"IAo-SY-fd9.title" = "Ouvrir...";
+
+/* Class = "NSWindow"; title = "WWDC"; ObjectID = "IQv-IB-iLA"; */
+"IQv-IB-iLA.title" = "WWDC";
+
+/* Class = "NSTextFieldCell"; title = "Session description goes here"; ObjectID = "IeT-9W-1pW"; */
+"IeT-9W-1pW.title" = "Session description goes here";
+
+/* Class = "NSMenuItem"; title = "Use None"; ObjectID = "J7y-lM-qPV"; */
+"J7y-lM-qPV.title" = "Ne rien utiiisé";
+
+/* Class = "NSTextFieldCell"; title = "Select a session to see It here"; ObjectID = "Jni-0L-ArF"; */
+"Jni-0L-ArF.title" = "Sélectionner une session pour l'afficher ici";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
+"Kd2-mp-pUS.title" = "Tout Montrer";
+
+/* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "LE2-aR-0XJ"; */
+"LE2-aR-0XJ.title" = "Mettre tout au premier plan";
+
+/* Class = "NSMenuItem"; title = "Fullscreen"; ObjectID = "LEB-rd-XCC"; */
+"LEB-rd-XCC.title" = "Plein écran";
+
+/* Class = "NSMenuItem"; title = "Services"; ObjectID = "NMo-om-nkz"; */
+"NMo-om-nkz.title" = "Services";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "OXs-hk-tAS"; */
+"OXs-hk-tAS.title" = "Text Cell";
+
+/* Class = "NSMenuItem"; title = "Half size"; ObjectID = "OXx-ig-XIj"; */
+"OXx-ig-XIj.title" = "A moitié";
+
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "OY7-WF-poV"; */
+"OY7-WF-poV.title" = "Minimiser";
+
+/* Class = "NSMenuItem"; title = "Baseline"; ObjectID = "OaQ-X3-Vso"; */
+"OaQ-X3-Vso.title" = "Base";
+
+/* Class = "NSMenuItem"; title = "Hide WWDC"; ObjectID = "Olw-nP-bQN"; */
+"Olw-nP-bQN.title" = "Cacher WWDC";
+
+/* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "OwM-mh-QMV"; */
+"OwM-mh-QMV.title" = "Chercher avant";
+
+/* Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "Oyz-dy-DGm"; */
+"Oyz-dy-DGm.title" = "Arrêter la synthèse";
+
+/* Class = "NSMenuItem"; title = "Remove from Favorites"; ObjectID = "P4z-pJ-BdQ"; */
+"P4z-pJ-BdQ.title" = "Enlever des Favoris";
+
+/* Class = "NSMenuItem"; title = "Bigger"; ObjectID = "Ptp-SP-VEL"; */
+"Ptp-SP-VEL.title" = "Plus gros";
+
+/* Class = "NSMenuItem"; title = "Show Fonts"; ObjectID = "Q5e-8K-NDq"; */
+"Q5e-8K-NDq.title" = "Montrer les polices de caractères";
+
+/* Class = "NSTextFieldCell"; title = "Platform"; ObjectID = "QG9-E2-JGn"; */
+"QG9-E2-JGn.title" = "Plateforme";
+
+/* Class = "NSMenuItem"; title = "Downloads"; ObjectID = "QVO-lm-fKQ"; */
+"QVO-lm-fKQ.title" = "Téléchargements";
+
+/* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "R4o-n2-Eq4"; */
+"R4o-n2-Eq4.title" = "Agrandir";
+
+/* Class = "NSMenuItem"; title = "Superscript"; ObjectID = "Rqc-34-cIF"; */
+"Rqc-34-cIF.title" = "Exposant";
+
+/* Class = "NSMenuItem"; title = "Select All"; ObjectID = "Ruw-6m-B2m"; */
+"Ruw-6m-B2m.title" = "Tout Sélectionner";
+
+/* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "S0p-oC-mLd"; */
+"S0p-oC-mLd.title" = "Aller à la Sélection";
+
+/* Class = "NSMenuItem"; title = "Quarter size"; ObjectID = "TOa-rj-RkP"; */
+"TOa-rj-RkP.title" = "Au quart";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "Td7-aD-5lo"; */
+"Td7-aD-5lo.title" = "Fenêtre";
+
+/* Class = "NSMenuItem"; title = "Mark as Unwatched"; ObjectID = "UNa-GB-piq"; */
+"UNa-GB-piq.title" = "Marquer comme non vu";
+
+/* Class = "NSTextFieldCell"; title = "No session selected"; ObjectID = "UU1-bR-82g"; */
+"UU1-bR-82g.title" = "Aucune session sélectionnée";
+
+/* Class = "NSButtonCell"; title = "View Slides"; ObjectID = "UpZ-Ii-Qdp"; */
+"UpZ-Ii-Qdp.title" = "Afficher les slides de présentation";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "Vdr-fp-XzO"; */
+"Vdr-fp-XzO.title" = "Cacher les autres";
+
+/* Class = "NSMenuItem"; title = "Italic"; ObjectID = "Vjx-xi-njq"; */
+"Vjx-xi-njq.title" = "Italique";
+
+/* Class = "NSMenu"; title = "Edit"; ObjectID = "W48-6f-4Dl"; */
+"W48-6f-4Dl.title" = "Edition";
+
+/* Class = "NSMenuItem"; title = "Underline"; ObjectID = "WRG-CD-K1S"; */
+"WRG-CD-K1S.title" = "Souligné";
+
+/* Class = "NSButtonCell"; title = "Watch Video"; ObjectID = "Xjs-Oy-GhI"; */
+"Xjs-Oy-GhI.title" = "Regarder la vidéo";
+
+/* Class = "NSMenuItem"; title = "Find…"; ObjectID = "Xz5-n4-O0W"; */
+"Xz5-n4-O0W.title" = "Chercher...";
+
+/* Class = "NSMenuItem"; title = "Find and Replace…"; ObjectID = "YEy-JH-Tfz"; */
+"YEy-JH-Tfz.title" = "Chercher et Remplacer...";
+
+/* Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "Ynk-f8-cLZ"; */
+"Ynk-f8-cLZ.title" = "Débuter la synthèse";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Download Video"; ObjectID = "ZoQ-nZ-mjo"; */
+"ZoQ-nZ-mjo.ibShadowedToolTip" = "Télécharger la vidéo";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "aUF-d1-5bR"; */
+"aUF-d1-5bR.title" = "Fenêtre";
+
+/* Class = "NSMenu"; title = "Font"; ObjectID = "aXa-aM-Jaq"; */
+"aXa-aM-Jaq.title" = "Police de caractère";
+
+/* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "agt-UL-0e3"; */
+"agt-UL-0e3.title" = "Par Défault";
+
+/* Class = "NSMenuItem"; title = "Show Colors"; ObjectID = "bgn-CT-cEk"; */
+"bgn-CT-cEk.title" = "Montrer les couleurs";
+
+/* Class = "NSMenu"; title = "File"; ObjectID = "bib-Uj-vzu"; */
+"bib-Uj-vzu.title" = "Fichier";
+
+/* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "buJ-ug-pKt"; */
+"buJ-ug-pKt.title" = "Chercher la sélection";
+
+/* Class = "NSMenuItem"; title = "Use None"; ObjectID = "cDB-IK-hbR"; */
+"cDB-IK-hbR.title" = "Ne rien utilisé ";
+
+/* Class = "NSTextFieldCell"; title = "Track"; ObjectID = "cm6-vo-QkU"; */
+"cm6-vo-QkU.title" = "Track";
+
+/* Class = "NSMenuItem"; title = "File"; ObjectID = "dMs-cI-mzQ"; */
+"dMs-cI-mzQ.title" = "Fichier";
+
+/* Class = "NSMenuItem"; title = "Undo"; ObjectID = "dRJ-4n-Yzg"; */
+"dRJ-4n-Yzg.title" = "Annuler";
+
+/* Class = "NSMenuItem"; title = "Copy URL"; ObjectID = "gMC-Ry-Aci"; */
+"gMC-Ry-Aci.title" = "Copier l'URL";
+
+/* Class = "NSMenuItem"; title = "Paste"; ObjectID = "gVA-U4-sdL"; */
+"gVA-U4-sdL.title" = "Coller";
+
+/* Class = "NSMenu"; title = "Services"; ObjectID = "hz9-B4-Xy5"; */
+"hz9-B4-Xy5.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Smaller"; ObjectID = "i1d-Er-qST"; */
+"i1d-Er-qST.title" = "Plus petit";
+
+/* Class = "NSMenu"; title = "Baseline"; ObjectID = "ijk-EB-dga"; */
+"ijk-EB-dga.title" = "Base";
+
+/* Class = "NSMenuItem"; title = "Kern"; ObjectID = "jBQ-r6-VK2"; */
+"jBQ-r6-VK2.title" = "Espacement entre les lettres";
+
+/* Class = "NSMenuItem"; title = "Format"; ObjectID = "jxT-CU-nIS"; */
+"jxT-CU-nIS.title" = "Format";
+
+/* Class = "NSMenuItem"; title = "Ligatures"; ObjectID = "o6e-r0-MWq"; */
+"o6e-r0-MWq.title" = "Ligatures";
+
+/* Class = "NSMenu"; title = "Open Recent"; ObjectID = "oas-Oc-fiZ"; */
+"oas-Oc-fiZ.title" = "Ouvert Récemment";
+
+/* Class = "NSMenuItem"; title = "Loosen"; ObjectID = "ogc-rX-tC1"; */
+"ogc-rX-tC1.title" = "Desserrer";
+
+/* Class = "NSButtonCell"; title = "Mark as watched"; ObjectID = "pEg-S2-YVS"; */
+"pEg-S2-YVS.title" = "Marquer comme vu";
+
+/* Class = "NSMenuItem"; title = "Reload Sessions"; ObjectID = "pIQ-Lc-aWD"; */
+"pIQ-Lc-aWD.title" = "Recharger les sessions";
+
+/* Class = "NSMenuItem"; title = "Mark as Watched"; ObjectID = "pY8-mq-Opi"; */
+"pY8-mq-Opi.title" = "Marquer comme vu";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "pa3-QI-u2k"; */
+"pa3-QI-u2k.title" = "Supprimer";
+
+/* Class = "NSMenuItem"; title = "Save…"; ObjectID = "pxx-59-PXV"; */
+"pxx-59-PXV.title" = "Enregistrer...";
+
+/* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "q09-fT-Sye"; */
+"q09-fT-Sye.title" = "Chercher suivant";
+
+/* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "snW-S8-Cw5"; */
+"snW-S8-Cw5.title" = "Montrer la barre d'outils";
+
+/* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "tXI-mr-wws"; */
+"tXI-mr-wws.title" = "Ouvert Récemment";
+
+/* Class = "NSMenu"; title = "Kern"; ObjectID = "tlD-Oa-oAM"; */
+"tlD-Oa-oAM.title" = "Espacement entre les lettres";
+
+/* Class = "NSMenu"; title = "WWDC"; ObjectID = "uQy-DD-JDr"; */
+"uQy-DD-JDr.title" = "WWDC";
+
+/* Class = "NSMenuItem"; title = "Cut"; ObjectID = "uRl-iY-unG"; */
+"uRl-iY-unG.title" = "Couper";
+
+/* Class = "NSMenuItem"; title = "Paste Style"; ObjectID = "vKC-jM-MkH"; */
+"vKC-jM-MkH.title" = "Coller le style";
+
+/* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "vNY-rz-j42"; */
+"vNY-rz-j42.title" = "Réinitialiser le menu";
+
+/* Class = "NSMenu"; title = "Ligatures"; ObjectID = "w0m-vy-SC9"; */
+"w0m-vy-SC9.title" = "Ligatures";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "wpr-3q-Mcd"; */
+"wpr-3q-Mcd.title" = "Aide";
+
+/* Class = "NSMenuItem"; title = "Copy"; ObjectID = "x3v-GG-iWU"; */
+"x3v-GG-iWU.title" = "Copier";
+
+/* Class = "NSMenuItem"; title = "Use All"; ObjectID = "xQD-1f-W4t"; */
+"xQD-1f-W4t.title" = "Tout utilisé";
+
+/* Class = "NSMenuItem"; title = "Speech"; ObjectID = "xrE-MZ-jX0"; */
+"xrE-MZ-jX0.title" = "Dictée";
+
+/* Class = "NSMenuItem"; title = "Check for Updates..."; ObjectID = "yfS-os-kny"; */
+"yfS-os-kny.title" = "Vérifier les mises à jour";
+

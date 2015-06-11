@@ -16,6 +16,7 @@ class LiveEventBannerViewController: NSViewController {
 
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var descriptionLabel: NSTextField!
+
     var barHeight: CGFloat {
         get {
             if view.hidden {
@@ -60,10 +61,15 @@ class LiveEventBannerViewController: NSViewController {
             NSNotificationCenter.defaultCenter().postNotificationName(LiveEventBannerVisibilityChangedNotification, object: nil)
             if let date = event.startsAt {
                 let formatter = NSDateFormatter()
+<<<<<<< HEAD
                 let dateFormat = NSDateFormatter.dateFormatFromTemplate("Md", options: 0, locale: NSLocale.currentLocale()) ?? "M-d"
                 let timeFormat = NSDateFormatter.dateFormatFromTemplate("jjmm", options: 0, locale: NSLocale.currentLocale()) ?? "HH':'mm"
                 formatter.dateFormat = "\(dateFormat) '@' \(timeFormat)"
                 
+=======
+                formatter.dateFormat = NSLocalizedString("MM-dd @ HH:mm", comment: "date format")
+              
+>>>>>>> Add french localization/i18n
                 titleLabel.stringValue = "\(event.title) (\(formatter.stringFromDate(date)))"
             } else {
                 titleLabel.stringValue = "\(event.title)"
