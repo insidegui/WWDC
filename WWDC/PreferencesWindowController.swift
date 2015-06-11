@@ -70,7 +70,7 @@ class PreferencesWindowController: NSWindowController {
                 
                 
                 let sessions2015 = sessions.filter{(session) in
-                    return session.year == 2015 && VideoStore.SharedStore().hasVideo(session.hd_url!)
+                    return session.year == 2015 && !VideoStore.SharedStore().hasVideo(session.hd_url!)
                 }
                 
                 println("Videos fetched, start downloading")
