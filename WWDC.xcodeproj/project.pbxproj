@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C967BA91AE7EB27003662B2 /* NSString+QualifierSearchParser.m */; };
+		A14104051B29955A00841313 /* DownloadVideosBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A14104041B29955A00841313 /* DownloadVideosBatch.swift */; };
 		C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */; };
 		C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */; };
 		C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */; };
@@ -137,6 +138,7 @@
 		1C967BA81AE7EB27003662B2 /* NSString+QualifierSearchParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+QualifierSearchParser.h"; sourceTree = "<group>"; };
 		1C967BA91AE7EB27003662B2 /* NSString+QualifierSearchParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+QualifierSearchParser.m"; sourceTree = "<group>"; };
 		1C967BAB1AE7EB5C003662B2 /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
+		A14104041B29955A00841313 /* DownloadVideosBatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadVideosBatch.swift; sourceTree = "<group>"; };
 		C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadListWindowController.xib; sourceTree = "<group>"; };
 		C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListWindowController.swift; sourceTree = "<group>"; };
 		C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListProgressCellView.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 		DD4F6E431AE2D11D0099BEB5 = {
 			isa = PBXGroup;
 			children = (
+				A14104041B29955A00841313 /* DownloadVideosBatch.swift */,
 				DDEC0DF81B0E73FA001752CA /* Fabric.framework */,
 				DD89EA061AF48A300073B845 /* Updater.xcodeproj */,
 				DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */,
@@ -547,6 +550,7 @@
 			files = (
 				C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */,
 				DD20166E1AE40D0100DD8155 /* ContentBackgroundView.swift in Sources */,
+				A14104051B29955A00841313 /* DownloadVideosBatch.swift in Sources */,
 				DDD7A4351AE2E02A000A0102 /* SeparatorView.swift in Sources */,
 				DD4F6E761AE2D82A0099BEB5 /* VideosHeaderViewController.swift in Sources */,
 				DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */,
