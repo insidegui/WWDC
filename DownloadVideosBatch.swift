@@ -68,7 +68,7 @@ class DownloadVideosBatch: NSObject {
         
                 let nc = NSNotificationCenter.defaultCenter()
         
-                self.downloadStartedHndl = nc.addObserverForName(VideoStoreNotificationDownloadProgressChanged, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+                self.downloadStartedHndl = nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { note in
                     let url = note.object as! String?
                     if url != nil {
                         println("Start downloading session '\(self.currentlyDownloadedSession)'")
