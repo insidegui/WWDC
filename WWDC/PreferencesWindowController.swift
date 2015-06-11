@@ -11,13 +11,7 @@ import Cocoa
 class PreferencesWindowController: NSWindowController {
     
     let prefs = Preferences.SharedPreferences()
-    private var downloadStartedHndl: AnyObject?
-    private var downloadFinishedHndl: AnyObject?
-    private var downloadChangedHndl: AnyObject?
-    private var downloadCancelledHndl: AnyObject?
-    private var downloadPausedHndl: AnyObject?
-    private var downloadResumedHndl: AnyObject?
-    private var downloadPresenter : DownloadProgressViewController?
+    
     convenience init() {
         self.init(windowNibName: "PreferencesWindowController")
     }
@@ -66,7 +60,7 @@ class PreferencesWindowController: NSWindowController {
         }
     }
     
-    @IBAction func doanloaAllButtonPressed(sender: AnyObject) {
+    @IBAction func downloadAllSessions(sender: AnyObject) {
         let nc = NSNotificationCenter.defaultCenter()
         
 
@@ -86,9 +80,7 @@ class PreferencesWindowController: NSWindowController {
         }
         
         DataStore.SharedStore.fetchSessions(completionHandler, disableCache: true)
-        self.addNotifications()
         
-        downloadPresenter = DownloadProgressViewController()
         if let appDelegate = NSApplication.sharedApplication().delegate as? AppDelegate {
             appDelegate.showDownloadsWindow(appDelegate)
         }
@@ -153,66 +145,4 @@ class PreferencesWindowController: NSWindowController {
         downloadProgressIndicator.startAnimation(nil)
 
     }
-    
-    private func addNotifications() {
-        
-        let nc = NSNotificationCenter.defaultCenter()
-        
-        self.downloadStartedHndl = nc.addObserverForName(VideoStoreNotificationDownloadProgressChanged, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            let url = note.object as! String?
-            if url != nil {
-                self.showProgressIndicator()
-            }
-        }
-        self.downloadFinishedHndl = nc.addObserverForName(VideoStoreNotificationDownloadFinished, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if let object = note.object as? String {
-                let url = object as String
-                
-                self.hideProgressIndicator()
-            }
-        }
-        self.downloadChangedHndl = nc.addObserverForName(VideoStoreNotificationDownloadProgressChanged, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if let info = note.userInfo {
-                if let object = note.object as? String {
-                    let url = object as String
-                    if let expected = info["totalBytesExpectedToWrite"] as? Int,
-                        let written = info["totalBytesWritten"] as? Int
-                    {
-//                        let progress = Double(written) / Double(expected)
-                        
-                    }
-                }
-            }
-        }
-        self.downloadCancelledHndl = nc.addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if let object = note.object as? String {
-                let url = object as String
-                
-                self.hideProgressIndicator()
-            }
-        }
-        self.downloadPausedHndl = nc.addObserverForName(VideoStoreNotificationDownloadPaused, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if let object = note.object as? String {
-                let url = object as String
-                
-                self.hideProgressIndicator()
-            }
-        }
-        self.downloadResumedHndl = nc.addObserverForName(VideoStoreNotificationDownloadResumed, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if let object = note.object as? String {
-                let url = object as String
-                self.showProgressIndicator()
-            }
-        }
-    }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadStartedHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadFinishedHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadChangedHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadCancelledHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadPausedHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadResumedHndl!)
-    }
-
 }

@@ -8,7 +8,6 @@
             <connections>
                 <outlet property="automaticRefreshEnabledCheckbox" destination="dNy-TJ-Tq9" id="JGq-Va-gu9"/>
                 <outlet property="bgColorWell" destination="aCW-n2-0qr" id="1gE-fU-6Pi"/>
-                <outlet property="downloadProgressIndicator" destination="PsC-eB-7om" id="nWA-s4-ukA"/>
                 <outlet property="downloadsFolderLabel" destination="iYN-Yq-tAu" id="4dY-Z5-jRe"/>
                 <outlet property="fontPopUp" destination="v7F-yu-I4e" id="oxg-Gb-l21"/>
                 <outlet property="sizePopUp" destination="GUn-XP-Tsu" id="g92-xn-lid"/>
@@ -212,16 +211,12 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="doanloaAllButtonPressed:" target="-2" id="ZQX-gw-aZv"/>
+                            <action selector="downloadAllSessions:" target="-2" id="tQh-33-YGx"/>
                         </connections>
                     </button>
-                    <progressIndicator hidden="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="PsC-eB-7om">
-                        <rect key="frame" x="20" y="198" width="155" height="20"/>
-                    </progressIndicator>
                 </subviews>
                 <constraints>
                     <constraint firstItem="Rid-bR-2ze" firstAttribute="top" secondItem="GUn-XP-Tsu" secondAttribute="bottom" constant="10" id="0Ul-EA-HhO"/>
-                    <constraint firstItem="PsC-eB-7om" firstAttribute="trailing" secondItem="ulu-ey-feY" secondAttribute="trailing" id="1l6-OB-cVE"/>
                     <constraint firstItem="Yy9-1y-c7m" firstAttribute="top" secondItem="v7F-yu-I4e" secondAttribute="bottom" constant="11" id="6xF-4w-u0b"/>
                     <constraint firstItem="aCW-n2-0qr" firstAttribute="top" secondItem="GUn-XP-Tsu" secondAttribute="bottom" constant="10" id="92c-3Y-zRh"/>
                     <constraint firstItem="rBt-da-KnE" firstAttribute="trailing" secondItem="N77-TC-Udh" secondAttribute="trailing" id="9Nf-HD-Pgt"/>
@@ -235,7 +230,6 @@
                     <constraint firstItem="dNy-TJ-Tq9" firstAttribute="leading" secondItem="dbV-Vc-Tsf" secondAttribute="leading" constant="-19" id="IZp-bb-cEt"/>
                     <constraint firstItem="v7F-yu-I4e" firstAttribute="leading" secondItem="xPt-Mi-x02" secondAttribute="trailing" constant="8" id="J5R-2W-8Fk"/>
                     <constraint firstItem="ADy-Xn-vCs" firstAttribute="top" secondItem="iYN-Yq-tAu" secondAttribute="bottom" constant="8" id="P8u-cX-r6i"/>
-                    <constraint firstItem="PsC-eB-7om" firstAttribute="leading" secondItem="ulu-ey-feY" secondAttribute="leading" id="Pd5-SD-2lT"/>
                     <constraint firstItem="aCW-n2-0qr" firstAttribute="leading" secondItem="Rid-bR-2ze" secondAttribute="trailing" constant="3" id="RW3-LJ-9hP"/>
                     <constraint firstItem="iYN-Yq-tAu" firstAttribute="leading" secondItem="ADy-Xn-vCs" secondAttribute="leading" id="SHx-4A-S8L"/>
                     <constraint firstItem="dNy-TJ-Tq9" firstAttribute="leading" secondItem="N77-TC-Udh" secondAttribute="trailing" constant="8" id="TUk-a4-rfB"/>
@@ -244,7 +238,6 @@
                     <constraint firstItem="0fF-2B-C09" firstAttribute="top" secondItem="ADy-Xn-vCs" secondAttribute="bottom" constant="8" id="Wyb-oZ-bCd"/>
                     <constraint firstItem="rBt-da-KnE" firstAttribute="trailing" secondItem="ulu-ey-feY" secondAttribute="trailing" constant="10" id="XzL-Jb-ORv"/>
                     <constraint firstItem="xPt-Mi-x02" firstAttribute="top" secondItem="dbV-Vc-Tsf" secondAttribute="bottom" constant="25" id="Y5S-oi-gRW"/>
-                    <constraint firstItem="PsC-eB-7om" firstAttribute="top" secondItem="ulu-ey-feY" secondAttribute="bottom" constant="8" id="Y6a-mL-tRh"/>
                     <constraint firstItem="iYN-Yq-tAu" firstAttribute="leading" secondItem="rBt-da-KnE" secondAttribute="trailing" constant="8" id="YvG-6b-yhX"/>
                     <constraint firstItem="N77-TC-Udh" firstAttribute="top" secondItem="0fF-2B-C09" secondAttribute="bottom" constant="25" id="ZVP-6b-3d1"/>
                     <constraint firstItem="dNy-TJ-Tq9" firstAttribute="top" secondItem="0fF-2B-C09" secondAttribute="bottom" constant="28" id="awh-YA-Mjc"/>
