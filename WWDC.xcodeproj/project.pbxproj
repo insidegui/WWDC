@@ -138,7 +138,7 @@
 		1C967BA81AE7EB27003662B2 /* NSString+QualifierSearchParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+QualifierSearchParser.h"; sourceTree = "<group>"; };
 		1C967BA91AE7EB27003662B2 /* NSString+QualifierSearchParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+QualifierSearchParser.m"; sourceTree = "<group>"; };
 		1C967BAB1AE7EB5C003662B2 /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
-		A14104041B29955A00841313 /* DownloadVideosBatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadVideosBatch.swift; sourceTree = "<group>"; };
+		A14104041B29955A00841313 /* DownloadVideosBatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadVideosBatch.swift; path = ../DownloadVideosBatch.swift; sourceTree = "<group>"; };
 		C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadListWindowController.xib; sourceTree = "<group>"; };
 		C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListWindowController.swift; sourceTree = "<group>"; };
 		C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListProgressCellView.swift; sourceTree = "<group>"; };
@@ -226,7 +226,6 @@
 		DD4F6E431AE2D11D0099BEB5 = {
 			isa = PBXGroup;
 			children = (
-				A14104041B29955A00841313 /* DownloadVideosBatch.swift */,
 				DDEC0DF81B0E73FA001752CA /* Fabric.framework */,
 				DD89EA061AF48A300073B845 /* Updater.xcodeproj */,
 				DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */,
@@ -381,6 +380,7 @@
 		DDD7A4361AE2E253000A0102 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A14104041B29955A00841313 /* DownloadVideosBatch.swift */,
 				DD373A891AE871AB00DAC19B /* VideoStore.swift */,
 				DDD7A4371AE2E265000A0102 /* Session.swift */,
 				DDD7A4391AE2E305000A0102 /* DataStore.swift */,
