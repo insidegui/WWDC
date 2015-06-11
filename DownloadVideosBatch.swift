@@ -56,7 +56,7 @@ class DownloadVideosBatch: NSObject {
             return
         }
         if let firstSession = sessions.first, let url = firstSession.hd_url {
-            stopDownloadingAnything()
+//            stopDownloadingAnything()
             self.currentlyDownloadedSession = firstSession.title
             
             VideoStore.SharedStore().download(url)
@@ -91,7 +91,7 @@ class DownloadVideosBatch: NSObject {
                             {
                                 let progress = Double(written) / Double(expected)
                                 
-                                println("Downloading \(self.currentlyDownloadedSession): \(progress)%")
+                                println("Downloading \(self.currentlyDownloadedSession): \(progress*100.0)%")
                             }
                         }
                     }

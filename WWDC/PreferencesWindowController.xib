@@ -212,7 +212,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="doanloaAllButtonPressed:" target="-2" id="6go-gR-eDU"/>
+                            <action selector="doanloaAllButtonPressed:" target="-2" id="ZQX-gw-aZv"/>
                         </connections>
                     </button>
                     <progressIndicator hidden="YES" fixedFrame="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="PsC-eB-7om">

@@ -17,7 +17,7 @@ class PreferencesWindowController: NSWindowController {
     private var downloadCancelledHndl: AnyObject?
     private var downloadPausedHndl: AnyObject?
     private var downloadResumedHndl: AnyObject?
-    
+    private var downloadPresenter : DownloadProgressViewController?
     convenience init() {
         self.init(windowNibName: "PreferencesWindowController")
     }
@@ -76,7 +76,7 @@ class PreferencesWindowController: NSWindowController {
                 
                 
                 let sessions2015 = sessions.filter{(session) in
-                    return session.year == 2015
+                    return session.year == 2015 && VideoStore.SharedStore().hasVideo(session.hd_url!)
                 }
                 
                 println("Videos fetched, start downloading")
@@ -88,7 +88,10 @@ class PreferencesWindowController: NSWindowController {
         DataStore.SharedStore.fetchSessions(completionHandler, disableCache: true)
         self.addNotifications()
         
-        
+        downloadPresenter = DownloadProgressViewController()
+        if let appDelegate = NSApplication.sharedApplication().delegate as? AppDelegate {
+            appDelegate.showDownloadsWindow(appDelegate)
+        }
         
         
     }
