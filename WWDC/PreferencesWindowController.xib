@@ -206,7 +206,7 @@
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ulu-ey-feY">
                         <rect key="frame" x="14" y="218" width="167" height="32"/>
-                        <buttonCell key="cell" type="push" title="Downlaod All Videos" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sFQ-Gp-P6E">
+                        <buttonCell key="cell" type="push" title="Download All Videos" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sFQ-Gp-P6E">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
