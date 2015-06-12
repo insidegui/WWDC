@@ -11,7 +11,7 @@ import ASCIIwwdc
 
 class SearchOperation: NSOperation {
 
-    private let validQualifiers = ["year", "focus", "track", "downloaded", "description", "transcript"]
+    private let validQualifiers = ["year", "focus", "track", "downloaded", "favorited", "description", "transcript"]
     
     var sessions: [Session]
     var term: String?
@@ -87,6 +87,10 @@ class SearchOperation: NSOperation {
                         } else {
                             return false
                         }
+                    }
+                    
+                    if let favorited: String = qualifiers["favorited"] as? String {
+                        return session.favorite
                     }
                     
                     if let query: String = qualifiers["_query"] as? String {
