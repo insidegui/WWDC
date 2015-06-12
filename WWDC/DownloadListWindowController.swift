@@ -83,7 +83,8 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 							let written = info["totalBytesWritten"] as? Int
 						{
 							let progress = Double(written) / Double(expected)
-							item!.progress = progress * 100
+                            let progressPercentage = Double(round(100 * (progress * 100)) / 100)
+                            item!.progress = progressPercentage
 							self.tableView.reloadDataForRowIndexes(NSIndexSet(index: idx), columnIndexes: NSIndexSet(index: 0))
 						}
 					}
@@ -199,7 +200,8 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
             cellView.progressIndicator.indeterminate = false
             cellView.cancelButton.image = NSImage(named: "NSStopProgressFreestandingTemplate")
             cellView.cancelButton.toolTip = NSLocalizedString("Pause", comment: "pause button tooltip in downloads window")
-			cellView.statusLabel.stringValue = NSLocalizedString("Downloading", comment: "video downloading status in downloads window")
+            let downloadingString = NSLocalizedString("Downloading", comment: "video downloading status in downloads window")
+			cellView.statusLabel.stringValue = downloadingString + ": \(item.progress!)%"
 		case .Suspended:
             cellView.progressIndicator.indeterminate = true
             cellView.cancelButton.image = NSImage(named: "NSRefreshFreestandingTemplate")
