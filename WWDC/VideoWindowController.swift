@@ -64,8 +64,12 @@ class VideoWindowController: NSWindowController {
         }
     }
     
+    private var activity: NSObjectProtocol?
+    
     override func windowDidLoad() {
         super.windowDidLoad()
+        
+        activity = NSProcessInfo.processInfo().beginActivityWithOptions(.IdleDisplaySleepDisabled | .IdleSystemSleepDisabled, reason: "Playing WWDC session video")
 
         progressIndicator.startAnimation(nil)
         window?.backgroundColor = NSColor.blackColor()
@@ -110,6 +114,10 @@ class VideoWindowController: NSWindowController {
         }
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
+            if let activity = self.activity {
+                NSProcessInfo.processInfo().endActivity(activity)
+            }
+            
             if self.event != nil {
                 if self.item != nil {
                     self.item.removeObserver(self, forKeyPath: "status")
