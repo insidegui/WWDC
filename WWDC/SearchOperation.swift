@@ -92,7 +92,9 @@ class SearchOperation: NSOperation {
                     }
                     
                     if let favorited: String = qualifiers["favorited"] as? String {
-                        return session.favorite
+                        if !(session.favorite == favorited.boolValue) {
+                            return false
+                        }
                     }
                     
                     if let query: String = qualifiers["_query"] as? String {
