@@ -12,6 +12,10 @@ You can also install using [Homebrew Cask](http://caskroom.io):
 
 ![screenshot](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/screenshot.png)
 
+## Download the entire session videos
+
+To download every available session video of 2015, go to settings and klick the "Download All Videos" button.
+
 ## El Capitan support
 
 Almost everything works fine on El Capitan, but live ~~sessions currently only play the audio, this seems to be a bug in AVFoundation and I'm currently trying to fix it~~. I've managed to get live streamed sessions working on El Capitan by using a custom player view, but I've not had the time to implement complete controls (volume, scrubbing, etc). 
