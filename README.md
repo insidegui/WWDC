@@ -18,10 +18,12 @@ Almost everything works fine on El Capitan, but live ~~sessions currently only p
 
 ## Searching
 
-You can perform an advanced search using the qualifiers "year", "focus", "track", "downloaded" and "description".
+You can perform an advanced search using the qualifiers "year", "focus", "track", "downloaded", "favorited" and "description".
 
 Example searches:
 
+	year:2015 favorited:yes downloaded:yes
+	
 	year:2013 focus:ios scroll
 
 	year:2014 track:frameworks cocoa
