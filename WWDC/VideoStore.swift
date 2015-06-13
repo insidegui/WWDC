@@ -32,8 +32,12 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         return _SharedVideoStore;
     }
     
-    func initialize() {
+    override init() {
+        super.init()
         backgroundSession = NSURLSession(configuration: configuration, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+    }
+    
+    func initialize() {
         backgroundSession.getTasksWithCompletionHandler { _, _, pendingTasks in
             if let tasks = pendingTasks as? [NSURLSessionDownloadTask] {
                 for task in tasks {
