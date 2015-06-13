@@ -11,7 +11,7 @@ import ASCIIwwdc
 
 class SearchOperation: NSOperation {
 
-    private let validQualifiers = ["year", "focus", "track", "downloaded", "description", "transcript"]
+    private let validQualifiers = ["year", "focus", "track", "downloaded", "favorited", "description", "transcript"]
     
     var sessions: [Session]
     var term: String?
@@ -83,8 +83,16 @@ class SearchOperation: NSOperation {
                     
                     if let downloaded: String = qualifiers["downloaded"] as? String {
                         if let url = session.hd_url {
-                            return (VideoStore.SharedStore().hasVideo(url) == downloaded.boolValue)
+                            if !(VideoStore.SharedStore().hasVideo(url) == downloaded.boolValue) {
+                                return false
+                            }
                         } else {
+                            return false
+                        }
+                    }
+                    
+                    if let favorited: String = qualifiers["favorited"] as? String {
+                        if !(session.favorite == favorited.boolValue) {
                             return false
                         }
                     }
