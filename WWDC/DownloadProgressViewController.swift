@@ -25,7 +25,7 @@ class DownloadProgressViewController: NSViewController {
 	}
 	
 	@IBOutlet var downloadButton: NSButton!
-	@IBOutlet var progressIndicator: GRActionableProgressIndicator!
+	@IBOutlet var progressIndicator: GRActionableProgressIndicator?
 	
 	private var downloadStartedHndl: AnyObject?
 	private var downloadFinishedHndl: AnyObject?
@@ -53,7 +53,7 @@ class DownloadProgressViewController: NSViewController {
 	
 	private func updateUI()
 	{
-        progressIndicator.doubleAction = "showDownloadsWindow:"
+        progressIndicator?.doubleAction = "showDownloadsWindow:"
         
 		if let session = session {
 			if session.hd_url != nil {
@@ -70,16 +70,16 @@ class DownloadProgressViewController: NSViewController {
 	private func updateButtonVisibility(visibility: DownloadProgressViewButtonState) {
 		switch (visibility) {
 		case .NoDownload:
-			self.progressIndicator.hidden = true
+			self.progressIndicator?.hidden = true
 			self.downloadButton.hidden = false
 		case .Downloaded:
-			self.progressIndicator.hidden = true
+			self.progressIndicator?.hidden = true
 			self.downloadButton.hidden = true
 		case .Downloading:
-			self.progressIndicator.hidden = false
+			self.progressIndicator?.hidden = false
 			self.downloadButton.hidden = true
 		case .Paused:
-            self.progressIndicator.hidden = false
+            self.progressIndicator?.hidden = false
 			self.downloadButton.hidden = true
 		}
 	}
@@ -106,10 +106,10 @@ class DownloadProgressViewController: NSViewController {
 			self.updateButtonVisibility(.Downloading)
 			if let info = note.userInfo {
 				if let totalBytesExpectedToWrite = info["totalBytesExpectedToWrite"] as? Int {
-					self.progressIndicator.maxValue = Double(totalBytesExpectedToWrite)
+					self.progressIndicator?.maxValue = Double(totalBytesExpectedToWrite)
 				}
 				if let totalBytesWritten = info["totalBytesWritten"] as? Int {
-					self.progressIndicator.doubleValue = Double(totalBytesWritten)
+					self.progressIndicator?.doubleValue = Double(totalBytesWritten)
 				}
 			}
 		}
