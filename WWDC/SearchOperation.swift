@@ -83,7 +83,9 @@ class SearchOperation: NSOperation {
                     
                     if let downloaded: String = qualifiers["downloaded"] as? String {
                         if let url = session.hd_url {
-                            return (VideoStore.SharedStore().hasVideo(url) == downloaded.boolValue)
+                            if !(VideoStore.SharedStore().hasVideo(url) == downloaded.boolValue) {
+                                return false
+                            }
                         } else {
                             return false
                         }
