@@ -751,6 +751,16 @@ CA
                                                     <action selector="download:" target="SkJ-kP-aeS" id="SHa-Ir-8uc"/>
                                                 </connections>
                                             </button>
+                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k9D-Uh-gk7">
+                                                <rect key="frame" x="-13" y="-14" width="48" height="48"/>
+                                                <buttonCell key="cell" type="square" title="X" bezelStyle="shadowlessSquare" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="BPJ-E5-Y8k">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <action selector="delete:" target="SkJ-kP-aeS" id="iky-6c-XRf"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="Rfp-dR-Pi4" firstAttribute="leading" secondItem="ZoQ-nZ-mjo" secondAttribute="leading" id="0hI-Lc-wPf"/>
@@ -873,6 +883,7 @@ CA
                 <customObject id="ztN-pJ-8Sm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <customObject id="SkJ-kP-aeS" customClass="DownloadProgressViewController" customModule="WWDC" customModuleProvider="target">
                     <connections>
+                        <outlet property="deleteButton" destination="k9D-Uh-gk7" id="fQS-Ek-gpc"/>
                         <outlet property="downloadButton" destination="ZoQ-nZ-mjo" id="ute-Zj-K3T"/>
                         <outlet property="progressIndicator" destination="Rfp-dR-Pi4" id="ZNm-pc-dhj"/>
                         <outlet property="view" destination="P5u-9c-sQG" id="NIz-ou-mqu"/>

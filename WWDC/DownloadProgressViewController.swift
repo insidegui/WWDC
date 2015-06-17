@@ -24,6 +24,7 @@ class DownloadProgressViewController: NSViewController {
 		}
 	}
 	
+    @IBOutlet var deleteButton: NSButton!
 	@IBOutlet var downloadButton: NSButton!
 	@IBOutlet var progressIndicator: GRActionableProgressIndicator?
 	
@@ -72,15 +73,19 @@ class DownloadProgressViewController: NSViewController {
 		case .NoDownload:
 			self.progressIndicator?.hidden = true
 			self.downloadButton.hidden = false
+            self.deleteButton.hidden = true
 		case .Downloaded:
 			self.progressIndicator?.hidden = true
 			self.downloadButton.hidden = true
+            self.deleteButton.hidden = false
 		case .Downloading:
 			self.progressIndicator?.hidden = false
 			self.downloadButton.hidden = true
+            self.deleteButton.hidden = true
 		case .Paused:
             self.progressIndicator?.hidden = false
 			self.downloadButton.hidden = true
+            self.deleteButton.hidden = true
 		}
 	}
 	
@@ -173,4 +178,18 @@ class DownloadProgressViewController: NSViewController {
 			VideoStore.SharedStore().download(url)
 		}
 	}
+
+    @IBAction func delete(sender: NSButton) {
+        let alertPanel = NSAlert()
+        alertPanel.informativeText = "You will still be able to stream or redownload it."
+        alertPanel.messageText = "Delete session video?"
+        alertPanel.addButtonWithTitle("Delete")
+        alertPanel.addButtonWithTitle("Cancel")
+
+        alertPanel.beginSheetModalForWindow(view.window!, completionHandler: { (response) -> Void in
+            if response == NSAlertFirstButtonReturn && VideoStore.SharedStore().deleteLocalVideo(self.session) {
+                self.updateDownloadStatus()
+            }
+        })
+    }
 }
