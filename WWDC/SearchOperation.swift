@@ -64,6 +64,8 @@ class SearchOperation: NSOperation {
                             fixedFocus = "OS X"
                         } else if focus.lowercaseString == "ios" {
                             fixedFocus = "iOS"
+                        } else if focus.lowercaseString == "watchos" {
+                            fixedFocus = "watchOS"
                         }
                         
                         if !contains(session.focus, fixedFocus) {
