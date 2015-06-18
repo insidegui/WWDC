@@ -50,6 +50,10 @@ class SearchController: NSObject {
             return
         }
         
+        if (count(term!) <= 3) && (count(term!) != 0) {
+            return
+        }
+        
         searchDidStartCallback()
         
         if searchOperationQueue == nil {

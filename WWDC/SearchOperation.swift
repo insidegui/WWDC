@@ -32,6 +32,10 @@ class SearchOperation: NSOperation {
     }
     
     override func main() {
+        if cancelled {
+            return
+        }
+        
         if let term = term {
             if term == "" {
                 result = sessions
