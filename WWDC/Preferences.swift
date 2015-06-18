@@ -32,6 +32,7 @@ class Preferences {
         static let liveEventCheckInterval = "liveEventCheckInterval"
         static let userKnowsLiveEventThing = "userKnowsLiveEventThing"
         static let automaticRefreshEnabled = "automaticRefreshEnabled"
+		static let floatOnTopEnabled = "floatOnTopEnabled"
         
         struct transcript {
             static let font = "transcript.font"
@@ -55,6 +56,7 @@ class Preferences {
         static let userKnowsLiveEventThing = false
         static let automaticRefreshEnabled = true
         static let automaticRefreshInterval = 60.0
+        static let floatOnTopEnabled = false
         
         struct transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
@@ -280,5 +282,18 @@ class Preferences {
             return DefaultValues.automaticRefreshInterval
         }
     }
-    
+
+	var floatOnTopEnabled: Bool {
+		get {
+			if let object = defaults.objectForKey(Keys.floatOnTopEnabled) as? NSNumber {
+				return object.boolValue
+			} else {
+				return DefaultValues.floatOnTopEnabled
+			}
+		}
+		set {
+			defaults.setObject(NSNumber(bool: newValue), forKey: Keys.floatOnTopEnabled)
+		}
+	}
+
 }

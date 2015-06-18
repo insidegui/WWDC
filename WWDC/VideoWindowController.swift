@@ -106,6 +106,10 @@ class VideoWindowController: NSWindowController {
                 self.player?.pause()
             }
         }
+
+		if Preferences.SharedPreferences().floatOnTopEnabled {
+			window!.level = Int(CGWindowLevelForKey(Int32(kCGFloatingWindowLevelKey)))
+		}
         
         if let event = self.event {
             window?.title = "\(event.title) (Live)"
@@ -278,6 +282,21 @@ class VideoWindowController: NSWindowController {
             sizeWindowToFill(nil)
         }
     }
+
+	// Toggles if the window should float on top of all other windows
+	@IBAction func floatOnTop(sender: NSMenuItem) {
+		if sender.state == NSOnState {
+			window!.level = Int(CGWindowLevelForKey(Int32(kCGNormalWindowLevelKey)))
+			Preferences.SharedPreferences().floatOnTopEnabled = false
+
+			sender.state = NSOffState
+		} else {
+			window!.level = Int(CGWindowLevelForKey(Int32(kCGFloatingWindowLevelKey)))
+			Preferences.SharedPreferences().floatOnTopEnabled = true
+
+			sender.state = NSOnState
+		}
+	}
     
     // resizes the window so the video fills the entire screen without cropping
     @IBAction func sizeWindowToFill(sender: AnyObject?)
