@@ -160,6 +160,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeViewWithIdentifier("video", owner: tableView) as! VideoTableCellView
         
+        // Crash fix - out of bounds displayedSessions
+        if row > count(displayedSessions) {
+            return cell
+        }
+        
         let session = displayedSessions[row]
         cell.titleField.stringValue = session.title
         cell.trackField.stringValue = session.track
