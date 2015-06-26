@@ -104,10 +104,9 @@ class SearchOperation: NSOperation {
                     }
                     
                     if let query: String = qualifiers["_query"] as? String {
-                        if query != "" {
-                            if let range = session.title.rangeOfString(query, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) {
-                                //Nothing here...
-                            } else {
+                        // match all words in session title
+                        for word in query.words() {
+                            if session.title.rangeOfString(word, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) == nil {
                                 return false
                             }
                         }
