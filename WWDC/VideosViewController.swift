@@ -60,6 +60,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         nc.addObserverForName(SessionFavoriteStatusDidChangeNotification, object: nil, queue: nil) { _ in
             self.reloadTablePreservingSelection()
         }
+        nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
+            self.reloadTablePreservingSelection()
+        }
         nc.addObserverForName(VideoStoreNotificationDownloadFinished, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
             self.reloadTablePreservingSelection()
         }
@@ -217,7 +220,17 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         cell.progressView.favorite = session.favorite
         
         if let url = session.hd_url {
-            cell.downloadedImage.hidden = !VideoStore.SharedStore().hasVideo(url)
+            let videoStore = VideoStore.SharedStore()
+
+            if videoStore.hasVideo(url) {
+                cell.downloadedImage.hidden = false
+                cell.downloadedImage.image = NSImage(named: "downloaded")
+            } else if videoStore.isDownloading(url) {
+                cell.downloadedImage.hidden = false
+                cell.downloadedImage.image = NSImage(named: "downloading")
+            } else {
+                cell.downloadedImage.hidden = true
+            }
         }
         
         return cell
