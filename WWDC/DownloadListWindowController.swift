@@ -139,17 +139,19 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 	}
 	
 	override func showWindow(sender: AnyObject?) {
-		super.showWindow(sender)
-		self.items.removeAll(keepCapacity: false)
-		let tasks = self.videoStore.allTasks()
-		let sessions = DataStore.SharedStore.cachedSessions!
-		for task in tasks {
-			if let url = task.originalRequest.URL?.absoluteString {
-				let session = sessions.filter { $0.hd_url == url }.first
-				var item = DownloadListItem(url: url, progress: 0, session: session!, task: task)
-				self.items.append(item)
-			}
-		}
+        super.showWindow(sender)
+        self.items.removeAll(keepCapacity: false)
+        let tasks = self.videoStore.allTasks()
+        if (DataStore.SharedStore.cachedSessions != nil) {
+            let sessions = DataStore.SharedStore.cachedSessions!
+            for task in tasks {
+                if let url = task.originalRequest.URL?.absoluteString {
+                    let session = sessions.filter { $0.hd_url == url }.first
+                    var item = DownloadListItem(url: url, progress: 0, session: session!, task: task)
+                    self.items.append(item)
+                }
+            }
+        }
 		self.tableView.reloadData()
 	}
 	
