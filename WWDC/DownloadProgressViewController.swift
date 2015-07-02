@@ -53,7 +53,7 @@ class DownloadProgressViewController: NSViewController {
 	
 	private func updateUI()
 	{
-        progressIndicator?.doubleAction = "showDownloadsWindow:"
+        progressIndicator?.action = "showDownloadsWindow:"
         
 		if let session = session {
 			if session.hd_url != nil {
