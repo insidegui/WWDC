@@ -10,15 +10,22 @@ import Cocoa
 
 private class DownloadListItem : NSObject {
 	
-	var url: String?
-	var progress: Double?
-	var session: Session?
-	var task: NSURLSessionDownloadTask?
-	
-	convenience init(url: String, progress: Double, session: Session, task: NSURLSessionDownloadTask) {
-		self.init()
+	let url: String
+	let session: Session
+	let task: NSURLSessionDownloadTask
+	var totalSize: Int?
+	var downloadedSize: Int = 0
+
+	var progress: Double {
+		if let totalSize = totalSize where totalSize > 0 {
+			return Double(downloadedSize) / Double(totalSize)
+		} else {
+			return 0
+		}
+	}
+
+	init(url: String, session: Session, task: NSURLSessionDownloadTask) {
 		self.url = url
-		self.progress = progress
 		self.session = session
 		self.task = task
 	}
@@ -37,12 +44,24 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 	private var downloadCancelledHndl: AnyObject?
 	private var downloadPausedHndl: AnyObject?
 	private var downloadResumedHndl: AnyObject?
-	
+
+	private var fileSizeFormatter: NSByteCountFormatter!
+	private var percentFormatter: NSNumberFormatter!
+
 	override func windowDidLoad() {
 		super.windowDidLoad()
 		self.tableView.setDelegate(self)
 		self.tableView.setDataSource(self)
 		self.tableView.columnAutoresizingStyle = .FirstColumnOnlyAutoresizingStyle
+
+		fileSizeFormatter = NSByteCountFormatter()
+		fileSizeFormatter.zeroPadsFractionDigits = true
+		fileSizeFormatter.allowsNonnumericFormatting = false
+
+		percentFormatter = NSNumberFormatter()
+		percentFormatter.numberStyle = .PercentStyle
+		percentFormatter.minimumFractionDigits = 1
+
 		let nc = NSNotificationCenter.defaultCenter()
 		self.downloadStartedHndl = nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { note in
 			let url = note.object as! String?
@@ -56,7 +75,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 					if let _url = task.originalRequest.URL?.absoluteString where _url == url {
 						let sessions = DataStore.SharedStore.cachedSessions!
 						let session = sessions.filter { $0.hd_url == url }.first
-						var item = DownloadListItem(url: url!, progress: 0, session: session!, task: task)
+						var item = DownloadListItem(url: url!, session: session!, task: task)
 						self.items.append(item)
 						self.tableView.insertRowsAtIndexes(NSIndexSet(index: self.items.count), withAnimation: .SlideUp)
 					}
@@ -78,12 +97,12 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 				if let object = note.object as? String {
 					let url = object as String
 					let (item, idx) = self.listItemForURL(url)
-					if item != nil {
+					if let item = item {
 						if let expected = info["totalBytesExpectedToWrite"] as? Int,
 							let written = info["totalBytesWritten"] as? Int
 						{
-							let progress = Double(written) / Double(expected)
-							item!.progress = progress * 100
+							item.downloadedSize = written
+							item.totalSize = expected
 							self.tableView.reloadDataForRowIndexes(NSIndexSet(index: idx), columnIndexes: NSIndexSet(index: 0))
 						}
 					}
@@ -146,7 +165,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 		for task in tasks {
 			if let url = task.originalRequest.URL?.absoluteString {
 				let session = sessions.filter { $0.hd_url == url }.first
-				var item = DownloadListItem(url: url, progress: 0, session: session!, task: task)
+				var item = DownloadListItem(url: url, session: session!, task: task)
 				self.items.append(item)
 			}
 		}
@@ -172,50 +191,64 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 		var cellView = tableView.makeViewWithIdentifier(identifier!, owner: self) as! DownloadListCellView
 		let item = self.items[row]
         
-		cellView.textField?.stringValue = "WWDC \(item.session!.year) - \(item.session!.title)"
+		cellView.textField?.stringValue = "WWDC \(item.session.year) - \(item.session.title)"
         
 		if item.progress > 0 {
 			if cellView.started == false {
 				cellView.startProgress()
 			}
-			cellView.progressIndicator.doubleValue = item.progress!
+			cellView.progressIndicator.doubleValue = item.progress * 100
 		}
 		cellView.item = item
 
 		cellView.cancelBlock = { [weak self] item, cell in
             let listItem = item as! DownloadListItem
             let task = listItem.task
-            switch task!.state {
+            switch task.state {
             case .Running:
-                self?.videoStore.pauseDownload(listItem.url!)
+                self?.videoStore.pauseDownload(listItem.url)
             case .Suspended:
-                self?.videoStore.resumeDownload(listItem.url!)
+                self?.videoStore.resumeDownload(listItem.url)
             default: break
             }
 		};
-        
-		switch item.task!.state {
+
+        var statusText: String?
+
+        switch item.task.state {
 		case .Running:
             cellView.progressIndicator.indeterminate = false
             cellView.cancelButton.image = NSImage(named: "NSStopProgressFreestandingTemplate")
             cellView.cancelButton.toolTip = NSLocalizedString("Pause", comment: "pause button tooltip in downloads window")
-			cellView.statusLabel.stringValue = NSLocalizedString("Downloading", comment: "video downloading status in downloads window")
+
+            statusText = NSLocalizedString("Downloading", comment: "video downloading status in downloads window")
 		case .Suspended:
             cellView.progressIndicator.indeterminate = true
             cellView.cancelButton.image = NSImage(named: "NSRefreshFreestandingTemplate")
             cellView.cancelButton.toolTip = NSLocalizedString("Resume", comment: "resume button tooltip in downloads window")
-			cellView.statusLabel.stringValue = NSLocalizedString("Paused", comment: "video paused status in downloads window")
+
+            statusText = NSLocalizedString("Paused", comment: "video paused status in downloads window")
 		default: break
 		}
-        
+
+        if let statusText = statusText {
+            if let totalSize = item.totalSize {
+                let downloaded = fileSizeFormatter.stringFromByteCount(Int64(item.downloadedSize))
+                let total = fileSizeFormatter.stringFromByteCount(Int64(totalSize))
+                let progress = percentFormatter.stringFromNumber(item.progress) ?? "? %"
+
+                cellView.statusLabel.stringValue = "\(statusText) – \(downloaded) / \(total) (\(progress))"
+            } else {
+                cellView.statusLabel.stringValue = statusText
+            }
+        }
+
 		return cellView
 	}
     
     func delete(sender: AnyObject?) {
         let item = self.items[tableView.selectedRow]
-        if let task = item.task {
-			self.videoStore.cancelDownload(item.url!)
-        }
+        self.videoStore.cancelDownload(item.url)
     }
 	
 }
