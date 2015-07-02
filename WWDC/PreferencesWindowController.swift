@@ -90,6 +90,12 @@ class PreferencesWindowController: NSWindowController {
     @IBAction func revealInFinder(sender: NSButton) {
         let path = Preferences.SharedPreferences().localVideoStoragePath
         let root = path.stringByDeletingLastPathComponent
+
+        let fileManager = NSFileManager.defaultManager()
+        if !fileManager.fileExistsAtPath(path) {
+            fileManager.createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil, error: nil)
+        }
+
         NSWorkspace.sharedWorkspace().selectFile(path, inFileViewerRootedAtPath: root)
     }
     
