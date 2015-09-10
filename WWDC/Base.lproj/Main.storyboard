@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="9046" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9046"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -504,7 +504,7 @@ CA
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <visualEffectView appearanceType="aqua" blendingMode="behindWindow" material="light" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="Rg6-r5-kXz">
+                            <visualEffectView appearanceType="aqua" blendingMode="behindWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="Rg6-r5-kXz">
                                 <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                                 <subviews>
                                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="42" horizontalPageScroll="10" verticalLineScroll="42" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TKd-X0-CX9">
@@ -638,7 +638,7 @@ CA
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </clipView>
                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="pZy-33-7cD">
-                                            <rect key="frame" x="1" y="113.44057315587997" width="228" height="16"/>
+                                            <rect key="frame" x="1" y="113" width="228" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="h8Z-3R-OMt">
@@ -799,8 +799,8 @@ CA
                             <stackView orientation="horizontal" alignment="centerY" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="NDa-qd-DsL">
                                 <rect key="frame" x="20" y="182" width="519" height="22"/>
                                 <beginningViews>
-                                    <button verticalHuggingPriority="50" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
-                                        <rect key="frame" x="14" y="200" width="141" height="32"/>
+                                    <button verticalHuggingPriority="50" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
+                                        <rect key="frame" x="-6" y="-7" width="141" height="33"/>
                                         <buttonCell key="cell" type="push" title="Watch HD Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D3d-bZ-Zck">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -809,8 +809,8 @@ CA
                                             <action selector="watchHD:" target="1s0-2L-R2i" id="xqm-Kv-PmK"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
-                                        <rect key="frame" x="155" y="200" width="118" height="32"/>
+                                    <button verticalHuggingPriority="50" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="COw-ui-l2a">
+                                        <rect key="frame" x="131" y="-7" width="118" height="33"/>
                                         <buttonCell key="cell" type="push" title="Watch Video" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xjs-Oy-GhI">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -819,8 +819,8 @@ CA
                                             <action selector="watch:" target="1s0-2L-R2i" id="d1x-9M-a2C"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
-                                        <rect key="frame" x="273" y="200" width="111" height="32"/>
+                                    <button verticalHuggingPriority="50" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Ff7-FM-rkW">
+                                        <rect key="frame" x="245" y="-7" width="111" height="33"/>
                                         <buttonCell key="cell" type="push" title="View Slides" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UpZ-Ii-Qdp">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
@@ -829,8 +829,8 @@ CA
                                             <action selector="watchSlides:" target="1s0-2L-R2i" id="Bt3-zs-bNR"/>
                                         </connections>
                                     </button>
-                                    <button verticalHuggingPriority="50" misplaced="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
-                                        <rect key="frame" x="384" y="200" width="161" height="32"/>
+                                    <button verticalHuggingPriority="50" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Zfu-UV-fL8">
+                                        <rect key="frame" x="352" y="-7" width="146" height="33"/>
                                         <buttonCell key="cell" type="push" title="Mark as watched" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pEg-S2-YVS">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
