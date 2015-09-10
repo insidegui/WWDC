@@ -55,6 +55,10 @@ class VideoWindowController: NSWindowController {
     var player: AVPlayer? {
         didSet {
             if let player = player {
+                if #available(OSX 10.11, *) {
+                    player.allowsExternalPlayback = true
+                }
+                
                 let args = NSProcessInfo.processInfo().arguments
                 if args.contains("zerovolume") {
                     player.volume = 0
