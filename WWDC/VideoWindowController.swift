@@ -72,7 +72,7 @@ class VideoWindowController: NSWindowController {
     override func windowDidLoad() {
         super.windowDidLoad()
         
-        activity = NSProcessInfo.processInfo().beginActivityWithOptions([.IdleDisplaySleepDisabled, .IdleSystemSleepDisabled], reason: "Playing WWDC session video")
+        activity = NSProcessInfo.processInfo().beginActivityWithOptions([.IdleDisplaySleepDisabled, .IdleSystemSleepDisabled, .UserInitiated], reason: "Playing WWDC session video")
 
         progressIndicator.startAnimation(nil)
         window?.backgroundColor = NSColor.blackColor()
