@@ -75,7 +75,7 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
         
         NSNotificationCenter.defaultCenter().postNotificationName(LiveEventWillStartPlayingNotification, object: nil)
         
-        liveEventPlayerController = VideoWindowController(event: event, videoURL: event.stream!.absoluteString!)
+        liveEventPlayerController = VideoWindowController(event: event, videoURL: event.stream!.absoluteString)
         liveEventPlayerController?.showWindow(nil)
     }
     

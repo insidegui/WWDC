@@ -34,9 +34,9 @@ class URLSchemeHandler: NSObject {
     
     private func findAndOpenSession(year: String, _ id: String) {
         if let sessions = DataStore.SharedStore.cachedSessions {
-            println("Year: \(year) | id: \(id)")
+            print("Year: \(year) | id: \(id)")
             let foundSession = sessions.filter { session in
-                if session.year == year.toInt()! && session.id == id.toInt()! {
+                if session.year == Int(year)! && session.id == Int(id)! {
                     return true
                 } else {
                     return false

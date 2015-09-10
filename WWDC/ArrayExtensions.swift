@@ -11,7 +11,7 @@ import Foundation
 extension Array {
     mutating func remove<U: Equatable>(object: U) {
         var index: Int?
-        for (idx, itemToRemove) in enumerate(self) {
+        for (idx, itemToRemove) in self.enumerate() {
             if let to = itemToRemove as? U {
                 if object == to {
                     index = idx

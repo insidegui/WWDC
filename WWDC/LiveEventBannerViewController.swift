@@ -40,7 +40,7 @@ class LiveEventBannerViewController: NSViewController {
     func prepareForParentView(parentView: NSView) {
         view.frame = NSMakeRect(0, 0, NSWidth(parentView.frame), NSHeight(view.frame))
         view.translatesAutoresizingMaskIntoConstraints = true
-        view.autoresizingMask = .ViewMaxYMargin | .ViewWidthSizable
+        view.autoresizingMask = [.ViewMaxYMargin, .ViewWidthSizable]
     }
     
     override func viewDidLoad() {

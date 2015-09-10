@@ -53,7 +53,7 @@ class SearchOperation: NSOperation {
                     if let year: String = qualifiers["year"] as? String {
                         let yearStr = "\(session.year)"
                         let result = (yearStr as NSString).rangeOfString(year, options: .CaseInsensitiveSearch)
-                        if result.location + result.length != count(yearStr) {
+                        if result.location + result.length != yearStr.characters.count {
                             return false
                         }
                     }
@@ -68,7 +68,7 @@ class SearchOperation: NSOperation {
                             fixedFocus = "watchOS"
                         }
                         
-                        if !contains(session.focus, fixedFocus) {
+                        if !session.focus.contains(fixedFocus) {
                             return false
                         }
                     }
@@ -80,7 +80,7 @@ class SearchOperation: NSOperation {
                     }
                     
                     if let description: String = qualifiers["description"] as? String {
-                        if let range = session.description.rangeOfString(description, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) {
+                        if let _ = session.description.rangeOfString(description, options: [.CaseInsensitiveSearch, .DiacriticInsensitiveSearch], range: nil, locale: nil) {
                             // continue...
                         } else {
                             return false
@@ -106,7 +106,7 @@ class SearchOperation: NSOperation {
                     if let query: String = qualifiers["_query"] as? String {
                         // match all words in session title
                         for word in query.words() {
-                            if session.title.rangeOfString(word, options: .CaseInsensitiveSearch | .DiacriticInsensitiveSearch, range: nil, locale: nil) == nil {
+                            if session.title.rangeOfString(word, options: [.CaseInsensitiveSearch, .DiacriticInsensitiveSearch], range: nil, locale: nil) == nil {
                                 return false
                             }
                         }

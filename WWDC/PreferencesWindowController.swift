@@ -71,7 +71,7 @@ class PreferencesWindowController: NSWindowController {
                     return session.year == 2015 && !VideoStore.SharedStore().hasVideo(session.hd_url!)
                 }
                 
-                println("Videos fetched, start downloading")
+                print("Videos fetched, start downloading")
                 DownloadVideosBatch.SharedDownloader().sessions = sessions2015
                 DownloadVideosBatch.SharedDownloader().startDownloading()
               }
@@ -89,11 +89,14 @@ class PreferencesWindowController: NSWindowController {
     
     @IBAction func revealInFinder(sender: NSButton) {
         let path = Preferences.SharedPreferences().localVideoStoragePath
-        let root = path.stringByDeletingLastPathComponent
+        let root = (path as NSString).stringByDeletingLastPathComponent
 
         let fileManager = NSFileManager.defaultManager()
         if !fileManager.fileExistsAtPath(path) {
-            fileManager.createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil, error: nil)
+            do {
+                try fileManager.createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
+            } catch _ {
+            }
         }
 
         NSWorkspace.sharedWorkspace().selectFile(path, inFileViewerRootedAtPath: root)

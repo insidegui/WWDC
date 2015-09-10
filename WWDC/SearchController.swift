@@ -50,7 +50,7 @@ class SearchController: NSObject {
             return
         }
         
-        if (count(term!) <= 3) && (count(term!) != 0) {
+        if ((term!).characters.count <= 3) && ((term!).characters.count != 0) {
             return
         }
         

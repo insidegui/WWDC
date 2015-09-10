@@ -12,7 +12,7 @@ extension String {
     
     var boolValue: Bool {
         get {
-            if self.lowercaseString == "yes" || self.lowercaseString == "true" || self.toInt() > 0 {
+            if self.lowercaseString == "yes" || self.lowercaseString == "true" || Int(self) > 0 {
                 return true
             } else {
                 return false
@@ -25,7 +25,7 @@ extension String {
         var words = [String]()
         let range = Range<String.Index>(start: self.startIndex, end: self.endIndex)
         self.enumerateSubstringsInRange(range, options: NSStringEnumerationOptions.ByWords) { (substring, _, _, _) -> () in
-            words.append(substring)
+            words.append(substring!)
         }
         return words
     }

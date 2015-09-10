@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         checkForUpdates(nil)
         
         // Keep a reference to the main application window
-        window = NSApplication.sharedApplication().windows.last as! NSWindow?
+        window = NSApplication.sharedApplication().windows.last 
         
         // continue any paused downloads
         VideoStore.SharedStore().initialize()

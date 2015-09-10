@@ -39,11 +39,9 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     
     func initialize() {
         backgroundSession.getTasksWithCompletionHandler { _, _, pendingTasks in
-            if let tasks = pendingTasks as? [NSURLSessionDownloadTask] {
-                for task in tasks {
-                    if let key = task.originalRequest.URL!.absoluteString {
-                        self.downloadTasks[key] = task
-                    }
+            for task in pendingTasks {
+                if let key = task.originalRequest?.URL!.absoluteString {
+                    self.downloadTasks[key] = task
                 }
             }
         }
@@ -68,7 +66,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         }
         
         let task = backgroundSession.downloadTaskWithURL(NSURL(string: url)!)
-		if let key = task.originalRequest.URL!.absoluteString {
+		if let key = task.originalRequest?.URL!.absoluteString {
 			self.downloadTasks[key] = task
 		}
         task.resume()
@@ -82,7 +80,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadPaused, object: url)
 			return true
         }
-		println("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
+		print("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
 		return false
     }
 	
@@ -92,7 +90,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadResumed, object: url)
 			return true
 		}
-		println("VideoStore was asked to resume downloading URL \(url), but there's no task for that URL")
+		print("VideoStore was asked to resume downloading URL \(url), but there's no task for that URL")
 		return false
 	}
 	
@@ -103,7 +101,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadCancelled, object: url)
 			return true
 		}
-		println("VideoStore was asked to cancel downloading URL \(url), but there's no task for that URL")
+		print("VideoStore was asked to cancel downloading URL \(url), but there's no task for that URL")
 		return false
 	}
 	
@@ -111,16 +109,16 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         let downloading = downloadTasks.keys.filter { taskURL in
             return url == taskURL
         }
-        
-        return (downloading.array.count > 0)
+
+        return (downloading.count > 0)
     }
     
     func localVideoPath(remoteURL: String) -> String {
-        return Preferences.SharedPreferences().localVideoStoragePath.stringByAppendingPathComponent(remoteURL.lastPathComponent)
+        return (Preferences.SharedPreferences().localVideoStoragePath as NSString).stringByAppendingPathComponent((remoteURL as NSString).lastPathComponent)
     }
     
     func localVideoAbsoluteURLString(remoteURL: String) -> String {
-        return NSURL(fileURLWithPath: localVideoPath(remoteURL))!.absoluteString!
+        return NSURL(fileURLWithPath: localVideoPath(remoteURL)).absoluteString
     }
     
     func hasVideo(url: String) -> Bool {
@@ -130,19 +128,24 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     // MARK: URL Session
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        let originalURL = downloadTask.originalRequest.URL!
-        let originalAbsoluteURLString = originalURL.absoluteString!
+        let originalURL = downloadTask.originalRequest!.URL!
+        let originalAbsoluteURLString = originalURL.absoluteString
 
         let fileManager = NSFileManager.defaultManager()
         
         if (fileManager.fileExistsAtPath(Preferences.SharedPreferences().localVideoStoragePath) == false) {
-            fileManager.createDirectoryAtPath(Preferences.SharedPreferences().localVideoStoragePath, withIntermediateDirectories: false, attributes: nil, error: nil)
+            do {
+                try fileManager.createDirectoryAtPath(Preferences.SharedPreferences().localVideoStoragePath, withIntermediateDirectories: false, attributes: nil)
+            } catch _ {
+            }
         }
         
-        let localURL = NSURL(fileURLWithPath: localVideoPath(originalAbsoluteURLString))!
+        let localURL = NSURL(fileURLWithPath: localVideoPath(originalAbsoluteURLString))
         
-        if fileManager.moveItemAtURL(location, toURL: localURL, error: nil) == false {
-            println("VideoStore was unable to move \(location) to \(localURL)")
+        do {
+            try fileManager.moveItemAtURL(location, toURL: localURL)
+        } catch _ {
+            print("VideoStore was unable to move \(location) to \(localURL)")
         }
         
         downloadTasks.removeValueForKey(originalAbsoluteURLString)
@@ -151,7 +154,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     }
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        let originalURL = downloadTask.originalRequest.URL!.absoluteString!
+        let originalURL = downloadTask.originalRequest!.URL!.absoluteString
 
         let info = ["totalBytesWritten": Int(totalBytesWritten), "totalBytesExpectedToWrite": Int(totalBytesExpectedToWrite)]
         NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadProgressChanged, object: originalURL, userInfo: info)
@@ -167,7 +170,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
             folderMonitor = nil
         }
         
-        folderMonitor = DTFolderMonitor(forURL: NSURL(fileURLWithPath: Preferences.SharedPreferences().localVideoStoragePath)!) {
+        folderMonitor = DTFolderMonitor(forURL: NSURL(fileURLWithPath: Preferences.SharedPreferences().localVideoStoragePath)) {
             NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadedFilesChangedNotification, object: nil)
         }
         folderMonitor.startMonitoring()

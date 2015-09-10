@@ -40,9 +40,9 @@ class TranscriptWindowController: NSWindowController {
         
         // initialize transcript controller with current session and add It's view to our window
         transcriptController = WWDCTranscriptViewController(year: Int32(session.year), session: Int32(session.id))
-        transcriptController.view.frame = NSMakeRect(0, 0, NSWidth(self.window!.contentView.frame), NSHeight(self.window!.contentView.frame))
-        transcriptController.view.autoresizingMask = .ViewHeightSizable | .ViewWidthSizable
-        self.window!.contentView.addSubview(transcriptController.view)
+        transcriptController.view.frame = NSMakeRect(0, 0, NSWidth(self.window!.contentView!.frame), NSHeight(self.window!.contentView!.frame))
+        transcriptController.view.autoresizingMask = [.ViewHeightSizable, .ViewWidthSizable]
+        self.window!.contentView!.addSubview(transcriptController.view)
         
         // configure transcript controller with preferences
         transcriptController.font = Preferences.SharedPreferences().transcriptFont

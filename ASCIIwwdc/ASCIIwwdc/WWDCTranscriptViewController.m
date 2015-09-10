@@ -17,7 +17,7 @@
 
 @import WebKit;
 
-@interface WWDCTranscriptViewController ()
+@interface WWDCTranscriptViewController () <WebFrameLoadDelegate>
 
 @property (weak) IBOutlet WebView *webView;
 @property (weak) IBOutlet NSProgressIndicator *progressIndicator;

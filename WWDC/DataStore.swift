@@ -53,7 +53,7 @@ class DataStore: NSObject {
     let URLSession2 = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
     
 	func fetchSessions(completionHandler: fetchSessionsCompletionHandler) {
-		if let appleURL = appleSessionsURL {
+		if appleSessionsURL != nil {
 			doFetchSessions(completionHandler)
 		} else {
 			let internalServiceURL = NSURL(string: _internalServiceURL)
@@ -63,7 +63,7 @@ class DataStore: NSObject {
 					completionHandler(false, [])
 					return
 				}
-				let parsedJSON: JSON? = JSON(data: data)
+				let parsedJSON: JSON? = JSON(data: data!)
 				if let json = parsedJSON, dictionary = json.dictionary {
 					let appleURL = dictionary["url"]!.string!
 					self.appleSessionsURL = NSURL(string: appleURL)!
@@ -80,7 +80,7 @@ class DataStore: NSObject {
         if disableCache {
             if let url = appleSessionsURL {
                 sranddev()
-                appleSessionsURL = NSURL(string: "\(url.absoluteString!)?\(rand())")
+                appleSessionsURL = NSURL(string: "\(url.absoluteString)?\(rand())")
             }
         }
         
@@ -94,7 +94,7 @@ class DataStore: NSObject {
                 return
             }
             
-            if let container = JSON(data: data).dictionary {
+            if let container = JSON(data: data!).dictionary {
                 let jsonSessions = container["sessions"]!.array!
                 
                 var sessions: [Session] = []
@@ -121,7 +121,7 @@ class DataStore: NSObject {
                     }
                 }
 				
-                sessions = sessions.sorted { sessionA, sessionB in
+                sessions = sessions.sort { sessionA, sessionB in
 					if(sessionA.year == sessionB.year) {
 						return sessionA.id < sessionB.id
 					} else {
@@ -212,12 +212,12 @@ class DataStore: NSObject {
     
     func checkForLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
         let task = URLSession2.dataTaskWithURL(liveURL) { data, response, error in
-            if data == nil || data.length == 0 {
+            if data == nil {
                 completionHandler(false, nil)
                 return
             }
             
-            let jsonData = JSON(data: data)
+            let jsonData = JSON(data: data!)
             let event = LiveEvent(jsonObject: jsonData)
             
             if event.isLiveRightNow {
@@ -231,12 +231,12 @@ class DataStore: NSObject {
     
     func fetchNextLiveEvent(completionHandler: (Bool, LiveEvent?) -> ()) {
         let task = URLSession2.dataTaskWithURL(liveNextURL) { data, response, error in
-            if data == nil || data.length == 0 {
+            if data == nil {
                 completionHandler(false, nil)
                 return
             }
             
-            let jsonData = JSON(data: data)
+            let jsonData = JSON(data: data!)
             let event = LiveEvent(jsonObject: jsonData)
             
             if event.title != "" {

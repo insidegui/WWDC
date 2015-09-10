@@ -175,6 +175,7 @@
 		DD2016381AE401B500DD8155 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0710;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Guilherme Rambo";
 				TargetAttributes = {

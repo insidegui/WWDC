@@ -17,6 +17,6 @@
 @property (readonly) NSString *fullText;
 @property (readonly) NSString *htmlString;
 
-@property (readonly) NSArray *timecodes;
+@property (readonly) NSArray<NSValue *> *timecodes;
 
 @end

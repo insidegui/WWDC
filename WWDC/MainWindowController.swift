@@ -25,8 +25,8 @@ class MainWindowController: NSWindowController {
             if let liveBanner = LiveEventBannerViewController.DefaultController {
                 liveBanner.event = LiveEventObserver.SharedObserver().nextEvent
                 if let window = self.window {
-                    window.contentView.addSubview(liveBanner.view)
-                    liveBanner.prepareForParentView(window.contentView as! NSView)
+                    window.contentView!.addSubview(liveBanner.view)
+                    liveBanner.prepareForParentView(window.contentView!)
                 }
             }
         }
@@ -41,7 +41,7 @@ class MainWindowController: NSWindowController {
     private func configureWindowAppearance()
     {
         if let window = window {
-            if let view = window.contentView as? NSView {
+            if let view = window.contentView {
                 view.wantsLayer = true
             }
             

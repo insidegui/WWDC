@@ -52,9 +52,9 @@ private extension NSImage {
         get {
             var rect = NSMakeRect(0, 0, self.size.width, self.size.height)
             
-            var iref = self.CGImageForProposedRect(&rect, context: nil, hints: nil)
+            let iref = self.CGImageForProposedRect(&rect, context: nil, hints: nil)
             
-            return iref!.takeRetainedValue()
+            return iref!
         }
     }
 }

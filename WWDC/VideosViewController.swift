@@ -106,7 +106,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         if let superview = scrollView.superview {
             superview.addSubview(headerController.view)
             headerController.view.frame = CGRectMake(0, NSHeight(superview.frame)-insetHeight, NSWidth(superview.frame), insetHeight)
-            headerController.view.autoresizingMask = NSAutoresizingMaskOptions.ViewWidthSizable | NSAutoresizingMaskOptions.ViewMinYMargin
+            headerController.view.autoresizingMask = [NSAutoresizingMaskOptions.ViewWidthSizable, NSAutoresizingMaskOptions.ViewMinYMargin]
             headerController.performSearch = search
         }
         
@@ -139,7 +139,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
 
     // MARK: Session loading
     
-    func loadSessions(#refresh: Bool, quiet: Bool) {
+    func loadSessions(refresh refresh: Bool, quiet: Bool) {
         if !quiet {
             if let window = view.window {
                 GRLoadingView.showInWindow(window)
@@ -211,14 +211,14 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeViewWithIdentifier("video", owner: tableView) as! VideoTableCellView
         
-        if row > count(displayedSessions) {
+        if row > displayedSessions.count {
             return cell
         }
         
         let session = displayedSessions[row]
         cell.titleField.stringValue = session.title
         cell.trackField.stringValue = session.track
-        cell.platformsField.stringValue = ", ".join(session.focus)
+        cell.platformsField.stringValue = session.focus.joinWithSeparator(", ")
         cell.detailsField.stringValue = "\(session.year) - Session \(session.id)"
         cell.progressView.progress = session.progress
         cell.progressView.favorite = session.favorite
@@ -286,7 +286,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
     
-    private let userInitiatedQ = dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.value), 0)
+    private let userInitiatedQ = dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)
     private enum MassiveUpdateProperty {
         case Progress(Double)
         case Favorite(Bool)
@@ -295,7 +295,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     private func doMassiveSessionPropertyUpdate(property: MassiveUpdateProperty) {
         dispatch_async(userInitiatedQ) {
             self.tableView.selectedRowIndexes.enumerateIndexesUsingBlock { idx, _ in
-                var session = self.displayedSessions[idx]
+                let session = self.displayedSessions[idx]
                 switch property {
                 case .Progress(let progress):
                     session.setProgressWithoutSendingNotification(progress)
@@ -313,7 +313,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         var stringToCopy:String?
         
         if tableView.selectedRowIndexes.count < 2 && tableView.clickedRow >= 0 {
-            var session = displayedSessions[tableView.clickedRow]
+            let session = displayedSessions[tableView.clickedRow]
             stringToCopy = session.shareURL
         } else {
             stringToCopy = ""

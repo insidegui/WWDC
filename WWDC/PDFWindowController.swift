@@ -49,7 +49,7 @@ class PDFWindowController: NSWindowController {
                     if success == true {
                         self.slidesDocument = PDFDocument(data: data)
                     } else {
-                        println("Download failed")
+                        print("Download failed")
                     }
                 }
             }

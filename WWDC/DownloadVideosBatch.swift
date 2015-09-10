@@ -46,7 +46,7 @@ class DownloadVideosBatch: NSObject {
     
     func startDownloading() {
         if self.sessions.count == 0 {
-            println("ALL VIDEOS DOWNLOADED")
+            print("ALL VIDEOS DOWNLOADED")
             currentlyDownloadedSession = ""
             return
         }
@@ -65,48 +65,46 @@ class DownloadVideosBatch: NSObject {
                 self.downloadStartedHndl = nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { note in
                     let url = note.object as! String?
                     if url != nil {
-                        println("Start downloading session '\(self.currentlyDownloadedSession)'")
+                        print("Start downloading session '\(self.currentlyDownloadedSession)'")
                     }
                 }
                 self.downloadFinishedHndl = nc.addObserverForName(VideoStoreNotificationDownloadFinished, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-                    if let object = note.object as? String {
-                        let url = object as String
-                        println("Finished downloading session '\(self.currentlyDownloadedSession)'")
+                    if let _ = note.object as? String {
+                        print("Finished downloading session '\(self.currentlyDownloadedSession)'")
                         self.sessions.removeAtIndex(0)
                         _sharedDownloader.startDownloading()
                     }
                 }
                 self.downloadChangedHndl = nc.addObserverForName(VideoStoreNotificationDownloadProgressChanged, object: nil, queue: NSOperationQueue.mainQueue()) { note in
                     if let info = note.userInfo {
-                        if let object = note.object as? String {
-                            let url = object as String
+                        if let _ = note.object as? String {
                             if let expected = info["totalBytesExpectedToWrite"] as? Int,
                                 let written = info["totalBytesWritten"] as? Int
                             {
                                 let progress = Double(written) / Double(expected)
                                 
-                                println("Downloading \(self.currentlyDownloadedSession): \(progress*100.0)%")
+                                print("Downloading \(self.currentlyDownloadedSession): \(progress*100.0)%")
                             }
                         }
                     }
                 }
                 self.downloadCancelledHndl = nc.addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
                     if let object = note.object as? String {
-                        let url = object as String
-                        println("Download of session \(self.currentlyDownloadedSession) was cancelled.")
+                        _ = object as String
+                        print("Download of session \(self.currentlyDownloadedSession) was cancelled.")
                     }
                 }
                 self.downloadPausedHndl = nc.addObserverForName(VideoStoreNotificationDownloadPaused, object: nil, queue: NSOperationQueue.mainQueue()) { note in
                     if let object = note.object as? String {
-                        let url = object as String
-                        println("Download of session \(self.currentlyDownloadedSession) was paused.")
+                        _ = object as String
+                        print("Download of session \(self.currentlyDownloadedSession) was paused.")
                         
                     }
                 }
                 self.downloadResumedHndl = nc.addObserverForName(VideoStoreNotificationDownloadResumed, object: nil, queue: NSOperationQueue.mainQueue()) { note in
                     if let object = note.object as? String {
-                        let url = object as String
-                        println("Download of session \(self.currentlyDownloadedSession) was resumed.")
+                        _ = object as String
+                        print("Download of session \(self.currentlyDownloadedSession) was resumed.")
                     }
                 }
     }
