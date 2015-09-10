@@ -48,6 +48,8 @@ WWDC for OS X is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can s
 
 ## Build Instructions
 
+* Important: building now requires Xcode 7.0 or later since the project was updated to Swift 2. *
+
 The only steps required before you build is to pull down the code and submodules:
 
 	$ git clone --recursive https://github.com/insidegui/WWDC.git
