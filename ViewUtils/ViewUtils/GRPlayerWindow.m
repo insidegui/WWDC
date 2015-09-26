@@ -7,13 +7,29 @@
 
 #import "GRPlayerWindow.h"
 
+#import <objc/runtime.h>
+
 #ifdef DEBUG
 @interface FScriptMenuItem: NSObject
 + (void)insertInMainMenu;
 @end
 #endif
 
+@interface GRPlayerWindowFrame : NSView
++ (void)installPlayerWindowTitleTextSwizzles;
+@end
+
+@interface GRPlayerWindowFrame (Swizzles)
+- (NSBackgroundStyle)_NS_backgroundStyleForTitleTextField;
+- (NSColor *)_NS_currentTitleColor;
+@end
+
 @implementation GRPlayerWindow
+
++ (void)load
+{
+    [GRPlayerWindowFrame installPlayerWindowTitleTextSwizzles];
+}
 
 - (void)makeKeyAndOrderFront:(id)sender
 {
@@ -25,7 +41,7 @@
     }
     #endif
     
-    [self _gr_customizeTitleIfNeeded];
+    [self configureTitlebar];
 }
 
 - (void)configureTitlebar
@@ -64,25 +80,38 @@
     if (!animate) [self center];
 }
 
-// On El Capitan and up (>=10.11), we need to customize the titlebar label color
-- (void)_gr_customizeTitleIfNeeded
+@end
+
+@implementation GRPlayerWindowFrame
+
++ (void)installPlayerWindowTitleTextSwizzles
 {
-    NSOperatingSystemVersion v = [NSProcessInfo processInfo].operatingSystemVersion;
-    if (v.majorVersion != 10 || v.minorVersion < 11) return;
-    
-    NSTextField *label = [self titlebarTextField];
-    label.textColor = [NSColor tertiaryLabelColor];
-    label.shadow = nil;
-    [label.cell setBackgroundStyle:NSBackgroundStyleDark];
+    Class targetClass = NSClassFromString(@"NSThemeFrame");
+    NSArray *methodsToOverride = @[@"_backgroundStyleForTitleTextField", @"_currentTitleColor"];
+    for (NSString *selector in methodsToOverride) {
+        Method m1 = class_getInstanceMethod(targetClass, NSSelectorFromString(selector));
+        Method m2 = class_getInstanceMethod([self class], NSSelectorFromString([selector stringByReplacingOccurrencesOfString:@"_" withString:@"_GR_"]));
+        class_addMethod(targetClass, NSSelectorFromString([selector stringByReplacingOccurrencesOfString:@"_" withString:@"_NS_"]), method_getImplementation(m1), method_getTypeEncoding(m1));
+        method_exchangeImplementations(m1, m2);
+    }
 }
 
-- (NSTextField *)titlebarTextField
+- (NSBackgroundStyle)_GR_backgroundStyleForTitleTextField
 {
-    for (id subview in self.titlebarView.subviews) {
-        if ([subview isKindOfClass:[NSTextField class]]) return subview;
+    if ([self.window isKindOfClass:[GRPlayerWindow class]]) {
+        return NSBackgroundStyleDark;
+    } else {
+        return [self _NS_backgroundStyleForTitleTextField];
     }
-    
-    return nil;
+}
+
+- (NSColor *)_GR_currentTitleColor
+{
+    if ([self.window isKindOfClass:[GRPlayerWindow class]]) {
+        return [NSColor secondaryLabelColor];
+    } else {
+        return [self _NS_currentTitleColor];
+    }
 }
 
 @end
