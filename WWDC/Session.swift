@@ -23,6 +23,7 @@ struct Session {
     var url: String
     var year: Int
     var hd_url: String?
+    var shelfImageURL: String?
     
     var progress: Double {
         get {
