@@ -244,6 +244,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         return 40.0
     }
     
+    func tableView(tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
+        return tableView.makeViewWithIdentifier("row", owner: tableView) as? NSTableRowView
+    }
+    
     // MARK: Table Menu
 
     @IBAction func markAsWatchedMenuAction(sender: NSMenuItem) {

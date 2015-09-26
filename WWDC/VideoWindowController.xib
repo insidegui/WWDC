@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E26a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15A279b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.AVKitIBPlugin" version="7706"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="8191"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="VideoWindowController" customModule="WWDC" customModuleProvider="target">
@@ -27,9 +27,11 @@
                 <subviews>
                     <avPlayerView controlsStyle="floating" translatesAutoresizingMaskIntoConstraints="NO" id="A94-Zf-dtb" customClass="GRPlayerView">
                         <rect key="frame" x="0.0" y="0.0" width="900" height="506"/>
+                        <animations/>
                     </avPlayerView>
                     <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7gd-xC-HsY" customClass="GRCustomPlayerView">
                         <rect key="frame" x="0.0" y="0.0" width="900" height="506"/>
+                        <animations/>
                     </customView>
                     <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="M25-n0-Ib8">
                         <rect key="frame" x="434" y="237" width="32" height="32"/>
@@ -42,6 +44,7 @@
                                 </configuration>
                             </ciFilter>
                         </contentFilters>
+                        <animations/>
                     </progressIndicator>
                 </subviews>
                 <constraints>
@@ -56,6 +59,7 @@
                     <constraint firstItem="A94-Zf-dtb" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="vjL-91-PKL"/>
                     <constraint firstAttribute="trailing" secondItem="7gd-xC-HsY" secondAttribute="trailing" id="wrz-uB-rLi"/>
                 </constraints>
+                <animations/>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>

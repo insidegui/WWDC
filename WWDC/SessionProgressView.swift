@@ -9,96 +9,160 @@
 import Cocoa
 import QuartzCore
 
-@IBDesignable
 class SessionProgressView: NSView {
 
-    @IBInspectable var favorite: Bool = false {
+    var favorite: Bool = false {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            updateUI()
         }
     }
     
-    @IBInspectable var progress: Double = 0 {
+    var progress: Double = 0 {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            updateUI()
         }
     }
-
-    override func drawRect(dirtyRect: NSRect) {
-        super.drawRect(dirtyRect)
-        
-        if progress >= 1 {
-            drawStarOutlineIfNeeded()
-            return
+    
+    var selected = false {
+        didSet {
+            updateColors()
         }
+    }
+    
+    private func updateUI() {
+        CATransaction.begin()
+        CATransaction.setAnimationDuration(0.0)
         
         if favorite {
-            drawStarBezel()
+            bgShapeLayer.path = starPath
+            
+            if progress >= 1 {
+                shapeLayer.path = nil
+            } else {
+                shapeLayer.path = starPath
+            }
         } else {
-            drawCircularBezel()
+            if progress >= 1 {
+                bgShapeLayer.path = nil
+                shapeLayer.path = nil
+            } else if progress == 0 {
+                bgShapeLayer.path = circlePath
+                shapeLayer.path = circlePath
+            } else if progress > 0 {
+                bgShapeLayer.path = circlePath
+                shapeLayer.path = halfCirclePath
+            }
         }
         
-        NSGraphicsContext.currentContext()?.saveGraphicsState()
-        Theme.WWDCTheme.fillColor.set()
-        if progress == 0 {
-            NSRectFill(bounds)
-        } else if progress < 1 {
-            NSBezierPath(rect: NSMakeRect(0, 0, round(NSWidth(bounds)/2), NSHeight(bounds))).addClip()
-            NSRectFill(bounds)
-        }
-        NSGraphicsContext.currentContext()?.restoreGraphicsState()
-        
-        drawStarOutlineIfNeeded()
+        CATransaction.commit()
+    }
+
+    private var bgShapeLayer: CAShapeLayer!
+    private var shapeLayer: CAShapeLayer!
+    private var circlePath: CGMutablePathRef!
+    private var halfCirclePath: CGMutablePathRef!
+    private var starPath: CGMutablePathRef!
+    
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
     }
     
-    // MARK: Shape drawing
-    
-    private var insetBounds: NSRect {
+    private var strokeColor: NSColor {
         get {
-            return NSInsetRect(bounds, 5.5, 5.5)
+            return selected ? Theme.WWDCTheme.fillColor.darkerColor : Theme.WWDCTheme.fillColor
         }
     }
-    private var insetBoundsForStar: NSRect {
+    
+    private var fillColor: NSColor {
         get {
-            return NSInsetRect(bounds, 5, 5)
+            return selected ? Theme.WWDCTheme.backgroundColor.colorWithAlphaComponent(0.9) : Theme.WWDCTheme.fillColor
         }
     }
     
-    private func drawCircularBezel() {
-        let circle = NSBezierPath(ovalInRect: insetBounds)
-        
-        Theme.WWDCTheme.backgroundColor.set()
-        circle.fill()
-        Theme.WWDCTheme.fillColor.set()
-        circle.stroke()
-        
-        circle.addClip()
-    }
-    
-    private func drawStarBezel() {
-        let ctx = NSGraphicsContext.currentContext()?.CGContext
-        
-        // mask the context to the star shape
-        let mask = Theme.WWDCTheme.starImage
-        CGContextClipToMask(ctx, insetBoundsForStar, mask)
-        CGContextSetFillColorWithColor(ctx, Theme.WWDCTheme.backgroundColor.CGColor)
-        CGContextFillRect(ctx, insetBoundsForStar)
-    }
-    
-    private func drawStarOutlineIfNeeded() {
-        if !favorite {
-            return
+    private var bgColor: NSColor {
+        get {
+            return selected ? Theme.WWDCTheme.fillColor : Theme.WWDCTheme.backgroundColor.colorWithAlphaComponent(0.9)
         }
-        
-        let ctx = NSGraphicsContext.currentContext()?.CGContext
-        
-        // get star outline shape
-        let outline = Theme.WWDCTheme.starOutlineImage
-        
-        // draw star outline
-        CGContextClipToMask(ctx, insetBoundsForStar, outline)
-        CGContextSetFillColorWithColor(ctx, Theme.WWDCTheme.fillColor.CGColor)
-        CGContextFillRect(ctx, insetBoundsForStar)
     }
     
+    private func commonInit() {
+        wantsLayer = true
+        layer = CALayer()
+        
+        shapeLayer = CAShapeLayer()
+        shapeLayer.frame = CGRectInset(bounds, 4.0, 4.0)
+        shapeLayer.autoresizingMask = [.LayerWidthSizable, .LayerHeightSizable]
+
+        bgShapeLayer = CAShapeLayer()
+        bgShapeLayer.frame = shapeLayer.frame
+        bgShapeLayer.autoresizingMask = [.LayerWidthSizable, .LayerHeightSizable]
+        bgShapeLayer.lineWidth = 1.0
+        
+        updateColors()
+        
+        preparePaths()
+
+        bgShapeLayer.path = circlePath
+        shapeLayer.path = circlePath
+        layer?.addSublayer(bgShapeLayer)
+        layer?.addSublayer(shapeLayer)
+    }
+    
+    private func updateColors() {
+        guard bgShapeLayer != nil || shapeLayer != nil else { return }
+        
+        CATransaction.begin()
+        CATransaction.setAnimationDuration(0.0)
+        bgShapeLayer.strokeColor = strokeColor.CGColor
+        shapeLayer.fillColor = fillColor.CGColor
+        bgShapeLayer.fillColor = bgColor.CGColor
+        CATransaction.commit()
+    }
+    
+    private func preparePaths() {
+        let shapeRect = CGRectInset(shapeLayer.bounds, 1.0, 1.0)
+        
+        circlePath = CGPathCreateMutable()
+        CGPathAddEllipseInRect(circlePath, nil, shapeRect)
+        
+        halfCirclePath = CGPathCreateMutable()
+        CGPathAddArc(halfCirclePath, nil, CGRectGetMidX(shapeRect), CGRectGetMidY(shapeRect), CGRectGetWidth(shapeRect)/2.0, -90.degreesToRadians, -270.degreesToRadians, true)
+        
+        starPath = CGPathCreateMutable()
+        let a = (2 * M_PI) / 10
+        let starRadius = Int(shapeLayer.bounds.size.width/2)
+        let span = Double(shapeLayer.bounds.size.width/2)
+        for i in 0...10 {
+            let r = Double(starRadius * (i % 2 + 1) / 2)
+            let o = a * Double(i)
+            let x = CGFloat(r * sin(o) + span)
+            let y = CGFloat(r * cos(o) + span)
+            
+            if (i == 0) {
+                CGPathMoveToPoint(starPath, nil, x, y)
+            } else {
+                CGPathAddLineToPoint(starPath, nil, x, y)
+            }
+        }
+        CGPathCloseSubpath(starPath)
+    }
+    
+    override var flipped: Bool {
+        get {
+            return true
+        }
+    }
+    
+}
+
+extension Int {
+    var degreesToRadians : CGFloat {
+        return CGFloat(self) * CGFloat(M_PI) / 180.0
+    }
 }

@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C967BA91AE7EB27003662B2 /* NSString+QualifierSearchParser.m */; };
 		515712D51B29E857007DE4A3 /* DownloadVideosBatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 515712D41B29E857007DE4A3 /* DownloadVideosBatch.swift */; };
+		51B28F551BB62BA9001F7A6C /* VideoTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B28F541BB62BA9001F7A6C /* VideoTableRowView.swift */; settings = {ASSET_TAGS = (); }; };
+		51B28F581BB6314B001F7A6C /* NSColor+GRProKitHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 51B28F571BB6314B001F7A6C /* NSColor+GRProKitHelpers.m */; settings = {ASSET_TAGS = (); }; };
+		51B28F5B1BB63F9E001F7A6C /* GridlessTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B28F5A1BB63F9E001F7A6C /* GridlessTableView.swift */; settings = {ASSET_TAGS = (); }; };
 		C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */; };
 		C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */; };
 		C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */; };
@@ -139,6 +142,10 @@
 		1C967BA91AE7EB27003662B2 /* NSString+QualifierSearchParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+QualifierSearchParser.m"; sourceTree = "<group>"; };
 		1C967BAB1AE7EB5C003662B2 /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
 		515712D41B29E857007DE4A3 /* DownloadVideosBatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadVideosBatch.swift; sourceTree = "<group>"; };
+		51B28F541BB62BA9001F7A6C /* VideoTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoTableRowView.swift; sourceTree = "<group>"; };
+		51B28F561BB6314B001F7A6C /* NSColor+GRProKitHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+GRProKitHelpers.h"; sourceTree = "<group>"; };
+		51B28F571BB6314B001F7A6C /* NSColor+GRProKitHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+GRProKitHelpers.m"; sourceTree = "<group>"; };
+		51B28F5A1BB63F9E001F7A6C /* GridlessTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridlessTableView.swift; sourceTree = "<group>"; };
 		C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadListWindowController.xib; sourceTree = "<group>"; };
 		C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListWindowController.swift; sourceTree = "<group>"; };
 		C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListProgressCellView.swift; sourceTree = "<group>"; };
@@ -215,6 +222,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		51B28F591BB63B3C001F7A6C /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				DD2016051AE3FA6600DD8155 /* SessionProgressView.swift */,
+				DD4F6E721AE2D5980099BEB5 /* VideoTableCellView.swift */,
+				51B28F541BB62BA9001F7A6C /* VideoTableRowView.swift */,
+				51B28F5A1BB63F9E001F7A6C /* GridlessTableView.swift */,
+			);
+			name = TableView;
+			sourceTree = "<group>";
+		};
 		DD2016621AE4029100DD8155 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -310,11 +328,10 @@
 		DDD7A42D1AE2DECE000A0102 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				51B28F591BB63B3C001F7A6C /* TableView */,
 				C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */,
-				DD4F6E721AE2D5980099BEB5 /* VideoTableCellView.swift */,
 				DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */,
 				DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */,
-				DD2016051AE3FA6600DD8155 /* SessionProgressView.swift */,
 				DD20166D1AE40D0100DD8155 /* ContentBackgroundView.swift */,
 			);
 			name = Views;
@@ -394,6 +411,8 @@
 		DDD7A43B1AE2E392000A0102 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				51B28F561BB6314B001F7A6C /* NSColor+GRProKitHelpers.h */,
+				51B28F571BB6314B001F7A6C /* NSColor+GRProKitHelpers.m */,
 				DD3081761AF3DC370009D412 /* DTFolderMonitor.h */,
 				DD3081771AF3DC370009D412 /* DTFolderMonitor.m */,
 				1C967BA81AE7EB27003662B2 /* NSString+QualifierSearchParser.h */,
@@ -576,7 +595,9 @@
 				DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */,
 				DD4F6E731AE2D5980099BEB5 /* VideoTableCellView.swift in Sources */,
 				DD4F6E711AE2D1C60099BEB5 /* VideoDetailsViewController.swift in Sources */,
+				51B28F551BB62BA9001F7A6C /* VideoTableRowView.swift in Sources */,
 				DDCB0D691B20D63A00D4DA32 /* TranscriptStore.swift in Sources */,
+				51B28F581BB6314B001F7A6C /* NSColor+GRProKitHelpers.m in Sources */,
 				DD4F6E6F1AE2D14A0099BEB5 /* MainWindowController.swift in Sources */,
 				DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */,
 				DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */,
@@ -586,6 +607,7 @@
 				1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */,
 				DD259FD01B220D96003EB3E5 /* SearchController.swift in Sources */,
 				DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */,
+				51B28F5B1BB63F9E001F7A6C /* GridlessTableView.swift in Sources */,
 				DD3081781AF3DC370009D412 /* DTFolderMonitor.m in Sources */,
 				DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */,
 			);

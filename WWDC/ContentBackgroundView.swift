@@ -8,7 +8,6 @@
 
 import Cocoa
 
-@IBDesignable
 class ContentBackgroundView: NSView {
 
     override func drawRect(dirtyRect: NSRect) {
