@@ -10,18 +10,6 @@ import Cocoa
 
 class VideoTableRowView: NSTableRowView {
     
-    private var nextRowView: VideoTableRowView? {
-        get {
-            if let rows = superview?.subviews {
-                if let idx = rows.indexOf(self) {
-                    guard idx < rows.count-1 else { return nil }
-                    return rows[idx+1] as? VideoTableRowView
-                }
-            }
-            return nil
-        }
-    }
-    
     override var previousRowSelected: Bool {
         didSet {
             setNeedsDisplayInRect(bounds)
@@ -43,7 +31,7 @@ class VideoTableRowView: NSTableRowView {
     private var shouldDrawAsKey: Bool {
         get {
             if let window = window {
-                return window.keyWindow && NSApp.active
+                return window.keyWindow && NSApp.active && window.firstResponder.isEqualTo(self.superview)
             } else {
                 return false
             }
@@ -83,12 +71,6 @@ class VideoTableRowView: NSTableRowView {
         updateSubviewsInterestedInSelectionState()
     }
     
-    override var interiorBackgroundStyle: NSBackgroundStyle {
-        get {
-            return (selected && shouldDrawAsKey) ? .Dark : .Raised
-        }
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         selected = false
@@ -97,7 +79,7 @@ class VideoTableRowView: NSTableRowView {
     override func drawSeparatorInRect(dirtyRect: NSRect) {
         let bottomRect = NSMakeRect(0, NSHeight(bounds)-1.0, NSWidth(bounds), 1.0)
         let topRect = NSMakeRect(0, 0.0, NSWidth(bounds), 1.0)
-
+        
         if selected {
             if shouldDrawAsKey {
                 Theme.WWDCTheme.fillColor.colorByAdjustingBrightnessWithFactor(-0.25).setFill()
@@ -109,7 +91,7 @@ class VideoTableRowView: NSTableRowView {
         } else {
             Theme.WWDCTheme.separatorColor.setFill()
         }
-
+        
         if !nextRowSelected {
             NSRectFill(bottomRect)
         }

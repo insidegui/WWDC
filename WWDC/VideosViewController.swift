@@ -215,28 +215,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             return cell
         }
         
-        let session = displayedSessions[row]
-        cell.titleField.stringValue = session.title
-        cell.trackField.stringValue = session.track
-        cell.platformsField.stringValue = session.focus.joinWithSeparator(", ")
-        cell.detailsField.stringValue = "\(session.year) - Session \(session.id)"
-        cell.progressView.progress = session.progress
-        cell.progressView.favorite = session.favorite
-        
-        if let url = session.hd_url {
-            let videoStore = VideoStore.SharedStore()
+        cell.session = displayedSessions[row]
 
-            if videoStore.hasVideo(url) {
-                cell.downloadedImage.hidden = false
-                cell.downloadedImage.image = NSImage(named: "downloaded")
-            } else if videoStore.isDownloading(url) {
-                cell.downloadedImage.hidden = false
-                cell.downloadedImage.image = NSImage(named: "downloading")
-            } else {
-                cell.downloadedImage.hidden = true
-            }
-        }
-        
         return cell
     }
     
