@@ -26,3 +26,4 @@ FOUNDATION_EXPORT const unsigned char ViewUtilsVersionString[];
 #import <ViewUtils/GRCustomPlayerView.h>
 #import <ViewUtils/GRTitlebarVisibilityControllingView.h>
 #import <ViewUtils/GRBannerView.h>
+#import <ViewUtils/GRMaskImageView.h>

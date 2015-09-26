@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import ViewUtils
 
 class VideoTableCellView: NSTableCellView {
     
@@ -19,13 +20,21 @@ class VideoTableCellView: NSTableCellView {
     @IBOutlet weak private var titleField: NSTextField!
     @IBOutlet weak private var detailsField: NSTextField!
     @IBOutlet weak private var progressView: SessionProgressView!
-    @IBOutlet weak private var downloadedImage: NSImageView!
+    @IBOutlet weak private var downloadedImage: GRMaskImageView!
+    
+    override var backgroundStyle: NSBackgroundStyle {
+        didSet {
+            updateTint()
+        }
+    }
     
     func updateUI() {
         titleField.stringValue = session.title
         detailsField.stringValue = "\(session.year) - Session \(session.id) - \(session.track)"
         progressView.progress = session.progress
         progressView.favorite = session.favorite
+        
+        updateTint()
         
         if let url = session.hd_url {
             let videoStore = VideoStore.SharedStore()
@@ -39,6 +48,14 @@ class VideoTableCellView: NSTableCellView {
             } else {
                 downloadedImage.hidden = true
             }
+        }
+    }
+    
+    func updateTint() {
+        if backgroundStyle == .Dark {
+            downloadedImage.tintColor = Theme.WWDCTheme.backgroundColor
+        } else {
+            downloadedImage.tintColor = Theme.WWDCTheme.fillColor
         }
     }
     

@@ -571,32 +571,34 @@ CA
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <imageView hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zgY-Cr-45f" userLabel="Downloaded Image">
+                                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="hGQ-A5-6wg" customClass="GRMaskImageView">
                                                                             <rect key="frame" x="437" y="17" width="7" height="7"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="height" constant="7" id="3HX-Cj-imS"/>
-                                                                                <constraint firstAttribute="width" constant="7" id="6eh-jz-eb9"/>
+                                                                                <constraint firstAttribute="height" constant="7" id="7QC-Z0-6S5"/>
+                                                                                <constraint firstAttribute="width" constant="7" id="EaV-DV-VSf"/>
                                                                             </constraints>
                                                                             <animations/>
-                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="downloaded" id="mXp-n9-kA8"/>
-                                                                        </imageView>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="image" keyPath="image" value="downloaded"/>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                        </customView>
                                                                     </subviews>
                                                                     <constraints>
+                                                                        <constraint firstItem="FAi-An-gn9" firstAttribute="trailing" secondItem="3v3-8v-AJg" secondAttribute="trailing" id="6J2-Ns-Puu"/>
                                                                         <constraint firstItem="iCs-Z3-5sc" firstAttribute="leading" secondItem="P0q-1C-AQy" secondAttribute="leading" constant="6" id="FBF-CI-xza"/>
                                                                         <constraint firstItem="FAi-An-gn9" firstAttribute="top" secondItem="3v3-8v-AJg" secondAttribute="bottom" constant="2" id="Fb8-Or-x5z"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="zgY-Cr-45f" secondAttribute="trailing" constant="3" id="MxO-xR-X9v"/>
-                                                                        <constraint firstItem="zgY-Cr-45f" firstAttribute="leading" secondItem="FAi-An-gn9" secondAttribute="trailing" constant="8" id="QNF-za-oCJ"/>
+                                                                        <constraint firstItem="hGQ-A5-6wg" firstAttribute="centerY" secondItem="P0q-1C-AQy" secondAttribute="centerY" id="IbN-w4-9ei"/>
                                                                         <constraint firstAttribute="centerY" secondItem="iCs-Z3-5sc" secondAttribute="centerY" id="UiE-Nu-aEl"/>
                                                                         <constraint firstItem="FAi-An-gn9" firstAttribute="leading" secondItem="3v3-8v-AJg" secondAttribute="leading" id="Xlf-fo-YW0"/>
-                                                                        <constraint firstItem="zgY-Cr-45f" firstAttribute="centerY" secondItem="P0q-1C-AQy" secondAttribute="centerY" id="mZc-MH-x6e"/>
                                                                         <constraint firstItem="3v3-8v-AJg" firstAttribute="leading" secondItem="P0q-1C-AQy" secondAttribute="leading" constant="34" id="oOE-BX-ZKC"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="hGQ-A5-6wg" secondAttribute="trailing" constant="3" id="tO5-dU-g9q"/>
+                                                                        <constraint firstItem="hGQ-A5-6wg" firstAttribute="leading" secondItem="3v3-8v-AJg" secondAttribute="trailing" constant="8" id="veL-Tj-ArJ"/>
                                                                         <constraint firstItem="3v3-8v-AJg" firstAttribute="top" secondItem="P0q-1C-AQy" secondAttribute="top" constant="3" id="wUy-mZ-smH"/>
-                                                                        <constraint firstItem="zgY-Cr-45f" firstAttribute="leading" secondItem="3v3-8v-AJg" secondAttribute="trailing" constant="8" id="z2G-ha-bXt"/>
                                                                     </constraints>
                                                                     <animations/>
                                                                     <connections>
                                                                         <outlet property="detailsField" destination="FAi-An-gn9" id="pJS-2A-zKx"/>
-                                                                        <outlet property="downloadedImage" destination="zgY-Cr-45f" id="x5B-ym-qyn"/>
+                                                                        <outlet property="downloadedImage" destination="hGQ-A5-6wg" id="9G3-9g-pDh"/>
                                                                         <outlet property="progressView" destination="iCs-Z3-5sc" id="lmA-ez-Zek"/>
                                                                         <outlet property="textField" destination="3v3-8v-AJg" id="vvt-wQ-fBZ"/>
                                                                         <outlet property="titleField" destination="3v3-8v-AJg" id="doE-zP-w64"/>
