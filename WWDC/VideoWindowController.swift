@@ -138,40 +138,24 @@ class VideoWindowController: NSWindowController {
     }
     
     private func loadEventVideo() {
-        if let url = event!.appropriateURL {
-            print("LIVE EVENT URL: \(url)")
-
-            self.asset = AVURLAsset(URL: url, options: nil)
-            let keys = ["playable", "tracks"]
-            asset.loadValuesAsynchronouslyForKeys(keys) {
-                for key in keys {
-                    var error: NSError?
-                    let status = self.asset.statusOfValueForKey(key, error: &error)
-                    if status == .Failed {
-                        print("[Live Session Playback] Failed to load status for key \(key) \(error)")
-                        return
-                    }
-                }
-                
+        if let url = event!.stream {
+            asset = AVURLAsset(URL: url, options: nil)
+            asset.loadValuesAsynchronouslyForKeys(["playable"]) {
                 dispatch_async(dispatch_get_main_queue()) {
-                    self.playEventVideo()
+                    if self.asset.playable {
+                        self.playEventVideo()
+                    }
                 }
             }
         }
     }
     
     private func playEventVideo() {
-        self.item = AVPlayerItem(asset: self.asset)
-        self.player = AVPlayer(playerItem: self.item)
-        self.item.addObserver(self, forKeyPath: "status", options: [.Initial, .New], context: nil)
-        
-        if NSProcessInfo.processInfo().isElCapitan {
-            self.playerView.hidden = true
-            self.customPlayerView.hidden = false
-            self.customPlayerView.player = self.player
-        } else {
-            self.playerView.player = player
-        }
+        item = AVPlayerItem(asset: asset)
+        player = AVPlayer(playerItem: item)
+        item.addObserver(self, forKeyPath: "status", options: [.Initial, .New], context: nil)
+
+        playerView.player = player
     }
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -192,9 +176,7 @@ class VideoWindowController: NSWindowController {
     }
     
     func showTranscriptWindow(sender: AnyObject?) {
-        if session == nil {
-            return
-        }
+        guard session != nil else { return }
         
         if transcriptWC != nil {
             if let window = transcriptWC.window {
@@ -208,9 +190,8 @@ class VideoWindowController: NSWindowController {
             transcriptWC = TranscriptWindowController(session: session)
             transcriptWC.showWindow(sender)
             transcriptWC.jumpToTimeCallback = { [unowned self] time in
-                if let player = self.player {
-                    player.seekToTime(CMTimeMakeWithSeconds(time, 30))
-                }
+                guard let player = self.player else { return }
+                player.seekToTime(CMTimeMakeWithSeconds(time, 30))
             }
             transcriptWC.transcriptReadyCallback = { [unowned self] transcript in
                 self.setupTranscriptSync(transcript)
@@ -221,9 +202,7 @@ class VideoWindowController: NSWindowController {
     var timeObserver: AnyObject?
     
     func setupTimeObserver() {
-        if session == nil {
-            return
-        }
+        guard session != nil else { return }
         
         timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(5, 1), queue: dispatch_get_main_queue()) { [unowned self] currentTime in
             let progress = Double(CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(self.player!.currentItem!.duration))
@@ -236,15 +215,11 @@ class VideoWindowController: NSWindowController {
     var boundaryObserver: AnyObject?
     
     func setupTranscriptSync(transcript: WWDCSessionTranscript) {
-        if self.transcriptWC == nil {
-            return
-        }
+        guard transcriptWC != nil else { return }
         
         boundaryObserver = player?.addBoundaryTimeObserverForTimes(transcript.timecodes, queue: dispatch_get_main_queue()) { [unowned self] in
-            if self.transcriptWC == nil {
-                return
-            }
-            
+            guard self.transcriptWC != nil else { return }
+
             let roundedTimecode = WWDCTranscriptLine.roundedStringFromTimecode(CMTimeGetSeconds(self.player!.currentTime()))
             self.transcriptWC.highlightLineAt(roundedTimecode)
         }
@@ -337,25 +312,4 @@ class VideoWindowController: NSWindowController {
         }
     }
     
-}
-
-private extension NSProcessInfo {
-    var isElCapitan: Bool {
-        get {
-            let v = self.operatingSystemVersion
-            return (v.majorVersion == 10 && v.minorVersion >= 11)
-        }
-    }
-}
-
-private extension LiveEvent {
-    var appropriateURL: NSURL? {
-        get {
-            if NSProcessInfo.processInfo().isElCapitan && stream2 != nil {
-                return stream2
-            } else {
-                return stream
-            }
-        }
-    }
 }
