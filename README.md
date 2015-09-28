@@ -6,15 +6,7 @@ Don't like WWDC's website? Use this app to watch WWDC sessions on your Mac.
 
 To download the latest release, [click here](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip).
 
-You can also install using [Homebrew Cask](http://caskroom.io):
-
-	$ brew cask install wwdc
-
 ![screenshot](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/screenshot.png)
-
-## El Capitan support
-
-Almost everything works fine on El Capitan, but live ~~sessions currently only play the audio, this seems to be a bug in AVFoundation and I'm currently trying to fix it~~. I've managed to get live streamed sessions working on El Capitan by using a custom player view, but I've not had the time to implement complete controls (volume, scrubbing, etc). 
 
 ## Searching
 
@@ -48,8 +40,14 @@ WWDC for OS X is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can s
 
 ## Build Instructions
 
-* Important: building now requires Xcode 7.0 or later since the project was updated to Swift 2. *
+* Important: building requires Xcode 7.0 or later since the project was updated to Swift 2. *
 
 The only steps required before you build is to pull down the code and submodules:
 
 	$ git clone --recursive https://github.com/insidegui/WWDC.git
+
+### Cask
+
+You can also install using [Homebrew Cask](http://caskroom.io):
+
+	$ brew cask install wwdc
