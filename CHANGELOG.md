@@ -1,5 +1,97 @@
 # Change Log
 
+## [2.3](https://github.com/insidegui/WWDC/tree/2.3) (2015-09-28)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/2.2...2.3)
+
+**Implemented enhancements:**
+
+- Add ability to save slides [\#94](https://github.com/insidegui/WWDC/issues/94)
+
+- Add Google Cast Integration [\#86](https://github.com/insidegui/WWDC/issues/86)
+
+- Ability to stream video to Apple TV [\#80](https://github.com/insidegui/WWDC/issues/80)
+
+- Search through ASCII WWDC transcripts in main screen [\#21](https://github.com/insidegui/WWDC/issues/21)
+
+**Fixed bugs:**
+
+- Crasher bug in VideosViewController tableView:viewForTableColumn:... [\#87](https://github.com/insidegui/WWDC/issues/87)
+
+- Crashed on searching [\#84](https://github.com/insidegui/WWDC/issues/84)
+
+- Screen goes to sleep when only playing movies [\#79](https://github.com/insidegui/WWDC/issues/79)
+
+- Crashes when I attempt to open downloads window \(Yosemite\) [\#77](https://github.com/insidegui/WWDC/issues/77)
+
+- Live sessions only play audio on El Capitan [\#65](https://github.com/insidegui/WWDC/issues/65)
+
+**Closed issues:**
+
+- Build fails in Xcode 7 [\#74](https://github.com/insidegui/WWDC/issues/74)
+
+**Merged pull requests:**
+
+- Separate “downloading” indicator on the video list [\#93](https://github.com/insidegui/WWDC/pull/93) ([mackuba](https://github.com/mackuba))
+
+- Show download progress in a label under progress bar as current/total MB + % [\#92](https://github.com/insidegui/WWDC/pull/92) ([mackuba](https://github.com/mackuba))
+
+- Open downloads window on single-click on the indicator control [\#91](https://github.com/insidegui/WWDC/pull/91) ([mackuba](https://github.com/mackuba))
+
+- Auto-create videos folder when clicking “Reveal in Finder” in preferences [\#90](https://github.com/insidegui/WWDC/pull/90) ([mackuba](https://github.com/mackuba))
+
+- Search using keywords. [\#89](https://github.com/insidegui/WWDC/pull/89) ([erndev](https://github.com/erndev))
+
+- Video window float on top [\#88](https://github.com/insidegui/WWDC/pull/88) ([jagreenwood](https://github.com/jagreenwood))
+
+- The updated link will also work with curl. [\#83](https://github.com/insidegui/WWDC/pull/83) ([chrisswong](https://github.com/chrisswong))
+
+- New search qualifier -- favorited [\#78](https://github.com/insidegui/WWDC/pull/78) ([mcgraw](https://github.com/mcgraw))
+
+- Add french localization/i18n [\#69](https://github.com/insidegui/WWDC/pull/69) ([guillaumemaka](https://github.com/guillaumemaka))
+
+- "Float on Top" option for playback window [\#56](https://github.com/insidegui/WWDC/pull/56) ([dstd](https://github.com/dstd))
+
+## [2.2](https://github.com/insidegui/WWDC/tree/2.2) (2015-06-11)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/2.1.1...2.2)
+
+**Implemented enhancements:**
+
+- publish app to brew cask  [\#67](https://github.com/insidegui/WWDC/issues/67)
+
+**Closed issues:**
+
+- Feature Request: Filter  by year, platform [\#72](https://github.com/insidegui/WWDC/issues/72)
+
+- Filter videos by year [\#66](https://github.com/insidegui/WWDC/issues/66)
+
+**Merged pull requests:**
+
+- simplify build instructions [\#73](https://github.com/insidegui/WWDC/pull/73) ([mr-v](https://github.com/mr-v))
+
+- Localize the date/time used in the live banner [\#71](https://github.com/insidegui/WWDC/pull/71) ([kballard](https://github.com/kballard))
+
+## [2.1.1](https://github.com/insidegui/WWDC/tree/2.1.1) (2015-06-09)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/2.1...2.1.1)
+
+**Merged pull requests:**
+
+- videos cell layout [\#63](https://github.com/insidegui/WWDC/pull/63) ([maojj](https://github.com/maojj))
+
+## [2.1](https://github.com/insidegui/WWDC/tree/2.1) (2015-06-09)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/2.0.2...2.1)
+
+## [2.0.2](https://github.com/insidegui/WWDC/tree/2.0.2) (2015-06-09)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/2.0.1...2.0.2)
+
+## [2.0.1](https://github.com/insidegui/WWDC/tree/2.0.1) (2015-06-09)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/2.0...2.0.1)
+
 ## [2.0](https://github.com/insidegui/WWDC/tree/2.0) (2015-06-08)
 
 [Full Changelog](https://github.com/insidegui/WWDC/compare/1.9.1...2.0)
