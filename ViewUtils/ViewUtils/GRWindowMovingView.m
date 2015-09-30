@@ -8,11 +8,6 @@
 
 #import "GRWindowMovingView.h"
 
-typedef int CGSConnectionID;
-
-extern CGSConnectionID CGSMainConnectionID(void);
-extern CGError CGSDragWindowRelativeToMouse(CGSConnectionID cid, CGWindowID wid, CGPoint point);
-
 @implementation GRWindowMovingView
 
 - (void)drawRect:(NSRect)dirtyRect
