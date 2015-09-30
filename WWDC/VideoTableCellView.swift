@@ -48,6 +48,8 @@ class VideoTableCellView: NSTableCellView {
             } else {
                 downloadedImage.hidden = true
             }
+        } else {
+            downloadedImage.hidden = true
         }
     }
     
