@@ -50,6 +50,10 @@ class VideoTableRowView: NSTableRowView {
         }
     }
     
+    override var allowsVibrancy: Bool {
+        return true
+    }
+    
     override func viewWillMoveToWindow(newWindow: NSWindow?) {
         let nc = NSNotificationCenter.defaultCenter()
         
@@ -82,28 +86,28 @@ class VideoTableRowView: NSTableRowView {
         
         if selected {
             if shouldDrawAsKey {
-                Theme.WWDCTheme.fillColor.colorByAdjustingBrightnessWithFactor(-0.25).setFill()
+                Theme.WWDCTheme.fillColor.colorByAdjustingBrightnessWithFactor(-0.2).colorWithAlphaComponent(0.8).setFill()
             } else {
-                Theme.WWDCTheme.separatorColor.colorByAdjustingBrightnessWithFactor(-0.25).setFill()
+                Theme.WWDCTheme.separatorColor.colorByAdjustingBrightnessWithFactor(-0.2).colorWithAlphaComponent(0.8).setFill()
             }
             
-            NSRectFill(topRect)
+            NSRectFillUsingOperation(topRect, .CompositeOverlay)
         } else {
             Theme.WWDCTheme.separatorColor.setFill()
         }
         
         if !nextRowSelected {
-            NSRectFill(bottomRect)
+            NSRectFillUsingOperation(bottomRect, .CompositeOverlay)
         }
     }
     
     override func drawSelectionInRect(dirtyRect: NSRect) {
         if shouldDrawAsKey {
-            Theme.WWDCTheme.fillColor.colorByAdjustingBrightnessWithFactor(-0.1).setFill()
+            Theme.WWDCTheme.fillColor.colorByAdjustingBrightnessWithFactor(-0.1).colorWithAlphaComponent(0.8).setFill()
         } else {
-            Theme.WWDCTheme.separatorColor.setFill()
+            Theme.WWDCTheme.separatorColor.colorWithAlphaComponent(0.8).setFill()
         }
-        NSRectFill(dirtyRect)
+        NSRectFillUsingOperation(dirtyRect, .CompositeOverlay)
     }
     
 }
