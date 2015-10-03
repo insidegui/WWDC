@@ -26,6 +26,18 @@ Example searches:
 	
 	description:iwork
 	
+## Skip forward/backward
+
+You can skip forward or backward using arrow keys
+
+* `↑` Skip forward one minute
+
+* `↓` Skip backward one minute
+
+* `→` Skip forward 10 seconds
+
+* `←` Skip backward 10 seconds
+
 ## Sharing
 
 You can share direct links to specific session videos. Just select the session on the list and ⌘C to copy It's URL, or use the right-click menu. For instance, [this link](wwdc://2014/101) opens up the 2014 keynote.
