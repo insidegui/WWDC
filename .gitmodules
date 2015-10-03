@@ -1,6 +1,6 @@
-[submodule "ASCIIwwdc/Submodules/YapDatabase"]
-	path = ASCIIwwdc/Submodules/YapDatabase
-	url = https://github.com/yapstudios/YapDatabase.git
-[submodule "ASCIIwwdc/Submodules/NTBTask"]
-	path = ASCIIwwdc/Submodules/NTBTask
-	url = https://github.com/kareman/NTBTask.git
+[submodule "vendor/Alamofire"]
+	path = vendor/Alamofire
+	url = https://github.com/Alamofire/Alamofire.git
+[submodule "vendor/KVOController"]
+	path = vendor/KVOController
+	url = https://github.com/facebook/KVOController.git
