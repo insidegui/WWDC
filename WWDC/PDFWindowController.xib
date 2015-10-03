@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7531"/>
-        <plugIn identifier="com.apple.pdfkit.ibplugin" version="7531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
+        <plugIn identifier="com.apple.pdfkit.ibplugin" version="8191"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PDFWindowController" customModule="WWDC" customModuleProvider="target">
             <connections>
                 <outlet property="pdfView" destination="94e-7J-iof" id="rzc-XT-336"/>
+                <outlet property="progressBgView" destination="HYm-PC-Lux" id="Ld8-vv-dSj"/>
                 <outlet property="progressIndicator" destination="fNu-Sb-Jsk" id="6Z6-62-qRF"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
@@ -23,20 +24,37 @@
                 <rect key="frame" x="0.0" y="-1" width="800" height="500"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <pdfView autoresizesSubviews="NO" wantsLayer="YES" autoScales="YES" translatesAutoresizingMaskIntoConstraints="NO" id="94e-7J-iof">
+                    <pdfView hidden="YES" autoresizesSubviews="NO" autoScales="YES" translatesAutoresizingMaskIntoConstraints="NO" id="94e-7J-iof">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="500"/>
+                        <animations/>
                     </pdfView>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="HYm-PC-Lux" customClass="ContentBackgroundView" customModule="WWDC" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="500"/>
                         <subviews>
-                            <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="fNu-Sb-Jsk">
-                                <rect key="frame" x="384" y="239" width="32" height="32"/>
+                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="1" bezeled="NO" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="fNu-Sb-Jsk">
+                                <rect key="frame" x="250" y="232" width="300" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="Paj-0L-yHN"/>
+                                </constraints>
+                                <animations/>
                             </progressIndicator>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hrV-u7-YYx">
+                                <rect key="frame" x="339" y="259" width="122" height="17"/>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Downloading slides" id="Da0-C7-0v1">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="fNu-Sb-Jsk" firstAttribute="top" secondItem="hrV-u7-YYx" secondAttribute="bottom" constant="8" id="6Ar-6F-HXE"/>
+                            <constraint firstItem="hrV-u7-YYx" firstAttribute="centerX" secondItem="HYm-PC-Lux" secondAttribute="centerX" id="9Uw-Rh-uXV"/>
                             <constraint firstAttribute="centerX" secondItem="fNu-Sb-Jsk" secondAttribute="centerX" id="gYP-OZ-bZC"/>
-                            <constraint firstAttribute="centerY" secondItem="fNu-Sb-Jsk" secondAttribute="centerY" constant="5" id="hCu-40-Hxy"/>
+                            <constraint firstAttribute="centerY" secondItem="fNu-Sb-Jsk" secondAttribute="centerY" constant="-8" id="hCu-40-Hxy"/>
                         </constraints>
+                        <animations/>
                     </customView>
                 </subviews>
                 <constraints>
@@ -49,6 +67,7 @@
                     <constraint firstItem="94e-7J-iof" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="h0Q-eY-cwk"/>
                     <constraint firstItem="HYm-PC-Lux" firstAttribute="leading" secondItem="94e-7J-iof" secondAttribute="leading" id="qJ9-cm-13J"/>
                 </constraints>
+                <animations/>
             </view>
             <userDefinedRuntimeAttributes>
                 <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">

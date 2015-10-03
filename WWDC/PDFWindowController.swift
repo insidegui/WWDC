@@ -13,21 +13,20 @@ class PDFWindowController: NSWindowController {
 
     @IBOutlet weak var pdfView: PDFView!
     
-    @IBOutlet weak var progressIndicator: NSProgressIndicator! {
-        didSet {
-            progressIndicator.displayedWhenStopped = false
-        }
-    }
+    @IBOutlet weak var progressBgView: ContentBackgroundView!
+    @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    
     var session: Session!
     var slidesDocument: PDFDocument? {
         didSet {
-            if slidesDocument != nil {
-                pdfView.setDocument(slidesDocument)
-                progressIndicator.stopAnimation(nil)
-                if let bgView = progressIndicator.superview {
-                    bgView.hidden = true
-                }
-            }
+            guard slidesDocument != nil else { return }
+            
+            window?.titlebarAppearsTransparent = false
+            window?.movableByWindowBackground = false
+            pdfView.setDocument(slidesDocument)
+            progressIndicator.stopAnimation(nil)
+            pdfView.hidden = false
+            progressBgView.hidden = true
         }
     }
     
@@ -36,23 +35,39 @@ class PDFWindowController: NSWindowController {
         self.session = session
     }
     
+    var downloader: SlidesDownloader!
     override func windowDidLoad() {
         super.windowDidLoad()
         
+        window?.titlebarAppearsTransparent = true
+        window?.movableByWindowBackground = true
+        
         progressIndicator.startAnimation(nil)
         
-        if session != nil {
-            window?.title = "WWDC \(session.year) | \(session.title) | Slides"
+        guard session != nil else { return }
+        
+        window?.title = "WWDC \(session.year) | \(session.title) | Slides"
 
-            DataStore.SharedStore.downloadSessionSlides(session) { success, data in
-                dispatch_async(dispatch_get_main_queue()) {
-                    if success == true {
-                        self.slidesDocument = PDFDocument(data: data)
-                    } else {
-                        print("Download failed")
-                    }
+        downloader = SlidesDownloader(session: session)
+        if session.slidesPDFData.length > 0 {
+            self.slidesDocument = PDFDocument(data: session.slidesPDFData)
+        } else {
+            let progressHandler: SlidesDownloader.ProgressHandler = { downloaded, total in
+                if self.progressIndicator.indeterminate {
+                    self.progressIndicator.minValue = 0
+                    self.progressIndicator.maxValue = total
+                    self.progressIndicator.indeterminate = false
                 }
+                
+                self.progressIndicator.doubleValue = downloaded
             }
+            downloader.downloadSlides({ success, data in
+                if success == true {
+                    self.slidesDocument = PDFDocument(data: data)
+                } else {
+                    print("Download failed")
+                }
+            }, progressHandler: progressHandler)
         }
     }
     
