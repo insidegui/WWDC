@@ -9,7 +9,6 @@
 import Cocoa
 import AVFoundation
 import AVKit
-import ASCIIwwdc
 import ViewUtils
 
 private let _nibName = "VideoWindowController"
@@ -17,7 +16,7 @@ private let _nibName = "VideoWindowController"
 class VideoWindowController: NSWindowController {
 
     var session: Session?
-    var event: LiveEvent?
+    var event: LiveSession?
     
     var videoURL: String?
     
@@ -38,7 +37,7 @@ class VideoWindowController: NSWindowController {
         self.videoURL = videoURL
     }
     
-    convenience init(event: LiveEvent, videoURL: String) {
+    convenience init(event: LiveSession, videoURL: String) {
         self.init(windowNibName: _nibName)
         self.event = event
         self.videoURL = videoURL
@@ -138,7 +137,7 @@ class VideoWindowController: NSWindowController {
     }
     
     private func loadEventVideo() {
-        if let url = event!.stream {
+        if let url = NSURL(string: event!.streamURL) {
             asset = AVURLAsset(URL: url, options: nil)
             asset.loadValuesAsynchronouslyForKeys(["playable"]) {
                 dispatch_async(dispatch_get_main_queue()) {
@@ -186,17 +185,17 @@ class VideoWindowController: NSWindowController {
             return
         }
         
-        if let session = session {
-            transcriptWC = TranscriptWindowController(session: session)
-            transcriptWC.showWindow(sender)
-            transcriptWC.jumpToTimeCallback = { [unowned self] time in
-                guard let player = self.player else { return }
-                player.seekToTime(CMTimeMakeWithSeconds(time, 30))
-            }
-            transcriptWC.transcriptReadyCallback = { [unowned self] transcript in
-                self.setupTranscriptSync(transcript)
-            }
-        }
+//        if let session = session {
+//            transcriptWC = TranscriptWindowController(session: session)
+//            transcriptWC.showWindow(sender)
+//            transcriptWC.jumpToTimeCallback = { [unowned self] time in
+//                guard let player = self.player else { return }
+//                player.seekToTime(CMTimeMakeWithSeconds(time, 30))
+//            }
+//            transcriptWC.transcriptReadyCallback = { [unowned self] transcript in
+//                self.setupTranscriptSync(transcript)
+//            }
+//        }
     }
     
     var timeObserver: AnyObject?
@@ -207,23 +206,25 @@ class VideoWindowController: NSWindowController {
         timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(5, 1), queue: dispatch_get_main_queue()) { [unowned self] currentTime in
             let progress = Double(CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(self.player!.currentItem!.duration))
 
-            self.session!.progress = progress
-            self.session!.currentPosition = CMTimeGetSeconds(currentTime)
+            WWDCDatabase.sharedDatabase.doChanges {
+                self.session!.progress = progress
+                self.session!.currentPosition = CMTimeGetSeconds(currentTime)
+            }
         }
     }
     
     var boundaryObserver: AnyObject?
     
-    func setupTranscriptSync(transcript: WWDCSessionTranscript) {
-        guard transcriptWC != nil else { return }
-        
-        boundaryObserver = player?.addBoundaryTimeObserverForTimes(transcript.timecodes, queue: dispatch_get_main_queue()) { [unowned self] in
-            guard self.transcriptWC != nil else { return }
-
-            let roundedTimecode = WWDCTranscriptLine.roundedStringFromTimecode(CMTimeGetSeconds(self.player!.currentTime()))
-            self.transcriptWC.highlightLineAt(roundedTimecode)
-        }
-    }
+//    func setupTranscriptSync(transcript: WWDCSessionTranscript) {
+//        guard transcriptWC != nil else { return }
+//        
+//        boundaryObserver = player?.addBoundaryTimeObserverForTimes(transcript.timecodes, queue: dispatch_get_main_queue()) { [unowned self] in
+//            guard self.transcriptWC != nil else { return }
+//
+//            let roundedTimecode = WWDCTranscriptLine.roundedStringFromTimecode(CMTimeGetSeconds(self.player!.currentTime()))
+//            self.transcriptWC.highlightLineAt(roundedTimecode)
+//        }
+//    }
     
     func setupWindowSizing()
     {

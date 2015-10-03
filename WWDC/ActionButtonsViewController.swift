@@ -47,8 +47,8 @@ class ActionButtonsViewController: NSViewController {
         
         if let session = session {
             setSessionCanBeWatched(true)
-            setSessionCanBeWatchedInHD((session.hd_url != nil))
-            setSessionHasSlides((session.slides != nil))
+            setSessionCanBeWatchedInHD((session.hdVideoURL != ""))
+            setSessionHasSlides((session.slidesURL != ""))
             reflectSessionProgress()
         } else {
             noSession()

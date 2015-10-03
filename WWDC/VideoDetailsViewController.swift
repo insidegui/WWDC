@@ -51,7 +51,7 @@ class VideoDetailsViewController: NSViewController {
         if let session = self.session {
             titleLabel.stringValue = session.title
             subtitleLabel.stringValue = "\(session.track) | Session \(session.id)"
-            descriptionLabel.stringValue = session.description
+            descriptionLabel.stringValue = session.summary
             descriptionLabel.hidden = false
             
             downloadController.session = session
@@ -87,11 +87,11 @@ class VideoDetailsViewController: NSViewController {
         }
         
         actionButtonsController.watchVideoCallback = { [unowned self] in
-            self.doWatchVideo(nil, url: self.session!.url)
+            self.doWatchVideo(nil, url: self.session!.videoURL)
         }
         
         actionButtonsController.showSlidesCallback = { [unowned self] in
-            if self.session!.slides != nil {
+            if self.session!.slidesURL != "" {
                 let slidesWindowController = PDFWindowController(session: self.session!)
                 slidesWindowController.showWindow(nil)
                 self.followWindowLifecycle(slidesWindowController.window)

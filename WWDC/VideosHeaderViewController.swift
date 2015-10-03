@@ -10,8 +10,21 @@ import Cocoa
 
 class VideosHeaderViewController: NSViewController {
     
-    @IBOutlet weak var searchBar: NSSearchField!
-    @IBOutlet weak var searchBarBottomConstraint: NSLayoutConstraint!
+    var progress: NSProgress? {
+        didSet {
+            searchBar.progress = progress
+        }
+    }
+    var searchTerm: String? {
+        get {
+            return searchBar.stringValue == "" ? nil : searchBar.stringValue
+        }
+        set {
+            searchBar.stringValue = searchTerm ?? ""
+        }
+    }
+    @IBOutlet weak private var searchBar: ProgressSearchField!
+    @IBOutlet weak private var searchBarBottomConstraint: NSLayoutConstraint!
     
     var performSearch: ((term: String) -> Void)?
     

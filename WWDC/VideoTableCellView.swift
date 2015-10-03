@@ -8,10 +8,14 @@
 
 import Cocoa
 import ViewUtils
+import KVOController
 
 class VideoTableCellView: NSTableCellView {
     
     var session: Session! {
+        willSet {
+            KVOController.unobserve(session)
+        }
         didSet {
             updateUI()
         }
@@ -28,11 +32,19 @@ class VideoTableCellView: NSTableCellView {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        KVOController.unobserve(session)
+    }
+
     func updateUI() {
+        KVOController.observe(session, keyPath: "favorite", options: .New, action: "updateSessionFlags")
+        KVOController.observe(session, keyPath: "progress", options: .New, action: "updateSessionFlags")
+        
         titleField.stringValue = session.title
         detailsField.stringValue = "\(session.year) - Session \(session.id) - \(session.track)"
-        progressView.progress = session.progress
-        progressView.favorite = session.favorite
+        updateSessionFlags()
         
         updateTint()
         
@@ -51,6 +63,11 @@ class VideoTableCellView: NSTableCellView {
         } else {
             downloadedImage.hidden = true
         }
+    }
+    
+    func updateSessionFlags() {
+        progressView.progress = session.progress
+        progressView.favorite = session.favorite
     }
     
     func updateTint() {

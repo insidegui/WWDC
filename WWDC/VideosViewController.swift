@@ -8,6 +8,7 @@
 
 import Cocoa
 import ViewUtils
+import RealmSwift
 
 class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
@@ -54,12 +55,12 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         loadSessions(refresh: false, quiet: false)
         
         let nc = NSNotificationCenter.defaultCenter()
-        nc.addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil) { _ in
-            self.reloadTablePreservingSelection()
-        }
-        nc.addObserverForName(SessionFavoriteStatusDidChangeNotification, object: nil, queue: nil) { _ in
-            self.reloadTablePreservingSelection()
-        }
+//        nc.addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil) { _ in
+//            self.reloadTablePreservingSelection()
+//        }
+//        nc.addObserverForName(SessionFavoriteStatusDidChangeNotification, object: nil, queue: nil) { _ in
+//            self.reloadTablePreservingSelection()
+//        }
         nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
             self.reloadTablePreservingSelection()
         }
@@ -111,29 +112,28 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
         
         // show search term from previous launch in search bar
-        headerController.searchBar.stringValue = savedSearchTerm
+        headerController.searchTerm = savedSearchTerm
     }
 
-    var sessions: [Session]! {
+    var sessions: Results<Session>! {
         didSet {
-            if sessions != nil {
-                // run transcript indexing service if needed
-                TranscriptStore.SharedStore.runIndexerIfNeeded(sessions)
-                
-                headerController.enable()
-                
-                // restore search from previous launch
-                if  savedSearchTerm != "" {
-                    search(savedSearchTerm)
-                    indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
-                }
-                
-                searchController.sessions = sessions
-            }
+            guard sessions != nil else { return }
             
-            if savedSearchTerm == "" {
-                reloadTablePreservingSelection()
-            }
+            headerController.enable()
+            
+            tableView.reloadData()
+            
+//            // restore search from previous launch
+//            if  savedSearchTerm != "" {
+//                search(savedSearchTerm)
+//                indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
+//            }
+//            
+//            searchController.sessions = sessions
+//            
+//            if savedSearchTerm == "" {
+//                reloadTablePreservingSelection()
+//            }
         }
     }
 
@@ -146,22 +146,30 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             }
         }
         
-        let completionHandler: DataStore.fetchSessionsCompletionHandler = { success, sessions in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.sessions = sessions
-                
-                self.splitManager?.restoreDividerPosition()
-                self.splitManager?.startSavingDividerPosition()
-                
-                if !quiet {
-                    GRLoadingView.dismissAllAfterDelay(0.3)
-                }
-
-                self.setupAutomaticSessionRefresh()
-            }
-        }
+        fetchLocalSessions()
         
-        DataStore.SharedStore.fetchSessions(completionHandler, disableCache: refresh)
+        WWDCDatabase.sharedDatabase.transcriptIndexingStartedCallback = {
+            self.headerController.progress = WWDCDatabase.sharedDatabase.transcriptIndexingProgress
+        }
+        WWDCDatabase.sharedDatabase.sessionListChangedCallback = { newSessionKeys in
+            print("\(newSessionKeys.count) new session(s) available")
+
+            GRLoadingView.dismissAllAfterDelay(0.3)
+            
+            self.fetchLocalSessions()
+            
+            self.splitManager?.restoreDividerPosition()
+            self.splitManager?.startSavingDividerPosition()
+            self.setupAutomaticSessionRefresh()
+        }
+        WWDCDatabase.sharedDatabase.refresh()
+    }
+    
+    func fetchLocalSessions() {
+        sessions = WWDCDatabase.sharedDatabase.standardSessionList
+        if sessions.count > 0 {
+            GRLoadingView.dismissAllAfterDelay(0.3)
+        }
     }
     
     @IBAction func refresh(sender: AnyObject?) {
@@ -233,8 +241,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBAction func markAsWatchedMenuAction(sender: NSMenuItem) {
         // if there is only one row selected, change the status of the clicked row instead of using the selection
         if tableView.selectedRowIndexes.count < 2 {
-            var session = displayedSessions[tableView.clickedRow]
-            session.progress = 100
+            let session = displayedSessions[tableView.clickedRow]
+            WWDCDatabase.sharedDatabase.doChanges {
+                session.progress = 100
+            }
         } else {
             doMassiveSessionPropertyUpdate(.Progress(100))
         }
@@ -243,8 +253,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBAction func markAsUnwatchedMenuAction(sender: NSMenuItem) {
         // if there is only one row selected, change the status of the clicked row instead of using the selection
         if tableView.selectedRowIndexes.count < 2 {
-            var session = displayedSessions[tableView.clickedRow]
-            session.progress = 0
+            let session = displayedSessions[tableView.clickedRow]
+            WWDCDatabase.sharedDatabase.doChanges {
+                session.progress = 0
+            }
         } else {
             doMassiveSessionPropertyUpdate(.Progress(0))
         }
@@ -253,8 +265,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBAction func addToFavoritesMenuAction(sender: NSMenuItem) {
         // if there is only one row selected, change the status of the clicked row instead of using the selection
         if tableView.selectedRowIndexes.count < 2 {
-            var session = displayedSessions[tableView.clickedRow]
-            session.favorite = true
+            let session = displayedSessions[tableView.clickedRow]
+            WWDCDatabase.sharedDatabase.doChanges {
+                session.favorite = true
+            }
         } else {
             doMassiveSessionPropertyUpdate(.Favorite(true))
         }
@@ -263,8 +277,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBAction func removeFromFavoritesMenuAction(sender: NSMenuItem) {
         // if there is only one row selected, change the status of the clicked row instead of using the selection
         if tableView.selectedRowIndexes.count < 2 {
-            var session = displayedSessions[tableView.clickedRow]
-            session.favorite = false
+            let session = displayedSessions[tableView.clickedRow]
+            WWDCDatabase.sharedDatabase.doChanges {
+                session.favorite = false
+            }
         } else {
             doMassiveSessionPropertyUpdate(.Favorite(false))
         }
@@ -279,16 +295,17 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     private func doMassiveSessionPropertyUpdate(property: MassiveUpdateProperty) {
         dispatch_async(userInitiatedQ) {
             self.tableView.selectedRowIndexes.enumerateIndexesUsingBlock { idx, _ in
-                let session = self.displayedSessions[idx]
-                switch property {
-                case .Progress(let progress):
-                    session.setProgressWithoutSendingNotification(progress)
-                case .Favorite(let favorite):
-                    session.setFavoriteWithoutSendingNotification(favorite)
+                var sessionKey = ""
+                mainQS { sessionKey = self.displayedSessions[idx].uniqueId }
+                WWDCDatabase.sharedDatabase.doBackgroundChanges { realm in
+                    guard let session = realm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
+                    switch property {
+                    case .Progress(let progress):
+                        session.progress = progress
+                    case .Favorite(let favorite):
+                        session.favorite = favorite
+                    }
                 }
-            }
-            dispatch_async(dispatch_get_main_queue()) {
-                self.reloadTablePreservingSelection()
             }
         }
     }
@@ -383,9 +400,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         searchController.searchFor(currentSearchTerm)
     }
     
-    var displayedSessions: [Session]! {
+    var displayedSessions: Results<Session>! {
         get {
-            return searchController.displayedSessions
+            return sessions
+//            return searchController.displayedSessions
         }
     }
     
