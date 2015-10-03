@@ -45,9 +45,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupSearching()
-        
+
         setupScrollView()
 
         tableView.gridColor = Theme.WWDCTheme.separatorColor
@@ -55,12 +53,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         loadSessions(refresh: false, quiet: false)
         
         let nc = NSNotificationCenter.defaultCenter()
-//        nc.addObserverForName(SessionProgressDidChangeNotification, object: nil, queue: nil) { _ in
-//            self.reloadTablePreservingSelection()
-//        }
-//        nc.addObserverForName(SessionFavoriteStatusDidChangeNotification, object: nil, queue: nil) { _ in
-//            self.reloadTablePreservingSelection()
-//        }
+
         nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
             self.reloadTablePreservingSelection()
         }
@@ -110,9 +103,6 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             headerController.view.autoresizingMask = [NSAutoresizingMaskOptions.ViewWidthSizable, NSAutoresizingMaskOptions.ViewMinYMargin]
             headerController.performSearch = search
         }
-        
-        // show search term from previous launch in search bar
-        headerController.searchTerm = savedSearchTerm
     }
 
     var sessions: Results<Session>! {
@@ -120,20 +110,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             guard sessions != nil else { return }
             
             headerController.enable()
-            
+            headerController.searchTerm = Preferences.SharedPreferences().searchTerm
+
             tableView.reloadData()
-            
-//            // restore search from previous launch
-//            if  savedSearchTerm != "" {
-//                search(savedSearchTerm)
-//                indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
-//            }
-//            
-//            searchController.sessions = sessions
-//            
-//            if savedSearchTerm == "" {
-//                reloadTablePreservingSelection()
-//            }
         }
     }
 
@@ -163,6 +142,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             self.setupAutomaticSessionRefresh()
         }
         WWDCDatabase.sharedDatabase.refresh()
+        
+        if Preferences.SharedPreferences().searchTerm != "" {
+            search(Preferences.SharedPreferences().searchTerm)
+        }
     }
     
     func fetchLocalSessions() {
@@ -373,37 +356,29 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     // MARK: Search
-    
-    var searchController = SearchController()
-    
-    private func setupSearching() {
-        searchController.searchDidFinishCallback = {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.reloadTablePreservingSelection()
-            }
-        }
-    }
-    
-    var currentSearchTerm: String? {
-        didSet {
-            if currentSearchTerm != nil {
-                Preferences.SharedPreferences().searchTerm = currentSearchTerm!
-            } else {
-                Preferences.SharedPreferences().searchTerm = ""
-            }
-        }
-    }
-    
+
+    private let searchQueue = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)
     func search(term: String) {
-        currentSearchTerm = term
+        Preferences.SharedPreferences().searchTerm = term
         
-        searchController.searchFor(currentSearchTerm)
+        if term != "" {
+            dispatch_async(searchQueue) {
+                let realm = try! Realm()
+                let transcripts = realm.objects(Transcript.self).filter("fullText CONTAINS[c] %@", term)
+                let keysMatchingTranscripts = transcripts.map({ $0.session!.uniqueId })
+                let results = realm.objects(Session.self).filter("title CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, keysMatchingTranscripts)
+                let sessionKeys = results.map({ $0.uniqueId })
+                
+                mainQ { self.sessions = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("uniqueId IN %@", sessionKeys) }
+            }
+        } else {
+            fetchLocalSessions()
+        }
     }
     
     var displayedSessions: Results<Session>! {
         get {
             return sessions
-//            return searchController.displayedSessions
         }
     }
     

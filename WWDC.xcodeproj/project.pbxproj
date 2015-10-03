@@ -23,8 +23,6 @@
 		DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016731AE411C800DD8155 /* VideoWindowController.swift */; };
 		DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2016741AE411C800DD8155 /* VideoWindowController.xib */; };
 		DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016771AE4141900DD8155 /* ArrayExtensions.swift */; };
-		DD259FD01B220D96003EB3E5 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD259FCF1B220D96003EB3E5 /* SearchController.swift */; };
-		DD259FD31B221291003EB3E5 /* SearchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD259FD21B221291003EB3E5 /* SearchOperation.swift */; };
 		DD2CC38C1AF4161700FC5F68 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2CC38B1AF4161700FC5F68 /* Preferences.swift */; };
 		DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2CC38D1AF419F500FC5F68 /* PreferencesWindowController.swift */; };
 		DD2CC3901AF419F500FC5F68 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2CC38E1AF419F500FC5F68 /* PreferencesWindowController.xib */; };
@@ -207,8 +205,6 @@
 		DD2016731AE411C800DD8155 /* VideoWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoWindowController.swift; sourceTree = "<group>"; };
 		DD2016741AE411C800DD8155 /* VideoWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoWindowController.xib; sourceTree = "<group>"; };
 		DD2016771AE4141900DD8155 /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
-		DD259FCF1B220D96003EB3E5 /* SearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
-		DD259FD21B221291003EB3E5 /* SearchOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchOperation.swift; sourceTree = "<group>"; };
 		DD2CC38B1AF4161700FC5F68 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		DD2CC38D1AF419F500FC5F68 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		DD2CC38E1AF419F500FC5F68 /* PreferencesWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreferencesWindowController.xib; sourceTree = "<group>"; };
@@ -442,7 +438,6 @@
 				DDF9D1921B04F361006F0953 /* SplitManager.swift */,
 				DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */,
 				DD0974DE1B18AAA8006A3C77 /* URLSchemeHandler.swift */,
-				DD259FCF1B220D96003EB3E5 /* SearchController.swift */,
 				DD945ED81B26A42300CE7B7D /* LiveEventBannerViewController.swift */,
 			);
 			name = "Aux Controllers";
@@ -470,7 +465,6 @@
 				DDD7A4321AE2DF14000A0102 /* Theme.swift */,
 				DD2016771AE4141900DD8155 /* ArrayExtensions.swift */,
 				DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */,
-				DD259FD21B221291003EB3E5 /* SearchOperation.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -706,7 +700,6 @@
 				DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */,
 				DD825CA71BBF575500276B83 /* Models.swift in Sources */,
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
-				DD259FD31B221291003EB3E5 /* SearchOperation.swift in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
 				DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */,
 				C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */,
@@ -724,7 +717,6 @@
 				DD825CA81BBF575500276B83 /* WWDCDatabase.swift in Sources */,
 				DD2CC38C1AF4161700FC5F68 /* Preferences.swift in Sources */,
 				1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */,
-				DD259FD01B220D96003EB3E5 /* SearchController.swift in Sources */,
 				DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */,
 				DD76C0181BBF83C10056BB20 /* SlidesDownloader.swift in Sources */,
 				51B28F5B1BB63F9E001F7A6C /* GridlessTableView.swift in Sources */,

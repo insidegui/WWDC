@@ -27,7 +27,7 @@
                         <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GHc-IG-Ous" customClass="ProgressSearchField" customModule="WWDC" customModuleProvider="target">
                             <rect key="frame" x="20" y="12" width="440" height="22"/>
                             <animations/>
-                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" recentsAutosaveName="search" id="aor-jz-ssL" customClass="ProgressSearchFieldCell" customModule="WWDC" customModuleProvider="target">
+                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" sendsSearchStringImmediately="YES" recentsAutosaveName="search" id="aor-jz-ssL" customClass="ProgressSearchFieldCell" customModule="WWDC" customModuleProvider="target">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

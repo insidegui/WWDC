@@ -45,7 +45,7 @@ typealias SessionsUpdatedCallback = () -> Void
         }
     }
     
-    private let realm = try! Realm()
+    let realm = try! Realm()
     
     /// Use this to change properties of model objects **on the main thread**
     /// - Warning: if you try to change properties of model objects (such as Session) outside a `doChanges` block, an exception will be thrown

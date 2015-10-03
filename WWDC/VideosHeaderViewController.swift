@@ -20,7 +20,7 @@ class VideosHeaderViewController: NSViewController {
             return searchBar.stringValue == "" ? nil : searchBar.stringValue
         }
         set {
-            searchBar.stringValue = searchTerm ?? ""
+            searchBar.stringValue = newValue ?? ""
         }
     }
     @IBOutlet weak private var searchBar: ProgressSearchField!
