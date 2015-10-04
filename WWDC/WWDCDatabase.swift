@@ -160,17 +160,23 @@ typealias SessionsUpdatedCallback = () -> Void
                 
                 var newSessionKeys: [String] = []
                 
+                let migrator = LegacyWWDCDatabaseMigrator()
+                
                 // create and store/update each video
                 for jsonSession in sessionsArray {
-                    let session = Session(json: jsonSession)
+                    var session = Session(json: jsonSession)
                     if backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) == nil {
                         newSessionKeys.append(session.uniqueId)
                     }
                     backgroundRealm.beginWrite()
+                    
+                    if migrator.needsMigration { session = migrator.migrateSession(session) }
                     backgroundRealm.add(session, update: true)
+                    
                     backgroundRealm.commitWrite()
                 }
                 
+                migrator.needsMigration = false
                 self.indexTranscriptsForSessionsWithKeys(newSessionKeys)
                 mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
             }
@@ -217,4 +223,77 @@ typealias SessionsUpdatedCallback = () -> Void
         }
     }
     
+}
+
+// MARK: - Data migration
+
+private class LegacyWWDCDatabaseMigrator {
+    
+    private let migrationStatusKey = "MigratedToRealm"
+    
+    var needsMigration: Bool {
+        get {
+            return !defaults.boolForKey(migrationStatusKey)
+        }
+        set {
+            defaults.setBool(newValue, forKey: migrationStatusKey)
+        }
+    }
+    
+    /// Migrates the session's favorite status, progress and position from the legacy preferences to the new model
+    func migrateSession(session: Session) -> Session {
+        session.favorite = fetchSessionIsFavorite(session)
+        session.currentPosition = fetchSessionCurrentPosition(session)
+        session.progress = fetchSessionProgress(session)
+        
+        return session
+    }
+    
+    init() {
+        loadFavorites()
+    }
+    
+    private let defaults = NSUserDefaults.standardUserDefaults()
+    
+    private func fetchSessionProgress(session: Session) -> Double {
+        return defaults.doubleForKey(session.legacyProgressKey)
+    }
+    
+    private func fetchSessionCurrentPosition(session: Session) -> Double {
+        return defaults.doubleForKey(session.legacyCurrentPositionKey)
+    }
+    
+    private var favorites: [String] = []
+    
+    private let favoritesKey = "Favorites"
+    private func loadFavorites() {
+        if let faves = defaults.arrayForKey(favoritesKey) as? [String] {
+            favorites = faves
+        }
+    }
+    
+    private func fetchSessionIsFavorite(session: Session) -> Bool {
+        return favorites.contains(session.legacyUniqueKey)
+    }
+    
+}
+
+private extension Session {
+    /* The properties below are only used to migrate the data from the old defaults-based model to Realm and will be removed in the near future */
+    
+    var legacyUniqueKey: String {
+        get {
+            return "\(year)-\(id)"
+        }
+    }
+    var legacyProgressKey: String {
+        get {
+            return "\(legacyUniqueKey)-progress"
+        }
+    }
+    var legacyCurrentPositionKey: String {
+        get {
+            return "\(legacyUniqueKey)-currentPosition"
+        }
+    }
 }

@@ -98,22 +98,6 @@ class Session: Object {
         }
     }
     
-    var legacyUniqueKey: String {
-        get {
-            return "\(year)-\(id)"
-        }
-    }
-    var legacyProgressKey: String {
-        get {
-            return "\(legacyUniqueKey)-progress"
-        }
-    }
-    var legacyCurrentPositionKey: String {
-        get {
-            return "\(legacyUniqueKey)-currentPosition"
-        }
-    }
-    
 }
 
 class TranscriptLine: Object {
