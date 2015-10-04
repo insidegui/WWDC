@@ -293,6 +293,26 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
 
+    @IBAction func downloadMenuAction(sender: AnyObject) {
+        if tableView.selectedRowIndexes.count < 2 {
+            let session = sessions[tableView.clickedRow]
+            addDownloadForSession(session)
+        } else {
+            tableView.selectedRowIndexes.enumerateIndexesUsingBlock { idx, _ in
+                let session = self.sessions[idx]
+                self.addDownloadForSession(session)
+            }
+        }
+    }
+    
+    private func addDownloadForSession(session: Session) {
+        guard session.hdVideoURL != "" else { return }
+        guard !VideoStore.SharedStore().hasVideo(session.hdVideoURL) else { return }
+        guard !VideoStore.SharedStore().isDownloading(session.hdVideoURL) else { return }
+        
+        VideoStore.SharedStore().download(session.hdVideoURL)
+    }
+    
     @IBAction func copyURL(sender: NSMenuItem) {
         var stringToCopy:String?
         
