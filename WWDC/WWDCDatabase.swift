@@ -25,8 +25,6 @@ typealias SessionsUpdatedCallback = () -> Void
     
     private struct Constants {
         static let internalServiceURL = "http://wwdc.guilhermerambo.me/index.json"
-        static let liveServiceURL = "http://wwdc.guilhermerambo.me/live.json"
-        static let liveNextServiceURL = "http://wwdc.guilhermerambo.me/next.json"
         static let asciiServiceBaseURL = "http://asciiwwdc.com/"
     }
 

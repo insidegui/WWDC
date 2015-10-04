@@ -27,7 +27,7 @@ class LiveEventBannerViewController: NSViewController {
         }
     }
     
-    var event: LiveEvent? {
+    var event: LiveSession? {
         didSet {
             updateUI()
         }
@@ -69,7 +69,7 @@ class LiveEventBannerViewController: NSViewController {
             } else {
                 titleLabel.stringValue = "\(event.title)"
             }
-            descriptionLabel.stringValue = event.description
+            descriptionLabel.stringValue = event.summary
         } else {
             view.hidden = true
             NSNotificationCenter.defaultCenter().postNotificationName(LiveEventBannerVisibilityChangedNotification, object: nil)

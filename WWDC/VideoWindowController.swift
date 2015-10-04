@@ -137,7 +137,7 @@ class VideoWindowController: NSWindowController {
     }
     
     private func loadEventVideo() {
-        if let url = NSURL(string: event!.streamURL) {
+        if let url = event?.streamURL {
             asset = AVURLAsset(URL: url, options: nil)
             asset.loadValuesAsynchronouslyForKeys(["playable"]) {
                 dispatch_async(dispatch_get_main_queue()) {
