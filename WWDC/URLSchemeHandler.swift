@@ -33,30 +33,22 @@ class URLSchemeHandler: NSObject {
     }
     
     private func findAndOpenSession(year: String, _ id: String) {
-        if let sessions = DataStore.SharedStore.cachedSessions {
-            print("Year: \(year) | id: \(id)")
-            let foundSession = sessions.filter { session in
-                if session.year == Int(year)! && session.id == Int(id)! {
-                    return true
-                } else {
-                    return false
-                }
+        let sessionKey = "#\(year)-\(id)"
+        guard let session = WWDCDatabase.sharedDatabase.realm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
+        
+        // session has HD video
+        if let url = session.hd_url {
+            if VideoStore.SharedStore().hasVideo(url) {
+                // HD video is available locally
+                let url = VideoStore.SharedStore().localVideoAbsoluteURLString(url)
+                launchVideo(session, url: url)
+            } else {
+                // HD video is not available locally
+                launchVideo(session, url: url)
             }
-            
-            if foundSession.count > 0 {
-                let session = foundSession[0]
-
-                if let url = session.hd_url {
-                    if VideoStore.SharedStore().hasVideo(url) {
-                        let url = VideoStore.SharedStore().localVideoAbsoluteURLString(url)
-                        launchVideo(session, url: url)
-                    } else {
-                        launchVideo(session, url: url)
-                    }
-                } else {
-                    launchVideo(session, url: session.url)
-                }
-            }
+        } else {
+            // session has only SD video
+            launchVideo(session, url: session.videoURL)
         }
     }
     
