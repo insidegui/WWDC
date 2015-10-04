@@ -50,10 +50,12 @@ class DownloadVideosBatch: NSObject {
             currentlyDownloadedSession = ""
             return
         }
-        if let firstSession = sessions.first, let url = firstSession.hd_url {
+        if let firstSession = sessions.first {
+            guard firstSession.hdVideoURL != "" else { return }
+            
             self.currentlyDownloadedSession = firstSession.title
             
-            VideoStore.SharedStore().download(url)
+            VideoStore.SharedStore().download(firstSession.hdVideoURL)
         }
         
     }

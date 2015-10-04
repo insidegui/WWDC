@@ -73,9 +73,8 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 				let tasks = self.videoStore.allTasks()
 				for task in tasks {
 					if let _url = task.originalRequest?.URL?.absoluteString where _url == url {
-						let sessions = DataStore.SharedStore.cachedSessions!
-						let session = sessions.filter { $0.hd_url == url }.first
-						let item = DownloadListItem(url: url!, session: session!, task: task)
+                        guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", _url).first else { return }
+						let item = DownloadListItem(url: url!, session: session, task: task)
 						self.items.append(item)
 						self.tableView.insertRowsAtIndexes(NSIndexSet(index: self.items.count), withAnimation: .SlideUp)
 					}
@@ -161,13 +160,12 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 		super.showWindow(sender)
 		self.items.removeAll(keepCapacity: false)
 		let tasks = self.videoStore.allTasks()
-		let sessions = DataStore.SharedStore.cachedSessions!
-		for task in tasks {
-			if let url = task.originalRequest?.URL?.absoluteString {
-				let session = sessions.filter { $0.hd_url == url }.first
-				let item = DownloadListItem(url: url, session: session!, task: task)
-				self.items.append(item)
-			}
+
+        for task in tasks {
+            guard let url = task.originalRequest?.URL?.absoluteString else { return }
+            guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", url).first else { return }
+            let item = DownloadListItem(url: url, session: session, task: task)
+            self.items.append(item)
 		}
 		self.tableView.reloadData()
 	}
