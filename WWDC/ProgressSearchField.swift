@@ -41,6 +41,13 @@ class ProgressSearchField: NSSearchField {
         }
     }
     
+    var isFirstResponder: Bool {
+        guard let window = self.window else { return false }
+        guard let responder = window.firstResponder as? NSTextView else { return false }
+        
+        return window.firstResponder.isKindOfClass(NSTextView.self) && window.fieldEditor(false, forObject: self) != nil && self.isEqualTo(responder.delegate)
+    }
+    
     deinit {
         progress?.removeObserver(self, forKeyPath: "fractionCompleted")
     }
@@ -48,6 +55,7 @@ class ProgressSearchField: NSSearchField {
 }
 
 class ProgressSearchFieldCell: NSSearchFieldCell {
+    
     
     override func drawInteriorWithFrame(cellFrame: NSRect, inView controlView: NSView) {
         super.drawInteriorWithFrame(cellFrame, inView: controlView)

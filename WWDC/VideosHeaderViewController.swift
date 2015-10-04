@@ -20,6 +20,7 @@ class VideosHeaderViewController: NSViewController {
             return searchBar.stringValue == "" ? nil : searchBar.stringValue
         }
         set {
+            guard !searchBar.isFirstResponder else { return }
             searchBar.stringValue = newValue ?? ""
         }
     }
