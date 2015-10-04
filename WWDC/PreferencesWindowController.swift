@@ -16,9 +16,6 @@ class PreferencesWindowController: NSWindowController {
         self.init(windowNibName: "PreferencesWindowController")
     }
     
-    
-    @IBOutlet weak var downloadProgressIndicator: NSProgressIndicator!
-    
     override func windowDidLoad() {
         super.windowDidLoad()
         
@@ -59,33 +56,6 @@ class PreferencesWindowController: NSWindowController {
             }
         }
     }
-    
-    @IBAction func downloadAllSessions(sender: AnyObject) {
-    
-        
-        let completionHandler: DataStore.fetchSessionsCompletionHandler = { success, sessions in
-            dispatch_async(dispatch_get_main_queue()) {
-                
-                
-                let sessions2015 = sessions.filter{(session) in
-                    return session.year == 2015 && !VideoStore.SharedStore().hasVideo(session.hd_url!)
-                }
-                
-                print("Videos fetched, start downloading")
-                DownloadVideosBatch.SharedDownloader().sessions = sessions2015
-                DownloadVideosBatch.SharedDownloader().startDownloading()
-              }
-        }
-        
-        DataStore.SharedStore.fetchSessions(completionHandler, disableCache: true)
-        
-        if let appDelegate = NSApplication.sharedApplication().delegate as? AppDelegate {
-            appDelegate.showDownloadsWindow(appDelegate)
-        }
-        
-        
-    }
-    
     
     @IBAction func revealInFinder(sender: NSButton) {
         let path = Preferences.SharedPreferences().localVideoStoragePath
@@ -140,16 +110,4 @@ class PreferencesWindowController: NSWindowController {
         fontPopUp.addItemsWithTitles(NSFontManager.sharedFontManager().availableFontFamilies)
     }
     
-    
-    
-    private func hideProgressIndicator() {
-        self.downloadProgressIndicator.hidden = true
-        downloadProgressIndicator.stopAnimation(nil)
-
-    }
-    private func showProgressIndicator() {
-        self.downloadProgressIndicator.hidden = false
-        downloadProgressIndicator.startAnimation(nil)
-
-    }
 }
