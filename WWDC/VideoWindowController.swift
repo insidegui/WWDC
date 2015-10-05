@@ -102,7 +102,7 @@ class VideoWindowController: NSWindowController {
                         }
                         
                         if let startAt = self.startTime {
-                            self.player?.seekToTime(CMTimeMakeWithSeconds(startAt, 6000), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+                            self.seekTo(startAt)
                         }
                         self.player?.play()
                         self.progressIndicator.stopAnimation(nil)
@@ -179,6 +179,10 @@ class VideoWindowController: NSWindowController {
         } else {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
+    }
+    
+    func seekTo(time: Double) {
+        player?.seekToTime(CMTimeMakeWithSeconds(time, 6000), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
     }
     
     func toggleFullScreen(sender: AnyObject?) {

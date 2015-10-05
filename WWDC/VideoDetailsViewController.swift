@@ -10,7 +10,9 @@ import Cocoa
 
 class VideoDetailsViewController: NSViewController {
     
-    var auxWindowControllers: [NSWindowController] = []
+    var videoControllers: [VideoWindowController] = []
+    var slideControllers: [PDFWindowController] = []
+    
     var searchTerm: String? {
         didSet {
             updateTranscriptsViewController()
@@ -126,7 +128,7 @@ class VideoDetailsViewController: NSViewController {
                 let slidesWindowController = PDFWindowController(session: self.session!)
                 slidesWindowController.showWindow(nil)
                 self.followWindowLifecycle(slidesWindowController.window)
-                self.auxWindowControllers.append(slidesWindowController)
+                self.slideControllers.append(slidesWindowController)
             }
         }
         
@@ -143,7 +145,20 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
+    private func playerControllerForSession(session: Session) -> VideoWindowController? {
+        let filteredControllers = videoControllers.filter { videoWC in
+            return videoWC.session?.uniqueId == session.uniqueId
+        }
+
+        return filteredControllers.first
+    }
+    
     private func watchVideo(startTime: Double) {
+        if let existingController = playerControllerForSession(session!) {
+            existingController.seekTo(startTime)
+            return
+        }
+        
         if session!.hd_url != nil {
             if VideoStore.SharedStore().hasVideo(session!.hd_url!) {
                 doWatchVideo(nil, url: VideoStore.SharedStore().localVideoAbsoluteURLString(session!.hd_url!), startTime: startTime)
@@ -160,14 +175,16 @@ class VideoDetailsViewController: NSViewController {
         let playerWindowController = VideoWindowController(session: session!, videoURL: url, startTime: startTime)
         playerWindowController.showWindow(sender)
         followWindowLifecycle(playerWindowController.window)
-        auxWindowControllers.append(playerWindowController)
+        videoControllers.append(playerWindowController)
     }
     
     private func followWindowLifecycle(window: NSWindow!) {
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: window, queue: nil) { note in
             if let window = note.object as? NSWindow {
-                if let controller = window.windowController {
-                    self.auxWindowControllers.remove(controller)
+                if let controller = window.windowController as? VideoWindowController {
+                    self.videoControllers.remove(controller)
+                } else if let controller = window.windowController as? PDFWindowController {
+                    self.slideControllers.remove(controller)
                 }
             }
         }
