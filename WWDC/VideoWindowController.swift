@@ -175,16 +175,22 @@ class VideoWindowController: NSWindowController {
     }
     
     func showTranscriptWindow(sender: AnyObject?) {
-        guard session != nil else { return }
+        let alert = NSAlert()
+        alert.messageText = "Transcripts not available"
+        alert.informativeText = "You're using a development version of the WWDC app. The transcript controller is not done yet, use the latest stable version to see transcripts."
+        alert.addButtonWithTitle("Dismiss")
+        alert.runModal()
         
-        if transcriptWC != nil {
-            if let window = transcriptWC.window {
-                window.orderFront(sender)
-            }
-            
-            return
-        }
-        
+//        guard session != nil else { return }
+//        
+//        if transcriptWC != nil {
+//            if let window = transcriptWC.window {
+//                window.orderFront(sender)
+//            }
+//            
+//            return
+//        }
+//        
 //        if let session = session {
 //            transcriptWC = TranscriptWindowController(session: session)
 //            transcriptWC.showWindow(sender)
