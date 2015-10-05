@@ -12,7 +12,7 @@ import RealmSwift
 
 class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
-    @IBOutlet weak var scrollView: NSScrollView!
+    @IBOutlet weak var scrollView: GRScrollView!
     @IBOutlet weak var tableView: NSTableView!
     
     var splitManager: SplitManager?
@@ -88,6 +88,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateScrollInsets:", name: LiveEventBannerVisibilityChangedNotification, object: nil)
         
         setupViewHeader(insetHeight)
+        setupFilterBar()
     }
     
     func updateScrollInsets(note: NSNotification?) {
@@ -97,11 +98,29 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     func setupViewHeader(insetHeight: CGFloat) {
-        if let superview = scrollView.superview {
-            superview.addSubview(headerController.view)
-            headerController.view.frame = CGRectMake(0, NSHeight(superview.frame)-insetHeight, NSWidth(superview.frame), insetHeight)
-            headerController.view.autoresizingMask = [NSAutoresizingMaskOptions.ViewWidthSizable, NSAutoresizingMaskOptions.ViewMinYMargin]
-            headerController.performSearch = search
+        guard let superview = scrollView.superview else { return }
+
+        superview.addSubview(headerController.view)
+        headerController.view.frame = CGRectMake(0, NSHeight(superview.frame)-insetHeight, NSWidth(superview.frame), insetHeight)
+        headerController.view.autoresizingMask = [NSAutoresizingMaskOptions.ViewWidthSizable, NSAutoresizingMaskOptions.ViewMinYMargin]
+        headerController.performSearch = search
+    }
+    
+    var filterBarController: FilterBarController?
+    func setupFilterBar() {
+        guard let superview = scrollView.superview else { return }
+        
+        filterBarController = FilterBarController(scrollView: scrollView)
+        superview.addSubview(filterBarController!.view, positioned: .Below, relativeTo: headerController.view)
+        filterBarController!.view.frame = CGRectMake(0, NSHeight(superview.frame)-NSHeight(headerController.view.frame), NSWidth(superview.frame), 44.0)
+        filterBarController!.view.autoresizingMask = [.ViewWidthSizable, .ViewMinYMargin]
+        
+        filterBarController!.filtersDidChangeCallback = {
+            var sessions = WWDCDatabase.sharedDatabase.realm.objects(Session.self)
+            for filter in self.filterBarController!.filters {
+                sessions = sessions.filter(filter.predicate)
+            }
+            self.sessions = sessions.sorted(WWDCDatabase.sharedDatabase.sortDescriptorsForSessionList)
         }
     }
 
@@ -387,10 +406,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                 let realm = try! Realm()
                 let transcripts = realm.objects(Transcript.self).filter("fullText CONTAINS[c] %@", term)
                 let keysMatchingTranscripts = transcripts.map({ $0.session!.uniqueId })
-                let results = realm.objects(Session.self).filter("title CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, keysMatchingTranscripts)
-                let sessionKeys = results.map({ $0.uniqueId })
-                
-                mainQ { self.sessions = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("uniqueId IN %@", sessionKeys) }
+                mainQ {
+                    self.sessions = self.sessions.filter("title CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, keysMatchingTranscripts).sorted(WWDCDatabase.sharedDatabase.sortDescriptorsForSessionList)
+                }
             }
         } else {
             fetchLocalSessions()

@@ -508,7 +508,7 @@ CA
                             <visualEffectView appearanceType="aqua" blendingMode="behindWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="Rg6-r5-kXz">
                                 <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                                 <subviews>
-                                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="42" horizontalPageScroll="10" verticalLineScroll="42" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TKd-X0-CX9">
+                                    <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="42" horizontalPageScroll="10" verticalLineScroll="42" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TKd-X0-CX9" customClass="GRScrollView">
                                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="fjK-ET-RRB">
                                             <rect key="frame" x="1" y="17" width="238" height="117"/>

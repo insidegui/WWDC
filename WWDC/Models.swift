@@ -100,6 +100,55 @@ class Session: Object {
     
 }
 
+enum SearchFilter {
+    case Year([Int])
+    case Track([String])
+    case Focus([String])
+    case Favorited(Bool)
+    case Downloaded(Bool)
+    
+    var isEmpty: Bool {
+        switch self {
+        case .Year(let years):
+            return years.count == 0
+        case .Track(let tracks):
+            return tracks.count == 0
+        case .Focus(let focuses):
+            return focuses.count == 0
+        default:
+            return true
+        }
+    }
+    
+    var predicate: NSPredicate {
+        switch self {
+        case .Year(let years):
+            return NSPredicate(format: "year IN %@", years)
+        case .Track(let tracks):
+            return NSPredicate(format: "track IN %@", tracks)
+        case .Focus(let focuses):
+            return NSPredicate(format: "focus IN %@", focuses)
+        case .Favorited(let favorited):
+            return NSPredicate(format: "favorite = %@", favorited)
+        case .Downloaded(let downloaded):
+            return NSPredicate(block: {obj, variables in
+                guard let session = obj as? Session else { return false }
+                guard session.hdVideoURL != "" else { return false }
+                return VideoStore.SharedStore().hasVideo(session.hdVideoURL) == downloaded
+            })
+        }
+    }
+    
+    static func predicatesWithFilters(filters: SearchFilters) -> [NSPredicate] {
+        var predicates: [NSPredicate] = []
+        for filter in filters {
+            predicates.append(filter.predicate)
+        }
+        return predicates
+    }
+}
+typealias SearchFilters = [SearchFilter]
+
 class TranscriptLine: Object {
     dynamic var transcript: Transcript?
     dynamic var text = ""

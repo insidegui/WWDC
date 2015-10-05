@@ -58,6 +58,8 @@
 		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
 		DD945ED91B26A42300CE7B7D /* LiveEventBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD945ED81B26A42300CE7B7D /* LiveEventBannerViewController.swift */; };
 		DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */; };
+		DDBD18651BC3227B00EF7718 /* FilterBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD18631BC3227B00EF7718 /* FilterBarController.swift */; };
+		DDBD18661BC3227B00EF7718 /* FilterBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDBD18641BC3227B00EF7718 /* FilterBarController.xib */; };
 		DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC049CE1AE564F20008D41A /* PDFWindowController.swift */; };
 		DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC049CF1AE564F20008D41A /* PDFWindowController.xib */; };
 		DDCC5D721AF1518A00F24F55 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */; };
@@ -242,6 +244,8 @@
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
 		DD945ED81B26A42300CE7B7D /* LiveEventBannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEventBannerViewController.swift; sourceTree = "<group>"; };
 		DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveEventBannerViewController.xib; sourceTree = "<group>"; };
+		DDBD18631BC3227B00EF7718 /* FilterBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBarController.swift; sourceTree = "<group>"; };
+		DDBD18641BC3227B00EF7718 /* FilterBarController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterBarController.xib; sourceTree = "<group>"; };
 		DDC049CE1AE564F20008D41A /* PDFWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWindowController.swift; sourceTree = "<group>"; };
 		DDC049CF1AE564F20008D41A /* PDFWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PDFWindowController.xib; sourceTree = "<group>"; };
 		DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -448,6 +452,7 @@
 				DD0974DE1B18AAA8006A3C77 /* URLSchemeHandler.swift */,
 				DD945ED81B26A42300CE7B7D /* LiveEventBannerViewController.swift */,
 				DDE3A8211BC2DCEC00610FEF /* TranscriptSearchResultsController.swift */,
+				DDBD18631BC3227B00EF7718 /* FilterBarController.swift */,
 			);
 			name = "Aux Controllers";
 			sourceTree = "<group>";
@@ -455,6 +460,7 @@
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DDBD18641BC3227B00EF7718 /* FilterBarController.xib */,
 				DDE3A8221BC2DCEC00610FEF /* TranscriptSearchResultsController.xib */,
 				DD2CC38E1AF419F500FC5F68 /* PreferencesWindowController.xib */,
 				DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */,
@@ -662,6 +668,7 @@
 				DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */,
 				DDE3A8241BC2DCEC00610FEF /* TranscriptSearchResultsController.xib in Resources */,
 				DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */,
+				DDBD18661BC3227B00EF7718 /* FilterBarController.xib in Resources */,
 				DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */,
 				DD829F221AF271DF00B5977B /* index.json in Resources */,
 				DD4F6E591AE2D11D0099BEB5 /* Main.storyboard in Resources */,
@@ -708,6 +715,7 @@
 				DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */,
 				DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */,
 				DDE3A8231BC2DCEC00610FEF /* TranscriptSearchResultsController.swift in Sources */,
+				DDBD18651BC3227B00EF7718 /* FilterBarController.swift in Sources */,
 				DD825CA71BBF575500276B83 /* Models.swift in Sources */,
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
