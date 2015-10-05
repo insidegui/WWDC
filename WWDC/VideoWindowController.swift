@@ -19,6 +19,7 @@ class VideoWindowController: NSWindowController {
     var event: LiveSession?
     
     var videoURL: String?
+    var startTime: Double?
     
     var asset: AVAsset!
     var item: AVPlayerItem!
@@ -35,6 +36,13 @@ class VideoWindowController: NSWindowController {
         self.init(windowNibName: _nibName)
         self.session = session
         self.videoURL = videoURL
+    }
+    
+    convenience init(session: Session, videoURL: String, startTime: Double?) {
+        self.init(windowNibName: _nibName)
+        self.session = session
+        self.videoURL = videoURL
+        self.startTime = startTime
     }
     
     convenience init(event: LiveSession, videoURL: String) {
@@ -93,6 +101,9 @@ class VideoWindowController: NSWindowController {
                             }
                         }
                         
+                        if let startAt = self.startTime {
+                            self.player?.seekToTime(CMTimeMakeWithSeconds(startAt, 6000), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+                        }
                         self.player?.play()
                         self.progressIndicator.stopAnimation(nil)
                     }

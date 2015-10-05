@@ -379,6 +379,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
 
     private let searchQueue = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)
     func search(term: String) {
+        detailsViewController?.searchTerm = term
         Preferences.SharedPreferences().searchTerm = term
         
         if term != "" {

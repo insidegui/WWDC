@@ -32,7 +32,7 @@ class ActionButtonsViewController: NSViewController {
     @IBOutlet var watchButton: NSButton!
     @IBOutlet var slidesButton: NSButton!
     @IBOutlet var progressButton: NSButton!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()

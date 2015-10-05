@@ -11,13 +11,17 @@ import Cocoa
 class VideoDetailsViewController: NSViewController {
     
     var auxWindowControllers: [NSWindowController] = []
-    
-    
-    var selectedCount = 1 {
+    var searchTerm: String? {
         didSet {
-            updateUI()
+            updateTranscriptsViewController()
         }
     }
+    
+    private var transcriptSearchResultsVC: TranscriptSearchResultsController?
+    
+    @IBOutlet weak var transcriptControllerContainerView: NSView!
+    
+    var selectedCount = 1
     var multipleSelection: Bool {
         get {
             return selectedCount > 1
@@ -63,6 +67,33 @@ class VideoDetailsViewController: NSViewController {
             subtitleLabel.stringValue = "Select a session to see It here"
             descriptionLabel.hidden = true
         }
+        
+        setupTranscriptResultsViewIfNeeded()
+        updateTranscriptsViewController()
+    }
+    
+    private func setupTranscriptResultsViewIfNeeded() {
+        guard transcriptSearchResultsVC == nil else { return }
+        transcriptSearchResultsVC = TranscriptSearchResultsController()
+        transcriptSearchResultsVC!.view.frame = self.transcriptControllerContainerView.bounds
+        transcriptSearchResultsVC!.view.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+        transcriptSearchResultsVC!.playCallback = { [unowned self] time in
+            self.watchVideo(time)
+        }
+        self.transcriptControllerContainerView.addSubview(transcriptSearchResultsVC!.view)
+    }
+    
+    private func updateTranscriptsViewController() {
+        guard let term = searchTerm else {
+            transcriptSearchResultsVC?.lines = nil
+            return
+        }
+        
+        guard term != "" else {
+            transcriptSearchResultsVC?.lines = nil
+            return
+        }
+        transcriptSearchResultsVC?.lines = session?.transcript?.lines.filter("text CONTAINS[c] %@", searchTerm!)
     }
     
     private func handleMultipleSelection()
@@ -79,15 +110,15 @@ class VideoDetailsViewController: NSViewController {
         actionButtonsController.watchHDVideoCallback = { [unowned self] in
             if self.session!.hd_url != nil {
                 if VideoStore.SharedStore().hasVideo(self.session!.hd_url!) {
-                    self.doWatchVideo(nil, url: VideoStore.SharedStore().localVideoAbsoluteURLString(self.session!.hd_url!))
+                    self.doWatchVideo(nil, url: VideoStore.SharedStore().localVideoAbsoluteURLString(self.session!.hd_url!), startTime: nil)
                 } else {
-                    self.doWatchVideo(nil, url: self.session!.hd_url!)
+                    self.doWatchVideo(nil, url: self.session!.hd_url!, startTime: nil)
                 }
             }
         }
         
         actionButtonsController.watchVideoCallback = { [unowned self] in
-            self.doWatchVideo(nil, url: self.session!.videoURL)
+            self.doWatchVideo(nil, url: self.session!.videoURL, startTime: nil)
         }
         
         actionButtonsController.showSlidesCallback = { [unowned self] in
@@ -112,9 +143,21 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
-    private func doWatchVideo(sender: AnyObject?, url: String)
+    private func watchVideo(startTime: Double) {
+        if session!.hd_url != nil {
+            if VideoStore.SharedStore().hasVideo(session!.hd_url!) {
+                doWatchVideo(nil, url: VideoStore.SharedStore().localVideoAbsoluteURLString(session!.hd_url!), startTime: startTime)
+            } else {
+                doWatchVideo(nil, url: session!.hd_url!, startTime: startTime)
+            }
+        } else {
+            doWatchVideo(nil, url: session!.videoURL, startTime: startTime)
+        }
+    }
+    
+    private func doWatchVideo(sender: AnyObject?, url: String, startTime: Double?)
     {
-        let playerWindowController = VideoWindowController(session: session!, videoURL: url)
+        let playerWindowController = VideoWindowController(session: session!, videoURL: url, startTime: startTime)
         playerWindowController.showWindow(sender)
         followWindowLifecycle(playerWindowController.window)
         auxWindowControllers.append(playerWindowController)

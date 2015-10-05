@@ -215,6 +215,7 @@ typealias SessionsUpdatedCallback = () -> Void
                 let transcript = Transcript(json: JSON(data: jsonData), session: session)
                 bgRealm.beginWrite()
                 bgRealm.add(transcript)
+                session.transcript = transcript
                 bgRealm.commitWrite()
                 self.transcriptIndexingProgress?.completedUnitCount += 1
             }

@@ -46,15 +46,3 @@ class Theme: NSObject {
     }
     
 }
-
-private extension NSImage {
-    var CGImage: CGImageRef {
-        get {
-            var rect = NSMakeRect(0, 0, self.size.width, self.size.height)
-            
-            let iref = self.CGImageForProposedRect(&rect, context: nil, hints: nil)
-            
-            return iref!
-        }
-    }
-}

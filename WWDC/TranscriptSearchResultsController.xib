@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9046" systemVersion="15A284" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9046"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="TranscriptSearchResultsController" customModule="WWDC" customModuleProvider="target">
+            <connections>
+                <outlet property="tableView" destination="7mr-fY-RBV" id="HmZ-nW-4uH"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="45" horizontalPageScroll="10" verticalLineScroll="45" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0sw-km-joO">
+                    <rect key="frame" x="0.0" y="1" width="480" height="271"/>
+                    <clipView key="contentView" id="Q6d-9G-zp2">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="271"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="43" rowSizeStyle="automatic" viewBased="YES" id="7mr-fY-RBV">
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="0.0"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <animations/>
+                                <size key="intercellSpacing" width="3" height="2"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
+                                <color key="gridColor" white="0.80000000000000004" alpha="0.24942466085271317" colorSpace="deviceWhite"/>
+                                <tableColumns>
+                                    <tableColumn width="477" minWidth="40" maxWidth="1000" id="V9u-mk-fAF">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="C4o-A6-xOl">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView identifier="transcriptLine" id="UA1-5b-dnI" customClass="TranscriptLineTableCellView" customModule="WWDC" customModuleProvider="target">
+                                                <rect key="frame" x="1" y="1" width="477" height="43"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <button toolTip="Play" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hom-PE-usH" customClass="RoundPlayButton" customModule="WWDC" customModuleProvider="target">
+                                                        <rect key="frame" x="21" y="5" width="33" height="33"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="33" id="dXo-Bz-Gdw"/>
+                                                            <constraint firstAttribute="height" constant="33" id="z6e-Ff-tSW"/>
+                                                        </constraints>
+                                                        <animations/>
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="tjH-Ko-gBp">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="play:" target="UA1-5b-dnI" id="GPT-Tj-cZz"/>
+                                                        </connections>
+                                                    </button>
+                                                    <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="gec-sf-x8u">
+                                                        <rect key="frame" x="60" y="13" width="396" height="17"/>
+                                                        <animations/>
+                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Transcript line summary goes here..." id="Mee-uf-rIG">
+                                                            <font key="font" metaFont="system"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="hom-PE-usH" firstAttribute="centerY" secondItem="UA1-5b-dnI" secondAttribute="centerY" id="2mo-CD-p6n"/>
+                                                    <constraint firstItem="gec-sf-x8u" firstAttribute="centerY" secondItem="UA1-5b-dnI" secondAttribute="centerY" id="4Y3-4C-Mdg"/>
+                                                    <constraint firstItem="hom-PE-usH" firstAttribute="leading" secondItem="UA1-5b-dnI" secondAttribute="leading" constant="21" id="IdX-MU-Kop"/>
+                                                    <constraint firstAttribute="trailing" secondItem="gec-sf-x8u" secondAttribute="trailing" constant="23" id="W5T-go-nVC"/>
+                                                    <constraint firstItem="gec-sf-x8u" firstAttribute="leading" secondItem="hom-PE-usH" secondAttribute="trailing" constant="8" id="jMN-fn-5vS"/>
+                                                </constraints>
+                                                <animations/>
+                                                <connections>
+                                                    <outlet property="playButton" destination="hom-PE-usH" id="Abx-JS-Mg6"/>
+                                                    <outlet property="summaryLabel" destination="gec-sf-x8u" id="BS5-HI-Vo9"/>
+                                                    <outlet property="textField" destination="gec-sf-x8u" id="FZk-MK-jV1"/>
+                                                </connections>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                </tableColumns>
+                            </tableView>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </clipView>
+                    <animations/>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="dSI-hK-g5T">
+                        <rect key="frame" x="1" y="119" width="223" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="bAl-oN-YUB">
+                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </scroller>
+                </scrollView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="0sw-km-joO" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="0MA-tO-dch"/>
+                <constraint firstAttribute="trailing" secondItem="0sw-km-joO" secondAttribute="trailing" id="3qX-cI-Bn0"/>
+                <constraint firstItem="0sw-km-joO" firstAttribute="centerY" secondItem="Hz6-mo-xeY" secondAttribute="centerY" id="52N-ky-2aa"/>
+                <constraint firstItem="0sw-km-joO" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="UtQ-y3-Kqm"/>
+            </constraints>
+            <animations/>
+            <point key="canvasLocation" x="371" y="458"/>
+        </customView>
+    </objects>
+</document>
