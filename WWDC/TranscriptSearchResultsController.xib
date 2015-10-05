@@ -16,13 +16,13 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="45" horizontalPageScroll="10" verticalLineScroll="45" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0sw-km-joO">
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="28" horizontalPageScroll="10" verticalLineScroll="28" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0sw-km-joO">
                     <rect key="frame" x="0.0" y="1" width="480" height="271"/>
                     <clipView key="contentView" id="Q6d-9G-zp2">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="271"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="43" rowSizeStyle="automatic" viewBased="YES" id="7mr-fY-RBV">
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="26" rowSizeStyle="automatic" viewBased="YES" id="7mr-fY-RBV">
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="0.0"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <animations/>
@@ -45,14 +45,14 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView identifier="transcriptLine" id="UA1-5b-dnI" customClass="TranscriptLineTableCellView" customModule="WWDC" customModuleProvider="target">
-                                                <rect key="frame" x="1" y="1" width="477" height="43"/>
+                                                <rect key="frame" x="1" y="1" width="477" height="26"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button toolTip="Play" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hom-PE-usH" customClass="RoundPlayButton" customModule="WWDC" customModuleProvider="target">
-                                                        <rect key="frame" x="21" y="5" width="33" height="33"/>
+                                                        <rect key="frame" x="3" y="3" width="20" height="20"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="33" id="dXo-Bz-Gdw"/>
-                                                            <constraint firstAttribute="height" constant="33" id="z6e-Ff-tSW"/>
+                                                            <constraint firstAttribute="height" constant="20" id="Ele-F2-l4J"/>
+                                                            <constraint firstAttribute="width" constant="20" id="TKr-OE-waY"/>
                                                         </constraints>
                                                         <animations/>
                                                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="tjH-Ko-gBp">
@@ -64,21 +64,21 @@
                                                         </connections>
                                                     </button>
                                                     <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="gec-sf-x8u">
-                                                        <rect key="frame" x="60" y="13" width="396" height="17"/>
+                                                        <rect key="frame" x="25" y="5" width="451" height="17"/>
                                                         <animations/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Transcript line summary goes here..." id="Mee-uf-rIG">
                                                             <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="hom-PE-usH" firstAttribute="centerY" secondItem="UA1-5b-dnI" secondAttribute="centerY" id="2mo-CD-p6n"/>
-                                                    <constraint firstItem="gec-sf-x8u" firstAttribute="centerY" secondItem="UA1-5b-dnI" secondAttribute="centerY" id="4Y3-4C-Mdg"/>
-                                                    <constraint firstItem="hom-PE-usH" firstAttribute="leading" secondItem="UA1-5b-dnI" secondAttribute="leading" constant="21" id="IdX-MU-Kop"/>
-                                                    <constraint firstAttribute="trailing" secondItem="gec-sf-x8u" secondAttribute="trailing" constant="23" id="W5T-go-nVC"/>
-                                                    <constraint firstItem="gec-sf-x8u" firstAttribute="leading" secondItem="hom-PE-usH" secondAttribute="trailing" constant="8" id="jMN-fn-5vS"/>
+                                                    <constraint firstItem="hom-PE-usH" firstAttribute="centerY" secondItem="UA1-5b-dnI" secondAttribute="centerY" id="ITT-YL-70h"/>
+                                                    <constraint firstItem="gec-sf-x8u" firstAttribute="leading" secondItem="hom-PE-usH" secondAttribute="trailing" constant="4" id="ZC4-dR-PU8"/>
+                                                    <constraint firstItem="gec-sf-x8u" firstAttribute="centerY" secondItem="UA1-5b-dnI" secondAttribute="centerY" id="qAF-ft-Qbx"/>
+                                                    <constraint firstItem="hom-PE-usH" firstAttribute="leading" secondItem="UA1-5b-dnI" secondAttribute="leading" constant="3" id="wBn-aH-NjP"/>
+                                                    <constraint firstAttribute="trailing" secondItem="gec-sf-x8u" secondAttribute="trailing" constant="3" id="wNf-hh-bhC"/>
                                                 </constraints>
                                                 <animations/>
                                                 <connections>
