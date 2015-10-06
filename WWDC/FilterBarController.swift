@@ -46,6 +46,9 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         
         scrollView.delegate = self
         
+        segmentedControl.action = "segmentedControlAction:"
+        segmentedControl.target = self
+        
         updateMenus()
     }
     
@@ -76,15 +79,18 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         for year in years {
             let item = NSMenuItem(title: "\(year)", action: "yearMenuAction:", keyEquivalent: "")
             item.target = self
+            item.state = yearFilter.selectedInts!.contains(year) ? NSOnState : NSOffState
             yearMenu.addItem(item)
         }
         for track in tracks {
             let item = NSMenuItem(title: "\(track)", action: "trackMenuAction:", keyEquivalent: "")
             item.target = self
+            item.state = trackFilter.selectedStrings!.contains(track) ? NSOnState : NSOffState
             trackMenu.addItem(item)
         }
         for focus in focuses {
             let item = NSMenuItem(title: "\(focus)", action: "focusMenuAction:", keyEquivalent: "")
+            item.state = focusFilter.selectedStrings!.contains(focus) ? NSOnState : NSOffState
             item.target = self
             focusMenu.addItem(item)
         }
@@ -109,6 +115,8 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     var yearFilter = SearchFilter.Year([])
     var trackFilter = SearchFilter.Track([])
     var focusFilter = SearchFilter.Focus([])
+    var favoritedFilter = SearchFilter.Favorited(false)
+    var downloadedFilter = SearchFilter.Downloaded(false)
     
     func updateFilters() {
         filters = []
@@ -121,6 +129,12 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         }
         if !focusFilter.isEmpty {
             filters.append(focusFilter)
+        }
+        if !favoritedFilter.isEmpty {
+            filters.append(favoritedFilter)
+        }
+        if !downloadedFilter.isEmpty {
+            filters.append(downloadedFilter)
         }
         
         filtersDidChangeCallback?()
@@ -167,6 +181,32 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         focusFilter = SearchFilter.Focus(selectedFocuses)
         
         updateFilters()
+    }
+    
+    var favoritedActive = false
+    var downloadedActive = false
+    func segmentedControlAction(sender: GRSegmentedControl) {
+        switch(segmentedControl.selectedSegment) {
+        case 0:
+//            yearMenu.popUpMenuPositioningItem(nil, atLocation: NSZeroPoint, inView: segmentedControl)
+            segmentedControl.setSelected(false, forSegment: 0)
+        case 1:
+//            trackMenu.popUpMenuPositioningItem(nil, atLocation: NSZeroPoint, inView: segmentedControl)
+            segmentedControl.setSelected(false, forSegment: 1)
+        case 2:
+//            focusMenu.popUpMenuPositioningItem(nil, atLocation: NSZeroPoint, inView: segmentedControl)
+            segmentedControl.setSelected(false, forSegment: 2)
+        case 3:
+            favoritedActive = !favoritedActive
+            favoritedFilter = SearchFilter.Favorited(favoritedActive)
+            updateFilters()
+        case 4:
+            downloadedActive = !downloadedActive
+            downloadedFilter = SearchFilter.Downloaded(downloadedActive)
+            updateFilters()
+        default:
+            print("Invalid segment!")
+        }
     }
     
     // MARK: Scrolling behavior

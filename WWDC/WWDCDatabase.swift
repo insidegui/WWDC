@@ -95,7 +95,7 @@ typealias SessionsUpdatedCallback = () -> Void
         fetchOrUpdateAppleServiceURLs()
     }
     
-    /// Returns the list of sessions available
+    /// Returns the list of sessions available sorted by year and session id
     /// - Warning: can only be used from the main thread
     var standardSessionList: Results<Session> {
         return realm.objects(Session.self).sorted(sortDescriptorsForSessionList)
@@ -241,6 +241,7 @@ private class LegacyWWDCDatabaseMigrator {
     
     /// Migrates the session's favorite status, progress and position from the legacy preferences to the new model
     func migrateSession(session: Session) -> Session {
+        session.downloaded = session.hdVideoURL.isEmpty ? false : VideoStore.SharedStore().hasVideo(session.hdVideoURL)
         session.favorite = fetchSessionIsFavorite(session)
         session.currentPosition = fetchSessionCurrentPosition(session)
         session.progress = fetchSessionProgress(session)

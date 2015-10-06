@@ -106,6 +106,30 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         headerController.performSearch = search
     }
     
+    var searchTermFilter: SearchFilter? {
+        didSet {
+            applySearchFilters()
+        }
+    }
+    
+    var searchFilters: SearchFilters = [] {
+        didSet {
+            applySearchFilters()
+        }
+    }
+    
+    private func applySearchFilters() {
+        fetchLocalSessions()
+        
+        for filter in searchFilters {
+            sessions = sessions.filter(filter.predicate)
+        }
+        
+        if let termFilter = searchTermFilter {
+            sessions = sessions.filter(termFilter.predicate)
+        }
+    }
+    
     var filterBarController: FilterBarController?
     func setupFilterBar() {
         guard let superview = scrollView.superview else { return }
@@ -116,11 +140,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         filterBarController!.view.autoresizingMask = [.ViewWidthSizable, .ViewMinYMargin]
         
         filterBarController!.filtersDidChangeCallback = {
-            var sessions = WWDCDatabase.sharedDatabase.realm.objects(Session.self)
-            for filter in self.filterBarController!.filters {
-                sessions = sessions.filter(filter.predicate)
-            }
-            self.sessions = sessions.sorted(WWDCDatabase.sharedDatabase.sortDescriptorsForSessionList)
+            self.searchFilters = self.filterBarController!.filters
         }
     }
 
@@ -169,6 +189,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     func fetchLocalSessions() {
         sessions = WWDCDatabase.sharedDatabase.standardSessionList
+        filterBarController?.updateMenus()
         if sessions.count > 0 {
             GRLoadingView.dismissAllAfterDelay(0.3)
         }
@@ -407,11 +428,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                 let transcripts = realm.objects(Transcript.self).filter("fullText CONTAINS[c] %@", term)
                 let keysMatchingTranscripts = transcripts.map({ $0.session!.uniqueId })
                 mainQ {
-                    self.sessions = self.sessions.filter("title CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, keysMatchingTranscripts).sorted(WWDCDatabase.sharedDatabase.sortDescriptorsForSessionList)
+                    self.searchTermFilter = SearchFilter.Arbitrary(NSPredicate(format: "title CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, keysMatchingTranscripts))
                 }
             }
         } else {
-            fetchLocalSessions()
+            self.searchTermFilter = nil
         }
     }
     

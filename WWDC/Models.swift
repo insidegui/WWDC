@@ -53,6 +53,7 @@ class Session: Object {
     dynamic var favorite = false
     dynamic var transcript: Transcript?
     dynamic var slidesPDFData = NSData()
+    dynamic var downloaded = false
     
     convenience required init(json: JSON) {
         self.init()
@@ -101,6 +102,7 @@ class Session: Object {
 }
 
 enum SearchFilter {
+    case Arbitrary(NSPredicate)
     case Year([Int])
     case Track([String])
     case Focus([String])
@@ -109,19 +111,26 @@ enum SearchFilter {
     
     var isEmpty: Bool {
         switch self {
+        case .Arbitrary:
+            return false
         case .Year(let years):
             return years.count == 0
         case .Track(let tracks):
             return tracks.count == 0
         case .Focus(let focuses):
             return focuses.count == 0
-        default:
-            return true
+        // for boolean properties, setting them to "false" means empty because we only want to filter when true
+        case .Favorited(let favorited):
+            return !favorited;
+        case .Downloaded(let downloaded):
+            return !downloaded;
         }
     }
     
     var predicate: NSPredicate {
         switch self {
+        case .Arbitrary(let predicate):
+            return predicate
         case .Year(let years):
             return NSPredicate(format: "year IN %@", years)
         case .Track(let tracks):
@@ -131,11 +140,27 @@ enum SearchFilter {
         case .Favorited(let favorited):
             return NSPredicate(format: "favorite = %@", favorited)
         case .Downloaded(let downloaded):
-            return NSPredicate(block: {obj, variables in
-                guard let session = obj as? Session else { return false }
-                guard session.hdVideoURL != "" else { return false }
-                return VideoStore.SharedStore().hasVideo(session.hdVideoURL) == downloaded
-            })
+            return NSPredicate(format: "downloaded = %@", downloaded)
+        }
+    }
+    
+    var selectedInts: [Int]? {
+        switch self {
+        case .Year(let years):
+            return years
+        default:
+            return nil
+        }
+    }
+    
+    var selectedStrings: [String]? {
+        switch self {
+        case .Track(let strings):
+            return strings
+        case .Focus(let strings):
+            return strings
+        default:
+            return nil
         }
     }
     
