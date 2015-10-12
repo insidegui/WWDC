@@ -8,31 +8,11 @@
 
 import Foundation
 
-extension Array {
-    mutating func remove<U: Equatable>(object: U) {
-        var index: Int?
-        for (idx, itemToRemove) in self.enumerate() {
-            if let to = itemToRemove as? U {
-                if object == to {
-                    index = idx
-                }
-            }
-        }
-        
-        if(index != nil) {
-            self.removeAtIndex(index!)
-        }
-    }
-    
-    func contains<U: Equatable>(object: U) -> Bool {
-        for itemToCompare in self {
-            if let to = itemToCompare as? U {
-                if object == to {
-                    return true
-                }
-            }
-        }
-        
-        return false
+extension RangeReplaceableCollectionType where Generator.Element: Equatable {
+    mutating func remove(object: Generator.Element) {
+        guard let index = indexOf(object)
+            else { return }
+
+        self.removeAtIndex(index)
     }
 }
