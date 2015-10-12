@@ -133,10 +133,12 @@ class VideoDetailsViewController: NSViewController {
         }
         
         actionButtonsController.toggleWatchedCallback = { [unowned self] in
-            if self.session!.progress < 100 {
-                self.session!.progress = 100
-            } else {
-                self.session!.progress = 0
+            WWDCDatabase.sharedDatabase.doChanges {
+                if self.session!.progress < 100 {
+                    self.session!.progress = 100
+                } else {
+                    self.session!.progress = 0
+                }
             }
         }
         
