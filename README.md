@@ -54,4 +54,4 @@ You can also install using [Homebrew Cask](http://caskroom.io):
 	
 ### PlayBack Tips: Speed Up / Slow Down, Skip Ahead Or Back
 
-Speed up or slow down playback by ⌥ + clicking on the skip forward or backward arrows on the player window or ⌥ swiping on your trackpad. Skip ahead or back by swiping on a trackpad.
+Speed up or slow down playback by ⌥ + clicking on the skip forward or backward arrows on the player window or ⌥ swiping on your trackpad or Magic Mouse. Skip ahead or back by swiping on a trackpad or Magic Mouse.
