@@ -51,3 +51,7 @@ The only steps required before you build is to pull down the code and submodules
 You can also install using [Homebrew Cask](http://caskroom.io):
 
 	$ brew cask install wwdc
+	
+### PlayBack Tip: Speed Up / Slow Down
+
+Speed up or slow down playback by ⌥ + clicking on the skip forward or backward arrows on the player window.
