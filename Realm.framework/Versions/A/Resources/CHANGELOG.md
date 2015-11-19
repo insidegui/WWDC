@@ -1,3 +1,83 @@
+0.96.2 Release notes (2015-10-26)
+=============================================================
+
+Prebuilt frameworks are now built with Xcode 7.1.
+
+### Bugfixes
+
+* Fix ignoring optional properties in Swift.
+* Fix CocoaPods installation on case-sensitive file systems.
+
+0.96.1 Release notes (2015-10-20)
+=============================================================
+
+### Bugfixes
+
+* Support assigning `Results` to `List` properties via KVC.
+* Honor the schema version set in the configuration in `+[RLMRealm migrateRealm:]`.
+* Fix crash when using optional Int16/Int32/Int64 properties in Swift.
+
+0.96.0 Release notes (2015-10-14)
+=============================================================
+
+* No functional changes since beta2.
+
+0.96.0-beta2 Release notes (2015-10-08)
+=============================================================
+
+### Bugfixes
+
+* Add RLMOptionalBase.h to the podspec.
+
+0.96.0-beta Release notes (2015-10-07)
+=============================================================
+
+### API breaking changes
+
+* CocoaPods v0.38 or greater is now required to install Realm and RealmSwift
+  as pods.
+
+### Enhancements
+
+* Functionality common to both `List` and `Results` is now declared in a
+  `RealmCollectionType` protocol that both types conform to.
+* `Results.realm` now returns an `Optional<Realm>` in order to conform to
+  `RealmCollectionType`, but will always return `.Some()` since a `Results`
+  cannot exist independently from a `Realm`.
+* Aggregate operations are now available on `List`: `min`, `max`, `sum`,
+  `average`.
+* Committing write transactions (via `commitWrite` / `commitWriteTransaction` and
+  `write` / `transactionWithBlock`) now optionally allow for handling errors when
+  the disk is out of space.
+* Added `isEmpty` property on `RLMRealm`/`Realm` to indicate if it contains any
+  objects.
+* The `@count`, `@min`, `@max`, `@sum` and `@avg` collection operators are now
+  supported in queries.
+
+### Bugfixes
+
+* Fix assertion failure when inserting NSData between 8MB and 16MB in size.
+* Fix assertion failure when rolling back a migration which removed an object
+  link or `RLMArray`/`List` property.
+* Add the path of the file being opened to file open errors.
+* Fix a crash that could be triggered by rapidly opening and closing a Realm
+  many times on multiple threads at once.
+* Fix several places where exception messages included the name of the wrong
+  function which failed.
+
+0.95.3 Release notes (2015-10-05)
+=============================================================
+
+### Bugfixes
+
+* Compile iOS Simulator framework architectures with `-fembed-bitcode-marker`.
+* Fix crashes when the first Realm opened uses a class subset and later Realms
+  opened do not.
+* Fix inconsistent errors when `Object(value: ...)` is used to initialize the
+  default value of a property of an `Object` subclass.
+* Throw an exception when a class subset has objects with array or object
+  properties of a type that are not part of the class subset.
+
 0.95.2 Release notes (2015-09-24)
 =============================================================
 

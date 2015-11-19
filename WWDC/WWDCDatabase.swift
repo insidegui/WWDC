@@ -50,7 +50,7 @@ typealias SessionsUpdatedCallback = () -> Void
     func doChanges(block: () -> Void) {
         realm.beginWrite()
         block()
-        realm.commitWrite()
+        try! realm.commitWrite()
     }
     
     /// Use this to change properties of model objects **on a background thread**
@@ -62,7 +62,7 @@ typealias SessionsUpdatedCallback = () -> Void
         let bgRealm = try! Realm()
         bgRealm.beginWrite()
         block(realm: bgRealm)
-        bgRealm.commitWrite()
+        try! bgRealm.commitWrite()
     }
     
     /// The progress when the transcripts are being downloaded/indexed
@@ -120,7 +120,7 @@ typealias SessionsUpdatedCallback = () -> Void
             print("AppConfig changed")
             
             // write the new configuration to the database so It can be fetched quickly later :)
-            self.realm.write { self.realm.add(fetchedConfig, update: true) }
+            try! self.realm.write { self.realm.add(fetchedConfig, update: true) }
             self.config = fetchedConfig
         }
     }
@@ -145,7 +145,7 @@ typealias SessionsUpdatedCallback = () -> Void
                         print("Video list did not change")
                         newVideosAvailable = false
                     } else {
-                        self.realm.write { self.config.videosUpdatedAt = json["updated"].stringValue }
+                        try! self.realm.write { self.config.videosUpdatedAt = json["updated"].stringValue }
                     }
                 }
                 
@@ -171,7 +171,7 @@ typealias SessionsUpdatedCallback = () -> Void
                     if migrator.needsMigration { session = migrator.migrateSession(session) }
                     backgroundRealm.add(session, update: true)
                     
-                    backgroundRealm.commitWrite()
+                    try! backgroundRealm.commitWrite()
                 }
                 
                 migrator.needsMigration = false
@@ -216,7 +216,7 @@ typealias SessionsUpdatedCallback = () -> Void
                 bgRealm.beginWrite()
                 bgRealm.add(transcript)
                 session.transcript = transcript
-                bgRealm.commitWrite()
+                try! bgRealm.commitWrite()
                 self.transcriptIndexingProgress?.completedUnitCount += 1
             }
         }
