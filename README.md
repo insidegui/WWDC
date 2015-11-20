@@ -8,6 +8,8 @@ To download the latest release, [click here](https://raw.githubusercontent.com/i
 
 ![screenshot](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/screenshot.png)
 
+Also, check this out: [WWDC app for the new Apple TV](https://github.com/insidegui/WWDC-tvOS) :)
+
 ## Searching
 
 You can perform an advanced search using the qualifiers "year", "focus", "track", "downloaded", "favorited" and "description".
