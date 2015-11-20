@@ -6,6 +6,8 @@
 //  Copyright © 2015 Guilherme Rambo. All rights reserved.
 //
 
+// TODO: share model layer between OS X and tvOS, not just copy the files around
+
 import Foundation
 import RealmSwift
 import Alamofire
@@ -175,7 +177,11 @@ typealias SessionsUpdatedCallback = () -> Void
                 }
                 
                 migrator.needsMigration = false
+                
+                #if os(OSX)
                 self.indexTranscriptsForSessionsWithKeys(newSessionKeys)
+                #endif
+                
                 mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
             }
         }
@@ -241,7 +247,9 @@ private class LegacyWWDCDatabaseMigrator {
     
     /// Migrates the session's favorite status, progress and position from the legacy preferences to the new model
     func migrateSession(session: Session) -> Session {
+        #if os(OSX)
         session.downloaded = session.hdVideoURL.isEmpty ? false : VideoStore.SharedStore().hasVideo(session.hdVideoURL)
+        #endif
         session.favorite = fetchSessionIsFavorite(session)
         session.currentPosition = fetchSessionCurrentPosition(session)
         session.progress = fetchSessionProgress(session)

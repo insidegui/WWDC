@@ -6,6 +6,8 @@
 //  Copyright © 2015 Guilherme Rambo. All rights reserved.
 //
 
+// TODO: share model layer between OS X and tvOS, not just copy the files around
+
 import Foundation
 import RealmSwift
 
@@ -97,6 +99,10 @@ class Session: Object {
         } else {
             return hdVideoURL
         }
+    }
+    
+    var subtitle: String {
+        return "\(year) | \(track) | \(focus)"
     }
     
 }
