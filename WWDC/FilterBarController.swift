@@ -14,8 +14,14 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     @IBOutlet weak private var segmentedControl: GRSegmentedControl!
     private weak var scrollView: GRScrollView?
     
-    private var accessoryViewBaseY = CGFloat(0.0)
-    private var accessoryViewContractedY = CGFloat(0.0)
+    private var accessoryViewBaseY: CGFloat {
+        guard let superview = scrollView?.superview else { return 0.0 }
+        return CGRectGetHeight(superview.frame)-CGRectGetHeight(view.frame)-(scrollView!.contentInsets.top-CGRectGetHeight(view.frame))
+    }
+    private var accessoryViewContractedY: CGFloat {
+        guard let superview = scrollView?.superview else { return 0.0 }
+        return CGRectGetHeight(superview.frame) - CGRectGetHeight(view.frame)
+    }
     private var lastScrollOffsetY = CGFloat(0.0)
     
     init(scrollView: GRScrollView) {
@@ -35,11 +41,6 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         super.viewDidLoad()
 
         guard let scrollView = self.scrollView else { return }
-        guard let superview = scrollView.superview else { return }
-        
-        accessoryViewBaseY = CGRectGetHeight(superview.frame)-CGRectGetHeight(view.frame)
-        view.frame = CGRectMake(0, accessoryViewBaseY, CGRectGetWidth(view.frame), 44.0)
-        accessoryViewContractedY = accessoryViewBaseY - CGRectGetHeight(view.frame)
         
         scrollView.automaticallyAdjustsContentInsets = false
         scrollView.contentInsets = NSEdgeInsets(top: scrollView.contentInsets.top+CGRectGetHeight(view.frame), left: 0, bottom: 0, right: 0)
@@ -50,6 +51,10 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         segmentedControl.target = self
         
         updateMenus()
+    }
+    
+    override func viewWillAppear() {
+        view.frame = CGRectMake(0, accessoryViewBaseY, CGRectGetWidth(view.frame), 44.0)
     }
     
     func updateMenus() {
@@ -212,10 +217,6 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     // MARK: Scrolling behavior
     
     func scrollViewDidScroll(scrollView: GRScrollView) {
-        guard let superview = scrollView.superview else { return }
-        
-        accessoryViewContractedY = CGRectGetHeight(superview.frame)
-        accessoryViewBaseY = CGRectGetHeight(superview.frame)-CGRectGetHeight(view.frame)-(scrollView.contentInsets.top-CGRectGetHeight(view.frame))
         
         let normalizedOffsetY = scrollView.contentOffset.y + scrollView.contentInsets.top
         
@@ -257,6 +258,35 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
             accessoryViewFrame.origin.y = accessoryViewBaseY
         }
         
+        NSAnimationContext.beginGrouping()
+        NSAnimationContext.currentContext().duration = 0.2;
+        NSAnimationContext.currentContext().timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        self.view.animator().frame = accessoryViewFrame
+        NSAnimationContext.endGrouping()
+    }
+    
+    func mouseWheelDidScroll(scrollView: GRScrollView) {
+        var accessoryViewFrame = view.frame
+        
+        let normalizedOffsetY = scrollView.contentOffset.y + scrollView.contentInsets.top
+        
+        // this makes sure lastScrollOffsetY is updated when the scrollview's state is restored at launch
+        if lastScrollOffsetY == 0.0 {
+            lastScrollOffsetY = normalizedOffsetY
+        }
+        
+        guard (normalizedOffsetY > 0 && normalizedOffsetY != lastScrollOffsetY) else { return }
+        
+        if normalizedOffsetY > lastScrollOffsetY {
+            // going down
+            accessoryViewFrame.origin.y = accessoryViewContractedY
+        } else {
+            // going up
+            accessoryViewFrame.origin.y = accessoryViewBaseY
+        }
+        
+        lastScrollOffsetY = normalizedOffsetY
+
         NSAnimationContext.beginGrouping()
         NSAnimationContext.currentContext().duration = 0.2;
         NSAnimationContext.currentContext().timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
