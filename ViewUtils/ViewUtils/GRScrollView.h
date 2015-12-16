@@ -14,6 +14,7 @@
 
 - (void)scrollViewDidScroll:(GRScrollView *__nonnull)scrollView;
 - (void)scrollViewDidEndDragging:(GRScrollView *__nonnull)scrollView;
+- (void)mouseWheelDidScroll:(GRScrollView *__nonnull)scrollView;
 
 @end
 

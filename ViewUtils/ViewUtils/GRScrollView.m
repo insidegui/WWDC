@@ -14,6 +14,11 @@
 {
     [super scrollWheel:theEvent];
     
+    if (theEvent.phase == NSEventPhaseNone && theEvent.momentumPhase == NSEventPhaseNone && [self.delegate respondsToSelector:@selector(mouseWheelDidScroll:)]) {
+        [self.delegate mouseWheelDidScroll:self];
+        return;
+    }
+    
     if (theEvent.phase == NSEventPhaseEnded && theEvent.deltaX == 0.0 && theEvent.deltaY == 0.0) if ([self.delegate respondsToSelector:@selector(scrollViewDidEndDragging:)]) [self.delegate scrollViewDidEndDragging:self];
     if ([self.delegate respondsToSelector:@selector(scrollViewDidScroll:)]) [self.delegate scrollViewDidScroll:self];
 }
