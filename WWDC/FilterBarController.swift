@@ -54,6 +54,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     }
     
     override func viewWillAppear() {
+        super.viewWillAppear()
         view.frame = CGRectMake(0, accessoryViewBaseY, CGRectGetWidth(view.frame), 44.0)
     }
     
