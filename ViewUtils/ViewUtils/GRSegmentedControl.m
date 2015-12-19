@@ -225,8 +225,7 @@
 
 - (double)_segmentedMenuDelayTime
 {
-    GRSegmentedControl *control = (GRSegmentedControl *)self.controlView;
-    if (control.showsMenuImmediately) {
+    if (self.control.showsMenuImmediately) {
         return 0.0;
     } else {
         return [super _segmentedMenuDelayTime];
