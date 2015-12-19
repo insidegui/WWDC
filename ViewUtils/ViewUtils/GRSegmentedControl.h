@@ -17,5 +17,6 @@
 @property (nonatomic, copy) IBInspectable NSColor *__nullable activeSegmentBackgroundColor;
 
 @property (nonatomic, assign) BOOL showsMenuImmediately;
+@property (nonatomic, assign) BOOL usesCocoaLook;
 
 @end

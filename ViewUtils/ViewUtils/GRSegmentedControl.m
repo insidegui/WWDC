@@ -54,6 +54,8 @@
 
 - (NSRect)drawingRectForBounds:(NSRect)theRect
 {
+    if (self.control.usesCocoaLook) return [super drawingRectForBounds:theRect];
+        
     NSRect rect = [super drawingRectForBounds:theRect];
     if ([NSProcessInfo processInfo].operatingSystemVersion.majorVersion == 10 &&
         [NSProcessInfo processInfo].operatingSystemVersion.minorVersion == 11) {
@@ -68,6 +70,8 @@
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
+    if (self.control.usesCocoaLook) return [super drawWithFrame:cellFrame inView:controlView];
+    
     CGContextRef ctx = [NSGraphicsContext currentContext].CGContext;
     CGContextSetBlendMode(ctx, kCGBlendModeOverlay);
     

@@ -50,6 +50,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         segmentedControl.action = "segmentedControlAction:"
         segmentedControl.target = self
         segmentedControl.showsMenuImmediately = true
+        segmentedControl.usesCocoaLook = true
         
         updateMenus()
     }
