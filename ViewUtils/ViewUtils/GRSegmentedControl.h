@@ -16,4 +16,6 @@
 @property (nonatomic, copy) IBInspectable NSColor *__nullable activeSegmentTextColor;
 @property (nonatomic, copy) IBInspectable NSColor *__nullable activeSegmentBackgroundColor;
 
+@property (nonatomic, assign) BOOL showsMenuImmediately;
+
 @end

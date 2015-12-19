@@ -49,6 +49,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         
         segmentedControl.action = "segmentedControlAction:"
         segmentedControl.target = self
+        segmentedControl.showsMenuImmediately = true
         
         updateMenus()
     }
@@ -194,13 +195,10 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     func segmentedControlAction(sender: GRSegmentedControl) {
         switch(segmentedControl.selectedSegment) {
         case 0:
-//            yearMenu.popUpMenuPositioningItem(nil, atLocation: NSZeroPoint, inView: segmentedControl)
             segmentedControl.setSelected(false, forSegment: 0)
         case 1:
-//            trackMenu.popUpMenuPositioningItem(nil, atLocation: NSZeroPoint, inView: segmentedControl)
             segmentedControl.setSelected(false, forSegment: 1)
         case 2:
-//            focusMenu.popUpMenuPositioningItem(nil, atLocation: NSZeroPoint, inView: segmentedControl)
             segmentedControl.setSelected(false, forSegment: 2)
         case 3:
             favoritedActive = !favoritedActive

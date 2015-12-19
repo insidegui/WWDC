@@ -10,6 +10,7 @@
 
 @interface NSSegmentedCell (Private)
 - (NSRect)rectForSegment:(NSInteger)segment inFrame:(NSRect)frame;
+- (double)_segmentedMenuDelayTime;
 @end
 
 @interface GRSegmentedItemTextCell : NSTextFieldCell
@@ -214,8 +215,18 @@
             self.clickHighlightedSegment = -1;
         }
     }
-    
+
     return [super trackMouse:theEvent inRect:cellFrame ofView:controlView untilMouseUp:flag];
+}
+
+- (double)_segmentedMenuDelayTime
+{
+    GRSegmentedControl *control = (GRSegmentedControl *)self.controlView;
+    if (control.showsMenuImmediately) {
+        return 0.0;
+    } else {
+        return [super _segmentedMenuDelayTime];
+    }
 }
 
 - (void)stopTracking:(NSPoint)lastPoint at:(NSPoint)stopPoint inView:(NSView *)controlView mouseIsUp:(BOOL)flag
