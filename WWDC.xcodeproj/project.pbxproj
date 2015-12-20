@@ -62,6 +62,9 @@
 		DDBD18661BC3227B00EF7718 /* FilterBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDBD18641BC3227B00EF7718 /* FilterBarController.xib */; };
 		DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC049CE1AE564F20008D41A /* PDFWindowController.swift */; };
 		DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC049CF1AE564F20008D41A /* PDFWindowController.xib */; };
+		DDCAB46E1C2620BE005889CB /* TranscriptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCAB46C1C2620BE005889CB /* TranscriptViewController.swift */; };
+		DDCAB46F1C2620BE005889CB /* TranscriptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDCAB46D1C2620BE005889CB /* TranscriptViewController.xib */; };
+		DDCAB48A1C263EF9005889CB /* TranscriptLineTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCAB4891C263EF9005889CB /* TranscriptLineTableRowView.swift */; };
 		DDCC5D721AF1518A00F24F55 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */; };
 		DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */; };
 		DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4321AE2DF14000A0102 /* Theme.swift */; };
@@ -248,6 +251,9 @@
 		DDBD18641BC3227B00EF7718 /* FilterBarController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterBarController.xib; sourceTree = "<group>"; };
 		DDC049CE1AE564F20008D41A /* PDFWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWindowController.swift; sourceTree = "<group>"; };
 		DDC049CF1AE564F20008D41A /* PDFWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PDFWindowController.xib; sourceTree = "<group>"; };
+		DDCAB46C1C2620BE005889CB /* TranscriptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptViewController.swift; sourceTree = "<group>"; };
+		DDCAB46D1C2620BE005889CB /* TranscriptViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptViewController.xib; sourceTree = "<group>"; };
+		DDCAB4891C263EF9005889CB /* TranscriptLineTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptLineTableRowView.swift; sourceTree = "<group>"; };
 		DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DDCC5D741AF1532600F24F55 /* GRCrashlyticsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRCrashlyticsHelper.h; sourceTree = "<group>"; };
 		DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRCrashlyticsHelper.m; sourceTree = "<group>"; };
@@ -293,6 +299,7 @@
 				51B28F541BB62BA9001F7A6C /* VideoTableRowView.swift */,
 				51B28F5A1BB63F9E001F7A6C /* GridlessTableView.swift */,
 				DDE3A82A1BC2DD8300610FEF /* TranscriptLineTableCellView.swift */,
+				DDCAB4891C263EF9005889CB /* TranscriptLineTableRowView.swift */,
 			);
 			name = TableView;
 			sourceTree = "<group>";
@@ -402,6 +409,34 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		DDCAB4641C26206D005889CB /* Transcript */ = {
+			isa = PBXGroup;
+			children = (
+				DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */,
+				DDCAB46C1C2620BE005889CB /* TranscriptViewController.swift */,
+			);
+			name = Transcript;
+			sourceTree = "<group>";
+		};
+		DDCAB46A1C26207A005889CB /* Main Window */ = {
+			isa = PBXGroup;
+			children = (
+				DD4F6E701AE2D1C60099BEB5 /* VideoDetailsViewController.swift */,
+				DD4F6E531AE2D11D0099BEB5 /* VideosViewController.swift */,
+			);
+			name = "Main Window";
+			sourceTree = "<group>";
+		};
+		DDCAB46B1C26208D005889CB /* Playback */ = {
+			isa = PBXGroup;
+			children = (
+				DDC049CE1AE564F20008D41A /* PDFWindowController.swift */,
+				DD2016731AE411C800DD8155 /* VideoWindowController.swift */,
+				DDCAB4641C26206D005889CB /* Transcript */,
+			);
+			name = Playback;
+			sourceTree = "<group>";
+		};
 		DDCC5D731AF1530800F24F55 /* Crashlytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -429,11 +464,8 @@
 		DDD7A42E1AE2DEDD000A0102 /* Main Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				DD4F6E701AE2D1C60099BEB5 /* VideoDetailsViewController.swift */,
-				DD4F6E531AE2D11D0099BEB5 /* VideosViewController.swift */,
-				DD2016731AE411C800DD8155 /* VideoWindowController.swift */,
-				DDC049CE1AE564F20008D41A /* PDFWindowController.swift */,
-				DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */,
+				DDCAB46B1C26208D005889CB /* Playback */,
+				DDCAB46A1C26207A005889CB /* Main Window */,
 				C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */,
 				DD2CC38D1AF419F500FC5F68 /* PreferencesWindowController.swift */,
 			);
@@ -460,6 +492,7 @@
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DDCAB46D1C2620BE005889CB /* TranscriptViewController.xib */,
 				DDBD18641BC3227B00EF7718 /* FilterBarController.xib */,
 				DDE3A8221BC2DCEC00610FEF /* TranscriptSearchResultsController.xib */,
 				DD2CC38E1AF419F500FC5F68 /* PreferencesWindowController.xib */,
@@ -670,6 +703,7 @@
 				DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */,
 				DDBD18661BC3227B00EF7718 /* FilterBarController.xib in Resources */,
 				DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */,
+				DDCAB46F1C2620BE005889CB /* TranscriptViewController.xib in Resources */,
 				DD829F221AF271DF00B5977B /* index.json in Resources */,
 				DD4F6E591AE2D11D0099BEB5 /* Main.storyboard in Resources */,
 				DD4F6E771AE2D82A0099BEB5 /* VideosHeaderViewController.xib in Resources */,
@@ -720,6 +754,7 @@
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
 				DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */,
+				DDCAB48A1C263EF9005889CB /* TranscriptLineTableRowView.swift in Sources */,
 				DDE3A82B1BC2DD8300610FEF /* TranscriptLineTableCellView.swift in Sources */,
 				C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */,
 				DD945ED91B26A42300CE7B7D /* LiveEventBannerViewController.swift in Sources */,
@@ -739,6 +774,7 @@
 				1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */,
 				DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */,
 				DD76C0181BBF83C10056BB20 /* SlidesDownloader.swift in Sources */,
+				DDCAB46E1C2620BE005889CB /* TranscriptViewController.swift in Sources */,
 				51B28F5B1BB63F9E001F7A6C /* GridlessTableView.swift in Sources */,
 				DD3081781AF3DC370009D412 /* DTFolderMonitor.m in Sources */,
 				DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */,

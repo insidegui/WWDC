@@ -190,33 +190,24 @@ class VideoWindowController: NSWindowController {
     }
     
     func showTranscriptWindow(sender: AnyObject?) {
-        let alert = NSAlert()
-        alert.messageText = "Transcripts not available"
-        alert.informativeText = "You're using a development version of the WWDC app. The transcript controller is not done yet, use the latest stable version to see transcripts."
-        alert.addButtonWithTitle("Dismiss")
-        alert.runModal()
-        
-//        guard session != nil else { return }
-//        
-//        if transcriptWC != nil {
-//            if let window = transcriptWC.window {
-//                window.orderFront(sender)
-//            }
-//            
-//            return
-//        }
-//        
-//        if let session = session {
-//            transcriptWC = TranscriptWindowController(session: session)
-//            transcriptWC.showWindow(sender)
-//            transcriptWC.jumpToTimeCallback = { [unowned self] time in
-//                guard let player = self.player else { return }
-//                player.seekToTime(CMTimeMakeWithSeconds(time, 30))
-//            }
-//            transcriptWC.transcriptReadyCallback = { [unowned self] transcript in
-//                self.setupTranscriptSync(transcript)
-//            }
-//        }
+        guard let session = session where session.transcript != nil else { return }
+
+        if transcriptWC != nil {
+            if let window = transcriptWC.window {
+                window.orderFront(sender)
+            }
+
+            return
+        }
+
+        transcriptWC = TranscriptWindowController(session: session)
+        transcriptWC.showWindow(sender)
+        transcriptWC.jumpToTimeCallback = { [unowned self] time in
+            guard let player = self.player else { return }
+            player.seekToTime(CMTimeMakeWithSeconds(time, player.currentItem!.duration.timescale))
+        }
+
+        setupTranscriptSync(session.transcript!)
     }
     
     var timeObserver: AnyObject?
@@ -236,16 +227,17 @@ class VideoWindowController: NSWindowController {
     
     var boundaryObserver: AnyObject?
     
-//    func setupTranscriptSync(transcript: WWDCSessionTranscript) {
-//        guard transcriptWC != nil else { return }
-//        
-//        boundaryObserver = player?.addBoundaryTimeObserverForTimes(transcript.timecodes, queue: dispatch_get_main_queue()) { [unowned self] in
-//            guard self.transcriptWC != nil else { return }
-//
-//            let roundedTimecode = WWDCTranscriptLine.roundedStringFromTimecode(CMTimeGetSeconds(self.player!.currentTime()))
-//            self.transcriptWC.highlightLineAt(roundedTimecode)
-//        }
-//    }
+    func setupTranscriptSync(transcript: Transcript) {
+        guard let player = player where transcriptWC != nil else { return }
+        
+        boundaryObserver = player.addBoundaryTimeObserverForTimes(transcript.timecodesWithTimescale(player.currentItem!.duration.timescale), queue: dispatch_get_main_queue()) { [unowned self] in
+            guard self.transcriptWC != nil else { return }
+
+            let ct = CMTimeGetSeconds(self.player!.currentTime())
+            let roundedTimecode = Transcript.roundedStringFromTimecode(ct)
+            self.transcriptWC.highlightLineAt(roundedTimecode)
+        }
+    }
     
     func setupWindowSizing()
     {
@@ -332,6 +324,28 @@ class VideoWindowController: NSWindowController {
         if let observer: AnyObject = boundaryObserver {
             player?.removeTimeObserver(observer)
         }
+    }
+    
+}
+
+extension Transcript {
+    
+    func timecodesWithTimescale(timescale: Int32) -> [NSValue] {
+        var results: [NSValue] = []
+        
+        for line in lines {
+            let time = CMTimeMakeWithSeconds(line.timecode, timescale)
+            results.append(NSValue(CMTime: time))
+        }
+        
+        return results
+    }
+    
+    class func roundedStringFromTimecode(timecode: Float64) -> String {
+        let formatter = NSNumberFormatter()
+        formatter.positiveFormat = "0.#"
+        
+        return formatter.stringFromNumber(timecode)!
     }
     
 }

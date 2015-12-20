@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9046" systemVersion="15A284" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9046"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="FilterBarController" customModule="WWDC" customModuleProvider="target">
@@ -24,7 +24,6 @@
                     <subviews>
                         <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KGp-29-lNn" customClass="GRSegmentedControl">
                             <rect key="frame" x="266" y="10" width="230" height="24"/>
-                            <animations/>
                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectAny" id="sVr-a0-c4I" customClass="GRSegmentedCell">
                                 <font key="font" metaFont="system"/>
                                 <segments>
@@ -49,7 +48,6 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="rkv-2a-onc"/>
                             </constraints>
-                            <animations/>
                         </customView>
                     </subviews>
                     <constraints>
@@ -59,7 +57,6 @@
                         <constraint firstAttribute="trailing" secondItem="Tf8-Nm-opu" secondAttribute="trailing" id="rc2-xo-eZn"/>
                         <constraint firstItem="Tf8-Nm-opu" firstAttribute="leading" secondItem="c4U-fZ-wmN" secondAttribute="leading" id="teL-0U-JaF"/>
                     </constraints>
-                    <animations/>
                 </visualEffectView>
             </subviews>
             <constraints>
@@ -68,7 +65,6 @@
                 <constraint firstAttribute="trailing" secondItem="c4U-fZ-wmN" secondAttribute="trailing" id="HeP-4w-egM"/>
                 <constraint firstItem="c4U-fZ-wmN" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="yh3-LB-oJH"/>
             </constraints>
-            <animations/>
             <point key="canvasLocation" x="302.5" y="389"/>
         </customView>
         <menu id="mil-Bl-w7a">
