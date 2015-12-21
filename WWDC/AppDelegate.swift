@@ -26,6 +26,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         NSUserDefaults.standardUserDefaults().registerDefaults(["NSApplicationCrashOnExceptions": true])
         
+        // prefetch info for the about window
+        About.sharedInstance.load()
+        
         // start checking for live event
         LiveEventObserver.SharedObserver().start()
         
@@ -108,6 +111,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.runModal()
         
         Preferences.SharedPreferences().userKnowsLiveEventThing = true
+    }
+    
+    // MARK: - About Panel
+    
+    private lazy var aboutWindowController: AboutWindowController = {
+        var aboutWC = AboutWindowController(infoText: About.sharedInstance.infoText)
+        
+        About.sharedInstance.infoTextChangedCallback = { newText in
+            self.aboutWindowController.infoText = newText
+        }
+        
+        return aboutWC
+    }()
+    
+    @IBAction func showAboutWindow(sender: AnyObject?) {
+        aboutWindowController.showWindow(sender)
     }
 
 }

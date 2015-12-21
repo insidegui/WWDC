@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="AboutWindowController" customModule="WWDC" customModuleProvider="target">
+            <connections>
+                <outlet property="applicationNameLabel" destination="chg-Wv-Nwx" id="jVX-zE-It0"/>
+                <outlet property="contributorsLabel" destination="KDr-E9-Eq4" id="cI0-4k-oJo"/>
+                <outlet property="creatorLabel" destination="G0L-Dk-MJY" id="8kK-4d-Mtn"/>
+                <outlet property="licenseLabel" destination="F8w-io-pcy" id="hOB-Ec-fZP"/>
+                <outlet property="versionLabel" destination="8wf-eb-rac" id="t6q-9W-i70"/>
+                <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F0z-JX-Cv5" customClass="AboutWindow" customModule="WWDC" customModuleProvider="target">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" fullSizeContentView="YES"/>
+            <rect key="contentRect" x="196" y="240" width="592" height="168"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <value key="maxSize" type="size" width="592" height="1000"/>
+            <view key="contentView" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="0.0" width="592" height="168"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" state="active" translatesAutoresizingMaskIntoConstraints="NO" id="3pd-oH-JvA">
+                        <rect key="frame" x="0.0" y="0.0" width="592" height="168"/>
+                        <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V4M-C8-cbO">
+                                <rect key="frame" x="20" y="20" width="210" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="210" id="U8j-lg-LOW"/>
+                                </constraints>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="wJC-yV-Z2d"/>
+                            </imageView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8wf-eb-rac">
+                                <rect key="frame" x="236" y="94" width="338" height="19"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" title="Version 0.0.0" id="vpR-dp-9lC">
+                                    <font key="font" metaFont="systemThin" size="16"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="G0L-Dk-MJY">
+                                <rect key="frame" x="236" y="40" width="132" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Created by John Doe" id="DnL-iA-ELg">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="F8w-io-pcy">
+                                <rect key="frame" x="236" y="20" width="85" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="License: XXX" id="ofR-pV-jsa">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="chg-Wv-Nwx">
+                                <rect key="frame" x="236" y="121" width="338" height="27"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Application Name" id="W1y-Kx-vGu">
+                                    <font key="font" metaFont="systemThin" size="22"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="KDr-E9-Eq4">
+                                <rect key="frame" x="236" y="65" width="338" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="334" id="par-Ek-pIe"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="Contributors (GitHub usernames): " id="4LB-iY-75p">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="8wf-eb-rac" secondAttribute="trailing" constant="20" id="0sH-Qe-Yc0"/>
+                            <constraint firstItem="V4M-C8-cbO" firstAttribute="leading" secondItem="3pd-oH-JvA" secondAttribute="leading" constant="20" id="1Yd-Mu-Zyf"/>
+                            <constraint firstItem="F8w-io-pcy" firstAttribute="leading" secondItem="V4M-C8-cbO" secondAttribute="trailing" constant="8" id="3qG-LD-cvZ"/>
+                            <constraint firstItem="8wf-eb-rac" firstAttribute="top" secondItem="chg-Wv-Nwx" secondAttribute="bottom" constant="8" id="8PI-GX-08I"/>
+                            <constraint firstAttribute="bottom" secondItem="F8w-io-pcy" secondAttribute="bottom" constant="20" id="92m-7h-chS"/>
+                            <constraint firstItem="chg-Wv-Nwx" firstAttribute="top" secondItem="3pd-oH-JvA" secondAttribute="top" constant="20" id="AOO-rc-YsQ"/>
+                            <constraint firstItem="V4M-C8-cbO" firstAttribute="top" secondItem="3pd-oH-JvA" secondAttribute="top" constant="20" id="JCx-Ju-fvZ"/>
+                            <constraint firstAttribute="bottom" secondItem="V4M-C8-cbO" secondAttribute="bottom" constant="20" id="JUI-pg-agQ"/>
+                            <constraint firstItem="G0L-Dk-MJY" firstAttribute="top" secondItem="KDr-E9-Eq4" secondAttribute="bottom" constant="8" id="NOW-lX-9bS"/>
+                            <constraint firstAttribute="trailing" secondItem="chg-Wv-Nwx" secondAttribute="trailing" constant="20" id="PiM-LF-jqj"/>
+                            <constraint firstAttribute="trailing" secondItem="KDr-E9-Eq4" secondAttribute="trailing" constant="20" id="VQZ-9G-7lL"/>
+                            <constraint firstItem="G0L-Dk-MJY" firstAttribute="leading" secondItem="V4M-C8-cbO" secondAttribute="trailing" constant="8" id="WEk-nN-I3c"/>
+                            <constraint firstItem="chg-Wv-Nwx" firstAttribute="leading" secondItem="V4M-C8-cbO" secondAttribute="trailing" constant="8" id="b4z-Wx-NdK"/>
+                            <constraint firstItem="KDr-E9-Eq4" firstAttribute="leading" secondItem="V4M-C8-cbO" secondAttribute="trailing" constant="8" id="cxJ-5A-sLl"/>
+                            <constraint firstItem="8wf-eb-rac" firstAttribute="leading" secondItem="V4M-C8-cbO" secondAttribute="trailing" constant="8" id="j9j-hV-7mQ"/>
+                            <constraint firstItem="KDr-E9-Eq4" firstAttribute="top" secondItem="8wf-eb-rac" secondAttribute="bottom" constant="8" id="kDA-i5-1s4"/>
+                            <constraint firstItem="F8w-io-pcy" firstAttribute="top" secondItem="G0L-Dk-MJY" secondAttribute="bottom" constant="3" id="mh4-LV-RZB"/>
+                        </constraints>
+                    </visualEffectView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="3pd-oH-JvA" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="OYj-DX-laB"/>
+                    <constraint firstItem="3pd-oH-JvA" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="YHB-IN-Lze"/>
+                    <constraint firstAttribute="trailing" secondItem="3pd-oH-JvA" secondAttribute="trailing" id="pzm-Yv-pvf"/>
+                    <constraint firstAttribute="bottom" secondItem="3pd-oH-JvA" secondAttribute="bottom" id="vgy-XM-Q1u"/>
+                </constraints>
+            </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
+            </connections>
+            <point key="canvasLocation" x="556" y="447"/>
+        </window>
+    </objects>
+    <resources>
+        <image name="NSApplicationIcon" width="128" height="128"/>
+    </resources>
+</document>

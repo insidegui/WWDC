@@ -64,5 +64,9 @@
 	<string>insidegui</string>
 	<key>UDRepoName</key>
 	<string>WWDC</string>
+    <key>GRBundleLicenseName</key>
+    <string>BSD</string>
+    <key>GRBundleMainDeveloperName</key>
+    <string>Guilherme Rambo</string>
 </dict>
 </plist>
