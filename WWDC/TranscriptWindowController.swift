@@ -17,15 +17,7 @@ class TranscriptWindowController: NSWindowController {
             transcriptController.jumpToTimeCallback = jumpToTimeCallback
         }
     }
-    
-//    var transcriptReadyCallback: (transcript: Transcript!) -> () = { _ in } {
-//        didSet {
-//            if transcriptController != nil {
-//                transcriptController.transcriptAvailableCallback = transcriptReadyCallback
-//            }
-//        }
-//    }
-    
+
     var session: Session!
     private var transcriptController: TranscriptViewController!
     

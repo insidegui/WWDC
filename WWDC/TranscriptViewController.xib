@@ -6,6 +6,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="TranscriptViewController" customModule="WWDC" customModuleProvider="target">
             <connections>
+                <outlet property="scrollView" destination="r0r-Jd-ypb" id="Ts2-gt-Rw3"/>
+                <outlet property="searchContainer" destination="7CG-7I-3av" id="Q5V-T4-5Kf"/>
+                <outlet property="searchField" destination="NOg-Iy-Mha" id="4cW-rY-Wpb"/>
                 <outlet property="tableView" destination="sFS-Az-I0S" id="qXz-RK-Rcf"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
@@ -85,11 +88,36 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
+                <visualEffectView appearanceType="vibrantLight" blendingMode="withinWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="7CG-7I-3av">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="62"/>
+                    <subviews>
+                        <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NOg-Iy-Mha">
+                            <rect key="frame" x="20" y="20" width="440" height="22"/>
+                            <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="Wvb-rF-f97">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </searchFieldCell>
+                            <connections>
+                                <action selector="search:" target="-2" id="TUK-7h-SKE"/>
+                            </connections>
+                        </searchField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="62" id="OVS-bZ-yFH"/>
+                        <constraint firstItem="NOg-Iy-Mha" firstAttribute="leading" secondItem="7CG-7I-3av" secondAttribute="leading" constant="20" id="RPo-4c-y1a"/>
+                        <constraint firstAttribute="trailing" secondItem="NOg-Iy-Mha" secondAttribute="trailing" constant="20" id="hQN-Uo-clD"/>
+                        <constraint firstItem="NOg-Iy-Mha" firstAttribute="centerY" secondItem="7CG-7I-3av" secondAttribute="centerY" id="snX-yk-kKg"/>
+                    </constraints>
+                </visualEffectView>
             </subviews>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="7CG-7I-3av" secondAttribute="trailing" id="1M4-uG-Bi7"/>
                 <constraint firstItem="r0r-Jd-ypb" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="1oh-uD-oVt"/>
                 <constraint firstAttribute="trailing" secondItem="r0r-Jd-ypb" secondAttribute="trailing" id="UqW-Wx-oqc"/>
                 <constraint firstItem="r0r-Jd-ypb" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="bNn-fE-t9g"/>
+                <constraint firstAttribute="bottom" secondItem="7CG-7I-3av" secondAttribute="bottom" id="c7R-Em-lfa"/>
+                <constraint firstItem="7CG-7I-3av" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="dDh-0a-qTN"/>
                 <constraint firstAttribute="bottom" secondItem="r0r-Jd-ypb" secondAttribute="bottom" id="y53-UE-YYa"/>
             </constraints>
             <point key="canvasLocation" x="478" y="358.5"/>

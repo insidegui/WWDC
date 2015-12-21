@@ -7,12 +7,20 @@
 //
 
 import Cocoa
+import RealmSwift
 
 class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
     var session: Session!
     var jumpToTimeCallback: (time: Double) -> () = { _ in }
     
+    @IBOutlet weak var searchContainer: NSVisualEffectView!
+    @IBOutlet weak var searchField: NSSearchField!
+    
+    var filteredLines: Results<TranscriptLine> {
+        return session.transcript!.lines.filter("text CONTAINS[c] %@", searchField.stringValue)
+    }
+
     var font: NSFont? {
         didSet {
             tableView.reloadData()
@@ -29,7 +37,10 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
             tableView.backgroundColor = backgroundColor
         }
     }
+    
+    var enableScrolling = true
 
+    @IBOutlet weak var scrollView: NSScrollView!
     @IBOutlet weak private var tableView: NSTableView!
     
     private struct Storyboard {
@@ -55,23 +66,31 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
         
         tableView.target = self
         tableView.doubleAction = Selector("doubleClickedLine:")
+        
+        scrollView.automaticallyAdjustsContentInsets = false
+        scrollView.contentInsets = NSEdgeInsets(top: 22.0, left: 0.0, bottom: NSHeight(searchContainer.bounds), right: 0.0)
     }
     
     func highlightLineAt(roundedTimecode: String) {
+        guard enableScrolling else { return }
+        
         guard let lines = session.transcript?.lines else { return }
         
         let result = lines.filter { Transcript.roundedStringFromTimecode($0.timecode) == roundedTimecode }
         
-        guard let row = lines.indexOf(result[0]) where result.count > 0 else { return }
+        guard result.count > 0 else { return }
+        
+        guard let row = lines.indexOf(result[0]) else { return }
 
         tableView.selectRowIndexes(NSIndexSet(index: row), byExtendingSelection: false)
+        
         tableView.scrollRowToVisible(row)
     }
     
     // MARK: - TableView
     
     func numberOfRowsInTableView(tableView: NSTableView) -> Int {
-        return session.transcript!.lines.count
+        return filteredLines.count
     }
     
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -79,7 +98,7 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
         
         cell.foregroundColor = textColor
         cell.font = font
-        cell.line = session.transcript!.lines[row]
+        cell.line = filteredLines[row]
         
         return cell
     }
@@ -95,8 +114,16 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
     }
     
     func doubleClickedLine(sender: AnyObject?) {
-        let line = session.transcript!.lines[tableView.clickedRow]
+        let line = filteredLines[tableView.clickedRow]
         jumpToTimeCallback(time: line.timecode)
     }
     
+    // MARK: - Search
+    
+    @IBAction func search(sender: NSSearchField) {
+        // disables scrolling during search
+        enableScrolling = (sender.stringValue == "")
+        
+        tableView.reloadData()
+    }
 }
