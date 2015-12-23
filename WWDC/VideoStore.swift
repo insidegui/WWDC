@@ -61,7 +61,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
 	}
 	
     func download(url: String) {
-        if isDownloading(url) {
+        if isDownloading(url) || hasVideo(url) {
             return
         }
         
@@ -144,6 +144,7 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         
         do {
             try fileManager.moveItemAtURL(location, toURL: localURL)
+            WWDCDatabase.sharedDatabase.updateDownloadedStatusForSessionWithURL(originalAbsoluteURLString, downloaded: true)
         } catch _ {
             print("VideoStore was unable to move \(location) to \(localURL)")
         }
@@ -162,7 +163,8 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     
     // MARK: File observation
     
-    var folderMonitor: DTFolderMonitor!
+    private var folderMonitor: DTFolderMonitor!
+    private var existingVideoFiles = [String]()
     
     func monitorDownloadsFolder() {
         if folderMonitor != nil {
@@ -170,10 +172,37 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
             folderMonitor = nil
         }
         
-        folderMonitor = DTFolderMonitor(forURL: NSURL(fileURLWithPath: Preferences.SharedPreferences().localVideoStoragePath)) {
+        let videosPath = Preferences.SharedPreferences().localVideoStoragePath
+        enumerateVideoFiles(videosPath)
+        
+        folderMonitor = DTFolderMonitor(forURL: NSURL(fileURLWithPath: videosPath)) {
+            self.enumerateVideoFiles(videosPath)
+            
             NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadedFilesChangedNotification, object: nil)
         }
         folderMonitor.startMonitoring()
+    }
+    
+    /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
+    private func enumerateVideoFiles(path: String) {
+        guard let enumerator = NSFileManager.defaultManager().enumeratorAtPath(path) else { return }
+        guard let files = enumerator.allObjects as? [String] else { return }
+        
+        // existing/added files
+        for file in files {
+            WWDCDatabase.sharedDatabase.updateDownloadedStatusForSessionWithLocalFileName(file, downloaded: true)
+        }
+        
+        if existingVideoFiles.count == 0 {
+            existingVideoFiles = files
+            return
+        }
+        
+        // removed files
+        let removedFiles = existingVideoFiles.filter { !files.contains($0) }
+        for file in removedFiles {
+            WWDCDatabase.sharedDatabase.updateDownloadedStatusForSessionWithLocalFileName(file, downloaded: false)
+        }
     }
     
     // MARK: Teardown

@@ -35,7 +35,7 @@ typealias SessionsUpdatedCallback = () -> Void
     }
     
     private let bgThread = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-    private var transcriptIndexingQueue = NSOperationQueue()
+    private var backgroundOperationQueue = NSOperationQueue()
     
     private var config: AppConfig! {
         didSet {
@@ -165,6 +165,7 @@ typealias SessionsUpdatedCallback = () -> Void
                 // create and store/update each video
                 for jsonSession in sessionsArray {
                     var session = Session(json: jsonSession)
+
                     if backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) == nil {
                         newSessionKeys.append(session.uniqueId)
                     }
@@ -191,8 +192,8 @@ typealias SessionsUpdatedCallback = () -> Void
         guard sessionKeys.count > 0 else { return }
         
         transcriptIndexingProgress = NSProgress(totalUnitCount: Int64(sessionKeys.count))
-        transcriptIndexingQueue.underlyingQueue = bgThread
-        transcriptIndexingQueue.name = "Transcript indexing"
+        backgroundOperationQueue.underlyingQueue = bgThread
+        backgroundOperationQueue.name = "WWDCDatabase background"
         
         let backgroundRealm = try! Realm()
         
@@ -215,7 +216,7 @@ typealias SessionsUpdatedCallback = () -> Void
                 return
             }
             
-            self.transcriptIndexingQueue.addOperationWithBlock {
+            self.backgroundOperationQueue.addOperationWithBlock {
                 let bgRealm = try! Realm()
                 guard let session = bgRealm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
                 let transcript = Transcript(json: JSON(data: jsonData), session: session)
@@ -225,6 +226,39 @@ typealias SessionsUpdatedCallback = () -> Void
                 try! bgRealm.commitWrite()
                 self.transcriptIndexingProgress?.completedUnitCount += 1
             }
+        }
+    }
+    
+    /// Update downloaded flag on the database for the session with the specified URL
+    func updateDownloadedStatusForSessionWithURL(url: String, downloaded: Bool) {
+        backgroundOperationQueue.addOperationWithBlock {
+            do {
+                let bgRealm = try Realm()
+                if let session = bgRealm.objects(Session.self).filter("hdVideoURL = %@", url).first {
+                    do {
+                        try bgRealm.write {
+                            session.downloaded = downloaded
+                        }
+                    } catch _ {
+                        print("Error updating downloaded flag for session with url \(url)")
+                    }
+                }
+            } catch let error {
+                print("Realm error \(error)")
+            }
+        }
+    }
+    
+    /// Update downloaded flag on the database for the session with the specified filename
+    func updateDownloadedStatusForSessionWithLocalFileName(filename: String, downloaded: Bool) {
+        mainQ {
+            guard let session = self.realm.objects(Session.self).filter("hdVideoURL contains %@", filename).first else {
+                print("Session not found with local filename \(filename)")
+                return
+            }
+            guard let url = session.hd_url else { return }
+            
+            self.updateDownloadedStatusForSessionWithURL(url, downloaded: downloaded)
         }
     }
     
