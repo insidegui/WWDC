@@ -165,7 +165,7 @@ class VideoDetailsViewController: NSViewController {
             if VideoStore.SharedStore().hasVideo(session!.hd_url!) {
                 doWatchVideo(nil, url: VideoStore.SharedStore().localVideoAbsoluteURLString(session!.hd_url!), startTime: startTime)
             } else {
-                doWatchVideo(nil, url: session!.hd_url!, startTime: startTime)
+                doWatchVideo(nil, url: session!.videoURL, startTime: startTime)
             }
         } else {
             doWatchVideo(nil, url: session!.videoURL, startTime: startTime)
