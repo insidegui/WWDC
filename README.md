@@ -1,10 +1,10 @@
 # WWDC app for OS X
 
-*Warning: Some features described on the readme may not be available on the latest release, download the source and build if you want the latest features.*
+Don't like the WWDC website? Prefer native apps?
 
-Don't like WWDC's website? Use this app to watch WWDC sessions on your Mac.
+Use this app to watch WWDC sessions on your Mac.
 
-To download the latest release, [click here](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip).
+[Click here to download the latest release](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip).
 
 ![screenshot](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/screenshot.png)
 
@@ -12,25 +12,19 @@ Also, check this out: [WWDC app for the new Apple TV](https://github.com/insideg
 
 ## Searching
 
-You can perform an advanced search using the qualifiers "year", "focus", "track", "downloaded", "favorited" and "description".
+The app has a powerful search feature. When you first launch the app, It indexes the videos database and downloads transcripts from ASCIIWWDC, so when you search, not only will you get search results from session titles and descriptions, but also from what the presenter said in the sessions.
 
-Example searches:
+The app even shows a list of phrases matching your search so you can jump right to the point in the session where your searched word/phrase appears.
 
-	year:2015 favorited:yes downloaded:yes
-	
-	year:2013 focus:ios scroll
+![Transcript Search](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/transcriptsearch.png)
 
-	year:2014 track:frameworks cocoa
+With the handy filter bar you can filter sessions by year, track and focus, and also filter to show only favorited or downloaded sessions.
 
-	track:frameworks core
-	
-	year:2014 downloaded:yes
-	
-	description:iwork
+![Transcript Search](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/filterbar.png)
 	
 ## Sharing
 
-You can share direct links to specific session videos. Just select the session on the list and ⌘C to copy It's URL, or use the right-click menu. For instance, [this link](wwdc://2014/101) opens up the 2014 keynote.
+You can share direct links to specific session videos. Just select the session on the list and ⌘C to copy It's URL, or use the right-click menu.
 
 ![rightmenushare](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/rightmenushare.png)
 
@@ -42,7 +36,7 @@ WWDC for OS X is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can s
 
 ## Build Instructions
 
-* Important: building requires Xcode 7.0 or later since the project was updated to Swift 2. *
+**Building requires Xcode 7.0 or later**
 
 The only steps required before you build is to pull down the code and submodules:
 
