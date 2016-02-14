@@ -1,3 +1,5 @@
+Psst, want me to love you? Then [check this out](https://getbrowserhub.com) 😁
+
 # WWDC app for OS X
 
 Don't like the WWDC website? Prefer native apps?
