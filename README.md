@@ -24,6 +24,18 @@ With the handy filter bar you can filter sessions by year, track and focus, and 
 
 ![Transcript Search](https://raw.githubusercontent.com/insidegui/WWDC/master/screenshots/filterbar.png)
 	
+## Skip forward/backward
+
+You can skip forward or backward using arrow keys
+
+* `↑` Skip forward one minute
+
+* `↓` Skip backward one minute
+
+* `→` Skip forward 10 seconds
+
+* `←` Skip backward 10 seconds
+
 ## Sharing
 
 You can share direct links to specific session videos. Just select the session on the list and ⌘C to copy It's URL, or use the right-click menu.

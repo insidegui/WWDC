@@ -325,7 +325,29 @@ class VideoWindowController: NSWindowController {
             player?.removeTimeObserver(observer)
         }
     }
-    
+}
+
+
+extension AVPlayerView {
+    public override func keyDown(theEvent: NSEvent) {
+        let skipSeconds = CMTimeMakeWithSeconds(10, 600)
+        let skipMinute  = CMTimeMakeWithSeconds(60, 600)
+        
+        guard let currentTime = self.player?.currentTime() else { return }
+        
+        switch(theEvent.keyCode) {
+        case 123:
+            self.player?.currentItem?.seekToTime(currentTime - skipSeconds)
+        case 124:
+            self.player?.currentItem?.seekToTime(currentTime + skipSeconds)
+        case 125:
+            self.player?.currentItem?.seekToTime(currentTime - skipMinute)
+        case 126:
+            self.player?.currentItem?.seekToTime(currentTime + skipMinute)
+        default:
+            break
+        }
+    }
 }
 
 extension Transcript {
