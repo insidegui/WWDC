@@ -103,6 +103,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         preferencesWindowController?.showWindow(self)
     }
     
+    @IBAction func focusSearchField(sender: AnyObject?) {
+        if let window = window,
+            splitViewController = window.contentViewController as? NSSplitViewController,
+            splitViewItem = splitViewController.splitViewItems[0] as? NSSplitViewItem,
+            videoViewController = splitViewItem.viewController as? VideosViewController,
+            searchBar = videoViewController.headerController.searchBar {
+                searchBar.becomeFirstResponder()
+        }
+    }
+    
     private func tellUserAboutTheLiveEventThing() {
         let alert = NSAlert()
         alert.messageText = "Did you know?"
