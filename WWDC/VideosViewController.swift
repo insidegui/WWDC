@@ -416,6 +416,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     // MARK: Search
+    
+    @IBAction func performFindPanelAction(sender: AnyObject) {
+        headerController.activateSearchField(sender)
+    }
 
     private let searchQueue = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0)
     func search(term: String) {

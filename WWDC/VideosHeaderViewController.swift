@@ -61,4 +61,8 @@ class VideosHeaderViewController: NSViewController {
             callback(term: sender.stringValue)
         }
     }
+    
+    @IBAction func activateSearchField(sender: AnyObject) {
+        searchBar.window?.makeFirstResponder(searchBar)
+    }
 }
