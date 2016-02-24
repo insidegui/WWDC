@@ -113,7 +113,7 @@ enum SearchFilter {
     case Track([String])
     case Focus([String])
     case Favorited(Bool)
-    case Downloaded(Bool)
+    case Downloaded([String])
     
     var isEmpty: Bool {
         switch self {
@@ -128,8 +128,8 @@ enum SearchFilter {
         // for boolean properties, setting them to "false" means empty because we only want to filter when true
         case .Favorited(let favorited):
             return !favorited;
-        case .Downloaded(let downloaded):
-            return !downloaded;
+        case .Downloaded(let states):
+            return states.count == 0;
         }
     }
     
@@ -146,7 +146,7 @@ enum SearchFilter {
         case .Favorited(let favorited):
             return NSPredicate(format: "favorite = %@", favorited)
         case .Downloaded(let downloaded):
-            return NSPredicate(format: "downloaded = %@", downloaded)
+            return NSPredicate(format: "downloaded = %@", downloaded[0].boolValue)
         }
     }
     
@@ -164,6 +164,8 @@ enum SearchFilter {
         case .Track(let strings):
             return strings
         case .Focus(let strings):
+            return strings
+        case .Downloaded(let strings):
             return strings
         default:
             return nil
