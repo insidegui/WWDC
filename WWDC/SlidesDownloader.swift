@@ -11,6 +11,8 @@ import Alamofire
 
 class SlidesDownloader {
     
+    private let maxPDFLength = 16*1024*1024
+    
     typealias ProgressHandler = (downloaded: Double, total: Double) -> Void
     typealias CompletionHandler = (success: Bool, data: NSData?) -> Void
     
@@ -27,7 +29,15 @@ class SlidesDownloader {
         Alamofire.download(Method.GET, slidesURL.absoluteString) { tempURL, response in
             if let data = NSData(contentsOfURL: tempURL) {
                 mainQ {
-                    WWDCDatabase.sharedDatabase.doChanges { self.session.slidesPDFData = data }
+                    // this operation can fail if the PDF file is too big, Realm currently supports blobs of up to 16MB
+                    if data.length < self.maxPDFLength {
+                        WWDCDatabase.sharedDatabase.doChanges {
+                            self.session.slidesPDFData = data
+                        }
+                    } else {
+                        print("Error saving slides data to database, the file is too big to be saved")
+                    }
+                    
                     completionHandler(success: true, data: data)
                 }
             } else {
