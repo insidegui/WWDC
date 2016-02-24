@@ -10,6 +10,7 @@ import Cocoa
 import ViewUtils
 
 enum DownloadProgressViewButtonState : Int {
+    case Invalid
 	case NoDownload
 	case Downloaded
 	case Downloading
@@ -53,22 +54,26 @@ class DownloadProgressViewController: NSViewController {
 	
 	private func updateUI()
 	{
-        progressIndicator?.action = "showDownloadsWindow:"
+        guard session != nil else {
+            updateButtonVisibility(.Invalid)
+            return
+        }
         
-		if let session = session {
-			if session.hd_url != nil {
-				view.hidden = false
-				updateDownloadStatus()
-			} else {
-				view.hidden = true
-			}
-		} else {
-			view.hidden = true
-		}
+        progressIndicator?.action = "showDownloadsWindow:"
+
+        if session.hd_url != nil {
+            view.hidden = false
+            updateDownloadStatus()
+        } else {
+            view.hidden = true
+        }
 	}
 	
 	private func updateButtonVisibility(visibility: DownloadProgressViewButtonState) {
 		switch (visibility) {
+        case .Invalid:
+            self.progressIndicator?.hidden = true
+            self.downloadButton.hidden = true
 		case .NoDownload:
 			self.progressIndicator?.hidden = true
 			self.downloadButton.hidden = false

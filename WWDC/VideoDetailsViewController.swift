@@ -68,6 +68,7 @@ class VideoDetailsViewController: NSViewController {
             titleLabel.stringValue = "No session selected"
             subtitleLabel.stringValue = "Select a session to see It here"
             descriptionLabel.hidden = true
+            downloadController.session = nil
         }
         
         setupTranscriptResultsViewIfNeeded()
