@@ -38,8 +38,8 @@ class VideoDetailsViewController: NSViewController {
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var subtitleLabel: NSTextField!
     @IBOutlet weak var descriptionLabel: NSTextField!
-    @IBOutlet var downloadController: DownloadProgressViewController!
-    @IBOutlet var actionButtonsController: ActionButtonsViewController!
+    @IBOutlet weak var downloadController: DownloadProgressViewController!
+    @IBOutlet weak var actionButtonsController: ActionButtonsViewController!
     
     private func updateUI()
     {

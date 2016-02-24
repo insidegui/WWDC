@@ -21,8 +21,8 @@ class VideoWindowController: NSWindowController {
     var videoURL: String?
     var startTime: Double?
     
-    var asset: AVAsset!
-    var item: AVPlayerItem!
+    weak var asset: AVAsset!
+    weak var item: AVPlayerItem!
     
     var transcriptWC: TranscriptWindowController!
     var playerWindow: GRPlayerWindow {
@@ -49,7 +49,7 @@ class VideoWindowController: NSWindowController {
         self.init(windowNibName: _nibName)
         self.event = event
         self.videoURL = videoURL
-        NSNotificationCenter.defaultCenter().addObserverForName(LiveEventTitleAvailableNotification, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+        NSNotificationCenter.defaultCenter().addObserverForName(LiveEventTitleAvailableNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [unowned self] note in
             if let title = note.object as? String {
                 self.window?.title = "\(title) (Live)"
             }
@@ -59,7 +59,7 @@ class VideoWindowController: NSWindowController {
     @IBOutlet weak var customPlayerView: GRCustomPlayerView!
     @IBOutlet weak var playerView: AVPlayerView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
-    var player: AVPlayer? {
+    weak var player: AVPlayer? {
         didSet {
             if let player = player {
                 if #available(OSX 10.11, *) {
@@ -78,6 +78,8 @@ class VideoWindowController: NSWindowController {
     
     override func windowDidLoad() {
         super.windowDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("windowWillClose:"), name: NSWindowWillCloseNotification, object: self.window)
         
         activity = NSProcessInfo.processInfo().beginActivityWithOptions([.IdleDisplaySleepDisabled, .IdleSystemSleepDisabled, .UserInitiated], reason: "Playing WWDC session video")
 
@@ -115,7 +117,7 @@ class VideoWindowController: NSWindowController {
             window?.title = "WWDC \(session.year) | \(session.title)"
             
             // pause playback when a live event starts playing
-            NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { _ in
+            NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { [unowned self] _ in
                 self.player?.pause()
             }
         }
@@ -129,22 +131,36 @@ class VideoWindowController: NSWindowController {
             
             loadEventVideo()
         }
+    }
+    
+    func windowWillClose(note: NSNotification!) {
+        player?.cancelPendingPrerolls()
+        player?.pause()
+        asset = nil
+        item = nil
+        player = nil
         
-        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { _ in
-            if let activity = self.activity {
-                NSProcessInfo.processInfo().endActivity(activity)
-            }
-            
-            if self.event != nil {
-                if self.item != nil {
-                    self.item.removeObserver(self, forKeyPath: "status")
-                }
-            }
-            
-            self.transcriptWC?.close()
-            
-            self.player?.pause()
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        
+        if let observer: AnyObject = timeObserver {
+            player?.removeTimeObserver(observer)
         }
+        if let observer: AnyObject = boundaryObserver {
+            player?.removeTimeObserver(observer)
+        }
+        
+        if let activity = self.activity {
+            NSProcessInfo.processInfo().endActivity(activity)
+        }
+        
+        if self.event != nil {
+            if self.item != nil {
+                self.item.removeObserver(self, forKeyPath: "status")
+            }
+        }
+        
+        self.transcriptWC?.close()
+        self.transcriptWC = nil
     }
     
     private func loadEventVideo() {
@@ -213,14 +229,16 @@ class VideoWindowController: NSWindowController {
     var timeObserver: AnyObject?
     
     func setupTimeObserver() {
-        guard session != nil else { return }
+        guard session != nil && timeObserver == nil else { return }
         
-        timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(5, 1), queue: dispatch_get_main_queue()) { [unowned self] currentTime in
-            let progress = Double(CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(self.player!.currentItem!.duration))
+        timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(5, 1), queue: dispatch_get_main_queue()) { [weak self] currentTime in
+            guard let weakSelf = self else { return }
+            
+            let progress = Double(CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(weakSelf.player!.currentItem!.duration))
 
             WWDCDatabase.sharedDatabase.doChanges {
-                self.session!.progress = progress
-                self.session!.currentPosition = CMTimeGetSeconds(currentTime)
+                weakSelf.session!.progress = progress
+                weakSelf.session!.currentPosition = CMTimeGetSeconds(currentTime)
             }
         }
     }
@@ -313,17 +331,6 @@ class VideoWindowController: NSWindowController {
     
     @IBAction func sizeWindowToQuarterSize(sender: AnyObject?) {
         sizeWindowTo(0.25)
-    }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        
-        if let observer: AnyObject = timeObserver {
-            player?.removeTimeObserver(observer)
-        }
-        if let observer: AnyObject = boundaryObserver {
-            player?.removeTimeObserver(observer)
-        }
     }
     
 }
