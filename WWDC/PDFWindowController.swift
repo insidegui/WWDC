@@ -16,6 +16,8 @@ class PDFWindowController: NSWindowController {
     @IBOutlet weak var progressBgView: ContentBackgroundView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
     
+    private var titlebarAccessoryController: TitlebarButtonAccessory!
+    
     var session: Session!
     var slidesDocument: PDFDocument? {
         didSet {
@@ -27,6 +29,7 @@ class PDFWindowController: NSWindowController {
             progressIndicator.stopAnimation(nil)
             pdfView.hidden = false
             progressBgView.hidden = true
+            titlebarAccessoryController.view.hidden = false
         }
     }
     
@@ -39,8 +42,14 @@ class PDFWindowController: NSWindowController {
     override func windowDidLoad() {
         super.windowDidLoad()
         
+        titlebarAccessoryController = TitlebarButtonAccessory(buttonTitle: "Open in Preview", buttonAction: openInPreview)
+        
         window?.titlebarAppearsTransparent = true
         window?.movableByWindowBackground = true
+        
+        titlebarAccessoryController.layoutAttribute = .Right
+        window?.addTitlebarAccessoryViewController(titlebarAccessoryController)
+        titlebarAccessoryController.view.hidden = true
         
         progressIndicator.startAnimation(nil)
         
@@ -68,6 +77,19 @@ class PDFWindowController: NSWindowController {
                     print("Download failed")
                 }
             }, progressHandler: progressHandler)
+        }
+    }
+    
+    private func openInPreview() {
+        guard let slidesDocument = slidesDocument else { return }
+        guard let downloadsPath = NSSearchPathForDirectoriesInDomains(.DownloadsDirectory, .UserDomainMask, true).first else { return }
+        
+        let filePath = NSString.pathWithComponents([downloadsPath, "\(session.title).pdf"])
+        
+        if slidesDocument.writeToURL(NSURL(fileURLWithPath: filePath)) {
+            NSWorkspace.sharedWorkspace().openFile(filePath)
+        } else {
+            NSLog("Error writing slides document to file \(filePath)")
         }
     }
     

@@ -30,6 +30,7 @@
 		DD2CC3901AF419F500FC5F68 /* PreferencesWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2CC38E1AF419F500FC5F68 /* PreferencesWindowController.xib */; };
 		DD3081781AF3DC370009D412 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3081771AF3DC370009D412 /* DTFolderMonitor.m */; };
 		DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD373A891AE871AB00DAC19B /* VideoStore.swift */; };
+		DD3F8B0C1C8BF3AA00A1601F /* TitlebarButtonAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3F8B0B1C8BF3AA00A1601F /* TitlebarButtonAccessory.swift */; };
 		DD3FDF1A1BC2EDFC0078B06C /* RoundPlayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3FDF191BC2EDFC0078B06C /* RoundPlayButton.swift */; };
 		DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E511AE2D11D0099BEB5 /* AppDelegate.swift */; };
 		DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E531AE2D11D0099BEB5 /* VideosViewController.swift */; };
@@ -225,6 +226,7 @@
 		DD3081761AF3DC370009D412 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
 		DD3081771AF3DC370009D412 /* DTFolderMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderMonitor.m; sourceTree = "<group>"; };
 		DD373A891AE871AB00DAC19B /* VideoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoStore.swift; sourceTree = "<group>"; };
+		DD3F8B0B1C8BF3AA00A1601F /* TitlebarButtonAccessory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitlebarButtonAccessory.swift; sourceTree = "<group>"; };
 		DD3FDF191BC2EDFC0078B06C /* RoundPlayButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundPlayButton.swift; sourceTree = "<group>"; };
 		DD4F6E4C1AE2D11D0099BEB5 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD4F6E501AE2D11D0099BEB5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -318,6 +320,15 @@
 				DD2016661AE4029100DD8155 /* ViewUtils.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DD3F8B051C8BF38D00A1601F /* Slides */ = {
+			isa = PBXGroup;
+			children = (
+				DDC049CE1AE564F20008D41A /* PDFWindowController.swift */,
+				DD3F8B0B1C8BF3AA00A1601F /* TitlebarButtonAccessory.swift */,
+			);
+			name = Slides;
 			sourceTree = "<group>";
 		};
 		DD4F6E431AE2D11D0099BEB5 = {
@@ -438,7 +449,7 @@
 		DDCAB46B1C26208D005889CB /* Playback */ = {
 			isa = PBXGroup;
 			children = (
-				DDC049CE1AE564F20008D41A /* PDFWindowController.swift */,
+				DD3F8B051C8BF38D00A1601F /* Slides */,
 				DD2016731AE411C800DD8155 /* VideoWindowController.swift */,
 				DDCAB4641C26206D005889CB /* Transcript */,
 			);
@@ -791,6 +802,7 @@
 				DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */,
 				DD76C0181BBF83C10056BB20 /* SlidesDownloader.swift in Sources */,
 				DDCAB46E1C2620BE005889CB /* TranscriptViewController.swift in Sources */,
+				DD3F8B0C1C8BF3AA00A1601F /* TitlebarButtonAccessory.swift in Sources */,
 				51B28F5B1BB63F9E001F7A6C /* GridlessTableView.swift in Sources */,
 				DD3081781AF3DC370009D412 /* DTFolderMonitor.m in Sources */,
 				DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */,
