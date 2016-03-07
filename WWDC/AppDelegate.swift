@@ -44,10 +44,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // initialize Crashlytics
         GRCrashlyticsHelper.install()
         
-        // tell the user he can watch the live keynote using the app, only once
-        if !Preferences.SharedPreferences().userKnowsLiveEventThing {
-            tellUserAboutTheLiveEventThing()
-        }
+        // tell user about nice new things
+        showCourtesyDialogs()
     }
     
     func applicationWillFinishLaunching(notification: NSNotification) {
@@ -103,6 +101,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         preferencesWindowController?.showWindow(self)
     }
     
+    // MARK: - Courtesy Dialogs
+    
+    private func showCourtesyDialogs() {
+        // tell the user he can watch the live keynote using the app, only once
+        if !Preferences.SharedPreferences().userKnowsLiveEventThing {
+            tellUserAboutTheLiveEventThing()
+        } else {
+            if !Preferences.SharedPreferences().tvTechTalksAlerted {
+                // tell the user he can watch the 2016 Apple TV Tech Talks, only once, and not with the other alert
+                tellUserAbout2016TVTechTalks()
+            }
+        }
+    }
+    
     private func tellUserAboutTheLiveEventThing() {
         let alert = NSAlert()
         alert.messageText = "Did you know?"
@@ -111,6 +123,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.runModal()
         
         Preferences.SharedPreferences().userKnowsLiveEventThing = true
+    }
+    
+    private func tellUserAbout2016TVTechTalks() {
+        let alert = NSAlert()
+        alert.messageText = "Now Available: Apple TV Tech Talks"
+        alert.informativeText = "Now you can watch the Apple TV Tech Talks using the app. Enjoy :]"
+        alert.addButtonWithTitle("Thanks")
+        alert.runModal()
+        
+        Preferences.SharedPreferences().tvTechTalksAlerted = true
     }
     
     // MARK: - About Panel

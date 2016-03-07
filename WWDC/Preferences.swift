@@ -31,6 +31,7 @@ class Preferences {
         static let autoplayLiveEvents = "autoplayLiveEvents"
         static let liveEventCheckInterval = "liveEventCheckInterval"
         static let userKnowsLiveEventThing = "userKnowsLiveEventThing"
+        static let tvTechTalksAlerted = "tvTechTalksAlerted"
         static let automaticRefreshEnabled = "automaticRefreshEnabled"
 		static let floatOnTopEnabled = "floatOnTopEnabled"
         
@@ -54,6 +55,7 @@ class Preferences {
         static let autoplayLiveEvents = true
         static let liveEventCheckInterval = 15.0
         static let userKnowsLiveEventThing = false
+        static let tvTechTalksAlerted = false
         static let automaticRefreshEnabled = true
         static let automaticRefreshInterval = 60.0
         static let floatOnTopEnabled = false
@@ -259,6 +261,20 @@ class Preferences {
         }
         set {
             defaults.setObject(NSNumber(bool: newValue), forKey: Keys.userKnowsLiveEventThing)
+        }
+    }
+    
+    // user was informed about the possibility to watch the 2016 Apple TV Tech Talks
+    var tvTechTalksAlerted: Bool {
+        get {
+            if let object = defaults.objectForKey(Keys.tvTechTalksAlerted) as? NSNumber {
+                return object.boolValue
+            } else {
+                return DefaultValues.tvTechTalksAlerted
+            }
+        }
+        set {
+            defaults.setObject(NSNumber(bool: newValue), forKey: Keys.tvTechTalksAlerted)
         }
     }
     
