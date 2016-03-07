@@ -57,6 +57,18 @@ class Session: Object {
     dynamic var slidesPDFData = NSData()
     dynamic var downloaded = false
     
+    var event: String {
+        if id > 10000 {
+            return "Apple TV Tech Talks"
+        } else {
+            return "WWDC"
+        }
+    }
+    
+    var isExtra: Bool {
+        return event != "WWDC"
+    }
+    
     convenience required init(json: JSON) {
         self.init()
         

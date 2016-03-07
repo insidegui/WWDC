@@ -114,7 +114,7 @@ class VideoWindowController: NSWindowController {
         }
         
         if let session = self.session {
-            window?.title = "WWDC \(session.year) | \(session.title)"
+            window?.title = "\(session.event) \(session.year) | \(session.title)"
             
             // pause playback when a live event starts playing
             NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { [unowned self] _ in

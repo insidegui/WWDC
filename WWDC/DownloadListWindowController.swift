@@ -189,7 +189,8 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 		let cellView = tableView.makeViewWithIdentifier(identifier!, owner: self) as! DownloadListCellView
 		let item = self.items[row]
         
-		cellView.textField?.stringValue = "WWDC \(item.session.year) - \(item.session.title)"
+        let title = item.session.isExtra ? "\(item.session.event) - \(item.session.title)" : "\(item.session.event) \(item.session.year) - \(item.session.title)"
+		cellView.textField?.stringValue = title
         
 		if item.progress > 0 {
 			if cellView.started == false {

@@ -25,8 +25,11 @@ typealias SessionsUpdatedCallback = () -> Void
 
 @objc class WWDCDatabase: NSObject {
     
+    private let currentDBVersion = UInt64(1)
+    
     private struct Constants {
         static let internalServiceURL = "http://wwdc.guilhermerambo.me/index.json"
+        static let extraVideosURL = "http://wwdc.guilhermerambo.me/extra.json"
         static let asciiServiceBaseURL = "http://asciiwwdc.com/"
     }
 
@@ -42,6 +45,7 @@ typealias SessionsUpdatedCallback = () -> Void
             guard config != nil else { return }
             
             updateSessionVideos()
+            updateExtraSessionVideos()
         }
     }
     
@@ -182,6 +186,44 @@ typealias SessionsUpdatedCallback = () -> Void
                 #if os(OSX)
                 self.indexTranscriptsForSessionsWithKeys(newSessionKeys)
                 #endif
+                
+                mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
+            }
+        }
+    }
+    
+    private func updateExtraSessionVideos() {
+        Alamofire.request(.GET, Constants.extraVideosURL).response { _, _, data, error in
+            dispatch_async(self.bgThread) {
+                let backgroundRealm = try! Realm()
+                
+                guard let jsonData = data else {
+                    print("No data returned from extra videos server!")
+                    return
+                }
+                
+                let json = JSON(data: jsonData)
+                
+                guard let sessionsArray = json["events"].array else {
+                    print("Could not parse array of sessions from extra videos server")
+                    return
+                }
+                
+                var newSessionKeys: [String] = []
+                
+                // create and store/update each video
+                for jsonSession in sessionsArray {
+                    let session = Session(json: jsonSession)
+                    
+                    if backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) == nil {
+                        newSessionKeys.append(session.uniqueId)
+                    }
+                    backgroundRealm.beginWrite()
+                    
+                    backgroundRealm.add(session, update: true)
+                    
+                    try! backgroundRealm.commitWrite()
+                }
                 
                 mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
             }
