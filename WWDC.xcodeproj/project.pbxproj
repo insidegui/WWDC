@@ -469,8 +469,8 @@
 		DDD7A42D1AE2DECE000A0102 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DD825CA91BBF631C00276B83 /* ProgressSearchField.swift */,
 				51B28F591BB63B3C001F7A6C /* TableView */,
+				DD825CA91BBF631C00276B83 /* ProgressSearchField.swift */,
 				C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */,
 				DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */,
 				DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */,
