@@ -225,7 +225,9 @@ typealias SessionsUpdatedCallback = () -> Void
                     try! backgroundRealm.commitWrite()
                 }
                 
-                mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
+                if newSessionKeys.count > 0 {
+                    mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
+                }
             }
         }
     }

@@ -48,7 +48,12 @@ class VideoTableCellView: NSTableCellView {
         }
         
         titleField.stringValue = session.title
-        detailsField.stringValue = "\(session.year) - Session \(session.id) - \(session.track)"
+        
+        if session.isExtra {
+            detailsField.stringValue = "\(session.event) \(session.year) - \(session.track)"
+        } else {
+            detailsField.stringValue = "\(session.year) - Session \(session.id) - \(session.track)"
+        }
         
         updateSessionFlags()
         updateTint()
