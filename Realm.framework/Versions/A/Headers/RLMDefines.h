@@ -27,10 +27,12 @@
 #pragma mark - Generics
 
 #if __has_extension(objc_generics)
+#define RLM_GENERIC(...) <__VA_ARGS__>
 #define RLM_GENERIC_COLLECTION <RLMObjectType: RLMObject *>
 #define RLM_GENERIC_RETURN <RLMObjectType>
 #define RLMObjectArgument RLMObjectType
 #else
+#define RLM_GENERIC(...)
 #define RLM_GENERIC_COLLECTION
 #define RLM_GENERIC_RETURN
 typedef id RLMObjectType;
@@ -74,6 +76,14 @@ typedef RLMObject * RLMObjectArgument;
 #  define RLM_NOESCAPE __attribute__((noescape))
 #else
 #  define RLM_NOESCAPE
+#endif
+
+#pragma mark - Unused Result
+
+#if __has_attribute(warn_unused_result)
+#  define RLM_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+#else
+#  define RLM_WARN_UNUSED_RESULT
 #endif
 
 #pragma mark - Swift Availability

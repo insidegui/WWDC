@@ -20,7 +20,7 @@
 
 #import <Realm/RLMDefines.h>
 
-@class RLMObjectSchema, RLMProperty, RLMObjectBase, RLMRealm, RLMProperty;
+@class RLMObjectSchema, RLMProperty, RLMObjectBase, RLMProperty;
 
 #ifdef __cplusplus
 typedef NSUInteger RLMCreationOptions;
@@ -60,6 +60,5 @@ void RLMReplaceClassNameMethod(Class accessorClass, NSString *className);
 
 // Replace sharedSchema method for the given class
 void RLMReplaceSharedSchemaMethod(Class accessorClass, RLMObjectSchema * __nullable schema);
-void RLMReplaceSharedSchemaMethodWithBlock(Class accessorClass, RLMObjectSchema *(^method)(Class));
 
 RLM_ASSUME_NONNULL_END

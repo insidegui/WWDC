@@ -28,7 +28,7 @@ RLM_ASSUME_NONNULL_BEGIN
  database.
 
  Realms can either be stored on disk (see +[RLMRealm realmWithPath:]) or in
- memory (see +[RLMRealm inMemoryRealmWithIdentifier:]).
+ memory (see RLMRealmConfiguration).
 
  RLMRealm instances are cached internally, and constructing equivalent RLMRealm
  objects (with the same path or identifier) multiple times on a single thread
@@ -47,10 +47,9 @@ RLM_ASSUME_NONNULL_BEGIN
  */
 
 @interface RLMRealm : NSObject
-/**---------------------------------------------------------------------------------------
- *  @name Creating & Initializing a Realm
- * ---------------------------------------------------------------------------------------
- */
+
+#pragma mark - Creating & Initializing a Realm
+
 /**
  Obtains an instance of the default Realm.
 
@@ -89,92 +88,6 @@ RLM_ASSUME_NONNULL_BEGIN
 + (instancetype)realmWithPath:(NSString *)path;
 
 /**
- Obtains an `RLMRealm` instance with persistence to a specific file path with
- options.
-
- Like `realmWithPath:`, but with the ability to open read-only realms and get
- errors as an `NSError` inout parameter rather than exceptions.
-
- @warning Read-only Realms do not support changes made to the file while the
- `RLMRealm` exists. This means that you cannot open a Realm as both read-only
- and read-write at the same time. Read-only Realms should normally only be used
- on files which cannot be opened in read-write mode, and not just for enforcing
- correctness in code that should not need to write to the Realm.
-
- @param path        Path to the file you want the data saved in.
- @param readonly    BOOL indicating if this Realm is read-only (must use for read-only files)
- @param error       If an error occurs, upon return contains an `NSError` object
-                    that describes the problem. If you are not interested in
-                    possible errors, pass in `NULL`.
-
- @return An `RLMRealm` instance.
- */
-+ (nullable instancetype)realmWithPath:(NSString *)path readOnly:(BOOL)readonly error:(NSError **)error DEPRECATED_MSG_ATTRIBUTE("Use +[RLMRealm realmWithConfiguration:error:]");
-
-/**
- Obtains an `RLMRealm` instance persisted to an encrypted file.
-
- The on-disk storage for encrypted Realms are encrypted using AES256+HMAC-SHA2,
- but otherwise they behave like normal persisted Realms.
-
- Encrypted Realms currently cannot be opened while lldb is attached to the
- process since lldb often hangs in this situation. See issue #1625 for
- further discussion. Attempting to open an encrypted Realm with lldb attached
- will result in an EXC_BAD_ACCESS. Running your application with
- REALM_DISABLE_ENCRYPTION=YES set in your environment will result in Realm
- treating requests to open an encrypted Realm as requesting an unencrypted Realm.
-
- @param path        Path to the file you want the data saved in.
- @param key         64-byte key to use to encrypt the data.
- @param readonly    BOOL indicating if this Realm is read-only (must use for read-only files)
- @param error       If an error occurs, upon return contains an `NSError` object
-                    that describes the problem. If you are not interested in
-                    possible errors, pass in `NULL`.
-
- @return An encrypted `RLMRealm` instance.
- */
-+ (nullable instancetype)realmWithPath:(NSString *)path
-                         encryptionKey:(NSData *)key
-                              readOnly:(BOOL)readonly
-                                 error:(NSError **)error DEPRECATED_MSG_ATTRIBUTE("Use +[RLMRealm realmWithConfiguration:error:]");
-
-/**
- Set the encryption key to use when opening Realms at a certain path.
-
- This can be used as an alternative to explicitly passing the key to
- `realmWithPath:key:readOnly:error:` each time a Realm instance is
- needed. The encryption key will be used any time a Realm is opened with
- `realmWithPath:` or `defaultRealm`.
-
- If you do not want Realm to hold on to your encryption keys any longer than
- needed, then use `realmWithPath:encryptionKey:readOnly:error:` rather than this
- method.
-
- @param key     64-byte encryption key to use, or `nil` to unset.
- @param path    Realm path to set the encryption key for.
- */
-+ (void)setEncryptionKey:(nullable NSData *)key forRealmsAtPath:(NSString *)path DEPRECATED_MSG_ATTRIBUTE("Use RLMRealmConfiguration to set an encryption key");
-
-/**
- Obtains an `RLMRealm` instance for an un-persisted in-memory Realm. The identifier
- used to create this instance can be used to access the same in-memory Realm from
- multiple threads.
-
- Because in-memory Realms are not persisted, you must be sure to hold on to a
- reference to the `RLMRealm` object returned from this for as long as you want
- the data to last. Realm's internal cache of `RLMRealm`s will not keep the
- in-memory Realm alive across cycles of the run loop, so without a strong
- reference to the `RLMRealm` a new Realm will be created each time. Note that
- `RLMObject`s, `RLMArray`s, and `RLMResults` that refer to objects persisted in a Realm have a
- strong reference to the relevant `RLMRealm`, as do `RLMNotifcationToken`s.
-
- @param identifier  A string used to identify a particular in-memory Realm.
-
- @return An `RLMRealm` instance.
- */
-+ (instancetype)inMemoryRealmWithIdentifier:(NSString *)identifier DEPRECATED_MSG_ATTRIBUTE("Use +[RLMRealm realmWithConfiguration:error:]");
-
-/**
  Path to the file where this Realm is persisted.
  */
 @property (nonatomic, readonly) NSString *path;
@@ -200,7 +113,7 @@ RLM_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL inWriteTransaction;
 
 /**
- Returns an `RLMRealmConfiguration` that can be used to create this `RLMRealm` instance.
+ Returns the `RLMRealmConfiguration` that was used to create this `RLMRealm` instance.
  */
 @property (nonatomic, readonly) RLMRealmConfiguration *configuration;
 
@@ -209,44 +122,21 @@ RLM_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) BOOL isEmpty;
 
-/**---------------------------------------------------------------------------------------
- *  @name Default Realm Path
- * ---------------------------------------------------------------------------------------
- */
-/**
- Returns the location of the default Realm as a string.
-
- `~/Library/Application Support/{bundle ID}/default.realm` on OS X.
-
- `default.realm` in your application's documents directory on iOS.
-
- @return Location of the default Realm.
-
- @see defaultRealm
- */
-+ (NSString *)defaultRealmPath DEPRECATED_MSG_ATTRIBUTE("Use [RLMRealmConfiguration defaultConfiguration].path");
-
-/**
- Set the default Realm path to a given path.
-
- @param defaultRealmPath    The path to use for the default Realm.
-
- @see defaultRealm
- */
-+ (void)setDefaultRealmPath:(NSString *)defaultRealmPath DEPRECATED_MSG_ATTRIBUTE("Use +[RLMRealmConfiguration setDefaultConfiguration:]");
-
-
 #pragma mark - Notifications
 
-typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
+/// Block to run when the data in a Realm was modified.
+typedef void (^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 
-/**---------------------------------------------------------------------------------------
- *  @name Receiving Notification when a Realm Changes
- * ---------------------------------------------------------------------------------------
- */
+#pragma mark - Receiving Notification when a Realm Changes
 
 /**
  Add a notification handler for changes in this RLMRealm.
+
+ Notification handlers are called after each write transaction is committed,
+ either on the current thread or other threads. The block is called on the same
+ thread as they were added on, and can only be added on threads which are
+ currently within a run loop. Unless you are specifically creating and running a
+ run loop on a background thread, this normally will only be the main thread.
 
  The block has the following definition:
 
@@ -261,10 +151,10 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 
  @param block   A block which is called to process RLMRealm notifications.
 
- @return A token object which can later be passed to `-removeNotification:`
-         to remove this notification.
+ @return A token object which must be stored as long as you wish to continue
+         receiving change notifications.
  */
-- (RLMNotificationToken *)addNotificationBlock:(RLMNotificationBlock)block;
+- (RLMNotificationToken *)addNotificationBlock:(RLMNotificationBlock)block RLM_WARN_UNUSED_RESULT;
 
 /**
  Remove a previously registered notification handler using the token returned
@@ -277,17 +167,15 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 
 #pragma mark - Transactions
 
-/**---------------------------------------------------------------------------------------
- *  @name Writing to a Realm
- * ---------------------------------------------------------------------------------------
- */
+
+#pragma mark - Writing to a Realm
 
 /**
  Begins a write transaction in an `RLMRealm`.
 
  Only one write transaction can be open at a time. Write transactions cannot be
  nested, and trying to begin a write transaction on a `RLMRealm` which is
- already in a write transaction with throw an exception. Calls to
+ already in a write transaction will throw an exception. Calls to
  `beginWriteTransaction` from `RLMRealm` instances in other threads will block
  until the current write transaction completes.
 
@@ -304,20 +192,18 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 - (void)beginWriteTransaction;
 
 /**
- Commits all writes operations in the current write transaction.
+ Commits all write operations in the current write transaction, and ends the 
+ transaction.
 
- After this is called the `RLMRealm` reverts back to being read-only.
-
- Calling this when not in a write transaction will throw an exception.
+ @warning This method can only be called during a write transaction.
  */
 - (void)commitWriteTransaction RLM_SWIFT_UNAVAILABLE("");
 
 /**
- Commits all writes operations in the current write transaction.
+ Commits all write operations in the current write transaction, and ends the
+ transaction.
 
- After this is called the `RLMRealm` reverts back to being read-only.
-
- Calling this when not in a write transaction will throw an exception.
+ @warning This method can only be called during a write transaction.
 
  @param error If an error occurs, upon return contains an `NSError` object
               that describes the problem. If you are not interested in
@@ -328,13 +214,13 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 - (BOOL)commitWriteTransaction:(NSError **)error;
 
 /**
- Revert all writes made in the current write transaction and end the transaction.
+ Reverts all writes made in the current write transaction and ends the transaction.
 
  This rolls back all objects in the Realm to the state they were in at the
  beginning of the write transaction, and then ends the transaction.
 
- This restores the data for deleted objects, but does not re-validated deleted
- accessor objects. Any `RLMObject`s which were added to the Realm will be
+ This restores the data for deleted objects, but does not revive invalidated
+ object instances. Any `RLMObject`s which were added to the Realm will be
  invalidated rather than switching back to standalone objects.
  Given the following code:
 
@@ -350,17 +236,27 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
  but re-running the query which provided `oldObject` will once again return
  the valid object.
 
- Calling this when not in a write transaction will throw an exception.
+ @warning This method can only be called during a write transaction.
  */
 - (void)cancelWriteTransaction;
 
 /**
  Helper to perform a block within a transaction.
  */
-- (void)transactionWithBlock:(void(^)(void))block RLM_SWIFT_UNAVAILABLE("");
+- (void)transactionWithBlock:(RLM_NOESCAPE void(^)(void))block RLM_SWIFT_UNAVAILABLE("");
 
 /**
- Helper to perform a block within a transaction.
+ Performs actions contained within the given block inside a write transation.
+ 
+ Write transactions cannot be nested, and trying to execute a write transaction 
+ on a `RLMRealm` which is already in a write transaction will throw an 
+ exception. Calls to `transactionWithBlock:` from `RLMRealm` instances in other 
+ threads will block until the current write transaction completes.
+
+ Before beginning the write transaction, `transactionWithBlock:` updates the
+ `RLMRealm` to the latest Realm version, as if refresh was called, and
+ generates notifications if applicable. This has no effect if the `RLMRealm`
+ was already up to date.
 
  @param block The block to perform.
  @param error If an error occurs, upon return contains an `NSError` object
@@ -369,7 +265,7 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 
  @return Whether the transaction succeeded.
  */
-- (BOOL)transactionWithBlock:(void(^)(void))block error:(NSError **)error;
+- (BOOL)transactionWithBlock:(RLM_NOESCAPE void(^)(void))block error:(NSError **)error;
 
 /**
  Update an `RLMRealm` and outstanding objects to point to the most recent data for this `RLMRealm`.
@@ -383,10 +279,14 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 
  If set to YES (the default), changes made on other threads will be reflected
  in this Realm on the next cycle of the run loop after the changes are
- committed.  If set to NO, you must manually call -refresh on the Realm to
+ committed.  If set to NO, you must manually call `-refresh` on the Realm to
  update it to get the latest version.
 
- Even with this enabled, you can still call -refresh at any time to update the
+ Note that by default, background threads do not have an active run loop and you 
+ will need to manually call `-refresh` in order to update to the latest version,
+ even if `autorefresh` is set to `true`.
+
+ Even with this enabled, you can still call `-refresh` at any time to update the
  Realm before the automatic refresh would occur.
 
  Notifications are sent when a write transaction is committed whether or not
@@ -458,17 +358,16 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 
 #pragma mark - Accessing Objects
 
-/**---------------------------------------------------------------------------------------
- *  @name Adding and Removing Objects from a Realm
- * ---------------------------------------------------------------------------------------
- */
+
+#pragma mark - Adding and Removing Objects from a Realm
+
 /**
- Adds an object to be persisted it in this Realm.
+ Adds an object to be persisted in this Realm.
 
  Once added, this object can be retrieved using the `objectsWhere:` selectors
- on `RLMRealm` and on subclasses of `RLMObject`. When added, all linked (child)
- objects referenced by this object will also be added to the Realm if they are
- not already in it. If the object or any linked objects already belong to a
+ on `RLMRealm` and on subclasses of `RLMObject`. When added, all (child)
+ relationships referenced by this object will also be added to the Realm if they are
+ not already in it. If the object or any related objects already belong to a
  different Realm an exception will be thrown. Use
  `-[RLMObject createInRealm:withObject]` to insert a copy of a persisted object
  into a different Realm.
@@ -476,14 +375,18 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
  The object to be added must be valid and cannot have been previously deleted
  from a Realm (i.e. `isInvalidated`) must be false.
 
+ @warning This method can only be called during a write transaction.
+
  @param object  Object to be added to this Realm.
  */
 - (void)addObject:(RLMObject *)object;
 
 /**
- Adds objects in the given array to be persisted it in this Realm.
+ Adds objects in the given array to be persisted in this Realm.
 
  This is the equivalent of `addObject:` except for an array of objects.
+
+ @warning This method can only be called during a write transaction.
 
  @param array   An enumerable object such as NSArray or RLMResults which contains objects to be added to
                 this Realm.
@@ -493,7 +396,7 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 - (void)addObjects:(id<NSFastEnumeration>)array;
 
 /**
- Adds or updates an object to be persisted it in this Realm. The object provided must have a designated
+ Adds or updates an object to be persisted in this Realm. The object provided must have a designated
  primary key. If no objects exist in the RLMRealm instance with the same primary key value, the object is
  inserted. Otherwise, the existing object is updated with any changed values.
 
@@ -501,14 +404,18 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
  Realm. Use `-[RLMObject createOrUpdateInRealm:withValue:]` to copy values to
  a different Realm.
 
+ @warning This method can only be called during a write transaction.
+
  @param object  Object to be added or updated.
  */
 - (void)addOrUpdateObject:(RLMObject *)object;
 
 /**
- Adds or updates objects in the given array to be persisted it in this Realm.
+ Adds or updates objects in the given array to be persisted in this Realm.
 
  This is the equivalent of `addOrUpdateObject:` except for an array of objects.
+
+ @warning This method can only be called during a write transaction.
 
  @param array  `NSArray`, `RLMArray`, or `RLMResults` of `RLMObject`s (or subclasses) to be added to this Realm.
 
@@ -519,6 +426,8 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 /**
  Delete an object from this Realm.
 
+ @warning This method can only be called during a write transaction.
+
  @param object  Object to be deleted from this Realm.
  */
 - (void)deleteObject:(RLMObject *)object;
@@ -526,12 +435,16 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
 /**
  Delete an `NSArray`, `RLMArray`, or `RLMResults` of objects from this Realm.
 
+ @warning This method can only be called during a write transaction.
+
  @param array  `RLMArray`, `NSArray`, or `RLMResults` of `RLMObject`s to be deleted.
  */
 - (void)deleteObjects:(id)array;
 
 /**
  Deletes all objects in this Realm.
+
+ @warning This method can only be called during a write transaction.
  */
 - (void)deleteAllObjects;
 
@@ -548,49 +461,6 @@ typedef void(^RLMNotificationBlock)(NSString *notification, RLMRealm *realm);
  @param oldSchemaVersion    The schema version of the `RLMRealm` being migrated.
  */
 typedef void (^RLMMigrationBlock)(RLMMigration *migration, uint64_t oldSchemaVersion);
-
-/**
- Specify a schema version and an associated migration block which is applied when
- opening the default Realm with an old schema version.
-
- Before you can open an existing `RLMRealm` which has a different on-disk schema
- from the schema defined in your object interfaces you must provide a migration 
- block which converts from the disk schema to your current object schema. At the
- minimum your migration block must initialize any properties which were added to
- existing objects without defaults and ensure uniqueness if a primary key
- property is added to an existing object.
-
- You should call this method before accessing any `RLMRealm` instances which
- require migration. After registering your migration block Realm will call your 
- block automatically as needed.
-
- @warning Unsuccessful migrations will throw exceptions when the migration block
- is applied. This will happen in the following cases:
-
- - The migration block was run and returns a schema version which is not higher
-   than the previous schema version.
- - A new property without a default was added to an object and not initialized
-   during the migration. You are required to either supply a default value or to
-   manually populate added properties during a migration.
-
- @param version     The current schema version.
- @param block       The block which migrates the Realm to the current version.
-
- @see               RLMMigration
- */
-+ (void)setDefaultRealmSchemaVersion:(uint64_t)version withMigrationBlock:(nullable RLMMigrationBlock)block DEPRECATED_MSG_ATTRIBUTE("Use RLMRealmConfiguration.schemaVersion and RLMRealmConfiguration.migrationBlock");
-
-/**
- Specify a schema version and an associated migration block which is applied when
- opening the Realm at realmPath with an old schema version.
-
- @param version     The current schema version.
- @param realmPath   The path at which this schema version and migration block is applied.
- @param block       The block which migrates the Realm to the current version.
-
- @see               RLMMigration
- */
-+ (void)setSchemaVersion:(uint64_t)version forRealmAtPath:(NSString *)realmPath withMigrationBlock:(nullable RLMMigrationBlock)block DEPRECATED_MSG_ATTRIBUTE("Use RLMRealmConfiguration.schemaVersion and RLMRealmConfiguration.migrationBlock");
 
 /**
  Get the schema version for a Realm at a given path.
@@ -631,67 +501,19 @@ typedef void (^RLMMigrationBlock)(RLMMigration *migration, uint64_t oldSchemaVer
  */
 + (NSError *)migrateRealm:(RLMRealmConfiguration *)configuration;
 
-/**
- Performs the registered migration block on a Realm at the given path.
-
- This method is called automatically when opening a Realm for the first time and does
- not need to be called explicitly. You can choose to call this method to control 
- exactly when and how migrations are performed.
-
- @param realmPath   The path of the Realm to migrate.
- @return            The error that occurred while applying the migration if any.
-
- @see               RLMMigration
- @see               setSchemaVersion:forRealmAtPath:withMigrationBlock:
- */
-+ (NSError *)migrateRealmAtPath:(NSString *)realmPath DEPRECATED_MSG_ATTRIBUTE("Use +[RLMRealm migrateRealm:]");
-
-/**
- Performs the registered migration block on an encrypted Realm at the given path.
-
- As `migrateRealmAtPath:`, but for encrypted realms.
-
- @param realmPath   The path of the Realm to migrate.
- @param key         64-byte encryption key.
- @return            The error that occurred while applying the migration, if any.
- */
-+ (NSError *)migrateRealmAtPath:(NSString *)realmPath encryptionKey:(NSData *)key DEPRECATED_MSG_ATTRIBUTE("Use +[RLMRealm migrateRealm:]");
-
-#pragma mark -
-
-//---------------------------------------------------------------------------------------
-//@name Named Object Storage and Retrieval
-//---------------------------------------------------------------------------------------
-//
-// Realm provides a top level key/value store for storing and accessing objects by NSString.
-// This system can be extended with the RLMKeyValueStore interface to create nested
-// namespaces as needed.
-
-// Retrieve a persisted object with an NSString.
-//
-// @usage RLMObject *object = RLMRealm.defaultRealm[@"name"];
-// @param key The NSString used to identify an object
-//
-// @return    RLMObject or nil if no object is stored for the given key.
-//
-//-(id)objectForKeyedSubscript:(id <NSCopying>)key;
-
-
-// Store an object with an NSString key.
-//
-// @usage RLMRealm.defaultRealm[@"name"] = object;
-// @param obj     The object to be stored.
-// @param key     The key that identifies the object to be used for future lookups.
-//
-//-(void)setObject:(RLMObject *)obj forKeyedSubscript:(id <NSCopying>)key;
-
-
 @end
 
-//
-// Notification token - holds onto the realm and the notification block
-//
+/**
+ A token which is returned from methods which subscribe to changes to a Realm.
+
+ Change subscriptions in Realm return an RLMNotificationToken which can be used
+ to unsubscribe from the changes. You must store a strong reference to the token
+ for as long as you want to continue to receive notifications. When you wish to
+ stop, call the `-stop` method.
+ */
 @interface RLMNotificationToken : NSObject
+/// Stop receiving notifications for the subcription that returned this token.
+- (void)stop;
 @end
 
 RLM_ASSUME_NONNULL_END
