@@ -165,22 +165,15 @@ class VideoWindowController: NSWindowController {
     
     private func loadEventVideo() {
         if let url = event?.streamURL {
-            asset = AVURLAsset(URL: url, options: nil)
-            asset.loadValuesAsynchronouslyForKeys(["playable"]) {
-                dispatch_async(dispatch_get_main_queue()) {
-                    if self.asset.playable {
-                        self.playEventVideo()
-                    }
-                }
+            dispatch_async(dispatch_get_main_queue()) {
+                self.playEventVideo(url)
             }
         }
     }
     
-    private func playEventVideo() {
-        item = AVPlayerItem(asset: asset)
-        player = AVPlayer(playerItem: item)
-        item.addObserver(self, forKeyPath: "status", options: [.Initial, .New], context: nil)
-
+    private func playEventVideo(url: NSURL) {
+        player = AVPlayer(URL: url)
+        progressIndicator.stopAnimation(nil)
         playerView.player = player
     }
     
