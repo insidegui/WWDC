@@ -345,12 +345,39 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
     
+    @IBAction func removeDownloadMenuAction(sender: AnyObject) {
+        if tableView.selectedRowIndexes.count < 2 {
+            let session = sessions[tableView.clickedRow]
+            removeDownloadForURL(session.hdVideoURL)
+        } else {
+            tableView.selectedRowIndexes.enumerateIndexesUsingBlock { idx, _ in
+                let session = self.sessions[idx]
+                self.removeDownloadForURL(session.hdVideoURL)
+            }
+        }
+    }
+    
     private func addDownloadForSession(session: Session) {
         guard session.hdVideoURL != "" else { return }
         guard !VideoStore.SharedStore().hasVideo(session.hdVideoURL) else { return }
         guard !VideoStore.SharedStore().isDownloading(session.hdVideoURL) else { return }
         
         VideoStore.SharedStore().download(session.hdVideoURL)
+    }
+    
+    private func removeDownloadForURL(url: String) {
+        
+        switch VideoStore.SharedStore().removeDownload(url) {
+        case .Error(let e):
+            print("Couldn't remove download. Error: \(e)")
+            // Also show as Alert?!
+            break
+        case .NotDownloaded:
+            print("Couldn't remove download, because the file is not downloaded.")
+            break
+        case .Removed:
+            break
+        }
     }
     
     @IBAction func copyURL(sender: NSMenuItem) {

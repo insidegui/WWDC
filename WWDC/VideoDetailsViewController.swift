@@ -41,8 +41,7 @@ class VideoDetailsViewController: NSViewController {
     @IBOutlet weak var downloadController: DownloadProgressViewController!
     @IBOutlet weak var actionButtonsController: ActionButtonsViewController!
     
-    private func updateUI()
-    {
+    private func updateUI() {
         if multipleSelection {
             handleMultipleSelection()
             return
@@ -99,8 +98,7 @@ class VideoDetailsViewController: NSViewController {
         transcriptSearchResultsVC?.lines = session?.transcript?.lines.filter("text CONTAINS[c] %@", searchTerm!)
     }
     
-    private func handleMultipleSelection()
-    {
+    private func handleMultipleSelection() {
         titleLabel.stringValue = "\(selectedCount) sessions selected"
         subtitleLabel.stringValue = ""
         descriptionLabel.hidden = true
@@ -108,8 +106,7 @@ class VideoDetailsViewController: NSViewController {
         downloadController.view.hidden = true
     }
     
-    private func setupActionCallbacks()
-    {
+    private func setupActionCallbacks() {
         actionButtonsController.watchHDVideoCallback = { [unowned self] in
             if self.session!.hd_url != nil {
                 if VideoStore.SharedStore().hasVideo(self.session!.hd_url!) {
@@ -173,8 +170,7 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
-    private func doWatchVideo(sender: AnyObject?, url: String, startTime: Double?)
-    {
+    private func doWatchVideo(sender: AnyObject?, url: String, startTime: Double?) {
         let playerWindowController = VideoWindowController(session: session!, videoURL: url, startTime: startTime)
         playerWindowController.showWindow(sender)
         followWindowLifecycle(playerWindowController.window)
@@ -198,7 +194,5 @@ class VideoDetailsViewController: NSViewController {
         
         updateUI()
     }
-    
-    
     
 }
