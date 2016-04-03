@@ -125,6 +125,27 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         return (NSFileManager.defaultManager().fileExistsAtPath(localVideoPath(url)))
     }
     
+    enum RemoveDownloadResponse {
+        case NotDownloaded, Removed, Error(_:ErrorType)
+    }
+    
+    func removeDownload(url: String) -> RemoveDownloadResponse {
+        
+        if hasVideo(url) {
+            let path = localVideoPath(url)
+            let absolute = localVideoAbsoluteURLString(url)
+            do {
+                try NSFileManager.defaultManager().removeItemAtPath(path)
+                WWDCDatabase.sharedDatabase.updateDownloadedStatusForSessionWithURL(absolute, downloaded: false)
+                return .Removed
+            } catch let e {
+                return .Error(e)
+            }
+        } else {
+            return .NotDownloaded
+        }
+    }
+    
     // MARK: URL Session
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {

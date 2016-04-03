@@ -23,7 +23,7 @@ extension String {
     func words() -> [String] {
         
         var words = [String]()
-        let range = Range<String.Index>(start: self.startIndex, end: self.endIndex)
+        let range = self.startIndex..<self.endIndex
         self.enumerateSubstringsInRange(range, options: NSStringEnumerationOptions.ByWords) { (substring, _, _, _) -> () in
             words.append(substring!)
         }

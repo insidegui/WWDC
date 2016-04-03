@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9046" systemVersion="15A284" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9046"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="VideosHeaderViewController" customModule="WWDC" customModuleProvider="target">
@@ -22,11 +22,9 @@
                     <subviews>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="4Ep-ss-fl8" customClass="GRWindowMovingView">
                             <rect key="frame" x="0.0" y="0.0" width="480" height="62"/>
-                            <animations/>
                         </customView>
                         <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GHc-IG-Ous" customClass="ProgressSearchField" customModule="WWDC" customModuleProvider="target">
                             <rect key="frame" x="20" y="12" width="440" height="22"/>
-                            <animations/>
                             <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" sendsSearchStringImmediately="YES" recentsAutosaveName="search" id="aor-jz-ssL" customClass="ProgressSearchFieldCell" customModule="WWDC" customModuleProvider="target">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -41,7 +39,6 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="AHg-f6-Ks2"/>
                             </constraints>
-                            <animations/>
                         </customView>
                     </subviews>
                     <constraints>
@@ -56,7 +53,6 @@
                         <constraint firstAttribute="trailing" secondItem="GHc-IG-Ous" secondAttribute="trailing" constant="20" id="sx0-2i-IeC"/>
                         <constraint firstAttribute="bottom" secondItem="RU1-af-9gf" secondAttribute="bottom" id="tx3-6Z-2UB"/>
                     </constraints>
-                    <animations/>
                 </visualEffectView>
             </subviews>
             <constraints>
@@ -65,7 +61,6 @@
                 <constraint firstAttribute="trailing" secondItem="Xsh-VS-dnl" secondAttribute="trailing" id="c8G-90-KQe"/>
                 <constraint firstAttribute="bottom" secondItem="Xsh-VS-dnl" secondAttribute="bottom" id="shr-vE-haq"/>
             </constraints>
-            <animations/>
         </customView>
     </objects>
 </document>

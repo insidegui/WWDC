@@ -19,3 +19,4 @@
 #if TARGET_OS_IPHONE
 #error Attempting to use Realm's OSX framework in an iOS project.
 #endif
+

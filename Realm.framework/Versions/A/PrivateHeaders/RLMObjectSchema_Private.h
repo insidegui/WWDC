@@ -27,7 +27,7 @@ RLM_ASSUME_NONNULL_BEGIN
 @interface RLMObjectSchema ()
 
 // writable redecleration
-@property (nonatomic, readwrite, copy) NSArray *properties;
+@property (nonatomic, readwrite, copy) NSArray RLM_GENERIC(RLMProperty *) *properties;
 @property (nonatomic, readwrite, assign) bool isSwiftClass;
 
 // class used for this object schema
@@ -35,12 +35,16 @@ RLM_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite, assign) Class accessorClass;
 @property (nonatomic, readwrite, assign) Class standaloneClass;
 
-@property (nonatomic, readwrite) RLMProperty *primaryKeyProperty;
+@property (nonatomic, readwrite, nullable) RLMProperty *primaryKeyProperty;
+
+@property (nonatomic, readonly) NSArray RLM_GENERIC(RLMProperty *) *propertiesInDeclaredOrder;
 
 // The Realm retains its object schemas, so they need to not retain the Realm
 @property (nonatomic, unsafe_unretained, nullable) RLMRealm *realm;
 // returns a cached or new schema for a given object class
 + (instancetype)schemaForObjectClass:(Class)objectClass;
+
+- (void)sortPropertiesByColumn;
 
 @end
 

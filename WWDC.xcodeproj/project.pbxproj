@@ -11,6 +11,10 @@
 		51B28F551BB62BA9001F7A6C /* VideoTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B28F541BB62BA9001F7A6C /* VideoTableRowView.swift */; };
 		51B28F581BB6314B001F7A6C /* NSColor+GRProKitHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 51B28F571BB6314B001F7A6C /* NSColor+GRProKitHelpers.m */; };
 		51B28F5B1BB63F9E001F7A6C /* GridlessTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51B28F5A1BB63F9E001F7A6C /* GridlessTableView.swift */; };
+		C58F081D1CAD20030009D469 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C58F081B1CAD20030009D469 /* Realm.framework */; };
+		C58F081E1CAD20030009D469 /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C58F081B1CAD20030009D469 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C58F081F1CAD20030009D469 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C58F081C1CAD20030009D469 /* RealmSwift.framework */; };
+		C58F08201CAD20030009D469 /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C58F081C1CAD20030009D469 /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */; };
 		C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */; };
 		C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */; };
@@ -45,10 +49,6 @@
 		DD5E94101C283A2300E26B61 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5E940F1C283A2300E26B61 /* AboutWindow.swift */; };
 		DD76C0181BBF83C10056BB20 /* SlidesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD76C0171BBF83C10056BB20 /* SlidesDownloader.swift */; };
 		DD7F6F911AE97C99007A4E5E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7F6F901AE97C99007A4E5E /* WebKit.framework */; };
-		DD825C8B1BBF56DC00276B83 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD825C891BBF56DC00276B83 /* Realm.framework */; };
-		DD825C8C1BBF56DC00276B83 /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD825C891BBF56DC00276B83 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		DD825C8D1BBF56DC00276B83 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD825C8A1BBF56DC00276B83 /* RealmSwift.framework */; };
-		DD825C8E1BBF56DC00276B83 /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD825C8A1BBF56DC00276B83 /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD825CA11BBF572600276B83 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD825C9A1BBF571F00276B83 /* Alamofire.framework */; };
 		DD825CA21BBF572600276B83 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD825C9A1BBF571F00276B83 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DD825CA71BBF575500276B83 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD825CA51BBF575500276B83 /* Models.swift */; };
@@ -187,12 +187,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DD825C8C1BBF56DC00276B83 /* Realm.framework in Embed Frameworks */,
 				DD2016691AE402B400DD8155 /* ViewUtils.framework in Embed Frameworks */,
-				DD825C8E1BBF56DC00276B83 /* RealmSwift.framework in Embed Frameworks */,
 				DD825CB61BBF6FD400276B83 /* KVOController.framework in Embed Frameworks */,
+				C58F08201CAD20030009D469 /* RealmSwift.framework in Embed Frameworks */,
 				DD825CA21BBF572600276B83 /* Alamofire.framework in Embed Frameworks */,
 				DD89EA0D1AF48A4C0073B845 /* Updater.framework in Embed Frameworks */,
+				C58F081E1CAD20030009D469 /* Realm.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -207,6 +207,8 @@
 		51B28F561BB6314B001F7A6C /* NSColor+GRProKitHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+GRProKitHelpers.h"; sourceTree = "<group>"; };
 		51B28F571BB6314B001F7A6C /* NSColor+GRProKitHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+GRProKitHelpers.m"; sourceTree = "<group>"; };
 		51B28F5A1BB63F9E001F7A6C /* GridlessTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridlessTableView.swift; sourceTree = "<group>"; };
+		C58F081B1CAD20030009D469 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
+		C58F081C1CAD20030009D469 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
 		C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DownloadListWindowController.xib; sourceTree = "<group>"; };
 		C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListWindowController.swift; sourceTree = "<group>"; };
 		C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListProgressCellView.swift; sourceTree = "<group>"; };
@@ -243,8 +245,6 @@
 		DD5E940F1C283A2300E26B61 /* AboutWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		DD76C0171BBF83C10056BB20 /* SlidesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlidesDownloader.swift; sourceTree = "<group>"; };
 		DD7F6F901AE97C99007A4E5E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		DD825C891BBF56DC00276B83 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
-		DD825C8A1BBF56DC00276B83 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
 		DD825C8F1BBF571F00276B83 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = vendor/Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		DD825CA51BBF575500276B83 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		DD825CA61BBF575500276B83 /* WWDCDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCDatabase.swift; sourceTree = "<group>"; };
@@ -286,12 +286,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD825C8B1BBF56DC00276B83 /* Realm.framework in Frameworks */,
 				DD89EA0C1AF48A4C0073B845 /* Updater.framework in Frameworks */,
-				DD825C8D1BBF56DC00276B83 /* RealmSwift.framework in Frameworks */,
 				DD7F6F911AE97C99007A4E5E /* WebKit.framework in Frameworks */,
+				C58F081F1CAD20030009D469 /* RealmSwift.framework in Frameworks */,
 				DD2016681AE402B400DD8155 /* ViewUtils.framework in Frameworks */,
 				DDCC5D721AF1518A00F24F55 /* Crashlytics.framework in Frameworks */,
+				C58F081D1CAD20030009D469 /* Realm.framework in Frameworks */,
 				DD825CB51BBF6FD400276B83 /* KVOController.framework in Frameworks */,
 				DDEC0DF91B0E73FA001752CA /* Fabric.framework in Frameworks */,
 				DD825CA11BBF572600276B83 /* Alamofire.framework in Frameworks */,
@@ -390,10 +390,10 @@
 		DD825CAB1BBF6ED100276B83 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				C58F081B1CAD20030009D469 /* Realm.framework */,
+				C58F081C1CAD20030009D469 /* RealmSwift.framework */,
 				DD825CAC1BBF6FCC00276B83 /* DynamicFramework.xcodeproj */,
 				DD825C8F1BBF571F00276B83 /* Alamofire.xcodeproj */,
-				DD825C891BBF56DC00276B83 /* Realm.framework */,
-				DD825C8A1BBF56DC00276B83 /* RealmSwift.framework */,
 				DDEC0DF81B0E73FA001752CA /* Fabric.framework */,
 				DD89EA061AF48A300073B845 /* Updater.xcodeproj */,
 				DDCC5D711AF1518A00F24F55 /* Crashlytics.framework */,
