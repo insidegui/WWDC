@@ -355,6 +355,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                 self.removeDownloadForURL(session.hdVideoURL)
             }
         }
+        
+        reloadTablePreservingSelection()
     }
     
     private func addDownloadForSession(session: Session) {
