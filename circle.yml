@@ -5,7 +5,7 @@ machine:
     XCODE_PROJECT: WWDC.xcodeproj
     XCODE_SCHEME: WWDC
   xcode:
-    version: "6.3.1"
+    version: "7.3"
 test:
   override:
     - set -o pipefail && xcodebuild -project 'WWDC.xcodeproj' -scheme 'WWDC' 
