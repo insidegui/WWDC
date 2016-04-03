@@ -133,8 +133,10 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         
         if hasVideo(url) {
             let path = localVideoPath(url)
+            let absolute = localVideoAbsoluteURLString(url)
             do {
                 try NSFileManager.defaultManager().removeItemAtPath(path)
+                WWDCDatabase.sharedDatabase.updateDownloadedStatusForSessionWithURL(absolute, downloaded: false)
                 return .Removed
             } catch let e {
                 return .Error(e)
