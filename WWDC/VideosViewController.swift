@@ -461,7 +461,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                 let transcripts = realm.objects(Transcript.self).filter("fullText CONTAINS[c] %@", term)
                 let keysMatchingTranscripts = transcripts.map({ $0.session!.uniqueId })
                 mainQ {
-                    self.searchTermFilter = SearchFilter.Arbitrary(NSPredicate(format: "title CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, keysMatchingTranscripts))
+                    self.searchTermFilter = SearchFilter.Arbitrary(NSPredicate(format: "title CONTAINS[c] %@ OR uniqueId CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, term, keysMatchingTranscripts))
                 }
             }
         } else {
