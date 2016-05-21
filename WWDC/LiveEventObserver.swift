@@ -31,7 +31,7 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
     func start() {
         NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
         
-        timer = NSTimer.scheduledTimerWithTimeInterval(Preferences.SharedPreferences().liveEventCheckInterval, target: self, selector: "checkNow", userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(Preferences.SharedPreferences().liveEventCheckInterval, target: self, selector: #selector(LiveEventObserver.checkNow), userInfo: nil, repeats: true)
         checkNow()
     }
     

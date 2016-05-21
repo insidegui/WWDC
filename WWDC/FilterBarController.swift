@@ -48,7 +48,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         
         scrollView.delegate = self
         
-        segmentedControl.action = "segmentedControlAction:"
+        segmentedControl.action = #selector(FilterBarController.segmentedControlAction(_:))
         segmentedControl.target = self
         segmentedControl.showsMenuImmediately = true
         segmentedControl.usesCocoaLook = true
@@ -87,26 +87,26 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         }
         
         for year in years {
-            let item = NSMenuItem(title: "\(year)", action: "yearMenuAction:", keyEquivalent: "")
+            let item = NSMenuItem(title: "\(year)", action: #selector(FilterBarController.yearMenuAction(_:)), keyEquivalent: "")
             item.target = self
             item.state = yearFilter.selectedInts!.contains(year) ? NSOnState : NSOffState
             yearMenu.addItem(item)
         }
         for track in tracks {
-            let item = NSMenuItem(title: "\(track)", action: "trackMenuAction:", keyEquivalent: "")
+            let item = NSMenuItem(title: "\(track)", action: #selector(FilterBarController.trackMenuAction(_:)), keyEquivalent: "")
             item.target = self
             item.state = trackFilter.selectedStrings!.contains(track) ? NSOnState : NSOffState
             trackMenu.addItem(item)
         }
         for focus in focuses {
-            let item = NSMenuItem(title: "\(focus)", action: "focusMenuAction:", keyEquivalent: "")
+            let item = NSMenuItem(title: "\(focus)", action: #selector(FilterBarController.focusMenuAction(_:)), keyEquivalent: "")
             item.state = focusFilter.selectedStrings!.contains(focus) ? NSOnState : NSOffState
             item.target = self
             focusMenu.addItem(item)
         }
         
         for (name,state) in [("Downloaded","yes"),("Missing","no")] {
-            let item = NSMenuItem(title: "\(name)", action: "downloadedMenuAction:", keyEquivalent: "")
+            let item = NSMenuItem(title: "\(name)", action: #selector(FilterBarController.downloadedMenuAction(_:)), keyEquivalent: "")
             item.state = downloadedFilter.selectedStrings!.contains(state) ? NSOnState : NSOffState
             item.target = self
             item.representedObject = state
