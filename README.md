@@ -1,4 +1,4 @@
-Psst, want me to love you? Then [check this out](https://getbrowserhub.com) 😁
+Psst, want me to love you? Then [check this out](https://getbrowserfreedom.com) 😁
 
 # WWDC app for OS X
 
