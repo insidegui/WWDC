@@ -304,8 +304,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             WWDCDatabase.sharedDatabase.doChanges {
                 session.favorite = false
             }
+			tableView.removeRowsAtIndexes(NSIndexSet(index: tableView.clickedRow), withAnimation: NSTableViewAnimationOptions.SlideUp)
         } else {
             doMassiveSessionPropertyUpdate(.Favorite(false))
+			tableView.removeRowsAtIndexes(tableView.selectedRowIndexes, withAnimation: NSTableViewAnimationOptions.SlideUp)
         }
     }
     
