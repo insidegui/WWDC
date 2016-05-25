@@ -85,7 +85,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         scrollView.automaticallyAdjustsContentInsets = false
         scrollView.contentInsets = NSEdgeInsets(top: insetHeight, left: 0, bottom: 0, right: 0)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateScrollInsets:", name: LiveEventBannerVisibilityChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(VideosViewController.updateScrollInsets(_:)), name: LiveEventBannerVisibilityChangedNotification, object: nil)
         
         setupViewHeader(insetHeight)
         setupFilterBar()
@@ -204,7 +204,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     func setupAutomaticSessionRefresh() {
         if Preferences.SharedPreferences().automaticRefreshEnabled {
             if sessionListRefreshTimer == nil {
-                sessionListRefreshTimer = NSTimer.scheduledTimerWithTimeInterval(Preferences.SharedPreferences().automaticRefreshInterval, target: self, selector: "sessionListRefreshFromTimer", userInfo: nil, repeats: true)
+                sessionListRefreshTimer = NSTimer.scheduledTimerWithTimeInterval(Preferences.SharedPreferences().automaticRefreshInterval, target: self, selector: #selector(VideosViewController.sessionListRefreshFromTimer), userInfo: nil, repeats: true)
             }
         } else {
             sessionListRefreshTimer?.invalidate()

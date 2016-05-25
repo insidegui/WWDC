@@ -37,7 +37,7 @@ class TitlebarButtonAccessory: NSTitlebarAccessoryViewController {
         button.font = NSFont.controlContentFontOfSize(11.0)
         button.title = buttonTitle
         button.target = self
-        button.action = Selector("runButtonAction:")
+        button.action = #selector(TitlebarButtonAccessory.runButtonAction(_:))
         
         button.sizeToFit()
         view.setFrameSize(NSSize(width: button.bounds.size.width + 10.0, height: button.bounds.size.height))
