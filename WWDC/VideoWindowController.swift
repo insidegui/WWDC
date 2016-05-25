@@ -89,6 +89,7 @@ class VideoWindowController: NSWindowController {
         if let url = NSURL(string: videoURL!) {
             if event == nil {
                 player = AVPlayer(URL: url)
+                addRateObserver(player: player!)
                 playerView.player = player
                 
                 // SESSION
@@ -134,8 +135,11 @@ class VideoWindowController: NSWindowController {
     }
     
     func windowWillClose(note: NSNotification!) {
-        player?.cancelPendingPrerolls()
-        player?.pause()
+        if let player = player {
+            player.cancelPendingPrerolls()
+            player.pause()
+            removeRateObserver(player: player)
+        }
         asset = nil
         item = nil
         player = nil
@@ -173,8 +177,19 @@ class VideoWindowController: NSWindowController {
     
     private func playEventVideo(url: NSURL) {
         player = AVPlayer(URL: url)
+        addRateObserver(player: player!)
         progressIndicator.stopAnimation(nil)
         playerView.player = player
+    }
+    
+    var rate: Float = 1.0
+    
+    private func addRateObserver(player player: AVPlayer) {
+        player.addObserver(self, forKeyPath: "rate", options: [.New, .Old], context: nil)
+    }
+
+    private func removeRateObserver(player player: AVPlayer) {
+        player.removeObserver(self, forKeyPath: "rate")
     }
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -183,6 +198,17 @@ class VideoWindowController: NSWindowController {
                 dispatch_async(dispatch_get_main_queue()) {
                     self.progressIndicator.stopAnimation(nil)
                     self.player?.play()
+                }
+            }
+        } else if keyPath == "rate" {
+            if let change = change,
+               let newRate = change[NSKeyValueChangeNewKey] as? Float,
+               let oldRate = change[NSKeyValueChangeOldKey] as? Float
+            {
+                if oldRate == 0.0 && newRate == 1.0 { // play button tapped
+                    player!.rate = rate // set rate to stored one
+                } else if newRate != 0.0 { // change rate button tapped
+                    rate = newRate // store rate
                 }
             }
         } else {
