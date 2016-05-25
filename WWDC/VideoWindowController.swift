@@ -91,6 +91,7 @@ class VideoWindowController: NSWindowController {
                 player = AVPlayer(URL: url)
                 addRateObserver(player: player!)
                 playerView.player = player
+                playerView.controlsStyle = .None
                 
                 // SESSION
                 player?.currentItem!.asset.loadValuesAsynchronouslyForKeys(["tracks"]) {
@@ -109,6 +110,7 @@ class VideoWindowController: NSWindowController {
                         }
                         self.player?.play()
                         self.progressIndicator.stopAnimation(nil)
+                        self.playerView.controlsStyle = .Floating
                     }
                 }
             }
