@@ -79,7 +79,7 @@ class VideoWindowController: NSWindowController {
     override func windowDidLoad() {
         super.windowDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("windowWillClose:"), name: NSWindowWillCloseNotification, object: self.window)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NSWindowDelegate.windowWillClose(_:)), name: NSWindowWillCloseNotification, object: self.window)
         
         activity = NSProcessInfo.processInfo().beginActivityWithOptions([.IdleDisplaySleepDisabled, .IdleSystemSleepDisabled, .UserInitiated], reason: "Playing WWDC session video")
 

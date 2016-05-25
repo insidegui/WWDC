@@ -40,8 +40,8 @@ class VideoTableCellView: NSTableCellView {
     }
 
     private func updateUI() {
-        KVOController.observe(session, keyPath: "favorite", options: .New, action: "updateSessionFlags")
-        KVOController.observe(session, keyPath: "progress", options: .New, action: "updateSessionFlags")
+        KVOController.observe(session, keyPath: "favorite", options: .New, action: #selector(VideoTableCellView.updateSessionFlags))
+        KVOController.observe(session, keyPath: "progress", options: .New, action: #selector(VideoTableCellView.updateSessionFlags))
         
         NSNotificationCenter.defaultCenter().addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
             self.updateDownloadImage()

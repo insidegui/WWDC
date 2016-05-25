@@ -65,7 +65,7 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
         tableView.setDataSource(self)
         
         tableView.target = self
-        tableView.doubleAction = Selector("doubleClickedLine:")
+        tableView.doubleAction = #selector(TranscriptViewController.doubleClickedLine(_:))
         
         scrollView.automaticallyAdjustsContentInsets = false
         scrollView.contentInsets = NSEdgeInsets(top: 22.0, left: 0.0, bottom: NSHeight(searchContainer.bounds), right: 0.0)
