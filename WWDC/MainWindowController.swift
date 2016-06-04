@@ -68,5 +68,13 @@ class MainWindowController: NSWindowController {
             }
         }
     }
+    
+    @IBAction func toggleSidebar(sender: AnyObject) {
+        guard let splitController = window?.contentViewController as? NSSplitViewController where splitController.splitViewItems.count > 0 else { return }
+        
+        let sidebar = splitController.splitViewItems[0]
+        
+        sidebar.animator().collapsed = !sidebar.collapsed
+    }
 
 }

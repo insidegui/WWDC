@@ -7,11 +7,15 @@
 //
 
 import Cocoa
+import KVOController
 
 class VideoDetailsViewController: NSViewController {
     
     var videoControllers: [VideoWindowController] = []
     var slideControllers: [PDFWindowController] = []
+    
+    @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var titleTopConstraint: NSLayoutConstraint!
     
     var searchTerm: String? {
         didSet {
@@ -193,6 +197,47 @@ class VideoDetailsViewController: NSViewController {
         super.viewDidLoad()
         
         updateUI()
+    }
+    
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        
+        setupSplitDetailBehavior()
+    }
+    
+    // MARK: - SplitView containment
+    
+    //32
+    
+    private struct SplitBehaviorMetrics {
+        struct Collapsed {
+            static let titleTopConstant = CGFloat(28.0)
+            static let heightConstant = CGFloat(74.0)
+        }
+        struct Expanded {
+            static let titleTopConstant = CGFloat(16.0)
+            static let heightConstant = CGFloat(62.0)
+        }
+    }
+    
+    private func setupSplitDetailBehavior() {
+        guard let splitController = parentViewController as? NSSplitViewController where splitController.splitViewItems.count == 2 else { return }
+        
+        KVOController.observe(splitController.splitViewItems[0], keyPath: "collapsed", options: [.Initial, .New], action: #selector(splitViewCollapsedStatusDidChange))
+    }
+    
+    @objc private func splitViewCollapsedStatusDidChange() {
+        NSAnimationContext.runAnimationGroup({ _ in
+            let sidebarSplitItem = (self.parentViewController as! NSSplitViewController).splitViewItems[0]
+            
+            if sidebarSplitItem.collapsed {
+                self.titleTopConstraint.animator().constant = SplitBehaviorMetrics.Collapsed.titleTopConstant
+                self.topBarHeightConstraint.animator().constant = SplitBehaviorMetrics.Collapsed.heightConstant
+            } else {
+                self.titleTopConstraint.animator().constant = SplitBehaviorMetrics.Expanded.titleTopConstant
+                self.topBarHeightConstraint.animator().constant = SplitBehaviorMetrics.Expanded.heightConstant
+            }
+        }, completionHandler: nil)
     }
     
 }

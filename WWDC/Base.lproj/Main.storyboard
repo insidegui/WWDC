@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10116"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -347,6 +347,13 @@ CA
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="View" id="HyV-fh-RgO">
                                     <items>
+                                        <menuItem title="Toggle Sidebar" keyEquivalent="s" id="2dj-5S-Hzz">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="toggleSidebar:" target="Ady-hI-5gd" id="L1r-o0-Zyf"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Lsf-Dt-gLr"/>
                                         <menuItem title="Reload Sessions" keyEquivalent="r" id="pIQ-Lc-aWD">
                                             <connections>
                                                 <action selector="refresh:" target="Ady-hI-5gd" id="Mrv-yl-CDH"/>
@@ -480,11 +487,11 @@ CA
             <objects>
                 <splitViewController id="L88-Pe-Ufl" sceneMemberID="viewController">
                     <splitViewItems>
-                        <splitViewItem id="Gkh-4w-vV7"/>
+                        <splitViewItem holdingPriority="260" behavior="sidebar" id="Gkh-4w-vV7"/>
                         <splitViewItem id="D7Y-VE-6eA"/>
                     </splitViewItems>
                     <splitView key="splitView" autosaveName="SPLIT" dividerStyle="thin" vertical="YES" id="gxR-0J-uE5">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="316"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </splitView>
                     <connections>
@@ -494,7 +501,7 @@ CA
                 </splitViewController>
                 <customObject id="1lW-hg-qcv" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="721"/>
+            <point key="canvasLocation" x="88" y="762"/>
         </scene>
         <!--Videos View Controller-->
         <scene sceneID="JYc-XG-PrL">
@@ -870,6 +877,8 @@ CA
                         <outlet property="downloadController" destination="SkJ-kP-aeS" id="dW2-ke-WsS"/>
                         <outlet property="subtitleLabel" destination="Q3D-NN-RLa" id="pFP-8H-gdR"/>
                         <outlet property="titleLabel" destination="OTC-kh-gjR" id="VaE-Md-v3f"/>
+                        <outlet property="titleTopConstraint" destination="fGc-c6-zbn" id="W3Q-o9-K2x"/>
+                        <outlet property="topBarHeightConstraint" destination="hPH-mv-MND" id="qDM-x9-XVg"/>
                         <outlet property="transcriptControllerContainerView" destination="d1c-zb-xge" id="Lac-ej-d8X"/>
                     </connections>
                 </viewController>
@@ -891,7 +900,7 @@ CA
                     </connections>
                 </customObject>
             </objects>
-            <point key="canvasLocation" x="715.5" y="931.5"/>
+            <point key="canvasLocation" x="860.5" y="927.5"/>
         </scene>
     </scenes>
     <resources>
