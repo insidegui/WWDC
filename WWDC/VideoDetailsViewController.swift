@@ -207,8 +207,6 @@ class VideoDetailsViewController: NSViewController {
     
     // MARK: - SplitView containment
     
-    //32
-    
     private struct SplitBehaviorMetrics {
         struct Collapsed {
             static let titleTopConstant = CGFloat(28.0)
