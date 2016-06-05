@@ -40,7 +40,7 @@ class LiveSessionTimeRemainingView: NSView {
         
         let titleOrigin = NSPoint(
             x: round(bounds.width / 2.0 - attributedTitle.size().width / 2.0),
-            y: round(bounds.width / 2.0 - attributedTitle.size().width / 2.0)
+            y: round(bounds.height / 2.0 - attributedTitle.size().height / 2.0)
         )
         
         attributedTitle.drawAtPoint(titleOrigin)
@@ -48,7 +48,7 @@ class LiveSessionTimeRemainingView: NSView {
     
     override var intrinsicContentSize: NSSize {
         let titleSize = attributedTitle.size()
-        return NSSize(width: titleSize.width + 10.0, height: titleSize.height + 6.0)
+        return NSSize(width: titleSize.width + 10.0, height: titleSize.height + 4.0)
     }
     
     func sizeToFit() {
