@@ -167,7 +167,7 @@ class VideoDetailsViewController: NSViewController {
             return (videoWC as? VideoWindowController)?.session?.uniqueId == session.uniqueId
         }
 
-        return filteredControllers.first as! VideoWindowController
+        return filteredControllers.first as? VideoWindowController
     }
     
     private func watchVideo(startTime: Double) {
