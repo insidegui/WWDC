@@ -1,5 +1,59 @@
 # Change Log
 
+## [3.3](https://github.com/insidegui/WWDC/tree/3.3) (2016-06-05)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.1...3.3)
+
+**Implemented enhancements:**
+
+- When a video is downloaded there's no built-in way to delete it [\#51](https://github.com/insidegui/WWDC/issues/51)
+
+**Fixed bugs:**
+
+- Crash when selecting an un-favorited video [\#125](https://github.com/insidegui/WWDC/issues/125)
+
+**Closed issues:**
+
+- don't find way for downloading SD video [\#121](https://github.com/insidegui/WWDC/issues/121)
+- Integration with existing downloaded videos [\#120](https://github.com/insidegui/WWDC/issues/120)
+- Can't switch subtitles to Chinese when Watch HD Video [\#118](https://github.com/insidegui/WWDC/issues/118)
+- Please add chinese transcript support [\#117](https://github.com/insidegui/WWDC/issues/117)
+
+**Merged pull requests:**
+
+- Updates tableView when user de-favorites session [\#129](https://github.com/insidegui/WWDC/pull/129) ([peterkos](https://github.com/peterkos))
+- Fixes bug of reseting playback rate to 1 after pressing pause then play. [\#128](https://github.com/insidegui/WWDC/pull/128) ([valeriyvan](https://github.com/valeriyvan))
+- Fixes soon be deprecated string selectors. [\#127](https://github.com/insidegui/WWDC/pull/127) ([valeriyvan](https://github.com/valeriyvan))
+- Makes sessions searchable by session number. [\#126](https://github.com/insidegui/WWDC/pull/126) ([valeriyvan](https://github.com/valeriyvan))
+- Updated browserhub link to browserfreedom [\#124](https://github.com/insidegui/WWDC/pull/124) ([peterkos](https://github.com/peterkos))
+- add 'remove download' option [\#119](https://github.com/insidegui/WWDC/pull/119) ([finngaida](https://github.com/finngaida))
+
+## [3.1](https://github.com/insidegui/WWDC/tree/3.1) (2016-03-07)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.2...3.1)
+
+## [3.2](https://github.com/insidegui/WWDC/tree/3.2) (2016-03-07)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.0...3.2)
+
+**Implemented enhancements:**
+
+- Better searching through slide PDFs [\#116](https://github.com/insidegui/WWDC/issues/116)
+- Apple TV Tech Talks [\#115](https://github.com/insidegui/WWDC/issues/115)
+- Hotkey for global search [\#112](https://github.com/insidegui/WWDC/issues/112)
+- Support filtering for missing items [\#110](https://github.com/insidegui/WWDC/issues/110)
+
+**Fixed bugs:**
+
+- video play issue [\#109](https://github.com/insidegui/WWDC/issues/109)
+- Error trying to AirPlay [\#108](https://github.com/insidegui/WWDC/issues/108)
+- Crash while playing video [\#96](https://github.com/insidegui/WWDC/issues/96)
+
+**Closed issues:**
+
+- WWDC2014-716 is missing [\#107](https://github.com/insidegui/WWDC/issues/107)
+
+**Merged pull requests:**
+
+- \#110 - filter for locally missing items as well [\#111](https://github.com/insidegui/WWDC/pull/111) ([lmihalkovic](https://github.com/lmihalkovic))
+
 ## [3.0](https://github.com/insidegui/WWDC/tree/3.0) (2016-02-07)
 [Full Changelog](https://github.com/insidegui/WWDC/compare/2.3...3.0)
 
