@@ -20,16 +20,6 @@ class MainWindowController: NSWindowController {
                 Preferences.SharedPreferences().mainWindowFrame = window.frame
             }
         }
-        
-        NSNotificationCenter.defaultCenter().addObserverForName(LiveEventNextInfoChangedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { _ in
-            if let liveBanner = LiveEventBannerViewController.DefaultController {
-                liveBanner.event = LiveEventObserver.SharedObserver().nextEvent
-                if let window = self.window {
-                    window.contentView!.addSubview(liveBanner.view)
-                    liveBanner.prepareForParentView(window.contentView!)
-                }
-            }
-        }
     }
     
     override func showWindow(sender: AnyObject?) {

@@ -85,16 +85,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         scrollView.automaticallyAdjustsContentInsets = false
         scrollView.contentInsets = NSEdgeInsets(top: insetHeight, left: 0, bottom: 0, right: 0)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(VideosViewController.updateScrollInsets(_:)), name: LiveEventBannerVisibilityChangedNotification, object: nil)
-        
-        setupViewHeader(insetHeight)
+       setupViewHeader(insetHeight)
         setupFilterBar()
-    }
-    
-    func updateScrollInsets(note: NSNotification?) {
-        if let bannerController = LiveEventBannerViewController.DefaultController {
-            scrollView.contentInsets = NSEdgeInsets(top: scrollView.contentInsets.top, left: 0, bottom: bannerController.barHeight, right: 0)
-        }
     }
     
     func setupViewHeader(insetHeight: CGFloat) {
