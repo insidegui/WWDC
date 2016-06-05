@@ -17,7 +17,13 @@
     release.identifier = [dict[@"id"] intValue];
     release.version = dict[@"tag_name"];
     release.notes = dict[@"body"];
-    release.download = dict[@"assets"][0][@"browser_download_url"];
+    
+    if ([dict[@"assets"] respondsToSelector:@selector(count)]) {
+        if ([dict[@"assets"] count] > 0) {
+            release.download = dict[@"assets"][0][@"browser_download_url"];
+        }
+    }
+    
     release.prerelease = [dict[@"prerelease"] boolValue];
     release.draft = [dict[@"draft"] boolValue];
     

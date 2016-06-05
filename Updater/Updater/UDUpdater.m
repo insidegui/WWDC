@@ -88,9 +88,9 @@
         NSLog(@"Latest release available is %@", latestRelease.version);
         #endif
         
-        if (latestRelease.prerelease || latestRelease.draft) {
+        if (latestRelease.prerelease || latestRelease.draft || latestRelease.download == nil || [latestRelease.download isEqualToString:@""]) {
             #ifdef DEBUG
-            NSLog(@"Latest release is prerelease or draft, ignoring.");
+            NSLog(@"Latest release is prerelease, draft or empty. Ignoring...");
             #endif
             return;
         }
