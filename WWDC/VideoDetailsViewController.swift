@@ -46,6 +46,10 @@ class VideoDetailsViewController: NSViewController {
     @IBOutlet weak var actionButtonsController: ActionButtonsViewController!
     
     private func updateUI() {
+        if liveSessionsAvailable && session != nil {
+            showLiveBanner()
+        }
+        
         if multipleSelection {
             handleMultipleSelection()
             return
@@ -56,6 +60,8 @@ class VideoDetailsViewController: NSViewController {
         
         actionButtonsController.session = session
         setupActionCallbacks()
+        
+        titleLabel.textColor = NSColor.labelColor()
         
         if let session = self.session {
             titleLabel.stringValue = session.title
@@ -72,6 +78,9 @@ class VideoDetailsViewController: NSViewController {
             subtitleLabel.stringValue = "Select a session to see It here"
             descriptionLabel.hidden = true
             downloadController.session = nil
+            
+            showAvailableLiveSessionsIfAvailable()
+            liveSessionsBannerView?.hidden = true
         }
         
         setupTranscriptResultsViewIfNeeded()
@@ -197,6 +206,8 @@ class VideoDetailsViewController: NSViewController {
         super.viewDidLoad()
         
         updateUI()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(showAvailableLiveSessionsIfAvailable(_:)), name: LiveSessionsListDidChangeNotification, object: nil)
     }
     
     override func viewWillAppear() {
@@ -236,6 +247,55 @@ class VideoDetailsViewController: NSViewController {
                 self.topBarHeightConstraint.animator().constant = SplitBehaviorMetrics.Expanded.heightConstant
             }
         }, completionHandler: nil)
+    }
+    
+    // MARK: - Live Sessions
+    
+    private var liveSessionsBannerView: LiveSessionsBannerView!
+    
+    private var liveSessionsAvailable: Bool {
+        return LiveEventObserver.SharedObserver().liveSessions.count > 0
+    }
+    
+    @IBAction func showAvailableLiveSessionsIfAvailable(sender: AnyObject? = nil) {
+        guard liveSessionsAvailable else {
+            liveSessionsBannerView?.hidden = true
+            return
+        }
+        guard session == nil else { return showLiveBanner() }
+        
+        titleLabel.stringValue = "Live Sessions"
+        titleLabel.textColor = liveSessionsAvailable ? Theme.WWDCTheme.liveColor : NSColor.labelColor()
+        subtitleLabel.stringValue = "WWDC sessions streaming live now"
+        descriptionLabel.hidden = true
+        downloadController.session = nil
+        
+        NSLog("\(LiveEventObserver.SharedObserver().liveSessions)")
+    }
+    
+    private func showLiveBanner() {
+        if liveSessionsBannerView == nil {
+            liveSessionsBannerView = LiveSessionsBannerView(frame: NSRect(x: 0.0, y: 0.0, width: view.bounds.width, height: 38.0))
+            liveSessionsBannerView.autoresizingMask = [.ViewWidthSizable, .ViewMaxYMargin]
+            view.addSubview(liveSessionsBannerView)
+            
+            let liveSessionsGesture = NSClickGestureRecognizer(target: self, action: #selector(clickedLiveSessionsBanner))
+            liveSessionsBannerView.addGestureRecognizer(liveSessionsGesture)
+        }
+        
+        let count = LiveEventObserver.SharedObserver().liveSessions.count
+        
+        if count > 1 {
+            liveSessionsBannerView.title = "There are \(count) sessions live right now, click here to see them."
+        } else {
+            liveSessionsBannerView.title = "There is a session live right now, click here to see It."
+        }
+        
+        liveSessionsBannerView.hidden = false
+    }
+    
+    @objc private func clickedLiveSessionsBanner() {
+        session = nil
     }
     
 }

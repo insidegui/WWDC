@@ -234,6 +234,7 @@ class LiveSession {
     var title = ""
     var summary = ""
     var startsAt: NSDate?
+    var endsAt: NSDate?
     var streamURL: NSURL?
     var alternateStreamURL = ""
     var isLiveRightNow = false
@@ -277,6 +278,38 @@ class LiveSession {
         if let startsAtString = jsonObject[Keys.startsAt].string {
             let startsAtWithZone = startsAtString+_dateTimezone
             startsAt = formatter.dateFromString(startsAtWithZone)
+        }
+    }
+    
+    init(liveSessionJSON: JSON) {
+        id = liveSessionJSON[Keys.id].intValue
+        
+        if let title = liveSessionJSON[Keys.title].string {
+            self.title = title
+        } else {
+            self.title = ""
+        }
+        
+        if let description = liveSessionJSON[Keys.description].string {
+            self.summary = description
+        } else {
+            self.summary = ""
+        }
+        
+        if let streamURL = liveSessionJSON["url"].string {
+            self.streamURL = NSURL(string: streamURL)
+        }
+        
+        isLiveRightNow = liveSessionJSON[Keys.isLiveRightNow].boolValue
+        
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
+        
+        if let startsAtString = liveSessionJSON["start_date"].string {
+            startsAt = formatter.dateFromString(startsAtString)
+        }
+        if let endsAtString = liveSessionJSON["end_date"].string {
+            endsAt = formatter.dateFromString(endsAtString)
         }
     }
 }

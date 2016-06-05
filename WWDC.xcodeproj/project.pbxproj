@@ -85,6 +85,7 @@
 		DDF1667F1D03C9CF006780BF /* WWDCPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDF1667D1D03C9C5006780BF /* WWDCPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDF166831D03CB69006780BF /* PlayerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166821D03CB69006780BF /* PlayerExtensions.swift */; };
 		DDF166851D03CD69006780BF /* WWDCEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166841D03CD69006780BF /* WWDCEnvironment.swift */; };
+		DDF166871D03F6F6006780BF /* LiveSessionsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166861D03F6F6006780BF /* LiveSessionsBannerView.swift */; };
 		DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */; };
 		DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */; };
 		DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */; };
@@ -341,6 +342,7 @@
 		DDF1666C1D03C9C5006780BF /* WWDCPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WWDCPlayer.xcodeproj; path = WWDCPlayer/WWDCPlayer.xcodeproj; sourceTree = "<group>"; };
 		DDF166821D03CB69006780BF /* PlayerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerExtensions.swift; sourceTree = "<group>"; };
 		DDF166841D03CD69006780BF /* WWDCEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCEnvironment.swift; sourceTree = "<group>"; };
+		DDF166861D03F6F6006780BF /* LiveSessionsBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionsBannerView.swift; sourceTree = "<group>"; };
 		DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEventObserver.swift; sourceTree = "<group>"; };
 		DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressViewController.swift; sourceTree = "<group>"; };
 		DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 				DD20166D1AE40D0100DD8155 /* ContentBackgroundView.swift */,
 				DD3FDF191BC2EDFC0078B06C /* RoundPlayButton.swift */,
 				DD5E940F1C283A2300E26B61 /* AboutWindow.swift */,
+				DDF166861D03F6F6006780BF /* LiveSessionsBannerView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -936,6 +939,7 @@
 				DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */,
 				DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */,
 				DD0974DF1B18AAA8006A3C77 /* URLSchemeHandler.swift in Sources */,
+				DDF166871D03F6F6006780BF /* LiveSessionsBannerView.swift in Sources */,
 				DD825CA81BBF575500276B83 /* WWDCDatabase.swift in Sources */,
 				DD2CC38C1AF4161700FC5F68 /* Preferences.swift in Sources */,
 				DD3FDF1A1BC2EDFC0078B06C /* RoundPlayButton.swift in Sources */,

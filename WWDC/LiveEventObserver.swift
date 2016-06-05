@@ -9,6 +9,7 @@
 import Cocoa
 import WWDCPlayer
 
+public let LiveSessionsListDidChangeNotification = "LiveSessionsListDidChangeNotification"
 public let LiveEventNextInfoChangedNotification = "LiveEventNextInfoChangedNotification"
 public let LiveEventTitleAvailableNotification = "LiveEventTitleAvailableNotification"
 public let LiveEventWillStartPlayingNotification = "LiveEventWillStartPlayingNotification"
@@ -36,7 +37,19 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
         checkNow()
     }
     
+    var liveSessions = [LiveSession]() {
+        didSet {
+            NSNotificationCenter.defaultCenter().postNotificationName(LiveSessionsListDidChangeNotification, object: self)
+        }
+    }
+    
     func checkNow() {
+        checkForLiveWWDCSessions { sessions in
+            dispatch_async(dispatch_get_main_queue()) {
+                self.liveSessions = sessions
+            }
+        }
+        
         checkForLiveEvent { available, event in
             dispatch_async(dispatch_get_main_queue()) {
                 if !available && self.liveEventPlayerController != nil {
@@ -119,20 +132,18 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
         }
     }
     
-    private let _liveServiceURL = WWDCEnvironment.specialLiveEventURL
+    private var specialLiveURL: NSURL {
+        return NSURL(string: WWDCEnvironment.specialLiveEventURL)!
+    }
     
-    private var liveURL: NSURL {
-        get {
-            sranddev()
-            // adds a random number as a parameter to completely prevent any caching
-            return NSURL(string: "\(_liveServiceURL)?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())")!
-        }
+    private var liveSessionsURL: NSURL {
+        return NSURL(string: WWDCEnvironment.liveSessionsURL)!
     }
     
     let URLSession2 = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
     
     func checkForLiveEvent(completionHandler: (Bool, LiveSession?) -> ()) {
-        let task = URLSession2.dataTaskWithURL(liveURL) { data, response, error in
+        let task = URLSession2.dataTaskWithURL(specialLiveURL) { data, response, error in
             if data == nil {
                 completionHandler(false, nil)
                 return
@@ -146,6 +157,24 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
             } else {
                 completionHandler(false, nil)
             }
+        }
+        task.resume()
+    }
+    
+    func checkForLiveWWDCSessions(completionHandler: (liveSessions: [LiveSession]) -> ()) {
+        let task = URLSession2.dataTaskWithURL(liveSessionsURL) { data, response, error in
+            guard let data = data where data.length > 0 else {
+                completionHandler(liveSessions: [])
+                return
+            }
+            
+            let jsonData = JSON(data: data)
+            guard let sessionsJSON = jsonData["live_sessions"].array else {
+                completionHandler(liveSessions: [])
+                return
+            }
+            
+            completionHandler(liveSessions: sessionsJSON.map({ LiveSession(liveSessionJSON: $0) }))
         }
         task.resume()
     }

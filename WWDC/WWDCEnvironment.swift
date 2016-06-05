@@ -33,6 +33,8 @@ struct WWDCEnvironment {
     }
     
     private static func URL(path: String) -> String {
+        sranddev()
+        
         return server + path + cacheAvoidingToken
     }
     
@@ -50,6 +52,10 @@ struct WWDCEnvironment {
     
     static var specialLiveEventURL: String {
         return URL("/live.json")
+    }
+    
+    static var liveSessionsURL: String {
+        return URL("/videos_live.php")
     }
     
 }

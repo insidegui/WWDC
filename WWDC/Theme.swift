@@ -19,6 +19,7 @@ class Theme: NSObject {
     let separatorColor = NSColor.grayColor().colorWithAlphaComponent(0.3)
     let backgroundColor = NSColor.whiteColor()
     let fillColor = NSColor(calibratedRed: 0, green: 0.49, blue: 1, alpha: 1)
+    let liveColor = NSColor(calibratedRed:0.823, green:0.114, blue:0.053, alpha:1)
     
     private var cachedImages: [String:CGImage] = [:]
     
