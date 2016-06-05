@@ -117,6 +117,19 @@ class Session: Object {
         return "\(year) | \(track) | \(focus)"
     }
     
+    func isSemanticallyEqualToSession(otherSession: Session) -> Bool {
+        return id == otherSession.id &&
+            year == otherSession.year &&
+            date == otherSession.date &&
+            track == otherSession.track &&
+            focus == otherSession.focus &&
+            title == otherSession.title &&
+            summary == otherSession.summary &&
+            videoURL == otherSession.videoURL &&
+            hdVideoURL == otherSession.hdVideoURL &&
+            slidesURL == otherSession.slidesURL
+    }
+    
 }
 
 enum SearchFilter {

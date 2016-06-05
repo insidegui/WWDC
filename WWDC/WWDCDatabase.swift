@@ -181,7 +181,11 @@ typealias SessionsUpdatedCallback = () -> Void
                     
                     var session = Session(json: jsonSession)
 
-                    if backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) == nil {
+                    if let existingSession = backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) {
+                        if !existingSession.isSemanticallyEqualToSession(session) {
+                            newSessionKeys.append(session.uniqueId)
+                        }
+                    } else {
                         newSessionKeys.append(session.uniqueId)
                     }
                     backgroundRealm.beginWrite()
