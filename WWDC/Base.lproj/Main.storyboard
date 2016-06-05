@@ -372,6 +372,11 @@ CA
                                                 <action selector="showTranscriptWindow:" target="Ady-hI-5gd" id="aev-Jc-EbN"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Change Playback Rate" keyEquivalent="R" id="TqR-eO-x8y">
+                                            <connections>
+                                                <action selector="changePlaybackRate:" target="Ady-hI-5gd" id="q8j-qN-bzo"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Uij-Id-KXF"/>
                                         <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
