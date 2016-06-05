@@ -1,0 +1,357 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DDD9CCD51D035978002A36F2 /* WWDCPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = DDD9CCD41D035978002A36F2 /* WWDCPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDD9CCE91D0359A7002A36F2 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD9CCE81D0359A7002A36F2 /* VideoPlayerViewController.swift */; };
+		DDD9CCEB1D035B55002A36F2 /* VideoPlayerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD9CCEA1D035B55002A36F2 /* VideoPlayerWindow.swift */; };
+		DDD9CCF21D035F04002A36F2 /* VideoPlayerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD9CCF11D035F04002A36F2 /* VideoPlayerWindowController.swift */; };
+		DDD9CCF71D039C49002A36F2 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDD9CCF61D039C49002A36F2 /* WhiteSpinner.car */; };
+		DDD9CCFB1D03A382002A36F2 /* UIDebugger.h in Headers */ = {isa = PBXBuildFile; fileRef = DDD9CCF91D03A382002A36F2 /* UIDebugger.h */; };
+		DDD9CCFC1D03A382002A36F2 /* UIDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD9CCFA1D03A382002A36F2 /* UIDebugger.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DDD9CCD11D035978002A36F2 /* WWDCPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WWDCPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDD9CCD41D035978002A36F2 /* WWDCPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WWDCPlayer.h; sourceTree = "<group>"; };
+		DDD9CCD61D035978002A36F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDD9CCE81D0359A7002A36F2 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
+		DDD9CCEA1D035B55002A36F2 /* VideoPlayerWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindow.swift; sourceTree = "<group>"; };
+		DDD9CCF11D035F04002A36F2 /* VideoPlayerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindowController.swift; sourceTree = "<group>"; };
+		DDD9CCF61D039C49002A36F2 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = WhiteSpinner.car; sourceTree = "<group>"; };
+		DDD9CCF91D03A382002A36F2 /* UIDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDebugger.h; sourceTree = "<group>"; };
+		DDD9CCFA1D03A382002A36F2 /* UIDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDebugger.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DDD9CCCD1D035978002A36F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DDD9CCC71D035978002A36F2 = {
+			isa = PBXGroup;
+			children = (
+				DDD9CCD31D035978002A36F2 /* WWDCPlayer */,
+				DDD9CCD21D035978002A36F2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DDD9CCD21D035978002A36F2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DDD9CCD11D035978002A36F2 /* WWDCPlayer.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DDD9CCD31D035978002A36F2 /* WWDCPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				DDD9CCF51D039C49002A36F2 /* Resources */,
+				DDD9CCE71D035986002A36F2 /* Classes */,
+				DDD9CCD41D035978002A36F2 /* WWDCPlayer.h */,
+				DDD9CCD61D035978002A36F2 /* Info.plist */,
+			);
+			path = WWDCPlayer;
+			sourceTree = "<group>";
+		};
+		DDD9CCE71D035986002A36F2 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				DDD9CCF81D03A378002A36F2 /* Helpers */,
+				DDD9CCF41D03610D002A36F2 /* Views */,
+				DDD9CCF31D036106002A36F2 /* Controllers */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		DDD9CCF31D036106002A36F2 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DDD9CCF11D035F04002A36F2 /* VideoPlayerWindowController.swift */,
+				DDD9CCE81D0359A7002A36F2 /* VideoPlayerViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		DDD9CCF41D03610D002A36F2 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DDD9CCEA1D035B55002A36F2 /* VideoPlayerWindow.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		DDD9CCF51D039C49002A36F2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DDD9CCF61D039C49002A36F2 /* WhiteSpinner.car */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DDD9CCF81D03A378002A36F2 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				DDD9CCF91D03A382002A36F2 /* UIDebugger.h */,
+				DDD9CCFA1D03A382002A36F2 /* UIDebugger.m */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DDD9CCCE1D035978002A36F2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDD9CCD51D035978002A36F2 /* WWDCPlayer.h in Headers */,
+				DDD9CCFB1D03A382002A36F2 /* UIDebugger.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DDD9CCD01D035978002A36F2 /* WWDCPlayer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DDD9CCD91D035978002A36F2 /* Build configuration list for PBXNativeTarget "WWDCPlayer" */;
+			buildPhases = (
+				DDD9CCCC1D035978002A36F2 /* Sources */,
+				DDD9CCCD1D035978002A36F2 /* Frameworks */,
+				DDD9CCCE1D035978002A36F2 /* Headers */,
+				DDD9CCCF1D035978002A36F2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WWDCPlayer;
+			productName = WWDCPlayer;
+			productReference = DDD9CCD11D035978002A36F2 /* WWDCPlayer.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DDD9CCC81D035978002A36F2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = "Guilherme Rambo";
+				TargetAttributes = {
+					DDD9CCD01D035978002A36F2 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = DDD9CCCB1D035978002A36F2 /* Build configuration list for PBXProject "WWDCPlayer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DDD9CCC71D035978002A36F2;
+			productRefGroup = DDD9CCD21D035978002A36F2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DDD9CCD01D035978002A36F2 /* WWDCPlayer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DDD9CCCF1D035978002A36F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDD9CCF71D039C49002A36F2 /* WhiteSpinner.car in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DDD9CCCC1D035978002A36F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDD9CCF21D035F04002A36F2 /* VideoPlayerWindowController.swift in Sources */,
+				DDD9CCE91D0359A7002A36F2 /* VideoPlayerViewController.swift in Sources */,
+				DDD9CCFC1D03A382002A36F2 /* UIDebugger.m in Sources */,
+				DDD9CCEB1D035B55002A36F2 /* VideoPlayerWindow.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		DDD9CCD71D035978002A36F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DDD9CCD81D035978002A36F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DDD9CCDA1D035978002A36F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = WWDCPlayer/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "$(inherited) -D DEBUG";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.WWDCPlayer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DDD9CCDB1D035978002A36F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = WWDCPlayer/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.WWDCPlayer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DDD9CCCB1D035978002A36F2 /* Build configuration list for PBXProject "WWDCPlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDD9CCD71D035978002A36F2 /* Debug */,
+				DDD9CCD81D035978002A36F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DDD9CCD91D035978002A36F2 /* Build configuration list for PBXNativeTarget "WWDCPlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDD9CCDA1D035978002A36F2 /* Debug */,
+				DDD9CCDB1D035978002A36F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DDD9CCC81D035978002A36F2 /* Project object */;
+}
