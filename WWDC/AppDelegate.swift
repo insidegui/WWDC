@@ -110,6 +110,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Courtesy Dialogs
     
     private func showCourtesyDialogs() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(WWDCWeekDidStart), name: WWDCWeekDidStartNotification, object: nil)
+        
+        NewWWDCGreeter().presentAutomaticRefreshSuggestionIfAppropriate()
+    }
+    
+    @objc private func WWDCWeekDidStart() {
         NewWWDCGreeter().presentAutomaticRefreshSuggestionIfAppropriate()
     }
     

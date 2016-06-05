@@ -23,6 +23,9 @@ private let _sharedWWDCDatabase = WWDCDatabase()
 
 typealias SessionsUpdatedCallback = () -> Void
 
+let WWDCWeekDidStartNotification = "WWDCWeekDidStartNotification"
+let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
+
 @objc class WWDCDatabase: NSObject {
     
     private let currentDBVersion = UInt64(1)
@@ -128,6 +131,22 @@ typealias SessionsUpdatedCallback = () -> Void
             
             // if the fetched config from the service is equal to the config in the database, don't bother updating It
             guard !fetchedConfig.isEqualToConfig(self.config) else { return }
+            
+            if fetchedConfig.isWWDCWeek {
+                mainQ {
+                    #if DEBUG
+                        print("WWDC week started")
+                    #endif
+                    NSNotificationCenter.defaultCenter().postNotificationName(WWDCWeekDidStartNotification, object: nil)
+                }
+            } else {
+                mainQ {
+                    #if DEBUG
+                        print("WWDC week ended")
+                    #endif
+                    NSNotificationCenter.defaultCenter().postNotificationName(WWDCWeekDidEndNotification, object: nil)
+                }
+            }
             
             print("AppConfig changed")
             
