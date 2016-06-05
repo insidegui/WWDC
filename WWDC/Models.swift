@@ -21,7 +21,7 @@ class AppConfig: Object {
         self.init()
         
         self.sessionsURL = json["sessions"].stringValue
-        self.videosURL = json["url"].stringValue
+        self.videosURL = json["videos"].stringValue
         self.isWWDCWeek = json["wwdc_week"].intValue == 1;
     }
     

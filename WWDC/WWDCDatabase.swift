@@ -28,8 +28,18 @@ typealias SessionsUpdatedCallback = () -> Void
     private let currentDBVersion = UInt64(1)
     
     private struct Constants {
-        static let internalServiceURL = "http://wwdc.guilhermerambo.me/index.json"
-        static let extraVideosURL = "http://wwdc.guilhermerambo.me/extra.json"
+        static var internalServiceURL: String {
+            #if DEBUG
+                if NSProcessInfo.processInfo().arguments.contains("--use-localhost") {
+                    return "http://localhost/index.json?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
+                } else {
+                    return "http://wwdc.guilhermerambo.me/index.json?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
+                }
+            #else
+                return "http://wwdc.guilhermerambo.me/index.json?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
+            #endif
+        }
+        static let extraVideosURL = "http://wwdc.guilhermerambo.me/extra.json?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
         static let asciiServiceBaseURL = "http://asciiwwdc.com/"
     }
 
@@ -111,6 +121,8 @@ typealias SessionsUpdatedCallback = () -> Void
     /// Orders the videos by year (descending) and session number (ascending)
     lazy var sortDescriptorsForSessionList: [SortDescriptor] = [SortDescriptor(property: "year", ascending: false), SortDescriptor(property: "id", ascending: true)]
     
+    private var shouldIgnoreCache = false
+    
     private func fetchOrUpdateAppleServiceURLs() {
         Alamofire.request(.GET, Constants.internalServiceURL).response { _, _, data, error in
             guard let jsonData = data else {
@@ -118,7 +130,11 @@ typealias SessionsUpdatedCallback = () -> Void
                 return
             }
             
-            let fetchedConfig = AppConfig(json: JSON(data: jsonData))
+            let configJSON = JSON(data: jsonData)
+            
+            self.shouldIgnoreCache = configJSON["ignore_cache"].intValue == 1
+            
+            let fetchedConfig = AppConfig(json: configJSON)
             
             // if the fetched config from the service is equal to the config in the database, don't bother updating It
             guard !fetchedConfig.isEqualToConfig(self.config) else { return }
@@ -147,7 +163,7 @@ typealias SessionsUpdatedCallback = () -> Void
                 
                 mainQS {
                     // check if the videos have been updated since the last fetch
-                    if json["updated"].stringValue == self.config.videosUpdatedAt {
+                    if json["updated"].stringValue == self.config.videosUpdatedAt && !self.shouldIgnoreCache {
                         print("Video list did not change")
                         newVideosAvailable = false
                     } else {
@@ -168,6 +184,11 @@ typealias SessionsUpdatedCallback = () -> Void
                 
                 // create and store/update each video
                 for jsonSession in sessionsArray {
+                    // WWDC 2016 updated the API to return all sessions even when they don't have a video URL yet
+                    // sessions are only valid for this app if URL is present
+                    // live sessions are handled separately
+                    if jsonSession["url"].string == nil { continue }
+                    
                     var session = Session(json: jsonSession)
 
                     if backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) == nil {
