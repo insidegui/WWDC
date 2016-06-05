@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import WWDCPlayer
 
 public let LiveEventNextInfoChangedNotification = "LiveEventNextInfoChangedNotification"
 public let LiveEventTitleAvailableNotification = "LiveEventTitleAvailableNotification"
@@ -22,7 +23,7 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
     }
     private var lastEventFound: LiveSession?
     private var timer: NSTimer?
-    private var liveEventPlayerController: VideoWindowController?
+    private var liveEventPlayerController: VideoPlayerWindowController?
     
     class func SharedObserver() -> LiveEventObserver {
         return _sharedInstance
@@ -40,20 +41,21 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
             dispatch_async(dispatch_get_main_queue()) {
                 if !available && self.liveEventPlayerController != nil {
                     self.liveEventPlayerController?.close()
+                    self.liveEventPlayerController = nil
                     return
                 }
                 
-                // an event is available
-                if available && event != nil {
-                    self.lastEventFound = event
-                    self.playEvent(event!)
+                if let lastEvent = self.lastEventFound, currentEvent = event where lastEvent.streamURL != currentEvent.streamURL {
+                    // event streaming URL changed
+                    self.doPlayEvent(currentEvent, ignoreExisting: true)
+                } else {
+                    // an event is available
+                    if available && event != nil {
+                        self.playEvent(event!)
+                    }
                 }
-            }
-        }
-        
-        fetchNextLiveEvent { available, event in
-            dispatch_async(dispatch_get_main_queue()) {
-                self.nextEvent = event
+                
+                self.lastEventFound = event
             }
         }
     }
@@ -66,16 +68,22 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
         showNotification(event)
     }
     
-    private func doPlayEvent(event: LiveSession) {
-        // we already have a live event playing, just return
-        if liveEventPlayerController != nil {
+    private func doPlayEvent(event: LiveSession, ignoreExisting: Bool = false) {
+        if liveEventPlayerController != nil && !ignoreExisting {
             NSNotificationCenter.defaultCenter().postNotificationName(LiveEventTitleAvailableNotification, object: event.title)
+            liveEventPlayerController?.window?.title = event.title
             return
         }
         
         NSNotificationCenter.defaultCenter().postNotificationName(LiveEventWillStartPlayingNotification, object: nil)
         
-        liveEventPlayerController = VideoWindowController(event: event, videoURL: event.streamURL!.absoluteString)
+        if liveEventPlayerController != nil {
+            liveEventPlayerController?.close()
+            liveEventPlayerController = nil
+        }
+        
+        let viewController = VideoPlayerViewController.withLiveSession(event)
+        liveEventPlayerController = VideoPlayerWindowController(playerViewController: viewController)
         liveEventPlayerController?.showWindow(nil)
     }
     
@@ -111,22 +119,13 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
         }
     }
     
-    private let _liveServiceURL = "http://wwdc.guilhermerambo.me/live.json"
-    private let _liveNextServiceURL = "http://wwdc.guilhermerambo.me/next.json"
+    private let _liveServiceURL = WWDCEnvironment.specialLiveEventURL
     
     private var liveURL: NSURL {
         get {
             sranddev()
             // adds a random number as a parameter to completely prevent any caching
             return NSURL(string: "\(_liveServiceURL)?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())")!
-        }
-    }
-    
-    private var liveNextURL: NSURL {
-        get {
-            sranddev()
-            // adds a random number as a parameter to completely prevent any caching
-            return NSURL(string: "\(_liveNextServiceURL)?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())")!
         }
     }
     
@@ -143,25 +142,6 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
             let event = LiveSession(jsonObject: jsonData)
             
             if event.isLiveRightNow {
-                completionHandler(true, event)
-            } else {
-                completionHandler(false, nil)
-            }
-        }
-        task.resume()
-    }
-    
-    func fetchNextLiveEvent(completionHandler: (Bool, LiveSession?) -> ()) {
-        let task = URLSession2.dataTaskWithURL(liveNextURL) { data, response, error in
-            if data == nil {
-                completionHandler(false, nil)
-                return
-            }
-            
-            let jsonData = JSON(data: data!)
-            let event = LiveSession(jsonObject: jsonData)
-            
-            if event.title != "" {
                 completionHandler(true, event)
             } else {
                 completionHandler(false, nil)
