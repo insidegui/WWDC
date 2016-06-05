@@ -57,11 +57,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
 	
+    private var checkForUpdatesTimer: NSTimer?
+    
     @IBAction func checkForUpdates(sender: AnyObject?) {
+        if WWDCDatabase.sharedDatabase.config.isWWDCWeek && checkForUpdatesTimer == nil {
+            checkForUpdatesTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: #selector(checkForUpdates(_:)), userInfo: nil, repeats: true)
+        }
+        
         UDUpdater.sharedUpdater().updateAutomatically = true
         UDUpdater.sharedUpdater().checkForUpdatesWithCompletionHandler { newRelease in
             if newRelease != nil {
-                if sender != nil {
+                if sender != nil && !(sender is NSTimer) {
                     let alert = NSAlert()
                     alert.messageText = "New version available"
                     alert.informativeText = "Version \(newRelease.version) is now available. It will be installed automatically the next time you launch the app."
@@ -74,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
                 }
             } else {
-                if sender != nil {
+                if sender != nil && !(sender is NSTimer) {
                     let alert = NSAlert()
                     alert.messageText = "You're up to date!"
                     alert.informativeText = "You have the newest version"
