@@ -15,7 +15,7 @@ class MainWindowController: NSWindowController {
         
         configureWindowAppearance()
         
-        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: nil, queue: nil) { _ in
+        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: window, queue: nil) { _ in
             if let window = self.window {
                 Preferences.SharedPreferences().mainWindowFrame = window.frame
             }
