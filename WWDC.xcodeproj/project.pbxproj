@@ -66,6 +66,7 @@
 		DDBD18661BC3227B00EF7718 /* FilterBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDBD18641BC3227B00EF7718 /* FilterBarController.xib */; };
 		DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC049CE1AE564F20008D41A /* PDFWindowController.swift */; };
 		DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC049CF1AE564F20008D41A /* PDFWindowController.xib */; };
+		DDC5840A1D04BDC20062D3ED /* DockIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC584091D04BDC20062D3ED /* DockIconView.swift */; };
 		DDCAB46E1C2620BE005889CB /* TranscriptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCAB46C1C2620BE005889CB /* TranscriptViewController.swift */; };
 		DDCAB46F1C2620BE005889CB /* TranscriptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDCAB46D1C2620BE005889CB /* TranscriptViewController.xib */; };
 		DDCAB48A1C263EF9005889CB /* TranscriptLineTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCAB4891C263EF9005889CB /* TranscriptLineTableRowView.swift */; };
@@ -326,6 +327,7 @@
 		DDBD18641BC3227B00EF7718 /* FilterBarController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterBarController.xib; sourceTree = "<group>"; };
 		DDC049CE1AE564F20008D41A /* PDFWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWindowController.swift; sourceTree = "<group>"; };
 		DDC049CF1AE564F20008D41A /* PDFWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PDFWindowController.xib; sourceTree = "<group>"; };
+		DDC584091D04BDC20062D3ED /* DockIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockIconView.swift; sourceTree = "<group>"; };
 		DDCAB46C1C2620BE005889CB /* TranscriptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptViewController.swift; sourceTree = "<group>"; };
 		DDCAB46D1C2620BE005889CB /* TranscriptViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptViewController.xib; sourceTree = "<group>"; };
 		DDCAB4891C263EF9005889CB /* TranscriptLineTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptLineTableRowView.swift; sourceTree = "<group>"; };
@@ -561,6 +563,7 @@
 				DD3FDF191BC2EDFC0078B06C /* RoundPlayButton.swift */,
 				DD5E940F1C283A2300E26B61 /* AboutWindow.swift */,
 				DDF166861D03F6F6006780BF /* LiveSessionsBannerView.swift */,
+				DDC584091D04BDC20062D3ED /* DockIconView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -933,6 +936,7 @@
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,
 				DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */,
 				DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */,
+				DDC5840A1D04BDC20062D3ED /* DockIconView.swift in Sources */,
 				DDE3A8231BC2DCEC00610FEF /* TranscriptSearchResultsController.swift in Sources */,
 				DDBD18651BC3227B00EF7718 /* FilterBarController.swift in Sources */,
 				DD29DD9B1C276CC400392D42 /* About.swift in Sources */,
