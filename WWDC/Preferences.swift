@@ -58,7 +58,8 @@ class Preferences {
         static let userKnowsLiveEventThing = false
         static let tvTechTalksAlerted = false
         static let automaticRefreshEnabled = true
-        static let automaticRefreshInterval = 60.0
+        static let automaticRefreshIntervalOnWWDCWeek = 60.0
+        static let automaticRefreshIntervalRegular = 900.0
         static let floatOnTopEnabled = false
         static let automaticRefreshSuggestionPresentedAt = NSDate.distantPast()
         
@@ -297,7 +298,7 @@ class Preferences {
     
     var automaticRefreshInterval: Double {
         get {
-            return DefaultValues.automaticRefreshInterval
+            return WWDCDatabase.sharedDatabase.config.isWWDCWeek ? DefaultValues.automaticRefreshIntervalOnWWDCWeek : DefaultValues.automaticRefreshIntervalRegular
         }
     }
 
