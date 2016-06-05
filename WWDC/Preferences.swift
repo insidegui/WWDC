@@ -34,6 +34,7 @@ class Preferences {
         static let tvTechTalksAlerted = "tvTechTalksAlerted"
         static let automaticRefreshEnabled = "automaticRefreshEnabled"
 		static let floatOnTopEnabled = "floatOnTopEnabled"
+        static let automaticRefreshSuggestionPresentedAt = "automaticRefreshSuggestionPresentedAt"
         
         struct transcript {
             static let font = "transcript.font"
@@ -59,6 +60,7 @@ class Preferences {
         static let automaticRefreshEnabled = true
         static let automaticRefreshInterval = 60.0
         static let floatOnTopEnabled = false
+        static let automaticRefreshSuggestionPresentedAt = NSDate.distantPast()
         
         struct transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
@@ -311,5 +313,18 @@ class Preferences {
 			defaults.setObject(NSNumber(bool: newValue), forKey: Keys.floatOnTopEnabled)
 		}
 	}
+    
+    var automaticRefreshSuggestionPresentedAt: NSDate? {
+        get {
+            if let object = defaults.objectForKey(Keys.automaticRefreshSuggestionPresentedAt) as? NSDate {
+                return object
+            } else {
+                return DefaultValues.automaticRefreshSuggestionPresentedAt
+            }
+        }
+        set {
+            defaults.setObject(newValue, forKey: Keys.automaticRefreshSuggestionPresentedAt)
+        }
+    }
 
 }

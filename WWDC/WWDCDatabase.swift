@@ -50,7 +50,7 @@ typealias SessionsUpdatedCallback = () -> Void
     private let bgThread = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
     private var backgroundOperationQueue = NSOperationQueue()
     
-    private var config: AppConfig! {
+    var config: AppConfig! {
         didSet {
             guard config != nil else { return }
             

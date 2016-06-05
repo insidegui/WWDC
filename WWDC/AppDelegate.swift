@@ -104,35 +104,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Courtesy Dialogs
     
     private func showCourtesyDialogs() {
-        // tell the user he can watch the live keynote using the app, only once
-        if !Preferences.SharedPreferences().userKnowsLiveEventThing {
-            tellUserAboutTheLiveEventThing()
-        } else {
-            if !Preferences.SharedPreferences().tvTechTalksAlerted {
-                // tell the user he can watch the 2016 Apple TV Tech Talks, only once, and not with the other alert
-                tellUserAbout2016TVTechTalks()
-            }
-        }
-    }
-    
-    private func tellUserAboutTheLiveEventThing() {
-        let alert = NSAlert()
-        alert.messageText = "Did you know?"
-        alert.informativeText = "You can watch live WWDC events using this app! Just open the app while the event is live and It will start playing automatically."
-        alert.addButtonWithTitle("Got It!")
-        alert.runModal()
-        
-        Preferences.SharedPreferences().userKnowsLiveEventThing = true
-    }
-    
-    private func tellUserAbout2016TVTechTalks() {
-        let alert = NSAlert()
-        alert.messageText = "Now Available: Apple TV Tech Talks"
-        alert.informativeText = "Now you can watch the Apple TV Tech Talks using the app. Enjoy :]"
-        alert.addButtonWithTitle("Thanks")
-        alert.runModal()
-        
-        Preferences.SharedPreferences().tvTechTalksAlerted = true
+        NewWWDCGreeter().presentAutomaticRefreshSuggestionIfAppropriate()
     }
     
     // MARK: - About Panel

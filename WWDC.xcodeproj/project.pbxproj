@@ -75,6 +75,7 @@
 		DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4321AE2DF14000A0102 /* Theme.swift */; };
 		DDD7A4351AE2E02A000A0102 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */; };
 		DDD7A43D1AE2E39A000A0102 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A43C1AE2E39A000A0102 /* SwiftyJSON.swift */; };
+		DDD9CD001D03C34D002A36F2 /* NewWWDCGreeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD9CCFF1D03C34D002A36F2 /* NewWWDCGreeter.swift */; };
 		DDE3A8231BC2DCEC00610FEF /* TranscriptSearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE3A8211BC2DCEC00610FEF /* TranscriptSearchResultsController.swift */; };
 		DDE3A8241BC2DCEC00610FEF /* TranscriptSearchResultsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDE3A8221BC2DCEC00610FEF /* TranscriptSearchResultsController.xib */; };
 		DDE3A82B1BC2DD8300610FEF /* TranscriptLineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE3A82A1BC2DD8300610FEF /* TranscriptLineTableCellView.swift */; };
@@ -312,6 +313,7 @@
 		DDD7A4321AE2DF14000A0102 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		DDD7A43C1AE2E39A000A0102 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		DDD9CCFF1D03C34D002A36F2 /* NewWWDCGreeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewWWDCGreeter.swift; sourceTree = "<group>"; };
 		DDE3A8211BC2DCEC00610FEF /* TranscriptSearchResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptSearchResultsController.swift; sourceTree = "<group>"; };
 		DDE3A8221BC2DCEC00610FEF /* TranscriptSearchResultsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptSearchResultsController.xib; sourceTree = "<group>"; };
 		DDE3A82A1BC2DD8300610FEF /* TranscriptLineTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptLineTableCellView.swift; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 				DDD7A4321AE2DF14000A0102 /* Theme.swift */,
 				DD2016771AE4141900DD8155 /* ArrayExtensions.swift */,
 				DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */,
+				DDD9CCFF1D03C34D002A36F2 /* NewWWDCGreeter.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -877,6 +880,7 @@
 				DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */,
 				DD4F6E731AE2D5980099BEB5 /* VideoTableCellView.swift in Sources */,
 				DD4F6E711AE2D1C60099BEB5 /* VideoDetailsViewController.swift in Sources */,
+				DDD9CD001D03C34D002A36F2 /* NewWWDCGreeter.swift in Sources */,
 				51B28F551BB62BA9001F7A6C /* VideoTableRowView.swift in Sources */,
 				51B28F581BB6314B001F7A6C /* NSColor+GRProKitHelpers.m in Sources */,
 				DD825CAA1BBF631C00276B83 /* ProgressSearchField.swift in Sources */,
