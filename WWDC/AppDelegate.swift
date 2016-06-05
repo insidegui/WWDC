@@ -60,7 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var checkForUpdatesTimer: NSTimer?
     
     @IBAction func checkForUpdates(sender: AnyObject?) {
-        if WWDCDatabase.sharedDatabase.config.isWWDCWeek && checkForUpdatesTimer == nil {
+        if checkForUpdatesTimer == nil {
             checkForUpdatesTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: #selector(checkForUpdates(_:)), userInfo: nil, repeats: true)
         }
         
