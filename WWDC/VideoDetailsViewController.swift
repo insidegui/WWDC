@@ -8,10 +8,11 @@
 
 import Cocoa
 import KVOController
+import WWDCPlayer
 
 class VideoDetailsViewController: NSViewController {
     
-    var videoControllers: [VideoWindowController] = []
+    var videoControllers: [NSWindowController] = []
     var slideControllers: [PDFWindowController] = []
     
     @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
@@ -26,6 +27,7 @@ class VideoDetailsViewController: NSViewController {
     private var transcriptSearchResultsVC: TranscriptSearchResultsController?
     
     @IBOutlet weak var transcriptControllerContainerView: NSView!
+    
     
     var selectedCount = 1
     var multipleSelection: Bool {
@@ -46,6 +48,8 @@ class VideoDetailsViewController: NSViewController {
     @IBOutlet weak var actionButtonsController: ActionButtonsViewController!
     
     private func updateUI() {
+        liveSessionsControllerContainerView.hidden = true
+        
         if liveSessionsAvailable && session != nil {
             showLiveBanner()
         }
@@ -160,10 +164,10 @@ class VideoDetailsViewController: NSViewController {
     
     private func playerControllerForSession(session: Session) -> VideoWindowController? {
         let filteredControllers = videoControllers.filter { videoWC in
-            return videoWC.session?.uniqueId == session.uniqueId
+            return (videoWC as? VideoWindowController)?.session?.uniqueId == session.uniqueId
         }
 
-        return filteredControllers.first
+        return filteredControllers.first as! VideoWindowController
     }
     
     private func watchVideo(startTime: Double) {
@@ -193,8 +197,10 @@ class VideoDetailsViewController: NSViewController {
     private func followWindowLifecycle(window: NSWindow!) {
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: window, queue: nil) { note in
             if let window = note.object as? NSWindow {
-                if let controller = window.windowController as? VideoWindowController {
-                    self.videoControllers.remove(controller)
+                let controller = window.windowController
+                
+                if controller is VideoWindowController || controller is VideoPlayerWindowController {
+                    self.videoControllers.remove(controller!)
                 } else if let controller = window.windowController as? PDFWindowController {
                     self.slideControllers.remove(controller)
                 }
@@ -252,13 +258,39 @@ class VideoDetailsViewController: NSViewController {
     // MARK: - Live Sessions
     
     private var liveSessionsBannerView: LiveSessionsBannerView!
+    @IBOutlet weak var liveSessionsControllerContainerView: NSView!
+    private var liveSessionsListVC: LiveSessionsListViewController?
     
     private var liveSessionsAvailable: Bool {
         return LiveEventObserver.SharedObserver().liveSessions.count > 0
     }
     
+    private func setupLiveSessionsViewIfNeeded() {
+        guard liveSessionsListVC == nil else { return }
+        
+        liveSessionsListVC = LiveSessionsListViewController()
+        liveSessionsListVC!.view.frame = liveSessionsControllerContainerView.bounds
+        liveSessionsListVC!.view.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+        
+        liveSessionsListVC?.playbackHandler = { [weak self] session in
+            self?.playLiveSession(session)
+        }
+        liveSessionsControllerContainerView.addSubview(liveSessionsListVC!.view)
+        liveSessionsControllerContainerView.hidden = false
+    }
+    
+    private func playLiveSession(session: LiveSession) {
+        let playerVC = VideoPlayerViewController.withLiveSession(session)
+        let playerWindowController = VideoPlayerWindowController(playerViewController: playerVC)
+        followWindowLifecycle(playerWindowController.window)
+        videoControllers.append(playerWindowController)
+        
+        playerWindowController.showWindow(nil)
+    }
+    
     @IBAction func showAvailableLiveSessionsIfAvailable(sender: AnyObject? = nil) {
         guard liveSessionsAvailable else {
+            liveSessionsControllerContainerView.hidden = true
             liveSessionsBannerView?.hidden = true
             return
         }
@@ -270,7 +302,10 @@ class VideoDetailsViewController: NSViewController {
         descriptionLabel.hidden = true
         downloadController.session = nil
         
-        NSLog("\(LiveEventObserver.SharedObserver().liveSessions)")
+        setupLiveSessionsViewIfNeeded()
+        
+        liveSessionsControllerContainerView.hidden = false
+        liveSessionsListVC!.liveSessions = LiveEventObserver.SharedObserver().liveSessions
     }
     
     private func showLiveBanner() {
