@@ -1,7 +1,13 @@
 # Change Log
 
+## [3.4](https://github.com/insidegui/WWDC/tree/3.4) (2016-06-05)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.3.1...3.4)
+
+## [3.3.1](https://github.com/insidegui/WWDC/tree/3.3.1) (2016-06-05)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.3...3.3.1)
+
 ## [3.3](https://github.com/insidegui/WWDC/tree/3.3) (2016-06-05)
-[Full Changelog](https://github.com/insidegui/WWDC/compare/3.1...3.3)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.2...3.3)
 
 **Implemented enhancements:**
 
@@ -27,11 +33,11 @@
 - Updated browserhub link to browserfreedom [\#124](https://github.com/insidegui/WWDC/pull/124) ([peterkos](https://github.com/peterkos))
 - add 'remove download' option [\#119](https://github.com/insidegui/WWDC/pull/119) ([finngaida](https://github.com/finngaida))
 
-## [3.1](https://github.com/insidegui/WWDC/tree/3.1) (2016-03-07)
-[Full Changelog](https://github.com/insidegui/WWDC/compare/3.2...3.1)
-
 ## [3.2](https://github.com/insidegui/WWDC/tree/3.2) (2016-03-07)
-[Full Changelog](https://github.com/insidegui/WWDC/compare/3.0...3.2)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.1...3.2)
+
+## [3.1](https://github.com/insidegui/WWDC/tree/3.1) (2016-03-07)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.0...3.1)
 
 **Implemented enhancements:**
 
