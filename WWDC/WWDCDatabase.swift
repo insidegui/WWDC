@@ -28,19 +28,9 @@ typealias SessionsUpdatedCallback = () -> Void
     private let currentDBVersion = UInt64(1)
     
     private struct Constants {
-        static var internalServiceURL: String {
-            #if DEBUG
-                if NSProcessInfo.processInfo().arguments.contains("--use-localhost") {
-                    return "http://localhost/index.json?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
-                } else {
-                    return "http://wwdc.guilhermerambo.me/index.json?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
-                }
-            #else
-                return "http://wwdc.guilhermerambo.me/index.json?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
-            #endif
-        }
-        static let extraVideosURL = "http://wwdc.guilhermerambo.me/extra.json?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
-        static let asciiServiceBaseURL = "http://asciiwwdc.com/"
+        static var internalServiceURL = WWDCEnvironment.indexURL
+        static let extraVideosURL = WWDCEnvironment.extraURL
+        static let asciiServiceBaseURL = WWDCEnvironment.asciiWWDCURL
     }
 
     class var sharedDatabase: WWDCDatabase {

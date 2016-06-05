@@ -81,6 +81,10 @@
 		DDE3A82B1BC2DD8300610FEF /* TranscriptLineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE3A82A1BC2DD8300610FEF /* TranscriptLineTableCellView.swift */; };
 		DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */; };
 		DDEC0DF91B0E73FA001752CA /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDEC0DF81B0E73FA001752CA /* Fabric.framework */; };
+		DDF1667E1D03C9CF006780BF /* WWDCPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF1667D1D03C9C5006780BF /* WWDCPlayer.framework */; };
+		DDF1667F1D03C9CF006780BF /* WWDCPlayer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDF1667D1D03C9C5006780BF /* WWDCPlayer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDF166831D03CB69006780BF /* PlayerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166821D03CB69006780BF /* PlayerExtensions.swift */; };
+		DDF166851D03CD69006780BF /* WWDCEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166841D03CD69006780BF /* WWDCEnvironment.swift */; };
 		DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */; };
 		DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */; };
 		DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */; };
@@ -221,6 +225,20 @@
 			remoteGlobalIDString = DD89E9B81AF4255F0073B845;
 			remoteInfo = Updater;
 		};
+		DDF1667C1D03C9C5006780BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDF1666C1D03C9C5006780BF /* WWDCPlayer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DDD9CCD11D035978002A36F2;
+			remoteInfo = WWDCPlayer;
+		};
+		DDF166801D03C9CF006780BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDF1666C1D03C9C5006780BF /* WWDCPlayer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = DDD9CCD01D035978002A36F2;
+			remoteInfo = WWDCPlayer;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -231,6 +249,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				DD2016691AE402B400DD8155 /* ViewUtils.framework in Embed Frameworks */,
+				DDF1667F1D03C9CF006780BF /* WWDCPlayer.framework in Embed Frameworks */,
 				C58F08201CAD20030009D469 /* RealmSwift.framework in Embed Frameworks */,
 				DD825CA21BBF572600276B83 /* Alamofire.framework in Embed Frameworks */,
 				DD813C3A1CF5F79000346004 /* KVOController.framework in Embed Frameworks */,
@@ -319,6 +338,9 @@
 		DDE3A82A1BC2DD8300610FEF /* TranscriptLineTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptLineTableCellView.swift; sourceTree = "<group>"; };
 		DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonsViewController.swift; sourceTree = "<group>"; };
 		DDEC0DF81B0E73FA001752CA /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		DDF1666C1D03C9C5006780BF /* WWDCPlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WWDCPlayer.xcodeproj; path = WWDCPlayer/WWDCPlayer.xcodeproj; sourceTree = "<group>"; };
+		DDF166821D03CB69006780BF /* PlayerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerExtensions.swift; sourceTree = "<group>"; };
+		DDF166841D03CD69006780BF /* WWDCEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCEnvironment.swift; sourceTree = "<group>"; };
 		DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEventObserver.swift; sourceTree = "<group>"; };
 		DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressViewController.swift; sourceTree = "<group>"; };
 		DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
@@ -330,6 +352,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDF1667E1D03C9CF006780BF /* WWDCPlayer.framework in Frameworks */,
 				DD89EA0C1AF48A4C0073B845 /* Updater.framework in Frameworks */,
 				DD7F6F911AE97C99007A4E5E /* WebKit.framework in Frameworks */,
 				C58F081F1CAD20030009D469 /* RealmSwift.framework in Frameworks */,
@@ -449,6 +472,7 @@
 		DD825CAB1BBF6ED100276B83 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				DDF1666C1D03C9C5006780BF /* WWDCPlayer.xcodeproj */,
 				DD813C231CF5F78900346004 /* FBKVOController.xcodeproj */,
 				C58F081B1CAD20030009D469 /* Realm.framework */,
 				C58F081C1CAD20030009D469 /* RealmSwift.framework */,
@@ -587,6 +611,7 @@
 				DD2016771AE4141900DD8155 /* ArrayExtensions.swift */,
 				DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */,
 				DDD9CCFF1D03C34D002A36F2 /* NewWWDCGreeter.swift */,
+				DDF166821D03CB69006780BF /* PlayerExtensions.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -594,8 +619,9 @@
 		DDD7A4361AE2E253000A0102 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				DD825CA51BBF575500276B83 /* Models.swift */,
+				DDF166841D03CD69006780BF /* WWDCEnvironment.swift */,
 				DD825CA61BBF575500276B83 /* WWDCDatabase.swift */,
+				DD825CA51BBF575500276B83 /* Models.swift */,
 				DD373A891AE871AB00DAC19B /* VideoStore.swift */,
 				DD2CC38B1AF4161700FC5F68 /* Preferences.swift */,
 				DD76C0171BBF83C10056BB20 /* SlidesDownloader.swift */,
@@ -618,6 +644,14 @@
 			name = Vendor;
 			sourceTree = "<group>";
 		};
+		DDF1666D1D03C9C5006780BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DDF1667D1D03C9C5006780BF /* WWDCPlayer.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -638,6 +672,7 @@
 				DD89EA0F1AF48A4C0073B845 /* PBXTargetDependency */,
 				DD825CA41BBF572600276B83 /* PBXTargetDependency */,
 				DD813C3C1CF5F79000346004 /* PBXTargetDependency */,
+				DDF166811D03C9CF006780BF /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			productName = WWDC;
@@ -688,6 +723,10 @@
 				{
 					ProductGroup = DD2016621AE4029100DD8155 /* Products */;
 					ProjectRef = DD2016611AE4029100DD8155 /* ViewUtils.xcodeproj */;
+				},
+				{
+					ProductGroup = DDF1666D1D03C9C5006780BF /* Products */;
+					ProjectRef = DDF1666C1D03C9C5006780BF /* WWDCPlayer.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -803,6 +842,13 @@
 			remoteRef = DD89EA0A1AF48A300073B845 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		DDF1667D1D03C9C5006780BF /* WWDCPlayer.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = WWDCPlayer.framework;
+			remoteRef = DDF1667C1D03C9C5006780BF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -871,7 +917,9 @@
 				DD29DD9B1C276CC400392D42 /* About.swift in Sources */,
 				DD825CA71BBF575500276B83 /* Models.swift in Sources */,
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
+				DDF166831D03CB69006780BF /* PlayerExtensions.swift in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
+				DDF166851D03CD69006780BF /* WWDCEnvironment.swift in Sources */,
 				DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */,
 				DDCAB48A1C263EF9005889CB /* TranscriptLineTableRowView.swift in Sources */,
 				DDE3A82B1BC2DD8300610FEF /* TranscriptLineTableCellView.swift in Sources */,
@@ -925,6 +973,11 @@
 			isa = PBXTargetDependency;
 			name = Updater;
 			targetProxy = DD89EA0E1AF48A4C0073B845 /* PBXContainerItemProxy */;
+		};
+		DDF166811D03C9CF006780BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WWDCPlayer;
+			targetProxy = DDF166801D03C9CF006780BF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
