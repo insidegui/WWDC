@@ -1,6 +1,0 @@
-[submodule "vendor/Alamofire"]
-	path = vendor/Alamofire
-	url = https://github.com/Alamofire/Alamofire.git
-[submodule "vendor/KVOController"]
-	path = vendor/KVOController
-	url = https://github.com/facebook/KVOController.git
