@@ -117,8 +117,10 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
     
     private var shouldIgnoreCache = false
     
+    private let manager = Alamofire.Manager(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+    
     private func fetchOrUpdateAppleServiceURLs() {
-        Alamofire.request(.GET, Constants.internalServiceURL).response { _, _, data, error in
+        manager.request(.GET, Constants.internalServiceURL).response { _, _, data, error in
             guard let jsonData = data else {
                 print("No data returned from internal server!")
                 return
@@ -158,7 +160,7 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
     }
     
     private func updateSessionVideos() {
-        Alamofire.request(.GET, config.videosURL).response { _, _, data, error in
+        manager.request(.GET, config.videosURL).response { _, _, data, error in
             dispatch_async(self.bgThread) {
                 let backgroundRealm = try! Realm()
                 
@@ -228,7 +230,7 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
     }
     
     private func updateExtraSessionVideos() {
-        Alamofire.request(.GET, Constants.extraVideosURL).response { _, _, data, error in
+        manager.request(.GET, Constants.extraVideosURL).response { _, _, data, error in
             dispatch_async(self.bgThread) {
                 let backgroundRealm = try! Realm()
                 
@@ -289,7 +291,7 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
         let sessionKey = session.uniqueId
         let url = "\(Constants.asciiServiceBaseURL)\(session.year)//sessions/\(session.id)"
         let headers = ["Accept": "application/json"]
-        Alamofire.request(.GET, url, parameters: nil, encoding: .JSON, headers: headers).response { _, response, data, error in
+        manager.request(.GET, url, parameters: nil, encoding: .JSON, headers: headers).response { _, response, data, error in
             guard let jsonData = data else {
                 print("No data returned from ASCIIWWDC for session \(session.uniqueId)")
                 return
