@@ -232,14 +232,32 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cell = tableView.makeViewWithIdentifier("video", owner: tableView) as! VideoTableCellView
-        
         if row > displayedSessions.count {
-            return cell
+            return nil
         }
         
-        cell.session = displayedSessions[row]
-
+        let session = displayedSessions[row]
+        
+        if session.isScheduled {
+            return cellForScheduledSession(session)
+        } else {
+            return cellForRegularSession(session)
+        }
+    }
+    
+    private func cellForScheduledSession(session: Session) -> NSView? {
+        let cell = tableView.makeViewWithIdentifier("scheduledSession", owner: tableView) as! ScheduledSessionTableCellView
+        
+        cell.session = session
+        
+        return cell
+    }
+    
+    private func cellForRegularSession(session: Session) -> NSView? {
+        let cell = tableView.makeViewWithIdentifier("video", owner: tableView) as! VideoTableCellView
+        
+        cell.session = session
+        
         return cell
     }
     

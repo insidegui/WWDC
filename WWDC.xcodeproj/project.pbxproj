@@ -53,6 +53,8 @@
 		DD8C68C31D0614300075D6A5 /* LiveSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C21D0614300075D6A5 /* LiveSession.swift */; };
 		DD8C68C51D0617970075D6A5 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C41D0617970075D6A5 /* Track.swift */; };
 		DD8C68C71D0617E60075D6A5 /* ScheduledSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C61D0617E60075D6A5 /* ScheduledSession.swift */; };
+		DD8C68CB1D06277F0075D6A5 /* ScheduledSessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68CA1D06277F0075D6A5 /* ScheduledSessionTableCellView.swift */; };
+		DD8C68CD1D062ED60075D6A5 /* NSColorHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68CC1D062ED60075D6A5 /* NSColorHex.swift */; };
 		DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */; };
 		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
 		DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */; };
@@ -160,6 +162,8 @@
 		DD8C68C21D0614300075D6A5 /* LiveSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSession.swift; sourceTree = "<group>"; };
 		DD8C68C41D0617970075D6A5 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		DD8C68C61D0617E60075D6A5 /* ScheduledSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduledSession.swift; sourceTree = "<group>"; };
+		DD8C68CA1D06277F0075D6A5 /* ScheduledSessionTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduledSessionTableCellView.swift; sourceTree = "<group>"; };
+		DD8C68CC1D062ED60075D6A5 /* NSColorHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSColorHex.swift; sourceTree = "<group>"; };
 		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
 		DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveEventBannerViewController.xib; sourceTree = "<group>"; };
@@ -224,6 +228,7 @@
 				DD2016051AE3FA6600DD8155 /* SessionProgressView.swift */,
 				DD4F6E721AE2D5980099BEB5 /* VideoTableCellView.swift */,
 				51B28F541BB62BA9001F7A6C /* VideoTableRowView.swift */,
+				DD8C68CA1D06277F0075D6A5 /* ScheduledSessionTableCellView.swift */,
 				51B28F5A1BB63F9E001F7A6C /* GridlessTableView.swift */,
 				DDE3A82A1BC2DD8300610FEF /* TranscriptLineTableCellView.swift */,
 				DDCAB4891C263EF9005889CB /* TranscriptLineTableRowView.swift */,
@@ -484,6 +489,7 @@
 		DDD7A43B1AE2E392000A0102 /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				DD8C68CC1D062ED60075D6A5 /* NSColorHex.swift */,
 				51B28F561BB6314B001F7A6C /* NSColor+GRProKitHelpers.h */,
 				51B28F571BB6314B001F7A6C /* NSColor+GRProKitHelpers.m */,
 				DD3081761AF3DC370009D412 /* DTFolderMonitor.h */,
@@ -691,6 +697,7 @@
 				DD4F6E731AE2D5980099BEB5 /* VideoTableCellView.swift in Sources */,
 				DD4F6E711AE2D1C60099BEB5 /* VideoDetailsViewController.swift in Sources */,
 				DDD9CD001D03C34D002A36F2 /* NewWWDCGreeter.swift in Sources */,
+				DD8C68CB1D06277F0075D6A5 /* ScheduledSessionTableCellView.swift in Sources */,
 				51B28F551BB62BA9001F7A6C /* VideoTableRowView.swift in Sources */,
 				51B28F581BB6314B001F7A6C /* NSColor+GRProKitHelpers.m in Sources */,
 				DD825CAA1BBF631C00276B83 /* ProgressSearchField.swift in Sources */,
@@ -698,6 +705,7 @@
 				DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */,
 				DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */,
 				DD0974DF1B18AAA8006A3C77 /* URLSchemeHandler.swift in Sources */,
+				DD8C68CD1D062ED60075D6A5 /* NSColorHex.swift in Sources */,
 				DDF1668D1D048C4D006780BF /* LiveSessionTableCellView.swift in Sources */,
 				DDF166871D03F6F6006780BF /* LiveSessionsBannerView.swift in Sources */,
 				DD825CA81BBF575500276B83 /* WWDCDatabase.swift in Sources */,
