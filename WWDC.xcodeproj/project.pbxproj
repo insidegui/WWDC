@@ -280,7 +280,6 @@
 				DDD7A42E1AE2DEDD000A0102 /* Main Controllers */,
 				DDD7A42D1AE2DECE000A0102 /* Views */,
 				DD4F6E511AE2D11D0099BEB5 /* AppDelegate.swift */,
-				DD4F6E551AE2D11D0099BEB5 /* Images.xcassets */,
 				DD4F6E4F1AE2D11D0099BEB5 /* Supporting Files */,
 			);
 			path = WWDC;
@@ -441,6 +440,7 @@
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DD4F6E551AE2D11D0099BEB5 /* Images.xcassets */,
 				DD29DD911C276C3000392D42 /* AboutWindowController.xib */,
 				DDCAB46D1C2620BE005889CB /* TranscriptViewController.xib */,
 				DDBD18641BC3227B00EF7718 /* FilterBarController.xib */,

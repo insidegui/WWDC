@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="FilterBarController" customModule="WWDC" customModuleProvider="target">
@@ -23,8 +23,8 @@
                 <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="c4U-fZ-wmN">
                     <rect key="frame" x="0.0" y="0.0" width="761" height="44"/>
                     <subviews>
-                        <segmentedControl verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KGp-29-lNn" customClass="GRSegmentedControl">
-                            <rect key="frame" x="266" y="10" width="230" height="24"/>
+                        <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KGp-29-lNn" customClass="GRSegmentedControl">
+                            <rect key="frame" x="263" y="10" width="236" height="24"/>
                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectAny" id="sVr-a0-c4I" customClass="GRSegmentedCell">
                                 <font key="font" metaFont="system"/>
                                 <segments>
@@ -32,7 +32,9 @@
                                     <segment label="Track" toolTip="Filter by track" tag="1"/>
                                     <segment label="Focus" toolTip="Filter by focus"/>
                                     <segment label="★" toolTip="Show only favorite sessions"/>
-                                    <segment label="↓" toolTip="Show only downloaded sessions"/>
+                                    <segment toolTip="Show only downloaded sessions" image="downloaded">
+                                        <nil key="label"/>
+                                    </segment>
                                 </segments>
                             </segmentedCell>
                             <userDefinedRuntimeAttributes>
@@ -125,4 +127,7 @@
             <point key="canvasLocation" x="545.5" y="585.5"/>
         </menu>
     </objects>
+    <resources>
+        <image name="downloaded" width="19" height="19"/>
+    </resources>
 </document>
