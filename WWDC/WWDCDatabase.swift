@@ -26,6 +26,8 @@ typealias SessionsUpdatedCallback = () -> Void
 
 let WWDCWeekDidStartNotification = "WWDCWeekDidStartNotification"
 let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
+let TranscriptIndexingDidStartNotification = "TranscriptIndexingDidStartNotification"
+let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotification"
 
 @objc class WWDCDatabase: NSObject {
     
@@ -75,9 +77,24 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
         try! bgRealm.commitWrite()
     }
     
+    /// Whether transcripts are currently being indexed
+    var isIndexingTranscripts = false {
+        didSet {
+            guard oldValue != isIndexingTranscripts else { return }
+            
+            let notificationName = isIndexingTranscripts ? TranscriptIndexingDidStartNotification : TranscriptIndexingDidStopNotification
+            
+            mainQ {
+                NSNotificationCenter.defaultCenter().postNotificationName(notificationName, object: nil)
+            }
+        }
+    }
+    
     /// The progress when the transcripts are being downloaded/indexed
     var transcriptIndexingProgress: NSProgress? {
         didSet {
+            isIndexingTranscripts = (transcriptIndexingProgress != nil)
+            
             transcriptIndexingStartedCallback?()
         }
     }
@@ -242,7 +259,7 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
         }
     }
     
-    private func indexTranscriptsForSessionsWithKeys(sessionKeys: [String]) {
+    func indexTranscriptsForSessionsWithKeys(sessionKeys: [String]) {
         guard sessionKeys.count > 0 else { return }
         
         transcriptIndexingProgress = NSProgress(totalUnitCount: Int64(sessionKeys.count))
@@ -261,10 +278,6 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
         // TODO: check if transcript has been updated and index It again if It has (https://github.com/ASCIIwwdc/asciiwwdc.com/issues/24)
         guard session.transcript == nil else { return }
         
-        #if DEBUG
-            NSLog("Session \(session.uniqueId) doesn't have a transcript, I'm looking for one...")
-        #endif
-        
         let sessionKey = session.uniqueId
         let url = "\(Constants.asciiServiceBaseURL)\(session.year)//sessions/\(session.id)"
         let headers = ["Accept": "application/json"]
@@ -275,14 +288,33 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
             }
             
             self.backgroundOperationQueue.addOperationWithBlock {
-                let bgRealm = try! Realm()
-                guard let session = bgRealm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
-                let transcript = Transcript(json: JSON(data: jsonData), session: session)
-                bgRealm.beginWrite()
-                bgRealm.add(transcript)
-                session.transcript = transcript
-                try! bgRealm.commitWrite()
-                self.transcriptIndexingProgress?.completedUnitCount += 1
+                do {
+                    let bgRealm = try Realm()
+                    guard let session = bgRealm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
+                    let transcript = Transcript(json: JSON(data: jsonData), session: session)
+                    bgRealm.beginWrite()
+                    bgRealm.add(transcript)
+                    session.transcript = transcript
+                    try bgRealm.commitWrite()
+                    self.transcriptIndexingProgress?.completedUnitCount += 1
+                } catch let error {
+                    NSLog("Error indexing transcript for session \(sessionKey): \(error)")
+                }
+                
+                if let progress = self.transcriptIndexingProgress {
+                    #if DEBUG
+                    NSLog("Completed: \(progress.completedUnitCount) Total: \(progress.totalUnitCount)")
+                    #endif
+                    
+                    if progress.completedUnitCount >= progress.totalUnitCount - 1 {
+                        mainQ {
+                            #if DEBUG
+                                NSLog("Transcript indexing finished")
+                            #endif
+                            self.isIndexingTranscripts = false
+                        }
+                    }
+                }
             }
         }
     }

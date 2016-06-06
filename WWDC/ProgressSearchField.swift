@@ -13,6 +13,12 @@ class ProgressSearchField: NSSearchField {
     var progress: NSProgress? {
         didSet {
             dispatch_async(dispatch_get_main_queue()) {
+                oldValue?.removeObserver(self, forKeyPath: "fractionCompleted")
+                
+                guard self.progress != nil else {
+                    self.showNormalState()
+                    return
+                }
                 self.progress?.addObserver(self, forKeyPath: "fractionCompleted", options: [.Initial, .New], context: nil)
                 self.setNeedsDisplay()
             }
@@ -28,17 +34,34 @@ class ProgressSearchField: NSSearchField {
         if keyPath == "fractionCompleted" {
             dispatch_async(dispatch_get_main_queue()) {
                 if self.progress?.fractionCompleted < 1.0 {
-                    self.placeholderString = "Indexing..."
-                    self.enabled = false
+                    self.showLoadingState()
                 } else {
-                    self.placeholderString = nil
-                    self.enabled = true
+                    self.showNormalState()
                 }
                 self.setNeedsDisplay()
             }
         } else {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
+    }
+    
+    @objc private func showLoadingState() {
+        placeholderString = "Indexing..."
+        enabled = false
+    }
+    
+    @objc private func showNormalState() {
+        placeholderString = nil
+        enabled = true
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(showLoadingState), name: TranscriptIndexingDidStartNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(showNormalState), name: TranscriptIndexingDidStopNotification, object: nil)
+        
+        showNormalState()
     }
     
     var isFirstResponder: Bool {

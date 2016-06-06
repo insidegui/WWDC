@@ -34,6 +34,8 @@ class PreferencesWindowController: NSWindowController {
         
         textColorWell.color = prefs.transcriptTextColor
         bgColorWell.color = prefs.transcriptBgColor
+        
+        setupTranscriptIndexingControls()
     }
     
     // MARK: Downloads folder
@@ -108,6 +110,45 @@ class PreferencesWindowController: NSWindowController {
     
     func populateFontsPopup() {
         fontPopUp.addItemsWithTitles(NSFontManager.sharedFontManager().availableFontFamilies)
+    }
+    
+    // MARK: - Transcripts index
+    
+    @IBOutlet weak var reindexTranscriptsButton: NSButton!
+    @IBOutlet weak var transcriptsIndexingProgressIndicator: NSProgressIndicator!
+    
+    private var installedIndexingObservers = false
+    
+    @objc private func setupTranscriptIndexingControls() {
+        if !installedIndexingObservers {
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(setupTranscriptIndexingControls), name: TranscriptIndexingDidStartNotification, object: nil)
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(setupTranscriptIndexingControls), name: TranscriptIndexingDidStopNotification, object: nil)
+            
+            installedIndexingObservers = true
+        }
+        
+        if !WWDCDatabase.sharedDatabase.isIndexingTranscripts {
+            reindexTranscriptsButton.enabled = true
+            transcriptsIndexingProgressIndicator.stopAnimation(nil)
+            transcriptsIndexingProgressIndicator.hidden = true
+        } else {
+            reindexTranscriptsButton.enabled = false
+            transcriptsIndexingProgressIndicator.startAnimation(nil)
+            transcriptsIndexingProgressIndicator.hidden = false
+        }
+    }
+    
+    @IBAction func reindexTranscripts(sender: NSButton) {
+        do {
+            WWDCDatabase.sharedDatabase.realm.beginWrite()
+            WWDCDatabase.sharedDatabase.realm.delete(WWDCDatabase.sharedDatabase.realm.objects(Transcript.self))
+            try WWDCDatabase.sharedDatabase.realm.commitWrite()
+        } catch let error as NSError {
+            mainQ { NSAlert(error: error).runModal() }
+        }
+        
+        let allSessionKeys = WWDCDatabase.sharedDatabase.realm.objects(Session.self).map({ $0.uniqueId })
+        WWDCDatabase.sharedDatabase.indexTranscriptsForSessionsWithKeys(allSessionKeys)
     }
     
 }

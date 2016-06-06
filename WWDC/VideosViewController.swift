@@ -148,7 +148,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
 
     // MARK: Session loading
-    
+        
     func loadSessions(refresh refresh: Bool, quiet: Bool) {
         if !quiet {
             if let window = view.window {
