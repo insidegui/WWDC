@@ -51,6 +51,8 @@
 		DD8C68BF1D0614180075D6A5 /* SearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68BE1D0614180075D6A5 /* SearchFilter.swift */; };
 		DD8C68C11D0614250075D6A5 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C01D0614250075D6A5 /* Transcript.swift */; };
 		DD8C68C31D0614300075D6A5 /* LiveSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C21D0614300075D6A5 /* LiveSession.swift */; };
+		DD8C68C51D0617970075D6A5 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C41D0617970075D6A5 /* Track.swift */; };
+		DD8C68C71D0617E60075D6A5 /* ScheduledSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C61D0617E60075D6A5 /* ScheduledSession.swift */; };
 		DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */; };
 		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
 		DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */; };
@@ -156,6 +158,8 @@
 		DD8C68BE1D0614180075D6A5 /* SearchFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFilter.swift; sourceTree = "<group>"; };
 		DD8C68C01D0614250075D6A5 /* Transcript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transcript.swift; sourceTree = "<group>"; };
 		DD8C68C21D0614300075D6A5 /* LiveSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSession.swift; sourceTree = "<group>"; };
+		DD8C68C41D0617970075D6A5 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
+		DD8C68C61D0617E60075D6A5 /* ScheduledSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduledSession.swift; sourceTree = "<group>"; };
 		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
 		DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveEventBannerViewController.xib; sourceTree = "<group>"; };
@@ -301,6 +305,7 @@
 		DD8C68B71D0613CA0075D6A5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DD8C68C91D06194E0075D6A5 /* Schedule */,
 				DD8C68BA1D0613FE0075D6A5 /* AppConfig.swift */,
 				DD8C68BC1D0614080075D6A5 /* Session.swift */,
 				DD8C68BE1D0614180075D6A5 /* SearchFilter.swift */,
@@ -328,6 +333,15 @@
 				DDF166841D03CD69006780BF /* WWDCEnvironment.swift */,
 			);
 			name = Configuration;
+			sourceTree = "<group>";
+		};
+		DD8C68C91D06194E0075D6A5 /* Schedule */ = {
+			isa = PBXGroup;
+			children = (
+				DD8C68C41D0617970075D6A5 /* Track.swift */,
+				DD8C68C61D0617E60075D6A5 /* ScheduledSession.swift */,
+			);
+			name = Schedule;
 			sourceTree = "<group>";
 		};
 		DDCAB4641C26206D005889CB /* Transcript */ = {
@@ -651,6 +665,7 @@
 				DD29DD991C276C3800392D42 /* AboutWindowController.swift in Sources */,
 				DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */,
 				DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */,
+				DD8C68C71D0617E60075D6A5 /* ScheduledSession.swift in Sources */,
 				DDF9D1931B04F361006F0953 /* SplitManager.swift in Sources */,
 				DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */,
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,
@@ -661,6 +676,7 @@
 				DD8C68C11D0614250075D6A5 /* Transcript.swift in Sources */,
 				DDBD18651BC3227B00EF7718 /* FilterBarController.swift in Sources */,
 				DD29DD9B1C276CC400392D42 /* About.swift in Sources */,
+				DD8C68C51D0617970075D6A5 /* Track.swift in Sources */,
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
 				DDF166831D03CB69006780BF /* PlayerExtensions.swift in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,

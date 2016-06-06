@@ -31,6 +31,18 @@ class Session: Object {
     dynamic var slidesPDFData = NSData()
     dynamic var downloaded = false
     
+    var isScheduled: Bool {
+        guard let realm = realm else { return false }
+        
+        return videoURL.isEmpty && realm.objectForPrimaryKey(ScheduledSession.self, key: uniqueId) != nil
+    }
+    
+    var schedule: ScheduledSession? {
+        guard let realm = realm else { return nil }
+        
+        return realm.objectForPrimaryKey(ScheduledSession.self, key: uniqueId)
+    }
+    
     var event: String {
         if id > 10000 {
             return "Apple TV Tech Talks"

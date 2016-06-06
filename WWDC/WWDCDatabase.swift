@@ -31,8 +31,6 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
 
 @objc class WWDCDatabase: NSObject {
     
-    private let currentDBVersion = UInt64(1)
-    
     private struct Constants {
         static var internalServiceURL = WWDCEnvironment.indexURL
         static let extraVideosURL = WWDCEnvironment.extraURL
@@ -41,6 +39,12 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
 
     class var sharedDatabase: WWDCDatabase {
         return _sharedWWDCDatabase
+    }
+    
+    override init() {
+        super.init()
+        
+        configureRealm()
     }
     
     private let bgThread = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
@@ -52,10 +56,21 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             
             wipe2016TechTalksVideos()
             updateSessionVideos()
+            updateSchedule()
         }
     }
     
-    let realm = try! Realm()
+    // MARK: - Realm Configuration
+    
+    private let currentDBVersion = UInt64(5)
+    
+    private func configureRealm() {
+        let realmConfiguration = Realm.Configuration(schemaVersion: currentDBVersion, migrationBlock: { _, _ in })
+        
+        Realm.Configuration.defaultConfiguration = realmConfiguration
+    }
+    
+    lazy var realm = try! Realm()
     
     /// Use this to change properties of model objects **on the main thread**
     /// - Warning: if you try to change properties of model objects (such as Session) outside a `doChanges` block, an exception will be thrown
@@ -76,6 +91,8 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         block(realm: bgRealm)
         try! bgRealm.commitWrite()
     }
+    
+    // MARK: - State
     
     /// Whether transcripts are currently being indexed
     var isIndexingTranscripts = false {
@@ -106,6 +123,8 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     /// - parameter newSessionKeys: The keys (uniqueId) for the new sessions
     var sessionListChangedCallback: ((newSessionKeys: [String]) -> Void)?
     
+    // MARK: - Core Functionality
+    
     /// This is the main "sync" function
     /// #### The following steps are performed when `refresh()` is called:
     /// 1. Check to see if the URL for Apple's service has changed and update app config accordingly
@@ -132,8 +151,6 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     /// Orders the videos by year (descending) and session number (ascending)
     lazy var sortDescriptorsForSessionList: [SortDescriptor] = [SortDescriptor(property: "year", ascending: false), SortDescriptor(property: "id", ascending: true)]
     
-    private var shouldIgnoreCache = false
-    
     private let manager = Alamofire.Manager(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
     
     private func fetchOrUpdateAppleServiceURLs() {
@@ -144,8 +161,6 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             }
             
             let configJSON = JSON(data: jsonData)
-            
-            self.shouldIgnoreCache = configJSON["ignore_cache"].intValue == 1
             
             let fetchedConfig = AppConfig(json: configJSON)
             
@@ -202,7 +217,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 
                 mainQS {
                     // check if the videos have been updated since the last fetch
-                    if json["updated"].stringValue == self.config.videosUpdatedAt && !self.shouldIgnoreCache {
+                    if json["updated"].stringValue == self.config.videosUpdatedAt && !self.config.shouldIgnoreCache {
                         print("Video list did not change")
                         newVideosAvailable = false
                     } else {
@@ -221,11 +236,6 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 
                 // create and store/update each video
                 for jsonSession in sessionsArray {
-                    // WWDC 2016 updated the API to return all sessions even when they don't have a video URL yet
-                    // sessions are only valid for this app if URL is present
-                    // live sessions are handled separately
-                    if jsonSession["url"].string == nil { continue }
-                    
                     let session = Session(json: jsonSession)
 
                     if let existingSession = backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) {
@@ -255,6 +265,67 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 #endif
                 
                 mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
+            }
+        }
+    }
+    
+    private func updateSchedule() {
+        guard config.scheduleEnabled else { return }
+        
+        manager.request(.GET, config.sessionsURL).response { _, _, data, error in
+            dispatch_async(self.bgThread) {
+                let backgroundRealm = try! Realm()
+                
+                guard let jsonData = data else {
+                    print("No data returned from Apple's (session schedule) server!")
+                    return
+                }
+                
+                let json = JSON(data: jsonData)
+                
+                guard let tracksArray = json["response"]["tracks"].array else {
+                    print("Could not parse array of tracks")
+                    return
+                }
+                
+                tracksArray.forEach({ jsonTrack in
+                    let track = Track(json: jsonTrack)
+                    backgroundRealm.beginWrite()
+                    backgroundRealm.add(track, update: true)
+                    do {
+                        try backgroundRealm.commitWrite()
+                    } catch let error {
+                        NSLog("Error writing track \(track.name) to realm: \(error)")
+                    }
+                })
+                
+                guard let sessionsArray = json["response"]["sessions"].array else {
+                    print("Could not parse array of sessions")
+                    return
+                }
+                
+                sessionsArray.forEach { jsonScheduledSession in
+                    let scheduledSession = ScheduledSession(json: jsonScheduledSession)
+                    
+                    if let trackName = jsonScheduledSession["track"].string {
+                        scheduledSession.track = backgroundRealm.objectForPrimaryKey(Track.self, key: trackName)
+                    }
+                    
+                    if let existingSession = backgroundRealm.objectForPrimaryKey(ScheduledSession.self, key: scheduledSession.uniqueId) {
+                        // do not update semantically equal scheduled sessions
+                        guard !existingSession.isSemanticallyEqualToScheduledSession(scheduledSession) else { return }
+                    }
+                    
+                    backgroundRealm.beginWrite()
+                    backgroundRealm.add(scheduledSession, update: true)
+                    do {
+                        try backgroundRealm.commitWrite()
+                    } catch let error {
+                        NSLog("Error writing scheduled session \(scheduledSession.uniqueId) to realm: \(error)")
+                    }
+                }
+                
+                mainQ { self.sessionListChangedCallback?(newSessionKeys: []) }
             }
         }
     }
