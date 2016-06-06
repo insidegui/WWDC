@@ -43,10 +43,14 @@
 		DD4F6E791AE2D98F0099BEB5 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */; };
 		DD5E94101C283A2300E26B61 /* AboutWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5E940F1C283A2300E26B61 /* AboutWindow.swift */; };
 		DD76C0181BBF83C10056BB20 /* SlidesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD76C0171BBF83C10056BB20 /* SlidesDownloader.swift */; };
-		DD825CA71BBF575500276B83 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD825CA51BBF575500276B83 /* Models.swift */; };
 		DD825CA81BBF575500276B83 /* WWDCDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD825CA61BBF575500276B83 /* WWDCDatabase.swift */; };
 		DD825CAA1BBF631C00276B83 /* ProgressSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD825CA91BBF631C00276B83 /* ProgressSearchField.swift */; };
 		DD829F221AF271DF00B5977B /* index.json in Resources */ = {isa = PBXBuildFile; fileRef = DD829F211AF271DF00B5977B /* index.json */; };
+		DD8C68BB1D0613FE0075D6A5 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68BA1D0613FE0075D6A5 /* AppConfig.swift */; };
+		DD8C68BD1D0614080075D6A5 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68BC1D0614080075D6A5 /* Session.swift */; };
+		DD8C68BF1D0614180075D6A5 /* SearchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68BE1D0614180075D6A5 /* SearchFilter.swift */; };
+		DD8C68C11D0614250075D6A5 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C01D0614250075D6A5 /* Transcript.swift */; };
+		DD8C68C31D0614300075D6A5 /* LiveSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C21D0614300075D6A5 /* LiveSession.swift */; };
 		DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */; };
 		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
 		DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */; };
@@ -143,11 +147,15 @@
 		DD4F6E781AE2D98F0099BEB5 /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		DD5E940F1C283A2300E26B61 /* AboutWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutWindow.swift; sourceTree = "<group>"; };
 		DD76C0171BBF83C10056BB20 /* SlidesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlidesDownloader.swift; sourceTree = "<group>"; };
-		DD825CA51BBF575500276B83 /* Models.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		DD825CA61BBF575500276B83 /* WWDCDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCDatabase.swift; sourceTree = "<group>"; };
 		DD825CA91BBF631C00276B83 /* ProgressSearchField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProgressSearchField.swift; sourceTree = "<group>"; };
 		DD829F1B1AF26D3C00B5977B /* Crashlytics.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = Crashlytics.sh; sourceTree = "<group>"; };
 		DD829F211AF271DF00B5977B /* index.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = index.json; sourceTree = "<group>"; };
+		DD8C68BA1D0613FE0075D6A5 /* AppConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
+		DD8C68BC1D0614080075D6A5 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		DD8C68BE1D0614180075D6A5 /* SearchFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFilter.swift; sourceTree = "<group>"; };
+		DD8C68C01D0614250075D6A5 /* Transcript.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transcript.swift; sourceTree = "<group>"; };
+		DD8C68C21D0614300075D6A5 /* LiveSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSession.swift; sourceTree = "<group>"; };
 		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
 		DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveEventBannerViewController.xib; sourceTree = "<group>"; };
@@ -262,7 +270,7 @@
 				DD829F201AF271D400B5977B /* Service */,
 				1C967BAB1AE7EB5C003662B2 /* WWDC-Bridging-Header.h */,
 				DDD7A43B1AE2E392000A0102 /* Vendor */,
-				DDD7A4361AE2E253000A0102 /* Models */,
+				DDD7A4361AE2E253000A0102 /* Core */,
 				DDD7A4311AE2DF06000A0102 /* Helpers */,
 				DDD7A42F1AE2DEF2000A0102 /* Aux Controllers */,
 				DDD7A42E1AE2DEDD000A0102 /* Main Controllers */,
@@ -288,6 +296,38 @@
 				DD829F211AF271DF00B5977B /* index.json */,
 			);
 			name = Service;
+			sourceTree = "<group>";
+		};
+		DD8C68B71D0613CA0075D6A5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DD8C68BA1D0613FE0075D6A5 /* AppConfig.swift */,
+				DD8C68BC1D0614080075D6A5 /* Session.swift */,
+				DD8C68BE1D0614180075D6A5 /* SearchFilter.swift */,
+				DD8C68C01D0614250075D6A5 /* Transcript.swift */,
+				DD8C68C21D0614300075D6A5 /* LiveSession.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		DD8C68B81D0613CD0075D6A5 /* Data Fetching and Storage */ = {
+			isa = PBXGroup;
+			children = (
+				DD825CA61BBF575500276B83 /* WWDCDatabase.swift */,
+				DD373A891AE871AB00DAC19B /* VideoStore.swift */,
+				DD76C0171BBF83C10056BB20 /* SlidesDownloader.swift */,
+				DD2CC38B1AF4161700FC5F68 /* Preferences.swift */,
+				DD29DD9A1C276CC400392D42 /* About.swift */,
+			);
+			name = "Data Fetching and Storage";
+			sourceTree = "<group>";
+		};
+		DD8C68B91D0613D90075D6A5 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				DDF166841D03CD69006780BF /* WWDCEnvironment.swift */,
+			);
+			name = Configuration;
 			sourceTree = "<group>";
 		};
 		DDCAB4641C26206D005889CB /* Transcript */ = {
@@ -417,18 +457,14 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
-		DDD7A4361AE2E253000A0102 /* Models */ = {
+		DDD7A4361AE2E253000A0102 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				DDF166841D03CD69006780BF /* WWDCEnvironment.swift */,
-				DD825CA61BBF575500276B83 /* WWDCDatabase.swift */,
-				DD825CA51BBF575500276B83 /* Models.swift */,
-				DD373A891AE871AB00DAC19B /* VideoStore.swift */,
-				DD2CC38B1AF4161700FC5F68 /* Preferences.swift */,
-				DD76C0171BBF83C10056BB20 /* SlidesDownloader.swift */,
-				DD29DD9A1C276CC400392D42 /* About.swift */,
+				DD8C68B91D0613D90075D6A5 /* Configuration */,
+				DD8C68B81D0613CD0075D6A5 /* Data Fetching and Storage */,
+				DD8C68B71D0613CA0075D6A5 /* Models */,
 			);
-			name = Models;
+			name = Core;
 			sourceTree = "<group>";
 		};
 		DDD7A43B1AE2E392000A0102 /* Vendor */ = {
@@ -606,6 +642,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */,
+				DD8C68BF1D0614180075D6A5 /* SearchFilter.swift in Sources */,
 				DD20166E1AE40D0100DD8155 /* ContentBackgroundView.swift in Sources */,
 				DDD7A4351AE2E02A000A0102 /* SeparatorView.swift in Sources */,
 				DD4F6E761AE2D82A0099BEB5 /* VideosHeaderViewController.swift in Sources */,
@@ -621,18 +658,20 @@
 				DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */,
 				DDC5840A1D04BDC20062D3ED /* DockIconView.swift in Sources */,
 				DDE3A8231BC2DCEC00610FEF /* TranscriptSearchResultsController.swift in Sources */,
+				DD8C68C11D0614250075D6A5 /* Transcript.swift in Sources */,
 				DDBD18651BC3227B00EF7718 /* FilterBarController.swift in Sources */,
 				DD29DD9B1C276CC400392D42 /* About.swift in Sources */,
-				DD825CA71BBF575500276B83 /* Models.swift in Sources */,
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
 				DDF166831D03CB69006780BF /* PlayerExtensions.swift in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
+				DD8C68C31D0614300075D6A5 /* LiveSession.swift in Sources */,
 				DDF166851D03CD69006780BF /* WWDCEnvironment.swift in Sources */,
 				DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */,
 				DDCAB48A1C263EF9005889CB /* TranscriptLineTableRowView.swift in Sources */,
 				DDE3A82B1BC2DD8300610FEF /* TranscriptLineTableCellView.swift in Sources */,
 				C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */,
 				DD4F6E521AE2D11D0099BEB5 /* AppDelegate.swift in Sources */,
+				DD8C68BD1D0614080075D6A5 /* Session.swift in Sources */,
 				DD4F6E731AE2D5980099BEB5 /* VideoTableCellView.swift in Sources */,
 				DD4F6E711AE2D1C60099BEB5 /* VideoDetailsViewController.swift in Sources */,
 				DDD9CD001D03C34D002A36F2 /* NewWWDCGreeter.swift in Sources */,
@@ -651,6 +690,7 @@
 				1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */,
 				DD5E94101C283A2300E26B61 /* AboutWindow.swift in Sources */,
 				DD2016781AE4141900DD8155 /* ArrayExtensions.swift in Sources */,
+				DD8C68BB1D0613FE0075D6A5 /* AppConfig.swift in Sources */,
 				DDF1668A1D048BC8006780BF /* LiveSessionsListViewController.swift in Sources */,
 				DD76C0181BBF83C10056BB20 /* SlidesDownloader.swift in Sources */,
 				DDCAB46E1C2620BE005889CB /* TranscriptViewController.swift in Sources */,
