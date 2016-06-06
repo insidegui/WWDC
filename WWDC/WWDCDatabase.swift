@@ -202,8 +202,6 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
                 
                 var newSessionKeys: [String] = []
                 
-                let migrator = LegacyWWDCDatabaseMigrator()
-                
                 // create and store/update each video
                 for jsonSession in sessionsArray {
                     // WWDC 2016 updated the API to return all sessions even when they don't have a video URL yet
@@ -211,7 +209,7 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
                     // live sessions are handled separately
                     if jsonSession["url"].string == nil { continue }
                     
-                    var session = Session(json: jsonSession)
+                    let session = Session(json: jsonSession)
 
                     if let existingSession = backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) {
                         if !existingSession.isSemanticallyEqualToSession(session) {
@@ -222,13 +220,10 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
                     }
                     backgroundRealm.beginWrite()
                     
-                    if migrator.needsMigration { session = migrator.migrateSession(session) }
                     backgroundRealm.add(session, update: true)
                     
                     try! backgroundRealm.commitWrite()
                 }
-                
-                migrator.needsMigration = false
                 
                 #if os(OSX)
                 self.indexTranscriptsForSessionsWithKeys(newSessionKeys)
@@ -313,80 +308,4 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
         }
     }
     
-}
-
-// MARK: - Data migration
-
-private class LegacyWWDCDatabaseMigrator {
-    
-    private let migrationStatusKey = "MigratedToRealm"
-    
-    var needsMigration: Bool {
-        get {
-            return !defaults.boolForKey(migrationStatusKey)
-        }
-        set {
-            defaults.setBool(newValue, forKey: migrationStatusKey)
-        }
-    }
-    
-    /// Migrates the session's favorite status, progress and position from the legacy preferences to the new model
-    func migrateSession(session: Session) -> Session {
-        #if os(OSX)
-        session.downloaded = session.hdVideoURL.isEmpty ? false : VideoStore.SharedStore().hasVideo(session.hdVideoURL)
-        #endif
-        session.favorite = fetchSessionIsFavorite(session)
-        session.currentPosition = fetchSessionCurrentPosition(session)
-        session.progress = fetchSessionProgress(session)
-        
-        return session
-    }
-    
-    init() {
-        loadFavorites()
-    }
-    
-    private let defaults = NSUserDefaults.standardUserDefaults()
-    
-    private func fetchSessionProgress(session: Session) -> Double {
-        return defaults.doubleForKey(session.legacyProgressKey)
-    }
-    
-    private func fetchSessionCurrentPosition(session: Session) -> Double {
-        return defaults.doubleForKey(session.legacyCurrentPositionKey)
-    }
-    
-    private var favorites: [String] = []
-    
-    private let favoritesKey = "Favorites"
-    private func loadFavorites() {
-        if let faves = defaults.arrayForKey(favoritesKey) as? [String] {
-            favorites = faves
-        }
-    }
-    
-    private func fetchSessionIsFavorite(session: Session) -> Bool {
-        return favorites.contains(session.legacyUniqueKey)
-    }
-    
-}
-
-private extension Session {
-    /* The properties below are only used to migrate the data from the old defaults-based model to Realm and will be removed in the near future */
-    
-    var legacyUniqueKey: String {
-        get {
-            return "\(year)-\(id)"
-        }
-    }
-    var legacyProgressKey: String {
-        get {
-            return "\(legacyUniqueKey)-progress"
-        }
-    }
-    var legacyCurrentPositionKey: String {
-        get {
-            return "\(legacyUniqueKey)-currentPosition"
-        }
-    }
 }
