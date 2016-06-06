@@ -48,8 +48,8 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
         didSet {
             guard config != nil else { return }
             
+            wipe2016TechTalksVideos()
             updateSessionVideos()
-            updateExtraSessionVideos()
         }
     }
     
@@ -159,6 +159,16 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
         }
     }
     
+    private func wipe2016TechTalksVideos() {
+        do {
+            try realm.write {
+                realm.delete(realm.objects(Session.self).filter("id > 10000"))
+            }
+        } catch let error {
+            NSLog("Error deleting tech talks videos: \(error)")
+        }
+    }
+    
     private func updateSessionVideos() {
         manager.request(.GET, config.videosURL).response { _, _, data, error in
             dispatch_async(self.bgThread) {
@@ -225,46 +235,6 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
                 #endif
                 
                 mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
-            }
-        }
-    }
-    
-    private func updateExtraSessionVideos() {
-        manager.request(.GET, Constants.extraVideosURL).response { _, _, data, error in
-            dispatch_async(self.bgThread) {
-                let backgroundRealm = try! Realm()
-                
-                guard let jsonData = data else {
-                    print("No data returned from extra videos server!")
-                    return
-                }
-                
-                let json = JSON(data: jsonData)
-                
-                guard let sessionsArray = json["events"].array else {
-                    print("Could not parse array of sessions from extra videos server")
-                    return
-                }
-                
-                var newSessionKeys: [String] = []
-                
-                // create and store/update each video
-                for jsonSession in sessionsArray {
-                    let session = Session(json: jsonSession)
-                    
-                    if backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) == nil {
-                        newSessionKeys.append(session.uniqueId)
-                    }
-                    backgroundRealm.beginWrite()
-                    
-                    backgroundRealm.add(session, update: true)
-                    
-                    try! backgroundRealm.commitWrite()
-                }
-                
-                if newSessionKeys.count > 0 {
-                    mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
-                }
             }
         }
     }
