@@ -17,7 +17,7 @@ class LiveSessionTableCellView: NSTableCellView {
     var delegate: LiveSessionTableCellViewDelegate?
     
     @IBOutlet weak private var playButton: NSButton!
-    @IBOutlet weak private var timeRemainingView: LiveSessionTimeRemainingView!
+    @IBOutlet weak private var timeRemainingView: RoundRectLabel!
     @IBOutlet weak private var titleTextField: NSTextField!
     
     private lazy var formatter: NSDateFormatter = {

@@ -23,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="35" viewBased="YES" id="Kub-Gq-Mef">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="271"/>
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="0.0"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -69,7 +69,7 @@
                                                             <action selector="play:" target="hRj-Es-ByD" id="aOo-5M-4y0"/>
                                                         </connections>
                                                     </button>
-                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Pqf-4i-xG6" customClass="LiveSessionTimeRemainingView" customModule="WWDC" customModuleProvider="target">
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Pqf-4i-xG6" customClass="RoundRectLabel" customModule="WWDC" customModuleProvider="target">
                                                         <rect key="frame" x="379" y="7" width="76" height="22"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="22" placeholder="YES" id="2jt-tA-eF3"/>

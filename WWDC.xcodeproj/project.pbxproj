@@ -84,7 +84,7 @@
 		DDF1668A1D048BC8006780BF /* LiveSessionsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166881D048BC8006780BF /* LiveSessionsListViewController.swift */; };
 		DDF1668B1D048BC8006780BF /* LiveSessionsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDF166891D048BC8006780BF /* LiveSessionsListViewController.xib */; };
 		DDF1668D1D048C4D006780BF /* LiveSessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF1668C1D048C4D006780BF /* LiveSessionTableCellView.swift */; };
-		DDF1668F1D048C7C006780BF /* LiveSessionTimeRemainingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF1668E1D048C7C006780BF /* LiveSessionTimeRemainingView.swift */; };
+		DDF1668F1D048C7C006780BF /* RoundRectLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF1668E1D048C7C006780BF /* RoundRectLabel.swift */; };
 		DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */; };
 		DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */; };
 		DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */; };
@@ -192,7 +192,7 @@
 		DDF166881D048BC8006780BF /* LiveSessionsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionsListViewController.swift; sourceTree = "<group>"; };
 		DDF166891D048BC8006780BF /* LiveSessionsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveSessionsListViewController.xib; sourceTree = "<group>"; };
 		DDF1668C1D048C4D006780BF /* LiveSessionTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionTableCellView.swift; sourceTree = "<group>"; };
-		DDF1668E1D048C7C006780BF /* LiveSessionTimeRemainingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionTimeRemainingView.swift; sourceTree = "<group>"; };
+		DDF1668E1D048C7C006780BF /* RoundRectLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundRectLabel.swift; sourceTree = "<group>"; };
 		DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEventObserver.swift; sourceTree = "<group>"; };
 		DDF80A651AE88B6F004BE8E2 /* DownloadProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressViewController.swift; sourceTree = "<group>"; };
 		DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
@@ -504,7 +504,7 @@
 			isa = PBXGroup;
 			children = (
 				DDF1668C1D048C4D006780BF /* LiveSessionTableCellView.swift */,
-				DDF1668E1D048C7C006780BF /* LiveSessionTimeRemainingView.swift */,
+				DDF1668E1D048C7C006780BF /* RoundRectLabel.swift */,
 			);
 			name = "Live Sessions";
 			sourceTree = "<group>";
@@ -722,7 +722,7 @@
 				51B28F5B1BB63F9E001F7A6C /* GridlessTableView.swift in Sources */,
 				DD3081781AF3DC370009D412 /* DTFolderMonitor.m in Sources */,
 				DDF80A661AE88B6F004BE8E2 /* DownloadProgressViewController.swift in Sources */,
-				DDF1668F1D048C7C006780BF /* LiveSessionTimeRemainingView.swift in Sources */,
+				DDF1668F1D048C7C006780BF /* RoundRectLabel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

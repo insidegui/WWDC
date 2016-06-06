@@ -1,5 +1,5 @@
 //
-//  LiveSessionTimeRemainingView.swift
+//  RoundRectLabel.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 05/06/16.
@@ -8,12 +8,18 @@
 
 import Cocoa
 
-class LiveSessionTimeRemainingView: NSView {
+class RoundRectLabel: NSView {
 
     var title: String = "" {
         didSet {
             _storedAttributedTitle = nil
             sizeToFit()
+            setNeedsDisplayInRect(bounds)
+        }
+    }
+    
+    var tintColor = Theme.WWDCTheme.fillColor {
+        didSet {
             setNeedsDisplayInRect(bounds)
         }
     }
@@ -34,7 +40,7 @@ class LiveSessionTimeRemainingView: NSView {
     override func drawRect(dirtyRect: NSRect) {
         super.drawRect(dirtyRect)
 
-        Theme.WWDCTheme.fillColor.setFill()
+        tintColor.setFill()
         NSBezierPath(roundedRect: bounds, xRadius: 4.0, yRadius: 4.0).addClip()
         NSRectFill(dirtyRect)
         
