@@ -1,0 +1,432 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DDCF4CFB1D05D0F20060F6E2 /* GRActionableProgressIndicator.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CDB1D05D0F20060F6E2 /* GRActionableProgressIndicator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4CFC1D05D0F20060F6E2 /* GRActionableProgressIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CDC1D05D0F20060F6E2 /* GRActionableProgressIndicator.m */; };
+		DDCF4CFD1D05D0F20060F6E2 /* GRBannerView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CDD1D05D0F20060F6E2 /* GRBannerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4CFE1D05D0F20060F6E2 /* GRBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CDE1D05D0F20060F6E2 /* GRBannerView.m */; };
+		DDCF4CFF1D05D0F20060F6E2 /* GRCustomPlayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CDF1D05D0F20060F6E2 /* GRCustomPlayerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D001D05D0F20060F6E2 /* GRCustomPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CE01D05D0F20060F6E2 /* GRCustomPlayerView.m */; };
+		DDCF4D011D05D0F20060F6E2 /* GRLoadingView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CE11D05D0F20060F6E2 /* GRLoadingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D021D05D0F20060F6E2 /* GRLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CE21D05D0F20060F6E2 /* GRLoadingView.m */; };
+		DDCF4D031D05D0F20060F6E2 /* GRMaskImageView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CE31D05D0F20060F6E2 /* GRMaskImageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D041D05D0F20060F6E2 /* GRMaskImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CE41D05D0F20060F6E2 /* GRMaskImageView.m */; };
+		DDCF4D051D05D0F20060F6E2 /* GRMovableVisualEffectView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CE51D05D0F20060F6E2 /* GRMovableVisualEffectView.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		DDCF4D061D05D0F20060F6E2 /* GRMovableVisualEffectView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CE61D05D0F20060F6E2 /* GRMovableVisualEffectView.m */; };
+		DDCF4D071D05D0F20060F6E2 /* GRPlayerView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CE71D05D0F20060F6E2 /* GRPlayerView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D081D05D0F20060F6E2 /* GRPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CE81D05D0F20060F6E2 /* GRPlayerView.m */; };
+		DDCF4D091D05D0F20060F6E2 /* GRPlayerWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CE91D05D0F20060F6E2 /* GRPlayerWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D0A1D05D0F20060F6E2 /* GRPlayerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CEA1D05D0F20060F6E2 /* GRPlayerWindow.m */; };
+		DDCF4D0B1D05D0F20060F6E2 /* GRReadingWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CEB1D05D0F20060F6E2 /* GRReadingWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D0C1D05D0F20060F6E2 /* GRReadingWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CEC1D05D0F20060F6E2 /* GRReadingWindow.m */; };
+		DDCF4D0D1D05D0F20060F6E2 /* GRScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CED1D05D0F20060F6E2 /* GRScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D0E1D05D0F20060F6E2 /* GRScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CEE1D05D0F20060F6E2 /* GRScrollView.m */; };
+		DDCF4D0F1D05D0F20060F6E2 /* GRSegmentedControl.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CEF1D05D0F20060F6E2 /* GRSegmentedControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D101D05D0F20060F6E2 /* GRSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CF01D05D0F20060F6E2 /* GRSegmentedControl.m */; };
+		DDCF4D111D05D0F20060F6E2 /* GRTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CF11D05D0F20060F6E2 /* GRTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D121D05D0F20060F6E2 /* GRTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CF21D05D0F20060F6E2 /* GRTextField.m */; };
+		DDCF4D131D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CF31D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D141D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CF41D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.m */; };
+		DDCF4D151D05D0F20060F6E2 /* GRWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CF51D05D0F20060F6E2 /* GRWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D161D05D0F20060F6E2 /* GRWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CF61D05D0F20060F6E2 /* GRWindow.m */; };
+		DDCF4D171D05D0F20060F6E2 /* GRWindowMovingView.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CF71D05D0F20060F6E2 /* GRWindowMovingView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D181D05D0F20060F6E2 /* GRWindowMovingView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CF81D05D0F20060F6E2 /* GRWindowMovingView.m */; };
+		DDCF4D191D05D0F20060F6E2 /* NSImage+CGImage.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4CF91D05D0F20060F6E2 /* NSImage+CGImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDCF4D1A1D05D0F20060F6E2 /* NSImage+CGImage.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCF4CFA1D05D0F20060F6E2 /* NSImage+CGImage.m */; };
+		DDCF4D1C1D05D0FC0060F6E2 /* WWDCAppKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DDCF4D1B1D05D0FC0060F6E2 /* WWDCAppKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DD2016411AE401B500DD8155 /* WWDCAppKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WWDCAppKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDCF4CDB1D05D0F20060F6E2 /* GRActionableProgressIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRActionableProgressIndicator.h; path = WWDCAppKit/GRActionableProgressIndicator.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CDC1D05D0F20060F6E2 /* GRActionableProgressIndicator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRActionableProgressIndicator.m; path = WWDCAppKit/GRActionableProgressIndicator.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CDD1D05D0F20060F6E2 /* GRBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRBannerView.h; path = WWDCAppKit/GRBannerView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CDE1D05D0F20060F6E2 /* GRBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRBannerView.m; path = WWDCAppKit/GRBannerView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CDF1D05D0F20060F6E2 /* GRCustomPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRCustomPlayerView.h; path = WWDCAppKit/GRCustomPlayerView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CE01D05D0F20060F6E2 /* GRCustomPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRCustomPlayerView.m; path = WWDCAppKit/GRCustomPlayerView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CE11D05D0F20060F6E2 /* GRLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRLoadingView.h; path = WWDCAppKit/GRLoadingView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CE21D05D0F20060F6E2 /* GRLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRLoadingView.m; path = WWDCAppKit/GRLoadingView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CE31D05D0F20060F6E2 /* GRMaskImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRMaskImageView.h; path = WWDCAppKit/GRMaskImageView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CE41D05D0F20060F6E2 /* GRMaskImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRMaskImageView.m; path = WWDCAppKit/GRMaskImageView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CE51D05D0F20060F6E2 /* GRMovableVisualEffectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRMovableVisualEffectView.h; path = WWDCAppKit/GRMovableVisualEffectView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CE61D05D0F20060F6E2 /* GRMovableVisualEffectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRMovableVisualEffectView.m; path = WWDCAppKit/GRMovableVisualEffectView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CE71D05D0F20060F6E2 /* GRPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRPlayerView.h; path = WWDCAppKit/GRPlayerView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CE81D05D0F20060F6E2 /* GRPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRPlayerView.m; path = WWDCAppKit/GRPlayerView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CE91D05D0F20060F6E2 /* GRPlayerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRPlayerWindow.h; path = WWDCAppKit/GRPlayerWindow.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CEA1D05D0F20060F6E2 /* GRPlayerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRPlayerWindow.m; path = WWDCAppKit/GRPlayerWindow.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CEB1D05D0F20060F6E2 /* GRReadingWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRReadingWindow.h; path = WWDCAppKit/GRReadingWindow.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CEC1D05D0F20060F6E2 /* GRReadingWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRReadingWindow.m; path = WWDCAppKit/GRReadingWindow.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CED1D05D0F20060F6E2 /* GRScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRScrollView.h; path = WWDCAppKit/GRScrollView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CEE1D05D0F20060F6E2 /* GRScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRScrollView.m; path = WWDCAppKit/GRScrollView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CEF1D05D0F20060F6E2 /* GRSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRSegmentedControl.h; path = WWDCAppKit/GRSegmentedControl.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CF01D05D0F20060F6E2 /* GRSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRSegmentedControl.m; path = WWDCAppKit/GRSegmentedControl.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CF11D05D0F20060F6E2 /* GRTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRTextField.h; path = WWDCAppKit/GRTextField.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CF21D05D0F20060F6E2 /* GRTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRTextField.m; path = WWDCAppKit/GRTextField.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CF31D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRTitlebarVisibilityControllingView.h; path = WWDCAppKit/GRTitlebarVisibilityControllingView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CF41D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRTitlebarVisibilityControllingView.m; path = WWDCAppKit/GRTitlebarVisibilityControllingView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CF51D05D0F20060F6E2 /* GRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRWindow.h; path = WWDCAppKit/GRWindow.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CF61D05D0F20060F6E2 /* GRWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRWindow.m; path = WWDCAppKit/GRWindow.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CF71D05D0F20060F6E2 /* GRWindowMovingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GRWindowMovingView.h; path = WWDCAppKit/GRWindowMovingView.h; sourceTree = SOURCE_ROOT; };
+		DDCF4CF81D05D0F20060F6E2 /* GRWindowMovingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GRWindowMovingView.m; path = WWDCAppKit/GRWindowMovingView.m; sourceTree = SOURCE_ROOT; };
+		DDCF4CF91D05D0F20060F6E2 /* NSImage+CGImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSImage+CGImage.h"; path = "WWDCAppKit/NSImage+CGImage.h"; sourceTree = SOURCE_ROOT; };
+		DDCF4CFA1D05D0F20060F6E2 /* NSImage+CGImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSImage+CGImage.m"; path = "WWDCAppKit/NSImage+CGImage.m"; sourceTree = SOURCE_ROOT; };
+		DDCF4D1B1D05D0FC0060F6E2 /* WWDCAppKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WWDCAppKit.h; path = WWDCAppKit/WWDCAppKit.h; sourceTree = SOURCE_ROOT; };
+		DDCF4D1D1D05D1040060F6E2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = WWDCAppKit/Info.plist; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DD20163D1AE401B500DD8155 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DD2016371AE401B500DD8155 = {
+			isa = PBXGroup;
+			children = (
+				DD2016431AE401B500DD8155 /* WWDCAppKit */,
+				DD2016421AE401B500DD8155 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DD2016421AE401B500DD8155 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DD2016411AE401B500DD8155 /* WWDCAppKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DD2016431AE401B500DD8155 /* WWDCAppKit */ = {
+			isa = PBXGroup;
+			children = (
+				DDCF4D1B1D05D0FC0060F6E2 /* WWDCAppKit.h */,
+				DDCF4CDA1D05D0E40060F6E2 /* Classes */,
+				DD2016441AE401B500DD8155 /* Supporting Files */,
+			);
+			name = WWDCAppKit;
+			path = ViewUtils;
+			sourceTree = "<group>";
+		};
+		DD2016441AE401B500DD8155 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DDCF4D1D1D05D1040060F6E2 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DDCF4CDA1D05D0E40060F6E2 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				DDCF4CDB1D05D0F20060F6E2 /* GRActionableProgressIndicator.h */,
+				DDCF4CDC1D05D0F20060F6E2 /* GRActionableProgressIndicator.m */,
+				DDCF4CDD1D05D0F20060F6E2 /* GRBannerView.h */,
+				DDCF4CDE1D05D0F20060F6E2 /* GRBannerView.m */,
+				DDCF4CDF1D05D0F20060F6E2 /* GRCustomPlayerView.h */,
+				DDCF4CE01D05D0F20060F6E2 /* GRCustomPlayerView.m */,
+				DDCF4CE11D05D0F20060F6E2 /* GRLoadingView.h */,
+				DDCF4CE21D05D0F20060F6E2 /* GRLoadingView.m */,
+				DDCF4CE31D05D0F20060F6E2 /* GRMaskImageView.h */,
+				DDCF4CE41D05D0F20060F6E2 /* GRMaskImageView.m */,
+				DDCF4CE51D05D0F20060F6E2 /* GRMovableVisualEffectView.h */,
+				DDCF4CE61D05D0F20060F6E2 /* GRMovableVisualEffectView.m */,
+				DDCF4CE71D05D0F20060F6E2 /* GRPlayerView.h */,
+				DDCF4CE81D05D0F20060F6E2 /* GRPlayerView.m */,
+				DDCF4CE91D05D0F20060F6E2 /* GRPlayerWindow.h */,
+				DDCF4CEA1D05D0F20060F6E2 /* GRPlayerWindow.m */,
+				DDCF4CEB1D05D0F20060F6E2 /* GRReadingWindow.h */,
+				DDCF4CEC1D05D0F20060F6E2 /* GRReadingWindow.m */,
+				DDCF4CED1D05D0F20060F6E2 /* GRScrollView.h */,
+				DDCF4CEE1D05D0F20060F6E2 /* GRScrollView.m */,
+				DDCF4CEF1D05D0F20060F6E2 /* GRSegmentedControl.h */,
+				DDCF4CF01D05D0F20060F6E2 /* GRSegmentedControl.m */,
+				DDCF4CF11D05D0F20060F6E2 /* GRTextField.h */,
+				DDCF4CF21D05D0F20060F6E2 /* GRTextField.m */,
+				DDCF4CF31D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.h */,
+				DDCF4CF41D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.m */,
+				DDCF4CF51D05D0F20060F6E2 /* GRWindow.h */,
+				DDCF4CF61D05D0F20060F6E2 /* GRWindow.m */,
+				DDCF4CF71D05D0F20060F6E2 /* GRWindowMovingView.h */,
+				DDCF4CF81D05D0F20060F6E2 /* GRWindowMovingView.m */,
+				DDCF4CF91D05D0F20060F6E2 /* NSImage+CGImage.h */,
+				DDCF4CFA1D05D0F20060F6E2 /* NSImage+CGImage.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DD20163E1AE401B500DD8155 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDCF4D0F1D05D0F20060F6E2 /* GRSegmentedControl.h in Headers */,
+				DDCF4D131D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.h in Headers */,
+				DDCF4D011D05D0F20060F6E2 /* GRLoadingView.h in Headers */,
+				DDCF4D151D05D0F20060F6E2 /* GRWindow.h in Headers */,
+				DDCF4CFB1D05D0F20060F6E2 /* GRActionableProgressIndicator.h in Headers */,
+				DDCF4D171D05D0F20060F6E2 /* GRWindowMovingView.h in Headers */,
+				DDCF4D191D05D0F20060F6E2 /* NSImage+CGImage.h in Headers */,
+				DDCF4D031D05D0F20060F6E2 /* GRMaskImageView.h in Headers */,
+				DDCF4D0B1D05D0F20060F6E2 /* GRReadingWindow.h in Headers */,
+				DDCF4D091D05D0F20060F6E2 /* GRPlayerWindow.h in Headers */,
+				DDCF4D1C1D05D0FC0060F6E2 /* WWDCAppKit.h in Headers */,
+				DDCF4D0D1D05D0F20060F6E2 /* GRScrollView.h in Headers */,
+				DDCF4D071D05D0F20060F6E2 /* GRPlayerView.h in Headers */,
+				DDCF4D111D05D0F20060F6E2 /* GRTextField.h in Headers */,
+				DDCF4CFF1D05D0F20060F6E2 /* GRCustomPlayerView.h in Headers */,
+				DDCF4CFD1D05D0F20060F6E2 /* GRBannerView.h in Headers */,
+				DDCF4D051D05D0F20060F6E2 /* GRMovableVisualEffectView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DD2016401AE401B500DD8155 /* WWDCAppKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD2016571AE401B500DD8155 /* Build configuration list for PBXNativeTarget "WWDCAppKit" */;
+			buildPhases = (
+				DD20163C1AE401B500DD8155 /* Sources */,
+				DD20163D1AE401B500DD8155 /* Frameworks */,
+				DD20163E1AE401B500DD8155 /* Headers */,
+				DD20163F1AE401B500DD8155 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WWDCAppKit;
+			productName = ViewUtils;
+			productReference = DD2016411AE401B500DD8155 /* WWDCAppKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DD2016381AE401B500DD8155 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 0710;
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = "Guilherme Rambo";
+				TargetAttributes = {
+					DD2016401AE401B500DD8155 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+				};
+			};
+			buildConfigurationList = DD20163B1AE401B500DD8155 /* Build configuration list for PBXProject "WWDCAppKit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DD2016371AE401B500DD8155;
+			productRefGroup = DD2016421AE401B500DD8155 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DD2016401AE401B500DD8155 /* WWDCAppKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DD20163F1AE401B500DD8155 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DD20163C1AE401B500DD8155 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDCF4D081D05D0F20060F6E2 /* GRPlayerView.m in Sources */,
+				DDCF4D0C1D05D0F20060F6E2 /* GRReadingWindow.m in Sources */,
+				DDCF4D0E1D05D0F20060F6E2 /* GRScrollView.m in Sources */,
+				DDCF4D141D05D0F20060F6E2 /* GRTitlebarVisibilityControllingView.m in Sources */,
+				DDCF4D0A1D05D0F20060F6E2 /* GRPlayerWindow.m in Sources */,
+				DDCF4D181D05D0F20060F6E2 /* GRWindowMovingView.m in Sources */,
+				DDCF4D101D05D0F20060F6E2 /* GRSegmentedControl.m in Sources */,
+				DDCF4D161D05D0F20060F6E2 /* GRWindow.m in Sources */,
+				DDCF4D1A1D05D0F20060F6E2 /* NSImage+CGImage.m in Sources */,
+				DDCF4D021D05D0F20060F6E2 /* GRLoadingView.m in Sources */,
+				DDCF4CFC1D05D0F20060F6E2 /* GRActionableProgressIndicator.m in Sources */,
+				DDCF4D041D05D0F20060F6E2 /* GRMaskImageView.m in Sources */,
+				DDCF4D061D05D0F20060F6E2 /* GRMovableVisualEffectView.m in Sources */,
+				DDCF4CFE1D05D0F20060F6E2 /* GRBannerView.m in Sources */,
+				DDCF4D121D05D0F20060F6E2 /* GRTextField.m in Sources */,
+				DDCF4D001D05D0F20060F6E2 /* GRCustomPlayerView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		DD2016551AE401B500DD8155 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DD2016561AE401B500DD8155 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DD2016581AE401B500DD8155 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = WWDCAppKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.guilhermerambo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = WWDCAppKit;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DD2016591AE401B500DD8155 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = WWDCAppKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "br.com.guilhermerambo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = WWDCAppKit;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DD20163B1AE401B500DD8155 /* Build configuration list for PBXProject "WWDCAppKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD2016551AE401B500DD8155 /* Debug */,
+				DD2016561AE401B500DD8155 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD2016571AE401B500DD8155 /* Build configuration list for PBXNativeTarget "WWDCAppKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD2016581AE401B500DD8155 /* Debug */,
+				DD2016591AE401B500DD8155 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DD2016381AE401B500DD8155 /* Project object */;
+}

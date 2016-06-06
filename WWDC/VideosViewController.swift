@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import ViewUtils
+import WWDCAppKit
 import RealmSwift
 
 class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {

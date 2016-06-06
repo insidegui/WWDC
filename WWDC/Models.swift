@@ -10,6 +10,7 @@
 
 import Foundation
 import RealmSwift
+import SwiftyJSON
 
 class AppConfig: Object {
     dynamic var sessionsURL = ""

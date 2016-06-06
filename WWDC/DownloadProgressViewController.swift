@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import ViewUtils
+import WWDCAppKit
 
 enum DownloadProgressViewButtonState : Int {
     case Invalid

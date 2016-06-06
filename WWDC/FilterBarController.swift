@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import ViewUtils
+import WWDCAppKit
 
 class FilterBarController: NSViewController, GRScrollViewDelegate {
 

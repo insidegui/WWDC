@@ -11,6 +11,7 @@
 import Foundation
 import RealmSwift
 import Alamofire
+import SwiftyJSON
 
 func mainQS(block: () -> ()) {
     dispatch_sync(dispatch_get_main_queue(), block)

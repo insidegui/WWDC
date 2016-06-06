@@ -8,6 +8,7 @@
 
 import Cocoa
 import WWDCPlayer
+import SwiftyJSON
 
 public let LiveSessionsListDidChangeNotification = "LiveSessionsListDidChangeNotification"
 public let LiveEventNextInfoChangedNotification = "LiveEventNextInfoChangedNotification"

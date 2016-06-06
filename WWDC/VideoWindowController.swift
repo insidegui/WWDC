@@ -9,7 +9,7 @@
 import Cocoa
 import AVFoundation
 import AVKit
-import ViewUtils
+import WWDCAppKit
 
 private let _nibName = "VideoWindowController"
 

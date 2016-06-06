@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import ViewUtils
+import WWDCAppKit
 import KVOController
 
 class VideoTableCellView: NSTableCellView {
