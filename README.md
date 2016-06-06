@@ -1,12 +1,12 @@
 Psst, want me to love you? Then [check this out](https://getbrowserfreedom.com) 😁
 
-# WWDC app for OS X
+# The WWDC app for OS X
 
-Don't like the WWDC website? Prefer native apps?
+This is the unofficial WWDC app for OS X.
 
-Use this app to watch WWDC sessions on your Mac.
+Use this app to watch WWDC sessions on your Mac and do much more. Keep reading...
 
-[Click here to download the latest release](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip).
+**⬇️ [Click here to download the latest release](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip) ⬇️**
 
 ![screenshot](screenshots/screenshot.png)
 
@@ -38,11 +38,19 @@ WWDC for OS X is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can s
 
 ## Build Instructions
 
-**Building requires Xcode 7.0 or later**
+**Pre-requisites:**
 
-The only steps required before you build is to pull down the code and submodules:
+- Xcode 7.3 or later
+- [CocoaPods](https://cocoapods.org)
+
+Clone the repository:
 
 	$ git clone --recursive https://github.com/insidegui/WWDC.git
+
+Install dependencies:
+
+	$ pod install
+
 
 ### Cask
 
