@@ -213,7 +213,11 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
 
                     if let existingSession = backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) {
                         if !existingSession.isSemanticallyEqualToSession(session) {
+                            // something about this session has changed, update
                             newSessionKeys.append(session.uniqueId)
+                        } else {
+                            // there's nothing new about this session
+                            continue;
                         }
                     } else {
                         newSessionKeys.append(session.uniqueId)
@@ -222,7 +226,11 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
                     
                     backgroundRealm.add(session, update: true)
                     
-                    try! backgroundRealm.commitWrite()
+                    do {
+                        try backgroundRealm.commitWrite()
+                    } catch let error {
+                        NSLog("Unable to commit session write: \(error)")
+                    }
                 }
                 
                 #if os(OSX)
@@ -252,6 +260,10 @@ let WWDCWeekDidEndNotification = "WWDCWeekDidEndNotification"
     private func indexTranscriptForSession(session: Session) {
         // TODO: check if transcript has been updated and index It again if It has (https://github.com/ASCIIwwdc/asciiwwdc.com/issues/24)
         guard session.transcript == nil else { return }
+        
+        #if DEBUG
+            NSLog("Session \(session.uniqueId) doesn't have a transcript, I'm looking for one...")
+        #endif
         
         let sessionKey = session.uniqueId
         let url = "\(Constants.asciiServiceBaseURL)\(session.year)//sessions/\(session.id)"
