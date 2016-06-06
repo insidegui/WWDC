@@ -236,8 +236,11 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 
                 // create and store/update each video
                 for jsonSession in sessionsArray {
+                    // ignored videos from 2016 without a duration specified
+                    if jsonSession["duration"].intValue == 0 && jsonSession["year"].intValue > 2015 { continue }
+                    
                     let session = Session(json: jsonSession)
-
+                    
                     if let existingSession = backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) {
                         if !existingSession.isSemanticallyEqualToSession(session) {
                             // something about this session has changed, update
