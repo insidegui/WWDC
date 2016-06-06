@@ -59,7 +59,7 @@ class DownloadProgressViewController: NSViewController {
             return
         }
         
-        progressIndicator?.action = "showDownloadsWindow:"
+        progressIndicator?.action = #selector(AppDelegate.showDownloadsWindow(_:))
 
         if session.hd_url != nil {
             view.hidden = false
