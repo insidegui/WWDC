@@ -464,6 +464,7 @@ CA
                     </connections>
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WWDC" customModuleProvider="target"/>
+                <customObject id="UwV-YX-STe" customClass="SUUpdater"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-216" y="-406"/>

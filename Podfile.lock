@@ -6,8 +6,8 @@ PODS:
   - Realm/Headers (1.0.0)
   - RealmSwift (1.0.0):
     - Realm (= 1.0.0)
+  - Sparkle (1.14.0)
   - SwiftyJSON (2.3.2)
-  - Updater (1.0.0)
   - WWDCAppKit (1.0.0)
   - WWDCPlayer (1.0.0)
 
@@ -15,14 +15,12 @@ DEPENDENCIES:
   - Alamofire
   - KVOController
   - RealmSwift
+  - Sparkle
   - SwiftyJSON
-  - Updater (from `LocalPods/Updater`)
   - WWDCAppKit (from `LocalPods/WWDCAppKit`)
   - WWDCPlayer (from `LocalPods/WWDCPlayer`)
 
 EXTERNAL SOURCES:
-  Updater:
-    :path: LocalPods/Updater
   WWDCAppKit:
     :path: LocalPods/WWDCAppKit
   WWDCPlayer:
@@ -33,8 +31,8 @@ SPEC CHECKSUMS:
   KVOController: 321b5fc59300fcaabd42c0f679baa7a27efbb2fd
   Realm: e15cd8e7c11d3e576f628ba0b7cb855269b4991c
   RealmSwift: 3229306d020d96f83b335f87a0dcbf2cef0e6a2b
+  Sparkle: ccd95233b12a3e3d4eeb55ff01dd4c8bb8188b07
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
-  Updater: 4c6a8e5c35f5fb7aaa160fd01c2649b10d21c827
   WWDCAppKit: afb67188d6b66f3012ea9242a61b5f7536319f2d
   WWDCPlayer: 939164a849d354ce4f035de68e6765c038115a96
 

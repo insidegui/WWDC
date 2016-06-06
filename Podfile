@@ -7,8 +7,8 @@ target 'WWDC' do
   pod 'Alamofire'
   pod 'KVOController'
   pod 'SwiftyJSON'
+  pod 'Sparkle'
   
-  pod 'Updater', :path => 'LocalPods/Updater'
   pod 'WWDCAppKit', :path => 'LocalPods/WWDCAppKit'
   pod 'WWDCPlayer', :path => 'LocalPods/WWDCPlayer'
 

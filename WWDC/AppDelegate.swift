@@ -8,7 +8,7 @@
 
 import Cocoa
 import Crashlytics
-import Updater
+import Sparkle
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -31,9 +31,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // start checking for live event
         LiveEventObserver.SharedObserver().start()
-        
-        // check for updates
-        checkForUpdates(nil)
         
         // Keep a reference to the main application window
         window = NSApplication.sharedApplication().windows.last 
@@ -60,39 +57,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
     }
-	
-    private var checkForUpdatesTimer: NSTimer?
     
     @IBAction func checkForUpdates(sender: AnyObject?) {
-        if checkForUpdatesTimer == nil {
-            checkForUpdatesTimer = NSTimer.scheduledTimerWithTimeInterval(300, target: self, selector: #selector(checkForUpdates(_:)), userInfo: nil, repeats: true)
-        }
-        
-        UDUpdater.sharedUpdater().updateAutomatically = true
-        UDUpdater.sharedUpdater().checkForUpdatesWithCompletionHandler { newRelease in
-            if newRelease != nil {
-                if sender != nil && !(sender is NSTimer) {
-                    let alert = NSAlert()
-                    alert.messageText = "New version available"
-                    alert.informativeText = "Version \(newRelease.version) is now available. It will be installed automatically the next time you launch the app."
-                    alert.addButtonWithTitle("Ok")
-                    alert.runModal()
-                } else {
-                    let notification = NSUserNotification()
-                    notification.title = "New version available"
-                    notification.informativeText = "A new version is available, relaunch the app to update"
-                    NSUserNotificationCenter.defaultUserNotificationCenter().deliverNotification(notification)
-                }
-            } else {
-                if sender != nil && !(sender is NSTimer) {
-                    let alert = NSAlert()
-                    alert.messageText = "You're up to date!"
-                    alert.informativeText = "You have the newest version"
-                    alert.addButtonWithTitle("Ok")
-                    alert.runModal()
-                }
-            }
-        }
+        SUUpdater.sharedUpdater().checkForUpdates(sender)
     }
     
     @IBAction func showDownloadsWindow(sender: AnyObject?) {
