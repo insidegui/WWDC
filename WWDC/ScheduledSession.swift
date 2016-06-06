@@ -21,6 +21,10 @@ class ScheduledSession: Object {
     dynamic var startsAt = NSDate()
     dynamic var endsAt = NSDate()
     
+    var liveSession: LiveSession? {
+        return LiveEventObserver.SharedObserver().liveSessions.filter({ $0.id == self.id }).first
+    }
+    
     var session: Session? {
         guard let realm = realm else { return nil }
         
