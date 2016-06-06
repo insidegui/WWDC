@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>WWDC Changelog</title>
+        <link>https://github.com/insidegui/WWDC/raw/master/Releases/appcast.xml</link>
+        <description>Most recent changes with links to updates.</description>
+        <language>en</language>
+		
+        <item>
+            <title>Version 3.4</title>
+			<description><![CDATA[
+							<ul>
+								<li>Ready for WWDC 2016</li>
+							</ul>
+						]]></description>
+            <pubDate>Sun, 05 Jun 2016 09:41:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/raw/master/Releases/WWDC_latest.zip" sparkle:version="341" sparkle:shortVersionString="3.4" length="5740764" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+    </channel>
+</rss>
