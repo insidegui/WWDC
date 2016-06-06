@@ -12,7 +12,5 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "10.10"
 
   s.source_files = 'WWDCPlayer/*.{swift}'
-  s.resource_bundles = {
-    'WWDCPlayer' => ['WWDCPlayer/Resources/*']
-  }
+  s.resources = 'WWDCPlayer/Resources/*'
 end
