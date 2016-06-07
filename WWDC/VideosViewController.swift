@@ -114,11 +114,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         fetchLocalSessions()
         
         for filter in searchFilters {
-            sessions = sessions.filter(filter.predicate)
+            sessions = (sessions as NSArray).filteredArrayUsingPredicate(filter.predicate) as! [Session]
         }
         
         if let termFilter = searchTermFilter {
-            sessions = sessions.filter(termFilter.predicate)
+            sessions = (sessions as NSArray).filteredArrayUsingPredicate(termFilter.predicate) as! [Session]
         }
     }
     
@@ -136,7 +136,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
 
-    var sessions: Results<Session>! {
+    var sessions: Array<Session>! {
         didSet {
             guard sessions != nil else { return }
             
@@ -180,7 +180,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     func fetchLocalSessions() {
-        sessions = WWDCDatabase.sharedDatabase.standardSessionList
+        sessions = WWDCDatabase.sharedDatabase.standardSessionList.sort { session1, session2 in
+            guard let schedule1 = session1.schedule, schedule2 = session2.schedule else { return false }
+            
+            return schedule1.startsAt.isLessThan(schedule2.startsAt)
+        }
         filterBarController?.updateMenus()
         if sessions.count > 0 {
             GRLoadingView.dismissAllAfterDelay(0.3)
@@ -485,7 +489,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
     
-    var displayedSessions: Results<Session>! {
+    var displayedSessions: [Session]! {
         get {
             return sessions
         }
