@@ -7,6 +7,19 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.1.1</title>
+			<description><![CDATA[
+							<ul>
+								<li>Fixes a crash that would occur when updating the database for the first time</li>
+								<li>Other minor fixes</li>
+							</ul>
+						]]></description>
+            <pubDate>Tue, 07 Jun 2016 20:30:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.1.1/WWDC_v4.1.1.zip" sparkle:version="411" sparkle:shortVersionString="4.1.1" length="7197537" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.1</title>
 			<description><![CDATA[
 							<ul>
