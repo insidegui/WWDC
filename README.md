@@ -18,7 +18,7 @@ When sessions are live, a "live" indicator appears on the list and a "Watch Live
 
 ![Live](screenshots/screenshot-schedule-fake.png)
 
-***NOTICE: The session titles shown in the screenshot are fictitious.***
+***NOTICE: The sessions shown in the screenshot are NOT REAL.***
 
 ## Searching
 
