@@ -8,7 +8,6 @@
 
 import Foundation
 import RealmSwift
-import SwiftyJSON
 
 class Session: Object {
     
@@ -53,28 +52,6 @@ class Session: Object {
     
     var isExtra: Bool {
         return event != "WWDC"
-    }
-    
-    convenience required init(json: JSON) {
-        self.init()
-        
-        self.id = json["id"].intValue
-        self.year = json["year"].intValue
-        self.uniqueId = "#" + String(year) + "-" + String(id)
-        self.title = json["title"].stringValue
-        self.summary = json["description"].stringValue
-        self.date = json["date"].stringValue
-        self.track = json["track"].stringValue
-        self.videoURL = json["url"].stringValue
-        self.hdVideoURL = json["download_hd"].stringValue
-        self.slidesURL = json["slides"].stringValue
-        self.track = json["track"].stringValue
-        if let focus = json["focus"].arrayObject as? [String] {
-            self.focus = focus.joinWithSeparator(", ")
-        }
-        if let images = json["images"].dictionaryObject as? [String: String] {
-            self.shelfImageURL = images["shelf"] ?? ""
-        }
     }
     
     override static func primaryKey() -> String? {

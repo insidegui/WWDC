@@ -16,6 +16,11 @@
 		C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */; };
 		C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */; };
 		DD0974DF1B18AAA8006A3C77 /* URLSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0974DE1B18AAA8006A3C77 /* URLSchemeHandler.swift */; };
+		DD1F90C61D0706E3000C24A9 /* JSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90C51D0706E3000C24A9 /* JSONAdapter.swift */; };
+		DD1F90C81D070834000C24A9 /* AppConfigAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90C71D070834000C24A9 /* AppConfigAdapter.swift */; };
+		DD1F90CA1D070938000C24A9 /* SessionAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90C91D070938000C24A9 /* SessionAdapter.swift */; };
+		DD1F90CC1D0709C4000C24A9 /* TranscriptAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90CB1D0709C4000C24A9 /* TranscriptAdapter.swift */; };
+		DD1F90CE1D070F8B000C24A9 /* LiveSessionAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90CD1D070F8B000C24A9 /* LiveSessionAdapter.swift */; };
 		DD2016061AE3FA6600DD8155 /* SessionProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016051AE3FA6600DD8155 /* SessionProgressView.swift */; };
 		DD20166E1AE40D0100DD8155 /* ContentBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD20166D1AE40D0100DD8155 /* ContentBackgroundView.swift */; };
 		DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2016731AE411C800DD8155 /* VideoWindowController.swift */; };
@@ -119,6 +124,11 @@
 		C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadListProgressCellView.swift; sourceTree = "<group>"; };
 		CDD9D5D75CD138A2A981E8DD /* Pods_WWDC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WWDC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD0974DE1B18AAA8006A3C77 /* URLSchemeHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSchemeHandler.swift; sourceTree = "<group>"; };
+		DD1F90C51D0706E3000C24A9 /* JSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONAdapter.swift; sourceTree = "<group>"; };
+		DD1F90C71D070834000C24A9 /* AppConfigAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppConfigAdapter.swift; sourceTree = "<group>"; };
+		DD1F90C91D070938000C24A9 /* SessionAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionAdapter.swift; sourceTree = "<group>"; };
+		DD1F90CB1D0709C4000C24A9 /* TranscriptAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptAdapter.swift; sourceTree = "<group>"; };
+		DD1F90CD1D070F8B000C24A9 /* LiveSessionAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionAdapter.swift; sourceTree = "<group>"; };
 		DD2016051AE3FA6600DD8155 /* SessionProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgressView.swift; sourceTree = "<group>"; };
 		DD20166D1AE40D0100DD8155 /* ContentBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentBackgroundView.swift; sourceTree = "<group>"; };
 		DD2016731AE411C800DD8155 /* VideoWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoWindowController.swift; sourceTree = "<group>"; };
@@ -238,6 +248,18 @@
 				CDD9D5D75CD138A2A981E8DD /* Pods_WWDC.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DD1F90C41D0706D6000C24A9 /* Adapters */ = {
+			isa = PBXGroup;
+			children = (
+				DD1F90C51D0706E3000C24A9 /* JSONAdapter.swift */,
+				DD1F90C71D070834000C24A9 /* AppConfigAdapter.swift */,
+				DD1F90C91D070938000C24A9 /* SessionAdapter.swift */,
+				DD1F90CB1D0709C4000C24A9 /* TranscriptAdapter.swift */,
+				DD1F90CD1D070F8B000C24A9 /* LiveSessionAdapter.swift */,
+			);
+			name = Adapters;
 			sourceTree = "<group>";
 		};
 		DD3F8B051C8BF38D00A1601F /* Slides */ = {
@@ -475,6 +497,7 @@
 			children = (
 				DD8C68B91D0613D90075D6A5 /* Configuration */,
 				DD8C68B81D0613CD0075D6A5 /* Data Fetching and Storage */,
+				DD1F90C41D0706D6000C24A9 /* Adapters */,
 				DD8C68B71D0613CA0075D6A5 /* Models */,
 			);
 			name = Core;
@@ -665,17 +688,21 @@
 				DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */,
 				DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */,
 				DD8C68C71D0617E60075D6A5 /* ScheduledSession.swift in Sources */,
+				DD1F90C61D0706E3000C24A9 /* JSONAdapter.swift in Sources */,
 				DDF9D1931B04F361006F0953 /* SplitManager.swift in Sources */,
 				DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */,
 				DD2016751AE411C800DD8155 /* VideoWindowController.swift in Sources */,
 				DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */,
 				DD2CC38F1AF419F500FC5F68 /* PreferencesWindowController.swift in Sources */,
 				DDC5840A1D04BDC20062D3ED /* DockIconView.swift in Sources */,
+				DD1F90CE1D070F8B000C24A9 /* LiveSessionAdapter.swift in Sources */,
 				DDE3A8231BC2DCEC00610FEF /* TranscriptSearchResultsController.swift in Sources */,
 				DD8C68C11D0614250075D6A5 /* Transcript.swift in Sources */,
+				DD1F90CA1D070938000C24A9 /* SessionAdapter.swift in Sources */,
 				DDBD18651BC3227B00EF7718 /* FilterBarController.swift in Sources */,
 				DD29DD9B1C276CC400392D42 /* About.swift in Sources */,
 				DD8C68C51D0617970075D6A5 /* Track.swift in Sources */,
+				DD1F90CC1D0709C4000C24A9 /* TranscriptAdapter.swift in Sources */,
 				DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */,
 				DDF166831D03CB69006780BF /* PlayerExtensions.swift in Sources */,
 				DD4F6E541AE2D11D0099BEB5 /* VideosViewController.swift in Sources */,
@@ -701,6 +728,7 @@
 				DD8C68CD1D062ED60075D6A5 /* NSColorHex.swift in Sources */,
 				DDF1668D1D048C4D006780BF /* LiveSessionTableCellView.swift in Sources */,
 				DD825CA81BBF575500276B83 /* WWDCDatabase.swift in Sources */,
+				DD1F90C81D070834000C24A9 /* AppConfigAdapter.swift in Sources */,
 				DD2CC38C1AF4161700FC5F68 /* Preferences.swift in Sources */,
 				DD3FDF1A1BC2EDFC0078B06C /* RoundPlayButton.swift in Sources */,
 				1C967BAA1AE7EB27003662B2 /* NSString+QualifierSearchParser.m in Sources */,

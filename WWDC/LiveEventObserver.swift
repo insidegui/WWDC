@@ -151,7 +151,7 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
             }
             
             let jsonData = JSON(data: data!)
-            let event = LiveSession(jsonObject: jsonData)
+            let event = LiveSessionAdapter.adaptSpecial(jsonData)
             
             if event.isLiveRightNow {
                 completionHandler(true, event)
@@ -175,7 +175,7 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
                 return
             }
             
-            completionHandler(liveSessions: sessionsJSON.map({ LiveSession(liveSessionJSON: $0) }))
+            completionHandler(liveSessions: sessionsJSON.map({ LiveSessionAdapter.adapt($0) }))
         }
         task.resume()
     }

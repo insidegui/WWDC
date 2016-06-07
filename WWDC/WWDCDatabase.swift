@@ -167,7 +167,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             
             let configJSON = JSON(data: jsonData)
             
-            let fetchedConfig = AppConfig(json: configJSON)
+            let fetchedConfig = AppConfigAdapter.adapt(configJSON)
             
             // if the fetched config from the service is equal to the config in the database, don't bother updating It
             guard !fetchedConfig.isEqualToConfig(self.config) else { return }
@@ -246,7 +246,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     // ignored videos from 2016 without a duration specified
                     if jsonSession["duration"].intValue == 0 && jsonSession["year"].intValue > 2015 { continue }
                     
-                    let session = Session(json: jsonSession)
+                    let session = SessionAdapter.adapt(jsonSession)
                     
                     if let existingSession = backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) {
                         if !existingSession.isSemanticallyEqualToSession(session) {
@@ -348,6 +348,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     }
     
     func indexTranscriptsForSessionsWithKeys(sessionKeys: [String]) {
+        guard !isIndexingTranscripts else { return }
         guard sessionKeys.count > 0 else { return }
         
         transcriptIndexingProgress = NSProgress(totalUnitCount: Int64(sessionKeys.count))
@@ -378,12 +379,18 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             self.backgroundOperationQueue.addOperationWithBlock {
                 do {
                     let bgRealm = try Realm()
+                    
                     guard let session = bgRealm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
-                    let transcript = Transcript(json: JSON(data: jsonData), session: session)
+                    
+                    let transcript = TranscriptAdapter.adapt(JSON(data: jsonData))
+                    transcript.session = session
+                    
                     bgRealm.beginWrite()
                     bgRealm.add(transcript)
                     session.transcript = transcript
+                    
                     try bgRealm.commitWrite()
+                    
                     self.transcriptIndexingProgress?.completedUnitCount += 1
                 } catch let error {
                     NSLog("Error indexing transcript for session \(sessionKey): \(error)")

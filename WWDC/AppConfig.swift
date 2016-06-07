@@ -8,7 +8,6 @@
 
 import Foundation
 import RealmSwift
-import SwiftyJSON
 
 class AppConfig: Object {
     dynamic var sessionsURL = ""
@@ -17,16 +16,6 @@ class AppConfig: Object {
     dynamic var scheduleEnabled = false
     dynamic var shouldIgnoreCache = false
     dynamic var videosUpdatedAt = ""
-    
-    convenience required init(json: JSON) {
-        self.init()
-        
-        self.sessionsURL = json["sessions"].stringValue
-        self.videosURL = json["videos"].stringValue
-        self.isWWDCWeek = json["wwdc_week"].intValue == 1
-        self.scheduleEnabled = json["schedule"].intValue == 1
-        self.shouldIgnoreCache = json["ignore_cache"].intValue == 1
-    }
     
     override static func primaryKey() -> String? {
         return "sessionsURL"
