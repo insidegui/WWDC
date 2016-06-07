@@ -9,6 +9,7 @@
 import Cocoa
 import KVOController
 import WWDCPlayer
+import WWDCAppKit
 
 class VideoDetailsViewController: NSViewController {
     
@@ -41,11 +42,40 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
+    @IBOutlet weak var liveIndicatorView: RoundRectLabel! {
+        didSet {
+            liveIndicatorView.tintColor = Theme.WWDCTheme.liveColor
+            liveIndicatorView.title = "LIVE"
+            
+            if #available(OSX 10.11, *) {
+                liveIndicatorView.font = NSFont.systemFontOfSize(11.0, weight: NSFontWeightMedium)
+            } else {
+                liveIndicatorView.font = NSFont.systemFontOfSize(11.0)
+            }
+        }
+    }
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var subtitleLabel: NSTextField!
     @IBOutlet weak var descriptionLabel: NSTextField!
     @IBOutlet weak var downloadController: DownloadProgressViewController!
     @IBOutlet weak var actionButtonsController: ActionButtonsViewController!
+    @IBOutlet weak var topBarBackgroundView: GRWindowMovingView!
+    @IBOutlet weak var topBarSeparatorView: SeparatorView!
+    
+    @IBOutlet weak var watchLiveButton: NSButton! {
+        didSet {
+            let pStyle = NSMutableParagraphStyle()
+            pStyle.alignment = NSCenterTextAlignment
+            let attrs = [
+                NSFontAttributeName: NSFont.controlContentFontOfSize(13.0),
+                NSForegroundColorAttributeName: NSColor.whiteColor(),
+                NSParagraphStyleAttributeName: pStyle
+            ]
+            watchLiveButton.attributedTitle = NSAttributedString(string: "Watch Live", attributes: attrs)
+            watchLiveButton.appearance = NSAppearance(named: "LiveButton")
+            watchLiveButton.sizeToFit()
+        }
+    }
     
     private func updateUI() {
         if multipleSelection {
@@ -53,6 +83,7 @@ class VideoDetailsViewController: NSViewController {
             return
         }
         
+        watchLiveButton.hidden = true
         actionButtonsController.view.hidden = false
         downloadController.view.hidden = false
         
@@ -67,19 +98,71 @@ class VideoDetailsViewController: NSViewController {
             descriptionLabel.stringValue = session.summary
             descriptionLabel.hidden = false
             
+            restoreColors()
+            
             downloadController.session = session
             downloadController.downloadFinishedCallback = { [unowned self] in
                 self.updateUI()
+            }
+            
+            if let schedule = session.schedule {
+                showScheduledState(schedule)
             }
         } else {
             titleLabel.stringValue = "No session selected"
             subtitleLabel.stringValue = "Select a session to see It here"
             descriptionLabel.hidden = true
             downloadController.session = nil
+            
+            restoreColors()
         }
         
         setupTranscriptResultsViewIfNeeded()
         updateTranscriptsViewController()
+    }
+    
+    private func showScheduledState(schedule: ScheduledSession) {
+        guard let track = schedule.track else { return }
+        
+        watchLiveButton.hidden = false
+        actionButtonsController.view.hidden = true
+        
+        topBarBackgroundView.backgroundColor = NSColor(hexString: track.darkColor)
+        topBarSeparatorView.backgroundColor = NSColor.blackColor()
+        titleLabel.textColor = NSColor(hexString: track.titleColor)
+        subtitleLabel.textColor = NSColor(hexString: track.color)
+        
+        updateLiveState()
+    }
+    
+    @objc private func updateLiveState(note: NSNotification? = nil) {
+        guard let schedule = session?.schedule else {
+            watchLiveButton.enabled = false
+            liveIndicatorView.hidden = true
+            return
+        }
+        
+        watchLiveButton.enabled = schedule.isLive
+        liveIndicatorView.hidden = !schedule.isLive
+    }
+    
+    @IBAction func watchLive(sender: NSButton) {
+        guard let liveSession = session?.schedule?.liveSession else { return }
+        
+        let playerVC = VideoPlayerViewController.withLiveSession(liveSession)
+        let playerWindowController = VideoPlayerWindowController(playerViewController: playerVC)
+        
+        videoControllers.append(playerWindowController)
+        followWindowLifecycle(playerWindowController.window)
+        
+        playerWindowController.showWindow(sender)
+    }
+    
+    private func restoreColors() {
+        titleLabel.textColor = NSColor.labelColor()
+        subtitleLabel.textColor = NSColor.secondaryLabelColor()
+        topBarBackgroundView.backgroundColor = NSColor.whiteColor()
+        topBarSeparatorView.backgroundColor = Theme.WWDCTheme.separatorColor
     }
     
     private func setupTranscriptResultsViewIfNeeded() {
@@ -203,6 +286,8 @@ class VideoDetailsViewController: NSViewController {
         super.viewDidLoad()
         
         updateUI()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateLiveState), name: LiveSessionsListDidChangeNotification, object: nil)
     }
     
     override func viewWillAppear() {

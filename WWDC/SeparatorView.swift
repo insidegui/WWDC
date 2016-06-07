@@ -10,10 +10,16 @@ import Cocoa
 
 class SeparatorView: NSView {
 
+    var backgroundColor = Theme.WWDCTheme.separatorColor {
+        didSet {
+            setNeedsDisplayInRect(bounds)
+        }
+    }
+    
     override func drawRect(dirtyRect: NSRect) {
         super.drawRect(dirtyRect)
 
-        Theme.WWDCTheme.separatorColor.set()
+        backgroundColor.set()
         NSRectFill(dirtyRect)
     }
     

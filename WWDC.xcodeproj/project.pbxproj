@@ -55,6 +55,7 @@
 		DD8C68C71D0617E60075D6A5 /* ScheduledSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68C61D0617E60075D6A5 /* ScheduledSession.swift */; };
 		DD8C68CB1D06277F0075D6A5 /* ScheduledSessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68CA1D06277F0075D6A5 /* ScheduledSessionTableCellView.swift */; };
 		DD8C68CD1D062ED60075D6A5 /* NSColorHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68CC1D062ED60075D6A5 /* NSColorHex.swift */; };
+		DD8C68CF1D0662A20075D6A5 /* LiveButton.car in Resources */ = {isa = PBXBuildFile; fileRef = DD8C68CE1D0662A20075D6A5 /* LiveButton.car */; };
 		DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */; };
 		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
 		DDBD18651BC3227B00EF7718 /* FilterBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD18631BC3227B00EF7718 /* FilterBarController.swift */; };
@@ -161,6 +162,7 @@
 		DD8C68C61D0617E60075D6A5 /* ScheduledSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduledSession.swift; sourceTree = "<group>"; };
 		DD8C68CA1D06277F0075D6A5 /* ScheduledSessionTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduledSessionTableCellView.swift; sourceTree = "<group>"; };
 		DD8C68CC1D062ED60075D6A5 /* NSColorHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSColorHex.swift; sourceTree = "<group>"; };
+		DD8C68CE1D0662A20075D6A5 /* LiveButton.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = LiveButton.car; path = Design/LiveButton.car; sourceTree = SOURCE_ROOT; };
 		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
 		DDBD18631BC3227B00EF7718 /* FilterBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBarController.swift; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 		DDD7A4301AE2DEFD000A0102 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				DD8C68CE1D0662A20075D6A5 /* LiveButton.car */,
 				DD4F6E551AE2D11D0099BEB5 /* Images.xcassets */,
 				DD29DD911C276C3000392D42 /* AboutWindowController.xib */,
 				DDCAB46D1C2620BE005889CB /* TranscriptViewController.xib */,
@@ -565,6 +568,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD8C68CF1D0662A20075D6A5 /* LiveButton.car in Resources */,
 				DD2CC3901AF419F500FC5F68 /* PreferencesWindowController.xib in Resources */,
 				C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */,
 				DD4F6E561AE2D11D0099BEB5 /* Images.xcassets in Resources */,

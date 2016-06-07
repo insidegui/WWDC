@@ -782,20 +782,20 @@ CA
             <objects>
                 <viewController id="PTx-VW-9eO" customClass="VideoDetailsViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" horizontalCompressionResistancePriority="250" id="lmc-yJ-Qdy" customClass="ContentBackgroundView" customModule="WWDC" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="559" height="323"/>
+                        <rect key="frame" x="0.0" y="0.0" width="629" height="323"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <customView horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yfT-Gv-ICD" customClass="GRWindowMovingView">
-                                <rect key="frame" x="0.0" y="261" width="559" height="62"/>
+                                <rect key="frame" x="0.0" y="261" width="629" height="62"/>
                                 <subviews>
                                     <customView horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="unj-WU-zmU" customClass="SeparatorView" customModule="WWDC" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="559" height="1"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="629" height="1"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="4FJ-B6-QQc"/>
                                         </constraints>
                                     </customView>
                                     <textField horizontalHuggingPriority="230" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="500" translatesAutoresizingMaskIntoConstraints="NO" id="OTC-kh-gjR">
-                                        <rect key="frame" x="18" y="27" width="492" height="19"/>
+                                        <rect key="frame" x="18" y="27" width="562" height="19"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No session selected" id="UU1-bR-82g">
                                             <font key="font" metaFont="systemBold" size="15"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -803,7 +803,7 @@ CA
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="230" verticalHuggingPriority="750" horizontalCompressionResistancePriority="500" verticalCompressionResistancePriority="500" translatesAutoresizingMaskIntoConstraints="NO" id="Q3D-NN-RLa">
-                                        <rect key="frame" x="18" y="11" width="492" height="14"/>
+                                        <rect key="frame" x="18" y="11" width="562" height="14"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Select a session to see It here" id="Jni-0L-ArF">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -811,7 +811,7 @@ CA
                                         </textFieldCell>
                                     </textField>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="P5u-9c-sQG">
-                                        <rect key="frame" x="516" y="21" width="23" height="21"/>
+                                        <rect key="frame" x="586" y="21" width="23" height="21"/>
                                         <subviews>
                                             <progressIndicator horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Rfp-dR-Pi4" customClass="GRActionableProgressIndicator">
                                                 <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
@@ -836,6 +836,13 @@ CA
                                             <constraint firstItem="ZoQ-nZ-mjo" firstAttribute="top" secondItem="P5u-9c-sQG" secondAttribute="top" id="rl9-VN-qPu"/>
                                         </constraints>
                                     </customView>
+                                    <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I5H-N2-rCF" customClass="RoundRectLabel" customModule="WWDC" customModuleProvider="target">
+                                        <rect key="frame" x="530" y="27" width="79" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="19" placeholder="YES" id="Hkn-g3-ii1"/>
+                                            <constraint firstAttribute="width" constant="79" placeholder="YES" id="z2U-Dk-7ST"/>
+                                        </constraints>
+                                    </customView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="centerY" secondItem="P5u-9c-sQG" secondAttribute="centerY" constant="0.5" id="6ZD-H2-xIa"/>
@@ -845,10 +852,12 @@ CA
                                     <constraint firstItem="P5u-9c-sQG" firstAttribute="leading" secondItem="Q3D-NN-RLa" secondAttribute="trailing" constant="8" id="Imi-GT-WHS"/>
                                     <constraint firstAttribute="bottom" secondItem="unj-WU-zmU" secondAttribute="bottom" id="QEa-2T-MZF"/>
                                     <constraint firstAttribute="trailing" secondItem="P5u-9c-sQG" secondAttribute="trailing" constant="20" id="U8f-pZ-DIf"/>
+                                    <constraint firstItem="I5H-N2-rCF" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="top" constant="16" id="Uf6-3z-6dG"/>
                                     <constraint firstItem="Q3D-NN-RLa" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" constant="20" id="Zca-OP-8uv"/>
                                     <constraint firstItem="Q3D-NN-RLa" firstAttribute="top" secondItem="OTC-kh-gjR" secondAttribute="bottom" constant="2" id="cDD-E4-tFM"/>
                                     <constraint firstItem="OTC-kh-gjR" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="top" constant="16" id="fGc-c6-zbn"/>
                                     <constraint firstAttribute="height" constant="62" id="hPH-mv-MND"/>
+                                    <constraint firstAttribute="trailing" secondItem="I5H-N2-rCF" secondAttribute="trailing" constant="20" id="taf-t4-H8M"/>
                                     <constraint firstItem="OTC-kh-gjR" firstAttribute="leading" secondItem="yfT-Gv-ICD" secondAttribute="leading" constant="20" id="z1a-ii-utb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -866,7 +875,7 @@ CA
                                 </textFieldCell>
                             </textField>
                             <stackView orientation="horizontal" alignment="centerY" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="NDa-qd-DsL">
-                                <rect key="frame" x="20" y="182" width="519" height="22"/>
+                                <rect key="frame" x="20" y="182" width="589" height="22"/>
                                 <beginningViews>
                                     <button verticalHuggingPriority="50" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KY0-ql-QWs">
                                         <rect key="frame" x="-6" y="-7" width="140" height="33"/>
@@ -926,14 +935,26 @@ CA
                                 </customSpacing>
                             </stackView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="d1c-zb-xge">
-                                <rect key="frame" x="20" y="20" width="519" height="139"/>
+                                <rect key="frame" x="20" y="20" width="589" height="139"/>
                             </customView>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dAt-fP-9qj">
+                                <rect key="frame" x="14" y="176" width="107" height="32"/>
+                                <buttonCell key="cell" type="push" title="Watch Live" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hJO-yx-NpN">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="watchLive:" target="PTx-VW-9eO" id="hHs-Re-cUL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="dAt-fP-9qj" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="20" id="1oc-Kd-Mha"/>
                             <constraint firstItem="d1c-zb-xge" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="5Jd-IA-amY"/>
                             <constraint firstItem="yfT-Gv-ICD" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" id="5X2-FA-2RR"/>
                             <constraint firstItem="NDa-qd-DsL" firstAttribute="centerX" secondItem="yfT-Gv-ICD" secondAttribute="centerX" id="9Ru-8q-Cjg"/>
                             <constraint firstItem="NDa-qd-DsL" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="20" id="A0o-bD-Ab8"/>
+                            <constraint firstItem="dAt-fP-9qj" firstAttribute="leading" secondItem="TO1-x6-ead" secondAttribute="leading" id="BBe-6F-LZV"/>
                             <constraint firstItem="yfT-Gv-ICD" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" id="FKh-9G-PHE"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="NDa-qd-DsL" secondAttribute="leading" id="MYD-oP-EUZ"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" symbolic="YES" id="Nl7-wk-Yx9"/>
@@ -948,11 +969,15 @@ CA
                         <outlet property="actionButtonsController" destination="1s0-2L-R2i" id="ygo-iC-BIf"/>
                         <outlet property="descriptionLabel" destination="TO1-x6-ead" id="zeU-Ec-TF1"/>
                         <outlet property="downloadController" destination="SkJ-kP-aeS" id="dW2-ke-WsS"/>
+                        <outlet property="liveIndicatorView" destination="I5H-N2-rCF" id="MjR-OE-CFy"/>
                         <outlet property="subtitleLabel" destination="Q3D-NN-RLa" id="pFP-8H-gdR"/>
                         <outlet property="titleLabel" destination="OTC-kh-gjR" id="VaE-Md-v3f"/>
                         <outlet property="titleTopConstraint" destination="fGc-c6-zbn" id="W3Q-o9-K2x"/>
+                        <outlet property="topBarBackgroundView" destination="yfT-Gv-ICD" id="KO3-QE-yKP"/>
                         <outlet property="topBarHeightConstraint" destination="hPH-mv-MND" id="qDM-x9-XVg"/>
+                        <outlet property="topBarSeparatorView" destination="unj-WU-zmU" id="gFw-KH-xX4"/>
                         <outlet property="transcriptControllerContainerView" destination="d1c-zb-xge" id="Lac-ej-d8X"/>
+                        <outlet property="watchLiveButton" destination="dAt-fP-9qj" id="Bvm-v0-5Bt"/>
                     </connections>
                 </viewController>
                 <customObject id="ztN-pJ-8Sm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
