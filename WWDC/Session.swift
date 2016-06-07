@@ -60,7 +60,7 @@ class Session: Object {
         
         self.id = json["id"].intValue
         self.year = json["year"].intValue
-        self.uniqueId = "#\(self.year)-\(self.id)"
+        self.uniqueId = "#" + String(year) + "-" + String(id)
         self.title = json["title"].stringValue
         self.summary = json["description"].stringValue
         self.date = json["date"].stringValue

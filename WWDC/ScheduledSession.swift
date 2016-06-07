@@ -55,7 +55,7 @@ class ScheduledSession: Object {
         
         if let year = Int(uniqueIdDateFormatter.stringFromDate(self.startsAt)) {
             self.year = year
-            self.uniqueId = "#\(self.year)-\(self.id)"
+            self.uniqueId = "#" + String(year) + "-" + String(id)
         }
         
         if let startTime = json["start_time"].int {
