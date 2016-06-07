@@ -78,6 +78,10 @@ class VideoDetailsViewController: NSViewController {
     }
     
     private func updateUI() {
+        if let session = session {
+            guard !session.invalidated else { return }
+        }
+        
         if multipleSelection {
             handleMultipleSelection()
             return
