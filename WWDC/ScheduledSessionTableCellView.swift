@@ -76,6 +76,7 @@ class ScheduledSessionTableCellView: NSTableCellView {
         
         updateSessionFlags()
         updateLive()
+        colorizeRowView()
     }
     
     private func updateDetail() {
@@ -116,6 +117,28 @@ class ScheduledSessionTableCellView: NSTableCellView {
     @objc private func updateSessionFlags() {
         favoriteIndicator.hidden = !session.favorite
         titleTrailingConstraint.constant = session.favorite ? 27.0 : 4.0
+    }
+    
+    private var parentRowView: VideoTableRowView? {
+        return superview as? VideoTableRowView
+    }
+    
+    override func viewDidMoveToSuperview() {
+        super.viewDidMoveToSuperview()
+        
+        colorizeRowView()
+    }
+    
+    private func colorizeRowView() {
+        guard let rowView = parentRowView else { return }
+        
+        if let schedule = session.schedule, track = schedule.track {
+            rowView.themeBackgroundColor = NSColor(hexString: track.color) ?? Theme.WWDCTheme.fillColor
+            rowView.themeSeparatorColor = NSColor(hexString: track.darkColor) ?? Theme.WWDCTheme.separatorColor
+        } else {
+            rowView.themeBackgroundColor = Theme.WWDCTheme.fillColor
+            rowView.themeSeparatorColor = Theme.WWDCTheme.separatorColor
+        }
     }
     
 }

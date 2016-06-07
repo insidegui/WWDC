@@ -77,7 +77,23 @@ class VideoTableRowView: NSTableRowView {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         selected = false
+        
+        themeBackgroundColor = Theme.WWDCTheme.fillColor
+        themeSeparatorColor = Theme.WWDCTheme.separatorColor
+    }
+    
+    var themeBackgroundColor = Theme.WWDCTheme.fillColor {
+        didSet {
+            setNeedsDisplayInRect(bounds)
+        }
+    }
+    
+    var themeSeparatorColor = Theme.WWDCTheme.separatorColor {
+        didSet {
+            setNeedsDisplayInRect(bounds)
+        }
     }
     
     override func drawSeparatorInRect(dirtyRect: NSRect) {
@@ -86,9 +102,9 @@ class VideoTableRowView: NSTableRowView {
         
         if selected {
             if shouldDrawAsKey {
-                Theme.WWDCTheme.fillColor.colorByAdjustingBrightnessWithFactor(-0.2).colorWithAlphaComponent(0.8).setFill()
+                themeBackgroundColor.colorByAdjustingBrightnessWithFactor(-0.2).colorWithAlphaComponent(0.8).setFill()
             } else {
-                Theme.WWDCTheme.separatorColor.colorByAdjustingBrightnessWithFactor(-0.2).colorWithAlphaComponent(0.8).setFill()
+                themeSeparatorColor.colorByAdjustingBrightnessWithFactor(-0.2).colorWithAlphaComponent(0.8).setFill()
             }
             
             NSRectFillUsingOperation(topRect, .CompositeOverlay)
@@ -103,9 +119,9 @@ class VideoTableRowView: NSTableRowView {
     
     override func drawSelectionInRect(dirtyRect: NSRect) {
         if shouldDrawAsKey {
-            Theme.WWDCTheme.fillColor.colorByAdjustingBrightnessWithFactor(-0.1).colorWithAlphaComponent(0.8).setFill()
+            themeBackgroundColor.colorByAdjustingBrightnessWithFactor(-0.1).colorWithAlphaComponent(0.8).setFill()
         } else {
-            Theme.WWDCTheme.separatorColor.colorWithAlphaComponent(0.8).setFill()
+            themeSeparatorColor.colorWithAlphaComponent(0.8).setFill()
         }
         NSRectFillUsingOperation(dirtyRect, .CompositeOverlay)
     }
