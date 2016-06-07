@@ -14,7 +14,7 @@
 							</ul>
 						]]></description>
             <pubDate>Tue, 07 Jun 2016 16:30:00 +0000</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/raw/master/Releases/WWDC_latest.zip" sparkle:version="410" sparkle:shortVersionString="4.1" length="7197537" type="application/octet-stream" />
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.1/WWDC_v4.1.zip" sparkle:version="410" sparkle:shortVersionString="4.1" length="7197537" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
         </item>
 		
@@ -26,7 +26,7 @@
 							</ul>
 						]]></description>
             <pubDate>Tue, 07 Jun 2016 14:00:00 +0000</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/raw/master/Releases/WWDC_latest.zip" sparkle:version="400" sparkle:shortVersionString="4.0" length="8153812" type="application/octet-stream" />
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.0/WWDC_v4.0.zip" sparkle:version="400" sparkle:shortVersionString="4.0" length="8153812" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
         </item>
     </channel>
