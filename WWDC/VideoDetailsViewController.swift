@@ -209,7 +209,15 @@ class VideoDetailsViewController: NSViewController {
             transcriptSearchResultsVC?.lines = nil
             return
         }
-        transcriptSearchResultsVC?.lines = session?.transcript?.lines.filter("text CONTAINS[c] %@", searchTerm!)
+        
+        if let relevantLines = session?.transcript?.lines.filter("text CONTAINS[c] %@", searchTerm!) where relevantLines.count > 0 {
+            transcriptSearchResultsVC?.lines = relevantLines
+            transcriptControllerContainerView.hidden = false
+        } else {
+            transcriptSearchResultsVC?.lines = nil
+            transcriptControllerContainerView.hidden = true
+        }
+        
     }
     
     private func handleMultipleSelection() {
@@ -222,6 +230,7 @@ class VideoDetailsViewController: NSViewController {
         descriptionLabel.hidden = true
         actionButtonsController.view.hidden = true
         downloadController.view.hidden = true
+        transcriptControllerContainerView.hidden = true
     }
     
     private func setupActionCallbacks() {
