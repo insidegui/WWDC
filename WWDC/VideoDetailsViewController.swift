@@ -231,6 +231,11 @@ class VideoDetailsViewController: NSViewController {
         }
         
         actionButtonsController.watchVideoCallback = { [unowned self] in
+            guard !self.session!.videoURL.isEmpty else {
+                self.showVideoNotAvailableAlert()
+                return
+            }
+            
             self.doWatchVideo(nil, url: self.session!.videoURL, startTime: nil)
         }
         
@@ -256,6 +261,14 @@ class VideoDetailsViewController: NSViewController {
         actionButtonsController.afterCallback = { [unowned self] in
             self.actionButtonsController.session = self.session
         }
+    }
+    
+    private func showVideoNotAvailableAlert() {
+        let alert = NSAlert()
+        alert.messageText = "Video not available"
+        alert.informativeText = "The video for this session is not available yet, please come back later to watch It. You can try refreshing now to see if It became available (⌘R)."
+        alert.addButtonWithTitle("OK")
+        alert.runModal()
     }
     
     private func playerControllerForSession(session: Session) -> VideoWindowController? {
