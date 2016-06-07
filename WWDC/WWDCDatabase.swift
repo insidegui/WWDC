@@ -207,8 +207,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     }
     
     private func updateSessionVideos() {
-        manager.request(.GET, config.videosURL).response { _, _, data, error in
-            dispatch_async(self.bgThread) {
+        manager.request(.GET, config.videosURL).response { [weak self] _, _, data, error in
+            guard let weakSelf = self else { return }
+            
+            dispatch_async(weakSelf.bgThread) {
                 let backgroundRealm = try! Realm()
                 
                 guard let jsonData = data else {
@@ -222,11 +224,11 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 
                 mainQS {
                     // check if the videos have been updated since the last fetch
-                    if json["updated"].stringValue == self.config.videosUpdatedAt && !self.config.shouldIgnoreCache {
+                    if json["updated"].stringValue == weakSelf.config.videosUpdatedAt && !weakSelf.config.shouldIgnoreCache {
                         print("Video list did not change")
                         newVideosAvailable = false
                     } else {
-                        try! self.realm.write { self.config.videosUpdatedAt = json["updated"].stringValue }
+                        try! weakSelf.realm.write { weakSelf.config.videosUpdatedAt = json["updated"].stringValue }
                     }
                 }
                 
@@ -274,10 +276,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 }
                 
                 #if os(OSX)
-                self.indexTranscriptsForSessionsWithKeys(newSessionKeys)
+                weakSelf.indexTranscriptsForSessionsWithKeys(newSessionKeys)
                 #endif
                 
-                mainQ { self.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
+                mainQ { weakSelf.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
             }
         }
     }
@@ -285,8 +287,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     private func updateSchedule() {
         guard config.scheduleEnabled else { return }
         
-        manager.request(.GET, config.sessionsURL).response { _, _, data, error in
-            dispatch_async(self.bgThread) {
+        manager.request(.GET, config.sessionsURL).response { [weak self] _, _, data, error in
+            guard let weakSelf = self else { return }
+            
+            dispatch_async(weakSelf.bgThread) {
                 let backgroundRealm = try! Realm()
                 
                 guard let jsonData = data else {
@@ -338,7 +342,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     }
                 }
                 
-                mainQ { self.sessionListChangedCallback?(newSessionKeys: []) }
+                mainQ { weakSelf.sessionListChangedCallback?(newSessionKeys: []) }
             }
         }
     }

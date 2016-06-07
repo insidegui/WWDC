@@ -131,8 +131,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         filterBarController!.view.frame = CGRectMake(0, NSHeight(superview.frame)-NSHeight(headerController.view.frame), NSWidth(superview.frame), 44.0)
         filterBarController!.view.autoresizingMask = [.ViewWidthSizable, .ViewMinYMargin]
         
-        filterBarController!.filtersDidChangeCallback = {
-            self.searchFilters = self.filterBarController!.filters
+        filterBarController!.filtersDidChangeCallback = { [weak self] in
+            guard let weakSelf = self else { return }
+            weakSelf.searchFilters = weakSelf.filterBarController!.filters
         }
     }
 
