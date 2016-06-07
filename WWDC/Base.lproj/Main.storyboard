@@ -928,19 +928,13 @@ CA
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="d1c-zb-xge">
                                 <rect key="frame" x="20" y="20" width="519" height="139"/>
                             </customView>
-                            <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bdl-S4-bBe">
-                                <rect key="frame" x="0.0" y="0.0" width="559" height="253"/>
-                            </customView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="Bdl-S4-bBe" secondAttribute="bottom" id="1rb-Aq-Ejw"/>
                             <constraint firstItem="d1c-zb-xge" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" id="5Jd-IA-amY"/>
                             <constraint firstItem="yfT-Gv-ICD" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" id="5X2-FA-2RR"/>
                             <constraint firstItem="NDa-qd-DsL" firstAttribute="centerX" secondItem="yfT-Gv-ICD" secondAttribute="centerX" id="9Ru-8q-Cjg"/>
                             <constraint firstItem="NDa-qd-DsL" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="20" id="A0o-bD-Ab8"/>
                             <constraint firstItem="yfT-Gv-ICD" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" id="FKh-9G-PHE"/>
-                            <constraint firstAttribute="trailing" secondItem="Bdl-S4-bBe" secondAttribute="trailing" id="Glw-sy-j8l"/>
-                            <constraint firstItem="Bdl-S4-bBe" firstAttribute="top" secondItem="unj-WU-zmU" secondAttribute="bottom" constant="8" id="Hjq-iz-NJE"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="NDa-qd-DsL" secondAttribute="leading" id="MYD-oP-EUZ"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" symbolic="YES" id="Nl7-wk-Yx9"/>
                             <constraint firstAttribute="bottom" secondItem="d1c-zb-xge" secondAttribute="bottom" constant="20" id="OIn-py-qNJ"/>
@@ -948,14 +942,12 @@ CA
                             <constraint firstAttribute="trailing" secondItem="NDa-qd-DsL" secondAttribute="trailing" constant="20" symbolic="YES" id="lf1-15-Oqn"/>
                             <constraint firstAttribute="trailing" secondItem="d1c-zb-xge" secondAttribute="trailing" constant="20" id="qLT-TO-gkm"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="bottom" constant="20" id="uSJ-UI-Mhf"/>
-                            <constraint firstItem="Bdl-S4-bBe" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" id="zdZ-dO-WUR"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="actionButtonsController" destination="1s0-2L-R2i" id="ygo-iC-BIf"/>
                         <outlet property="descriptionLabel" destination="TO1-x6-ead" id="zeU-Ec-TF1"/>
                         <outlet property="downloadController" destination="SkJ-kP-aeS" id="dW2-ke-WsS"/>
-                        <outlet property="liveSessionsControllerContainerView" destination="Bdl-S4-bBe" id="JBF-v8-Zdu"/>
                         <outlet property="subtitleLabel" destination="Q3D-NN-RLa" id="pFP-8H-gdR"/>
                         <outlet property="titleLabel" destination="OTC-kh-gjR" id="VaE-Md-v3f"/>
                         <outlet property="titleTopConstraint" destination="fGc-c6-zbn" id="W3Q-o9-K2x"/>
