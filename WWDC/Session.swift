@@ -31,13 +31,13 @@ class Session: Object {
     dynamic var downloaded = false
     
     var isScheduled: Bool {
-        guard let schedule = schedule else { return false }
+        guard let schedule = schedule where !schedule.invalidated else { return false }
         
         return schedule.endsAt.isGreaterThanOrEqualTo(NSDate())
     }
     
     var schedule: ScheduledSession? {
-        guard let realm = realm else { return nil }
+        guard let realm = realm where !invalidated else { return nil }
         
         return realm.objectForPrimaryKey(ScheduledSession.self, key: uniqueId)
     }
