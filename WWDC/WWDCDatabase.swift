@@ -138,12 +138,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     /// 3. Parse the results and update the local database
     /// 4. Fetch and index transcripts from ASCIIWWDC
     func refresh() {
-        // try to find an existing AppConfig object in the database
-        if let fetchedConfig = realm.objects(AppConfig.self).last {
-            self.config = fetchedConfig
-        }
-        
-        fetchOrUpdateAppleServiceURLs()
+        downloadAppConfigAndSyncDatabase()
     }
     
     /// Returns the list of sessions available sorted by year and session id
@@ -158,7 +153,8 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     
     private let manager = Alamofire.Manager(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
     
-    private func fetchOrUpdateAppleServiceURLs() {
+    /// This method downloads the app config from the server and sets It in self, which makes the app download the videos and schedule from the servers specified in the config
+    private func downloadAppConfigAndSyncDatabase() {
         manager.request(.GET, Constants.internalServiceURL).response { _, _, data, error in
             guard let jsonData = data else {
                 print("No data returned from internal server!")
@@ -169,8 +165,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             
             let fetchedConfig = AppConfigAdapter.adapt(configJSON)
             
-            // if the fetched config from the service is equal to the config in the database, don't bother updating It
-            guard !fetchedConfig.isEqualToConfig(self.config) else { return }
+            if let existingConfig = self.realm.objects(AppConfig.self).last {
+                // if the fetched config from the service is equal to the config in the database, don't bother updating It
+                guard !fetchedConfig.isEqualToConfig(existingConfig) else { return }
+            }
             
             if fetchedConfig.isWWDCWeek {
                 mainQ {
@@ -193,7 +191,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             // replace configuration on the database with the new configuration
             self.realm.beginWrite()
             do {
-                self.realm.delete(self.config)
+                if self.config != nil {
+                    self.realm.delete(self.config)
+                }
+                
                 self.realm.add(fetchedConfig)
                 
                 try self.realm.commitWrite()
