@@ -32,9 +32,9 @@ class Session: Object {
     dynamic var downloaded = false
     
     var isScheduled: Bool {
-        guard let realm = realm else { return false }
+        guard let schedule = schedule else { return false }
         
-        return videoURL.isEmpty && realm.objectForPrimaryKey(ScheduledSession.self, key: uniqueId) != nil
+        return schedule.endsAt.isGreaterThanOrEqualTo(NSDate())
     }
     
     var schedule: ScheduledSession? {
