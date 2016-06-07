@@ -15,6 +15,8 @@
 		C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */; };
 		C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */; };
 		C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */; };
+		DD03E3951D0757E800C27AC6 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCF4D461D05D3260060F6E2 /* Fabric.framework */; };
+		DD03E3961D0757EB00C27AC6 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCF4D451D05D3260060F6E2 /* Crashlytics.framework */; };
 		DD0974DF1B18AAA8006A3C77 /* URLSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0974DE1B18AAA8006A3C77 /* URLSchemeHandler.swift */; };
 		DD1F90C61D0706E3000C24A9 /* JSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90C51D0706E3000C24A9 /* JSONAdapter.swift */; };
 		DD1F90C81D070834000C24A9 /* AppConfigAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90C71D070834000C24A9 /* AppConfigAdapter.swift */; };
@@ -71,10 +73,6 @@
 		DDCAB46F1C2620BE005889CB /* TranscriptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDCAB46D1C2620BE005889CB /* TranscriptViewController.xib */; };
 		DDCAB48A1C263EF9005889CB /* TranscriptLineTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCAB4891C263EF9005889CB /* TranscriptLineTableRowView.swift */; };
 		DDCC5D761AF1532600F24F55 /* GRCrashlyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */; };
-		DDCF4D471D05D3260060F6E2 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCF4D451D05D3260060F6E2 /* Crashlytics.framework */; };
-		DDCF4D481D05D3260060F6E2 /* Crashlytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDCF4D451D05D3260060F6E2 /* Crashlytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		DDCF4D491D05D3260060F6E2 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCF4D461D05D3260060F6E2 /* Fabric.framework */; };
-		DDCF4D4A1D05D3260060F6E2 /* Fabric.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDCF4D461D05D3260060F6E2 /* Fabric.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4321AE2DF14000A0102 /* Theme.swift */; };
 		DDD7A4351AE2E02A000A0102 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */; };
 		DDD9CD001D03C34D002A36F2 /* NewWWDCGreeter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD9CCFF1D03C34D002A36F2 /* NewWWDCGreeter.swift */; };
@@ -92,21 +90,6 @@
 		DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */; };
 		DDF9D1931B04F361006F0953 /* SplitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF9D1921B04F361006F0953 /* SplitManager.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		DD20166C1AE402B400DD8155 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				DDCF4D481D05D3260060F6E2 /* Crashlytics.framework in Embed Frameworks */,
-				DDCF4D4A1D05D3260060F6E2 /* Fabric.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1C967BA81AE7EB27003662B2 /* NSString+QualifierSearchParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+QualifierSearchParser.h"; sourceTree = "<group>"; };
@@ -208,9 +191,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDCF4D471D05D3260060F6E2 /* Crashlytics.framework in Frameworks */,
 				1E79A12E8372925A20BF940E /* Pods_WWDC.framework in Frameworks */,
-				DDCF4D491D05D3260060F6E2 /* Fabric.framework in Frameworks */,
+				DD03E3951D0757E800C27AC6 /* Fabric.framework in Frameworks */,
+				DD03E3961D0757EB00C27AC6 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,7 +517,6 @@
 				DD4F6E481AE2D11D0099BEB5 /* Sources */,
 				DD4F6E491AE2D11D0099BEB5 /* Frameworks */,
 				DD4F6E4A1AE2D11D0099BEB5 /* Resources */,
-				DD20166C1AE402B400DD8155 /* Embed Frameworks */,
 				DDCC5D701AF1512400F24F55 /* Crashlytics */,
 				6496650DC2A92C0EB1093F35 /* Embed Pods Frameworks */,
 				15C33143705C6CD43FE580A2 /* Copy Pods Resources */,
@@ -845,7 +827,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -868,7 +849,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

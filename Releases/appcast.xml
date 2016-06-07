@@ -6,6 +6,18 @@
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
 		
+		<item>
+            <title>Version 4.1</title>
+			<description><![CDATA[
+							<ul>
+								<li>Fixes a problem with the code signature</li>
+							</ul>
+						]]></description>
+            <pubDate>Tue, 07 Jun 2016 16:30:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/raw/master/Releases/WWDC_latest.zip" sparkle:version="410" sparkle:shortVersionString="4.1" length="7197537" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
         <item>
             <title>Version 4.0</title>
 			<description><![CDATA[
