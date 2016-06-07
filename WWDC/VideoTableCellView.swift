@@ -26,7 +26,7 @@ class VideoTableCellView: NSTableCellView {
     @IBOutlet weak private var progressView: SessionProgressView!
     @IBOutlet weak private var downloadedImage: GRMaskImageView!
     
-    override var backgroundStyle: NSBackgroundStyle {
+    var selected = false {
         didSet {
             updateTint()
         }
@@ -34,6 +34,8 @@ class VideoTableCellView: NSTableCellView {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        selected = false
         
         NSNotificationCenter.defaultCenter().removeObserver(self)
         KVOController.unobserve(session)
@@ -83,10 +85,21 @@ class VideoTableCellView: NSTableCellView {
         progressView.favorite = session.favorite
     }
     
+    override var backgroundStyle: NSBackgroundStyle {
+        didSet {
+            titleField.cell?.backgroundStyle = .Light
+            detailsField.cell?.backgroundStyle = .Light
+        }
+    }
+    
     func updateTint() {
-        if backgroundStyle == .Dark {
+        if selected {
+            titleField.textColor = NSColor.whiteColor()
+            detailsField.textColor = NSColor(calibratedWhite: 1.0, alpha: 0.70)
             downloadedImage.tintColor = Theme.WWDCTheme.backgroundColor
         } else {
+            titleField.textColor = NSColor(calibratedWhite: 0.0, alpha: 0.95)
+            detailsField.textColor = NSColor(calibratedWhite: 0.0, alpha: 0.70)
             downloadedImage.tintColor = Theme.WWDCTheme.fillColor
         }
     }

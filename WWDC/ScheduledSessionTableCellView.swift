@@ -60,8 +60,16 @@ class ScheduledSessionTableCellView: NSTableCellView {
         return f
     }()
     
+    var selected = false {
+        didSet {
+            updateTint()
+        }
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        selected = false
         
         NSNotificationCenter.defaultCenter().removeObserver(self)
         KVOController.unobserve(session)
@@ -77,6 +85,7 @@ class ScheduledSessionTableCellView: NSTableCellView {
         updateSessionFlags()
         updateLive()
         colorizeRowView()
+        updateTint()
     }
     
     private func updateDetail() {
@@ -138,6 +147,23 @@ class ScheduledSessionTableCellView: NSTableCellView {
         } else {
             rowView.themeBackgroundColor = Theme.WWDCTheme.fillColor
             rowView.themeSeparatorColor = Theme.WWDCTheme.separatorColor
+        }
+    }
+    
+    override var backgroundStyle: NSBackgroundStyle {
+        didSet {
+            titleField.cell?.backgroundStyle = .Light
+            detailsField.cell?.backgroundStyle = .Light
+        }
+    }
+    
+    func updateTint() {
+        if selected {
+            titleField.textColor = NSColor.whiteColor()
+            detailsField.textColor = NSColor.whiteColor()
+        } else {
+            titleField.textColor = NSColor(calibratedWhite: 0.0, alpha: 0.95)
+            detailsField.textColor = NSColor(calibratedWhite: 0.0, alpha: 0.70)
         }
     }
     

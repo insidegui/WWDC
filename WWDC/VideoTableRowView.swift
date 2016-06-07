@@ -28,25 +28,21 @@ class VideoTableRowView: NSTableRowView {
         }
     }
     
-    private var shouldDrawAsKey: Bool {
-        get {
-            if let window = window {
-                return window.keyWindow && NSApp.active && window.firstResponder.isEqualTo(self.superview)
-            } else {
-                return false
-            }
-        }
-    }
+    private var shouldDrawAsKey = true
     
     private func updateSubviewsInterestedInSelectionState() {
         guard subviews.count > 0 else { return }
         
         if let videoCell = subviews[0] as? VideoTableCellView {
+            videoCell.selected = selected
+            
             for subview in videoCell.subviews {
                 if let p = subview as? SessionProgressView {
                     p.selected = selected
                 }
             }
+        } else if let scheduleCell = subviews[0] as? ScheduledSessionTableCellView {
+            scheduleCell.selected = selected
         }
     }
     
