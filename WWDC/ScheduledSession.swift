@@ -25,6 +25,10 @@ class ScheduledSession: Object {
         return LiveEventObserver.SharedObserver().liveSessions.filter({ $0.id == self.id }).first
     }
     
+    var isLive: Bool {
+        return liveSession != nil
+    }
+    
     var session: Session? {
         guard let realm = realm else { return nil }
         

@@ -12,9 +12,7 @@ class RoundRectLabel: NSView {
 
     var title: String = "" {
         didSet {
-            _storedAttributedTitle = nil
-            sizeToFit()
-            setNeedsDisplayInRect(bounds)
+            invalidateTitle()
         }
     }
     
@@ -24,12 +22,30 @@ class RoundRectLabel: NSView {
         }
     }
     
+    var font = NSFont.systemFontOfSize(11.0) {
+        didSet {
+            invalidateTitle()
+        }
+    }
+    
+    var textColor = NSColor.whiteColor() {
+        didSet {
+            invalidateTitle()
+        }
+    }
+    
+    private func invalidateTitle() {
+        _storedAttributedTitle = nil
+        sizeToFit()
+        setNeedsDisplayInRect(bounds)
+    }
+    
     private var _storedAttributedTitle: NSAttributedString?
     private var attributedTitle: NSAttributedString {
         if _storedAttributedTitle == nil {
             let attrs = [
-                NSFontAttributeName: NSFont.systemFontOfSize(11.0),
-                NSForegroundColorAttributeName: NSColor.whiteColor()
+                NSFontAttributeName: font,
+                NSForegroundColorAttributeName: textColor
             ]
             _storedAttributedTitle = NSAttributedString(string: title, attributes: attrs)
         }

@@ -618,7 +618,7 @@ CA
                                                                             <rect key="frame" x="8" y="4" width="436" height="14"/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Rci-ye-2qZ">
                                                                                 <font key="font" metaFont="smallSystem"/>
-                                                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
@@ -644,24 +644,36 @@ CA
                                                                                 <constraint firstAttribute="width" constant="2" id="kBl-p1-fRl"/>
                                                                             </constraints>
                                                                         </customView>
+                                                                        <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVh-Wd-Gak" customClass="RoundRectLabel" customModule="WWDC" customModuleProvider="target">
+                                                                            <rect key="frame" x="10" y="3" width="48" height="17"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="17" placeholder="YES" id="6g3-Bq-rOw"/>
+                                                                                <constraint firstAttribute="width" constant="48" placeholder="YES" id="eyz-wG-zEL"/>
+                                                                            </constraints>
+                                                                        </customView>
                                                                     </subviews>
                                                                     <constraints>
                                                                         <constraint firstItem="F44-in-hRv" firstAttribute="leading" secondItem="ARV-Ac-EqM" secondAttribute="leading" constant="10" id="2De-X4-u70"/>
                                                                         <constraint firstItem="5zt-YN-VWV" firstAttribute="top" secondItem="ARV-Ac-EqM" secondAttribute="top" id="Cq0-CB-1qy"/>
                                                                         <constraint firstItem="F44-in-hRv" firstAttribute="top" secondItem="ARV-Ac-EqM" secondAttribute="top" constant="3" id="Maf-wO-2jk"/>
+                                                                        <constraint firstItem="mVh-Wd-Gak" firstAttribute="centerY" secondItem="UWb-DH-WaF" secondAttribute="centerY" id="ObK-rl-Fph"/>
                                                                         <constraint firstItem="UWb-DH-WaF" firstAttribute="leading" secondItem="F44-in-hRv" secondAttribute="leading" id="PHY-QZ-fQo"/>
                                                                         <constraint firstItem="UWb-DH-WaF" firstAttribute="top" secondItem="F44-in-hRv" secondAttribute="bottom" constant="2" id="PxI-yn-ziK"/>
                                                                         <constraint firstItem="UWb-DH-WaF" firstAttribute="trailing" secondItem="5zt-YN-VWV" secondAttribute="trailing" id="QsG-cC-jVg"/>
                                                                         <constraint firstItem="iAZ-n2-Rln" firstAttribute="leading" secondItem="ARV-Ac-EqM" secondAttribute="leading" constant="2" id="S0V-hV-4fo"/>
                                                                         <constraint firstAttribute="trailing" secondItem="5zt-YN-VWV" secondAttribute="trailing" constant="5" id="TAC-kx-o6n"/>
-                                                                        <constraint firstItem="5zt-YN-VWV" firstAttribute="leading" secondItem="F44-in-hRv" secondAttribute="trailing" constant="8" id="UIs-k1-dyr"/>
                                                                         <constraint firstAttribute="bottom" secondItem="iAZ-n2-Rln" secondAttribute="bottom" constant="1" id="mJB-g6-p6z"/>
                                                                         <constraint firstItem="iAZ-n2-Rln" firstAttribute="top" secondItem="ARV-Ac-EqM" secondAttribute="top" constant="1" id="oTw-zz-POc"/>
+                                                                        <constraint firstItem="mVh-Wd-Gak" firstAttribute="leading" secondItem="F44-in-hRv" secondAttribute="leading" id="rjc-Gt-ngb"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="F44-in-hRv" secondAttribute="trailing" constant="27" id="xha-ak-jMf"/>
                                                                     </constraints>
                                                                     <connections>
                                                                         <outlet property="detailsField" destination="UWb-DH-WaF" id="Wr3-f0-paF"/>
                                                                         <outlet property="favoriteIndicator" destination="5zt-YN-VWV" id="jsr-lH-pIC"/>
+                                                                        <outlet property="liveIndicator" destination="mVh-Wd-Gak" id="mVq-eR-9xM"/>
+                                                                        <outlet property="subtitleLeadingConstraint" destination="PHY-QZ-fQo" id="NAH-T5-CaI"/>
                                                                         <outlet property="titleField" destination="F44-in-hRv" id="aAa-d5-Uqo"/>
+                                                                        <outlet property="titleTrailingConstraint" destination="xha-ak-jMf" id="cZG-FO-Bat"/>
                                                                         <outlet property="trackDecorationView" destination="iAZ-n2-Rln" id="fXu-N7-vVs"/>
                                                                     </connections>
                                                                 </tableCellView>
