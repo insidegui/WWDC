@@ -37,6 +37,7 @@ private extension Preferences {
     
     var shouldPresentAutomaticRefreshSuggestion: Bool {
         guard !Preferences.SharedPreferences().automaticRefreshEnabled else { return false }
+        guard WWDCDatabase.sharedDatabase.config != nil else { return false }
         
         let isWWDCWeek = WWDCDatabase.sharedDatabase.config.isWWDCWeek
         
