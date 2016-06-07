@@ -190,6 +190,10 @@ class VideoDetailsViewController: NSViewController {
     }
     
     private func handleMultipleSelection() {
+        restoreColors()
+        
+        liveIndicatorView.hidden = true
+        watchLiveButton.hidden = true
         titleLabel.stringValue = "\(selectedCount) sessions selected"
         subtitleLabel.stringValue = ""
         descriptionLabel.hidden = true
