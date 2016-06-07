@@ -70,7 +70,7 @@ class RoundRectLabel: NSView {
     
     override var intrinsicContentSize: NSSize {
         let titleSize = attributedTitle.size()
-        return NSSize(width: titleSize.width + 10.0, height: titleSize.height + 4.0)
+        return NSSize(width: titleSize.width + 8.0, height: titleSize.height + 2.0)
     }
     
     func sizeToFit() {
