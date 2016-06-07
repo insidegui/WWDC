@@ -48,10 +48,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(notification: NSNotification) {
         // register custom URL scheme handler
         URLSchemeHandler.SharedHandler().register()
-        
-        // install custom dock icon
-        NSApp.dockTile.contentView = DockIconView(dockTile: NSApp.dockTile)
-        NSApp.dockTile.display()
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
