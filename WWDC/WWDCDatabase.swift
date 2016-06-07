@@ -65,7 +65,13 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     private let currentDBVersion = UInt64(5)
     
     private func configureRealm() {
-        let realmConfiguration = Realm.Configuration(schemaVersion: currentDBVersion, migrationBlock: { _, _ in })
+        let realmConfiguration = Realm.Configuration(schemaVersion: currentDBVersion, migrationBlock: { migration, oldVersion in
+            if oldVersion == 0 && self.currentDBVersion == 5 {
+                NSLog("Migrating data from version 0 to version 5")
+                // app config must be invalidated for this version update
+                migration.deleteData("AppConfig")
+            }
+        })
         
         Realm.Configuration.defaultConfiguration = realmConfiguration
     }
@@ -133,9 +139,8 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     /// 4. Fetch and index transcripts from ASCIIWWDC
     func refresh() {
         // try to find an existing AppConfig object in the database
-        let fetchedConfig = realm.objects(AppConfig.self)
-        if fetchedConfig.count > 0 {
-            self.config = fetchedConfig[0]
+        if let fetchedConfig = realm.objects(AppConfig.self).last {
+            self.config = fetchedConfig
         }
         
         fetchOrUpdateAppleServiceURLs()
@@ -252,6 +257,11 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     } else {
                         newSessionKeys.append(session.uniqueId)
                     }
+                    
+                    if WWDCEnvironment.yearsToIgnoreTranscript.contains(session.year) {
+                        newSessionKeys.remove(session.uniqueId)
+                    }
+                    
                     backgroundRealm.beginWrite()
                     
                     backgroundRealm.add(session, update: true)

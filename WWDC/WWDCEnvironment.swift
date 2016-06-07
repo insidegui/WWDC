@@ -58,4 +58,8 @@ struct WWDCEnvironment {
         return URL("/videos_live.php")
     }
     
+    // MARK: - Transcript ignore
+    
+    static let yearsToIgnoreTranscript = [2011, 2016]
+    
 }
