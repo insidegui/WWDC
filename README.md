@@ -8,9 +8,17 @@ Use this app to watch WWDC sessions on your Mac and do much more. Keep reading..
 
 **⬇️ [Click here to download the latest release](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip) ⬇️**
 
-![screenshot](screenshots/screenshot.png)
+## Schedule and Live Streaming
 
-Also, check this out: [WWDC app for the new Apple TV](https://github.com/insidegui/WWDC-tvOS) :)
+The app now shows the schedule for this year's sessions.
+
+Please note that since this app is focused on videos, the schedule only shows sessions which will be live streamed, not labs and other events.
+
+When sessions are live, a "live" indicator appears on the list and a "Watch Live" button becomes available:
+
+![Live](screenshots/screenshot-schedule-fake.png)
+
+***NOTICE: The session titles shown in the screenshot are fictitious.***
 
 ## Searching
 
