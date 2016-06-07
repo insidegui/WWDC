@@ -16,7 +16,6 @@ private let _nibName = "VideoWindowController"
 class VideoWindowController: NSWindowController {
 
     var session: Session?
-    var event: LiveSession?
     
     var videoURL: String?
     var startTime: Double?
@@ -45,20 +44,9 @@ class VideoWindowController: NSWindowController {
         self.startTime = startTime
     }
     
-    convenience init(event: LiveSession, videoURL: String) {
-        self.init(windowNibName: _nibName)
-        self.event = event
-        self.videoURL = videoURL
-        NSNotificationCenter.defaultCenter().addObserverForName(LiveEventTitleAvailableNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [unowned self] note in
-            if let title = note.object as? String {
-                self.window?.title = "\(title) (Live)"
-            }
-        }
-    }
-    
-    @IBOutlet weak var customPlayerView: GRCustomPlayerView!
     @IBOutlet weak var playerView: AVPlayerView!
     @IBOutlet weak var progressIndicator: NSProgressIndicator!
+    
     weak var player: AVPlayer? {
         didSet {
             if let player = player {
@@ -79,72 +67,41 @@ class VideoWindowController: NSWindowController {
     override func windowDidLoad() {
         super.windowDidLoad()
         
+        guard let session = session else { return }
+        
+        setupPlayer()
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NSWindowDelegate.windowWillClose(_:)), name: NSWindowWillCloseNotification, object: self.window)
         
         activity = NSProcessInfo.processInfo().beginActivityWithOptions([.IdleDisplaySleepDisabled, .IdleSystemSleepDisabled, .UserInitiated], reason: "Playing WWDC session video")
 
         progressIndicator.startAnimation(nil)
         window?.backgroundColor = NSColor.blackColor()
-
-        if let url = NSURL(string: videoURL!) {
-            if event == nil {
-                player = AVPlayer(URL: url)
-                addRateObserver(player: player!)
-                playerView.player = player
-                
-                // SESSION
-                player?.currentItem!.asset.loadValuesAsynchronouslyForKeys(["tracks"]) {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.setupWindowSizing()
-                        self.setupTimeObserver()
-                        
-                        if let session = self.session {
-                            if session.currentPosition > 0 {
-                                self.player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
-                            }
-                        }
-                        
-                        if let startAt = self.startTime {
-                            self.seekTo(startAt)
-                        }
-                        self.player?.play()
-                        self.progressIndicator.stopAnimation(nil)
-                    }
-                }
-            }
-        }
         
-        if let session = self.session {
-            window?.title = "\(session.event) \(session.year) | \(session.title)"
-            
-            // pause playback when a live event starts playing
-            NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { [unowned self] _ in
-                self.player?.pause()
-            }
+        window?.title = "\(session.event) \(session.year) | \(session.title)"
+        
+        // pause playback when a live event starts playing
+        NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { [weak self] _ in
+            self?.player?.pause()
         }
 
 		if Preferences.SharedPreferences().floatOnTopEnabled {
 			window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey))
 		}
-        
-        if let event = self.event {
-            window?.title = "\(event.title) (Live)"
-            
-            loadEventVideo()
-        }
     }
     
     func windowWillClose(note: NSNotification!) {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        
         if let player = player {
             player.cancelPendingPrerolls()
             player.pause()
             removeRateObserver(player: player)
         }
+        
         asset = nil
         item = nil
         player = nil
-        
-        NSNotificationCenter.defaultCenter().removeObserver(self)
         
         if let observer: AnyObject = timeObserver {
             player?.removeTimeObserver(observer)
@@ -157,29 +114,35 @@ class VideoWindowController: NSWindowController {
             NSProcessInfo.processInfo().endActivity(activity)
         }
         
-        if self.event != nil {
-            if self.item != nil {
-                self.item.removeObserver(self, forKeyPath: "status")
-            }
-        }
-        
         self.transcriptWC?.close()
         self.transcriptWC = nil
     }
     
-    private func loadEventVideo() {
-        if let url = event?.streamURL {
-            dispatch_async(dispatch_get_main_queue()) {
-                self.playEventVideo(url)
-            }
-        }
-    }
-    
-    private func playEventVideo(url: NSURL) {
+    private func setupPlayer() {
+        guard let videoURL = videoURL, url = NSURL(string: videoURL) else { return }
+        
         player = AVPlayer(URL: url)
         addRateObserver(player: player!)
-        progressIndicator.stopAnimation(nil)
         playerView.player = player
+        
+        player?.currentItem?.asset.loadValuesAsynchronouslyForKeys(["tracks"]) { [weak self] in
+            dispatch_async(dispatch_get_main_queue()) {
+                self?.setupWindowSizing()
+                self?.setupTimeObserver()
+                
+                if let session = self?.session {
+                    if session.currentPosition > 0 {
+                        self?.player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
+                    }
+                }
+                
+                if let startAt = self?.startTime {
+                    self?.seekTo(startAt)
+                }
+                self?.player?.play()
+                self?.progressIndicator.stopAnimation(nil)
+            }
+        }
     }
     
     var rate: Float = 1.0
