@@ -190,9 +190,18 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             
             print("AppConfig changed")
             
-            // write the new configuration to the database so It can be fetched quickly later :)
-            try! self.realm.write { self.realm.add(fetchedConfig, update: true) }
-            self.config = fetchedConfig
+            // replace configuration on the database with the new configuration
+            self.realm.beginWrite()
+            do {
+                self.realm.delete(self.config)
+                self.realm.add(fetchedConfig)
+                
+                try self.realm.commitWrite()
+                
+                self.config = fetchedConfig
+            } catch let error {
+                NSLog("Unable to save new configuration: \(error)")
+            }
         }
     }
     
