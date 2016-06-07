@@ -94,6 +94,8 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
     }
     
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        guard row < filteredLines.count else { return nil }
+        
         let cell = tableView.makeViewWithIdentifier(Storyboard.cellIdentifier, owner: tableView) as! TranscriptLineTableCellView
         
         cell.foregroundColor = textColor
@@ -114,6 +116,8 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
     }
     
     func doubleClickedLine(sender: AnyObject?) {
+        guard tableView.clickedRow < filteredLines.count else { return }
+        
         let line = filteredLines[tableView.clickedRow]
         jumpToTimeCallback(time: line.timecode)
     }
@@ -122,7 +126,7 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
     
     @IBAction func search(sender: NSSearchField) {
         // disables scrolling during search
-        enableScrolling = (sender.stringValue == "")
+        enableScrolling = sender.stringValue.isEmpty
         
         tableView.reloadData()
     }
