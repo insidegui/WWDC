@@ -57,7 +57,6 @@
 		DD8C68CD1D062ED60075D6A5 /* NSColorHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C68CC1D062ED60075D6A5 /* NSColorHex.swift */; };
 		DD92EAAC1AE9795900D503AE /* TranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */; };
 		DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */; };
-		DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */; };
 		DDBD18651BC3227B00EF7718 /* FilterBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD18631BC3227B00EF7718 /* FilterBarController.swift */; };
 		DDBD18661BC3227B00EF7718 /* FilterBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDBD18641BC3227B00EF7718 /* FilterBarController.xib */; };
 		DDC049D01AE564F20008D41A /* PDFWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC049CE1AE564F20008D41A /* PDFWindowController.swift */; };
@@ -80,9 +79,7 @@
 		DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */; };
 		DDF166831D03CB69006780BF /* PlayerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166821D03CB69006780BF /* PlayerExtensions.swift */; };
 		DDF166851D03CD69006780BF /* WWDCEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166841D03CD69006780BF /* WWDCEnvironment.swift */; };
-		DDF166871D03F6F6006780BF /* LiveSessionsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166861D03F6F6006780BF /* LiveSessionsBannerView.swift */; };
 		DDF1668A1D048BC8006780BF /* LiveSessionsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166881D048BC8006780BF /* LiveSessionsListViewController.swift */; };
-		DDF1668B1D048BC8006780BF /* LiveSessionsListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDF166891D048BC8006780BF /* LiveSessionsListViewController.xib */; };
 		DDF1668D1D048C4D006780BF /* LiveSessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF1668C1D048C4D006780BF /* LiveSessionTableCellView.swift */; };
 		DDF1668F1D048C7C006780BF /* RoundRectLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF1668E1D048C7C006780BF /* RoundRectLabel.swift */; };
 		DDF6153F1B07C30B002C8667 /* LiveEventObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */; };
@@ -166,7 +163,6 @@
 		DD8C68CC1D062ED60075D6A5 /* NSColorHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSColorHex.swift; sourceTree = "<group>"; };
 		DD92EAAA1AE9795900D503AE /* TranscriptWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptWindowController.swift; sourceTree = "<group>"; };
 		DD92EAAB1AE9795900D503AE /* TranscriptWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptWindowController.xib; sourceTree = "<group>"; };
-		DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveEventBannerViewController.xib; sourceTree = "<group>"; };
 		DDBD18631BC3227B00EF7718 /* FilterBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterBarController.swift; sourceTree = "<group>"; };
 		DDBD18641BC3227B00EF7718 /* FilterBarController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterBarController.xib; sourceTree = "<group>"; };
 		DDC049CE1AE564F20008D41A /* PDFWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFWindowController.swift; sourceTree = "<group>"; };
@@ -188,9 +184,7 @@
 		DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonsViewController.swift; sourceTree = "<group>"; };
 		DDF166821D03CB69006780BF /* PlayerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerExtensions.swift; sourceTree = "<group>"; };
 		DDF166841D03CD69006780BF /* WWDCEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCEnvironment.swift; sourceTree = "<group>"; };
-		DDF166861D03F6F6006780BF /* LiveSessionsBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionsBannerView.swift; sourceTree = "<group>"; };
 		DDF166881D048BC8006780BF /* LiveSessionsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionsListViewController.swift; sourceTree = "<group>"; };
-		DDF166891D048BC8006780BF /* LiveSessionsListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LiveSessionsListViewController.xib; sourceTree = "<group>"; };
 		DDF1668C1D048C4D006780BF /* LiveSessionTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionTableCellView.swift; sourceTree = "<group>"; };
 		DDF1668E1D048C7C006780BF /* RoundRectLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundRectLabel.swift; sourceTree = "<group>"; };
 		DDF6153E1B07C30B002C8667 /* LiveEventObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveEventObserver.swift; sourceTree = "<group>"; };
@@ -407,7 +401,6 @@
 				DD20166D1AE40D0100DD8155 /* ContentBackgroundView.swift */,
 				DD3FDF191BC2EDFC0078B06C /* RoundPlayButton.swift */,
 				DD5E940F1C283A2300E26B61 /* AboutWindow.swift */,
-				DDF166861D03F6F6006780BF /* LiveSessionsBannerView.swift */,
 				DDC584091D04BDC20062D3ED /* DockIconView.swift */,
 			);
 			name = Views;
@@ -457,8 +450,6 @@
 				DD4F6E571AE2D11D0099BEB5 /* Main.storyboard */,
 				DD4F6E751AE2D82A0099BEB5 /* VideosHeaderViewController.xib */,
 				C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */,
-				DD945EDF1B26A72900CE7B7D /* LiveEventBannerViewController.xib */,
-				DDF166891D048BC8006780BF /* LiveSessionsListViewController.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -580,9 +571,7 @@
 				DD2016761AE411C800DD8155 /* VideoWindowController.xib in Resources */,
 				DDC049D11AE564F20008D41A /* PDFWindowController.xib in Resources */,
 				DDE3A8241BC2DCEC00610FEF /* TranscriptSearchResultsController.xib in Resources */,
-				DD945EE01B26A72900CE7B7D /* LiveEventBannerViewController.xib in Resources */,
 				DDBD18661BC3227B00EF7718 /* FilterBarController.xib in Resources */,
-				DDF1668B1D048BC8006780BF /* LiveSessionsListViewController.xib in Resources */,
 				DD92EAAD1AE9795900D503AE /* TranscriptWindowController.xib in Resources */,
 				DD29DD921C276C3000392D42 /* AboutWindowController.xib in Resources */,
 				DDCAB46F1C2620BE005889CB /* TranscriptViewController.xib in Resources */,
@@ -707,7 +696,6 @@
 				DD0974DF1B18AAA8006A3C77 /* URLSchemeHandler.swift in Sources */,
 				DD8C68CD1D062ED60075D6A5 /* NSColorHex.swift in Sources */,
 				DDF1668D1D048C4D006780BF /* LiveSessionTableCellView.swift in Sources */,
-				DDF166871D03F6F6006780BF /* LiveSessionsBannerView.swift in Sources */,
 				DD825CA81BBF575500276B83 /* WWDCDatabase.swift in Sources */,
 				DD2CC38C1AF4161700FC5F68 /* Preferences.swift in Sources */,
 				DD3FDF1A1BC2EDFC0078B06C /* RoundPlayButton.swift in Sources */,
