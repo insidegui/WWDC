@@ -7,15 +7,14 @@
         <language>en</language>
 		
         <item>
-            <title>Version 3.5</title>
+            <title>Version 4.0</title>
 			<description><![CDATA[
 							<ul>
-								<li>Ready for WWDC 2016</li>
-								<li>Updates are now handled using Sparkle</li>
+								<li>WWDC 2016 schedule and live sessions</li>
 							</ul>
 						]]></description>
-            <pubDate>Sun, 05 Jun 2016 09:41:00 +0000</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/raw/master/Releases/WWDC_v3.5.zip" sparkle:version="350" sparkle:shortVersionString="3.5" length="5740764" type="application/octet-stream" />
+            <pubDate>Tue, 07 Jun 2016 14:00:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/raw/master/Releases/WWDC_latest.zip" sparkle:version="400" sparkle:shortVersionString="4.0" length="8153812" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
         </item>
     </channel>
