@@ -88,7 +88,6 @@ class VideoDetailsViewController: NSViewController {
         }
         
         watchLiveButton.hidden = true
-        actionButtonsController.view.hidden = false
         downloadController.view.hidden = false
         
         actionButtonsController.session = session
@@ -97,6 +96,7 @@ class VideoDetailsViewController: NSViewController {
         titleLabel.textColor = NSColor.labelColor()
         
         if let session = self.session {
+            actionButtonsController.view.hidden = false
             titleLabel.stringValue = session.title
             subtitleLabel.stringValue = "\(session.track) | Session \(session.id)"
             descriptionLabel.stringValue = session.summary
@@ -113,6 +113,7 @@ class VideoDetailsViewController: NSViewController {
                 showScheduledState(schedule)
             }
         } else {
+            actionButtonsController.view.hidden = true
             titleLabel.stringValue = "No session selected"
             subtitleLabel.stringValue = "Select a session to see It here"
             descriptionLabel.hidden = true
