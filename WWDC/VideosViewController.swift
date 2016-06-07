@@ -17,10 +17,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     var splitManager: SplitManager?
     
-    var indexOfLastSelectedRow = -1
-    let savedSearchTerm = Preferences.SharedPreferences().searchTerm
     var finishedInitialSetup = false
-    var restoredSelection = false
     var loadedStoryboard = false
     
     lazy var headerController: VideosHeaderViewController! = VideosHeaderViewController.loadDefaultController()
@@ -31,8 +28,6 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         if splitManager == nil && loadedStoryboard {
             if let splitViewController = parentViewController as? NSSplitViewController {
                 splitManager = SplitManager(splitView: splitViewController.splitView)
-//                this caused a crash when running on 10.11...
-//                splitViewController.splitView.delegate = self.splitManager
             }
         }
         
@@ -142,9 +137,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             guard sessions != nil else { return }
             
             headerController.enable()
-            headerController.searchTerm = Preferences.SharedPreferences().searchTerm
-
-            tableView.reloadData()
+            
+            reloadTablePreservingSelection()
         }
     }
 
@@ -159,25 +153,33 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         fetchLocalSessions()
         
-        WWDCDatabase.sharedDatabase.transcriptIndexingStartedCallback = {
-            self.headerController.progress = WWDCDatabase.sharedDatabase.transcriptIndexingProgress
+        WWDCDatabase.sharedDatabase.transcriptIndexingStartedCallback = { [weak self] in
+            self?.headerController.progress = WWDCDatabase.sharedDatabase.transcriptIndexingProgress
         }
-        WWDCDatabase.sharedDatabase.sessionListChangedCallback = { newSessionKeys in
+        WWDCDatabase.sharedDatabase.sessionListChangedCallback = { [weak self] newSessionKeys in
             print("\(newSessionKeys.count) new session(s) available")
 
             GRLoadingView.dismissAllAfterDelay(0.3)
             
-            self.fetchLocalSessions()
+            self?.fetchLocalSessions()
             
-            self.splitManager?.restoreDividerPosition()
-            self.splitManager?.startSavingDividerPosition()
-            self.setupAutomaticSessionRefresh()
+            self?.splitManager?.restoreDividerPosition()
+            self?.splitManager?.startSavingDividerPosition()
+            self?.setupAutomaticSessionRefresh()
+            
+            self?.restoreSearchIfNeeded()
         }
         WWDCDatabase.sharedDatabase.refresh()
         
-        if Preferences.SharedPreferences().searchTerm != "" {
-            search(Preferences.SharedPreferences().searchTerm)
-        }
+        restoreSearchIfNeeded()
+    }
+    
+    func restoreSearchIfNeeded() {
+        applySearchFilters()
+        
+        guard let term = headerController.searchTerm else { return }
+        
+        mainQ { self.search(term) }
     }
     
     func fetchLocalSessions() {
@@ -215,16 +217,15 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     
     // MARK: TableView
     
+    private var selectionIndexesBeforeRefresh: NSIndexSet?
+    
     func reloadTablePreservingSelection() {
+        selectionIndexesBeforeRefresh = tableView.selectedRowIndexes
+        
         tableView.reloadData()
         
-        if !restoredSelection {
-            indexOfLastSelectedRow = Preferences.SharedPreferences().selectedSession
-            restoredSelection = true
-        }
-        
-        if indexOfLastSelectedRow > -1 {
-            tableView.selectRowIndexes(NSIndexSet(index: indexOfLastSelectedRow), byExtendingSelection: false)
+        if let indexes = selectionIndexesBeforeRefresh {
+            tableView.selectRowIndexes(indexes, byExtendingSelection: false)
         }
     }
     
@@ -319,14 +320,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             WWDCDatabase.sharedDatabase.doChanges {
                 session.favorite = false
             }
+            restoreSearchIfNeeded()
             reloadTablePreservingSelection()
         } else {
             doMassiveSessionPropertyUpdate(.Favorite(false))
             reloadTablePreservingSelection()
-        }
-        
-        if Preferences.SharedPreferences().searchTerm != "" {
-            search(Preferences.SharedPreferences().searchTerm)
         }
     }
     
@@ -351,6 +349,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
                     }
                 }
             }
+            mainQ { self.restoreSearchIfNeeded() }
         }
     }
 
@@ -449,10 +448,6 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
         
         if tableView.selectedRow >= 0 {
-
-            Preferences.SharedPreferences().selectedSession = tableView.selectedRow
-            
-            indexOfLastSelectedRow = tableView.selectedRow
 
             let session = displayedSessions[tableView.selectedRow]
             if let detailsVC = detailsViewController {
