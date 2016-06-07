@@ -135,12 +135,30 @@ class VideoDetailsViewController: NSViewController {
         updateLiveState()
     }
     
+    private lazy var startTimeFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        
+        formatter.locale = NSLocale(localeIdentifier: "en")
+        formatter.dateFormat = "EEEE 'at' HH:mm"
+        
+        return formatter
+    }()
+    
     @objc private func updateLiveState(note: NSNotification? = nil) {
         guard let schedule = session?.schedule else {
             watchLiveButton.enabled = false
             liveIndicatorView.hidden = true
             return
         }
+        
+        let tooltip: String
+        if schedule.isLive {
+            tooltip = "This session is live streaming right now, click to watch!"
+        } else {
+            tooltip = "This session will be live streamed! Come back on " + startTimeFormatter.stringFromDate(schedule.startsAt) + " to watch It."
+        }
+        
+        watchLiveButton.toolTip = tooltip
         
         watchLiveButton.enabled = schedule.isLive
         liveIndicatorView.hidden = !schedule.isLive
