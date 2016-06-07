@@ -54,6 +54,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         didSet {
             guard config != nil else { return }
             
+            #if DEBUG
+                NSLog("Did fetch AppConfig")
+            #endif
+            
             wipe2016TechTalksVideos()
             updateSessionVideos()
             updateSchedule()
@@ -165,9 +169,12 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             
             let fetchedConfig = AppConfigAdapter.adapt(configJSON)
             
-            if let existingConfig = self.realm.objects(AppConfig.self).last {
-                // if the fetched config from the service is equal to the config in the database, don't bother updating It
-                guard !fetchedConfig.isEqualToConfig(existingConfig) else { return }
+            let existingConfig = self.realm.objects(AppConfig.self).last
+            
+            // if the fetched config from the service is equal to the config in the database, don't bother updating It
+            guard !fetchedConfig.isEqualToConfig(existingConfig) else {
+                self.config = existingConfig
+                return
             }
             
             if fetchedConfig.isWWDCWeek {
@@ -191,8 +198,8 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             // replace configuration on the database with the new configuration
             self.realm.beginWrite()
             do {
-                if self.config != nil {
-                    self.realm.delete(self.config)
+                if let existingConfig = existingConfig {
+                    self.realm.delete(existingConfig)
                 }
                 
                 self.realm.add(fetchedConfig)
@@ -217,6 +224,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     }
     
     private func updateSessionVideos() {
+        #if DEBUG
+            NSLog("Updating videos...")
+        #endif
+        
         manager.request(.GET, config.videosURL).response { [weak self] _, _, data, error in
             guard let weakSelf = self else { return }
             
@@ -235,7 +246,9 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 mainQS {
                     // check if the videos have been updated since the last fetch
                     if json["updated"].stringValue == weakSelf.config.videosUpdatedAt && !weakSelf.config.shouldIgnoreCache {
-                        print("Video list did not change")
+                        #if DEBUG
+                            NSLog("Video list did not change")
+                        #endif
                         newVideosAvailable = false
                     } else {
                         try! weakSelf.realm.write { weakSelf.config.videosUpdatedAt = json["updated"].stringValue }
@@ -245,7 +258,9 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 guard newVideosAvailable else { return }
                 
                 guard let sessionsArray = json["sessions"].array else {
-                    print("Could not parse array of sessions")
+                    #if DEBUG
+                        NSLog("Could not parse array of videos")
+                    #endif
                     return
                 }
                 
@@ -295,6 +310,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     }
     
     private func updateSchedule() {
+        #if DEBUG
+            NSLog("Updating schedule...")
+        #endif
+        
         guard config.scheduleEnabled else { return }
         
         manager.request(.GET, config.sessionsURL).response { [weak self] _, _, data, error in
