@@ -14,7 +14,7 @@ import WWDCAppKit
 private let _nibName = "VideoWindowController"
 
 class VideoWindowController: NSWindowController {
-
+    
     var session: Session?
     
     var videoURL: String?
@@ -30,7 +30,7 @@ class VideoWindowController: NSWindowController {
         }
     }
     var videoNaturalSize = CGSizeZero
-
+    
     convenience init(session: Session, videoURL: String) {
         self.init(windowNibName: _nibName)
         self.session = session
@@ -74,7 +74,7 @@ class VideoWindowController: NSWindowController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NSWindowDelegate.windowWillClose(_:)), name: NSWindowWillCloseNotification, object: self.window)
         
         activity = NSProcessInfo.processInfo().beginActivityWithOptions([.IdleDisplaySleepDisabled, .IdleSystemSleepDisabled, .UserInitiated], reason: "Playing WWDC session video")
-
+        
         progressIndicator.startAnimation(nil)
         window?.backgroundColor = NSColor.blackColor()
         
@@ -84,10 +84,10 @@ class VideoWindowController: NSWindowController {
         NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { [weak self] _ in
             self?.player?.pause()
         }
-
-		if Preferences.SharedPreferences().floatOnTopEnabled {
-			window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey))
-		}
+        
+        if Preferences.SharedPreferences().floatOnTopEnabled {
+            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey))
+        }
     }
     
     func windowWillClose(note: NSNotification!) {
@@ -121,6 +121,8 @@ class VideoWindowController: NSWindowController {
     private func setupPlayer() {
         guard let videoURL = videoURL, url = NSURL(string: videoURL) else { return }
         
+        playerView.controlsStyle = .None
+        
         player = AVPlayer(URL: url)
         addRateObserver(player: player!)
         playerView.player = player
@@ -141,6 +143,7 @@ class VideoWindowController: NSWindowController {
                 }
                 self?.player?.play()
                 self?.progressIndicator.stopAnimation(nil)
+                self?.playerView.controlsStyle = .Floating
             }
         }
     }
@@ -150,7 +153,7 @@ class VideoWindowController: NSWindowController {
     private func addRateObserver(player player: AVPlayer) {
         player.addObserver(self, forKeyPath: "rate", options: [.New, .Old], context: nil)
     }
-
+    
     private func removeRateObserver(player player: AVPlayer) {
         player.removeObserver(self, forKeyPath: "rate")
     }
@@ -165,8 +168,8 @@ class VideoWindowController: NSWindowController {
             }
         } else if keyPath == "rate" {
             if let change = change,
-               let newRate = change[NSKeyValueChangeNewKey] as? Float,
-               let oldRate = change[NSKeyValueChangeOldKey] as? Float
+                let newRate = change[NSKeyValueChangeNewKey] as? Float,
+                let oldRate = change[NSKeyValueChangeOldKey] as? Float
             {
                 if oldRate == 0.0 && newRate == 1.0 { // play button tapped
                     player!.rate = rate // set rate to stored one
@@ -189,22 +192,22 @@ class VideoWindowController: NSWindowController {
     
     func showTranscriptWindow(sender: AnyObject?) {
         guard let session = session where session.transcript != nil else { return }
-
+        
         if transcriptWC != nil {
             if let window = transcriptWC.window {
                 window.orderFront(sender)
             }
-
+            
             return
         }
-
+        
         transcriptWC = TranscriptWindowController(session: session)
         transcriptWC.showWindow(sender)
         transcriptWC.jumpToTimeCallback = { [unowned self] time in
             guard let player = self.player else { return }
             player.seekToTime(CMTimeMakeWithSeconds(time, player.currentItem!.duration.timescale))
         }
-
+        
         setupTranscriptSync(session.transcript!)
     }
     
@@ -217,7 +220,7 @@ class VideoWindowController: NSWindowController {
             guard let weakSelf = self else { return }
             
             let progress = Double(CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(weakSelf.player!.currentItem!.duration))
-
+            
             WWDCDatabase.sharedDatabase.doChanges {
                 weakSelf.session!.progress = progress
                 weakSelf.session!.currentPosition = CMTimeGetSeconds(currentTime)
@@ -232,7 +235,7 @@ class VideoWindowController: NSWindowController {
         
         boundaryObserver = player.addBoundaryTimeObserverForTimes(transcript.timecodesWithTimescale(player.currentItem!.duration.timescale), queue: dispatch_get_main_queue()) { [unowned self] in
             guard self.transcriptWC != nil else { return }
-
+            
             let ct = CMTimeGetSeconds(self.player!.currentTime())
             let roundedTimecode = Transcript.roundedStringFromTimecode(ct)
             self.transcriptWC.highlightLineAt(roundedTimecode)
@@ -266,21 +269,21 @@ class VideoWindowController: NSWindowController {
             sizeWindowToFill(nil)
         }
     }
-
-	// Toggles if the window should float on top of all other windows
-	@IBAction func floatOnTop(sender: NSMenuItem) {
-		if sender.state == NSOnState {
-			window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.NormalWindowLevelKey))
-			Preferences.SharedPreferences().floatOnTopEnabled = false
-
-			sender.state = NSOffState
-		} else {
-			window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey))
-			Preferences.SharedPreferences().floatOnTopEnabled = true
-
-			sender.state = NSOnState
-		}
-	}
+    
+    // Toggles if the window should float on top of all other windows
+    @IBAction func floatOnTop(sender: NSMenuItem) {
+        if sender.state == NSOnState {
+            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.NormalWindowLevelKey))
+            Preferences.SharedPreferences().floatOnTopEnabled = false
+            
+            sender.state = NSOffState
+        } else {
+            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey))
+            Preferences.SharedPreferences().floatOnTopEnabled = true
+            
+            sender.state = NSOnState
+        }
+    }
     
     // resizes the window so the video fills the entire screen without cropping
     @IBAction func sizeWindowToFill(sender: AnyObject?)
