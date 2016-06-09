@@ -7,6 +7,19 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.1.2</title>
+			<description><![CDATA[
+							<ul>
+								<li>Fixed a crash that would occur when trying to seek a video before It had completed loading</li>
+								<li>The app will now correctly use 12 or 24-hour time according to the system's international settings</li>
+							</ul>
+						]]></description>
+            <pubDate>Tue, 09 Jun 2016 00:15:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.1.2/WWDC_v4.1.2.zip" sparkle:version="412" sparkle:shortVersionString="4.1.2" length="7197909" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.1.1</title>
 			<description><![CDATA[
 							<ul>
