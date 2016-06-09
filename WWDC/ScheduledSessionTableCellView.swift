@@ -55,7 +55,7 @@ class ScheduledSessionTableCellView: NSTableCellView {
     private lazy var timeFormatter: NSDateFormatter = {
         let f = NSDateFormatter()
         
-        f.dateFormat = "HH:mm"
+        f.timeStyle = .ShortStyle
         
         return f
     }()

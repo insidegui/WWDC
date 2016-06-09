@@ -140,11 +140,19 @@ class VideoDetailsViewController: NSViewController {
         updateLiveState()
     }
     
-    private lazy var startTimeFormatter: NSDateFormatter = {
+    private lazy var startDateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         
         formatter.locale = NSLocale(localeIdentifier: "en")
-        formatter.dateFormat = "EEEE 'at' HH:mm"
+        formatter.dateFormat = "EEEE 'at' "
+        
+        return formatter
+    }()
+    
+    private lazy var startTimeFormatter: NSDateFormatter = {
+        let formatter = NSDateFormatter()
+        
+        formatter.timeStyle = .ShortStyle
         
         return formatter
     }()
@@ -160,7 +168,7 @@ class VideoDetailsViewController: NSViewController {
         if schedule.isLive {
             tooltip = "This session is live streaming right now, click to watch!"
         } else {
-            tooltip = "This session will be live streamed! Come back on " + startTimeFormatter.stringFromDate(schedule.startsAt) + " to watch It."
+            tooltip = "This session will be live streamed! Come back on " + startDateFormatter.stringFromDate(schedule.startsAt) + startTimeFormatter.stringFromDate(schedule.startsAt) + " to watch It."
         }
         
         watchLiveButton.toolTip = tooltip
