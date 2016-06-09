@@ -1,5 +1,50 @@
 # Change Log
 
+## [Unreleased](https://github.com/insidegui/WWDC/tree/HEAD)
+
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.1.2...HEAD)
+
+**Implemented enhancements:**
+
+- Grouping videos by WWDC Session [\#99](https://github.com/insidegui/WWDC/issues/99)
+- Add ability to skip forward/back 10s/15s/30s [\#70](https://github.com/insidegui/WWDC/issues/70)
+
+**Fixed bugs:**
+
+- DividerPosition gets restored while window is visible [\#50](https://github.com/insidegui/WWDC/issues/50)
+
+**Closed issues:**
+
+- Adding metadata to video files [\#105](https://github.com/insidegui/WWDC/issues/105)
+
+## [4.1.2](https://github.com/insidegui/WWDC/tree/4.1.2) (2016-06-08)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.1.1...4.1.2)
+
+## [4.1.1](https://github.com/insidegui/WWDC/tree/4.1.1) (2016-06-07)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.1...4.1.1)
+
+**Closed issues:**
+
+- Download is not properly signed, triggers gatekeeper warning. [\#134](https://github.com/insidegui/WWDC/issues/134)
+
+## [4.1](https://github.com/insidegui/WWDC/tree/4.1) (2016-06-07)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.0...4.1)
+
+**Fixed bugs:**
+
+- Question: App will not save favorites ? [\#133](https://github.com/insidegui/WWDC/issues/133)
+
+## [4.0](https://github.com/insidegui/WWDC/tree/4.0) (2016-06-07)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.4...4.0)
+
+**Implemented enhancements:**
+
+- Add schedule of upcoming WWDC events / sessions [\#132](https://github.com/insidegui/WWDC/issues/132)
+
+**Fixed bugs:**
+
+- AirPlay icon misplaced beneath playback speed [\#130](https://github.com/insidegui/WWDC/issues/130)
+
 ## [3.4](https://github.com/insidegui/WWDC/tree/3.4) (2016-06-05)
 [Full Changelog](https://github.com/insidegui/WWDC/compare/3.3.1...3.4)
 
@@ -26,6 +71,7 @@
 
 **Merged pull requests:**
 
+- Temporarily disable video controls while loading [\#131](https://github.com/insidegui/WWDC/pull/131) ([peterkos](https://github.com/peterkos))
 - Updates tableView when user de-favorites session [\#129](https://github.com/insidegui/WWDC/pull/129) ([peterkos](https://github.com/peterkos))
 - Fixes bug of reseting playback rate to 1 after pressing pause then play. [\#128](https://github.com/insidegui/WWDC/pull/128) ([valeriyvan](https://github.com/valeriyvan))
 - Fixes soon be deprecated string selectors. [\#127](https://github.com/insidegui/WWDC/pull/127) ([valeriyvan](https://github.com/valeriyvan))
