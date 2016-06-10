@@ -35,6 +35,12 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         let window = VideoPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .Buffered, defer: false)
         window.releasedWhenClosed = true
         
+        if #available(OSX 10.11, *) {
+            // ¯\_(ツ)_/¯
+        } else {
+            window.collectionBehavior = [.Default, .FullScreenPrimary]
+        }
+        
         super.init(window: window)
         
         window.delegate = self
