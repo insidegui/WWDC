@@ -96,7 +96,9 @@ class VideoWindowController: NSWindowController {
         if let player = player {
             player.cancelPendingPrerolls()
             player.pause()
-            removeRateObserver(player: player)
+            if #available(OSX 10.11, *) {
+                removeRateObserver(player: player)
+            }
         }
         
         asset = nil
@@ -124,7 +126,9 @@ class VideoWindowController: NSWindowController {
         playerView.controlsStyle = .None
         
         player = AVPlayer(URL: url)
-        addRateObserver(player: player!)
+        if #available(OSX 10.11, *) {
+            addRateObserver(player: player!)
+        }
         playerView.player = player
         
         player?.currentItem?.asset.loadValuesAsynchronouslyForKeys(["tracks"]) { [weak self] in
@@ -150,10 +154,14 @@ class VideoWindowController: NSWindowController {
     
     var rate: Float = 1.0
     
+    // observing the key "rate" on AVPlayer caused a crash on 10.10
+    @available(OSX 10.11, *)
     private func addRateObserver(player player: AVPlayer) {
         player.addObserver(self, forKeyPath: "rate", options: [.New, .Old], context: nil)
     }
     
+    // observing the key "rate" on AVPlayer caused a crash on 10.10
+    @available(OSX 10.11, *)
     private func removeRateObserver(player player: AVPlayer) {
         player.removeObserver(self, forKeyPath: "rate")
     }
