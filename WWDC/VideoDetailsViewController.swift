@@ -64,16 +64,20 @@ class VideoDetailsViewController: NSViewController {
     
     @IBOutlet weak var watchLiveButton: NSButton! {
         didSet {
-            let pStyle = NSMutableParagraphStyle()
-            pStyle.alignment = NSCenterTextAlignment
-            let attrs = [
-                NSFontAttributeName: NSFont.controlContentFontOfSize(13.0),
-                NSForegroundColorAttributeName: NSColor.whiteColor(),
-                NSParagraphStyleAttributeName: pStyle
-            ]
-            watchLiveButton.attributedTitle = NSAttributedString(string: "Watch Live", attributes: attrs)
-            watchLiveButton.appearance = NSAppearance(named: "LiveButton")
-            watchLiveButton.sizeToFit()
+            if #available(OSX 10.11, *) {
+                let pStyle = NSMutableParagraphStyle()
+                pStyle.alignment = NSCenterTextAlignment
+                
+                let attrs = [
+                    NSFontAttributeName: NSFont.controlContentFontOfSize(13.0),
+                    NSForegroundColorAttributeName: NSColor.whiteColor(),
+                    NSParagraphStyleAttributeName: pStyle
+                ]
+                watchLiveButton.attributedTitle = NSAttributedString(string: "Watch Live", attributes: attrs)
+                
+                watchLiveButton.appearance = NSAppearance(named: "LiveButton")
+                watchLiveButton.sizeToFit()
+            }
         }
     }
     
