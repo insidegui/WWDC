@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G12a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
@@ -720,6 +720,8 @@ CA
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="downloadMenuItem" destination="ggO-K9-4H2" id="gvb-my-ybk"/>
+                        <outlet property="removeDownloadMenuItem" destination="3ng-2r-LuE" id="ik8-be-5PR"/>
                         <outlet property="scrollView" destination="TKd-X0-CX9" id="ne4-Lz-uK3"/>
                         <outlet property="tableView" destination="hE6-m5-F6H" id="JrW-sy-d14"/>
                     </connections>

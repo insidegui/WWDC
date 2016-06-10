@@ -10,11 +10,14 @@ import Cocoa
 import WWDCAppKit
 import RealmSwift
 
-class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
+class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuDelegate {
 
     @IBOutlet weak var scrollView: GRScrollView!
     @IBOutlet weak var tableView: NSTableView!
     
+    @IBOutlet weak var downloadMenuItem: NSMenuItem!
+    
+    @IBOutlet weak var removeDownloadMenuItem: NSMenuItem!
     var splitManager: SplitManager?
     
     var finishedInitialSetup = false
@@ -44,6 +47,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         setupScrollView()
 
         tableView.gridColor = Theme.WWDCTheme.separatorColor
+        self.tableView.menu?.delegate = self
+        self.tableView.menu?.autoenablesItems = false
         
         loadSessions(refresh: false, quiet: false)
         
@@ -141,6 +146,38 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             reloadTablePreservingSelection()
         }
     }
+    
+    //MARK: NSMenuDelegate
+    
+    func menuWillOpen(menu: NSMenu) {
+        
+        if menu == self.tableView.menu {
+            
+            let session = self.sessions[self.tableView.clickedRow]
+            
+            if session.year >= 2013 {
+                
+                if session.isScheduled {
+                    
+                    self.downloadMenuItem.enabled = false
+                    self.removeDownloadMenuItem.enabled = false
+                    
+                } else {
+                    
+                    self.downloadMenuItem.enabled = session.downloaded ? false:true //if session has already been downloaded then disable the download button
+                    
+                    self.removeDownloadMenuItem.enabled = session.downloaded
+                    
+                }
+                
+            } else {
+                
+                self.downloadMenuItem.enabled = false
+                self.removeDownloadMenuItem.enabled = false
+            }
+        }
+    }
+
 
     // MARK: Session loading
         
