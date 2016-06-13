@@ -125,6 +125,21 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         (window as! VideoPlayerWindow).applySizePreset(.Max)
     }
     
+    @IBAction func floatOnTop(sender: NSMenuItem) {
+        if sender.state == NSOnState {
+            toggleFloatOnTop(false)
+            sender.state = NSOffState
+        } else {
+            toggleFloatOnTop(true)
+            sender.state = NSOnState
+        }
+    }
+    
+    private func toggleFloatOnTop(enable: Bool) {
+        let level = enable ? Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey)) : Int(CGWindowLevelForKey(CGWindowLevelKey.NormalWindowLevelKey))
+        window?.level = level
+    }
+    
     deinit {
         #if DEBUG
         Swift.print("VideoPlayerWindowController is gone")
