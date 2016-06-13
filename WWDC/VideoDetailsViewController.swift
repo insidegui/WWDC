@@ -150,17 +150,19 @@ class VideoDetailsViewController: NSViewController {
     }
     
     @objc private func updateReminderButton() {
-        guard let schedule = session?.schedule else { return }
-        
-        reminderButton.enabled = true
-        
-        calendarHelper.hasReminderForScheduledSession(schedule) { [weak self] hasReminder in
-            if hasReminder {
-                self?.reminderButton.title = "Remove Reminder"
-                self?.reminderButton.tag = 1
-            } else {
-                self?.reminderButton.title = "Create Reminder"
-                self?.reminderButton.tag = 0
+        dispatch_async(dispatch_get_main_queue()) {
+            guard let schedule = self.session?.schedule else { return }
+            
+            self.reminderButton.enabled = true
+            
+            self.calendarHelper.hasReminderForScheduledSession(schedule) { [weak self] hasReminder in
+                if hasReminder {
+                    self?.reminderButton.title = "Remove Reminder"
+                    self?.reminderButton.tag = 1
+                } else {
+                    self?.reminderButton.title = "Create Reminder"
+                    self?.reminderButton.tag = 0
+                }
             }
         }
     }
