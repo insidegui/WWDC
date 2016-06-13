@@ -12,6 +12,8 @@ struct WWDCEnvironment {
     
     // MARK: - Configuration
     
+    static let liveTolerance = 60.0 * 15.0
+    
     private static var shouldUseTestServer: Bool {
         #if DEBUG
             return NSProcessInfo.processInfo().arguments.contains("--use-localhost")
