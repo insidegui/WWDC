@@ -5,19 +5,7 @@
         <link>https://github.com/insidegui/WWDC/raw/master/Releases/appcast.xml</link>
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
-		
-		<item>
-            <title>Version 4.2</title>
-			<description><![CDATA[
-							<ul>
-								<li>Adds an option to create a reminder for scheduled sessions</li>
-								<li>"Float on top" option now works with the new live session player (partially)</li>
-							</ul>
-						]]></description>
-            <pubDate>Mon, 13 Jun 2016 20:30:00 +0000</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.2/WWDC_v4.2.zip" sparkle:version="420" sparkle:shortVersionString="4.2" length="7233978" type="application/octet-stream" />
-            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
-        </item>
+
 		
 		<item>
             <title>Version 4.1.4</title>
