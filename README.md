@@ -1,8 +1,8 @@
 Psst, want me to love you? Then [check this out](https://getbrowserfreedom.com) 😁
 
-# The WWDC app for OS X
+# The WWDC app for macOS
 
-This is the unofficial WWDC app for OS X.
+This is the unofficial WWDC app for macOS.
 
 Use this app to watch WWDC sessions on your Mac and do much more. Keep reading...
 
@@ -40,7 +40,7 @@ You can share direct links to specific session videos. Just select the session o
 
 ## Reading
 
-WWDC for OS X is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can see and search through transcripts of the sessions while watching the videos.
+WWDC for macOS is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can see and search through transcripts of the sessions while watching the videos.
 
 ![screenshot2](screenshots/screenshot2.png)
 
