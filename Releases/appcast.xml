@@ -7,6 +7,18 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.1.4</title>
+			<description><![CDATA[
+							<ul>
+								<li>Improved compatibility with live streamed sessions</li>
+							</ul>
+						]]></description>
+            <pubDate>Mon, 13 Jun 2016 17:00:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.1.4/WWDC_v4.1.4.zip" sparkle:version="414" sparkle:shortVersionString="4.1.4" length="7204603" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.1.3</title>
 			<description><![CDATA[
 							<strong>WARNING: this is the last version to officially support OS X 10.10 (Yosemite).</strong>
