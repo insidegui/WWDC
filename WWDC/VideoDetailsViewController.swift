@@ -113,7 +113,7 @@ class VideoDetailsViewController: NSViewController {
                 self.updateUI()
             }
             
-            if let schedule = session.schedule {
+            if let schedule = session.schedule where session.isScheduled {
                 showScheduledState(schedule)
             }
         } else {
