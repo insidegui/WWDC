@@ -66,12 +66,12 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     
     // MARK: - Realm Configuration
     
-    private let currentDBVersion = UInt64(5)
+    private let currentDBVersion = UInt64(6)
     
     private func configureRealm() {
         let realmConfiguration = Realm.Configuration(schemaVersion: currentDBVersion, migrationBlock: { migration, oldVersion in
-            if oldVersion == 0 && self.currentDBVersion == 5 {
-                NSLog("Migrating data from version 0 to version 5")
+            if oldVersion == 0 && self.currentDBVersion >= 5 {
+                NSLog("Migrating data from version 0 to version \(self.currentDBVersion)")
                 // app config must be invalidated for this version update
                 migration.deleteData("AppConfig")
             }

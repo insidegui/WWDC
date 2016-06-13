@@ -80,6 +80,7 @@
 		DDE3A8241BC2DCEC00610FEF /* TranscriptSearchResultsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDE3A8221BC2DCEC00610FEF /* TranscriptSearchResultsController.xib */; };
 		DDE3A82B1BC2DD8300610FEF /* TranscriptLineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE3A82A1BC2DD8300610FEF /* TranscriptLineTableCellView.swift */; };
 		DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */; };
+		DDF0564E1D0F623700EB04B6 /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0564D1D0F623700EB04B6 /* CalendarHelper.swift */; };
 		DDF166831D03CB69006780BF /* PlayerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166821D03CB69006780BF /* PlayerExtensions.swift */; };
 		DDF166851D03CD69006780BF /* WWDCEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166841D03CD69006780BF /* WWDCEnvironment.swift */; };
 		DDF1668A1D048BC8006780BF /* LiveSessionsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF166881D048BC8006780BF /* LiveSessionsListViewController.swift */; };
@@ -175,6 +176,7 @@
 		DDE3A8221BC2DCEC00610FEF /* TranscriptSearchResultsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TranscriptSearchResultsController.xib; sourceTree = "<group>"; };
 		DDE3A82A1BC2DD8300610FEF /* TranscriptLineTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptLineTableCellView.swift; sourceTree = "<group>"; };
 		DDE6CFE51AED1F3700DC8D9E /* ActionButtonsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonsViewController.swift; sourceTree = "<group>"; };
+		DDF0564D1D0F623700EB04B6 /* CalendarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
 		DDF166821D03CB69006780BF /* PlayerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerExtensions.swift; sourceTree = "<group>"; };
 		DDF166841D03CD69006780BF /* WWDCEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCEnvironment.swift; sourceTree = "<group>"; };
 		DDF166881D048BC8006780BF /* LiveSessionsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveSessionsListViewController.swift; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 				DDF80A671AE8AC78004BE8E2 /* StringExtensions.swift */,
 				DDD9CCFF1D03C34D002A36F2 /* NewWWDCGreeter.swift */,
 				DDF166821D03CB69006780BF /* PlayerExtensions.swift */,
+				DDF0564D1D0F623700EB04B6 /* CalendarHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -663,6 +666,7 @@
 				DD4F6E761AE2D82A0099BEB5 /* VideosHeaderViewController.swift in Sources */,
 				DDF80A681AE8AC78004BE8E2 /* StringExtensions.swift in Sources */,
 				DD373A8A1AE871AB00DAC19B /* VideoStore.swift in Sources */,
+				DDF0564E1D0F623700EB04B6 /* CalendarHelper.swift in Sources */,
 				DD29DD991C276C3800392D42 /* AboutWindowController.swift in Sources */,
 				DDD7A4331AE2DF14000A0102 /* Theme.swift in Sources */,
 				DDE6CFE61AED1F3700DC8D9E /* ActionButtonsViewController.swift in Sources */,
@@ -833,6 +837,7 @@
 				);
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "$(inherited) -D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "br.com.guilhermerambo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -855,6 +860,7 @@
 				);
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = "br.com.guilhermerambo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
