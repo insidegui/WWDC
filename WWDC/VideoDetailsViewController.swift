@@ -330,7 +330,7 @@ class VideoDetailsViewController: NSViewController {
     private func showVideoNotAvailableAlert() {
         let alert = NSAlert()
         alert.messageText = "Video not available"
-        alert.informativeText = "The video for this session is not available yet, please come back later to watch It. You can try refreshing now to see if It became available (⌘R)."
+        alert.informativeText = "The video for this session is not available yet, please come back later to watch it. You can try refreshing now to see if it became available (⌘R)."
         alert.addButtonWithTitle("OK")
         alert.runModal()
     }
