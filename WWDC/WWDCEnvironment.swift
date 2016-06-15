@@ -16,7 +16,17 @@ struct WWDCEnvironment {
     
     private static var shouldUseTestServer: Bool {
         #if DEBUG
+            NSLog("Using localhost!")
             return NSProcessInfo.processInfo().arguments.contains("--use-localhost")
+        #else
+            return false
+        #endif
+    }
+    
+    private static var shouldUseFakeTestData: Bool {
+        #if DEBUG
+            NSLog("Using fake data!")
+            return NSProcessInfo.processInfo().arguments.contains("--use-fake-data")
         #else
             return false
         #endif
@@ -43,7 +53,11 @@ struct WWDCEnvironment {
     // MARK: - Paths
     
     static var indexURL: String {
-        return URL("/index.json")
+        if shouldUseFakeTestData {
+            return URL("/fake_index.json")
+        } else {
+            return URL("/index.json")
+        }
     }
     
     static var extraURL: String {

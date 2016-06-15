@@ -277,6 +277,18 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                         if !existingSession.isSemanticallyEqualToSession(session) {
                             // something about this session has changed, update
                             newSessionKeys.append(session.uniqueId)
+                            
+                            backgroundRealm.beginWrite()
+                            session.favorite = existingSession.favorite
+                            session.downloaded = existingSession.downloaded
+                            session.progress = existingSession.progress
+                            session.currentPosition = existingSession.currentPosition
+                            do {
+                                try backgroundRealm.commitWrite()
+                            } catch let error {
+                                NSLog("Error restoring properties for session \(session.uniqueId): \(error)")
+                            }
+                            
                         } else {
                             // there's nothing new about this session
                             continue;

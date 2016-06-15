@@ -7,6 +7,18 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.2.2</title>
+			<description><![CDATA[
+							<ul>
+								<li>Fixes a bug which caused favorites to be lost when a session got updated</li>
+							</ul>
+						]]></description>
+            <pubDate>Wed, 15 Jun 2016 11:40:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.2.2/WWDC_v4.2.2.zip" sparkle:version="422" sparkle:shortVersionString="4.2.2" length="7234714" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.2.1</title>
 			<description><![CDATA[
 							<ul>
