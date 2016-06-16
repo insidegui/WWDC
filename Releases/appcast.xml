@@ -7,6 +7,18 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.2.3</title>
+			<description><![CDATA[
+							<ul>
+								<li>Fixes a bug where the currently live sessions would "jump" up on the list (above the extra videos)</li>
+							</ul>
+						]]></description>
+            <pubDate>Wed, 16 Jun 2016 20:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.2.3/WWDC_v4.2.3.zip" sparkle:version="423" sparkle:shortVersionString="4.2.3" length="7234756" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.2.2</title>
 			<description><![CDATA[
 							<ul>
