@@ -16,7 +16,6 @@ struct WWDCEnvironment {
     
     private static var shouldUseTestServer: Bool {
         #if DEBUG
-            NSLog("Using localhost!")
             return NSProcessInfo.processInfo().arguments.contains("--use-localhost")
         #else
             return false
@@ -25,7 +24,6 @@ struct WWDCEnvironment {
     
     private static var shouldUseFakeTestData: Bool {
         #if DEBUG
-            NSLog("Using fake data!")
             return NSProcessInfo.processInfo().arguments.contains("--use-fake-data")
         #else
             return false
