@@ -18,8 +18,8 @@ class ScheduledSession: Object {
     dynamic var id = 0
     dynamic var uniqueId = ""
     dynamic var room = ""
-    dynamic var startsAt = NSDate()
-    dynamic var endsAt = NSDate()
+    dynamic var startsAt = NSDate.distantFuture()
+    dynamic var endsAt = NSDate.distantFuture()
     dynamic var calendarIdentifier = ""
     
     var liveSession: LiveSession? {
@@ -59,11 +59,11 @@ class ScheduledSession: Object {
             self.uniqueId = "#" + String(year) + "-" + String(id)
         }
         
-        if let startTime = json["start_time"].int {
+        if let startTime = json["start_time"].int where startTime > 0 {
             self.startsAt = NSDate(timeIntervalSince1970: NSTimeInterval(startTime))
         }
         
-        if let endTime = json["end_time"].int {
+        if let endTime = json["end_time"].int where endTime > 0 {
             self.endsAt = NSDate(timeIntervalSince1970: NSTimeInterval(endTime))
         }
     }
