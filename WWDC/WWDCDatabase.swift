@@ -326,8 +326,6 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             NSLog("Updating schedule...")
         #endif
         
-        fixScheduleVideosDateBugIfNeeded()
-        
         guard config.scheduleEnabled else { return }
         
         manager.request(.GET, config.sessionsURL).response { [weak self] _, _, data, error in
@@ -367,7 +365,9 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 sessionsArray.forEach { jsonScheduledSession in
                     let scheduledSession = ScheduledSession(json: jsonScheduledSession)
                     
-                    guard scheduledSession.type.lowercaseString == "session" else { return }
+                    if scheduledSession.type.lowercaseString == "video" {
+                        scheduledSession.startsAt = NSDate.distantFuture()
+                    }
                     
                     if let trackName = jsonScheduledSession["track"].string {
                         scheduledSession.track = backgroundRealm.objectForPrimaryKey(Track.self, key: trackName)
@@ -387,30 +387,9 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     }
                 }
                 
-                mainQ { weakSelf.sessionListChangedCallback?(newSessionKeys: []) }
-            }
-        }
-    }
-    
-    // Previous versions of the app would treat "video" sessions as regular sessions but this caused a problem with the date-time-based ordering
-    private func fixScheduleVideosDateBugIfNeeded() {
-        let defaultsKey = "fixedScheduleDateBug2"
-        guard !NSUserDefaults.standardUserDefaults().boolForKey(defaultsKey) else { return }
-        NSUserDefaults.standardUserDefaults().setBool(true, forKey: defaultsKey)
-        
-        dispatch_async(bgThread) {
-            do {
-                let bgRealm = try Realm()
-                
-                bgRealm.beginWrite()
-                
-                bgRealm.objects(ScheduledSession.self).filter("type == %@", "Video").forEach { $0.startsAt = NSDate.distantFuture() }
-                
-                try bgRealm.commitWrite()
-                
-                NSLog("Updated special video sessions startsAt to distant future")
-            } catch let error {
-                NSLog("Error fixing schedule date bug: \(error)")
+                mainQ {
+                    weakSelf.sessionListChangedCallback?(newSessionKeys: [])
+                }
             }
         }
     }
