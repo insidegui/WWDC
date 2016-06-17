@@ -50,6 +50,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
     
     override func windowDidLoad() {
         super.windowDidLoad()
+        
         self.tableView.setDelegate(self)
         self.tableView.setDataSource(self)
         self.tableView.columnAutoresizingStyle = .FirstColumnOnlyAutoresizingStyle
@@ -136,6 +137,8 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
                 }
             }
         }
+        
+        populateDownloadItems()
     }
     
     private func listItemForURL(url: String!) -> (DownloadListItem?, Int) {
@@ -156,8 +159,17 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
         NSNotificationCenter.defaultCenter().removeObserver(self.downloadResumedHndl!)
     }
     
-    override func showWindow(sender: AnyObject?) {
-        super.showWindow(sender)
+    var videoStore: VideoStore {
+        get {
+            return VideoStore.SharedStore()
+        }
+    }
+    
+    convenience init() {
+        self.init(windowNibName: "DownloadListWindowController")
+    }
+    
+    private func populateDownloadItems() {
         self.items.removeAll(keepCapacity: false)
         let tasks = self.videoStore.allTasks()
         
@@ -168,16 +180,6 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
             self.items.append(item)
         }
         self.tableView.reloadData()
-    }
-    
-    var videoStore: VideoStore {
-        get {
-            return VideoStore.SharedStore()
-        }
-    }
-    
-    convenience init() {
-        self.init(windowNibName: "DownloadListWindowController")
     }
     
     func numberOfRowsInTableView(tableView: NSTableView) -> Int {
