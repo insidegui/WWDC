@@ -162,8 +162,8 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
 		let tasks = self.videoStore.allTasks()
 
         for task in tasks {
-            guard let url = task.originalRequest?.URL?.absoluteString else { return }
-            guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", url).first else { return }
+            guard let url = task.originalRequest?.URL?.absoluteString else { continue }
+            guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", url).first else { continue }
             let item = DownloadListItem(url: url, session: session, task: task)
             self.items.append(item)
 		}
