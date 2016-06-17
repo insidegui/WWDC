@@ -171,14 +171,16 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
     
     private func populateDownloadItems() {
         self.items.removeAll(keepCapacity: false)
-        let tasks = self.videoStore.allTasks()
         
-        for task in tasks {
-            guard let url = task.originalRequest?.URL?.absoluteString else { continue }
-            guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", url).first else { continue }
-            let item = DownloadListItem(url: url, session: session, task: task)
+        videoStore.allTasks().forEach { task in
+            guard let taskURL = task.originalRequest?.URL?.absoluteString else { return }
+            guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", taskURL).first else { return }
+            
+            let item = DownloadListItem(url: taskURL, session: session, task: task)
+            
             self.items.append(item)
         }
+        
         self.tableView.reloadData()
     }
     
