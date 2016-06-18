@@ -42,7 +42,7 @@ If you see an open issue and you want to fix it, reply on the issue announcing t
 
 ####II. Use Swift, if you can
 
-The app is written mainly in Swift but there are some components written in Objective-C because some of the features where hard to implement back when Swift was just getting started.
+The app is written mainly in Swift but there are some components written in Objective-C because some of the features were hard to implement back when Swift was just getting started.
 
 If you want to contribute and you don't want to write Swift code or don't know Swift, you can use Objective-C. But you really should be learning Swift 😬
 
