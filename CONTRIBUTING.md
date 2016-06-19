@@ -36,7 +36,7 @@ In fact, if you see some code not following these guidelines, fix it and send a 
 
 ####I. Tip: Check the roadmap and ask before you code
 
-It's happened a couple of times that I was working on a feature and someone opened a pull request implementing the same feature I was working on. This wastes time and effort because only one of the solutions will actually be used, so before you start coding I suggest you take a look at the ***roadmap*** (coming soon) to see what I'm working on currently.
+It's happened a couple of times that I was working on a feature and someone opened a pull request implementing the same feature I was working on. This wastes time and effort because only one of the solutions will actually be used, so before you start coding I suggest you take a look at the [roadmap](ROADMAP.md) to see what I'm working on currently.
 
 If you see an open issue and you want to fix it, reply on the issue announcing that you're going to work on it so other people know there's someone already working on that.
 
