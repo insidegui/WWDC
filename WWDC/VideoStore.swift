@@ -130,6 +130,10 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     }
     
     func removeDownload(url: String) -> RemoveDownloadResponse {
+        if isDownloading(url) {
+            cancelDownload(url)
+            return .Removed
+        }
         
         if hasVideo(url) {
             let path = localVideoPath(url)

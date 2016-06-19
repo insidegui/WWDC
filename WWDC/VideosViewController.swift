@@ -44,7 +44,6 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         setupScrollView()
 
         tableView.gridColor = Theme.WWDCTheme.separatorColor
-        
         loadSessions(refresh: false, quiet: false)
         
         let nc = NSNotificationCenter.defaultCenter()
@@ -139,6 +138,71 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             headerController.enable()
             
             reloadTablePreservingSelection()
+        }
+    }
+    
+    // MARK: Table View Menu Validation
+    
+    private enum TableViewMenuItemTags: Int {
+        case Watched = 1000
+        case Unwatched = 1001
+        case Favorite = 1002
+        case RemoveFavorite = 1003
+        case Download = 1004
+        case RemoveDownload = 1005
+        case CopyURL = 1006
+    }
+    
+    override func validateMenuItem(menuItem: NSMenuItem) -> Bool {
+        guard let item = TableViewMenuItemTags(rawValue: menuItem.tag) else { return false }
+        
+        // this validation only applies to the row where the right-click happened, not when many rows are selected
+        guard tableView.selectedRowIndexes.count <= 1 else { return true }
+        
+        let tableViewRow = tableView.clickedRow
+        let session = sessions[tableViewRow]
+        
+        guard !session.invalidated else { return false }
+        
+        switch item {
+        case .Watched:
+            return session.progress != 100
+            
+        case .Unwatched:
+            return session.progress == 100
+            
+        case .Favorite:
+            return session.favorite ? false : true
+            
+        case .RemoveFavorite:
+            return session.favorite
+            
+        case .Download:
+            return self.validateDownloadMenuItemsFrom(session).shouldEnableDownload
+            
+        case .RemoveDownload:
+            return self.validateDownloadMenuItemsFrom(session).shouldEnableRemoveDownload
+            
+        case .CopyURL:
+            return true
+        }
+    }
+    
+    func validateDownloadMenuItemsFrom(session: Session) -> (shouldEnableDownload: Bool, shouldEnableRemoveDownload:Bool) {
+        guard !session.invalidated else { return (false, false) }
+        
+        if session.year < 2013 {
+            return (false, false)
+        }
+        
+        if VideoStore.SharedStore().isDownloading(session.hdVideoURL) {
+            return (false, true)
+        }
+        
+        if session.isScheduled == false {
+            return (session.downloaded ? false:true, session.downloaded)
+        } else {
+            return (false, false)
         }
     }
 
