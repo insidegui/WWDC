@@ -3,7 +3,6 @@ use_frameworks!
 
 target 'WWDC' do
 
-  pod 'RealmSwift'
   pod 'Alamofire'
   pod 'KVOController'
   pod 'SwiftyJSON'
