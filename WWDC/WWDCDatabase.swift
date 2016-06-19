@@ -66,12 +66,12 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     
     // MARK: - Realm Configuration
     
-    private let currentDBVersion = UInt64(5)
+    private let currentDBVersion = UInt64(6)
     
     private func configureRealm() {
         let realmConfiguration = Realm.Configuration(schemaVersion: currentDBVersion, migrationBlock: { migration, oldVersion in
-            if oldVersion == 0 && self.currentDBVersion == 5 {
-                NSLog("Migrating data from version 0 to version 5")
+            if oldVersion == 0 && self.currentDBVersion >= 5 {
+                NSLog("Migrating data from version 0 to version \(self.currentDBVersion)")
                 // app config must be invalidated for this version update
                 migration.deleteData("AppConfig")
             }
@@ -277,6 +277,18 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                         if !existingSession.isSemanticallyEqualToSession(session) {
                             // something about this session has changed, update
                             newSessionKeys.append(session.uniqueId)
+                            
+                            backgroundRealm.beginWrite()
+                            session.favorite = existingSession.favorite
+                            session.downloaded = existingSession.downloaded
+                            session.progress = existingSession.progress
+                            session.currentPosition = existingSession.currentPosition
+                            do {
+                                try backgroundRealm.commitWrite()
+                            } catch let error {
+                                NSLog("Error restoring properties for session \(session.uniqueId): \(error)")
+                            }
+                            
                         } else {
                             // there's nothing new about this session
                             continue;
@@ -353,6 +365,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 sessionsArray.forEach { jsonScheduledSession in
                     let scheduledSession = ScheduledSession(json: jsonScheduledSession)
                     
+                    if scheduledSession.type.lowercaseString == "video" {
+                        scheduledSession.startsAt = NSDate.distantFuture()
+                    }
+                    
                     if let trackName = jsonScheduledSession["track"].string {
                         scheduledSession.track = backgroundRealm.objectForPrimaryKey(Track.self, key: trackName)
                     }
@@ -371,7 +387,9 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     }
                 }
                 
-                mainQ { weakSelf.sessionListChangedCallback?(newSessionKeys: []) }
+                mainQ {
+                    weakSelf.sessionListChangedCallback?(newSessionKeys: [])
+                }
             }
         }
     }

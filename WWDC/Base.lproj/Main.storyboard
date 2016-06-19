@@ -949,6 +949,16 @@ CA
                                     <action selector="watchLive:" target="PTx-VW-9eO" id="hHs-Re-cUL"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bts-j6-1kJ">
+                                <rect key="frame" x="121" y="176" width="142" height="32"/>
+                                <buttonCell key="cell" type="push" title="Create Reminder" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qfl-71-rMp">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="reminderButtonAction:" target="PTx-VW-9eO" id="VJt-nA-Vyu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="dAt-fP-9qj" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="20" id="1oc-Kd-Mha"/>
@@ -957,11 +967,13 @@ CA
                             <constraint firstItem="NDa-qd-DsL" firstAttribute="centerX" secondItem="yfT-Gv-ICD" secondAttribute="centerX" id="9Ru-8q-Cjg"/>
                             <constraint firstItem="NDa-qd-DsL" firstAttribute="top" secondItem="TO1-x6-ead" secondAttribute="bottom" constant="20" id="A0o-bD-Ab8"/>
                             <constraint firstItem="dAt-fP-9qj" firstAttribute="leading" secondItem="TO1-x6-ead" secondAttribute="leading" id="BBe-6F-LZV"/>
+                            <constraint firstItem="bts-j6-1kJ" firstAttribute="centerY" secondItem="dAt-fP-9qj" secondAttribute="centerY" id="C5f-V1-PYE"/>
                             <constraint firstItem="yfT-Gv-ICD" firstAttribute="top" secondItem="lmc-yJ-Qdy" secondAttribute="top" id="FKh-9G-PHE"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="NDa-qd-DsL" secondAttribute="leading" id="MYD-oP-EUZ"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="leading" secondItem="lmc-yJ-Qdy" secondAttribute="leading" constant="20" symbolic="YES" id="Nl7-wk-Yx9"/>
                             <constraint firstAttribute="bottom" secondItem="d1c-zb-xge" secondAttribute="bottom" constant="20" id="OIn-py-qNJ"/>
                             <constraint firstItem="d1c-zb-xge" firstAttribute="top" secondItem="NDa-qd-DsL" secondAttribute="bottom" constant="23" id="cFW-Lq-rWp"/>
+                            <constraint firstItem="bts-j6-1kJ" firstAttribute="leading" secondItem="dAt-fP-9qj" secondAttribute="trailing" constant="12" symbolic="YES" id="k7R-ql-ms2"/>
                             <constraint firstAttribute="trailing" secondItem="NDa-qd-DsL" secondAttribute="trailing" constant="20" symbolic="YES" id="lf1-15-Oqn"/>
                             <constraint firstAttribute="trailing" secondItem="d1c-zb-xge" secondAttribute="trailing" constant="20" id="qLT-TO-gkm"/>
                             <constraint firstItem="TO1-x6-ead" firstAttribute="top" secondItem="yfT-Gv-ICD" secondAttribute="bottom" constant="20" id="uSJ-UI-Mhf"/>
@@ -972,6 +984,7 @@ CA
                         <outlet property="descriptionLabel" destination="TO1-x6-ead" id="zeU-Ec-TF1"/>
                         <outlet property="downloadController" destination="SkJ-kP-aeS" id="dW2-ke-WsS"/>
                         <outlet property="liveIndicatorView" destination="I5H-N2-rCF" id="MjR-OE-CFy"/>
+                        <outlet property="reminderButton" destination="bts-j6-1kJ" id="1HJ-yb-p6e"/>
                         <outlet property="subtitleLabel" destination="Q3D-NN-RLa" id="pFP-8H-gdR"/>
                         <outlet property="titleLabel" destination="OTC-kh-gjR" id="VaE-Md-v3f"/>
                         <outlet property="titleTopConstraint" destination="fGc-c6-zbn" id="W3Q-o9-K2x"/>

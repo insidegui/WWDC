@@ -7,6 +7,69 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.2.3</title>
+			<description><![CDATA[
+							<ul>
+								<li>Fixes a bug where the currently live sessions would "jump" up on the list (above the extra videos)</li>
+							</ul>
+						]]></description>
+            <pubDate>Wed, 16 Jun 2016 20:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.2.3/WWDC_v4.2.3.zip" sparkle:version="423" sparkle:shortVersionString="4.2.3" length="7234756" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 4.2.2</title>
+			<description><![CDATA[
+							<ul>
+								<li>Fixes a bug which caused favorites to be lost when a session got updated</li>
+							</ul>
+						]]></description>
+            <pubDate>Wed, 15 Jun 2016 11:40:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.2.2/WWDC_v4.2.2.zip" sparkle:version="422" sparkle:shortVersionString="4.2.2" length="7234714" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 4.2.1</title>
+			<description><![CDATA[
+							<ul>
+								<li>Adds an option to create a reminder for scheduled sessions</li>
+								<li>"Float on top" option now works with the new live session player (partially)</li>
+							</ul>
+						]]></description>
+            <pubDate>Mon, 13 Jun 2016 20:50:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.2.1/WWDC_v4.2.1.zip" sparkle:version="421" sparkle:shortVersionString="4.2.1" length="7234183" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 4.1.4</title>
+			<description><![CDATA[
+							<ul>
+								<li>Improved compatibility with live streamed sessions</li>
+							</ul>
+						]]></description>
+            <pubDate>Mon, 13 Jun 2016 17:00:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.1.4/WWDC_v4.1.4.zip" sparkle:version="414" sparkle:shortVersionString="4.1.4" length="7204603" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 4.1.3</title>
+			<description><![CDATA[
+							<strong>WARNING: this is the last version to officially support OS X 10.10 (Yosemite).</strong>
+							<ul>
+								<li>Fixes a crash when playing videos on Yosemite</li>
+								<li>Overall improved Yosemite support</li>
+							</ul>
+						]]></description>
+            <pubDate>Fri, 10 Jun 2016 14:00:00 +0000</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.1.3/WWDC_v4.1.3.zip" sparkle:version="413" sparkle:shortVersionString="4.1.3" length="7200185" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.1.2</title>
 			<description><![CDATA[
 							<ul>

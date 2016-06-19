@@ -35,6 +35,12 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         let window = VideoPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .Buffered, defer: false)
         window.releasedWhenClosed = true
         
+        if #available(OSX 10.11, *) {
+            // ¯\_(ツ)_/¯
+        } else {
+            window.collectionBehavior = [.Default, .FullScreenPrimary]
+        }
+        
         super.init(window: window)
         
         window.delegate = self
@@ -117,6 +123,21 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     
     @IBAction func sizeWindowToFill(sender: AnyObject?) {
         (window as! VideoPlayerWindow).applySizePreset(.Max)
+    }
+    
+    @IBAction func floatOnTop(sender: NSMenuItem) {
+        if sender.state == NSOnState {
+            toggleFloatOnTop(false)
+            sender.state = NSOffState
+        } else {
+            toggleFloatOnTop(true)
+            sender.state = NSOnState
+        }
+    }
+    
+    private func toggleFloatOnTop(enable: Bool) {
+        let level = enable ? Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey)) : Int(CGWindowLevelForKey(CGWindowLevelKey.NormalWindowLevelKey))
+        window?.level = level
     }
     
     deinit {

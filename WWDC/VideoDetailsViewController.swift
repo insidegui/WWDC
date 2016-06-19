@@ -10,6 +10,7 @@ import Cocoa
 import KVOController
 import WWDCPlayer
 import WWDCAppKit
+import EventKit
 
 class VideoDetailsViewController: NSViewController {
     
@@ -64,18 +65,23 @@ class VideoDetailsViewController: NSViewController {
     
     @IBOutlet weak var watchLiveButton: NSButton! {
         didSet {
-            let pStyle = NSMutableParagraphStyle()
-            pStyle.alignment = NSCenterTextAlignment
-            let attrs = [
-                NSFontAttributeName: NSFont.controlContentFontOfSize(13.0),
-                NSForegroundColorAttributeName: NSColor.whiteColor(),
-                NSParagraphStyleAttributeName: pStyle
-            ]
-            watchLiveButton.attributedTitle = NSAttributedString(string: "Watch Live", attributes: attrs)
-            watchLiveButton.appearance = NSAppearance(named: "LiveButton")
-            watchLiveButton.sizeToFit()
+            if #available(OSX 10.11, *) {
+                let pStyle = NSMutableParagraphStyle()
+                pStyle.alignment = NSCenterTextAlignment
+                
+                let attrs = [
+                    NSFontAttributeName: NSFont.controlContentFontOfSize(13.0),
+                    NSForegroundColorAttributeName: NSColor.whiteColor(),
+                    NSParagraphStyleAttributeName: pStyle
+                ]
+                watchLiveButton.attributedTitle = NSAttributedString(string: "Watch Live", attributes: attrs)
+                
+                watchLiveButton.appearance = NSAppearance(named: "LiveButton")
+                watchLiveButton.sizeToFit()
+            }
         }
     }
+    @IBOutlet weak var reminderButton: NSButton!
     
     private func updateUI() {
         if let session = session {
@@ -88,6 +94,7 @@ class VideoDetailsViewController: NSViewController {
         }
         
         watchLiveButton.hidden = true
+        reminderButton.hidden = true
         downloadController.view.hidden = false
         
         actionButtonsController.session = session
@@ -109,7 +116,7 @@ class VideoDetailsViewController: NSViewController {
                 self.updateUI()
             }
             
-            if let schedule = session.schedule {
+            if let schedule = session.schedule where session.isScheduled {
                 showScheduledState(schedule)
             }
         } else {
@@ -130,6 +137,7 @@ class VideoDetailsViewController: NSViewController {
         guard let track = schedule.track else { return }
         
         watchLiveButton.hidden = false
+        reminderButton.hidden = false
         actionButtonsController.view.hidden = true
         
         topBarBackgroundView.backgroundColor = NSColor(hexString: track.darkColor)
@@ -138,6 +146,25 @@ class VideoDetailsViewController: NSViewController {
         subtitleLabel.textColor = NSColor(hexString: track.color)
         
         updateLiveState()
+        updateReminderButton()
+    }
+    
+    @objc private func updateReminderButton() {
+        dispatch_async(dispatch_get_main_queue()) {
+            guard let schedule = self.session?.schedule else { return }
+            
+            self.reminderButton.enabled = true
+            
+            self.calendarHelper.hasReminderForScheduledSession(schedule) { [weak self] hasReminder in
+                if hasReminder {
+                    self?.reminderButton.title = "Remove Reminder"
+                    self?.reminderButton.tag = 1
+                } else {
+                    self?.reminderButton.title = "Create Reminder"
+                    self?.reminderButton.tag = 0
+                }
+            }
+        }
     }
     
     private lazy var startDateFormatter: NSDateFormatter = {
@@ -189,6 +216,20 @@ class VideoDetailsViewController: NSViewController {
         playerWindowController.showWindow(sender)
     }
     
+    private lazy var calendarHelper = CalendarHelper()
+    
+    @IBAction func reminderButtonAction(sender: NSButton) {
+        guard let schedule = session?.schedule else { return }
+        
+        sender.enabled = false
+        
+        if sender.tag == 0 {
+            calendarHelper.registerReminderForScheduledSession(schedule)
+        } else {
+            calendarHelper.unregisterReminderForScheduledSession(schedule)
+        }
+    }
+    
     private func restoreColors() {
         titleLabel.textColor = NSColor.labelColor()
         subtitleLabel.textColor = NSColor.secondaryLabelColor()
@@ -233,6 +274,7 @@ class VideoDetailsViewController: NSViewController {
         
         liveIndicatorView.hidden = true
         watchLiveButton.hidden = true
+        reminderButton.hidden = true
         titleLabel.stringValue = "\(selectedCount) sessions selected"
         subtitleLabel.stringValue = ""
         descriptionLabel.hidden = true
@@ -288,7 +330,7 @@ class VideoDetailsViewController: NSViewController {
     private func showVideoNotAvailableAlert() {
         let alert = NSAlert()
         alert.messageText = "Video not available"
-        alert.informativeText = "The video for this session is not available yet, please come back later to watch It. You can try refreshing now to see if It became available (⌘R)."
+        alert.informativeText = "The video for this session is not available yet, please come back later to watch it. You can try refreshing now to see if it became available (⌘R)."
         alert.addButtonWithTitle("OK")
         alert.runModal()
     }
@@ -345,6 +387,7 @@ class VideoDetailsViewController: NSViewController {
         updateUI()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateLiveState), name: LiveSessionsListDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateReminderButton), name: EKEventStoreChangedNotification, object: nil)
     }
     
     override func viewWillAppear() {

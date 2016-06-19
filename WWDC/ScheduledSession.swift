@@ -20,6 +20,7 @@ class ScheduledSession: Object {
     dynamic var room = ""
     dynamic var startsAt = NSDate()
     dynamic var endsAt = NSDate()
+    dynamic var calendarIdentifier = ""
     
     var liveSession: LiveSession? {
         return LiveEventObserver.SharedObserver().liveSessions.filter({ $0.id == self.id }).first

@@ -33,7 +33,9 @@ class Session: Object {
     var isScheduled: Bool {
         guard let schedule = schedule where !schedule.invalidated else { return false }
         
-        return schedule.endsAt.isGreaterThanOrEqualTo(NSDate())
+        guard !schedule.isLive else { return true }
+        
+        return schedule.endsAt.isGreaterThanOrEqualTo(NSDate().dateByAddingTimeInterval(WWDCEnvironment.liveTolerance))
     }
     
     var schedule: ScheduledSession? {
