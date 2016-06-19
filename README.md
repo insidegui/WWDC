@@ -54,8 +54,11 @@ WWDC for macOS is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can 
 
 **Pre-requisites:**
 
-- Xcode 7.3 or later
+- OS X 10.11.*
+- Xcode 7.3.*
 - [CocoaPods](https://cocoapods.org)
+
+**NOTICE: Building on macOS is not supported yet.**
 
 Clone the repository:
 
