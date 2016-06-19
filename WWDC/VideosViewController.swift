@@ -15,9 +15,6 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     @IBOutlet weak var scrollView: GRScrollView!
     @IBOutlet weak var tableView: NSTableView!
     
-    @IBOutlet weak var downloadMenuItem: NSMenuItem!
-    
-    @IBOutlet weak var removeDownloadMenuItem: NSMenuItem!
     var splitManager: SplitManager?
     
     var finishedInitialSetup = false
@@ -159,11 +156,13 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     override func validateMenuItem(menuItem: NSMenuItem) -> Bool {
         guard let item = TableViewMenuItemTags(rawValue: menuItem.tag) else { return false }
         
-        // this validation only applies when a single session is selected
-        guard tableView.selectedRowIndexes.count == 1 else { return true }
+        // this validation only applies to the row where the right-click happened, not when many rows are selected
+        guard tableView.selectedRowIndexes.count <= 1 else { return true }
         
         let tableViewRow = tableView.clickedRow
         let session = sessions[tableViewRow]
+        
+        guard !session.invalidated else { return false }
         
         switch item {
         case .Watched:
@@ -194,6 +193,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         
         if session.year < 2013 {
             return (false, false)
+        }
+        
+        if VideoStore.SharedStore().isDownloading(session.hdVideoURL) {
+            return (false, true)
         }
         
         if session.isScheduled == false {
