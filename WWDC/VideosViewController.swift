@@ -10,16 +10,6 @@ import Cocoa
 import WWDCAppKit
 import RealmSwift
 
-private enum TableViewMenuItemTags: Int {
-    
-    case Watched = 1000
-    case Unwatched = 1001
-    case Favorite = 1002
-    case RemoveFavorite = 1003
-    case Download = 1004
-    case RemoveDownload = 1005
-    case CopyURL = 1006
-}
 class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
     @IBOutlet weak var scrollView: GRScrollView!
@@ -154,66 +144,63 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
     
-    //MARK: Table View Menu Validation
+    // MARK: Table View Menu Validation
+    
+    private enum TableViewMenuItemTags: Int {
+        case Watched = 1000
+        case Unwatched = 1001
+        case Favorite = 1002
+        case RemoveFavorite = 1003
+        case Download = 1004
+        case RemoveDownload = 1005
+        case CopyURL = 1006
+    }
     
     override func validateMenuItem(menuItem: NSMenuItem) -> Bool {
+        guard let item = TableViewMenuItemTags(rawValue: menuItem.tag) else { return false }
         
-        let tableViewRow = self.tableView.clickedRow
+        // this validation only applies when a single session is selected
+        guard tableView.selectedRowIndexes.count == 1 else { return true }
+        
+        let tableViewRow = tableView.clickedRow
         let session = sessions[tableViewRow]
         
-        switch menuItem.tag {
-            
-        case TableViewMenuItemTags.Watched.rawValue:
-            
+        switch item {
+        case .Watched:
             return session.progress != 100
             
-        case TableViewMenuItemTags.Unwatched.rawValue:
-            
+        case .Unwatched:
             return session.progress == 100
             
-        case TableViewMenuItemTags.Favorite.rawValue:
+        case .Favorite:
+            return session.favorite ? false : true
             
-            return session.favorite ? false:true
-            
-        case TableViewMenuItemTags.RemoveFavorite.rawValue:
-            
+        case .RemoveFavorite:
             return session.favorite
             
-        case TableViewMenuItemTags.Download.rawValue:
-            
+        case .Download:
             return self.validateDownloadMenuItemsFrom(session).shouldEnableDownload
             
-        case TableViewMenuItemTags.RemoveDownload.rawValue:
-            
+        case .RemoveDownload:
             return self.validateDownloadMenuItemsFrom(session).shouldEnableRemoveDownload
             
-        case TableViewMenuItemTags.CopyURL.rawValue:
-            
+        case .CopyURL:
             return true
-            
-        default:
-            
-            return false
         }
-        
     }
     
     func validateDownloadMenuItemsFrom(session: Session) -> (shouldEnableDownload: Bool, shouldEnableRemoveDownload:Bool) {
+        guard !session.invalidated else { return (false, false) }
         
         if session.year < 2013 {
-            
             return (false, false)
         }
         
         if session.isScheduled == false {
-            
             return (session.downloaded ? false:true, session.downloaded)
-            
         } else {
-            
             return (false, false)
         }
-        
     }
 
     // MARK: Session loading
