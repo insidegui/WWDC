@@ -10,7 +10,7 @@ import Cocoa
 import WWDCAppKit
 import RealmSwift
 
-class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuDelegate {
+class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
     @IBOutlet weak var scrollView: GRScrollView!
     @IBOutlet weak var tableView: NSTableView!
@@ -47,9 +47,6 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         setupScrollView()
 
         tableView.gridColor = Theme.WWDCTheme.separatorColor
-        self.tableView.menu?.delegate = self
-        self.tableView.menu?.autoenablesItems = false
-        
         loadSessions(refresh: false, quiet: false)
         
         let nc = NSNotificationCenter.defaultCenter()
@@ -148,35 +145,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     //MARK: NSMenuDelegate
-    
-    func menuWillOpen(menu: NSMenu) {
-        
-        if menu == self.tableView.menu {
-            
-            let session = self.sessions[self.tableView.clickedRow]
-            
-            if session.year >= 2013 {
-                
-                if session.isScheduled {
-                    
-                    self.downloadMenuItem.enabled = false
-                    self.removeDownloadMenuItem.enabled = false
-                    
-                } else {
-                    
-                    self.downloadMenuItem.enabled = session.downloaded ? false:true //if session has already been downloaded then disable the download button
-                    
-                    self.removeDownloadMenuItem.enabled = session.downloaded
-                    
-                }
-                
-            } else {
-                
-                self.downloadMenuItem.enabled = false
-                self.removeDownloadMenuItem.enabled = false
-            }
-        }
-    }
+   
 
 
     // MARK: Session loading
