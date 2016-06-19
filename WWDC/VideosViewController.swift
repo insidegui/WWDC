@@ -10,6 +10,16 @@ import Cocoa
 import WWDCAppKit
 import RealmSwift
 
+private enum TableViewMenuItemTags: Int {
+    
+    case Watched = 1000
+    case Unwatched = 1001
+    case Favorite = 1002
+    case RemoveFavorite = 1003
+    case Download = 1004
+    case RemoveDownload = 1005
+    case CopyURL = 1006
+}
 class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
     @IBOutlet weak var scrollView: GRScrollView!
@@ -144,9 +154,67 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
     
-    //MARK: NSMenuDelegate
-   
-
+    //MARK: Table View Menu Validation
+    
+    override func validateMenuItem(menuItem: NSMenuItem) -> Bool {
+        
+        let tableViewRow = self.tableView.clickedRow
+        let session = sessions[tableViewRow]
+        
+        switch menuItem.tag {
+            
+        case TableViewMenuItemTags.Watched.rawValue:
+            
+            return session.progress != 100
+            
+        case TableViewMenuItemTags.Unwatched.rawValue:
+            
+            return session.progress == 100
+            
+        case TableViewMenuItemTags.Favorite.rawValue:
+            
+            return session.favorite ? false:true
+            
+        case TableViewMenuItemTags.RemoveFavorite.rawValue:
+            
+            return session.favorite
+            
+        case TableViewMenuItemTags.Download.rawValue:
+            
+            return self.validateDownloadMenuItemsFrom(session).shouldEnableDownload
+            
+        case TableViewMenuItemTags.RemoveDownload.rawValue:
+            
+            return self.validateDownloadMenuItemsFrom(session).shouldEnableRemoveDownload
+            
+        case TableViewMenuItemTags.CopyURL.rawValue:
+            
+            return true
+            
+        default:
+            
+            return false
+        }
+        
+    }
+    
+    func validateDownloadMenuItemsFrom(session: Session) -> (shouldEnableDownload: Bool, shouldEnableRemoveDownload:Bool) {
+        
+        if session.year < 2013 {
+            
+            return (false, false)
+        }
+        
+        if session.isScheduled == false {
+            
+            return (session.downloaded ? false:true, session.downloaded)
+            
+        } else {
+            
+            return (false, false)
+        }
+        
+    }
 
     // MARK: Session loading
         

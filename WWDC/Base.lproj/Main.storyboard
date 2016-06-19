@@ -720,8 +720,6 @@ CA
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="downloadMenuItem" destination="ggO-K9-4H2" id="gvb-my-ybk"/>
-                        <outlet property="removeDownloadMenuItem" destination="3ng-2r-LuE" id="ik8-be-5PR"/>
                         <outlet property="scrollView" destination="TKd-X0-CX9" id="ne4-Lz-uK3"/>
                         <outlet property="tableView" destination="hE6-m5-F6H" id="JrW-sy-d14"/>
                     </connections>
@@ -729,46 +727,46 @@ CA
                 <customObject id="gRz-vj-pED" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <menu id="RkM-qz-Jmu">
                     <items>
-                        <menuItem title="Mark as Watched" id="pY8-mq-Opi">
+                        <menuItem title="Mark as Watched" tag="1000" id="pY8-mq-Opi">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="markAsWatchedMenuAction:" target="LMR-Ze-kQp" id="HUJ-cj-6ob"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Mark as Unwatched" id="UNa-GB-piq">
+                        <menuItem title="Mark as Unwatched" tag="1001" id="UNa-GB-piq">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="markAsUnwatchedMenuAction:" target="LMR-Ze-kQp" id="jhb-v4-YPP"/>
                             </connections>
                         </menuItem>
                         <menuItem isSeparatorItem="YES" id="CWV-72-iIR"/>
-                        <menuItem title="Add to Favorites" id="C1r-Bf-iTX">
+                        <menuItem title="Add to Favorites" tag="1002" id="C1r-Bf-iTX">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="addToFavoritesMenuAction:" target="LMR-Ze-kQp" id="ZyF-PH-44h"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Remove from Favorites" id="P4z-pJ-BdQ">
+                        <menuItem title="Remove from Favorites" tag="1003" id="P4z-pJ-BdQ">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="removeFromFavoritesMenuAction:" target="LMR-Ze-kQp" id="2TC-br-yIJ"/>
                             </connections>
                         </menuItem>
                         <menuItem isSeparatorItem="YES" id="oIk-GT-MRy"/>
-                        <menuItem title="Download" id="ggO-K9-4H2">
+                        <menuItem title="Download" tag="1004" id="ggO-K9-4H2">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="downloadMenuAction:" target="LMR-Ze-kQp" id="y0C-bj-mhL"/>
                             </connections>
                         </menuItem>
-                        <menuItem title="Remove from Downloads" id="3ng-2r-LuE">
+                        <menuItem title="Remove from Downloads" tag="1005" id="3ng-2r-LuE">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="removeDownloadMenuAction:" target="LMR-Ze-kQp" id="XQG-RI-Mg7"/>
                             </connections>
                         </menuItem>
                         <menuItem isSeparatorItem="YES" id="7Iw-Wn-MLG"/>
-                        <menuItem title="Copy URL" id="gMC-Ry-Aci">
+                        <menuItem title="Copy URL" tag="1006" id="gMC-Ry-Aci">
                             <modifierMask key="keyEquivalentModifierMask"/>
                             <connections>
                                 <action selector="copyURL:" target="LMR-Ze-kQp" id="Qyg-vB-6AN"/>
