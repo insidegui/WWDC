@@ -34,7 +34,7 @@ struct WWDCEnvironment {
         if shouldUseTestServer {
             return "http://localhost"
         } else {
-            return "http://cdn.wwdc.guilhermerambo.me"
+            return "http://wwdc.guilhermerambo.me"
         }
     }
     
@@ -48,7 +48,7 @@ struct WWDCEnvironment {
         if shouldUseFakeTestData {
             return URL("/fake_index.json")
         } else {
-            return URL("/index2.json")
+            return "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/xhgbpyutb6wvn2xcrbcz/wwdc.json"
         }
     }
     

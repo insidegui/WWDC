@@ -16,17 +16,19 @@ class AppConfigAdapter: JSONAdapter {
     static func adapt(json: JSON) -> ModelType {
         let config = AppConfig()
         
-        if let baseURL = json["baseURL"].string {
-            config.sessionsURL = baseURL + json["sessions"].stringValue
-            config.videosURL = baseURL + json["videos"].stringValue
-        } else {
-            config.sessionsURL = json["sessions"].stringValue
-            config.videosURL = json["videos"].stringValue
+        if let videos = json["urls"]["videos"].string {
+            config.videosURL = videos
+        }
+        if let sessions = json["urls"]["sessions"].string {
+            config.sessionsURL = sessions
         }
         
-        config.isWWDCWeek = json["wwdc_week"].intValue == 1
-        config.scheduleEnabled = json["schedule"].intValue == 1
-        config.shouldIgnoreCache = json["ignore_cache"].intValue == 1
+        if let streaming = json["features"]["liveStreaming"].bool {
+            config.isWWDCWeek = streaming
+        }
+        
+        config.scheduleEnabled = true
+        config.shouldIgnoreCache = false
         
         return config
     }
