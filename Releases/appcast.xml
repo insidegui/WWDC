@@ -7,6 +7,19 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.2.4</title>
+			<description><![CDATA[
+							<ul>
+								<li>Improves the behavior of the contextual menu on the sidebar</li>
+								<li>Networking efficiency improvements</li>
+							</ul>
+						]]></description>
+            <pubDate>Wed, 19 Jun 2016 22:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.2.4/WWDC_v4.2.4.zip" sparkle:version="424" sparkle:shortVersionString="4.2.4" length="7236051" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.2.3</title>
 			<description><![CDATA[
 							<ul>
