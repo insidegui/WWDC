@@ -58,8 +58,8 @@ class Preferences {
         static let userKnowsLiveEventThing = false
         static let tvTechTalksAlerted = false
         static let automaticRefreshEnabled = true
-        static let automaticRefreshIntervalOnWWDCWeek = 300.0
-        static let automaticRefreshIntervalRegular = 1800.0
+        static let automaticRefreshIntervalOnWWDCWeek = 900.0
+        static let automaticRefreshIntervalRegular = 3600.0
         static let floatOnTopEnabled = false
         static let automaticRefreshSuggestionPresentedAt = NSDate.distantPast()
         

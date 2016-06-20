@@ -30,22 +30,16 @@ struct WWDCEnvironment {
         #endif
     }
     
-    private static var cacheAvoidingToken: String {
-        return "?t=\(rand())&s=\(NSDate.timeIntervalSinceReferenceDate())"
-    }
-    
     private static var server: String {
         if shouldUseTestServer {
             return "http://localhost"
         } else {
-            return "http://wwdc.guilhermerambo.me"
+            return "http://cdn.wwdc.guilhermerambo.me"
         }
     }
     
     private static func URL(path: String) -> String {
-        sranddev()
-        
-        return server + path + cacheAvoidingToken
+        return server + path
     }
     
     // MARK: - Paths
@@ -54,7 +48,7 @@ struct WWDCEnvironment {
         if shouldUseFakeTestData {
             return URL("/fake_index.json")
         } else {
-            return URL("/index.json")
+            return URL("/index2.json")
         }
     }
     
@@ -69,7 +63,7 @@ struct WWDCEnvironment {
     }
     
     static var liveSessionsURL: String {
-        return URL("/videos_live.php")
+        return URL("/videos_live.json")
     }
     
     // MARK: - Transcript ignore
