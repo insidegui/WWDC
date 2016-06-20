@@ -109,16 +109,6 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
                 }
             }
         }
-        self.downloadCancelledHndl = nc.addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-            if let object = note.object as? String {
-                let url = object as String
-                let (item, _) = self.listItemForURL(url)
-                if item != nil {
-                    self.items.remove(item!)
-                    self.tableView.removeRowsAtIndexes(NSIndexSet(index: self.tableView.selectedRow), withAnimation: .EffectGap)
-                }
-            }
-        }
         self.downloadPausedHndl = nc.addObserverForName(VideoStoreNotificationDownloadPaused, object: nil, queue: NSOperationQueue.mainQueue()) { note in
             if let object = note.object as? String {
                 let url = object as String
@@ -136,6 +126,9 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
                     self.tableView.reloadDataForRowIndexes(NSIndexSet(index: idx), columnIndexes: NSIndexSet(index: 0))
                 }
             }
+        }
+        self.downloadCancelledHndl = nc.addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+            self.populateDownloadItems()
         }
         
         populateDownloadItems()
@@ -250,8 +243,32 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
     }
     
     func delete(sender: AnyObject?) {
-        let item = self.items[tableView.selectedRow]
-        self.videoStore.cancelDownload(item.url)
+        guard tableView.selectedRowIndexes.count > 0 else { return }
+        
+        var downloadsToCancel = [String]()
+        
+        tableView.selectedRowIndexes.enumerateIndexesUsingBlock { index, _ in
+            downloadsToCancel.append(self.items[index].url)
+        }
+        
+        downloadsToCancel.forEach { self.videoStore.cancelDownload($0) }
+    }
+    
+    // MARK: Menu Validation
+    
+    private enum MenuItemTags: Int {
+        case Delete = 1077
+    }
+    
+    override func validateMenuItem(menuItem: NSMenuItem) -> Bool {
+        guard let item = MenuItemTags(rawValue: menuItem.tag) else {
+            return super.validateMenuItem(menuItem)
+        }
+        
+        switch item {
+        case .Delete:
+            return tableView.selectedRowIndexes.count > 0
+        }
     }
     
 }
