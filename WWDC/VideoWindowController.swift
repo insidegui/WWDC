@@ -199,7 +199,19 @@ class VideoWindowController: NSWindowController {
     }
     
     func showTranscriptWindow(sender: AnyObject?) {
-        guard let session = session where session.transcript != nil else { return }
+        guard let session = session else { return }
+        guard session.transcript != nil else {
+            let alert = NSAlert()
+            alert.messageText = "Transcript not available"
+            if WWDCEnvironment.yearsToIgnoreTranscript.contains(session.year) {
+                alert.informativeText = "Transcripts for \(session.year) sessions are not available yet."
+            } else {
+                alert.informativeText = "The transcript for this session is not available."
+            }
+            alert.addButtonWithTitle("OK")
+            alert.runModal()
+            return
+        }
         
         if transcriptWC != nil {
             if let window = transcriptWC.window {
@@ -239,9 +251,15 @@ class VideoWindowController: NSWindowController {
     var boundaryObserver: AnyObject?
     
     func setupTranscriptSync(transcript: Transcript) {
+        guard !transcript.invalidated else { return }
+        guard transcript.lines.count > 0 else { return }
         guard let player = player where transcriptWC != nil else { return }
+        guard let playerItem = player.currentItem else { return }
         
-        boundaryObserver = player.addBoundaryTimeObserverForTimes(transcript.timecodesWithTimescale(player.currentItem!.duration.timescale), queue: dispatch_get_main_queue()) { [unowned self] in
+        let timecodes = transcript.timecodesWithTimescale(playerItem.duration.timescale)
+        guard timecodes.count > 0 else { return }
+        
+        boundaryObserver = player.addBoundaryTimeObserverForTimes(timecodes, queue: dispatch_get_main_queue()) { [unowned self] in
             guard self.transcriptWC != nil else { return }
             
             let ct = CMTimeGetSeconds(self.player!.currentTime())
