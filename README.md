@@ -10,7 +10,7 @@ Use this app to watch WWDC sessions on your Mac and do much more. Keep reading..
 
 **⬇️ [Click here to download the latest release](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip) ⬇️**
 
-*The app still works on Yosemite, but it is not officially supported anymore.*
+**Requires OS X 10.11 or later** *(the app still runs on Yosemite, but it is not officially supported anymore)*
 
 ## Schedule, Live Streaming and Videos
 
