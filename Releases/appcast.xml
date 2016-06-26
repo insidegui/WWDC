@@ -7,6 +7,20 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.3</title>
+			<description><![CDATA[
+							<ul>
+								<li>Transcripts for 2016 are now available</li>
+								<li>Improves the downloads window, allowing the removal of multiple downloads at once</li>
+								<li>Fixes a crash that would occur when trying to open the transcripts for a session without transcripts available</li>
+							</ul>
+						]]></description>
+            <pubDate>Sun, 26 Jun 2016 11:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.3/WWDC_v4.3.zip" sparkle:version="430" sparkle:shortVersionString="4.3" length="7243768" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.2.4</title>
 			<description><![CDATA[
 							<ul>
