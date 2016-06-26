@@ -15,6 +15,7 @@ enum SearchFilter {
     case Focus([String])
     case Favorited(Bool)
     case Downloaded([String])
+    case SearchIn([String])
     
     var isEmpty: Bool {
         switch self {
@@ -30,9 +31,14 @@ enum SearchFilter {
         case .Favorited(let favorited):
             return !favorited;
         case .Downloaded(let states):
-            return states.count == 0;
-        }
+          return states.count == 0;
+        case .SearchIn(let searchKeys):
+          return searchKeys.count == 0;
+          
+      }
+      
     }
+    private static let searchTermKey = "SEARCHTERM"
     
     var predicate: NSPredicate {
         switch self {
@@ -48,6 +54,21 @@ enum SearchFilter {
             return NSPredicate(format: "favorite = %@", favorited)
         case .Downloaded(let downloaded):
             return NSPredicate(format: "downloaded = %@", downloaded[0].boolValue)
+        case .SearchIn(let searchKeys):
+            let keys = searchKeys.count > 0 ? searchKeys : Session.searchableTextKeys;
+            let predicates = keys.map { searchKey in
+                 NSPredicate(format: "\(searchKey) CONTAINS[c] $\(SearchFilter.searchTermKey)")
+            }
+            return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
+        }
+    }
+    
+    func predicateWithSearchTerm(term: String) -> NSPredicate  {
+        switch self {
+        case .SearchIn(_):
+            return self.predicate.predicateWithSubstitutionVariables([SearchFilter.searchTermKey: term])
+        default:
+            return self.predicate
         }
     }
     
@@ -67,6 +88,8 @@ enum SearchFilter {
         case .Focus(let strings):
             return strings
         case .Downloaded(let strings):
+            return strings
+        case .SearchIn(let strings):
             return strings
         default:
             return nil

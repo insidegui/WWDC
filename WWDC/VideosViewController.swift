@@ -129,6 +129,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             guard let weakSelf = self else { return }
             weakSelf.searchFilters = weakSelf.filterBarController!.filters
         }
+        filterBarController!.searchInFilterDidChangeCallback = { [weak self] in
+            guard let weakSelf = self else { return }
+            let searchTerm = weakSelf.headerController.searchTerm
+            weakSelf.search(searchTerm ?? "")
+        }
     }
 
     var sessions: Array<Session>! {
@@ -538,10 +543,11 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         if term != "" {
             dispatch_async(searchQueue) {
                 let realm = try! Realm()
-                let transcripts = realm.objects(Transcript.self).filter("fullText CONTAINS[c] %@", term)
-                let keysMatchingTranscripts = transcripts.map({ $0.session!.uniqueId })
+                let termPredicate =  self.filterBarController!.searchInFilter.predicateWithSearchTerm(term)
+                let sessions = realm.objects(Session.self).filter(termPredicate)
+                let keysMatchingTerm = sessions.map { $0.uniqueId }
                 mainQ {
-                    self.searchTermFilter = SearchFilter.Arbitrary(NSPredicate(format: "title CONTAINS[c] %@ OR uniqueId CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, term, keysMatchingTranscripts))
+                    self.searchTermFilter = SearchFilter.Arbitrary(NSPredicate(format: "uniqueId IN %@", keysMatchingTerm))
                 }
             }
         } else {

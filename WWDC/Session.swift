@@ -95,4 +95,7 @@ class Session: Object {
             slidesURL == otherSession.slidesURL
     }
     
+    static let searchableTextKeysToDisplayableNames = ["uniqueId": "Unique ID", "title": "Title", "summary": "Summary", "transcript.fullText": "Transcription"]
+    static let searchableTextKeys = ["uniqueId", "title", "summary", "transcript.fullText"]
+    
 }

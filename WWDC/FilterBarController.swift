@@ -37,6 +37,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     @IBOutlet var trackMenu: NSMenu!
     @IBOutlet var focusMenu: NSMenu!
     @IBOutlet var downloadedMenu: NSMenu!
+    @IBOutlet var searchInMenu: NSMenu!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +67,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         trackMenu.removeAllItems()
         focusMenu.removeAllItems()
         downloadedMenu.removeAllItems()
+        searchInMenu.removeAllItems()
         
         let sessions = WWDCDatabase.sharedDatabase.standardSessionList
         var years: [Int] = []
@@ -113,10 +115,19 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
             downloadedMenu.addItem(item)
         }
         
+        for key in Session.searchableTextKeys {
+            let item = NSMenuItem(title: Session.searchableTextKeysToDisplayableNames[key]!, action: #selector(FilterBarController.searchInMenuAction(_:)), keyEquivalent: "")
+            item.state = searchInFilter.selectedStrings!.contains(key) ? NSOnState : NSOffState
+            item.target = self
+            item.representedObject = key
+            searchInMenu.addItem(item)
+        }
+        
         segmentedControl.setMenu(yearMenu, forSegment: 0)
         segmentedControl.setMenu(trackMenu, forSegment: 1)
         segmentedControl.setMenu(focusMenu, forSegment: 2)
         segmentedControl.setMenu(downloadedMenu, forSegment: 4)
+        segmentedControl.setMenu(searchInMenu, forSegment: 5)
     }
     
     private func toggle(item: NSMenuItem) {
@@ -128,6 +139,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     }
     
     var filtersDidChangeCallback: (() -> Void)?
+    var searchInFilterDidChangeCallback: (() -> Void)?
     
     var filters: SearchFilters = []
     
@@ -136,6 +148,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     var focusFilter = SearchFilter.Focus([])
     var favoritedFilter = SearchFilter.Favorited(false)
     var downloadedFilter = SearchFilter.Downloaded([])
+    var searchInFilter = SearchFilter.SearchIn([])
     
     func updateFilters() {
         filters = []
@@ -220,6 +233,15 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         updateFilters()
     }
     
+    func searchInMenuAction(sender: NSMenuItem) {
+        toggle(sender)
+        let selectedSearchKeys = searchInMenu.itemArray
+                                             .filter {$0.state == NSOnState}
+                                             .map {$0.representedObject as! String}
+        self.searchInFilter = SearchFilter.SearchIn(selectedSearchKeys)
+        self.searchInFilterDidChangeCallback?()
+    }
+    
     var favoritedActive = false
     var downloadedActive = false
     func segmentedControlAction(sender: GRSegmentedControl) {
@@ -236,6 +258,8 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
             updateFilters()
         case 4:
             segmentedControl.setSelected(false, forSegment: 4)
+        case 5:
+            segmentedControl.setSelected(false, forSegment: 5)
         default:
             print("Invalid segment!")
         }
