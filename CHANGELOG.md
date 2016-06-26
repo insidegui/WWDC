@@ -1,8 +1,75 @@
 # Change Log
 
-## [Unreleased](https://github.com/insidegui/WWDC/tree/HEAD)
+## [4.3](https://github.com/insidegui/WWDC/tree/4.3) (2016-06-20)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.2.4...4.3)
 
-[Full Changelog](https://github.com/insidegui/WWDC/compare/4.1.2...HEAD)
+**Implemented enhancements:**
+
+- Allow multiple selection in download window [\#157](https://github.com/insidegui/WWDC/issues/157)
+
+**Fixed bugs:**
+
+- Unable to view transcript with video [\#165](https://github.com/insidegui/WWDC/issues/165)
+
+**Closed issues:**
+
+- Resume downloads after relaunching app \(instead of marking incomplete: "Complete"\) [\#163](https://github.com/insidegui/WWDC/issues/163)
+
+## [4.2.4](https://github.com/insidegui/WWDC/tree/4.2.4) (2016-06-20)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.2.3...4.2.4)
+
+**Implemented enhancements:**
+
+- Main window is named "Untitled" in the Window menu [\#153](https://github.com/insidegui/WWDC/issues/153)
+- UX improvements [\#149](https://github.com/insidegui/WWDC/issues/149)
+
+**Closed issues:**
+
+- Trouble building project [\#161](https://github.com/insidegui/WWDC/issues/161)
+- Allow cancelling and removing downloads \(not just pausing them\) [\#155](https://github.com/insidegui/WWDC/issues/155)
+- Download Storage [\#154](https://github.com/insidegui/WWDC/issues/154)
+- "Mark as watched" resets randomly [\#148](https://github.com/insidegui/WWDC/issues/148)
+
+**Merged pull requests:**
+
+- Do not skip all downloads but only invalid downloads [\#152](https://github.com/insidegui/WWDC/pull/152) ([TomasLinhart](https://github.com/TomasLinhart))
+- Improve constancy between the tableView's NSMenu and the VideoDetailsViewController [\#137](https://github.com/insidegui/WWDC/pull/137) ([SoneeJohn](https://github.com/SoneeJohn))
+
+## [4.2.3](https://github.com/insidegui/WWDC/tree/4.2.3) (2016-06-15)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.2.2...4.2.3)
+
+**Fixed bugs:**
+
+- Forgetting favourites after sessions occur. [\#145](https://github.com/insidegui/WWDC/issues/145)
+
+**Closed issues:**
+
+- No option To Download Quality \(SD/HD\) [\#144](https://github.com/insidegui/WWDC/issues/144)
+- Question: why did my favorites disappeared ? [\#143](https://github.com/insidegui/WWDC/issues/143)
+
+## [4.2.2](https://github.com/insidegui/WWDC/tree/4.2.2) (2016-06-14)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.2.1...4.2.2)
+
+**Implemented enhancements:**
+
+- Float on Top not working for Live window [\#140](https://github.com/insidegui/WWDC/issues/140)
+- Suggestion: Add to Calendar option for Live Sessions [\#139](https://github.com/insidegui/WWDC/issues/139)
+
+**Merged pull requests:**
+
+- s/It/it [\#142](https://github.com/insidegui/WWDC/pull/142) ([barbosa](https://github.com/barbosa))
+
+## [4.2.1](https://github.com/insidegui/WWDC/tree/4.2.1) (2016-06-13)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.2...4.2.1)
+
+## [4.2](https://github.com/insidegui/WWDC/tree/4.2) (2016-06-13)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.1.4...4.2)
+
+## [4.1.4](https://github.com/insidegui/WWDC/tree/4.1.4) (2016-06-11)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.1.3...4.1.4)
+
+## [4.1.3](https://github.com/insidegui/WWDC/tree/4.1.3) (2016-06-10)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.1.2...4.1.3)
 
 **Implemented enhancements:**
 
@@ -11,6 +78,7 @@
 
 **Fixed bugs:**
 
+- App crashes when select a video and click on watch video button [\#135](https://github.com/insidegui/WWDC/issues/135)
 - DividerPosition gets restored while window is visible [\#50](https://github.com/insidegui/WWDC/issues/50)
 
 **Closed issues:**
@@ -134,7 +202,6 @@
 **Implemented enhancements:**
 
 - Add ability to save slides [\#94](https://github.com/insidegui/WWDC/issues/94)
-- Add Google Cast Integration [\#86](https://github.com/insidegui/WWDC/issues/86)
 - Ability to stream video to Apple TV [\#80](https://github.com/insidegui/WWDC/issues/80)
 - Search through ASCII WWDC transcripts in main screen [\#21](https://github.com/insidegui/WWDC/issues/21)
 
