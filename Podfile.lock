@@ -1,11 +1,14 @@
 PODS:
-  - Alamofire (3.4.0)
+  - Alamofire (3.4.1)
+  - Crashlytics (3.7.2):
+    - Fabric (~> 1.6.3)
+  - Fabric (1.6.7)
   - KVOController (1.1.0)
-  - Realm (1.0.0):
-    - Realm/Headers (= 1.0.0)
-  - Realm/Headers (1.0.0)
-  - RealmSwift (1.0.0):
-    - Realm (= 1.0.0)
+  - Realm (1.0.1):
+    - Realm/Headers (= 1.0.1)
+  - Realm/Headers (1.0.1)
+  - RealmSwift (1.0.1):
+    - Realm (= 1.0.1)
   - Sparkle (1.14.0)
   - SwiftyJSON (2.3.2)
   - WWDCAppKit (1.0.0)
@@ -13,6 +16,8 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - Crashlytics
+  - Fabric
   - KVOController
   - RealmSwift
   - Sparkle
@@ -27,10 +32,12 @@ EXTERNAL SOURCES:
     :path: LocalPods/WWDCPlayer
 
 SPEC CHECKSUMS:
-  Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
+  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
+  Crashlytics: 130ab943f8c78cda7a814b434f270b2e2c8a3cba
+  Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   KVOController: 321b5fc59300fcaabd42c0f679baa7a27efbb2fd
-  Realm: e15cd8e7c11d3e576f628ba0b7cb855269b4991c
-  RealmSwift: 3229306d020d96f83b335f87a0dcbf2cef0e6a2b
+  Realm: 2e15e39d35b08abb529e212ed5d8af107b5236c8
+  RealmSwift: d73ea2af08c3676dbdd5e4b669651a0f492162a4
   Sparkle: ccd95233b12a3e3d4eeb55ff01dd4c8bb8188b07
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
   WWDCAppKit: afb67188d6b66f3012ea9242a61b5f7536319f2d

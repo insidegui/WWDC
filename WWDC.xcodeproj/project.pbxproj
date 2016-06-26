@@ -15,8 +15,6 @@
 		C913E99A1AED1D2900EBC693 /* DownloadListWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C913E9991AED1D2900EBC693 /* DownloadListWindowController.xib */; };
 		C913E99C1AED21FB00EBC693 /* DownloadListWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E99B1AED21FB00EBC693 /* DownloadListWindowController.swift */; };
 		C913E9A21AED435800EBC693 /* DownloadListProgressCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C913E9A11AED435800EBC693 /* DownloadListProgressCellView.swift */; };
-		DD03E3951D0757E800C27AC6 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCF4D461D05D3260060F6E2 /* Fabric.framework */; };
-		DD03E3961D0757EB00C27AC6 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDCF4D451D05D3260060F6E2 /* Crashlytics.framework */; };
 		DD0974DF1B18AAA8006A3C77 /* URLSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0974DE1B18AAA8006A3C77 /* URLSchemeHandler.swift */; };
 		DD1F90C61D0706E3000C24A9 /* JSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90C51D0706E3000C24A9 /* JSONAdapter.swift */; };
 		DD1F90C81D070834000C24A9 /* AppConfigAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1F90C71D070834000C24A9 /* AppConfigAdapter.swift */; };
@@ -167,8 +165,6 @@
 		DDCAB4891C263EF9005889CB /* TranscriptLineTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptLineTableRowView.swift; sourceTree = "<group>"; };
 		DDCC5D741AF1532600F24F55 /* GRCrashlyticsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRCrashlyticsHelper.h; sourceTree = "<group>"; };
 		DDCC5D751AF1532600F24F55 /* GRCrashlyticsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRCrashlyticsHelper.m; sourceTree = "<group>"; };
-		DDCF4D451D05D3260060F6E2 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		DDCF4D461D05D3260060F6E2 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DDD7A4321AE2DF14000A0102 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		DDD7A4341AE2E02A000A0102 /* SeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		DDD9CCFF1D03C34D002A36F2 /* NewWWDCGreeter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewWWDCGreeter.swift; sourceTree = "<group>"; };
@@ -194,8 +190,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E79A12E8372925A20BF940E /* Pods_WWDC.framework in Frameworks */,
-				DD03E3951D0757E800C27AC6 /* Fabric.framework in Frameworks */,
-				DD03E3961D0757EB00C27AC6 /* Crashlytics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,7 +251,6 @@
 		DD4F6E431AE2D11D0099BEB5 = {
 			isa = PBXGroup;
 			children = (
-				DDCF4D4B1D05D3290060F6E2 /* Libraries */,
 				DD4F6E4E1AE2D11D0099BEB5 /* WWDC */,
 				DD4F6E4D1AE2D11D0099BEB5 /* Products */,
 				06C99C1DDCB7D79748232907 /* Pods */,
@@ -387,15 +380,6 @@
 			name = Crashlytics;
 			sourceTree = "<group>";
 		};
-		DDCF4D4B1D05D3290060F6E2 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				DDCF4D461D05D3260060F6E2 /* Fabric.framework */,
-				DDCF4D451D05D3260060F6E2 /* Crashlytics.framework */,
-			);
-			name = Libraries;
-			sourceTree = "<group>";
-		};
 		DDD7A42D1AE2DECE000A0102 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -520,9 +504,9 @@
 				DD4F6E481AE2D11D0099BEB5 /* Sources */,
 				DD4F6E491AE2D11D0099BEB5 /* Frameworks */,
 				DD4F6E4A1AE2D11D0099BEB5 /* Resources */,
-				DDCC5D701AF1512400F24F55 /* Crashlytics */,
 				6496650DC2A92C0EB1093F35 /* Embed Pods Frameworks */,
 				15C33143705C6CD43FE580A2 /* Copy Pods Resources */,
+				DD0D56981D2014BB005830BE /* Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -623,7 +607,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WWDC/Pods-WWDC-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DDCC5D701AF1512400F24F55 /* Crashlytics */ = {
+		DD0D56981D2014BB005830BE /* Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -634,7 +618,7 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
+			shellPath = /bin/sh;
 			shellScript = "if [ -f \"./WWDC/Crashlytics.sh\" ]; then\n./WWDC/Crashlytics.sh\nfi";
 		};
 		DFE6F34C6CF3BC39BB2481AB /* Check Pods Manifest.lock */ = {
