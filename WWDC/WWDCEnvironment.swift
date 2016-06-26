@@ -68,6 +68,7 @@ struct WWDCEnvironment {
     
     // MARK: - Transcript ignore
     
-    static let yearsToIgnoreTranscript = [2011, 2016]
+    static let yearsToIgnoreTranscript = [2011]
+    static let reloadableYears = [2016]
     
 }

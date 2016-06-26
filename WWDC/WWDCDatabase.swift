@@ -255,7 +255,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     }
                 }
                 
-                guard newVideosAvailable else { return }
+                guard newVideosAvailable else {
+                    self?.reloadTranscriptsIfNeeded()
+                    return
+                }
                 
                 guard let sessionsArray = json["sessions"].array else {
                     #if DEBUG
@@ -458,6 +461,17 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     }
                 }
             }
+        }
+    }
+    
+    private func reloadTranscriptsIfNeeded() {
+        do {
+            let bgRealm = try Realm()
+            let validYears = WWDCEnvironment.reloadableYears
+            let sessionKeys = bgRealm.objects(Session.self).filter({ validYears.contains($0.year) && $0.transcript == nil }).map({ $0.uniqueId })
+            self.indexTranscriptsForSessionsWithKeys(sessionKeys)
+        } catch {
+            print("Error reloading transcripts: \(error)")
         }
     }
     
