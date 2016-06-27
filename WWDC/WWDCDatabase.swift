@@ -69,13 +69,18 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     private let currentDBVersion = UInt64(6)
     
     private func configureRealm() {
-        let realmConfiguration = Realm.Configuration(schemaVersion: currentDBVersion, migrationBlock: { migration, oldVersion in
+        var realmConfiguration = Realm.Configuration(schemaVersion: currentDBVersion, migrationBlock: { migration, oldVersion in
             if oldVersion == 0 && self.currentDBVersion >= 5 {
                 NSLog("Migrating data from version 0 to version \(self.currentDBVersion)")
                 // app config must be invalidated for this version update
                 migration.deleteData("AppConfig")
             }
         })
+        
+        let preferences = Preferences.SharedPreferences()
+        if let realmPath = preferences.databasePath {
+            realmConfiguration.fileURL = NSURL(fileURLWithPath: realmPath).URLByAppendingPathComponent("default.realm")
+        }
         
         Realm.Configuration.defaultConfiguration = realmConfiguration
     }
