@@ -79,7 +79,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         
         let preferences = Preferences.SharedPreferences()
         if let realmPath = preferences.databasePath {
-            realmConfiguration.fileURL = NSURL(fileURLWithPath: realmPath)
+            realmConfiguration.fileURL = NSURL(fileURLWithPath: realmPath).URLByAppendingPathComponent("default.realm")
         }
         
         Realm.Configuration.defaultConfiguration = realmConfiguration
