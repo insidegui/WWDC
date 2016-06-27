@@ -35,6 +35,7 @@ class Preferences {
         static let automaticRefreshEnabled = "automaticRefreshEnabled"
 		static let floatOnTopEnabled = "floatOnTopEnabled"
         static let automaticRefreshSuggestionPresentedAt = "automaticRefreshSuggestionPresentedAt"
+        static let realmDatabasePath = "realmDatabasePath"
         
         struct transcript {
             static let font = "transcript.font"
@@ -325,6 +326,15 @@ class Preferences {
         }
         set {
             defaults.setObject(newValue, forKey: Keys.automaticRefreshSuggestionPresentedAt)
+        }
+    }
+    
+    var databasePath: String? {
+        get {
+            return defaults.objectForKey(Keys.realmDatabasePath) as? String
+        }
+        set {
+            defaults.setObject(newValue, forKey: Keys.realmDatabasePath)
         }
     }
 
