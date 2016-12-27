@@ -14,9 +14,9 @@ public struct VideoPlayerViewControllerMetadata {
     public let title: String?
     public let subtitle: String?
     public let description: String?
-    public let imageURL: NSURL?
+    public let imageURL: URL?
     
-    public init(title: String?, subtitle: String?, description: String?, imageURL: NSURL?) {
+    public init(title: String?, subtitle: String?, description: String?, imageURL: URL?) {
         self.title = title
         self.subtitle = subtitle
         self.description = description
@@ -24,12 +24,12 @@ public struct VideoPlayerViewControllerMetadata {
     }
 }
 
-public class VideoPlayerViewController: NSViewController {
+open class VideoPlayerViewController: NSViewController {
 
-    public let metadata: VideoPlayerViewControllerMetadata
-    public let player: AVPlayer
+    open let metadata: VideoPlayerViewControllerMetadata
+    open let player: AVPlayer
     
-    public var detached = false
+    open var detached = false
     
     public init(player: AVPlayer, metadata: VideoPlayerViewControllerMetadata) {
         self.metadata = metadata
@@ -42,25 +42,25 @@ public class VideoPlayerViewController: NSViewController {
         fatalError("VideoPlayerViewController can't be initialized with a coder")
     }
     
-    private lazy var playerView: AVPlayerView = {
+    fileprivate lazy var playerView: AVPlayerView = {
         let p = AVPlayerView(frame: NSZeroRect)
         
         p.translatesAutoresizingMaskIntoConstraints = false
-        p.controlsStyle = .Floating
+        p.controlsStyle = .floating
         
         return p
     }()
     
-    private lazy var progressIndicator: NSProgressIndicator = {
+    fileprivate lazy var progressIndicator: NSProgressIndicator = {
         let p = NSProgressIndicator(frame: NSZeroRect)
         
-        p.controlSize = .RegularControlSize
-        p.style = .SpinningStyle
-        p.indeterminate = true
+        p.controlSize = .regular
+        p.style = .spinningStyle
+        p.isIndeterminate = true
         p.translatesAutoresizingMaskIntoConstraints = false
         
         if #available(OSX 10.11, *) {
-            p.appearance = NSAppearance(appearanceNamed: "WhiteSpinner", bundle: NSBundle(forClass: VideoPlayerViewController.self))
+            p.appearance = NSAppearance(appearanceNamed: "WhiteSpinner", bundle: Bundle(for: VideoPlayerViewController.self))
         }
         
         p.sizeToFit()
@@ -68,34 +68,34 @@ public class VideoPlayerViewController: NSViewController {
         return p
     }()
     
-    public override func loadView() {
+    open override func loadView() {
         view = NSView(frame: NSZeroRect)
         view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.blackColor().CGColor
+        view.layer?.backgroundColor = NSColor.black.cgColor
         
         view.addSubview(playerView)
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerView]))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerView]))
         
         view.addSubview(progressIndicator)
         view.addConstraints([
-            NSLayoutConstraint(item: progressIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: progressIndicator, attribute: .CenterY, relatedBy: .Equal, toItem: view, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: progressIndicator, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0),
         ])
         
         progressIndicator.layer?.zPosition = 999
     }
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         
         registerPlayerObservationForKeyPath("status") { [weak self] in
             guard let weakSelf = self else { return }
             
             switch weakSelf.player.status {
-            case .ReadyToPlay, .Failed:
+            case .readyToPlay, .failed:
                 weakSelf.progressIndicator.stopAnimation(nil)
-                weakSelf.progressIndicator.hidden = true
+                weakSelf.progressIndicator.isHidden = true
             default: break
             }
         }
@@ -103,7 +103,7 @@ public class VideoPlayerViewController: NSViewController {
         registerPlayerObservationForKeyPath("currentItem.presentationSize") { [weak self] in
             guard let weakSelf = self else { return }
             
-            guard let size = weakSelf.player.currentItem?.presentationSize where size != NSZeroSize else { return }
+            guard let size = weakSelf.player.currentItem?.presentationSize, size != NSZeroSize else { return }
             
             (weakSelf.view.window as? VideoPlayerWindow)?.aspectRatio = size
         }
@@ -120,7 +120,7 @@ public class VideoPlayerViewController: NSViewController {
         player.play()
     }
     
-    @objc private func doubleClickedPlayerView() {
+    @objc fileprivate func doubleClickedPlayerView() {
         if let playerWindow = view.window as? VideoPlayerWindow {
             playerWindow.toggleFullScreen(self)
         } else {
@@ -130,28 +130,28 @@ public class VideoPlayerViewController: NSViewController {
     
     // MARK: - Player Observation
     
-    private var playerObservations = Dictionary<String, () -> Void>()
+    fileprivate var playerObservations = Dictionary<String, () -> Void>()
     
-    private func registerPlayerObservationForKeyPath(keyPath: String, callback: () -> ()) {
+    fileprivate func registerPlayerObservationForKeyPath(_ keyPath: String, callback: @escaping () -> ()) {
         playerObservations[keyPath] = callback
-        player.addObserver(self, forKeyPath: keyPath, options: [.Initial, .New], context: nil)
+        player.addObserver(self, forKeyPath: keyPath, options: [.initial, .new], context: nil)
     }
     
-    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard let keyPath = keyPath else { return }
         
         if let callback = playerObservations[keyPath] {
-            dispatch_async(dispatch_get_main_queue(), callback)
+            DispatchQueue.main.async(execute: callback)
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
     
     // MARK: - Detach
     
-    private var detachedWindowController: VideoPlayerWindowController!
+    fileprivate var detachedWindowController: VideoPlayerWindowController!
     
-    public func detach(forEnteringFullscreen fullscreen: Bool = false) {
+    open func detach(forEnteringFullscreen fullscreen: Bool = false) {
         detachedWindowController = VideoPlayerWindowController(playerViewController: self, fullscreenOnly: fullscreen, originalContainer: view.superview)
         detachedWindowController.contentViewController = self
         

@@ -8,7 +8,7 @@
 
 import Cocoa
 
-public class VideoPlayerWindow: NSWindow {
+open class VideoPlayerWindow: NSWindow {
     
     deinit {
         #if DEBUG
@@ -23,56 +23,50 @@ public class VideoPlayerWindow: NSWindow {
     
     @IBInspectable var hidesTitlebar = true
     
-    override init(contentRect: NSRect, styleMask aStyle: Int, backing bufferingType: NSBackingStoreType, defer flag: Bool) {
+    override init(contentRect: NSRect, styleMask aStyle: NSWindowStyleMask, backing bufferingType: NSBackingStoreType, defer flag: Bool) {
         super.init(contentRect: contentRect, styleMask: aStyle, backing: bufferingType, defer: flag)
         
         applyCustomizations()
     }
     
-    required public init?(coder: NSCoder) {
-        super.init(coder: coder)
-        
-        applyCustomizations()
-    }
-    
-    public override var effectiveAppearance: NSAppearance {
+    open override var effectiveAppearance: NSAppearance {
         return NSAppearance(named: NSAppearanceNameVibrantDark)!
     }
     
-    private var _storedTitlebarView: NSVisualEffectView?
-    private var titlebarView: NSVisualEffectView? {
+    fileprivate var _storedTitlebarView: NSVisualEffectView?
+    fileprivate var titlebarView: NSVisualEffectView? {
         guard _storedTitlebarView == nil else { return _storedTitlebarView }
         guard let containerClass = NSClassFromString("NSTitlebarContainerView") else { return nil }
         
-        guard let containerView = contentView?.superview?.subviews.filter({ $0.isKindOfClass(containerClass) }).last else { return nil }
+        guard let containerView = contentView?.superview?.subviews.filter({ $0.isKind(of: containerClass) }).last else { return nil }
         
-        guard let titlebar = containerView.subviews.filter({ $0.isKindOfClass(NSVisualEffectView.self) }).last as? NSVisualEffectView else { return nil }
+        guard let titlebar = containerView.subviews.filter({ $0.isKind(of: NSVisualEffectView.self) }).last as? NSVisualEffectView else { return nil }
         
         _storedTitlebarView = titlebar
         
         return _storedTitlebarView
     }
-    private var titlebarWidgets: [NSButton]? {
+    fileprivate var titlebarWidgets: [NSButton]? {
         return titlebarView?.subviews.map({ $0 as? NSButton }).filter({ $0 != nil }).map({ $0! })
     }
     
-    private var titleTextField: NSTextField?
-    private var titlebarSeparatorLayer: CALayer?
-    private var titlebarGradientLayer: CAGradientLayer?
+    fileprivate var titleTextField: NSTextField?
+    fileprivate var titlebarSeparatorLayer: CALayer?
+    fileprivate var titlebarGradientLayer: CAGradientLayer?
     
-    private var fullscreenObserver: NSObjectProtocol?
+    fileprivate var fullscreenObserver: NSObjectProtocol?
     
-    @objc private func applyCustomizations(note: NSNotification? = nil) {
-        titleVisibility = .Hidden
-        movableByWindowBackground = true
+    @objc fileprivate func applyCustomizations(_ note: Notification? = nil) {
+        titleVisibility = .hidden
+        isMovableByWindowBackground = true
         
         if #available(OSX 10.11, *) {
-            titlebarView?.material = .UltraDark
+            titlebarView?.material = .ultraDark
         } else {
-            titlebarView?.material = .Dark
+            titlebarView?.material = .dark
         }
         
-        titlebarView?.state = .Active
+        titlebarView?.state = .active
         
         installTitlebarGradientIfNeeded()
         installTitlebarSeparatorIfNeeded()
@@ -83,92 +77,92 @@ public class VideoPlayerWindow: NSWindow {
         applyAppearanceToWidgets()
     }
     
-    private func appearanceForWidgets() -> NSAppearance? {
+    fileprivate func appearanceForWidgets() -> NSAppearance? {
         return NSAppearance(named: NSAppearanceNameVibrantDark)
     }
     
-    private func applyAppearanceToWidgets() {
+    fileprivate func applyAppearanceToWidgets() {
         titlebarWidgets?.forEach { $0.appearance = appearanceForWidgets() }
     }
     
-    private func installTitleTextFieldIfNeeded() {
+    fileprivate func installTitleTextFieldIfNeeded() {
         guard titleTextField == nil && titlebarView != nil else { return }
         
         titleTextField = NSTextField(frame: titlebarView!.bounds)
-        titleTextField!.editable = false
-        titleTextField!.selectable = false
+        titleTextField!.isEditable = false
+        titleTextField!.isSelectable = false
         titleTextField!.drawsBackground = false
-        titleTextField!.bezeled = false
-        titleTextField!.bordered = false
+        titleTextField!.isBezeled = false
+        titleTextField!.isBordered = false
         titleTextField!.stringValue = title
-        titleTextField!.font = NSFont.titleBarFontOfSize(13.0)
+        titleTextField!.font = NSFont.titleBarFont(ofSize: 13.0)
         titleTextField!.textColor = NSColor(calibratedWhite: 0.9, alpha: 0.8)
-        titleTextField!.alignment = .Center
+        titleTextField!.alignment = .center
         titleTextField!.translatesAutoresizingMaskIntoConstraints = false
-        titleTextField!.lineBreakMode = .ByTruncatingMiddle
+        titleTextField!.lineBreakMode = .byTruncatingMiddle
         titleTextField!.sizeToFit()
         
         titlebarView!.addSubview(titleTextField!)
         
         
         titlebarView?.addConstraints([
-            NSLayoutConstraint(item: titleTextField!, attribute: .CenterX, relatedBy: .Equal, toItem: titlebarView!, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: titleTextField!, attribute: .CenterY, relatedBy: .Equal, toItem: titlebarView!, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: titleTextField!, attribute: .Leading, relatedBy: .GreaterThanOrEqual, toItem: titlebarView!, attribute: .Leading, multiplier: 1.0, constant: 67.0)
+            NSLayoutConstraint(item: titleTextField!, attribute: .centerX, relatedBy: .equal, toItem: titlebarView!, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: titleTextField!, attribute: .centerY, relatedBy: .equal, toItem: titlebarView!, attribute: .centerY, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: titleTextField!, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: titlebarView!, attribute: .leading, multiplier: 1.0, constant: 67.0)
         ])
         
-        titleTextField!.setContentCompressionResistancePriority(0.1, forOrientation: .Horizontal)
+        titleTextField!.setContentCompressionResistancePriority(0.1, for: .horizontal)
         
         titleTextField!.layer?.compositingFilter = "lightenBlendMode"
     }
     
-    private func installTitlebarGradientIfNeeded() {
+    fileprivate func installTitlebarGradientIfNeeded() {
         guard titlebarGradientLayer == nil && titlebarView != nil else { return }
         
         titlebarGradientLayer = CAGradientLayer()
-        titlebarGradientLayer!.colors = [NSColor(calibratedWhite: 0.0, alpha: 0.4).CGColor, NSColor.clearColor().CGColor]
+        titlebarGradientLayer!.colors = [NSColor(calibratedWhite: 0.0, alpha: 0.4).cgColor, NSColor.clear.cgColor]
         titlebarGradientLayer!.frame = titlebarView!.bounds
-        titlebarGradientLayer!.autoresizingMask = [.LayerWidthSizable, .LayerHeightSizable]
+        titlebarGradientLayer!.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
         titlebarGradientLayer!.compositingFilter = "overlayBlendMode"
-        titlebarView?.layer?.insertSublayer(titlebarGradientLayer!, atIndex: 0)
+        titlebarView?.layer?.insertSublayer(titlebarGradientLayer!, at: 0)
     }
     
-    private func installTitlebarSeparatorIfNeeded() {
+    fileprivate func installTitlebarSeparatorIfNeeded() {
         guard titlebarSeparatorLayer == nil && titlebarView != nil else { return }
         
         titlebarSeparatorLayer = CALayer()
-        titlebarSeparatorLayer!.backgroundColor = NSColor.labelColor().colorWithAlphaComponent(0.7).CGColor
+        titlebarSeparatorLayer!.backgroundColor = NSColor.labelColor.withAlphaComponent(0.7).cgColor
         titlebarSeparatorLayer!.frame = CGRect(x: 0.0, y: 0.0, width: titlebarView!.bounds.width, height: 1.0)
-        titlebarSeparatorLayer!.autoresizingMask = [.LayerWidthSizable, .LayerMinYMargin]
+        titlebarSeparatorLayer!.autoresizingMask = [.layerWidthSizable, .layerMinYMargin]
         titlebarView?.layer?.addSublayer(titlebarSeparatorLayer!)
     }
     
-    private func installFullscreenObserverIfNeeded() {
+    fileprivate func installFullscreenObserverIfNeeded() {
         guard fullscreenObserver == nil else { return }
         
-        let nc = NSNotificationCenter.defaultCenter()
+        let nc = NotificationCenter.default
         
         // the customizations (especially the title text field ones) have to be reapplied when entering and exiting fullscreen
-        nc.addObserver(self, selector: #selector(applyCustomizations), name: NSWindowDidEnterFullScreenNotification, object: self)
-        nc.addObserver(self, selector: #selector(applyCustomizations), name: NSWindowDidExitFullScreenNotification, object: self)
+        nc.addObserver(self, selector: #selector(applyCustomizations), name: NSNotification.Name.NSWindowDidEnterFullScreen, object: self)
+        nc.addObserver(self, selector: #selector(applyCustomizations), name: NSNotification.Name.NSWindowDidExitFullScreen, object: self)
     }
     
-    public override func makeKeyAndOrderFront(sender: AnyObject?) {
+    open override func makeKeyAndOrderFront(_ sender: Any?) {
         super.makeKeyAndOrderFront(sender)
         
         applyCustomizations()
     }
     
-    public override var title: String {
+    open override var title: String {
         didSet {
             titleTextField?.stringValue = title
         }
     }
     
-    private var actualContentView: NSView?
-    private var darkContentView: DarkWindowContentView!
+    fileprivate var actualContentView: NSView?
+    fileprivate var darkContentView: DarkWindowContentView!
     
-    public override var contentView: NSView? {
+    open override var contentView: NSView? {
         set {
             actualContentView = newValue
             
@@ -178,7 +172,7 @@ public class VideoPlayerWindow: NSWindow {
             }
             
             if let newContentView = actualContentView {
-                newContentView.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+                newContentView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
                 darkContentView.addSubview(newContentView)
             }
             
@@ -189,8 +183,8 @@ public class VideoPlayerWindow: NSWindow {
         }
     }
     
-    func hideTitlebar(animated: Bool = true) {
-        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.TitlebarWillDisappear, object: self)
+    func hideTitlebar(_ animated: Bool = true) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.TitlebarWillDisappear), object: self)
         
         guard let titlebarView = titlebarView else { return }
         guard titlebarView.alphaValue > 0.0 else { return }
@@ -198,8 +192,8 @@ public class VideoPlayerWindow: NSWindow {
         setTitlebarOpacity(0.0, animated: animated)
     }
     
-    func showTitlebar(animated: Bool = true) {
-        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.TitlebarWillAppear, object: self)
+    func showTitlebar(_ animated: Bool = true) {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.TitlebarWillAppear), object: self)
         
         guard let titlebarView = titlebarView else { return }
         guard titlebarView.alphaValue < 1.0 else { return }
@@ -207,7 +201,7 @@ public class VideoPlayerWindow: NSWindow {
         setTitlebarOpacity(1.0, animated: animated)
     }
     
-    private func setTitlebarOpacity(opacity: CGFloat, animated: Bool) {
+    fileprivate func setTitlebarOpacity(_ opacity: CGFloat, animated: Bool) {
         guard hidesTitlebar else { return }
         
         // when the window is in full screen, the titlebar view is in another window (the "toolbar window")
@@ -219,7 +213,7 @@ public class VideoPlayerWindow: NSWindow {
             }, completionHandler: nil)
     }
     
-    public override var backgroundColor: NSColor! {
+    open override var backgroundColor: NSColor! {
         didSet {
             (contentView as? DarkWindowContentView)?.backgroundColor = backgroundColor
         }
@@ -231,35 +225,35 @@ private class DarkWindowContentView: NSView {
     
     var backgroundColor: NSColor = NSColor(calibratedWhite: 0.1, alpha: 1.0) {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            setNeedsDisplay(bounds)
         }
     }
     
-    private var overlayView: PlayerWindowOverlayView?
+    fileprivate var overlayView: PlayerWindowOverlayView?
     
-    private func installOverlayView() {
+    fileprivate func installOverlayView() {
         guard overlayView == nil else { return }
         
         overlayView = PlayerWindowOverlayView(frame: bounds)
-        overlayView!.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
-        addSubview(overlayView!, positioned: .Above, relativeTo: subviews.last)
+        overlayView!.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        addSubview(overlayView!, positioned: .above, relativeTo: subviews.last)
     }
     
-    private func moveOverlayViewToTop() {
+    fileprivate func moveOverlayViewToTop() {
         if overlayView == nil {
             installOverlayView()
         } else {
             overlayView!.removeFromSuperview()
-            addSubview(overlayView!, positioned: .Above, relativeTo: subviews.last)
+            addSubview(overlayView!, positioned: .above, relativeTo: subviews.last)
         }
     }
     
-    private override func drawRect(dirtyRect: NSRect) {
+    fileprivate override func draw(_ dirtyRect: NSRect) {
         backgroundColor.setFill()
         NSRectFill(dirtyRect)
     }
     
-    private override func addSubview(aView: NSView) {
+    fileprivate override func addSubview(_ aView: NSView) {
         super.addSubview(aView)
         
         if aView != overlayView {
@@ -271,88 +265,88 @@ private class DarkWindowContentView: NSView {
 
 private class PlayerWindowOverlayView: NSView {
     
-    private var playerWindow: VideoPlayerWindow? {
+    fileprivate var playerWindow: VideoPlayerWindow? {
         return window as? VideoPlayerWindow
     }
     
-    private var mouseTrackingArea: NSTrackingArea!
+    fileprivate var mouseTrackingArea: NSTrackingArea!
     
-    private override func updateTrackingAreas() {
+    fileprivate override func updateTrackingAreas() {
         super.updateTrackingAreas()
         
         if mouseTrackingArea != nil {
             removeTrackingArea(mouseTrackingArea)
         }
         
-        mouseTrackingArea = NSTrackingArea(rect: bounds, options: [.InVisibleRect, .MouseEnteredAndExited, .MouseMoved, .ActiveAlways], owner: self, userInfo: nil)
+        mouseTrackingArea = NSTrackingArea(rect: bounds, options: [.inVisibleRect, .mouseEnteredAndExited, .mouseMoved, .activeAlways], owner: self, userInfo: nil)
         addTrackingArea(mouseTrackingArea)
     }
     
-    private var mouseIdleTimer: NSTimer!
+    fileprivate var mouseIdleTimer: Timer!
     
-    private func resetMouseIdleTimer() {
+    fileprivate func resetMouseIdleTimer() {
         if mouseIdleTimer != nil {
             mouseIdleTimer.invalidate()
             mouseIdleTimer = nil
         }
         
-        mouseIdleTimer = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(mouseIdleTimerAction(_:)), userInfo: nil, repeats: false)
+        mouseIdleTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction(_:)), userInfo: nil, repeats: false)
     }
     
-    @objc private func mouseIdleTimerAction(sender: NSTimer) {
+    @objc fileprivate func mouseIdleTimerAction(_ sender: Timer) {
         playerWindow?.hideTitlebar()
     }
     
-    private override func viewDidMoveToWindow() {
+    fileprivate override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(windowWillExitFullscreen), name: NSWindowWillExitFullScreenNotification, object: window)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullscreen), name: NSNotification.Name.NSWindowWillExitFullScreen, object: window)
         resetMouseIdleTimer()
     }
     
-    @objc private func windowWillExitFullscreen() {
+    @objc fileprivate func windowWillExitFullscreen() {
         resetMouseIdleTimer()
     }
     
-    private override func mouseEntered(theEvent: NSEvent) {
+    fileprivate override func mouseEntered(with theEvent: NSEvent) {
         resetMouseIdleTimer()
         playerWindow?.showTitlebar()
     }
     
-    private override func mouseExited(theEvent: NSEvent) {
+    fileprivate override func mouseExited(with theEvent: NSEvent) {
         playerWindow?.hideTitlebar()
     }
     
-    private override func mouseMoved(theEvent: NSEvent) {
+    fileprivate override func mouseMoved(with theEvent: NSEvent) {
         resetMouseIdleTimer()
         playerWindow?.showTitlebar()
     }
     
-    private override func mouseDown(theEvent: NSEvent) {
+    fileprivate override func mouseDown(with theEvent: NSEvent) {
         if theEvent.clickCount == 2 {
             window?.toggleFullScreen(self)
         } else {
             if #available(OSX 10.11, *) {
-                window?.performWindowDragWithEvent(theEvent)
+                window?.performDrag(with: theEvent)
             }
         }
         
-        super.mouseDown(theEvent)
+        super.mouseDown(with: theEvent)
     }
     
-    private override func drawRect(dirtyRect: NSRect) {
+    fileprivate override func draw(_ dirtyRect: NSRect) {
         return
     }
     
-    private override func acceptsFirstMouse(theEvent: NSEvent?) -> Bool {
+    fileprivate override func acceptsFirstMouse(for theEvent: NSEvent?) -> Bool {
         guard let event = theEvent else { return false }
-        guard event.type == .LeftMouseDown else { return false }
+        guard event.type == .leftMouseDown else { return false }
         
         return true
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         mouseIdleTimer.invalidate()
         mouseIdleTimer = nil
     }

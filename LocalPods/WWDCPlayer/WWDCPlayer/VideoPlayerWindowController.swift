@@ -10,35 +10,35 @@ import Cocoa
 
 public enum VideoPlayerWindowSizePreset: CGFloat {
     
-    case Quarter = 0.25
-    case Half = 0.50
-    case Max = 1.0
+    case quarter = 0.25
+    case half = 0.50
+    case max = 1.0
     
 }
 
-public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
+open class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 
-    private let fullscreenOnly: Bool
-    private let originalContainer: NSView!
+    fileprivate let fullscreenOnly: Bool
+    fileprivate let originalContainer: NSView!
     
-    public var actionOnWindowClosed = {}
+    open var actionOnWindowClosed = {}
     
     public init(playerViewController: VideoPlayerViewController, fullscreenOnly: Bool = false, originalContainer: NSView? = nil) {
         self.fullscreenOnly = fullscreenOnly
         self.originalContainer = originalContainer
         
-        let styleMask = NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask|NSFullSizeContentViewWindowMask
+        let styleMask: NSWindowStyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
         
         var rect = VideoPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view.superview)
         if rect == NSZeroRect { rect = VideoPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
         
-        let window = VideoPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .Buffered, defer: false)
-        window.releasedWhenClosed = true
+        let window = VideoPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = true
         
         if #available(OSX 10.11, *) {
             // ¯\_(ツ)_/¯
         } else {
-            window.collectionBehavior = [.Default, .FullScreenPrimary]
+            window.collectionBehavior = .fullScreenPrimary
         }
         
         super.init(window: window)
@@ -48,7 +48,7 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         contentViewController = playerViewController
         window.title = playerViewController.title ?? ""
         
-        if let aspect = playerViewController.player.currentItem?.presentationSize where aspect != NSZeroSize {
+        if let aspect = playerViewController.player.currentItem?.presentationSize, aspect != NSZeroSize {
             window.aspectRatio = aspect
         }
     }
@@ -57,11 +57,11 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         fatalError("VideoPlayerWindowController can't be initialized with a coder")
     }
     
-    public override func showWindow(sender: AnyObject?) {
+    open override func showWindow(_ sender: Any?) {
         super.showWindow(sender)
         
         if !fullscreenOnly {
-            (window as! VideoPlayerWindow).applySizePreset(.Half)
+            (window as! VideoPlayerWindow).applySizePreset(.half)
         } else {
             window?.toggleFullScreen(sender)
         }
@@ -69,7 +69,7 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     
     // MARK: - Reattachment and fullscreen support
     
-    public func windowWillClose(notification: NSNotification) {
+    open func windowWillClose(_ notification: Notification) {
         (contentViewController as? VideoPlayerViewController)?.player.cancelPendingPrerolls()
         (contentViewController as? VideoPlayerViewController)?.player.pause()
         
@@ -80,32 +80,32 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         reattachContentViewController()
     }
     
-    public func windowWillExitFullScreen(notification: NSNotification) {
+    open func windowWillExitFullScreen(_ notification: Notification) {
         guard fullscreenOnly && contentViewController is VideoPlayerViewController else { return }
         
         window?.resizeIncrements = NSSize(width: 1.0, height: 1.0)
     }
     
-    public func windowDidExitFullScreen(notification: NSNotification) {
+    open func windowDidExitFullScreen(_ notification: Notification) {
         guard fullscreenOnly && contentViewController is VideoPlayerViewController else { return }
         
         reattachContentViewController()
     }
     
-    private func reattachContentViewController() {
+    fileprivate func reattachContentViewController() {
         contentViewController!.view.frame = originalContainer.bounds
         originalContainer.addSubview(contentViewController!.view)
         contentViewController = nil
         close()
     }
     
-    public func customWindowsToExitFullScreenForWindow(window: NSWindow) -> [NSWindow]? {
+    open func customWindowsToExitFullScreen(for window: NSWindow) -> [NSWindow]? {
         guard fullscreenOnly else { return nil }
         
         return [window]
     }
     
-    public func window(window: NSWindow, startCustomAnimationToExitFullScreenWithDuration duration: NSTimeInterval) {
+    open func window(_ window: NSWindow, startCustomAnimationToExitFullScreenWithDuration duration: TimeInterval) {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = duration
             let frame = VideoPlayerWindow.bestScreenRectFromDetachingContainer(self.originalContainer)
@@ -113,19 +113,19 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
             }, completionHandler: nil)
     }
     
-    @IBAction public func sizeWindowToHalfSize(sender: AnyObject?) {
-        (window as! VideoPlayerWindow).applySizePreset(.Half)
+    @IBAction open func sizeWindowToHalfSize(_ sender: AnyObject?) {
+        (window as! VideoPlayerWindow).applySizePreset(.half)
     }
     
-    @IBAction public func sizeWindowToQuarterSize(sender: AnyObject?) {
-        (window as! VideoPlayerWindow).applySizePreset(.Quarter)
+    @IBAction open func sizeWindowToQuarterSize(_ sender: AnyObject?) {
+        (window as! VideoPlayerWindow).applySizePreset(.quarter)
     }
     
-    @IBAction func sizeWindowToFill(sender: AnyObject?) {
-        (window as! VideoPlayerWindow).applySizePreset(.Max)
+    @IBAction func sizeWindowToFill(_ sender: AnyObject?) {
+        (window as! VideoPlayerWindow).applySizePreset(.max)
     }
     
-    @IBAction func floatOnTop(sender: NSMenuItem) {
+    @IBAction func floatOnTop(_ sender: NSMenuItem) {
         if sender.state == NSOnState {
             toggleFloatOnTop(false)
             sender.state = NSOffState
@@ -135,8 +135,8 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         }
     }
     
-    private func toggleFloatOnTop(enable: Bool) {
-        let level = enable ? Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey)) : Int(CGWindowLevelForKey(CGWindowLevelKey.NormalWindowLevelKey))
+    fileprivate func toggleFloatOnTop(_ enable: Bool) {
+        let level = enable ? Int(CGWindowLevelForKey(CGWindowLevelKey.floatingWindow)) : Int(CGWindowLevelForKey(CGWindowLevelKey.normalWindow))
         window?.level = level
     }
     
@@ -150,28 +150,28 @@ public class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 
 private extension VideoPlayerWindow {
     
-    class func centerRectForProposedContentRect(rect: NSRect) -> NSRect {
-        guard let screen = NSScreen.mainScreen() else { return NSZeroRect }
+    class func centerRectForProposedContentRect(_ rect: NSRect) -> NSRect {
+        guard let screen = NSScreen.main() else { return NSZeroRect }
         
         return NSRect(x: screen.frame.width / 2.0 - rect.width / 2.0, y: screen.frame.height / 2.0 - rect.height / 2.0, width: rect.width, height: rect.height)
     }
     
-    class func bestScreenRectFromDetachingContainer(containerView: NSView?) -> NSRect {
+    class func bestScreenRectFromDetachingContainer(_ containerView: NSView?) -> NSRect {
         guard let view = containerView else { return NSZeroRect }
         
-        return view.window?.convertRectToScreen(view.frame) ?? NSZeroRect
+        return view.window?.convertToScreen(view.frame) ?? NSZeroRect
     }
     
-    func applySizePreset(preset: VideoPlayerWindowSizePreset, center: Bool = true, animated: Bool = true) {
+    func applySizePreset(_ preset: VideoPlayerWindowSizePreset, center: Bool = true, animated: Bool = true) {
         guard let screen = screen else { return }
         
         let proportion = frame.size.width / screen.visibleFrame.size.width
         let idealSize: NSSize
         if proportion != preset.rawValue {
-            let rect = NSRect(origin: CGPointZero, size: NSSize(width: screen.frame.size.width * preset.rawValue, height: screen.frame.size.height * preset.rawValue))
-            idealSize = constrainFrameRect(rect, toScreen: screen).size
+            let rect = NSRect(origin: CGPoint.zero, size: NSSize(width: screen.frame.size.width * preset.rawValue, height: screen.frame.size.height * preset.rawValue))
+            idealSize = constrainFrameRect(rect, to: screen).size
         } else {
-            idealSize = constrainFrameRect(frame, toScreen: screen).size
+            idealSize = constrainFrameRect(frame, to: screen).size
         }
         
         let origin: NSPoint
