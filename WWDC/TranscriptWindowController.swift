@@ -10,7 +10,7 @@ import Cocoa
 
 class TranscriptWindowController: NSWindowController {
 
-    var jumpToTimeCallback: (time: Double) -> () = { _ in }
+    var jumpToTimeCallback: (_ time: Double) -> () = { _ in }
     {
         didSet {
             guard let transcriptController = transcriptController else { return }
@@ -19,7 +19,7 @@ class TranscriptWindowController: NSWindowController {
     }
 
     var session: Session!
-    private var transcriptController: TranscriptViewController!
+    fileprivate var transcriptController: TranscriptViewController!
     
     convenience init (session: Session) {
         self.init(windowNibName: "TranscriptWindowController")
@@ -32,7 +32,7 @@ class TranscriptWindowController: NSWindowController {
         // initialize transcript controller with current session and add It's view to our window
         transcriptController = TranscriptViewController(session: session)
         transcriptController.view.frame = NSMakeRect(0, 0, NSWidth(self.window!.contentView!.frame), NSHeight(self.window!.contentView!.frame))
-        transcriptController.view.autoresizingMask = [.ViewHeightSizable, .ViewWidthSizable]
+        transcriptController.view.autoresizingMask = [.viewHeightSizable, .viewWidthSizable]
         self.window!.contentView!.addSubview(transcriptController.view)
 
         // configure transcript controller with preferences
@@ -41,15 +41,15 @@ class TranscriptWindowController: NSWindowController {
         transcriptController.backgroundColor = Preferences.SharedPreferences().transcriptBgColor
 
         // set notification observers to keep transcript controller in sync with preferences
-        let nc = NSNotificationCenter.defaultCenter()
-        nc.addObserverForName(TranscriptPreferencesChangedNotification, object: nil, queue: nil) { _ in
+        let nc = NotificationCenter.default
+        nc.addObserver(forName: NSNotification.Name(rawValue: TranscriptPreferencesChangedNotification), object: nil, queue: nil) { _ in
             self.transcriptController.font = Preferences.SharedPreferences().transcriptFont
             self.transcriptController.textColor = Preferences.SharedPreferences().transcriptTextColor
             self.transcriptController.backgroundColor = Preferences.SharedPreferences().transcriptBgColor
         }
     }
     
-    func highlightLineAt(roundedTimecode: String) {
+    func highlightLineAt(_ roundedTimecode: String) {
         transcriptController.highlightLineAt(roundedTimecode)
     }
     

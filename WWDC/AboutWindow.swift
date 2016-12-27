@@ -10,11 +10,11 @@ import Cocoa
 
 class AboutWindow: NSWindow {
 
-    override var canBecomeMainWindow: Bool {
+    override var canBecomeMain: Bool {
         return false
     }
     
-    override var canBecomeKeyWindow: Bool {
+    override var canBecomeKey: Bool {
         return false
     }
     

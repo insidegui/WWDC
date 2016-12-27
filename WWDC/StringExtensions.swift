@@ -7,12 +7,36 @@
 //
 
 import Foundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 extension String {
     
     var boolValue: Bool {
         get {
-            if self.lowercaseString == "yes" || self.lowercaseString == "true" || Int(self) > 0 {
+            if self.lowercased() == "yes" || self.lowercased() == "true" || Int(self) > 0 {
                 return true
             } else {
                 return false
@@ -23,8 +47,8 @@ extension String {
     func words() -> [String] {
         
         var words = [String]()
-        let range = self.startIndex..<self.endIndex
-        self.enumerateSubstringsInRange(range, options: NSStringEnumerationOptions.ByWords) { (substring, _, _, _) -> () in
+        let range = self.characters.indices
+        self.enumerateSubstrings(in: range, options: NSString.EnumerationOptions.byWords) { (substring, _, _, _) -> () in
             words.append(substring!)
         }
         return words

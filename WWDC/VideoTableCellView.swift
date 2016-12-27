@@ -21,10 +21,10 @@ class VideoTableCellView: NSTableCellView {
         }
     }
     
-    @IBOutlet weak private var titleField: NSTextField!
-    @IBOutlet weak private var detailsField: NSTextField!
-    @IBOutlet weak private var progressView: SessionProgressView!
-    @IBOutlet weak private var downloadedImage: GRMaskImageView!
+    @IBOutlet weak fileprivate var titleField: NSTextField!
+    @IBOutlet weak fileprivate var detailsField: NSTextField!
+    @IBOutlet weak fileprivate var progressView: SessionProgressView!
+    @IBOutlet weak fileprivate var downloadedImage: GRMaskImageView!
     
     var selected = false {
         didSet {
@@ -37,15 +37,15 @@ class VideoTableCellView: NSTableCellView {
         
         selected = false
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         KVOController.unobserve(session)
     }
 
-    private func updateUI() {
+    fileprivate func updateUI() {
         KVOController.observe(session, keyPath: "favorite", options: .New, action: #selector(VideoTableCellView.updateSessionFlags))
         KVOController.observe(session, keyPath: "progress", options: .New, action: #selector(VideoTableCellView.updateSessionFlags))
         
-        NSNotificationCenter.defaultCenter().addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadCancelled), object: nil, queue: OperationQueue.main) { note in
             self.updateDownloadImage()
         }
         
@@ -87,14 +87,14 @@ class VideoTableCellView: NSTableCellView {
     
     override var backgroundStyle: NSBackgroundStyle {
         didSet {
-            titleField.cell?.backgroundStyle = .Light
-            detailsField.cell?.backgroundStyle = .Light
+            titleField.cell?.backgroundStyle = .light
+            detailsField.cell?.backgroundStyle = .light
         }
     }
     
     func updateTint() {
         if selected {
-            titleField.textColor = NSColor.whiteColor()
+            titleField.textColor = NSColor.white
             detailsField.textColor = NSColor(calibratedWhite: 1.0, alpha: 0.70)
             downloadedImage.tintColor = Theme.WWDCTheme.backgroundColor
         } else {

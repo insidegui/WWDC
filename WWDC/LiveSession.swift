@@ -13,9 +13,9 @@ class LiveSession {
     var id = 0
     var title = ""
     var summary = ""
-    var startsAt: NSDate?
-    var endsAt: NSDate?
-    var streamURL: NSURL?
+    var startsAt: Date?
+    var endsAt: Date?
+    var streamURL: URL?
     var alternateStreamURL = ""
     var isLiveRightNow = false
     

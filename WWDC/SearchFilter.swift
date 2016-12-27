@@ -9,51 +9,51 @@
 import Foundation
 
 enum SearchFilter {
-    case Arbitrary(NSPredicate)
-    case Year([Int])
-    case Track([String])
-    case Focus([String])
-    case Favorited(Bool)
-    case Downloaded([String])
+    case arbitrary(NSPredicate)
+    case year([Int])
+    case track([String])
+    case focus([String])
+    case favorited(Bool)
+    case downloaded([String])
     
     var isEmpty: Bool {
         switch self {
-        case .Arbitrary:
+        case .arbitrary:
             return false
-        case .Year(let years):
+        case .year(let years):
             return years.count == 0
-        case .Track(let tracks):
+        case .track(let tracks):
             return tracks.count == 0
-        case .Focus(let focuses):
+        case .focus(let focuses):
             return focuses.count == 0
         // for boolean properties, setting them to "false" means empty because we only want to filter when true
-        case .Favorited(let favorited):
+        case .favorited(let favorited):
             return !favorited;
-        case .Downloaded(let states):
+        case .downloaded(let states):
             return states.count == 0;
         }
     }
     
     var predicate: NSPredicate {
         switch self {
-        case .Arbitrary(let predicate):
+        case .arbitrary(let predicate):
             return predicate
-        case .Year(let years):
+        case .year(let years):
             return NSPredicate(format: "year IN %@", years)
-        case .Track(let tracks):
+        case .track(let tracks):
             return NSPredicate(format: "track IN %@", tracks)
-        case .Focus(let focuses):
+        case .focus(let focuses):
             return NSPredicate(format: "focus IN %@", focuses)
-        case .Favorited(let favorited):
-            return NSPredicate(format: "favorite = %@", favorited)
-        case .Downloaded(let downloaded):
-            return NSPredicate(format: "downloaded = %@", downloaded[0].boolValue)
+        case .favorited(let favorited):
+            return NSPredicate(format: "favorite = %@", favorited as CVarArg)
+        case .downloaded(let downloaded):
+            return NSPredicate(format: "downloaded = %@", downloaded[0].boolValue as CVarArg)
         }
     }
     
     var selectedInts: [Int]? {
         switch self {
-        case .Year(let years):
+        case .year(let years):
             return years
         default:
             return nil
@@ -62,18 +62,18 @@ enum SearchFilter {
     
     var selectedStrings: [String]? {
         switch self {
-        case .Track(let strings):
+        case .track(let strings):
             return strings
-        case .Focus(let strings):
+        case .focus(let strings):
             return strings
-        case .Downloaded(let strings):
+        case .downloaded(let strings):
             return strings
         default:
             return nil
         }
     }
     
-    static func predicatesWithFilters(filters: SearchFilters) -> [NSPredicate] {
+    static func predicatesWithFilters(_ filters: SearchFilters) -> [NSPredicate] {
         var predicates: [NSPredicate] = []
         for filter in filters {
             predicates.append(filter.predicate)

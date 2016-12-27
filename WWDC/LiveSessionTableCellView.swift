@@ -9,21 +9,21 @@
 import Cocoa
 
 protocol LiveSessionTableCellViewDelegate {
-    func playLiveSession(session: LiveSession)
+    func playLiveSession(_ session: LiveSession)
 }
 
 class LiveSessionTableCellView: NSTableCellView {
 
     var delegate: LiveSessionTableCellViewDelegate?
     
-    @IBOutlet weak private var playButton: NSButton!
-    @IBOutlet weak private var timeRemainingView: RoundRectLabel!
-    @IBOutlet weak private var titleTextField: NSTextField!
+    @IBOutlet weak fileprivate var playButton: NSButton!
+    @IBOutlet weak fileprivate var timeRemainingView: RoundRectLabel!
+    @IBOutlet weak fileprivate var titleTextField: NSTextField!
     
-    private lazy var formatter: NSDateFormatter = {
-        let f = NSDateFormatter()
+    fileprivate lazy var formatter: DateFormatter = {
+        let f = DateFormatter()
         
-        f.timeStyle = .ShortStyle
+        f.timeStyle = .short
         
         return f
     }()
@@ -34,20 +34,20 @@ class LiveSessionTableCellView: NSTableCellView {
         }
     }
     
-    private func updateUI() {
+    fileprivate func updateUI() {
         guard let session = session else { return }
         
         titleTextField.stringValue = session.title
         
         if let endsAt = session.endsAt {
-            timeRemainingView.title = "Ends at " + formatter.stringFromDate(endsAt)
-            timeRemainingView.hidden = false
+            timeRemainingView.title = "Ends at " + formatter.string(from: endsAt as Date)
+            timeRemainingView.isHidden = false
         } else {
-            timeRemainingView.hidden = true
+            timeRemainingView.isHidden = true
         }
     }
     
-    @IBAction func play(sender: NSButton) {
+    @IBAction func play(_ sender: NSButton) {
         guard let session = session else { return }
         
         delegate?.playLiveSession(session)

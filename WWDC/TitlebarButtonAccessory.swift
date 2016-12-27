@@ -13,7 +13,7 @@ class TitlebarButtonAccessory: NSTitlebarAccessoryViewController {
     let buttonTitle: String
     let buttonAction: () -> Void
     
-    init(buttonTitle: String, buttonAction: () -> Void) {
+    init(buttonTitle: String, buttonAction: @escaping () -> Void) {
         self.buttonTitle = buttonTitle
         self.buttonAction = buttonAction
         
@@ -32,9 +32,9 @@ class TitlebarButtonAccessory: NSTitlebarAccessoryViewController {
         
         let button = NSButton(frame: view.bounds)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.bezelStyle = .RoundRectBezelStyle
-        button.controlSize = .SmallControlSize
-        button.font = NSFont.controlContentFontOfSize(11.0)
+        button.bezelStyle = .roundRect
+        button.controlSize = .small
+        button.font = NSFont.controlContentFont(ofSize: 11.0)
         button.title = buttonTitle
         button.target = self
         button.action = #selector(TitlebarButtonAccessory.runButtonAction(_:))
@@ -43,11 +43,11 @@ class TitlebarButtonAccessory: NSTitlebarAccessoryViewController {
         view.setFrameSize(NSSize(width: button.bounds.size.width + 10.0, height: button.bounds.size.height))
         view.addSubview(button)
         
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("[button]-(6)-|", options: [], metrics: nil, views: ["button": button]))
-        view.addConstraint(NSLayoutConstraint(item: button, attribute: .CenterY, relatedBy: .Equal, toItem: view, attribute: .CenterY, multiplier: 1.0, constant: 0.0))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "[button]-(6)-|", options: [], metrics: nil, views: ["button": button]))
+        view.addConstraint(NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0))
     }
     
-    @objc private func runButtonAction(sender: AnyObject) {
+    @objc fileprivate func runButtonAction(_ sender: AnyObject) {
         buttonAction()
     }
     

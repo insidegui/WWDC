@@ -21,8 +21,8 @@ class ScheduledSessionTableCellView: NSTableCellView {
     
     @IBOutlet weak var titleTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var subtitleLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet weak private var titleField: NSTextField!
-    @IBOutlet weak private var detailsField: NSTextField!
+    @IBOutlet weak fileprivate var titleField: NSTextField!
+    @IBOutlet weak fileprivate var detailsField: NSTextField!
     @IBOutlet weak var favoriteIndicator: NSTextField!
     @IBOutlet weak var trackDecorationView: NSView! {
         didSet {
@@ -36,26 +36,26 @@ class ScheduledSessionTableCellView: NSTableCellView {
             liveIndicator.title = "LIVE"
             
             if #available(OSX 10.11, *) {
-                liveIndicator.font = NSFont.systemFontOfSize(9.0, weight: NSFontWeightMedium)
+                liveIndicator.font = NSFont.systemFont(ofSize: 9.0, weight: NSFontWeightMedium)
             } else {
-                liveIndicator.font = NSFont.systemFontOfSize(9.0)
+                liveIndicator.font = NSFont.systemFont(ofSize: 9.0)
             }
         }
     }
     
-    private lazy var dateFormatter: NSDateFormatter = {
-        let f = NSDateFormatter()
+    fileprivate lazy var dateFormatter: DateFormatter = {
+        let f = DateFormatter()
         
-        f.locale = NSLocale(localeIdentifier: "en")
+        f.locale = Locale(identifier: "en")
         f.dateFormat = "E"
         
         return f
     }()
     
-    private lazy var timeFormatter: NSDateFormatter = {
-        let f = NSDateFormatter()
+    fileprivate lazy var timeFormatter: DateFormatter = {
+        let f = DateFormatter()
         
-        f.timeStyle = .ShortStyle
+        f.timeStyle = .short
         
         return f
     }()
@@ -71,14 +71,14 @@ class ScheduledSessionTableCellView: NSTableCellView {
         
         selected = false
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         KVOController.unobserve(session)
     }
     
-    private func updateUI() {
+    fileprivate func updateUI() {
         KVOController.observe(session, keyPath: "favorite", options: .New, action: #selector(updateSessionFlags))
         
-        NSNotificationCenter.defaultCenter().addObserverForName(LiveSessionsListDidChangeNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: updateLive)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: LiveSessionsListDidChangeNotification), object: nil, queue: OperationQueue.main, using: updateLive)
         
         titleField.stringValue = session.title
         
@@ -88,13 +88,13 @@ class ScheduledSessionTableCellView: NSTableCellView {
         updateTint()
     }
     
-    private func updateDetail() {
+    fileprivate func updateDetail() {
         if let schedule = session.schedule {
             if let track = schedule.track { updateTrackDecorationWithTrack(track) }
             
-            let day = schedule.isLive ? "" : dateFormatter.stringFromDate(schedule.startsAt) + " "
-            let startTime = timeFormatter.stringFromDate(schedule.startsAt)
-            let endTime = timeFormatter.stringFromDate(schedule.endsAt)
+            let day = schedule.isLive ? "" : dateFormatter.string(from: schedule.startsAt as Date) + " "
+            let startTime = timeFormatter.string(from: schedule.startsAt as Date)
+            let endTime = timeFormatter.string(from: schedule.endsAt as Date)
             
             detailsField.stringValue = "\(day)\(startTime) - \(endTime) − \(schedule.room)"
         } else {
@@ -102,33 +102,33 @@ class ScheduledSessionTableCellView: NSTableCellView {
         }
     }
     
-    private func updateLive(node: NSNotification? = nil) {
+    fileprivate func updateLive(_ node: Notification? = nil) {
         updateDetail()
         
         guard let schedule = session.schedule else { return }
 
         if schedule.isLive {
-            liveIndicator.hidden = false
+            liveIndicator.isHidden = false
             subtitleLeadingConstraint.constant = liveIndicator.bounds.size.width + CGFloat(4.0)
         } else {
-            liveIndicator.hidden = true
+            liveIndicator.isHidden = true
             subtitleLeadingConstraint.constant = 0.0
         }
     }
     
-    private func updateTrackDecorationWithTrack(track: Track) {
+    fileprivate func updateTrackDecorationWithTrack(_ track: Track) {
         CATransaction.begin()
         CATransaction.setAnimationDuration(0.0)
-        trackDecorationView.layer?.backgroundColor = NSColor(hexString: track.color)?.CGColor
+        trackDecorationView.layer?.backgroundColor = NSColor(hexString: track.color)?.cgColor
         CATransaction.commit()
     }
     
-    @objc private func updateSessionFlags() {
-        favoriteIndicator.hidden = !session.favorite
+    @objc fileprivate func updateSessionFlags() {
+        favoriteIndicator.isHidden = !session.favorite
         titleTrailingConstraint.constant = session.favorite ? 27.0 : 4.0
     }
     
-    private var parentRowView: VideoTableRowView? {
+    fileprivate var parentRowView: VideoTableRowView? {
         return superview as? VideoTableRowView
     }
     
@@ -138,10 +138,10 @@ class ScheduledSessionTableCellView: NSTableCellView {
         colorizeRowView()
     }
     
-    private func colorizeRowView() {
+    fileprivate func colorizeRowView() {
         guard let rowView = parentRowView else { return }
         
-        if let schedule = session.schedule, track = schedule.track {
+        if let schedule = session.schedule, let track = schedule.track {
             rowView.themeBackgroundColor = NSColor(hexString: track.color) ?? Theme.WWDCTheme.fillColor
             rowView.themeSeparatorColor = NSColor(hexString: track.darkColor) ?? Theme.WWDCTheme.separatorColor
         } else {
@@ -152,15 +152,15 @@ class ScheduledSessionTableCellView: NSTableCellView {
     
     override var backgroundStyle: NSBackgroundStyle {
         didSet {
-            titleField.cell?.backgroundStyle = .Light
-            detailsField.cell?.backgroundStyle = .Light
+            titleField.cell?.backgroundStyle = .light
+            detailsField.cell?.backgroundStyle = .light
         }
     }
     
     func updateTint() {
         if selected {
-            titleField.textColor = NSColor.whiteColor()
-            detailsField.textColor = NSColor.whiteColor()
+            titleField.textColor = NSColor.white
+            detailsField.textColor = NSColor.white
         } else {
             titleField.textColor = NSColor(calibratedWhite: 0.0, alpha: 0.95)
             detailsField.textColor = NSColor(calibratedWhite: 0.0, alpha: 0.70)

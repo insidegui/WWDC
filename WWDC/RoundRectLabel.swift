@@ -18,43 +18,43 @@ class RoundRectLabel: NSView {
     
     var tintColor = Theme.WWDCTheme.fillColor {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            setNeedsDisplay(bounds)
         }
     }
     
-    var font = NSFont.systemFontOfSize(11.0) {
+    var font = NSFont.systemFont(ofSize: 11.0) {
         didSet {
             invalidateTitle()
         }
     }
     
-    var textColor = NSColor.whiteColor() {
+    var textColor = NSColor.white {
         didSet {
             invalidateTitle()
         }
     }
     
-    private func invalidateTitle() {
+    fileprivate func invalidateTitle() {
         _storedAttributedTitle = nil
         sizeToFit()
-        setNeedsDisplayInRect(bounds)
+        setNeedsDisplay(bounds)
     }
     
-    private var _storedAttributedTitle: NSAttributedString?
-    private var attributedTitle: NSAttributedString {
+    fileprivate var _storedAttributedTitle: NSAttributedString?
+    fileprivate var attributedTitle: NSAttributedString {
         if _storedAttributedTitle == nil {
             let attrs = [
                 NSFontAttributeName: font,
                 NSForegroundColorAttributeName: textColor
-            ]
+            ] as [String : Any]
             _storedAttributedTitle = NSAttributedString(string: title, attributes: attrs)
         }
         
         return _storedAttributedTitle!
     }
     
-    override func drawRect(dirtyRect: NSRect) {
-        super.drawRect(dirtyRect)
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
 
         tintColor.setFill()
         NSBezierPath(roundedRect: bounds, xRadius: 4.0, yRadius: 4.0).addClip()
@@ -65,7 +65,7 @@ class RoundRectLabel: NSView {
             y: round(bounds.height / 2.0 - attributedTitle.size().height / 2.0)
         )
         
-        attributedTitle.drawAtPoint(titleOrigin)
+        attributedTitle.draw(at: titleOrigin)
     }
     
     override var intrinsicContentSize: NSSize {

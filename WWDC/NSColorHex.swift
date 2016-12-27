@@ -16,9 +16,8 @@ extension NSColor {
             return nil
         }
         
-        guard let hexString: String = hexString.substringFromIndex(hexString.startIndex.advancedBy(1)),
-            var   hexValue:  UInt32 = 0
-            where NSScanner(string: hexString).scanHexInt(&hexValue) else {
+        guard let hexString: String = hexString.substring(from: hexString.characters.index(hexString.startIndex, offsetBy: 1)),
+            var   hexValue:  UInt32 = 0, Scanner(string: hexString).scanHexInt32(&hexValue) else {
                 return nil
         }
         
@@ -36,7 +35,7 @@ extension NSColor {
         }
     }
     
-    private convenience init(hex3: UInt16, alpha: CGFloat = 1) {
+    fileprivate convenience init(hex3: UInt16, alpha: CGFloat = 1) {
         let divisor = CGFloat(15)
         let red     = CGFloat((hex3 & 0xF00) >> 8) / divisor
         let green   = CGFloat((hex3 & 0x0F0) >> 4) / divisor
@@ -44,7 +43,7 @@ extension NSColor {
         self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
     
-    private convenience init(hex4: UInt16) {
+    fileprivate convenience init(hex4: UInt16) {
         let divisor = CGFloat(15)
         let red     = CGFloat((hex4 & 0xF000) >> 12) / divisor
         let green   = CGFloat((hex4 & 0x0F00) >>  8) / divisor
@@ -53,7 +52,7 @@ extension NSColor {
         self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
     
-    private convenience init(hex6: UInt32, alpha: CGFloat = 1) {
+    fileprivate convenience init(hex6: UInt32, alpha: CGFloat = 1) {
         let divisor = CGFloat(255)
         let red     = CGFloat((hex6 & 0xFF0000) >> 16) / divisor
         let green   = CGFloat((hex6 & 0x00FF00) >>  8) / divisor
@@ -61,7 +60,7 @@ extension NSColor {
         self.init(red: red, green: green, blue: blue, alpha: alpha)
     }
     
-    private convenience init(hex8: UInt32) {
+    fileprivate convenience init(hex8: UInt32) {
         let divisor = CGFloat(255)
         let red     = CGFloat((hex8 & 0xFF000000) >> 24) / divisor
         let green   = CGFloat((hex8 & 0x00FF0000) >> 16) / divisor

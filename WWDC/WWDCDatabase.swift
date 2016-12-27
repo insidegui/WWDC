@@ -13,11 +13,11 @@ import RealmSwift
 import Alamofire
 import SwiftyJSON
 
-func mainQS(block: () -> ()) {
-    dispatch_sync(dispatch_get_main_queue(), block)
+func mainQS(_ block: () -> ()) {
+    DispatchQueue.main.sync(execute: block)
 }
-func mainQ(block: () -> ()) {
-    dispatch_async(dispatch_get_main_queue(), block)
+func mainQ(_ block: @escaping () -> ()) {
+    DispatchQueue.main.async(execute: block)
 }
 
 private let _sharedWWDCDatabase = WWDCDatabase()
@@ -31,7 +31,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
 
 @objc class WWDCDatabase: NSObject {
     
-    private struct Constants {
+    fileprivate struct Constants {
         static var internalServiceURL = WWDCEnvironment.indexURL
         static let extraVideosURL = WWDCEnvironment.extraURL
         static let asciiServiceBaseURL = WWDCEnvironment.asciiWWDCURL
@@ -47,8 +47,8 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         configureRealm()
     }
     
-    private let bgThread = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
-    private var backgroundOperationQueue = NSOperationQueue()
+    fileprivate let bgThread = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background)
+    fileprivate var backgroundOperationQueue = OperationQueue()
     
     var config: AppConfig! {
         didSet {
@@ -66,9 +66,9 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     
     // MARK: - Realm Configuration
     
-    private let currentDBVersion = UInt64(6)
+    fileprivate let currentDBVersion = UInt64(6)
     
-    private func configureRealm() {
+    fileprivate func configureRealm() {
         let realmConfiguration = Realm.Configuration(schemaVersion: currentDBVersion, migrationBlock: { migration, oldVersion in
             if oldVersion == 0 && self.currentDBVersion >= 5 {
                 NSLog("Migrating data from version 0 to version \(self.currentDBVersion)")
@@ -84,7 +84,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     
     /// Use this to change properties of model objects **on the main thread**
     /// - Warning: if you try to change properties of model objects (such as Session) outside a `doChanges` block, an exception will be thrown
-    func doChanges(block: () -> Void) {
+    func doChanges(_ block: () -> Void) {
         realm.beginWrite()
         block()
         try! realm.commitWrite()
@@ -95,7 +95,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     /// - Warning: if you try to change properties of model objects (such as Session) outside a `doChanges` block, an exception will be thrown
     /// - Warning: if you try to directly change a model fetched from another thread, an exception will be thrown.
     /// If you need to change a model fetched on another thread, re-fetch it using the provided realm before making the changes
-    func doBackgroundChanges(block: (realm: Realm) -> Void) {
+    func doBackgroundChanges(_ block: (_ realm: Realm) -> Void) {
         let bgRealm = try! Realm()
         bgRealm.beginWrite()
         block(realm: bgRealm)
@@ -112,13 +112,13 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             let notificationName = isIndexingTranscripts ? TranscriptIndexingDidStartNotification : TranscriptIndexingDidStopNotification
             
             mainQ {
-                NSNotificationCenter.defaultCenter().postNotificationName(notificationName, object: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: notificationName), object: nil)
             }
         }
     }
     
     /// The progress when the transcripts are being downloaded/indexed
-    var transcriptIndexingProgress: NSProgress? {
+    var transcriptIndexingProgress: Progress? {
         didSet {
             isIndexingTranscripts = (transcriptIndexingProgress != nil)
             
@@ -131,7 +131,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     
     /// A callback to execute whenever new sessions are available
     /// - parameter newSessionKeys: The keys (uniqueId) for the new sessions
-    var sessionListChangedCallback: ((newSessionKeys: [String]) -> Void)?
+    var sessionListChangedCallback: ((_ newSessionKeys: [String]) -> Void)?
     
     // MARK: - Core Functionality
     
@@ -155,10 +155,10 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     /// Orders the videos by year (descending) and session number (ascending)
     lazy var sortDescriptorsForSessionList: [SortDescriptor] = [SortDescriptor(property: "year", ascending: false), SortDescriptor(property: "id", ascending: true)]
     
-    private let manager = Alamofire.Manager(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+    fileprivate let manager = Alamofire.Manager(configuration: URLSessionConfiguration.ephemeralSessionConfiguration())
     
     /// This method downloads the app config from the server and sets It in self, which makes the app download the videos and schedule from the servers specified in the config
-    private func downloadAppConfigAndSyncDatabase() {
+    fileprivate func downloadAppConfigAndSyncDatabase() {
         manager.request(.GET, Constants.internalServiceURL).response { _, _, data, error in
             guard let jsonData = data else {
                 print("No data returned from internal server!")
@@ -213,7 +213,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         }
     }
     
-    private func wipe2016TechTalksVideos() {
+    fileprivate func wipe2016TechTalksVideos() {
         do {
             try realm.write {
                 realm.delete(realm.objects(Session.self).filter("id > 10000"))
@@ -223,7 +223,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         }
     }
     
-    private func updateSessionVideos() {
+    fileprivate func updateSessionVideos() {
         #if DEBUG
             NSLog("Updating videos...")
         #endif
@@ -324,7 +324,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         }
     }
     
-    private func updateSchedule() {
+    fileprivate func updateSchedule() {
         #if DEBUG
             NSLog("Updating schedule...")
         #endif
@@ -397,11 +397,11 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         }
     }
     
-    func indexTranscriptsForSessionsWithKeys(sessionKeys: [String]) {
+    func indexTranscriptsForSessionsWithKeys(_ sessionKeys: [String]) {
         guard !isIndexingTranscripts else { return }
         guard sessionKeys.count > 0 else { return }
         
-        transcriptIndexingProgress = NSProgress(totalUnitCount: Int64(sessionKeys.count))
+        transcriptIndexingProgress = Progress(totalUnitCount: Int64(sessionKeys.count))
         backgroundOperationQueue.underlyingQueue = bgThread
         backgroundOperationQueue.name = "WWDCDatabase background"
         
@@ -413,7 +413,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         }
     }
     
-    private func indexTranscriptForSession(session: Session) {
+    fileprivate func indexTranscriptForSession(_ session: Session) {
         // TODO: check if transcript has been updated and index It again if It has (https://github.com/ASCIIwwdc/asciiwwdc.com/issues/24)
         guard session.transcript == nil else { return }
         
@@ -464,7 +464,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         }
     }
     
-    private func reloadTranscriptsIfNeeded() {
+    fileprivate func reloadTranscriptsIfNeeded() {
         do {
             let bgRealm = try Realm()
             let validYears = WWDCEnvironment.reloadableYears
@@ -476,8 +476,8 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     }
     
     /// Update downloaded flag on the database for the session with the specified URL
-    func updateDownloadedStatusForSessionWithURL(url: String, downloaded: Bool) {
-        backgroundOperationQueue.addOperationWithBlock {
+    func updateDownloadedStatusForSessionWithURL(_ url: String, downloaded: Bool) {
+        backgroundOperationQueue.addOperation {
             do {
                 let bgRealm = try Realm()
                 if let session = bgRealm.objects(Session.self).filter("hdVideoURL = %@", url).first {
@@ -496,7 +496,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     }
     
     /// Update downloaded flag on the database for the session with the specified filename
-    func updateDownloadedStatusForSessionWithLocalFileName(filename: String, downloaded: Bool) {
+    func updateDownloadedStatusForSessionWithLocalFileName(_ filename: String, downloaded: Bool) {
         mainQ {
             guard let session = self.realm.objects(Session.self).filter("hdVideoURL contains %@", filename).first else {
                 print("Session not found with local filename \(filename)")

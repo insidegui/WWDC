@@ -10,7 +10,7 @@ import Cocoa
 
 class GridlessTableView: NSTableView {
 
-    override func drawGridInClipRect(clipRect: NSRect) {
+    override func drawGrid(inClipRect clipRect: NSRect) {
         return;
     }
     

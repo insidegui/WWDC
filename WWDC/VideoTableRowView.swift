@@ -10,39 +10,39 @@ import Cocoa
 
 class VideoTableRowView: NSTableRowView {
     
-    override var previousRowSelected: Bool {
+    override var isPreviousRowSelected: Bool {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            setNeedsDisplay(bounds)
         }
     }
     
-    override var nextRowSelected: Bool {
+    override var isNextRowSelected: Bool {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            setNeedsDisplay(bounds)
         }
     }
     
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
             updateSubviewsInterestedInSelectionState()
         }
     }
     
-    private var shouldDrawAsKey = true
+    fileprivate var shouldDrawAsKey = true
     
-    private func updateSubviewsInterestedInSelectionState() {
+    fileprivate func updateSubviewsInterestedInSelectionState() {
         guard subviews.count > 0 else { return }
         
         if let videoCell = subviews[0] as? VideoTableCellView {
-            videoCell.selected = selected
+            videoCell.selected = isSelected
             
             for subview in videoCell.subviews {
                 if let p = subview as? SessionProgressView {
-                    p.selected = selected
+                    p.selected = isSelected
                 }
             }
         } else if let scheduleCell = subviews[0] as? ScheduledSessionTableCellView {
-            scheduleCell.selected = selected
+            scheduleCell.selected = isSelected
         }
     }
     
@@ -50,22 +50,22 @@ class VideoTableRowView: NSTableRowView {
         return true
     }
     
-    override func viewWillMoveToWindow(newWindow: NSWindow?) {
-        let nc = NSNotificationCenter.defaultCenter()
+    override func viewWillMove(toWindow newWindow: NSWindow?) {
+        let nc = NotificationCenter.default
         
         nc.removeObserver(self)
         
-        super.viewWillMoveToWindow(newWindow)
+        super.viewWillMove(toWindow: newWindow)
         
-        nc.addObserverForName(NSWindowDidResignKeyNotification, object: newWindow, queue: nil) { _ in
-            self.setNeedsDisplayInRect(self.bounds)
+        nc.addObserver(forName: NSNotification.Name.NSWindowDidResignKey, object: newWindow, queue: nil) { _ in
+            self.setNeedsDisplay(self.bounds)
         }
-        nc.addObserverForName(NSWindowDidBecomeKeyNotification, object: newWindow, queue: nil) { _ in
-            self.setNeedsDisplayInRect(self.bounds)
+        nc.addObserver(forName: NSNotification.Name.NSWindowDidBecomeKey, object: newWindow, queue: nil) { _ in
+            self.setNeedsDisplay(self.bounds)
         }
     }
     
-    override func addSubview(aView: NSView) {
+    override func addSubview(_ aView: NSView) {
         super.addSubview(aView)
         
         updateSubviewsInterestedInSelectionState()
@@ -74,7 +74,7 @@ class VideoTableRowView: NSTableRowView {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        selected = false
+        isSelected = false
         
         themeBackgroundColor = Theme.WWDCTheme.fillColor
         themeSeparatorColor = Theme.WWDCTheme.separatorColor
@@ -82,44 +82,44 @@ class VideoTableRowView: NSTableRowView {
     
     var themeBackgroundColor = Theme.WWDCTheme.fillColor {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            setNeedsDisplay(bounds)
         }
     }
     
     var themeSeparatorColor = Theme.WWDCTheme.separatorColor {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            setNeedsDisplay(bounds)
         }
     }
     
-    override func drawSeparatorInRect(dirtyRect: NSRect) {
+    override func drawSeparator(in dirtyRect: NSRect) {
         let bottomRect = NSMakeRect(0, NSHeight(bounds)-1.0, NSWidth(bounds), 1.0)
         let topRect = NSMakeRect(0, 0.0, NSWidth(bounds), 1.0)
         
-        if selected {
+        if isSelected {
             if shouldDrawAsKey {
-                themeBackgroundColor.colorByAdjustingBrightnessWithFactor(-0.2).colorWithAlphaComponent(0.8).setFill()
+                themeBackgroundColor.adjustingBrightness(withFactor: -0.2).withAlphaComponent(0.8).setFill()
             } else {
-                themeSeparatorColor.colorByAdjustingBrightnessWithFactor(-0.2).colorWithAlphaComponent(0.8).setFill()
+                themeSeparatorColor.adjustingBrightness(withFactor: -0.2).withAlphaComponent(0.8).setFill()
             }
             
-            NSRectFillUsingOperation(topRect, .CompositeOverlay)
+            NSRectFillUsingOperation(topRect, .overlay)
         } else {
             Theme.WWDCTheme.separatorColor.setFill()
         }
         
-        if !nextRowSelected {
-            NSRectFillUsingOperation(bottomRect, .CompositeOverlay)
+        if !isNextRowSelected {
+            NSRectFillUsingOperation(bottomRect, .overlay)
         }
     }
     
-    override func drawSelectionInRect(dirtyRect: NSRect) {
+    override func drawSelection(in dirtyRect: NSRect) {
         if shouldDrawAsKey {
-            themeBackgroundColor.colorByAdjustingBrightnessWithFactor(-0.1).colorWithAlphaComponent(0.8).setFill()
+            themeBackgroundColor.adjustingBrightness(withFactor: -0.1).withAlphaComponent(0.8).setFill()
         } else {
-            themeSeparatorColor.colorWithAlphaComponent(0.8).setFill()
+            themeSeparatorColor.withAlphaComponent(0.8).setFill()
         }
-        NSRectFillUsingOperation(dirtyRect, .CompositeOverlay)
+        NSRectFillUsingOperation(dirtyRect, .overlay)
     }
     
 }

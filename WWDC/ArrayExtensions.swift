@@ -8,11 +8,11 @@
 
 import Foundation
 
-extension RangeReplaceableCollectionType where Generator.Element: Equatable {
-    mutating func remove(object: Generator.Element) {
-        guard let index = indexOf(object)
+extension RangeReplaceableCollection where Iterator.Element: Equatable {
+    mutating func remove(_ object: Iterator.Element) {
+        guard let index = index(of: object)
             else { return }
 
-        self.removeAtIndex(index)
+        self.remove(at: index)
     }
 }

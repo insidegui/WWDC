@@ -29,7 +29,7 @@ class SessionProgressView: NSView {
         }
     }
     
-    private func updateUI() {
+    fileprivate func updateUI() {
         CATransaction.begin()
         CATransaction.setAnimationDuration(0.0)
         
@@ -57,11 +57,11 @@ class SessionProgressView: NSView {
         CATransaction.commit()
     }
 
-    private var bgShapeLayer: CAShapeLayer!
-    private var shapeLayer: CAShapeLayer!
-    private var circlePath: CGMutablePathRef!
-    private var halfCirclePath: CGMutablePathRef!
-    private var starPath: CGMutablePathRef!
+    fileprivate var bgShapeLayer: CAShapeLayer!
+    fileprivate var shapeLayer: CAShapeLayer!
+    fileprivate var circlePath: CGMutablePath!
+    fileprivate var halfCirclePath: CGMutablePath!
+    fileprivate var starPath: CGMutablePath!
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -73,35 +73,35 @@ class SessionProgressView: NSView {
         commonInit()
     }
     
-    private var strokeColor: NSColor {
+    fileprivate var strokeColor: NSColor {
         get {
-            return selected ? Theme.WWDCTheme.fillColor.darkerColor : Theme.WWDCTheme.fillColor
+            return selected ? Theme.WWDCTheme.fillColor.darker : Theme.WWDCTheme.fillColor
         }
     }
     
-    private var fillColor: NSColor {
+    fileprivate var fillColor: NSColor {
         get {
-            return selected ? Theme.WWDCTheme.backgroundColor.colorWithAlphaComponent(0.9) : Theme.WWDCTheme.fillColor
+            return selected ? Theme.WWDCTheme.backgroundColor.withAlphaComponent(0.9) : Theme.WWDCTheme.fillColor
         }
     }
     
-    private var bgColor: NSColor {
+    fileprivate var bgColor: NSColor {
         get {
-            return selected ? Theme.WWDCTheme.fillColor : Theme.WWDCTheme.backgroundColor.colorWithAlphaComponent(0.9)
+            return selected ? Theme.WWDCTheme.fillColor : Theme.WWDCTheme.backgroundColor.withAlphaComponent(0.9)
         }
     }
     
-    private func commonInit() {
+    fileprivate func commonInit() {
         wantsLayer = true
         layer = CALayer()
         
         shapeLayer = CAShapeLayer()
-        shapeLayer.frame = CGRectInset(bounds, 4.0, 4.0)
-        shapeLayer.autoresizingMask = [.LayerWidthSizable, .LayerHeightSizable]
+        shapeLayer.frame = bounds.insetBy(dx: 4.0, dy: 4.0)
+        shapeLayer.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
 
         bgShapeLayer = CAShapeLayer()
         bgShapeLayer.frame = shapeLayer.frame
-        bgShapeLayer.autoresizingMask = [.LayerWidthSizable, .LayerHeightSizable]
+        bgShapeLayer.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
         bgShapeLayer.lineWidth = 1.0
         
         updateColors()
@@ -114,27 +114,27 @@ class SessionProgressView: NSView {
         layer?.addSublayer(shapeLayer)
     }
     
-    private func updateColors() {
+    fileprivate func updateColors() {
         guard bgShapeLayer != nil || shapeLayer != nil else { return }
         
         CATransaction.begin()
         CATransaction.setAnimationDuration(0.0)
-        bgShapeLayer.strokeColor = strokeColor.CGColor
-        shapeLayer.fillColor = fillColor.CGColor
-        bgShapeLayer.fillColor = bgColor.CGColor
+        bgShapeLayer.strokeColor = strokeColor.cgColor
+        shapeLayer.fillColor = fillColor.cgColor
+        bgShapeLayer.fillColor = bgColor.cgColor
         CATransaction.commit()
     }
     
-    private func preparePaths() {
-        let shapeRect = CGRectInset(shapeLayer.bounds, 1.0, 1.0)
+    fileprivate func preparePaths() {
+        let shapeRect = shapeLayer.bounds.insetBy(dx: 1.0, dy: 1.0)
         
-        circlePath = CGPathCreateMutable()
+        circlePath = CGMutablePath()
         CGPathAddEllipseInRect(circlePath, nil, shapeRect)
         
-        halfCirclePath = CGPathCreateMutable()
-        CGPathAddArc(halfCirclePath, nil, CGRectGetMidX(shapeRect), CGRectGetMidY(shapeRect), CGRectGetWidth(shapeRect)/2.0, -90.degreesToRadians, -270.degreesToRadians, true)
+        halfCirclePath = CGMutablePath()
+        CGPathAddArc(halfCirclePath, nil, shapeRect.midX, shapeRect.midY, shapeRect.width/2.0, -90.degreesToRadians, -270.degreesToRadians, true)
         
-        starPath = CGPathCreateMutable()
+        starPath = CGMutablePath()
         let a = (2 * M_PI) / 10
         let starRadius = Int(shapeLayer.bounds.size.width/2)
         let span = Double(shapeLayer.bounds.size.width/2)
@@ -150,10 +150,10 @@ class SessionProgressView: NSView {
                 CGPathAddLineToPoint(starPath, nil, x, y)
             }
         }
-        CGPathCloseSubpath(starPath)
+        starPath.closeSubpath()
     }
     
-    override var flipped: Bool {
+    override var isFlipped: Bool {
         get {
             return true
         }

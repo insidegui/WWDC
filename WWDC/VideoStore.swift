@@ -20,12 +20,12 @@ public let VideoStoreNotificationDownloadProgressChanged = "VideoStoreNotificati
 private let _SharedVideoStore = VideoStore()
 private let _BackgroundSessionIdentifier = "WWDC Video Downloader"
 
-class VideoStore : NSObject, NSURLSessionDownloadDelegate {
+class VideoStore : NSObject, URLSessionDownloadDelegate {
 
-    private let configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(_BackgroundSessionIdentifier)
-    private var backgroundSession: NSURLSession!
-    private var downloadTasks: [String : NSURLSessionDownloadTask] = [:]
-    private let defaults = NSUserDefaults.standardUserDefaults()
+    fileprivate let configuration = URLSessionConfiguration.background(withIdentifier: _BackgroundSessionIdentifier)
+    fileprivate var backgroundSession: Foundation.URLSession!
+    fileprivate var downloadTasks: [String : URLSessionDownloadTask] = [:]
+    fileprivate let defaults = UserDefaults.standard
     
     class func SharedStore() -> VideoStore
     {
@@ -34,21 +34,21 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     
     override init() {
         super.init()
-        backgroundSession = NSURLSession(configuration: configuration, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        backgroundSession = Foundation.URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
     }
     
     func initialize() {
         backgroundSession.getTasksWithCompletionHandler { _, _, pendingTasks in
             for task in pendingTasks {
-                if let key = task.originalRequest?.URL!.absoluteString {
+                if let key = task.originalRequest?.url!.absoluteString {
                     self.downloadTasks[key] = task
                 }
             }
         }
         
-        NSNotificationCenter.defaultCenter().addObserverForName(LocalVideoStoragePathPreferenceChangedNotification, object: nil, queue: nil) { _ in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: LocalVideoStoragePathPreferenceChangedNotification), object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
-            NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadedFilesChangedNotification, object: nil)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: VideoStoreDownloadedFilesChangedNotification), object: nil)
         }
         
         monitorDownloadsFolder()
@@ -56,56 +56,56 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
     
     // MARK: Public interface
 	
-	func allTasks() -> [NSURLSessionDownloadTask] {
+	func allTasks() -> [URLSessionDownloadTask] {
 		return Array(self.downloadTasks.values)
 	}
 	
-    func download(url: String) {
+    func download(_ url: String) {
         if isDownloading(url) || hasVideo(url) {
             return
         }
         
-        let task = backgroundSession.downloadTaskWithURL(NSURL(string: url)!)
-		if let key = task.originalRequest?.URL!.absoluteString {
+        let task = backgroundSession.downloadTask(with: URL(string: url)!)
+		if let key = task.originalRequest?.url!.absoluteString {
 			self.downloadTasks[key] = task
 		}
         task.resume()
 		
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadStarted, object: url)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: VideoStoreNotificationDownloadStarted), object: url)
     }
     
-    func pauseDownload(url: String) -> Bool {
+    func pauseDownload(_ url: String) -> Bool {
         if let task = downloadTasks[url] {
 			task.suspend()
-			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadPaused, object: url)
+			NotificationCenter.default.post(name: Notification.Name(rawValue: VideoStoreNotificationDownloadPaused), object: url)
 			return true
         }
 		print("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
 		return false
     }
 	
-	func resumeDownload(url: String) -> Bool {
+	func resumeDownload(_ url: String) -> Bool {
 		if let task = downloadTasks[url] {
 			task.resume()
-			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadResumed, object: url)
+			NotificationCenter.default.post(name: Notification.Name(rawValue: VideoStoreNotificationDownloadResumed), object: url)
 			return true
 		}
 		print("VideoStore was asked to resume downloading URL \(url), but there's no task for that URL")
 		return false
 	}
 	
-	func cancelDownload(url: String) -> Bool {
+	func cancelDownload(_ url: String) -> Bool {
 		if let task = downloadTasks[url] {
 			task.cancel()
-			self.downloadTasks.removeValueForKey(url)
-			NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadCancelled, object: url)
+			self.downloadTasks.removeValue(forKey: url)
+			NotificationCenter.default.post(name: Notification.Name(rawValue: VideoStoreNotificationDownloadCancelled), object: url)
 			return true
 		}
 		print("VideoStore was asked to cancel downloading URL \(url), but there's no task for that URL")
 		return false
 	}
 	
-    func isDownloading(url: String) -> Bool {
+    func isDownloading(_ url: String) -> Bool {
         let downloading = downloadTasks.keys.filter { taskURL in
             return url == taskURL
         }
@@ -113,83 +113,83 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         return (downloading.count > 0)
     }
     
-    func localVideoPath(remoteURL: String) -> String {
-        return (Preferences.SharedPreferences().localVideoStoragePath as NSString).stringByAppendingPathComponent((remoteURL as NSString).lastPathComponent)
+    func localVideoPath(_ remoteURL: String) -> String {
+        return (Preferences.SharedPreferences().localVideoStoragePath as NSString).appendingPathComponent((remoteURL as NSString).lastPathComponent)
     }
     
-    func localVideoAbsoluteURLString(remoteURL: String) -> String {
-        return NSURL(fileURLWithPath: localVideoPath(remoteURL)).absoluteString
+    func localVideoAbsoluteURLString(_ remoteURL: String) -> String {
+        return URL(fileURLWithPath: localVideoPath(remoteURL)).absoluteString
     }
     
-    func hasVideo(url: String) -> Bool {
-        return (NSFileManager.defaultManager().fileExistsAtPath(localVideoPath(url)))
+    func hasVideo(_ url: String) -> Bool {
+        return (FileManager.default.fileExists(atPath: localVideoPath(url)))
     }
     
     enum RemoveDownloadResponse {
-        case NotDownloaded, Removed, Error(_:ErrorType)
+        case notDownloaded, removed, error(_:Error)
     }
     
-    func removeDownload(url: String) -> RemoveDownloadResponse {
+    func removeDownload(_ url: String) -> RemoveDownloadResponse {
         if isDownloading(url) {
             cancelDownload(url)
-            return .Removed
+            return .removed
         }
         
         if hasVideo(url) {
             let path = localVideoPath(url)
             let absolute = localVideoAbsoluteURLString(url)
             do {
-                try NSFileManager.defaultManager().removeItemAtPath(path)
+                try FileManager.default.removeItem(atPath: path)
                 WWDCDatabase.sharedDatabase.updateDownloadedStatusForSessionWithURL(absolute, downloaded: false)
-                return .Removed
+                return .removed
             } catch let e {
-                return .Error(e)
+                return .error(e)
             }
         } else {
-            return .NotDownloaded
+            return .notDownloaded
         }
     }
     
     // MARK: URL Session
     
-    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
-        let originalURL = downloadTask.originalRequest!.URL!
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        let originalURL = downloadTask.originalRequest!.url!
         let originalAbsoluteURLString = originalURL.absoluteString
 
-        let fileManager = NSFileManager.defaultManager()
+        let fileManager = FileManager.default
         
-        if (fileManager.fileExistsAtPath(Preferences.SharedPreferences().localVideoStoragePath) == false) {
+        if (fileManager.fileExists(atPath: Preferences.SharedPreferences().localVideoStoragePath) == false) {
             do {
-                try fileManager.createDirectoryAtPath(Preferences.SharedPreferences().localVideoStoragePath, withIntermediateDirectories: false, attributes: nil)
+                try fileManager.createDirectory(atPath: Preferences.SharedPreferences().localVideoStoragePath, withIntermediateDirectories: false, attributes: nil)
             } catch _ {
             }
         }
         
-        let localURL = NSURL(fileURLWithPath: localVideoPath(originalAbsoluteURLString))
+        let localURL = URL(fileURLWithPath: localVideoPath(originalAbsoluteURLString))
         
         do {
-            try fileManager.moveItemAtURL(location, toURL: localURL)
+            try fileManager.moveItem(at: location, to: localURL)
             WWDCDatabase.sharedDatabase.updateDownloadedStatusForSessionWithURL(originalAbsoluteURLString, downloaded: true)
         } catch _ {
             print("VideoStore was unable to move \(location) to \(localURL)")
         }
         
-        downloadTasks.removeValueForKey(originalAbsoluteURLString)
+        downloadTasks.removeValue(forKey: originalAbsoluteURLString)
         
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadFinished, object: originalAbsoluteURLString)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: VideoStoreNotificationDownloadFinished), object: originalAbsoluteURLString)
     }
     
-    func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        let originalURL = downloadTask.originalRequest!.URL!.absoluteString
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        let originalURL = downloadTask.originalRequest!.url!.absoluteString
 
         let info = ["totalBytesWritten": Int(totalBytesWritten), "totalBytesExpectedToWrite": Int(totalBytesExpectedToWrite)]
-        NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreNotificationDownloadProgressChanged, object: originalURL, userInfo: info)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: VideoStoreNotificationDownloadProgressChanged), object: originalURL, userInfo: info)
     }
     
     // MARK: File observation
     
-    private var folderMonitor: DTFolderMonitor!
-    private var existingVideoFiles = [String]()
+    fileprivate var folderMonitor: DTFolderMonitor!
+    fileprivate var existingVideoFiles = [String]()
     
     func monitorDownloadsFolder() {
         if folderMonitor != nil {
@@ -200,17 +200,17 @@ class VideoStore : NSObject, NSURLSessionDownloadDelegate {
         let videosPath = Preferences.SharedPreferences().localVideoStoragePath
         enumerateVideoFiles(videosPath)
         
-        folderMonitor = DTFolderMonitor(forURL: NSURL(fileURLWithPath: videosPath)) {
+        folderMonitor = DTFolderMonitor(for: URL(fileURLWithPath: videosPath)) {
             self.enumerateVideoFiles(videosPath)
             
-            NSNotificationCenter.defaultCenter().postNotificationName(VideoStoreDownloadedFilesChangedNotification, object: nil)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: VideoStoreDownloadedFilesChangedNotification), object: nil)
         }
         folderMonitor.startMonitoring()
     }
     
     /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
-    private func enumerateVideoFiles(path: String) {
-        guard let enumerator = NSFileManager.defaultManager().enumeratorAtPath(path) else { return }
+    fileprivate func enumerateVideoFiles(_ path: String) {
+        guard let enumerator = FileManager.default.enumerator(atPath: path) else { return }
         guard let files = enumerator.allObjects as? [String] else { return }
         
         // existing/added files

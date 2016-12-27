@@ -13,7 +13,7 @@ class SessionAdapter: JSONAdapter {
     
     typealias ModelType = Session
     
-    static func adapt(json: JSON) -> ModelType {
+    static func adapt(_ json: JSON) -> ModelType {
         let session = Session()
         
         session.id = json["id"].intValue

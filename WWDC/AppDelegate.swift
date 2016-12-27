@@ -15,16 +15,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow?
 	
-    private var downloadListWindowController: DownloadListWindowController?
-    private var preferencesWindowController: PreferencesWindowController?
+    fileprivate var downloadListWindowController: DownloadListWindowController?
+    fileprivate var preferencesWindowController: PreferencesWindowController?
     
-    func applicationOpenUntitledFile(sender: NSApplication) -> Bool {
+    func applicationOpenUntitledFile(_ sender: NSApplication) -> Bool {
         window?.makeKeyAndOrderFront(nil)
         return false
     }
 
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
-        NSUserDefaults.standardUserDefaults().registerDefaults(["NSApplicationCrashOnExceptions": true])
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
         
         // prefetch info for the about window
         About.sharedInstance.load()
@@ -33,7 +33,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         LiveEventObserver.SharedObserver().start()
         
         // Keep a reference to the main application window
-        window = NSApplication.sharedApplication().windows.last 
+        window = NSApplication.shared().windows.last 
         
         // continue any paused downloads
         VideoStore.SharedStore().initialize()
@@ -45,20 +45,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         showCourtesyDialogs()
     }
     
-    func applicationWillFinishLaunching(notification: NSNotification) {
+    func applicationWillFinishLaunching(_ notification: Notification) {
         // register custom URL scheme handler
         URLSchemeHandler.SharedHandler().register()
     }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
+    func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
     
-    @IBAction func checkForUpdates(sender: AnyObject?) {
-        SUUpdater.sharedUpdater().checkForUpdates(sender)
+    @IBAction func checkForUpdates(_ sender: AnyObject?) {
+        SUUpdater.shared().checkForUpdates(sender)
     }
     
-    @IBAction func showDownloadsWindow(sender: AnyObject?) {
+    @IBAction func showDownloadsWindow(_ sender: AnyObject?) {
         if downloadListWindowController == nil {
             downloadListWindowController = DownloadListWindowController()
         }
@@ -66,7 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         downloadListWindowController?.showWindow(self)
     }
     
-    @IBAction func showPreferencesWindow(sender: AnyObject?) {
+    @IBAction func showPreferencesWindow(_ sender: AnyObject?) {
         if preferencesWindowController == nil {
             preferencesWindowController = PreferencesWindowController()
         }
@@ -76,19 +76,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // MARK: - Courtesy Dialogs
     
-    private func showCourtesyDialogs() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(WWDCWeekDidStart), name: WWDCWeekDidStartNotification, object: nil)
+    fileprivate func showCourtesyDialogs() {
+        NotificationCenter.default.addObserver(self, selector: #selector(WWDCWeekDidStart), name: NSNotification.Name(rawValue: WWDCWeekDidStartNotification), object: nil)
         
         NewWWDCGreeter().presentAutomaticRefreshSuggestionIfAppropriate()
     }
     
-    @objc private func WWDCWeekDidStart() {
+    @objc fileprivate func WWDCWeekDidStart() {
         NewWWDCGreeter().presentAutomaticRefreshSuggestionIfAppropriate()
     }
     
     // MARK: - About Panel
     
-    private lazy var aboutWindowController: AboutWindowController = {
+    fileprivate lazy var aboutWindowController: AboutWindowController = {
         var aboutWC = AboutWindowController(infoText: About.sharedInstance.infoText)
         
         About.sharedInstance.infoTextChangedCallback = { newText in
@@ -98,7 +98,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return aboutWC
     }()
     
-    @IBAction func showAboutWindow(sender: AnyObject?) {
+    @IBAction func showAboutWindow(_ sender: AnyObject?) {
         aboutWindowController.showWindow(sender)
     }
 

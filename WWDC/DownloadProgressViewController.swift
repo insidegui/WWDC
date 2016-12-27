@@ -10,11 +10,11 @@ import Cocoa
 import WWDCAppKit
 
 enum DownloadProgressViewButtonState : Int {
-    case Invalid
-	case NoDownload
-	case Downloaded
-	case Downloading
-	case Paused
+    case invalid
+	case noDownload
+	case downloaded
+	case downloading
+	case paused
 }
 
 class DownloadProgressViewController: NSViewController {
@@ -28,13 +28,13 @@ class DownloadProgressViewController: NSViewController {
 	@IBOutlet var downloadButton: NSButton!
 	@IBOutlet var progressIndicator: GRActionableProgressIndicator?
 	
-	private var downloadStartedHndl: AnyObject?
-	private var downloadFinishedHndl: AnyObject?
-	private var downloadChangedHndl: AnyObject?
-	private var downloadCancelledHndl: AnyObject?
-	private var downloadPausedHndl: AnyObject?
-	private var downloadResumedHndl: AnyObject?
-	private var subscribed: Bool = false
+	fileprivate var downloadStartedHndl: AnyObject?
+	fileprivate var downloadFinishedHndl: AnyObject?
+	fileprivate var downloadChangedHndl: AnyObject?
+	fileprivate var downloadCancelledHndl: AnyObject?
+	fileprivate var downloadPausedHndl: AnyObject?
+	fileprivate var downloadResumedHndl: AnyObject?
+	fileprivate var subscribed: Bool = false
 	
 	var downloadFinishedCallback: () -> () = {}
 	
@@ -44,71 +44,71 @@ class DownloadProgressViewController: NSViewController {
 	}
 	
 	deinit {
-		NSNotificationCenter.defaultCenter().removeObserver(self.downloadStartedHndl!)
-		NSNotificationCenter.defaultCenter().removeObserver(self.downloadFinishedHndl!)
-		NSNotificationCenter.defaultCenter().removeObserver(self.downloadChangedHndl!)
-		NSNotificationCenter.defaultCenter().removeObserver(self.downloadCancelledHndl!)
-		NSNotificationCenter.defaultCenter().removeObserver(self.downloadPausedHndl!)
-		NSNotificationCenter.defaultCenter().removeObserver(self.downloadResumedHndl!)
+		NotificationCenter.default.removeObserver(self.downloadStartedHndl!)
+		NotificationCenter.default.removeObserver(self.downloadFinishedHndl!)
+		NotificationCenter.default.removeObserver(self.downloadChangedHndl!)
+		NotificationCenter.default.removeObserver(self.downloadCancelledHndl!)
+		NotificationCenter.default.removeObserver(self.downloadPausedHndl!)
+		NotificationCenter.default.removeObserver(self.downloadResumedHndl!)
 	}
 	
-	private func updateUI()
+	fileprivate func updateUI()
 	{
         guard session != nil else {
-            updateButtonVisibility(.Invalid)
+            updateButtonVisibility(.invalid)
             return
         }
         
         progressIndicator?.action = #selector(AppDelegate.showDownloadsWindow(_:))
 
         if session.hd_url != nil {
-            view.hidden = false
+            view.isHidden = false
             updateDownloadStatus()
         } else {
-            view.hidden = true
+            view.isHidden = true
         }
 	}
 	
-	private func updateButtonVisibility(visibility: DownloadProgressViewButtonState) {
+	fileprivate func updateButtonVisibility(_ visibility: DownloadProgressViewButtonState) {
 		switch (visibility) {
-        case .Invalid:
+        case .invalid:
             self.progressIndicator?.hidden = true
-            self.downloadButton.hidden = true
-		case .NoDownload:
+            self.downloadButton.isHidden = true
+		case .noDownload:
 			self.progressIndicator?.hidden = true
-			self.downloadButton.hidden = false
-		case .Downloaded:
+			self.downloadButton.isHidden = false
+		case .downloaded:
 			self.progressIndicator?.hidden = true
-			self.downloadButton.hidden = true
-		case .Downloading:
+			self.downloadButton.isHidden = true
+		case .downloading:
 			self.progressIndicator?.hidden = false
-			self.downloadButton.hidden = true
-		case .Paused:
+			self.downloadButton.isHidden = true
+		case .paused:
             self.progressIndicator?.hidden = false
-			self.downloadButton.hidden = true
+			self.downloadButton.isHidden = true
 		}
 	}
 	
-	private func subscribeForNotifications() {
-		let nc = NSNotificationCenter.defaultCenter()
-		self.downloadStartedHndl = nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+	fileprivate func subscribeForNotifications() {
+		let nc = NotificationCenter.default
+		self.downloadStartedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadStarted), object: nil, queue: OperationQueue.main) { note in
 			if !self.isThisNotificationForMe(note) {
 				return
 			}
-			self.updateButtonVisibility(.Downloading)
+			self.updateButtonVisibility(.downloading)
 		}
-		self.downloadFinishedHndl = nc.addObserverForName(VideoStoreNotificationDownloadFinished, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+		self.downloadFinishedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadFinished), object: nil, queue: OperationQueue.main) { note in
 			if !self.isThisNotificationForMe(note) {
 				return
 			}
-			self.updateButtonVisibility(.Downloaded)
+			self.updateButtonVisibility(.downloaded)
 			self.downloadFinishedCallback()
 		}
-		self.downloadChangedHndl = nc.addObserverForName(VideoStoreNotificationDownloadProgressChanged, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+		self.downloadChangedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadProgressChanged), object: nil, queue: OperationQueue.main) { note in
 			if !self.isThisNotificationForMe(note) {
 				return
 			}
-			self.updateButtonVisibility(.Downloading)
+			self.updateButtonVisibility(.downloading)
 			if let info = note.userInfo {
 				if let totalBytesExpectedToWrite = info["totalBytesExpectedToWrite"] as? Int {
 					self.progressIndicator?.maxValue = Double(totalBytesExpectedToWrite)
@@ -118,35 +118,35 @@ class DownloadProgressViewController: NSViewController {
 				}
 			}
 		}
-		self.downloadCancelledHndl = nc.addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-			self.updateButtonVisibility(.NoDownload)
+		self.downloadCancelledHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadCancelled), object: nil, queue: OperationQueue.main) { note in
+			self.updateButtonVisibility(.noDownload)
 		}
-		self.downloadPausedHndl = nc.addObserverForName(VideoStoreNotificationDownloadPaused, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-			self.updateButtonVisibility(.Paused)
+		self.downloadPausedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadPaused), object: nil, queue: OperationQueue.main) { note in
+			self.updateButtonVisibility(.paused)
 		}
-		self.downloadResumedHndl = nc.addObserverForName(VideoStoreNotificationDownloadResumed, object: nil, queue: NSOperationQueue.mainQueue()) { note in
-			self.updateButtonVisibility(.Downloading)
+		self.downloadResumedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadResumed), object: nil, queue: OperationQueue.main) { note in
+			self.updateButtonVisibility(.downloading)
 		}
 		self.subscribed = true
 	}
 	
-	private func updateDownloadStatus()
+	fileprivate func updateDownloadStatus()
 	{
 		if self.subscribed == false {
 			self.subscribeForNotifications()
 		}
 		if VideoStore.SharedStore().isDownloading(session.hd_url!) {
-			self.updateButtonVisibility(.Downloading)
+			self.updateButtonVisibility(.downloading)
 		} else {
 			if VideoStore.SharedStore().hasVideo(session.hd_url!) {
-				self.updateButtonVisibility(.Downloaded)
+				self.updateButtonVisibility(.downloaded)
 			} else {
-				self.updateButtonVisibility(.NoDownload)
+				self.updateButtonVisibility(.noDownload)
 			}
 		}
 	}
 	
-	private func isThisNotificationForMe(note: NSNotification!) -> Bool {
+	fileprivate func isThisNotificationForMe(_ note: Notification!) -> Bool {
 		// we don't have a downloadable session, so this is clearly not for us
         if session == nil {
             return false
@@ -169,7 +169,7 @@ class DownloadProgressViewController: NSViewController {
 		return true
 	}
 	
-	@IBAction func download(sender: NSButton) {
+	@IBAction func download(_ sender: NSButton) {
         if session == nil {
             return
         }

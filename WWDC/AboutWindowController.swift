@@ -10,11 +10,11 @@ import Cocoa
 
 class AboutWindowController: NSWindowController {
 
-    @IBOutlet weak private var applicationNameLabel: NSTextField!
-    @IBOutlet weak private var versionLabel: NSTextField!
+    @IBOutlet weak fileprivate var applicationNameLabel: NSTextField!
+    @IBOutlet weak fileprivate var versionLabel: NSTextField!
     @IBOutlet weak var contributorsLabel: NSTextField!
-    @IBOutlet weak private var creatorLabel: NSTextField!
-    @IBOutlet weak private var licenseLabel: NSTextField!
+    @IBOutlet weak fileprivate var creatorLabel: NSTextField!
+    @IBOutlet weak fileprivate var licenseLabel: NSTextField!
 
     var infoText: String? {
         didSet {
@@ -32,7 +32,7 @@ class AboutWindowController: NSWindowController {
         super.windowDidLoad()
 
         // close the window when the escape key is pressed
-        NSEvent.addLocalMonitorForEventsMatchingMask(.KeyDownMask) { event in
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
             guard event.keyCode == 53 else { return event }
             
             self.closeAnimated()
@@ -40,12 +40,12 @@ class AboutWindowController: NSWindowController {
             return nil
         }
         
-        window?.collectionBehavior = [.Transient, .IgnoresCycle]
-        window?.movable = false
+        window?.collectionBehavior = [.transient, .ignoresCycle]
+        window?.isMovable = false
         window?.titlebarAppearsTransparent = true
-        window?.titleVisibility = .Hidden
+        window?.titleVisibility = .hidden
         
-        let info = NSBundle.mainBundle().infoDictionary!
+        let info = Bundle.main.infoDictionary!
         
         if let appName = info["CFBundleName"] as? String {
             applicationNameLabel.stringValue = appName
@@ -78,7 +78,7 @@ class AboutWindowController: NSWindowController {
         }
     }
     
-    override func showWindow(sender: AnyObject?) {
+    override func showWindow(_ sender: Any?) {
         window?.center()
         window?.alphaValue = 0.0
         
@@ -89,8 +89,8 @@ class AboutWindowController: NSWindowController {
     
     func closeAnimated() {
         NSAnimationContext.beginGrouping()
-        NSAnimationContext.currentContext().duration = 0.4
-        NSAnimationContext.currentContext().completionHandler = {
+        NSAnimationContext.current().duration = 0.4
+        NSAnimationContext.current().completionHandler = {
             self.close()
         }
         window?.animator().alphaValue = 0.0

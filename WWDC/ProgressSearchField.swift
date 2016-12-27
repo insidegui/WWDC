@@ -7,19 +7,32 @@
 //
 
 import Cocoa
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 class ProgressSearchField: NSSearchField {
 
-    var progress: NSProgress? {
+    var progress: Progress? {
         didSet {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 oldValue?.removeObserver(self, forKeyPath: "fractionCompleted")
                 
                 guard self.progress != nil else {
                     self.showNormalState()
                     return
                 }
-                self.progress?.addObserver(self, forKeyPath: "fractionCompleted", options: [.Initial, .New], context: nil)
+                self.progress?.addObserver(self, forKeyPath: "fractionCompleted", options: [.initial, .new], context: nil)
                 self.setNeedsDisplay()
             }
         }
@@ -30,9 +43,9 @@ class ProgressSearchField: NSSearchField {
         return ProgressSearchFieldCell.self
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "fractionCompleted" {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 if self.progress?.fractionCompleted < 1.0 {
                     self.showLoadingState()
                 } else {
@@ -41,25 +54,25 @@ class ProgressSearchField: NSSearchField {
                 self.setNeedsDisplay()
             }
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
     
-    @objc private func showLoadingState() {
+    @objc fileprivate func showLoadingState() {
         placeholderString = "Indexing..."
-        enabled = false
+        isEnabled = false
     }
     
-    @objc private func showNormalState() {
+    @objc fileprivate func showNormalState() {
         placeholderString = nil
-        enabled = true
+        isEnabled = true
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(showLoadingState), name: TranscriptIndexingDidStartNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(showNormalState), name: TranscriptIndexingDidStopNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showLoadingState), name: NSNotification.Name(rawValue: TranscriptIndexingDidStartNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showNormalState), name: NSNotification.Name(rawValue: TranscriptIndexingDidStopNotification), object: nil)
         
         showNormalState()
     }
@@ -68,7 +81,7 @@ class ProgressSearchField: NSSearchField {
         guard let window = self.window else { return false }
         guard let responder = window.firstResponder as? NSTextView else { return false }
         
-        return window.firstResponder.isKindOfClass(NSTextView.self) && window.fieldEditor(false, forObject: self) != nil && self.isEqualTo(responder.delegate)
+        return window.firstResponder.isKind(of: NSTextView.self) && window.fieldEditor(false, for: self) != nil && self.isEqual(to: responder.delegate)
     }
     
     deinit {
@@ -80,14 +93,14 @@ class ProgressSearchField: NSSearchField {
 class ProgressSearchFieldCell: NSSearchFieldCell {
     
     
-    override func drawInteriorWithFrame(cellFrame: NSRect, inView controlView: NSView) {
-        super.drawInteriorWithFrame(cellFrame, inView: controlView)
+    override func drawInterior(withFrame cellFrame: NSRect, in controlView: NSView) {
+        super.drawInterior(withFrame: cellFrame, in: controlView)
         
         guard let searchField = controlView as? ProgressSearchField else { return }
         guard let progress = searchField.progress else { return }
         guard progress.fractionCompleted < 1.0 else { return }
         
-        NSGraphicsContext.currentContext()?.saveGraphicsState()
+        NSGraphicsContext.current()?.saveGraphicsState()
 
         let progressArea = NSInsetRect(cellFrame, 0, 1.0)
         let progressClipPath = NSBezierPath(roundedRect: progressArea, xRadius: 4.0, yRadius: 4.0)
@@ -97,7 +110,7 @@ class ProgressSearchFieldCell: NSSearchFieldCell {
         searchField.progressColor.setFill()
         NSRectFill(progressFill)
         
-        NSGraphicsContext.currentContext()?.restoreGraphicsState()
+        NSGraphicsContext.current()?.restoreGraphicsState()
     }
     
 }

@@ -11,28 +11,28 @@ import RealmSwift
 
 class TranscriptSearchResultsController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
-    var playCallback: ((startTime: Double) -> Void)?
+    var playCallback: ((_ startTime: Double) -> Void)?
     
     var lines: Results<TranscriptLine>? {
         didSet {
             guard lines != nil && lines?.count > 0 else {
-                view.hidden = true
+                view.isHidden = true
                 return
             }
             
-            view.hidden = false
+            view.isHidden = false
             tableView.reloadData()
         }
     }
     
     @IBOutlet weak var tableView: NSTableView! {
         didSet {
-            tableView.setDelegate(self)
-            tableView.setDataSource(self)
+            tableView.delegate = self
+            tableView.dataSource = self
         }
     }
     
-    private struct Storyboard {
+    fileprivate struct Storyboard {
         static let transcriptLineCellIdentifier = "transcriptLine"
     }
     
@@ -51,12 +51,12 @@ class TranscriptSearchResultsController: NSViewController, NSTableViewDelegate, 
     
     // MARK: Table View
     
-    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+    func numberOfRows(in tableView: NSTableView) -> Int {
         return lines?.count ?? 0
     }
     
-    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cell = tableView.makeViewWithIdentifier(Storyboard.transcriptLineCellIdentifier, owner: tableView) as! TranscriptLineTableCellView
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        let cell = tableView.make(withIdentifier: Storyboard.transcriptLineCellIdentifier, owner: tableView) as! TranscriptLineTableCellView
         
         cell.line = lines![row]
         cell.playCallback = playCallback

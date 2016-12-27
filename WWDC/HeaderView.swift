@@ -10,10 +10,10 @@ import Cocoa
 
 class HeaderView: NSView {
 
-    override func drawRect(dirtyRect: NSRect) {
-        super.drawRect(dirtyRect)
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
 
-        NSColor.whiteColor().set()
+        NSColor.white.set()
         NSRectFill(dirtyRect)
     }
     

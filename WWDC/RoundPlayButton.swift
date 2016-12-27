@@ -11,13 +11,13 @@ import WWDCAppKit
 
 class RoundPlayButton: NSButton {
 
-    override func drawRect(dirtyRect: NSRect) {
+    override func draw(_ dirtyRect: NSRect) {
         
-        let bezel = NSBezierPath(ovalInRect: NSInsetRect(bounds, 1.0, 1.0))
+        let bezel = NSBezierPath(ovalIn: NSInsetRect(bounds, 1.0, 1.0))
         bezel.lineWidth = 1.0
         
-        if highlighted {
-            Theme.WWDCTheme.fillColor.darkerColor.set()
+        if isHighlighted {
+            Theme.WWDCTheme.fillColor.darker.set()
         } else {
             Theme.WWDCTheme.fillColor.set()
         }
@@ -26,14 +26,14 @@ class RoundPlayButton: NSButton {
         
         let playImage = NSImage(named: "play")!
         let playMask = playImage.CGImage
-        let ctx = NSGraphicsContext.currentContext()?.CGContext
+        let ctx = NSGraphicsContext.current()?.cgContext
         
         let multiplier = CGFloat(0.8)
         let imageWidth = playImage.size.width*multiplier
         let imageHeight = playImage.size.height*multiplier
         let glyphRect = NSMakeRect(floor(bounds.size.width/2-imageWidth/2)+2.0, floor(bounds.size.height/2-imageHeight/2)+1.0, floor(imageWidth), floor(imageHeight))
-        CGContextClipToMask(ctx, glyphRect, playMask)
-        CGContextFillRect(ctx, bounds)
+        ctx.clip(to: glyphRect, mask: playMask)
+        ctx?.fill(bounds)
     }
     
 }

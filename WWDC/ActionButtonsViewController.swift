@@ -38,8 +38,8 @@ class ActionButtonsViewController: NSViewController {
         updateUI()
     }
     
-    private func updateUI() {
-        guard viewLoaded else { return }
+    fileprivate func updateUI() {
+        guard isViewLoaded else { return }
         guard session != nil else { return }
         guard !session.invalidated else { return }
         
@@ -56,78 +56,78 @@ class ActionButtonsViewController: NSViewController {
         }
     }
     
-    private func noSession() {
+    fileprivate func noSession() {
         setSessionCanBeWatched(false)
         setSessionCanBeWatchedInHD(false)
         setSessionHasSlides(false)
         hideProgressButton()
     }
     
-    private func setSessionCanBeWatched(can: Bool) {
+    fileprivate func setSessionCanBeWatched(_ can: Bool) {
         if can {
-            stackView.addView(watchButton, inGravity: .Top)
+            stackView.addView(watchButton, in: .top)
         } else {
             if watchButton.superview != nil {
                 watchButton.removeFromSuperviewWithoutNeedingDisplay()
             }
         }
     }
-    private func setSessionCanBeWatchedInHD(can: Bool) {
+    fileprivate func setSessionCanBeWatchedInHD(_ can: Bool) {
         if can {
-            stackView.addView(watchHDButton, inGravity: .Top)
+            stackView.addView(watchHDButton, in: .top)
         } else {
             if watchHDButton.superview != nil {
                 watchHDButton.removeFromSuperviewWithoutNeedingDisplay()
             }
         }
     }
-    private func setSessionHasSlides(has: Bool) {
+    fileprivate func setSessionHasSlides(_ has: Bool) {
         if has {
-            stackView.addView(slidesButton, inGravity: .Top)
+            stackView.addView(slidesButton, in: .top)
         } else {
             if slidesButton.superview != nil {
                 slidesButton.removeFromSuperviewWithoutNeedingDisplay()
             }
         }
     }
-    private func hideProgressButton() {
+    fileprivate func hideProgressButton() {
         if progressButton.superview != nil {
             progressButton.removeFromSuperviewWithoutNeedingDisplay()
         }
     }
     
-    private struct ProgressButtonTitles {
+    fileprivate struct ProgressButtonTitles {
         static let MarkAsWatched = NSLocalizedString("Mark as Watched", comment: "mark as watched button title")
         static let MarkAsUnwatched = NSLocalizedString("Mark as Unwatched", comment: "mark as unwatched button title")
     }
     
-    private func reflectSessionProgress() {
+    fileprivate func reflectSessionProgress() {
         if session.progress < 100 {
             progressButton.title = ProgressButtonTitles.MarkAsWatched
             if progressButton.superview == nil {
-                stackView.addView(progressButton, inGravity: .Top)
+                stackView.addView(progressButton, in: .top)
             }
         } else {
             progressButton.title = ProgressButtonTitles.MarkAsUnwatched
             if progressButton.superview == nil {
-                stackView.addView(progressButton, inGravity: .Top)
+                stackView.addView(progressButton, in: .top)
             }
         }
     }
     
-    @IBAction func watchHD(sender: NSButton) {
+    @IBAction func watchHD(_ sender: NSButton) {
         watchHDVideoCallback()
         afterCallback()
     }
-    @IBAction func watch(sender: NSButton) {
+    @IBAction func watch(_ sender: NSButton) {
         watchVideoCallback()
         afterCallback()
     }
-    @IBAction func watchSlides(sender: NSButton) {
+    @IBAction func watchSlides(_ sender: NSButton) {
         showSlidesCallback()
         afterCallback()
     }
-    @IBAction func toggleWatched(sender: NSButton) {
+    @IBAction func toggleWatched(_ sender: NSButton) {
         toggleWatchedCallback()
         afterCallback()
     }

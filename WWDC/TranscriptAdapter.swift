@@ -13,7 +13,7 @@ class TranscriptLineAdapter: JSONAdapter {
     
     typealias ModelType = TranscriptLine
     
-    static func adapt(json: JSON) -> ModelType {
+    static func adapt(_ json: JSON) -> ModelType {
         let line = TranscriptLine()
         
         line.timecode = json["timecode"].doubleValue
@@ -28,12 +28,12 @@ class TranscriptAdapter: JSONAdapter {
     
     typealias ModelType = Transcript
     
-    static func adapt(json: JSON) -> ModelType {
+    static func adapt(_ json: JSON) -> ModelType {
         let transcript = Transcript()
         
         transcript.fullText = json["transcript"].stringValue
         
-        if let annotations = json["annotations"].arrayObject as? [String], timecodes = json["timecodes"].arrayObject as? [Double] {
+        if let annotations = json["annotations"].arrayObject as? [String], let timecodes = json["timecodes"].arrayObject as? [Double] {
             let transcriptData = annotations.map { annotations.indexOf($0)! >= timecodes.count ? nil : JSON(["annotation": $0, "timecode": timecodes[annotations.indexOf($0)!]]) }.filter({ $0 != nil }).map({$0!})
             
             transcriptData.map(TranscriptLineAdapter.adapt).forEach { line in

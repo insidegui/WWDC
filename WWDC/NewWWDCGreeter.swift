@@ -10,13 +10,13 @@ import Foundation
 
 class NewWWDCGreeter {
     
-    private lazy var automaticRefreshSuggestionAlert: NSAlert = {
+    fileprivate lazy var automaticRefreshSuggestionAlert: NSAlert = {
         let alert = NSAlert()
         
         alert.messageText = "Another year, another WWDC"
         alert.informativeText = "Yay, It's WWDC week! Do you want to turn on automatic updates to make sure you always have the latest videos available?"
-        alert.addButtonWithTitle("Yes, sure!")
-        alert.addButtonWithTitle("No, thanks")
+        alert.addButton(withTitle: "Yes, sure!")
+        alert.addButton(withTitle: "No, thanks")
         
         return alert
     }()
@@ -28,7 +28,7 @@ class NewWWDCGreeter {
             Preferences.SharedPreferences().automaticRefreshEnabled = true
         }
         
-        Preferences.SharedPreferences().automaticRefreshSuggestionPresentedAt = NSDate()
+        Preferences.SharedPreferences().automaticRefreshSuggestionPresentedAt = Date()
     }
     
 }
@@ -42,7 +42,7 @@ private extension Preferences {
         let isWWDCWeek = WWDCDatabase.sharedDatabase.config.isWWDCWeek
         
         if let presentedAt = automaticRefreshSuggestionPresentedAt {
-            return presentedAt.numberOfDaysUntilDateTime(NSDate()) >= 200 && isWWDCWeek
+            return presentedAt.numberOfDaysUntilDateTime(Date()) >= 200 && isWWDCWeek
         } else {
             return isWWDCWeek
         }
@@ -50,20 +50,20 @@ private extension Preferences {
     
 }
 
-private extension NSDate {
-    func numberOfDaysUntilDateTime(toDateTime: NSDate, inTimeZone timeZone: NSTimeZone? = nil) -> Int {
-        let calendar = NSCalendar.currentCalendar()
+private extension Date {
+    func numberOfDaysUntilDateTime(_ toDateTime: Date, inTimeZone timeZone: TimeZone? = nil) -> Int {
+        var calendar = Calendar.current
         if let timeZone = timeZone {
             calendar.timeZone = timeZone
         }
         
-        var fromDate: NSDate?, toDate: NSDate?
+        var fromDate: Date?, toDate: Date?
         
-        calendar.rangeOfUnit(.Day, startDate: &fromDate, interval: nil, forDate: self)
-        calendar.rangeOfUnit(.Day, startDate: &toDate, interval: nil, forDate: toDateTime)
+        (calendar as NSCalendar).range(of: .day, start: &fromDate, interval: nil, for: self)
+        (calendar as NSCalendar).range(of: .day, start: &toDate, interval: nil, for: toDateTime)
         
-        let difference = calendar.components(.Day, fromDate: fromDate!, toDate: toDate!, options: [])
+        let difference = (calendar as NSCalendar).components(.day, from: fromDate!, to: toDate!, options: [])
         
-        return difference.day
+        return difference.day!
     }
 }

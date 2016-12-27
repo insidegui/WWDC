@@ -18,7 +18,7 @@ class DownloadListCellView: NSTableCellView {
     @IBOutlet weak var statusLabel: NSTextField!
     @IBOutlet weak var cancelButton: NSButton!
 	
-	@IBAction func cancelBtnPressed(sender: NSButton) {
+	@IBAction func cancelBtnPressed(_ sender: NSButton) {
 		if let block = self.cancelBlock {
 			block(self.item, self)
 		}
@@ -26,7 +26,7 @@ class DownloadListCellView: NSTableCellView {
 	
 	override func awakeFromNib() {
 		super.awakeFromNib()
-		self.progressIndicator.indeterminate = true
+		self.progressIndicator.isIndeterminate = true
 		self.progressIndicator.startAnimation(nil)
 	}
 	
@@ -34,7 +34,7 @@ class DownloadListCellView: NSTableCellView {
 		if (self.started) {
 			return
 		}
-		self.progressIndicator.indeterminate = false
+		self.progressIndicator.isIndeterminate = false
 		self.started = true
 	}
 	

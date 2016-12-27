@@ -18,15 +18,15 @@ class About {
         return _sharedAboutInfo
     }
 
-    private struct Constants {
+    fileprivate struct Constants {
         static let contributorsURL = "https://api.github.com/repos/insidegui/WWDC/contributors"
     }
     
-    var infoTextChangedCallback: (newText: String) -> () = { _ in }
+    var infoTextChangedCallback: (_ newText: String) -> () = { _ in }
     var infoText = "" {
         didSet {
             mainQ {
-                self.infoTextChangedCallback(newText: self.infoText)
+                self.infoTextChangedCallback(self.infoText)
             }
         }
     }
@@ -43,7 +43,7 @@ class About {
         }
     }
     
-    private func parseResponse(response: Response<AnyObject, NSError>) {
+    fileprivate func parseResponse(_ response: Response<AnyObject, NSError>) {
         guard let rawData = response.data else { return }
         
         let jsonData = JSON(data: rawData)
@@ -59,12 +59,12 @@ class About {
         buildInfoText(contributorNames)
     }
     
-    private func buildInfoText(names: [String]) {
+    fileprivate func buildInfoText(_ names: [String]) {
         var text = "Contributors (GitHub usernames):\n"
         
         var prefix = ""
         for name in names {
-            text.appendContentsOf("\(prefix)\(name)")
+            text.append("\(prefix)\(name)")
             prefix = ", "
         }
         

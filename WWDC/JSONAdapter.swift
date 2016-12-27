@@ -13,6 +13,6 @@ protocol JSONAdapter {
     
     associatedtype ModelType
     
-    static func adapt(json: JSON) -> ModelType
+    static func adapt(_ json: JSON) -> ModelType
     
 }

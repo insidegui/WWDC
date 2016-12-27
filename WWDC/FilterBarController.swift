@@ -11,18 +11,18 @@ import WWDCAppKit
 
 class FilterBarController: NSViewController, GRScrollViewDelegate {
 
-    @IBOutlet weak private var segmentedControl: GRSegmentedControl!
-    private weak var scrollView: GRScrollView?
+    @IBOutlet weak fileprivate var segmentedControl: GRSegmentedControl!
+    fileprivate weak var scrollView: GRScrollView?
     
-    private var accessoryViewBaseY: CGFloat {
+    fileprivate var accessoryViewBaseY: CGFloat {
         guard let superview = scrollView?.superview else { return 0.0 }
-        return CGRectGetHeight(superview.frame)-CGRectGetHeight(view.frame)-(scrollView!.contentInsets.top-CGRectGetHeight(view.frame))
+        return (superview.frame).height-(view.frame).height-(scrollView!.contentInsets.top-(view.frame).height)
     }
-    private var accessoryViewContractedY: CGFloat {
+    fileprivate var accessoryViewContractedY: CGFloat {
         guard let superview = scrollView?.superview else { return 0.0 }
-        return CGRectGetHeight(superview.frame) - CGRectGetHeight(view.frame)
+        return (superview.frame).height - (view.frame).height
     }
-    private var lastScrollOffsetY = CGFloat(0.0)
+    fileprivate var lastScrollOffsetY = CGFloat(0.0)
     
     init(scrollView: GRScrollView) {
         self.scrollView = scrollView
@@ -44,7 +44,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         guard let scrollView = self.scrollView else { return }
         
         scrollView.automaticallyAdjustsContentInsets = false
-        scrollView.contentInsets = NSEdgeInsets(top: scrollView.contentInsets.top+CGRectGetHeight(view.frame), left: 0, bottom: 0, right: 0)
+        scrollView.contentInsets = EdgeInsets(top: scrollView.contentInsets.top+(view.frame).height, left: 0, bottom: 0, right: 0)
         
         scrollView.delegate = self
         
@@ -58,7 +58,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     
     override func viewWillAppear() {
         super.viewWillAppear()
-        view.frame = CGRectMake(0, accessoryViewBaseY, CGRectGetWidth(view.frame), 44.0)
+        view.frame = CGRect(x: 0, y: accessoryViewBaseY, width: view.frame.width, height: 44.0)
     }
     
     func updateMenus() {
@@ -119,7 +119,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         segmentedControl.setMenu(downloadedMenu, forSegment: 4)
     }
     
-    private func toggle(item: NSMenuItem) {
+    fileprivate func toggle(_ item: NSMenuItem) {
         if item.state == NSOnState {
             item.state = NSOffState
         } else {
@@ -131,11 +131,11 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     
     var filters: SearchFilters = []
     
-    var yearFilter = SearchFilter.Year([])
-    var trackFilter = SearchFilter.Track([])
-    var focusFilter = SearchFilter.Focus([])
-    var favoritedFilter = SearchFilter.Favorited(false)
-    var downloadedFilter = SearchFilter.Downloaded([])
+    var yearFilter = SearchFilter.year([])
+    var trackFilter = SearchFilter.track([])
+    var focusFilter = SearchFilter.focus([])
+    var favoritedFilter = SearchFilter.favorited(false)
+    var downloadedFilter = SearchFilter.downloaded([])
     
     func updateFilters() {
         filters = []
@@ -159,54 +159,54 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         filtersDidChangeCallback?()
     }
     
-    func yearMenuAction(sender: NSMenuItem) {
+    func yearMenuAction(_ sender: NSMenuItem) {
         toggle(sender)
         
         var selectedYears:[Int] = []
-        for item in yearMenu.itemArray {
+        for item in yearMenu.items {
             let year = Int(item.title)!
             if item.state == NSOnState {
                 selectedYears.append(year)
             }
         }
-        yearFilter = SearchFilter.Year(selectedYears)
+        yearFilter = SearchFilter.year(selectedYears)
         
         updateFilters()
     }
     
-    func trackMenuAction(sender: NSMenuItem) {
+    func trackMenuAction(_ sender: NSMenuItem) {
         toggle(sender)
         
         var selectedTracks:[String] = []
-        for item in trackMenu.itemArray {
+        for item in trackMenu.items {
             if item.state == NSOnState {
                 selectedTracks.append(item.title)
             }
         }
-        trackFilter = SearchFilter.Track(selectedTracks)
+        trackFilter = SearchFilter.track(selectedTracks)
         
         updateFilters()
     }
     
-    func focusMenuAction(sender: NSMenuItem) {
+    func focusMenuAction(_ sender: NSMenuItem) {
         toggle(sender)
         
         var selectedFocuses:[String] = []
-        for item in focusMenu.itemArray {
+        for item in focusMenu.items {
             if item.state == NSOnState {
                 selectedFocuses.append(item.title)
             }
         }
-        focusFilter = SearchFilter.Focus(selectedFocuses)
+        focusFilter = SearchFilter.focus(selectedFocuses)
         
         updateFilters()
     }
     
-    func downloadedMenuAction(sender: NSMenuItem) {
+    func downloadedMenuAction(_ sender: NSMenuItem) {
         toggle(sender)
 
         var selectedDownloaded:[String] = []
-        for item in downloadedMenu.itemArray {
+        for item in downloadedMenu.items {
             if item.state == NSOnState {
                 if(item == sender) {
                     selectedDownloaded.append(item.representedObject as! String)
@@ -215,14 +215,14 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
                 }
             }
         }
-        downloadedFilter = SearchFilter.Downloaded(selectedDownloaded)
+        downloadedFilter = SearchFilter.downloaded(selectedDownloaded)
         
         updateFilters()
     }
     
     var favoritedActive = false
     var downloadedActive = false
-    func segmentedControlAction(sender: GRSegmentedControl) {
+    func segmentedControlAction(_ sender: GRSegmentedControl) {
         switch(segmentedControl.selectedSegment) {
         case 0:
             segmentedControl.setSelected(false, forSegment: 0)
@@ -232,7 +232,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
             segmentedControl.setSelected(false, forSegment: 2)
         case 3:
             favoritedActive = !favoritedActive
-            favoritedFilter = SearchFilter.Favorited(favoritedActive)
+            favoritedFilter = SearchFilter.favorited(favoritedActive)
             updateFilters()
         case 4:
             segmentedControl.setSelected(false, forSegment: 4)
@@ -243,7 +243,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
     
     // MARK: Scrolling behavior
     
-    func scrollViewDidScroll(scrollView: GRScrollView) {
+    func scrollViewDidScroll(_ scrollView: GRScrollView) {
         
         let normalizedOffsetY = scrollView.contentOffset.y + scrollView.contentInsets.top
         
@@ -278,7 +278,7 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         lastScrollOffsetY = normalizedOffsetY
     }
     
-    func scrollViewDidEndDragging(scrollView: GRScrollView) {
+    func scrollViewDidEndDragging(_ scrollView: GRScrollView) {
         var accessoryViewFrame = view.frame
         
         if accessoryViewFrame.origin.y > accessoryViewBaseY && accessoryViewFrame.origin.y != accessoryViewContractedY {
@@ -286,13 +286,13 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         }
         
         NSAnimationContext.beginGrouping()
-        NSAnimationContext.currentContext().duration = 0.2;
-        NSAnimationContext.currentContext().timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        NSAnimationContext.current().duration = 0.2;
+        NSAnimationContext.current().timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         self.view.animator().frame = accessoryViewFrame
         NSAnimationContext.endGrouping()
     }
     
-    func mouseWheelDidScroll(scrollView: GRScrollView) {
+    func mouseWheelDidScroll(_ scrollView: GRScrollView) {
         var accessoryViewFrame = view.frame
         
         let normalizedOffsetY = scrollView.contentOffset.y + scrollView.contentInsets.top
@@ -315,8 +315,8 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         lastScrollOffsetY = normalizedOffsetY
 
         NSAnimationContext.beginGrouping()
-        NSAnimationContext.currentContext().duration = 0.2;
-        NSAnimationContext.currentContext().timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        NSAnimationContext.current().duration = 0.2;
+        NSAnimationContext.current().timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         self.view.animator().frame = accessoryViewFrame
         NSAnimationContext.endGrouping()
     }

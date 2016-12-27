@@ -13,13 +13,13 @@ class LiveSessionAdapter: JSONAdapter {
     
     typealias ModelType = LiveSession
     
-    private struct Constants {
+    fileprivate struct Constants {
         static let dateTimezone = "GMT"
         static let dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'ZZZZ"
         static let dateFormatForNewSessions = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
     }
     
-    private struct Keys {
+    fileprivate struct Keys {
         static let id = "id"
         static let title = "title"
         static let description = "description"
@@ -29,7 +29,7 @@ class LiveSessionAdapter: JSONAdapter {
         static let isLiveRightNow = "isLiveRightNow"
     }
     
-    static func adaptSpecial(json: JSON) -> ModelType {
+    static func adaptSpecial(_ json: JSON) -> ModelType {
         let session = LiveSession()
         
         session.id = json[Keys.id].intValue
@@ -47,12 +47,12 @@ class LiveSessionAdapter: JSONAdapter {
         }
         
         if let streamURL = json[Keys.stream].string {
-            session.streamURL = NSURL(string: streamURL)
+            session.streamURL = URL(string: streamURL)
         }
         
         session.isLiveRightNow = json[Keys.isLiveRightNow].boolValue
         
-        let formatter = NSDateFormatter()
+        let formatter = DateFormatter()
         formatter.dateFormat = Constants.dateFormat
         if let startsAtString = json[Keys.startsAt].string {
             let startsAtWithZone = startsAtString + Constants.dateTimezone
@@ -62,7 +62,7 @@ class LiveSessionAdapter: JSONAdapter {
         return session
     }
     
-    static func adapt(json: JSON) -> ModelType {
+    static func adapt(_ json: JSON) -> ModelType {
         let session = LiveSession()
         
         session.id = json[Keys.id].intValue
@@ -80,12 +80,12 @@ class LiveSessionAdapter: JSONAdapter {
         }
         
         if let streamURL = json["url"].string {
-            session.streamURL = NSURL(string: streamURL)
+            session.streamURL = URL(string: streamURL)
         }
         
         session.isLiveRightNow = json[Keys.isLiveRightNow].boolValue
         
-        let formatter = NSDateFormatter()
+        let formatter = DateFormatter()
         formatter.dateFormat = Constants.dateFormatForNewSessions
         
         if let startsAtString = json["start_date"].string {

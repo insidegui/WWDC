@@ -17,22 +17,22 @@ class URLSchemeHandler: NSObject {
     }
     
     func register() {
-        NSAppleEventManager.sharedAppleEventManager().setEventHandler(self, andSelector: #selector(URLSchemeHandler.handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
+        NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(URLSchemeHandler.handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
     }
     
-    func handleURLEvent(event: NSAppleEventDescriptor, replyEvent: NSAppleEventDescriptor) {
-        if let urlString = event.paramDescriptorForKeyword(UInt32(keyDirectObject))?.stringValue {
-            if let url = NSURL(string: urlString) {
+    func handleURLEvent(_ event: NSAppleEventDescriptor, replyEvent: NSAppleEventDescriptor) {
+        if let urlString = event.paramDescriptor(forKeyword: UInt32(keyDirectObject))?.stringValue {
+            if let url = URL(string: urlString) {
                 if let host = url.host {
                     if let path = url.path {
-                        findAndOpenSession(host,path.stringByReplacingOccurrencesOfString("/", withString: "", options: .CaseInsensitiveSearch, range: nil))
+                        findAndOpenSession(host,path.replacingOccurrences(of: "/", with: "", options: .caseInsensitive, range: nil))
                     }
                 }
             }
         }
     }
     
-    private func findAndOpenSession(year: String, _ id: String) {
+    fileprivate func findAndOpenSession(_ year: String, _ id: String) {
         let sessionKey = "#\(year)-\(id)"
         guard let session = WWDCDatabase.sharedDatabase.realm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
         
@@ -52,7 +52,7 @@ class URLSchemeHandler: NSObject {
         }
     }
     
-    private func launchVideo(session: Session, url: String) {
+    fileprivate func launchVideo(_ session: Session, url: String) {
         let controller = VideoWindowController(session: session, videoURL: url)
         controller.showWindow(self)
     }

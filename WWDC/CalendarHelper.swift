@@ -11,41 +11,41 @@ import EventKit
 
 class CalendarHelper {
     
-    private var authorized = false
-    private lazy var store = EKEventStore()
+    fileprivate var authorized = false
+    fileprivate lazy var store = EKEventStore()
     
     init() {
-        authorized = (EKEventStore.authorizationStatusForEntityType(.Reminder) == .Authorized)
+        authorized = (EKEventStore.authorizationStatus(for: .reminder) == .authorized)
     }
     
-    private func performAuthorized(block: () -> ()) {
+    fileprivate func performAuthorized(_ block: @escaping () -> ()) {
         guard !authorized else {
-            dispatch_async(dispatch_get_main_queue(), block)
+            DispatchQueue.main.async(execute: block)
             return
         }
         
-        store.requestAccessToEntityType(.Reminder) { [weak self] success, error in
+        store.requestAccess(to: .reminder) { [weak self] success, error in
             self?.authorized = success
-            dispatch_async(dispatch_get_main_queue(), block)
+            DispatchQueue.main.async(execute: block)
         }
     }
     
-    private var predicateForReminders: NSPredicate {
-        return store.predicateForRemindersInCalendars([store.defaultCalendarForNewReminders()])
+    fileprivate var predicateForReminders: NSPredicate {
+        return store.predicateForReminders(in: [store.defaultCalendarForNewReminders()])
     }
     
-    func registerReminderForScheduledSession(scheduledSession: ScheduledSession) {
+    func registerReminderForScheduledSession(_ scheduledSession: ScheduledSession) {
         performAuthorized { [unowned self] in
             guard let actualSession = scheduledSession.session else { return }
             
             let reminder = EKReminder(eventStore: self.store)
-            reminder.addAlarm(EKAlarm(absoluteDate: scheduledSession.startsAt))
-            reminder.timeZone = NSTimeZone.systemTimeZone()
+            reminder.addAlarm(EKAlarm(absoluteDate: scheduledSession.startsAt as Date))
+            reminder.timeZone = TimeZone.current
             reminder.title = actualSession.title
             reminder.calendar = self.store.defaultCalendarForNewReminders()
             
             do {
-                try self.store.saveReminder(reminder, commit: true)
+                try self.store.save(reminder, commit: true)
                 WWDCDatabase.sharedDatabase.doChanges {
                     scheduledSession.calendarIdentifier = reminder.calendarItemExternalIdentifier
                 }
@@ -55,15 +55,15 @@ class CalendarHelper {
         }
     }
     
-    func hasReminderForScheduledSession(scheduledSession: ScheduledSession, completionBlock: (Bool) -> ()) {
+    func hasReminderForScheduledSession(_ scheduledSession: ScheduledSession, completionBlock: @escaping (Bool) -> ()) {
         guard authorized else {
-            dispatch_async(dispatch_get_main_queue()) { completionBlock(false) }
+            DispatchQueue.main.async { completionBlock(false) }
             return
         }
         
-        store.fetchRemindersMatchingPredicate(predicateForReminders) { reminders in
-            dispatch_async(dispatch_get_main_queue()) {
-                if let reminders = reminders where reminders.count > 0 {
+        store.fetchReminders(matching: predicateForReminders) { reminders in
+            DispatchQueue.main.async {
+                if let reminders = reminders, reminders.count > 0 {
                     let hasReminder = reminders.filter({ $0.calendarItemExternalIdentifier == scheduledSession.calendarIdentifier }).count > 0
                     completionBlock(hasReminder)
                 } else {
@@ -73,14 +73,14 @@ class CalendarHelper {
         }
     }
     
-    func unregisterReminderForScheduledSession(scheduledSession: ScheduledSession) {
+    func unregisterReminderForScheduledSession(_ scheduledSession: ScheduledSession) {
         guard !scheduledSession.calendarIdentifier.isEmpty else { return }
         
-        store.fetchRemindersMatchingPredicate(predicateForReminders) { [weak self] reminders in
-            dispatch_async(dispatch_get_main_queue()) {
+        store.fetchReminders(matching: predicateForReminders) { [weak self] reminders in
+            DispatchQueue.main.async {
                 if let reminder = reminders?.filter({ $0.calendarItemExternalIdentifier == scheduledSession.calendarIdentifier }).first {
                     do {
-                        try self?.store.removeReminder(reminder, commit: true)
+                        try self?.store.remove(reminder, commit: true)
                     } catch let error as NSError {
                         NSLog("Error deleting reminder: \(error)")
                     }

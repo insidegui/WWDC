@@ -21,7 +21,7 @@ class AppConfig: Object {
         return "sessionsURL"
     }
     
-    func isEqualToConfig(config: AppConfig?) -> Bool {
+    func isEqualToConfig(_ config: AppConfig?) -> Bool {
         guard let compareConfig = config else { return false }
         
         return compareConfig.sessionsURL == self.sessionsURL &&

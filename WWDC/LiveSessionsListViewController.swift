@@ -20,7 +20,7 @@ class LiveSessionsListViewController: NSViewController {
     
     @IBOutlet weak var tableView: NSTableView!
     
-    var playbackHandler: (session: LiveSession) -> Void = { _ in }
+    var playbackHandler: (_ session: LiveSession) -> Void = { _ in }
     
     var liveSessions = [LiveSession]() {
         didSet {
@@ -31,13 +31,13 @@ class LiveSessionsListViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.setDataSource(self)
-        tableView.setDelegate(self)
+        tableView.dataSource = self
+        tableView.delegate = self
         
         updateUI()
     }
     
-    private func updateUI() {
+    fileprivate func updateUI() {
         guard tableView != nil else { return }
         
         tableView.reloadData()
@@ -49,12 +49,12 @@ class LiveSessionsListViewController: NSViewController {
 
 extension LiveSessionsListViewController: NSTableViewDelegate, NSTableViewDataSource {
     
-    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+    func numberOfRows(in tableView: NSTableView) -> Int {
         return liveSessions.count
     }
     
-    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let cell = tableView.makeViewWithIdentifier("Live Session", owner: tableView) as? LiveSessionTableCellView else { return nil }
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        guard let cell = tableView.make(withIdentifier: "Live Session", owner: tableView) as? LiveSessionTableCellView else { return nil }
         
         cell.delegate = self
         cell.session = liveSessions[row]
@@ -62,7 +62,7 @@ extension LiveSessionsListViewController: NSTableViewDelegate, NSTableViewDataSo
         return cell
     }
     
-    func tableView(tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         return false
     }
     
@@ -72,8 +72,8 @@ extension LiveSessionsListViewController: NSTableViewDelegate, NSTableViewDataSo
 
 extension LiveSessionsListViewController: LiveSessionTableCellViewDelegate {
     
-    func playLiveSession(session: LiveSession) {
-        playbackHandler(session: session)
+    func playLiveSession(_ session: LiveSession) {
+        playbackHandler(session)
     }
     
 }

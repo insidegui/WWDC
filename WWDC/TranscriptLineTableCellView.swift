@@ -10,19 +10,19 @@ import Cocoa
 
 class TranscriptLineTableCellView: NSTableCellView {
 
-    @IBOutlet weak private var playButton: NSButton?
-    @IBOutlet weak private var summaryLabel: NSTextField!
+    @IBOutlet weak fileprivate var playButton: NSButton?
+    @IBOutlet weak fileprivate var summaryLabel: NSTextField!
     
     var selected = false {
         didSet {
-            setNeedsDisplayInRect(bounds)
+            setNeedsDisplay(bounds)
         }
     }
     
     var foregroundColor: NSColor?
     var font: NSFont?
     
-    var playCallback: ((startTime: Double) -> Void)?
+    var playCallback: ((_ startTime: Double) -> Void)?
     
     var line: TranscriptLine? {
         didSet {
@@ -30,25 +30,25 @@ class TranscriptLineTableCellView: NSTableCellView {
         }
     }
     
-    @IBAction func play(sender: NSButton) {
+    @IBAction func play(_ sender: NSButton) {
         guard let line = self.line else { return }
-        playCallback?(startTime: line.timecode)
+        playCallback?(line.timecode)
     }
     
-    private func updateUI() {
+    fileprivate func updateUI() {
         guard let line = self.line else { return }
         summaryLabel.stringValue = line.text
         
         summaryLabel.textColor = foregroundColor
         summaryLabel.font = font
-        summaryLabel.cell?.backgroundStyle = NSBackgroundStyle.Light
+        summaryLabel.cell?.backgroundStyle = NSBackgroundStyle.light
     }
     
-    override func setNeedsDisplayInRect(invalidRect: NSRect) {
-        super.setNeedsDisplayInRect(invalidRect)
+    override func setNeedsDisplay(_ invalidRect: NSRect) {
+        super.setNeedsDisplay(invalidRect)
 
         if selected {
-            summaryLabel.textColor = NSColor.blackColor()
+            summaryLabel.textColor = NSColor.black
         } else {
             summaryLabel.textColor = foregroundColor
         }

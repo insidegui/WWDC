@@ -27,19 +27,19 @@ class Session: Object {
     dynamic var currentPosition: Double = 0.0
     dynamic var favorite = false
     dynamic var transcript: Transcript?
-    dynamic var slidesPDFData = NSData()
+    dynamic var slidesPDFData = Data()
     dynamic var downloaded = false
     
     var isScheduled: Bool {
-        guard let schedule = schedule where !schedule.invalidated else { return false }
+        guard let schedule = schedule, !schedule.invalidated else { return false }
         
         guard !schedule.isLive else { return true }
         
-        return schedule.endsAt.isGreaterThanOrEqualTo(NSDate().dateByAddingTimeInterval(WWDCEnvironment.liveTolerance))
+        return schedule.endsAt.isGreaterThanOrEqual(to: Date().addingTimeInterval(WWDCEnvironment.liveTolerance))
     }
     
     var schedule: ScheduledSession? {
-        guard let realm = realm where !invalidated else { return nil }
+        guard let realm = realm, !invalidated else { return nil }
         
         return realm.objectForPrimaryKey(ScheduledSession.self, key: uniqueId)
     }
@@ -82,7 +82,7 @@ class Session: Object {
         return "\(year) | \(track) | \(focus)"
     }
     
-    func isSemanticallyEqualToSession(otherSession: Session) -> Bool {
+    func isSemanticallyEqualToSession(_ otherSession: Session) -> Bool {
         return id == otherSession.id &&
             year == otherSession.year &&
             date == otherSession.date &&

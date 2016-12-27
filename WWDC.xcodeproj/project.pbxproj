@@ -531,6 +531,7 @@
 					DD4F6E4B1AE2D11D0099BEB5 = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = 8C7439RJLG;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -827,6 +828,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -848,6 +850,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "br.com.guilhermerambo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

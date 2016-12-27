@@ -11,10 +11,10 @@ import Alamofire
 
 class SlidesDownloader {
     
-    private let maxPDFLength = 16*1024*1024
+    fileprivate let maxPDFLength = 16*1024*1024
     
-    typealias ProgressHandler = (downloaded: Double, total: Double) -> Void
-    typealias CompletionHandler = (success: Bool, data: NSData?) -> Void
+    typealias ProgressHandler = (_ downloaded: Double, _ total: Double) -> Void
+    typealias CompletionHandler = (_ success: Bool, _ data: Data?) -> Void
     
     var session: Session
 
@@ -22,9 +22,9 @@ class SlidesDownloader {
         self.session = session
     }
     
-    func downloadSlides(completionHandler: CompletionHandler, progressHandler: ProgressHandler?) {
-        guard session.slidesURL != "" else { return completionHandler(success: false, data: nil) }
-        guard let slidesURL = NSURL(string: session.slidesURL) else { return completionHandler(success: false, data: nil) }
+    func downloadSlides(_ completionHandler: @escaping CompletionHandler, progressHandler: ProgressHandler?) {
+        guard session.slidesURL != "" else { return completionHandler(false, nil) }
+        guard let slidesURL = URL(string: session.slidesURL) else { return completionHandler(false, nil) }
         
         Alamofire.download(Method.GET, slidesURL.absoluteString) { tempURL, response in
             if let data = NSData(contentsOfURL: tempURL) {

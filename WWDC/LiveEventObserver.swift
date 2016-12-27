@@ -20,46 +20,46 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
 
     var nextEvent: LiveSession? {
         didSet {
-            NSNotificationCenter.defaultCenter().postNotificationName(LiveEventNextInfoChangedNotification, object: nil)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: LiveEventNextInfoChangedNotification), object: nil)
         }
     }
-    private var lastEventFound: LiveSession?
-    private var timer: NSTimer?
-    private var liveEventPlayerController: VideoPlayerWindowController?
+    fileprivate var lastEventFound: LiveSession?
+    fileprivate var timer: Timer?
+    fileprivate var liveEventPlayerController: VideoPlayerWindowController?
     
     class func SharedObserver() -> LiveEventObserver {
         return _sharedInstance
     }
     
     func start() {
-        NSUserNotificationCenter.defaultUserNotificationCenter().delegate = self
+        NSUserNotificationCenter.default.delegate = self
         
-        timer = NSTimer.scheduledTimerWithTimeInterval(Preferences.SharedPreferences().liveEventCheckInterval, target: self, selector: #selector(LiveEventObserver.checkNow), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: Preferences.SharedPreferences().liveEventCheckInterval, target: self, selector: #selector(LiveEventObserver.checkNow), userInfo: nil, repeats: true)
         checkNow()
     }
     
     var liveSessions = [LiveSession]() {
         didSet {
-            NSNotificationCenter.defaultCenter().postNotificationName(LiveSessionsListDidChangeNotification, object: self)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: LiveSessionsListDidChangeNotification), object: self)
         }
     }
     
     func checkNow() {
         checkForLiveWWDCSessions { sessions in
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.liveSessions = sessions
             }
         }
         
         checkForLiveEvent { available, event in
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 if !available && self.liveEventPlayerController != nil {
                     self.liveEventPlayerController?.close()
                     self.liveEventPlayerController = nil
                     return
                 }
                 
-                if let lastEvent = self.lastEventFound, currentEvent = event where lastEvent.streamURL != currentEvent.streamURL {
+                if let lastEvent = self.lastEventFound, let currentEvent = event, lastEvent.streamURL != currentEvent.streamURL {
                     // event streaming URL changed
                     self.doPlayEvent(currentEvent, ignoreExisting: true)
                 } else {
@@ -74,7 +74,7 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
         }
     }
     
-    func playEvent(event: LiveSession) {
+    func playEvent(_ event: LiveSession) {
         if Preferences.SharedPreferences().autoplayLiveEvents || overrideAutoplayPreference {
             doPlayEvent(event)
         }
@@ -82,14 +82,14 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
         showNotification(event)
     }
     
-    private func doPlayEvent(event: LiveSession, ignoreExisting: Bool = false) {
+    fileprivate func doPlayEvent(_ event: LiveSession, ignoreExisting: Bool = false) {
         if liveEventPlayerController != nil && !ignoreExisting {
-            NSNotificationCenter.defaultCenter().postNotificationName(LiveEventTitleAvailableNotification, object: event.title)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: LiveEventTitleAvailableNotification), object: event.title)
             liveEventPlayerController?.window?.title = event.title
             return
         }
         
-        NSNotificationCenter.defaultCenter().postNotificationName(LiveEventWillStartPlayingNotification, object: nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: LiveEventWillStartPlayingNotification), object: nil)
         
         if liveEventPlayerController != nil {
             liveEventPlayerController?.close()
@@ -116,35 +116,35 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
         }
     }
     
-    func showNotification(event: LiveSession) {
+    func showNotification(_ event: LiveSession) {
         let notification = NSUserNotification()
         notification.title = "\(event.title) is live!"
         notification.informativeText = "Watch \(event.title) right now!"
         notification.hasActionButton = true
         notification.actionButtonTitle = "Watch"
-        notification.deliveryDate = NSDate()
+        notification.deliveryDate = Date()
         notification.identifier = liveEventNotificationIdentifier
-        NSUserNotificationCenter.defaultUserNotificationCenter().scheduleNotification(notification)
+        NSUserNotificationCenter.default.scheduleNotification(notification)
     }
     
-    func userNotificationCenter(center: NSUserNotificationCenter, didActivateNotification notification: NSUserNotification) {
+    func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
         if notification.identifier == liveEventNotificationIdentifier {
             checkNowAndPlay()
         }
     }
     
-    private var specialLiveURL: NSURL {
-        return NSURL(string: WWDCEnvironment.specialLiveEventURL)!
+    fileprivate var specialLiveURL: URL {
+        return URL(string: WWDCEnvironment.specialLiveEventURL)!
     }
     
-    private var liveSessionsURL: NSURL {
-        return NSURL(string: WWDCEnvironment.liveSessionsURL)!
+    fileprivate var liveSessionsURL: URL {
+        return URL(string: WWDCEnvironment.liveSessionsURL)!
     }
     
-    let URLSession2 = NSURLSession(configuration: NSURLSessionConfiguration.ephemeralSessionConfiguration())
+    let URLSession2 = URLSession(configuration: URLSessionConfiguration.ephemeral)
     
-    func checkForLiveEvent(completionHandler: (Bool, LiveSession?) -> ()) {
-        let task = URLSession2.dataTaskWithURL(specialLiveURL) { data, response, error in
+    func checkForLiveEvent(_ completionHandler: @escaping (Bool, LiveSession?) -> ()) {
+        let task = URLSession2.dataTask(with: specialLiveURL, completionHandler: { data, response, error in
             if data == nil {
                 completionHandler(false, nil)
                 return
@@ -158,25 +158,25 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
             } else {
                 completionHandler(false, nil)
             }
-        }
+        }) 
         task.resume()
     }
     
-    func checkForLiveWWDCSessions(completionHandler: (liveSessions: [LiveSession]) -> ()) {
-        let task = URLSession2.dataTaskWithURL(liveSessionsURL) { data, response, error in
-            guard let data = data where data.length > 0 else {
-                completionHandler(liveSessions: [])
+    func checkForLiveWWDCSessions(_ completionHandler: @escaping (_ liveSessions: [LiveSession]) -> ()) {
+        let task = URLSession2.dataTask(with: liveSessionsURL, completionHandler: { data, response, error in
+            guard let data = data, data.count > 0 else {
+                completionHandler([])
                 return
             }
             
             let jsonData = JSON(data: data)
             guard let sessionsJSON = jsonData["live_sessions"].array else {
-                completionHandler(liveSessions: [])
+                completionHandler([])
                 return
             }
             
             completionHandler(liveSessions: sessionsJSON.map({ LiveSessionAdapter.adapt($0) }))
-        }
+        }) 
         task.resume()
     }
     

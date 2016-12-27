@@ -12,7 +12,7 @@ import RealmSwift
 class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
 
     var session: Session!
-    var jumpToTimeCallback: (time: Double) -> () = { _ in }
+    var jumpToTimeCallback: (_ time: Double) -> () = { _ in }
     
     @IBOutlet weak var searchContainer: NSVisualEffectView!
     @IBOutlet weak var searchField: NSSearchField!
@@ -41,9 +41,9 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
     var enableScrolling = true
 
     @IBOutlet weak var scrollView: NSScrollView!
-    @IBOutlet weak private var tableView: NSTableView!
+    @IBOutlet weak fileprivate var tableView: NSTableView!
     
-    private struct Storyboard {
+    fileprivate struct Storyboard {
         static let cellIdentifier = "transcriptCell"
         static let rowIdentifier = "rowView"
     }
@@ -61,17 +61,17 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.setDelegate(self)
-        tableView.setDataSource(self)
+        tableView.delegate = self
+        tableView.dataSource = self
         
         tableView.target = self
         tableView.doubleAction = #selector(TranscriptViewController.doubleClickedLine(_:))
         
         scrollView.automaticallyAdjustsContentInsets = false
-        scrollView.contentInsets = NSEdgeInsets(top: 22.0, left: 0.0, bottom: NSHeight(searchContainer.bounds), right: 0.0)
+        scrollView.contentInsets = EdgeInsets(top: 22.0, left: 0.0, bottom: NSHeight(searchContainer.bounds), right: 0.0)
     }
     
-    func highlightLineAt(roundedTimecode: String) {
+    func highlightLineAt(_ roundedTimecode: String) {
         guard enableScrolling else { return }
         
         guard let lines = session.transcript?.lines else { return }
@@ -82,21 +82,21 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
         
         guard let row = lines.indexOf(result[0]) else { return }
 
-        tableView.selectRowIndexes(NSIndexSet(index: row), byExtendingSelection: false)
+        tableView.selectRowIndexes(IndexSet(index: row), byExtendingSelection: false)
         
         tableView.scrollRowToVisible(row)
     }
     
     // MARK: - TableView
     
-    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+    func numberOfRows(in tableView: NSTableView) -> Int {
         return filteredLines.count
     }
     
-    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard row < filteredLines.count else { return nil }
         
-        let cell = tableView.makeViewWithIdentifier(Storyboard.cellIdentifier, owner: tableView) as! TranscriptLineTableCellView
+        let cell = tableView.make(withIdentifier: Storyboard.cellIdentifier, owner: tableView) as! TranscriptLineTableCellView
         
         cell.foregroundColor = textColor
         cell.font = font
@@ -105,17 +105,17 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
         return cell
     }
     
-    func tableView(tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        return tableView.makeViewWithIdentifier(Storyboard.rowIdentifier, owner: tableView) as? NSTableRowView
+    func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
+        return tableView.make(withIdentifier: Storyboard.rowIdentifier, owner: tableView) as? NSTableRowView
     }
     
-    func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+    func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         guard let font = font else { return 17.0 }
         
         return font.pointSize * 2
     }
     
-    func doubleClickedLine(sender: AnyObject?) {
+    func doubleClickedLine(_ sender: AnyObject?) {
         guard tableView.clickedRow < filteredLines.count else { return }
         
         let line = filteredLines[tableView.clickedRow]
@@ -124,7 +124,7 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
     
     // MARK: - Search
     
-    @IBAction func search(sender: NSSearchField) {
+    @IBAction func search(_ sender: NSSearchField) {
         // disables scrolling during search
         enableScrolling = sender.stringValue.isEmpty
         

@@ -18,8 +18,8 @@ class ScheduledSession: Object {
     dynamic var id = 0
     dynamic var uniqueId = ""
     dynamic var room = ""
-    dynamic var startsAt = NSDate()
-    dynamic var endsAt = NSDate()
+    dynamic var startsAt = Date()
+    dynamic var endsAt = Date()
     dynamic var calendarIdentifier = ""
     
     var liveSession: LiveSession? {
@@ -68,12 +68,12 @@ class ScheduledSession: Object {
         }
     }
     
-    func isSemanticallyEqualToScheduledSession(otherSession: ScheduledSession) -> Bool {
+    func isSemanticallyEqualToScheduledSession(_ otherSession: ScheduledSession) -> Bool {
         return id == otherSession.id &&
             year == otherSession.year &&
             room == otherSession.room &&
-            startsAt.isEqualToDate(otherSession.startsAt) &&
-            endsAt.isEqualToDate(otherSession.endsAt)
+            (startsAt == otherSession.startsAt) &&
+            (endsAt == otherSession.endsAt)
     }
     
 }

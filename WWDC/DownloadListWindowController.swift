@@ -12,19 +12,19 @@ private class DownloadListItem : NSObject {
     
     let url: String
     let session: Session
-    let task: NSURLSessionDownloadTask
+    let task: URLSessionDownloadTask
     var totalSize: Int?
     var downloadedSize: Int = 0
     
     var progress: Double {
-        if let totalSize = totalSize where totalSize > 0 {
+        if let totalSize = totalSize, totalSize > 0 {
             return Double(downloadedSize) / Double(totalSize)
         } else {
             return 0
         }
     }
     
-    init(url: String, session: Session, task: NSURLSessionDownloadTask) {
+    init(url: String, session: Session, task: URLSessionDownloadTask) {
         self.url = url
         self.session = session
         self.task = task
@@ -37,34 +37,34 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
     
     @IBOutlet var tableView: NSTableView!
     
-    private var items: [DownloadListItem] = []
-    private var downloadStartedHndl: AnyObject?
-    private var downloadFinishedHndl: AnyObject?
-    private var downloadChangedHndl: AnyObject?
-    private var downloadCancelledHndl: AnyObject?
-    private var downloadPausedHndl: AnyObject?
-    private var downloadResumedHndl: AnyObject?
+    fileprivate var items: [DownloadListItem] = []
+    fileprivate var downloadStartedHndl: AnyObject?
+    fileprivate var downloadFinishedHndl: AnyObject?
+    fileprivate var downloadChangedHndl: AnyObject?
+    fileprivate var downloadCancelledHndl: AnyObject?
+    fileprivate var downloadPausedHndl: AnyObject?
+    fileprivate var downloadResumedHndl: AnyObject?
     
-    private var fileSizeFormatter: NSByteCountFormatter!
-    private var percentFormatter: NSNumberFormatter!
+    fileprivate var fileSizeFormatter: ByteCountFormatter!
+    fileprivate var percentFormatter: NumberFormatter!
     
     override func windowDidLoad() {
         super.windowDidLoad()
         
-        self.tableView.setDelegate(self)
-        self.tableView.setDataSource(self)
-        self.tableView.columnAutoresizingStyle = .FirstColumnOnlyAutoresizingStyle
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.columnAutoresizingStyle = .firstColumnOnlyAutoresizingStyle
         
-        fileSizeFormatter = NSByteCountFormatter()
+        fileSizeFormatter = ByteCountFormatter()
         fileSizeFormatter.zeroPadsFractionDigits = true
         fileSizeFormatter.allowsNonnumericFormatting = false
         
-        percentFormatter = NSNumberFormatter()
-        percentFormatter.numberStyle = .PercentStyle
+        percentFormatter = NumberFormatter()
+        percentFormatter.numberStyle = .percent
         percentFormatter.minimumFractionDigits = 1
         
-        let nc = NSNotificationCenter.defaultCenter()
-        self.downloadStartedHndl = nc.addObserverForName(VideoStoreNotificationDownloadStarted, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+        let nc = NotificationCenter.default
+        self.downloadStartedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadStarted), object: nil, queue: OperationQueue.main) { note in
             let url = note.object as! String?
             if url != nil {
                 let (item, _) = self.listItemForURL(url)
@@ -73,26 +73,26 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
                 }
                 let tasks = self.videoStore.allTasks()
                 for task in tasks {
-                    if let _url = task.originalRequest?.URL?.absoluteString where _url == url {
+                    if let _url = task.originalRequest?.url?.absoluteString, _url == url {
                         guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", _url).first else { return }
                         let item = DownloadListItem(url: url!, session: session, task: task)
                         self.items.append(item)
-                        self.tableView.insertRowsAtIndexes(NSIndexSet(index: self.items.count), withAnimation: .SlideUp)
+                        self.tableView.insertRows(at: IndexSet(integer: self.items.count), withAnimation: .slideUp)
                     }
                 }
             }
         }
-        self.downloadFinishedHndl = nc.addObserverForName(VideoStoreNotificationDownloadFinished, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+        self.downloadFinishedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadFinished), object: nil, queue: OperationQueue.main) { note in
             if let object = note.object as? String {
                 let url = object as String
                 let (item, idx) = self.listItemForURL(url)
                 if item != nil {
                     self.items.remove(item!)
-                    self.tableView.removeRowsAtIndexes(NSIndexSet(index: idx), withAnimation: .SlideDown)
+                    self.tableView.removeRows(at: IndexSet(integer: idx), withAnimation: .slideDown)
                 }
             }
         }
-        self.downloadChangedHndl = nc.addObserverForName(VideoStoreNotificationDownloadProgressChanged, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+        self.downloadChangedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadProgressChanged), object: nil, queue: OperationQueue.main) { note in
             if let info = note.userInfo {
                 if let object = note.object as? String {
                     let url = object as String
@@ -103,39 +103,39 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
                         {
                             item.downloadedSize = written
                             item.totalSize = expected
-                            self.tableView.reloadDataForRowIndexes(NSIndexSet(index: idx), columnIndexes: NSIndexSet(index: 0))
+                            self.tableView.reloadData(forRowIndexes: IndexSet(integer: idx), columnIndexes: IndexSet(integer: 0))
                         }
                     }
                 }
             }
         }
-        self.downloadPausedHndl = nc.addObserverForName(VideoStoreNotificationDownloadPaused, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+        self.downloadPausedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadPaused), object: nil, queue: OperationQueue.main) { note in
             if let object = note.object as? String {
                 let url = object as String
                 let (item, idx) = self.listItemForURL(url)
                 if item != nil {
-                    self.tableView.reloadDataForRowIndexes(NSIndexSet(index: idx), columnIndexes: NSIndexSet(index: 0))
+                    self.tableView.reloadData(forRowIndexes: IndexSet(integer: idx), columnIndexes: IndexSet(integer: 0))
                 }
             }
         }
-        self.downloadResumedHndl = nc.addObserverForName(VideoStoreNotificationDownloadResumed, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+        self.downloadResumedHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadResumed), object: nil, queue: OperationQueue.main) { note in
             if let object = note.object as? String {
                 let url = object as String
                 let (item, idx) = self.listItemForURL(url)
                 if item != nil {
-                    self.tableView.reloadDataForRowIndexes(NSIndexSet(index: idx), columnIndexes: NSIndexSet(index: 0))
+                    self.tableView.reloadData(forRowIndexes: IndexSet(integer: idx), columnIndexes: IndexSet(integer: 0))
                 }
             }
         }
-        self.downloadCancelledHndl = nc.addObserverForName(VideoStoreNotificationDownloadCancelled, object: nil, queue: NSOperationQueue.mainQueue()) { note in
+        self.downloadCancelledHndl = nc.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadCancelled), object: nil, queue: OperationQueue.main) { note in
             self.populateDownloadItems()
         }
         
         populateDownloadItems()
     }
     
-    private func listItemForURL(url: String!) -> (DownloadListItem?, Int) {
-        for (idx, item) in self.items.enumerate() {
+    fileprivate func listItemForURL(_ url: String!) -> (DownloadListItem?, Int) {
+        for (idx, item) in self.items.enumerated() {
             if item.url == url {
                 return (item, idx)
             }
@@ -144,12 +144,12 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadStartedHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadFinishedHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadChangedHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadCancelledHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadPausedHndl!)
-        NSNotificationCenter.defaultCenter().removeObserver(self.downloadResumedHndl!)
+        NotificationCenter.default.removeObserver(self.downloadStartedHndl!)
+        NotificationCenter.default.removeObserver(self.downloadFinishedHndl!)
+        NotificationCenter.default.removeObserver(self.downloadChangedHndl!)
+        NotificationCenter.default.removeObserver(self.downloadCancelledHndl!)
+        NotificationCenter.default.removeObserver(self.downloadPausedHndl!)
+        NotificationCenter.default.removeObserver(self.downloadResumedHndl!)
     }
     
     var videoStore: VideoStore {
@@ -162,11 +162,11 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
         self.init(windowNibName: "DownloadListWindowController")
     }
     
-    private func populateDownloadItems() {
-        self.items.removeAll(keepCapacity: false)
+    fileprivate func populateDownloadItems() {
+        self.items.removeAll(keepingCapacity: false)
         
         videoStore.allTasks().forEach { task in
-            guard let taskURL = task.originalRequest?.URL?.absoluteString else { return }
+            guard let taskURL = task.originalRequest?.url?.absoluteString else { return }
             guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", taskURL).first else { return }
             
             let item = DownloadListItem(url: taskURL, session: session, task: task)
@@ -177,13 +177,13 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
         self.tableView.reloadData()
     }
     
-    func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+    func numberOfRows(in tableView: NSTableView) -> Int {
         return self.items.count
     }
     
-    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let identifier = tableColumn?.identifier
-        let cellView = tableView.makeViewWithIdentifier(identifier!, owner: self) as! DownloadListCellView
+        let cellView = tableView.make(withIdentifier: identifier!, owner: self) as! DownloadListCellView
         let item = self.items[row]
         
         let title = item.session.isExtra ? "\(item.session.event) - \(item.session.title)" : "\(item.session.event) \(item.session.year) - \(item.session.title)"
@@ -201,9 +201,9 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
             let listItem = item as! DownloadListItem
             let task = listItem.task
             switch task.state {
-            case .Running:
+            case .running:
                 self?.videoStore.pauseDownload(listItem.url)
-            case .Suspended:
+            case .suspended:
                 self?.videoStore.resumeDownload(listItem.url)
             default: break
             }
@@ -212,14 +212,14 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
         var statusText: String?
         
         switch item.task.state {
-        case .Running:
-            cellView.progressIndicator.indeterminate = false
+        case .running:
+            cellView.progressIndicator.isIndeterminate = false
             cellView.cancelButton.image = NSImage(named: "NSStopProgressFreestandingTemplate")
             cellView.cancelButton.toolTip = NSLocalizedString("Pause", comment: "pause button tooltip in downloads window")
             
             statusText = NSLocalizedString("Downloading", comment: "video downloading status in downloads window")
-        case .Suspended:
-            cellView.progressIndicator.indeterminate = true
+        case .suspended:
+            cellView.progressIndicator.isIndeterminate = true
             cellView.cancelButton.image = NSImage(named: "NSRefreshFreestandingTemplate")
             cellView.cancelButton.toolTip = NSLocalizedString("Resume", comment: "resume button tooltip in downloads window")
             
@@ -229,9 +229,9 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
         
         if let statusText = statusText {
             if let totalSize = item.totalSize {
-                let downloaded = fileSizeFormatter.stringFromByteCount(Int64(item.downloadedSize))
-                let total = fileSizeFormatter.stringFromByteCount(Int64(totalSize))
-                let progress = percentFormatter.stringFromNumber(item.progress) ?? "? %"
+                let downloaded = fileSizeFormatter.string(fromByteCount: Int64(item.downloadedSize))
+                let total = fileSizeFormatter.string(fromByteCount: Int64(totalSize))
+                let progress = percentFormatter.string(from: NSNumber(item.progress)) ?? "? %"
                 
                 cellView.statusLabel.stringValue = "\(statusText) – \(downloaded) / \(total) (\(progress))"
             } else {
@@ -242,12 +242,12 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
         return cellView
     }
     
-    func delete(sender: AnyObject?) {
+    func delete(_ sender: AnyObject?) {
         guard tableView.selectedRowIndexes.count > 0 else { return }
         
         var downloadsToCancel = [String]()
         
-        tableView.selectedRowIndexes.enumerateIndexesUsingBlock { index, _ in
+        (tableView.selectedRowIndexes as NSIndexSet).enumerate { index, _ in
             downloadsToCancel.append(self.items[index].url)
         }
         
@@ -256,17 +256,17 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
     
     // MARK: Menu Validation
     
-    private enum MenuItemTags: Int {
-        case Delete = 1077
+    fileprivate enum MenuItemTags: Int {
+        case delete = 1077
     }
     
-    override func validateMenuItem(menuItem: NSMenuItem) -> Bool {
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         guard let item = MenuItemTags(rawValue: menuItem.tag) else {
             return super.validateMenuItem(menuItem)
         }
         
         switch item {
-        case .Delete:
+        case .delete:
             return tableView.selectedRowIndexes.count > 0
         }
     }

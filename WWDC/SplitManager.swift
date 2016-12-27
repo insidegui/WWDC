@@ -23,7 +23,7 @@ class SplitManager: NSObject, NSSplitViewDelegate {
         isSavingDividerPosition = true
     }
     
-    func splitView(splitView: NSSplitView, constrainSplitPosition proposedPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
+    func splitView(_ splitView: NSSplitView, constrainSplitPosition proposedPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         if isSavingDividerPosition {
             Preferences.SharedPreferences().dividerPosition = proposedPosition
             
@@ -35,7 +35,7 @@ class SplitManager: NSObject, NSSplitViewDelegate {
     
     func restoreDividerPosition()
     {
-        splitView.setPosition(Preferences.SharedPreferences().dividerPosition, ofDividerAtIndex: 0)
+        splitView.setPosition(Preferences.SharedPreferences().dividerPosition, ofDividerAt: 0)
     }
     
 }

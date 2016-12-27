@@ -26,7 +26,7 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
-    private var transcriptSearchResultsVC: TranscriptSearchResultsController?
+    fileprivate var transcriptSearchResultsVC: TranscriptSearchResultsController?
     
     @IBOutlet weak var transcriptControllerContainerView: NSView!
     
@@ -49,9 +49,9 @@ class VideoDetailsViewController: NSViewController {
             liveIndicatorView.title = "LIVE"
             
             if #available(OSX 10.11, *) {
-                liveIndicatorView.font = NSFont.systemFontOfSize(11.0, weight: NSFontWeightMedium)
+                liveIndicatorView.font = NSFont.systemFont(ofSize: 11.0, weight: NSFontWeightMedium)
             } else {
-                liveIndicatorView.font = NSFont.systemFontOfSize(11.0)
+                liveIndicatorView.font = NSFont.systemFont(ofSize: 11.0)
             }
         }
     }
@@ -70,8 +70,8 @@ class VideoDetailsViewController: NSViewController {
                 pStyle.alignment = NSCenterTextAlignment
                 
                 let attrs = [
-                    NSFontAttributeName: NSFont.controlContentFontOfSize(13.0),
-                    NSForegroundColorAttributeName: NSColor.whiteColor(),
+                    NSFontAttributeName: NSFont.controlContentFont(ofSize: 13.0),
+                    NSForegroundColorAttributeName: NSColor.white,
                     NSParagraphStyleAttributeName: pStyle
                 ]
                 watchLiveButton.attributedTitle = NSAttributedString(string: "Watch Live", attributes: attrs)
@@ -83,7 +83,7 @@ class VideoDetailsViewController: NSViewController {
     }
     @IBOutlet weak var reminderButton: NSButton!
     
-    private func updateUI() {
+    fileprivate func updateUI() {
         if let session = session {
             guard !session.invalidated else { return }
         }
@@ -93,21 +93,21 @@ class VideoDetailsViewController: NSViewController {
             return
         }
         
-        watchLiveButton.hidden = true
-        reminderButton.hidden = true
-        downloadController.view.hidden = false
+        watchLiveButton.isHidden = true
+        reminderButton.isHidden = true
+        downloadController.view.isHidden = false
         
         actionButtonsController.session = session
         setupActionCallbacks()
         
-        titleLabel.textColor = NSColor.labelColor()
+        titleLabel.textColor = NSColor.labelColor
         
         if let session = self.session {
-            actionButtonsController.view.hidden = false
+            actionButtonsController.view.isHidden = false
             titleLabel.stringValue = session.title
             subtitleLabel.stringValue = "\(session.track) | Session \(session.id)"
             descriptionLabel.stringValue = session.summary
-            descriptionLabel.hidden = false
+            descriptionLabel.isHidden = false
             
             restoreColors()
             
@@ -116,14 +116,14 @@ class VideoDetailsViewController: NSViewController {
                 self.updateUI()
             }
             
-            if let schedule = session.schedule where session.isScheduled {
+            if let schedule = session.schedule, session.isScheduled {
                 showScheduledState(schedule)
             }
         } else {
-            actionButtonsController.view.hidden = true
+            actionButtonsController.view.isHidden = true
             titleLabel.stringValue = "No session selected"
             subtitleLabel.stringValue = "Select a session to see It here"
-            descriptionLabel.hidden = true
+            descriptionLabel.isHidden = true
             downloadController.session = nil
             
             restoreColors()
@@ -133,15 +133,15 @@ class VideoDetailsViewController: NSViewController {
         updateTranscriptsViewController()
     }
     
-    private func showScheduledState(schedule: ScheduledSession) {
+    fileprivate func showScheduledState(_ schedule: ScheduledSession) {
         guard let track = schedule.track else { return }
         
-        watchLiveButton.hidden = false
-        reminderButton.hidden = false
-        actionButtonsController.view.hidden = true
+        watchLiveButton.isHidden = false
+        reminderButton.isHidden = false
+        actionButtonsController.view.isHidden = true
         
         topBarBackgroundView.backgroundColor = NSColor(hexString: track.darkColor)
-        topBarSeparatorView.backgroundColor = NSColor.blackColor()
+        topBarSeparatorView.backgroundColor = NSColor.black
         titleLabel.textColor = NSColor(hexString: track.titleColor)
         subtitleLabel.textColor = NSColor(hexString: track.color)
         
@@ -149,11 +149,11 @@ class VideoDetailsViewController: NSViewController {
         updateReminderButton()
     }
     
-    @objc private func updateReminderButton() {
-        dispatch_async(dispatch_get_main_queue()) {
+    @objc fileprivate func updateReminderButton() {
+        DispatchQueue.main.async {
             guard let schedule = self.session?.schedule else { return }
             
-            self.reminderButton.enabled = true
+            self.reminderButton.isEnabled = true
             
             self.calendarHelper.hasReminderForScheduledSession(schedule) { [weak self] hasReminder in
                 if hasReminder {
@@ -167,27 +167,27 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
-    private lazy var startDateFormatter: NSDateFormatter = {
-        let formatter = NSDateFormatter()
+    fileprivate lazy var startDateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
         
-        formatter.locale = NSLocale(localeIdentifier: "en")
+        formatter.locale = Locale(identifier: "en")
         formatter.dateFormat = "EEEE 'at' "
         
         return formatter
     }()
     
-    private lazy var startTimeFormatter: NSDateFormatter = {
-        let formatter = NSDateFormatter()
+    fileprivate lazy var startTimeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
         
-        formatter.timeStyle = .ShortStyle
+        formatter.timeStyle = .short
         
         return formatter
     }()
     
-    @objc private func updateLiveState(note: NSNotification? = nil) {
+    @objc fileprivate func updateLiveState(_ note: Notification? = nil) {
         guard let schedule = session?.schedule else {
-            watchLiveButton.enabled = false
-            liveIndicatorView.hidden = true
+            watchLiveButton.isEnabled = false
+            liveIndicatorView.isHidden = true
             return
         }
         
@@ -195,16 +195,16 @@ class VideoDetailsViewController: NSViewController {
         if schedule.isLive {
             tooltip = "This session is live streaming right now, click to watch!"
         } else {
-            tooltip = "This session will be live streamed! Come back on " + startDateFormatter.stringFromDate(schedule.startsAt) + startTimeFormatter.stringFromDate(schedule.startsAt) + " to watch It."
+            tooltip = "This session will be live streamed! Come back on " + startDateFormatter.string(from: schedule.startsAt as Date) + startTimeFormatter.string(from: schedule.startsAt as Date) + " to watch It."
         }
         
         watchLiveButton.toolTip = tooltip
         
-        watchLiveButton.enabled = schedule.isLive
-        liveIndicatorView.hidden = !schedule.isLive
+        watchLiveButton.isEnabled = schedule.isLive
+        liveIndicatorView.isHidden = !schedule.isLive
     }
     
-    @IBAction func watchLive(sender: NSButton) {
+    @IBAction func watchLive(_ sender: NSButton) {
         guard let liveSession = session?.schedule?.liveSession else { return }
         
         let playerVC = VideoPlayerViewController.withLiveSession(liveSession)
@@ -216,12 +216,12 @@ class VideoDetailsViewController: NSViewController {
         playerWindowController.showWindow(sender)
     }
     
-    private lazy var calendarHelper = CalendarHelper()
+    fileprivate lazy var calendarHelper = CalendarHelper()
     
-    @IBAction func reminderButtonAction(sender: NSButton) {
+    @IBAction func reminderButtonAction(_ sender: NSButton) {
         guard let schedule = session?.schedule else { return }
         
-        sender.enabled = false
+        sender.isEnabled = false
         
         if sender.tag == 0 {
             calendarHelper.registerReminderForScheduledSession(schedule)
@@ -230,25 +230,25 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
-    private func restoreColors() {
-        titleLabel.textColor = NSColor.labelColor()
-        subtitleLabel.textColor = NSColor.secondaryLabelColor()
+    fileprivate func restoreColors() {
+        titleLabel.textColor = NSColor.labelColor
+        subtitleLabel.textColor = NSColor.secondaryLabelColor
         topBarBackgroundView.backgroundColor = NSColor.whiteColor()
         topBarSeparatorView.backgroundColor = Theme.WWDCTheme.separatorColor
     }
     
-    private func setupTranscriptResultsViewIfNeeded() {
+    fileprivate func setupTranscriptResultsViewIfNeeded() {
         guard transcriptSearchResultsVC == nil else { return }
         transcriptSearchResultsVC = TranscriptSearchResultsController()
         transcriptSearchResultsVC!.view.frame = self.transcriptControllerContainerView.bounds
-        transcriptSearchResultsVC!.view.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+        transcriptSearchResultsVC!.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
         transcriptSearchResultsVC!.playCallback = { [unowned self] time in
             self.watchVideo(time)
         }
         self.transcriptControllerContainerView.addSubview(transcriptSearchResultsVC!.view)
     }
     
-    private func updateTranscriptsViewController() {
+    fileprivate func updateTranscriptsViewController() {
         guard let term = searchTerm else {
             transcriptSearchResultsVC?.lines = nil
             return
@@ -259,31 +259,31 @@ class VideoDetailsViewController: NSViewController {
             return
         }
         
-        if let relevantLines = session?.transcript?.lines.filter("text CONTAINS[c] %@", searchTerm!) where relevantLines.count > 0 {
+        if let relevantLines = session?.transcript?.lines.filter("text CONTAINS[c] %@", searchTerm!), relevantLines.count > 0 {
             transcriptSearchResultsVC?.lines = relevantLines
-            transcriptControllerContainerView.hidden = false
+            transcriptControllerContainerView.isHidden = false
         } else {
             transcriptSearchResultsVC?.lines = nil
-            transcriptControllerContainerView.hidden = true
+            transcriptControllerContainerView.isHidden = true
         }
         
     }
     
-    private func handleMultipleSelection() {
+    fileprivate func handleMultipleSelection() {
         restoreColors()
         
-        liveIndicatorView.hidden = true
-        watchLiveButton.hidden = true
-        reminderButton.hidden = true
+        liveIndicatorView.isHidden = true
+        watchLiveButton.isHidden = true
+        reminderButton.isHidden = true
         titleLabel.stringValue = "\(selectedCount) sessions selected"
         subtitleLabel.stringValue = ""
-        descriptionLabel.hidden = true
-        actionButtonsController.view.hidden = true
-        downloadController.view.hidden = true
-        transcriptControllerContainerView.hidden = true
+        descriptionLabel.isHidden = true
+        actionButtonsController.view.isHidden = true
+        downloadController.view.isHidden = true
+        transcriptControllerContainerView.isHidden = true
     }
     
-    private func setupActionCallbacks() {
+    fileprivate func setupActionCallbacks() {
         actionButtonsController.watchHDVideoCallback = { [unowned self] in
             if self.session!.hd_url != nil {
                 if VideoStore.SharedStore().hasVideo(self.session!.hd_url!) {
@@ -327,15 +327,15 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
-    private func showVideoNotAvailableAlert() {
+    fileprivate func showVideoNotAvailableAlert() {
         let alert = NSAlert()
         alert.messageText = "Video not available"
         alert.informativeText = "The video for this session is not available yet, please come back later to watch it. You can try refreshing now to see if it became available (⌘R)."
-        alert.addButtonWithTitle("OK")
+        alert.addButton(withTitle: "OK")
         alert.runModal()
     }
     
-    private func playerControllerForSession(session: Session) -> VideoWindowController? {
+    fileprivate func playerControllerForSession(_ session: Session) -> VideoWindowController? {
         let filteredControllers = videoControllers.filter { videoWC in
             return (videoWC as? VideoWindowController)?.session?.uniqueId == session.uniqueId
         }
@@ -343,7 +343,7 @@ class VideoDetailsViewController: NSViewController {
         return filteredControllers.first as? VideoWindowController
     }
     
-    private func watchVideo(startTime: Double) {
+    fileprivate func watchVideo(_ startTime: Double) {
         if let existingController = playerControllerForSession(session!) {
             existingController.seekTo(startTime)
             return
@@ -360,15 +360,15 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
-    private func doWatchVideo(sender: AnyObject?, url: String, startTime: Double?) {
+    fileprivate func doWatchVideo(_ sender: AnyObject?, url: String, startTime: Double?) {
         let playerWindowController = VideoWindowController(session: session!, videoURL: url, startTime: startTime)
         playerWindowController.showWindow(sender)
         followWindowLifecycle(playerWindowController.window)
         videoControllers.append(playerWindowController)
     }
     
-    private func followWindowLifecycle(window: NSWindow!) {
-        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: window, queue: nil) { note in
+    fileprivate func followWindowLifecycle(_ window: NSWindow!) {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.NSWindowWillClose, object: window, queue: nil) { note in
             if let window = note.object as? NSWindow {
                 let controller = window.windowController
                 
@@ -386,8 +386,8 @@ class VideoDetailsViewController: NSViewController {
         
         updateUI()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateLiveState), name: LiveSessionsListDidChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateReminderButton), name: EKEventStoreChangedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateLiveState), name: NSNotification.Name(rawValue: LiveSessionsListDidChangeNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateReminderButton), name: NSNotification.Name.EKEventStoreChanged, object: nil)
     }
     
     override func viewWillAppear() {
@@ -398,7 +398,7 @@ class VideoDetailsViewController: NSViewController {
     
     // MARK: - SplitView containment
     
-    private struct SplitBehaviorMetrics {
+    fileprivate struct SplitBehaviorMetrics {
         struct Collapsed {
             static let titleTopConstant = CGFloat(28.0)
             static let heightConstant = CGFloat(74.0)
@@ -409,17 +409,17 @@ class VideoDetailsViewController: NSViewController {
         }
     }
     
-    private func setupSplitDetailBehavior() {
-        guard let splitController = parentViewController as? NSSplitViewController where splitController.splitViewItems.count == 2 else { return }
+    fileprivate func setupSplitDetailBehavior() {
+        guard let splitController = parent as? NSSplitViewController, splitController.splitViewItems.count == 2 else { return }
         
         KVOController.observe(splitController.splitViewItems[0], keyPath: "collapsed", options: [.Initial, .New], action: #selector(splitViewCollapsedStatusDidChange))
     }
     
-    @objc private func splitViewCollapsedStatusDidChange() {
+    @objc fileprivate func splitViewCollapsedStatusDidChange() {
         NSAnimationContext.runAnimationGroup({ _ in
-            let sidebarSplitItem = (self.parentViewController as! NSSplitViewController).splitViewItems[0]
+            let sidebarSplitItem = (self.parent as! NSSplitViewController).splitViewItems[0]
             
-            if sidebarSplitItem.collapsed {
+            if sidebarSplitItem.isCollapsed {
                 self.titleTopConstraint.animator().constant = SplitBehaviorMetrics.Collapsed.titleTopConstant
                 self.topBarHeightConstraint.animator().constant = SplitBehaviorMetrics.Collapsed.heightConstant
             } else {

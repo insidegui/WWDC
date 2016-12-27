@@ -29,7 +29,7 @@ class VideoWindowController: NSWindowController {
             return window as! GRPlayerWindow
         }
     }
-    var videoNaturalSize = CGSizeZero
+    var videoNaturalSize = CGSize.zero
     
     convenience init(session: Session, videoURL: String) {
         self.init(windowNibName: _nibName)
@@ -54,7 +54,7 @@ class VideoWindowController: NSWindowController {
                     player.allowsExternalPlayback = true
                 }
                 
-                let args = NSProcessInfo.processInfo().arguments
+                let args = ProcessInfo.processInfo.arguments
                 if args.contains("zerovolume") {
                     player.volume = 0
                 }
@@ -62,7 +62,7 @@ class VideoWindowController: NSWindowController {
         }
     }
     
-    private var activity: NSObjectProtocol?
+    fileprivate var activity: NSObjectProtocol?
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -71,27 +71,27 @@ class VideoWindowController: NSWindowController {
         
         setupPlayer()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(NSWindowDelegate.windowWillClose(_:)), name: NSWindowWillCloseNotification, object: self.window)
+        NotificationCenter.default.addObserver(self, selector: #selector(NSWindowDelegate.windowWillClose(_:)), name: NSNotification.Name.NSWindowWillClose, object: self.window)
         
-        activity = NSProcessInfo.processInfo().beginActivityWithOptions([.IdleDisplaySleepDisabled, .IdleSystemSleepDisabled, .UserInitiated], reason: "Playing WWDC session video")
+        activity = ProcessInfo.processInfo.beginActivity(options: [.idleDisplaySleepDisabled, .idleSystemSleepDisabled, .userInitiated], reason: "Playing WWDC session video")
         
         progressIndicator.startAnimation(nil)
-        window?.backgroundColor = NSColor.blackColor()
+        window?.backgroundColor = NSColor.black
         
         window?.title = "\(session.event) \(session.year) | \(session.title)"
         
         // pause playback when a live event starts playing
-        NSNotificationCenter.defaultCenter().addObserverForName(LiveEventWillStartPlayingNotification, object: nil, queue: nil) { [weak self] _ in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: LiveEventWillStartPlayingNotification), object: nil, queue: nil) { [weak self] _ in
             self?.player?.pause()
         }
         
         if Preferences.SharedPreferences().floatOnTopEnabled {
-            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey))
+            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.floatingWindow))
         }
     }
     
-    func windowWillClose(note: NSNotification!) {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+    func windowWillClose(_ note: Notification!) {
+        NotificationCenter.default.removeObserver(self)
         
         if let player = player {
             player.cancelPendingPrerolls()
@@ -113,32 +113,32 @@ class VideoWindowController: NSWindowController {
         }
         
         if let activity = self.activity {
-            NSProcessInfo.processInfo().endActivity(activity)
+            ProcessInfo.processInfo.endActivity(activity)
         }
         
         self.transcriptWC?.close()
         self.transcriptWC = nil
     }
     
-    private func setupPlayer() {
-        guard let videoURL = videoURL, url = NSURL(string: videoURL) else { return }
+    fileprivate func setupPlayer() {
+        guard let videoURL = videoURL, let url = URL(string: videoURL) else { return }
         
-        playerView.controlsStyle = .None
+        playerView.controlsStyle = .none
         
-        player = AVPlayer(URL: url)
+        player = AVPlayer(url: url)
         if #available(OSX 10.11, *) {
             addRateObserver(player: player!)
         }
         playerView.player = player
         
-        player?.currentItem?.asset.loadValuesAsynchronouslyForKeys(["tracks"]) { [weak self] in
-            dispatch_async(dispatch_get_main_queue()) {
+        player?.currentItem?.asset.loadValuesAsynchronously(forKeys: ["tracks"]) { [weak self] in
+            DispatchQueue.main.async {
                 self?.setupWindowSizing()
                 self?.setupTimeObserver()
                 
                 if let session = self?.session {
                     if session.currentPosition > 0 {
-                        self?.player?.seekToTime(CMTimeMakeWithSeconds(session.currentPosition, 1))
+                        self?.player?.seek(to: CMTimeMakeWithSeconds(session.currentPosition, 1))
                     }
                 }
                 
@@ -147,7 +147,7 @@ class VideoWindowController: NSWindowController {
                 }
                 self?.player?.play()
                 self?.progressIndicator.stopAnimation(nil)
-                self?.playerView.controlsStyle = .Floating
+                self?.playerView.controlsStyle = .floating
             }
         }
     }
@@ -156,28 +156,28 @@ class VideoWindowController: NSWindowController {
     
     // observing the key "rate" on AVPlayer caused a crash on 10.10
     @available(OSX 10.11, *)
-    private func addRateObserver(player player: AVPlayer) {
-        player.addObserver(self, forKeyPath: "rate", options: [.New, .Old], context: nil)
+    fileprivate func addRateObserver(player: AVPlayer) {
+        player.addObserver(self, forKeyPath: "rate", options: [.new, .old], context: nil)
     }
     
     // observing the key "rate" on AVPlayer caused a crash on 10.10
     @available(OSX 10.11, *)
-    private func removeRateObserver(player player: AVPlayer) {
+    fileprivate func removeRateObserver(player: AVPlayer) {
         player.removeObserver(self, forKeyPath: "rate")
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "status" {
-            if item.status == .ReadyToPlay {
-                dispatch_async(dispatch_get_main_queue()) {
+            if item.status == .readyToPlay {
+                DispatchQueue.main.async {
                     self.progressIndicator.stopAnimation(nil)
                     self.player?.play()
                 }
             }
         } else if keyPath == "rate" {
             if let change = change,
-                let newRate = change[NSKeyValueChangeNewKey] as? Float,
-                let oldRate = change[NSKeyValueChangeOldKey] as? Float
+                let newRate = change[NSKeyValueChangeKey.newKey] as? Float,
+                let oldRate = change[NSKeyValueChangeKey.oldKey] as? Float
             {
                 if oldRate == 0.0 && newRate == 1.0 { // play button tapped
                     player!.rate = rate // set rate to stored one
@@ -186,19 +186,19 @@ class VideoWindowController: NSWindowController {
                 }
             }
         } else {
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
     
-    func seekTo(time: Double) {
-        player?.seekToTime(CMTimeMakeWithSeconds(time, 6000), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+    func seekTo(_ time: Double) {
+        player?.seek(to: CMTimeMakeWithSeconds(time, 6000), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
     }
     
-    func toggleFullScreen(sender: AnyObject?) {
+    func toggleFullScreen(_ sender: AnyObject?) {
         window!.toggleFullScreen(sender)
     }
     
-    func showTranscriptWindow(sender: AnyObject?) {
+    func showTranscriptWindow(_ sender: AnyObject?) {
         guard let session = session else { return }
         guard session.transcript != nil else {
             let alert = NSAlert()
@@ -208,7 +208,7 @@ class VideoWindowController: NSWindowController {
             } else {
                 alert.informativeText = "The transcript for this session is not available."
             }
-            alert.addButtonWithTitle("OK")
+            alert.addButton(withTitle: "OK")
             alert.runModal()
             return
         }
@@ -225,7 +225,7 @@ class VideoWindowController: NSWindowController {
         transcriptWC.showWindow(sender)
         transcriptWC.jumpToTimeCallback = { [unowned self] time in
             guard let player = self.player else { return }
-            player.seekToTime(CMTimeMakeWithSeconds(time, player.currentItem!.duration.timescale))
+            player.seek(to: CMTimeMakeWithSeconds(time, player.currentItem!.duration.timescale))
         }
         
         setupTranscriptSync(session.transcript!)
@@ -236,7 +236,7 @@ class VideoWindowController: NSWindowController {
     func setupTimeObserver() {
         guard session != nil && timeObserver == nil else { return }
         
-        timeObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMakeWithSeconds(5, 1), queue: dispatch_get_main_queue()) { [weak self] currentTime in
+        timeObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 1), queue: DispatchQueue.main) { [weak self] currentTime in
             guard let weakSelf = self else { return }
             
             let progress = Double(CMTimeGetSeconds(currentTime)/CMTimeGetSeconds(weakSelf.player!.currentItem!.duration))
@@ -245,34 +245,34 @@ class VideoWindowController: NSWindowController {
                 weakSelf.session!.progress = progress
                 weakSelf.session!.currentPosition = CMTimeGetSeconds(currentTime)
             }
-        }
+        } as AnyObject?
     }
     
     var boundaryObserver: AnyObject?
     
-    func setupTranscriptSync(transcript: Transcript) {
+    func setupTranscriptSync(_ transcript: Transcript) {
         guard !transcript.invalidated else { return }
         guard transcript.lines.count > 0 else { return }
-        guard let player = player where transcriptWC != nil else { return }
+        guard let player = player, transcriptWC != nil else { return }
         guard let playerItem = player.currentItem else { return }
         
         let timecodes = transcript.timecodesWithTimescale(playerItem.duration.timescale)
         guard timecodes.count > 0 else { return }
         
-        boundaryObserver = player.addBoundaryTimeObserverForTimes(timecodes, queue: dispatch_get_main_queue()) { [unowned self] in
+        boundaryObserver = player.addBoundaryTimeObserver(forTimes: timecodes, queue: DispatchQueue.main) { [unowned self] in
             guard self.transcriptWC != nil else { return }
             
             let ct = CMTimeGetSeconds(self.player!.currentTime())
             let roundedTimecode = Transcript.roundedStringFromTimecode(ct)
             self.transcriptWC.highlightLineAt(roundedTimecode)
-        }
+        } as AnyObject?
     }
     
     func setupWindowSizing()
     {
         if let asset = player?.currentItem?.asset {
             // get video dimensions and set window aspect ratio
-            let tracks = asset.tracksWithMediaType(AVMediaTypeVideo)
+            let tracks = asset.tracks(withMediaType: AVMediaTypeVideo)
             if tracks.count > 0 {
                 let track = tracks[0]
                 videoNaturalSize = track.naturalSize
@@ -297,14 +297,14 @@ class VideoWindowController: NSWindowController {
     }
     
     // Toggles if the window should float on top of all other windows
-    @IBAction func floatOnTop(sender: NSMenuItem) {
+    @IBAction func floatOnTop(_ sender: NSMenuItem) {
         if sender.state == NSOnState {
-            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.NormalWindowLevelKey))
+            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.normalWindow))
             Preferences.SharedPreferences().floatOnTopEnabled = false
             
             sender.state = NSOffState
         } else {
-            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.FloatingWindowLevelKey))
+            window!.level = Int(CGWindowLevelForKey(CGWindowLevelKey.floatingWindow))
             Preferences.SharedPreferences().floatOnTopEnabled = true
             
             sender.state = NSOnState
@@ -312,9 +312,9 @@ class VideoWindowController: NSWindowController {
     }
     
     // resizes the window so the video fills the entire screen without cropping
-    @IBAction func sizeWindowToFill(sender: AnyObject?)
+    @IBAction func sizeWindowToFill(_ sender: AnyObject?)
     {
-        if (videoNaturalSize == CGSizeZero) {
+        if (videoNaturalSize == CGSize.zero) {
             return
         }
         
@@ -324,9 +324,9 @@ class VideoWindowController: NSWindowController {
     }
     
     // resizes the window to a fraction of the video's size
-    func sizeWindowTo(fraction: CGFloat)
+    func sizeWindowTo(_ fraction: CGFloat)
     {
-        if (videoNaturalSize == CGSizeZero) {
+        if (videoNaturalSize == CGSize.zero) {
             return
         }
         
@@ -336,11 +336,11 @@ class VideoWindowController: NSWindowController {
         playerWindow.sizeToFitVideoSize(scaledSize, ignoringScreenSize: true, animated: true)
     }
     
-    @IBAction func sizeWindowToHalfSize(sender: AnyObject?) {
+    @IBAction func sizeWindowToHalfSize(_ sender: AnyObject?) {
         sizeWindowTo(0.5)
     }
     
-    @IBAction func sizeWindowToQuarterSize(sender: AnyObject?) {
+    @IBAction func sizeWindowToQuarterSize(_ sender: AnyObject?) {
         sizeWindowTo(0.25)
     }
     
@@ -348,7 +348,7 @@ class VideoWindowController: NSWindowController {
 
 extension Transcript {
     
-    func timecodesWithTimescale(timescale: Int32) -> [NSValue] {
+    func timecodesWithTimescale(_ timescale: Int32) -> [NSValue] {
         var results: [NSValue] = []
         
         for line in lines {
@@ -359,11 +359,11 @@ extension Transcript {
         return results
     }
     
-    class func roundedStringFromTimecode(timecode: Float64) -> String {
-        let formatter = NSNumberFormatter()
+    class func roundedStringFromTimecode(_ timecode: Float64) -> String {
+        let formatter = NumberFormatter()
         formatter.positiveFormat = "0.#"
         
-        return formatter.stringFromNumber(timecode)!
+        return formatter.string(from: NSNumber(timecode))!
     }
     
 }

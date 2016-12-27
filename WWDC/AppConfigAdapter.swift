@@ -13,7 +13,7 @@ class AppConfigAdapter: JSONAdapter {
     
     typealias ModelType = AppConfig
     
-    static func adapt(json: JSON) -> ModelType {
+    static func adapt(_ json: JSON) -> ModelType {
         let config = AppConfig()
         
         if let videos = json["urls"]["videos"].string {

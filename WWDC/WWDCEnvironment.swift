@@ -14,7 +14,7 @@ struct WWDCEnvironment {
     
     static let liveTolerance = 60.0 * 15.0
     
-    private static var shouldUseTestServer: Bool {
+    fileprivate static var shouldUseTestServer: Bool {
         #if DEBUG
             return NSProcessInfo.processInfo().arguments.contains("--use-localhost")
         #else
@@ -22,7 +22,7 @@ struct WWDCEnvironment {
         #endif
     }
     
-    private static var shouldUseFakeTestData: Bool {
+    fileprivate static var shouldUseFakeTestData: Bool {
         #if DEBUG
             return NSProcessInfo.processInfo().arguments.contains("--use-fake-data")
         #else
@@ -30,7 +30,7 @@ struct WWDCEnvironment {
         #endif
     }
     
-    private static var server: String {
+    fileprivate static var server: String {
         if shouldUseTestServer {
             return "http://localhost"
         } else {
@@ -38,7 +38,7 @@ struct WWDCEnvironment {
         }
     }
     
-    private static func URL(path: String) -> String {
+    fileprivate static func URL(_ path: String) -> String {
         return server + path
     }
     
