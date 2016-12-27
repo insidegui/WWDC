@@ -78,7 +78,7 @@
     
     if (theEvent.clickCount == 2) {
         if ([self.window.windowController respondsToSelector:@selector(toggleFullScreen:)]) {
-            [self.window.windowController toggleFullScreen:self];
+            [self.window toggleFullScreen:self];
         }
     }
 }
