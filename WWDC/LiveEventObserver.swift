@@ -175,7 +175,7 @@ class LiveEventObserver: NSObject, NSUserNotificationCenterDelegate {
                 return
             }
             
-            completionHandler(liveSessions: sessionsJSON.map({ LiveSessionAdapter.adapt($0) }))
+            completionHandler(sessionsJSON.map({ LiveSessionAdapter.adapt($0) }))
         }) 
         task.resume()
     }

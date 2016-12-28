@@ -251,7 +251,7 @@ class VideoWindowController: NSWindowController {
     var boundaryObserver: AnyObject?
     
     func setupTranscriptSync(_ transcript: Transcript) {
-        guard !transcript.invalidated else { return }
+        guard !transcript.isInvalidated else { return }
         guard transcript.lines.count > 0 else { return }
         guard let player = player, transcriptWC != nil else { return }
         guard let playerItem = player.currentItem else { return }
@@ -320,7 +320,7 @@ class VideoWindowController: NSWindowController {
         
         Preferences.SharedPreferences().lastVideoWindowScale = 100.0
         
-        playerWindow.sizeToFitVideoSize(videoNaturalSize, ignoringScreenSize: false, animated: false)
+        playerWindow.size(toFitVideoSize: videoNaturalSize, ignoringScreenSize: false, animated: false)
     }
     
     // resizes the window to a fraction of the video's size
@@ -333,7 +333,7 @@ class VideoWindowController: NSWindowController {
         Preferences.SharedPreferences().lastVideoWindowScale = fraction
         
         let scaledSize = CGSize(width: videoNaturalSize.width*fraction, height: videoNaturalSize.height*fraction)
-        playerWindow.sizeToFitVideoSize(scaledSize, ignoringScreenSize: true, animated: true)
+        playerWindow.size(toFitVideoSize: scaledSize, ignoringScreenSize: true, animated: true)
     }
     
     @IBAction func sizeWindowToHalfSize(_ sender: AnyObject?) {
@@ -353,7 +353,8 @@ extension Transcript {
         
         for line in lines {
             let time = CMTimeMakeWithSeconds(line.timecode, timescale)
-            results.append(NSValue(CMTime: time))
+            
+            results.append(NSValue(time: time))
         }
         
         return results
@@ -363,7 +364,7 @@ extension Transcript {
         let formatter = NumberFormatter()
         formatter.positiveFormat = "0.#"
         
-        return formatter.string(from: NSNumber(timecode))!
+        return formatter.string(from: NSNumber(value: timecode)) ?? "0.0"
     }
     
 }

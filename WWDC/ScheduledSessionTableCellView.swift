@@ -12,7 +12,7 @@ class ScheduledSessionTableCellView: NSTableCellView {
 
     var session: Session! {
         willSet {
-            KVOController.unobserve(session)
+            kvoController.unobserve(session)
         }
         didSet {
             updateUI()
@@ -72,11 +72,11 @@ class ScheduledSessionTableCellView: NSTableCellView {
         selected = false
         
         NotificationCenter.default.removeObserver(self)
-        KVOController.unobserve(session)
+        kvoController.unobserve(session)
     }
     
     fileprivate func updateUI() {
-        KVOController.observe(session, keyPath: "favorite", options: .New, action: #selector(updateSessionFlags))
+        kvoController.observe(session, keyPath: "favorite", options: .new, action: #selector(updateSessionFlags))
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: LiveSessionsListDidChangeNotification), object: nil, queue: OperationQueue.main, using: updateLive)
         

@@ -72,6 +72,8 @@ class PDFWindowController: NSWindowController {
             }
             downloader.downloadSlides({ success, data in
                 if success == true {
+                    guard let data = data else { return }
+                    
                     self.slidesDocument = PDFDocument(data: data)
                 } else {
                     print("Download failed")

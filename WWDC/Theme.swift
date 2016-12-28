@@ -41,7 +41,7 @@ class Theme: NSObject {
         if let image = cachedImages[name] {
             return image
         } else {
-            cachedImages[name] = NSImage(named: name)?.CGImage
+            cachedImages[name] = NSImage(named: name)?.cgImage
             return cachedImages[name]!
         }
     }

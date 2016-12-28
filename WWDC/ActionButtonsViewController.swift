@@ -41,7 +41,7 @@ class ActionButtonsViewController: NSViewController {
     fileprivate func updateUI() {
         guard isViewLoaded else { return }
         guard session != nil else { return }
-        guard !session.invalidated else { return }
+        guard !session.isInvalidated else { return }
         
         
         noSession()

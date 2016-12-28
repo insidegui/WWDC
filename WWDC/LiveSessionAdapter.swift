@@ -56,7 +56,7 @@ class LiveSessionAdapter: JSONAdapter {
         formatter.dateFormat = Constants.dateFormat
         if let startsAtString = json[Keys.startsAt].string {
             let startsAtWithZone = startsAtString + Constants.dateTimezone
-            session.startsAt = formatter.dateFromString(startsAtWithZone)
+            session.startsAt = formatter.date(from: startsAtWithZone)
         }
         
         return session
@@ -89,10 +89,10 @@ class LiveSessionAdapter: JSONAdapter {
         formatter.dateFormat = Constants.dateFormatForNewSessions
         
         if let startsAtString = json["start_date"].string {
-            session.startsAt = formatter.dateFromString(startsAtString)
+            session.startsAt = formatter.date(from: startsAtString)
         }
         if let endsAtString = json["end_date"].string {
-            session.endsAt = formatter.dateFromString(endsAtString)
+            session.endsAt = formatter.date(from: endsAtString)
         }
         
         return session

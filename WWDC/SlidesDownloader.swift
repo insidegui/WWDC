@@ -26,33 +26,26 @@ class SlidesDownloader {
         guard session.slidesURL != "" else { return completionHandler(false, nil) }
         guard let slidesURL = URL(string: session.slidesURL) else { return completionHandler(false, nil) }
         
-        Alamofire.download(Method.GET, slidesURL.absoluteString) { tempURL, response in
-            if let data = NSData(contentsOfURL: tempURL) {
-                mainQ {
-                    // this operation can fail if the PDF file is too big, Realm currently supports blobs of up to 16MB
-                    if data.length < self.maxPDFLength {
-                        WWDCDatabase.sharedDatabase.doChanges {
-                            self.session.slidesPDFData = data
-                        }
-                    } else {
-                        print("Error saving slides data to database, the file is too big to be saved")
-                    }
-                    
-                    completionHandler(success: true, data: data)
-                }
-            } else {
-                completionHandler(success: false, data: nil)
-            }
-
-            do {
-                try NSFileManager.defaultManager().removeItemAtURL(tempURL)
-            } catch {
-                print("Error removing temporary PDF file")
+        Alamofire.request(slidesURL).responseData { response in
+            guard let data = response.result.value else {
+                completionHandler(false, nil)
+                return
             }
             
-            return tempURL
-        }.progress { _, totalBytesRead, totalBytesExpected in
-            mainQ { progressHandler?(downloaded: Double(totalBytesRead), total: Double(totalBytesExpected)) }
+            mainQ {
+                // this operation can fail if the PDF file is too big, Realm currently supports blobs of up to 16MB
+                if data.count < self.maxPDFLength {
+                    WWDCDatabase.sharedDatabase.doChanges {
+                        self.session.slidesPDFData = data as Data
+                    }
+                } else {
+                    print("Error saving slides data to database, the file is too big to be saved")
+                }
+                
+                completionHandler(true, data)
+            }
+        }.downloadProgress { progress in
+            mainQ { progressHandler?(Double(progress.completedUnitCount), Double(progress.totalUnitCount)) }
         }
     }
     

@@ -202,9 +202,9 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
             let task = listItem.task
             switch task.state {
             case .running:
-                self?.videoStore.pauseDownload(listItem.url)
+                _ = self?.videoStore.pauseDownload(listItem.url)
             case .suspended:
-                self?.videoStore.resumeDownload(listItem.url)
+                _ = self?.videoStore.resumeDownload(listItem.url)
             default: break
             }
         };
@@ -231,7 +231,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
             if let totalSize = item.totalSize {
                 let downloaded = fileSizeFormatter.string(fromByteCount: Int64(item.downloadedSize))
                 let total = fileSizeFormatter.string(fromByteCount: Int64(totalSize))
-                let progress = percentFormatter.string(from: NSNumber(item.progress)) ?? "? %"
+                let progress = percentFormatter.string(from: NSNumber(value: item.progress)) ?? "? %"
                 
                 cellView.statusLabel.stringValue = "\(statusText) – \(downloaded) / \(total) (\(progress))"
             } else {
@@ -247,11 +247,11 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
         
         var downloadsToCancel = [String]()
         
-        (tableView.selectedRowIndexes as NSIndexSet).enumerate { index, _ in
+        (tableView.selectedRowIndexes as NSIndexSet).enumerate({ index, _ in
             downloadsToCancel.append(self.items[index].url)
-        }
+        })
         
-        downloadsToCancel.forEach { self.videoStore.cancelDownload($0) }
+        downloadsToCancel.forEach { _ = self.videoStore.cancelDownload($0) }
     }
     
     // MARK: Menu Validation

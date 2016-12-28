@@ -31,17 +31,17 @@ class Session: Object {
     dynamic var downloaded = false
     
     var isScheduled: Bool {
-        guard let schedule = schedule, !schedule.invalidated else { return false }
+        guard let schedule = schedule, !schedule.isInvalidated else { return false }
         
         guard !schedule.isLive else { return true }
         
-        return schedule.endsAt.isGreaterThanOrEqual(to: Date().addingTimeInterval(WWDCEnvironment.liveTolerance))
+        return schedule.endsAt >= Date().addingTimeInterval(WWDCEnvironment.liveTolerance)
     }
     
     var schedule: ScheduledSession? {
-        guard let realm = realm, !invalidated else { return nil }
+        guard let realm = realm, !isInvalidated else { return nil }
         
-        return realm.objectForPrimaryKey(ScheduledSession.self, key: uniqueId)
+        return realm.object(ofType: ScheduledSession.self, forPrimaryKey: uniqueId as AnyObject)
     }
     
     var event: String {

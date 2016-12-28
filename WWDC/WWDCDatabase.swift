@@ -47,7 +47,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         configureRealm()
     }
     
-    fileprivate let bgThread = DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.background)
+    fileprivate let bgThread = DispatchQueue.global(qos: .background)
     fileprivate var backgroundOperationQueue = OperationQueue()
     
     var config: AppConfig! {
@@ -73,7 +73,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             if oldVersion == 0 && self.currentDBVersion >= 5 {
                 NSLog("Migrating data from version 0 to version \(self.currentDBVersion)")
                 // app config must be invalidated for this version update
-                migration.deleteData("AppConfig")
+                migration.deleteData(forType: "AppConfig")
             }
         })
         
@@ -98,7 +98,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     func doBackgroundChanges(_ block: (_ realm: Realm) -> Void) {
         let bgRealm = try! Realm()
         bgRealm.beginWrite()
-        block(realm: bgRealm)
+        block(bgRealm)
         try! bgRealm.commitWrite()
     }
     
@@ -148,19 +148,19 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     /// Returns the list of sessions available sorted by year and session id
     /// - Warning: can only be used from the main thread
     var standardSessionList: Results<Session> {
-        return realm.objects(Session.self).sorted(sortDescriptorsForSessionList)
+        return realm.objects(Session.self).sorted(by: sortDescriptorsForSessionList)
     }
     
     /// #### The best sort descriptors for the list of videos
     /// Orders the videos by year (descending) and session number (ascending)
     lazy var sortDescriptorsForSessionList: [SortDescriptor] = [SortDescriptor(property: "year", ascending: false), SortDescriptor(property: "id", ascending: true)]
     
-    fileprivate let manager = Alamofire.Manager(configuration: URLSessionConfiguration.ephemeralSessionConfiguration())
+    fileprivate let manager = Alamofire.SessionManager(configuration: URLSessionConfiguration.ephemeral)
     
     /// This method downloads the app config from the server and sets It in self, which makes the app download the videos and schedule from the servers specified in the config
     fileprivate func downloadAppConfigAndSyncDatabase() {
-        manager.request(.GET, Constants.internalServiceURL).response { _, _, data, error in
-            guard let jsonData = data else {
+        manager.request(Constants.internalServiceURL).response { response in
+            guard let jsonData = response.data else {
                 print("No data returned from internal server!")
                 return
             }
@@ -182,14 +182,14 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     #if DEBUG
                         print("WWDC week started")
                     #endif
-                    NSNotificationCenter.defaultCenter().postNotificationName(WWDCWeekDidStartNotification, object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: WWDCWeekDidStartNotification), object: nil)
                 }
             } else {
                 mainQ {
                     #if DEBUG
                         print("WWDC week ended")
                     #endif
-                    NSNotificationCenter.defaultCenter().postNotificationName(WWDCWeekDidEndNotification, object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: WWDCWeekDidEndNotification), object: nil)
                 }
             }
             
@@ -228,13 +228,13 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             NSLog("Updating videos...")
         #endif
         
-        manager.request(.GET, config.videosURL).response { [weak self] _, _, data, error in
+        manager.request(config.videosURL).response { [weak self] response in
             guard let weakSelf = self else { return }
             
-            dispatch_async(weakSelf.bgThread) {
+            weakSelf.bgThread.async {
                 let backgroundRealm = try! Realm()
                 
-                guard let jsonData = data else {
+                guard let jsonData = response.data else {
                     print("No data returned from Apple's (session videos) server!")
                     return
                 }
@@ -276,7 +276,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                     
                     let session = SessionAdapter.adapt(jsonSession)
                     
-                    if let existingSession = backgroundRealm.objectForPrimaryKey(Session.self, key: session.uniqueId) {
+                    if let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: session.uniqueId as AnyObject) {
                         if !existingSession.isSemanticallyEqualToSession(session) {
                             // something about this session has changed, update
                             newSessionKeys.append(session.uniqueId)
@@ -319,7 +319,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 weakSelf.indexTranscriptsForSessionsWithKeys(newSessionKeys)
                 #endif
                 
-                mainQ { weakSelf.sessionListChangedCallback?(newSessionKeys: newSessionKeys) }
+                mainQ { weakSelf.sessionListChangedCallback?(newSessionKeys) }
             }
         }
     }
@@ -331,13 +331,13 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         
         guard config.scheduleEnabled else { return }
         
-        manager.request(.GET, config.sessionsURL).response { [weak self] _, _, data, error in
+        manager.request(config.sessionsURL).response { [weak self] response in
             guard let weakSelf = self else { return }
             
-            dispatch_async(weakSelf.bgThread) {
+            weakSelf.bgThread.async {
                 let backgroundRealm = try! Realm()
                 
-                guard let jsonData = data else {
+                guard let jsonData = response.data else {
                     print("No data returned from Apple's (session schedule) server!")
                     return
                 }
@@ -368,15 +368,15 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 sessionsArray.forEach { jsonScheduledSession in
                     let scheduledSession = ScheduledSession(json: jsonScheduledSession)
                     
-                    if scheduledSession.type.lowercaseString == "video" {
-                        scheduledSession.startsAt = NSDate.distantFuture()
+                    if scheduledSession.type.lowercased() == "video" {
+                        scheduledSession.startsAt = Date.distantFuture
                     }
                     
                     if let trackName = jsonScheduledSession["track"].string {
-                        scheduledSession.track = backgroundRealm.objectForPrimaryKey(Track.self, key: trackName)
+                        scheduledSession.track = backgroundRealm.object(ofType: Track.self, forPrimaryKey: trackName as AnyObject)
                     }
                     
-                    if let existingSession = backgroundRealm.objectForPrimaryKey(ScheduledSession.self, key: scheduledSession.uniqueId) {
+                    if let existingSession = backgroundRealm.object(ofType: ScheduledSession.self, forPrimaryKey: scheduledSession.uniqueId as AnyObject) {
                         // do not update semantically equal scheduled sessions
                         guard !existingSession.isSemanticallyEqualToScheduledSession(scheduledSession) else { return }
                     }
@@ -391,7 +391,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 }
                 
                 mainQ {
-                    weakSelf.sessionListChangedCallback?(newSessionKeys: [])
+                    weakSelf.sessionListChangedCallback?([])
                 }
             }
         }
@@ -408,7 +408,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         let backgroundRealm = try! Realm()
         
         for key in sessionKeys {
-            guard let session = backgroundRealm.objectForPrimaryKey(Session.self, key: key) else { return }
+            guard let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: key as AnyObject) else { return }
             indexTranscriptForSession(session)
         }
     }
@@ -420,17 +420,18 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
         let sessionKey = session.uniqueId
         let url = "\(Constants.asciiServiceBaseURL)\(session.year)//sessions/\(session.id)"
         let headers = ["Accept": "application/json"]
-        manager.request(.GET, url, parameters: nil, encoding: .JSON, headers: headers).response { _, response, data, error in
-            guard let jsonData = data else {
+        
+        manager.request(url, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseData { response in
+            guard let jsonData = response.data else {
                 print("No data returned from ASCIIWWDC for session \(session.uniqueId)")
                 return
             }
             
-            self.backgroundOperationQueue.addOperationWithBlock {
+            self.backgroundOperationQueue.addOperation {
                 do {
                     let bgRealm = try Realm()
                     
-                    guard let session = bgRealm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
+                    guard let session = bgRealm.object(ofType: Session.self, forPrimaryKey: sessionKey as AnyObject) else { return }
                     
                     let transcript = TranscriptAdapter.adapt(JSON(data: jsonData))
                     transcript.session = session
@@ -448,7 +449,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
                 
                 if let progress = self.transcriptIndexingProgress {
                     #if DEBUG
-                    NSLog("Completed: \(progress.completedUnitCount) Total: \(progress.totalUnitCount)")
+                        NSLog("Completed: \(progress.completedUnitCount) Total: \(progress.totalUnitCount)")
                     #endif
                     
                     if progress.completedUnitCount >= progress.totalUnitCount - 1 {
@@ -469,7 +470,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
             let bgRealm = try Realm()
             let validYears = WWDCEnvironment.reloadableYears
             let sessionKeys = bgRealm.objects(Session.self).filter({ validYears.contains($0.year) && $0.transcript == nil }).map({ $0.uniqueId })
-            self.indexTranscriptsForSessionsWithKeys(sessionKeys)
+            self.indexTranscriptsForSessionsWithKeys(Array(sessionKeys))
         } catch {
             print("Error reloading transcripts: \(error)")
         }

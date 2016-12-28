@@ -69,7 +69,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             return
         }
         
-        GRLoadingView.showInWindow(self.view.window!)
+        _ = GRLoadingView.show(in: self.view.window!)
         
         finishedInitialSetup = true
     }
@@ -120,8 +120,8 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     func setupFilterBar() {
         guard let superview = scrollView.superview else { return }
         
-        filterBarController = FilterBarController(coder: scrollView)
-        superview.addSubview(filterBarController!.view, positioned: .Below, relativeTo: headerController.view)
+        filterBarController = FilterBarController(scrollView: scrollView)
+        superview.addSubview(filterBarController!.view, positioned: .below, relativeTo: headerController.view)
         filterBarController!.view.frame = CGRect(x: 0, y: NSHeight(superview.frame)-NSHeight(headerController.view.frame), width: NSWidth(superview.frame), height: 44.0)
         filterBarController!.view.autoresizingMask = [.viewWidthSizable, .viewMinYMargin]
         
@@ -162,7 +162,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         let tableViewRow = tableView.clickedRow
         let session = sessions[tableViewRow]
         
-        guard !session.invalidated else { return false }
+        guard !session.isInvalidated else { return false }
         
         switch item {
         case .watched:
@@ -189,7 +189,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     func validateDownloadMenuItemsFrom(_ session: Session) -> (shouldEnableDownload: Bool, shouldEnableRemoveDownload:Bool) {
-        guard !session.invalidated else { return (false, false) }
+        guard !session.isInvalidated else { return (false, false) }
         
         if session.year < 2013 {
             return (false, false)
@@ -211,7 +211,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     func loadSessions(refresh: Bool, quiet: Bool) {
         if !quiet {
             if let window = view.window {
-                GRLoadingView.showInWindow(window)
+                GRLoadingView.show(in: window)
             }
         }
         
@@ -223,7 +223,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         WWDCDatabase.sharedDatabase.sessionListChangedCallback = { [weak self] newSessionKeys in
             print("\(newSessionKeys.count) new session(s) available")
 
-            GRLoadingView.dismissAllAfterDelay(0.3)
+            GRLoadingView.dismissAll(afterDelay: 0.3)
             
             self?.fetchLocalSessions()
             
@@ -247,14 +247,14 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     }
     
     func fetchLocalSessions() {
-        sessions = WWDCDatabase.sharedDatabase.standardSessionList.sort { session1, session2 in
+        sessions = WWDCDatabase.sharedDatabase.standardSessionList.sorted { session1, session2 in
             guard let schedule1 = session1.schedule, let schedule2 = session2.schedule else { return false }
             
-            return schedule1.startsAt.isLessThan(schedule2.startsAt)
+            return schedule1.startsAt < schedule2.startsAt
         }
         filterBarController?.updateMenus()
         if sessions.count > 0 {
-            GRLoadingView.dismissAllAfterDelay(0.3)
+            GRLoadingView.dismissAll(afterDelay: 0.3)
         }
     }
     
@@ -392,7 +392,7 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
         }
     }
     
-    fileprivate let userInitiatedQ = DispatchQueue.global(priority: Int(DispatchQoS.QoSClass.userInitiated.rawValue))
+    fileprivate let userInitiatedQ = DispatchQueue.global(qos: .userInitiated)
     fileprivate enum MassiveUpdateProperty {
         case progress(Double)
         case favorite(Bool)
@@ -400,19 +400,19 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
     // changes the property of all selected sessions on a background queue
     fileprivate func doMassiveSessionPropertyUpdate(_ property: MassiveUpdateProperty) {
         userInitiatedQ.async {
-            (self.tableView.selectedRowIndexes as NSIndexSet).enumerate { idx, _ in
+            (self.tableView.selectedRowIndexes as NSIndexSet).enumerate({ idx, _ in
                 var sessionKey = ""
                 mainQS { sessionKey = self.displayedSessions[idx].uniqueId }
                 WWDCDatabase.sharedDatabase.doBackgroundChanges { realm in
-                    guard let session = realm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
+                    guard let session = realm.object(ofType: Session.self, forPrimaryKey: sessionKey as AnyObject) else { return }
                     switch property {
-                    case .Progress(let progress):
+                    case .progress(let progress):
                         session.progress = progress
-                    case .Favorite(let favorite):
+                    case .favorite(let favorite):
                         session.favorite = favorite
                     }
                 }
-            }
+            })
             mainQ { self.restoreSearchIfNeeded() }
         }
     }
@@ -422,10 +422,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             let session = sessions[tableView.clickedRow]
             addDownloadForSession(session)
         } else {
-            (tableView.selectedRowIndexes as NSIndexSet).enumerate { idx, _ in
+            (tableView.selectedRowIndexes as NSIndexSet).enumerate({ idx, _ in
                 let session = self.sessions[idx]
                 self.addDownloadForSession(session)
-            }
+            })
         }
     }
     
@@ -434,10 +434,10 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             let session = sessions[tableView.clickedRow]
             removeDownloadForURL(session.hdVideoURL)
         } else {
-            (tableView.selectedRowIndexes as NSIndexSet).enumerate { idx, _ in
+            (tableView.selectedRowIndexes as NSIndexSet).enumerate({ idx, _ in
                 let session = self.sessions[idx]
                 self.removeDownloadForURL(session.hdVideoURL)
-            }
+            })
         }
         
         reloadTablePreservingSelection()
@@ -539,9 +539,9 @@ class VideosViewController: NSViewController, NSTableViewDelegate, NSTableViewDa
             searchQueue.async {
                 let realm = try! Realm()
                 let transcripts = realm.objects(Transcript.self).filter("fullText CONTAINS[c] %@", term)
-                let keysMatchingTranscripts = transcripts.map({ $0.session!.uniqueId })
+                let keysMatchingTranscripts = Array(transcripts.map({ $0.session!.uniqueId }))
                 mainQ {
-                    self.searchTermFilter = SearchFilter.Arbitrary(NSPredicate(format: "title CONTAINS[c] %@ OR uniqueId CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, term, keysMatchingTranscripts))
+                    self.searchTermFilter = SearchFilter.arbitrary(NSPredicate(format: "title CONTAINS[c] %@ OR uniqueId CONTAINS[c] %@ OR summary CONTAINS[c] %@ OR uniqueId IN %@", term, term, term, keysMatchingTranscripts))
                 }
             }
         } else {

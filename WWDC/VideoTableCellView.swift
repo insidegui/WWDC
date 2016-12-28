@@ -14,7 +14,7 @@ class VideoTableCellView: NSTableCellView {
     
     var session: Session! {
         willSet {
-            KVOController.unobserve(session)
+            kvoController.unobserve(session)
         }
         didSet {
             updateUI()
@@ -38,12 +38,12 @@ class VideoTableCellView: NSTableCellView {
         selected = false
         
         NotificationCenter.default.removeObserver(self)
-        KVOController.unobserve(session)
+        kvoController.unobserve(session)
     }
 
     fileprivate func updateUI() {
-        KVOController.observe(session, keyPath: "favorite", options: .New, action: #selector(VideoTableCellView.updateSessionFlags))
-        KVOController.observe(session, keyPath: "progress", options: .New, action: #selector(VideoTableCellView.updateSessionFlags))
+        kvoController.observe(session, keyPath: "favorite", options: .new, action: #selector(VideoTableCellView.updateSessionFlags))
+        kvoController.observe(session, keyPath: "progress", options: .new, action: #selector(VideoTableCellView.updateSessionFlags))
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: VideoStoreNotificationDownloadCancelled), object: nil, queue: OperationQueue.main) { note in
             self.updateDownloadImage()
@@ -67,16 +67,16 @@ class VideoTableCellView: NSTableCellView {
             let videoStore = VideoStore.SharedStore()
             
             if videoStore.hasVideo(url) {
-                downloadedImage.hidden = false
+                downloadedImage.isHidden = false
                 downloadedImage.image = NSImage(named: "downloaded")
             } else if videoStore.isDownloading(url) {
-                downloadedImage.hidden = false
+                downloadedImage.isHidden = false
                 downloadedImage.image = NSImage(named: "downloading")
             } else {
-                downloadedImage.hidden = true
+                downloadedImage.isHidden = true
             }
         } else {
-            downloadedImage.hidden = true
+            downloadedImage.isHidden = true
         }
     }
     

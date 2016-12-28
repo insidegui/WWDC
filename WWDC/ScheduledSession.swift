@@ -33,7 +33,7 @@ class ScheduledSession: Object {
     var session: Session? {
         guard let realm = realm else { return nil }
         
-        return realm.objectForPrimaryKey(Session.self, key: uniqueId)
+        return realm.object(ofType: Session.self, forPrimaryKey: uniqueId as AnyObject)
     }
     
     override static func primaryKey() -> String? {
@@ -47,24 +47,24 @@ class ScheduledSession: Object {
     convenience required init(json: JSON) {
         self.init()
         
-        let uniqueIdDateFormatter = NSDateFormatter()
+        let uniqueIdDateFormatter = DateFormatter()
         uniqueIdDateFormatter.dateFormat = "YYYY"
         
         self.type = json["type"].stringValue
         self.id = json["id"].intValue
         self.room = json["room"].stringValue
         
-        if let year = Int(uniqueIdDateFormatter.stringFromDate(self.startsAt)) {
+        if let year = Int(uniqueIdDateFormatter.string(from: self.startsAt)) {
             self.year = year
             self.uniqueId = "#" + String(year) + "-" + String(id)
         }
         
         if let startTime = json["start_time"].int {
-            self.startsAt = NSDate(timeIntervalSince1970: NSTimeInterval(startTime))
+            self.startsAt = Date(timeIntervalSince1970: TimeInterval(startTime))
         }
         
         if let endTime = json["end_time"].int {
-            self.endsAt = NSDate(timeIntervalSince1970: NSTimeInterval(endTime))
+            self.endsAt = Date(timeIntervalSince1970: TimeInterval(endTime))
         }
     }
     

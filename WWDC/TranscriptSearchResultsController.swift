@@ -15,7 +15,7 @@ class TranscriptSearchResultsController: NSViewController, NSTableViewDelegate, 
     
     var lines: Results<TranscriptLine>? {
         didSet {
-            guard lines != nil && lines?.count > 0 else {
+            guard let lines = lines, lines.count > 0 else {
                 view.isHidden = true
                 return
             }

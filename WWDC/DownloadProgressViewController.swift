@@ -72,19 +72,19 @@ class DownloadProgressViewController: NSViewController {
 	fileprivate func updateButtonVisibility(_ visibility: DownloadProgressViewButtonState) {
 		switch (visibility) {
         case .invalid:
-            self.progressIndicator?.hidden = true
+            self.progressIndicator?.isHidden = true
             self.downloadButton.isHidden = true
 		case .noDownload:
-			self.progressIndicator?.hidden = true
+			self.progressIndicator?.isHidden = true
 			self.downloadButton.isHidden = false
 		case .downloaded:
-			self.progressIndicator?.hidden = true
+			self.progressIndicator?.isHidden = true
 			self.downloadButton.isHidden = true
 		case .downloading:
-			self.progressIndicator?.hidden = false
+			self.progressIndicator?.isHidden = false
 			self.downloadButton.isHidden = true
 		case .paused:
-            self.progressIndicator?.hidden = false
+            self.progressIndicator?.isHidden = false
 			self.downloadButton.isHidden = true
 		}
 	}

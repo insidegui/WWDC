@@ -72,15 +72,15 @@ class FilterBarController: NSViewController, GRScrollViewDelegate {
         var tracks: [String] = []
         var focuses: [String] = []
         for session in sessions {
-            if years.indexOf(session.year) == nil {
+            if years.index(of: session.year) == nil {
                 years.append(session.year)
             }
-            if tracks.indexOf(session.track) == nil {
+            if tracks.index(of: session.track) == nil {
                 tracks.append(session.track)
             }
-            let sessionFocuses = session.focus.componentsSeparatedByString(", ")
+            let sessionFocuses = session.focus.components(separatedBy: ", ")
             for focus in sessionFocuses {
-                if focuses.indexOf(focus) == nil && focus != "" {
+                if focuses.index(of: focus) == nil && focus != "" {
                     focuses.append(focus)
                 }
             }

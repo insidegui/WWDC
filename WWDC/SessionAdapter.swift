@@ -29,7 +29,7 @@ class SessionAdapter: JSONAdapter {
         session.track = json["track"].stringValue
         
         if let focus = json["focus"].arrayObject as? [String] {
-            session.focus = focus.joinWithSeparator(", ")
+            session.focus = focus.joined(separator: ", ")
         }
         
         if let images = json["images"].dictionaryObject as? [String: String] {

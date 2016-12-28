@@ -35,7 +35,7 @@ class MainWindowController: NSWindowController {
                 view.wantsLayer = true
             }
             
-            window.styleMask |= NSFullSizeContentViewWindowMask
+            window.styleMask.insert(.fullSizeContentView)
             window.titleVisibility = .hidden
             window.titlebarAppearsTransparent = true
         }

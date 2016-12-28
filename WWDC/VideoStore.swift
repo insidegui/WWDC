@@ -131,7 +131,7 @@ class VideoStore : NSObject, URLSessionDownloadDelegate {
     
     func removeDownload(_ url: String) -> RemoveDownloadResponse {
         if isDownloading(url) {
-            cancelDownload(url)
+            _ = cancelDownload(url)
             return .removed
         }
         

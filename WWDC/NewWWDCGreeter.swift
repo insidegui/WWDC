@@ -52,18 +52,22 @@ private extension Preferences {
 
 private extension Date {
     func numberOfDaysUntilDateTime(_ toDateTime: Date, inTimeZone timeZone: TimeZone? = nil) -> Int {
-        var calendar = Calendar.current
+        var calendar = NSCalendar.current
         if let timeZone = timeZone {
             calendar.timeZone = timeZone
         }
         
-        var fromDate: Date?, toDate: Date?
+        var fromDate: NSDate?, toDate: NSDate?
         
         (calendar as NSCalendar).range(of: .day, start: &fromDate, interval: nil, for: self)
         (calendar as NSCalendar).range(of: .day, start: &toDate, interval: nil, for: toDateTime)
         
-        let difference = (calendar as NSCalendar).components(.day, from: fromDate!, to: toDate!, options: [])
+        guard fromDate != nil, toDate != nil else {
+            return 0
+        }
         
-        return difference.day!
+        let difference = calendar.dateComponents(Set([Calendar.Component.day]), from: fromDate as! Date, to: toDate as! Date)
+        
+        return difference.day ?? 0
     }
 }

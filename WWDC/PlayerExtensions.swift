@@ -13,7 +13,7 @@ import AVFoundation
 extension VideoPlayerViewController {
     
     class func withLiveSession(_ session: LiveSession) -> VideoPlayerViewController {
-        let player = AVPlayer(URL: session.streamURL!)
+        let player = AVPlayer(url: session.streamURL!)
         
         return VideoPlayerViewController(player: player, metadata: VideoPlayerViewControllerMetadata.fromLiveSession(session))
     }

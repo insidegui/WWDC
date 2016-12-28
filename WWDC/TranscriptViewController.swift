@@ -76,13 +76,13 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
         
         guard let lines = session.transcript?.lines else { return }
         
-        let result = lines.filter { Transcript.roundedStringFromTimecode($0.timecode) == roundedTimecode }
+        let result = Array(lines.filter { Transcript.roundedStringFromTimecode($0.timecode) == roundedTimecode })
         
         guard result.count > 0 else { return }
         
-        guard let row = lines.indexOf(result[0]) else { return }
-
-        tableView.selectRowIndexes(IndexSet(index: row), byExtendingSelection: false)
+        guard let row = lines.index(of: result[0]) else { return }
+        
+        tableView.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
         
         tableView.scrollRowToVisible(row)
     }
@@ -119,7 +119,7 @@ class TranscriptViewController: NSViewController, NSTableViewDelegate, NSTableVi
         guard tableView.clickedRow < filteredLines.count else { return }
         
         let line = filteredLines[tableView.clickedRow]
-        jumpToTimeCallback(time: line.timecode)
+        jumpToTimeCallback(line.timecode)
     }
     
     // MARK: - Search

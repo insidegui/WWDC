@@ -148,7 +148,7 @@ class PreferencesWindowController: NSWindowController {
         }
         
         let allSessionKeys = WWDCDatabase.sharedDatabase.realm.objects(Session.self).map({ $0.uniqueId })
-        WWDCDatabase.sharedDatabase.indexTranscriptsForSessionsWithKeys(allSessionKeys)
+        WWDCDatabase.sharedDatabase.indexTranscriptsForSessionsWithKeys(Array(allSessionKeys))
     }
     
 }

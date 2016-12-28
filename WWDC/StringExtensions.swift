@@ -44,14 +44,4 @@ extension String {
         }
     }
     
-    func words() -> [String] {
-        
-        var words = [String]()
-        let range = self.characters.indices
-        self.enumerateSubstrings(in: range, options: NSString.EnumerationOptions.byWords) { (substring, _, _, _) -> () in
-            words.append(substring!)
-        }
-        return words
-    }
-    
 }

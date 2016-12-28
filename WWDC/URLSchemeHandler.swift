@@ -24,9 +24,7 @@ class URLSchemeHandler: NSObject {
         if let urlString = event.paramDescriptor(forKeyword: UInt32(keyDirectObject))?.stringValue {
             if let url = URL(string: urlString) {
                 if let host = url.host {
-                    if let path = url.path {
-                        findAndOpenSession(host,path.replacingOccurrences(of: "/", with: "", options: .caseInsensitive, range: nil))
-                    }
+                    findAndOpenSession(host,url.path.replacingOccurrences(of: "/", with: "", options: .caseInsensitive, range: nil))
                 }
             }
         }
@@ -34,7 +32,7 @@ class URLSchemeHandler: NSObject {
     
     fileprivate func findAndOpenSession(_ year: String, _ id: String) {
         let sessionKey = "#\(year)-\(id)"
-        guard let session = WWDCDatabase.sharedDatabase.realm.objectForPrimaryKey(Session.self, key: sessionKey) else { return }
+        guard let session = WWDCDatabase.sharedDatabase.realm.object(ofType: Session.self, forPrimaryKey: sessionKey as AnyObject) else { return }
         
         // session has HD video
         if let url = session.hd_url {

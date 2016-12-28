@@ -33,9 +33,9 @@ class About {
     
     /// Loads the list of contributors from the GitHub repository and builds the infoText
     func load() {
-        Alamofire.request(.GET, Constants.contributorsURL).responseJSON { response in
+        Alamofire.request(Constants.contributorsURL).responseJSON { response in
             switch response.result {
-            case .Success(_):
+            case .success(_):
                 self.parseResponse(response)
             default:
                 print("Unable to download about window contribution info")
@@ -43,7 +43,7 @@ class About {
         }
     }
     
-    fileprivate func parseResponse(_ response: Response<AnyObject, NSError>) {
+    fileprivate func parseResponse(_ response: DataResponse<Any>) {
         guard let rawData = response.data else { return }
         
         let jsonData = JSON(data: rawData)

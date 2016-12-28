@@ -34,7 +34,7 @@ class TranscriptAdapter: JSONAdapter {
         transcript.fullText = json["transcript"].stringValue
         
         if let annotations = json["annotations"].arrayObject as? [String], let timecodes = json["timecodes"].arrayObject as? [Double] {
-            let transcriptData = annotations.map { annotations.indexOf($0)! >= timecodes.count ? nil : JSON(["annotation": $0, "timecode": timecodes[annotations.indexOf($0)!]]) }.filter({ $0 != nil }).map({$0!})
+            let transcriptData = annotations.map { annotations.index(of: $0)! >= timecodes.count ? JSON.null : JSON(["annotation": $0, "timecode": timecodes[annotations.index(of: $0)!]]) }.filter({ $0 != nil }).map({$0!})
             
             transcriptData.map(TranscriptLineAdapter.adapt).forEach { line in
                 line.transcript = transcript

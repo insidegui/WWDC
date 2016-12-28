@@ -24,16 +24,15 @@ class RoundPlayButton: NSButton {
         
         bezel.stroke()
         
-        let playImage = NSImage(named: "play")!
-        let playMask = playImage.CGImage
-        let ctx = NSGraphicsContext.current()?.cgContext
+        guard let playImage = NSImage(named: "play") else { return }
+        guard let ctx = NSGraphicsContext.current()?.cgContext, let playMask = playImage.cgImage else { return }
         
         let multiplier = CGFloat(0.8)
         let imageWidth = playImage.size.width*multiplier
         let imageHeight = playImage.size.height*multiplier
         let glyphRect = NSMakeRect(floor(bounds.size.width/2-imageWidth/2)+2.0, floor(bounds.size.height/2-imageHeight/2)+1.0, floor(imageWidth), floor(imageHeight))
         ctx.clip(to: glyphRect, mask: playMask)
-        ctx?.fill(bounds)
+        ctx.fill(bounds)
     }
     
 }

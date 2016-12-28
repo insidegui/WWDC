@@ -129,10 +129,10 @@ class SessionProgressView: NSView {
         let shapeRect = shapeLayer.bounds.insetBy(dx: 1.0, dy: 1.0)
         
         circlePath = CGMutablePath()
-        CGPathAddEllipseInRect(circlePath, nil, shapeRect)
+        circlePath.addEllipse(in: shapeRect)
         
         halfCirclePath = CGMutablePath()
-        CGPathAddArc(halfCirclePath, nil, shapeRect.midX, shapeRect.midY, shapeRect.width/2.0, -90.degreesToRadians, -270.degreesToRadians, true)
+        halfCirclePath.addArc(center: CGPoint(x: shapeRect.midX, y: shapeRect.midY), radius: shapeRect.width / 2.0, startAngle: -90.degreesToRadians, endAngle: -270.degreesToRadians, clockwise: true, transform: .identity)
         
         starPath = CGMutablePath()
         let a = (2 * M_PI) / 10
@@ -145,9 +145,9 @@ class SessionProgressView: NSView {
             let y = CGFloat(r * cos(o) + span)
             
             if (i == 0) {
-                CGPathMoveToPoint(starPath, nil, x, y)
+                starPath.move(to: CGPoint(x: x, y: y))
             } else {
-                CGPathAddLineToPoint(starPath, nil, x, y)
+                starPath.addLine(to: CGPoint(x: x, y: y))
             }
         }
         starPath.closeSubpath()

@@ -85,7 +85,7 @@ class VideoDetailsViewController: NSViewController {
     
     fileprivate func updateUI() {
         if let session = session {
-            guard !session.invalidated else { return }
+            guard !session.isInvalidated else { return }
         }
         
         if multipleSelection {
@@ -233,7 +233,7 @@ class VideoDetailsViewController: NSViewController {
     fileprivate func restoreColors() {
         titleLabel.textColor = NSColor.labelColor
         subtitleLabel.textColor = NSColor.secondaryLabelColor
-        topBarBackgroundView.backgroundColor = NSColor.whiteColor()
+        topBarBackgroundView.backgroundColor = .white
         topBarSeparatorView.backgroundColor = Theme.WWDCTheme.separatorColor
     }
     
@@ -412,7 +412,7 @@ class VideoDetailsViewController: NSViewController {
     fileprivate func setupSplitDetailBehavior() {
         guard let splitController = parent as? NSSplitViewController, splitController.splitViewItems.count == 2 else { return }
         
-        KVOController.observe(splitController.splitViewItems[0], keyPath: "collapsed", options: [.Initial, .New], action: #selector(splitViewCollapsedStatusDidChange))
+        kvoController.observe(splitController.splitViewItems[0], keyPath: "collapsed", options: [.initial, .new], action: #selector(splitViewCollapsedStatusDidChange))
     }
     
     @objc fileprivate func splitViewCollapsedStatusDidChange() {
