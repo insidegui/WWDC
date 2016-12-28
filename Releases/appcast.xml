@@ -7,6 +7,23 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 4.3.1</title>
+			<description><![CDATA[
+							<h3>Important: starting on this version, WWDC will not run on OS X 10.10 anymore</h3>
+							<p>If you're still running Yosemite, you can keep using the previous version.</p>
+							<p>&nbsp;</p>
+							<h3>What's new:</h3>
+							<ul>
+								<li>The app is now converted to Swift 3</li>
+								<li>Improved the resizing behavior on the video window, it now works for streamed videos as well as downloaded videos</li>
+							</ul>
+						]]></description>
+            <pubDate>Wed, 28 Dec 2016 15:40:00 -0200</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.3.1/WWDC_v4.3.1.zip" sparkle:version="440" sparkle:shortVersionString="4.3.1" length="8353208" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.3</title>
 			<description><![CDATA[
 							<ul>
