@@ -10,6 +10,7 @@ import Cocoa
 import AVFoundation
 import AVKit
 import WWDCAppKit
+import KVOController
 
 private let _nibName = "VideoWindowController"
 
@@ -131,9 +132,10 @@ class VideoWindowController: NSWindowController {
         }
         playerView.player = player
         
+        kvoController.observe(player, keyPath: #keyPath(AVPlayer.currentItem.presentationSize), options: [.initial, .new], action: #selector(setupWindowSizing))
+        
         player?.currentItem?.asset.loadValuesAsynchronously(forKeys: ["tracks"]) { [weak self] in
             DispatchQueue.main.async {
-                self?.setupWindowSizing()
                 self?.setupTimeObserver()
                 
                 if let session = self?.session {
@@ -268,21 +270,21 @@ class VideoWindowController: NSWindowController {
         } as AnyObject?
     }
     
+    private var aspectRatioSet = false
+    
     func setupWindowSizing()
     {
-        if let asset = player?.currentItem?.asset {
-            // get video dimensions and set window aspect ratio
-            let tracks = asset.tracks(withMediaType: AVMediaTypeVideo)
-            if tracks.count > 0 {
-                let track = tracks[0]
-                videoNaturalSize = track.naturalSize
-                playerWindow.aspectRatio = videoNaturalSize
-            } else {
-                return
-            }
-        } else {
-            return
-        }
+        guard !aspectRatioSet else { return }
+        
+        guard let presentationSize = player?.currentItem?.presentationSize else { return }
+        
+        guard presentationSize.width > 0 && presentationSize.height > 0 else { return }
+        
+        videoNaturalSize = presentationSize
+        
+        playerWindow.aspectRatio = videoNaturalSize
+        
+        aspectRatioSet = true
         
         // get saved scale
         let lastScale = Preferences.SharedPreferences().lastVideoWindowScale
@@ -314,9 +316,7 @@ class VideoWindowController: NSWindowController {
     // resizes the window so the video fills the entire screen without cropping
     @IBAction func sizeWindowToFill(_ sender: AnyObject?)
     {
-        if (videoNaturalSize == CGSize.zero) {
-            return
-        }
+        guard aspectRatioSet else { return }
         
         Preferences.SharedPreferences().lastVideoWindowScale = 100.0
         
@@ -326,9 +326,7 @@ class VideoWindowController: NSWindowController {
     // resizes the window to a fraction of the video's size
     func sizeWindowTo(_ fraction: CGFloat)
     {
-        if (videoNaturalSize == CGSize.zero) {
-            return
-        }
+        guard aspectRatioSet else { return }
         
         Preferences.SharedPreferences().lastVideoWindowScale = fraction
         
