@@ -1,5 +1,19 @@
 # Change Log
 
+## [4.3.1](https://github.com/insidegui/WWDC/tree/4.3.1) (2016-12-28)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/4.3...4.3.1)
+
+**Fixed bugs:**
+
+- Crash when pressing delete in download window with no selection [\#156](https://github.com/insidegui/WWDC/issues/156)
+- Inconstancy with downloads from pre 2013 [\#136](https://github.com/insidegui/WWDC/issues/136)
+
+**Closed issues:**
+
+- Build issue on Xcode7.2, OS10.10.5 [\#177](https://github.com/insidegui/WWDC/issues/177)
+- quit app. rebooted mac. app not set to launch on its own. yet it launches process to continue downloads in background. [\#173](https://github.com/insidegui/WWDC/issues/173)
+- was it able to select subtitles other than English? [\#171](https://github.com/insidegui/WWDC/issues/171)
+
 ## [4.3](https://github.com/insidegui/WWDC/tree/4.3) (2016-06-20)
 [Full Changelog](https://github.com/insidegui/WWDC/compare/4.2.4...4.3)
 
@@ -120,7 +134,7 @@
 [Full Changelog](https://github.com/insidegui/WWDC/compare/3.3...3.3.1)
 
 ## [3.3](https://github.com/insidegui/WWDC/tree/3.3) (2016-06-05)
-[Full Changelog](https://github.com/insidegui/WWDC/compare/3.2...3.3)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.1...3.3)
 
 **Implemented enhancements:**
 
@@ -147,11 +161,11 @@
 - Updated browserhub link to browserfreedom [\#124](https://github.com/insidegui/WWDC/pull/124) ([peterkos](https://github.com/peterkos))
 - add 'remove download' option [\#119](https://github.com/insidegui/WWDC/pull/119) ([finngaida](https://github.com/finngaida))
 
-## [3.2](https://github.com/insidegui/WWDC/tree/3.2) (2016-03-07)
-[Full Changelog](https://github.com/insidegui/WWDC/compare/3.1...3.2)
-
 ## [3.1](https://github.com/insidegui/WWDC/tree/3.1) (2016-03-07)
-[Full Changelog](https://github.com/insidegui/WWDC/compare/3.0...3.1)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.2...3.1)
+
+## [3.2](https://github.com/insidegui/WWDC/tree/3.2) (2016-03-07)
+[Full Changelog](https://github.com/insidegui/WWDC/compare/3.0...3.2)
 
 **Implemented enhancements:**
 

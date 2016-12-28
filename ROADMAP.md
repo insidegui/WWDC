@@ -6,16 +6,16 @@ This document describes the current state of development and what has to be done
 
 Main goals:
 
-- Migrate to Swift 3
+- ~~Migrate to Swift 3~~
 - Refactor
 - Redesign
 - New features
 - Fix issues
 
 
-### Migrate to Swift 3
+### ~~Migrate to Swift 3~~ (done)
 
-With the introduction of macOS Sierra and Xcode 8, we now have Swift 3. Swift 3 changes a lot of stuff and our code should be migrated to it before macOS Sierra ships (october 2016, probably).
+~~With the introduction of macOS Sierra and Xcode 8, we now have Swift 3. Swift 3 changes a lot of stuff and our code should be migrated to it before macOS Sierra ships (october 2016, probably).~~
 
 ### Refactor
 
