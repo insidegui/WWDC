@@ -1,8 +1,6 @@
-If you want to support my open source projects financially, you can do so by purchasing a copy of [BrowserFreedom](https://getbrowserfreedom.com) 😁
+If you want to support my open source projects financially, you can do so by purchasing a copy of [BrowserFreedom](https://getbrowserfreedom.com), [Mediunic](https://itunes.apple.com/app/mediunic-medium-client/id1088945121?mt=12) or sending Bitcoin to `3DH9B42m6k2A89hy1Diz3Vr3cpDNQTQCbJ` 😁
 
-If you want to be a part of this project, [read the contribution guidelines](CONTRIBUTING.md).
-
-# The WWDC app for macOS
+# The unofficial WWDC app for macOS
 
 This is the unofficial WWDC app for macOS.
 
@@ -10,7 +8,7 @@ Use this app to watch WWDC sessions on your Mac and do much more. Keep reading..
 
 **⬇️ [Click here to download the latest release](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip) ⬇️**
 
-**Requires OS X 10.11 or later** *(the app still runs on Yosemite, but it is not officially supported anymore)*
+**Requires macOS 10.11 or later**
 
 ## Schedule, Live Streaming and Videos
 
@@ -50,15 +48,19 @@ WWDC for macOS is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can 
 
 ![screenshot2](screenshots/screenshot2.png)
 
+## Contributing
+
+Please check out the [contribution guidelines](CONTRIBUTING.md) and [roadmap](ROADMAP.md) before contributing.
+
+The app is currently implemented in Swift 3 (conversion done on December 2016). The architecture is not very nice, since I started working on this when I had just started to use Swift, it could be a lot more "swifty".
+
 ## Build Instructions
 
 **Pre-requisites:**
 
-- OS X 10.11.*
-- Xcode 7.3.*
+- macOS 10.12
+- Xcode 8.1
 - [CocoaPods](https://cocoapods.org)
-
-**NOTICE: Building on macOS is not supported yet.**
 
 Clone the repository:
 
@@ -67,7 +69,6 @@ Clone the repository:
 Install dependencies:
 
 	$ pod install
-
 
 ### Cask
 
