@@ -119,7 +119,7 @@ class ScheduledSessionTableCellView: NSTableCellView {
     fileprivate func updateTrackDecorationWithTrack(_ track: Track) {
         CATransaction.begin()
         CATransaction.setAnimationDuration(0.0)
-        trackDecorationView.layer?.backgroundColor = NSColor(hexString: track.color)?.cgColor
+        trackDecorationView.layer?.backgroundColor = NSColor(hexString: track.color).cgColor
         CATransaction.commit()
     }
     
@@ -142,8 +142,8 @@ class ScheduledSessionTableCellView: NSTableCellView {
         guard let rowView = parentRowView else { return }
         
         if let schedule = session.schedule, let track = schedule.track {
-            rowView.themeBackgroundColor = NSColor(hexString: track.color) ?? Theme.WWDCTheme.fillColor
-            rowView.themeSeparatorColor = NSColor(hexString: track.darkColor) ?? Theme.WWDCTheme.separatorColor
+            rowView.themeBackgroundColor = NSColor(hexString: track.color)
+            rowView.themeSeparatorColor = NSColor(hexString: track.darkColor) 
         } else {
             rowView.themeBackgroundColor = Theme.WWDCTheme.fillColor
             rowView.themeSeparatorColor = Theme.WWDCTheme.separatorColor
