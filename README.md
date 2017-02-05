@@ -6,6 +6,12 @@ This new version is pretty much a rewrite from the ground up, using what we have
 
 The development of this version is being coordinated in a Slack team, if you'd like to join, let me know and I'll send you an invitation.
 
+### Building the app
+
+Building the app requires [Carthage](https://github.com/Carthage/Carthage) to be installed.
+
+Clone this branch and before opening the project, run `./bootstrap.sh` to fetch the dependencies (this script can take a while to run, that's normal).
+
 ### The Goal
 
 The goal is to have this new version released before next WWDC (june 2017).

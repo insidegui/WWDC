@@ -18,3 +18,4 @@ DerivedData
 Crashlytics.sh
 generatechangelog.sh
 Pods/
+Carthage

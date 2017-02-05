@@ -1,0 +1,751 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */; };
+		DD36A4B21E478C6A00B2EA88 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4B11E478C6A00B2EA88 /* ViewController.swift */; };
+		DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */; };
+		DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD36A4B51E478C6A00B2EA88 /* Main.storyboard */; };
+		DD36A4D11E478D7E00B2EA88 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
+		DD36A4D81E478D7E00B2EA88 /* ConfCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4D71E478D7E00B2EA88 /* ConfCoreTests.swift */; };
+		DD36A4DA1E478D7E00B2EA88 /* ConfCore.h in Headers */ = {isa = PBXBuildFile; fileRef = DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
+		DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD5F51751E47DE0F0017F9EC /* Realm.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F516E1E47DE0F0017F9EC /* Realm.framework.dSYM */; };
+		DD5F51761E47DE0F0017F9EC /* RealmSwift.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F516F1E47DE0F0017F9EC /* RealmSwift.framework.dSYM */; };
+		DD5F51771E47DE0F0017F9EC /* RxBlocking.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F51701E47DE0F0017F9EC /* RxBlocking.framework.dSYM */; };
+		DD5F51781E47DE0F0017F9EC /* RxCocoa.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F51711E47DE0F0017F9EC /* RxCocoa.framework.dSYM */; };
+		DD5F51791E47DE0F0017F9EC /* RxRealm.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F51721E47DE0F0017F9EC /* RxRealm.framework.dSYM */; };
+		DD5F517A1E47DE0F0017F9EC /* RxSwift.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F51731E47DE0F0017F9EC /* RxSwift.framework.dSYM */; };
+		DD5F517B1E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F51741E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM */; };
+		DD5F51851E47DE7E0017F9EC /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
+		DD5F51861E47DE7E0017F9EC /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
+		DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */; };
+		DD5F51881E47DE7E0017F9EC /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
+		DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; };
+		DD5F518A1E47DE7E0017F9EC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DD36A4D21E478D7E00B2EA88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD36A4C71E478D7E00B2EA88;
+			remoteInfo = ConfCore;
+		};
+		DD36A4D41E478D7E00B2EA88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD36A4AB1E478C6900B2EA88;
+			remoteInfo = WWDC;
+		};
+		DD36A4DB1E478D7E00B2EA88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD36A4C71E478D7E00B2EA88;
+			remoteInfo = ConfCore;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DD36A4E41E478D7E00B2EA88 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD5F516D1E47DDDF0017F9EC /* Carthage: Copy DSYMs */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				DD5F51751E47DE0F0017F9EC /* Realm.framework.dSYM in Carthage: Copy DSYMs */,
+				DD5F51761E47DE0F0017F9EC /* RealmSwift.framework.dSYM in Carthage: Copy DSYMs */,
+				DD5F51771E47DE0F0017F9EC /* RxBlocking.framework.dSYM in Carthage: Copy DSYMs */,
+				DD5F51781E47DE0F0017F9EC /* RxCocoa.framework.dSYM in Carthage: Copy DSYMs */,
+				DD5F51791E47DE0F0017F9EC /* RxRealm.framework.dSYM in Carthage: Copy DSYMs */,
+				DD5F517A1E47DE0F0017F9EC /* RxSwift.framework.dSYM in Carthage: Copy DSYMs */,
+				DD5F517B1E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM in Carthage: Copy DSYMs */,
+			);
+			name = "Carthage: Copy DSYMs";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		DD36A4AC1E478C6A00B2EA88 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DD36A4B11E478C6A00B2EA88 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DD36A4B61E478C6A00B2EA88 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DD36A4B81E478C6A00B2EA88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ConfCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfCore.h; sourceTree = "<group>"; };
+		DD36A4CB1E478D7E00B2EA88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConfCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD36A4D71E478D7E00B2EA88 /* ConfCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfCoreTests.swift; sourceTree = "<group>"; };
+		DD36A4D91E478D7E00B2EA88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD5F516E1E47DE0F0017F9EC /* Realm.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Realm.framework.dSYM; path = Carthage/Build/Mac/Realm.framework.dSYM; sourceTree = "<group>"; };
+		DD5F516F1E47DE0F0017F9EC /* RealmSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RealmSwift.framework.dSYM; path = Carthage/Build/Mac/RealmSwift.framework.dSYM; sourceTree = "<group>"; };
+		DD5F51701E47DE0F0017F9EC /* RxBlocking.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxBlocking.framework.dSYM; path = Carthage/Build/Mac/RxBlocking.framework.dSYM; sourceTree = "<group>"; };
+		DD5F51711E47DE0F0017F9EC /* RxCocoa.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxCocoa.framework.dSYM; path = Carthage/Build/Mac/RxCocoa.framework.dSYM; sourceTree = "<group>"; };
+		DD5F51721E47DE0F0017F9EC /* RxRealm.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxRealm.framework.dSYM; path = Carthage/Build/Mac/RxRealm.framework.dSYM; sourceTree = "<group>"; };
+		DD5F51731E47DE0F0017F9EC /* RxSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxSwift.framework.dSYM; path = Carthage/Build/Mac/RxSwift.framework.dSYM; sourceTree = "<group>"; };
+		DD5F51741E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftyJSON.framework.dSYM; path = Carthage/Build/Mac/SwiftyJSON.framework.dSYM; sourceTree = "<group>"; };
+		DD5F517F1E47DE7E0017F9EC /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/Mac/Realm.framework; sourceTree = "<group>"; };
+		DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/Mac/RealmSwift.framework; sourceTree = "<group>"; };
+		DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/Mac/RxCocoa.framework; sourceTree = "<group>"; };
+		DD5F51821E47DE7E0017F9EC /* RxRealm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRealm.framework; path = Carthage/Build/Mac/RxRealm.framework; sourceTree = "<group>"; };
+		DD5F51831E47DE7E0017F9EC /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/Mac/RxSwift.framework; sourceTree = "<group>"; };
+		DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/Mac/SwiftyJSON.framework; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DD36A4A91E478C6900B2EA88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
+				DD5F51851E47DE7E0017F9EC /* Realm.framework in Frameworks */,
+				DD5F51861E47DE7E0017F9EC /* RealmSwift.framework in Frameworks */,
+				DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */,
+				DD5F51881E47DE7E0017F9EC /* RxRealm.framework in Frameworks */,
+				DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */,
+				DD5F518A1E47DE7E0017F9EC /* SwiftyJSON.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD36A4C41E478D7E00B2EA88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD36A4CD1E478D7E00B2EA88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD36A4D11E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DD36A4A31E478C6900B2EA88 = {
+			isa = PBXGroup;
+			children = (
+				DD5F517C1E47DE150017F9EC /* Vendor */,
+				DD36A4AE1E478C6A00B2EA88 /* WWDC */,
+				DD36A4C91E478D7E00B2EA88 /* ConfCore */,
+				DD36A4D61E478D7E00B2EA88 /* ConfCoreTests */,
+				DD36A4AD1E478C6A00B2EA88 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DD36A4AD1E478C6A00B2EA88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DD36A4AC1E478C6A00B2EA88 /* WWDC.app */,
+				DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */,
+				DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DD36A4AE1E478C6A00B2EA88 /* WWDC */ = {
+			isa = PBXGroup;
+			children = (
+				DD36A4C21E478D0D00B2EA88 /* Resources */,
+				DD36A4BE1E478CEC00B2EA88 /* Bootstrap */,
+				DD36A4C11E478CFC00B2EA88 /* ViewModels */,
+				DD36A4C01E478CF500B2EA88 /* Views */,
+				DD36A4BF1E478CF100B2EA88 /* Controllers */,
+			);
+			path = WWDC;
+			sourceTree = "<group>";
+		};
+		DD36A4BE1E478CEC00B2EA88 /* Bootstrap */ = {
+			isa = PBXGroup;
+			children = (
+				DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */,
+			);
+			name = Bootstrap;
+			sourceTree = "<group>";
+		};
+		DD36A4BF1E478CF100B2EA88 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DD36A4B11E478C6A00B2EA88 /* ViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		DD36A4C01E478CF500B2EA88 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		DD36A4C11E478CFC00B2EA88 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ViewModels;
+			sourceTree = "<group>";
+		};
+		DD36A4C21E478D0D00B2EA88 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */,
+				DD36A4B51E478C6A00B2EA88 /* Main.storyboard */,
+				DD36A4B81E478C6A00B2EA88 /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		DD36A4C91E478D7E00B2EA88 /* ConfCore */ = {
+			isa = PBXGroup;
+			children = (
+				DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */,
+				DD36A4CB1E478D7E00B2EA88 /* Info.plist */,
+			);
+			path = ConfCore;
+			sourceTree = "<group>";
+		};
+		DD36A4D61E478D7E00B2EA88 /* ConfCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				DD36A4D71E478D7E00B2EA88 /* ConfCoreTests.swift */,
+				DD36A4D91E478D7E00B2EA88 /* Info.plist */,
+			);
+			path = ConfCoreTests;
+			sourceTree = "<group>";
+		};
+		DD5F517C1E47DE150017F9EC /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				DD5F517E1E47DE7D0017F9EC /* Frameworks */,
+				DD5F517D1E47DE190017F9EC /* DSYMs */,
+			);
+			name = Vendor;
+			sourceTree = "<group>";
+		};
+		DD5F517D1E47DE190017F9EC /* DSYMs */ = {
+			isa = PBXGroup;
+			children = (
+				DD5F516E1E47DE0F0017F9EC /* Realm.framework.dSYM */,
+				DD5F516F1E47DE0F0017F9EC /* RealmSwift.framework.dSYM */,
+				DD5F51701E47DE0F0017F9EC /* RxBlocking.framework.dSYM */,
+				DD5F51711E47DE0F0017F9EC /* RxCocoa.framework.dSYM */,
+				DD5F51721E47DE0F0017F9EC /* RxRealm.framework.dSYM */,
+				DD5F51731E47DE0F0017F9EC /* RxSwift.framework.dSYM */,
+				DD5F51741E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM */,
+			);
+			name = DSYMs;
+			sourceTree = "<group>";
+		};
+		DD5F517E1E47DE7D0017F9EC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DD5F517F1E47DE7E0017F9EC /* Realm.framework */,
+				DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */,
+				DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */,
+				DD5F51821E47DE7E0017F9EC /* RxRealm.framework */,
+				DD5F51831E47DE7E0017F9EC /* RxSwift.framework */,
+				DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		DD36A4C51E478D7E00B2EA88 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD36A4DA1E478D7E00B2EA88 /* ConfCore.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		DD36A4AB1E478C6900B2EA88 /* WWDC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD36A4BB1E478C6A00B2EA88 /* Build configuration list for PBXNativeTarget "WWDC" */;
+			buildPhases = (
+				DD36A4A81E478C6900B2EA88 /* Sources */,
+				DD36A4A91E478C6900B2EA88 /* Frameworks */,
+				DD36A4AA1E478C6900B2EA88 /* Resources */,
+				DD36A4E41E478D7E00B2EA88 /* Embed Frameworks */,
+				DD5F516B1E47DCC40017F9EC /* Carthage: Copy Frameworks */,
+				DD5F516D1E47DDDF0017F9EC /* Carthage: Copy DSYMs */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DD36A4DC1E478D7E00B2EA88 /* PBXTargetDependency */,
+			);
+			name = WWDC;
+			productName = WWDC;
+			productReference = DD36A4AC1E478C6A00B2EA88 /* WWDC.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DD36A4C71E478D7E00B2EA88 /* ConfCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD36A4E31E478D7E00B2EA88 /* Build configuration list for PBXNativeTarget "ConfCore" */;
+			buildPhases = (
+				DD36A4C31E478D7E00B2EA88 /* Sources */,
+				DD36A4C41E478D7E00B2EA88 /* Frameworks */,
+				DD36A4C51E478D7E00B2EA88 /* Headers */,
+				DD36A4C61E478D7E00B2EA88 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ConfCore;
+			productName = ConfCore;
+			productReference = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DD36A4CF1E478D7E00B2EA88 /* ConfCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD36A4E51E478D7E00B2EA88 /* Build configuration list for PBXNativeTarget "ConfCoreTests" */;
+			buildPhases = (
+				DD36A4CC1E478D7E00B2EA88 /* Sources */,
+				DD36A4CD1E478D7E00B2EA88 /* Frameworks */,
+				DD36A4CE1E478D7E00B2EA88 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DD36A4D31E478D7E00B2EA88 /* PBXTargetDependency */,
+				DD36A4D51E478D7E00B2EA88 /* PBXTargetDependency */,
+			);
+			name = ConfCoreTests;
+			productName = ConfCoreTests;
+			productReference = DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DD36A4A41E478C6900B2EA88 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "Guilherme Rambo";
+				TargetAttributes = {
+					DD36A4AB1E478C6900B2EA88 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 8C7439RJLG;
+						ProvisioningStyle = Automatic;
+					};
+					DD36A4C71E478D7E00B2EA88 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 8C7439RJLG;
+						ProvisioningStyle = Automatic;
+					};
+					DD36A4CF1E478D7E00B2EA88 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 8C7439RJLG;
+						ProvisioningStyle = Automatic;
+						TestTargetID = DD36A4AB1E478C6900B2EA88;
+					};
+				};
+			};
+			buildConfigurationList = DD36A4A71E478C6900B2EA88 /* Build configuration list for PBXProject "WWDC" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DD36A4A31E478C6900B2EA88;
+			productRefGroup = DD36A4AD1E478C6A00B2EA88 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DD36A4AB1E478C6900B2EA88 /* WWDC */,
+				DD36A4C71E478D7E00B2EA88 /* ConfCore */,
+				DD36A4CF1E478D7E00B2EA88 /* ConfCoreTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DD36A4AA1E478C6900B2EA88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */,
+				DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD36A4C61E478D7E00B2EA88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD36A4CE1E478D7E00B2EA88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DD5F516B1E47DCC40017F9EC /* Carthage: Copy Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/Mac/Realm.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/RealmSwift.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/RxCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/RxRealm.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/SwiftyJSON.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/RxSwift.framework",
+			);
+			name = "Carthage: Copy Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DD36A4A81E478C6900B2EA88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD36A4B21E478C6A00B2EA88 /* ViewController.swift in Sources */,
+				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD36A4C31E478D7E00B2EA88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD36A4CC1E478D7E00B2EA88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD36A4D81E478D7E00B2EA88 /* ConfCoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DD36A4D31E478D7E00B2EA88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
+			targetProxy = DD36A4D21E478D7E00B2EA88 /* PBXContainerItemProxy */;
+		};
+		DD36A4D51E478D7E00B2EA88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD36A4AB1E478C6900B2EA88 /* WWDC */;
+			targetProxy = DD36A4D41E478D7E00B2EA88 /* PBXContainerItemProxy */;
+		};
+		DD36A4DC1E478D7E00B2EA88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
+			targetProxy = DD36A4DB1E478D7E00B2EA88 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DD36A4B51E478C6A00B2EA88 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DD36A4B61E478C6A00B2EA88 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DD36A4B91E478C6A00B2EA88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DD36A4BA1E478C6A00B2EA88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+			};
+			name = Release;
+		};
+		DD36A4BC1E478C6A00B2EA88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = WWDC/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.WWDC;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		DD36A4BD1E478C6A00B2EA88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = WWDC/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.WWDC;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		DD36A4DF1E478D7E00B2EA88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = ConfCore/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.ConfCore;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DD36A4E01E478D7E00B2EA88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = ConfCore/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.ConfCore;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DD36A4E11E478D7E00B2EA88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				INFOPLIST_FILE = ConfCoreTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.ConfCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
+			};
+			name = Debug;
+		};
+		DD36A4E21E478D7E00B2EA88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				INFOPLIST_FILE = ConfCoreTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.ConfCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DD36A4A71E478C6900B2EA88 /* Build configuration list for PBXProject "WWDC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD36A4B91E478C6A00B2EA88 /* Debug */,
+				DD36A4BA1E478C6A00B2EA88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD36A4BB1E478C6A00B2EA88 /* Build configuration list for PBXNativeTarget "WWDC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD36A4BC1E478C6A00B2EA88 /* Debug */,
+				DD36A4BD1E478C6A00B2EA88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD36A4E31E478D7E00B2EA88 /* Build configuration list for PBXNativeTarget "ConfCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD36A4DF1E478D7E00B2EA88 /* Debug */,
+				DD36A4E01E478D7E00B2EA88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD36A4E51E478D7E00B2EA88 /* Build configuration list for PBXNativeTarget "ConfCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD36A4E11E478D7E00B2EA88 /* Debug */,
+				DD36A4E21E478D7E00B2EA88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DD36A4A41E478C6900B2EA88 /* Project object */;
+}
