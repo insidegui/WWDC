@@ -1,78 +1,56 @@
-If you want to support my open source projects financially, you can do so by purchasing a copy of [BrowserFreedom](https://getbrowserfreedom.com), [Mediunic](https://itunes.apple.com/app/mediunic-medium-client/id1088945121?mt=12) or sending Bitcoin to `3DH9B42m6k2A89hy1Diz3Vr3cpDNQTQCbJ` 😁
+## WWDC for macOS - Version 5 overhaul
 
-# The unofficial WWDC app for macOS
+This branch contains the development of the new major version of WWDC for macOS.
 
-This is the unofficial WWDC app for macOS.
+This new version is pretty much a rewrite from the ground up, using what we have learned from creating the original app to make a better architected, more stable and more usable app :)
 
-Use this app to watch WWDC sessions on your Mac and do much more. Keep reading...
+The development of this version is being coordinated in a Slack team, if you'd like to join, let me know and I'll send you an invitation.
 
-**⬇️ [Click here to download the latest release](https://raw.githubusercontent.com/insidegui/WWDC/master/Releases/WWDC_latest.zip) ⬇️**
+### The Goal
 
-**Requires macOS 10.11 or later**
+The goal is to have this new version released before next WWDC (june 2017).
 
-## Schedule, Live Streaming and Videos
+Steps:
 
-The app shows the schedule for the current WWDC and videos for the past events.
+- Redesign by [Vicente](https://github.com/vicenteborrell)
+- Implement new backend and database layer
+- Implement the new UI
+- Fix initial bugs
+- RELEASE =D
 
-Please note that since this app is focused on videos, the schedule only shows sessions which will be live streamed, not labs and other events.
 
-When sessions are live, a "live" indicator appears on the list and a "Watch Live" button becomes available:
+### Main features
 
-![Schedule Screenshot](screenshots/screenshot-schedule.png)
+#### Schedule
+- List the schedule for the current/last event
+- Let the user create reminders for the sessions/labs
+- Stream live videos of the sessions when available
 
-## Controlling playback speed
+#### Videos
+- List videos from all available WWDC editions
+- Stream videos
+- Download HD versions of the videos for offline watching (bonus: allow the user to choose to download SD versions of the videos)
+- Show resources associated with sessions/videos (slides, links, etc)
+- Show and search transcripts from ASCIIWWDC
 
-You can cycle through playback speeds by pressing `⌘⇧R` or by option-clicking on the skip forward arrows when the video is playing.
+#### News
 
-## Searching
+Nothing special about this, just the news from the "news" tab on the iOS app :)
 
-The app has a powerful search feature. When you first launch the app, it indexes the videos database and downloads transcripts from ASCIIWWDC, so when you search, not only will you get search results from session titles and descriptions, but also from what the presenter said in the sessions.
+#### Bookmarks
+This is a new feature, the user will be able to create bookmarks at specific points in videos and add notes associated with these bookmarks so they can search later, find their notes and quickly jump to the point in the video where the original note was created.
 
-The app even shows a list of phrases matching your search so you can jump right to the point in the session where your searched word/phrase appears.
+BONUS: make the bookmarks collaborative using CloudKit's sharing features or allow the user to mark bookmarks as public so other users of the app can see their bookmarks.
 
-![Transcript Search](screenshots/transcriptsearch.png)
+### Architecture
 
-With the handy filter bar you can filter sessions by year, track and focus, and also filter to show only favorited or downloaded sessions.
+I want to use an architecture similar to what I used on my [Astronomer demo app](http://github.com/insidegui/Astronomer). I think this is the way to go to have a stable and performant app.
 
-![Transcript Search](screenshots/filterbar.png)
-	
-## Sharing
+### Dependencies
 
-You can share direct links to specific session videos. Just select the session on the list and ⌘C to copy it's URL, or use the right-click menu.
+Currently, these are the dependencies the app uses:
 
-![rightmenushare](screenshots/rightmenushare.png)
-
-## Reading
-
-WWDC for macOS is integrated with [ASCIIWWDC](http://asciiwwdc.com), so you can see and search through transcripts of the sessions while watching the videos.
-
-![screenshot2](screenshots/screenshot2.png)
-
-## Contributing
-
-Please check out the [contribution guidelines](CONTRIBUTING.md) and [roadmap](ROADMAP.md) before contributing.
-
-The app is currently implemented in Swift 3 (conversion done on December 2016). The architecture is not very nice, since I started working on this when I had just started to use Swift, it could be a lot more "swifty".
-
-## Build Instructions
-
-**Pre-requisites:**
-
-- macOS 10.12
-- Xcode 8.1
-- [CocoaPods](https://cocoapods.org)
-
-Clone the repository:
-
-	$ git clone --recursive https://github.com/insidegui/WWDC.git
-
-Install dependencies:
-
-	$ pod install
-
-### Cask
-
-You can also install using [Homebrew Cask](http://caskroom.io):
-
-	$ brew cask install wwdc
-
+- Realm: data storage
+- RxSwift: reactive extensions
+- RxRealm: reactive extensions for Realm
+- SwiftyJSON: for JSON parsing
