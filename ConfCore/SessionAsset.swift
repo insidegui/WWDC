@@ -1,0 +1,41 @@
+//
+//  SessionAsset.swift
+//  WWDC
+//
+//  Created by Guilherme Rambo on 06/02/17.
+//  Copyright © 2017 Guilherme Rambo. All rights reserved.
+//
+
+import Cocoa
+import RealmSwift
+
+/// Session assets are resources associated with sessions, like videos, PDFs and useful links
+class SessionAsset: Object {
+    
+    /// The type of asset:
+    ///
+    /// - WWDCSessionAssetTypeHDVideo
+    /// - WWDCSessionAssetTypeSDVideo
+    /// - WWDCSessionAssetTypeShelfImage
+    /// - WWDCSessionAssetTypeSlidesPDF
+    /// - WWDCSessionAssetTypeStreamingVideo
+    /// - WWDCSessionAssetTypeWebpageURL
+    dynamic var assetType = ""
+    
+    /// URL for this asset
+    dynamic var remoteURL = ""
+    
+    /// Relative local URL to save the asset to when downloading
+    dynamic var relativeLocalURL = ""
+    
+    /// Whether this asset has been download or not
+    dynamic var isDownloaded = false
+    
+    /// The session this asset belongs to
+    let session = LinkingObjects(fromType: Session.self, property: "assets")
+    
+    override class func primaryKey() -> String? {
+        return "remoteURL"
+    }
+    
+}
