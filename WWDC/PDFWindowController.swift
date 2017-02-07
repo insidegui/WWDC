@@ -109,4 +109,16 @@ class PDFWindowController: NSWindowController {
         }
     }
     
+    override func keyDown(theEvent: NSEvent) {
+        switch theEvent.keyCode {
+        case 35: // p
+            pdfView.goToPreviousPage(self)
+        case 45: // n
+            pdfView.goToNextPage(self)
+        default:
+            super.keyDown(theEvent)
+            break
+        }
+    }
+
 }
