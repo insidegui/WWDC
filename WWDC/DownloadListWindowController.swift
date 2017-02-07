@@ -77,7 +77,7 @@ class DownloadListWindowController: NSWindowController, NSTableViewDelegate, NST
                         guard let session = WWDCDatabase.sharedDatabase.realm.objects(Session.self).filter("hdVideoURL = %@", _url).first else { return }
                         let item = DownloadListItem(url: url!, session: session, task: task)
                         self.items.append(item)
-                        self.tableView.insertRows(at: IndexSet(integer: self.items.count), withAnimation: .slideUp)
+                        self.tableView.insertRows(at: IndexSet(integer: self.items.count-1), withAnimation: .slideUp)
                     }
                 }
             }
