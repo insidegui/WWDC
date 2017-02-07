@@ -104,9 +104,10 @@ class DatabaseTests: XCTestCase {
             newsItem.visibility = "user.accessLevel == 6"
             
             let gallery = NewsItem()
-            newsItem.newsType = 2
-            newsItem.title = "Connecting at the Get Togethers"
-            newsItem.body = "13 photos"
+            gallery.identifier = "E55831D4-8CC0-4073-8D22-6F8F9DDE8DF4"
+            gallery.newsType = 2
+            gallery.title = "Connecting at the Get Togethers"
+            gallery.body = "13 photos"
             
             let photo = Photo()
             photo.identifier = "C720F641-6928-4023-9EA4-B7AF5C3206D0"
@@ -158,7 +159,6 @@ class DatabaseTests: XCTestCase {
             realm.add(photo)
             realm.add(gallery)
             realm.add(newsItem)
-            realm.add(newsItem)
             realm.add(event)
             realm.add(track)
             realm.add(focus)
@@ -172,7 +172,48 @@ class DatabaseTests: XCTestCase {
             realm.add(session)
         }
         
-        // TODO: fetch the models created and verify that all relationships are correctly set
+        let event = realm.objects(Event.self).first
+        XCTAssertNotNil(event)
+        XCTAssertEqual(event?.sessions.count, 1)
+        XCTAssertEqual(event?.sessions.first?.event.first?.name, event?.name)
+        
+        let track = realm.objects(Track.self).first
+        XCTAssertNotNil(track)
+        XCTAssertEqual(track?.sessions.count, 1)
+        XCTAssertEqual(track?.sessions.first?.track.first?.name, track?.name)
+        
+        let focus = realm.objects(Focus.self).first
+        XCTAssertNotNil(focus)
+        XCTAssertEqual(focus?.sessions.count, 1)
+        XCTAssertEqual(focus?.sessions.first?.focuses.first?.name, focus?.name)
+        
+        let keyword = realm.objects(Keyword.self).first
+        XCTAssertNotNil(keyword)
+        XCTAssertEqual(keyword?.sessions.count, 1)
+        XCTAssertEqual(keyword?.sessions.first?.keywords.first?.name, keyword?.name)
+        
+        let room = realm.objects(Room.self).first
+        XCTAssertNotNil(room)
+        XCTAssertEqual(room?.instances.count, 1)
+        XCTAssertEqual(room?.instances.first?.room.first?.name, room?.name)
+        
+        let session = realm.objects(Session.self).first
+        XCTAssertNotNil(session)
+        XCTAssertEqual(session?.keywords.count, 1)
+        XCTAssertEqual(session?.assets.count, 2)
+        XCTAssertEqual(session?.instances.count, 1)
+        XCTAssertEqual(session?.favorites.count, 1)
+        XCTAssertEqual(session?.bookmarks.count, 1)
+        XCTAssertEqual(session?.focuses.count, 1)
+        XCTAssertEqual(session?.track.count, 1)
+        XCTAssertEqual(session?.event.count, 1)
+        XCTAssertNotNil(session?.transcript)
+        
+        let gallery = realm.object(ofType: NewsItem.self,
+                                   forPrimaryKey: "E55831D4-8CC0-4073-8D22-6F8F9DDE8DF4")
+        XCTAssertNotNil(gallery)
+        XCTAssertEqual(gallery?.photos.count, 1)
+        XCTAssertEqual(gallery?.photos.first?.representations.count, 2)
     }
     
 }

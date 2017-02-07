@@ -45,6 +45,9 @@ class Session: Object {
     /// Transcript for the session
     dynamic var transcript: Transcript?
     
+    /// The session's focuses
+    let focuses = LinkingObjects(fromType: Focus.self, property: "sessions")
+    
     /// The session's track
     let track = LinkingObjects(fromType: Track.self, property: "sessions")
     
