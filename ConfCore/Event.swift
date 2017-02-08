@@ -24,11 +24,26 @@ class Event: Object {
     /// When the event ends
     dynamic var endDate = Date.distantPast
     
+    /// Is this the current event?
+    dynamic var isCurrent = false
+    
     /// Sessions held at this event
     let sessions = List<Session>()
     
     override class func primaryKey() -> String? {
         return "identifier"
+    }
+    
+    static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool) -> Event {
+        let event = Event()
+        
+        event.identifier = identifier
+        event.name = name
+        event.startDate = startDate
+        event.endDate = endDate
+        event.isCurrent = isCurrent
+        
+        return event
     }
     
 }
