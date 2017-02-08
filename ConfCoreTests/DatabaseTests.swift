@@ -58,10 +58,9 @@ class DatabaseTests: XCTestCase {
             keyword.name = "objective c"
             
             let room = Room()
-            room.displayOrder = 4
             room.mapName = "Session-NobHill"
             room.name = "Nob Hill"
-            room.floor = 2
+            room.floor = "floor2"
             
             let session = Session()
             session.sessionType = 0

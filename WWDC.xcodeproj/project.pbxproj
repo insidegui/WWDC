@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DD34DA071E4AB0E400F25C45 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34DA061E4AB0E400F25C45 /* AdapterTests.swift */; };
+		DD34DA0B1E4AB3E400F25C45 /* RoomsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */; };
 		DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */; };
 		DD36A4B21E478C6A00B2EA88 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4B11E478C6A00B2EA88 /* ViewController.swift */; };
 		DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */; };
@@ -118,6 +119,7 @@
 
 /* Begin PBXFileReference section */
 		DD34DA061E4AB0E400F25C45 /* AdapterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdapterTests.swift; sourceTree = "<group>"; };
+		DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsJSONAdapter.swift; sourceTree = "<group>"; };
 		DD36A4AC1E478C6A00B2EA88 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD36A4B11E478C6A00B2EA88 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 				DD5DEC1F1E4AA6F800426FA6 /* Adapter.swift */,
 				DD5DEC2E1E4AAC9300426FA6 /* DateAdapter.swift */,
 				DD5DEC211E4AA7F100426FA6 /* EventsJSONAdapter.swift */,
+				DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */,
 			);
 			name = Adapters;
 			sourceTree = "<group>";
@@ -601,6 +604,7 @@
 				DD65FD591E48A0C90054DD35 /* Photo.swift in Sources */,
 				DD65FD6B1E48BD9F0054DD35 /* Favorite.swift in Sources */,
 				DD65FD511E48A05C0054DD35 /* Session.swift in Sources */,
+				DD34DA0B1E4AB3E400F25C45 /* RoomsJSONAdapter.swift in Sources */,
 				DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */,
 				DD65FD5D1E48A11F0054DD35 /* Track.swift in Sources */,
 				DD5DEC201E4AA6F800426FA6 /* Adapter.swift in Sources */,

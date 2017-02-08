@@ -11,9 +11,6 @@ import RealmSwift
 
 /// Represents a room or venue where sessions are held
 class Room: Object {
-
-    /// Order to display in lists
-    dynamic var displayOrder = 0
     
     /// Name of the map file (maps are not present in the macOS app because they are embedded in the iOS app's binary, not given by the API)
     dynamic var mapName = ""
@@ -21,14 +18,24 @@ class Room: Object {
     /// Name of the room
     dynamic var name = ""
     
-    /// Room floor
-    dynamic var floor = 0
+    /// Room floor name
+    dynamic var floor = ""
     
     /// Session instances held at this room
     let instances = List<SessionInstance>()
     
     override class func primaryKey() -> String? {
         return "name"
+    }
+    
+    static func make(name: String, mapName: String, floor: String) -> Room {
+        let room = Room()
+        
+        room.name = name
+        room.mapName = mapName
+        room.floor = floor
+        
+        return room
     }
     
 }

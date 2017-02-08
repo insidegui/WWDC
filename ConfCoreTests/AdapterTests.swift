@@ -51,5 +51,31 @@ class AdapterTests: XCTestCase {
             XCTAssertEqual(events[4].isCurrent, false)
         }
     }
+    
+    func testRoomsAdapter() {
+        let json = getJson(from: "sessions")
+        
+        guard let roomsArray = json["response"]["rooms"].array else {
+            XCTFail("Sessions.json fixture doesn't have a \"rooms\" array")
+            fatalError()
+        }
+        
+        let result = RoomsJSONAdapter().adapt(roomsArray)
+        
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let rooms):
+            XCTAssertEqual(rooms.count, 29)
+            
+            XCTAssertEqual(rooms[0].name, "Bill Graham Civic Auditorium")
+            XCTAssertEqual(rooms[0].mapName, "BGCA")
+            XCTAssertEqual(rooms[0].floor, "billGraham")
+            
+            XCTAssertEqual(rooms[28].name, "Recharge Lounge")
+            XCTAssertEqual(rooms[28].mapName, "Lounge-Recharge")
+            XCTAssertEqual(rooms[28].floor, "floor3")
+        }
+    }
 
 }
