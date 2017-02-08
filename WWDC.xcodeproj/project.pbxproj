@@ -18,6 +18,8 @@
 		DD36A4DA1E478D7E00B2EA88 /* ConfCore.h in Headers */ = {isa = PBXBuildFile; fileRef = DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
 		DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD54CD101E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */; };
+		DD54CD121E4AB95F000BF5F2 /* FocusesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD111E4AB95F000BF5F2 /* FocusesJSONAdapter.swift */; };
 		DD5DEC1E1E4AA6B800426FA6 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5DEC1D1E4AA6B800426FA6 /* Result.swift */; };
 		DD5DEC201E4AA6F800426FA6 /* Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5DEC1F1E4AA6F800426FA6 /* Adapter.swift */; };
 		DD5DEC221E4AA7F100426FA6 /* EventsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5DEC211E4AA7F100426FA6 /* EventsJSONAdapter.swift */; };
@@ -133,6 +135,8 @@
 		DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConfCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD36A4D71E478D7E00B2EA88 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
 		DD36A4D91E478D7E00B2EA88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordsJSONAdapter.swift; sourceTree = "<group>"; };
+		DD54CD111E4AB95F000BF5F2 /* FocusesJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusesJSONAdapter.swift; sourceTree = "<group>"; };
 		DD5DEC1D1E4AA6B800426FA6 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		DD5DEC1F1E4AA6F800426FA6 /* Adapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Adapter.swift; sourceTree = "<group>"; };
 		DD5DEC211E4AA7F100426FA6 /* EventsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsJSONAdapter.swift; sourceTree = "<group>"; };
@@ -314,6 +318,8 @@
 				DD5DEC211E4AA7F100426FA6 /* EventsJSONAdapter.swift */,
 				DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */,
 				DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */,
+				DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */,
+				DD54CD111E4AB95F000BF5F2 /* FocusesJSONAdapter.swift */,
 			);
 			name = Adapters;
 			sourceTree = "<group>";
@@ -618,12 +624,14 @@
 				DD65FD5B1E48A1080054DD35 /* Focus.swift in Sources */,
 				DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */,
 				DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */,
+				DD54CD101E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift in Sources */,
 				DD65FD551E48A0A70054DD35 /* Room.swift in Sources */,
 				DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */,
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,
 				DD65FD5F1E48A3900054DD35 /* SessionInstance.swift in Sources */,
 				DD65FD571E48A0BD0054DD35 /* Event.swift in Sources */,
 				DD65FD611E48A86A0054DD35 /* PhotoRepresentation.swift in Sources */,
+				DD54CD121E4AB95F000BF5F2 /* FocusesJSONAdapter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

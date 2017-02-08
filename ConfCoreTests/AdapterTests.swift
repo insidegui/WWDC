@@ -108,4 +108,57 @@ class AdapterTests: XCTestCase {
         }
     }
 
+    func testKeywordsAdapter() {
+        let json = getJson(from: "sessions")
+        
+        guard let keywordsArray = json["response"]["sessions"][0]["keywords"].array else {
+            XCTFail("Couldn't find a session in sessions.json with an array of keywords")
+            fatalError()
+        }
+        
+        let result = KeywordsJSONAdapter().adapt(keywordsArray)
+        
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let keywords):
+            XCTAssertEqual(keywords.count, 10)
+            XCTAssertEqual(keywords.map({ $0.name }), [
+                "audio",
+                "editing",
+                "export",
+                "hls",
+                "http live streaming",
+                "imaging",
+                "media",
+                "playback",
+                "recording",
+                "video"
+                ]);
+        }
+    }
+
+    func testFocusesAdapter() {
+        let json = getJson(from: "sessions")
+        
+        guard let focusesArray = json["response"]["sessions"][0]["focus"].array else {
+            XCTFail("Couldn't find a session in sessions.json with an array of focuses")
+            fatalError()
+        }
+        
+        let result = FocusesJSONAdapter().adapt(focusesArray)
+        
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let focuses):
+            XCTAssertEqual(focuses.count, 3)
+            XCTAssertEqual(focuses.map({ $0.name }), [
+                "iOS",
+                "macOS",
+                "tvOS"
+                ]);
+        }
+    }
+    
 }
