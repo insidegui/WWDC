@@ -9,6 +9,15 @@
 import Cocoa
 import RealmSwift
 
+enum SessionAssetType: String {
+    case hdVideo = "WWDCSessionAssetTypeHDVideo"
+    case sdVideo = "WWDCSessionAssetTypeSDVideo"
+    case image = "WWDCSessionAssetTypeShelfImage"
+    case slides = "WWDCSessionAssetTypeSlidesPDF"
+    case streamingVideo = "WWDCSessionAssetTypeStreamingVideo"
+    case webpage = "WWDCSessionAssetTypeWebpageURL"
+}
+
 /// Session assets are resources associated with sessions, like videos, PDFs and useful links
 class SessionAsset: Object {
     

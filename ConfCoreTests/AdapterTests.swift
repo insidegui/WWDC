@@ -161,4 +161,43 @@ class AdapterTests: XCTestCase {
         }
     }
     
+    func testAssetsAdapter() {
+        let json = getJson(from: "videos")
+        
+        guard let sessionsArray = json["sessions"].array else {
+            XCTFail("Couldn't find an array of sessions in videos.json")
+            fatalError()
+        }
+        
+        let result = SessionAssetsJSONAdapter().adapt(sessionsArray)
+        
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let assets):
+            let flattenedAssets = assets.flatMap({ $0 })
+            XCTAssertEqual(flattenedAssets.count, 2947)
+            
+            XCTAssertEqual(flattenedAssets[0].assetType, SessionAssetType.streamingVideo.rawValue)
+            XCTAssertEqual(flattenedAssets[0].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/hls_vod_mvp.m3u8")
+            
+            XCTAssertEqual(flattenedAssets[1].assetType, SessionAssetType.hdVideo.rawValue)
+            XCTAssertEqual(flattenedAssets[1].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_hd_mastering_uikit_on_tvos.mp4")
+            XCTAssertEqual(flattenedAssets[1].relativeLocalURL, "2016/210_hd_mastering_uikit_on_tvos.mp4")
+            
+            XCTAssertEqual(flattenedAssets[2].assetType, SessionAssetType.sdVideo.rawValue)
+            XCTAssertEqual(flattenedAssets[2].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_sd_mastering_uikit_on_tvos.mp4")
+            XCTAssertEqual(flattenedAssets[2].relativeLocalURL, "2016/210_sd_mastering_uikit_on_tvos.mp4")
+            
+            XCTAssertEqual(flattenedAssets[3].assetType, SessionAssetType.slides.rawValue)
+            XCTAssertEqual(flattenedAssets[3].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_mastering_uikit_on_tvos.pdf")
+            
+            XCTAssertEqual(flattenedAssets[4].assetType, SessionAssetType.webpage.rawValue)
+            XCTAssertEqual(flattenedAssets[4].remoteURL, "https://developer.apple.com/wwdc16/210")
+            
+            XCTAssertEqual(flattenedAssets[5].assetType, SessionAssetType.image.rawValue)
+            XCTAssertEqual(flattenedAssets[5].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/images/210_734x413.jpg")
+        }
+    }
+    
 }
