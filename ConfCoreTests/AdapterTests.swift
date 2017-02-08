@@ -77,5 +77,35 @@ class AdapterTests: XCTestCase {
             XCTAssertEqual(rooms[28].floor, "floor3")
         }
     }
+    
+    func testTracksAdapter() {
+        let json = getJson(from: "sessions")
+        
+        guard let tracksArray = json["response"]["tracks"].array else {
+            XCTFail("Sessions.json fixture doesn't have a \"tracks\" array")
+            fatalError()
+        }
+        
+        let result = TracksJSONAdapter().adapt(tracksArray)
+        
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let tracks):
+            XCTAssertEqual(tracks.count, 8)
+            
+            XCTAssertEqual(tracks[0].name, "Featured")
+            XCTAssertEqual(tracks[0].lightColor, "#9E9E9E")
+            XCTAssertEqual(tracks[0].lightBackgroundColor, "#32353D")
+            XCTAssertEqual(tracks[0].darkColor, "#32353D")
+            XCTAssertEqual(tracks[0].titleColor, "#D9D9DD")
+            
+            XCTAssertEqual(tracks[7].name, "Distribution")
+            XCTAssertEqual(tracks[7].lightColor, "#B0619E")
+            XCTAssertEqual(tracks[7].lightBackgroundColor, "#373049")
+            XCTAssertEqual(tracks[7].darkColor, "#373049")
+            XCTAssertEqual(tracks[7].titleColor, "#F5BEFF")
+        }
+    }
 
 }

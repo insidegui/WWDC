@@ -11,9 +11,6 @@ import RealmSwift
 
 /// Tracks represent a specific are of interest (ex: "System Frameworks", "Graphics and Games")
 class Track: Object {
-
-    /// The order to display in lists
-    dynamic var displayOrder = 0
     
     /// The name of the track
     dynamic var name = ""
@@ -35,6 +32,22 @@ class Track: Object {
     
     override class func primaryKey() -> String? {
         return "name"
+    }
+    
+    static func make(name: String,
+                     darkColor: String,
+                     lightBackgroundColor: String,
+                     lightColor: String,
+                     titleColor: String) -> Track {
+        let track = Track()
+        
+        track.name = name
+        track.darkColor = darkColor
+        track.lightBackgroundColor = lightBackgroundColor
+        track.lightColor = lightColor
+        track.titleColor = titleColor
+        
+        return track
     }
     
 }

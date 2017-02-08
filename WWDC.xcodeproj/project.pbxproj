@@ -60,6 +60,7 @@
 		DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD681E48BBEF0054DD35 /* TranscriptAnnotation.swift */; };
 		DD65FD6B1E48BD9F0054DD35 /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD6A1E48BD9F0054DD35 /* Favorite.swift */; };
 		DD65FD6D1E48BE270054DD35 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD6C1E48BE270054DD35 /* Bookmark.swift */; };
+		DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -169,6 +170,7 @@
 		DD65FD681E48BBEF0054DD35 /* TranscriptAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptAnnotation.swift; sourceTree = "<group>"; };
 		DD65FD6A1E48BD9F0054DD35 /* Favorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorite.swift; sourceTree = "<group>"; };
 		DD65FD6C1E48BE270054DD35 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksJSONAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -311,6 +313,7 @@
 				DD5DEC2E1E4AAC9300426FA6 /* DateAdapter.swift */,
 				DD5DEC211E4AA7F100426FA6 /* EventsJSONAdapter.swift */,
 				DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */,
+				DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */,
 			);
 			name = Adapters;
 			sourceTree = "<group>";
@@ -606,6 +609,7 @@
 				DD65FD511E48A05C0054DD35 /* Session.swift in Sources */,
 				DD34DA0B1E4AB3E400F25C45 /* RoomsJSONAdapter.swift in Sources */,
 				DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */,
+				DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */,
 				DD65FD5D1E48A11F0054DD35 /* Track.swift in Sources */,
 				DD5DEC201E4AA6F800426FA6 /* Adapter.swift in Sources */,
 				DD5DEC221E4AA7F100426FA6 /* EventsJSONAdapter.swift in Sources */,

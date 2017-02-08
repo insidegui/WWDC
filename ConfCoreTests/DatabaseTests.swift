@@ -44,7 +44,6 @@ class DatabaseTests: XCTestCase {
             event.endDate = Date.distantFuture
             
             let track = Track()
-            track.displayOrder = 2
             track.name = "Developer Tools"
             track.darkColor = "#43342E"
             track.lightColor = "#E59053"
