@@ -19,6 +19,8 @@
 		DD36A4DA1E478D7E00B2EA88 /* ConfCore.h in Headers */ = {isa = PBXBuildFile; fileRef = DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
 		DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD3C4D251E561E4D0093BBD0 /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
+		DD3C4D261E561E4E0093BBD0 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; };
 		DD54CD101E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */; };
 		DD54CD121E4AB95F000BF5F2 /* FocusesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD111E4AB95F000BF5F2 /* FocusesJSONAdapter.swift */; };
 		DD54CD141E4AC21F000BF5F2 /* SessionAssetsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD131E4AC21F000BF5F2 /* SessionAssetsAdapter.swift */; };
@@ -38,12 +40,8 @@
 		DD5F51791E47DE0F0017F9EC /* RxRealm.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F51721E47DE0F0017F9EC /* RxRealm.framework.dSYM */; };
 		DD5F517A1E47DE0F0017F9EC /* RxSwift.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F51731E47DE0F0017F9EC /* RxSwift.framework.dSYM */; };
 		DD5F517B1E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD5F51741E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM */; };
-		DD5F51851E47DE7E0017F9EC /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
-		DD5F51861E47DE7E0017F9EC /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
 		DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */; };
-		DD5F51881E47DE7E0017F9EC /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
 		DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; };
-		DD5F518A1E47DE7E0017F9EC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */; };
 		DD6477311E55231A00386D93 /* LiveVideosAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6477301E55231A00386D93 /* LiveVideosAdapter.swift */; };
 		DD6477331E5535DE00386D93 /* SessionsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6477321E5535DE00386D93 /* SessionsJSONAdapter.swift */; };
 		DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD4B1E489FF50054DD35 /* SessionAsset.swift */; };
@@ -191,12 +189,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
-				DD5F51851E47DE7E0017F9EC /* Realm.framework in Frameworks */,
-				DD5F51861E47DE7E0017F9EC /* RealmSwift.framework in Frameworks */,
 				DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */,
-				DD5F51881E47DE7E0017F9EC /* RxRealm.framework in Frameworks */,
 				DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */,
-				DD5F518A1E47DE7E0017F9EC /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +200,8 @@
 			files = (
 				DD65FD4D1E48A01B0054DD35 /* Realm.framework in Frameworks */,
 				DD65FD4E1E48A01B0054DD35 /* RealmSwift.framework in Frameworks */,
+				DD3C4D251E561E4D0093BBD0 /* RxRealm.framework in Frameworks */,
+				DD3C4D261E561E4E0093BBD0 /* RxSwift.framework in Frameworks */,
 				DD65FD4F1E48A01B0054DD35 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
