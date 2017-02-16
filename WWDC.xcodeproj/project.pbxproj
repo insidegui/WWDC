@@ -43,6 +43,7 @@
 		DD5F51881E47DE7E0017F9EC /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
 		DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; };
 		DD5F518A1E47DE7E0017F9EC /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */; };
+		DD6477311E55231A00386D93 /* LiveVideosAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6477301E55231A00386D93 /* LiveVideosAdapter.swift */; };
 		DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD4B1E489FF50054DD35 /* SessionAsset.swift */; };
 		DD65FD4D1E48A01B0054DD35 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
 		DD65FD4E1E48A01B0054DD35 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
@@ -161,6 +162,7 @@
 		DD5F51821E47DE7E0017F9EC /* RxRealm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRealm.framework; path = Carthage/Build/Mac/RxRealm.framework; sourceTree = "<group>"; };
 		DD5F51831E47DE7E0017F9EC /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/Mac/RxSwift.framework; sourceTree = "<group>"; };
 		DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/Mac/SwiftyJSON.framework; sourceTree = "<group>"; };
+		DD6477301E55231A00386D93 /* LiveVideosAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveVideosAdapter.swift; sourceTree = "<group>"; };
 		DD65FD4B1E489FF50054DD35 /* SessionAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionAsset.swift; sourceTree = "<group>"; };
 		DD65FD501E48A05C0054DD35 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		DD65FD521E48A06A0054DD35 /* NewsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsItem.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 				DD5DEC2E1E4AAC9300426FA6 /* DateAdapter.swift */,
 				DD5DEC211E4AA7F100426FA6 /* EventsJSONAdapter.swift */,
 				DD54CD131E4AC21F000BF5F2 /* SessionAssetsAdapter.swift */,
+				DD6477301E55231A00386D93 /* LiveVideosAdapter.swift */,
 				DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */,
 				DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */,
 				DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */,
@@ -634,6 +637,7 @@
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,
 				DD65FD5F1E48A3900054DD35 /* SessionInstance.swift in Sources */,
 				DD65FD571E48A0BD0054DD35 /* Event.swift in Sources */,
+				DD6477311E55231A00386D93 /* LiveVideosAdapter.swift in Sources */,
 				DD65FD611E48A86A0054DD35 /* PhotoRepresentation.swift in Sources */,
 				DD54CD121E4AB95F000BF5F2 /* FocusesJSONAdapter.swift in Sources */,
 			);

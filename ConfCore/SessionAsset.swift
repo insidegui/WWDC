@@ -15,6 +15,7 @@ enum SessionAssetType: String {
     case image = "WWDCSessionAssetTypeShelfImage"
     case slides = "WWDCSessionAssetTypeSlidesPDF"
     case streamingVideo = "WWDCSessionAssetTypeStreamingVideo"
+    case liveStreamVideo = "WWDCSessionAssetTypeLiveStreamVideo"
     case webpage = "WWDCSessionAssetTypeWebpageURL"
 }
 
@@ -30,6 +31,12 @@ class SessionAsset: Object {
     /// - WWDCSessionAssetTypeStreamingVideo
     /// - WWDCSessionAssetTypeWebpageURL
     dynamic var assetType = ""
+    
+    /// The year of the session this asset belongs to
+    dynamic var year = 0
+    
+    /// The id of the session this asset belongs to
+    dynamic var sessionId = ""
     
     /// URL for this asset
     dynamic var remoteURL = ""

@@ -180,23 +180,63 @@ class AdapterTests: XCTestCase {
             
             XCTAssertEqual(flattenedAssets[0].assetType, SessionAssetType.streamingVideo.rawValue)
             XCTAssertEqual(flattenedAssets[0].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/hls_vod_mvp.m3u8")
+            XCTAssertEqual(flattenedAssets[0].year, 2016)
+            XCTAssertEqual(flattenedAssets[0].sessionId, "210")
             
             XCTAssertEqual(flattenedAssets[1].assetType, SessionAssetType.hdVideo.rawValue)
             XCTAssertEqual(flattenedAssets[1].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_hd_mastering_uikit_on_tvos.mp4")
             XCTAssertEqual(flattenedAssets[1].relativeLocalURL, "2016/210_hd_mastering_uikit_on_tvos.mp4")
+            XCTAssertEqual(flattenedAssets[1].year, 2016)
+            XCTAssertEqual(flattenedAssets[1].sessionId, "210")
             
             XCTAssertEqual(flattenedAssets[2].assetType, SessionAssetType.sdVideo.rawValue)
             XCTAssertEqual(flattenedAssets[2].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_sd_mastering_uikit_on_tvos.mp4")
             XCTAssertEqual(flattenedAssets[2].relativeLocalURL, "2016/210_sd_mastering_uikit_on_tvos.mp4")
+            XCTAssertEqual(flattenedAssets[2].year, 2016)
+            XCTAssertEqual(flattenedAssets[2].sessionId, "210")
             
             XCTAssertEqual(flattenedAssets[3].assetType, SessionAssetType.slides.rawValue)
             XCTAssertEqual(flattenedAssets[3].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_mastering_uikit_on_tvos.pdf")
+            XCTAssertEqual(flattenedAssets[3].year, 2016)
+            XCTAssertEqual(flattenedAssets[3].sessionId, "210")
             
             XCTAssertEqual(flattenedAssets[4].assetType, SessionAssetType.webpage.rawValue)
             XCTAssertEqual(flattenedAssets[4].remoteURL, "https://developer.apple.com/wwdc16/210")
+            XCTAssertEqual(flattenedAssets[4].year, 2016)
+            XCTAssertEqual(flattenedAssets[4].sessionId, "210")
             
             XCTAssertEqual(flattenedAssets[5].assetType, SessionAssetType.image.rawValue)
             XCTAssertEqual(flattenedAssets[5].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/images/210_734x413.jpg")
+            XCTAssertEqual(flattenedAssets[5].year, 2016)
+            XCTAssertEqual(flattenedAssets[5].sessionId, "210")
+        }
+    }
+    
+    func testLiveAssetsAdapter() {
+        let json = getJson(from: "videos_live")
+        
+        guard let sessionsDict = json["live_sessions"].dictionary else {
+            XCTFail("Couldn't find a dictionary of live sessions in videos_live.json")
+            fatalError()
+        }
+        
+        let sessionsArray = sessionsDict.map { key, value -> JSON in
+            var v = value
+            v["sessionId"] = JSON.init(rawValue: key)!
+            return v
+        }
+        
+        let result = LiveVideosAdapter().adapt(sessionsArray)
+     
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let assets):
+            let sortedAssets = assets.sorted(by: { $0.0.sessionId < $0.1.sessionId })
+            XCTAssertEqual(sortedAssets[0].assetType, SessionAssetType.liveStreamVideo.rawValue)
+            XCTAssertGreaterThan(sortedAssets[0].year, 2016)
+            XCTAssertEqual(sortedAssets[0].sessionId, "201")
+            XCTAssertEqual(sortedAssets[0].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8")
         }
     }
     

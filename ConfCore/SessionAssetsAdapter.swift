@@ -23,7 +23,7 @@ final class SessionAssetsJSONAdapter: Adapter {
     typealias OutputType = [SessionAsset]
     
     func adapt(_ input: JSON) -> Result<[SessionAsset], AdapterError> {
-        guard let id = input[AssetKeys.id].string else {
+        guard let sessionId = input[AssetKeys.id].string else {
             return .error(.missingKey(AssetKeys.id))
         }
         
@@ -44,13 +44,16 @@ final class SessionAssetsJSONAdapter: Adapter {
         let streaming = SessionAsset()
         streaming.assetType = SessionAssetType.streamingVideo.rawValue
         streaming.remoteURL = url
-        
+        streaming.year = year
+        streaming.sessionId = sessionId
         output.append(streaming)
         
         if let hd = input[AssetKeys.download_hd].string {
             let hdVideo = SessionAsset()
             hdVideo.assetType = SessionAssetType.hdVideo.rawValue
             hdVideo.remoteURL = hd
+            hdVideo.year = year
+            hdVideo.sessionId = sessionId
             
             let filename = URL(string: hd)?.lastPathComponent ?? "\(title).mp4"
             hdVideo.relativeLocalURL = "\(year)/\(filename)"
@@ -62,6 +65,8 @@ final class SessionAssetsJSONAdapter: Adapter {
             let sdVideo = SessionAsset()
             sdVideo.assetType = SessionAssetType.sdVideo.rawValue
             sdVideo.remoteURL = sd
+            sdVideo.year = year
+            sdVideo.sessionId = sessionId
             
             let filename = URL(string: sd)?.lastPathComponent ?? "\(title).mp4"
             sdVideo.relativeLocalURL = "\(year)/\(filename)"
@@ -73,6 +78,8 @@ final class SessionAssetsJSONAdapter: Adapter {
             let slidesAsset = SessionAsset()
             slidesAsset.assetType = SessionAssetType.slides.rawValue
             slidesAsset.remoteURL = slides
+            slidesAsset.year = year
+            slidesAsset.sessionId = sessionId
             
             output.append(slidesAsset)
         }
@@ -81,6 +88,8 @@ final class SessionAssetsJSONAdapter: Adapter {
             let webpageAsset = SessionAsset()
             webpageAsset.assetType = SessionAssetType.webpage.rawValue
             webpageAsset.remoteURL = webpage
+            webpageAsset.year = year
+            webpageAsset.sessionId = sessionId
             
             output.append(webpageAsset)
         }
@@ -89,6 +98,8 @@ final class SessionAssetsJSONAdapter: Adapter {
             let imageAsset = SessionAsset()
             imageAsset.assetType = SessionAssetType.image.rawValue
             imageAsset.remoteURL = image
+            imageAsset.year = year
+            imageAsset.sessionId = sessionId
             
             output.append(imageAsset)
         }
