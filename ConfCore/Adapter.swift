@@ -11,12 +11,15 @@ import SwiftyJSON
 
 enum AdapterError: Error {
     case invalidData
+    case unsupported
     case missingKey(JSONSubscriptType)
     
     var localizedDescription: String {
         switch self {
         case .invalidData:
             return "Invalid input data"
+        case .unsupported:
+            return "This type of entity is not supported"
         case .missingKey(let key):
             return "Input is missing a required key: \"\(key)\""
         }

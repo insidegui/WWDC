@@ -79,11 +79,11 @@ class DatabaseTests: XCTestCase {
             asset2.remoteURL = "http://devstreaming.apple.com/videos/wwdc/2014/208xx42tf0hw3vv/208/ref.mov"
             
             let photoRep = PhotoRepresentation()
-            photoRep.remoteURL = "https://test.com/test.jpg"
+            photoRep.remotePath = "4FF1EAAF-7D24-4F20-A182-0AA1FBB4D8DE/512.jpeg"
             photoRep.width = 512
 
             let photoRep2 = PhotoRepresentation()
-            photoRep2.remoteURL = "https://test.com/test1024.jpg"
+            photoRep2.remotePath = "CC9D2377-90B0-4750-8C97-549DEC08C028/1024.jpeg"
             photoRep2.width = 1024
             
             let instance = SessionInstance()

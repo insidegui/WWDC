@@ -319,4 +319,37 @@ class AdapterTests: XCTestCase {
         }
     }
     
+    func testNewsAndPhotoAdapters() {
+        let json = getJson(from: "news")
+        
+        guard let newsArray = json["items"].array else {
+            XCTFail("Couldn't find an array of items in news.json")
+            fatalError()
+        }
+        
+        let result = NewsItemsJSONAdapter().adapt(newsArray)
+        
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let items):
+            XCTAssertEqual(items.count, 16)
+            
+            // Regular news
+            XCTAssertEqual(items[0].identifier, "991DF480-4435-4930-B0BC-8F75EFB85002")
+            XCTAssertEqual(items[0].title, "Welcome")
+            XCTAssertEqual(items[0].body, "We’re looking forward to an exciting week at the Apple Worldwide Developers Conference. Use this app to stream session videos, browse the conference schedule, mark schedule items as favorites, keep up with the latest conference news, and view maps of Moscone West.")
+            XCTAssertEqual(items[0].date, Date(timeIntervalSince1970: 1464973210))
+            
+            // Photo gallery
+            XCTAssertEqual(items[5].identifier, "047E4F0B-2B8C-499A-BB23-F2CFDB3EB730")
+            XCTAssertEqual(items[5].title, "Scholarship Winners Get the Excitement Started")
+            XCTAssertEqual(items[5].body, "")
+            XCTAssertEqual(items[5].date, Date(timeIntervalSince1970: 1465833604))
+            XCTAssertEqual(items[5].photos[0].identifier, "6F3D98B4-71A9-4321-9D4E-974346E784FD")
+            XCTAssertEqual(items[5].photos[0].representations[0].width, 256)
+            XCTAssertEqual(items[5].photos[0].representations[0].remotePath, "6F3D98B4-71A9-4321-9D4E-974346E784FD/256.jpeg")
+        }
+    }
+    
 }

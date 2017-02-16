@@ -9,6 +9,13 @@
 import Cocoa
 import RealmSwift
 
+enum NewsType: Int {
+    case news
+    case unsupportedUnknown
+    case gallery
+    case unsupportedPassbook
+}
+
 /// NewsItem can be a simple news text or a photo gallery
 class NewsItem: Object {
 
@@ -17,9 +24,6 @@ class NewsItem: Object {
     
     /// The type of news (0 = regular news, 2 = photo gallery)
     dynamic var newsType = 0
-    
-    /// The location of the news (seems to always be zero)
-    dynamic var location = 0
     
     /// The condition that must be true so the user can see this item (used to limit some items to only attendees)
     dynamic var visibility = ""

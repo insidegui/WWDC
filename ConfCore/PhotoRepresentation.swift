@@ -9,11 +9,25 @@
 import Cocoa
 import RealmSwift
 
+enum PhotoRepresentationSize: Int {
+    case mini = 256
+    case small = 512
+    case medium = 1024
+    case large = 2048
+    
+    static let all: [PhotoRepresentationSize] = [
+        .mini,
+        .small,
+        .medium,
+        .large
+    ]
+}
+
 /// Photo representations are assets for photos specifying widths and URLs for different photo sizes
 class PhotoRepresentation: Object {
 
-    /// The URL for the photo
-    dynamic var remoteURL = ""
+    /// The path for the photo
+    dynamic var remotePath = ""
     
     /// The width of the photo
     dynamic var width = 0
@@ -22,7 +36,7 @@ class PhotoRepresentation: Object {
     let photo = LinkingObjects(fromType: Photo.self, property: "representations")
     
     override class func primaryKey() -> String? {
-        return "remoteURL"
+        return "remotePath"
     }
     
 }
