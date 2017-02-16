@@ -18,26 +18,23 @@ class Session: Object {
     /// Session number
     dynamic var number = ""
     
-    /// Type of session (0 = regular session, 1 = lab, 2 = video-only session)
-    dynamic var sessionType = 0
-    
     /// Title
     dynamic var title = ""
     
     /// Description
     dynamic var summary = ""
     
+    /// Event identifier (only using during JSON adapting)
+    dynamic var eventIdentifier = ""
+    
+    /// Track name (only using during JSON adapting)
+    dynamic var trackName = ""
+    
     /// The session's focuses
     let focuses = List<Focus>()
     
-    /// Keywords associated with this session
-    let keywords = List<Keyword>()
-    
     /// The session's assets (videos, slides, links)
     let assets = List<SessionAsset>()
-    
-    /// The session's instances (when and where the session will occur)
-    let instances = List<SessionInstance>()
     
     /// Session favorite
     let favorites = List<Favorite>()
@@ -53,5 +50,16 @@ class Session: Object {
     
     /// The event this session belongs to
     let event = LinkingObjects(fromType: Event.self, property: "sessions")
+    
+    /// Instances of this session
+    let instances = LinkingObjects(fromType: SessionInstance.self, property: "session")
+    
+    override static func primaryKey() -> String? {
+        return "identifier"
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["trackName", "eventIdentifier"]
+    }
     
 }

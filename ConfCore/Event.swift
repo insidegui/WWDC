@@ -12,7 +12,7 @@ import RealmSwift
 /// Represents a past, present or future WWDC edition (ex: WWDC-2016)
 class Event: Object {
 
-    /// Unique identifier
+    /// Unique identifier (ex: wwdc2017)
     dynamic var identifier = ""
     
     /// Event name

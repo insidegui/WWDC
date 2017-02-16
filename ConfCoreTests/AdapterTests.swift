@@ -240,4 +240,45 @@ class AdapterTests: XCTestCase {
         }
     }
     
+    func testSessionsAdapter() {
+        let json = getJson(from: "videos")
+        
+        guard let sessionsArray = json["sessions"].array else {
+            XCTFail("Couldn't find an array of sessions in videos.json")
+            fatalError()
+        }
+        
+        let result = SessionsJSONAdapter().adapt(sessionsArray)
+        
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let sessions):
+            XCTAssertEqual(sessions.count, 550)
+            XCTAssertEqual(sessions[0].title, "Mastering UIKit on tvOS")
+            XCTAssertEqual(sessions[0].trackName, "App Frameworks")
+            XCTAssertEqual(sessions[0].number, "210")
+            XCTAssertEqual(sessions[0].summary, "Learn how to make your tvOS interface more dynamic, intuitive, and high-performing with tips and tricks learned in this session.")
+            XCTAssertEqual(sessions[0].focuses[0].name, "tvOS")
+        }
+    }
+    
+    func testSessionInstancesAdapter() {
+        let json = getJson(from: "sessions")
+        
+        guard let instancesArray = json["response"]["sessions"].array else {
+            XCTFail("Couldn't find an array of sessions in sessions.json")
+            fatalError()
+        }
+        
+        let result = SessionInstancesJSONAdapter().adapt(instancesArray)
+        
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let instances):
+            XCTAssertEqual(instances.count, 316)
+        }
+    }
+    
 }

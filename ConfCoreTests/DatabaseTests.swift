@@ -62,7 +62,6 @@ class DatabaseTests: XCTestCase {
             room.floor = "floor2"
             
             let session = Session()
-            session.sessionType = 0
             session.identifier = "wwdc2014-206"
             session.number = "206"
             session.summary = "The modern WebKit framework enables developers to integrate web content into their native app experience with more features and fewer lines of code. Dive into the latest WebKit enhancements including modern Objective-C features such as blocks and explicit object types, advanced bridging between JavaScript and Objective-C, increased JavaScript performance via WebKit's super-fast JIT, and more—all delivered in an API unified for both iOS and OS X."
@@ -88,12 +87,9 @@ class DatabaseTests: XCTestCase {
             photoRep2.width = 1024
             
             let instance = SessionInstance()
+            instance.session = session
             instance.startTime = Date.distantPast
             instance.endTime = Date.distantFuture
-            instance.liveStreamEndTime = Date.distantFuture
-            
-            instance.liveStreamPhotoRep = photoRep
-            instance.liveStreamAsset = asset2
             
             let newsItem = NewsItem()
             newsItem.newsType = 0
@@ -145,8 +141,6 @@ class DatabaseTests: XCTestCase {
             room.instances.append(instance)
             session.assets.append(asset)
             session.assets.append(asset2)
-            session.keywords.append(keyword)
-            session.instances.append(instance)
             track.sessions.append(session)
             event.sessions.append(session)
             
@@ -187,9 +181,6 @@ class DatabaseTests: XCTestCase {
         
         let keyword = realm.objects(Keyword.self).first
         XCTAssertNotNil(keyword)
-        XCTAssertEqual(keyword?.sessions.count, 1)
-        XCTAssertEqual(keyword?.sessions.first?.keywords.first?.name, keyword?.name)
-        
         let room = realm.objects(Room.self).first
         XCTAssertNotNil(room)
         XCTAssertEqual(room?.instances.count, 1)
@@ -197,9 +188,7 @@ class DatabaseTests: XCTestCase {
         
         let session = realm.objects(Session.self).first
         XCTAssertNotNil(session)
-        XCTAssertEqual(session?.keywords.count, 1)
         XCTAssertEqual(session?.assets.count, 2)
-        XCTAssertEqual(session?.instances.count, 1)
         XCTAssertEqual(session?.favorites.count, 1)
         XCTAssertEqual(session?.bookmarks.count, 1)
         XCTAssertEqual(session?.focuses.count, 1)

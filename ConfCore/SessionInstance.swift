@@ -9,31 +9,60 @@
 import Cocoa
 import RealmSwift
 
-/// A session instance represents a specific occurence of a session, associated with a room and possibly a live stream asset
+enum SessionInstanceType: Int {
+    case session
+    case lab
+    case video
+    
+    init?(rawSessionType: String) {
+        switch rawSessionType {
+        case "Session":
+            self = .session
+        case "Lab":
+            self = .lab
+        case "Video":
+            self = .video
+        default: return nil
+        }
+    }
+}
+
+/// A session instance represents a specific occurence of a session with a location and start/end times
 class SessionInstance: Object {
     
-    /// The start date and time for this instance
-    dynamic var startTime = Date.distantPast
+    /// Unique identifier
+    dynamic var identifier = ""
     
-    /// The end date and time for this instance
-    dynamic var endTime = Date.distantPast
+    /// Instance number
+    dynamic var number = ""
     
-    /// When the live stream ends
-    dynamic var liveStreamEndTime = Date.distantPast
+    /// The session
+    dynamic var session: Session? = nil
     
-    /// Whether this instance is live now or not
-    dynamic var isStreamingLive = false
+    /// Type of session (0 = regular session, 1 = lab, 2 = video-only session)
+    dynamic var sessionType = 0
     
-    /// The live stream asset for this instance
-    var liveStreamAsset: SessionAsset?
+    /// The start time
+    dynamic var startTime: Date = .distantPast
     
-    /// The live stream photo for this instance
-    var liveStreamPhotoRep: PhotoRepresentation?
+    /// The end time
+    dynamic var endTime: Date = .distantPast
+    
+    /// Keywords for this session
+    let keywords = List<Keyword>()
+    
+    /// Room name (for JSON adapting only)
+    dynamic var roomName = ""
     
     /// The room where this session will be held
     let room = LinkingObjects(fromType: Room.self, property: "instances")
     
-    /// The session this instance belongs to
-    let session = LinkingObjects(fromType: Session.self, property: "instances")
+    override static func primaryKey() -> String? {
+        return "identifier"
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["roomName"]
+    }
     
 }
