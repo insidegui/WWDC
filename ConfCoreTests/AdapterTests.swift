@@ -278,6 +278,23 @@ class AdapterTests: XCTestCase {
             XCTFail(error.localizedDescription)
         case .success(let instances):
             XCTAssertEqual(instances.count, 316)
+            XCTAssertNotNil(instances[0].session)
+            XCTAssertEqual(instances[0].session?.number, "5080")
+            XCTAssertEqual(instances[0].session?.title, "AVFoundation / AVKit Lab")
+            XCTAssertEqual(instances[0].session?.trackName, "Media")
+            XCTAssertEqual(instances[0].session?.summary, "AVFoundation is a powerful framework for all types of media operations, including capture, editing, playback, and export. Built on AVFoundation, AVKit offers a fully featured and intuitive user interface for interaction with media in apps. Get one-on-one technical guidance from Apple engineers about using AVFoundation and AVKit in your apps. Bring your code and your questions.")
+            XCTAssertEqual(instances[0].session?.focuses.count, 3)
+            XCTAssertEqual(instances[0].session?.focuses[0].name, "iOS")
+            XCTAssertEqual(instances[0].session?.focuses[1].name, "macOS")
+            XCTAssertEqual(instances[0].session?.focuses[2].name, "tvOS")
+            XCTAssertEqual(instances[0].identifier, "2016-5080")
+            XCTAssertEqual(instances[0].number, "5080")
+            XCTAssertEqual(instances[0].sessionType, 1)
+            XCTAssertEqual(instances[0].keywords.count, 10)
+            XCTAssertEqual(instances[0].keywords.first?.name, "audio")
+            XCTAssertEqual(instances[0].keywords.last?.name, "video")
+            XCTAssertEqual(instances[0].startTime, Date(timeIntervalSince1970: 1466020800))
+            XCTAssertEqual(instances[0].endTime, Date(timeIntervalSince1970: 1466031600))
         }
     }
     
