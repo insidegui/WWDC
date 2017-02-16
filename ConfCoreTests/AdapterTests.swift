@@ -278,6 +278,8 @@ class AdapterTests: XCTestCase {
             XCTFail(error.localizedDescription)
         case .success(let instances):
             XCTAssertEqual(instances.count, 316)
+            
+            // Lab
             XCTAssertNotNil(instances[0].session)
             XCTAssertEqual(instances[0].session?.number, "5080")
             XCTAssertEqual(instances[0].session?.title, "AVFoundation / AVKit Lab")
@@ -295,6 +297,25 @@ class AdapterTests: XCTestCase {
             XCTAssertEqual(instances[0].keywords.last?.name, "video")
             XCTAssertEqual(instances[0].startTime, Date(timeIntervalSince1970: 1466020800))
             XCTAssertEqual(instances[0].endTime, Date(timeIntervalSince1970: 1466031600))
+            
+            // Session
+            XCTAssertNotNil(instances[2].session)
+            XCTAssertEqual(instances[2].session?.number, "301")
+            XCTAssertEqual(instances[2].session?.title, "Introducing Expanded Subscriptions in iTunes Connect")
+            XCTAssertEqual(instances[2].session?.trackName, "Distribution")
+            XCTAssertEqual(instances[2].session?.summary, "See what's new in subscriptions. Learn how our improvements give you more flexibility and control over pricing, and provide powerful incentives to engage and retain your customers.")
+            XCTAssertEqual(instances[2].session?.focuses.count, 3)
+            XCTAssertEqual(instances[2].session?.focuses[0].name, "iOS")
+            XCTAssertEqual(instances[2].session?.focuses[1].name, "macOS")
+            XCTAssertEqual(instances[2].session?.focuses[2].name, "tvOS")
+            XCTAssertEqual(instances[2].identifier, "2016-301")
+            XCTAssertEqual(instances[2].number, "301")
+            XCTAssertEqual(instances[2].sessionType, 0)
+            XCTAssertEqual(instances[2].keywords.count, 2)
+            XCTAssertEqual(instances[2].keywords.first?.name, "iap")
+            XCTAssertEqual(instances[2].keywords.last?.name, "subscription")
+            XCTAssertEqual(instances[2].startTime, Date(timeIntervalSince1970: 1465945200))
+            XCTAssertEqual(instances[2].endTime, Date(timeIntervalSince1970: 1465947600))
         }
     }
     
