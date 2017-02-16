@@ -16,7 +16,7 @@ class Focus: Object {
     dynamic var name = ""
     
     /// Sessions containing this focus
-    let sessions = List<Session>()
+    let sessions = LinkingObjects(fromType: Session.self, property: "focuses")
     
     override class func primaryKey() -> String? {
         return "name"

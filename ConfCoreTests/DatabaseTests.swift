@@ -67,6 +67,7 @@ class DatabaseTests: XCTestCase {
             session.number = "206"
             session.summary = "The modern WebKit framework enables developers to integrate web content into their native app experience with more features and fewer lines of code. Dive into the latest WebKit enhancements including modern Objective-C features such as blocks and explicit object types, advanced bridging between JavaScript and Objective-C, increased JavaScript performance via WebKit's super-fast JIT, and more—all delivered in an API unified for both iOS and OS X."
             session.title = "Introducing the Modern WebKit API"
+            session.focuses.append(focus)
             
             let asset = SessionAsset()
             asset.assetType = "WWDCSessionAssetTypeHDVideo"
@@ -148,8 +149,7 @@ class DatabaseTests: XCTestCase {
             session.instances.append(instance)
             track.sessions.append(session)
             event.sessions.append(session)
-            focus.sessions.append(session)
-         
+            
             realm.add(favorite)
             realm.add(bookmark)
             realm.add(annotation)

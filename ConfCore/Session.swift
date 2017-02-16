@@ -27,6 +27,9 @@ class Session: Object {
     /// Description
     dynamic var summary = ""
     
+    /// The session's focuses
+    let focuses = List<Focus>()
+    
     /// Keywords associated with this session
     let keywords = List<Keyword>()
     
@@ -44,9 +47,6 @@ class Session: Object {
     
     /// Transcript for the session
     dynamic var transcript: Transcript?
-    
-    /// The session's focuses
-    let focuses = LinkingObjects(fromType: Focus.self, property: "sessions")
     
     /// The session's track
     let track = LinkingObjects(fromType: Track.self, property: "sessions")
