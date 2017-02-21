@@ -68,6 +68,7 @@
 		DD65FD6D1E48BE270054DD35 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD6C1E48BE270054DD35 /* Bookmark.swift */; };
 		DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
+		DDAE7C551E5BC6CD00CEA205 /* Siesta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */; };
 		DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */; };
 /* End PBXBuildFile section */
 
@@ -188,6 +189,8 @@
 		DD65FD6C1E48BE270054DD35 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptsJSONAdapter.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
+		DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Siesta.framework; path = Carthage/Build/Mac/Siesta.framework; sourceTree = "<group>"; };
+		DDAE7C561E5BC6E300CEA205 /* Siesta.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Siesta.framework.dSYM; path = Carthage/Build/Mac/Siesta.framework.dSYM; sourceTree = "<group>"; };
 		DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksJSONAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -210,6 +213,7 @@
 				DD65FD4E1E48A01B0054DD35 /* RealmSwift.framework in Frameworks */,
 				DD3C4D251E561E4D0093BBD0 /* RxRealm.framework in Frameworks */,
 				DD3C4D261E561E4E0093BBD0 /* RxSwift.framework in Frameworks */,
+				DDAE7C551E5BC6CD00CEA205 /* Siesta.framework in Frameworks */,
 				DD65FD4F1E48A01B0054DD35 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -235,6 +239,7 @@
 				DD36A4C91E478D7E00B2EA88 /* ConfCore */,
 				DD36A4D61E478D7E00B2EA88 /* ConfCoreTests */,
 				DD36A4AD1E478C6A00B2EA88 /* Products */,
+				DDAE7C531E5BC6CD00CEA205 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -303,6 +308,7 @@
 		DD36A4C91E478D7E00B2EA88 /* ConfCore */ = {
 			isa = PBXGroup;
 			children = (
+				DDAE7C521E5BC6B000CEA205 /* Networking */,
 				DD65FD4A1E489FDA0054DD35 /* Models */,
 				DD5DEC1C1E4AA68F00426FA6 /* Adapters */,
 				DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */,
@@ -369,6 +375,7 @@
 		DD5F517D1E47DE190017F9EC /* DSYMs */ = {
 			isa = PBXGroup;
 			children = (
+				DDAE7C561E5BC6E300CEA205 /* Siesta.framework.dSYM */,
 				DD5F516E1E47DE0F0017F9EC /* Realm.framework.dSYM */,
 				DD5F516F1E47DE0F0017F9EC /* RealmSwift.framework.dSYM */,
 				DD5F51701E47DE0F0017F9EC /* RxBlocking.framework.dSYM */,
@@ -383,6 +390,7 @@
 		DD5F517E1E47DE7D0017F9EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */,
 				DD5F517F1E47DE7E0017F9EC /* Realm.framework */,
 				DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */,
 				DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */,
@@ -438,6 +446,20 @@
 				DD65FD6C1E48BE270054DD35 /* Bookmark.swift */,
 			);
 			name = UserDefined;
+			sourceTree = "<group>";
+		};
+		DDAE7C521E5BC6B000CEA205 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Networking;
+			sourceTree = "<group>";
+		};
+		DDAE7C531E5BC6CD00CEA205 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -606,6 +628,7 @@
 				"$(SRCROOT)/Carthage/Build/Mac/RxRealm.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/RxSwift.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/Siesta.framework",
 			);
 			name = "Carthage: Copy Frameworks";
 			outputPaths = (
