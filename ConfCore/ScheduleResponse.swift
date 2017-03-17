@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct ScheduleResponse {
+public struct ScheduleResponse {
     
-    let rooms: [Room]
-    let tracks: [Track]
-    let instances: [SessionInstance]
+    public let rooms: [Room]
+    public let tracks: [Track]
+    public let instances: [SessionInstance]
     
 }

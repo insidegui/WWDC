@@ -10,15 +10,15 @@ import Cocoa
 import RealmSwift
 
 /// TranscriptAnnotation is a line within an ASCIIWWDC transcript, with its associated timestamp within the session's video
-class TranscriptAnnotation: Object {
+public class TranscriptAnnotation: Object {
 
     /// The time this annotation occurs within the video
-    dynamic var timecode = 0.0
+    public dynamic var timecode = 0.0
     
     /// The annotation's text
-    dynamic var body = ""
+    public dynamic var body = ""
     
     /// The transcript this annotation is associated with
-    let transcript = LinkingObjects(fromType: Transcript.self, property: "annotations")
+    public let transcript = LinkingObjects(fromType: Transcript.self, property: "annotations")
     
 }

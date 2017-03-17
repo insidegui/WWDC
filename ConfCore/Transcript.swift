@@ -10,21 +10,21 @@ import Cocoa
 import RealmSwift
 
 /// Transcript is an ASCIIWWDC transcript for a WWDC session
-class Transcript: Object {
+public class Transcript: Object {
 
     /// Unique identifier
-    dynamic var identifier = ""
+    public dynamic var identifier = ""
     
     /// Full text
-    dynamic var fullText = ""
+    public dynamic var fullText = ""
     
     /// The annotations the transcript contains
-    let annotations = List<TranscriptAnnotation>()
+    public let annotations = List<TranscriptAnnotation>()
     
     /// The session this transcript is for
-    let session = LinkingObjects(fromType: Session.self, property: "transcript")
+    public let session = LinkingObjects(fromType: Session.self, property: "transcript")
     
-    override class func primaryKey() -> String? {
+    public override class func primaryKey() -> String? {
         return "identifier"
     }
     

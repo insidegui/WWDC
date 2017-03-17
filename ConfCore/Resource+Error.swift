@@ -9,12 +9,12 @@
 import Foundation
 import Siesta
 
-enum APIError: Error {
+public enum APIError: Error {
     case http(Error)
     case adapter
     case unknown
     
-    var localizedDescription: String {
+    public var localizedDescription: String {
         switch self {
         case .http(let error):
             return error.localizedDescription

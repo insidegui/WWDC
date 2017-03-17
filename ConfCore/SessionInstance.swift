@@ -9,7 +9,7 @@
 import Cocoa
 import RealmSwift
 
-enum SessionInstanceType: Int {
+public enum SessionInstanceType: Int {
     case session
     case lab
     case video
@@ -28,40 +28,40 @@ enum SessionInstanceType: Int {
 }
 
 /// A session instance represents a specific occurence of a session with a location and start/end times
-class SessionInstance: Object {
+public class SessionInstance: Object {
     
     /// Unique identifier
-    dynamic var identifier = ""
+    public dynamic var identifier = ""
     
     /// Instance number
-    dynamic var number = ""
+    public dynamic var number = ""
     
     /// The session
-    dynamic var session: Session? = nil
+    public dynamic var session: Session? = nil
     
     /// Type of session (0 = regular session, 1 = lab, 2 = video-only session)
-    dynamic var sessionType = 0
+    public dynamic var sessionType = 0
     
     /// The start time
-    dynamic var startTime: Date = .distantPast
+    public dynamic var startTime: Date = .distantPast
     
     /// The end time
-    dynamic var endTime: Date = .distantPast
+    public dynamic var endTime: Date = .distantPast
     
     /// Keywords for this session
-    let keywords = List<Keyword>()
+    public let keywords = List<Keyword>()
     
     /// Room name (for JSON adapting only)
-    dynamic var roomName = ""
+    public dynamic var roomName = ""
     
     /// The room where this session will be held
-    let room = LinkingObjects(fromType: Room.self, property: "instances")
+    public let room = LinkingObjects(fromType: Room.self, property: "instances")
     
-    override static func primaryKey() -> String? {
+    public override static func primaryKey() -> String? {
         return "identifier"
     }
     
-    override static func ignoredProperties() -> [String] {
+    public override static func ignoredProperties() -> [String] {
         return ["roomName"]
     }
     

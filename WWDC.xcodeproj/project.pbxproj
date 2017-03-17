@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		DD0353491E5545B300D5E343 /* SessionInstancesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */; };
+		DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F0C551E7B8DD600B52184 /* Storage.swift */; };
+		DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
+		DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
 		DD34DA071E4AB0E400F25C45 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34DA061E4AB0E400F25C45 /* AdapterTests.swift */; };
 		DD34DA0B1E4AB3E400F25C45 /* RoomsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */; };
 		DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */; };
@@ -137,6 +140,7 @@
 
 /* Begin PBXFileReference section */
 		DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionInstancesJSONAdapter.swift; sourceTree = "<group>"; };
+		DD0F0C551E7B8DD600B52184 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		DD34DA061E4AB0E400F25C45 /* AdapterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdapterTests.swift; sourceTree = "<group>"; };
 		DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsJSONAdapter.swift; sourceTree = "<group>"; };
 		DD36A4AC1E478C6A00B2EA88 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -217,7 +221,9 @@
 			files = (
 				DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
 				DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */,
+				DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */,
 				DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */,
+				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +253,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DD0F0C541E7B8DB100B52184 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				DD0F0C551E7B8DD600B52184 /* Storage.swift */,
+			);
+			name = Storage;
+			sourceTree = "<group>";
+		};
 		DD36A4A31E478C6900B2EA88 = {
 			isa = PBXGroup;
 			children = (
@@ -324,6 +338,7 @@
 		DD36A4C91E478D7E00B2EA88 /* ConfCore */ = {
 			isa = PBXGroup;
 			children = (
+				DD0F0C541E7B8DB100B52184 /* Storage */,
 				DDAE7C521E5BC6B000CEA205 /* Networking */,
 				DD65FD4A1E489FDA0054DD35 /* Models */,
 				DD5DEC1C1E4AA68F00426FA6 /* Adapters */,
@@ -720,6 +735,7 @@
 				DD5DEC2F1E4AAC9300426FA6 /* DateAdapter.swift in Sources */,
 				DDAE7C5E1E5C723A00CEA205 /* Resource+Error.swift in Sources */,
 				DDAE7C5A1E5C652600CEA205 /* Environment.swift in Sources */,
+				DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */,
 				DDAE7C651E5CA81C00CEA205 /* SessionsResponse.swift in Sources */,
 				DD65FD591E48A0C90054DD35 /* Photo.swift in Sources */,
 				DD65FD6B1E48BD9F0054DD35 /* Favorite.swift in Sources */,

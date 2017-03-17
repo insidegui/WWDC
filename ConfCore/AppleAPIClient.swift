@@ -12,12 +12,12 @@ import SwiftyJSON
 
 // MARK: - Initialization and configuration
 
-final class AppleAPIClient {
+public final class AppleAPIClient {
     
     fileprivate let environment: Environment
     fileprivate let service: Service
     
-    init(environment: Environment) {
+    public init(environment: Environment) {
         self.environment = environment
         self.service = Service(baseURL: environment.baseURL)
         
@@ -98,25 +98,25 @@ final class AppleAPIClient {
 
 extension AppleAPIClient {
 
-    func fetchLiveVideoAssets(completion: @escaping (Result<[SessionAsset], APIError>) -> Void) {
+    public func fetchLiveVideoAssets(completion: @escaping (Result<[SessionAsset], APIError>) -> Void) {
         liveVideoAssets.addObserver(owner: self) { [weak self] resource, event in
             self?.process(resource, event: event, with: completion)
         }.loadIfNeeded()
     }
     
-    func fetchSchedule(completion: @escaping (Result<ScheduleResponse, APIError>) -> Void) {
+    public func fetchSchedule(completion: @escaping (Result<ScheduleResponse, APIError>) -> Void) {
         schedule.addObserver(owner: self) { [weak self] resource, event in
             self?.process(resource, event: event, with: completion)
         }.loadIfNeeded()
     }
     
-    func fetchSessions(completion: @escaping (Result<SessionsResponse, APIError>) -> Void) {
+    public func fetchSessions(completion: @escaping (Result<SessionsResponse, APIError>) -> Void) {
         sessions.addObserver(owner: self) { [weak self] resource, event in
             self?.process(resource, event: event, with: completion)
         }.loadIfNeeded()
     }
     
-    func fetchNewsItems(completion: @escaping (Result<[NewsItem], APIError>) -> Void) {
+    public func fetchNewsItems(completion: @escaping (Result<[NewsItem], APIError>) -> Void) {
         news.addObserver(owner: self) { [weak self] resource, event in
             self?.process(resource, event: event, with: completion)
         }.loadIfNeeded()

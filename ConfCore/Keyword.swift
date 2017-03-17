@@ -10,15 +10,15 @@ import Cocoa
 import RealmSwift
 
 /// Keywords used when searching sessions
-class Keyword: Object {
+public class Keyword: Object {
 
     /// The keyword
-    dynamic var name = ""
+    public dynamic var name = ""
     
     /// Sessions containing this keyword
-    let sessionInstances = LinkingObjects(fromType: SessionInstance.self, property: "keywords")
+    public let sessionInstances = LinkingObjects(fromType: SessionInstance.self, property: "keywords")
     
-    override class func primaryKey() -> String? {
+    public override class func primaryKey() -> String? {
         return "name"
     }
     

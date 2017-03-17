@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Environment {
+public struct Environment {
     
     let baseURL: String
     let videosPath: String
@@ -20,10 +20,10 @@ struct Environment {
 
 extension Environment {
     
-    static let test = Environment(baseURL: "http://localhost:9042",
-                                  videosPath: "/videos.json",
-                                  sessionsPath: "/sessions.json",
-                                  newsPath: "/news.json",
-                                  liveVideosPath: "/videos_live.json")
+    public static let test = Environment(baseURL: "http://localhost:9042",
+                                         videosPath: "/videos.json",
+                                         sessionsPath: "/sessions.json",
+                                         newsPath: "/news.json",
+                                         liveVideosPath: "/videos_live.json")
     
 }

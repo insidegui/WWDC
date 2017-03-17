@@ -10,31 +10,31 @@ import Cocoa
 import RealmSwift
 
 /// Represents a past, present or future WWDC edition (ex: WWDC-2016)
-class Event: Object {
+public class Event: Object {
 
     /// Unique identifier (ex: wwdc2017)
-    dynamic var identifier = ""
+    public dynamic var identifier = ""
     
     /// Event name
-    dynamic var name = ""
+    public dynamic var name = ""
     
     /// When the event starts
-    dynamic var startDate = Date.distantPast
+    public dynamic var startDate = Date.distantPast
     
     /// When the event ends
-    dynamic var endDate = Date.distantPast
+    public dynamic var endDate = Date.distantPast
     
     /// Is this the current event?
-    dynamic var isCurrent = false
+    public dynamic var isCurrent = false
     
     /// Sessions held at this event
-    let sessions = List<Session>()
+    public let sessions = List<Session>()
     
-    override class func primaryKey() -> String? {
+    public override class func primaryKey() -> String? {
         return "identifier"
     }
     
-    static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool) -> Event {
+    public static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool) -> Event {
         let event = Event()
         
         event.identifier = identifier

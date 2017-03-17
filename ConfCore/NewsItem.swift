@@ -9,7 +9,7 @@
 import Cocoa
 import RealmSwift
 
-enum NewsType: Int {
+public enum NewsType: Int {
     case news
     case unsupportedUnknown
     case gallery
@@ -17,30 +17,30 @@ enum NewsType: Int {
 }
 
 /// NewsItem can be a simple news text or a photo gallery
-class NewsItem: Object {
+public class NewsItem: Object {
 
     /// Unique identifier
-    dynamic var identifier = ""
+    public dynamic var identifier = ""
     
     /// The type of news (0 = regular news, 2 = photo gallery)
-    dynamic var newsType = 0
+    public dynamic var newsType = 0
     
     /// The condition that must be true so the user can see this item (used to limit some items to only attendees)
-    dynamic var visibility = ""
+    public dynamic var visibility = ""
     
     /// When this news item got published
-    dynamic var date = Date.distantPast
+    public dynamic var date = Date.distantPast
     
     /// Title
-    dynamic var title = ""
+    public dynamic var title = ""
     
     /// Text
-    dynamic var body = ""
+    public dynamic var body = ""
     
     /// Photos for this news item, only present when `newsType == 2`
-    let photos = List<Photo>()
+    public let photos = List<Photo>()
     
-    override class func primaryKey() -> String? {
+    public override class func primaryKey() -> String? {
         return "identifier"
     }
     

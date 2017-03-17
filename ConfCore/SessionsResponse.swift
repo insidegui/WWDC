@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct SessionsResponse {
+public struct SessionsResponse {
     
-    let events: [Event]
-    let sessions: [Session]
-    let assets: [SessionAsset]
+    public let events: [Event]
+    public let sessions: [Session]
+    public let assets: [SessionAsset]
     
 }

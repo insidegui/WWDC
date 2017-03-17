@@ -10,18 +10,18 @@ import Cocoa
 import RealmSwift
 
 /// Defines the user action of adding a session as favorite
-class Favorite: Object {
+public class Favorite: Object {
 
     /// Unique identifier
-    dynamic var identifier = ""
+    public dynamic var identifier = ""
     
     /// When the favorite was created
-    dynamic var createdAt = Date.distantPast
+    public dynamic var createdAt = Date.distantPast
     
     /// The session this favorite is associated with
-    let session = LinkingObjects(fromType: Session.self, property: "favorites")
+    public let session = LinkingObjects(fromType: Session.self, property: "favorites")
     
-    override class func primaryKey() -> String? {
+    public override class func primaryKey() -> String? {
         return "identifier"
     }
     

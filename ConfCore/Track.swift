@@ -10,31 +10,31 @@ import Cocoa
 import RealmSwift
 
 /// Tracks represent a specific are of interest (ex: "System Frameworks", "Graphics and Games")
-class Track: Object {
+public class Track: Object {
     
     /// The name of the track
-    dynamic var name = ""
+    public dynamic var name = ""
     
     /// Dark theme color
-    dynamic var darkColor = ""
+    public dynamic var darkColor = ""
     
     /// Color for light backgrounds
-    dynamic var lightBackgroundColor = ""
+    public dynamic var lightBackgroundColor = ""
     
     /// Color for light contexts
-    dynamic var lightColor = ""
+    public dynamic var lightColor = ""
     
     /// Theme title color
-    dynamic var titleColor = ""
+    public dynamic var titleColor = ""
     
     /// Sessions related to this track
-    let sessions = List<Session>()
+    public let sessions = List<Session>()
     
-    override class func primaryKey() -> String? {
+    public override class func primaryKey() -> String? {
         return "name"
     }
     
-    static func make(name: String,
+    public static func make(name: String,
                      darkColor: String,
                      lightBackgroundColor: String,
                      lightColor: String,

@@ -9,7 +9,7 @@
 import Cocoa
 import RealmSwift
 
-enum SessionAssetType: String {
+public enum SessionAssetType: String {
     case hdVideo = "WWDCSessionAssetTypeHDVideo"
     case sdVideo = "WWDCSessionAssetTypeSDVideo"
     case image = "WWDCSessionAssetTypeShelfImage"
@@ -20,7 +20,7 @@ enum SessionAssetType: String {
 }
 
 /// Session assets are resources associated with sessions, like videos, PDFs and useful links
-class SessionAsset: Object {
+public class SessionAsset: Object {
     
     /// The type of asset:
     ///
@@ -30,27 +30,27 @@ class SessionAsset: Object {
     /// - WWDCSessionAssetTypeSlidesPDF
     /// - WWDCSessionAssetTypeStreamingVideo
     /// - WWDCSessionAssetTypeWebpageURL
-    dynamic var assetType = ""
+    public dynamic var assetType = ""
     
     /// The year of the session this asset belongs to
-    dynamic var year = 0
+    public dynamic var year = 0
     
     /// The id of the session this asset belongs to
-    dynamic var sessionId = ""
+    public dynamic var sessionId = ""
     
     /// URL for this asset
-    dynamic var remoteURL = ""
+    public dynamic var remoteURL = ""
     
     /// Relative local URL to save the asset to when downloading
-    dynamic var relativeLocalURL = ""
+    public dynamic var relativeLocalURL = ""
     
     /// Whether this asset has been download or not
-    dynamic var isDownloaded = false
+    public dynamic var isDownloaded = false
     
     /// The session this asset belongs to
-    let session = LinkingObjects(fromType: Session.self, property: "assets")
+    public let session = LinkingObjects(fromType: Session.self, property: "assets")
     
-    override class func primaryKey() -> String? {
+    public override class func primaryKey() -> String? {
         return "remoteURL"
     }
     

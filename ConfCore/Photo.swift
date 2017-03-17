@@ -10,21 +10,21 @@ import Cocoa
 import RealmSwift
 
 /// Photos are pictures associated with news items
-class Photo: Object {
+public class Photo: Object {
 
     /// Unique identifier
-    dynamic var identifier = ""
+    public dynamic var identifier = ""
     
     /// The photo's aspect ratio
-    dynamic var aspectRatio = 0.0
+    public dynamic var aspectRatio = 0.0
     
     /// The news item this photo is associated with
-    let newsItem = LinkingObjects(fromType: NewsItem.self, property: "photos")
+    public let newsItem = LinkingObjects(fromType: NewsItem.self, property: "photos")
     
     /// The representations this photo has
-    let representations = List<PhotoRepresentation>()
+    public let representations = List<PhotoRepresentation>()
     
-    override class func primaryKey() -> String? {
+    public override class func primaryKey() -> String? {
         return "identifier"
     }
     
