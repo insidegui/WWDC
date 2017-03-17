@@ -43,21 +43,6 @@ final class SessionsResponseAdapter: Adapter {
             return .error(.invalidData)
         }
         
-        events.forEach { event in
-            let eventSessions = sessions.filter({ $0.eventIdentifier == event.identifier })
-            
-            event.sessions.append(objectsIn: eventSessions)
-        }
-        
-        sessions.forEach { session in
-            let components = session.identifier.components(separatedBy: "-")
-            guard components.count == 2 else { return }
-            guard let year = Int(components[0]) else { return }
-            
-            let sessionAssets = assets.flatMap({ $0 }).filter({ $0.year == year && $0.sessionId == components[1] })
-            session.assets.append(objectsIn: sessionAssets)
-        }
-        
         let response = SessionsResponse(events: events, sessions: sessions, assets: assets.flatMap({$0}))
         
         return .success(response)

@@ -50,9 +50,7 @@ class ViewController: NSViewController {
                     case .error(let error):
                         NSAlert(error: error).runModal()
                     case .success(let response):
-                        self?.storage.store(objects: response.events)
-                        self?.storage.store(objects: response.sessions)
-                        self?.storage.store(objects: response.assets)
+                        self?.storage.store(sessionsResponse: response)
                         
                         self?.client.fetchSchedule { result in
                             DispatchQueue.main.async {
@@ -60,9 +58,7 @@ class ViewController: NSViewController {
                                 case .error(let error):
                                     NSAlert(error: error).runModal()
                                 case .success(let response):
-                                    self?.storage.store(objects: response.rooms)
-                                    self?.storage.store(objects: response.tracks)
-                                    self?.storage.store(objects: response.instances)
+                                    self?.storage.store(schedule: response)
                                 }
                             }
                         }

@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 private enum SessionInstanceKeys: String, JSONSubscriptType {
-    case id, room, keywords, startGMT, endGMT, type
+    case id, track, room, keywords, startGMT, endGMT, type
     case favId = "fav_id"
     
     var jsonKey: JSONKey {
@@ -30,6 +30,10 @@ final class SessionInstancesJSONAdapter: Adapter {
         
         guard let id = input[SessionInstanceKeys.id].string else {
             return .error(.missingKey(SessionInstanceKeys.id))
+        }
+        
+        guard let trackName = input[SessionInstanceKeys.track].string else {
+            return .error(.missingKey(SessionInstanceKeys.track))
         }
         
         guard let roomName = input[SessionInstanceKeys.room].string else {
@@ -69,6 +73,7 @@ final class SessionInstancesJSONAdapter: Adapter {
         instance.identifier = session.identifier
         instance.number = id
         instance.session = session
+        instance.trackName = trackName
         instance.roomName = roomName
         instance.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
         instance.startTime = startDate

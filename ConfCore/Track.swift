@@ -30,6 +30,9 @@ public class Track: Object {
     /// Sessions related to this track
     public let sessions = List<Session>()
     
+    /// Instances related to this track
+    public let instances = List<SessionInstance>()
+    
     public override class func primaryKey() -> String? {
         return "name"
     }

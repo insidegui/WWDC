@@ -47,11 +47,6 @@ final class ScheduleResponseAdapter: Adapter {
             return .error(.invalidData)
         }
         
-        rooms.forEach { room in
-            let instances = instances.filter({ $0.roomName == room.name })
-            room.instances.append(objectsIn: instances)
-        }
-        
         let response = ScheduleResponse(rooms: rooms,
                                         tracks: tracks,
                                         instances: instances)

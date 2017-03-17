@@ -54,8 +54,14 @@ public class SessionInstance: Object {
     /// Room name (for JSON adapting only)
     public dynamic var roomName = ""
     
+    // Track name (for JSON adapting only)
+    public dynamic var trackName = ""
+    
     /// The room where this session will be held
     public let room = LinkingObjects(fromType: Room.self, property: "instances")
+    
+    /// The track associated with the instance
+    public let track = LinkingObjects(fromType: Track.self, property: "instances")
     
     public override static func primaryKey() -> String? {
         return "identifier"

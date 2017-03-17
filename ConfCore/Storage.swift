@@ -31,6 +31,51 @@ public final class Storage {
         }
     }
     
+    public func store(schedule: ScheduleResponse, withoutNotifying tokens: [NotificationToken] = []) {
+        schedule.rooms.forEach { room in
+            let instances = schedule.instances.filter({ $0.roomName == room.name })
+            
+            room.instances.append(objectsIn: instances)
+        }
+        
+        schedule.tracks.forEach { track in
+            let instances = schedule.instances.filter({ $0.trackName == track.name })
+            
+            track.instances.append(objectsIn: instances)
+        }
+        
+        store(objects: schedule.instances, withoutNotifying: tokens)
+        store(objects: schedule.rooms, withoutNotifying: tokens)
+        store(objects: schedule.tracks, withoutNotifying: tokens)
+    }
+    
+    public func store(sessionsResponse: SessionsResponse, withoutNotifying tokens: [NotificationToken] = []) {
+        let tracks = realm.objects(Track.self).toArray()
+        
+        sessionsResponse.events.forEach { event in
+            let sessions = sessionsResponse.sessions.filter({ $0.eventIdentifier == event.identifier })
+            
+            event.sessions.append(objectsIn: sessions)
+        }
+        
+        sessionsResponse.sessions.forEach { session in
+            tracks.filter({ $0.name == session.trackName }).first?.sessions.append(session)
+            
+            let components = session.identifier.components(separatedBy: "-")
+            guard components.count == 2 else { return }
+            guard let year = Int(components[0]) else { return }
+            
+            let assets = sessionsResponse.assets.filter({ $0.year == year && $0.sessionId == components[1] })
+            
+            session.assets.append(objectsIn: assets)
+        }
+        
+        store(objects: sessionsResponse.assets, withoutNotifying: tokens)
+        store(objects: sessionsResponse.sessions, withoutNotifying: tokens)
+        store(objects: sessionsResponse.events, withoutNotifying: tokens)
+        store(objects: tracks, withoutNotifying: tokens)
+    }
+    
     public typealias ScheduleObservable = Observable<Results<SessionInstance>>
     
     public lazy var schedule: ScheduleObservable = {
