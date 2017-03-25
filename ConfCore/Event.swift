@@ -30,6 +30,9 @@ public class Event: Object {
     /// Sessions held at this event
     public let sessions = List<Session>()
     
+    /// Session instances for schedule
+    public var sessionInstances = List<SessionInstance>()
+    
     public override class func primaryKey() -> String? {
         return "identifier"
     }

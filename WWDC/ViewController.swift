@@ -40,8 +40,8 @@ class ViewController: NSViewController {
         do {
             storage = try Storage(realmConfiguration!)
             
-            storage.schedule.observeOn(MainScheduler.instance).subscribe(onNext: { schedule in
-                NSLog("Schedule = \(schedule.toArray())")
+            storage.events.observeOn(MainScheduler.instance).subscribe(onNext: { events in
+                NSLog("Events = \(events.toArray())")
             }).addDisposableTo(self.disposeBag)
             
             client.fetchSessions { [weak self] result in
@@ -59,6 +59,7 @@ class ViewController: NSViewController {
                                     NSAlert(error: error).runModal()
                                 case .success(let response):
                                     self?.storage.store(schedule: response)
+                                    return
                                 }
                             }
                         }

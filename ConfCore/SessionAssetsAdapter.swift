@@ -23,16 +23,16 @@ final class SessionAssetsJSONAdapter: Adapter {
     typealias OutputType = [SessionAsset]
     
     func adapt(_ input: JSON) -> Result<[SessionAsset], AdapterError> {
+        guard let title = input[AssetKeys.title].string else {
+            return .error(.missingKey(AssetKeys.title))
+        }
+        
         guard let sessionId = input[AssetKeys.id].string else {
             return .error(.missingKey(AssetKeys.id))
         }
         
         guard let year = input[AssetKeys.year].int else {
             return .error(.missingKey(AssetKeys.year))
-        }
-        
-        guard let title = input[AssetKeys.title].string else {
-            return .error(.missingKey(AssetKeys.title))
         }
         
         guard let url = input[AssetKeys.url].string else {

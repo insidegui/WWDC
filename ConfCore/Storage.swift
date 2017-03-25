@@ -31,6 +31,13 @@ public final class Storage {
         }
     }
     
+    private func associateSessionInstances(with event: Event, withoutNotifying tokens: [NotificationToken]) {
+        let instances = realm.objects(SessionInstance.self).filter("startTime >= %@ AND endTime <= %@", event.startDate, event.endDate)
+        event.sessionInstances = List<SessionInstance>(instances)
+        
+        store(objects: [event], withoutNotifying: tokens)
+    }
+    
     public func store(schedule: ScheduleResponse, withoutNotifying tokens: [NotificationToken] = []) {
         schedule.rooms.forEach { room in
             let instances = schedule.instances.filter({ $0.roomName == room.name })
@@ -47,6 +54,8 @@ public final class Storage {
         store(objects: schedule.instances, withoutNotifying: tokens)
         store(objects: schedule.rooms, withoutNotifying: tokens)
         store(objects: schedule.tracks, withoutNotifying: tokens)
+        
+        realm.objects(Event.self).forEach({ self.associateSessionInstances(with: $0, withoutNotifying: tokens) })
     }
     
     public func store(sessionsResponse: SessionsResponse, withoutNotifying tokens: [NotificationToken] = []) {
@@ -70,24 +79,18 @@ public final class Storage {
             session.assets.append(objectsIn: assets)
         }
         
+        sessionsResponse.events.forEach({ self.associateSessionInstances(with: $0, withoutNotifying: tokens) })
+        
         store(objects: sessionsResponse.assets, withoutNotifying: tokens)
         store(objects: sessionsResponse.sessions, withoutNotifying: tokens)
         store(objects: sessionsResponse.events, withoutNotifying: tokens)
         store(objects: tracks, withoutNotifying: tokens)
     }
     
-    public typealias ScheduleObservable = Observable<Results<SessionInstance>>
-    
-    public lazy var schedule: ScheduleObservable = {
-        let latestEvent = self.realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).first
+    public lazy var events: Observable<Results<Event>> = {
+        let eventsSortedByDateDescending = self.realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false)
         
-        return Observable.from(latestEvent).flatMap { event -> ScheduleObservable in
-            let results = self.realm.objects(SessionInstance.self)
-                                    .filter("startTime >= %@ AND endTime <= %@", event.startDate, event.endDate)
-                                    .sorted(byKeyPath: "startTime")
-            
-            return Observable.collection(from: results)
-        }
+        return Observable.collection(from: eventsSortedByDateDescending)
     }()
     
 }
