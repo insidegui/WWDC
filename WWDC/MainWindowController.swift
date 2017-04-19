@@ -24,7 +24,7 @@ final class MainWindowController: NSWindowController {
         
         super.init(window: window)
         
-        window.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
+        window.appearance = WWDCAppearance.appearance()
         window.center()
         
         windowDidLoad()

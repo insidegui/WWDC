@@ -10,7 +10,7 @@
 
 NSString *const WWDCAppearanceName = @"WWDC";
 
-@interface NSAppearance (Private)
+@interface NSCompositeAppearance: NSAppearance
 
 - (instancetype)initWithAppearances:(NSArray <NSAppearance *> *)appearances;
 
@@ -23,7 +23,7 @@ NSString *const WWDCAppearanceName = @"WWDC";
     NSAppearance *dark = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
     NSAppearance *wwdc = [NSAppearance appearanceNamed:WWDCAppearanceName];
     
-    return [[NSAppearance alloc] initWithAppearances:@[wwdc, dark]];
+    return [[NSClassFromString(@"NSCompositeAppearance") alloc] initWithAppearances:@[wwdc, dark]];
 }
 
 @end
