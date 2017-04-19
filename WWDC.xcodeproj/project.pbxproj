@@ -80,6 +80,10 @@
 		DDAE7C631E5C7E7800CEA205 /* ScheduleResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C621E5C7E7800CEA205 /* ScheduleResponse.swift */; };
 		DDAE7C651E5CA81C00CEA205 /* SessionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C641E5CA81C00CEA205 /* SessionsResponse.swift */; };
 		DDAE7C6B1E5CA97A00CEA205 /* SessionsResponseAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C6A1E5CA97A00CEA205 /* SessionsResponseAdapter.swift */; };
+		DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */; };
+		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
+		DDCE7ED71EA7A2C300C7A3CA /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDCE7ED61EA7A2C300C7A3CA /* WWDC.car */; };
+		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
 		DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */; };
 /* End PBXBuildFile section */
 
@@ -211,6 +215,12 @@
 		DDAE7C621E5C7E7800CEA205 /* ScheduleResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleResponse.swift; sourceTree = "<group>"; };
 		DDAE7C641E5CA81C00CEA205 /* SessionsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsResponse.swift; sourceTree = "<group>"; };
 		DDAE7C6A1E5CA97A00CEA205 /* SessionsResponseAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsResponseAdapter.swift; sourceTree = "<group>"; };
+		DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
+		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
+		DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWDCAppearance.h; sourceTree = "<group>"; };
+		DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWDCAppearance.m; sourceTree = "<group>"; };
+		DDCE7ED61EA7A2C300C7A3CA /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = WWDC.car; sourceTree = "<group>"; };
+		DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksJSONAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -286,6 +296,8 @@
 		DD36A4AE1E478C6A00B2EA88 /* WWDC */ = {
 			isa = PBXGroup;
 			children = (
+				DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */,
+				DDCE7ECE1EA7A1A600C7A3CA /* Look */,
 				DD36A4C21E478D0D00B2EA88 /* Resources */,
 				DD36A4BE1E478CEC00B2EA88 /* Bootstrap */,
 				DD36A4C11E478CFC00B2EA88 /* ViewModels */,
@@ -299,6 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */,
+				DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */,
 			);
 			name = Bootstrap;
 			sourceTree = "<group>";
@@ -306,6 +319,7 @@
 		DD36A4BF1E478CF100B2EA88 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DDCE7ECB1EA7A0E400C7A3CA /* Base */,
 				DD36A4B11E478C6A00B2EA88 /* ViewController.swift */,
 			);
 			name = Controllers;
@@ -541,6 +555,24 @@
 			name = ASCIIWWDC;
 			sourceTree = "<group>";
 		};
+		DDCE7ECB1EA7A0E400C7A3CA /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */,
+			);
+			name = Base;
+			sourceTree = "<group>";
+		};
+		DDCE7ECE1EA7A1A600C7A3CA /* Look */ = {
+			isa = PBXGroup;
+			children = (
+				DDCE7ED61EA7A2C300C7A3CA /* WWDC.car */,
+				DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */,
+				DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */,
+			);
+			name = Look;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -626,6 +658,7 @@
 					DD36A4AB1E478C6900B2EA88 = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = 8C7439RJLG;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					DD36A4C71E478D7E00B2EA88 = {
@@ -668,6 +701,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */,
+				DDCE7ED71EA7A2C300C7A3CA /* WWDC.car in Resources */,
 				DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -723,8 +757,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* ViewController.swift in Sources */,
+				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
+				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -910,6 +947,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
@@ -921,6 +959,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.WWDC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -930,6 +970,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
@@ -941,6 +982,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.WWDC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
