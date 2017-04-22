@@ -43,7 +43,22 @@ final class SessionsResponseAdapter: Adapter {
             return .error(.invalidData)
         }
         
-        let response = SessionsResponse(events: events, sessions: sessions, assets: assets.flatMap({$0}))
+        var trackNames = Set<String>()
+        
+        sessions.forEach { session in
+            guard !trackNames.contains(session.trackName) else { return }
+            trackNames.insert(session.trackName)
+        }
+        
+        let tracks: [Track] = trackNames.map { name in
+            let track = Track()
+            
+            track.name = name
+            
+            return track
+        }
+        
+        let response = SessionsResponse(events: events, sessions: sessions, assets: assets.flatMap({$0}), tracks: tracks)
         
         return .success(response)
     }

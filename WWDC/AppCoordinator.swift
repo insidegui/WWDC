@@ -23,8 +23,12 @@ final class AppCoordinator {
     var videosController: VideosSplitViewController
     
     init(windowController: MainWindowController) {
+        guard let identifier = Bundle.main.bundleIdentifier else {
+            fatalError("Bundle identifier is nil, this should never happen")
+        }
+        
         let dir = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first!
-        let filePath = dir + "/ConfCore.realm"
+        let filePath = dir + "/\(identifier)/ConfCore.realm"
         let realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
         
         let client = AppleAPIClient(environment: Environment.test)

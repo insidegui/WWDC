@@ -73,6 +73,8 @@
 		DD7F385F1EABD631002D8C00 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* MainTabController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* VideosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* VideosTableViewController.swift */; };
 		DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */; };
+		DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */; };
+		DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */; };
 		DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
 		DDAE7C551E5BC6CD00CEA205 /* Siesta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */; };
@@ -211,6 +213,8 @@
 		DD7F385E1EABD631002D8C00 /* MainTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* VideosTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosTableViewController.swift; sourceTree = "<group>"; };
 		DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDetailsViewController.swift; sourceTree = "<group>"; };
+		DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
+		DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionTableCellView.swift; sourceTree = "<group>"; };
 		DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptsJSONAdapter.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
 		DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Siesta.framework; path = Carthage/Build/Mac/Siesta.framework; sourceTree = "<group>"; };
@@ -337,6 +341,7 @@
 		DD36A4C01E478CF500B2EA88 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -344,6 +349,7 @@
 		DD36A4C11E478CFC00B2EA88 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */,
 			);
 			name = ViewModels;
 			sourceTree = "<group>";
@@ -778,6 +784,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
+				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
+				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* VideosSplitViewController.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* MainTabController.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,

@@ -18,6 +18,12 @@ class VideosTableViewController: NSViewController {
     
     var sessions = Variable<Results<Session>?>(nil)
     
+    var viewModels: [SessionViewModel] = [] {
+        didSet {
+            print(viewModels)
+        }
+    }
+    
     init() {
         super.init(nibName: nil, bundle: nil)!
     }
@@ -35,9 +41,10 @@ class VideosTableViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sessions.asObservable().subscribe(onNext: { results in
+        sessions.asObservable().subscribe(onNext: { [weak self] results in
             guard let results = results else { return }
-            print(results)
+            
+            self?.viewModels = results.flatMap({ SessionViewModel(session: $0) })
         }).addDisposableTo(self.disposeBag)
     }
     

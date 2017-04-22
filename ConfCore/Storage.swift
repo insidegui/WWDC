@@ -59,8 +59,6 @@ public final class Storage {
     }
     
     public func store(sessionsResponse: SessionsResponse, withoutNotifying tokens: [NotificationToken] = []) {
-        let tracks = realm.objects(Track.self).toArray()
-        
         sessionsResponse.events.forEach { event in
             let sessions = sessionsResponse.sessions.filter({ $0.eventIdentifier == event.identifier })
             
@@ -68,7 +66,7 @@ public final class Storage {
         }
         
         sessionsResponse.sessions.forEach { session in
-            tracks.filter({ $0.name == session.trackName }).first?.sessions.append(session)
+            sessionsResponse.tracks.filter({ $0.name == session.trackName }).first?.sessions.append(session)
             
             let components = session.identifier.components(separatedBy: "-")
             guard components.count == 2 else { return }
@@ -84,7 +82,7 @@ public final class Storage {
         store(objects: sessionsResponse.assets, withoutNotifying: tokens)
         store(objects: sessionsResponse.sessions, withoutNotifying: tokens)
         store(objects: sessionsResponse.events, withoutNotifying: tokens)
-        store(objects: tracks, withoutNotifying: tokens)
+        store(objects: sessionsResponse.tracks, withoutNotifying: tokens)
     }
     
     public lazy var events: Observable<Results<Event>> = {
