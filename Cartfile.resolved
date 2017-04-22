@@ -1,3 +1,4 @@
+github "Instagram/IGListKit" "2.1.0"
 github "ReactiveX/RxSwift" "3.4.0"
 github "SwiftyJSON/SwiftyJSON" "3.1.4"
 github "realm/realm-cocoa" "v2.6.1"

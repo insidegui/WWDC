@@ -8,8 +8,9 @@
 
 import Foundation
 import ConfCore
+import IGListKit
 
-struct SessionViewModel {
+final class SessionViewModel: NSObject {
     
     let identifier: String
     let title: String
@@ -17,10 +18,6 @@ struct SessionViewModel {
     let context: String
     let imageUrl: URL?
     let color: NSColor
-    
-}
-
-extension SessionViewModel {
     
     init?(session: Session) {
         guard let event = session.event.first else { return nil }
@@ -49,6 +46,27 @@ extension SessionViewModel {
         self.subtitle = "WWDC \(year) - Session \(session.number)"
         self.context = "\(focuses) - \(track.name)"
         self.color = .red
+        
+        super.init()
+    }
+    
+}
+
+extension SessionViewModel: IGListDiffable {
+    
+    func diffIdentifier() -> NSObjectProtocol {
+        return identifier as NSObjectProtocol
+    }
+    
+    func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
+        guard let other = object as? SessionViewModel else { return false }
+        
+        return self.identifier == other.identifier &&
+                self.title == other.title &&
+                self.subtitle == other.subtitle &&
+                self.context == other.context &&
+                self.imageUrl == other.imageUrl &&
+                self.color == other.color
     }
     
 }
