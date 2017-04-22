@@ -45,7 +45,7 @@ final class SessionTableCellView: NSTableCellView {
     private lazy var titleLabel: NSTextField = {
         let l = NSTextField(labelWithString: "")
         l.font = NSFont.systemFont(ofSize: 14)
-        l.textColor = NSColor(calibratedWhite: 0.9, alpha: 1.0)
+        l.textColor = .primaryText
         l.cell?.backgroundStyle = .dark
         
         return l
@@ -54,7 +54,7 @@ final class SessionTableCellView: NSTableCellView {
     private lazy var subtitleLabel: NSTextField = {
         let l = NSTextField(labelWithString: "")
         l.font = NSFont.systemFont(ofSize: 12)
-        l.textColor = NSColor(calibratedWhite: 0.75, alpha: 1.0)
+        l.textColor = .secondaryText
         l.cell?.backgroundStyle = .dark
         
         return l
@@ -63,7 +63,7 @@ final class SessionTableCellView: NSTableCellView {
     private lazy var contextLabel: NSTextField = {
         let l = NSTextField(labelWithString: "")
         l.font = NSFont.systemFont(ofSize: 12)
-        l.textColor = NSColor(calibratedWhite: 0.75, alpha: 1.0)
+        l.textColor = .secondaryText
         l.cell?.backgroundStyle = .dark
         
         return l
@@ -110,7 +110,7 @@ final class SessionTableCellView: NSTableCellView {
     
     private func buildUI() {
         wantsLayer = true
-        layer?.backgroundColor = NSColor(calibratedRed:0.13, green:0.13, blue:0.13, alpha:1.00).cgColor
+        layer?.backgroundColor = NSColor.listBackground.cgColor
         
         addSubview(mainStackView)
         mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true

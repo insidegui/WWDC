@@ -77,6 +77,7 @@
 		DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */; };
 		DD7F386C1EABF560002D8C00 /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7F386B1EABF560002D8C00 /* IGListKit.framework */; };
 		DD7F386F1EABF631002D8C00 /* NSTableView+IGListKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F386E1EABF631002D8C00 /* NSTableView+IGListKit.swift */; };
+		DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38701EABF6C4002D8C00 /* Colors.swift */; };
 		DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
 		DDAE7C551E5BC6CD00CEA205 /* Siesta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */; };
@@ -220,6 +221,7 @@
 		DD7F386B1EABF560002D8C00 /* IGListKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IGListKit.framework; path = Carthage/Build/Mac/IGListKit.framework; sourceTree = "<group>"; };
 		DD7F386D1EABF576002D8C00 /* IGListKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = IGListKit.framework.dSYM; path = Carthage/Build/Mac/IGListKit.framework.dSYM; sourceTree = "<group>"; };
 		DD7F386E1EABF631002D8C00 /* NSTableView+IGListKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTableView+IGListKit.swift"; sourceTree = "<group>"; };
+		DD7F38701EABF6C4002D8C00 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptsJSONAdapter.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
 		DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Siesta.framework; path = Carthage/Build/Mac/Siesta.framework; sourceTree = "<group>"; };
@@ -604,6 +606,7 @@
 				DDCE7ED61EA7A2C300C7A3CA /* WWDC.car */,
 				DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */,
 				DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */,
+				DD7F38701EABF6C4002D8C00 /* Colors.swift */,
 			);
 			name = Look;
 			sourceTree = "<group>";
@@ -794,6 +797,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
+				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
 				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* VideosSplitViewController.swift in Sources */,
