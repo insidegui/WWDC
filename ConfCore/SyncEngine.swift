@@ -20,24 +20,11 @@ public final class SyncEngine {
     }
     
     public func syncSessionsAndSchedule(completion: @escaping (APIError?) -> Void) {
-        client.fetchSessions { [weak self] result in
+        client.fetchSessions { [weak self] sessionsResult in
             DispatchQueue.main.async {
-                switch result {
-                case .error(let error):
-                    completion(error)
-                case .success(let response):
-                    self?.storage.store(sessionsResponse: response)
-                    
-                    self?.client.fetchSchedule { result in
-                        DispatchQueue.main.async {
-                            switch result {
-                            case .error(let error):
-                                completion(error)
-                            case .success(let response):
-                                self?.storage.store(schedule: response)
-                                completion(nil)
-                            }
-                        }
+                self?.client.fetchSchedule { scheduleResult in
+                    DispatchQueue.main.async {
+                        self?.storage.store(sessionsResult: sessionsResult, scheduleResult: scheduleResult)
                     }
                 }
             }

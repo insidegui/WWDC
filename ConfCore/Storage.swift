@@ -19,70 +19,62 @@ public final class Storage {
         self.realm = try Realm(configuration: configuration)
     }
     
-    public func store(objects: [Object], withoutNotifying tokens: [NotificationToken] = []) {
+    func store(sessionsResult: Result<SessionsResponse, APIError>, scheduleResult: Result<ScheduleResponse, APIError>) {
+        if case let .error(sessionsError) = sessionsResult {
+            print("Error downloading sessions: \(sessionsError)")
+        }
+        if case let .error(scheduleError) = scheduleResult {
+            print("Error downloading schedule: \(scheduleError)")
+        }
+        
+        guard case let .success(sessionsResponse) = sessionsResult, case let .success(scheduleResponse) = scheduleResult else {
+            return
+        }
+        
         realm.beginWrite()
         
-        realm.add(objects, update: true)
-        
-        do {
-            try realm.commitWrite(withoutNotifying: tokens)
-        } catch {
-            NSLog("Realm error: \(error)")
-        }
-    }
-    
-    private func associateSessionInstances(with event: Event, withoutNotifying tokens: [NotificationToken]) {
-        let instances = realm.objects(SessionInstance.self).filter("startTime >= %@ AND endTime <= %@", event.startDate, event.endDate)
-        event.sessionInstances = List<SessionInstance>(instances)
-        
-        store(objects: [event], withoutNotifying: tokens)
-    }
-    
-    public func store(schedule: ScheduleResponse, withoutNotifying tokens: [NotificationToken] = []) {
-        schedule.rooms.forEach { room in
-            let instances = schedule.instances.filter({ $0.roomName == room.name })
-            
-            room.instances.append(objectsIn: instances)
+        // Add sessions and session instances to tracks
+        scheduleResponse.tracks.forEach { track in
+            track.sessions.append(objectsIn: sessionsResponse.sessions.filter({ $0.trackName == track.name }))
+            track.instances.append(objectsIn: scheduleResponse.instances.filter({ $0.trackName == track.name }))
         }
         
-        schedule.tracks.forEach { track in
-            let instances = schedule.instances.filter({ $0.trackName == track.name })
-            
-            track.instances.append(objectsIn: instances)
-        }
-        
-        store(objects: schedule.instances, withoutNotifying: tokens)
-        store(objects: schedule.rooms, withoutNotifying: tokens)
-        store(objects: schedule.tracks, withoutNotifying: tokens)
-        
-        realm.objects(Event.self).forEach({ self.associateSessionInstances(with: $0, withoutNotifying: tokens) })
-    }
-    
-    public func store(sessionsResponse: SessionsResponse, withoutNotifying tokens: [NotificationToken] = []) {
+        // Associate sessions with events
         sessionsResponse.events.forEach { event in
             let sessions = sessionsResponse.sessions.filter({ $0.eventIdentifier == event.identifier })
             
             event.sessions.append(objectsIn: sessions)
         }
-        
+
+        // Associate assets with sessions
         sessionsResponse.sessions.forEach { session in
-            sessionsResponse.tracks.filter({ $0.name == session.trackName }).first?.sessions.append(session)
-            
             let components = session.identifier.components(separatedBy: "-")
             guard components.count == 2 else { return }
             guard let year = Int(components[0]) else { return }
-            
+
             let assets = sessionsResponse.assets.filter({ $0.year == year && $0.sessionId == components[1] })
             
             session.assets.append(objectsIn: assets)
         }
         
-        sessionsResponse.events.forEach({ self.associateSessionInstances(with: $0, withoutNotifying: tokens) })
+        // Associate rooms with session instances
+        scheduleResponse.rooms.forEach { room in
+            let instances = scheduleResponse.instances.filter({ $0.roomName == room.name })
+            
+            room.instances.append(objectsIn: instances)
+        }
         
-        store(objects: sessionsResponse.assets, withoutNotifying: tokens)
-        store(objects: sessionsResponse.sessions, withoutNotifying: tokens)
-        store(objects: sessionsResponse.events, withoutNotifying: tokens)
-        store(objects: sessionsResponse.tracks, withoutNotifying: tokens)
+        // Save everything
+        realm.add(scheduleResponse.instances, update: true)
+        realm.add(scheduleResponse.rooms, update: true)
+        realm.add(scheduleResponse.tracks, update: true)
+        realm.add(sessionsResponse.events, update: true)
+        
+        do {
+            try realm.commitWrite()
+        } catch {
+            NSLog("Realm error: \(error)")
+        }
     }
     
     public lazy var events: Observable<Results<Event>> = {
