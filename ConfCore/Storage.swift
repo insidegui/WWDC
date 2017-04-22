@@ -93,4 +93,10 @@ public final class Storage {
         return Observable.collection(from: eventsSortedByDateDescending)
     }()
     
+    public lazy var sessions: Observable<Results<Session>> = {
+        let sessions = self.realm.objects(Session.self).sorted(byKeyPath: "number", ascending: true)
+        
+        return Observable.collection(from: sessions)
+    }()
+    
 }

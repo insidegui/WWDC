@@ -10,17 +10,17 @@ import Cocoa
 
 final class MainWindowController: NSWindowController {
 
-    init() {
-        let rect: NSRect
-        
+    static var defaultRect: NSRect {
         if let screen = NSScreen.main() {
-            rect = screen.visibleFrame.insetBy(dx: 50, dy: 70)
+            return screen.visibleFrame.insetBy(dx: 50, dy: 70)
         } else {
-            rect = NSRect(x: 0, y: 0, width: 1200, height: 640)
+            return NSRect(x: 0, y: 0, width: 1200, height: 640)
         }
-        
+    }
+    
+    init() {
         let mask: NSWindowStyleMask = [.titled, .resizable, .miniaturizable, .closable]
-        let window = NSWindow(contentRect: rect, styleMask: mask, backing: .buffered, defer: false)
+        let window = NSWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
         
         super.init(window: window)
         
