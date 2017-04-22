@@ -31,7 +31,7 @@ final class AppCoordinator {
         let filePath = dir + "/\(identifier)/ConfCore.realm"
         let realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
         
-        let client = AppleAPIClient(environment: Environment.test)
+        let client = AppleAPIClient(environment: .current)
         
         do {
             self.storage = try Storage(realmConfig)
