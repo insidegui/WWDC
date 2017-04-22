@@ -68,6 +68,8 @@ class VideosTableViewController: NSViewController {
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.blue.cgColor
         
+        scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
+        
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
         

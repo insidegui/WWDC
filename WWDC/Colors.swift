@@ -22,4 +22,12 @@ extension NSColor {
         return NSColor(calibratedWhite: 0.75, alpha: 1.0)
     }
     
+    static var tertiaryText: NSColor {
+        return NSColor(calibratedWhite: 0.4, alpha: 1.0)
+    }
+    
+    static var primary: NSColor {
+        return NSColor(calibratedRed:0.20, green:0.82, blue:0.91, alpha:1.00)
+    }
+    
 }
