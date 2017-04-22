@@ -15,7 +15,9 @@ final class SessionViewModel: NSObject {
     let identifier: String
     let title: String
     let subtitle: String
+    let summary: String
     let context: String
+    let footer: String
     let imageUrl: URL?
     let color: NSColor
     
@@ -33,20 +35,34 @@ final class SessionViewModel: NSObject {
             self.imageUrl = nil
         }
         
-        let focuses = SessionViewModel.focusesDescription(from: session.focuses.toArray())
+        let focusesArray = session.focuses.toArray()
+        
+        let focuses = SessionViewModel.focusesDescription(from: focusesArray)
+        let allFocuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: true)
+        
+        var footer = "WWDC \(year) · Session \(session.number)"
+        var context = "\(track.name)"
+        
+        if focusesArray.count > 0 {
+            footer += " · \(allFocuses)"
+            context = "\(focuses) - " + context
+        }
+        
         self.identifier = session.identifier
         self.title = session.title
         self.subtitle = "WWDC \(year) - Session \(session.number)"
-        self.context = "\(focuses) - \(track.name)"
+        self.context = context
         self.color = NSColor.fromHexString(hexString: track.lightColor)
+        self.summary = session.summary
+        self.footer = footer
         
         super.init()
     }
     
-    static func focusesDescription(from focuses: [Focus]) -> String {
+    static func focusesDescription(from focuses: [Focus], collapse: Bool = false) -> String {
         var result: String
         
-        if focuses.count == 4 {
+        if focuses.count == 4 && collapse {
             result = "All Platforms"
         } else {
             let separator = ", "

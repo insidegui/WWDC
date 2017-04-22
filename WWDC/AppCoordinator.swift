@@ -51,7 +51,15 @@ final class AppCoordinator {
         
         self.windowController = windowController
         
+        setupBindings()
+        
         NotificationCenter.default.addObserver(forName: .NSApplicationDidFinishLaunching, object: nil, queue: nil) { _ in self.startup() }
+    }
+    
+    private func setupBindings() {
+        let selectedSession = videosController.listViewController.selectedSession.asObservable()
+        
+        selectedSession.bind(to: videosController.detailViewController.summaryController.viewModel).addDisposableTo(self.disposeBag)
     }
     
     @IBAction func refresh(_ sender: Any?) {

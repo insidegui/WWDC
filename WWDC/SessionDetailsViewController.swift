@@ -7,9 +7,15 @@
 //
 
 import Cocoa
+import RxSwift
+import RxCocoa
 
 class SessionDetailsViewController: NSViewController {
 
+    private let disposeBag = DisposeBag()
+    
+    var viewModel = Variable<SessionViewModel?>(nil)
+    
     let playerController: VideoPlayerViewController
     let summaryController: SessionSummaryViewController
     
@@ -48,6 +54,8 @@ class SessionDetailsViewController: NSViewController {
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
         stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 4).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -46).isActive = true
+        
+        viewModel.asObservable().bind(to: summaryController.viewModel).addDisposableTo(self.disposeBag)
     }
     
 }

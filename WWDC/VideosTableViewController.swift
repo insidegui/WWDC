@@ -17,6 +17,7 @@ class VideosTableViewController: NSViewController {
     private let disposeBag = DisposeBag()
     
     var sessions = Variable<Results<Session>?>(nil)
+    var selectedSession = Variable<SessionViewModel?>(nil)
     
     var viewModels: [SessionViewModel] = [] {
         didSet {
@@ -108,6 +109,15 @@ extension VideosTableViewController: NSTableViewDataSource, NSTableViewDelegate 
         cell?.viewModel = viewModels[row]
         
         return cell
+    }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        if tableView.selectedRow < 0 {
+            selectedSession.value = nil
+        } else {
+            let viewModel = viewModels[tableView.selectedRow]
+            selectedSession.value = viewModel
+        }
     }
     
 }

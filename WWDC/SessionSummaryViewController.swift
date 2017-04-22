@@ -7,9 +7,15 @@
 //
 
 import Cocoa
+import RxSwift
+import RxCocoa
 
 class SessionSummaryViewController: NSViewController {
 
+    private let disposeBag = DisposeBag()
+    
+    var viewModel = Variable<SessionViewModel?>(nil)
+    
     init() {
         super.init(nibName: nil, bundle: nil)!
     }
@@ -19,7 +25,7 @@ class SessionSummaryViewController: NSViewController {
     }
     
     private lazy var titleLabel: NSTextField = {
-        let l = NSTextField(labelWithString: "Platforms State of the Union")
+        let l = NSTextField(labelWithString: "")
         l.font = NSFont.systemFont(ofSize: 24)
         l.textColor = .primaryText
         l.cell?.backgroundStyle = .dark
@@ -28,8 +34,8 @@ class SessionSummaryViewController: NSViewController {
         return l
     }()
     
-    private lazy var subtitleLabel: WWDCTextField = {
-        let l = WWDCTextField(wrappingLabelWithString: "Join us for an unforgettable award ceremony celebrating developers and their outstanding work. The 2016 Apple Design Awards recognize state of the art iOS, macOS, watchOS, and tvOS apps that reflect excellence in design and innovation.")
+    private lazy var summaryLabel: WWDCTextField = {
+        let l = WWDCTextField(wrappingLabelWithString: "")
         l.font = NSFont.systemFont(ofSize: 18)
         l.textColor = .secondaryText
         l.cell?.backgroundStyle = .dark
@@ -38,7 +44,7 @@ class SessionSummaryViewController: NSViewController {
     }()
     
     private lazy var contextLabel: NSTextField = {
-        let l = NSTextField(labelWithString: "WWDC 2016 · Session 102 · iOS, macOS, tvOS, watchOS")
+        let l = NSTextField(labelWithString: "")
         l.font = NSFont.systemFont(ofSize: 16)
         l.textColor = .tertiaryText
         l.cell?.backgroundStyle = .dark
@@ -48,7 +54,7 @@ class SessionSummaryViewController: NSViewController {
     }()
     
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.titleLabel, self.subtitleLabel, self.contextLabel])
+        let v = NSStackView(views: [self.titleLabel, self.summaryLabel, self.contextLabel])
         
         v.orientation = .vertical
         v.alignment = .leading
@@ -67,6 +73,18 @@ class SessionSummaryViewController: NSViewController {
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         stackView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let title = viewModel.asObservable().ignoreNil().map({ $0.title })
+        let summary = viewModel.asObservable().ignoreNil().map({ $0.summary })
+        let footer = viewModel.asObservable().ignoreNil().map({ $0.footer })
+        
+        title.asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).addDisposableTo(self.disposeBag)
+        summary.asDriver(onErrorJustReturn: "").drive(summaryLabel.rx.text).addDisposableTo(self.disposeBag)
+        footer.asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).addDisposableTo(self.disposeBag)
     }
     
 }
