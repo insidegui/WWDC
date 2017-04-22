@@ -47,6 +47,7 @@ final class SessionTableCellView: NSTableCellView {
         l.font = NSFont.systemFont(ofSize: 14)
         l.textColor = .primaryText
         l.cell?.backgroundStyle = .dark
+        l.lineBreakMode = .byTruncatingTail
         
         return l
     }()
@@ -56,6 +57,7 @@ final class SessionTableCellView: NSTableCellView {
         l.font = NSFont.systemFont(ofSize: 12)
         l.textColor = .secondaryText
         l.cell?.backgroundStyle = .dark
+        l.lineBreakMode = .byTruncatingTail
         
         return l
     }()
@@ -65,6 +67,7 @@ final class SessionTableCellView: NSTableCellView {
         l.font = NSFont.systemFont(ofSize: 12)
         l.textColor = .secondaryText
         l.cell?.backgroundStyle = .dark
+        l.lineBreakMode = .byTruncatingTail
         
         return l
     }()
@@ -74,6 +77,9 @@ final class SessionTableCellView: NSTableCellView {
         
         v.heightAnchor.constraint(equalToConstant: 48).isActive = true
         v.widthAnchor.constraint(equalToConstant: 85).isActive = true
+        v.wantsLayer = true
+        v.layer?.cornerRadius = 2
+        v.layer?.masksToBounds = true
         
         return v
     }()
@@ -110,7 +116,6 @@ final class SessionTableCellView: NSTableCellView {
     
     private func buildUI() {
         wantsLayer = true
-        layer?.backgroundColor = NSColor.listBackground.cgColor
         
         addSubview(mainStackView)
         mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true

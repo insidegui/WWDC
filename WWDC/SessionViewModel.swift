@@ -33,21 +33,38 @@ final class SessionViewModel: NSObject {
             self.imageUrl = nil
         }
         
-        let focuses: String
-        
-        if session.focuses.count == 4 {
-            focuses = "All Platforms"
-        } else {
-            focuses = session.focuses.reduce("", { $0 + ", " + $1.name })
-        }
-        
+        let focuses = SessionViewModel.focusesDescription(from: session.focuses.toArray())
         self.identifier = session.identifier
         self.title = session.title
         self.subtitle = "WWDC \(year) - Session \(session.number)"
         self.context = "\(focuses) - \(track.name)"
-        self.color = .red
+        self.color = NSColor.fromHexString(hexString: track.lightColor)
         
         super.init()
+    }
+    
+    static func focusesDescription(from focuses: [Focus]) -> String {
+        var result: String
+        
+        if focuses.count == 4 {
+            result = "All Platforms"
+        } else {
+            let separator = ", "
+            
+            result = focuses.reduce("") { partial, focus in
+                if partial.isEmpty {
+                    return focus.name + separator
+                } else {
+                    return partial + focus.name + separator
+                }
+            }
+            
+            if let lastCommaRange = result.range(of: separator, options: .backwards, range: nil, locale: nil) {
+                result = result.replacingCharacters(in: lastCommaRange, with: "")
+            }
+        }
+        
+        return result
     }
     
 }

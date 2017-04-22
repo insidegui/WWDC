@@ -29,7 +29,7 @@ final class VideosSplitViewController: NSSplitViewController {
         
         view.wantsLayer = true
         
-        let listItem = NSSplitViewItem(contentListWithViewController: listViewController)
+        let listItem = NSSplitViewItem(sidebarWithViewController: listViewController)
         let detailItem = NSSplitViewItem(viewController: detailViewController)
         
         addSplitViewItem(listItem)
