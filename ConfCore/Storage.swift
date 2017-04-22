@@ -70,6 +70,17 @@ public final class Storage {
         realm.add(scheduleResponse.tracks, update: true)
         realm.add(sessionsResponse.events, update: true)
         
+        // Associate instances with events
+        scheduleResponse.instances.forEach { instance in
+            guard let session = instance.session else { return }
+            
+            guard let event = self.realm.objects(Session.self).filter({ $0.identifier == session.identifier && $0.number == session.number }).first?.event.first else {
+                return
+            }
+            
+            event.sessionInstances.append(instance)
+        }
+        
         do {
             try realm.commitWrite()
         } catch {
