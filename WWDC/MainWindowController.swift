@@ -31,6 +31,8 @@ final class MainWindowController: NSWindowController {
         
         window.toolbar = NSToolbar(identifier: "WWDC")
         
+        window.identifier = "main"
+        
         windowDidLoad()
     }
     

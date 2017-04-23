@@ -27,6 +27,8 @@ class VideosTableViewController: NSViewController {
     
     init() {
         super.init(nibName: nil, bundle: nil)!
+        
+        identifier = "videosList"
     }
     
     required init?(coder: NSCoder) {

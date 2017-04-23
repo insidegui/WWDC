@@ -18,6 +18,8 @@ final class VideosSplitViewController: NSSplitViewController {
         detailViewController = SessionDetailsViewController()
         
         super.init(nibName: nil, bundle: nil)!
+        
+        identifier = "videosSplit"
     }
     
     required init?(coder: NSCoder) {

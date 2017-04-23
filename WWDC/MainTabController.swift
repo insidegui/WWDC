@@ -12,6 +12,8 @@ class MainTabController: NSTabViewController {
 
     init() {
         super.init(nibName: nil, bundle: nil)!
+        
+        identifier = "tabs"
     }
     
     required init?(coder: NSCoder) {
