@@ -7,3 +7,5 @@ github "RxSwiftCommunity/RxRealm" ~> 0.5
 
 github "bustoutsolutions/siesta" ~> 1.0
 github "Instagram/IGListKit" ~> 2.0.0
+
+github "insidegui/PIPContainer" ~> 1.0
