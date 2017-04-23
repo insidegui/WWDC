@@ -27,6 +27,10 @@ final class MainWindowController: NSWindowController {
         window.appearance = WWDCAppearance.appearance()
         window.center()
         
+        window.titleVisibility = .hidden
+        
+        window.toolbar = NSToolbar(identifier: "WWDC")
+        
         windowDidLoad()
     }
     

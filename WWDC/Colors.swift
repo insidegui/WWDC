@@ -30,4 +30,12 @@ extension NSColor {
         return NSColor(calibratedRed:0.20, green:0.82, blue:0.91, alpha:1.00)
     }
     
+    static var toolbarTint: NSColor {
+        return NSColor(calibratedRed:0.67, green:0.71, blue:0.75, alpha:1.00)
+    }
+    
+    static var toolbarTintActive: NSColor {
+        return NSColor(calibratedRed:0.14, green:0.82, blue:0.92, alpha:1.00)
+    }
+    
 }
