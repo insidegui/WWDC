@@ -100,12 +100,32 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         do {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
             
+            teardownPlayerIfNeeded()
+            
             currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, metadata: playbackViewModel.metadata)
             
             attachPlayerToShelf()
         } catch {
             WWDCAlert.show(with: error)
         }
+    }
+    
+    private func teardownPlayerIfNeeded() {
+        guard let playerController = currentPlayerController else { return }
+        
+        playerController.player.pause()
+        playerController.player.cancelPendingPrerolls()
+        
+        // close detached window
+        if let window = playerController.view.window {
+            if window != windowController.window {
+                window.close()
+            }
+        }
+        
+        playerController.view.removeFromSuperview()
+        
+        currentPlayerController = nil
     }
     
     private func attachPlayerToShelf() {
