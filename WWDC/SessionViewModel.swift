@@ -37,8 +37,8 @@ final class SessionViewModel: NSObject {
         
         let focusesArray = session.focuses.toArray()
         
-        let focuses = SessionViewModel.focusesDescription(from: focusesArray)
-        let allFocuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: true)
+        let focuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: true)
+        let allFocuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: false)
         
         var footer = "WWDC \(year) · Session \(session.number)"
         var context = "\(track.name)"
@@ -59,7 +59,7 @@ final class SessionViewModel: NSObject {
         super.init()
     }
     
-    static func focusesDescription(from focuses: [Focus], collapse: Bool = false) -> String {
+    static func focusesDescription(from focuses: [Focus], collapse: Bool) -> String {
         var result: String
         
         if focuses.count == 4 && collapse {
