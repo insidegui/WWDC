@@ -20,6 +20,7 @@ final class SessionViewModel: NSObject {
     let footer: String
     let imageUrl: URL?
     let color: NSColor
+    let webUrl: URL?
     
     init?(session: Session) {
         guard let event = session.event.first else { return nil }
@@ -27,7 +28,7 @@ final class SessionViewModel: NSObject {
         
         let year = Calendar.current.component(.year, from: event.startDate)
         
-        let imageAsset = session.assets.filter({ $0.assetType == SessionAssetType.image.rawValue }).first
+        let imageAsset = session.asset(of: .image)
         
         if let thumbnail = imageAsset?.remoteURL, let thumbnailUrl = URL(string: thumbnail) {
             self.imageUrl = thumbnailUrl
@@ -55,6 +56,12 @@ final class SessionViewModel: NSObject {
         self.color = NSColor.fromHexString(hexString: track.lightColor)
         self.summary = session.summary
         self.footer = footer
+        
+        if let url = session.asset(of: .webpage)?.remoteURL {
+            self.webUrl = URL(string: url)
+        } else {
+            self.webUrl = nil
+        }
         
         super.init()
     }
@@ -103,3 +110,5 @@ extension SessionViewModel: IGListDiffable {
     }
     
 }
+
+extension SessionViewModel: UserActivityRepresentable { }

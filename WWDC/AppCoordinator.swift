@@ -25,6 +25,8 @@ final class AppCoordinator {
     
     var currentPlayerController: VideoPlayerViewController?
     
+    var currentActivity: NSUserActivity?
+    
     init(windowController: MainWindowController) {
         let filePath = PathUtil.appSupportPath + "/ConfCore.realm"
         let realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
@@ -62,6 +64,8 @@ final class AppCoordinator {
     private func setupBindings() {
         storage.sessions.bind(to: videosController.listViewController.sessions).addDisposableTo(self.disposeBag)
         selectedSession.bind(to: videosController.detailViewController.viewModel).addDisposableTo(self.disposeBag)
+        
+        selectedSession.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
     }
     
     private func setupDelegation() {
@@ -120,6 +124,29 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
         
         playerController.view.alphaValue = 1
+    }
+    
+}
+
+// MARK: - User Activity
+
+extension AppCoordinator {
+    
+    func updateCurrentActivity(with item: UserActivityRepresentable?) {
+        guard let item = item else {
+            currentActivity?.invalidate()
+            currentActivity = nil
+            return
+        }
+        
+        let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
+        
+        activity.title = item.title
+        activity.webpageURL = item.webUrl
+        
+        activity.becomeCurrent()
+        
+        currentActivity = activity
     }
     
 }
