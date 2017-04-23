@@ -11,6 +11,7 @@
 		DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F0C551E7B8DD600B52184 /* Storage.swift */; };
 		DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
 		DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
+		DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */; };
 		DD34DA071E4AB0E400F25C45 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34DA061E4AB0E400F25C45 /* AdapterTests.swift */; };
 		DD34DA0B1E4AB3E400F25C45 /* RoomsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */; };
 		DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */; };
@@ -161,6 +162,7 @@
 /* Begin PBXFileReference section */
 		DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionInstancesJSONAdapter.swift; sourceTree = "<group>"; };
 		DD0F0C551E7B8DD600B52184 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfView.swift; sourceTree = "<group>"; };
 		DD34DA061E4AB0E400F25C45 /* AdapterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdapterTests.swift; sourceTree = "<group>"; };
 		DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsJSONAdapter.swift; sourceTree = "<group>"; };
 		DD36A4AC1E478C6A00B2EA88 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -367,6 +369,7 @@
 				DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */,
 				DD7F386E1EABF631002D8C00 /* NSTableView+IGListKit.swift */,
 				DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */,
+				DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -852,6 +855,7 @@
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
 				DD7F386F1EABF631002D8C00 /* NSTableView+IGListKit.swift in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
+				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

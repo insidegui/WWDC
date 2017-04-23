@@ -55,6 +55,7 @@ final class AppCoordinator {
         let selectedSession = videosController.listViewController.selectedSession.asObservable()
         
         selectedSession.bind(to: videosController.detailViewController.summaryController.viewModel).addDisposableTo(self.disposeBag)
+        selectedSession.bind(to: videosController.detailViewController.playerController.viewModel).addDisposableTo(self.disposeBag)
     }
     
     @IBAction func refresh(_ sender: Any?) {

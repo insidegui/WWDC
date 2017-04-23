@@ -37,6 +37,7 @@ class SessionDetailsViewController: NSViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         v.alignment = .leading
         v.distribution = .fill
+        v.spacing = 22
         
         return v
     }()
@@ -52,7 +53,7 @@ class SessionDetailsViewController: NSViewController {
         view.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
-        stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 4).isActive = true
+        stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 2).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -46).isActive = true
         
         viewModel.asObservable().bind(to: summaryController.viewModel).addDisposableTo(self.disposeBag)
