@@ -62,4 +62,19 @@ public class Session: Object {
         return ["trackName", "eventIdentifier"]
     }
     
+    public static func standardSort(sessionA: Session, sessionB: Session) -> Bool {
+        guard let eventA = sessionA.event.first, let eventB = sessionB.event.first else { return false }
+        guard let trackA = sessionA.track.first, let trackB = sessionB.track.first else { return false }
+        
+        if trackA.order == trackB.order {
+            if eventA.startDate == eventB.startDate {
+                return sessionA.title < sessionB.title
+            } else {
+                return eventA.startDate > eventB.startDate
+            }
+        } else {
+            return trackA.order < trackB.order
+        }
+    }
+    
 }

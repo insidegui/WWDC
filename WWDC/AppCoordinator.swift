@@ -52,6 +52,8 @@ final class AppCoordinator {
     }
     
     private func setupBindings() {
+        storage.sessions.bind(to: videosController.listViewController.sessions).addDisposableTo(self.disposeBag)
+        
         let selectedSession = videosController.listViewController.selectedSession.asObservable()
         
         selectedSession.bind(to: videosController.detailViewController.summaryController.viewModel).addDisposableTo(self.disposeBag)
@@ -72,8 +74,6 @@ final class AppCoordinator {
         windowController.showWindow(self)
         
         refresh(nil)
-        
-        storage.sessions.bind(to: videosController.listViewController.sessions).addDisposableTo(self.disposeBag)
     }
     
 }

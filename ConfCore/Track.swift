@@ -15,6 +15,9 @@ public class Track: Object {
     /// The name of the track
     public dynamic var name = ""
     
+    /// The order in which the track should be listed
+    public dynamic var order = 0
+    
     /// Dark theme color
     public dynamic var darkColor = ""
     

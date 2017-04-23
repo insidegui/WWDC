@@ -86,7 +86,9 @@ class VideosTableViewController: NSViewController {
         sessions.asObservable().subscribe(onNext: { [weak self] results in
             guard let results = results else { return }
             
-            self?.viewModels = results.flatMap({ SessionViewModel(session: $0) })
+            let sortedSessions = results.sorted(by: Session.standardSort)
+            
+            self?.viewModels = sortedSessions.flatMap({ SessionViewModel(session: $0) })
         }).addDisposableTo(self.disposeBag)
     }
     

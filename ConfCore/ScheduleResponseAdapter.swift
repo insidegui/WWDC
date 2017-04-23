@@ -39,8 +39,13 @@ final class ScheduleResponseAdapter: Adapter {
             return .error(.invalidData)
         }
         
-        guard case .success(let tracks) = TracksJSONAdapter().adapt(tracksJson) else {
+        guard case .success(var tracks) = TracksJSONAdapter().adapt(tracksJson) else {
             return .error(.invalidData)
+        }
+        
+        // add order to tracks using the order from the server
+        for i in 0..<tracks.count {
+            tracks[i].order = i
         }
         
         guard case .success(let instances) = SessionInstancesJSONAdapter().adapt(instancesJson) else {
