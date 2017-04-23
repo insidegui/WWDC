@@ -26,6 +26,12 @@ final class SessionTableCellView: NSTableCellView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
+    }
+    
     private func updateUI() {
         guard let viewModel = viewModel else { return }
         
@@ -33,10 +39,14 @@ final class SessionTableCellView: NSTableCellView {
         subtitleLabel.stringValue = viewModel.subtitle
         contextLabel.stringValue = viewModel.context
         
+        thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
+        
         if let imageUrl = viewModel.imageUrl {
-            thumbnailImageView.image = NSImage(contentsOf: imageUrl)
-        } else {
-            thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
+            ImageCache.shared.fetchImage(at: imageUrl) { [weak self] url, image in
+                guard url == imageUrl else { return }
+                
+                self?.thumbnailImageView.image = image
+            }
         }
         
         contextColorView.layer?.backgroundColor = viewModel.color.cgColor

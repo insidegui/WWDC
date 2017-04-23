@@ -83,6 +83,8 @@
 		DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */; };
 		DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */; };
 		DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F387F1EAC15B4002D8C00 /* RxNil.swift */; };
+		DD7F38861EAC223F002D8C00 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38851EAC223F002D8C00 /* ImageCache.swift */; };
+		DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38871EAC2275002D8C00 /* PathUtil.swift */; };
 		DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
 		DDAE7C551E5BC6CD00CEA205 /* Siesta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */; };
@@ -232,6 +234,8 @@
 		DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionSummaryViewController.swift; sourceTree = "<group>"; };
 		DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTextField.swift; sourceTree = "<group>"; };
 		DD7F387F1EAC15B4002D8C00 /* RxNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxNil.swift; sourceTree = "<group>"; };
+		DD7F38851EAC223F002D8C00 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		DD7F38871EAC2275002D8C00 /* PathUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathUtil.swift; sourceTree = "<group>"; };
 		DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptsJSONAdapter.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
 		DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Siesta.framework; path = Carthage/Build/Mac/Siesta.framework; sourceTree = "<group>"; };
@@ -547,6 +551,8 @@
 			isa = PBXGroup;
 			children = (
 				DD7F387F1EAC15B4002D8C00 /* RxNil.swift */,
+				DD7F38871EAC2275002D8C00 /* PathUtil.swift */,
+				DD7F38851EAC223F002D8C00 /* ImageCache.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -833,12 +839,14 @@
 				DD7F38781EAC0C98002D8C00 /* VideoPlayerViewController.swift in Sources */,
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
+				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* VideosSplitViewController.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* MainTabController.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* VideosTableViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
+				DD7F38861EAC223F002D8C00 /* ImageCache.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
