@@ -113,4 +113,8 @@ public final class Storage {
         return Observable.collection(from: self.realm.objects(Session.self))
     }()
     
+    public func session(with identifier: String) -> Session? {
+        return realm.object(ofType: Session.self, forPrimaryKey: identifier)
+    }
+    
 }

@@ -10,6 +10,7 @@ import Cocoa
 import RealmSwift
 import RxSwift
 import ConfCore
+import WWDCPlayer
 
 final class AppCoordinator {
     
@@ -21,6 +22,8 @@ final class AppCoordinator {
     var windowController: MainWindowController
     var tabController: MainTabController
     var videosController: VideosSplitViewController
+    
+    var currentPlayerController: VideoPlayerViewController?
     
     init(windowController: MainWindowController) {
         let filePath = PathUtil.appSupportPath + "/ConfCore.realm"
@@ -47,17 +50,22 @@ final class AppCoordinator {
         self.windowController = windowController
         
         setupBindings()
+        setupDelegation()
         
         NotificationCenter.default.addObserver(forName: .NSApplicationDidFinishLaunching, object: nil, queue: nil) { _ in self.startup() }
     }
     
+    var selectedSession: Observable<SessionViewModel?> {
+        return videosController.listViewController.selectedSession.asObservable()
+    }
+    
     private func setupBindings() {
         storage.sessions.bind(to: videosController.listViewController.sessions).addDisposableTo(self.disposeBag)
-        
-        let selectedSession = videosController.listViewController.selectedSession.asObservable()
-        
-        selectedSession.bind(to: videosController.detailViewController.summaryController.viewModel).addDisposableTo(self.disposeBag)
-        selectedSession.bind(to: videosController.detailViewController.playerController.viewModel).addDisposableTo(self.disposeBag)
+        selectedSession.bind(to: videosController.detailViewController.viewModel).addDisposableTo(self.disposeBag)
+    }
+    
+    private func setupDelegation() {
+        videosController.detailViewController.shelfController.delegate = self
     }
     
     @IBAction func refresh(_ sender: Any?) {
@@ -74,6 +82,44 @@ final class AppCoordinator {
         windowController.showWindow(self)
         
         refresh(nil)
+    }
+    
+}
+
+// MARK: - Video playback management
+
+extension AppCoordinator: ShelfViewControllerDelegate {
+    
+    func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController) {
+        guard let viewModel = videosController.detailViewController.viewModel.value else { return }
+        
+        do {
+            let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
+            
+            currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, metadata: playbackViewModel.metadata)
+            
+            attachPlayerToShelf()
+        } catch {
+            WWDCAlert.show(with: error)
+        }
+    }
+    
+    private func attachPlayerToShelf() {
+        guard let playerController = currentPlayerController else { return }
+        
+        let shelf = videosController.detailViewController.shelfController
+        
+        shelf.addChildViewController(playerController)
+        
+        playerController.view.frame = shelf.view.bounds
+        playerController.view.alphaValue = 0
+        
+        shelf.view.addSubview(playerController.view)
+        
+        shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+        shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+        
+        playerController.view.alphaValue = 1
     }
     
 }

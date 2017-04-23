@@ -1,5 +1,5 @@
 //
-//  VideoPlayerViewController.swift
+//  ShelfViewController.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 22/04/17.
@@ -10,8 +10,14 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
-class VideoPlayerViewController: NSViewController {
+protocol ShelfViewControllerDelegate: class {
+    func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
+}
 
+class ShelfViewController: NSViewController {
+
+    weak var delegate: ShelfViewControllerDelegate?
+    
     private let disposeBag = DisposeBag()
     
     var viewModel = Variable<SessionViewModel?>(nil)
@@ -22,6 +28,17 @@ class VideoPlayerViewController: NSViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         
         return v
+    }()
+    
+    lazy var playButton: VibrantButton = {
+        let b = VibrantButton(frame: .zero)
+        
+        b.title = "Play"
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.target = self
+        b.action = #selector(play(_:))
+        
+        return b
     }()
     
     init() {
@@ -41,12 +58,18 @@ class VideoPlayerViewController: NSViewController {
         shelfView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         shelfView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         shelfView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        view.addSubview(playButton)
+        playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        playButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         viewModel.asObservable().subscribe(onNext: { [weak self] viewModel in
+            self?.playButton.isHidden = (viewModel == nil)
+            
             guard let viewModel = viewModel else { return }
             
             if let imageUrl = viewModel.imageUrl {
@@ -57,6 +80,10 @@ class VideoPlayerViewController: NSViewController {
                 }
             }
         }).addDisposableTo(self.disposeBag)
+    }
+    
+    @objc private func play(_ sender: Any?) {
+        delegate?.shelfViewControllerDidSelectPlay(self)
     }
     
 }
