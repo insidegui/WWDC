@@ -1,6 +1,6 @@
 //
 //  VideoPlayerViewController.swift
-//  WWDCPlayer
+//  WWDC
 //
 //  Created by Guilherme Rambo on 04/06/16.
 //  Copyright © 2016 Guilherme Rambo. All rights reserved.
@@ -10,6 +10,7 @@ import Cocoa
 import AVFoundation
 import AVKit
 import PIPContainer
+import PlayerUI
 
 public struct VideoPlayerViewControllerMetadata {
     public let title: String?
@@ -112,7 +113,7 @@ open class VideoPlayerViewController: PIPContainerViewController {
     }
     
     @objc fileprivate func doubleClickedPlayerView() {
-        if let playerWindow = view.window as? VideoPlayerWindow {
+        if let playerWindow = view.window as? PUIPlayerWindow {
             playerWindow.toggleFullScreen(self)
         } else {
             detach(forEnteringFullscreen: true)
@@ -136,7 +137,7 @@ open class VideoPlayerViewController: PIPContainerViewController {
     private func playerItemPresentationSizeDidChange() {
         guard let size = player.currentItem?.presentationSize, size != NSZeroSize else { return }
         
-        (view.window as? VideoPlayerWindow)?.aspectRatio = size
+        (view.window as? PUIPlayerWindow)?.aspectRatio = size
     }
     
     private func playerStatusDidChange() {
@@ -178,7 +179,11 @@ open class VideoPlayerViewController: PIPContainerViewController {
 
 private final class PlayerContainerViewController: NSViewController {
     
-    weak var player: AVPlayer?
+    let player: AVPlayer
+    
+    var playerView: PUIPlayerView {
+        return view as! PUIPlayerView
+    }
     
     init(player: AVPlayer) {
         self.player = player
@@ -191,20 +196,7 @@ private final class PlayerContainerViewController: NSViewController {
     }
     
     override func loadView() {
-        view = WPLVideoView(frame: .zero)
-        view.wantsLayer = true
-        view.layer = CALayer()
-        view.layer?.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
-        view.layer?.backgroundColor = NSColor.black.cgColor
-        
-        guard let player = player else { return }
-        
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.backgroundColor = NSColor.black.cgColor
-        playerLayer.frame = view.bounds
-        playerLayer.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
-        view.layer?.addSublayer(playerLayer)
+        view = PUIPlayerView(player: player)
     }
     
 }

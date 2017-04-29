@@ -1,14 +1,15 @@
 //
 //  VideoPlayerWindowController.swift
-//  WWDCPlayer
+//  WWDC
 //
 //  Created by Guilherme Rambo on 04/06/16.
 //  Copyright © 2016 Guilherme Rambo. All rights reserved.
 //
 
 import Cocoa
+import PlayerUI
 
-public enum VideoPlayerWindowSizePreset: CGFloat {
+public enum PUIPlayerWindowSizePreset: CGFloat {
     
     case quarter = 0.25
     case half = 0.50
@@ -29,10 +30,10 @@ open class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         
         let styleMask: NSWindowStyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
         
-        var rect = VideoPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view.superview)
-        if rect == NSZeroRect { rect = VideoPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
+        var rect = PUIPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view.superview)
+        if rect == NSZeroRect { rect = PUIPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
         
-        let window = VideoPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .buffered, defer: false)
+        let window = PUIPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = true
         
         if #available(OSX 10.11, *) {
@@ -61,7 +62,7 @@ open class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         super.showWindow(sender)
         
         if !fullscreenOnly {
-            (window as! VideoPlayerWindow).applySizePreset(.half)
+            (window as! PUIPlayerWindow).applySizePreset(.half)
         } else {
             window?.toggleFullScreen(sender)
         }
@@ -112,21 +113,21 @@ open class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     open func window(_ window: NSWindow, startCustomAnimationToExitFullScreenWithDuration duration: TimeInterval) {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = duration
-            let frame = VideoPlayerWindow.bestScreenRectFromDetachingContainer(self.originalContainer)
+            let frame = PUIPlayerWindow.bestScreenRectFromDetachingContainer(self.originalContainer)
             window.animator().setFrame(frame, display: false)
             }, completionHandler: nil)
     }
     
     @IBAction open func sizeWindowToHalfSize(_ sender: AnyObject?) {
-        (window as! VideoPlayerWindow).applySizePreset(.half)
+        (window as! PUIPlayerWindow).applySizePreset(.half)
     }
     
     @IBAction open func sizeWindowToQuarterSize(_ sender: AnyObject?) {
-        (window as! VideoPlayerWindow).applySizePreset(.quarter)
+        (window as! PUIPlayerWindow).applySizePreset(.quarter)
     }
     
     @IBAction func sizeWindowToFill(_ sender: AnyObject?) {
-        (window as! VideoPlayerWindow).applySizePreset(.max)
+        (window as! PUIPlayerWindow).applySizePreset(.max)
     }
     
     @IBAction func floatOnTop(_ sender: NSMenuItem) {
@@ -152,7 +153,7 @@ open class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 
 }
 
-private extension VideoPlayerWindow {
+private extension PUIPlayerWindow {
     
     class func centerRectForProposedContentRect(_ rect: NSRect) -> NSRect {
         guard let screen = NSScreen.main() else { return NSZeroRect }
@@ -166,7 +167,7 @@ private extension VideoPlayerWindow {
         return view.window?.convertToScreen(superview.convert(view.frame, to: nil)) ?? NSZeroRect
     }
     
-    func applySizePreset(_ preset: VideoPlayerWindowSizePreset, center: Bool = true, animated: Bool = true) {
+    func applySizePreset(_ preset: PUIPlayerWindowSizePreset, center: Bool = true, animated: Bool = true) {
         guard let screen = screen else { return }
         
         let proportion = frame.size.width / screen.visibleFrame.size.width

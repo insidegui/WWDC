@@ -9,7 +9,7 @@
 import Foundation
 import ConfCore
 import AVFoundation
-import WWDCPlayer
+import PlayerUI
 
 enum PlaybackError: Error {
     case sessionNotFound(String)

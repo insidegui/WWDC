@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 import RxSwift
 import ConfCore
-import WWDCPlayer
+import PlayerUI
 
 final class AppCoordinator {
     
