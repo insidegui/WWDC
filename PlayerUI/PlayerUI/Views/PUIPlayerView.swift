@@ -13,6 +13,19 @@ public final class PUIPlayerView: NSView {
     
     // MARK: - Public API
     
+    public var togglesPlaybackOnSingleClick: Bool = false
+    
+    public var annotations: [PUITimelineAnnotation] {
+        get {
+            return sortedAnnotations
+        }
+        set {
+            self.sortedAnnotations = newValue.sorted(by: { $0.timestamp < $1.timestamp })
+            
+            timelineView.annotations = sortedAnnotations
+        }
+    }
+    
     public var timelineDelegate: PUITimelineDelegate? {
         get {
             return timelineView.delegate
@@ -38,7 +51,6 @@ public final class PUIPlayerView: NSView {
         self.wantsLayer = true
         self.layer = PUIBoringLayer()
         self.layer?.backgroundColor = NSColor.black.cgColor
-        self.layerUsesCoreImageFilters = true
         
         setupPlayer()
         setupControls()
@@ -52,7 +64,31 @@ public final class PUIPlayerView: NSView {
         return !player.rate.isZero
     }
     
+    public var currentTimestamp: Double {
+        return Double(CMTimeGetSeconds(player.currentTime()))
+    }
+    
+    public var firstAnnotationBeforeCurrentTime: PUITimelineAnnotation? {
+        return annotations.filter({ $0.timestamp + 1 < currentTimestamp }).last
+    }
+    
+    public var firstAnnotationAfterCurrentTime: PUITimelineAnnotation? {
+        return annotations.filter({ $0.timestamp > currentTimestamp + 1 }).first
+    }
+    
+    public func seek(to annotation: PUITimelineAnnotation) {
+        let time = CMTimeMakeWithSeconds(Float64(annotation.timestamp), 9000)
+        
+        player.seek(to: time)
+    }
+    
     // MARK: - Private API
+    
+    private var sortedAnnotations: [PUITimelineAnnotation] = [] {
+        didSet {
+            updateAnnotationsState()
+        }
+    }
     
     private var playerTimeObserver: Any?
     
@@ -70,6 +106,8 @@ public final class PUIPlayerView: NSView {
         layer?.addSublayer(playerLayer)
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
+        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
+        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
         
         asset?.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: metadataBecameAvailable)
         
@@ -82,16 +120,57 @@ public final class PUIPlayerView: NSView {
         }
         
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
+        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
+        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
         
         oldValue.pause()
         oldValue.cancelPendingPrerolls()
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(AVPlayer.status) {
-            playerStatusChanged()
+        DispatchQueue.main.async {
+            if keyPath == #keyPath(AVPlayer.status) {
+                self.playerStatusChanged()
+            } else if keyPath == #keyPath(AVPlayer.currentItem.loadedTimeRanges) {
+                self.updateBufferedSegments()
+            } else if keyPath == #keyPath(AVPlayer.rate) {
+                self.updatePlayingState()
+            } else {
+                super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            }
+        }
+    }
+    
+    private func updateBufferedSegments() {
+        guard let loadedRanges = player.currentItem?.loadedTimeRanges else { return }
+        guard let durationTime = player.currentItem?.duration else { return }
+        
+        let duration = Double(CMTimeGetSeconds(durationTime))
+        
+        let segments = loadedRanges.map { value -> PUIBufferSegment in
+            let range = value.timeRangeValue
+            let startTime = Double(CMTimeGetSeconds(range.start))
+            let segmentDuration = Double(CMTimeGetSeconds(range.duration))
+            
+            return PUIBufferSegment(start: startTime / duration, duration: segmentDuration / duration)
+        }
+        
+        timelineView.loadedSegments = Set<PUIBufferSegment>(segments)
+    }
+    
+    private func updateAnnotationsState() {
+        let canGoBack = firstAnnotationBeforeCurrentTime != nil
+        let canGoForward = firstAnnotationAfterCurrentTime != nil
+        
+        previousAnnotationButton.isEnabled = canGoBack
+        nextAnnotationButton.isEnabled = canGoForward
+    }
+    
+    private func updatePlayingState() {
+        if isPlaying {
+            playButton.image = .PUIPause
         } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            playButton.image = .PUIPlay
         }
     }
     
@@ -100,16 +179,22 @@ public final class PUIPlayerView: NSView {
     }
     
     private func metadataBecameAvailable() {
-        guard let duration = asset?.duration else { return }
-        
-        timelineView.mediaDuration = Double(CMTimeGetSeconds(duration))
+        DispatchQueue.main.async {
+            guard let duration = self.asset?.duration else { return }
+            
+            self.timelineView.mediaDuration = Double(CMTimeGetSeconds(duration))
+        }
     }
     
     private func playerTimeDidChange(time: CMTime) {
-        guard let duration = asset?.duration else { return }
-        
-        let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
-        timelineView.playbackProgress = progress
+        DispatchQueue.main.async {
+            guard let duration = self.asset?.duration else { return }
+            
+            let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
+            self.timelineView.playbackProgress = progress
+            
+            self.updateAnnotationsState()
+        }
     }
     
     public override func layout() {
@@ -126,30 +211,150 @@ public final class PUIPlayerView: NSView {
     
     fileprivate var wasPlayingBeforeStartingInteractiveSeek = false
     
+    private var controlsVisualEffectView: NSVisualEffectView!
+    
     private var controlsContainerView: NSStackView!
+    private var centerButtonsContainerView: NSStackView!
     
     private var timelineView: PUITimelineView!
     
+    private lazy var playButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUIPlay
+        b.target = self
+        b.action = #selector(togglePlaying(_:))
+        
+        return b
+    }()
+    
+    private lazy var previousAnnotationButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUIPreviousBookmark
+        b.target = self
+        b.action = #selector(previousAnnotation(_:))
+        
+        return b
+    }()
+    
+    private lazy var nextAnnotationButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUINextBookmark
+        b.target = self
+        b.action = #selector(nextAnnotation(_:))
+        
+        return b
+    }()
+    
+    private lazy var backButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUIBack30s
+        b.target = self
+        b.action = #selector(goBackInTime(_:))
+        
+        return b
+    }()
+    
+    private lazy var forwardButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUIForward30s
+        b.target = self
+        b.action = #selector(goForwardInTime(_:))
+        
+        return b
+    }()
+    
     private func setupControls() {
+        // VFX view
+        controlsVisualEffectView = NSVisualEffectView(frame: bounds)
+        controlsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
+        controlsVisualEffectView.material = .ultraDark
+        controlsVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
+        controlsVisualEffectView.blendingMode = .withinWindow
+        controlsVisualEffectView.wantsLayer = true
+        controlsVisualEffectView.state = .active
+        
         // Timeline view
         timelineView = PUITimelineView(frame: .zero)
         timelineView.viewDelegate = self
         
+        // Center Buttons
+        centerButtonsContainerView = NSStackView(views: [
+            backButton,
+            previousAnnotationButton,
+            playButton,
+            nextAnnotationButton,
+            forwardButton
+        ])
+        
+        centerButtonsContainerView.orientation = .horizontal
+        centerButtonsContainerView.spacing = 24
+        centerButtonsContainerView.alignment = .centerY
+        
         // Main stack view
-        controlsContainerView = NSStackView(views: [timelineView])
+        controlsContainerView = NSStackView(views: [timelineView, centerButtonsContainerView])
         controlsContainerView.orientation = .vertical
         controlsContainerView.spacing = 12
         controlsContainerView.distribution = .fill
         controlsContainerView.translatesAutoresizingMaskIntoConstraints = false
         controlsContainerView.wantsLayer = true
-        controlsContainerView.layer?.opacity = 0.9
-        controlsContainerView.layer?.compositingFilter = "lightenBlendMode"
         
-        addSubview(controlsContainerView)
+        controlsVisualEffectView.addSubview(controlsContainerView)
+        addSubview(controlsVisualEffectView)
         
-        controlsContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
-        controlsContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
-        controlsContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16).isActive = true
+        controlsContainerView.leadingAnchor.constraint(equalTo: controlsVisualEffectView.leadingAnchor, constant: 12).isActive = true
+        controlsContainerView.trailingAnchor.constraint(equalTo: controlsVisualEffectView.trailingAnchor, constant: -12).isActive = true
+        controlsContainerView.topAnchor.constraint(equalTo: controlsVisualEffectView.topAnchor, constant: 12).isActive = true
+        controlsContainerView.bottomAnchor.constraint(equalTo: controlsVisualEffectView.bottomAnchor, constant: -12).isActive = true
+        
+        controlsVisualEffectView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        controlsVisualEffectView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        controlsVisualEffectView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+    
+    // MARK: - Control actions
+    
+    @IBAction public func togglePlaying(_ sender: Any?) {
+        if isPlaying {
+            player.pause()
+        } else {
+            player.play()
+        }
+    }
+    
+    @IBAction public func previousAnnotation(_ sender: Any?) {
+        guard let annotation = firstAnnotationBeforeCurrentTime else { return }
+        
+        seek(to: annotation)
+    }
+    
+    @IBAction public func nextAnnotation(_ sender: Any?) {
+        guard let annotation = firstAnnotationAfterCurrentTime else { return }
+        
+        seek(to: annotation)
+    }
+    
+    @IBAction public func goBackInTime(_ sender: Any?) {
+        modifyCurrentTime(with: 30, using: CMTimeSubtract)
+    }
+    
+    @IBAction public func goForwardInTime(_ sender: Any?) {
+        modifyCurrentTime(with: 30, using: CMTimeAdd)
+    }
+    
+    private func modifyCurrentTime(with seconds: Double, using function: (CMTime, CMTime) -> CMTime) {
+        guard let durationTime = player.currentItem?.duration else { return }
+        
+        let modifier = CMTimeMakeWithSeconds(seconds, durationTime.timescale)
+        let targetTime = function(player.currentTime(), modifier)
+        
+        guard targetTime.isValid && targetTime.isNumeric else { return }
+        
+        player.seek(to: targetTime)
     }
     
     // MARK: - Visibility management
@@ -201,7 +406,7 @@ public final class PUIPlayerView: NSView {
     private func setControls(opacity: CGFloat, animated: Bool) {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = animated ? 0.4 : 0.0
-            self.controlsContainerView.animator().alphaValue = opacity
+            self.controlsVisualEffectView.animator().alphaValue = opacity
         }, completionHandler: nil)
     }
     
@@ -271,10 +476,12 @@ public final class PUIPlayerView: NSView {
         if doubleClicked {
             window?.toggleFullScreen(self)
         } else {
-            if isPlaying {
-                player.pause()
-            } else {
-                player.play()
+            if togglesPlaybackOnSingleClick {
+                if isPlaying {
+                    player.pause()
+                } else {
+                    player.play()
+                }
             }
         }
         

@@ -74,12 +74,18 @@ public final class PUITimelineView: NSView {
     
     weak var viewDelegate: PUITimelineViewDelegate?
     
-    private struct Metrics {
+    var loadedSegments = Set<PUIBufferSegment>() {
+        didSet {
+            bufferingProgressLayer.segments = loadedSegments
+        }
+    }
+    
+    struct Metrics {
         static let cornerRadius: CGFloat = 4
     }
     
     private var borderLayer: PUIBoringLayer!
-    private var bufferingProgressLayer: PUIBoringLayer!
+    private var bufferingProgressLayer: PUIBufferLayer!
     private var playbackProgressLayer: PUIBoringLayer!
     private var ghostProgressLayer: PUIBoringLayer!
     
@@ -100,8 +106,7 @@ public final class PUITimelineView: NSView {
         
         // Buffering bar
         
-        bufferingProgressLayer = PUIBoringLayer()
-        bufferingProgressLayer.backgroundColor = NSColor.playerBuffer.cgColor
+        bufferingProgressLayer = PUIBufferLayer()
         bufferingProgressLayer.frame = bounds
         bufferingProgressLayer.cornerRadius = Metrics.cornerRadius
         bufferingProgressLayer.masksToBounds = true
@@ -139,10 +144,7 @@ public final class PUITimelineView: NSView {
     }
     
     private func layoutBufferingLayer() {
-        let bufferingWidth = bounds.width * CGFloat(bufferingProgress)
-        var bufferingRect = bounds
-        bufferingRect.size.width = bufferingWidth
-        bufferingProgressLayer.frame = bufferingRect
+        bufferingProgressLayer.frame = bounds
     }
     
     private func layoutPlaybackLayer() {
@@ -275,6 +277,10 @@ public final class PUITimelineView: NSView {
                 self.ghostProgressLayer.opacity = 0
             }
         }
+    }
+    
+    public override var allowsVibrancy: Bool {
+        return true
     }
     
 }

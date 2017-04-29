@@ -16,6 +16,10 @@
 		DDE29EC01EB5299000680703 /* DebugLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE29EBE1EB5299000680703 /* DebugLog.swift */; };
 		DDE29EC11EB5299000680703 /* NSEvent+ForceTouch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE29EBF1EB5299000680703 /* NSEvent+ForceTouch.swift */; };
 		DDEA85FE1EB52B89002AE0EB /* PUIPlayerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85FD1EB52B89002AE0EB /* PUIPlayerWindow.swift */; };
+		DDEA860B1EB53083002AE0EB /* PUIBufferLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA860A1EB53083002AE0EB /* PUIBufferLayer.swift */; };
+		DDEA860D1EB53B2F002AE0EB /* PUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA860C1EB53B2F002AE0EB /* PUIButton.swift */; };
+		DDEA860F1EB53D8F002AE0EB /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDEA860E1EB53D8F002AE0EB /* Media.xcassets */; };
+		DDEA86111EB53FD3002AE0EB /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA86101EB53FD3002AE0EB /* Images.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +35,10 @@
 		DDE29EBF1EB5299000680703 /* NSEvent+ForceTouch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSEvent+ForceTouch.swift"; sourceTree = "<group>"; };
 		DDE29EC41EB529C400680703 /* PIPContainer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIPContainer.framework; path = ../Carthage/Build/Mac/PIPContainer.framework; sourceTree = "<group>"; };
 		DDEA85FD1EB52B89002AE0EB /* PUIPlayerWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerWindow.swift; sourceTree = "<group>"; };
+		DDEA860A1EB53083002AE0EB /* PUIBufferLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIBufferLayer.swift; sourceTree = "<group>"; };
+		DDEA860C1EB53B2F002AE0EB /* PUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIButton.swift; sourceTree = "<group>"; };
+		DDEA860E1EB53D8F002AE0EB /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		DDEA86101EB53FD3002AE0EB /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				DDE29EB01EB5297100680703 /* WhiteSpinner.car */,
+				DDEA860E1EB53D8F002AE0EB /* Media.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -85,10 +94,12 @@
 		DDE29EAC1EB5293000680703 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DDEA860C1EB53B2F002AE0EB /* PUIButton.swift */,
 				DDEA85FD1EB52B89002AE0EB /* PUIPlayerWindow.swift */,
 				DDE29EB21EB5297800680703 /* PUIBoringLayer.swift */,
-				DDE29EB31EB5297800680703 /* PUIPlayerView.swift */,
+				DDEA860A1EB53083002AE0EB /* PUIBufferLayer.swift */,
 				DDE29EB41EB5297800680703 /* PUITimelineView.swift */,
+				DDE29EB31EB5297800680703 /* PUIPlayerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -97,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				DDE29EBC1EB5298900680703 /* Colors.swift */,
+				DDEA86101EB53FD3002AE0EB /* Images.swift */,
 			);
 			path = Definitions;
 			sourceTree = "<group>";
@@ -189,6 +201,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDEA860F1EB53D8F002AE0EB /* Media.xcassets in Resources */,
 				DDE29EB11EB5297100680703 /* WhiteSpinner.car in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -203,8 +216,11 @@
 				DDE29EBD1EB5298900680703 /* Colors.swift in Sources */,
 				DDE29EC01EB5299000680703 /* DebugLog.swift in Sources */,
 				DDE29EC11EB5299000680703 /* NSEvent+ForceTouch.swift in Sources */,
+				DDEA860D1EB53B2F002AE0EB /* PUIButton.swift in Sources */,
 				DDEA85FE1EB52B89002AE0EB /* PUIPlayerWindow.swift in Sources */,
+				DDEA860B1EB53083002AE0EB /* PUIBufferLayer.swift in Sources */,
 				DDE29EB61EB5297800680703 /* PUIPlayerView.swift in Sources */,
+				DDEA86111EB53FD3002AE0EB /* Images.swift in Sources */,
 				DDE29EB71EB5297800680703 /* PUITimelineView.swift in Sources */,
 				DDE29EB51EB5297800680703 /* PUIBoringLayer.swift in Sources */,
 			);
