@@ -7,10 +7,11 @@
 //
 
 import Cocoa
+import AVFoundation
 
 public protocol PUITimelineDelegate: class {
     
-    func viewForTimeline(_ annotation: PUITimelineAnnotation) -> NSView?
+    func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController?
     func timelineDidReceiveForceTouch(at timestamp: Double)
     func timelineDidHighlightAnnotation(_ annotation: PUITimelineAnnotation?)
     
@@ -75,6 +76,10 @@ public final class PUITimelineView: NSView {
         }
     }
     
+    public var hasValidMediaDuration: Bool {
+        return AVPlayer.validateMediaDurationWithSeconds(mediaDuration)
+    }
+    
     // MARK: - Private API
     
     weak var viewDelegate: PUITimelineViewDelegate?
@@ -88,7 +93,7 @@ public final class PUITimelineView: NSView {
     struct Metrics {
         static let cornerRadius: CGFloat = 4
         static let annotationBubbleDiameter: CGFloat = 12
-        static let annotationBubbleDiameterHover: CGFloat = annotationBubbleDiameter * 1.3
+        static let annotationBubbleDiameterHoverScale: CGFloat = 1.3
     }
     
     private var borderLayer: PUIBoringLayer!
@@ -158,6 +163,8 @@ public final class PUITimelineView: NSView {
     }
     
     private func layoutPlaybackLayer() {
+        guard hasValidMediaDuration else { return }
+        
         let playbackWidth = bounds.width * CGFloat(playbackProgress)
         var playbackRect = bounds
         playbackRect.size.width = playbackWidth
@@ -247,6 +254,11 @@ public final class PUITimelineView: NSView {
             case .pressure, .tabletPoint:
                 switch e.touchForce {
                 case .forceTouch:
+                    guard self.hasValidMediaDuration else {
+                        stop.pointee = true
+                        return
+                    }
+                    
                     let timestamp = self.mediaDuration * progress
                     
                     DebugLog("Force touch at \(timestamp)s")
@@ -305,7 +317,7 @@ public final class PUITimelineView: NSView {
     private var annotationLayers: [PUIBoringLayer] = []
     
     private func layoutAnnotations(distributeOnly: Bool = false) {
-        guard !mediaDuration.isNaN && !mediaDuration.isInfinite && !mediaDuration.isZero else { return }
+        guard hasValidMediaDuration else { return }
         
         annotationLayers.forEach({ $0.removeFromSuperlayer() })
         annotationLayers.removeAll()
@@ -333,6 +345,8 @@ public final class PUITimelineView: NSView {
     }
     
     private func layoutAnnotationLayer(_ layer: PUIBoringLayer, for annotation: PUITimelineAnnotation, with diameter: CGFloat, animated: Bool = false) {
+        guard hasValidMediaDuration else { return }
+        
         let x: CGFloat = (CGFloat(annotation.timestamp / self.mediaDuration) * self.bounds.width) - (diameter / 2)
         let y: CGFloat = self.bounds.height / 2 - diameter / 2
         
@@ -390,7 +404,8 @@ public final class PUITimelineView: NSView {
         defer { CATransaction.commit() }
         
         layer.animate {
-            layer.transform = CATransform3DMakeScale(1.3, 1.3, 1.3)
+            let s = Metrics.annotationBubbleDiameterHoverScale
+            layer.transform = CATransform3DMakeScale(s, s, s)
             layer.borderWidth = 1
         }
         

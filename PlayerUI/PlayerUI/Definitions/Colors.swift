@@ -10,6 +10,10 @@ import Cocoa
 
 extension NSColor {
     
+    static var timeLabel: NSColor {
+        return NSColor(calibratedRed:0.90, green:0.90, blue:0.90, alpha:1.00)
+    }
+    
     static var playerBorder: NSColor {
         return NSColor(calibratedRed:0.40, green:0.40, blue:0.40, alpha:1.00)
     }

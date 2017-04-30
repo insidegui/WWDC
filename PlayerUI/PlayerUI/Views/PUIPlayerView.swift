@@ -175,7 +175,11 @@ public final class PUIPlayerView: NSView {
     }
     
     private func playerStatusChanged() {
-        // TODO: reflect important player statuses
+        switch player.status {
+        case .readyToPlay:
+            self.updateTimeLabels()
+        default: break
+        }
     }
     
     private func metadataBecameAvailable() {
@@ -188,13 +192,27 @@ public final class PUIPlayerView: NSView {
     
     private func playerTimeDidChange(time: CMTime) {
         DispatchQueue.main.async {
+            guard self.player.hasValidMediaDuration else { return }
             guard let duration = self.asset?.duration else { return }
             
             let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
             self.timelineView.playbackProgress = progress
             
             self.updateAnnotationsState()
+            self.updateTimeLabels()
         }
+    }
+    
+    private func updateTimeLabels() {
+        guard self.player.hasValidMediaDuration else { return }
+        guard let duration = self.asset?.duration else { return }
+        
+        let time = player.currentTime()
+        
+        self.elapsedTimeLabel.stringValue = String(time: time) ?? ""
+        
+        let remainingTime = CMTimeSubtract(time, duration)
+        self.remainingTimeLabel.stringValue = String(time: remainingTime) ?? ""
     }
     
     public override func layout() {
@@ -213,10 +231,65 @@ public final class PUIPlayerView: NSView {
     
     private var controlsVisualEffectView: NSVisualEffectView!
     
+    private var timeLabelsContainerView: NSStackView!
     private var controlsContainerView: NSStackView!
+    private var volumeControlsContainerView: NSStackView!
     private var centerButtonsContainerView: NSStackView!
     
     private var timelineView: PUITimelineView!
+    
+    private lazy var elapsedTimeLabel: NSTextField = {
+        let l = NSTextField(labelWithString: "00:00:00")
+        
+        l.alignment = .left
+        l.font = NSFont.systemFont(ofSize: 14, weight: NSFontWeightMedium)
+        l.textColor = .timeLabel
+        
+        return l
+    }()
+    
+    private lazy var remainingTimeLabel: NSTextField = {
+        let l = NSTextField(labelWithString: "-00:00:00")
+        
+        l.alignment = .right
+        l.font = NSFont.systemFont(ofSize: 14, weight: NSFontWeightMedium)
+        l.textColor = .timeLabel
+        
+        return l
+    }()
+    
+    private lazy var volumeButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUIVolume
+        b.target = self
+        b.action = #selector(toggleMute(_:))
+        
+        return b
+    }()
+    
+    private lazy var volumeSlider: PUISlider = {
+        let s = PUISlider(frame: .zero)
+        
+        s.widthAnchor.constraint(equalToConstant: 88).isActive = true
+        s.isContinuous = true
+        s.target = self
+        s.minValue = 0
+        s.maxValue = 1
+        s.action = #selector(volumeSliderAction(_:))
+        
+        return s
+    }()
+    
+    private lazy var subtitlesButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUISubtitles
+        b.target = self
+        b.action = #selector(showSubtitlesMenu(_:))
+        
+        return b
+    }()
     
     private lazy var playButton: PUIButton = {
         let b = PUIButton(frame: .zero)
@@ -268,6 +341,26 @@ public final class PUIPlayerView: NSView {
         return b
     }()
     
+    private lazy var addAnnotationButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUIBookmark
+        b.target = self
+        b.action = #selector(addAnnotation(_:))
+        
+        return b
+    }()
+    
+    private lazy var pipButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUIPictureInPicture
+        b.target = self
+        b.action = #selector(togglePip(_:))
+        
+        return b
+    }()
+    
     private func setupControls() {
         // VFX view
         controlsVisualEffectView = NSVisualEffectView(frame: bounds)
@@ -278,25 +371,69 @@ public final class PUIPlayerView: NSView {
         controlsVisualEffectView.wantsLayer = true
         controlsVisualEffectView.state = .active
         
+        // Time labels
+        timeLabelsContainerView = NSStackView(views: [elapsedTimeLabel, remainingTimeLabel])
+        timeLabelsContainerView.distribution = .fillEqually
+        timeLabelsContainerView.orientation = .horizontal
+        timeLabelsContainerView.alignment = .centerY
+        
         // Timeline view
         timelineView = PUITimelineView(frame: .zero)
         timelineView.viewDelegate = self
         
+        // Volume controls
+        volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
+        
+        volumeControlsContainerView.orientation = .horizontal
+        volumeControlsContainerView.spacing = 6
+        volumeControlsContainerView.alignment = .centerY
+        
         // Center Buttons
-        centerButtonsContainerView = NSStackView(views: [
-            backButton,
-            previousAnnotationButton,
-            playButton,
-            nextAnnotationButton,
-            forwardButton
-        ])
+        centerButtonsContainerView = NSStackView(frame: bounds)
+        
+        // Leading controls (volume, subtitles)
+        centerButtonsContainerView.addView(volumeButton, in: .leading)
+        centerButtonsContainerView.addView(volumeSlider, in: .leading)
+        centerButtonsContainerView.addView(subtitlesButton, in: .leading)
+        
+        centerButtonsContainerView.setCustomSpacing(6, after: volumeButton)
+        
+        // Center controls (play, annotations, forward, backward)
+        centerButtonsContainerView.addView(backButton, in: .center)
+        centerButtonsContainerView.addView(previousAnnotationButton, in: .center)
+        centerButtonsContainerView.addView(playButton, in: .center)
+        centerButtonsContainerView.addView(nextAnnotationButton, in: .center)
+        centerButtonsContainerView.addView(forwardButton, in: .center)
+        
+        // Trailing controls (speed, add annotation, pip)
+        centerButtonsContainerView.addView(addAnnotationButton, in: .trailing)
+        centerButtonsContainerView.addView(pipButton, in: .trailing)
         
         centerButtonsContainerView.orientation = .horizontal
         centerButtonsContainerView.spacing = 24
+        centerButtonsContainerView.distribution = .gravityAreas
         centerButtonsContainerView.alignment = .centerY
         
+        // Visibility priorities
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: volumeButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: volumeSlider)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: subtitlesButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: backButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: previousAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityMustHold, for: playButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: forwardButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: nextAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: addAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: pipButton)
+        centerButtonsContainerView.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        
         // Main stack view
-        controlsContainerView = NSStackView(views: [timelineView, centerButtonsContainerView])
+        controlsContainerView = NSStackView(views: [
+            timeLabelsContainerView,
+            timelineView,
+            centerButtonsContainerView
+        ])
+        
         controlsContainerView.orientation = .vertical
         controlsContainerView.spacing = 12
         controlsContainerView.distribution = .fill
@@ -314,9 +451,27 @@ public final class PUIPlayerView: NSView {
         controlsVisualEffectView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         controlsVisualEffectView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         controlsVisualEffectView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        timeLabelsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
+        timeLabelsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
+        
+        centerButtonsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
+        centerButtonsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
     }
     
     // MARK: - Control actions
+    
+    @IBAction public func toggleMute(_ sender: Any?) {
+        player.isMuted = !player.isMuted
+    }
+    
+    @IBAction func volumeSliderAction(_ sender: Any?) {
+        player.volume = Float(volumeSlider.doubleValue)
+    }
+    
+    @IBAction func showSubtitlesMenu(_ sender: PUIButton) {
+        // TODO: show subtitles menu
+    }
     
     @IBAction public func togglePlaying(_ sender: Any?) {
         if isPlaying {
@@ -344,6 +499,14 @@ public final class PUIPlayerView: NSView {
     
     @IBAction public func goForwardInTime(_ sender: Any?) {
         modifyCurrentTime(with: 30, using: CMTimeAdd)
+    }
+    
+    @IBAction public func addAnnotation(_ sender: NSView?) {
+        // TODO: handle add annotation (probably with delegate method)
+    }
+    
+    @IBAction public func togglePip(_ sender: NSView?) {
+        // TODO: handle PiP (probably with delegate method - PiP is implemented in the app, not the framework)
     }
     
     private func modifyCurrentTime(with seconds: Double, using function: (CMTime, CMTime) -> CMTime) {
