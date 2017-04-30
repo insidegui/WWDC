@@ -12,6 +12,7 @@ public protocol PUITimelineDelegate: class {
     
     func viewForTimeline(_ annotation: PUITimelineAnnotation) -> NSView?
     func timelineDidReceiveForceTouch(at timestamp: Double)
+    func timelineDidHighlightAnnotation(_ annotation: PUITimelineAnnotation?)
     
 }
 
@@ -64,11 +65,15 @@ public final class PUITimelineView: NSView {
     
     public var annotations: [PUITimelineAnnotation] = [] {
         didSet {
-            
+            layoutAnnotations()
         }
     }
     
-    public var mediaDuration: Double = 0
+    public var mediaDuration: Double = 0 {
+        didSet {
+            needsLayout = true
+        }
+    }
     
     // MARK: - Private API
     
@@ -82,6 +87,8 @@ public final class PUITimelineView: NSView {
     
     struct Metrics {
         static let cornerRadius: CGFloat = 4
+        static let annotationBubbleDiameter: CGFloat = 12
+        static let annotationBubbleDiameterHover: CGFloat = annotationBubbleDiameter * 1.3
     }
     
     private var borderLayer: PUIBoringLayer!
@@ -110,6 +117,8 @@ public final class PUITimelineView: NSView {
         bufferingProgressLayer.frame = bounds
         bufferingProgressLayer.cornerRadius = Metrics.cornerRadius
         bufferingProgressLayer.masksToBounds = true
+        // TODO: hide buffering layer only when media is not a stream
+        bufferingProgressLayer.opacity = 0
         
         layer?.addSublayer(bufferingProgressLayer)
         
@@ -141,6 +150,7 @@ public final class PUITimelineView: NSView {
         
         layoutBufferingLayer()
         layoutPlaybackLayer()
+        layoutAnnotations(distributeOnly: true)
     }
     
     private func layoutBufferingLayer() {
@@ -186,6 +196,8 @@ public final class PUITimelineView: NSView {
         super.mouseExited(with: event)
         
         hasMouseInside = false
+        
+        unhighlightCurrentHoveredAnnotationIfNeeded()
     }
     
     public override func mouseMoved(with event: NSEvent) {
@@ -193,7 +205,8 @@ public final class PUITimelineView: NSView {
         
         guard hasMouseInside else { return }
         
-        self.updateGhostProgress(with: event)
+        updateGhostProgress(with: event)
+        trackMouseAgainstAnnotations(with: event)
     }
     
     private func updateGhostProgress(with event: NSEvent) {
@@ -281,6 +294,119 @@ public final class PUITimelineView: NSView {
     
     public override var allowsVibrancy: Bool {
         return true
+    }
+    
+    public override var isFlipped: Bool {
+        return true
+    }
+    
+    // MARK: - Annotation management
+    
+    private var annotationLayers: [PUIBoringLayer] = []
+    
+    private func layoutAnnotations(distributeOnly: Bool = false) {
+        guard !mediaDuration.isNaN && !mediaDuration.isInfinite && !mediaDuration.isZero else { return }
+        
+        annotationLayers.forEach({ $0.removeFromSuperlayer() })
+        annotationLayers.removeAll()
+        
+        annotationLayers = annotations.map { annotation in
+            let l = PUIBoringLayer()
+            
+            l.backgroundColor = NSColor.playerHighlight.cgColor
+            l.name = annotation.identifier
+            l.zPosition = 50
+            l.cornerRadius = Metrics.annotationBubbleDiameter / 2
+            l.borderColor = NSColor.white.cgColor
+            l.borderWidth = 0
+            
+            return l
+        }
+        
+        annotations.forEach { annotation in
+            guard let l = annotationLayers.first(where: { $0.name == annotation.identifier }) else { return }
+            
+            self.layoutAnnotationLayer(l, for: annotation, with: Metrics.annotationBubbleDiameter)
+        }
+        
+        annotationLayers.forEach({ self.layer?.addSublayer($0) })
+    }
+    
+    private func layoutAnnotationLayer(_ layer: PUIBoringLayer, for annotation: PUITimelineAnnotation, with diameter: CGFloat, animated: Bool = false) {
+        let x: CGFloat = (CGFloat(annotation.timestamp / self.mediaDuration) * self.bounds.width) - (diameter / 2)
+        let y: CGFloat = self.bounds.height / 2 - diameter / 2
+        
+        let f = CGRect(x: x, y: y, width: diameter, height: diameter)
+        
+        if animated {
+            layer.animate {
+                layer.frame = f
+                layer.cornerRadius = f.width / 2
+            }
+        } else {
+            layer.frame = f
+            layer.cornerRadius = f.width / 2
+        }
+    }
+    
+    private var hoveredAnnotation: (PUITimelineAnnotation, PUIBoringLayer)?
+    
+    private func annotationUnderMouse(with event: NSEvent, diameter: CGFloat = Metrics.annotationBubbleDiameter) -> (annotation: PUITimelineAnnotation, layer: PUIBoringLayer)? {
+        var point = convert(event.locationInWindow, from: nil)
+        point.x -= diameter / 2
+        
+        let s = CGSize(width: diameter, height: diameter)
+        let testRect = CGRect(origin: point, size: s)
+        
+        guard let annotationLayer = annotationLayers.first(where: { $0.frame.intersects(testRect) }) else { return nil }
+        
+        guard let name = annotationLayer.name else { return nil }
+        
+        guard let annotation = annotations.first(where: { $0.identifier == name }) else { return nil }
+        
+        return (annotation: annotation, layer: annotationLayer)
+    }
+    
+    private func trackMouseAgainstAnnotations(with event: NSEvent) {
+        guard let (annotation, annotationLayer) = annotationUnderMouse(with: event) else {
+            unhighlightCurrentHoveredAnnotationIfNeeded()
+            
+            return
+        }
+        
+        hoveredAnnotation = (annotation, annotationLayer)
+        
+        mouseOver(annotation, layer: annotationLayer)
+    }
+    
+    private func unhighlightCurrentHoveredAnnotationIfNeeded() {
+        guard let (ha, hal) = self.hoveredAnnotation else { return }
+        
+        mouseOut(ha, layer: hal)
+    }
+    
+    private func mouseOver(_ annotation: PUITimelineAnnotation, layer: PUIBoringLayer) {
+        CATransaction.begin()
+        defer { CATransaction.commit() }
+        
+        layer.animate {
+            layer.transform = CATransform3DMakeScale(1.3, 1.3, 1.3)
+            layer.borderWidth = 1
+        }
+        
+        delegate?.timelineDidHighlightAnnotation(annotation)
+    }
+    
+    private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIBoringLayer) {
+        CATransaction.begin()
+        defer { CATransaction.commit() }
+        
+        layer.animate {
+            layer.transform = CATransform3DIdentity
+            layer.borderWidth = 0
+        }
+        
+        delegate?.timelineDidHighlightAnnotation(nil)
     }
     
 }
