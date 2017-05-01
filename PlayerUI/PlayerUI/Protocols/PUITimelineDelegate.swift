@@ -14,4 +14,10 @@ public protocol PUITimelineDelegate: class {
     func timelineDidReceiveForceTouch(at timestamp: Double)
     func timelineDidHighlightAnnotation(_ annotation: PUITimelineAnnotation?)
     
+    func timelineCanDeleteAnnotation(_ annotation: PUITimelineAnnotation) -> Bool
+    func timelineCanMoveAnnotation(_ annotation: PUITimelineAnnotation) -> Bool
+    
+    func timelineDidMoveAnnotation(_ annotation: PUITimelineAnnotation, to timestamp: Double)
+    func timelineDidDeleteAnnotation(_ annotation: PUITimelineAnnotation)
+    
 }

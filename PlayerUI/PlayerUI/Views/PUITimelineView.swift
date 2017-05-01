@@ -81,6 +81,8 @@ public final class PUITimelineView: NSView {
         static let cornerRadius: CGFloat = 4
         static let annotationBubbleDiameter: CGFloat = 12
         static let annotationBubbleDiameterHoverScale: CGFloat = 1.3
+        static let annotationDragThresholdVertical: CGFloat = 15
+        static let annotationDragThresholdHorizontal: CGFloat = 6
     }
     
     private var borderLayer: PUIBoringLayer!
@@ -222,6 +224,11 @@ public final class PUITimelineView: NSView {
     }
     
     public override func mouseDown(with event: NSEvent) {
+        if let targetAnnotation = hoveredAnnotation {
+            mouseDown(targetAnnotation.0, layer: targetAnnotation.1, originalEvent: event)
+            return
+        }
+        
         var startedInteractiveSeek = false
         
         window?.trackEvents(matching: [.pressure, .leftMouseUp, .leftMouseDragged, .tabletPoint], timeout: NSEventDurationForever, mode: .eventTrackingRunLoopMode) { e, stop in
@@ -409,6 +416,106 @@ public final class PUITimelineView: NSView {
         }
         
         delegate?.timelineDidHighlightAnnotation(nil)
+    }
+    
+    private enum AnnotationDragMode {
+        case none
+        case delete
+        case move
+    }
+    
+    private func mouseDown(_ annotation: PUITimelineAnnotation, layer: PUIBoringLayer, originalEvent: NSEvent) {
+        let startingPoint = self.convert(originalEvent.locationInWindow, from: nil)
+        let originalPosition = layer.position
+        
+        var cancelled = true
+        
+        let canDelete = delegate?.timelineCanDeleteAnnotation(annotation) ?? false
+        let canMove = delegate?.timelineCanMoveAnnotation(annotation) ?? false
+        
+        var mode: AnnotationDragMode = .none {
+            didSet {
+                if oldValue != .delete && mode == .delete {
+                    NSCursor.disappearingItem().push()
+                } else if oldValue == .delete && mode != .delete {
+                    NSCursor.pop()
+                } else if mode == .none && cancelled {
+                    layer.animate { layer.position = originalPosition }
+                }
+            }
+        }
+        
+        window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged, .keyUp], timeout: NSEventDurationForever, mode: .eventTrackingRunLoopMode) { event, stop in
+            let point = self.convert(event.locationInWindow, from: nil)
+            
+            switch event.type {
+            case .leftMouseUp:
+                switch mode {
+                case .delete:
+                    cancelled = false
+                    
+                    // poof
+                    NSShowAnimationEffect(.poof, NSEvent.mouseLocation(), .zero, nil, nil, nil)
+                    
+                    CATransaction.begin()
+                    CATransaction.setCompletionBlock { layer.removeFromSuperlayer() }
+                    layer.animate {
+                        layer.transform = CATransform3DMakeScale(0, 0, 0)
+                        layer.opacity = 0
+                    }
+                    CATransaction.commit()
+                    
+                    self.delegate?.timelineDidDeleteAnnotation(annotation)
+                case .move:
+                    cancelled = false
+                    
+                    let timestamp = Double(point.x) / self.mediaDuration
+                    
+                    self.delegate?.timelineDidMoveAnnotation(annotation, to: timestamp)
+                default: break
+                }
+                mode = .none
+                stop.pointee = true
+            case .leftMouseDragged:
+                if mode != .delete {
+                    guard point.x - layer.bounds.width / 2 > 0 else { return }
+                    guard point.x < self.borderLayer.frame.width - layer.bounds.width / 2 else { return }
+                }
+                
+                let verticalDiff = startingPoint.y - point.y
+                let horizontalDiff = startingPoint.x - point.x
+                
+                var newPosition = layer.position
+                
+                if abs(verticalDiff) > Metrics.annotationDragThresholdVertical && canDelete {
+                    newPosition = point
+                    mode = .delete
+                } else if abs(horizontalDiff) > Metrics.annotationDragThresholdHorizontal && canMove {
+                    newPosition.y = originalPosition.y
+                    newPosition.x = point.x
+                    mode = .move
+                } else {
+                    layer.position = originalPosition
+                    mode = .none
+                }
+                
+                if mode != .none {
+                    layer.position = newPosition
+                }
+            case .keyUp:
+                // cancel with ESC
+                if event.keyCode == 53 {
+                    mode = .none
+                    
+                    layer.animate {
+                        layer.position = originalPosition
+                    }
+                    
+                    stop.pointee = true
+                }
+            default: break
+            }
+        }
     }
     
 }

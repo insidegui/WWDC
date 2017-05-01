@@ -468,6 +468,7 @@ public final class PUIPlayerView: NSView {
         controlsVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
         controlsVisualEffectView.blendingMode = .withinWindow
         controlsVisualEffectView.wantsLayer = true
+        controlsVisualEffectView.layer?.masksToBounds = false
         controlsVisualEffectView.state = .active
         
         // Time labels
@@ -540,6 +541,7 @@ public final class PUIPlayerView: NSView {
         controlsContainerView.distribution = .fill
         controlsContainerView.translatesAutoresizingMaskIntoConstraints = false
         controlsContainerView.wantsLayer = true
+        controlsContainerView.layer?.masksToBounds = false
         
         controlsVisualEffectView.addSubview(controlsContainerView)
         addSubview(controlsVisualEffectView)
