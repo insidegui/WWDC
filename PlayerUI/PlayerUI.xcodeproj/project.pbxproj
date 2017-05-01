@@ -17,6 +17,7 @@
 		DDDE430A1EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43091EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift */; };
 		DDDE430C1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE430B1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift */; };
 		DDDE43311EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43301EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift */; };
+		DDDE43341EB7CA7400B88E91 /* PUIPlayerViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43331EB7CA7400B88E91 /* PUIPlayerViewDelegates.swift */; };
 		DDE29EB11EB5297100680703 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDE29EB01EB5297100680703 /* WhiteSpinner.car */; };
 		DDE29EB51EB5297800680703 /* PUIBoringLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE29EB21EB5297800680703 /* PUIBoringLayer.swift */; };
 		DDE29EB61EB5297800680703 /* PUIPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE29EB31EB5297800680703 /* PUIPlayerView.swift */; };
@@ -44,6 +45,7 @@
 		DDDE43091EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProvider.swift; sourceTree = "<group>"; };
 		DDDE430B1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackConsumer.swift; sourceTree = "<group>"; };
 		DDDE43301EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProviderRegistration.swift; sourceTree = "<group>"; };
+		DDDE43331EB7CA7400B88E91 /* PUIPlayerViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerViewDelegates.swift; sourceTree = "<group>"; };
 		DDE29EB01EB5297100680703 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = WhiteSpinner.car; sourceTree = "<group>"; };
 		DDE29EB21EB5297800680703 /* PUIBoringLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIBoringLayer.swift; sourceTree = "<group>"; };
 		DDE29EB31EB5297800680703 /* PUIPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerView.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 		DDA4D6631EB7898400172ECF /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				DDDE43321EB7CA6500B88E91 /* Player */,
 				DDDE43071EB789EB00B88E91 /* Timeline */,
 				DDDE43081EB789F500B88E91 /* External Playback */,
 			);
@@ -135,6 +138,14 @@
 				DDDE43301EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		DDDE43321EB7CA6500B88E91 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				DDDE43331EB7CA7400B88E91 /* PUIPlayerViewDelegates.swift */,
+			);
+			name = Player;
 			sourceTree = "<group>";
 		};
 		DDE29EAB1EB5292B00680703 /* Resources */ = {
@@ -283,6 +294,7 @@
 				DDE29EB61EB5297800680703 /* PUIPlayerView.swift in Sources */,
 				DDAD96291EB6797F007E4E21 /* PUISlider.swift in Sources */,
 				DDDE43311EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift in Sources */,
+				DDDE43341EB7CA7400B88E91 /* PUIPlayerViewDelegates.swift in Sources */,
 				DDDE430C1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift in Sources */,
 				DDAD96251EB6426B007E4E21 /* String+CMTime.swift in Sources */,
 				DDEA86111EB53FD3002AE0EB /* Images.swift in Sources */,

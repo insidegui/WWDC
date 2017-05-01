@@ -13,6 +13,23 @@ public final class PUIPlayerView: NSView {
     
     // MARK: - Public API
     
+    public weak var delegate: PUIPlayerViewDelegate?
+    
+    public weak var appearanceDelegate: PUIPlayerViewAppearanceDelegate? {
+        didSet {
+            invalidateAppearance()
+        }
+    }
+    
+    public var timelineDelegate: PUITimelineDelegate? {
+        get {
+            return timelineView.delegate
+        }
+        set {
+            timelineView.delegate = newValue
+        }
+    }
+    
     public var togglesPlaybackOnSingleClick: Bool = false
     
     public var annotations: [PUITimelineAnnotation] {
@@ -23,15 +40,6 @@ public final class PUIPlayerView: NSView {
             self.sortedAnnotations = newValue.sorted(by: { $0.timestamp < $1.timestamp })
             
             timelineView.annotations = sortedAnnotations
-        }
-    }
-    
-    public var timelineDelegate: PUITimelineDelegate? {
-        get {
-            return timelineView.delegate
-        }
-        set {
-            timelineView.delegate = newValue
         }
     }
     
@@ -112,6 +120,13 @@ public final class PUIPlayerView: NSView {
         return currentExternalPlaybackProvider != nil
     }
     
+    public var hideAllControls: Bool = false {
+        didSet {
+            controlsVisualEffectView.isHidden = hideAllControls
+            extrasMenuContainerView.isHidden = hideAllControls
+        }
+    }
+    
     // MARK: External playback
     
     fileprivate(set) var externalPlaybackProviders: [PUIExternalPlaybackProviderRegistration] = [] {
@@ -132,6 +147,10 @@ public final class PUIPlayerView: NSView {
         let registration = PUIExternalPlaybackProviderRegistration(provider: instance, button: button, menu: NSMenu())
         
         externalPlaybackProviders.append(registration)
+    }
+    
+    public func invalidateAppearance() {
+        configureWithAppearanceFromDelegate()
     }
     
     // MARK: - Private API
@@ -553,6 +572,34 @@ public final class PUIPlayerView: NSView {
         updateExtrasMenuPosition()
     }
     
+    private func configureWithAppearanceFromDelegate() {
+        guard let d = appearanceDelegate else { return }
+        
+        subtitlesButton.isHidden = !d.playerViewShouldShowSubtitlesControl(self)
+        pipButton.isHidden = !d.playerViewShouldShowPictureInPictureControl(self)
+        speedButton.isHidden = !d.playerViewShouldShowSpeedControl(self)
+        
+        let disableAnnotationControls = !d.playerViewShouldShowAnnotationControls(self)
+        addAnnotationButton.isHidden = disableAnnotationControls
+        previousAnnotationButton.isHidden = disableAnnotationControls
+        nextAnnotationButton.isHidden = disableAnnotationControls
+        
+        let disableBackAndForward = !d.playerViewShouldShowBackAndForwardControls(self)
+        backButton.isHidden = disableBackAndForward
+        forwardButton.isHidden = disableBackAndForward
+        
+        updateExternalPlaybackControlsAvailability()
+        
+        fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
+    }
+    
+    fileprivate func updateExternalPlaybackControlsAvailability() {
+        guard let d = appearanceDelegate else { return }
+        
+        let disableExternalPlayback = !d.playerViewShouldShowExternalPlaybackControls(self)
+        externalPlaybackProviders.forEach({ $0.button.isHidden = disableExternalPlayback })
+    }
+    
     private var isDominantViewInWindow: Bool {
         guard let contentView = window?.contentView else { return false }
         guard contentView != self else { return true }
@@ -657,11 +704,11 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction public func addAnnotation(_ sender: NSView?) {
-        // TODO: handle add annotation (probably with delegate method)
+        delegate?.playerViewDidSelectAddAnnotation(self, from: sender)
     }
     
     @IBAction public func togglePip(_ sender: NSView?) {
-        // TODO: handle PiP (probably with delegate method - PiP is implemented in the app, not the framework)
+        delegate?.playerViewDidSelectTogglePiP(self)
     }
     
     @IBAction public func toggleFullscreen(_ sender: Any?) {
@@ -926,6 +973,7 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
     
     public func externalPlaybackProviderDidChangeAvailabilityStatus(_ provider: PUIExternalPlaybackProvider) {
         updateExternalPlaybackMenus()
+        updateExternalPlaybackControlsAvailability()
         
         if !provider.isAvailable && isCurrentProvider(provider) {
             // current provider got invalidated, go back to internal playback
