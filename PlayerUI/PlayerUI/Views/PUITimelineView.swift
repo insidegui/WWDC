@@ -101,7 +101,6 @@ public final class PUITimelineView: NSView {
         borderLayer.borderWidth = 1.0
         borderLayer.frame = bounds
         borderLayer.cornerRadius = Metrics.cornerRadius
-        borderLayer.masksToBounds = true
         
         layer?.addSublayer(borderLayer)
         
@@ -321,7 +320,7 @@ public final class PUITimelineView: NSView {
             
             l.backgroundColor = NSColor.playerHighlight.cgColor
             l.name = annotation.identifier
-            l.zPosition = 50
+            l.zPosition = 999
             l.cornerRadius = Metrics.annotationBubbleDiameter / 2
             l.borderColor = NSColor.white.cgColor
             l.borderWidth = 0
@@ -469,12 +468,22 @@ public final class PUITimelineView: NSView {
                 case .move:
                     cancelled = false
                     
-                    let timestamp = Double(point.x) / self.mediaDuration
+                    var timestamp = Double(point.x / self.bounds.width) * self.mediaDuration
+                    
+                    if timestamp < 0 {
+                        timestamp = 0
+                    } else if timestamp > self.mediaDuration {
+                        timestamp = self.mediaDuration
+                    }
                     
                     self.delegate?.timelineDidMoveAnnotation(annotation, to: timestamp)
                 default: break
                 }
+                
                 mode = .none
+                self.hoveredAnnotation = nil
+                self.mouseOut(annotation, layer: layer)
+                
                 stop.pointee = true
             case .leftMouseDragged:
                 if mode != .delete {
