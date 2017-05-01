@@ -935,8 +935,15 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
     
     public func externalPlaybackProviderDidInvalidatePlaybackSession(_ provider: PUIExternalPlaybackProvider) {
         if isCurrentProvider(provider) {
+            let wasPlaying = !provider.status.rate.isZero
+            
             // provider session invalidated, go back to internal playback
             self.currentExternalPlaybackProvider = nil
+            
+            if wasPlaying {
+                self.player.play()
+                self.updatePlayingState()
+            }
         }
     }
     
