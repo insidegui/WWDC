@@ -9,19 +9,6 @@
 import Cocoa
 import AVFoundation
 
-public protocol PUITimelineDelegate: class {
-    
-    func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController?
-    func timelineDidReceiveForceTouch(at timestamp: Double)
-    func timelineDidHighlightAnnotation(_ annotation: PUITimelineAnnotation?)
-    
-}
-
-public protocol PUITimelineAnnotation {
-    var identifier: String { get }
-    var timestamp: Double { get }
-}
-
 protocol PUITimelineViewDelegate: class {
     
     func timelineViewWillBeginInteractiveSeek()

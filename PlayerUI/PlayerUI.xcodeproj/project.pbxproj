@@ -12,6 +12,10 @@
 		DDAD96271EB64689007E4E21 /* AVPlayer+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAD96261EB64689007E4E21 /* AVPlayer+Validation.swift */; };
 		DDAD96291EB6797F007E4E21 /* PUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAD96281EB6797F007E4E21 /* PUISlider.swift */; };
 		DDBFA1641EB525F2004AE10F /* PlayerUI.h in Headers */ = {isa = PBXBuildFile; fileRef = DDBFA1621EB525F2004AE10F /* PlayerUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDDE43041EB789CF00B88E91 /* PUITimelineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43031EB789CF00B88E91 /* PUITimelineDelegate.swift */; };
+		DDDE43061EB789E300B88E91 /* PUITimelineAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43051EB789E300B88E91 /* PUITimelineAnnotation.swift */; };
+		DDDE430A1EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43091EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift */; };
+		DDDE430C1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE430B1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift */; };
 		DDE29EB11EB5297100680703 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDE29EB01EB5297100680703 /* WhiteSpinner.car */; };
 		DDE29EB51EB5297800680703 /* PUIBoringLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE29EB21EB5297800680703 /* PUIBoringLayer.swift */; };
 		DDE29EB61EB5297800680703 /* PUIPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE29EB31EB5297800680703 /* PUIPlayerView.swift */; };
@@ -34,6 +38,10 @@
 		DDBFA15F1EB525F2004AE10F /* PlayerUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlayerUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBFA1621EB525F2004AE10F /* PlayerUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerUI.h; sourceTree = "<group>"; };
 		DDBFA1631EB525F2004AE10F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDDE43031EB789CF00B88E91 /* PUITimelineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineDelegate.swift; sourceTree = "<group>"; };
+		DDDE43051EB789E300B88E91 /* PUITimelineAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineAnnotation.swift; sourceTree = "<group>"; };
+		DDDE43091EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProvider.swift; sourceTree = "<group>"; };
+		DDDE430B1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackConsumer.swift; sourceTree = "<group>"; };
 		DDE29EB01EB5297100680703 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = WhiteSpinner.car; sourceTree = "<group>"; };
 		DDE29EB21EB5297800680703 /* PUIBoringLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIBoringLayer.swift; sourceTree = "<group>"; };
 		DDE29EB31EB5297800680703 /* PUIPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerView.swift; sourceTree = "<group>"; };
@@ -60,6 +68,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DDA4D6631EB7898400172ECF /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				DDDE43071EB789EB00B88E91 /* Timeline */,
+				DDDE43081EB789F500B88E91 /* External Playback */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		DDBFA1551EB525F2004AE10F = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +97,7 @@
 		DDBFA1611EB525F2004AE10F /* PlayerUI */ = {
 			isa = PBXGroup;
 			children = (
+				DDA4D6631EB7898400172ECF /* Protocols */,
 				DDE29EAF1EB5293C00680703 /* Util */,
 				DDE29EAE1EB5293700680703 /* Definitions */,
 				DDE29EAC1EB5293000680703 /* Views */,
@@ -88,6 +106,24 @@
 				DDBFA1631EB525F2004AE10F /* Info.plist */,
 			);
 			path = PlayerUI;
+			sourceTree = "<group>";
+		};
+		DDDE43071EB789EB00B88E91 /* Timeline */ = {
+			isa = PBXGroup;
+			children = (
+				DDDE43031EB789CF00B88E91 /* PUITimelineDelegate.swift */,
+				DDDE43051EB789E300B88E91 /* PUITimelineAnnotation.swift */,
+			);
+			name = Timeline;
+			sourceTree = "<group>";
+		};
+		DDDE43081EB789F500B88E91 /* External Playback */ = {
+			isa = PBXGroup;
+			children = (
+				DDDE430B1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift */,
+				DDDE43091EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift */,
+			);
+			name = "External Playback";
 			sourceTree = "<group>";
 		};
 		DDE29EAB1EB5292B00680703 /* Resources */ = {
@@ -231,13 +267,17 @@
 				DDE29EC11EB5299000680703 /* NSEvent+ForceTouch.swift in Sources */,
 				DDEA860D1EB53B2F002AE0EB /* PUIButton.swift in Sources */,
 				DDEA85FE1EB52B89002AE0EB /* PUIPlayerWindow.swift in Sources */,
+				DDDE43061EB789E300B88E91 /* PUITimelineAnnotation.swift in Sources */,
 				DDEA860B1EB53083002AE0EB /* PUIBufferLayer.swift in Sources */,
 				DDE29EB61EB5297800680703 /* PUIPlayerView.swift in Sources */,
 				DDAD96291EB6797F007E4E21 /* PUISlider.swift in Sources */,
+				DDDE430C1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift in Sources */,
 				DDAD96251EB6426B007E4E21 /* String+CMTime.swift in Sources */,
 				DDEA86111EB53FD3002AE0EB /* Images.swift in Sources */,
+				DDDE430A1EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift in Sources */,
 				DDE29EB71EB5297800680703 /* PUITimelineView.swift in Sources */,
 				DDE29EB51EB5297800680703 /* PUIBoringLayer.swift in Sources */,
+				DDDE43041EB789CF00B88E91 /* PUITimelineDelegate.swift in Sources */,
 				DDA4D6621EB781FC00172ECF /* Speeds.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

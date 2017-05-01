@@ -43,6 +43,8 @@ public final class PUIPlayerView: NSView {
         }
     }
     
+    public var remoteMediaUrl: URL?
+    
     public init(player: AVPlayer) {
         self.player = player
         
@@ -88,6 +90,25 @@ public final class PUIPlayerView: NSView {
             
             speedButton.image = playbackSpeed.icon
         }
+    }
+    
+    // MARK: External playback
+    
+    public private(set) var externalPlaybackProviders: [PUIExternalPlaybackProvider] = [] {
+        didSet {
+            updateExternalPlaybackMenus()
+        }
+    }
+    
+    public func registerExternalPlaybackProvider(_ provider: PUIExternalPlaybackProvider.Type) {
+        // prevent registering the same provider multiple times
+        guard !externalPlaybackProviders.contains(where: { type(of: $0).name == provider.name }) else {
+            NSLog("PUIPlayerView WARNING: tried to register provider \(provider.name) which was already registered")
+            return
+        }
+        
+        let instance = provider.init(consumer: self)
+        externalPlaybackProviders.append(instance)
     }
     
     // MARK: - Private API
@@ -237,6 +258,8 @@ public final class PUIPlayerView: NSView {
     
     fileprivate var wasPlayingBeforeStartingInteractiveSeek = false
     
+    private var extrasMenuContainerView: NSStackView!
+    
     private var controlsVisualEffectView: NSVisualEffectView!
     
     private var timeLabelsContainerView: NSStackView!
@@ -264,6 +287,16 @@ public final class PUIPlayerView: NSView {
         l.textColor = .timeLabel
         
         return l
+    }()
+    
+    private lazy var fullScreenButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUIFullScreen
+        b.target = self
+        b.action = #selector(toggleFullscreen(_:))
+        
+        return b
     }()
     
     private lazy var volumeButton: PUIButton = {
@@ -379,6 +412,8 @@ public final class PUIPlayerView: NSView {
         return b
     }()
     
+    private var extrasMenuTopConstraint: NSLayoutConstraint!
+    
     private func setupControls() {
         // VFX view
         controlsVisualEffectView = NSVisualEffectView(frame: bounds)
@@ -477,6 +512,57 @@ public final class PUIPlayerView: NSView {
         
         centerButtonsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
         centerButtonsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
+        
+        // Extras menu (external playback, fullscreen button)
+        extrasMenuContainerView = NSStackView(views: [fullScreenButton])
+        extrasMenuContainerView.orientation = .horizontal
+        extrasMenuContainerView.alignment = .centerY
+        extrasMenuContainerView.distribution = .equalSpacing
+        extrasMenuContainerView.spacing = 30
+        
+        addSubview(extrasMenuContainerView)
+        
+        extrasMenuContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
+        updateExtrasMenuPosition()
+    }
+    
+    private var isDominantViewInWindow: Bool {
+        guard let contentView = window?.contentView else { return false }
+        guard contentView != self else { return true }
+        
+        return bounds.height >= contentView.bounds.height
+    }
+    
+    private func updateExtrasMenuPosition() {
+        let topConstant: CGFloat = isDominantViewInWindow ? 34 : 12
+        
+        if extrasMenuTopConstraint == nil {
+            extrasMenuTopConstraint = extrasMenuContainerView.topAnchor.constraint(equalTo: topAnchor, constant: topConstant)
+            extrasMenuTopConstraint.isActive = true
+        } else {
+            extrasMenuTopConstraint.constant = topConstant
+        }
+    }
+    
+    private func updateExternalPlaybackMenus() {
+        // clean menu
+        extrasMenuContainerView.arrangedSubviews.enumerated().forEach { idx, v in
+            guard idx < extrasMenuContainerView.arrangedSubviews.count - 1 else { return }
+            
+            extrasMenuContainerView.removeArrangedSubview(v)
+        }
+        
+        // repopulate
+        externalPlaybackProviders.map(button(for:)).forEach({ extrasMenuContainerView.insertArrangedSubview($0, at: 0) })
+    }
+    
+    private func button(for provider: PUIExternalPlaybackProvider) -> PUIButton {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = provider.icon
+        b.toolTip = type(of: provider).name
+        
+        return b
     }
     
     // MARK: - Control actions
@@ -531,6 +617,10 @@ public final class PUIPlayerView: NSView {
     
     @IBAction public func togglePip(_ sender: NSView?) {
         // TODO: handle PiP (probably with delegate method - PiP is implemented in the app, not the framework)
+    }
+    
+    @IBAction public func toggleFullscreen(_ sender: Any?) {
+        window?.toggleFullScreen(sender)
     }
     
     private func modifyCurrentTime(with seconds: Double, using function: (CMTime, CMTime) -> CMTime) {
@@ -594,13 +684,39 @@ public final class PUIPlayerView: NSView {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = animated ? 0.4 : 0.0
             self.controlsVisualEffectView.animator().alphaValue = opacity
+            self.extrasMenuContainerView.animator().alphaValue = opacity
         }, completionHandler: nil)
+    }
+    
+    public override func viewWillMove(toWindow newWindow: NSWindow?) {
+        NotificationCenter.default.removeObserver(self, name: .NSWindowWillEnterFullScreen, object: self.window)
+        NotificationCenter.default.removeObserver(self, name: .NSWindowWillExitFullScreen, object: self.window)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillEnterFullScreen), name: .NSWindowWillEnterFullScreen, object: newWindow)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullScreen), name: .NSWindowWillExitFullScreen, object: newWindow)
     }
     
     public override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
         
         resetMouseIdleTimer()
+        updateExtrasMenuPosition()
+    }
+    
+    private var windowIsInFullScreen: Bool {
+        guard let window = window else { return false }
+        
+        return window.styleMask.contains(.fullScreen)
+    }
+    
+    @objc private func windowWillEnterFullScreen() {
+        fullScreenButton.isHidden = true
+        updateExtrasMenuPosition()
+    }
+    
+    @objc private func windowWillExitFullScreen() {
+        fullScreenButton.isHidden = false
+        updateExtrasMenuPosition()
     }
     
     // MARK: - Events
@@ -700,6 +816,24 @@ extension PUIPlayerView: PUITimelineViewDelegate {
         if wasPlayingBeforeStartingInteractiveSeek {
             player.play()
         }
+    }
+    
+}
+
+// MARK: - External playback support
+
+extension PUIPlayerView: PUIExternalPlaybackConsumer {
+    
+    public func externalPlaybackProviderDidChangeMediaStatus(_ provider: PUIExternalPlaybackProvider) {
+        
+    }
+    
+    public func externalPlaybackProviderDidChangeAvailabilityStatus(_ provider: PUIExternalPlaybackProvider) {
+        
+    }
+    
+    public func externalPlaybackProvider(_ provider: PUIExternalPlaybackProvider, deviceSelectionMenuDidChangeWith menu: NSMenu) {
+        
     }
     
 }
