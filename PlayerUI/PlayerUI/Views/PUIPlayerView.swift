@@ -82,6 +82,14 @@ public final class PUIPlayerView: NSView {
         player.seek(to: time)
     }
     
+    public var playbackSpeed: PUIPlaybackSpeed = .normal {
+        didSet {
+            if isPlaying { player.rate = playbackSpeed.rawValue }
+            
+            speedButton.image = playbackSpeed.icon
+        }
+    }
+    
     // MARK: - Private API
     
     private var sortedAnnotations: [PUITimelineAnnotation] = [] {
@@ -341,6 +349,16 @@ public final class PUIPlayerView: NSView {
         return b
     }()
     
+    private lazy var speedButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = .PUISpeedOne
+        b.target = self
+        b.action = #selector(toggleSpeed(_:))
+        
+        return b
+    }()
+    
     private lazy var addAnnotationButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
@@ -406,6 +424,7 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.addView(forwardButton, in: .center)
         
         // Trailing controls (speed, add annotation, pip)
+        centerButtonsContainerView.addView(speedButton, in: .trailing)
         centerButtonsContainerView.addView(addAnnotationButton, in: .trailing)
         centerButtonsContainerView.addView(pipButton, in: .trailing)
         
@@ -423,6 +442,7 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityMustHold, for: playButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: forwardButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: nextAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: speedButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: addAnnotationButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: pipButton)
         centerButtonsContainerView.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
@@ -475,9 +495,9 @@ public final class PUIPlayerView: NSView {
     
     @IBAction public func togglePlaying(_ sender: Any?) {
         if isPlaying {
-            player.pause()
+            player.rate = 0
         } else {
-            player.play()
+            player.rate = playbackSpeed.rawValue
         }
     }
     
@@ -499,6 +519,10 @@ public final class PUIPlayerView: NSView {
     
     @IBAction public func goForwardInTime(_ sender: Any?) {
         modifyCurrentTime(with: 30, using: CMTimeAdd)
+    }
+    
+    @IBAction public func toggleSpeed(_ sender: Any?) {
+        playbackSpeed = playbackSpeed.next
     }
     
     @IBAction public func addAnnotation(_ sender: NSView?) {
