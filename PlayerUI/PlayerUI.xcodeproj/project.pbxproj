@@ -16,6 +16,7 @@
 		DDDE43061EB789E300B88E91 /* PUITimelineAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43051EB789E300B88E91 /* PUITimelineAnnotation.swift */; };
 		DDDE430A1EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43091EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift */; };
 		DDDE430C1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE430B1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift */; };
+		DDDE43311EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43301EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift */; };
 		DDE29EB11EB5297100680703 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDE29EB01EB5297100680703 /* WhiteSpinner.car */; };
 		DDE29EB51EB5297800680703 /* PUIBoringLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE29EB21EB5297800680703 /* PUIBoringLayer.swift */; };
 		DDE29EB61EB5297800680703 /* PUIPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE29EB31EB5297800680703 /* PUIPlayerView.swift */; };
@@ -42,6 +43,7 @@
 		DDDE43051EB789E300B88E91 /* PUITimelineAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineAnnotation.swift; sourceTree = "<group>"; };
 		DDDE43091EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProvider.swift; sourceTree = "<group>"; };
 		DDDE430B1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackConsumer.swift; sourceTree = "<group>"; };
+		DDDE43301EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProviderRegistration.swift; sourceTree = "<group>"; };
 		DDE29EB01EB5297100680703 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = WhiteSpinner.car; sourceTree = "<group>"; };
 		DDE29EB21EB5297800680703 /* PUIBoringLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIBoringLayer.swift; sourceTree = "<group>"; };
 		DDE29EB31EB5297800680703 /* PUIPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerView.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		DDBFA1611EB525F2004AE10F /* PlayerUI */ = {
 			isa = PBXGroup;
 			children = (
+				DDDE432F1EB7BDEA00B88E91 /* Models */,
 				DDA4D6631EB7898400172ECF /* Protocols */,
 				DDE29EAF1EB5293C00680703 /* Util */,
 				DDE29EAE1EB5293700680703 /* Definitions */,
@@ -124,6 +127,14 @@
 				DDDE43091EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift */,
 			);
 			name = "External Playback";
+			sourceTree = "<group>";
+		};
+		DDDE432F1EB7BDEA00B88E91 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DDDE43301EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		DDE29EAB1EB5292B00680703 /* Resources */ = {
@@ -271,6 +282,7 @@
 				DDEA860B1EB53083002AE0EB /* PUIBufferLayer.swift in Sources */,
 				DDE29EB61EB5297800680703 /* PUIPlayerView.swift in Sources */,
 				DDAD96291EB6797F007E4E21 /* PUISlider.swift in Sources */,
+				DDDE43311EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift in Sources */,
 				DDDE430C1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift in Sources */,
 				DDAD96251EB6426B007E4E21 /* String+CMTime.swift in Sources */,
 				DDEA86111EB53FD3002AE0EB /* Images.swift in Sources */,

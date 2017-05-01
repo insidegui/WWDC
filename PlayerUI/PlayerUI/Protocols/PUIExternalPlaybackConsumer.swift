@@ -28,6 +28,16 @@ public protocol PUIExternalPlaybackConsumer: class {
     ///   - menu: The updated menu to be showed when the provider's icon is clicked
     func externalPlaybackProvider(_ provider: PUIExternalPlaybackProvider, deviceSelectionMenuDidChangeWith menu: NSMenu)
     
+    /// Tells the consumer that the media is now playing on one of the devices offered by the provider
+    ///
+    /// - Parameter provider: The provider that called the method
+    func externalPlaybackProviderDidBecomeCurrent(_ provider: PUIExternalPlaybackProvider)
+    
+    /// Tells the consumer that the current playback session for the provider is no longer valid
+    ///
+    /// - Parameter provider: The provider that called the method
+    func externalPlaybackProviderDidInvalidatePlaybackSession(_ provider: PUIExternalPlaybackProvider)
+    
     /// The media for the remote URL to be played by the provider
     var remoteMediaUrl: URL? { get }
     

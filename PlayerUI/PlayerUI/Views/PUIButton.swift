@@ -10,6 +10,8 @@ import Cocoa
 
 final class PUIButton: NSControl {
     
+    var showsMenuOnLeftClick = false
+    
     var image: NSImage? {
         didSet {
             guard let image = image else { return }
@@ -74,8 +76,19 @@ final class PUIButton: NSControl {
         }
     }
     
+    override var isEnabled: Bool {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
     override func mouseDown(with event: NSEvent) {
         guard isEnabled else { return }
+        
+        guard !showsMenuOnLeftClick else {
+            showMenu(with: event)
+            return
+        }
         
         shouldDrawHighlighted = true
         
@@ -89,6 +102,16 @@ final class PUIButton: NSControl {
         if let action = action, let target = target {
             NSApp.sendAction(action, to: target, from: self)
         }
+    }
+    
+    private func showMenu(with event: NSEvent) {
+        guard let menu = self.menu else { return }
+        
+        menu.popUp(positioning: nil, at: .zero, in: self)
+    }
+    
+    override var effectiveAppearance: NSAppearance {
+        return NSAppearance(named: NSAppearanceNameVibrantDark)!
     }
     
     override var allowsVibrancy: Bool {

@@ -11,13 +11,19 @@ import Cocoa
 public struct PUIExternalPlaybackMediaStatus {
     
     /// The rate at which the media is playing (1 = playing. 0 = paused)
-    let rate: Float
+    public var rate: Float
     
     /// The current timestamp the media is playing at (in seconds)
-    let currentTime: Double
+    public var currentTime: Double
     
     /// The volume on the external device (between 0 and 1)
-    let volume: Float
+    public var volume: Float
+    
+    public init(rate: Float = 0, volume: Float = 1, currentTime: Double = 0) {
+        self.rate = rate
+        self.volume = volume
+        self.currentTime = currentTime
+    }
     
 }
 

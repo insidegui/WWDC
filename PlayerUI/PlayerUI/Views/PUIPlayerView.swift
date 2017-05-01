@@ -63,11 +63,23 @@ public final class PUIPlayerView: NSView {
     }
     
     public var isPlaying: Bool {
+        if let externalProvider = currentExternalPlaybackProvider {
+            return !externalProvider.status.rate.isZero
+        } else {
+            return isInternalPlayerPlaying
+        }
+    }
+    
+    public var isInternalPlayerPlaying: Bool {
         return !player.rate.isZero
     }
     
     public var currentTimestamp: Double {
-        return Double(CMTimeGetSeconds(player.currentTime()))
+        if let externalProvider = currentExternalPlaybackProvider {
+            return Double(externalProvider.status.currentTime)
+        } else {
+            return Double(CMTimeGetSeconds(player.currentTime()))
+        }
     }
     
     public var firstAnnotationBeforeCurrentTime: PUITimelineAnnotation? {
@@ -81,20 +93,28 @@ public final class PUIPlayerView: NSView {
     public func seek(to annotation: PUITimelineAnnotation) {
         let time = CMTimeMakeWithSeconds(Float64(annotation.timestamp), 9000)
         
-        player.seek(to: time)
+        if isPlayingExternally {
+            currentExternalPlaybackProvider?.seek(to: annotation.timestamp)
+        } else {
+            player.seek(to: time)
+        }
     }
     
     public var playbackSpeed: PUIPlaybackSpeed = .normal {
         didSet {
-            if isPlaying { player.rate = playbackSpeed.rawValue }
+            if isPlaying && !isPlayingExternally { player.rate = playbackSpeed.rawValue }
             
-            speedButton.image = playbackSpeed.icon
+            updatePlaybackSpeedState()
         }
+    }
+    
+    public var isPlayingExternally: Bool {
+        return currentExternalPlaybackProvider != nil
     }
     
     // MARK: External playback
     
-    public private(set) var externalPlaybackProviders: [PUIExternalPlaybackProvider] = [] {
+    fileprivate(set) var externalPlaybackProviders: [PUIExternalPlaybackProviderRegistration] = [] {
         didSet {
             updateExternalPlaybackMenus()
         }
@@ -102,13 +122,16 @@ public final class PUIPlayerView: NSView {
     
     public func registerExternalPlaybackProvider(_ provider: PUIExternalPlaybackProvider.Type) {
         // prevent registering the same provider multiple times
-        guard !externalPlaybackProviders.contains(where: { type(of: $0).name == provider.name }) else {
+        guard !externalPlaybackProviders.contains(where: { type(of: $0.provider).name == provider.name }) else {
             NSLog("PUIPlayerView WARNING: tried to register provider \(provider.name) which was already registered")
             return
         }
         
         let instance = provider.init(consumer: self)
-        externalPlaybackProviders.append(instance)
+        let button = self.button(for: instance)
+        let registration = PUIExternalPlaybackProviderRegistration(provider: instance, button: button, menu: NSMenu())
+        
+        externalPlaybackProviders.append(registration)
     }
     
     // MARK: - Private API
@@ -195,12 +218,16 @@ public final class PUIPlayerView: NSView {
         nextAnnotationButton.isEnabled = canGoForward
     }
     
-    private func updatePlayingState() {
+    fileprivate func updatePlayingState() {
         if isPlaying {
             playButton.image = .PUIPause
         } else {
             playButton.image = .PUIPlay
         }
+    }
+    
+    fileprivate func updatePlaybackSpeedState() {
+        speedButton.image = playbackSpeed.icon
     }
     
     private func playerStatusChanged() {
@@ -219,7 +246,7 @@ public final class PUIPlayerView: NSView {
         }
     }
     
-    private func playerTimeDidChange(time: CMTime) {
+    fileprivate func playerTimeDidChange(time: CMTime) {
         DispatchQueue.main.async {
             guard self.player.hasValidMediaDuration else { return }
             guard let duration = self.asset?.duration else { return }
@@ -267,7 +294,7 @@ public final class PUIPlayerView: NSView {
     private var volumeControlsContainerView: NSStackView!
     private var centerButtonsContainerView: NSStackView!
     
-    private var timelineView: PUITimelineView!
+    fileprivate var timelineView: PUITimelineView!
     
     private lazy var elapsedTimeLabel: NSTextField = {
         let l = NSTextField(labelWithString: "00:00:00")
@@ -309,7 +336,7 @@ public final class PUIPlayerView: NSView {
         return b
     }()
     
-    private lazy var volumeSlider: PUISlider = {
+    fileprivate lazy var volumeSlider: PUISlider = {
         let s = PUISlider(frame: .zero)
         
         s.widthAnchor.constraint(equalToConstant: 88).isActive = true
@@ -332,7 +359,7 @@ public final class PUIPlayerView: NSView {
         return b
     }()
     
-    private lazy var playButton: PUIButton = {
+    fileprivate lazy var playButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
         b.image = .PUIPlay
@@ -382,7 +409,7 @@ public final class PUIPlayerView: NSView {
         return b
     }()
     
-    private lazy var speedButton: PUIButton = {
+    fileprivate lazy var speedButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
         b.image = .PUISpeedOne
@@ -544,7 +571,7 @@ public final class PUIPlayerView: NSView {
         }
     }
     
-    private func updateExternalPlaybackMenus() {
+    fileprivate func updateExternalPlaybackMenus() {
         // clean menu
         extrasMenuContainerView.arrangedSubviews.enumerated().forEach { idx, v in
             guard idx < extrasMenuContainerView.arrangedSubviews.count - 1 else { return }
@@ -553,7 +580,10 @@ public final class PUIPlayerView: NSView {
         }
         
         // repopulate
-        externalPlaybackProviders.map(button(for:)).forEach({ extrasMenuContainerView.insertArrangedSubview($0, at: 0) })
+        externalPlaybackProviders.filter({ $0.provider.isAvailable }).forEach { registration in
+            registration.button.menu = registration.menu
+            extrasMenuContainerView.insertArrangedSubview(registration.button, at: 0)
+        }
     }
     
     private func button(for provider: PUIExternalPlaybackProvider) -> PUIButton {
@@ -561,6 +591,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = provider.icon
         b.toolTip = type(of: provider).name
+        b.showsMenuOnLeftClick = true
         
         return b
     }
@@ -572,7 +603,13 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction func volumeSliderAction(_ sender: Any?) {
-        player.volume = Float(volumeSlider.doubleValue)
+        let v = Float(volumeSlider.doubleValue)
+        
+        if isPlayingExternally {
+            currentExternalPlaybackProvider?.setVolume(v)
+        } else {
+            player.volume = v
+        }
     }
     
     @IBAction func showSubtitlesMenu(_ sender: PUIButton) {
@@ -581,9 +618,17 @@ public final class PUIPlayerView: NSView {
     
     @IBAction public func togglePlaying(_ sender: Any?) {
         if isPlaying {
-            player.rate = 0
+            if isPlayingExternally {
+                currentExternalPlaybackProvider?.pause()
+            } else {
+                player.rate = 0
+            }
         } else {
-            player.rate = playbackSpeed.rawValue
+            if isPlayingExternally {
+                currentExternalPlaybackProvider?.play()
+            } else {
+                player.rate = playbackSpeed.rawValue
+            }
         }
     }
     
@@ -631,7 +676,11 @@ public final class PUIPlayerView: NSView {
         
         guard targetTime.isValid && targetTime.isNumeric else { return }
         
-        player.seek(to: targetTime)
+        if isPlayingExternally {
+            currentExternalPlaybackProvider?.seek(to: seconds)
+        } else {
+            player.seek(to: targetTime)
+        }
     }
     
     // MARK: - Visibility management
@@ -791,6 +840,26 @@ public final class PUIPlayerView: NSView {
         super.mouseDown(with: event)
     }
     
+    // MARK: - External playback state management
+    
+    fileprivate var currentExternalPlaybackProvider: PUIExternalPlaybackProvider? {
+        didSet {
+            if currentExternalPlaybackProvider != nil {
+                transitionToExternalPlayback()
+            } else {
+                transitionToInternalPlayback()
+            }
+        }
+    }
+    
+    private func transitionToExternalPlayback() {
+        // TODO: show some UI to indicate that the video is now being played externally
+    }
+    
+    private func transitionToInternalPlayback() {
+        // TODO: reset the UI to internal playback mode
+    }
+    
 }
 
 // MARK: - PUITimelineViewDelegate
@@ -800,7 +869,11 @@ extension PUIPlayerView: PUITimelineViewDelegate {
     func timelineViewWillBeginInteractiveSeek() {
         wasPlayingBeforeStartingInteractiveSeek = isPlaying
         
-        player.pause()
+        if isPlayingExternally {
+            currentExternalPlaybackProvider?.pause()
+        } else {
+            player.pause()
+        }
     }
     
     func timelineViewDidSeek(to progress: Double) {
@@ -809,12 +882,20 @@ extension PUIPlayerView: PUITimelineViewDelegate {
         let targetTime = progress * Double(CMTimeGetSeconds(duration))
         let time = CMTimeMakeWithSeconds(targetTime, duration.timescale)
         
-        player.seek(to: time)
+        if isPlayingExternally {
+            currentExternalPlaybackProvider?.seek(to: targetTime)
+        } else {
+            player.seek(to: time)
+        }
     }
     
     func timelineViewDidFinishInteractiveSeek() {
         if wasPlayingBeforeStartingInteractiveSeek {
-            player.play()
+            if isPlayingExternally {
+                currentExternalPlaybackProvider?.play()
+            } else {
+                player.play()
+            }
         }
     }
     
@@ -824,16 +905,53 @@ extension PUIPlayerView: PUITimelineViewDelegate {
 
 extension PUIPlayerView: PUIExternalPlaybackConsumer {
     
-    public func externalPlaybackProviderDidChangeMediaStatus(_ provider: PUIExternalPlaybackProvider) {
+    private func isCurrentProvider(_ provider: PUIExternalPlaybackProvider) -> Bool {
+        guard let currentProvider = currentExternalPlaybackProvider else { return false }
         
+        return type(of: provider).name == type(of: currentProvider).name
+    }
+    
+    public func externalPlaybackProviderDidChangeMediaStatus(_ provider: PUIExternalPlaybackProvider) {
+        volumeSlider.doubleValue = Double(provider.status.volume)
+        
+        if let speed = PUIPlaybackSpeed(rawValue: provider.status.rate) {
+            self.playbackSpeed = speed
+        }
+        
+        let time = CMTimeMakeWithSeconds(Float64(provider.status.currentTime), 9000)
+        playerTimeDidChange(time: time)
+        
+        updatePlayingState()
     }
     
     public func externalPlaybackProviderDidChangeAvailabilityStatus(_ provider: PUIExternalPlaybackProvider) {
+        updateExternalPlaybackMenus()
         
+        if !provider.isAvailable && isCurrentProvider(provider) {
+            // current provider got invalidated, go back to internal playback
+            self.currentExternalPlaybackProvider = nil
+        }
+    }
+    
+    public func externalPlaybackProviderDidInvalidatePlaybackSession(_ provider: PUIExternalPlaybackProvider) {
+        if isCurrentProvider(provider) {
+            // provider session invalidated, go back to internal playback
+            self.currentExternalPlaybackProvider = nil
+        }
     }
     
     public func externalPlaybackProvider(_ provider: PUIExternalPlaybackProvider, deviceSelectionMenuDidChangeWith menu: NSMenu) {
+        guard let registrationIndex = externalPlaybackProviders.index(where: { type(of: $0.provider).name == type(of: provider).name }) else { return }
         
+        externalPlaybackProviders[registrationIndex].menu = menu
+    }
+    
+    public func externalPlaybackProviderDidBecomeCurrent(_ provider: PUIExternalPlaybackProvider) {
+        if isInternalPlayerPlaying {
+            player.rate = 0
+        }
+        
+        self.currentExternalPlaybackProvider = provider
     }
     
 }
