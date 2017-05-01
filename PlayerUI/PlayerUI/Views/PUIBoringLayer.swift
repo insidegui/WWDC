@@ -10,7 +10,7 @@ import Foundation
 import QuartzCore
 import AVFoundation
 
-final class PUIBoringLayer: CALayer {
+class PUIBoringLayer: CALayer {
     
     private var shouldAnimate: Bool = false
     
@@ -31,6 +31,27 @@ final class PUIBoringLayer: CALayer {
 }
 
 final class PUIBoringPlayerLayer: AVPlayerLayer {
+    
+    private var shouldAnimate: Bool = false
+    
+    override func action(forKey event: String) -> CAAction? {
+        if shouldAnimate {
+            return super.action(forKey: event)
+        } else {
+            return nil
+        }
+    }
+    
+    func animate(with block: () -> Void) {
+        shouldAnimate = true
+        block()
+        shouldAnimate = false
+    }
+    
+}
+
+
+final class PUIBoringTextLayer: CATextLayer {
     
     private var shouldAnimate: Bool = false
     

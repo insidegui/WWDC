@@ -11,12 +11,10 @@ import AVFoundation
 
 extension String {
     
-    init?(time: CMTime) {
-        let secondCount = time.value / Int64(time.timescale)
+    init?(timestamp: Double) {
+        let prefix = timestamp < 0 ? "-" : ""
         
-        let prefix = secondCount < 0 ? "-" : ""
-        
-        let date = Date(timeInterval: TimeInterval(secondCount), since: Date())
+        let date = Date(timeInterval: TimeInterval(timestamp), since: Date())
         let components = Calendar.current.dateComponents([.hour, .minute, .second], from: Date(), to: date)
         
         guard let hour = components.hour, let minute = components.minute, let second = components.second else {
@@ -34,6 +32,12 @@ extension String {
         }
         
         self.init(prefix + bits.joined(separator: ":"))
+    }
+    
+    init?(time: CMTime) {
+        let secondCount = time.value / Int64(time.timescale)
+        
+        self.init(timestamp: Double(secondCount))
     }
     
 }

@@ -307,7 +307,7 @@ public final class PUITimelineView: NSView {
     
     // MARK: - Annotation management
     
-    private var annotationLayers: [PUIBoringLayer] = []
+    private var annotationLayers: [PUIAnnotationLayer] = []
     
     private func layoutAnnotations(distributeOnly: Bool = false) {
         guard hasValidMediaDuration else { return }
@@ -315,8 +315,10 @@ public final class PUITimelineView: NSView {
         annotationLayers.forEach({ $0.removeFromSuperlayer() })
         annotationLayers.removeAll()
         
+        let sf = self.window?.screen?.backingScaleFactor ?? 1
+        
         annotationLayers = annotations.map { annotation in
-            let l = PUIBoringLayer()
+            let l = PUIAnnotationLayer()
             
             l.backgroundColor = NSColor.playerHighlight.cgColor
             l.name = annotation.identifier
@@ -324,6 +326,14 @@ public final class PUITimelineView: NSView {
             l.cornerRadius = Metrics.annotationBubbleDiameter / 2
             l.borderColor = NSColor.white.cgColor
             l.borderWidth = 0
+            
+            let textLayer = PUIBoringTextLayer()
+            
+            textLayer.string = self.attributedString(for: annotation.timestamp)
+            textLayer.contentsScale = sf
+            textLayer.opacity = 0
+            
+            l.attach(layer: textLayer, attribute: .top, spacing: 8)
             
             return l
         }
@@ -335,6 +345,21 @@ public final class PUITimelineView: NSView {
         }
         
         annotationLayers.forEach({ self.layer?.addSublayer($0) })
+    }
+    
+    private func attributedString(for timestamp: Double) -> NSAttributedString {
+        let pStyle = NSMutableParagraphStyle()
+        pStyle.alignment = .center
+        
+        let timeTextAttributes: [String: Any] = [
+            NSFontAttributeName: NSFont.systemFont(ofSize: 14, weight: NSFontWeightMedium),
+            NSForegroundColorAttributeName: NSColor.playerHighlight,
+            NSParagraphStyleAttributeName: pStyle
+        ]
+        
+        let timeStr = String(timestamp: timestamp) ?? ""
+        
+        return NSAttributedString(string: timeStr, attributes: timeTextAttributes)
     }
     
     private func layoutAnnotationLayer(_ layer: PUIBoringLayer, for annotation: PUITimelineAnnotation, with diameter: CGFloat, animated: Bool = false) {
@@ -356,9 +381,9 @@ public final class PUITimelineView: NSView {
         }
     }
     
-    private var hoveredAnnotation: (PUITimelineAnnotation, PUIBoringLayer)?
+    private var hoveredAnnotation: (PUITimelineAnnotation, PUIAnnotationLayer)?
     
-    private func annotationUnderMouse(with event: NSEvent, diameter: CGFloat = Metrics.annotationBubbleDiameter) -> (annotation: PUITimelineAnnotation, layer: PUIBoringLayer)? {
+    private func annotationUnderMouse(with event: NSEvent, diameter: CGFloat = Metrics.annotationBubbleDiameter) -> (annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer)? {
         var point = convert(event.locationInWindow, from: nil)
         point.x -= diameter / 2
         
@@ -392,7 +417,7 @@ public final class PUITimelineView: NSView {
         mouseOut(ha, layer: hal)
     }
     
-    private func mouseOver(_ annotation: PUITimelineAnnotation, layer: PUIBoringLayer) {
+    private func mouseOver(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
         CATransaction.begin()
         defer { CATransaction.commit() }
         
@@ -400,18 +425,20 @@ public final class PUITimelineView: NSView {
             let s = Metrics.annotationBubbleDiameterHoverScale
             layer.transform = CATransform3DMakeScale(s, s, s)
             layer.borderWidth = 1
+            layer.attachedLayer.animate { layer.attachedLayer.opacity = 1 }
         }
         
         delegate?.timelineDidHighlightAnnotation(annotation)
     }
     
-    private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIBoringLayer) {
+    private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
         CATransaction.begin()
         defer { CATransaction.commit() }
         
         layer.animate {
             layer.transform = CATransform3DIdentity
             layer.borderWidth = 0
+            layer.attachedLayer.animate { layer.attachedLayer.opacity = 0 }
         }
         
         delegate?.timelineDidHighlightAnnotation(nil)
@@ -423,9 +450,11 @@ public final class PUITimelineView: NSView {
         case move
     }
     
-    private func mouseDown(_ annotation: PUITimelineAnnotation, layer: PUIBoringLayer, originalEvent: NSEvent) {
+    private func mouseDown(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer, originalEvent: NSEvent) {
         let startingPoint = self.convert(originalEvent.locationInWindow, from: nil)
         let originalPosition = layer.position
+        
+        let originalTimestampString = layer.attachedLayer.string
         
         var cancelled = true
         
@@ -436,12 +465,39 @@ public final class PUITimelineView: NSView {
             didSet {
                 if oldValue != .delete && mode == .delete {
                     NSCursor.disappearingItem().push()
+                    layer.attachedLayer.animate { layer.attachedLayer.opacity = 0 }
                 } else if oldValue == .delete && mode != .delete {
                     NSCursor.pop()
+                    layer.attachedLayer.animate { layer.attachedLayer.opacity = 1 }
                 } else if mode == .none && cancelled {
                     layer.animate { layer.position = originalPosition }
+                    updateAnnotationTextLayer(with: originalTimestampString)
                 }
             }
+        }
+        
+        func makeTimestamp(for point: CGPoint) -> Double {
+            var timestamp = Double(point.x / self.bounds.width) * self.mediaDuration
+            
+            if timestamp < 0 {
+                timestamp = 0
+            } else if timestamp > self.mediaDuration {
+                timestamp = self.mediaDuration
+            }
+            
+            return timestamp
+        }
+        
+        func updateAnnotationTextLayer(at point: CGPoint) {
+            let timestamp = makeTimestamp(for: point)
+            
+            layer.attachedLayer.string = self.attributedString(for: timestamp)
+        }
+        
+        func updateAnnotationTextLayer(with string: Any?) {
+            guard let str = string else { return }
+            
+            layer.attachedLayer.string = str
         }
         
         window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged, .keyUp], timeout: NSEventDurationForever, mode: .eventTrackingRunLoopMode) { event, stop in
@@ -468,13 +524,7 @@ public final class PUITimelineView: NSView {
                 case .move:
                     cancelled = false
                     
-                    var timestamp = Double(point.x / self.bounds.width) * self.mediaDuration
-                    
-                    if timestamp < 0 {
-                        timestamp = 0
-                    } else if timestamp > self.mediaDuration {
-                        timestamp = self.mediaDuration
-                    }
+                    let timestamp = makeTimestamp(for: point)
                     
                     self.delegate?.timelineDidMoveAnnotation(annotation, to: timestamp)
                 default: break
@@ -483,6 +533,8 @@ public final class PUITimelineView: NSView {
                 mode = .none
                 self.hoveredAnnotation = nil
                 self.mouseOut(annotation, layer: layer)
+                
+                updateAnnotationTextLayer(at: point)
                 
                 stop.pointee = true
             case .leftMouseDragged:
@@ -503,6 +555,8 @@ public final class PUITimelineView: NSView {
                     newPosition.y = originalPosition.y
                     newPosition.x = point.x
                     mode = .move
+                    
+                    updateAnnotationTextLayer(at: point)
                 } else {
                     layer.position = originalPosition
                     mode = .none
