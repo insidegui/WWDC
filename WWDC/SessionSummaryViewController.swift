@@ -24,22 +24,30 @@ class SessionSummaryViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var titleLabel: NSTextField = {
-        let l = NSTextField(labelWithString: "")
+    private lazy var titleLabel: WWDCTextField = {
+        let l = WWDCTextField(labelWithString: "")
         l.font = NSFont.systemFont(ofSize: 24)
         l.textColor = .primaryText
         l.cell?.backgroundStyle = .dark
-        l.lineBreakMode = .byTruncatingTail
+        l.lineBreakMode = .byWordWrapping
+        l.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        l.allowsDefaultTighteningForTruncation = true
+        l.maximumNumberOfLines = 2
         
         return l
     }()
     
     private lazy var summaryLabel: WWDCTextField = {
-        let l = WWDCTextField(wrappingLabelWithString: "")
+        let l = WWDCTextField(labelWithString: "")
         l.font = NSFont.systemFont(ofSize: 18)
         l.textColor = .secondaryText
         l.cell?.backgroundStyle = .dark
-
+        l.isSelectable = true
+        l.lineBreakMode = .byWordWrapping
+        l.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        l.allowsDefaultTighteningForTruncation = true
+        l.maximumNumberOfLines = 5
+        
         return l
     }()
     
@@ -49,6 +57,7 @@ class SessionSummaryViewController: NSViewController {
         l.textColor = .tertiaryText
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byTruncatingTail
+        l.allowsDefaultTighteningForTruncation = true
         
         return l
     }()

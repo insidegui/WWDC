@@ -29,9 +29,7 @@ public final class PUIPlayerView: NSView {
             timelineView.delegate = newValue
         }
     }
-    
-    public var togglesPlaybackOnSingleClick: Bool = false
-    
+        
     public var annotations: [PUITimelineAnnotation] {
         get {
             return sortedAnnotations
@@ -857,36 +855,11 @@ public final class PUIPlayerView: NSView {
     }
     
     public override func mouseDown(with event: NSEvent) {
-        var c = 0
-        var doubleClicked = false
-        var cancelledByDrag = false
-        
-        // allow double-click to enter full screen while still allowing single click to play/pause without playing or pausing on double click
-        while let e = NSApp.nextEvent(matching: [.leftMouseUp, .leftMouseDragged], until: Date().addingTimeInterval(0.2), inMode: .defaultRunLoopMode, dequeue: true) {
-            if e.type == .leftMouseUp {
-                c += 1
-            } else {
-                // if the user drags, we cancel the click interaction
-                cancelledByDrag = true
-            }
-            doubleClicked = c > 1
-        }
-        
-        guard !cancelledByDrag else { return }
-        
-        if doubleClicked {
+        if event.type == .leftMouseDown && event.clickCount == 2 {
             window?.toggleFullScreen(self)
         } else {
-            if togglesPlaybackOnSingleClick {
-                if isPlaying {
-                    player.pause()
-                } else {
-                    player.play()
-                }
-            }
+            super.mouseDown(with: event)
         }
-        
-        super.mouseDown(with: event)
     }
     
     // MARK: - External playback state management
