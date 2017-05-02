@@ -36,6 +36,10 @@ final class VideosSplitViewController: NSSplitViewController {
         
         addSplitViewItem(listItem)
         addSplitViewItem(detailItem)
+        
+        listViewController.view.setContentHuggingPriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
+        detailViewController.view.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        detailViewController.view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
     }
     
 }

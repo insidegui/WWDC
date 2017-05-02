@@ -101,7 +101,6 @@
 		DDAE7C651E5CA81C00CEA205 /* SessionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C641E5CA81C00CEA205 /* SessionsResponse.swift */; };
 		DDAE7C6B1E5CA97A00CEA205 /* SessionsResponseAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C6A1E5CA97A00CEA205 /* SessionsResponseAdapter.swift */; };
 		DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */; };
-		DDB28F711EAD07990077703F /* PlayerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F701EAD07990077703F /* PlayerWindow.swift */; };
 		DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F851EAD20A10077703F /* UIDebugger.m */; };
 		DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */; };
 		DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F901EAD2A050077703F /* WWDCAlert.swift */; };
@@ -290,7 +289,6 @@
 		DDAE7C641E5CA81C00CEA205 /* SessionsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsResponse.swift; sourceTree = "<group>"; };
 		DDAE7C6A1E5CA97A00CEA205 /* SessionsResponseAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsResponseAdapter.swift; sourceTree = "<group>"; };
 		DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VibrantButton.swift; sourceTree = "<group>"; };
-		DDB28F701EAD07990077703F /* PlayerWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerWindow.swift; sourceTree = "<group>"; };
 		DDB28F841EAD20A10077703F /* UIDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDebugger.h; sourceTree = "<group>"; };
 		DDB28F851EAD20A10077703F /* UIDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIDebugger.m; sourceTree = "<group>"; };
 		DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackViewModel.swift; sourceTree = "<group>"; };
@@ -419,7 +417,6 @@
 		DD36A4C01E478CF500B2EA88 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DDB28F701EAD07990077703F /* PlayerWindow.swift */,
 				DD382B771EAC345F009760C4 /* MaskImageView.h */,
 				DD382B781EAC345F009760C4 /* MaskImageView.m */,
 				DD382B791EAC345F009760C4 /* NSImage+CGImage.h */,
@@ -939,7 +936,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDB28F711EAD07990077703F /* PlayerWindow.swift in Sources */,
 				DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */,
 				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
