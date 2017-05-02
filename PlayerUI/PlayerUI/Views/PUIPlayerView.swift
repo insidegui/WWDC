@@ -122,7 +122,7 @@ public final class PUIPlayerView: NSView {
     
     public var hideAllControls: Bool = false {
         didSet {
-            controlsVisualEffectView.isHidden = hideAllControls
+            controlsContainerView.isHidden = hideAllControls
             extrasMenuContainerView.isHidden = hideAllControls
         }
     }
@@ -306,7 +306,7 @@ public final class PUIPlayerView: NSView {
     
     private var extrasMenuContainerView: NSStackView!
     
-    private var controlsVisualEffectView: NSVisualEffectView!
+//    private var controlsVisualEffectView: NSVisualEffectView!
     
     private var timeLabelsContainerView: NSStackView!
     private var controlsContainerView: NSStackView!
@@ -462,14 +462,14 @@ public final class PUIPlayerView: NSView {
     
     private func setupControls() {
         // VFX view
-        controlsVisualEffectView = NSVisualEffectView(frame: bounds)
-        controlsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
-        controlsVisualEffectView.material = .ultraDark
-        controlsVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
-        controlsVisualEffectView.blendingMode = .withinWindow
-        controlsVisualEffectView.wantsLayer = true
-        controlsVisualEffectView.layer?.masksToBounds = false
-        controlsVisualEffectView.state = .active
+//        controlsVisualEffectView = NSVisualEffectView(frame: bounds)
+//        controlsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
+//        controlsVisualEffectView.material = .ultraDark
+//        controlsVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
+//        controlsVisualEffectView.blendingMode = .withinWindow
+//        controlsVisualEffectView.wantsLayer = true
+//        controlsVisualEffectView.layer?.masksToBounds = false
+//        controlsVisualEffectView.state = .active
         
         // Time labels
         timeLabelsContainerView = NSStackView(views: [elapsedTimeLabel, remainingTimeLabel])
@@ -543,17 +543,17 @@ public final class PUIPlayerView: NSView {
         controlsContainerView.wantsLayer = true
         controlsContainerView.layer?.masksToBounds = false
         
-        controlsVisualEffectView.addSubview(controlsContainerView)
-        addSubview(controlsVisualEffectView)
+//        controlsVisualEffectView.addSubview(controlsContainerView)
+        addSubview(controlsContainerView)
         
-        controlsContainerView.leadingAnchor.constraint(equalTo: controlsVisualEffectView.leadingAnchor, constant: 12).isActive = true
-        controlsContainerView.trailingAnchor.constraint(equalTo: controlsVisualEffectView.trailingAnchor, constant: -12).isActive = true
-        controlsContainerView.topAnchor.constraint(equalTo: controlsVisualEffectView.topAnchor, constant: 12).isActive = true
-        controlsContainerView.bottomAnchor.constraint(equalTo: controlsVisualEffectView.bottomAnchor, constant: -12).isActive = true
+//        controlsContainerView.leadingAnchor.constraint(equalTo: controlsVisualEffectView.leadingAnchor, constant: 12).isActive = true
+//        controlsContainerView.trailingAnchor.constraint(equalTo: controlsVisualEffectView.trailingAnchor, constant: -12).isActive = true
+//        controlsContainerView.topAnchor.constraint(equalTo: controlsVisualEffectView.topAnchor, constant: 12).isActive = true
+//        controlsContainerView.bottomAnchor.constraint(equalTo: controlsVisualEffectView.bottomAnchor, constant: -12).isActive = true
         
-        controlsVisualEffectView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        controlsVisualEffectView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        controlsVisualEffectView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        controlsContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
+        controlsContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
+        controlsContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12).isActive = true
         
         timeLabelsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
         timeLabelsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
@@ -781,7 +781,7 @@ public final class PUIPlayerView: NSView {
     private func setControls(opacity: CGFloat, animated: Bool) {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = animated ? 0.4 : 0.0
-            self.controlsVisualEffectView.animator().alphaValue = opacity
+            self.controlsContainerView.animator().alphaValue = opacity
             self.extrasMenuContainerView.animator().alphaValue = opacity
         }, completionHandler: nil)
     }
