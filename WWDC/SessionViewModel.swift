@@ -15,6 +15,7 @@ final class SessionViewModel: NSObject {
     let identifier: String
     let title: String
     let subtitle: String
+    let trackName: String
     let summary: String
     let context: String
     let footer: String
@@ -25,6 +26,8 @@ final class SessionViewModel: NSObject {
     init?(session: Session) {
         guard let event = session.event.first else { return nil }
         guard let track = session.track.first else { return nil }
+        
+        self.trackName = track.name
         
         let year = Calendar.current.component(.year, from: event.startDate)
         
@@ -62,6 +65,21 @@ final class SessionViewModel: NSObject {
         } else {
             self.webUrl = nil
         }
+        
+        super.init()
+    }
+    
+    init(title: String) {
+        self.identifier = title
+        self.title = title
+        self.trackName = ""
+        self.subtitle = ""
+        self.summary = ""
+        self.context = ""
+        self.footer = ""
+        self.color = .clear
+        self.webUrl = nil
+        self.imageUrl = nil
         
         super.init()
     }

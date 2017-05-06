@@ -38,6 +38,14 @@ extension NSColor {
         return NSColor(calibratedRed:0.14, green:0.82, blue:0.92, alpha:1.00)
     }
     
+    static var sectionHeaderBackground: NSColor {
+        return NSColor(calibratedRed:0.40, green:0.40, blue:0.40, alpha:0.97)
+    }
+    
+    static var darkText: NSColor {
+        return NSColor(calibratedRed:0.04, green:0.04, blue:0.04, alpha:1.00)
+    }
+    
     static var selection: NSColor {
         return #colorLiteral(red: 0.07500000000000001, green: 0.4433333333333331, blue: 0.5, alpha: 1)
     }

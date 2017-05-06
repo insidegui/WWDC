@@ -119,6 +119,8 @@
 		DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */; };
 		DDF32EA91EBE29D70028E39D /* PlayerContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EA81EBE29D70028E39D /* PlayerContainerViewController.swift */; };
 		DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */; };
+		DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */; };
+		DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -310,6 +312,8 @@
 		DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindowController.swift; sourceTree = "<group>"; };
 		DDF32EA81EBE29D70028E39D /* PlayerContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContainerViewController.swift; sourceTree = "<group>"; };
 		DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableRowView.swift; sourceTree = "<group>"; };
+		DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRow.swift; sourceTree = "<group>"; };
+		DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleTableCellView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -421,18 +425,13 @@
 		DD36A4C01E478CF500B2EA88 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DD382B771EAC345F009760C4 /* MaskImageView.h */,
-				DD382B781EAC345F009760C4 /* MaskImageView.m */,
-				DD382B791EAC345F009760C4 /* NSImage+CGImage.h */,
-				DD382B7A1EAC345F009760C4 /* NSImage+CGImage.m */,
-				DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */,
-				DD7F386E1EABF631002D8C00 /* NSTableView+IGListKit.swift */,
-				DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */,
+				DDF32EB11EBE34E10028E39D /* Base */,
+				DDF32EB01EBE34CE0028E39D /* TableView */,
 				DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */,
 				DD382B7D1EAC3565009760C4 /* TabItemView.swift */,
 				DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */,
+				DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */,
 				DDB28F901EAD2A050077703F /* WWDCAlert.swift */,
-				DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -442,6 +441,7 @@
 			children = (
 				DDB28F921EAD48D70077703F /* UserActivityRepresentable.swift */,
 				DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */,
+				DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */,
 				DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */,
 			);
 			name = ViewModels;
@@ -739,6 +739,28 @@
 			name = Playback;
 			sourceTree = "<group>";
 		};
+		DDF32EB01EBE34CE0028E39D /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */,
+				DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */,
+				DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */,
+			);
+			name = TableView;
+			sourceTree = "<group>";
+		};
+		DDF32EB11EBE34E10028E39D /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				DD7F386E1EABF631002D8C00 /* NSTableView+IGListKit.swift */,
+				DD382B771EAC345F009760C4 /* MaskImageView.h */,
+				DD382B781EAC345F009760C4 /* MaskImageView.m */,
+				DD382B791EAC345F009760C4 /* NSImage+CGImage.h */,
+				DD382B7A1EAC345F009760C4 /* NSImage+CGImage.m */,
+			);
+			name = Base;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -955,9 +977,11 @@
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* VideosSplitViewController.swift in Sources */,
+				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* MainTabController.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* VideosTableViewController.swift in Sources */,
+				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
 				DD7F38861EAC223F002D8C00 /* ImageCache.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,

@@ -14,12 +14,17 @@ import ConfCore
 
 class VideosTableViewController: NSViewController {
     
+    fileprivate struct Metrics {
+        static let headerRowHeight: CGFloat = 20
+        static let sessionRowHeight: CGFloat = 64
+    }
+    
     private let disposeBag = DisposeBag()
     
     var sessions = Variable<Results<Session>?>(nil)
     var selectedSession = Variable<SessionViewModel?>(nil)
     
-    var viewModels: [SessionViewModel] = [] {
+    var viewModels: [SessionRow] = [] {
         didSet {
             tableView.reload(withOldValue: oldValue, newValue: viewModels)
         }
@@ -43,8 +48,9 @@ class VideosTableViewController: NSViewController {
         v.allowsMultipleSelection = true
         v.backgroundColor = .listBackground
         v.headerView = nil
-        v.rowHeight = 64
+        v.rowHeight = Metrics.sessionRowHeight
         v.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        v.floatsGroupRows = true
         
         let column = NSTableColumn(identifier: "session")
         v.addTableColumn(column)
@@ -90,7 +96,21 @@ class VideosTableViewController: NSViewController {
             
             let sortedSessions = results.sorted(by: Session.standardSort)
             
-            self?.viewModels = sortedSessions.flatMap({ SessionViewModel(session: $0) })
+            var outViewModels: [SessionRow] = []
+            let rowModels = sortedSessions.flatMap(SessionViewModel.init(session:)).map(SessionRow.init(viewModel:))
+            
+            var previousRowModel: SessionRow? = nil
+            for rowModel in rowModels {
+                if rowModel.viewModel.trackName != previousRowModel?.viewModel.trackName {
+                    outViewModels.append(SessionRow(title: rowModel.viewModel.trackName))
+                }
+                
+                outViewModels.append(rowModel)
+                
+                previousRowModel = rowModel
+            }
+            
+            self?.viewModels = outViewModels
         }).addDisposableTo(self.disposeBag)
     }
     
@@ -98,41 +118,110 @@ class VideosTableViewController: NSViewController {
 
 extension VideosTableViewController: NSTableViewDataSource, NSTableViewDelegate {
     
+    private struct Constants {
+        static let sessionCellIdentifier = "sessionCell"
+        static let titleCellIdentifier = "titleCell"
+        static let rowIdentifier = "row"
+    }
+    
     func numberOfRows(in tableView: NSTableView) -> Int {
         return viewModels.count
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        var cell = tableView.make(withIdentifier: "cell", owner: tableView) as? SessionTableCellView
+        let sessionRow = viewModels[row]
         
-        if cell == nil {
-            cell = SessionTableCellView(frame: .zero)
-            cell?.identifier = "cell"
+        switch sessionRow.kind {
+        case .session:
+            return cellForSessionViewModel(sessionRow.viewModel)
+        case .sectionHeader:
+            return cellForSectionTitle(sessionRow.title)
         }
-        
-        cell?.viewModel = viewModels[row]
-        
-        return cell
     }
     
     func tableViewSelectionDidChange(_ notification: Notification) {
         if tableView.selectedRow < 0 {
             selectedSession.value = nil
         } else {
-            let viewModel = viewModels[tableView.selectedRow]
-            selectedSession.value = viewModel
+            let row = viewModels[tableView.selectedRow]
+            guard case .session = row.kind else {
+                selectedSession.value = nil
+                return
+            }
+            
+            selectedSession.value = row.viewModel
         }
     }
     
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        var row = tableView.make(withIdentifier: "row", owner: tableView) as? WWDCTableRowView
+        var rowView = tableView.make(withIdentifier: Constants.rowIdentifier, owner: tableView) as? WWDCTableRowView
         
-        if row == nil {
-            row = WWDCTableRowView(frame: .zero)
-            row?.identifier = "row"
+        if rowView == nil {
+            rowView = WWDCTableRowView(frame: .zero)
+            rowView?.identifier = Constants.rowIdentifier
         }
         
-        return row
+        switch viewModels[row].kind {
+        case .sectionHeader:
+            rowView?.isGroupRowStyle = true
+        default:
+            rowView?.isGroupRowStyle = false
+        }
+        
+        return rowView
+    }
+    
+    private func cellForSessionViewModel(_ viewModel: SessionViewModel) -> SessionTableCellView? {
+        var cell = tableView.make(withIdentifier: Constants.sessionCellIdentifier, owner: tableView) as? SessionTableCellView
+        
+        if cell == nil {
+            cell = SessionTableCellView(frame: .zero)
+            cell?.identifier = Constants.sessionCellIdentifier
+        }
+        
+        cell?.viewModel = viewModel
+        
+        return cell
+    }
+    
+    private func cellForSectionTitle(_ title: String) -> TitleTableCellView? {
+        var cell = tableView.make(withIdentifier: Constants.titleCellIdentifier, owner: tableView) as? TitleTableCellView
+        
+        if cell == nil {
+            cell = TitleTableCellView(frame: .zero)
+            cell?.identifier = Constants.titleCellIdentifier
+        }
+        
+        cell?.title = title
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {        
+        switch viewModels[row].kind {
+        case .session:
+            return Metrics.sessionRowHeight
+        case .sectionHeader:
+            return Metrics.headerRowHeight
+        }
+    }
+    
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        switch viewModels[row].kind {
+        case .sectionHeader:
+            return false
+        case .session:
+            return true
+        }
+    }
+    
+    func tableView(_ tableView: NSTableView, isGroupRow row: Int) -> Bool {
+        switch viewModels[row].kind {
+        case .sectionHeader:
+            return true
+        case .session:
+            return false
+        }
     }
     
 }

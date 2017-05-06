@@ -12,6 +12,11 @@ import IGListKit
 extension NSTableView {
     
     func reload(withOldValue oldValue: [IGListDiffable], newValue: [IGListDiffable]) {
+        guard oldValue.count > 0 else {
+            reloadData()
+            return
+        }
+        
         let diff = IGListDiff(oldValue, newValue, .equality)
         
         beginUpdates()
