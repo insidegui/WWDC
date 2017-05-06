@@ -124,4 +124,15 @@ extension VideosTableViewController: NSTableViewDataSource, NSTableViewDelegate 
         }
     }
     
+    func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
+        var row = tableView.make(withIdentifier: "row", owner: tableView) as? WWDCTableRowView
+        
+        if row == nil {
+            row = WWDCTableRowView(frame: .zero)
+            row?.identifier = "row"
+        }
+        
+        return row
+    }
+    
 }

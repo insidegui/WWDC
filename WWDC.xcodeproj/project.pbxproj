@@ -118,6 +118,7 @@
 		DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */; };
 		DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */; };
 		DDF32EA91EBE29D70028E39D /* PlayerContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EA81EBE29D70028E39D /* PlayerContainerViewController.swift */; };
+		DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -308,6 +309,7 @@
 		DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindowController.swift; sourceTree = "<group>"; };
 		DDF32EA81EBE29D70028E39D /* PlayerContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContainerViewController.swift; sourceTree = "<group>"; };
+		DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -430,6 +432,7 @@
 				DD382B7D1EAC3565009760C4 /* TabItemView.swift */,
 				DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */,
 				DDB28F901EAD2A050077703F /* WWDCAlert.swift */,
+				DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -940,6 +943,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */,
+				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
 				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
 				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
