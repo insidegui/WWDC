@@ -39,7 +39,6 @@ extension Session {
 struct PlaybackViewModel {
     
     let sessionViewModel: SessionViewModel
-    let metadata: VideoPlayerViewControllerMetadata
     let player: AVPlayer
     
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
@@ -48,11 +47,6 @@ struct PlaybackViewModel {
         guard let session = storage.session(with: sessionViewModel.identifier) else {
             throw PlaybackError.sessionNotFound(sessionViewModel.identifier)
         }
-        
-        self.metadata = VideoPlayerViewControllerMetadata(title: sessionViewModel.title,
-                                                          subtitle: sessionViewModel.subtitle,
-                                                          description: sessionViewModel.summary,
-                                                          imageURL: sessionViewModel.imageUrl)
         
         guard let asset = session.asset(of: .streamingVideo) else {
             throw PlaybackError.assetNotFound(session.identifier)

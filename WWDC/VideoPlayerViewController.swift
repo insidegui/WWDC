@@ -12,32 +12,13 @@ import AVKit
 import PIPContainer
 import PlayerUI
 
-public struct VideoPlayerViewControllerMetadata {
-    public let title: String?
-    public let subtitle: String?
-    public let description: String?
-    public let imageURL: URL?
-    
-    public init(title: String?, subtitle: String?, description: String?, imageURL: URL?) {
-        self.title = title
-        self.subtitle = subtitle
-        self.description = description
-        self.imageURL = imageURL
-    }
-}
-
-final class WPLMainView: NSView { }
-final class WPLVideoView: NSView { }
-
 open class VideoPlayerViewController: PIPContainerViewController {
 
-    open let metadata: VideoPlayerViewControllerMetadata
     open let player: AVPlayer
     
     open var detached = false
     
-    public init(player: AVPlayer, metadata: VideoPlayerViewControllerMetadata) {
-        self.metadata = metadata
+    public init(player: AVPlayer) {
         self.player = player
         
         super.init(nibName: nil, bundle: nil)!
@@ -76,7 +57,7 @@ open class VideoPlayerViewController: PIPContainerViewController {
         // ¯\_(ツ)_/¯
         pipWillOpen = { }
         
-        view = WPLMainView(frame: NSZeroRect)
+        view = NSView(frame: NSZeroRect)
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.black.cgColor
         
@@ -102,22 +83,6 @@ open class VideoPlayerViewController: PIPContainerViewController {
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize), options: [.initial, .new], context: nil)
         
         progressIndicator.startAnimation(nil)
-        
-        title = metadata.title
-        
-        let doubleClickGesture = NSClickGestureRecognizer(target: self, action: #selector(doubleClickedPlayerView))
-        doubleClickGesture.numberOfClicksRequired = 2
-        playerContainer.view.addGestureRecognizer(doubleClickGesture)
-        
-        player.play()
-    }
-    
-    @objc fileprivate func doubleClickedPlayerView() {
-        if let playerWindow = view.window as? PUIPlayerWindow {
-            playerWindow.toggleFullScreen(self)
-        } else {
-            detach(forEnteringFullscreen: true)
-        }
     }
     
     // MARK: - Player Observation

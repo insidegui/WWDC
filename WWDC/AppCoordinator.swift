@@ -102,7 +102,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             
             teardownPlayerIfNeeded()
             
-            currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, metadata: playbackViewModel.metadata)
+            currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player)
             
             attachPlayerToShelf()
         } catch {
