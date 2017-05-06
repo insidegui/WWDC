@@ -94,7 +94,7 @@ class VideosTableViewController: NSViewController {
         sessions.asObservable().subscribe(onNext: { [weak self] results in
             guard let results = results else { return }
             
-            let sortedSessions = results.sorted(by: Session.standardSort)
+            let sortedSessions = results.filter(NSPredicate(format: "assets.@count > 0")).sorted(by: Session.standardSort)
             
             var outViewModels: [SessionRow] = []
             let rowModels = sortedSessions.flatMap(SessionViewModel.init(session:)).map(SessionRow.init(viewModel:))
