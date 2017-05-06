@@ -27,6 +27,11 @@ class VideosTableViewController: NSViewController {
     var viewModels: [SessionRow] = [] {
         didSet {
             tableView.reload(withOldValue: oldValue, newValue: viewModels)
+            
+            // make sure the selected session is kept up to date
+            if tableView.selectedRow >= 0 {
+                selectedSession.value = viewModels[tableView.selectedRow].viewModel
+            }
         }
     }
     
@@ -91,6 +96,12 @@ class VideosTableViewController: NSViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
+        tableView.rx.selectedRow.map { index -> SessionViewModel? in
+            guard let index = index else { return nil }
+            
+            return self.viewModels[index].viewModel
+        }.bind(to: selectedSession).addDisposableTo(self.disposeBag)
+        
         sessions.asObservable().subscribe(onNext: { [weak self] results in
             guard let results = results else { return }
             
@@ -136,20 +147,6 @@ extension VideosTableViewController: NSTableViewDataSource, NSTableViewDelegate 
             return cellForSessionViewModel(sessionRow.viewModel)
         case .sectionHeader:
             return cellForSectionTitle(sessionRow.title)
-        }
-    }
-    
-    func tableViewSelectionDidChange(_ notification: Notification) {
-        if tableView.selectedRow < 0 {
-            selectedSession.value = nil
-        } else {
-            let row = viewModels[tableView.selectedRow]
-            guard case .session = row.kind else {
-                selectedSession.value = nil
-                return
-            }
-            
-            selectedSession.value = row.viewModel
         }
     }
     

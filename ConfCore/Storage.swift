@@ -117,4 +117,26 @@ public final class Storage {
         return realm.object(ofType: Session.self, forPrimaryKey: identifier)
     }
     
+    public func createFavorite(for session: Session) {
+        do {
+            try realm.write {
+                session.favorites.append(Favorite())
+            }
+        } catch {
+            NSLog("Error creating favorite for session \(session)")
+        }
+    }
+    
+    public func removeFavorite(for session: Session) {
+        guard let favorite = session.favorites.first else { return }
+        
+        do {
+            try realm.write {
+                realm.delete(favorite)
+            }
+        } catch {
+            NSLog("Error creating favorite for session \(session)")
+        }
+    }
+    
 }

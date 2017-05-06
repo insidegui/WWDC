@@ -61,6 +61,10 @@ final class AppCoordinator {
         return videosController.listViewController.selectedSession.asObservable()
     }
     
+    var selectedSessionValue: SessionViewModel? {
+        return videosController.listViewController.selectedSession.value
+    }
+    
     private func setupBindings() {
         storage.sessions.bind(to: videosController.listViewController.sessions).addDisposableTo(self.disposeBag)
         selectedSession.bind(to: videosController.detailViewController.viewModel).addDisposableTo(self.disposeBag)
@@ -69,7 +73,10 @@ final class AppCoordinator {
     }
     
     private func setupDelegation() {
-        videosController.detailViewController.shelfController.delegate = self
+        let detail = videosController.detailViewController
+        
+        detail.shelfController.delegate = self
+        detail.summaryController.actionsViewController.delegate = self
     }
     
     @IBAction func refresh(_ sender: Any?) {
@@ -86,87 +93,6 @@ final class AppCoordinator {
         windowController.showWindow(self)
         
         refresh(nil)
-    }
-    
-}
-
-// MARK: - Video playback management
-
-extension AppCoordinator: ShelfViewControllerDelegate {
-    
-    func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController) {
-        guard let viewModel = videosController.detailViewController.viewModel.value else { return }
-        
-        do {
-            let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
-            
-            teardownPlayerIfNeeded()
-            
-            currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player)
-            
-            attachPlayerToShelf()
-        } catch {
-            WWDCAlert.show(with: error)
-        }
-    }
-    
-    private func teardownPlayerIfNeeded() {
-        guard let playerController = currentPlayerController else { return }
-        
-        playerController.player.pause()
-        playerController.player.cancelPendingPrerolls()
-        
-        // close detached window
-        if let window = playerController.view.window {
-            if window != windowController.window {
-                window.close()
-            }
-        }
-        
-        playerController.view.removeFromSuperview()
-        
-        currentPlayerController = nil
-    }
-    
-    private func attachPlayerToShelf() {
-        guard let playerController = currentPlayerController else { return }
-        
-        let shelf = videosController.detailViewController.shelfController
-        
-        shelf.addChildViewController(playerController)
-        
-        playerController.view.frame = shelf.view.bounds
-        playerController.view.alphaValue = 0
-        
-        shelf.view.addSubview(playerController.view)
-        
-        shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
-        shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
-        
-        playerController.view.alphaValue = 1
-    }
-    
-}
-
-// MARK: - User Activity
-
-extension AppCoordinator {
-    
-    func updateCurrentActivity(with item: UserActivityRepresentable?) {
-        guard let item = item else {
-            currentActivity?.invalidate()
-            currentActivity = nil
-            return
-        }
-        
-        let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
-        
-        activity.title = item.title
-        activity.webpageURL = item.webUrl
-        
-        activity.becomeCurrent()
-        
-        currentActivity = activity
     }
     
 }

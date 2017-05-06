@@ -23,7 +23,11 @@ final class SessionViewModel: NSObject {
     let color: NSColor
     let webUrl: URL?
     
+    let session: Session
+    
     init?(session: Session) {
+        self.session = session
+        
         guard let event = session.event.first else { return nil }
         guard let track = session.track.first else { return nil }
         
@@ -80,6 +84,7 @@ final class SessionViewModel: NSObject {
         self.color = .clear
         self.webUrl = nil
         self.imageUrl = nil
+        self.session = Session()
         
         super.init()
     }
@@ -130,3 +135,11 @@ extension SessionViewModel: IGListDiffable {
 }
 
 extension SessionViewModel: UserActivityRepresentable { }
+
+extension SessionViewModel {
+    
+    var isFavorite: Bool {
+        return session.favorites.count > 0
+    }
+    
+}

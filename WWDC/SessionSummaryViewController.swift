@@ -37,6 +37,23 @@ class SessionSummaryViewController: NSViewController {
         return l
     }()
     
+    lazy var actionsViewController: SessionActionsViewController = {
+        let v = SessionActionsViewController()
+        
+        return v
+    }()
+    
+    private lazy var titleStack: NSStackView = {
+        let v = NSStackView(views: [self.titleLabel, self.actionsViewController.view])
+        
+        v.orientation = .horizontal
+        v.alignment = .top
+        v.distribution = .equalSpacing
+        v.spacing = 22
+        
+        return v
+    }()
+    
     private lazy var summaryLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
         l.font = NSFont.systemFont(ofSize: 18)
@@ -63,7 +80,7 @@ class SessionSummaryViewController: NSViewController {
     }()
     
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.titleLabel, self.summaryLabel, self.contextLabel])
+        let v = NSStackView(views: [self.titleStack, self.summaryLabel, self.contextLabel])
         
         v.orientation = .vertical
         v.alignment = .leading
@@ -94,6 +111,8 @@ class SessionSummaryViewController: NSViewController {
         title.asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).addDisposableTo(self.disposeBag)
         summary.asDriver(onErrorJustReturn: "").drive(summaryLabel.rx.text).addDisposableTo(self.disposeBag)
         footer.asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).addDisposableTo(self.disposeBag)
+        
+        viewModel.asObservable().bind(to: actionsViewController.viewModel).addDisposableTo(self.disposeBag)
     }
     
 }

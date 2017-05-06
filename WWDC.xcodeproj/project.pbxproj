@@ -121,6 +121,11 @@
 		DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */; };
 		DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */; };
 		DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */; };
+		DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */; };
+		DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */; };
+		DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */; };
+		DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */; };
+		DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -314,6 +319,11 @@
 		DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableRowView.swift; sourceTree = "<group>"; };
 		DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRow.swift; sourceTree = "<group>"; };
 		DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleTableCellView.swift; sourceTree = "<group>"; };
+		DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionActionsViewController.swift; sourceTree = "<group>"; };
+		DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+UserActivity.swift"; sourceTree = "<group>"; };
+		DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Shelf.swift"; sourceTree = "<group>"; };
+		DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+SessionActions.swift"; sourceTree = "<group>"; };
+		DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTableView+Rx.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -408,6 +418,9 @@
 			children = (
 				DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */,
 				DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */,
+				DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */,
+				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
+				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
 			);
 			name = Bootstrap;
 			sourceTree = "<group>";
@@ -613,6 +626,7 @@
 			isa = PBXGroup;
 			children = (
 				DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */,
+				DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */,
 				DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */,
 			);
 			name = Sessions;
@@ -742,6 +756,7 @@
 		DDF32EB01EBE34CE0028E39D /* TableView */ = {
 			isa = PBXGroup;
 			children = (
+				DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */,
 				DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */,
 				DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */,
 				DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */,
@@ -971,6 +986,7 @@
 				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
 				DD7F38781EAC0C98002D8C00 /* ShelfViewController.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
+				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
@@ -983,11 +999,13 @@
 				DD7F38621EABD6CF002D8C00 /* VideosTableViewController.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
+				DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */,
 				DD7F38861EAC223F002D8C00 /* ImageCache.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
 				DDF32EA91EBE29D70028E39D /* PlayerContainerViewController.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
+				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
 				DD7F386F1EABF631002D8C00 /* NSTableView+IGListKit.swift in Sources */,
@@ -995,9 +1013,11 @@
 				DD382B7B1EAC345F009760C4 /* MaskImageView.m in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
+				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
 				DD382B7C1EAC345F009760C4 /* NSImage+CGImage.m in Sources */,
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
 				DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */,
+				DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

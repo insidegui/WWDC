@@ -8,11 +8,19 @@
 
 import Cocoa
 
-final class PUIButton: NSControl {
+public final class PUIButton: NSControl {
     
-    var showsMenuOnLeftClick = false
+    public var isToggle = false
     
-    var image: NSImage? {
+    public var state: Int = NSOffState {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    public var showsMenuOnLeftClick = false
+    
+    public var image: NSImage? {
         didSet {
             guard let image = image else { return }
             
@@ -32,7 +40,7 @@ final class PUIButton: NSControl {
         }
     }
     
-    override func draw(_ dirtyRect: NSRect) {
+    public override func draw(_ dirtyRect: NSRect) {
         if let maskImage = maskImage {
             drawMask(maskImage)
         } else {
@@ -45,7 +53,7 @@ final class PUIButton: NSControl {
         
         ctx.clip(to: bounds, mask: maskImage)
         
-        if shouldDrawHighlighted {
+        if shouldDrawHighlighted || state == NSOnState {
             ctx.setFillColor(NSColor.playerHighlight.cgColor)
         } else if !isEnabled {
             ctx.setFillColor(NSColor.buttonColor.withAlphaComponent(0.5).cgColor)
@@ -62,7 +70,7 @@ final class PUIButton: NSControl {
         image.draw(in: bounds)
     }
     
-    override var intrinsicContentSize: NSSize {
+    public override var intrinsicContentSize: NSSize {
         if let image = image {
             return image.size
         } else {
@@ -76,13 +84,13 @@ final class PUIButton: NSControl {
         }
     }
     
-    override var isEnabled: Bool {
+    public override var isEnabled: Bool {
         didSet {
             setNeedsDisplay()
         }
     }
     
-    override func mouseDown(with event: NSEvent) {
+    public override func mouseDown(with event: NSEvent) {
         guard isEnabled else { return }
         
         guard !showsMenuOnLeftClick else {
@@ -100,6 +108,9 @@ final class PUIButton: NSControl {
         }
         
         if let action = action, let target = target {
+            if isToggle {
+                self.state = (self.state == NSOnState) ? NSOffState : NSOnState
+            }
             NSApp.sendAction(action, to: target, from: self)
         }
     }
@@ -110,11 +121,11 @@ final class PUIButton: NSControl {
         menu.popUp(positioning: nil, at: .zero, in: self)
     }
     
-    override var effectiveAppearance: NSAppearance {
+    public override var effectiveAppearance: NSAppearance {
         return NSAppearance(named: NSAppearanceNameVibrantDark)!
     }
     
-    override var allowsVibrancy: Bool {
+    public override var allowsVibrancy: Bool {
         return true
     }
     
