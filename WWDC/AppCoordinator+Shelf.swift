@@ -57,6 +57,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         
         playerController.view.frame = shelf.view.bounds
         playerController.view.alphaValue = 0
+        playerController.view.translatesAutoresizingMaskIntoConstraints = false
         
         shelf.view.addSubview(playerController.view)
         
