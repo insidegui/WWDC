@@ -712,7 +712,7 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction public func toggleFullscreen(_ sender: Any?) {
-        window?.toggleFullScreen(sender)
+        delegate?.playerViewDidSelectToggleFullScreen(self)
     }
     
     private func modifyCurrentTime(with seconds: Double, using function: (CMTime, CMTime) -> CMTime) {
@@ -856,7 +856,7 @@ public final class PUIPlayerView: NSView {
     
     public override func mouseDown(with event: NSEvent) {
         if event.type == .leftMouseDown && event.clickCount == 2 {
-            window?.toggleFullScreen(self)
+            toggleFullscreen(self)
         } else {
             super.mouseDown(with: event)
         }

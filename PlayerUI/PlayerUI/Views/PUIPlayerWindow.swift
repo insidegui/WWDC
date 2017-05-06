@@ -39,11 +39,7 @@ open class PUIPlayerWindow: NSWindow {
     fileprivate var titlebarWidgets = Set<NSButton>()
     
     fileprivate func appearanceForWidgets() -> NSAppearance? {
-        if allowsPiPMode {
-            return NSAppearance(appearanceNamed: "PiPZoom", bundle: Bundle(for: PUIPlayerWindow.self))
-        } else {
-            return NSAppearance(named: NSAppearanceNameAqua)
-        }
+        return NSAppearance(named: NSAppearanceNameAqua)
     }
     
     fileprivate func applyAppearanceToWidgets() {
@@ -217,111 +213,6 @@ open class PUIPlayerWindow: NSWindow {
         }
     }
     
-    // MARK: - PiP Mode
-    
-    open var allowsPiPMode = false {
-        didSet {
-            applyAppearanceToWidgets()
-            if isInPiPMode {
-                exitPiPMode()
-            }
-        }
-    }
-    
-    @objc open var isInPiPMode = false
-    
-    open override func toggleFullScreen(_ sender: Any?) {
-        if canEnterPiPMode || isInPiPMode {
-            togglePiPMode(sender as AnyObject?)
-        } else {
-            self.reallyDoToggleFullScreenImNotEvenKiddingItsRealThisTimeISwear(sender as AnyObject?)
-        }
-    }
-    
-    @IBAction open func reallyDoToggleFullScreenImNotEvenKiddingItsRealThisTimeISwear(_ sender: AnyObject?) {
-        super.toggleFullScreen(sender)
-    }
-    
-    fileprivate var canEnterPiPMode: Bool {
-        return allowsPiPMode && !isInPiPMode && !styleMask.contains(.fullScreen) && screen != nil
-    }
-    
-    fileprivate var levelBeforePiPMode: Int = 0
-    fileprivate var collectionBehaviorBeforePiPMode: NSWindowCollectionBehavior = []
-    fileprivate var frameBeforePiPMode: NSRect = NSZeroRect
-    
-    @IBAction open func togglePiPMode(_ sender: AnyObject?) {
-        if isInPiPMode {
-            exitPiPMode()
-        } else {
-            enterPiPMode()
-        }
-    }
-    
-    fileprivate func enterPiPMode() {
-        guard canEnterPiPMode else { return }
-        guard !isInPiPMode else { return }
-        
-        willChangeValue(forKey: "isInPiPMode")
-        
-        hideTitlebar()
-        isInPiPMode = true
-        
-        frameBeforePiPMode = frame
-        levelBeforePiPMode = level
-        collectionBehaviorBeforePiPMode = collectionBehavior
-        
-        collectionBehavior = [.canJoinAllSpaces, .stationary, .fullScreenPrimary]
-        level = Int(CGWindowLevelForKey(CGWindowLevelKey.maximumWindow))
-        setFrame(frameForPiPMode, display: true, animate: true)
-        
-        didChangeValue(forKey: "isInPiPMode")
-    }
-    
-    fileprivate func exitPiPMode() {
-        guard isInPiPMode else { return }
-        
-        willChangeValue(forKey: "isInPiPMode")
-        isInPiPMode = false
-        
-        let aspectBeforePiP = aspectRatio
-        resizeIncrements = NSSize(width: 1.0, height: 1.0)
-        setFrame(frameBeforePiPMode, display: true, animate: true)
-        aspectRatio = aspectBeforePiP
-        
-        collectionBehavior = collectionBehaviorBeforePiPMode
-        level = levelBeforePiPMode
-        didChangeValue(forKey: "isInPiPMode")
-    }
-    
-    fileprivate var frameForPiPMode: NSRect {
-        guard let screen = screen else { return frame }
-        
-        struct PiPConstants {
-            static let width = CGFloat(320.0)
-            static let height = CGFloat(134.0)
-        }
-        
-        let baseRect = NSRect(
-            x: 0,
-            y: 0,
-            width: PiPConstants.width,
-            height: PiPConstants.height
-        )
-        
-        var effectiveAspectRatio = aspectRatio
-        if (effectiveAspectRatio == .zero) {
-            effectiveAspectRatio = NSSize(width: 960.0, height: 400.0)
-        }
-        
-        var effectiveRect = AVMakeRect(aspectRatio: effectiveAspectRatio, insideRect: baseRect)
-        
-        effectiveRect.origin.x = screen.frame.width - effectiveRect.width - 40.0
-        effectiveRect.origin.y = 40.0
-        
-        return effectiveRect
-    }
-    
 }
 
 private class PUIPlayerWindowContentView: NSView {
@@ -419,14 +310,6 @@ private class PUIPlayerWindowOverlayView: NSView {
     
     fileprivate override func draw(_ dirtyRect: NSRect) {
         return
-    }
-    
-    fileprivate override func mouseUp(with event: NSEvent) {
-        super.mouseUp(with: event)
-        
-        if event.clickCount == 2 {
-            self.PUIPlayerWindow?.reallyDoToggleFullScreenImNotEvenKiddingItsRealThisTimeISwear(self)
-        }
     }
     
     deinit {

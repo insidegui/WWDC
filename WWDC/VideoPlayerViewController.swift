@@ -8,11 +8,9 @@
 
 import Cocoa
 import AVFoundation
-import AVKit
-import PIPContainer
 import PlayerUI
 
-open class VideoPlayerViewController: PIPContainerViewController {
+open class VideoPlayerViewController: NSViewController {
 
     open let player: AVPlayer
     
@@ -54,9 +52,6 @@ open class VideoPlayerViewController: PIPContainerViewController {
     }()
     
     open override func loadView() {
-        // ¯\_(ツ)_/¯
-        pipWillOpen = { }
-        
         view = NSView(frame: NSZeroRect)
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.black.cgColor
@@ -78,6 +73,8 @@ open class VideoPlayerViewController: PIPContainerViewController {
     
     override open func viewDidLoad() {
         super.viewDidLoad()
+        
+        playerContainer.playerView.delegate = self
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize), options: [.initial, .new], context: nil)
@@ -142,26 +139,26 @@ open class VideoPlayerViewController: PIPContainerViewController {
     
 }
 
-private final class PlayerContainerViewController: NSViewController {
+extension VideoPlayerViewController: PUIPlayerViewDelegate {
     
-    let player: AVPlayer
-    
-    var playerView: PUIPlayerView {
-        return view as! PUIPlayerView
+    public func playerViewDidSelectTogglePiP(_ playerView: PUIPlayerView) {
+        // TODO: PiP will have to be implemented directly instead of using PIPContainer
+        let alert = NSAlert()
+        alert.messageText = "Not Implemented"
+        alert.informativeText = "PiP is not implemented yet"
+        alert.runModal()
     }
     
-    init(player: AVPlayer) {
-        self.player = player
+    public func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView) {
+        if let playerWindow = playerView.window as? PUIPlayerWindow {
+            playerWindow.toggleFullScreen(self)
+        } else {
+            detach(forEnteringFullscreen: true)
+        }
+    }
+    
+    public func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, from view: NSView?) {
         
-        super.init(nibName: nil, bundle: nil)!
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func loadView() {
-        view = PUIPlayerView(player: player)
     }
     
 }
