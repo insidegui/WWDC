@@ -116,6 +116,8 @@ open class VideoPlayerViewController: NSViewController {
     fileprivate var detachedWindowController: VideoPlayerWindowController!
     
     open func detach(forEnteringFullscreen fullscreen: Bool = false) {
+        view.translatesAutoresizingMaskIntoConstraints = true
+        
         detachedWindowController = VideoPlayerWindowController(playerViewController: self, fullscreenOnly: fullscreen, originalContainer: view.superview)
         detachedWindowController.contentViewController = self
         
