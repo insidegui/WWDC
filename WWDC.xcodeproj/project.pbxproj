@@ -110,7 +110,6 @@
 		DDB28F991EAD4DF90077703F /* PIPContainer.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DDB28F981EAD4DEE0077703F /* PIPContainer.framework.dSYM */; };
 		DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */; };
 		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
-		DDCE7ED71EA7A2C300C7A3CA /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDCE7ED61EA7A2C300C7A3CA /* WWDC.car */; };
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
 		DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */; };
 		DDE29EC71EB529F200680703 /* PlayerUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBFA16F1EB525F3004AE10F /* PlayerUI.framework */; };
@@ -128,6 +127,7 @@
 		DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */; };
 		DDFA10BD1EBEA584001DCF66 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BC1EBEA584001DCF66 /* Download.swift */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
+		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -312,7 +312,6 @@
 		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWDCAppearance.h; sourceTree = "<group>"; };
 		DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWDCAppearance.m; sourceTree = "<group>"; };
-		DDCE7ED61EA7A2C300C7A3CA /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = WWDC.car; sourceTree = "<group>"; };
 		DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksJSONAdapter.swift; sourceTree = "<group>"; };
 		DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
@@ -328,6 +327,7 @@
 		DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTableView+Rx.swift"; sourceTree = "<group>"; };
 		DDFA10BC1EBEA584001DCF66 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -740,7 +740,7 @@
 		DDCE7ECE1EA7A1A600C7A3CA /* Look */ = {
 			isa = PBXGroup;
 			children = (
-				DDCE7ED61EA7A2C300C7A3CA /* WWDC.car */,
+				DDFA10C51EBFA578001DCF66 /* WWDC.car */,
 				DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */,
 				DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */,
 				DD7F38701EABF6C4002D8C00 /* Colors.swift */,
@@ -927,7 +927,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */,
-				DDCE7ED71EA7A2C300C7A3CA /* WWDC.car in Resources */,
+				DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */,
 				DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

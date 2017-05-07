@@ -57,6 +57,22 @@ class SessionActionsViewController: NSViewController {
         return b
     }()
     
+    private lazy var downloadIndicator: NSProgressIndicator = {
+        let pi = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: 24, height: 24))
+        
+        pi.style = .spinningStyle
+        pi.isIndeterminate = false
+        pi.minValue = 0
+        pi.maxValue = 1
+        pi.doubleValue = 0
+        pi.translatesAutoresizingMaskIntoConstraints = false
+        pi.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        pi.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        pi.isHidden = true
+        
+        return pi
+    }()
+    
     private lazy var shareButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
@@ -68,7 +84,7 @@ class SessionActionsViewController: NSViewController {
     }()
     
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.favoriteButton, self.downloadButton, self.shareButton])
+        let v = NSStackView(views: [self.favoriteButton, self.downloadButton, self.downloadIndicator, self.shareButton])
         
         v.orientation = .horizontal
         v.spacing = 22
@@ -93,10 +109,32 @@ class SessionActionsViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.asObservable().observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
-            guard let viewModel = viewModel else { return }
+        let isFavorite = viewModel.asObservable().ignoreNil().flatMap({ $0.rxIsFavorite })
+        let validDownload = viewModel.asObservable().ignoreNil().flatMap({ $0.rxValidDownload })
+        
+        isFavorite.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] fave in
+            self.favoriteButton.state = fave ? NSOnState : NSOffState
+        }).addDisposableTo(self.disposeBag)
+        
+        validDownload.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] download in
+            guard let download = download else {
+                self.downloadIndicator.isHidden = true
+                self.downloadButton.isHidden = false
+                return
+            }
             
-            self?.favoriteButton.state = viewModel.isFavorite ? NSOnState : NSOffState
+            switch download.status {
+            case .downloading:
+                self.downloadIndicator.isHidden = false
+                self.downloadButton.isHidden = true
+                self.downloadIndicator.doubleValue = download.progress
+            case .completed:
+                self.downloadIndicator.isHidden = true
+                self.downloadButton.isHidden = false
+            default:
+                // TODO: handle other download statuses
+                print("Download status not handled: \(download.status)")
+            }
         }).addDisposableTo(self.disposeBag)
     }
     

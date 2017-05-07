@@ -68,6 +68,16 @@ final class SessionViewModel: NSObject {
         return Observable.from(object: self.session).map({ SessionViewModel.webUrl(for: $0) })
     }()
     
+    lazy var rxValidDownload: Observable<Download?> = {
+        let downloadAssets = self.session.assets.filter("rawAssetType == %@ AND SUBQUERY(downloads, $download, $download.rawStatus != %@).@count > 0", SessionAssetType.hdVideo.rawValue, DownloadStatus.none.rawValue)
+        
+        return Observable.collection(from: downloadAssets).map({ $0.first?.downloads.first })
+    }()
+    
+    lazy var rxIsFavorite: Observable<Bool> = {
+        return Observable.from(object: self.session).map({ $0.favorites.count > 0 })
+    }()
+    
     lazy var rxModelChange: Variable<Int> = {
         return Variable<Int>(0)
     }()

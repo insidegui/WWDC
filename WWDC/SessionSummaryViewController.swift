@@ -40,6 +40,8 @@ class SessionSummaryViewController: NSViewController {
     lazy var actionsViewController: SessionActionsViewController = {
         let v = SessionActionsViewController()
         
+        v.view.isHidden = true
+        
         return v
     }()
     
@@ -103,6 +105,8 @@ class SessionSummaryViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewModel.asObservable().map({ $0 == nil }).bind(to: actionsViewController.view.rx.isHidden).addDisposableTo(self.disposeBag)
         
         let title = viewModel.asObservable().ignoreNil().flatMap({ $0.rxTitle })
         let summary = viewModel.asObservable().ignoreNil().flatMap({ $0.rxSummary })
