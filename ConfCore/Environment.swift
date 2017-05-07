@@ -23,10 +23,6 @@ extension Environment {
     public static var current: Environment {
         if ProcessInfo.processInfo.arguments.contains("--test") {
             return .test
-        } else if ProcessInfo.processInfo.arguments.contains("--contingency") {
-            return .contingencyTest
-        } else if ProcessInfo.processInfo.arguments.contains("--post-contingency") {
-            return .postContingencyTest
         } else {
             return .production
         }
@@ -37,18 +33,6 @@ extension Environment {
                                          sessionsPath: "/sessions.json",
                                          newsPath: "/news.json",
                                          liveVideosPath: "/videos_live.json")
-    
-    public static let contingencyTest = Environment(baseURL: "http://localhost:9042",
-                                                    videosPath: "/videos_contingency.json",
-                                                    sessionsPath: "/sessions_contingency.json",
-                                                    newsPath: "/news.json",
-                                                    liveVideosPath: "/videos_live.json")
-    
-    public static let postContingencyTest = Environment(baseURL: "http://localhost:9042",
-                                                        videosPath: "/videos_post_contingency.json",
-                                                        sessionsPath: "/sessions_post_contingency.json",
-                                                        newsPath: "/news.json",
-                                                        liveVideosPath: "/videos_live.json")
     
     public static let production = Environment(baseURL: "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/xhgbpyutb6wvn2xcrbcz",
                                          videosPath: "/videos.json",

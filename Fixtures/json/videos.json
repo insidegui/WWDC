@@ -1,5 +1,5 @@
 {
-  "updated": "2016-07-12T10:43:33-07:00",
+  "updated": "2017-07-12T10:43:33-07:00",
   "tracks": [
     "App Frameworks",
     "System Frameworks",
@@ -12,7 +12,7 @@
   ],
   "sessions": [
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Learn how to make your tvOS interface more dynamic, intuitive, and high-performing with tips and tricks learned in this session.",
       "focus": [
         "tvOS"
@@ -32,12 +32,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/subtitles/eng/210_sd_mastering_uikit_on_tvos.vtt",
       "location": "Presidio",
       "duration": 2280,
-      "start_date": "2016-06-15T10:00:00-07:00",
-      "end_date": "2016-06-15T10:40:00-07:00",
+      "start_date": "2017-06-15T10:00:00-07:00",
+      "end_date": "2017-06-15T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/210"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "watchOS 3 brings together notifications, complications, and the new Dock to keep your apps glanceable and responsive. Find out about the new additions to watchOS to create stunning visuals and learn about new snapshotting APIs to ensure your app is up to date when people glance at their wrist. Take a tour of watchOS 3 enhancements with us and find out which sessions you won't want to miss throughout the week.",
       "focus": [
         "watchOS"
@@ -57,12 +57,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/208j30f4v1a1i9i5fg9/208/subtitles/eng/208_sd_whats_new_in_watchos_3.vtt",
       "location": "Presidio",
       "duration": 2696,
-      "start_date": "2016-06-14T17:00:00-07:00",
-      "end_date": "2016-06-14T18:00:00-07:00",
+      "start_date": "2017-06-14T17:00:00-07:00",
+      "end_date": "2017-06-14T18:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/208"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Core Motion enables your applications to access a wide array of sensors on iOS and watchOS devices. Discover how steps and activity detection can be used with user elevation changes to develop fitness apps. Explore ways to observe wrist rotation and effort and translate them to immersive health and fitness experiences.",
       "focus": [
         "iOS",
@@ -83,12 +83,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/713uqrvfj3uo0xewc37/713/subtitles/eng/713_sd_health_and_fitness_with_core_motion.vtt",
       "location": "Nob Hill",
       "duration": 2176,
-      "start_date": "2016-06-16T15:00:00-07:00",
-      "end_date": "2016-06-16T15:40:00-07:00",
+      "start_date": "2017-06-16T15:00:00-07:00",
+      "end_date": "2017-06-16T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/713"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Xcode 8 makes it easier to find several new categories of bugs with improvements in Runtime Sanitization and the Clang Static Analyzer. The Thread Sanitizer will help you find data races and other concurrency bugs. The static analyzer has been extended to search for localizability issues, check nullability, and find memory leaks in MRR code.",
       "focus": [
         "iOS",
@@ -111,12 +111,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/412jzguxz4h8hykgjlm/412/subtitles/eng/412_sd_thread_sanitizer_and_static_analysis.vtt",
       "location": "Mission",
       "duration": 2000,
-      "start_date": "2016-06-16T10:00:00-07:00",
-      "end_date": "2016-06-16T10:40:00-07:00",
+      "start_date": "2017-06-16T10:00:00-07:00",
+      "end_date": "2017-06-16T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/412"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Get the latest news and updates from the Wallet and Apple Pay teams. Learn how to integrate Apple Pay into more places than ever before including watchOS, iOS Messages and Intents extensions. Learn about new tools to make testing and developing your Apple Pay-enabled apps even easier. We'll also cover new features in Wallet for retailers, banks, and card issuers.",
       "focus": [
         "iOS",
@@ -138,12 +138,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/704s1a6rjyi2dqhhyi7/704/subtitles/eng/704_sd_whats_new_with_wallet_and_apple_pay.vtt",
       "location": "Mission",
       "duration": 2028,
-      "start_date": "2016-06-14T15:00:00-07:00",
-      "end_date": "2016-06-14T15:40:00-07:00",
+      "start_date": "2017-06-14T15:00:00-07:00",
+      "end_date": "2017-06-14T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/704"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "This year, Apple Pay is coming to the web with Safari on both macOS and iOS. Now you can experience the convenience and security of Apple Pay in your store, in your app, and on your website. Discover how easy it is to set up Apple Pay on the web, and learn how designing for Apple Pay can increase conversions, user engagement, and customer satisfaction.",
       "focus": [
         "iOS",
@@ -165,12 +165,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/703rx8zlfedjfom6l93/703/subtitles/eng/703_sd_apple_pay_on_the_web.vtt",
       "location": "Mission",
       "duration": 3149,
-      "start_date": "2016-06-14T13:40:00-07:00",
-      "end_date": "2016-06-14T14:40:00-07:00",
+      "start_date": "2017-06-14T13:40:00-07:00",
+      "end_date": "2017-06-14T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/703"
     },
     {
-      "date": "2016-06-13",
+      "date": "2017-06-13",
       "description": "WWDC 2016 Keynote",
       "focus": [
         "iOS",
@@ -193,12 +193,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/101g0jrsvv5qcoduisk/101/subtitles/eng/101_sd_keynote.vtt",
       "location": "Bill Graham Civic Auditorium",
       "duration": 7370,
-      "start_date": "2016-06-13T10:00:00-07:00",
-      "end_date": "2016-06-13T12:00:00-07:00",
+      "start_date": "2017-06-13T10:00:00-07:00",
+      "end_date": "2017-06-13T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/101"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "ReplayKit is an easy-to-use framework that enables players to share gameplay recordings or broadcast live games to players and viewers online. Watch how live broadcasting can help build community and create new fans for your apps and games. Understand the APIs to include player commentary via the microphone and front-facing camera on iPhone and iPad, and check out new support for ReplayKit on Apple TV.",
       "focus": [
         "iOS",
@@ -219,12 +219,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/601nsio90cd7ylwimk9/601/subtitles/eng/601_sd_go_live_with_replaykit.vtt",
       "location": "Mission",
       "duration": 1572,
-      "start_date": "2016-06-14T10:00:00-07:00",
-      "end_date": "2016-06-14T10:40:00-07:00",
+      "start_date": "2017-06-14T10:00:00-07:00",
+      "end_date": "2017-06-14T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/601"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Learn about advanced techniques in TVML based apps, such as bridging between native and javascript code, creating your own custom views for use inside of templates, creating your own custom templates, how to introduce UIKit view controllers alongside TVMLKit based templates, and additional best practices you can apply to your apps.",
       "focus": [
         "tvOS"
@@ -244,12 +244,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/229b09xkrv3t6tdzwsu/229/subtitles/eng/229_sd_developing_tvos_apps_using_tvmlkit_part_2.vtt",
       "location": "Nob Hill",
       "duration": 2506,
-      "start_date": "2016-06-16T16:00:00-07:00",
-      "end_date": "2016-06-16T16:40:00-07:00",
+      "start_date": "2017-06-16T16:00:00-07:00",
+      "end_date": "2017-06-16T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/229"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Take an advanced class in Testing and Xcode Server. You'll gain an in-depth knowledge on the lifecycle of a test, how they're are hosted, and how using modern observation can help you make bulletproof tests for your app. Then, learn about changes in Xcode Server that make continuous integration easier than ever, including configuring your own user for testing, enhancements to issue tracking, email notifications and support for crash logs.",
       "focus": [
         "iOS",
@@ -272,12 +272,12 @@
       "subtitles": null,
       "location": "Pacific Heights",
       "duration": 2210,
-      "start_date": "2016-06-15T15:00:00-07:00",
-      "end_date": "2016-06-15T15:40:00-07:00",
+      "start_date": "2017-06-15T15:00:00-07:00",
+      "end_date": "2017-06-15T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/409"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "watchOS 3 represents a big leap forward for Apple Watch and the apps that run on it. Performance improvements, powerful graphics and animation capabilities, deeper access to device capabilities, and a refined navigation model lay the foundation for designing useful and stunning Apple Watch apps. Learn best practices and techniques for making complications, notifications and apps that are highly actionable, glanceable and responsive.",
       "focus": [
         "watchOS"
@@ -297,12 +297,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/804zpr8et6qv87n8j1z/804/subtitles/eng/804_sd_designing_great_apple_watch_experiences.vtt",
       "location": "Presidio",
       "duration": 3366,
-      "start_date": "2016-06-15T13:40:00-07:00",
-      "end_date": "2016-06-15T14:40:00-07:00",
+      "start_date": "2017-06-15T13:40:00-07:00",
+      "end_date": "2017-06-15T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/804"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Direct onscreen manipulation is the cornerstone of the user experience on iOS. iOS 10 includes new support for making onscreen interactions even more immersive and interactive. Dive straight into the philosophy and techniques of building completely interactive, interruptible animations in your apps.",
       "focus": [
         "iOS",
@@ -323,8 +323,8 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/216v55u6zpxizxkml6k/216/subtitles/eng/216_sd_advances_in_uikit_animations_and_transitions.vtt",
       "location": "Pacific Heights",
       "duration": 2776,
-      "start_date": "2016-06-15T17:00:00-07:00",
-      "end_date": "2016-06-15T17:40:00-07:00",
+      "start_date": "2017-06-15T17:00:00-07:00",
+      "end_date": "2017-06-15T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/216"
     },
     {
@@ -353,7 +353,7 @@
       "webpageURL": "https://developer.apple.com/wwdc16/511"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "SceneKit is a fully featured high-level graphics framework enabling your apps and games to create 3D animated scenes and effects. Witness the biggest leap forward in SceneKit yet with the introduction of its new Physically-Based Renderer (PBR). Dive into new APIs for accurate materials, physically-based lights, HDR effects, and enhancements in Model I/O. Walk through an example game using PBR and see how to integrate its workflow into your development.",
       "focus": [
         "iOS",
@@ -376,12 +376,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/609pxdzx9vsps1l0qdh/609/subtitles/eng/609_sd_advances_in_scenekit_rendering.vtt",
       "location": "Mission",
       "duration": 3154,
-      "start_date": "2016-06-16T11:00:00-07:00",
-      "end_date": "2016-06-16T12:00:00-07:00",
+      "start_date": "2017-06-16T11:00:00-07:00",
+      "end_date": "2017-06-16T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/609"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Xcode enables you to create great apps for Apple platforms. This session will introduce you to the basics of creating a project with Xcode, and more. You'll learn how to comfortably navigate your project and gain insights into working with workspaces, targets, and schemes. We'll introduce you to version control workflows, and walk through using Xcode's source editors and design tools. Join us if you're new to Apple platforms or want to learn more about using Xcode.",
       "focus": [
         "iOS",
@@ -404,12 +404,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/413jz6eb2wkfuzwx1me/413/subtitles/eng/413_sd_introduction_to_xcode.vtt",
       "location": "Nob Hill",
       "duration": 3163,
-      "start_date": "2016-06-16T13:40:00-07:00",
-      "end_date": "2016-06-16T14:40:00-07:00",
+      "start_date": "2017-06-16T13:40:00-07:00",
+      "end_date": "2017-06-16T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/413"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "The Accelerate framework gives you fast, energy efficient signal and image processing and linear algebra libraries. Learn about new libraries dedicated to high performance neural networks and numerical integration.",
       "focus": [
         "iOS",
@@ -430,12 +430,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/715v2nxofqo5an4q79a/715/subtitles/eng/715_sd_neural_networks_and_accelerate.vtt",
       "location": "Mission",
       "duration": 1919,
-      "start_date": "2016-06-16T16:00:00-07:00",
-      "end_date": "2016-06-16T16:40:00-07:00",
+      "start_date": "2017-06-16T16:00:00-07:00",
+      "end_date": "2017-06-16T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/715"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Typography is essential to an app's form and function. Learn principles of good typography and techniques to apply them to your work. Make the most of the advanced features in our system fonts, and learn best practices for using custom fonts.",
       "focus": [
         "iOS",
@@ -458,12 +458,12 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 1648,
-      "start_date": "2016-06-15T09:00:00-07:00",
-      "end_date": "2016-06-15T09:40:00-07:00",
+      "start_date": "2017-06-15T09:00:00-07:00",
+      "end_date": "2017-06-15T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/803"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Apps are quickly changing how we experience TV today, and tvOS is the foundation upon which new apps and ideas are being built. Take your app to the next level with great new features in tvOS 10. Learn all about the new interface appearance APIs, support for badging and notifications, and more.",
       "focus": [
         "tvOS"
@@ -483,12 +483,12 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 2318,
-      "start_date": "2016-06-14T15:00:00-07:00",
-      "end_date": "2016-06-14T15:40:00-07:00",
+      "start_date": "2017-06-14T15:00:00-07:00",
+      "end_date": "2017-06-14T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/206"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Dive into the latest additions to Game Center, Apple's social gaming network. Check out new capabilities for persistent game sessions and how they provide added flexibility for single-player, real-time multiplayer, and turn-based games. Learn about changes that streamline Game Center and a new way to send game invites and join multiplayer matches.",
       "focus": [
         "iOS",
@@ -511,12 +511,12 @@
       "subtitles": null,
       "location": "Mission",
       "duration": 2148,
-      "start_date": "2016-06-17T10:00:00-07:00",
-      "end_date": "2016-06-17T10:40:00-07:00",
+      "start_date": "2017-06-17T10:00:00-07:00",
+      "end_date": "2017-06-17T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/611"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "watchOS 3 adds a lineup of technologies for developing games that are responsive, lightweight, and fun. Gain insights into techniques for creating great games for Apple Watch. Discover how to take advantage of gesture recognizers and the Digital Crown for gameplay, SpriteKit and SceneKit for 2D and 3D graphics, and Game Center for turn-based multiplayer games.",
       "focus": [
         "watchOS"
@@ -536,12 +536,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/612qhqi7kh3399jwhy7/612/subtitles/eng/612_sd_game_technologies_for_apple_watch.vtt",
       "location": "Mission",
       "duration": 2230,
-      "start_date": "2016-06-17T15:00:00-07:00",
-      "end_date": "2016-06-17T15:40:00-07:00",
+      "start_date": "2017-06-17T15:00:00-07:00",
+      "end_date": "2017-06-17T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/612"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "CallKit is a new framework that lets your VoIP app integrate tightly with the native Phone UI. Learn how you can have your incoming calls displayed fully on the lock screen. Get details on how people can choose to use your app when making calls from the native Phone app's contacts, favorites, and recents. See how adopting CallKit lets your app coexist seamlessly with other active calls, and allow your calls to interact with CarPlay and Bluetooth accessories.",
       "focus": [
         "iOS"
@@ -561,12 +561,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/230b83wfxc7m69dm90q/230/subtitles/eng/230_sd_enhancing_voip_apps_with_callkit.vtt",
       "location": "Mission",
       "duration": 2153,
-      "start_date": "2016-06-16T17:00:00-07:00",
-      "end_date": "2016-06-16T17:40:00-07:00",
+      "start_date": "2017-06-16T17:00:00-07:00",
+      "end_date": "2017-06-16T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/230"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Gain specific insights into tuning your application for better I/O performance. Learn best practices to reduce local storage operations and trim your memory usage. Get details on how to update your app to increase responsiveness and extend battery life.",
       "focus": [
         "iOS",
@@ -589,12 +589,12 @@
       "subtitles": null,
       "location": "Nob Hill",
       "duration": 2854,
-      "start_date": "2016-06-17T11:00:00-07:00",
-      "end_date": "2016-06-17T12:00:00-07:00",
+      "start_date": "2017-06-17T11:00:00-07:00",
+      "end_date": "2017-06-17T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/719"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Learn by example how to integrate SiriKit into your app. See how easily you can create your first Intents extension to expose your app's core functionality in Siri. Find out how to bring your app's user interface into Siri, creating a unique and recognizable experience for your customers.",
       "focus": [
         "iOS"
@@ -614,12 +614,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/225e97ww3majsu3bvt8/225/subtitles/eng/225_sd_extending_your_apps_with_sirikit.vtt",
       "location": "Presidio",
       "duration": 3226,
-      "start_date": "2016-06-16T13:40:00-07:00",
-      "end_date": "2016-06-16T14:40:00-07:00",
+      "start_date": "2017-06-16T13:40:00-07:00",
+      "end_date": "2017-06-16T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/225"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Learn about all of the new, and a few existing, features of Xcode source editor. See how you can make the most of new code completion features, Swift image and color literals, and snippets. We'll also show how to add commands to the source editor with new Xcode Extensions that you can distribute on the Mac App Store.",
       "focus": [
         "iOS",
@@ -642,12 +642,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/414k6h6qdzyihpowpaa/414/subtitles/eng/414_sd_using_and_extending_the_xcode_source_editor.vtt",
       "location": "Pacific Heights",
       "duration": 2223,
-      "start_date": "2016-06-16T17:00:00-07:00",
-      "end_date": "2016-06-16T17:40:00-07:00",
+      "start_date": "2017-06-16T17:00:00-07:00",
+      "end_date": "2017-06-16T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/414"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "See what's new in subscriptions. Learn how our improvements give you more flexibility and control over pricing, and provide powerful incentives to engage and retain your customers.",
       "focus": [
         "iOS",
@@ -669,12 +669,12 @@
       "subtitles": null,
       "location": "Pacific Heights",
       "duration": 2074,
-      "start_date": "2016-06-14T16:00:00-07:00",
-      "end_date": "2016-06-14T16:40:00-07:00",
+      "start_date": "2017-06-14T16:00:00-07:00",
+      "end_date": "2017-06-14T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/301"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "In this first part of a two part series, explore the motivation and concepts necessary to take advantage of trait collections. Walk through building an interface in Xcode and learn from the experts how to take advantage of new features to more easily create your app for different device sizes and configurations.",
       "focus": [
         "iOS",
@@ -696,12 +696,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/222l873ttj77llkzbzs/222/subtitles/eng/222_sd_making_apps_adaptive_part_1.vtt",
       "location": "Presidio",
       "duration": 2266,
-      "start_date": "2016-06-16T11:00:00-07:00",
-      "end_date": "2016-06-16T11:40:00-07:00",
+      "start_date": "2017-06-16T11:00:00-07:00",
+      "end_date": "2017-06-16T11:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/222"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Launching an App is a complicated and subtle process and the ramifications on launch times of different App design patterns are often non-obvious. Come learn what happens in the time between when an App begins launching and when the main() function gets control and how that time relates to the code and structure of your App. Learn about the inner details of the dynamic loader, dyld, and best practices for structuring your code to perform at its best from the very start.",
       "focus": [
         "iOS",
@@ -724,12 +724,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/406i3zbazbegkeh0udt/406/subtitles/eng/406_sd_optimizing_app_startup_time.vtt",
       "location": "Mission",
       "duration": 2362,
-      "start_date": "2016-06-15T10:00:00-07:00",
-      "end_date": "2016-06-15T10:40:00-07:00",
+      "start_date": "2017-06-15T10:00:00-07:00",
+      "end_date": "2017-06-15T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/406"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "You're familiar with Keynote for making presentations, but it's also a powerful tool for exploring, iterating and refining user interface layouts and workflows. Learn techniques and best practices for using Keynote to quickly and persuasively express your product ideas by building realistic and tangible design comps and user flows.",
       "focus": [],
       "id": "805",
@@ -747,12 +747,12 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 2495,
-      "start_date": "2016-06-17T10:00:00-07:00",
-      "end_date": "2016-06-17T10:40:00-07:00",
+      "start_date": "2017-06-17T10:00:00-07:00",
+      "end_date": "2017-06-17T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/805"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "The best way to avoid technical debt is to incrementally build-up technical credit. This session builds on last year's Modernizing Existing Apps with Swift presentation to show you how you can continue modernizing your codebase while adopting best practices and adding new feature work.",
       "focus": [
         "iOS",
@@ -775,12 +775,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/213r47rtymgcyythv7w/213/subtitles/eng/213_sd_improving_existing_apps_with_modern_best_practices.vtt",
       "location": "Presidio",
       "duration": 2259,
-      "start_date": "2016-06-15T15:00:00-07:00",
-      "end_date": "2016-06-15T15:40:00-07:00",
+      "start_date": "2017-06-15T15:00:00-07:00",
+      "end_date": "2017-06-15T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/213"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "CareKit is a new open source framework designed to help you create personal care apps that can monitor, present and share personal health information. Learn how to create and extend Care Cards and an Insight Dashboard, and to package information for sharing with families or professional caregivers.",
       "focus": [
         "iOS"
@@ -800,12 +800,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/237e12rha4rg2t0p53u/237/subtitles/eng/237_sd_getting_started_with_carekit.vtt",
       "location": "Pacific Heights",
       "duration": 1875,
-      "start_date": "2016-06-17T15:00:00-07:00",
-      "end_date": "2016-06-17T15:40:00-07:00",
+      "start_date": "2017-06-17T15:00:00-07:00",
+      "end_date": "2017-06-17T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/237"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Even consumer-focused apps are used by people in business and education. See how minor changes can fine tune your app to meet the needs of these large organizations. Learn best practices for synching user-specific content on Shared iPad and how to add deep-link support for Classroom app, authentication integration via Touch ID, AppConfig driven customization, and much more.",
       "focus": [
         "iOS",
@@ -826,12 +826,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/304heg1mrvxxz5lhd4h/304/subtitles/eng/304_sd_best_practices_for_building_apps_used_in_business_and_education.vtt",
       "location": "Nob Hill",
       "duration": 2809,
-      "start_date": "2016-06-15T13:40:00-07:00",
-      "end_date": "2016-06-15T14:40:00-07:00",
+      "start_date": "2017-06-15T13:40:00-07:00",
+      "end_date": "2017-06-15T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/304"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "While the Swift language makes it easy to write software that is incredibly fast and safe by design, Swift being open source means you can use it on an even broader range of platforms, from mobile devices to the desktop and in the cloud. Come for an overview of available projects at Swift.org and examples of the community in action.",
       "focus": [
         "iOS",
@@ -854,12 +854,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/415kvwo632dbu5csn3g/415/subtitles/eng/415_sd_going_serverside_with_swift_open_source.vtt",
       "location": "Mission",
       "duration": 2274,
-      "start_date": "2016-06-17T09:00:00-07:00",
-      "end_date": "2016-06-17T09:40:00-07:00",
+      "start_date": "2017-06-17T09:00:00-07:00",
+      "end_date": "2017-06-17T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/415"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Underlying nearly every iOS, macOS, watchOS, and tvOS application sits the Foundation framework. See how improvements to the fundamental set of API in Foundation will improve the experience of using Swift for the entire Cocoa and Cocoa Touch SDK. Learn how Foundation framework's new value types, adoption of standard library protocols, additional type safety, better generics, and custom operators will also make your own Swift code safer, faster, and more expressive.",
       "focus": [
         "iOS",
@@ -882,12 +882,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/207i37356qcyyh2yxos/207/subtitles/eng/207_sd_whats_new_in_foundation_for_swift.vtt",
       "location": "Mission",
       "duration": 2207,
-      "start_date": "2016-06-14T16:00:00-07:00",
-      "end_date": "2016-06-14T16:40:00-07:00",
+      "start_date": "2017-06-14T16:00:00-07:00",
+      "end_date": "2017-06-14T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/207"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "The next wave of the Internet's evolution is happening now. You'll learn best practices for supporting IPv6, restricting cellular usage, and using Quality of Service to create a fast lane for your iOS apps. Discover how to support a multilingual Internet by using UTF-8, and how new internationalized domain names and email addresses affect you.",
       "focus": [
         "iOS",
@@ -910,12 +910,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/714urluxe140lardrb7/714/subtitles/eng/714_sd_networking_for_the_modern_internet.vtt",
       "location": "Pacific Heights",
       "duration": 2366,
-      "start_date": "2016-06-16T15:00:00-07:00",
-      "end_date": "2016-06-16T15:40:00-07:00",
+      "start_date": "2017-06-16T15:00:00-07:00",
+      "end_date": "2017-06-16T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/714"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Discover the fascinating details behind the display of color on Apple platforms. Go beyond the basics and learn how your apps can take advantage of a wider and deeper representation of color on iOS and macOS. Gain specific insights from the experts on optimizing your artwork asset pipeline and explore new API to develop more vivd, true to life experiences.",
       "focus": [
         "iOS",
@@ -937,12 +937,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/712ugi7vg8jznn3pc3u/712/subtitles/eng/712_sd_working_with_wide_color.vtt",
       "location": "Mission",
       "duration": 3177,
-      "start_date": "2016-06-16T13:40:00-07:00",
-      "end_date": "2016-06-16T14:40:00-07:00",
+      "start_date": "2017-06-16T13:40:00-07:00",
+      "end_date": "2017-06-16T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/712"
     },
     {
-      "date": "2016-06-13",
+      "date": "2017-06-13",
       "description": "Join us for an unforgettable award ceremony celebrating developers and their outstanding work. The 2016 Apple Design Awards recognize state of the art iOS, macOS, watchOS, and tvOS apps that reflect excellence in design and innovation.",
       "focus": [
         "iOS",
@@ -965,12 +965,12 @@
       "subtitles": null,
       "location": "Bill Graham Civic Auditorium",
       "duration": 4070,
-      "start_date": "2016-06-13T16:30:00-07:00",
-      "end_date": "2016-06-13T17:30:00-07:00",
+      "start_date": "2017-06-13T16:30:00-07:00",
+      "end_date": "2017-06-13T17:30:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/103"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Making your app accessible helps you reach all of your potential users. Get introduced to the new Accessibility Inspector and learn how it streamlines finding and fixing accessibility issues across all Apple platforms. Go beyond the basics with our experts as they guide you through the process of optimizing accessibility for your app",
       "focus": [
         "iOS",
@@ -993,12 +993,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/407itxn2ujs52fwcgw5/407/subtitles/eng/407_sd_auditing_your_apps_for_accessibility.vtt",
       "location": "Nob Hill",
       "duration": 2041,
-      "start_date": "2016-06-15T10:00:00-07:00",
-      "end_date": "2016-06-15T10:40:00-07:00",
+      "start_date": "2017-06-15T10:00:00-07:00",
+      "end_date": "2017-06-15T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/407"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Following some simple practices when writing your app can help make it world-ready. Learn about what's new, how to take greater advantage of existing frameworks, and review some common pitfalls and how to avoid them. Hear some ideas for going one step further and optimizing your app for different countries.",
       "focus": [
         "iOS",
@@ -1021,12 +1021,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/201h1g4asm31ti2l9n1/201/subtitles/eng/201_sd_internationalization_best_practices.vtt",
       "location": "Mission",
       "duration": 1934,
-      "start_date": "2016-06-14T09:00:00-07:00",
-      "end_date": "2016-06-14T09:40:00-07:00",
+      "start_date": "2017-06-14T09:00:00-07:00",
+      "end_date": "2017-06-14T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/201"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Join us for an introduction to TVMLKit, a template-based UI layout technology that is part of tvOS. Learn about new features coming in tvOS 10, as well as best practices in architecting your application, styling and customization of templates, and media playback.",
       "focus": [
         "tvOS"
@@ -1046,12 +1046,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/212s41rh77qgdg26s86/212/subtitles/eng/212_sd_developing_tvos_apps_using_tvmlkit_part_1.vtt",
       "location": "Mission",
       "duration": 3405,
-      "start_date": "2016-06-15T13:40:00-07:00",
-      "end_date": "2016-06-15T14:40:00-07:00",
+      "start_date": "2017-06-15T13:40:00-07:00",
+      "end_date": "2017-06-15T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/212"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "AVFoundation is a powerful framework for media operations, providing capture, editing, playback, and export. Learn about new APIs and methods for media playback. Create seamless loops, simplify your playback logic with \"autowait\", and see how to deliver an even faster playback startup experience.",
       "focus": [
         "iOS",
@@ -1074,12 +1074,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/503lkp4vimgv7tqecn7/503/subtitles/eng/503_sd_advances_in_avfoundation_playback.vtt",
       "location": "Mission",
       "duration": 2193,
-      "start_date": "2016-06-15T09:00:00-07:00",
-      "end_date": "2016-06-15T09:40:00-07:00",
+      "start_date": "2017-06-15T09:00:00-07:00",
+      "end_date": "2017-06-15T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/503"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "The UIKit framework provides the crucial infrastructure needed to construct and manage iOS apps, and UIKit continues to advance the state of the art for app design with many new features. Dive straight into new features across the iOS frameworks that allow your apps to take advantage of many new system services, as well as to offer services to other apps. This is your first stop to discover the many sessions to see about harnessing the power of iOS 10.",
       "focus": [
         "iOS",
@@ -1101,12 +1101,12 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 3399,
-      "start_date": "2016-06-14T13:40:00-07:00",
-      "end_date": "2016-06-14T14:40:00-07:00",
+      "start_date": "2017-06-14T13:40:00-07:00",
+      "end_date": "2017-06-14T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/205"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Messages allows your apps to create an expressive experience within a conversation. Get an overview of the iMessage App architecture. See how Xcode can easily create a simple sticker pack with your art. Learn how to make an iMessage app that has a custom sticker grid and can make any image you create into a sticker. Go beyond the basic sticker and create animated stickers. Learn how to perfect your iMessage app presentation and layout.",
       "focus": [
         "iOS"
@@ -1126,12 +1126,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/204t23fvanrkj7a1oj7/204/subtitles/eng/204_sd_imessage_apps_and_stickers_part_1.vtt",
       "location": "Presidio",
       "duration": 2165,
-      "start_date": "2016-06-14T11:00:00-07:00",
-      "end_date": "2016-06-14T11:40:00-07:00",
+      "start_date": "2017-06-14T11:00:00-07:00",
+      "end_date": "2017-06-14T11:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/204"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Push and locally scheduled notifications can provide people with timely information and provide them with the ability to take appropriate actions in response. Hear about the new APIs to schedule, respond to, and manage delivery of notifications. Learn how to write an extension to decrypt and augment push notifications before they are displayed.",
       "focus": [
         "iOS",
@@ -1154,12 +1154,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/707s77u9e6pv0dy9ggm/707/subtitles/eng/707_sd_introduction_to_notifications.vtt",
       "location": "Pacific Heights",
       "duration": 2280,
-      "start_date": "2016-06-15T09:00:00-07:00",
-      "end_date": "2016-06-15T09:40:00-07:00",
+      "start_date": "2017-06-15T09:00:00-07:00",
+      "end_date": "2017-06-15T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/707"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Apple TV presents an incredible opportunity for developers to create new games made for the living room. See how the Game Controller framework can tap into the Siri Remote to harness touch and the built-in accelerometer and gyroscope to deliver engaging gameplay. Learn how to fully integrate MFi controllers, and understand best practices for developing titles that require a game controller.",
       "focus": [
         "iOS",
@@ -1180,12 +1180,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/607odzb3n443nv9ei5p/607/subtitles/eng/607_sd_controlling_game_input_for_apple_tv.vtt",
       "location": "Mission",
       "duration": 2252,
-      "start_date": "2016-06-15T17:00:00-07:00",
-      "end_date": "2016-06-15T17:40:00-07:00",
+      "start_date": "2017-06-15T17:00:00-07:00",
+      "end_date": "2017-06-15T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/607"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "The Apple LLVM compiler in Xcode 8 adds new language features, improved diagnostics, and more powerful optimizations. Get an overview of some new Objective-C and C++ features and learn how to use advanced optimizations to speed up your apps.",
       "focus": [
         "iOS",
@@ -1208,12 +1208,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/405i2ilotov3bazyei1/405/subtitles/eng/405_sd_whats_new_in_llvm.vtt",
       "location": "Pacific Heights",
       "duration": 2418,
-      "start_date": "2016-06-14T17:00:00-07:00",
-      "end_date": "2016-06-14T17:40:00-07:00",
+      "start_date": "2017-06-14T17:00:00-07:00",
+      "end_date": "2017-06-14T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/405"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Learn how to make your apps faster and more efficient in this introduction to Time Profiler in Instruments. Walk through how to use Time Profiler to measure your app's performance. Learn how Time Profiler works and can be used to identify problems and verify your fixes. Discover how easy it is to improve your app's power usage and performance by using Instruments throughout your development process.",
       "focus": [
         "iOS",
@@ -1236,12 +1236,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/418kmcxcwg4psxzsjuy/418/subtitles/eng/418_sd_using_time_profiler_in_instruments.vtt",
       "location": "Nob Hill",
       "duration": 1973,
-      "start_date": "2016-06-17T15:00:00-07:00",
-      "end_date": "2016-06-17T15:40:00-07:00",
+      "start_date": "2017-06-17T15:00:00-07:00",
+      "end_date": "2017-06-17T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/418"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "ResearchKit is an open source framework you can use to build compelling apps that gather and present meaningful data used in medical research. Learn about new capabilities, how to create and extend surveys, how to create active tasks that use touch or other built-in and third-party accessory features, and how to effectively participate in the community.",
       "focus": [
         "iOS"
@@ -1261,12 +1261,12 @@
       "subtitles": null,
       "location": "Nob Hill",
       "duration": 1919,
-      "start_date": "2016-06-17T10:00:00-07:00",
-      "end_date": "2016-06-17T10:40:00-07:00",
+      "start_date": "2017-06-17T10:00:00-07:00",
+      "end_date": "2017-06-17T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/234"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "The Metal shading language is an easy-to-use programming language for writing graphics and compute functions which execute on the GPU. Dive deeper into understanding the design patterns, memory access models, and detailed shader coding best practices which reduce bottlenecks and hide latency. Intended for experienced shader authors with a solid understanding of GPU architecture and hoping to extract every possible cycle.",
       "focus": [
         "iOS",
@@ -1287,12 +1287,12 @@
       "subtitles": null,
       "location": "Nob Hill",
       "duration": 2475,
-      "start_date": "2016-06-15T15:00:00-07:00",
-      "end_date": "2016-06-15T15:40:00-07:00",
+      "start_date": "2017-06-15T15:00:00-07:00",
+      "end_date": "2017-06-15T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/606"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Wildlife populations across the globe face innumerable threats that have resulted in dwindling numbers of many species. Ginette Hemley, SVP of Wildlife Conservation at World Wildlife Fund, will take us through many of the bold new approaches to conservation that organizations like WWF are taking to tackle these challenges. One of the most promising and potentially game-changing ideas for solving conservation problems around the world is by applying technology in creative new ways. From examining polar bear DNA to utilizing devices such as thermal imaging cameras and gunshot detectors to drawing upon the power of social networks and apps, learn about the surprising ways that WWF and its partners are harnessing the power of technology to keep up with the planet's most urgent wildlife conservation challenges.",
       "focus": [],
       "id": "105",
@@ -1310,12 +1310,12 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 3600,
-      "start_date": "2016-06-15T12:20:00-07:00",
-      "end_date": "2016-06-15T13:20:00-07:00",
+      "start_date": "2017-06-15T12:20:00-07:00",
+      "end_date": "2017-06-15T13:20:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/105"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "People love to take pictures with iPhone. In fact, it's the most popular camera in the world, and photography apps empower this experience. Explore new AVFoundation Capture APIs which allow for the capture of Live Photos, RAW image data from the camera, and wide color photos.",
       "focus": [
         "iOS"
@@ -1335,8 +1335,8 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/501l32ujtbnw2ad06wy/501/subtitles/eng/501_sd_advances_in_ios_photography.vtt",
       "location": "Pacific Heights",
       "duration": 3582,
-      "start_date": "2016-06-14T11:00:00-07:00",
-      "end_date": "2016-06-14T12:00:00-07:00",
+      "start_date": "2017-06-14T11:00:00-07:00",
+      "end_date": "2017-06-14T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/501"
     },
     {
@@ -1365,7 +1365,7 @@
       "webpageURL": "https://developer.apple.com/wwdc16/723"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Quick interactions are essential for creating a compelling Apple Watch app. Gain insights into new gesture, Digital Crown, navigation, and notification APIs, and see how to use these API alongside SceneKit and SpriteKit to create rich, glanceable interfaces. Explore how this expanded toolbox can help make your watch apps quick and responsive.",
       "focus": [
         "watchOS"
@@ -1385,12 +1385,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/211m4cro5y3rrsfzfdj/211/subtitles/eng/211_sd_quick_interaction_techniques_for_watchos.vtt",
       "location": "Presidio",
       "duration": 2062,
-      "start_date": "2016-06-15T11:00:00-07:00",
-      "end_date": "2016-06-15T11:40:00-07:00",
+      "start_date": "2017-06-15T11:00:00-07:00",
+      "end_date": "2017-06-15T11:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/211"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "The Apple File System (APFS) is the next-generation file system designed to scale from an Apple Watch to a Mac Pro. APFS is optimized for Flash/SSD storage, and engineered with encryption as a primary feature. Learn about APFS benefits versus HFS+ and how to make sure your file system code is compatible.",
       "focus": [
         "iOS",
@@ -1413,12 +1413,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/701q0pnn0ietcautcrv/701/subtitles/eng/701_sd_introducing_apple_file_system.vtt",
       "location": "Nob Hill",
       "duration": 2181,
-      "start_date": "2016-06-14T10:00:00-07:00",
-      "end_date": "2016-06-14T10:40:00-07:00",
+      "start_date": "2017-06-14T10:00:00-07:00",
+      "end_date": "2017-06-14T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/701"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Using On-Demand Resources allows you to create smaller app bundles, enable faster downloads, and add more content than ever before on iOS and tvOS. Learn the recommended approach for delivering apps packaged with On-Demand Resources. Explore strategies for pre-fetching content and understand how to optimize the first-launch experience.",
       "focus": [
         "iOS",
@@ -1439,12 +1439,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/221l723gdmjyvv5pmw7/221/subtitles/eng/221_sd_optimizing_ondemand_resources.vtt",
       "location": "Nob Hill",
       "duration": 1653,
-      "start_date": "2016-06-16T10:00:00-07:00",
-      "end_date": "2016-06-16T10:40:00-07:00",
+      "start_date": "2017-06-16T10:00:00-07:00",
+      "end_date": "2017-06-16T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/221"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Core Data is a framework that you can use to manage the model layer objects in your application, providing generalized and automated solutions to common tasks associated with object life cycle, object graph management, and persistence. Learn about the latest advancements in and explore best practices for taking full advantage of this powerful framework.",
       "focus": [
         "iOS",
@@ -1466,12 +1466,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/242vdhuk4hmwrxnb465/242/subtitles/eng/242_sd_whats_new_in_core_data.vtt",
       "location": "Pacific Heights",
       "duration": 2294,
-      "start_date": "2016-06-17T10:00:00-07:00",
-      "end_date": "2016-06-17T10:40:00-07:00",
+      "start_date": "2017-06-17T10:00:00-07:00",
+      "end_date": "2017-06-17T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/242"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "White House Champion of Change, Forbes 30 under 30 leader, and BBC Women of Africa Hero, Haben Girma is an acclaimed accessibility and inclusion advocate. The first deaf blind person to graduate from Harvard Law School, Haben champions equal access to information for people with disabilities, earning her recognition from both President Obama and President Clinton. Through this presentation, Haben will share how designing with accessibility in mind benefits not just users with disabilities, but developers, too. Throughout history, disability has sparked innovation, leading to breakthroughs in wide-ranging inventions from keyboards to telephones. Hear Haben's remarkable story and learn how incorporating universal access principles into product development can increase access for people with disabilities while simultaneously improving the overall usability of your app.",
       "focus": [],
       "id": "104",
@@ -1489,12 +1489,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/104b1061nbty638w2cd/104/subtitles/eng/104_sd_disability_and_innovation_the_universal_benefits_of_accessible_design.vtt",
       "location": "Presidio",
       "duration": 3600,
-      "start_date": "2016-06-14T12:20:00-07:00",
-      "end_date": "2016-06-14T13:20:00-07:00",
+      "start_date": "2017-06-14T12:20:00-07:00",
+      "end_date": "2017-06-14T13:20:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/104"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Learn about new developments in Privacy on iOS, macOS, watchOS, and tvOS that impact you and your apps. Explore techniques to respect your users' privacy while building great features into your apps.",
       "focus": [
         "iOS",
@@ -1517,12 +1517,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/709tvxadw201avg5v7n/709/subtitles/eng/709_sd_engineering_privacy_for_your_users.vtt",
       "location": "Pacific Heights",
       "duration": 2331,
-      "start_date": "2016-06-15T16:00:00-07:00",
-      "end_date": "2016-06-15T16:40:00-07:00",
+      "start_date": "2017-06-15T16:00:00-07:00",
+      "end_date": "2017-06-15T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/709"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Designing security into your app requires that you follow secure coding practices and use the security features that are built into the operating system. Learn about new developments in Security on iOS, macOS, watchOS and tvOS that impact your apps. Hear about best practices for developing and distributing secure apps and protecting people's data.",
       "focus": [
         "iOS",
@@ -1545,12 +1545,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/706sgjvzkvg6rrg9icw/706/subtitles/eng/706_sd_whats_new_in_security.vtt",
       "location": "Nob Hill",
       "duration": 1990,
-      "start_date": "2016-06-14T17:00:00-07:00",
-      "end_date": "2016-06-14T17:40:00-07:00",
+      "start_date": "2017-06-14T17:00:00-07:00",
+      "end_date": "2017-06-14T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/706"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "GameplayKit provides developers a collection of essential tools and techniques used to implement modern gameplay algorithms. Learn what's new in GameplayKit and check out advances in pathfinding, autonomous agents, and game AI, as well as many enhancements supporting GameplayKit in Xcode. Tap into new capabilities for 2D and 3D spatial partitioning, and explore noise-based procedural data generation useful for height maps, natural textures, and more.",
       "focus": [
         "iOS",
@@ -1572,12 +1572,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/608p3mqohp4bat0id7s/608/subtitles/eng/608_sd_whats_new_in_gameplaykit.vtt",
       "location": "Pacific Heights",
       "duration": 2472,
-      "start_date": "2016-06-16T09:00:00-07:00",
-      "end_date": "2016-06-16T09:40:00-07:00",
+      "start_date": "2017-06-16T09:00:00-07:00",
+      "end_date": "2017-06-16T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/608"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "NSURLSession provides a rich set of methods to support uploading and downloading content via HTTP and newer HTTP-based protocols, authentication with web servers, local caching of resources, and transfers that occur in the background while your app isn't running — simplifying the complexities of modern day networking. Learn about new enhancements in HTTP/2, introspection capabilities with networking metrics, and security and privacy enhancements for you and your customers.",
       "focus": [
         "iOS",
@@ -1600,12 +1600,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/711tlraheg74mofg3uq/711/subtitles/eng/711_sd_nsurlsession_new_features_and_best_practices.vtt",
       "location": "Presidio",
       "duration": 2523,
-      "start_date": "2016-06-16T10:00:00-07:00",
-      "end_date": "2016-06-16T10:40:00-07:00",
+      "start_date": "2017-06-16T10:00:00-07:00",
+      "end_date": "2017-06-16T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/711"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "CloudKit is the framework that powers iCloud services on all of Apple's platforms. Learn about the new features that have been added over the past year, and dive deep into the new sharing APIs that lets you share private data between iCloud users.",
       "focus": [
         "iOS",
@@ -1628,12 +1628,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/226aey4ryxex6rvqvn1/226/subtitles/eng/226_sd_whats_new_with_cloudkit.vtt",
       "location": "Presidio",
       "duration": 2645,
-      "start_date": "2016-06-16T15:00:00-07:00",
-      "end_date": "2016-06-16T15:40:00-07:00",
+      "start_date": "2017-06-16T15:00:00-07:00",
+      "end_date": "2017-06-16T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/226"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Swift 3 provides new interfaces that make it easier than ever to write applications with Grand Central Dispatch. Learn the basics of GCD and best practices on how to use it to architect your Swift application. You'll also hear about new APIs and other GCD improvements.",
       "focus": [
         "iOS",
@@ -1656,12 +1656,12 @@
       "subtitles": null,
       "location": "Pacific Heights",
       "duration": 2141,
-      "start_date": "2016-06-17T16:00:00-07:00",
-      "end_date": "2016-06-17T16:40:00-07:00",
+      "start_date": "2017-06-17T16:00:00-07:00",
+      "end_date": "2017-06-17T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/720"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Swift 3 introduces new API Design Guidelines specifically crafted to the unique character of Swift for clear, concise code. This talk will explore the philosophy behind the Swift API Design Guidelines and their application throughout the Swift Standard Library and the Cocoa and Cocoa Touch APIs. See how this API transformation will affect your Swift code and learn how to ensure a smooth transition to Swift 3. Learn how Swift 3 imports Objective-C APIs and how to expose rich Swift interfaces for existing Objective-C libraries.",
       "focus": [
         "iOS",
@@ -1684,12 +1684,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/403hb0ie2m86hvs7yyn/403/subtitles/eng/403_sd_swift_api_design_guidelines.vtt",
       "location": "Presidio",
       "duration": 2476,
-      "start_date": "2016-06-14T10:00:00-07:00",
-      "end_date": "2016-06-14T10:40:00-07:00",
+      "start_date": "2017-06-14T10:00:00-07:00",
+      "end_date": "2017-06-14T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/403"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Building a great international user interface goes beyond just translating your app. Explore new and improved APIs in iOS, macOS, and watchOS, and learn how Xcode 8 makes it easy to provide directional images to build first class apps for RTL languages. Hear from experts on how to fine-tune your international UI to create a seamless bidirectional experience and take your app in a new direction.",
       "focus": [
         "iOS",
@@ -1711,12 +1711,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/232biqdny8x84wjag07/232/subtitles/eng/232_sd_whats_new_in_international_user_interfaces.vtt",
       "location": "Nob Hill",
       "duration": 2358,
-      "start_date": "2016-06-17T09:00:00-07:00",
-      "end_date": "2016-06-17T09:40:00-07:00",
+      "start_date": "2017-06-17T09:00:00-07:00",
+      "end_date": "2017-06-17T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/232"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Updated to include the latest features, syntax and best practices for Swift 3, this session introduces the basics of the Swift programming language. Learn the recommended manner in which to declare variables, define functions, work with fundamental value types, protocols, generics, and more. Explore some of the great features that make Swift a safe, fast, and expressive language.",
       "focus": [
         "iOS",
@@ -1739,12 +1739,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/404hskg1ijeev16mdej/404/subtitles/eng/404_sd_getting_started_with_swift.vtt",
       "location": "Pacific Heights",
       "duration": 3107,
-      "start_date": "2016-06-14T13:40:00-07:00",
-      "end_date": "2016-06-14T14:40:00-07:00",
+      "start_date": "2017-06-14T13:40:00-07:00",
+      "end_date": "2017-06-14T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/404"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "3D Touch adds a completely new dimension to the iOS user interface and introduces an entirely new way to interact with your iPhone. Explore the existing API and get introduced to additions in iOS 10 that allow you to push the boundaries of 3D Touch. Learn about best practices for incorporating 3D Touch into your apps, how to add support for Quick Actions, Peek, and Pop.",
       "focus": [
         "iOS"
@@ -1764,12 +1764,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/228a1kbxogojm4fviqc/228/subtitles/eng/228_sd_a_peek_at_3d_touch.vtt",
       "location": "Presidio",
       "duration": 2517,
-      "start_date": "2016-06-16T16:00:00-07:00",
-      "end_date": "2016-06-16T16:40:00-07:00",
+      "start_date": "2017-06-16T16:00:00-07:00",
+      "end_date": "2017-06-16T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/228"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "The Foundation framework, which includes the root object class, classes representing basic data types such as strings and byte arrays, and collection classes for storing other objects, has added new support for specifying Units and Measurements. Understand how to model your measurements and convert within dimensions. Learn from the experts how to use and surface Units and Measurements in your interfaces.",
       "focus": [
         "iOS",
@@ -1791,12 +1791,12 @@
       "subtitles": null,
       "location": "Nob Hill",
       "duration": 1917,
-      "start_date": "2016-06-17T16:00:00-07:00",
-      "end_date": "2016-06-17T16:40:00-07:00",
+      "start_date": "2017-06-17T16:00:00-07:00",
+      "end_date": "2017-06-17T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/238"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Change the way the world experiences television through apps that are designed to be immersive, intuitive and easy to use. Learn best practices and techniques to take advantage of the big screen and the Siri Remote.",
       "focus": [
         "tvOS"
@@ -1816,12 +1816,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/802z6j79sd7g5drr7k7/802/subtitles/eng/802_sd_designing_for_tvos.vtt",
       "location": "Presidio",
       "duration": 1925,
-      "start_date": "2016-06-14T16:00:00-07:00",
-      "end_date": "2016-06-14T16:40:00-07:00",
+      "start_date": "2017-06-14T16:00:00-07:00",
+      "end_date": "2017-06-14T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/802"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "The StoreKit API allows apps to request payment for additional functionality or content. Hear about the latest changes to StoreKit including Swift 3.0 APIs, updates to Subscriptions and using StoreKit with iMessage apps. Learn best practices for receipt management and Sandbox testing.",
       "focus": [
         "iOS",
@@ -1843,12 +1843,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/702rhpkb0ux7uuzixps/702/subtitles/eng/702_sd_using_store_kit_for_inapp_purchases_with_swift_3.vtt",
       "location": "Mission",
       "duration": 3247,
-      "start_date": "2016-06-14T11:00:00-07:00",
-      "end_date": "2016-06-14T12:00:00-07:00",
+      "start_date": "2017-06-14T11:00:00-07:00",
+      "end_date": "2017-06-14T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/702"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "A well performing Watch app begins with great app architecture. Join us to discover strategies you can apply to keep your app responsive, lower your app's resume time, and stay memory efficient. Learn how we used these same principles in the Stocks app to enhance the user experience for watchOS 3.",
       "focus": [
         "watchOS"
@@ -1868,12 +1868,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/227a480gfx4hwinv5x9/227/subtitles/eng/227_sd_architecting_for_performance_on_watchos_3.vtt",
       "location": "Mission",
       "duration": 2462,
-      "start_date": "2016-06-16T15:00:00-07:00",
-      "end_date": "2016-06-16T15:40:00-07:00",
+      "start_date": "2017-06-16T15:00:00-07:00",
+      "end_date": "2017-06-16T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/227"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Examine the technologies that make a modern macOS app. Come learn from the experts how to harness the power of Cocoa to build powerful, immersive apps. Whether you're a seasoned Cocoa developer or new to the platform, this session is for you.",
       "focus": [
         "macOS"
@@ -1893,12 +1893,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/239ebj00keggvd2m2fx/239/subtitles/eng/239_sd_crafting_modern_cocoa_apps.vtt",
       "location": "Pacific Heights",
       "duration": 2651,
-      "start_date": "2016-06-17T17:00:00-07:00",
-      "end_date": "2016-06-17T17:40:00-07:00",
+      "start_date": "2017-06-17T17:00:00-07:00",
+      "end_date": "2017-06-17T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/239"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "iOS 10 and macOS 10.12 brings a powerful set of new APIs to work with many types of photos. Explore using Core Image to process RAW image files from many popular cameras and recent iOS devices. See how to edit and enhance Live Photos directly within your app.",
       "focus": [
         "iOS"
@@ -1918,12 +1918,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/505mia12r7dwmk3aumw/505/subtitles/eng/505_sd_live_photo_editing_and_raw_processing_with_core_image.vtt",
       "location": "Nob Hill",
       "duration": 3511,
-      "start_date": "2016-06-16T11:00:00-07:00",
-      "end_date": "2016-06-16T12:00:00-07:00",
+      "start_date": "2017-06-16T11:00:00-07:00",
+      "end_date": "2017-06-16T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/505"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "In this second part of a two part series, go beyond the basics in understanding how to make your apps adaptive. Learn through practical examples how to extend your application interfaces using UIKit. Get introduced to best practices for structuring your app for flexible interface designs. Learn from the experts what to keep in mind as you build apps for the future, today.",
       "focus": [
         "iOS",
@@ -1944,12 +1944,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/233c3uhytv8cxwoanja/233/subtitles/eng/233_sd_making_apps_adaptive_part_2.vtt",
       "location": "Presidio",
       "duration": 2260,
-      "start_date": "2016-06-17T09:00:00-07:00",
-      "end_date": "2016-06-17T09:40:00-07:00",
+      "start_date": "2017-06-17T09:00:00-07:00",
+      "end_date": "2017-06-17T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/233"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Learn about the latest developments in managing Apple devices in large organizations including Classroom and Shared iPad for Education. Learn the latest techniques to wirelessly configure settings, monitor compliance with policies, install apps and bulk configure devices with ease.",
       "focus": [
         "iOS",
@@ -1972,12 +1972,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/303g7ecrjttz4lpqd7y/303/subtitles/eng/303_sd_whats_new_in_apple_device_management.vtt",
       "location": "Nob Hill",
       "duration": 3117,
-      "start_date": "2016-06-15T11:00:00-07:00",
-      "end_date": "2016-06-15T12:00:00-07:00",
+      "start_date": "2017-06-15T11:00:00-07:00",
+      "end_date": "2017-06-15T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/303"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "iTunes Connect has been updated to make your experience with delivering apps to the App Store even better. Learn about time-saving improvements to managing screenshots, new ways to stay up to date with the iTunes Connect for iOS app, and upcoming features to help you gain insights into your data in App Analytics.",
       "focus": [
         "iOS",
@@ -2000,12 +2000,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/305h9fsce1kcqkvmtvk/305/subtitles/eng/305_sd_whats_new_in_itunes_connect.vtt",
       "location": "Presidio",
       "duration": 2503,
-      "start_date": "2016-06-17T13:40:00-07:00",
-      "end_date": "2016-06-17T14:40:00-07:00",
+      "start_date": "2017-06-17T13:40:00-07:00",
+      "end_date": "2017-06-17T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/305"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "macOS brings many new enhancements such as automatic window tabbing, enhanced color reproduction, and improved presentation of right-to-left languages. Get introduced to new APIs for these features and more, such as NSGridView and NSMeasurement. Learn about new conventions for APIs in Swift and Objective-C. This is your first stop to discover exciting new features in Cocoa sessions throughout the week.",
       "focus": [
         "macOS"
@@ -2025,12 +2025,12 @@
       "subtitles": null,
       "location": "Nob Hill",
       "duration": 3461,
-      "start_date": "2016-06-14T11:00:00-07:00",
-      "end_date": "2016-06-14T12:00:00-07:00",
+      "start_date": "2017-06-14T11:00:00-07:00",
+      "end_date": "2017-06-14T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/203"
     },
     {
-      "date": "2016-06-13",
+      "date": "2017-06-13",
       "description": "WWDC 2016 Platforms State of the Union",
       "focus": [
         "iOS",
@@ -2053,12 +2053,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/102w0bsn0ge83qfv7za/102/subtitles/eng/102_sd_platforms_state_of_the_union.vtt",
       "location": "Bill Graham Civic Auditorium",
       "duration": 6346,
-      "start_date": "2016-06-13T14:30:00-07:00",
-      "end_date": "2016-06-13T16:00:00-07:00",
+      "start_date": "2017-06-13T14:30:00-07:00",
+      "end_date": "2017-06-13T16:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/102"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Inclusive design means making your app intuitive, appropriate, and delightful for a global audience and people who have accessibility challenges. Learn easy-to-follow techniques for making your app culturally-relevant and accessible through use of type, layout, color and iconography.",
       "focus": [
         "iOS",
@@ -2079,12 +2079,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/801y753jw8vxmjblocq/801/subtitles/eng/801_sd_inclusive_app_design.vtt",
       "location": "Pacific Heights",
       "duration": 2125,
-      "start_date": "2016-06-14T10:00:00-07:00",
-      "end_date": "2016-06-14T10:40:00-07:00",
+      "start_date": "2017-06-14T10:00:00-07:00",
+      "end_date": "2017-06-14T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/801"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "The new Unified Logging and Tracing System for iOS and macOS uses Activity Tracing for performance, consolidates kernel and user-space logging, and has many other improvements. Learn how Logging and Tracing can help you debug and troubleshoot issues with your apps.",
       "focus": [
         "iOS",
@@ -2105,12 +2105,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/721wh2etddp4ghxhpcg/721/subtitles/eng/721_sd_unified_logging_and_activity_tracing.vtt",
       "location": "Nob Hill",
       "duration": 2622,
-      "start_date": "2016-06-17T17:00:00-07:00",
-      "end_date": "2016-06-17T17:40:00-07:00",
+      "start_date": "2017-06-17T17:00:00-07:00",
+      "end_date": "2017-06-17T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/721"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "iOS and macOS can proactively promote your app and data, thereby increasing user engagement. See how adopting a few simple APIs to inform the OS about your app's capabilities can lead to your app being suggested in various places like the app switcher, on the lock screen, Contacts, and more.",
       "focus": [
         "iOS",
@@ -2133,12 +2133,12 @@
       "subtitles": null,
       "location": "Mission",
       "duration": 3096,
-      "start_date": "2016-06-17T13:40:00-07:00",
-      "end_date": "2016-06-17T14:40:00-07:00",
+      "start_date": "2017-06-17T13:40:00-07:00",
+      "end_date": "2017-06-17T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/240"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Building on the fundamentals, dive into the specifics of constructing games and graphics apps with Metal. Learn about scene management and understand how to manage and update Metal resources. Understand the rendering loop, command encoding, and multi-thread synchronization.",
       "focus": [
         "iOS",
@@ -2160,8 +2160,8 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/603oba298b1v4z54011/603/subtitles/eng/603_sd_adopting_metal_part_2.vtt",
       "location": "Nob Hill",
       "duration": 2219,
-      "start_date": "2016-06-14T15:00:00-07:00",
-      "end_date": "2016-06-14T15:40:00-07:00",
+      "start_date": "2017-06-14T15:00:00-07:00",
+      "end_date": "2017-06-14T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/603"
     },
     {
@@ -2216,7 +2216,7 @@
       "webpageURL": "https://developer.apple.com/wwdc16/722"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "3D Touch on Notifications provides users with access to media attachments and live content. See how your app can take advantage of this new functionality to provide a rich interactive experience within the notification itself.",
       "focus": [
         "iOS",
@@ -2239,12 +2239,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/708tbh8wnspsg01hxwx/708/subtitles/eng/708_sd_advanced_notifications.vtt",
       "location": "Pacific Heights",
       "duration": 1649,
-      "start_date": "2016-06-15T10:00:00-07:00",
-      "end_date": "2016-06-15T10:40:00-07:00",
+      "start_date": "2017-06-15T10:00:00-07:00",
+      "end_date": "2017-06-15T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/708"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Learn how to bring your Content Blocker App Extensions to macOS and how to expose your application's abilities through Safari with Safari App Extensions. Safari App Extensions let you take full advantage of web technologies, Cocoa, and other system frameworks that you already use in your app on macOS.",
       "focus": [
         "iOS",
@@ -2265,12 +2265,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/214b51jlndqja1bpptt/214/subtitles/eng/214_sd_extending_your_app_with_safari_app_extensions.vtt",
       "location": "Nob Hill",
       "duration": 2148,
-      "start_date": "2016-06-15T16:00:00-07:00",
-      "end_date": "2016-06-15T16:40:00-07:00",
+      "start_date": "2017-06-15T16:00:00-07:00",
+      "end_date": "2017-06-15T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/214"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Become a News Publisher. Apple News allows you to monetize your stories and find new readers. Learn how to sign up and discover how easy it is to integrate with your existing CMS or author stories using the News Publisher authoring tool.",
       "focus": [
         "iOS"
@@ -2290,12 +2290,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/502lezynlddsti4drbq/502/subtitles/eng/502_sd_getting_published_in_apple_news.vtt",
       "location": "Pacific Heights",
       "duration": 2363,
-      "start_date": "2016-06-14T15:00:00-07:00",
-      "end_date": "2016-06-14T15:40:00-07:00",
+      "start_date": "2017-06-14T15:00:00-07:00",
+      "end_date": "2017-06-14T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/502"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Join engineers from the Instruments team for another focused look at the System Trace Instruments profiling template and how to get the most out of it. Discover how threads, virtual memory, and locking interact to affect performance. Dive deep for a practical look at how you can improve your app's responsiveness and keep your users engaged.",
       "focus": [
         "iOS",
@@ -2318,8 +2318,8 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/411jge60tmuuh7dolja/411/subtitles/eng/411_sd_system_trace_in_depth.vtt",
       "location": "Nob Hill",
       "duration": 2238,
-      "start_date": "2016-06-16T09:00:00-07:00",
-      "end_date": "2016-06-16T09:40:00-07:00",
+      "start_date": "2017-06-16T09:00:00-07:00",
+      "end_date": "2017-06-16T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/411"
     },
     {
@@ -2348,7 +2348,7 @@
       "webpageURL": "https://developer.apple.com/wwdc16/509"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Discover enhancements to the Metal shading language and how to use function specialization to improve performance while reducing the number of shader configurations in your app. Take advantage of resource read-writes to enable amazing new rendering techniques, understand how to support wide color, and accelerate your deep learning algorithms using the Metal Performance Shaders framework.",
       "focus": [
         "iOS",
@@ -2370,12 +2370,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/605ooaey8tbzegv8fth/605/subtitles/eng/605_sd_whats_new_in_metal_part_2.vtt",
       "location": "Pacific Heights",
       "duration": 3701,
-      "start_date": "2016-06-15T13:40:00-07:00",
-      "end_date": "2016-06-15T14:40:00-07:00",
+      "start_date": "2017-06-15T13:40:00-07:00",
+      "end_date": "2017-06-15T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/605"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "UICollectionView is a powerful class allowing your app to manage and customize the layout of views. iOS 10 brings enhancements for better performance, easier layout and brings features you've been looking for. Learn how to make your apps richer and faster by using new features in UICollectionView and its sibling, UITableView.",
       "focus": [
         "iOS",
@@ -2396,12 +2396,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/219g66mxt0n74iogsgp/219/subtitles/eng/219_sd_whats_new_in_uicollectionview_in_ios_10.vtt",
       "location": "Presidio",
       "duration": 2142,
-      "start_date": "2016-06-16T09:00:00-07:00",
-      "end_date": "2016-06-16T09:40:00-07:00",
+      "start_date": "2017-06-16T09:00:00-07:00",
+      "end_date": "2017-06-16T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/219"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "CloudKit keeps app data updated across iOS, macOS, watchOS, tvOS, and the web so you can focus on building your app. Hear best practices from the CloudKit engineering team about how to take advantage of the APIs and push notifications in order to provide your users with the best experience. Learn about the ways Apple apps use CloudKit and how you can apply the same approaches in your app.",
       "focus": [
         "iOS",
@@ -2424,12 +2424,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/231bhrh1z1fzrejhbz7/231/subtitles/eng/231_sd_cloudkit_best_practices.vtt",
       "location": "Pacific Heights",
       "duration": 2568,
-      "start_date": "2016-06-17T09:00:00-07:00",
-      "end_date": "2016-06-17T09:40:00-07:00",
+      "start_date": "2017-06-17T09:00:00-07:00",
+      "end_date": "2017-06-17T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/231"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Metal is the powerful low-overhead graphics and compute technology designed to unlock the power of the GPU. Check out the latest additions to the Metal frameworks and get details about supporting tessellation in your apps and games. Discover how to take control over synchronization and learn how to use resource heaps for even more efficient memory usage. See what's new in Metal debugging and profiling tools and gain insight into analyzing and optimizing performance.",
       "focus": [
         "iOS",
@@ -2451,12 +2451,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/604oezpg3wmqrkxl0t7/604/subtitles/eng/604_sd_whats_new_in_metal_part_1.vtt",
       "location": "Pacific Heights",
       "duration": 3336,
-      "start_date": "2016-06-15T11:00:00-07:00",
-      "end_date": "2016-06-15T12:00:00-07:00",
+      "start_date": "2017-06-15T11:00:00-07:00",
+      "end_date": "2017-06-15T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/604"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "SpriteKit adds new features to make it even easier to create high-performance, power-efficient 2D games. See how tile maps enable you to lay out large scenes quickly and check out new APIs for warp transformations and custom shader attributes. Learn about focus-based interactions on Apple TV, rendering on Apple Watch, and new tools built right into Xcode for measuring performance and integrating with GameplayKit.",
       "focus": [
         "iOS",
@@ -2479,12 +2479,12 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 3001,
-      "start_date": "2016-06-16T17:00:00-07:00",
-      "end_date": "2016-06-16T18:00:00-07:00",
+      "start_date": "2017-06-16T17:00:00-07:00",
+      "end_date": "2017-06-16T18:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/610"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "iOS, macOS, watchOS and tvOS offer a rich set of tools and APIs for recording, processing, and playing back audio in your apps. Learn how to choose the right API for your app, and the details on implementing each of them in order to deliver an outstanding audio experience.",
       "focus": [
         "iOS",
@@ -2507,12 +2507,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/507n0zrhzxdzmg20zcl/507/subtitles/eng/507_sd_delivering_an_exceptional_audio_experience.vtt",
       "location": "Nob Hill",
       "duration": 3258,
-      "start_date": "2016-06-17T13:40:00-07:00",
-      "end_date": "2016-06-17T14:40:00-07:00",
+      "start_date": "2017-06-17T13:40:00-07:00",
+      "end_date": "2017-06-17T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/507"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Metal provides the best access to the GPU on iOS, tvOS, and macOS, enabling you to maximize the graphics and compute potential of your apps and games. Get introduced to the essential concepts behind Metal, its low-overhead architecture, streamlined API, and support for efficient multi-threading. Start learning how to code with Metal in a walkthrough of rendering a basic scene.",
       "focus": [
         "iOS",
@@ -2534,12 +2534,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/602o05a86ysk0ngvlgj/602/subtitles/eng/602_sd_adopting_metal_part_1.vtt",
       "location": "Nob Hill",
       "duration": 3489,
-      "start_date": "2016-06-14T13:40:00-07:00",
-      "end_date": "2016-06-14T14:40:00-07:00",
+      "start_date": "2017-06-14T13:40:00-07:00",
+      "end_date": "2017-06-14T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/602"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "AVKit on tvOS offers an intuitive user interface for interaction with your media on this powerful new platform. AVKit is built on AVFoundation, which gives you access to the full potential of platform services for operating on time-based audiovisual media. Learn how to leverage the new content proposal APIs, and how to create a seamless interstitial playback experience. Management of media metadata and chapter navigation will also be covered.",
       "focus": [
         "tvOS"
@@ -2559,12 +2559,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/506ms2tv71tcduwp3dm/506/subtitles/eng/506_sd_avkit_on_tvos.vtt",
       "location": "Presidio",
       "duration": 2346,
-      "start_date": "2016-06-17T11:00:00-07:00",
-      "end_date": "2016-06-17T11:40:00-07:00",
+      "start_date": "2017-06-17T11:00:00-07:00",
+      "end_date": "2017-06-17T11:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/506"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Discover how to give users a great location-aware experience while conserving power across all Apple platforms. Learn best practices for using Core Location, how an App can use and manage Circular and Beacon Regions, defer or pause location updates, and how to use Visit Monitoring to determine the interesting places the user has been. Get an overview of how a user authorizes an App's use of location services.",
       "focus": [
         "iOS",
@@ -2587,12 +2587,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/716vyncka4gcaxxwuvq/716/subtitles/eng/716_sd_core_location_best_practices.vtt",
       "location": "Pacific Heights",
       "duration": 2021,
-      "start_date": "2016-06-16T16:00:00-07:00",
-      "end_date": "2016-06-16T16:40:00-07:00",
+      "start_date": "2017-06-16T16:00:00-07:00",
+      "end_date": "2017-06-16T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/716"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "iOS 10 introduces SiriKit, a new framework enabling apps to integrate with Siri. Simply by speaking, your apps can send messages, place calls, send payments, and more. Learn how SiriKit helps you create new experiences on iOS and explore design principles for creating a great Siri experience.",
       "focus": [
         "iOS"
@@ -2612,12 +2612,12 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 3380,
-      "start_date": "2016-06-15T17:00:00-07:00",
-      "end_date": "2016-06-15T18:00:00-07:00",
+      "start_date": "2017-06-15T17:00:00-07:00",
+      "end_date": "2017-06-15T18:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/217"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Hear about the newest features in Swift 3, the third major release of the safe, fast, and expressive language, and the first major release built with the open source community. Gain insight into the latest changes in Xcode including enhanced migration support to help move your code to Swift 3. Learn how you can get involved in the open source community at Swift.org.",
       "focus": [
         "iOS",
@@ -2640,12 +2640,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/402h429l9d0hy98c9m6/402/subtitles/eng/402_sd_whats_new_in_swift.vtt",
       "location": "Presidio",
       "duration": 2474,
-      "start_date": "2016-06-14T09:00:00-07:00",
-      "end_date": "2016-06-14T09:40:00-07:00",
+      "start_date": "2017-06-14T09:00:00-07:00",
+      "end_date": "2017-06-14T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/402"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Learn essential best practices for using event input from Apple Pencil in your drawing apps. Gain a practical understanding of the concepts behind efficient and accurate touch event processing. Get details about the touch input pipeline on iOS and how to take advantage of it in all your apps.",
       "focus": [
         "iOS"
@@ -2665,12 +2665,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/220c6lnr7wkcjewnj1g/220/subtitles/eng/220_sd_leveraging_touch_input_on_ios.vtt",
       "location": "Pacific Heights",
       "duration": 2097,
-      "start_date": "2016-06-16T10:00:00-07:00",
-      "end_date": "2016-06-16T10:40:00-07:00",
+      "start_date": "2017-06-16T10:00:00-07:00",
+      "end_date": "2017-06-16T10:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/220"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Messages apps allow people to collaborate by using your app. Learn how people can work together to accomplish a task within the conversation. Customize the appearance of the messages your app can send. Learn about how to manage your app state in one-to-one and group conversations to provide an engaging and collaborative experience.",
       "focus": [
         "iOS"
@@ -2690,12 +2690,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/224g9mui5qb06o6ukpf/224/subtitles/eng/224_sd_imessage_apps_and_stickers_part_2.vtt",
       "location": "Pacific Heights",
       "duration": 2727,
-      "start_date": "2016-06-16T13:40:00-07:00",
-      "end_date": "2016-06-16T14:40:00-07:00",
+      "start_date": "2017-06-16T13:40:00-07:00",
+      "end_date": "2017-06-16T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/224"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Building on last year's Protocol-Oriented Programming and Building Better Apps with Value Types sessions, this year's session will highlight tips and tricks for building better Swift apps. See how you can incorporate these design approaches into a real MVC-based Cocoa Touch app, especially in the view and controller layers, where you might not have thought of using these techniques before.",
       "focus": [
         "iOS",
@@ -2718,12 +2718,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/419lgbsyhjrmqtmq0qh/419/subtitles/eng/419_sd_protocol_and_value_oriented_programming_in_uikit_apps.vtt",
       "location": "Presidio",
       "duration": 2391,
-      "start_date": "2016-06-17T16:00:00-07:00",
-      "end_date": "2016-06-17T16:40:00-07:00",
+      "start_date": "2017-06-17T16:00:00-07:00",
+      "end_date": "2017-06-17T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/419"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Spend an hour with the team responsible for the technology behind Xcode's debugger: LLDB. Find out what's new, what's been there all along that you didn't know about, and how best to take advantage of it all. This session will cover a range of topics with tips for both newcomers and experienced developers.",
       "focus": [
         "iOS",
@@ -2746,12 +2746,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/417kbvnnlivhyfnn98p/417/subtitles/eng/417_sd_debugging_tips_and_tricks.vtt",
       "location": "Pacific Heights",
       "duration": 3592,
-      "start_date": "2016-06-17T13:40:00-07:00",
-      "end_date": "2016-06-17T14:40:00-07:00",
+      "start_date": "2017-06-17T13:40:00-07:00",
+      "end_date": "2017-06-17T14:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/417"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Xcode provides powerful options for managing projects for small and large development teams. Learn how new features in Xcode simplify the process of certificate management, app signing and configuration of your project's build settings.",
       "focus": [
         "iOS",
@@ -2774,8 +2774,8 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/401hmew12wifry4svvi/401/subtitles/eng/401_sd_whats_new_in_xcode_app_signing.vtt",
       "location": "Nob Hill",
       "duration": 1936,
-      "start_date": "2016-06-14T09:00:00-07:00",
-      "end_date": "2016-06-14T09:40:00-07:00",
+      "start_date": "2017-06-14T09:00:00-07:00",
+      "end_date": "2017-06-14T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/401"
     },
     {
@@ -2806,7 +2806,7 @@
       "webpageURL": "https://developer.apple.com/wwdc16/724"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Search APIs make it easy for users to discover information in your app and the app itself. New features expand the search capabilities allowing users to search directly in your app and enable you to search your own app index. Learn about the latest API updates and the new privacy-friendly method for improving the ranking of your app content.",
       "focus": [
         "iOS",
@@ -2827,8 +2827,8 @@
       "subtitles": null,
       "location": "Pacific Heights",
       "duration": 3271,
-      "start_date": "2016-06-16T11:00:00-07:00",
-      "end_date": "2016-06-16T12:00:00-07:00",
+      "start_date": "2017-06-16T11:00:00-07:00",
+      "end_date": "2017-06-16T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/223"
     },
     {
@@ -2858,7 +2858,7 @@
       "webpageURL": "https://developer.apple.com/wwdc16/241"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Have you saved our 63-page iOS security white paper to your Reading List but find yourself too busy making great apps to get through it? You can keep your good intentions to devour every last detail, but meanwhile come join us for an illuminating talk on why we care so deeply about security as a design philosophy central to all our iOS products.",
       "focus": [
         "iOS"
@@ -2878,12 +2878,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/705s57mrvm8so193i8c/705/subtitles/eng/705_sd_how_ios_security_really_works.vtt",
       "location": "Nob Hill",
       "duration": 1465,
-      "start_date": "2016-06-14T16:00:00-07:00",
-      "end_date": "2016-06-14T16:40:00-07:00",
+      "start_date": "2017-06-14T16:00:00-07:00",
+      "end_date": "2017-06-14T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/705"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "The focus interaction model is a critical component of an engaging and intuitive experience on tvOS. Learn more about how it works, some additions and changes to the API, as well as tips and tricks for making your tvOS app even better.",
       "focus": [
         "tvOS"
@@ -2903,12 +2903,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/215e597a1en6wrh89hm/215/subtitles/eng/215_sd_focus_interaction_on_tvos.vtt",
       "location": "Mission",
       "duration": 2213,
-      "start_date": "2016-06-15T16:00:00-07:00",
-      "end_date": "2016-06-15T16:40:00-07:00",
+      "start_date": "2017-06-15T16:00:00-07:00",
+      "end_date": "2017-06-15T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/215"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "The heroes and villains of Marvel have captivated a worldwide audience for over 75 years. Marvel Games Creative Director Bill Rosemann lifts up the masks of Spider-Man, Black Panther, the Guardians of the Galaxy and more to reveal the true power behind the world's most heroic brand.",
       "focus": [],
       "id": "108",
@@ -2926,8 +2926,8 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 3600,
-      "start_date": "2016-06-17T12:20:00-07:00",
-      "end_date": "2016-06-17T13:20:00-07:00",
+      "start_date": "2017-06-17T12:20:00-07:00",
+      "end_date": "2017-06-17T13:20:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/108"
     },
     {
@@ -2958,7 +2958,7 @@
       "webpageURL": "https://developer.apple.com/wwdc16/510"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Learn what's new with HomeKit in iOS 10 including support for new types of accessories such as cameras and doorbells, enhancements in remotely connecting with accessories, how set up of Wi-Fi HomeKit accessories has been greatly improved, and how to write HomeKit enabled tvOS Apps.",
       "focus": [
         "iOS",
@@ -2980,12 +2980,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/710tkhyprou9hhbnc6g/710/subtitles/eng/710_sd_whats_new_in_homekit.vtt",
       "location": "Nob Hill",
       "duration": 2037,
-      "start_date": "2016-06-15T17:00:00-07:00",
-      "end_date": "2016-06-15T17:40:00-07:00",
+      "start_date": "2017-06-15T17:00:00-07:00",
+      "end_date": "2017-06-15T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/710"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "HTTP Live Streaming offers a reliable media playback experiences over a wide variety of network conditions. Join us to learn how to deliver offline playback using the same media assets you already host for online playback. See new additions to the HLS protocol, such as support for fragmented MP4 and in-playlist metadata.",
       "focus": [
         "iOS",
@@ -3007,12 +3007,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/504m956dgg4hlw2uez9/504/subtitles/eng/504_sd_whats_new_in_http_live_streaming.vtt",
       "location": "Mission",
       "duration": 2043,
-      "start_date": "2016-06-15T15:00:00-07:00",
-      "end_date": "2016-06-15T15:40:00-07:00",
+      "start_date": "2017-06-15T15:00:00-07:00",
+      "end_date": "2017-06-15T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/504"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "Keeping your Apple Watch app up to date is key to creating a great experience on watchOS 3. Learn how to use the new background tasks to keep your complications and the new watchOS 3 Dock snapshots consistent with your app's underlying model. Discover how to get the most from NSURLSessions and Watch Connectivity to keep data fresh and glanceable.",
       "focus": [
         "watchOS"
@@ -3032,12 +3032,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/218e59uvbkp1smncrss/218/subtitles/eng/218_sd_keeping_your_watch_app_up_to_date.vtt",
       "location": "Mission",
       "duration": 2347,
-      "start_date": "2016-06-16T09:00:00-07:00",
-      "end_date": "2016-06-16T09:40:00-07:00",
+      "start_date": "2017-06-16T09:00:00-07:00",
+      "end_date": "2017-06-16T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/218"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "HealthKit provides robust tools for building great workout apps for Apple Watch. Learn how your workout app can collect data from Watch sensors, run and analyze data in real-time in the background, and contribute to Activity rings. Gain insights into creating a great standalone Watch experience and see how to display your workouts within the Health app and the Activity app on iOS.",
       "focus": [
         "watchOS"
@@ -3057,12 +3057,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/235dk9q4a4mflq2dbms/235/subtitles/eng/235_sd_building_great_workout_apps.vtt",
       "location": "Pacific Heights",
       "duration": 3176,
-      "start_date": "2016-06-17T11:00:00-07:00",
-      "end_date": "2016-06-17T12:00:00-07:00",
+      "start_date": "2017-06-17T11:00:00-07:00",
+      "end_date": "2017-06-17T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/235"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Get details about new features of Auto Layout in Xcode, Cocoa and Cocoa Touch. Explore the new NSGridView, allowing your Cocoa app to easily build grid interfaces. Dive deeper into new tools that enable you to quickly diagnose layout issues in your interface. Learn about the new features in Xcode to quickly build adaptive interfaces.",
       "focus": [
         "iOS",
@@ -3084,12 +3084,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/236dnxhy85jkit108dh/236/subtitles/eng/236_sd_whats_new_in_auto_layout.vtt",
       "location": "Presidio",
       "duration": 2419,
-      "start_date": "2016-06-17T15:00:00-07:00",
-      "end_date": "2016-06-17T15:40:00-07:00",
+      "start_date": "2017-06-17T15:00:00-07:00",
+      "end_date": "2017-06-17T15:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/236"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "The Web Inspector provides some sleek new tools to help you understand your app's web content performance and memory usage. Explore how you can use Web Inspector's new memory and JavaScript profiling tools to debug web content on iOS and macOS. Discover new features and learn best practices to maximize your effectiveness with the Web Inspector tools.",
       "focus": [
         "iOS",
@@ -3110,12 +3110,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/420lbx5afix4io0xo9p/420/subtitles/eng/420_sd_optimizing_web_content_in_your_app.vtt",
       "location": "Mission",
       "duration": 2485,
-      "start_date": "2016-06-17T16:00:00-07:00",
-      "end_date": "2016-06-17T16:40:00-07:00",
+      "start_date": "2017-06-17T16:00:00-07:00",
+      "end_date": "2017-06-17T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/420"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "Apple News beautifully introduces new readers to your stories. Learn about Apple News Format and how it can be used to author rich, responsive stories that intelligently adapt to all screen sizes. Discover the many features of Apple News including interactive galleries, video, audio, and animations which help to make your content more engaging than ever.",
       "focus": [
         "iOS"
@@ -3135,12 +3135,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/508nbofuzf16hljuwqe/508/subtitles/eng/508_sd_using_apple_news_format_to_create_rich_and_responsive_stories.vtt",
       "location": "Mission",
       "duration": 2229,
-      "start_date": "2016-06-17T17:00:00-07:00",
-      "end_date": "2016-06-17T17:40:00-07:00",
+      "start_date": "2017-06-17T17:00:00-07:00",
+      "end_date": "2017-06-17T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/508"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Explore the new accessibility features for iOS, tvOS, and macOS. Gain specific knowledge of how best to adapt your app to make it accessible to everyone, regardless of their physical or learning abilities. Learn from the experts about advanced accessibility topics and how best to structure your app interface for accessibility.",
       "focus": [
         "iOS",
@@ -3162,12 +3162,12 @@
       "subtitles": null,
       "location": "Pacific Heights",
       "duration": 2100,
-      "start_date": "2016-06-14T09:00:00-07:00",
-      "end_date": "2016-06-14T09:40:00-07:00",
+      "start_date": "2017-06-14T09:00:00-07:00",
+      "end_date": "2017-06-14T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/202"
     },
     {
-      "date": "2016-06-14",
+      "date": "2017-06-14",
       "description": "Search Ads provides a new way to increase awareness of your apps in App Store search results. Learn how sponsored ads in App Store search work, see a preview of the powerful targeting options, reporting and attribution features and how quick and easy it is to get started.",
       "focus": [
         "iOS"
@@ -3187,12 +3187,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/302f5hkfjyg13j84oda/302/subtitles/eng/302_sd_introducing_search_ads.vtt",
       "location": "Mission",
       "duration": 1536,
-      "start_date": "2016-06-14T17:00:00-07:00",
-      "end_date": "2016-06-14T17:40:00-07:00",
+      "start_date": "2017-06-14T17:00:00-07:00",
+      "end_date": "2017-06-14T17:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/302"
     },
     {
-      "date": "2016-06-17",
+      "date": "2017-06-17",
       "description": "In this advanced session, find out how structs, classes, protocols, and generics are implemented in Swift. Learn about their relative costs in different dimensions of performance. See how to apply this information to speed up your code.",
       "focus": [
         "iOS",
@@ -3215,12 +3215,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/416k7f0xkmz28rvlvwb/416/subtitles/eng/416_sd_understanding_swift_performance.vtt",
       "location": "Mission",
       "duration": 3502,
-      "start_date": "2016-06-17T11:00:00-07:00",
-      "end_date": "2016-06-17T12:00:00-07:00",
+      "start_date": "2017-06-17T11:00:00-07:00",
+      "end_date": "2017-06-17T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/416"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "HealthKit offers more than ever to developers joining in Apple's vibrant health and fitness ecosystem. Discover new ways to integrate the popular activity-tracking features of Apple Watch with your own app. Learn how to contribute to an even more complete picture of users' health data by reading and writing Health Documents from your organization. Review core concepts for working with HealthKit and explore best practices for managing data to ensure your users enjoy a seamless experience.",
       "focus": [
         "iOS",
@@ -3241,12 +3241,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/209e37d5ks3pfj21ij5/209/subtitles/eng/209_sd_getting_the_most_out_of_healthkit.vtt",
       "location": "Nob Hill",
       "duration": 2297,
-      "start_date": "2016-06-15T09:00:00-07:00",
-      "end_date": "2016-06-15T09:40:00-07:00",
+      "start_date": "2017-06-15T09:00:00-07:00",
+      "end_date": "2017-06-15T09:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/209"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Learn more about Swift Playgrounds, the new iPad app that teaches coding using the powerful Swift programming language. Explore the featured content, complete with puzzles that help you master each coding concept. Learn more about the coding features of Swift Playgrounds and see how the editing experience was re-imagined for touch. Learn to use the included templates to build playgrounds and look at the available features in the new playground book format.",
       "focus": [
         "iOS"
@@ -3266,12 +3266,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/408j7syjtdlxnl2rq4j/408/subtitles/eng/408_sd_introducing_swift_playgrounds.vtt",
       "location": "Mission",
       "duration": 2984,
-      "start_date": "2016-06-15T11:00:00-07:00",
-      "end_date": "2016-06-15T12:00:00-07:00",
+      "start_date": "2017-06-15T11:00:00-07:00",
+      "end_date": "2017-06-15T12:00:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/408"
     },
     {
-      "date": "2016-06-15",
+      "date": "2017-06-15",
       "description": "Discover Xcode's enhancements for debugging autolayout issues at runtime. Learn how issues inside complex GKStateMachine objects can be easily debugged at runtime. Gain insight into finding performance bottlenecks inside SpriteKit and SceneKit apps more easily with the enhanced FPS gauge. Understand how to fix leaked and abandoned memory in your app by inspecting the heap from within your typical Xcode debugging workflow.",
       "focus": [
         "iOS",
@@ -3294,12 +3294,12 @@
       "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/410jaf5ko3ob8asajlf/410/subtitles/eng/410_sd_visual_debugging_with_xcode.vtt",
       "location": "Presidio",
       "duration": 2301,
-      "start_date": "2016-06-15T16:00:00-07:00",
-      "end_date": "2016-06-15T16:40:00-07:00",
+      "start_date": "2017-06-15T16:00:00-07:00",
+      "end_date": "2017-06-15T16:40:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/410"
     },
     {
-      "date": "2016-06-16",
+      "date": "2017-06-16",
       "description": "When Ajit Narayanan began working on technologies for children with disabilities in India in 2008, it was the beginning of an incredible journey down a rabbit hole — one that took him and his team on a wild ride across the worlds of electrical engineering, autism, cross-cultural communication and the mathematics of language. His journey led him to build Avaz, a wheelchair-mounted tablet to help people with disabilities communicate, then even more ambitiously, to invent FreeSpeech, an entirely new visual language that could break down language barriers altogether. Ajit will talk about the series of events that led to the creation of the Avaz and FreeSpeech apps, their impact in India and around the world (earning him the National Award for Empowerment of People with Disabilities from the President of India) and his ideas on the transformative role that apps can play in education.",
       "focus": [],
       "id": "106",
@@ -3317,8 +3317,8 @@
       "subtitles": null,
       "location": "Presidio",
       "duration": 3600,
-      "start_date": "2016-06-16T12:20:00-07:00",
-      "end_date": "2016-06-16T13:20:00-07:00",
+      "start_date": "2017-06-16T12:20:00-07:00",
+      "end_date": "2017-06-16T13:20:00-07:00",
       "webpageURL": "https://developer.apple.com/wwdc16/106"
     },
     {
@@ -14650,8 +14650,8 @@
       "current": true,
       "identifier": "wwdc2016",
       "webUrlKey": "wwdc16",
-      "start": "2016-06-13",
-      "end": "2016-06-17"
+      "start": "2017-06-13",
+      "end": "2017-06-17"
     },
     {
       "name": "WWDC 2015",
