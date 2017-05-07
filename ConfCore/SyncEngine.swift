@@ -9,6 +9,10 @@
 import Foundation
 import RxSwift
 
+extension Notification.Name {
+    public static let SyncEngineDidSyncSessionsAndSchedule = Notification.Name("SyncEngineDidSyncSessionsAndSchedule")
+}
+
 public final class SyncEngine {
     
     public let storage: Storage
@@ -19,12 +23,14 @@ public final class SyncEngine {
         self.client = client
     }
     
-    public func syncSessionsAndSchedule(completion: @escaping (APIError?) -> Void) {
+    public func syncSessionsAndSchedule() {
         client.fetchSessions { [weak self] sessionsResult in
             DispatchQueue.main.async {
                 self?.client.fetchSchedule { scheduleResult in
                     DispatchQueue.main.async {
-                        self?.storage.store(sessionsResult: sessionsResult, scheduleResult: scheduleResult)
+                        self?.storage.store(sessionsResult: sessionsResult, scheduleResult: scheduleResult) {
+                            NotificationCenter.default.post(name: .SyncEngineDidSyncSessionsAndSchedule, object: self)
+                        }
                     }
                 }
             }

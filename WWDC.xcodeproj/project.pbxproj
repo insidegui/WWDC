@@ -127,6 +127,7 @@
 		DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */; };
 		DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */; };
 		DDFA10BD1EBEA584001DCF66 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BC1EBEA584001DCF66 /* Download.swift */; };
+		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -326,6 +327,7 @@
 		DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+SessionActions.swift"; sourceTree = "<group>"; };
 		DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTableView+Rx.swift"; sourceTree = "<group>"; };
 		DDFA10BC1EBEA584001DCF66 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
+		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -423,6 +425,7 @@
 				DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */,
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
 				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
+				DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */,
 			);
 			name = Bootstrap;
 			sourceTree = "<group>";
@@ -993,6 +996,7 @@
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
+				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* VideosSplitViewController.swift in Sources */,

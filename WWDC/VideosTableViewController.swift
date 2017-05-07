@@ -21,7 +21,13 @@ class VideosTableViewController: NSViewController {
     
     private let disposeBag = DisposeBag()
     
-    var sessions = Variable<Results<Session>?>(nil)
+    var sessions: Results<Session>? {
+        didSet {
+            guard oldValue?.count != sessions?.count else { return }
+            
+            updateSessionsList()
+        }
+    }
     var selectedSession = Variable<SessionViewModel?>(nil)
     
     var viewModels: [SessionRow] = [] {
@@ -43,6 +49,28 @@ class VideosTableViewController: NSViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func updateSessionsList() {
+        guard let results = sessions else { return }
+        
+        let sortedSessions = results.sorted(by: Session.standardSort)
+        
+        var outViewModels: [SessionRow] = []
+        let rowModels = sortedSessions.flatMap(SessionViewModel.init(session:)).map(SessionRow.init(viewModel:))
+        
+        var previousRowModel: SessionRow? = nil
+        for rowModel in rowModels {
+            if rowModel.viewModel.trackName != previousRowModel?.viewModel.trackName {
+                outViewModels.append(SessionRow(title: rowModel.viewModel.trackName))
+            }
+            
+            outViewModels.append(rowModel)
+            
+            previousRowModel = rowModel
+        }
+        
+        self.viewModels = rowModels
     }
     
     lazy var tableView: NSTableView = {
@@ -102,27 +130,7 @@ class VideosTableViewController: NSViewController {
             return self.viewModels[index].viewModel
         }.bind(to: selectedSession).addDisposableTo(self.disposeBag)
         
-        sessions.asObservable().subscribe(onNext: { [weak self] results in
-            guard let results = results else { return }
-            
-            let sortedSessions = results.filter(NSPredicate(format: "assets.@count > 0")).sorted(by: Session.standardSort)
-            
-            var outViewModels: [SessionRow] = []
-            let rowModels = sortedSessions.flatMap(SessionViewModel.init(session:)).map(SessionRow.init(viewModel:))
-            
-            var previousRowModel: SessionRow? = nil
-            for rowModel in rowModels {
-                if rowModel.viewModel.trackName != previousRowModel?.viewModel.trackName {
-                    outViewModels.append(SessionRow(title: rowModel.viewModel.trackName))
-                }
-                
-                outViewModels.append(rowModel)
-                
-                previousRowModel = rowModel
-            }
-            
-            self?.viewModels = outViewModels
-        }).addDisposableTo(self.disposeBag)
+        
     }
     
 }

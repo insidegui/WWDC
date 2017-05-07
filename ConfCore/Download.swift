@@ -11,6 +11,7 @@ import RealmSwift
 
 public enum DownloadStatus: String {
     case none
+    case deleted
     case downloading
     case paused
     case failed

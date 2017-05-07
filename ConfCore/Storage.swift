@@ -24,7 +24,18 @@ public final class Storage {
         self.realm = try Realm(configuration: configuration)
     }
     
-    func store(sessionsResult: Result<SessionsResponse, APIError>, scheduleResult: Result<ScheduleResponse, APIError>) {
+    /// Performs a write transaction on the database using `block`
+    public func update(with block: @escaping () -> Void) {
+        do {
+            try realm.write {
+                block()
+            }
+        } catch {
+            NSLog("Error performing realm write: \(error)")
+        }
+    }
+    
+    func store(sessionsResult: Result<SessionsResponse, APIError>, scheduleResult: Result<ScheduleResponse, APIError>, completion: @escaping () -> Void) {
         backgroundQueue.async {
             if self.backgroundRealm == nil {
                 do {
@@ -97,6 +108,8 @@ public final class Storage {
             
             do {
                 try self.backgroundRealm.commitWrite()
+                
+                DispatchQueue.main.async { completion() }
             } catch {
                 NSLog("Realm error: \(error)")
             }
@@ -109,9 +122,13 @@ public final class Storage {
         return Observable.collection(from: eventsSortedByDateDescending)
     }()
     
-    public lazy var sessions: Observable<Results<Session>> = {
+    public lazy var sessionsObservable: Observable<Results<Session>> = {
         return Observable.collection(from: self.realm.objects(Session.self))
     }()
+    
+    public var sessions: Results<Session> {
+        return self.realm.objects(Session.self).filter("assets.@count > 0")
+    }
     
     public func session(with identifier: String) -> Session? {
         return realm.object(ofType: Session.self, forPrimaryKey: identifier)
@@ -137,6 +154,31 @@ public final class Storage {
         } catch {
             NSLog("Error creating favorite for session \(session)")
         }
+    }
+    
+    public lazy var activeDownloads: Observable<Results<Download>> = {
+        let results = self.realm.objects(Download.self).filter("rawStatus != %@ AND rawStatus != %@", "none", "deleted")
+        
+        return Observable.collection(from: results)
+    }()
+    
+    public func createDownload(for asset: SessionAsset) {
+        // prevent multiple download instances per session asset
+        guard asset.downloads.filter({ $0.status != .deleted && $0.status != .none }).count == 0 else { return }
+        
+        do {
+            try realm.write {
+                let download = Download()
+                download.status = .paused
+                asset.downloads.append(download)
+            }
+        } catch {
+            NSLog("Error creating download for asset \(asset): \(error)")
+        }
+    }
+    
+    public func asset(with remoteURL: URL) -> SessionAsset? {
+        return realm.objects(SessionAsset.self).filter("remoteURL == %@", remoteURL.absoluteString).first
     }
     
 }

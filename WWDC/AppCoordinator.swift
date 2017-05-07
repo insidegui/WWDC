@@ -18,6 +18,7 @@ final class AppCoordinator {
     
     var storage: Storage
     var syncEngine: SyncEngine
+    var downloadManager: DownloadManager
     
     var windowController: MainWindowController
     var tabController: MainTabController
@@ -40,6 +41,8 @@ final class AppCoordinator {
             self.storage = try Storage(realmConfig)
             
             self.syncEngine = SyncEngine(storage: storage, client: client)
+            
+            self.downloadManager = DownloadManager(storage)
         } catch {
             fatalError("Realm initialization error: \(error)")
         }
@@ -69,7 +72,6 @@ final class AppCoordinator {
     }
     
     private func setupBindings() {
-        storage.sessions.bind(to: videosController.listViewController.sessions).addDisposableTo(self.disposeBag)
         selectedSession.bind(to: videosController.detailViewController.viewModel).addDisposableTo(self.disposeBag)
         
         selectedSession.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
@@ -82,18 +84,21 @@ final class AppCoordinator {
         detail.summaryController.actionsViewController.delegate = self
     }
     
+    private func updateListsAfterSync() {
+        self.videosController.listViewController.sessions = storage.sessions
+    }
+    
     @IBAction func refresh(_ sender: Any?) {
-        syncEngine.syncSessionsAndSchedule { error in
-            if let error = error {
-                // TODO: better error handling
-                print("Error while syncing sessions and schedule: \(error)")
-            }
-        }
+        syncEngine.syncSessionsAndSchedule()
     }
     
     func startup() {
         windowController.contentViewController = tabController
         windowController.showWindow(self)
+        
+        NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: OperationQueue.main) { _ in
+            self.updateListsAfterSync()
+        }
         
         refresh(nil)
     }

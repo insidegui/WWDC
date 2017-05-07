@@ -25,7 +25,11 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     }
     
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
+        guard let viewModel = selectedSessionValue else { return }
         
+        guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
+        
+        downloadManager.download(videoAsset)
     }
     
     func sessionActionsDidSelectShare(_ sender: NSView?) {
