@@ -109,7 +109,11 @@ public final class Storage {
             do {
                 try self.backgroundRealm.commitWrite()
                 
-                DispatchQueue.main.async { completion() }
+                DispatchQueue.main.async {
+                    _ = self.realm.refresh()
+                    
+                    completion()
+                }
             } catch {
                 NSLog("Realm error: \(error)")
             }

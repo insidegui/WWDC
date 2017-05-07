@@ -23,8 +23,6 @@ class VideosTableViewController: NSViewController {
     
     var sessions: Results<Session>? {
         didSet {
-            guard oldValue?.count != sessions?.count else { return }
-            
             updateSessionsList()
         }
     }
