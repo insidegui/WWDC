@@ -101,6 +101,7 @@ final class AppCoordinator {
         }
         
         refresh(nil)
+        updateListsAfterSync()
     }
     
 }
