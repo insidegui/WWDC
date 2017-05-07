@@ -104,9 +104,9 @@ class SessionSummaryViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let title = viewModel.asObservable().ignoreNil().map({ $0.title })
-        let summary = viewModel.asObservable().ignoreNil().map({ $0.summary })
-        let footer = viewModel.asObservable().ignoreNil().map({ $0.footer })
+        let title = viewModel.asObservable().ignoreNil().flatMap({ $0.rxTitle })
+        let summary = viewModel.asObservable().ignoreNil().flatMap({ $0.rxSummary })
+        let footer = viewModel.asObservable().ignoreNil().flatMap({ $0.rxFooter })
         
         title.asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).addDisposableTo(self.disposeBag)
         summary.asDriver(onErrorJustReturn: "").drive(summaryLabel.rx.text).addDisposableTo(self.disposeBag)
