@@ -7,12 +7,20 @@
 //
 
 import Cocoa
+import RxSwift
+import RxCocoa
 
 final class SessionTableCellView: NSTableCellView {
     
+    private var disposeBag = DisposeBag()
+    
     var viewModel: SessionViewModel? {
         didSet {
-            updateUI()
+            guard let viewModel = viewModel else { return }
+            
+            viewModel.rxModelChange.asObservable().subscribe(onNext: { [weak self] _ in
+                self?.updateUI()
+            }).addDisposableTo(self.disposeBag)
         }
     }
     
@@ -28,6 +36,8 @@ final class SessionTableCellView: NSTableCellView {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        self.disposeBag = DisposeBag()
         
         thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
     }
