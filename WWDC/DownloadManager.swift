@@ -16,8 +16,16 @@ final class DownloadManager: NSObject {
     
     fileprivate var tasks: [String: URLSessionDownloadTask] = [:]
     
+    fileprivate lazy var downloadQueue: OperationQueue = {
+        let q = OperationQueue()
+        
+        q.underlyingQueue = DispatchQueue(label: "DownloadManager", qos: .background)
+        
+        return q
+    }()
+    
     fileprivate lazy var downloadSession: URLSession = {
-        let s = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue.main)
+        let s = URLSession(configuration: .default, delegate: self, delegateQueue: self.downloadQueue)
         
         return s
     }()
@@ -38,20 +46,28 @@ final class DownloadManager: NSObject {
         task.resume()
     }
     
+    fileprivate var lastStorageUpdate = Date.distantPast
+    
 }
 
 extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSessionTaskDelegate {
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        // limit storage writes to 1 per second
+        guard Date().timeIntervalSince(lastStorageUpdate) > 1 else { return }
+        
         guard let url = downloadTask.originalRequest?.url else { return }
         
         let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
         
-        let download = storage.asset(with: url)?.downloads.first
-        storage.update {
+        let download = storage.unmanagedObject(of: SessionAsset.self, with: url.absoluteString)?.downloads.first
+        
+        storage.unmanagedUpdate {
             download?.status = .downloading
             download?.progress = progress
         }
+        
+        lastStorageUpdate = Date()
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
@@ -61,7 +77,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSe
         
         let finalPath = dir + "/" + asset.relativeLocalURL
         
-        let download = asset.downloads.first
+        let download = storage.unmanagedObject(of: SessionAsset.self, with: url.absoluteString)?.downloads.first
         
         do {
             let finalURL = URL(fileURLWithPath: finalPath)
@@ -70,14 +86,14 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSe
             try FileManager.default.createDirectory(at: finalDirURL, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.moveItem(at: location, to: finalURL)
             
-            storage.update {
+            storage.unmanagedUpdate {
                 download?.status = .completed
                 download?.progress = 1
             }
         } catch {
             NSLog("Error copying file downloaded for \(asset): \(error)")
             
-            storage.update {
+            storage.unmanagedUpdate {
                 download?.status = .failed
             }
         }
@@ -86,8 +102,9 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSe
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         guard let url = task.originalRequest?.url else { return }
         
-        let download = storage.asset(with: url)?.downloads.first
-        storage.update {
+        let download = storage.unmanagedObject(of: SessionAsset.self, with: url.absoluteString)?.downloads.first
+        
+        storage.unmanagedUpdate {
             download?.status = error != nil ? .failed : .completed
         }
     }

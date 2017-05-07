@@ -24,7 +24,7 @@ public final class Storage {
         self.realm = try Realm(configuration: configuration)
     }
     
-    /// Performs a write transaction on the database using `block`
+    /// Performs a write transaction on the database using `block`, on the main queue
     public func update(with block: @escaping () -> Void) {
         do {
             try realm.write {
@@ -32,6 +32,29 @@ public final class Storage {
             }
         } catch {
             NSLog("Error performing realm write: \(error)")
+        }
+    }
+    
+    /// Performs a write transaction on the database using `block`, on the current queue
+    public func unmanagedUpdate(with block: @escaping () -> Void) {
+        do {
+            let tempRealm = try Realm(configuration: self.realmConfig)
+            
+            try tempRealm.write {
+                block()
+            }
+        } catch {
+            NSLog("Error initializing temporary realm or performing background write: \(error)")
+        }
+    }
+    
+    public func unmanagedObject<T: Object>(of type: T.Type, with primaryKey: String) -> T? {
+        do {
+            let tempRealm = try Realm(configuration: self.realmConfig)
+            
+            return tempRealm.object(ofType: type, forPrimaryKey: primaryKey)
+        } catch {
+            return nil
         }
     }
     
