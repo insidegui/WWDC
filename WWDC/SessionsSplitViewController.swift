@@ -1,5 +1,5 @@
 //
-//  VideosSplitViewController.swift
+//  SessionsSplitViewController.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 05/02/17.
@@ -8,18 +8,16 @@
 
 import Cocoa
 
-final class VideosSplitViewController: NSSplitViewController {
+final class SessionsSplitViewController: NSSplitViewController {
     
-    var listViewController: VideosTableViewController
+    var listViewController: SessionsTableViewController
     var detailViewController: SessionDetailsViewController
     
     init() {
-        listViewController = VideosTableViewController()
+        listViewController = SessionsTableViewController()
         detailViewController = SessionDetailsViewController()
         
         super.init(nibName: nil, bundle: nil)!
-        
-        identifier = "videosSplit"
     }
     
     required init?(coder: NSCoder) {

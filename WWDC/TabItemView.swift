@@ -32,6 +32,8 @@ final class TabItemView: NSView {
     var target: Any?
     var action: Selector?
     
+    var controllerIdentifier: String = ""
+    
     var title: String? {
         didSet {
             titleLabel.stringValue = title ?? ""
@@ -121,14 +123,8 @@ final class TabItemView: NSView {
     }
     
     override func mouseDown(with event: NSEvent) {
-        if state == NSOffState {
-            state = NSOnState
-            
-            if let target = target, let action = action {
-                NSApp.sendAction(action, to: target, from: self)
-            }
-        } else {
-            state = NSOffState
+        if let target = target, let action = action {
+            NSApp.sendAction(action, to: target, from: self)
         }
     }
     

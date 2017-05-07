@@ -22,7 +22,9 @@ final class AppCoordinator {
     
     var windowController: MainWindowController
     var tabController: MainTabController
-    var videosController: VideosSplitViewController
+    
+    var scheduleController: SessionsSplitViewController
+    var videosController: SessionsSplitViewController
     
     var currentPlayerController: VideoPlayerViewController?
     
@@ -49,8 +51,16 @@ final class AppCoordinator {
         
         self.tabController = MainTabController()
         
+        // Schedule
+        self.scheduleController = SessionsSplitViewController()
+        scheduleController.identifier = "Schedule"
+        let scheduleItem = NSTabViewItem(viewController: scheduleController)
+        scheduleItem.label = "Schedule"
+        self.tabController.addTabViewItem(scheduleItem)
+        
         // Videos
-        self.videosController = VideosSplitViewController()
+        self.videosController = SessionsSplitViewController()
+        videosController.identifier = "Videos"
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
         self.tabController.addTabViewItem(videosItem)

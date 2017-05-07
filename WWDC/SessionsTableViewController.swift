@@ -1,5 +1,5 @@
 //
-//  VideosTableViewController.swift
+//  SessionsTableViewController.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 22/04/17.
@@ -12,7 +12,7 @@ import RxCocoa
 import RealmSwift
 import ConfCore
 
-class VideosTableViewController: NSViewController {
+class SessionsTableViewController: NSViewController {
     
     fileprivate struct Metrics {
         static let headerRowHeight: CGFloat = 20
@@ -131,7 +131,7 @@ class VideosTableViewController: NSViewController {
     
 }
 
-extension VideosTableViewController: NSTableViewDataSource, NSTableViewDelegate {
+extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
     
     private struct Constants {
         static let sessionCellIdentifier = "sessionCell"

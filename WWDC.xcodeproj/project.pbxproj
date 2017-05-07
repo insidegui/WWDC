@@ -15,7 +15,7 @@
 		DD34DA071E4AB0E400F25C45 /* AdapterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34DA061E4AB0E400F25C45 /* AdapterTests.swift */; };
 		DD34DA0B1E4AB3E400F25C45 /* RoomsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */; };
 		DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */; };
-		DD36A4B21E478C6A00B2EA88 /* VideosSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4B11E478C6A00B2EA88 /* VideosSplitViewController.swift */; };
+		DD36A4B21E478C6A00B2EA88 /* SessionsSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4B11E478C6A00B2EA88 /* SessionsSplitViewController.swift */; };
 		DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */; };
 		DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD36A4B51E478C6A00B2EA88 /* Main.storyboard */; };
 		DD36A4D11E478D7E00B2EA88 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
@@ -75,7 +75,7 @@
 		DD65FD6D1E48BE270054DD35 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD6C1E48BE270054DD35 /* Bookmark.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* MainTabController.swift */; };
-		DD7F38621EABD6CF002D8C00 /* VideosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* VideosTableViewController.swift */; };
+		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
 		DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */; };
 		DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */; };
 		DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */; };
@@ -211,7 +211,7 @@
 		DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsJSONAdapter.swift; sourceTree = "<group>"; };
 		DD36A4AC1E478C6A00B2EA88 /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		DD36A4B11E478C6A00B2EA88 /* VideosSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideosSplitViewController.swift; sourceTree = "<group>"; };
+		DD36A4B11E478C6A00B2EA88 /* SessionsSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsSplitViewController.swift; sourceTree = "<group>"; };
 		DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DD36A4B61E478C6A00B2EA88 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DD36A4B81E478C6A00B2EA88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -272,7 +272,7 @@
 		DD65FD6C1E48BE270054DD35 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* MainTabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
-		DD7F38611EABD6CF002D8C00 /* VideosTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosTableViewController.swift; sourceTree = "<group>"; };
+		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
 		DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDetailsViewController.swift; sourceTree = "<group>"; };
 		DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionTableCellView.swift; sourceTree = "<group>"; };
@@ -434,7 +434,7 @@
 			isa = PBXGroup;
 			children = (
 				DDCE7ECB1EA7A0E400C7A3CA /* Base */,
-				DD7F38601EABD66D002D8C00 /* Videos */,
+				DD7F38601EABD66D002D8C00 /* Sessions */,
 				DD7F387B1EAC0CF0002D8C00 /* Sessions */,
 			);
 			name = Controllers;
@@ -617,23 +617,20 @@
 			name = UserDefined;
 			sourceTree = "<group>";
 		};
-		DD7F38601EABD66D002D8C00 /* Videos */ = {
+		DD7F38601EABD66D002D8C00 /* Sessions */ = {
 			isa = PBXGroup;
 			children = (
+				DD36A4B11E478C6A00B2EA88 /* SessionsSplitViewController.swift */,
+				DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */,
 				DDEA85F81EB52AA6002AE0EB /* Playback */,
-				DD36A4B11E478C6A00B2EA88 /* VideosSplitViewController.swift */,
-				DD7F38611EABD6CF002D8C00 /* VideosTableViewController.swift */,
-				DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */,
+				DDFA10C71EBFD897001DCF66 /* Detail */,
 			);
-			name = Videos;
+			name = Sessions;
 			sourceTree = "<group>";
 		};
 		DD7F387B1EAC0CF0002D8C00 /* Sessions */ = {
 			isa = PBXGroup;
 			children = (
-				DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */,
-				DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */,
-				DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */,
 			);
 			name = Sessions;
 			sourceTree = "<group>";
@@ -780,6 +777,17 @@
 				DD382B7A1EAC345F009760C4 /* NSImage+CGImage.m */,
 			);
 			name = Base;
+			sourceTree = "<group>";
+		};
+		DDFA10C71EBFD897001DCF66 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */,
+				DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */,
+				DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */,
+				DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */,
+			);
+			name = Detail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -999,11 +1007,11 @@
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
-				DD36A4B21E478C6A00B2EA88 /* VideosSplitViewController.swift in Sources */,
+				DD36A4B21E478C6A00B2EA88 /* SessionsSplitViewController.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* MainTabController.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
-				DD7F38621EABD6CF002D8C00 /* VideosTableViewController.swift in Sources */,
+				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
 				DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */,
