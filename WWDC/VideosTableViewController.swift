@@ -68,7 +68,7 @@ class VideosTableViewController: NSViewController {
             previousRowModel = rowModel
         }
         
-        self.viewModels = rowModels
+        self.viewModels = outViewModels
     }
     
     lazy var tableView: NSTableView = {
@@ -127,8 +127,6 @@ class VideosTableViewController: NSViewController {
             
             return self.viewModels[index].viewModel
         }.bind(to: selectedSession).addDisposableTo(self.disposeBag)
-        
-        
     }
     
 }
