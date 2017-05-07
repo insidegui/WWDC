@@ -64,4 +64,12 @@ public class SessionAsset: Object {
         return "remoteURL"
     }
     
+    func merge(with other: SessionAsset, in realm: Realm) {
+        assert(other.remoteURL == self.remoteURL, "Can't merge two objects with different identifiers!")
+        
+        self.year = other.year
+        self.sessionId = other.sessionId
+        self.relativeLocalURL = other.relativeLocalURL
+    }
+    
 }

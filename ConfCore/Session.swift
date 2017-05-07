@@ -77,4 +77,27 @@ public class Session: Object {
         }
     }
     
+    func merge(with other: Session, in realm: Realm) {
+        assert(other.identifier == self.identifier, "Can't merge two objects with different identifiers!")
+        
+        self.title = other.title
+        self.number = other.number
+        self.summary = other.summary
+        self.eventIdentifier = other.eventIdentifier
+        self.trackName = other.trackName
+        
+        let otherFocuses = other.focuses.map { newFocus -> (Focus) in
+            if newFocus.realm == nil,
+                let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name)
+            {
+                return existingFocus
+            } else {
+                return newFocus
+            }
+        }
+        
+        self.focuses.removeAll()
+        self.focuses.append(objectsIn: otherFocuses)
+    }
+    
 }

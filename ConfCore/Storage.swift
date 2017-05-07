@@ -58,52 +58,90 @@ public final class Storage {
             
             self.backgroundRealm.beginWrite()
             
-            // Add sessions and session instances to tracks
-            scheduleResponse.tracks.forEach { track in
-                track.sessions.append(objectsIn: sessionsResponse.sessions.filter({ $0.trackName == track.name }))
-                track.instances.append(objectsIn: scheduleResponse.instances.filter({ $0.trackName == track.name }))
+            // Merge existing session data, preserving user-defined data
+            let consolidatedSessions = sessionsResponse.sessions.map { newSession -> (Session) in
+                if let existingSession = self.backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
+                    existingSession.merge(with: newSession, in: self.backgroundRealm)
+                    
+                    return existingSession
+                } else {
+                    return newSession
+                }
             }
-            
+
             // Associate sessions with events
             sessionsResponse.events.forEach { event in
-                let sessions = sessionsResponse.sessions.filter({ $0.eventIdentifier == event.identifier })
+                let sessions = consolidatedSessions.filter({ $0.eventIdentifier == event.identifier })
                 
                 event.sessions.append(objectsIn: sessions)
             }
             
             // Associate assets with sessions
-            sessionsResponse.sessions.forEach { session in
+            consolidatedSessions.forEach { session in
                 let components = session.identifier.components(separatedBy: "-")
                 guard components.count == 2 else { return }
                 guard let year = Int(components[0]) else { return }
                 
-                let assets = sessionsResponse.assets.filter({ $0.year == year && $0.sessionId == components[1] })
+                session.assets.removeAll()
+                
+                // Merge assets, preserving user-defined data
+                let assets = sessionsResponse.assets.filter({ $0.year == year && $0.sessionId == components[1] }).map { newAsset -> (SessionAsset) in
+                    if let existingAsset = self.backgroundRealm.object(ofType: SessionAsset.self, forPrimaryKey: newAsset.remoteURL) {
+                        existingAsset.merge(with: newAsset, in: self.backgroundRealm)
+                        
+                        return existingAsset
+                    } else {
+                        return newAsset
+                    }
+                }
                 
                 session.assets.append(objectsIn: assets)
             }
             
+
+            // Merge existing instance data, preserving user-defined data
+            let consolidatedInstances = scheduleResponse.instances.map { newInstance -> (SessionInstance) in
+                if let existingInstance = self.backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
+                    existingInstance.merge(with: newInstance, in: self.backgroundRealm)
+                    
+                    return existingInstance
+                } else {
+                    return newInstance
+                }
+            }
+            
             // Associate rooms with session instances
             scheduleResponse.rooms.forEach { room in
-                let instances = scheduleResponse.instances.filter({ $0.roomName == room.name })
+                let instances = consolidatedInstances.filter({ $0.roomName == room.name })
                 
+                room.instances.removeAll()
                 room.instances.append(objectsIn: instances)
             }
             
             // Save everything
-            self.backgroundRealm.add(scheduleResponse.instances, update: true)
             self.backgroundRealm.add(scheduleResponse.rooms, update: true)
             self.backgroundRealm.add(scheduleResponse.tracks, update: true)
             self.backgroundRealm.add(sessionsResponse.events, update: true)
             
             // Associate instances with events
-            scheduleResponse.instances.forEach { instance in
+            consolidatedInstances.forEach { instance in
                 guard let session = instance.session else { return }
                 
                 guard let event = self.backgroundRealm.objects(Session.self).filter({ $0.identifier == session.identifier && $0.number == session.number }).first?.event.first else {
                     return
                 }
+                event.sessionInstances.removeAll()
                 
                 event.sessionInstances.append(instance)
+            }
+            
+            // Add sessions and session instances to tracks
+            scheduleResponse.tracks.forEach { track in
+                track.sessions.removeAll()
+                track.instances.removeAll()
+                
+                track.sessions.append(objectsIn: consolidatedSessions.filter({ $0.trackName == track.name }))
+                track.instances.append(objectsIn: consolidatedInstances.filter({ $0.trackName == track.name }))
             }
             
             do {

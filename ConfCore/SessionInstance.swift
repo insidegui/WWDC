@@ -71,4 +71,32 @@ public class SessionInstance: Object {
         return ["roomName"]
     }
     
+    func merge(with other: SessionInstance, in realm: Realm) {
+        assert(other.identifier == self.identifier, "Can't merge two objects with different identifiers!")
+        
+        self.number = other.number
+        self.sessionType = other.sessionType
+        self.startTime = other.startTime
+        self.endTime = other.endTime
+        self.roomName = other.roomName
+        self.trackName = other.trackName
+        
+        if let otherSession = other.session {
+            self.session = realm.object(ofType: Session.self, forPrimaryKey: otherSession.identifier)
+        }
+        
+        let otherKeywords = other.keywords.map { newKeyword -> (Keyword) in
+            if newKeyword.realm == nil,
+                let existingKeyword = realm.object(ofType: Keyword.self, forPrimaryKey: newKeyword.name)
+            {
+                return existingKeyword
+            } else {
+                return newKeyword
+            }
+        }
+        
+        self.keywords.removeAll()
+        self.keywords.append(objectsIn: otherKeywords)
+    }
+    
 }
