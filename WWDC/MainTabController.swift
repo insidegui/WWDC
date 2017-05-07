@@ -35,6 +35,7 @@ class MainTabController: NSTabViewController {
         guard let toolbar = view.window?.toolbar else { return }
         
         toolbar.insertItem(withItemIdentifier: NSToolbarFlexibleSpaceItemIdentifier, at: 0)
+        toolbar.insertItem(withItemIdentifier: NSToolbarSpaceItemIdentifier, at: 2)
         toolbar.insertItem(withItemIdentifier: NSToolbarFlexibleSpaceItemIdentifier, at: toolbar.items.count)
         
         addObserver(self, forKeyPath: #keyPath(selectedTabViewItemIndex), options: [.initial, .new], context: nil)
