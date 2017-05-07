@@ -71,6 +71,16 @@ public class SessionInstance: Object {
         return ["roomName"]
     }
     
+    public static func standardSort(instanceA: SessionInstance, instanceB: SessionInstance) -> Bool {
+        guard let nA = Int(instanceA.number), let nB = Int(instanceB.number) else { return false }
+        
+        if instanceA.startTime == instanceB.startTime {
+            return nA < nB
+        } else {
+            return instanceA.startTime < instanceB.startTime
+        }
+    }
+    
     func merge(with other: SessionInstance, in realm: Realm) {
         assert(other.identifier == self.identifier, "Can't merge two objects with different identifiers!")
         

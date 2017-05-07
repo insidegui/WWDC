@@ -52,14 +52,14 @@ final class AppCoordinator {
         self.tabController = MainTabController()
         
         // Schedule
-        self.scheduleController = SessionsSplitViewController()
+        self.scheduleController = SessionsSplitViewController(listStyle: .schedule)
         scheduleController.identifier = "Schedule"
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
         self.tabController.addTabViewItem(scheduleItem)
         
         // Videos
-        self.videosController = SessionsSplitViewController()
+        self.videosController = SessionsSplitViewController(listStyle: .videos)
         videosController.identifier = "Videos"
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
@@ -88,14 +88,23 @@ final class AppCoordinator {
     }
     
     private func setupDelegation() {
-        let detail = videosController.detailViewController
+        let videoDetail = videosController.detailViewController
         
-        detail.shelfController.delegate = self
-        detail.summaryController.actionsViewController.delegate = self
+        videoDetail.shelfController.delegate = self
+        videoDetail.summaryController.actionsViewController.delegate = self
+        
+        let scheduleDetail = scheduleController.detailViewController
+        
+        scheduleDetail.shelfController.delegate = self
+        scheduleDetail.summaryController.actionsViewController.delegate = self
     }
     
     private func updateListsAfterSync() {
-        self.videosController.listViewController.sessions = storage.sessions
+        self.videosController.listViewController.sessions = storage.sessions.toArray()
+        
+        storage.scheduleObservable.subscribe(onNext: { [weak self] instances in
+            self?.scheduleController.listViewController.sessionInstances = instances
+        }).dispose()
     }
     
     @IBAction func refresh(_ sender: Any?) {

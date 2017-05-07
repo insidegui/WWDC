@@ -16,6 +16,7 @@ import RxCocoa
 final class SessionViewModel: NSObject {
     
     let session: Session
+    let sessionInstance: SessionInstance
     let identifier: String
     
     var title: String = ""
@@ -82,8 +83,15 @@ final class SessionViewModel: NSObject {
         return Variable<Int>(0)
     }()
     
-    init?(session: Session) {
+    convenience init?(session: Session) {
+        self.init(session: session, instance: nil)
+    }
+    
+    init?(session: Session?, instance: SessionInstance?) {
+        guard let session = session else { return nil }
+        
         self.session = session
+        self.sessionInstance = instance ?? SessionInstance()
         
         guard let event = session.event.first else { return nil }
         guard let track = session.track.first else { return nil }
@@ -162,6 +170,7 @@ final class SessionViewModel: NSObject {
         self.webUrl = nil
         self.imageUrl = nil
         self.session = Session()
+        self.sessionInstance = SessionInstance()
         
         super.init()
     }

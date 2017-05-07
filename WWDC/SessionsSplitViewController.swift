@@ -13,8 +13,8 @@ final class SessionsSplitViewController: NSSplitViewController {
     var listViewController: SessionsTableViewController
     var detailViewController: SessionDetailsViewController
     
-    init() {
-        listViewController = SessionsTableViewController()
+    init(listStyle: SessionsListStyle) {
+        listViewController = SessionsTableViewController(style: listStyle)
         detailViewController = SessionDetailsViewController()
         
         super.init(nibName: nil, bundle: nil)!

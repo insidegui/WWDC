@@ -221,6 +221,16 @@ public final class Storage {
         }
     }
     
+    public lazy var scheduleObservable: Observable<Results<SessionInstance>?> = {
+        let currentEventCollection = self.realm.objects(Event.self).filter("isCurrent == true")
+        
+        return Observable.collection(from: currentEventCollection).map { events -> Results<SessionInstance>? in
+            guard let event = events.first else { return nil }
+            
+            return self.realm.objects(SessionInstance.self).filter("startTime >= %@ AND endTime <= %@", event.startDate, event.endDate)
+        }
+    }()
+    
     public lazy var activeDownloads: Observable<Results<Download>> = {
         let results = self.realm.objects(Download.self).filter("rawStatus != %@ AND rawStatus != %@", "none", "deleted")
         

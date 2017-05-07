@@ -12,6 +12,11 @@ import RxCocoa
 import RealmSwift
 import ConfCore
 
+enum SessionsListStyle {
+    case schedule
+    case videos
+}
+
 class SessionsTableViewController: NSViewController {
     
     fileprivate struct Metrics {
@@ -21,12 +26,20 @@ class SessionsTableViewController: NSViewController {
     
     private let disposeBag = DisposeBag()
     
-    var sessions: Results<Session>? {
+    let style: SessionsListStyle
+    
+    var sessions: Array<Session>? {
         didSet {
-            updateSessionsList()
+            updateVideosList()
         }
     }
     var selectedSession = Variable<SessionViewModel?>(nil)
+    
+    var sessionInstances: Results<SessionInstance>? {
+        didSet {
+            updateScheduleList()
+        }
+    }
     
     var viewModels: [SessionRow] = [] {
         didSet {
@@ -39,7 +52,9 @@ class SessionsTableViewController: NSViewController {
         }
     }
     
-    init() {
+    init(style: SessionsListStyle) {
+        self.style = style
+        
         super.init(nibName: nil, bundle: nil)!
         
         identifier = "videosList"
@@ -49,7 +64,7 @@ class SessionsTableViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func updateSessionsList() {
+    private func updateVideosList() {
         guard let results = sessions else { return }
         
         let sortedSessions = results.sorted(by: Session.standardSort)
@@ -61,6 +76,28 @@ class SessionsTableViewController: NSViewController {
         for rowModel in rowModels {
             if rowModel.viewModel.trackName != previousRowModel?.viewModel.trackName {
                 outViewModels.append(SessionRow(title: rowModel.viewModel.trackName))
+            }
+            
+            outViewModels.append(rowModel)
+            
+            previousRowModel = rowModel
+        }
+        
+        self.viewModels = outViewModels
+    }
+    
+    private func updateScheduleList() {
+        guard let results = sessionInstances else { return }
+        
+        let sortedInstances = results.sorted(by: SessionInstance.standardSort)
+        
+        var outViewModels: [SessionRow] = []
+        let rowModels = sortedInstances.flatMap({ SessionViewModel(session: $0.session, instance: $0) }).map(SessionRow.init(viewModel:))
+        
+        var previousRowModel: SessionRow? = nil
+        for rowModel in rowModels {
+            if rowModel.viewModel.sessionInstance.startTime != previousRowModel?.viewModel.sessionInstance.startTime {
+                outViewModels.append(SessionRow(title: rowModel.viewModel.sessionInstance.startTime.description))
             }
             
             outViewModels.append(rowModel)
