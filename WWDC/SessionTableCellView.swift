@@ -16,11 +16,11 @@ final class SessionTableCellView: NSTableCellView {
     
     var viewModel: SessionViewModel? {
         didSet {
-            guard let viewModel = viewModel else { return }
+            guard viewModel != oldValue else { return }
             
-            viewModel.rxModelChange.asObservable().subscribe(onNext: { [weak self] _ in
-                self?.updateUI()
-            }).addDisposableTo(self.disposeBag)
+            thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
+            
+            bindUI()
         }
     }
     
@@ -37,29 +37,37 @@ final class SessionTableCellView: NSTableCellView {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.disposeBag = DisposeBag()
-        
         thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
+        
+        self.disposeBag = DisposeBag()
     }
     
-    private func updateUI() {
+    private func bindUI() {
         guard let viewModel = viewModel else { return }
         
-        titleLabel.stringValue = viewModel.title
-        subtitleLabel.stringValue = viewModel.subtitle
-        contextLabel.stringValue = viewModel.context
+        viewModel.rxTitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).addDisposableTo(self.disposeBag)
+        viewModel.rxSubtitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(subtitleLabel.rx.text).addDisposableTo(self.disposeBag)
+        viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).addDisposableTo(self.disposeBag)
         
-        thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
-        
-        if let imageUrl = viewModel.imageUrl {
+        viewModel.rxImageUrl.distinctUntilChanged({ $0 != $1 }).subscribe(onNext: { [weak self] imageUrl in
+            guard let imageUrl = imageUrl else { return }
+            
             ImageCache.shared.fetchImage(at: imageUrl) { [weak self] url, image in
                 guard url == imageUrl else { return }
                 
                 self?.thumbnailImageView.image = image
             }
-        }
+        }).addDisposableTo(self.disposeBag)
         
-        contextColorView.layer?.backgroundColor = viewModel.color.cgColor
+        viewModel.rxColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            CATransaction.setAnimationDuration(0)
+            
+            self?.contextColorView.layer?.backgroundColor = color.cgColor
+            
+            CATransaction.commit()
+        }).addDisposableTo(self.disposeBag)
     }
     
     private lazy var titleLabel: NSTextField = {
