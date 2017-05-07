@@ -35,7 +35,7 @@ final class LiveVideosAdapter: Adapter {
         // Live assets are always for the current year
         asset.year = Calendar.current.component(.year, from: Date())
         asset.sessionId = sessionId
-        asset.assetType = SessionAssetType.liveStreamVideo.rawValue
+        asset.rawAssetType = SessionAssetType.liveStreamVideo.rawValue
         asset.remoteURL = url
         
         return .success(asset)

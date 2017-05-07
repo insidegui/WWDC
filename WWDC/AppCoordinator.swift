@@ -29,7 +29,10 @@ final class AppCoordinator {
     
     init(windowController: MainWindowController) {
         let filePath = PathUtil.appSupportPath + "/ConfCore.realm"
-        let realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
+        
+        var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
+        realmConfig.schemaVersion = 2
+        realmConfig.migrationBlock = { _, _ in }
         
         let client = AppleAPIClient(environment: .current)
         

@@ -42,7 +42,7 @@ final class SessionAssetsJSONAdapter: Adapter {
         var output = [SessionAsset]()
         
         let streaming = SessionAsset()
-        streaming.assetType = SessionAssetType.streamingVideo.rawValue
+        streaming.rawAssetType = SessionAssetType.streamingVideo.rawValue
         streaming.remoteURL = url
         streaming.year = year
         streaming.sessionId = sessionId
@@ -50,7 +50,7 @@ final class SessionAssetsJSONAdapter: Adapter {
         
         if let hd = input[AssetKeys.download_hd].string {
             let hdVideo = SessionAsset()
-            hdVideo.assetType = SessionAssetType.hdVideo.rawValue
+            hdVideo.rawAssetType = SessionAssetType.hdVideo.rawValue
             hdVideo.remoteURL = hd
             hdVideo.year = year
             hdVideo.sessionId = sessionId
@@ -63,7 +63,7 @@ final class SessionAssetsJSONAdapter: Adapter {
         
         if let sd = input[AssetKeys.download_sd].string {
             let sdVideo = SessionAsset()
-            sdVideo.assetType = SessionAssetType.sdVideo.rawValue
+            sdVideo.rawAssetType = SessionAssetType.sdVideo.rawValue
             sdVideo.remoteURL = sd
             sdVideo.year = year
             sdVideo.sessionId = sessionId
@@ -76,7 +76,7 @@ final class SessionAssetsJSONAdapter: Adapter {
         
         if let slides = input[AssetKeys.slides].string {
             let slidesAsset = SessionAsset()
-            slidesAsset.assetType = SessionAssetType.slides.rawValue
+            slidesAsset.rawAssetType = SessionAssetType.slides.rawValue
             slidesAsset.remoteURL = slides
             slidesAsset.year = year
             slidesAsset.sessionId = sessionId
@@ -86,7 +86,7 @@ final class SessionAssetsJSONAdapter: Adapter {
         
         if let webpage = input[AssetKeys.webpageURL].string {
             let webpageAsset = SessionAsset()
-            webpageAsset.assetType = SessionAssetType.webpage.rawValue
+            webpageAsset.rawAssetType = SessionAssetType.webpage.rawValue
             webpageAsset.remoteURL = webpage
             webpageAsset.year = year
             webpageAsset.sessionId = sessionId
@@ -96,7 +96,7 @@ final class SessionAssetsJSONAdapter: Adapter {
         
         if let image = input[AssetKeys.images][AssetKeys.shelf].string {
             let imageAsset = SessionAsset()
-            imageAsset.assetType = SessionAssetType.image.rawValue
+            imageAsset.rawAssetType = SessionAssetType.image.rawValue
             imageAsset.remoteURL = image
             imageAsset.year = year
             imageAsset.sessionId = sessionId

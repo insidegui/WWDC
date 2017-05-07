@@ -31,7 +31,7 @@ enum PlaybackError: Error {
 extension Session {
     
     func asset(of type: SessionAssetType) -> SessionAsset? {
-        return assets.filter({ $0.assetType == type.rawValue }).first
+        return assets.filter({ $0.assetType == type }).first
     }
     
 }
