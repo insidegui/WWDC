@@ -181,4 +181,10 @@ public final class Storage {
         return realm.objects(SessionAsset.self).filter("remoteURL == %@", remoteURL.absoluteString).first
     }
     
+    public func download(for session: Session) -> Observable<Download?> {
+        let download = session.assets.filter("rawType == %@", SessionAssetType.hdVideo.rawValue).first?.downloads.first
+        
+        return Observable.from(optional: download)
+    }
+    
 }
