@@ -92,12 +92,14 @@ class SessionsTableViewController: NSViewController {
         let sortedInstances = results.sorted(by: SessionInstance.standardSort)
         
         var outViewModels: [SessionRow] = []
-        let rowModels = sortedInstances.flatMap({ SessionViewModel(session: $0.session, instance: $0) }).map(SessionRow.init(viewModel:))
+        let rowModels = sortedInstances.flatMap({ SessionViewModel(session: $0.session, instance: $0, style: .schedule) }).map(SessionRow.init(viewModel:))
         
         var previousRowModel: SessionRow? = nil
         for rowModel in rowModels {
             if rowModel.viewModel.sessionInstance.startTime != previousRowModel?.viewModel.sessionInstance.startTime {
-                outViewModels.append(SessionRow(title: rowModel.viewModel.sessionInstance.startTime.description))
+                let date = rowModel.viewModel.sessionInstance.startTime
+                let vm = SessionViewModel(headerWithDate: date, showTimeZone: previousRowModel == nil)
+                outViewModels.append(SessionRow(viewModel: vm, kind: .sectionHeader))
             }
             
             outViewModels.append(rowModel)

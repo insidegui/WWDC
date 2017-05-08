@@ -19,18 +19,19 @@ final class SessionRow: NSObject {
     let kind: SessionRowKind
     let viewModel: SessionViewModel
     
-    init(viewModel: SessionViewModel) {
-        self.kind = .session
+    init(viewModel: SessionViewModel, kind: SessionRowKind) {
+        self.kind = kind
         self.viewModel = viewModel
         
         super.init()
     }
     
-    init(title: String) {
-        self.kind = .sectionHeader
-        self.viewModel = SessionViewModel(title: title)
-        
-        super.init()
+    convenience init(viewModel: SessionViewModel) {
+        self.init(viewModel: viewModel, kind: .session)
+    }
+    
+    convenience init(title: String) {
+        self.init(viewModel: SessionViewModel(title: title), kind: .sectionHeader)
     }
     
     var title: String {

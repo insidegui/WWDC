@@ -15,6 +15,8 @@ import RxCocoa
 
 final class SessionViewModel: NSObject {
     
+    let style: SessionsListStyle
+    
     let session: Session
     let sessionInstance: SessionInstance
     let identifier: String
@@ -50,7 +52,14 @@ final class SessionViewModel: NSObject {
     }()
     
     lazy var rxContext: Observable<String> = {
-        return Observable.from(object: self.session).map({ SessionViewModel.context(for: $0) })
+        if self.style == .schedule {
+            let so = Observable.from(object: self.session)
+            let io = Observable.from(object: self.sessionInstance)
+            
+            return Observable.zip(so, io).map({ SessionViewModel.context(for: $0.0, instance: $0.1) })
+        } else {
+            return Observable.from(object: self.session).map({ SessionViewModel.context(for: $0) })
+        }
     }()
     
     lazy var rxFooter: Observable<String> = {
@@ -79,15 +88,13 @@ final class SessionViewModel: NSObject {
         return Observable.from(object: self.session).map({ $0.favorites.count > 0 })
     }()
     
-    lazy var rxModelChange: Variable<Int> = {
-        return Variable<Int>(0)
-    }()
-    
     convenience init?(session: Session) {
-        self.init(session: session, instance: nil)
+        self.init(session: session, instance: nil, style: .videos)
     }
     
-    init?(session: Session?, instance: SessionInstance?) {
+    init?(session: Session?, instance: SessionInstance?, style: SessionsListStyle) {
+        self.style = style
+        
         guard let session = session else { return nil }
         
         self.session = session
@@ -102,7 +109,13 @@ final class SessionViewModel: NSObject {
         self.identifier = session.identifier
         self.title = session.title
         self.subtitle = SessionViewModel.subtitle(from: session, at: event)
-        self.context = SessionViewModel.context(for: session)
+        
+        if style == .schedule {
+            self.context = SessionViewModel.context(for: session, instance: sessionInstance)
+        } else {
+            self.context = SessionViewModel.context(for: session)
+        }
+        
         self.color = NSColor.fromHexString(hexString: track.lightColor)
         self.summary = session.summary
         self.footer = SessionViewModel.footer(for: session, at: event)
@@ -114,47 +127,38 @@ final class SessionViewModel: NSObject {
         
         self.rxTitle.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.title = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
         
         self.rxSubtitle.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.subtitle = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
         
         self.rxTrackName.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.trackName = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
         
         self.rxSummary.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.summary = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
         
         self.rxContext.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.context = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
         
         self.rxFooter.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.footer = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
         
         self.rxColor.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.color = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
         
         self.rxImageUrl.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.imageUrl = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
         
         self.rxWebUrl.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
             self?.webUrl = newValue
-            self?.rxModelChange.value += 1
         }).addDisposableTo(self.disposeBag)
     }
     
@@ -171,6 +175,25 @@ final class SessionViewModel: NSObject {
         self.imageUrl = nil
         self.session = Session()
         self.sessionInstance = SessionInstance()
+        self.style = .videos
+        
+        super.init()
+    }
+    
+    init(headerWithDate date: Date, showTimeZone: Bool) {
+        self.identifier = title
+        self.title = SessionViewModel.standardFormatted(date: date, withTimeZoneName: showTimeZone)
+        self.trackName = ""
+        self.subtitle = ""
+        self.summary = ""
+        self.context = ""
+        self.footer = ""
+        self.color = .clear
+        self.webUrl = nil
+        self.imageUrl = nil
+        self.session = Session()
+        self.sessionInstance = SessionInstance()
+        self.style = .videos
         
         super.init()
     }
@@ -207,18 +230,28 @@ final class SessionViewModel: NSObject {
         return result
     }
     
-    static func context(for session: Session) -> String {
-        let focusesArray = session.focuses.toArray()
-        
-        let focuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: true)
-        
-        var result = session.track.first?.name ?? ""
-        
-        if focusesArray.count > 0 {
-            result = "\(focuses) - " + result
+    static func context(for session: Session, instance: SessionInstance? = nil) -> String {
+        if let instance = instance {
+            var result = timeFormatter.string(from: instance.startTime) + " - " + timeFormatter.string(from: instance.endTime)
+            
+            if let roomName = instance.room.first?.name {
+                result += " - " + roomName
+            }
+            
+            return result
+        } else {
+            let focusesArray = session.focuses.toArray()
+            
+            let focuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: true)
+            
+            var result = session.track.first?.name ?? ""
+            
+            if focusesArray.count > 0 {
+                result = "\(focuses) - " + result
+            }
+            
+            return result
         }
-        
-        return result
     }
     
     static func footer(for session: Session, at event: ConfCore.Event?) -> String {
@@ -257,6 +290,40 @@ final class SessionViewModel: NSObject {
         guard let code = session.track.first?.lightColor else { return nil }
         
         return NSColor.fromHexString(hexString: code)
+    }
+    
+    static let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        
+        df.locale = Locale.current
+        df.timeZone = TimeZone.current
+        df.dateFormat = "EEEE"
+        
+        return df
+    }()
+    
+    static let timeFormatter: DateFormatter = {
+        let tf = DateFormatter()
+        
+        tf.locale = Locale.current
+        tf.timeZone = TimeZone.current
+        tf.timeStyle = .short
+        
+        return tf
+    }()
+    
+    static var timeZoneNameSuffix: String {
+        if let name = TimeZone.current.localizedName(for: .shortGeneric, locale: Locale.current) {
+            return " " + name
+        } else {
+            return ""
+        }
+    }
+    
+    static func standardFormatted(date: Date, withTimeZoneName: Bool) -> String {
+        let result = dateFormatter.string(from: date) + ", " + timeFormatter.string(from: date)
+        
+        return withTimeZoneName ? result + timeZoneNameSuffix : result
     }
     
 }
