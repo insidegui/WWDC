@@ -38,12 +38,7 @@ class SessionsTableViewController: NSViewController {
     
     var viewModels: [SessionRow] = [] {
         didSet {
-            tableView.reload(withOldValue: oldValue, newValue: viewModels)
-            
-            // make sure the selected session is kept up to date
-            if tableView.selectedRow >= 0 {
-                selectedSession.value = viewModels[tableView.selectedRow].viewModel
-            }
+            tableView.reloadData()
         }
     }
     

@@ -23,13 +23,7 @@
       "images": {
         "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/images/210_734x413.jpg"
       },
-      "download_hd": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_hd_mastering_uikit_on_tvos.mp4",
-      "download_sd": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_sd_mastering_uikit_on_tvos.mp4",
-      "slides": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/210_mastering_uikit_on_tvos.pdf",
       "year": 2017,
-      "url": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/hls_vod_mvp.m3u8",
-      "tvos_url": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/atv_vod_mvp.m3u8",
-      "subtitles": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/subtitles/eng/210_sd_mastering_uikit_on_tvos.vtt",
       "location": "Presidio",
       "duration": 2280,
       "start_date": "2017-06-15T10:00:00-07:00",
@@ -14650,8 +14644,8 @@
         "current": true,
         "identifier": "wwdc2017",
         "webUrlKey": "wwdc17",
-        "start": "2017-06-05",
-        "end": "2017-06-09"
+        "start": "2017-06-13",
+        "end": "2017-06-17"
       },
     {
       "name": "WWDC 2016",

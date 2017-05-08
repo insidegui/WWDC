@@ -35,18 +35,16 @@ final class SessionAssetsJSONAdapter: Adapter {
             return .error(.missingKey(AssetKeys.year))
         }
         
-        guard let url = input[AssetKeys.url].string else {
-            return .error(.missingKey(AssetKeys.url))
-        }
-        
         var output = [SessionAsset]()
         
-        let streaming = SessionAsset()
-        streaming.rawAssetType = SessionAssetType.streamingVideo.rawValue
-        streaming.remoteURL = url
-        streaming.year = year
-        streaming.sessionId = sessionId
-        output.append(streaming)
+        if let url = input[AssetKeys.url].string {
+            let streaming = SessionAsset()
+            streaming.rawAssetType = SessionAssetType.streamingVideo.rawValue
+            streaming.remoteURL = url
+            streaming.year = year
+            streaming.sessionId = sessionId
+            output.append(streaming)
+        }
         
         if let hd = input[AssetKeys.download_hd].string {
             let hdVideo = SessionAsset()
