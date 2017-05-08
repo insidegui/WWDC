@@ -111,12 +111,19 @@ class SessionActionsViewController: NSViewController {
         
         let isFavorite = viewModel.asObservable().ignoreNil().flatMap({ $0.rxIsFavorite })
         let validDownload = viewModel.asObservable().ignoreNil().flatMap({ $0.rxValidDownload })
+        let hasDownloadableContent = viewModel.asObservable().ignoreNil().flatMap({ $0.rxDownloadableContent }).map({ $0.count > 0 })
         
         isFavorite.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] fave in
             self.favoriteButton.state = fave ? NSOnState : NSOffState
         }).addDisposableTo(self.disposeBag)
         
-        validDownload.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] download in
+        Observable.zip(hasDownloadableContent, validDownload).subscribe(onNext: { (hasContent, download) in
+            guard hasContent else {
+                self.downloadIndicator.isHidden = true
+                self.downloadButton.isHidden = true
+                return
+            }
+            
             guard let download = download else {
                 self.downloadIndicator.isHidden = true
                 self.downloadButton.isHidden = false

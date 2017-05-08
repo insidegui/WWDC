@@ -95,6 +95,12 @@ final class SessionViewModel: NSObject {
         return Observable.collection(from: playableAssets)
     }()
     
+    lazy var rxDownloadableContent: Observable<Results<SessionAsset>> = {
+        let downloadableAssets = self.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue)
+        
+        return Observable.collection(from: downloadableAssets)
+    }()
+    
     convenience init?(session: Session) {
         self.init(session: session, instance: nil, style: .videos)
     }
