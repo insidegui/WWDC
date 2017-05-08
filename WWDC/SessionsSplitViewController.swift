@@ -8,6 +8,11 @@
 
 import Cocoa
 
+enum SessionsListStyle {
+    case schedule
+    case videos
+}
+
 final class SessionsSplitViewController: NSSplitViewController {
     
     var listViewController: SessionsTableViewController
@@ -15,7 +20,7 @@ final class SessionsSplitViewController: NSSplitViewController {
     
     init(listStyle: SessionsListStyle) {
         listViewController = SessionsTableViewController(style: listStyle)
-        detailViewController = SessionDetailsViewController()
+        detailViewController = SessionDetailsViewController(listStyle: listStyle)
         
         super.init(nibName: nil, bundle: nil)!
     }

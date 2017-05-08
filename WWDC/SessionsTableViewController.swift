@@ -12,11 +12,6 @@ import RxCocoa
 import RealmSwift
 import ConfCore
 
-enum SessionsListStyle {
-    case schedule
-    case videos
-}
-
 class SessionsTableViewController: NSViewController {
     
     fileprivate struct Metrics {

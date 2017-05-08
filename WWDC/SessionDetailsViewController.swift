@@ -14,12 +14,16 @@ class SessionDetailsViewController: NSViewController {
 
     private let disposeBag = DisposeBag()
     
+    let listStyle: SessionsListStyle
+    
     var viewModel = Variable<SessionViewModel?>(nil)
     
     let shelfController: ShelfViewController
     let summaryController: SessionSummaryViewController
     
-    init() {
+    init(listStyle: SessionsListStyle) {
+        self.listStyle = listStyle
+        
         self.shelfController = ShelfViewController()
         self.summaryController = SessionSummaryViewController()
         

@@ -12,6 +12,7 @@ import IGListKit
 import RxRealm
 import RxSwift
 import RxCocoa
+import RealmSwift
 
 final class SessionViewModel: NSObject {
     
@@ -86,6 +87,12 @@ final class SessionViewModel: NSObject {
     
     lazy var rxIsFavorite: Observable<Bool> = {
         return Observable.from(object: self.session).map({ $0.favorites.count > 0 })
+    }()
+    
+    lazy var rxPlayableContent: Observable<Results<SessionAsset>> = {
+        let playableAssets = self.session.assets.filter("rawAssetType == %@ OR rawAssetType == %@", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
+        
+        return Observable.collection(from: playableAssets)
     }()
     
     convenience init?(session: Session) {

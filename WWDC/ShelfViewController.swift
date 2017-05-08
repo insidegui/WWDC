@@ -37,6 +37,7 @@ class ShelfViewController: NSViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         b.target = self
         b.action = #selector(play(_:))
+        b.isHidden = true
         
         return b
     }()
@@ -67,17 +68,22 @@ class ShelfViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.asObservable().subscribe(onNext: { [weak self] viewModel in
-            self?.playButton.isHidden = (viewModel == nil)
+        bindUI()
+    }
+    
+    private func bindUI() {
+        let rxImageUrl = viewModel.asObservable().ignoreNil().flatMap({ $0.rxImageUrl })
+        let rxCanBePlayed = viewModel.asObservable().ignoreNil().flatMap({ $0.rxPlayableContent.map({ $0.count > 0 }) })
+        
+        rxCanBePlayed.map({ !$0 }).asDriver(onErrorJustReturn: true).drive(playButton.rx.isHidden).addDisposableTo(self.disposeBag)
+        
+        rxImageUrl.subscribe(onNext: { [weak self] imageUrl in
+            guard let imageUrl = imageUrl else { return }
             
-            guard let viewModel = viewModel else { return }
-            
-            if let imageUrl = viewModel.imageUrl {
-                ImageCache.shared.fetchImage(at: imageUrl) { url, image in
-                    guard url == imageUrl else { return }
-                    
-                    self?.shelfView.image = image
-                }
+            ImageCache.shared.fetchImage(at: imageUrl) { url, image in
+                guard url == imageUrl else { return }
+
+                self?.shelfView.image = image
             }
         }).addDisposableTo(self.disposeBag)
     }
