@@ -73,18 +73,32 @@ final class AppCoordinator {
         NotificationCenter.default.addObserver(forName: .NSApplicationDidFinishLaunching, object: nil, queue: nil) { _ in self.startup() }
     }
     
+    /// The session that is currently selected on the videos tab (observable)
     var selectedSession: Observable<SessionViewModel?> {
         return videosController.listViewController.selectedSession.asObservable()
     }
     
+    /// The session that is currently selected on the schedule tab (observable)
+    var selectedScheduleItem: Observable<SessionViewModel?> {
+        return scheduleController.listViewController.selectedSession.asObservable()
+    }
+    
+    /// The session that is currently selected on the videos tab
     var selectedSessionValue: SessionViewModel? {
         return videosController.listViewController.selectedSession.value
     }
     
+    /// The session that is currently selected on the schedule tab
+    var selectedScheduleItemValue: SessionViewModel? {
+        return scheduleController.listViewController.selectedSession.value
+    }
+    
     private func setupBindings() {
         selectedSession.bind(to: videosController.detailViewController.viewModel).addDisposableTo(self.disposeBag)
+        selectedScheduleItem.bind(to: scheduleController.detailViewController.viewModel).addDisposableTo(self.disposeBag)
         
         selectedSession.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
+        selectedScheduleItem.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
     }
     
     private func setupDelegation() {
