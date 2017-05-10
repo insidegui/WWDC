@@ -71,6 +71,8 @@ class ShelfViewController: NSViewController {
         bindUI()
     }
     
+    private var currentImageDownloadOperation: Operation?
+    
     private func bindUI() {
         let rxImageUrl = viewModel.asObservable().ignoreNil().flatMap({ $0.rxImageUrl })
         let rxCanBePlayed = viewModel.asObservable().ignoreNil().flatMap({ $0.rxPlayableContent.map({ $0.count > 0 }) })
@@ -78,12 +80,14 @@ class ShelfViewController: NSViewController {
         rxCanBePlayed.map({ !$0 }).asDriver(onErrorJustReturn: true).drive(playButton.rx.isHidden).addDisposableTo(self.disposeBag)
         
         rxImageUrl.subscribe(onNext: { [weak self] imageUrl in
+            self?.currentImageDownloadOperation?.cancel()
+            
             guard let imageUrl = imageUrl else { return }
             
-            ImageCache.shared.fetchImage(at: imageUrl) { url, image in
+            self?.currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, original, _ in
                 guard url == imageUrl else { return }
-
-                self?.shelfView.image = image
+                
+                self?.shelfView.image = original
             }
         }).addDisposableTo(self.disposeBag)
     }

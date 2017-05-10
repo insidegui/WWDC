@@ -17,22 +17,12 @@ import RealmSwift
 final class SessionViewModel: NSObject {
     
     let style: SessionsListStyle
-    
+    var title: String
     let session: Session
     let sessionInstance: SessionInstance
     let identifier: String
-    
-    var title: String = ""
-    var subtitle: String = ""
-    var trackName: String = ""
-    var summary: String = ""
-    var context: String = ""
-    var footer: String = ""
-    
-    var color: NSColor = .clear
-    
-    var imageUrl: URL? = nil
-    var webUrl: URL? = nil
+    var webUrl: URL?
+    let trackName: String
     
     private var disposeBag = DisposeBag()
     
@@ -109,104 +99,50 @@ final class SessionViewModel: NSObject {
         self.style = style
         
         guard let session = session else { return nil }
-        
-        self.session = session
-        self.sessionInstance = instance ?? SessionInstance()
-        
-        guard let event = session.event.first else { return nil }
         guard let track = session.track.first else { return nil }
         
         self.trackName = track.name
-        
-        self.imageUrl = SessionViewModel.imageUrl(for: session)
-        self.identifier = session.identifier
+        self.session = session
+        self.sessionInstance = instance ?? SessionInstance()
         self.title = session.title
-        self.subtitle = SessionViewModel.subtitle(from: session, at: event)
+        self.identifier = session.identifier
         
-        if style == .schedule {
-            self.context = SessionViewModel.context(for: session, instance: sessionInstance)
-        } else {
-            self.context = SessionViewModel.context(for: session)
+        if let webUrlStr = session.asset(of: .webpage)?.remoteURL {
+            self.webUrl = URL(string: webUrlStr)
         }
-        
-        self.color = NSColor.fromHexString(hexString: track.lightColor)
-        self.summary = session.summary
-        self.footer = SessionViewModel.footer(for: session, at: event)
-        self.webUrl = SessionViewModel.webUrl(for: session)
         
         super.init()
         
-        // MARK: SELF-UPDATE
-        
-        self.rxTitle.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.title = newValue
+        rxWebUrl.subscribe(onNext: { [weak self] url in
+            self?.webUrl = url
         }).addDisposableTo(self.disposeBag)
         
-        self.rxSubtitle.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.subtitle = newValue
-        }).addDisposableTo(self.disposeBag)
-        
-        self.rxTrackName.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.trackName = newValue
-        }).addDisposableTo(self.disposeBag)
-        
-        self.rxSummary.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.summary = newValue
-        }).addDisposableTo(self.disposeBag)
-        
-        self.rxContext.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.context = newValue
-        }).addDisposableTo(self.disposeBag)
-        
-        self.rxFooter.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.footer = newValue
-        }).addDisposableTo(self.disposeBag)
-        
-        self.rxColor.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.color = newValue
-        }).addDisposableTo(self.disposeBag)
-        
-        self.rxImageUrl.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.imageUrl = newValue
-        }).addDisposableTo(self.disposeBag)
-        
-        self.rxWebUrl.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] newValue in
-            self?.webUrl = newValue
+        rxTitle.subscribe(onNext: { [weak self] title in
+            self?.title = title
         }).addDisposableTo(self.disposeBag)
     }
     
     init(title: String) {
         self.identifier = title
         self.title = title
-        self.trackName = ""
-        self.subtitle = ""
-        self.summary = ""
-        self.context = ""
-        self.footer = ""
-        self.color = .clear
         self.webUrl = nil
-        self.imageUrl = nil
         self.session = Session()
         self.sessionInstance = SessionInstance()
         self.style = .videos
+        self.trackName = ""
         
         super.init()
     }
     
     init(headerWithDate date: Date, showTimeZone: Bool) {
-        self.identifier = title
         self.title = SessionViewModel.standardFormatted(date: date, withTimeZoneName: showTimeZone)
-        self.trackName = ""
-        self.subtitle = ""
-        self.summary = ""
-        self.context = ""
-        self.footer = ""
-        self.color = .clear
-        self.webUrl = nil
-        self.imageUrl = nil
+        self.identifier = title
+        
         self.session = Session()
         self.sessionInstance = SessionInstance()
         self.style = .videos
+        self.webUrl = nil
+        self.trackName = ""
         
         super.init()
     }
@@ -351,11 +287,7 @@ extension SessionViewModel: IGListDiffable {
         guard let other = object as? SessionViewModel else { return false }
         
         return self.identifier == other.identifier &&
-                self.title == other.title &&
-                self.subtitle == other.subtitle &&
-                self.context == other.context &&
-                self.imageUrl == other.imageUrl &&
-                self.color == other.color
+                self.title == other.title
     }
     
 }

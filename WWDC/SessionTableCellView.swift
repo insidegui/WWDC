@@ -24,6 +24,8 @@ final class SessionTableCellView: NSTableCellView {
         }
     }
     
+    private var imageDownloadOperation: Operation? = nil
+    
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         
@@ -36,6 +38,8 @@ final class SessionTableCellView: NSTableCellView {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        imageDownloadOperation?.cancel()
         
         thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
         
@@ -52,21 +56,17 @@ final class SessionTableCellView: NSTableCellView {
         viewModel.rxImageUrl.distinctUntilChanged({ $0 != $1 }).subscribe(onNext: { [weak self] imageUrl in
             guard let imageUrl = imageUrl else { return }
             
-            ImageCache.shared.fetchImage(at: imageUrl) { [weak self] url, image in
+            self?.imageDownloadOperation?.cancel()
+            
+            self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, _, thumb in
                 guard url == imageUrl else { return }
                 
-                self?.thumbnailImageView.image = image
+                self?.thumbnailImageView.image = thumb
             }
         }).addDisposableTo(self.disposeBag)
         
         viewModel.rxColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-            CATransaction.setAnimationDuration(0)
-            
             self?.contextColorView.layer?.backgroundColor = color.cgColor
-            
-            CATransaction.commit()
         }).addDisposableTo(self.disposeBag)
     }
     
