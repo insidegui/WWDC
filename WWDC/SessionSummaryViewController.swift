@@ -50,8 +50,9 @@ class SessionSummaryViewController: NSViewController {
         
         v.orientation = .horizontal
         v.alignment = .top
-        v.distribution = .equalSpacing
+        v.distribution = .fill
         v.spacing = 22
+        v.translatesAutoresizingMaskIntoConstraints = false
         
         return v
     }()
@@ -86,8 +87,12 @@ class SessionSummaryViewController: NSViewController {
         
         v.orientation = .vertical
         v.alignment = .leading
+        v.distribution = .fill
         v.spacing = 24
         v.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.titleStack.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
+        self.titleStack.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
         
         return v
     }()

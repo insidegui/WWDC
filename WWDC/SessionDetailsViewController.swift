@@ -38,13 +38,9 @@ class SessionDetailsViewController: NSViewController {
         view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
         
-//        view.widthAnchor.constraint(greaterThanOrEqualToConstant: 760).isActive = true
-        
         shelfController.view.translatesAutoresizingMaskIntoConstraints = false
         summaryController.view.translatesAutoresizingMaskIntoConstraints = false
-        
-//        shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 450).isActive = true
-        
+                
         view.addSubview(shelfController.view)
         view.addSubview(summaryController.view)
         
