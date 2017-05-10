@@ -15,7 +15,7 @@ import PlayerUI
 extension AppCoordinator: ShelfViewControllerDelegate {
     
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController) {
-        guard let viewModel = videosController.detailViewController.viewModel.value else { return }
+        guard let viewModel = controller.viewModel.value else { return }
         
         do {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
@@ -24,7 +24,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             
             currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player)
             
-            attachPlayerToShelf()
+            attachPlayerToShelf(controller)
         } catch {
             WWDCAlert.show(with: error)
         }
@@ -48,10 +48,8 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         currentPlayerController = nil
     }
     
-    private func attachPlayerToShelf() {
+    private func attachPlayerToShelf(_ shelf: ShelfViewController) {
         guard let playerController = currentPlayerController else { return }
-        
-        let shelf = videosController.detailViewController.shelfController
         
         shelf.addChildViewController(playerController)
         
