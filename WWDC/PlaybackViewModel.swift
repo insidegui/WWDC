@@ -36,10 +36,12 @@ extension Session {
     
 }
 
-struct PlaybackViewModel {
+final class PlaybackViewModel {
     
     let sessionViewModel: SessionViewModel
     let player: AVPlayer
+    
+    private var timeObserver: Any?
     
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
         self.sessionViewModel = sessionViewModel
@@ -59,6 +61,21 @@ struct PlaybackViewModel {
         }
         
         self.player = AVPlayer(url: streamUrl)
+        
+        let p = session.currentPosition()
+        self.player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
+        
+        self.timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+            let s = Double(CMTimeGetSeconds(currentTime))
+            
+            self?.sessionViewModel.session.setCurrentPosition(s)
+        }
+    }
+    
+    deinit {
+        if let timeObserver = timeObserver {
+            player.removeTimeObserver(timeObserver)
+        }
     }
     
 }

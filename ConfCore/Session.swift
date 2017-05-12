@@ -39,6 +39,9 @@ public class Session: Object {
     /// Session favorite
     public let favorites = List<Favorite>()
     
+    /// Session progress
+    public let progresses = List<SessionProgress>()
+    
     /// Session bookmarks
     public let bookmarks = List<Bookmark>()
     

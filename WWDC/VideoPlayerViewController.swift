@@ -79,6 +79,8 @@ open class VideoPlayerViewController: NSViewController {
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize), options: [.initial, .new], context: nil)
         
+        player.play()
+        
         progressIndicator.startAnimation(nil)
     }
     

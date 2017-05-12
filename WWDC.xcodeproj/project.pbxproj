@@ -90,6 +90,7 @@
 		DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F387F1EAC15B4002D8C00 /* RxNil.swift */; };
 		DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38871EAC2275002D8C00 /* PathUtil.swift */; };
 		DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */; };
+		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
 		DDAE7C551E5BC6CD00CEA205 /* Siesta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */; };
@@ -289,6 +290,7 @@
 		DD7F387F1EAC15B4002D8C00 /* RxNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxNil.swift; sourceTree = "<group>"; };
 		DD7F38871EAC2275002D8C00 /* PathUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathUtil.swift; sourceTree = "<group>"; };
 		DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadCenter.swift; sourceTree = "<group>"; };
+		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptsJSONAdapter.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
 		DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Siesta.framework; path = Carthage/Build/Mac/Siesta.framework; sourceTree = "<group>"; };
@@ -622,6 +624,7 @@
 			isa = PBXGroup;
 			children = (
 				DD65FD6A1E48BD9F0054DD35 /* Favorite.swift */,
+				DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */,
 				DDFA10BC1EBEA584001DCF66 /* Download.swift */,
 				DD65FD6C1E48BE270054DD35 /* Bookmark.swift */,
 			);
@@ -1056,6 +1059,7 @@
 				DDAE7C5E1E5C723A00CEA205 /* Resource+Error.swift in Sources */,
 				DDAE7C5A1E5C652600CEA205 /* Environment.swift in Sources */,
 				DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */,
+				DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */,
 				DDAE7C651E5CA81C00CEA205 /* SessionsResponse.swift in Sources */,
 				DD65FD591E48A0C90054DD35 /* Photo.swift in Sources */,
 				DD65FD6B1E48BD9F0054DD35 /* Favorite.swift in Sources */,

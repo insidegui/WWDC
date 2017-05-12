@@ -34,7 +34,7 @@ final class AppCoordinator {
         let filePath = PathUtil.appSupportPath + "/ConfCore.realm"
         
         var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
-        realmConfig.schemaVersion = 2
+        realmConfig.schemaVersion = 3
         realmConfig.migrationBlock = { _, _ in }
         
         let client = AppleAPIClient(environment: .current)
@@ -92,6 +92,9 @@ final class AppCoordinator {
     var selectedScheduleItemValue: SessionViewModel? {
         return scheduleController.listViewController.selectedSession.value
     }
+    
+    /// The viewModel for the current playback session
+    var currentPlaybackViewModel: PlaybackViewModel?
     
     private func setupBindings() {
         selectedSession.bind(to: videosController.detailViewController.viewModel).addDisposableTo(self.disposeBag)

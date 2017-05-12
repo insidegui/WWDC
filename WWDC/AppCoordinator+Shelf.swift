@@ -20,6 +20,8 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         do {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
             
+            self.currentPlaybackViewModel = playbackViewModel
+            
             teardownPlayerIfNeeded()
             
             currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player)
@@ -46,6 +48,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         playerController.view.removeFromSuperview()
         
         currentPlayerController = nil
+        currentPlaybackViewModel = nil
     }
     
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
