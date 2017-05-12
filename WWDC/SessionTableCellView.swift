@@ -66,7 +66,15 @@ final class SessionTableCellView: NSTableCellView {
         }).addDisposableTo(self.disposeBag)
         
         viewModel.rxColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
-            self?.contextColorView.layer?.backgroundColor = color.cgColor
+            self?.contextColorView.color = color
+        }).addDisposableTo(self.disposeBag)
+        
+        viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
+            if let progress = progresses.first {
+                self?.contextColorView.progress = progress.relativePosition
+            } else {
+                self?.contextColorView.progress = 1
+            }
         }).addDisposableTo(self.disposeBag)
     }
     
@@ -112,12 +120,9 @@ final class SessionTableCellView: NSTableCellView {
         return v
     }()
     
-    private lazy var contextColorView: NSView = {
-        let v = NSView()
+    private lazy var contextColorView: TrackColorView = {
+        let v = TrackColorView()
         
-        v.layer = CALayer()
-        v.layer?.backgroundColor = NSColor.red.cgColor
-        v.layer?.cornerRadius = 2
         v.widthAnchor.constraint(equalToConstant: 4).isActive = true
         
         return v

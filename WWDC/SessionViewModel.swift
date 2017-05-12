@@ -91,6 +91,12 @@ final class SessionViewModel: NSObject {
         return Observable.collection(from: downloadableAssets)
     }()
     
+    lazy var rxProgresses: Observable<Results<SessionProgress>> = {
+        let progresses = self.session.progresses.filter(NSPredicate(value: true))
+        
+        return Observable.collection(from: progresses)
+    }()
+    
     convenience init?(session: Session) {
         self.init(session: session, instance: nil, style: .videos)
     }

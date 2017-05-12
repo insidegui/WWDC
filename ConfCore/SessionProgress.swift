@@ -24,6 +24,9 @@ public class SessionProgress: Object {
     /// The current position in the video (in seconds)
     public dynamic var currentPosition: Double = 0
     
+    /// The current position in the video, relative to the duration (from 0 to 1)
+    public dynamic var relativePosition: Double = 0
+    
     /// The session this progress is associated with
     public let session = LinkingObjects(fromType: Session.self, property: "progresses")
     
@@ -35,8 +38,10 @@ public class SessionProgress: Object {
 
 extension Session {
     
-    public func setCurrentPosition(_ position: Double) {
+    public func setCurrentPosition(_ position: Double, _ duration: Double) {
         guard Thread.isMainThread else { return }
+        guard !duration.isNaN, !duration.isZero, !duration.isInfinite else { return }
+        guard !position.isNaN, !position.isZero, !position.isInfinite else { return }
         
         do {
             try self.realm?.write {
@@ -50,6 +55,7 @@ extension Session {
                 }
                 
                 progress.currentPosition = position
+                progress.relativePosition = position / duration
                 progress.updatedAt = Date()
             }
         } catch {
