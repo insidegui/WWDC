@@ -251,7 +251,7 @@ public final class Storage {
     
     public func createDownload(for asset: SessionAsset) {
         // prevent multiple download instances per session asset
-        guard asset.downloads.filter({ $0.status != .deleted && $0.status != .none }).count == 0 else { return }
+        guard asset.downloads.filter({ $0.status != .none }).count == 0 else { return }
         
         do {
             try realm.write {

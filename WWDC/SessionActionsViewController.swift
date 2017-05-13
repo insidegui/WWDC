@@ -124,6 +124,26 @@ class SessionActionsViewController: NSViewController {
         viewModel.rxIsFavorite.subscribe(onNext: { [weak self] isFavorite in
             self?.favoriteButton.state = isFavorite ? NSOnState : NSOffState
         }).addDisposableTo(self.disposeBag)
+        
+        let rxActiveDownload = viewModel.rxActiveDownloads.map({ $0.first })
+        
+        let rxHideDownloadButton = rxActiveDownload.map({ $0?.status == .downloading || $0?.status == .completed })
+        
+        rxHideDownloadButton.observeOn(MainScheduler.instance).bind(to: downloadButton.rx.isHidden).addDisposableTo(self.disposeBag)
+        rxHideDownloadButton.observeOn(MainScheduler.instance).map({ !$0 }).bind(to: downloadIndicator.rx.isHidden).addDisposableTo(self.disposeBag)
+        
+        rxActiveDownload.subscribe(onNext: { [weak self] download in
+            guard let download = download else {
+                self?.downloadIndicator.doubleValue = 0
+                return
+            }
+            
+            switch download.status {
+            case .downloading:
+                self?.downloadIndicator.doubleValue = download.progress
+            default: break
+            }
+        }).addDisposableTo(self.disposeBag)
     }
     
     @IBAction func toggleFavorite(_ sender: NSView?) {
