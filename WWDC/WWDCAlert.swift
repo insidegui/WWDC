@@ -18,4 +18,12 @@ final class WWDCAlert {
         alert.runModal()
     }
     
+    static func create() -> NSAlert {
+        let alert = NSAlert()
+        
+        alert.window.appearance = WWDCAppearance.appearance()
+        
+        return alert
+    }
+    
 }

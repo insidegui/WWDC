@@ -116,6 +116,15 @@
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
 		DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */; };
 		DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */; };
+		DDDAA3F21EC7653300DF9D02 /* ThrowBack.h in Headers */ = {isa = PBXBuildFile; fileRef = DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDDAA3F51EC7653300DF9D02 /* ThrowBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */; };
+		DDDAA3F61EC7653300DF9D02 /* ThrowBack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDDAA3FD1EC765B600DF9D02 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
+		DDDAA3FE1EC765CD00DF9D02 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
+		DDDAA3FF1EC768A100DF9D02 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
+		DDDAA4021EC768C500DF9D02 /* TBUserDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA4011EC768C500DF9D02 /* TBUserDataMigrator.swift */; };
+		DDDAA4071EC76D9300DF9D02 /* TBPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA4061EC76D9300DF9D02 /* TBPreferences.swift */; };
+		DDDAA40A1EC775B500DF9D02 /* TBSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA4091EC775B500DF9D02 /* TBSession.swift */; };
 		DDE29EC71EB529F200680703 /* PlayerUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBFA16F1EB525F3004AE10F /* PlayerUI.framework */; };
 		DDE29EC81EB529F200680703 /* PlayerUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDBFA16F1EB525F3004AE10F /* PlayerUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */; };
@@ -163,6 +172,20 @@
 			remoteGlobalIDString = DDBFA15F1EB525F2004AE10F;
 			remoteInfo = PlayerUI;
 		};
+		DDDAA3F31EC7653300DF9D02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DDDAA3ED1EC7653200DF9D02;
+			remoteInfo = ThrowBack;
+		};
+		DDDAA3FB1EC7654600DF9D02 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DDDAA3ED1EC7653200DF9D02;
+			remoteInfo = ThrowBack;
+		};
 		DDE29EC91EB529F200680703 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DDBFA16A1EB525F2004AE10F /* PlayerUI.xcodeproj */;
@@ -179,6 +202,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				DDDAA3F61EC7653300DF9D02 /* ThrowBack.framework in Embed Frameworks */,
 				DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */,
 				DDE29EC81EB529F200680703 /* PlayerUI.framework in Embed Frameworks */,
 			);
@@ -322,6 +346,12 @@
 		DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksJSONAdapter.swift; sourceTree = "<group>"; };
 		DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleSection.swift; sourceTree = "<group>"; };
+		DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ThrowBack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThrowBack.h; sourceTree = "<group>"; };
+		DDDAA3F11EC7653300DF9D02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDDAA4011EC768C500DF9D02 /* TBUserDataMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBUserDataMigrator.swift; sourceTree = "<group>"; };
+		DDDAA4061EC76D9300DF9D02 /* TBPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBPreferences.swift; sourceTree = "<group>"; };
+		DDDAA4091EC775B500DF9D02 /* TBSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBSession.swift; sourceTree = "<group>"; };
 		DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindowController.swift; sourceTree = "<group>"; };
 		DDF32EA81EBE29D70028E39D /* PlayerContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContainerViewController.swift; sourceTree = "<group>"; };
@@ -347,6 +377,7 @@
 				DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */,
 				DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */,
 				DDE29EC71EB529F200680703 /* PlayerUI.framework in Frameworks */,
+				DDDAA3F51EC7653300DF9D02 /* ThrowBack.framework in Frameworks */,
 				DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */,
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 				DD7F386C1EABF560002D8C00 /* IGListKit.framework in Frameworks */,
@@ -373,6 +404,16 @@
 				DD36A4D11E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
 				DD65FD641E48AE540054DD35 /* Realm.framework in Frameworks */,
 				DD65FD651E48AE540054DD35 /* RealmSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDDAA3EA1EC7653200DF9D02 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDDAA3FF1EC768A100DF9D02 /* ConfCore.framework in Frameworks */,
+				DDDAA3FD1EC765B600DF9D02 /* Realm.framework in Frameworks */,
+				DDDAA3FE1EC765CD00DF9D02 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,6 +444,7 @@
 				DD36A4AE1E478C6A00B2EA88 /* WWDC */,
 				DD36A4C91E478D7E00B2EA88 /* ConfCore */,
 				DD36A4D61E478D7E00B2EA88 /* ConfCoreTests */,
+				DDDAA3EF1EC7653300DF9D02 /* ThrowBack */,
 				DD36A4AD1E478C6A00B2EA88 /* Products */,
 				DDAE7C531E5BC6CD00CEA205 /* Frameworks */,
 			);
@@ -414,6 +456,7 @@
 				DD36A4AC1E478C6A00B2EA88 /* WWDC.app */,
 				DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */,
 				DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */,
+				DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -774,6 +817,34 @@
 			name = Display;
 			sourceTree = "<group>";
 		};
+		DDDAA3EF1EC7653300DF9D02 /* ThrowBack */ = {
+			isa = PBXGroup;
+			children = (
+				DDDAA3F11EC7653300DF9D02 /* Info.plist */,
+				DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */,
+				DDDAA4001EC768A900DF9D02 /* Migration */,
+			);
+			path = ThrowBack;
+			sourceTree = "<group>";
+		};
+		DDDAA4001EC768A900DF9D02 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				DDDAA4081EC775AD00DF9D02 /* LegacyModels */,
+				DDDAA4061EC76D9300DF9D02 /* TBPreferences.swift */,
+				DDDAA4011EC768C500DF9D02 /* TBUserDataMigrator.swift */,
+			);
+			name = Migration;
+			sourceTree = "<group>";
+		};
+		DDDAA4081EC775AD00DF9D02 /* LegacyModels */ = {
+			isa = PBXGroup;
+			children = (
+				DDDAA4091EC775B500DF9D02 /* TBSession.swift */,
+			);
+			name = LegacyModels;
+			sourceTree = "<group>";
+		};
 		DDEA85F81EB52AA6002AE0EB /* Playback */ = {
 			isa = PBXGroup;
 			children = (
@@ -829,6 +900,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DDDAA3EB1EC7653200DF9D02 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDDAA3F21EC7653300DF9D02 /* ThrowBack.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -848,6 +927,7 @@
 			dependencies = (
 				DD36A4DC1E478D7E00B2EA88 /* PBXTargetDependency */,
 				DDE29ECA1EB529F200680703 /* PBXTargetDependency */,
+				DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			productName = WWDC;
@@ -866,6 +946,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DDDAA3FC1EC7654600DF9D02 /* PBXTargetDependency */,
 			);
 			name = ConfCore;
 			productName = ConfCore;
@@ -890,6 +971,24 @@
 			productName = ConfCoreTests;
 			productReference = DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DDDAA3ED1EC7653200DF9D02 /* ThrowBack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DDDAA3F71EC7653300DF9D02 /* Build configuration list for PBXNativeTarget "ThrowBack" */;
+			buildPhases = (
+				DDDAA3E91EC7653200DF9D02 /* Sources */,
+				DDDAA3EA1EC7653200DF9D02 /* Frameworks */,
+				DDDAA3EB1EC7653200DF9D02 /* Headers */,
+				DDDAA3EC1EC7653200DF9D02 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ThrowBack;
+			productName = ThrowBack;
+			productReference = DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
@@ -919,6 +1018,12 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = DD36A4AB1E478C6900B2EA88;
 					};
+					DDDAA3ED1EC7653200DF9D02 = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = 8C7439RJLG;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = DD36A4A71E478C6900B2EA88 /* Build configuration list for PBXProject "WWDC" */;
@@ -943,6 +1048,7 @@
 				DD36A4AB1E478C6900B2EA88 /* WWDC */,
 				DD36A4C71E478D7E00B2EA88 /* ConfCore */,
 				DD36A4CF1E478D7E00B2EA88 /* ConfCoreTests */,
+				DDDAA3ED1EC7653200DF9D02 /* ThrowBack */,
 			);
 		};
 /* End PBXProject section */
@@ -985,6 +1091,13 @@
 				DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */,
 				DD5DEC291E4AA8C800426FA6 /* news.json in Resources */,
 				DD5DEC2B1E4AA8C800426FA6 /* videos.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDDAA3EC1EC7653200DF9D02 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1125,6 +1238,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DDDAA3E91EC7653200DF9D02 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDDAA4071EC76D9300DF9D02 /* TBPreferences.swift in Sources */,
+				DDDAA40A1EC775B500DF9D02 /* TBSession.swift in Sources */,
+				DDDAA4021EC768C500DF9D02 /* TBUserDataMigrator.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1142,6 +1265,16 @@
 			isa = PBXTargetDependency;
 			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
 			targetProxy = DD36A4DB1E478D7E00B2EA88 /* PBXContainerItemProxy */;
+		};
+		DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DDDAA3ED1EC7653200DF9D02 /* ThrowBack */;
+			targetProxy = DDDAA3F31EC7653300DF9D02 /* PBXContainerItemProxy */;
+		};
+		DDDAA3FC1EC7654600DF9D02 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DDDAA3ED1EC7653200DF9D02 /* ThrowBack */;
+			targetProxy = DDDAA3FB1EC7654600DF9D02 /* PBXContainerItemProxy */;
 		};
 		DDE29ECA1EB529F200680703 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1400,6 +1533,69 @@
 			};
 			name = Release;
 		};
+		DDDAA3F81EC7653300DF9D02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = ThrowBack/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.ThrowBack;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DDDAA3F91EC7653300DF9D02 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = ThrowBack/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.ThrowBack;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1438,6 +1634,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		DDDAA3F71EC7653300DF9D02 /* Build configuration list for PBXNativeTarget "ThrowBack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDDAA3F81EC7653300DF9D02 /* Debug */,
+				DDDAA3F91EC7653300DF9D02 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

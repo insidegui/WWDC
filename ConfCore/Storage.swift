@@ -14,7 +14,7 @@ import RxRealm
 public final class Storage {
     
     private let realmConfig: Realm.Configuration
-    private let realm: Realm
+    public let realm: Realm
     private var backgroundRealm: Realm!
     
     private let backgroundQueue = DispatchQueue(label: "Storage", qos: .userInitiated)
