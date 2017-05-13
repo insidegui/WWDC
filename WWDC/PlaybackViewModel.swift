@@ -40,6 +40,7 @@ final class PlaybackViewModel {
     
     let sessionViewModel: SessionViewModel
     let player: AVPlayer
+    let isLiveStream: Bool
     
     private var timeObserver: Any?
     
@@ -62,19 +63,32 @@ final class PlaybackViewModel {
             streamUrl = localUrl
         }
         
+        if session.instances.filter("isCurrentlyLive == true").count > 0 {
+            if let liveAsset = session.assets.filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).first, let liveURL = URL(string: liveAsset.remoteURL) {
+                streamUrl = liveURL
+                self.isLiveStream = true
+            } else {
+                self.isLiveStream = false
+            }
+        } else {
+            self.isLiveStream = false
+        }
+        
         self.player = AVPlayer(url: streamUrl)
         
-        let p = session.currentPosition()
-        self.player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
-        
-        self.timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
-            guard let duration = self?.player.currentItem?.asset.duration else { return }
-            guard CMTIME_IS_VALID(duration) else { return }
+        if !self.isLiveStream {
+            let p = session.currentPosition()
+            self.player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
             
-            let p = Double(CMTimeGetSeconds(currentTime))
-            let d = Double(CMTimeGetSeconds(duration))
-            
-            self?.sessionViewModel.session.setCurrentPosition(p, d)
+            self.timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+                guard let duration = self?.player.currentItem?.asset.duration else { return }
+                guard CMTIME_IS_VALID(duration) else { return }
+                
+                let p = Double(CMTimeGetSeconds(currentTime))
+                let d = Double(CMTimeGetSeconds(duration))
+                
+                self?.sessionViewModel.session.setCurrentPosition(p, d)
+            }
         }
     }
     
