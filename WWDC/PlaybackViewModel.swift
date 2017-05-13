@@ -54,10 +54,12 @@ final class PlaybackViewModel {
             throw PlaybackError.assetNotFound(session.identifier)
         }
         
-        // TODO: play local video file when downloaded
-        
-        guard let streamUrl = URL(string: asset.remoteURL) else {
+        guard var streamUrl = URL(string: asset.remoteURL) else {
             throw PlaybackError.invalidAsset(asset.remoteURL)
+        }
+        
+        if let localUrl = DownloadManager(storage).localFileURL(for: session) {
+            streamUrl = localUrl
         }
         
         self.player = AVPlayer(url: streamUrl)

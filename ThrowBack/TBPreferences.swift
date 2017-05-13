@@ -8,11 +8,9 @@
 
 import Foundation
 
-private let _SharedPreferences = TBPreferences();
-
-class TBPreferences {
+public final class TBPreferences {
     
-    static let shared: TBPreferences = TBPreferences()
+    public static let shared: TBPreferences = TBPreferences()
     
     var presentedVersionFiveMigrationPrompt: Bool {
         get {
@@ -138,7 +136,7 @@ class TBPreferences {
     }
     
     // where to save downloaded videos
-    var localVideoStoragePath: String {
+    public var localVideoStoragePath: String {
         set {
             defaults.set(newValue, forKey: Keys.localVideoStoragePath)
         }

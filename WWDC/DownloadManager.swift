@@ -46,6 +46,18 @@ final class DownloadManager: NSObject {
         task.resume()
     }
     
+    func localFileURL(for session: Session) -> URL? {
+        guard let asset = session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else {
+            return nil
+        }
+        
+        let url = Preferences.shared.localVideoStorageURL.appendingPathComponent(asset.relativeLocalURL)
+        
+        guard FileManager.default.fileExists(atPath: url.path) else { return nil }
+        
+        return url
+    }
+    
     fileprivate var lastStorageUpdate = Date.distantPast
     
 }
