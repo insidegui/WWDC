@@ -1646,6 +1646,7 @@
 				DDDAA3F91EC7653300DF9D02 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

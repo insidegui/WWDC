@@ -19,8 +19,26 @@ public final class Storage {
     private let backgroundQueue = DispatchQueue(label: "Storage", qos: .utility)
     
     public init(_ configuration: Realm.Configuration) throws {
-        self.realmConfig = configuration
-        self.realm = try Realm(configuration: configuration)
+        var config = configuration
+        config.migrationBlock = Storage.migrate(migration:oldVersion:)
+        
+        self.realmConfig = config
+        self.realm = try Realm(configuration: config)
+    }
+    
+    internal static func migrate(migration: Migration, oldVersion: UInt64) {
+        if oldVersion < 10 {
+            // alpha cleanup
+            migration.deleteData(forType: "Event")
+            migration.deleteData(forType: "Track")
+            migration.deleteData(forType: "Room")
+            migration.deleteData(forType: "Favorite")
+            migration.deleteData(forType: "SessionProgress")
+            migration.deleteData(forType: "Session")
+            migration.deleteData(forType: "SessionInstance")
+            migration.deleteData(forType: "SessionAsset")
+            migration.deleteData(forType: "SessionAsset")
+        }
     }
     
     /// Performs a write transaction on the database using `block`, on the main queue
@@ -107,7 +125,7 @@ public final class Storage {
                     
                     // Merge assets, preserving user-defined data
                     let assets = sessionsResponse.assets.filter({ $0.year == year && $0.sessionId == components[1] }).map { newAsset -> (SessionAsset) in
-                        if let existingAsset = backgroundRealm.object(ofType: SessionAsset.self, forPrimaryKey: newAsset.remoteURL) {
+                        if let existingAsset = backgroundRealm.object(ofType: SessionAsset.self, forPrimaryKey: newAsset.identifier) {
                             existingAsset.merge(with: newAsset, in: backgroundRealm)
                             
                             return existingAsset

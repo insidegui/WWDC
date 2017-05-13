@@ -36,7 +36,6 @@ final class AppCoordinator {
         
         var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
         realmConfig.schemaVersion = Constants.coreSchemaVersion
-        realmConfig.migrationBlock = { _, _ in }
         
         let client = AppleAPIClient(environment: .current)
         
