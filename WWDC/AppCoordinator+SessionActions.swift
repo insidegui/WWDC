@@ -15,7 +15,7 @@ import PlayerUI
 extension AppCoordinator: SessionActionsViewControllerDelegate {
     
     func sessionActionsDidSelectFavorite(_ sender: NSView?) {
-        guard let viewModel = selectedSessionValue else { return }
+        guard let viewModel = selectedSessionValue ?? selectedScheduleItemValue else { return }
         
         if viewModel.isFavorite {
             storage.removeFavorite(for: viewModel.session)
@@ -25,7 +25,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     }
     
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
-        guard let viewModel = selectedSessionValue else { return }
+        guard let viewModel = selectedSessionValue ?? selectedScheduleItemValue else { return }
         
         guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
         
