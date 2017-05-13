@@ -31,7 +31,13 @@ public class SessionAsset: Object {
     /// - WWDCSessionAssetTypeSlidesPDF
     /// - WWDCSessionAssetTypeStreamingVideo
     /// - WWDCSessionAssetTypeWebpageURL
-    internal dynamic var rawAssetType = ""
+    internal dynamic var rawAssetType = "" {
+        didSet {
+            self.identifier = generateIdentifier()
+        }
+    }
+    
+    public dynamic var identifier = ""
     
     public var assetType: SessionAssetType {
         get {
@@ -43,10 +49,18 @@ public class SessionAsset: Object {
     }
     
     /// The year of the session this asset belongs to
-    public dynamic var year = 0
+    public dynamic var year = 0 {
+        didSet {
+            self.identifier = generateIdentifier()
+        }
+    }
     
     /// The id of the session this asset belongs to
-    public dynamic var sessionId = ""
+    public dynamic var sessionId = "" {
+        didSet {
+            self.identifier = generateIdentifier()
+        }
+    }
     
     /// URL for this asset
     public dynamic var remoteURL = ""
@@ -61,7 +75,7 @@ public class SessionAsset: Object {
     public let downloads = List<Download>()
     
     public override class func primaryKey() -> String? {
-        return "remoteURL"
+        return "identifier"
     }
     
     func merge(with other: SessionAsset, in realm: Realm) {
@@ -70,6 +84,10 @@ public class SessionAsset: Object {
         self.year = other.year
         self.sessionId = other.sessionId
         self.relativeLocalURL = other.relativeLocalURL
+    }
+    
+    internal func generateIdentifier() -> String {
+        return String(self.year) + "@" + self.sessionId + "~" + self.rawAssetType.replacingOccurrences(of: "WWDCSessionAssetType", with: "")
     }
     
 }

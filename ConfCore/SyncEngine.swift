@@ -37,4 +37,12 @@ public final class SyncEngine {
         }
     }
     
+    public func syncLiveVideos() {
+        client.fetchLiveVideoAssets { [weak self] result in
+            DispatchQueue.main.async {
+                self?.storage.store(liveVideosResult: result)
+            }
+        }
+    }
+    
 }

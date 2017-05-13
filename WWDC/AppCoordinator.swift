@@ -144,6 +144,7 @@ final class AppCoordinator {
     
     @IBAction func refresh(_ sender: Any?) {
         syncEngine.syncSessionsAndSchedule()
+        syncEngine.syncLiveVideos()
     }
     
     func startup() {

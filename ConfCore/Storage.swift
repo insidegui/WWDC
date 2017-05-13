@@ -15,9 +15,8 @@ public final class Storage {
     
     private let realmConfig: Realm.Configuration
     public let realm: Realm
-    private var backgroundRealm: Realm!
     
-    private let backgroundQueue = DispatchQueue(label: "Storage", qos: .userInitiated)
+    private let backgroundQueue = DispatchQueue(label: "Storage", qos: .utility)
     
     public init(_ configuration: Realm.Configuration) throws {
         self.realmConfig = configuration
@@ -60,13 +59,7 @@ public final class Storage {
     
     func store(sessionsResult: Result<SessionsResponse, APIError>, scheduleResult: Result<ScheduleResponse, APIError>, completion: @escaping () -> Void) {
         backgroundQueue.async {
-            if self.backgroundRealm == nil {
-                do {
-                    self.backgroundRealm = try Realm(configuration: self.realmConfig)
-                } catch {
-                    fatalError("Error initializing background Realm: \(error)")
-                }
-            }
+            let backgroundRealm = try! Realm(configuration: self.realmConfig)
             
             if case let .error(sessionsError) = sessionsResult {
                 print("Error downloading sessions: \(sessionsError)")
@@ -79,13 +72,13 @@ public final class Storage {
                 return
             }
             
-            self.backgroundRealm.beginWrite()
+            backgroundRealm.beginWrite()
             
             // Merge existing session data, preserving user-defined data
             let consolidatedSessions = sessionsResponse.sessions.map { newSession -> (Session) in
                 return autoreleasepool {
-                    if let existingSession = self.backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
-                        existingSession.merge(with: newSession, in: self.backgroundRealm)
+                    if let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
+                        existingSession.merge(with: newSession, in: backgroundRealm)
                         
                         return existingSession
                     } else {
@@ -114,8 +107,8 @@ public final class Storage {
                     
                     // Merge assets, preserving user-defined data
                     let assets = sessionsResponse.assets.filter({ $0.year == year && $0.sessionId == components[1] }).map { newAsset -> (SessionAsset) in
-                        if let existingAsset = self.backgroundRealm.object(ofType: SessionAsset.self, forPrimaryKey: newAsset.remoteURL) {
-                            existingAsset.merge(with: newAsset, in: self.backgroundRealm)
+                        if let existingAsset = backgroundRealm.object(ofType: SessionAsset.self, forPrimaryKey: newAsset.remoteURL) {
+                            existingAsset.merge(with: newAsset, in: backgroundRealm)
                             
                             return existingAsset
                         } else {
@@ -130,25 +123,25 @@ public final class Storage {
             // Merge existing instance data, preserving user-defined data
             scheduleResponse.instances.forEach { newInstance in
                 return autoreleasepool {
-                    if let existingInstance = self.backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
-                        existingInstance.merge(with: newInstance, in: self.backgroundRealm)
+                    if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
+                        existingInstance.merge(with: newInstance, in: backgroundRealm)
                         
-                        self.backgroundRealm.add(existingInstance, update: true)
+                        backgroundRealm.add(existingInstance, update: true)
                     } else {
-                        self.backgroundRealm.add(newInstance, update: true)
+                        backgroundRealm.add(newInstance, update: true)
                     }
                 }
             }
             
             // Save everything
-            self.backgroundRealm.add(scheduleResponse.rooms, update: true)
-            self.backgroundRealm.add(scheduleResponse.tracks, update: true)
-            self.backgroundRealm.add(sessionsResponse.events, update: true)
+            backgroundRealm.add(scheduleResponse.rooms, update: true)
+            backgroundRealm.add(scheduleResponse.tracks, update: true)
+            backgroundRealm.add(sessionsResponse.events, update: true)
             
             do {
-                try self.backgroundRealm.commitWrite()
+                try backgroundRealm.commitWrite()
                 
-                self.updateAssociationsAndCreateViews(in: self.backgroundRealm, completion: completion)
+                self.updateAssociationsAndCreateViews(in: backgroundRealm, completion: completion)
             } catch {
                 NSLog("Realm error: \(error)")
             }
@@ -181,6 +174,13 @@ public final class Storage {
             
             track.instances.append(objectsIn: instances)
             track.sessions.append(objectsIn: sessions)
+        }
+        
+        // add live video assets to sessions
+        realm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
+            if let session = realm.objects(Session.self).filter("year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
+                session.assets.append(liveAsset)
+            }
         }
         
         // Create schedule view
@@ -219,6 +219,30 @@ public final class Storage {
             }
         } catch {
             NSLog("Realm error while consolidating schedule: \(error)")
+        }
+    }
+    
+    internal func store(liveVideosResult: Result<[SessionAsset], APIError>) {
+        backgroundQueue.async {
+            guard case .success(let assets) = liveVideosResult else { return }
+            
+            let backgroundRealm = try! Realm(configuration: self.realmConfig)
+            
+            backgroundRealm.beginWrite()
+            
+            assets.forEach { asset in
+                backgroundRealm.add(asset, update: true)
+                
+                if let session = backgroundRealm.objects(Session.self).filter("year == %d AND number == %@", asset.year, asset.sessionId).first {
+                    session.assets.append(asset)
+                }
+            }
+            
+            do {
+                try backgroundRealm.commitWrite()
+            } catch {
+                NSLog("Error syncing live videos: \(error)")
+            }
         }
     }
     

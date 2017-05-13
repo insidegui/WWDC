@@ -65,6 +65,7 @@ final class SessionsJSONAdapter: Adapter {
         let session = Session()
         
         session.identifier = identifier
+        session.year = Int(eventYear) ?? -1
         session.number = id
         session.title = title
         session.summary = summary

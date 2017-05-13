@@ -15,6 +15,9 @@ public class Session: Object {
     /// Unique identifier
     public dynamic var identifier = ""
     
+    /// Session year
+    public dynamic var year = 0
+    
     /// Session number
     public dynamic var number = ""
     
