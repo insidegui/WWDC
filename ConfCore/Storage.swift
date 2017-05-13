@@ -262,6 +262,12 @@ public final class Storage {
         }
     }
     
+    public lazy var tracksObservable: Observable<Results<Track>> = {
+        let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
+        
+        return Observable.collection(from: tracks)
+    }()
+    
     public lazy var scheduleObservable: Observable<Results<ScheduleSection>> = {
         let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
         

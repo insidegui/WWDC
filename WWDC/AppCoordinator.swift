@@ -133,7 +133,9 @@ final class AppCoordinator {
     }
     
     private func doUpdateLists() {
-        videosController.listViewController.sessions = storage.sessions.toArray()
+        storage.tracksObservable.subscribe(onNext: { [weak self] tracks in
+            self?.videosController.listViewController.tracks = tracks
+        }).dispose()
         
         storage.scheduleObservable.subscribe(onNext: { [weak self] sections in
             self?.scheduleController.listViewController.scheduleSections = sections

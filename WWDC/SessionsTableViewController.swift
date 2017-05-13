@@ -21,14 +21,15 @@ class SessionsTableViewController: NSViewController {
     
     private let disposeBag = DisposeBag()
     
+    var selectedSession = Variable<SessionViewModel?>(nil)
+    
     let style: SessionsListStyle
     
-    var sessions: Array<Session>? {
+    var tracks: Results<Track>? {
         didSet {
             updateVideosList()
         }
     }
-    var selectedSession = Variable<SessionViewModel?>(nil)
     
     var scheduleSections: Results<ScheduleSection>? {
         didSet {
@@ -55,25 +56,20 @@ class SessionsTableViewController: NSViewController {
     }
     
     private func updateVideosList() {
-//        guard let results = sessions else { return }
-//        
-//        let sortedSessions = results.sorted(by: Session.standardSort)
-//        
-//        var outViewModels: [SessionRow] = []
-//        let rowModels = sortedSessions.flatMap(SessionViewModel.init(session:)).map(SessionRow.init(viewModel:))
-//        
-//        var previousRowModel: SessionRow? = nil
-//        for rowModel in rowModels {
-//            if rowModel.viewModel.trackName != previousRowModel?.viewModel.trackName {
-//                outViewModels.append(SessionRow(title: rowModel.viewModel.trackName))
-//            }
-//            
-//            outViewModels.append(rowModel)
-//            
-//            previousRowModel = rowModel
-//        }
-//        
-//        self.viewModels = outViewModels
+        guard let tracks = tracks else { return }
+        
+        self.viewModels = tracks.flatMap { track -> [SessionRow] in
+            let titleViewModel = SessionViewModel(title: track.name)
+            let titleRow = SessionRow(viewModel: titleViewModel, kind: .sectionHeader)
+            
+            let sessionRows: [SessionRow] = track.sessions.filter("assets.@count > 0").sorted(by: Session.standardSort).flatMap { session in
+                guard let viewModel = SessionViewModel(session: session) else { return nil }
+                
+                return SessionRow(viewModel: viewModel, kind: .session)
+            }
+            
+            return [titleRow] + sessionRows
+        }
     }
     
     private func updateScheduleList() {
@@ -87,32 +83,14 @@ class SessionsTableViewController: NSViewController {
             
             shownTimeZone = true
             
-            let instanceViewModels: [SessionViewModel] = section.instances.flatMap({ SessionViewModel(session: $0.session, instance: $0, style: .schedule) })
-            let instanceRows: [SessionRow] = instanceViewModels.map({ SessionRow(viewModel: $0) })
+            let instanceRows: [SessionRow] = section.instances.flatMap { instance in
+                guard let viewModel = SessionViewModel(session: instance.session, instance: instance, style: .schedule) else { return nil }
+                
+                return SessionRow(viewModel: viewModel, kind: .session)
+            }
             
             return [titleRow] + instanceRows
         }
-        
-//
-//        let sortedInstances = results.sorted(by: SessionInstance.standardSort)
-//        
-//        var outViewModels: [SessionRow] = []
-//        let rowModels = sortedInstances.flatMap({ SessionViewModel(session: $0.session, instance: $0, style: .schedule) }).map(SessionRow.init(viewModel:))
-//        
-//        var previousRowModel: SessionRow? = nil
-//        for rowModel in rowModels {
-//            if rowModel.viewModel.sessionInstance.startTime != previousRowModel?.viewModel.sessionInstance.startTime {
-//                let date = rowModel.viewModel.sessionInstance.startTime
-//                let vm = SessionViewModel(headerWithDate: date, showTimeZone: previousRowModel == nil)
-//                outViewModels.append(SessionRow(viewModel: vm, kind: .sectionHeader))
-//            }
-//            
-//            outViewModels.append(rowModel)
-//            
-//            previousRowModel = rowModel
-//        }
-//        
-//        self.viewModels = outViewModels
     }
     
     lazy var tableView: NSTableView = {
