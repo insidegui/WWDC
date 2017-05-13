@@ -72,12 +72,15 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSe
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let url = downloadTask.originalRequest?.url else { return }
-        guard let asset = storage.asset(with: url) else { return }
         guard let dir = NSSearchPathForDirectoriesInDomains(.moviesDirectory, .userDomainMask, true).first else { return }
         
-        let finalPath = dir + "/" + asset.relativeLocalURL
+        guard let download = storage.unmanagedObject(of: SessionAsset.self, with: url.absoluteString)?.downloads.first else {
+            return
+        }
         
-        let download = storage.unmanagedObject(of: SessionAsset.self, with: url.absoluteString)?.downloads.first
+        guard let asset = download.asset.first else { return }
+
+        let finalPath = dir + "/" + asset.relativeLocalURL
         
         do {
             let finalURL = URL(fileURLWithPath: finalPath)
@@ -87,14 +90,14 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSe
             try FileManager.default.moveItem(at: location, to: finalURL)
             
             storage.unmanagedUpdate {
-                download?.status = .completed
-                download?.progress = 1
+                download.status = .completed
+                download.progress = 1
             }
         } catch {
             NSLog("Error copying file downloaded for \(asset): \(error)")
             
             storage.unmanagedUpdate {
-                download?.status = .failed
+                download.status = .failed
             }
         }
     }
