@@ -15,7 +15,7 @@ import PlayerUI
 extension AppCoordinator: ShelfViewControllerDelegate {
     
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController) {
-        guard let viewModel = controller.viewModel.value else { return }
+        guard let viewModel = controller.viewModel else { return }
         
         do {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)

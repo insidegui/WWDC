@@ -18,9 +18,13 @@ class ShelfViewController: NSViewController {
 
     weak var delegate: ShelfViewControllerDelegate?
     
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     
-    var viewModel = Variable<SessionViewModel?>(nil)
+    var viewModel: SessionViewModel? = nil {
+        didSet {
+            updateBindings()
+        }
+    }
     
     lazy var shelfView: ShelfView = {
         let v = ShelfView()
@@ -68,25 +72,32 @@ class ShelfViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindUI()
+        updateBindings()
     }
     
     private var currentImageDownloadOperation: Operation?
     
-    private func bindUI() {
-        let rxImageUrl = viewModel.asObservable().ignoreNil().flatMap({ $0.rxImageUrl })
-        let rxCanBePlayed = viewModel.asObservable().ignoreNil().flatMap({ $0.rxPlayableContent.map({ $0.count > 0 }) })
+    private func updateBindings() {
+        self.disposeBag = DisposeBag()
         
-        rxCanBePlayed.map({ !$0 }).asDriver(onErrorJustReturn: true).drive(playButton.rx.isHidden).addDisposableTo(self.disposeBag)
+        guard let viewModel = viewModel else { return }
         
-        rxImageUrl.subscribe(onNext: { [weak self] imageUrl in
+        let rxCanBePlayed = viewModel.rxPlayableContent.map({ $0.count > 0 })
+        
+        rxCanBePlayed.map({ !$0 }).bind(to: playButton.rx.isHidden).addDisposableTo(self.disposeBag)
+        
+        viewModel.rxImageUrl.subscribe(onNext: { [weak self] imageUrl in
             self?.currentImageDownloadOperation?.cancel()
+            self?.currentImageDownloadOperation = nil
             
-            guard let imageUrl = imageUrl else { return }
+            guard let imageUrl = imageUrl else {
+                self?.shelfView.image = #imageLiteral(resourceName: "noimage")
+                return
+            }
             
             self?.currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, original, _ in
                 guard url == imageUrl else { return }
-                
+
                 self?.shelfView.image = original
             }
         }).addDisposableTo(self.disposeBag)

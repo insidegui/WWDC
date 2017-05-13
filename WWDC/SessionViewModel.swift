@@ -26,6 +26,10 @@ final class SessionViewModel: NSObject {
     
     private var disposeBag = DisposeBag()
     
+    lazy var rxSession: Observable<Session> = {
+        return Observable.from(object: self.session)
+    }()
+    
     lazy var rxTitle: Observable<String> = {
         return Observable.from(object: self.session).map({ $0.title })
     }()
@@ -69,10 +73,10 @@ final class SessionViewModel: NSObject {
         return Observable.from(object: self.session).map({ SessionViewModel.webUrl(for: $0) })
     }()
     
-    lazy var rxValidDownload: Observable<Download?> = {
-        let downloadAssets = self.session.assets.filter("rawAssetType == %@ AND SUBQUERY(downloads, $download, $download.rawStatus != %@).@count > 0", SessionAssetType.hdVideo.rawValue, DownloadStatus.none.rawValue)
+    lazy var rxActiveDownloads: Observable<Results<Download>> = {
+        let query = self.session.realm!.objects(Download.self).filter("rawStatus != %@ AND sessionIdentifier == %@", DownloadStatus.none.rawValue, self.session.identifier)
         
-        return Observable.collection(from: downloadAssets).map({ $0.first?.downloads.first })
+        return Observable.collection(from: query)
     }()
     
     lazy var rxIsFavorite: Observable<Bool> = {

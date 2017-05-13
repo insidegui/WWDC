@@ -256,6 +256,7 @@ public final class Storage {
         do {
             try realm.write {
                 let download = Download()
+                download.sessionIdentifier = asset.session.first?.identifier ?? "ERROR"
                 download.status = .paused
                 asset.downloads.append(download)
             }

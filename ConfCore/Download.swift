@@ -24,6 +24,9 @@ public class Download: Object {
     /// Unique identifier
     public dynamic var identifier = UUID().uuidString
     
+    /// The session this download is associated with
+    public dynamic var sessionIdentifier = ""
+    
     /// When the download was started
     public dynamic var createdAt = Date()
     

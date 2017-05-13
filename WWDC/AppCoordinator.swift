@@ -34,7 +34,7 @@ final class AppCoordinator {
         let filePath = PathUtil.appSupportPath + "/ConfCore.realm"
         
         var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
-        realmConfig.schemaVersion = 4
+        realmConfig.schemaVersion = 5
         realmConfig.migrationBlock = { _, _ in }
         
         let client = AppleAPIClient(environment: .current)
@@ -97,8 +97,13 @@ final class AppCoordinator {
     var currentPlaybackViewModel: PlaybackViewModel?
     
     private func setupBindings() {
-        selectedSession.bind(to: videosController.detailViewController.viewModel).addDisposableTo(self.disposeBag)
-        selectedScheduleItem.bind(to: scheduleController.detailViewController.viewModel).addDisposableTo(self.disposeBag)
+        selectedSession.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
+            self?.videosController.detailViewController.viewModel = viewModel
+        }).addDisposableTo(self.disposeBag)
+        
+        selectedScheduleItem.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
+            self?.scheduleController.detailViewController.viewModel = viewModel
+        }).addDisposableTo(self.disposeBag)
         
         selectedSession.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
         selectedScheduleItem.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)

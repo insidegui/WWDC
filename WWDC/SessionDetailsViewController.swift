@@ -16,7 +16,12 @@ class SessionDetailsViewController: NSViewController {
     
     let listStyle: SessionsListStyle
     
-    var viewModel = Variable<SessionViewModel?>(nil)
+    var viewModel: SessionViewModel? = nil {
+        didSet {
+            self.shelfController.viewModel = viewModel
+            self.summaryController.viewModel = viewModel
+        }
+    }
     
     let shelfController: ShelfViewController
     let summaryController: SessionSummaryViewController
@@ -57,9 +62,6 @@ class SessionDetailsViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        viewModel.asObservable().bind(to: shelfController.viewModel).addDisposableTo(self.disposeBag)
-        viewModel.asObservable().bind(to: summaryController.viewModel).addDisposableTo(self.disposeBag)
     }
     
 }

@@ -30,9 +30,13 @@ class SessionActionsViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     
-    var viewModel = Variable<SessionViewModel?>(nil)
+    var viewModel: SessionViewModel? = nil {
+        didSet {
+            updateBindings()
+        }
+    }
     
     weak var delegate: SessionActionsViewControllerDelegate?
     
@@ -109,39 +113,16 @@ class SessionActionsViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let isFavorite = viewModel.asObservable().ignoreNil().flatMap({ $0.rxIsFavorite })
-        let validDownload = viewModel.asObservable().ignoreNil().flatMap({ $0.rxValidDownload })
-        let hasDownloadableContent = viewModel.asObservable().ignoreNil().flatMap({ $0.rxDownloadableContent }).map({ $0.count > 0 })
+        updateBindings()
+    }
+    
+    private func updateBindings() {
+        self.disposeBag = DisposeBag()
         
-        isFavorite.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] fave in
-            self.favoriteButton.state = fave ? NSOnState : NSOffState
-        }).addDisposableTo(self.disposeBag)
+        guard let viewModel = viewModel else { return }
         
-        Observable.zip(hasDownloadableContent, validDownload).subscribe(onNext: { (hasContent, download) in
-            guard hasContent else {
-                self.downloadIndicator.isHidden = true
-                self.downloadButton.isHidden = true
-                return
-            }
-            
-            guard let download = download else {
-                self.downloadIndicator.isHidden = true
-                self.downloadButton.isHidden = false
-                return
-            }
-            
-            switch download.status {
-            case .downloading:
-                self.downloadIndicator.isHidden = false
-                self.downloadButton.isHidden = true
-                self.downloadIndicator.doubleValue = download.progress
-            case .completed:
-                self.downloadIndicator.isHidden = true
-                self.downloadButton.isHidden = false
-            default:
-                // TODO: handle other download statuses
-                print("Download status not handled: \(download.status)")
-            }
+        viewModel.rxIsFavorite.subscribe(onNext: { [weak self] isFavorite in
+            self?.favoriteButton.state = isFavorite ? NSOnState : NSOffState
         }).addDisposableTo(self.disposeBag)
     }
     

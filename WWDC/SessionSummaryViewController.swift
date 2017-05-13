@@ -12,9 +12,13 @@ import RxCocoa
 
 class SessionSummaryViewController: NSViewController {
 
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     
-    var viewModel = Variable<SessionViewModel?>(nil)
+    var viewModel: SessionViewModel? = nil {
+        didSet {
+            updateBindings()
+        }
+    }
     
     init() {
         super.init(nibName: nil, bundle: nil)!
@@ -111,17 +115,20 @@ class SessionSummaryViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.asObservable().map({ $0 == nil }).bind(to: actionsViewController.view.rx.isHidden).addDisposableTo(self.disposeBag)
+        updateBindings()
+    }
+    
+    private func updateBindings() {
+        actionsViewController.view.isHidden = (viewModel == nil)
+        actionsViewController.viewModel = viewModel
         
-        let title = viewModel.asObservable().ignoreNil().flatMap({ $0.rxTitle })
-        let summary = viewModel.asObservable().ignoreNil().flatMap({ $0.rxSummary })
-        let footer = viewModel.asObservable().ignoreNil().flatMap({ $0.rxFooter })
+        guard let viewModel = viewModel else { return }
         
-        title.asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).addDisposableTo(self.disposeBag)
-        summary.asDriver(onErrorJustReturn: "").drive(summaryLabel.rx.text).addDisposableTo(self.disposeBag)
-        footer.asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).addDisposableTo(self.disposeBag)
+        self.disposeBag = DisposeBag()
         
-        viewModel.asObservable().bind(to: actionsViewController.viewModel).addDisposableTo(self.disposeBag)
+        viewModel.rxTitle.bind(to: titleLabel.rx.text).addDisposableTo(self.disposeBag)
+        viewModel.rxSummary.bind(to: summaryLabel.rx.text).addDisposableTo(self.disposeBag)
+        viewModel.rxFooter.bind(to: contextLabel.rx.text).addDisposableTo(self.disposeBag)
     }
     
 }
