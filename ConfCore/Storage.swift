@@ -184,12 +184,47 @@ public final class Storage {
             do {
                 try self.backgroundRealm.commitWrite()
                 
-                DispatchQueue.main.async {
-                    completion()
-                }
+                self.consolidateScheduleView(in: self.backgroundRealm, completion: completion)
             } catch {
                 NSLog("Realm error: \(error)")
             }
+        }
+    }
+    
+    private func consolidateScheduleView(in realm: Realm, completion: @escaping () -> Void) {
+        realm.beginWrite()
+        
+        realm.objects(ScheduleSection.self).forEach({ realm.delete($0) })
+        
+        let instances = realm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
+        
+        var previousStartTime: Date? = nil
+        for instance in instances {
+            guard instance.startTime != previousStartTime else { continue }
+            
+            autoreleasepool {
+                let section = ScheduleSection()
+                section.representedDate = instance.startTime
+                
+                let instancesForSection = instances.filter({ $0.startTime == instance.startTime })
+                section.instances.append(objectsIn: instancesForSection)
+                section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
+                realm.add(section, update: true)
+                
+                previousStartTime = instance.startTime
+            }
+        }
+        
+        do {
+            try realm.commitWrite()
+            
+            DispatchQueue.main.async {
+                _ = self.realm.refresh()
+                
+                completion()
+            }
+        } catch {
+            NSLog("Realm error while consolidating schedule: \(error)")
         }
     }
     
@@ -233,14 +268,10 @@ public final class Storage {
         }
     }
     
-    public lazy var scheduleObservable: Observable<Results<SessionInstance>?> = {
-        let currentEventCollection = self.realm.objects(Event.self).filter("isCurrent == true")
+    public lazy var scheduleObservable: Observable<Results<ScheduleSection>> = {
+        let sections = self.realm.objects(ScheduleSection.self).sorted(byKeyPath: "representedDate")
         
-        return Observable.collection(from: currentEventCollection).map { events -> Results<SessionInstance>? in
-            guard let event = events.first else { return nil }
-            
-            return self.realm.objects(SessionInstance.self).filter("startTime >= %@ AND endTime <= %@", event.startDate, event.endDate)
-        }
+        return Observable.collection(from: sections)
     }()
     
     public lazy var activeDownloads: Observable<Results<Download>> = {

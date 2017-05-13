@@ -30,7 +30,7 @@ class SessionsTableViewController: NSViewController {
     }
     var selectedSession = Variable<SessionViewModel?>(nil)
     
-    var sessionInstances: Results<SessionInstance>? {
+    var scheduleSections: Results<ScheduleSection>? {
         didSet {
             updateScheduleList()
         }
@@ -55,49 +55,64 @@ class SessionsTableViewController: NSViewController {
     }
     
     private func updateVideosList() {
-        guard let results = sessions else { return }
-        
-        let sortedSessions = results.sorted(by: Session.standardSort)
-        
-        var outViewModels: [SessionRow] = []
-        let rowModels = sortedSessions.flatMap(SessionViewModel.init(session:)).map(SessionRow.init(viewModel:))
-        
-        var previousRowModel: SessionRow? = nil
-        for rowModel in rowModels {
-            if rowModel.viewModel.trackName != previousRowModel?.viewModel.trackName {
-                outViewModels.append(SessionRow(title: rowModel.viewModel.trackName))
-            }
-            
-            outViewModels.append(rowModel)
-            
-            previousRowModel = rowModel
-        }
-        
-        self.viewModels = outViewModels
+//        guard let results = sessions else { return }
+//        
+//        let sortedSessions = results.sorted(by: Session.standardSort)
+//        
+//        var outViewModels: [SessionRow] = []
+//        let rowModels = sortedSessions.flatMap(SessionViewModel.init(session:)).map(SessionRow.init(viewModel:))
+//        
+//        var previousRowModel: SessionRow? = nil
+//        for rowModel in rowModels {
+//            if rowModel.viewModel.trackName != previousRowModel?.viewModel.trackName {
+//                outViewModels.append(SessionRow(title: rowModel.viewModel.trackName))
+//            }
+//            
+//            outViewModels.append(rowModel)
+//            
+//            previousRowModel = rowModel
+//        }
+//        
+//        self.viewModels = outViewModels
     }
     
     private func updateScheduleList() {
-        guard let results = sessionInstances else { return }
+        guard let sections = scheduleSections else { return }
         
-        let sortedInstances = results.sorted(by: SessionInstance.standardSort)
+        var shownTimeZone = false
         
-        var outViewModels: [SessionRow] = []
-        let rowModels = sortedInstances.flatMap({ SessionViewModel(session: $0.session, instance: $0, style: .schedule) }).map(SessionRow.init(viewModel:))
-        
-        var previousRowModel: SessionRow? = nil
-        for rowModel in rowModels {
-            if rowModel.viewModel.sessionInstance.startTime != previousRowModel?.viewModel.sessionInstance.startTime {
-                let date = rowModel.viewModel.sessionInstance.startTime
-                let vm = SessionViewModel(headerWithDate: date, showTimeZone: previousRowModel == nil)
-                outViewModels.append(SessionRow(viewModel: vm, kind: .sectionHeader))
-            }
+        self.viewModels = sections.flatMap { section -> [SessionRow] in
+            let titleViewModel = SessionViewModel(headerWithDate: section.representedDate, showTimeZone: !shownTimeZone)
+            let titleRow = SessionRow(viewModel: titleViewModel, kind: SessionRowKind.sectionHeader)
             
-            outViewModels.append(rowModel)
+            shownTimeZone = true
             
-            previousRowModel = rowModel
+            let instanceViewModels: [SessionViewModel] = section.instances.flatMap({ SessionViewModel(session: $0.session, instance: $0, style: .schedule) })
+            let instanceRows: [SessionRow] = instanceViewModels.map({ SessionRow(viewModel: $0) })
+            
+            return [titleRow] + instanceRows
         }
         
-        self.viewModels = outViewModels
+//
+//        let sortedInstances = results.sorted(by: SessionInstance.standardSort)
+//        
+//        var outViewModels: [SessionRow] = []
+//        let rowModels = sortedInstances.flatMap({ SessionViewModel(session: $0.session, instance: $0, style: .schedule) }).map(SessionRow.init(viewModel:))
+//        
+//        var previousRowModel: SessionRow? = nil
+//        for rowModel in rowModels {
+//            if rowModel.viewModel.sessionInstance.startTime != previousRowModel?.viewModel.sessionInstance.startTime {
+//                let date = rowModel.viewModel.sessionInstance.startTime
+//                let vm = SessionViewModel(headerWithDate: date, showTimeZone: previousRowModel == nil)
+//                outViewModels.append(SessionRow(viewModel: vm, kind: .sectionHeader))
+//            }
+//            
+//            outViewModels.append(rowModel)
+//            
+//            previousRowModel = rowModel
+//        }
+//        
+//        self.viewModels = outViewModels
     }
     
     lazy var tableView: NSTableView = {

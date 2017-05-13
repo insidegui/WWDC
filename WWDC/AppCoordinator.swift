@@ -34,7 +34,7 @@ final class AppCoordinator {
         let filePath = PathUtil.appSupportPath + "/ConfCore.realm"
         
         var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
-        realmConfig.schemaVersion = 5
+        realmConfig.schemaVersion = Constants.coreSchemaVersion
         realmConfig.migrationBlock = { _, _ in }
         
         let client = AppleAPIClient(environment: .current)
@@ -124,8 +124,8 @@ final class AppCoordinator {
     private func updateListsAfterSync() {
         self.videosController.listViewController.sessions = storage.sessions.toArray()
         
-        storage.scheduleObservable.subscribe(onNext: { [weak self] instances in
-            self?.scheduleController.listViewController.sessionInstances = instances
+        storage.scheduleObservable.subscribe(onNext: { [weak self] sections in
+            self?.scheduleController.listViewController.scheduleSections = sections
         }).dispose()
     }
     

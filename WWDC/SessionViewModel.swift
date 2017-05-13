@@ -108,8 +108,8 @@ final class SessionViewModel: NSObject {
     init?(session: Session?, instance: SessionInstance?, style: SessionsListStyle) {
         self.style = style
         
-        guard let session = session else { return nil }
-        guard let track = session.track.first else { return nil }
+        guard let session = session ?? instance?.session else { return nil }
+        guard let track = session.track.first ?? instance?.track.first else { return nil }
         
         self.trackName = track.name
         self.session = session
