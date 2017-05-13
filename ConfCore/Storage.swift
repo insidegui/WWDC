@@ -183,6 +183,8 @@ public final class Storage {
             track.sessions.append(objectsIn: sessions)
         }
         
+        // Create schedule view
+        
         realm.objects(ScheduleSection.self).forEach({ realm.delete($0) })
         
         let instances = realm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
@@ -192,12 +194,15 @@ public final class Storage {
             guard instance.startTime != previousStartTime else { continue }
             
             autoreleasepool {
-                let section = ScheduleSection()
-                section.representedDate = instance.startTime
-                
                 let instancesForSection = instances.filter({ $0.startTime == instance.startTime })
+                
+                let section = ScheduleSection()
+                
+                section.representedDate = instance.startTime
+                section.eventIdentifier = instance.eventIdentifier
                 section.instances.append(objectsIn: instancesForSection)
                 section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
+                
                 realm.add(section, update: true)
                 
                 previousStartTime = instance.startTime
@@ -258,9 +263,13 @@ public final class Storage {
     }
     
     public lazy var scheduleObservable: Observable<Results<ScheduleSection>> = {
-        let sections = self.realm.objects(ScheduleSection.self).sorted(byKeyPath: "representedDate")
+        let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
         
-        return Observable.collection(from: sections)
+        return Observable.collection(from: currentEvents).map({ $0.first?.identifier }).flatMap { (identifier: String?) -> Observable<Results<ScheduleSection>> in
+            let sections = self.realm.objects(ScheduleSection.self).filter("eventIdentifier == %@", identifier ?? "").sorted(byKeyPath: "representedDate")
+            
+            return Observable.collection(from: sections)
+        }
     }()
     
     public lazy var activeDownloads: Observable<Results<Download>> = {

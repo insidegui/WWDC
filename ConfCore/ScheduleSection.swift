@@ -9,10 +9,11 @@
 import Cocoa
 import RealmSwift
 
-/// A section from the schedule, representing a day of the conference
+/// A section from the schedule, representing a time slot of the conference
 public final class ScheduleSection: Object {
     
     public dynamic var identifier: String = ""
+    public dynamic var eventIdentifier: String = ""
     public dynamic var representedDate: Date = .distantPast
     public let instances = List<SessionInstance>()
     
