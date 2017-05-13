@@ -8,10 +8,18 @@
 
 import Cocoa
 
-final class TrackColorView: NSView, CALayerDelegate {
+private final class TrackColorLayer: CALayer {
     
-    private lazy var progressLayer: CALayer = {
-        let l = CALayer()
+    override func action(forKey event: String) -> CAAction? {
+        return nil
+    }
+    
+}
+
+final class TrackColorView: NSView {
+    
+    private lazy var progressLayer: TrackColorLayer = {
+        let l = TrackColorLayer()
         
         l.autoresizingMask = [.layerWidthSizable]
         
@@ -22,10 +30,7 @@ final class TrackColorView: NSView, CALayerDelegate {
         super.init(frame: frameRect)
         
         wantsLayer = true
-        layer = CALayer()
-        
-        layer?.delegate = self
-        progressLayer.delegate = self
+        layer = TrackColorLayer()
         
         layer?.cornerRadius = 2
         layer?.masksToBounds = true
@@ -39,9 +44,18 @@ final class TrackColorView: NSView, CALayerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    var hasValidProgress = false {
+        didSet {
+            needsLayout = true
+        }
+    }
+    
     var progress: Double = 0.5 {
         didSet {
-            if progress < 1 {
+            // hide when fully watched
+            self.alphaValue = progress >= Constants.watchedVideoRelativePosition ? 0 : 1
+            
+            if hasValidProgress && progress < 1 {
                 layer?.borderWidth = 1
             } else {
                 layer?.borderWidth = 0
@@ -65,12 +79,10 @@ final class TrackColorView: NSView, CALayerDelegate {
     override func layout() {
         super.layout()
         
-        let progressFrame = NSRect(x: 0, y: 0, width: bounds.width, height: bounds.height * CGFloat(progress))
+        let progressHeight = hasValidProgress ? bounds.height * CGFloat(progress) : bounds.height
+        
+        let progressFrame = NSRect(x: 0, y: 0, width: bounds.width, height: progressHeight)
         progressLayer.frame = progressFrame
-    }
-    
-    func action(for layer: CALayer, forKey event: String) -> CAAction? {
-        return nil
     }
     
 }

@@ -71,9 +71,11 @@ final class SessionTableCellView: NSTableCellView {
         
         viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
             if let progress = progresses.first {
+                self?.contextColorView.hasValidProgress = true
                 self?.contextColorView.progress = progress.relativePosition
             } else {
-                self?.contextColorView.progress = 1
+                self?.contextColorView.hasValidProgress = false
+                self?.contextColorView.progress = 0
             }
         }).addDisposableTo(self.disposeBag)
     }
