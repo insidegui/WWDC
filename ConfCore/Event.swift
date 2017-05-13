@@ -49,4 +49,10 @@ public class Event: Object {
         return event
     }
     
+    internal static func identifier(from date: Date) -> String {
+        let year = Calendar.current.component(.year, from: date)
+        
+        return "wwdc\(year)"
+    }
+    
 }

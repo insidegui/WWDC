@@ -36,6 +36,9 @@ public class SessionInstance: Object {
     /// Instance number
     public dynamic var number = ""
     
+    /// The event identifier for the event this instance belongs to
+    public dynamic var eventIdentifier = ""
+    
     /// The session
     public dynamic var session: Session? = nil
     
@@ -51,10 +54,10 @@ public class SessionInstance: Object {
     /// Keywords for this session
     public let keywords = List<Keyword>()
     
-    /// Room name (for JSON adapting only)
+    /// Room name
     public dynamic var roomName = ""
     
-    // Track name (for JSON adapting only)
+    // Track name
     public dynamic var trackName = ""
     
     /// The room where this session will be held
@@ -65,10 +68,6 @@ public class SessionInstance: Object {
     
     public override static func primaryKey() -> String? {
         return "identifier"
-    }
-    
-    public override static func ignoredProperties() -> [String] {
-        return ["roomName"]
     }
     
     public static func standardSort(instanceA: SessionInstance, instanceB: SessionInstance) -> Bool {

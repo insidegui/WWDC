@@ -127,27 +127,16 @@ public final class Storage {
                 }
             }
             
-
             // Merge existing instance data, preserving user-defined data
-            let consolidatedInstances = scheduleResponse.instances.map { newInstance -> (SessionInstance) in
+            scheduleResponse.instances.forEach { newInstance in
                 return autoreleasepool {
                     if let existingInstance = self.backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
                         existingInstance.merge(with: newInstance, in: self.backgroundRealm)
                         
-                        return existingInstance
+                        self.backgroundRealm.add(existingInstance, update: true)
                     } else {
-                        return newInstance
+                        self.backgroundRealm.add(newInstance, update: true)
                     }
-                }
-            }
-            
-            // Associate rooms with session instances
-            scheduleResponse.rooms.forEach { room in
-                autoreleasepool {
-                    let instances = consolidatedInstances.filter({ $0.roomName == room.name })
-                    
-                    room.instances.removeAll()
-                    room.instances.append(objectsIn: instances)
                 }
             }
             
@@ -156,43 +145,43 @@ public final class Storage {
             self.backgroundRealm.add(scheduleResponse.tracks, update: true)
             self.backgroundRealm.add(sessionsResponse.events, update: true)
             
-            // Associate instances with events
-            consolidatedInstances.forEach { instance in
-                autoreleasepool {
-                    guard let session = instance.session else { return }
-                    
-                    guard let event = self.backgroundRealm.objects(Session.self).filter({ $0.identifier == session.identifier && $0.number == session.number }).first?.event.first else {
-                        return
-                    }
-                    event.sessionInstances.removeAll()
-                    
-                    event.sessionInstances.append(instance)
-                }
-            }
-            
-            // Add sessions and session instances to tracks
-            scheduleResponse.tracks.forEach { track in
-                autoreleasepool {
-                    track.sessions.removeAll()
-                    track.instances.removeAll()
-                    
-                    track.sessions.append(objectsIn: consolidatedSessions.filter({ $0.trackName == track.name }))
-                    track.instances.append(objectsIn: consolidatedInstances.filter({ $0.trackName == track.name }))
-                }
-            }
-            
             do {
                 try self.backgroundRealm.commitWrite()
                 
-                self.consolidateScheduleView(in: self.backgroundRealm, completion: completion)
+                self.updateAssociationsAndCreateViews(in: self.backgroundRealm, completion: completion)
             } catch {
                 NSLog("Realm error: \(error)")
             }
         }
     }
     
-    private func consolidateScheduleView(in realm: Realm, completion: @escaping () -> Void) {
+    private func updateAssociationsAndCreateViews(in realm: Realm, completion: @escaping () -> Void) {
         realm.beginWrite()
+        
+        // add instances to rooms
+        realm.objects(Room.self).forEach { room in
+            let instances = realm.objects(SessionInstance.self).filter("roomName == %@", room.name)
+            
+            room.instances.append(objectsIn: instances)
+        }
+        
+        // add instances and sessions to events
+        realm.objects(Event.self).forEach { event in
+            let instances = realm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
+            let sessions = realm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
+            
+            event.sessionInstances.append(objectsIn: instances)
+            event.sessions.append(objectsIn: sessions)
+        }
+        
+        // add instances and sessions to tracks
+        realm.objects(Track.self).forEach { track in
+            let instances = realm.objects(SessionInstance.self).filter("trackName == %@", track.name)
+            let sessions = realm.objects(Session.self).filter("trackName == %@", track.name)
+            
+            track.instances.append(objectsIn: instances)
+            track.sessions.append(objectsIn: sessions)
+        }
         
         realm.objects(ScheduleSection.self).forEach({ realm.delete($0) })
         

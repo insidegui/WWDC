@@ -71,6 +71,7 @@ final class SessionInstancesJSONAdapter: Adapter {
         let instance = SessionInstance()
         
         instance.identifier = session.identifier
+        instance.eventIdentifier = Event.identifier(from: startDate)
         instance.number = id
         instance.session = session
         instance.trackName = trackName

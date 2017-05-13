@@ -24,10 +24,10 @@ public class Session: Object {
     /// Description
     public dynamic var summary = ""
     
-    /// Event identifier (only using during JSON adapting)
+    /// The event identifier for the event this session belongs to
     public dynamic var eventIdentifier = ""
     
-    /// Track name (only using during JSON adapting)
+    /// Track name
     public dynamic var trackName = ""
     
     /// The session's focuses
@@ -59,10 +59,6 @@ public class Session: Object {
     
     public override static func primaryKey() -> String? {
         return "identifier"
-    }
-    
-    public override static func ignoredProperties() -> [String] {
-        return ["trackName", "eventIdentifier"]
     }
     
     public static func standardSort(sessionA: Session, sessionB: Session) -> Bool {
