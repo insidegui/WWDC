@@ -17,6 +17,8 @@ final class AppCoordinator {
     
     private let disposeBag = DisposeBag()
     
+    var liveObserver: LiveObserver
+    
     var storage: Storage
     var syncEngine: SyncEngine
     var downloadManager: DownloadManager
@@ -66,6 +68,8 @@ final class AppCoordinator {
         self.tabController.addTabViewItem(videosItem)
         
         self.windowController = windowController
+        
+        self.liveObserver = LiveObserver(dateProvider: Today, storage: storage)
         
         setupBindings()
         setupDelegation()
@@ -139,6 +143,8 @@ final class AppCoordinator {
         storage.scheduleObservable.subscribe(onNext: { [weak self] sections in
             self?.scheduleController.listViewController.scheduleSections = sections
         }).dispose()
+        
+        liveObserver.start()
     }
     
     @IBAction func refresh(_ sender: Any?) {

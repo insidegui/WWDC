@@ -66,6 +66,9 @@ public class SessionInstance: Object {
     /// The track associated with the instance
     public let track = LinkingObjects(fromType: Track.self, property: "instances")
     
+    /// Whether this is being live streamed at the moment
+    public dynamic var isCurrentlyLive = false
+    
     public override static func primaryKey() -> String? {
         return "identifier"
     }

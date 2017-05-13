@@ -8,6 +8,8 @@
 
 import Foundation
 
+public let ConfCoreDateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+
 final class DateAdapter: Adapter {
     typealias InputType = String
     typealias OutputType = Date
@@ -32,7 +34,7 @@ final class DateTimeAdapter: Adapter {
     
     func adapt(_ input: String) -> Result<Date, AdapterError> {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        formatter.dateFormat = ConfCoreDateFormat
         formatter.locale = Locale.current
         formatter.timeZone = TimeZone.current
         

@@ -111,6 +111,9 @@
 		DDB28F941EAD4DBF0077703F /* IGListKit.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD7F386D1EABF576002D8C00 /* IGListKit.framework.dSYM */; };
 		DDB28F951EAD4DC40077703F /* Siesta.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DDAE7C561E5BC6E300CEA205 /* Siesta.framework.dSYM */; };
 		DDB28F991EAD4DF90077703F /* PIPContainer.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DDB28F981EAD4DEE0077703F /* PIPContainer.framework.dSYM */; };
+		DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3527F1EC7C4CA00254815 /* Arguments.swift */; };
+		DDB352821EC7C55300254815 /* DateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB352811EC7C55300254815 /* DateProvider.swift */; };
+		DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB352831EC7C74C00254815 /* LiveObserver.swift */; };
 		DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */; };
 		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
@@ -339,6 +342,9 @@
 		DDB28F921EAD48D70077703F /* UserActivityRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserActivityRepresentable.swift; sourceTree = "<group>"; };
 		DDB28F961EAD4DDA0077703F /* PIPContainer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIPContainer.framework; path = Carthage/Build/Mac/PIPContainer.framework; sourceTree = "<group>"; };
 		DDB28F981EAD4DEE0077703F /* PIPContainer.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = PIPContainer.framework.dSYM; path = Carthage/Build/Mac/PIPContainer.framework.dSYM; sourceTree = "<group>"; };
+		DDB3527F1EC7C4CA00254815 /* Arguments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Arguments.swift; sourceTree = "<group>"; };
+		DDB352811EC7C55300254815 /* DateProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateProvider.swift; sourceTree = "<group>"; };
+		DDB352831EC7C74C00254815 /* LiveObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveObserver.swift; sourceTree = "<group>"; };
 		DDBFA16A1EB525F2004AE10F /* PlayerUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PlayerUI.xcodeproj; path = PlayerUI/PlayerUI.xcodeproj; sourceTree = "<group>"; };
 		DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -468,6 +474,7 @@
 			children = (
 				DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */,
 				DD34A7991EC3CD4F00E0B575 /* Definitions */,
+				DDB352851EC7C75100254815 /* Helpers */,
 				DD7F387E1EAC15A1002D8C00 /* Util */,
 				DDCE7ECE1EA7A1A600C7A3CA /* Look */,
 				DD36A4C21E478D0D00B2EA88 /* Resources */,
@@ -781,6 +788,16 @@
 				DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */,
 			);
 			name = ASCIIWWDC;
+			sourceTree = "<group>";
+		};
+		DDB352851EC7C75100254815 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				DDB3527F1EC7C4CA00254815 /* Arguments.swift */,
+				DDB352811EC7C55300254815 /* DateProvider.swift */,
+				DDB352831EC7C74C00254815 /* LiveObserver.swift */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 		DDBFA16B1EB525F2004AE10F /* Products */ = {
@@ -1153,8 +1170,10 @@
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
+				DDB352821EC7C55300254815 /* DateProvider.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* SessionsSplitViewController.swift in Sources */,
+				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* MainTabController.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
@@ -1169,6 +1188,7 @@
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
 				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
+				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
 				DD7F386F1EABF631002D8C00 /* NSTableView+IGListKit.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
