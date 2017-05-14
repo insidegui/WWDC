@@ -116,6 +116,7 @@
 		DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB352831EC7C74C00254815 /* LiveObserver.swift */; };
 		DDB3529A1EC8AB2800254815 /* WWDCImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB352991EC8AB2800254815 /* WWDCImageView.swift */; };
 		DDB3529C1EC8AB5D00254815 /* WWDCLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3529B1EC8AB5D00254815 /* WWDCLayer.swift */; };
+		DDB3529E1EC8D8CD00254815 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB3529D1EC8D8CD00254815 /* main.m */; };
 		DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */; };
 		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
@@ -349,6 +350,7 @@
 		DDB352831EC7C74C00254815 /* LiveObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveObserver.swift; sourceTree = "<group>"; };
 		DDB352991EC8AB2800254815 /* WWDCImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCImageView.swift; sourceTree = "<group>"; };
 		DDB3529B1EC8AB5D00254815 /* WWDCLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCLayer.swift; sourceTree = "<group>"; };
+		DDB3529D1EC8D8CD00254815 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DDBFA16A1EB525F2004AE10F /* PlayerUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PlayerUI.xcodeproj; path = PlayerUI/PlayerUI.xcodeproj; sourceTree = "<group>"; };
 		DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -499,6 +501,7 @@
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
 				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
 				DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */,
+				DDB3529D1EC8D8CD00254815 /* main.m */,
 			);
 			name = Bootstrap;
 			sourceTree = "<group>";
@@ -1165,6 +1168,7 @@
 				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
 				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
+				DDB3529E1EC8D8CD00254815 /* main.m in Sources */,
 				DD7F38781EAC0C98002D8C00 /* ShelfViewController.swift in Sources */,
 				DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
