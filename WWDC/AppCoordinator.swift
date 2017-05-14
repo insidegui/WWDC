@@ -33,6 +33,20 @@ final class AppCoordinator {
     
     var currentActivity: NSUserActivity?
     
+    var activeTab: MainTabController.Tab = .schedule
+    
+    /// The tab that "owns" the current player (the one that was active when the "play" button was pressed)
+    var playerOwnerTab: MainTabController.Tab? = nil
+    
+    /// The session that "owns" the current player (the one that was selected on the active tab when "play" was pressed)
+    var playerOwnerSessionIdentifier: String? = nil
+    
+    /// Whether playback can be restored to the previous context when exiting PiP mode (go back to tab/session)
+    var canRestorePlaybackContext = false
+    
+    /// Whether we're currently in the middle of a player context transition
+    var isTransitioningPlayerContext = false
+    
     init(windowController: MainWindowController) {
         let filePath = PathUtil.appSupportPath + "/ConfCore.realm"
         
@@ -77,6 +91,16 @@ final class AppCoordinator {
         NotificationCenter.default.addObserver(forName: .NSApplicationDidFinishLaunching, object: nil, queue: nil) { _ in self.startup() }
     }
     
+    /// The list controller for the active tab
+    var currentListController: SessionsTableViewController {
+        switch activeTab {
+        case .schedule:
+            return scheduleController.listViewController
+        case .videos:
+            return videosController.listViewController
+        }
+    }
+    
     /// The session that is currently selected on the videos tab (observable)
     var selectedSession: Observable<SessionViewModel?> {
         return videosController.listViewController.selectedSession.asObservable()
@@ -97,20 +121,42 @@ final class AppCoordinator {
         return scheduleController.listViewController.selectedSession.value
     }
     
+    /// The selected session's view model, regardless of which tab it is selected in
+    var selectedViewModelRegardlessOfTab: SessionViewModel?
+    
     /// The viewModel for the current playback session
     var currentPlaybackViewModel: PlaybackViewModel?
     
     private func setupBindings() {
+        tabController.rxActiveTab.subscribe(onNext: { [weak self] activeTab in
+            self?.activeTab = activeTab
+            
+            self?.updateSelectedViewModelRegardlessOfTab()
+        }).addDisposableTo(self.disposeBag)
+        
         selectedSession.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
             self?.videosController.detailViewController.viewModel = viewModel
+            self?.updateSelectedViewModelRegardlessOfTab()
         }).addDisposableTo(self.disposeBag)
         
         selectedScheduleItem.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
             self?.scheduleController.detailViewController.viewModel = viewModel
+            self?.updateSelectedViewModelRegardlessOfTab()
         }).addDisposableTo(self.disposeBag)
         
         selectedSession.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
         selectedScheduleItem.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
+    }
+    
+    private func updateSelectedViewModelRegardlessOfTab() {
+        switch activeTab {
+        case .schedule:
+            self.selectedViewModelRegardlessOfTab = selectedScheduleItemValue
+        case .videos:
+            self.selectedViewModelRegardlessOfTab = selectedSessionValue
+        }
+        
+        self.updateShelfBasedOnSelectionChange()
     }
     
     private func setupDelegation() {

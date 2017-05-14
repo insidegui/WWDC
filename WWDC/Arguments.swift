@@ -18,6 +18,10 @@ struct Arguments {
         return args.contains("--skip-migration")
     }
     
+    static var useTestVideo: Bool {
+        return args.contains("--use-test-video")
+    }
+    
     static var deloreanDate: String? {
         guard let deloreanIndex = args.index(of: "--delorean") else { return nil }
         

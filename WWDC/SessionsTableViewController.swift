@@ -55,6 +55,19 @@ class SessionsTableViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func selectSession(with identifier: String) {
+        guard let index = sessionRows.index(where: { row in
+            guard case .session(let viewModel) = row.kind else { return false }
+            
+            return viewModel.identifier == identifier
+        }) else {
+            return
+        }
+        
+        tableView.selectRowIndexes(IndexSet([index]), byExtendingSelection: false)
+        tableView.scrollRowToVisible(index)
+    }
+    
     private func updateVideosList() {
         guard let tracks = tracks else { return }
         

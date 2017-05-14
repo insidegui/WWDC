@@ -85,9 +85,15 @@ final class PlaybackViewModel {
             }
         }
         
-        guard let finalUrl = streamUrl else {
+        guard var finalUrl = streamUrl else {
             throw PlaybackError.invalidAsset("No valid video URL could be found")
         }
+        
+        #if DEBUG
+        if Arguments.useTestVideo {
+            finalUrl = URL(fileURLWithPath: "/Users/inside/Movies/test.m4v")
+        }
+        #endif
         
         self.player = AVPlayer(url: finalUrl)
         

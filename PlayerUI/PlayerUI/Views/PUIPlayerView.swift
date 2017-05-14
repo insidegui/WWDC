@@ -172,6 +172,8 @@ public final class PUIPlayerView: NSView {
     
     // MARK: - Private API
     
+    fileprivate var lastKnownWindow: NSWindow? = nil
+    
     private var sortedAnnotations: [PUITimelineAnnotation] = [] {
         didSet {
             updateAnnotationsState()
@@ -881,6 +883,10 @@ public final class PUIPlayerView: NSView {
         
         resetMouseIdleTimer()
         updateExtrasMenuPosition()
+        
+        if window != nil {
+            self.lastKnownWindow = window
+        }
     }
     
     private var windowIsInFullScreen: Bool {
@@ -1096,23 +1102,23 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
     }
     
     public func pipWillClose(_ pip: PIPViewController) {
-        guard let window = self.window else { return }
-        
         delegate?.playerViewWillExitPictureInPictureMode(self)
         
         if !NSApp.isActive {
             NSApp.activate(ignoringOtherApps: true)
         }
         
-        window.makeKeyAndOrderFront(pip)
-        
-        if window.isMiniaturized {
-            window.deminiaturize(nil)
+        if let window = self.lastKnownWindow {
+            window.makeKeyAndOrderFront(pip)
+            
+            if window.isMiniaturized {
+                window.deminiaturize(nil)
+            }
         }
         
         pip.replacementRect = self.frame
         pip.replacementView = self
-        pip.replacementWindow = self.window
+        pip.replacementWindow = self.lastKnownWindow
     }
     
     func pictureContainerViewSuperviewDidChange(to superview: NSView?) {

@@ -7,9 +7,31 @@
 //
 
 import Cocoa
+import RxSwift
+import RxCocoa
 
 class MainTabController: NSTabViewController {
 
+    enum Tab: Int {
+        case schedule
+        case videos
+    }
+    
+    var activeTab: Tab {
+        get {
+            return Tab(rawValue: self.selectedTabViewItemIndex) ?? .schedule
+        }
+        set {
+            self.selectedTabViewItemIndex = newValue.rawValue
+        }
+    }
+    
+    private var activeTabVar = Variable<Tab>(.schedule)
+    
+    var rxActiveTab: Observable<Tab> {
+        return activeTabVar.asObservable()
+    }
+    
     init() {
         super.init(nibName: nil, bundle: nil)!
         
@@ -23,7 +45,7 @@ class MainTabController: NSTabViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        transitionOptions = [.crossfade, .allowUserInteraction]
+        transitionOptions = [.allowUserInteraction]
         
         tabStyle = .toolbar
         view.wantsLayer = true
@@ -59,6 +81,8 @@ class MainTabController: NSTabViewController {
                     view.state = NSOffState
                 }
             }
+            
+            self.activeTabVar.value = Tab(rawValue: self.selectedTabViewItemIndex) ?? .schedule
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }

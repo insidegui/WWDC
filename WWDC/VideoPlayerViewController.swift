@@ -16,6 +16,8 @@ open class VideoPlayerViewController: NSViewController {
     
     open var detached = false
     
+    var playerWillExitPictureInPicture: (() -> Void)?
+    
     public init(player: AVPlayer) {
         self.player = player
         
@@ -33,6 +35,10 @@ open class VideoPlayerViewController: NSViewController {
         
         return c
     }()
+    
+    var playerView: PUIPlayerView {
+        return playerContainer.playerView
+    }
     
     fileprivate lazy var progressIndicator: NSProgressIndicator = {
         let p = NSProgressIndicator(frame: NSZeroRect)
@@ -158,7 +164,7 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
     }
     
     public func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView) {
-        
+        self.playerWillExitPictureInPicture?()
     }
     
     public func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
