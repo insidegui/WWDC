@@ -83,14 +83,25 @@ final class SessionViewModel: NSObject {
         return Observable.from(object: self.session).map({ $0.favorites.count > 0 })
     }()
     
+    lazy var rxIsCurrentlyLive: Observable<Bool> = {
+        return Observable.from(object: self.sessionInstance).map({ $0.isCurrentlyLive })
+    }()
+    
     lazy var rxPlayableContent: Observable<Results<SessionAsset>> = {
         let playableAssets = self.session.assets.filter("rawAssetType == %@ OR rawAssetType == %@", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
         
         return Observable.collection(from: playableAssets)
     }()
     
+    lazy var rxCanBePlayed: Observable<Bool> = {
+        let validAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '') OR (rawAssetType == %@ AND SUBQUERY(session.instances, $instance, $instance.isCurrentlyLive == true).@count > 0)", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
+        let validAssetsObservable = Observable.collection(from: validAssets)
+        
+        return validAssetsObservable.map({ $0.count > 0 })
+    }()
+    
     lazy var rxDownloadableContent: Observable<Results<SessionAsset>> = {
-        let downloadableAssets = self.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue)
+        let downloadableAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '')", SessionAssetType.hdVideo.rawValue)
         
         return Observable.collection(from: downloadableAssets)
     }()
@@ -113,7 +124,7 @@ final class SessionViewModel: NSObject {
         
         self.trackName = track.name
         self.session = session
-        self.sessionInstance = instance ?? SessionInstance()
+        self.sessionInstance = instance ?? session.instances.first ?? SessionInstance()
         self.title = session.title
         self.identifier = session.identifier
         

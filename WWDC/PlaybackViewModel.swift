@@ -23,7 +23,7 @@ enum PlaybackError: Error {
         case .assetNotFound(let identifier):
             return "Unable to find asset for session \(identifier)"
         case .invalidAsset(let url):
-            return "Invalid stream url: \(url)"
+            return "Invalid stream: \(url)"
         }
     }
 }
@@ -51,18 +51,9 @@ final class PlaybackViewModel {
             throw PlaybackError.sessionNotFound(sessionViewModel.identifier)
         }
         
-        guard let asset = session.asset(of: .streamingVideo) else {
-            throw PlaybackError.assetNotFound(session.identifier)
-        }
+        var streamUrl: URL?
         
-        guard var streamUrl = URL(string: asset.remoteURL) else {
-            throw PlaybackError.invalidAsset(asset.remoteURL)
-        }
-        
-        if let localUrl = DownloadManager(storage).localFileURL(for: session) {
-            streamUrl = localUrl
-        }
-        
+        // first, check if the session is being live streamed now
         if session.instances.filter("isCurrentlyLive == true").count > 0 {
             if let liveAsset = session.assets.filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).first, let liveURL = URL(string: liveAsset.remoteURL) {
                 streamUrl = liveURL
@@ -74,7 +65,31 @@ final class PlaybackViewModel {
             self.isLiveStream = false
         }
         
-        self.player = AVPlayer(url: streamUrl)
+        // not live
+        if !self.isLiveStream {
+            // must have at least streaming video asset
+            guard let asset = session.asset(of: .streamingVideo) else {
+                throw PlaybackError.assetNotFound(session.identifier)
+            }
+            
+            // remote url for the streaming video must be valid
+            guard let remoteUrl = URL(string: asset.remoteURL) else {
+                throw PlaybackError.invalidAsset(asset.remoteURL)
+            }
+            
+            // check if we have a downloaded file and use it instead
+            if let localUrl = DownloadManager(storage).localFileURL(for: session) {
+                streamUrl = localUrl
+            } else {
+                streamUrl = remoteUrl
+            }
+        }
+        
+        guard let finalUrl = streamUrl else {
+            throw PlaybackError.invalidAsset("No valid video URL could be found")
+        }
+        
+        self.player = AVPlayer(url: finalUrl)
         
         if !self.isLiveStream {
             let p = session.currentPosition()

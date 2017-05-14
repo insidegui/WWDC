@@ -82,9 +82,7 @@ class ShelfViewController: NSViewController {
         
         guard let viewModel = viewModel else { return }
         
-        let rxCanBePlayed = viewModel.rxPlayableContent.map({ $0.count > 0 })
-        
-        rxCanBePlayed.map({ !$0 }).bind(to: playButton.rx.isHidden).addDisposableTo(self.disposeBag)
+        viewModel.rxCanBePlayed.map({ !$0 }).bind(to: playButton.rx.isHidden).addDisposableTo(self.disposeBag)
         
         viewModel.rxImageUrl.subscribe(onNext: { [weak self] imageUrl in
             self?.currentImageDownloadOperation?.cancel()
