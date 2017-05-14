@@ -10,8 +10,14 @@ import Cocoa
 
 class WWDCImageView: NSView {
 
+    var drawsBackground = true {
+        didSet {
+            self.backgroundLayer.isHidden = !drawsBackground
+        }
+    }
+    
     override var isOpaque: Bool {
-        return true
+        return drawsBackground
     }
     
     var backgroundColor: NSColor = .clear {

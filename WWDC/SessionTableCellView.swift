@@ -55,7 +55,10 @@ final class SessionTableCellView: NSTableCellView {
         viewModel.rxSubtitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(subtitleLabel.rx.text).addDisposableTo(self.disposeBag)
         viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).addDisposableTo(self.disposeBag)
         
-        let isSnowFlake = Observable.zip(viewModel.rxIsCurrentlyLive.distinctUntilChanged(), viewModel.rxIsLab.distinctUntilChanged())
+        viewModel.rxIsFavorite.distinctUntilChanged().map({ !$0 }).bind(to: favoritedImageView.rx.isHidden).addDisposableTo(self.disposeBag)
+        viewModel.rxIsDownloaded.distinctUntilChanged().map({ !$0 }).bind(to: downloadedImageView.rx.isHidden).addDisposableTo(self.disposeBag)
+        
+        let isSnowFlake = Observable.zip(viewModel.rxIsCurrentlyLive, viewModel.rxIsLab)
         
         isSnowFlake.map({ !$0.0 && !$0.1 }).bind(to: self.snowFlakeView.rx.isHidden).addDisposableTo(self.disposeBag)
         isSnowFlake.map({ $0.0 || $0.1 }).bind(to: self.thumbnailImageView.rx.isHidden).addDisposableTo(self.disposeBag)
@@ -163,14 +166,56 @@ final class SessionTableCellView: NSTableCellView {
         
         v.orientation = .vertical
         v.alignment = .leading
+        v.distribution = .fill
         v.spacing = 0
         
         return v
     }()
     
-    private lazy var mainStackView: NSStackView = {
-        let v = NSStackView(views: [self.contextColorView, self.snowFlakeView, self.thumbnailImageView, self.textStackView])
+    private lazy var favoritedImageView: WWDCImageView = {
+        let v = WWDCImageView()
         
+        v.heightAnchor.constraint(equalToConstant: 14).isActive = true
+        v.drawsBackground = false
+        v.image = #imageLiteral(resourceName: "star-small")
+        
+        return v
+    }()
+    
+    private lazy var downloadedImageView: WWDCImageView = {
+        let v = WWDCImageView()
+        
+        v.heightAnchor.constraint(equalToConstant: 11).isActive = true
+        v.drawsBackground = false
+        v.image = #imageLiteral(resourceName: "download-small")
+        
+        return v
+    }()
+    
+    private lazy var iconsStackView: NSStackView = {
+        let v = NSStackView(views: [])
+        
+        v.distribution = .gravityAreas
+        v.orientation = .vertical
+        v.spacing = 4
+        v.addView(self.favoritedImageView, in: .top)
+        v.addView(self.downloadedImageView, in: .bottom)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        
+        v.widthAnchor.constraint(equalToConstant: 12).isActive = true
+        
+        return v
+    }()
+    
+    private lazy var mainStackView: NSStackView = {
+        let v = NSStackView(views: [
+            self.contextColorView,
+            self.snowFlakeView,
+            self.thumbnailImageView,
+            self.textStackView
+        ])
+        
+        v.distribution = .fill
         v.orientation = .horizontal
         v.translatesAutoresizingMaskIntoConstraints = false
         
@@ -181,10 +226,17 @@ final class SessionTableCellView: NSTableCellView {
         wantsLayer = true
         
         addSubview(mainStackView)
+        addSubview(iconsStackView)
+        
         mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
-        mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
+        mainStackView.trailingAnchor.constraint(equalTo: iconsStackView.leadingAnchor, constant: -4).isActive = true
         mainStackView.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
         mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+        
+        iconsStackView.topAnchor.constraint(equalTo: mainStackView.topAnchor).isActive = true
+        iconsStackView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor).isActive = true
+        
+        iconsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4).isActive = true
     }
     
 }
