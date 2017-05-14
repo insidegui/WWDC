@@ -169,6 +169,13 @@
 			remoteGlobalIDString = DD36A4C71E478D7E00B2EA88;
 			remoteInfo = ConfCore;
 		};
+		DDB352941EC7FFE900254815 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD36A4C71E478D7E00B2EA88;
+			remoteInfo = ConfCore;
+		};
 		DDBFA16E1EB525F3004AE10F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DDBFA16A1EB525F2004AE10F /* PlayerUI.xcodeproj */;
@@ -177,13 +184,6 @@
 			remoteInfo = PlayerUI;
 		};
 		DDDAA3F31EC7653300DF9D02 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DDDAA3ED1EC7653200DF9D02;
-			remoteInfo = ThrowBack;
-		};
-		DDDAA3FB1EC7654600DF9D02 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
 			proxyType = 1;
@@ -966,7 +966,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DDDAA3FC1EC7654600DF9D02 /* PBXTargetDependency */,
 			);
 			name = ConfCore;
 			productName = ConfCore;
@@ -1004,6 +1003,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DDB352951EC7FFE900254815 /* PBXTargetDependency */,
 			);
 			name = ThrowBack;
 			productName = ThrowBack;
@@ -1290,15 +1290,15 @@
 			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
 			targetProxy = DD36A4DB1E478D7E00B2EA88 /* PBXContainerItemProxy */;
 		};
+		DDB352951EC7FFE900254815 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
+			targetProxy = DDB352941EC7FFE900254815 /* PBXContainerItemProxy */;
+		};
 		DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DDDAA3ED1EC7653200DF9D02 /* ThrowBack */;
 			targetProxy = DDDAA3F31EC7653300DF9D02 /* PBXContainerItemProxy */;
-		};
-		DDDAA3FC1EC7654600DF9D02 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DDDAA3ED1EC7653200DF9D02 /* ThrowBack */;
-			targetProxy = DDDAA3FB1EC7654600DF9D02 /* PBXContainerItemProxy */;
 		};
 		DDE29ECA1EB529F200680703 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
