@@ -54,6 +54,8 @@ extension AppCoordinator: ShelfViewControllerDelegate {
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
         guard let playerController = currentPlayerController else { return }
         
+        shelf.playButton.isHidden = true
+        
         shelf.addChildViewController(playerController)
         
         playerController.view.frame = shelf.view.bounds
