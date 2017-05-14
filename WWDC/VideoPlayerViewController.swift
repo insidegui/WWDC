@@ -157,4 +157,12 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
         
     }
     
+    public func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView) {
+        
+    }
+    
+    public func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
+        
+    }
+    
 }

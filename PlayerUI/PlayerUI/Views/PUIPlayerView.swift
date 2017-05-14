@@ -15,7 +15,11 @@ public final class PUIPlayerView: NSView {
     
     public weak var delegate: PUIPlayerViewDelegate?
     
-    public internal(set) var isInPictureInPictureMode: Bool = false
+    public internal(set) var isInPictureInPictureMode: Bool = false {
+        didSet {
+            self.pipButton.state = isInPictureInPictureMode ? NSOnState : NSOffState
+        }
+    }
     
     public weak var appearanceDelegate: PUIPlayerViewAppearanceDelegate? {
         didSet {
@@ -467,6 +471,7 @@ public final class PUIPlayerView: NSView {
     private lazy var pipButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
+        b.isToggle = true
         b.image = .PUIPictureInPicture
         b.target = self
         b.action = #selector(togglePip(_:))
@@ -765,6 +770,8 @@ public final class PUIPlayerView: NSView {
     fileprivate var pipController: PIPViewController?
     
     fileprivate func enterPictureInPictureMode() {
+        delegate?.playerViewWillEnterPictureInPictureMode(self)
+        
         pipController = PIPViewController()
         pipController?.delegate = self
         pipController?.setPlaying(self.isPlaying)
@@ -1062,6 +1069,8 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
     
     public func pipWillClose(_ pip: PIPViewController) {
         guard let window = self.window else { return }
+        
+        delegate?.playerViewWillExitPictureInPictureMode(self)
         
         if !NSApp.isActive {
             NSApp.activate(ignoringOtherApps: true)
