@@ -51,6 +51,8 @@ public final class PUIPlayerView: NSView {
     
     public var remoteMediaUrl: URL?
     
+    var pictureContainer: PUIPictureContainerViewController!
+    
     public init(player: AVPlayer) {
         self.player = player
         
@@ -169,10 +171,13 @@ public final class PUIPlayerView: NSView {
     
     private func setupPlayer() {
         playerLayer.player = player
-        playerLayer.frame = bounds
         playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
         
-        layer?.addSublayer(playerLayer)
+        pictureContainer = PUIPictureContainerViewController(playerLayer: playerLayer)
+        pictureContainer.view.frame = bounds
+        
+        pictureContainer.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        addSubview(pictureContainer.view)
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
