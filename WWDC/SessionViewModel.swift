@@ -88,10 +88,18 @@ final class SessionViewModel: NSObject {
     }()
     
     lazy var rxIsCurrentlyLive: Observable<Bool> = {
+        guard self.sessionInstance.realm != nil else {
+            return Observable.just(false)
+        }
+        
         return Observable.from(object: self.sessionInstance).map({ $0.isCurrentlyLive })
     }()
     
     lazy var rxIsLab: Observable<Bool> = {
+        guard self.sessionInstance.realm != nil else {
+            return Observable.just(false)
+        }
+        
         return Observable.from(object: self.sessionInstance).map({ $0.type == .lab })
     }()
     
