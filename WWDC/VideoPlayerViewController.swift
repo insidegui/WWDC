@@ -145,14 +145,6 @@ open class VideoPlayerViewController: NSViewController {
 
 extension VideoPlayerViewController: PUIPlayerViewDelegate {
     
-    public func playerViewDidSelectTogglePiP(_ playerView: PUIPlayerView) {
-        // TODO: PiP will have to be implemented directly instead of using PIPContainer
-        let alert = NSAlert()
-        alert.messageText = "Not Implemented"
-        alert.informativeText = "PiP is not implemented yet"
-        alert.runModal()
-    }
-    
     public func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView) {
         if let playerWindow = playerView.window as? PUIPlayerWindow {
             playerWindow.toggleFullScreen(self)

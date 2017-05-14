@@ -15,6 +15,8 @@ public final class PUIPlayerView: NSView {
     
     public weak var delegate: PUIPlayerViewDelegate?
     
+    public internal(set) var isInPictureInPictureMode: Bool = false
+    
     public weak var appearanceDelegate: PUIPlayerViewAppearanceDelegate? {
         didSet {
             invalidateAppearance()
@@ -174,9 +176,9 @@ public final class PUIPlayerView: NSView {
         playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
         
         pictureContainer = PUIPictureContainerViewController(playerLayer: playerLayer)
-        pictureContainer.view.frame = bounds
+        pictureContainer.delegate = self
+        pictureContainer.view.translatesAutoresizingMaskIntoConstraints = false
         
-        pictureContainer.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
         addSubview(pictureContainer.view)
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
@@ -196,6 +198,7 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
+        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize))
         
         oldValue.pause()
         oldValue.cancelPendingPrerolls()
@@ -209,6 +212,8 @@ public final class PUIPlayerView: NSView {
                 self.updateBufferedSegments()
             } else if keyPath == #keyPath(AVPlayer.rate) {
                 self.updatePlayingState()
+            } else if keyPath == #keyPath(AVPlayer.currentItem.presentationSize) {
+                self.playerPresentationSizeDidChange()
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
@@ -241,6 +246,8 @@ public final class PUIPlayerView: NSView {
     }
     
     fileprivate func updatePlayingState() {
+        pipController?.setPlaying(isPlaying)
+        
         if isPlaying {
             playButton.image = .PUIPause
         } else {
@@ -250,6 +257,18 @@ public final class PUIPlayerView: NSView {
     
     fileprivate func updatePlaybackSpeedState() {
         speedButton.image = playbackSpeed.icon
+    }
+    
+    fileprivate var currentPresentationSize: NSSize? {
+        guard let size = player.currentItem?.presentationSize, size != NSZeroSize else { return nil }
+        
+        return size
+    }
+    
+    private func playerPresentationSizeDidChange() {
+        guard let size = currentPresentationSize else { return }
+        
+        pipController?.aspectRatio = size
     }
     
     private func playerStatusChanged() {
@@ -293,12 +312,6 @@ public final class PUIPlayerView: NSView {
         self.remainingTimeLabel.stringValue = String(time: remainingTime) ?? ""
     }
     
-    public override func layout() {
-        super.layout()
-        
-        playerLayer.frame = bounds
-    }
-    
     deinit {
         teardown(player: player)
     }
@@ -309,7 +322,7 @@ public final class PUIPlayerView: NSView {
     
     private var extrasMenuContainerView: NSStackView!
     
-    private var controlsVisualEffectView: NSVisualEffectView!
+    fileprivate var controlsVisualEffectView: NSVisualEffectView!
     
     private var timeLabelsContainerView: NSStackView!
     private var controlsContainerView: NSStackView!
@@ -670,17 +683,25 @@ public final class PUIPlayerView: NSView {
     
     @IBAction public func togglePlaying(_ sender: Any?) {
         if isPlaying {
-            if isPlayingExternally {
-                currentExternalPlaybackProvider?.pause()
-            } else {
-                player.rate = 0
-            }
+            pause(sender)
         } else {
-            if isPlayingExternally {
-                currentExternalPlaybackProvider?.play()
-            } else {
-                player.rate = playbackSpeed.rawValue
-            }
+            play(sender)
+        }
+    }
+    
+    @IBAction public func pause(_ sender: Any?) {
+        if isPlayingExternally {
+            currentExternalPlaybackProvider?.pause()
+        } else {
+            player.rate = 0
+        }
+    }
+    
+    @IBAction public func play(_ sender: Any?) {
+        if isPlayingExternally {
+            currentExternalPlaybackProvider?.play()
+        } else {
+            player.rate = playbackSpeed.rawValue
         }
     }
     
@@ -713,7 +734,11 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction public func togglePip(_ sender: NSView?) {
-        delegate?.playerViewDidSelectTogglePiP(self)
+        if isInPictureInPictureMode {
+            exitPictureInPictureMode()
+        } else {
+            enterPictureInPictureMode()
+        }
     }
     
     @IBAction public func toggleFullscreen(_ sender: Any?) {
@@ -733,6 +758,26 @@ public final class PUIPlayerView: NSView {
         } else {
             player.seek(to: targetTime)
         }
+    }
+    
+    // MARK: - PiP Support
+    
+    fileprivate var pipController: PIPViewController?
+    
+    fileprivate func enterPictureInPictureMode() {
+        pipController = PIPViewController()
+        pipController?.delegate = self
+        pipController?.setPlaying(self.isPlaying)
+        pipController?.aspectRatio = self.currentPresentationSize ?? NSSize(width: 640, height: 360)
+        pipController?.view.layer?.backgroundColor = NSColor.black.cgColor
+        
+        pipController?.presentAsPicture(inPicture: self.pictureContainer)
+        
+        self.isInPictureInPictureMode = true
+    }
+    
+    fileprivate func exitPictureInPictureMode() {
+        pipController?.dismissViewController(pictureContainer)
     }
     
     // MARK: - Visibility management
@@ -987,6 +1032,57 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
         }
         
         self.currentExternalPlaybackProvider = provider
+    }
+    
+}
+
+// MARK: - PiP delegate
+
+extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewControllerDelegate {
+    
+    public func pipActionStop(_ pip: PIPViewController) {
+        self.pause(pip)
+    }
+    
+    public func pipActionPause(_ pip: PIPViewController) {
+        self.pause(pip)
+    }
+    
+    public func pipActionPlay(_ pip: PIPViewController) {
+        self.play(pip)
+    }
+    
+    public func pipDidClose(_ pip: PIPViewController) {
+        pictureContainer.view.frame = self.bounds
+        
+        self.addSubview(pictureContainer.view, positioned: .below, relativeTo: self.controlsVisualEffectView)
+        
+        self.isInPictureInPictureMode = false
+    }
+    
+    public func pipWillClose(_ pip: PIPViewController) {
+        guard let window = self.window else { return }
+        
+        if !NSApp.isActive {
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        
+        window.makeKeyAndOrderFront(pip)
+        
+        if window.isMiniaturized {
+            window.deminiaturize(nil)
+        }
+        
+        pip.replacementRect = self.frame
+        pip.replacementView = self
+        pip.replacementWindow = self.window
+    }
+    
+    func pictureContainerViewSuperviewDidChange(to superview: NSView?) {
+        guard let superview = superview else { return }
+        
+        pictureContainer.view.frame = superview.bounds
+        pictureContainer.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
     }
     
 }

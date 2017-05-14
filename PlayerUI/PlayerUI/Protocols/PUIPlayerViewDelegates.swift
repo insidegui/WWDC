@@ -11,7 +11,6 @@ import Cocoa
 public protocol PUIPlayerViewDelegate: class {
     
     func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, from view: NSView?)
-    func playerViewDidSelectTogglePiP(_ playerView: PUIPlayerView)
     func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView)
     
 }

@@ -11,7 +11,9 @@
 		DDAD96251EB6426B007E4E21 /* String+CMTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAD96241EB6426B007E4E21 /* String+CMTime.swift */; };
 		DDAD96271EB64689007E4E21 /* AVPlayer+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAD96261EB64689007E4E21 /* AVPlayer+Validation.swift */; };
 		DDAD96291EB6797F007E4E21 /* PUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAD96281EB6797F007E4E21 /* PUISlider.swift */; };
-		DDB352871EC7E60F00254815 /* PUIPictureContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB352861EC7E60F00254815 /* PUIPictureContainerViewController.swift */; };
+		DDB3528B1EC7E7A800254815 /* PUIPictureContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3528A1EC7E7A800254815 /* PUIPictureContainerViewController.swift */; };
+		DDB3528D1EC7E7E300254815 /* PIP.h in Headers */ = {isa = PBXBuildFile; fileRef = DDB3528C1EC7E7E300254815 /* PIP.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDB3528F1EC7EA8400254815 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB3528E1EC7EA8400254815 /* PIP.framework */; };
 		DDBFA1641EB525F2004AE10F /* PlayerUI.h in Headers */ = {isa = PBXBuildFile; fileRef = DDBFA1621EB525F2004AE10F /* PlayerUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDDE43041EB789CF00B88E91 /* PUITimelineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43031EB789CF00B88E91 /* PUITimelineDelegate.swift */; };
 		DDDE43061EB789E300B88E91 /* PUITimelineAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43051EB789E300B88E91 /* PUITimelineAnnotation.swift */; };
@@ -39,7 +41,9 @@
 		DDAD96241EB6426B007E4E21 /* String+CMTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+CMTime.swift"; sourceTree = "<group>"; };
 		DDAD96261EB64689007E4E21 /* AVPlayer+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVPlayer+Validation.swift"; sourceTree = "<group>"; };
 		DDAD96281EB6797F007E4E21 /* PUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUISlider.swift; sourceTree = "<group>"; };
-		DDB352861EC7E60F00254815 /* PUIPictureContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPictureContainerViewController.swift; sourceTree = "<group>"; };
+		DDB3528A1EC7E7A800254815 /* PUIPictureContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPictureContainerViewController.swift; sourceTree = "<group>"; };
+		DDB3528C1EC7E7E300254815 /* PIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIP.h; path = ../../../../PIPContainer/Sources/Private/PIP.h; sourceTree = "<group>"; };
+		DDB3528E1EC7EA8400254815 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDBFA15F1EB525F2004AE10F /* PlayerUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlayerUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBFA1621EB525F2004AE10F /* PlayerUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerUI.h; sourceTree = "<group>"; };
 		DDBFA1631EB525F2004AE10F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -70,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDB3528F1EC7EA8400254815 /* PIP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +89,22 @@
 				DDDE43081EB789F500B88E91 /* External Playback */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		DDB352881EC7E77600254815 /* PiP Support */ = {
+			isa = PBXGroup;
+			children = (
+				DDB3528C1EC7E7E300254815 /* PIP.h */,
+			);
+			path = "PiP Support";
+			sourceTree = "<group>";
+		};
+		DDB352891EC7E78C00254815 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DDB3528A1EC7E7A800254815 /* PUIPictureContainerViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		DDBFA1551EB525F2004AE10F = {
@@ -106,12 +127,14 @@
 		DDBFA1611EB525F2004AE10F /* PlayerUI */ = {
 			isa = PBXGroup;
 			children = (
+				DDB352891EC7E78C00254815 /* Controllers */,
 				DDDE432F1EB7BDEA00B88E91 /* Models */,
 				DDA4D6631EB7898400172ECF /* Protocols */,
 				DDE29EAF1EB5293C00680703 /* Util */,
 				DDE29EAE1EB5293700680703 /* Definitions */,
 				DDE29EAC1EB5293000680703 /* Views */,
 				DDE29EAB1EB5292B00680703 /* Resources */,
+				DDB352881EC7E77600254815 /* PiP Support */,
 				DDBFA1621EB525F2004AE10F /* PlayerUI.h */,
 				DDBFA1631EB525F2004AE10F /* Info.plist */,
 			);
@@ -172,7 +195,6 @@
 				DDEA860A1EB53083002AE0EB /* PUIBufferLayer.swift */,
 				DDE29EB41EB5297800680703 /* PUITimelineView.swift */,
 				DDE29EB31EB5297800680703 /* PUIPlayerView.swift */,
-				DDB352861EC7E60F00254815 /* PUIPictureContainerViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -201,6 +223,7 @@
 		DDE29EC31EB529C400680703 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DDB3528E1EC7EA8400254815 /* PIP.framework */,
 				DDE29EC41EB529C400680703 /* PIPContainer.framework */,
 			);
 			name = Frameworks;
@@ -213,6 +236,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDB3528D1EC7E7E300254815 /* PIP.h in Headers */,
 				DDBFA1641EB525F2004AE10F /* PlayerUI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,7 +317,7 @@
 				DDE29EBD1EB5298900680703 /* Colors.swift in Sources */,
 				DDE29EC01EB5299000680703 /* DebugLog.swift in Sources */,
 				DDAD96271EB64689007E4E21 /* AVPlayer+Validation.swift in Sources */,
-				DDB352871EC7E60F00254815 /* PUIPictureContainerViewController.swift in Sources */,
+				DDB3528B1EC7E7A800254815 /* PUIPictureContainerViewController.swift in Sources */,
 				DDE29EC11EB5299000680703 /* NSEvent+ForceTouch.swift in Sources */,
 				DDEA860D1EB53B2F002AE0EB /* PUIButton.swift in Sources */,
 				DDEA85FE1EB52B89002AE0EB /* PUIPlayerWindow.swift in Sources */,
@@ -426,6 +450,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -449,6 +477,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
