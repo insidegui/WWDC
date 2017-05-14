@@ -101,7 +101,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
         
         if let blur = CIFilter(name: "CIGaussianBlur"), let sat = CIFilter(name: "CIColorControls") {
             sat.setDefaults()
-            sat.setValue(1.5, forKey: "inputSaturation")
+            sat.setValue(2, forKey: "inputSaturation")
             blur.setValue(100, forKey: "inputRadius")
             snapshotLayer.filters = [sat, blur]
         }
