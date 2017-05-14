@@ -1092,6 +1092,7 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
         self.addSubview(pictureContainer.view, positioned: .below, relativeTo: self.controlsVisualEffectView)
         
         self.isInPictureInPictureMode = false
+        self.pipController = nil
     }
     
     public func pipWillClose(_ pip: PIPViewController) {
@@ -1119,6 +1120,14 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
         
         pictureContainer.view.frame = superview.bounds
         pictureContainer.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        
+        if superview == self, pipController != nil {
+            if self.pictureContainer.presenting == pipController {
+                pipController?.dismissViewController(self.pictureContainer)
+            }
+            
+            pipController = nil
+        }
     }
     
 }
