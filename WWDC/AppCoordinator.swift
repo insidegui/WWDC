@@ -88,7 +88,9 @@ final class AppCoordinator {
         setupBindings()
         setupDelegation()
         
+        NotificationCenter.default.addObserver(forName: .MainTabControllerDidFinishLoading, object: nil, queue: nil) { _ in self.restoreApplicationState() }
         NotificationCenter.default.addObserver(forName: .NSApplicationDidFinishLaunching, object: nil, queue: nil) { _ in self.startup() }
+        NotificationCenter.default.addObserver(forName: .NSApplicationWillTerminate, object: nil, queue: nil) { _ in self.saveApplicationState() }
     }
     
     /// The list controller for the active tab
@@ -189,6 +191,8 @@ final class AppCoordinator {
         }).dispose()
         
         liveObserver.start()
+        
+        restoreListStatesIfNeeded()
     }
     
     @IBAction func refresh(_ sender: Any?) {
@@ -206,6 +210,34 @@ final class AppCoordinator {
         
         refresh(nil)
         updateListsAfterSync()
+    }
+    
+    // MARK: - State restoration
+    
+    private var didRestoreLists = false
+    
+    private func saveApplicationState() {
+        Preferences.shared.activeTab = activeTab
+        Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
+        Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
+    }
+    
+    private func restoreApplicationState() {
+        self.tabController.activeTab = Preferences.shared.activeTab
+    }
+    
+    private func restoreListStatesIfNeeded() {
+        defer { didRestoreLists = true }
+        
+        guard !didRestoreLists else { return }
+        
+        if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
+            self.scheduleController.listViewController.selectSession(with: identifier)
+        }
+        
+        if let identifier = Preferences.shared.selectedVideoItemIdentifier {
+            self.videosController.listViewController.selectSession(with: identifier)
+        }
     }
     
     // MARK: - Data migration

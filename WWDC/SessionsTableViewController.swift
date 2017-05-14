@@ -39,7 +39,7 @@ class SessionsTableViewController: NSViewController {
     
     var sessionRows: [SessionRow] = [] {
         didSet {
-            tableView.reloadData()
+            tableView.reloadPreservingSelection()
         }
     }
     
@@ -104,8 +104,8 @@ class SessionsTableViewController: NSViewController {
         }
     }
     
-    lazy var tableView: NSTableView = {
-        let v = NSTableView()
+    lazy var tableView: WWDCTableView = {
+        let v = WWDCTableView()
         
         v.wantsLayer = true
         v.focusRingType = .none

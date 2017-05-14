@@ -27,4 +27,33 @@ final class Preferences {
         }
     }
     
+    var activeTab: MainTabController.Tab {
+        get {
+            let rawValue = defaults.integer(forKey: #function)
+            
+            return MainTabController.Tab(rawValue: rawValue) ?? .schedule
+        }
+        set {
+            defaults.set(newValue.rawValue, forKey: #function)
+        }
+    }
+    
+    var selectedScheduleItemIdentifier: String? {
+        get {
+            return defaults.object(forKey: #function) as? String
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
+    
+    var selectedVideoItemIdentifier: String? {
+        get {
+            return defaults.object(forKey: #function) as? String
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
+    
 }

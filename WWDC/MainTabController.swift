@@ -10,6 +10,10 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
+extension Notification.Name {
+    static let MainTabControllerDidFinishLoading = Notification.Name("MainTabControllerDidFinishLoading")
+}
+
 class MainTabController: NSTabViewController {
 
     enum Tab: Int {
@@ -51,6 +55,8 @@ class MainTabController: NSTabViewController {
         view.wantsLayer = true
     }
     
+    private var sentStatupNotification = false
+    
     override func viewDidAppear() {
         super.viewDidAppear()
         
@@ -61,6 +67,11 @@ class MainTabController: NSTabViewController {
         toolbar.insertItem(withItemIdentifier: NSToolbarFlexibleSpaceItemIdentifier, at: toolbar.items.count)
         
         addObserver(self, forKeyPath: #keyPath(selectedTabViewItemIndex), options: [.initial, .new], context: nil)
+        
+        if !sentStatupNotification {
+            sentStatupNotification = true
+            NotificationCenter.default.post(name: .MainTabControllerDidFinishLoading, object: self)
+        }
     }
     
     deinit {
