@@ -143,9 +143,6 @@ final class AppCoordinator {
             self?.scheduleController.detailViewController.viewModel = viewModel
             self?.updateSelectedViewModelRegardlessOfTab()
         }).addDisposableTo(self.disposeBag)
-        
-        selectedSession.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
-        selectedScheduleItem.subscribe(onNext: updateCurrentActivity).addDisposableTo(self.disposeBag)
     }
     
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -157,6 +154,7 @@ final class AppCoordinator {
         }
         
         self.updateShelfBasedOnSelectionChange()
+        self.updateCurrentActivity(with: selectedViewModelRegardlessOfTab)
     }
     
     private func setupDelegation() {
