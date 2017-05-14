@@ -117,14 +117,12 @@ final class SessionTableCellView: NSTableCellView {
         return l
     }()
     
-    private lazy var thumbnailImageView: NSImageView = {
-        let v = NSImageView()
+    private lazy var thumbnailImageView: WWDCImageView = {
+        let v = WWDCImageView()
         
         v.heightAnchor.constraint(equalToConstant: 48).isActive = true
         v.widthAnchor.constraint(equalToConstant: 85).isActive = true
-        v.wantsLayer = true
-        v.layer?.cornerRadius = 2
-        v.layer?.masksToBounds = true
+        v.backgroundColor = .black
         
         return v
     }()

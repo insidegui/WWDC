@@ -28,6 +28,9 @@ final class ImageDownloadCenter {
             
             let thumb = NSImage(data: cache.thumbnail)
             
+            original?.cacheMode = .never
+            thumb?.cacheMode = .never
+            
             completion(url, original, thumb)
             
             return nil
@@ -200,6 +203,9 @@ private final class ImageDownloadOperation: Operation {
             guard !self.isCancelled else { return }
             
             let thumbnailImage = originalImage.resized(to: self.thumbnailHeight)
+            
+            originalImage.cacheMode = .never
+            thumbnailImage.cacheMode = .never
             
             DispatchQueue.main.async {
                 self.imageCompletionHandler?(self.url, originalImage, thumbnailImage)

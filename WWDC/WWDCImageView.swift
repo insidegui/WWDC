@@ -10,6 +10,10 @@ import Cocoa
 
 class WWDCImageView: NSView {
 
+    override var isOpaque: Bool {
+        return true
+    }
+    
     var backgroundColor: NSColor = .clear {
         didSet {
             backgroundLayer.backgroundColor = backgroundColor.cgColor
