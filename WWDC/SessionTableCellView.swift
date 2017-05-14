@@ -18,6 +18,8 @@ final class SessionTableCellView: NSTableCellView {
         didSet {
             guard viewModel != oldValue else { return }
             
+            self.disposeBag = DisposeBag()
+            
             thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
             
             bindUI()
@@ -53,8 +55,18 @@ final class SessionTableCellView: NSTableCellView {
         viewModel.rxSubtitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(subtitleLabel.rx.text).addDisposableTo(self.disposeBag)
         viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).addDisposableTo(self.disposeBag)
         
-        viewModel.rxIsLab.distinctUntilChanged().map({ !$0 }).bind(to: self.labIndicator.rx.isHidden).addDisposableTo(self.disposeBag)
-        viewModel.rxIsLab.distinctUntilChanged().bind(to: self.thumbnailImageView.rx.isHidden).addDisposableTo(self.disposeBag)
+        let isSnowFlake = Observable.zip(viewModel.rxIsCurrentlyLive.distinctUntilChanged(), viewModel.rxIsLab.distinctUntilChanged())
+        
+        isSnowFlake.map({ !$0.0 && !$0.1 }).bind(to: self.snowFlakeView.rx.isHidden).addDisposableTo(self.disposeBag)
+        isSnowFlake.map({ $0.0 || $0.1 }).bind(to: self.thumbnailImageView.rx.isHidden).addDisposableTo(self.disposeBag)
+        
+        isSnowFlake.subscribe(onNext: { [weak self] (isLive: Bool, isLab: Bool) -> Void in
+            if isLive {
+                self?.snowFlakeView.image = #imageLiteral(resourceName: "live-indicator")
+            } else if isLab {
+                self?.snowFlakeView.image = #imageLiteral(resourceName: "lab-indicator")
+            }
+        }).addDisposableTo(self.disposeBag)
         
         viewModel.rxImageUrl.distinctUntilChanged({ $0 != $1 }).subscribe(onNext: { [weak self] imageUrl in
             guard let imageUrl = imageUrl else { return }
@@ -73,7 +85,7 @@ final class SessionTableCellView: NSTableCellView {
         }).addDisposableTo(self.disposeBag)
         
         viewModel.rxDarkColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
-            self?.labIndicator.backgroundColor = color
+            self?.snowFlakeView.backgroundColor = color
         }).addDisposableTo(self.disposeBag)
         
         viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
@@ -127,7 +139,7 @@ final class SessionTableCellView: NSTableCellView {
         return v
     }()
     
-    private lazy var labIndicator: WWDCImageView = {
+    private lazy var snowFlakeView: WWDCImageView = {
         let v = WWDCImageView()
         
         v.heightAnchor.constraint(equalToConstant: 48).isActive = true
@@ -157,7 +169,7 @@ final class SessionTableCellView: NSTableCellView {
     }()
     
     private lazy var mainStackView: NSStackView = {
-        let v = NSStackView(views: [self.contextColorView, self.labIndicator, self.thumbnailImageView, self.textStackView])
+        let v = NSStackView(views: [self.contextColorView, self.snowFlakeView, self.thumbnailImageView, self.textStackView])
         
         v.orientation = .horizontal
         v.translatesAutoresizingMaskIntoConstraints = false

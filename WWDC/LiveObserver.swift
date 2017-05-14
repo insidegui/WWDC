@@ -25,8 +25,6 @@ final class LiveObserver {
     }
     
     func start() {
-        clearLiveInstances()
-        
         guard !isRunning else { return }
         
         guard storage.realm.objects(Event.self).filter("startDate <= %@ AND endDate > %@ ", dateProvider(), dateProvider()).count > 0 else {
@@ -68,11 +66,6 @@ final class LiveObserver {
         
         setLiveFlag(false, for: notLiveAnymore)
         setLiveFlag(true, for: liveInstances.toArray())
-    }
-    
-    /// Mark every instance as not live
-    private func clearLiveInstances() {
-        setLiveFlag(false, for: allLiveInstances.toArray())
     }
     
     private func setLiveFlag(_ value: Bool, for instances: [SessionInstance]) {
