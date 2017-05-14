@@ -65,6 +65,10 @@ final class SessionViewModel: NSObject {
         return Observable.from(object: self.session).map({ SessionViewModel.trackColor(for: $0) }).ignoreNil()
     }()
     
+    lazy var rxDarkColor: Observable<NSColor> = {
+        return Observable.from(object: self.session).map({ SessionViewModel.darkTrackColor(for: $0) }).ignoreNil()
+    }()
+    
     lazy var rxImageUrl: Observable<URL?> = {
         return Observable.from(object: self.session).map({ SessionViewModel.imageUrl(for: $0) })
     }()
@@ -85,6 +89,10 @@ final class SessionViewModel: NSObject {
     
     lazy var rxIsCurrentlyLive: Observable<Bool> = {
         return Observable.from(object: self.sessionInstance).map({ $0.isCurrentlyLive })
+    }()
+    
+    lazy var rxIsLab: Observable<Bool> = {
+        return Observable.from(object: self.sessionInstance).map({ $0.type == .lab })
     }()
     
     lazy var rxPlayableContent: Observable<Results<SessionAsset>> = {
@@ -258,6 +266,12 @@ final class SessionViewModel: NSObject {
     
     static func trackColor(for session: Session) -> NSColor? {
         guard let code = session.track.first?.lightColor else { return nil }
+        
+        return NSColor.fromHexString(hexString: code)
+    }
+    
+    static func darkTrackColor(for session: Session) -> NSColor? {
+        guard let code = session.track.first?.darkColor else { return nil }
         
         return NSColor.fromHexString(hexString: code)
     }

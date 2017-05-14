@@ -8,18 +8,10 @@
 
 import Cocoa
 
-private final class TrackColorLayer: CALayer {
-    
-    override func action(forKey event: String) -> CAAction? {
-        return nil
-    }
-    
-}
-
 final class TrackColorView: NSView {
     
-    private lazy var progressLayer: TrackColorLayer = {
-        let l = TrackColorLayer()
+    private lazy var progressLayer: WWDCLayer = {
+        let l = WWDCLayer()
         
         l.autoresizingMask = [.layerWidthSizable]
         
@@ -30,7 +22,7 @@ final class TrackColorView: NSView {
         super.init(frame: frameRect)
         
         wantsLayer = true
-        layer = TrackColorLayer()
+        layer = WWDCLayer()
         
         layer?.cornerRadius = 2
         layer?.masksToBounds = true

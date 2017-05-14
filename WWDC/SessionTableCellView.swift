@@ -53,6 +53,9 @@ final class SessionTableCellView: NSTableCellView {
         viewModel.rxSubtitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(subtitleLabel.rx.text).addDisposableTo(self.disposeBag)
         viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).addDisposableTo(self.disposeBag)
         
+        viewModel.rxIsLab.distinctUntilChanged().map({ !$0 }).bind(to: self.labIndicator.rx.isHidden).addDisposableTo(self.disposeBag)
+        viewModel.rxIsLab.distinctUntilChanged().bind(to: self.thumbnailImageView.rx.isHidden).addDisposableTo(self.disposeBag)
+        
         viewModel.rxImageUrl.distinctUntilChanged({ $0 != $1 }).subscribe(onNext: { [weak self] imageUrl in
             guard let imageUrl = imageUrl else { return }
             
@@ -67,6 +70,10 @@ final class SessionTableCellView: NSTableCellView {
         
         viewModel.rxColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
             self?.contextColorView.color = color
+        }).addDisposableTo(self.disposeBag)
+        
+        viewModel.rxDarkColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
+            self?.labIndicator.backgroundColor = color
         }).addDisposableTo(self.disposeBag)
         
         viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
@@ -122,6 +129,17 @@ final class SessionTableCellView: NSTableCellView {
         return v
     }()
     
+    private lazy var labIndicator: WWDCImageView = {
+        let v = WWDCImageView()
+        
+        v.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        v.widthAnchor.constraint(equalToConstant: 85).isActive = true
+        v.isHidden = true
+        v.image = #imageLiteral(resourceName: "lab-indicator")
+        
+        return v
+    }()
+    
     private lazy var contextColorView: TrackColorView = {
         let v = TrackColorView()
         
@@ -141,7 +159,7 @@ final class SessionTableCellView: NSTableCellView {
     }()
     
     private lazy var mainStackView: NSStackView = {
-        let v = NSStackView(views: [self.contextColorView, self.thumbnailImageView, self.textStackView])
+        let v = NSStackView(views: [self.contextColorView, self.labIndicator, self.thumbnailImageView, self.textStackView])
         
         v.orientation = .horizontal
         v.translatesAutoresizingMaskIntoConstraints = false

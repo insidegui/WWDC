@@ -45,6 +45,15 @@ public class SessionInstance: Object {
     /// Type of session (0 = regular session, 1 = lab, 2 = video-only session)
     public dynamic var sessionType = 0
     
+    public var type: SessionInstanceType {
+        get {
+            return SessionInstanceType(rawValue: sessionType) ?? .session
+        }
+        set {
+            self.sessionType = newValue.rawValue
+        }
+    }
+    
     /// The start time
     public dynamic var startTime: Date = .distantPast
     
