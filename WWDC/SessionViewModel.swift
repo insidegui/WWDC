@@ -151,31 +151,6 @@ final class SessionViewModel: NSObject {
         }).addDisposableTo(self.disposeBag)
     }
     
-    init(title: String) {
-        self.identifier = title
-        self.title = title
-        self.webUrl = nil
-        self.session = Session()
-        self.sessionInstance = SessionInstance()
-        self.style = .videos
-        self.trackName = ""
-        
-        super.init()
-    }
-    
-    init(headerWithDate date: Date, showTimeZone: Bool) {
-        self.title = SessionViewModel.standardFormatted(date: date, withTimeZoneName: showTimeZone)
-        self.identifier = title
-        
-        self.session = Session()
-        self.sessionInstance = SessionInstance()
-        self.style = .videos
-        self.webUrl = nil
-        self.trackName = ""
-        
-        super.init()
-    }
-    
     static func subtitle(from session: Session, at event: ConfCore.Event?) -> String {
         guard let event = event else { return "" }
         

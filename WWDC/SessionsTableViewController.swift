@@ -37,7 +37,7 @@ class SessionsTableViewController: NSViewController {
         }
     }
     
-    var viewModels: [SessionRow] = [] {
+    var sessionRows: [SessionRow] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -58,14 +58,13 @@ class SessionsTableViewController: NSViewController {
     private func updateVideosList() {
         guard let tracks = tracks else { return }
         
-        self.viewModels = tracks.flatMap { track -> [SessionRow] in
-            let titleViewModel = SessionViewModel(title: track.name)
-            let titleRow = SessionRow(viewModel: titleViewModel, kind: .sectionHeader)
+        self.sessionRows = tracks.flatMap { track -> [SessionRow] in
+            let titleRow = SessionRow(title: track.name)
             
             let sessionRows: [SessionRow] = track.sessions.filter("assets.@count > 0").sorted(by: Session.standardSort).flatMap { session in
                 guard let viewModel = SessionViewModel(session: session) else { return nil }
                 
-                return SessionRow(viewModel: viewModel, kind: .session)
+                return SessionRow(viewModel: viewModel)
             }
             
             return [titleRow] + sessionRows
@@ -77,16 +76,15 @@ class SessionsTableViewController: NSViewController {
         
         var shownTimeZone = false
         
-        self.viewModels = sections.flatMap { section -> [SessionRow] in
-            let titleViewModel = SessionViewModel(headerWithDate: section.representedDate, showTimeZone: !shownTimeZone)
-            let titleRow = SessionRow(viewModel: titleViewModel, kind: SessionRowKind.sectionHeader)
+        self.sessionRows = sections.flatMap { section -> [SessionRow] in
+            let titleRow = SessionRow(date: section.representedDate, showTimeZone: !shownTimeZone)
             
             shownTimeZone = true
             
             let instanceRows: [SessionRow] = section.instances.flatMap { instance in
                 guard let viewModel = SessionViewModel(session: instance.session, instance: instance, style: .schedule) else { return nil }
                 
-                return SessionRow(viewModel: viewModel, kind: .session)
+                return SessionRow(viewModel: viewModel)
             }
             
             return [titleRow] + instanceRows
@@ -146,8 +144,9 @@ class SessionsTableViewController: NSViewController {
         
         tableView.rx.selectedRow.map { index -> SessionViewModel? in
             guard let index = index else { return nil }
+            guard case .session(let viewModel) = self.sessionRows[index].kind else { return nil }
             
-            return self.viewModels[index].viewModel
+            return viewModel
         }.bind(to: selectedSession).addDisposableTo(self.disposeBag)
     }
     
@@ -162,17 +161,17 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return viewModels.count
+        return sessionRows.count
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let sessionRow = viewModels[row]
+        let sessionRow = sessionRows[row]
         
         switch sessionRow.kind {
-        case .session:
-            return cellForSessionViewModel(sessionRow.viewModel)
-        case .sectionHeader:
-            return cellForSectionTitle(sessionRow.title)
+        case .session(let viewModel):
+            return cellForSessionViewModel(viewModel)
+        case .sectionHeader(let title):
+            return cellForSectionTitle(title)
         }
     }
     
@@ -184,7 +183,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
             rowView?.identifier = Constants.rowIdentifier
         }
         
-        switch viewModels[row].kind {
+        switch sessionRows[row].kind {
         case .sectionHeader:
             rowView?.isGroupRowStyle = true
         default:
@@ -221,7 +220,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
     
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {        
-        switch viewModels[row].kind {
+        switch sessionRows[row].kind {
         case .session:
             return Metrics.sessionRowHeight
         case .sectionHeader:
@@ -230,7 +229,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        switch viewModels[row].kind {
+        switch sessionRows[row].kind {
         case .sectionHeader:
             return false
         case .session:
@@ -239,7 +238,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
     
     func tableView(_ tableView: NSTableView, isGroupRow row: Int) -> Bool {
-        switch viewModels[row].kind {
+        switch sessionRows[row].kind {
         case .sectionHeader:
             return true
         case .session:

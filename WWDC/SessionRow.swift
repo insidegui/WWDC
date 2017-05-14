@@ -10,32 +10,28 @@ import Foundation
 import IGListKit
 
 enum SessionRowKind {
-    case sectionHeader
-    case session
+    case sectionHeader(String)
+    case session(SessionViewModel)
 }
 
 final class SessionRow: NSObject {
     
     let kind: SessionRowKind
-    let viewModel: SessionViewModel
     
-    init(viewModel: SessionViewModel, kind: SessionRowKind) {
-        self.kind = kind
-        self.viewModel = viewModel
+    init(viewModel: SessionViewModel) {
+        self.kind = .session(viewModel)
         
         super.init()
     }
     
-    convenience init(viewModel: SessionViewModel) {
-        self.init(viewModel: viewModel, kind: .session)
+    init(title: String) {
+        self.kind = .sectionHeader(title)
     }
     
-    convenience init(title: String) {
-        self.init(viewModel: SessionViewModel(title: title), kind: .sectionHeader)
-    }
-    
-    var title: String {
-        return viewModel.title
+    convenience init(date: Date, showTimeZone: Bool = false) {
+        let title = SessionViewModel.standardFormatted(date: date, withTimeZoneName: showTimeZone)
+        
+        self.init(title: title)
     }
     
 }
@@ -43,11 +39,24 @@ final class SessionRow: NSObject {
 extension SessionRow: IGListDiffable {
     
     func diffIdentifier() -> NSObjectProtocol {
-        return viewModel.diffIdentifier()
+        switch self.kind {
+        case .sectionHeader(let title):
+            return title as NSObjectProtocol
+        case .session(let viewModel):
+            return viewModel.diffIdentifier()
+        }
     }
     
     func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
-        return viewModel.isEqual(toDiffableObject: object)
+        guard let other = object as? SessionRow else { return false }
+        
+        if case .session(let otherViewModel) = other.kind, case .session(let viewModel) = self.kind {
+            return otherViewModel.isEqual(toDiffableObject: viewModel)
+        } else if case .sectionHeader(let otherTitle) = other.kind, case .sectionHeader(let title) = self.kind {
+            return otherTitle == title
+        } else {
+            return false
+        }
     }
     
 }
