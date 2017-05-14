@@ -58,6 +58,10 @@ extension NSImage {
         return playerBundle.image(forResource: "pip")!
     }
     
+    static var PUIPictureInPictureLarge: NSImage {
+        return playerBundle.image(forResource: "pip-big")!
+    }
+    
     static var PUISubtitles: NSImage {
         return playerBundle.image(forResource: "subtitles")!
     }

@@ -14,6 +14,8 @@
 		DDB3528B1EC7E7A800254815 /* PUIPictureContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3528A1EC7E7A800254815 /* PUIPictureContainerViewController.swift */; };
 		DDB3528D1EC7E7E300254815 /* PIP.h in Headers */ = {isa = PBXBuildFile; fileRef = DDB3528C1EC7E7E300254815 /* PIP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDB3528F1EC7EA8400254815 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB3528E1EC7EA8400254815 /* PIP.framework */; };
+		DDB352911EC7F83F00254815 /* PUIExternalPlaybackStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB352901EC7F83F00254815 /* PUIExternalPlaybackStatusViewController.swift */; };
+		DDB352931EC7FD3A00254815 /* NSWindow+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB352921EC7FD3A00254815 /* NSWindow+Snapshot.swift */; };
 		DDBFA1641EB525F2004AE10F /* PlayerUI.h in Headers */ = {isa = PBXBuildFile; fileRef = DDBFA1621EB525F2004AE10F /* PlayerUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDDE43041EB789CF00B88E91 /* PUITimelineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43031EB789CF00B88E91 /* PUITimelineDelegate.swift */; };
 		DDDE43061EB789E300B88E91 /* PUITimelineAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDE43051EB789E300B88E91 /* PUITimelineAnnotation.swift */; };
@@ -44,6 +46,8 @@
 		DDB3528A1EC7E7A800254815 /* PUIPictureContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPictureContainerViewController.swift; sourceTree = "<group>"; };
 		DDB3528C1EC7E7E300254815 /* PIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PIP.h; path = ../../../../PIPContainer/Sources/Private/PIP.h; sourceTree = "<group>"; };
 		DDB3528E1EC7EA8400254815 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
+		DDB352901EC7F83F00254815 /* PUIExternalPlaybackStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackStatusViewController.swift; sourceTree = "<group>"; };
+		DDB352921EC7FD3A00254815 /* NSWindow+Snapshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSWindow+Snapshot.swift"; sourceTree = "<group>"; };
 		DDBFA15F1EB525F2004AE10F /* PlayerUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlayerUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDBFA1621EB525F2004AE10F /* PlayerUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerUI.h; sourceTree = "<group>"; };
 		DDBFA1631EB525F2004AE10F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				DDB3528A1EC7E7A800254815 /* PUIPictureContainerViewController.swift */,
+				DDB352901EC7F83F00254815 /* PUIExternalPlaybackStatusViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -216,6 +221,7 @@
 				DDE29EBF1EB5299000680703 /* NSEvent+ForceTouch.swift */,
 				DDAD96241EB6426B007E4E21 /* String+CMTime.swift */,
 				DDAD96261EB64689007E4E21 /* AVPlayer+Validation.swift */,
+				DDB352921EC7FD3A00254815 /* NSWindow+Snapshot.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -327,9 +333,11 @@
 				DDAD96291EB6797F007E4E21 /* PUISlider.swift in Sources */,
 				DDDE43311EB7BE1400B88E91 /* PUIExternalPlaybackProviderRegistration.swift in Sources */,
 				DDDE43341EB7CA7400B88E91 /* PUIPlayerViewDelegates.swift in Sources */,
+				DDB352931EC7FD3A00254815 /* NSWindow+Snapshot.swift in Sources */,
 				DDDE430C1EB78E0000B88E91 /* PUIExternalPlaybackConsumer.swift in Sources */,
 				DDAD96251EB6426B007E4E21 /* String+CMTime.swift in Sources */,
 				DDEA86111EB53FD3002AE0EB /* Images.swift in Sources */,
+				DDB352911EC7F83F00254815 /* PUIExternalPlaybackStatusViewController.swift in Sources */,
 				DDDE430A1EB78A1F00B88E91 /* PUIExternalPlaybackProvider.swift in Sources */,
 				DDE29EB71EB5297800680703 /* PUITimelineView.swift in Sources */,
 				DDE29EB51EB5297800680703 /* PUIBoringLayer.swift in Sources */,

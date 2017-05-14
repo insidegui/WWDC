@@ -17,7 +17,18 @@ public final class PUIPlayerView: NSView {
     
     public internal(set) var isInPictureInPictureMode: Bool = false {
         didSet {
+            guard isInPictureInPictureMode != oldValue else { return }
+            
             self.pipButton.state = isInPictureInPictureMode ? NSOnState : NSOffState
+            
+            if isInPictureInPictureMode {
+                self.externalStatusController.providerIcon = .PUIPictureInPictureLarge
+                self.externalStatusController.providerName = "Picture in Picture"
+                self.externalStatusController.providerDescription = "Playing in Picture in Picture"
+                self.externalStatusController.view.isHidden = false
+            } else {
+                self.externalStatusController.view.isHidden = true
+            }
         }
     }
     
@@ -481,7 +492,17 @@ public final class PUIPlayerView: NSView {
     
     private var extrasMenuTopConstraint: NSLayoutConstraint!
     
+    private lazy var externalStatusController = PUIExternalPlaybackStatusViewController()
+    
     private func setupControls() {
+        externalStatusController.view.isHidden = true
+        externalStatusController.view.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(externalStatusController.view)
+        externalStatusController.view.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        externalStatusController.view.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        externalStatusController.view.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        externalStatusController.view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
         // VFX view
         controlsVisualEffectView = NSVisualEffectView(frame: bounds)
         controlsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
@@ -771,6 +792,12 @@ public final class PUIPlayerView: NSView {
     
     fileprivate func enterPictureInPictureMode() {
         delegate?.playerViewWillEnterPictureInPictureMode(self)
+        
+        if let rect = superview?.convert(frame, to: nil) {
+            self.controlsVisualEffectView.isHidden = true
+            self.externalStatusController.snapshot = self.window?.snapshot(in: rect)
+            self.controlsVisualEffectView.isHidden = false
+        }
         
         pipController = PIPViewController()
         pipController?.delegate = self
