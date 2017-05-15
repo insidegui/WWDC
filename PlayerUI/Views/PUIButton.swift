@@ -12,6 +12,18 @@ public final class PUIButton: NSControl {
     
     public var isToggle = false
     
+    public var activeTintColor: NSColor = .playerHighlight {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    public var tintColor: NSColor = .buttonColor {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
     public var state: Int = NSOffState {
         didSet {
             setNeedsDisplay()
@@ -34,7 +46,27 @@ public final class PUIButton: NSControl {
         }
     }
     
+    public var alternateImage: NSImage? {
+        didSet {
+            guard let alternateImage = alternateImage else { return }
+            
+            if alternateImage.isTemplate {
+                self.alternateMaskImage = alternateImage.cgImage(forProposedRect: nil, context: nil, hints: nil)
+            } else {
+                self.alternateMaskImage = nil
+            }
+            
+            invalidateIntrinsicContentSize()
+        }
+    }
+    
     private var maskImage: CGImage? {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    private var alternateMaskImage: CGImage? {
         didSet {
             setNeedsDisplay()
         }
@@ -42,9 +74,17 @@ public final class PUIButton: NSControl {
     
     public override func draw(_ dirtyRect: NSRect) {
         if let maskImage = maskImage {
-            drawMask(maskImage)
+            if let alternateMaskImage = alternateMaskImage, state == NSOnState {
+                drawMask(alternateMaskImage)
+            } else {
+                drawMask(maskImage)
+            }
         } else {
-            drawImage()
+            if let alternateImage = alternateImage, state == NSOnState {
+                drawImage(alternateImage)
+            } else {
+                drawImage(image)
+            }
         }
     }
     
@@ -53,18 +93,19 @@ public final class PUIButton: NSControl {
         
         ctx.clip(to: bounds, mask: maskImage)
         
-        if shouldDrawHighlighted || state == NSOnState {
-            ctx.setFillColor(NSColor.playerHighlight.cgColor)
+        if shouldDrawHighlighted || state == NSOnState || shouldAlwaysDrawHighlighted {
+            ctx.setFillColor(activeTintColor.cgColor)
         } else if !isEnabled {
-            ctx.setFillColor(NSColor.buttonColor.withAlphaComponent(0.5).cgColor)
+            let color = shouldAlwaysDrawHighlighted ? activeTintColor : tintColor
+            ctx.setFillColor(color.withAlphaComponent(0.5).cgColor)
         } else {
-            ctx.setFillColor(NSColor.buttonColor.cgColor)
+            ctx.setFillColor(activeTintColor.cgColor)
         }
         
         ctx.fill(bounds)
     }
     
-    private func drawImage() {
+    private func drawImage(_ image: NSImage?) {
         guard let image = image else { return }
         
         image.draw(in: bounds)
@@ -79,6 +120,12 @@ public final class PUIButton: NSControl {
     }
     
     private var shouldDrawHighlighted: Bool = false {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
+    public var shouldAlwaysDrawHighlighted: Bool = false {
         didSet {
             setNeedsDisplay()
         }

@@ -44,9 +44,11 @@ class SessionActionsViewController: NSViewController {
         let b = PUIButton(frame: .zero)
         
         b.image = #imageLiteral(resourceName: "favorite")
+        b.alternateImage = #imageLiteral(resourceName: "favorite-filled")
         b.target = self
         b.action = #selector(toggleFavorite(_:))
         b.isToggle = true
+        b.shouldAlwaysDrawHighlighted = true
         
         return b
     }()
@@ -57,6 +59,7 @@ class SessionActionsViewController: NSViewController {
         b.image = #imageLiteral(resourceName: "download")
         b.target = self
         b.action = #selector(download(_:))
+        b.shouldAlwaysDrawHighlighted = true
         
         return b
     }()
@@ -83,6 +86,7 @@ class SessionActionsViewController: NSViewController {
         b.image = #imageLiteral(resourceName: "share")
         b.target = self
         b.action = #selector(share(_:))
+        b.shouldAlwaysDrawHighlighted = true
         
         return b
     }()
