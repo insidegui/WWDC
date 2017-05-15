@@ -45,7 +45,9 @@ class SessionDetailsViewController: NSViewController {
         
         shelfController.view.translatesAutoresizingMaskIntoConstraints = false
         summaryController.view.translatesAutoresizingMaskIntoConstraints = false
-                
+        
+        shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 400).isActive = true
+        
         view.addSubview(shelfController.view)
         view.addSubview(summaryController.view)
         
