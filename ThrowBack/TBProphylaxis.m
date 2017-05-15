@@ -14,6 +14,8 @@
 
 + (void)load
 {
+#pragma mark Prevent simulatenously running old version
+    
     NSArray <NSRunningApplication *> *apps = [NSRunningApplication runningApplicationsWithBundleIdentifier:@"br.com.guilhermerambo.WWDC"];
     
     BOOL shouldQuit = NO;
@@ -37,6 +39,46 @@
         [alert addButtonWithTitle:@"OK"];
         [alert runModal];
         exit(1);
+    }
+
+#pragma mark Restore old preferences
+    
+    NSString *libraryDirPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *oldPrefsPath = [libraryDirPath stringByAppendingPathComponent:@"Preferences/br.com.guilhermerambo.WWDC.plist"];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:oldPrefsPath]) {
+        NSString *newPrefsPath = [libraryDirPath stringByAppendingPathComponent:@"Preferences/io.wwdc.app.plist"];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:newPrefsPath]) {
+            NSError *prefsCopyError;
+            if (![[NSFileManager defaultManager] copyItemAtPath:oldPrefsPath toPath:newPrefsPath error:&prefsCopyError]) {
+                NSAlert *alert = [NSAlert new];
+                alert.messageText = @"Error copying app preferences";
+                alert.informativeText = [NSString stringWithFormat:@"I tried to copy the old version's preferences but this wasn't possible. The following error occurred:\n%@\n\nDo you want to continue?", prefsCopyError.localizedDescription];
+                [alert addButtonWithTitle:@"Yes"];
+                [alert addButtonWithTitle:@"No"];
+                if ([alert runModal] == 1001) exit(3);
+            }
+        }
+    }
+    
+#pragma mark Restore old app support files
+    
+    NSString *appSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *oldAppSupportPath = [appSupportPath stringByAppendingPathComponent:@"br.com.guilhermerambo.WWDC"];
+    
+    // no old version's files exist
+    if (![[NSFileManager defaultManager] fileExistsAtPath:oldAppSupportPath]) return;
+    
+    NSString *newAppSupportPath = [appSupportPath stringByAppendingPathComponent:@"io.wwdc.app"];
+    
+    NSError *supportMoveError;
+    if (![[NSFileManager defaultManager] moveItemAtPath:oldAppSupportPath toPath:newAppSupportPath error:&supportMoveError]) {
+        NSAlert *alert = [NSAlert new];
+        alert.messageText = @"Error moving application suport directory";
+        alert.informativeText = [NSString stringWithFormat:@"I tried to move the old version's app support directory but this wasn't possible. The following error occurred:\n%@\n\nDo you want to continue?", supportMoveError.localizedDescription];
+        [alert addButtonWithTitle:@"Yes"];
+        [alert addButtonWithTitle:@"No"];
+        if ([alert runModal] == 1001) exit(2);
     }
 }
 
