@@ -53,7 +53,7 @@ class SessionDetailsViewController: NSViewController {
         
         shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
         shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
-        shelfController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 2).isActive = true
+        shelfController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 22).isActive = true
         
         summaryController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
         summaryController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
