@@ -166,7 +166,7 @@ final class SessionTableCellView: NSTableCellView {
         
         v.orientation = .vertical
         v.alignment = .leading
-        v.distribution = .fill
+        v.distribution = .equalSpacing
         v.spacing = 0
         
         return v
@@ -207,36 +207,37 @@ final class SessionTableCellView: NSTableCellView {
         return v
     }()
     
-    private lazy var mainStackView: NSStackView = {
-        let v = NSStackView(views: [
-            self.contextColorView,
-            self.snowFlakeView,
-            self.thumbnailImageView,
-            self.textStackView
-        ])
-        
-        v.distribution = .fill
-        v.orientation = .horizontal
-        v.translatesAutoresizingMaskIntoConstraints = false
-        
-        return v
-    }()
-    
     private func buildUI() {
         wantsLayer = true
         
-        addSubview(mainStackView)
+        contextColorView.translatesAutoresizingMaskIntoConstraints = false
+        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
+        snowFlakeView.translatesAutoresizingMaskIntoConstraints = false
+        textStackView.translatesAutoresizingMaskIntoConstraints = false
+        iconsStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(contextColorView)
+        addSubview(thumbnailImageView)
+        addSubview(snowFlakeView)
+        addSubview(textStackView)
         addSubview(iconsStackView)
         
-        mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
-        mainStackView.trailingAnchor.constraint(equalTo: iconsStackView.leadingAnchor, constant: -4).isActive = true
-        mainStackView.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
-        mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
+        contextColorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
+        contextColorView.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
+        contextColorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
         
-        iconsStackView.topAnchor.constraint(equalTo: mainStackView.topAnchor).isActive = true
-        iconsStackView.bottomAnchor.constraint(equalTo: mainStackView.bottomAnchor).isActive = true
+        thumbnailImageView.centerYAnchor.constraint(equalTo: contextColorView.centerYAnchor).isActive = true
+        thumbnailImageView.leadingAnchor.constraint(equalTo: contextColorView.trailingAnchor, constant: 8).isActive = true
+        snowFlakeView.centerYAnchor.constraint(equalTo: thumbnailImageView.centerYAnchor).isActive = true
+        snowFlakeView.centerXAnchor.constraint(equalTo: thumbnailImageView.centerXAnchor).isActive = true
         
+        textStackView.centerYAnchor.constraint(equalTo: thumbnailImageView.centerYAnchor, constant: -1).isActive = true
+        textStackView.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 8).isActive = true
+        textStackView.trailingAnchor.constraint(equalTo: iconsStackView.leadingAnchor, constant: -2).isActive = true
+
         iconsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4).isActive = true
+        iconsStackView.topAnchor.constraint(equalTo: textStackView.topAnchor).isActive = true
+        iconsStackView.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor).isActive = true
     }
     
 }
