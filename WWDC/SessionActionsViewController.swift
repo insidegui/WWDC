@@ -16,6 +16,7 @@ protocol SessionActionsViewControllerDelegate: class {
     
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
     func sessionActionsDidSelectDownload(_ sender: NSView?)
+    func sessionActionsDidSelectDeleteDownload(_ sender: NSView?)
     func sessionActionsDidSelectShare(_ sender: NSView?)
     
 }
@@ -34,6 +35,7 @@ class SessionActionsViewController: NSViewController {
     
     var viewModel: SessionViewModel? = nil {
         didSet {
+            resetDownloadButton()
             updateBindings()
         }
     }
@@ -131,7 +133,13 @@ class SessionActionsViewController: NSViewController {
         
         let rxActiveDownload = viewModel.rxActiveDownloads.map({ $0.first })
         
-        let rxHideDownloadButton = rxActiveDownload.map({ $0?.status == .downloading || $0?.status == .completed })
+        viewModel.rxActiveDownloads.map({ $0.count > 0 }).subscribe(onNext: { [weak self] hasAnyDownload in
+            if !hasAnyDownload {
+                self?.resetDownloadButton()
+            }
+        }).addDisposableTo(self.disposeBag)
+        
+        let rxHideDownloadButton = rxActiveDownload.map({ $0?.status == .downloading })
         
         rxHideDownloadButton.observeOn(MainScheduler.instance).bind(to: downloadButton.rx.isHidden).addDisposableTo(self.disposeBag)
         rxHideDownloadButton.observeOn(MainScheduler.instance).map({ !$0 }).bind(to: downloadIndicator.rx.isHidden).addDisposableTo(self.disposeBag)
@@ -145,9 +153,18 @@ class SessionActionsViewController: NSViewController {
             switch download.status {
             case .downloading:
                 self?.downloadIndicator.doubleValue = download.progress
-            default: break
+            case .completed:
+                self?.downloadButton.image = #imageLiteral(resourceName: "trash")
+                self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload(_:))
+            default:
+                self?.resetDownloadButton()
             }
         }).addDisposableTo(self.disposeBag)
+    }
+    
+    private func resetDownloadButton() {
+        downloadButton.image = #imageLiteral(resourceName: "download")
+        downloadButton.action = #selector(SessionActionsViewController.download(_:))
     }
     
     @IBAction func toggleFavorite(_ sender: NSView?) {
@@ -156,6 +173,10 @@ class SessionActionsViewController: NSViewController {
     
     @IBAction func download(_ sender: NSView?) {
         delegate?.sessionActionsDidSelectDownload(sender)
+    }
+    
+    @IBAction func deleteDownload(_ sender: NSView?) {
+        delegate?.sessionActionsDidSelectDeleteDownload(sender)
     }
     
     @IBAction func share(_ sender: NSView?) {

@@ -9,6 +9,7 @@
 import Cocoa
 import RxSwift
 import ConfCore
+import RealmSwift
 
 final class DownloadManager: NSObject {
     
@@ -34,6 +35,12 @@ final class DownloadManager: NSObject {
         self.storage = storage
     }
     
+    fileprivate func localStoragePath(for asset: SessionAsset) -> String? {
+        guard let dir = NSSearchPathForDirectoriesInDomains(.moviesDirectory, .userDomainMask, true).first else { return nil }
+        
+        return dir + "/WWDC/" + asset.relativeLocalURL
+    }
+    
     func download(_ asset: SessionAsset) {
         guard let url = URL(string: asset.remoteURL) else { return }
         
@@ -44,6 +51,24 @@ final class DownloadManager: NSObject {
         self.tasks[asset.remoteURL] = task
         
         task.resume()
+    }
+    
+    func deleteDownload(for asset: SessionAsset) {
+        guard let download = asset.downloads.first else { return }
+        
+        guard let filePath = self.localStoragePath(for: asset) else { return }
+        
+        guard FileManager.default.fileExists(atPath: filePath) else { return }
+        
+        do {
+            try FileManager.default.removeItem(atPath: filePath)
+            
+            storage.unmanagedUpdate { realm in
+                realm.delete(download)
+            }
+        } catch {
+            WWDCAlert.show(with: error)
+        }
     }
     
     func localFileURL(for session: Session) -> URL? {
@@ -64,35 +89,43 @@ final class DownloadManager: NSObject {
 
 extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSessionTaskDelegate {
     
+    private func download(for url: URL) -> Download? {
+        let predicate = NSPredicate(format: "remoteURL == %@", url.absoluteString)
+        
+        return storage.unmanagedObjects(of: SessionAsset.self, with: predicate)?.first?.downloads.first
+    }
+    
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         // limit storage writes to 1 per second
         guard Date().timeIntervalSince(lastStorageUpdate) > 1 else { return }
+        
+        defer { lastStorageUpdate = Date() }
         
         guard let url = downloadTask.originalRequest?.url else { return }
         
         let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
         
-        let download = storage.unmanagedObject(of: SessionAsset.self, with: url.absoluteString)?.downloads.first
-        
-        storage.unmanagedUpdate {
-            download?.status = .downloading
-            download?.progress = progress
+        guard let download = self.download(for: url) else {
+            return
         }
         
-        lastStorageUpdate = Date()
+        storage.unmanagedUpdate { realm in
+            download.status = .downloading
+            download.progress = progress
+            realm.add(download, update: true)
+        }
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let url = downloadTask.originalRequest?.url else { return }
-        guard let dir = NSSearchPathForDirectoriesInDomains(.moviesDirectory, .userDomainMask, true).first else { return }
         
-        guard let download = storage.unmanagedObject(of: SessionAsset.self, with: url.absoluteString)?.downloads.first else {
+        guard let download = self.download(for: url) else {
             return
         }
         
         guard let asset = download.asset.first else { return }
 
-        let finalPath = dir + "/" + asset.relativeLocalURL
+        guard let finalPath = self.localStoragePath(for: asset) else { return }
         
         do {
             let finalURL = URL(fileURLWithPath: finalPath)
@@ -101,15 +134,17 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSe
             try FileManager.default.createDirectory(at: finalDirURL, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.moveItem(at: location, to: finalURL)
             
-            storage.unmanagedUpdate {
+            storage.unmanagedUpdate { realm in
                 download.status = .completed
                 download.progress = 1
+                realm.add(download, update: true)
             }
         } catch {
             NSLog("Error copying file downloaded for \(asset): \(error)")
             
-            storage.unmanagedUpdate {
+            storage.unmanagedUpdate { realm in
                 download.status = .failed
+                realm.add(download, update: true)
             }
         }
     }
@@ -117,10 +152,11 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSe
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         guard let url = task.originalRequest?.url else { return }
         
-        let download = storage.unmanagedObject(of: SessionAsset.self, with: url.absoluteString)?.downloads.first
+        guard let download = self.download(for: url) else { return }
         
-        storage.unmanagedUpdate {
-            download?.status = error != nil ? .failed : .completed
+        storage.unmanagedUpdate { realm in
+            download.status = error != nil ? .failed : .completed
+            realm.add(download, update: true)
         }
     }
     
