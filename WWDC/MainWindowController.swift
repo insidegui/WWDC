@@ -20,7 +20,7 @@ final class MainWindowController: NSWindowController {
     
     init() {        
         let mask: NSWindowStyleMask = [.titled, .resizable, .miniaturizable, .closable]
-        let window = NSWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
+        let window = WWDCWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
         
         super.init(window: window)
         

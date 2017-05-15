@@ -50,4 +50,12 @@ extension NSColor {
         return #colorLiteral(red: 0.07500000000000001, green: 0.4433333333333331, blue: 0.5, alpha: 1)
     }
     
+    static var darkWindowBackground: NSColor {
+        return .black
+    }
+    
+    static var darkTitlebarBackground: NSColor {
+        return NSColor(calibratedRed:0.06, green:0.06, blue:0.06, alpha:1.00)
+    }
+    
 }
