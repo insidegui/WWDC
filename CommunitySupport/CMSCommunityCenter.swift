@@ -27,6 +27,12 @@ public final class CMSCommunityCenter: NSObject {
     public typealias CMSProgressBlock = (_ progress: Double) -> Void
     public typealias CMSCompletionBlock = (_ error: Error?) -> Void
     
+    public override init() {
+        super.init()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(createSubscriptionsIfNeeded), name: .NSApplicationDidFinishLaunching, object: nil)
+    }
+    
     public func save(model: CMSCloudKitRepresentable, progress: @escaping CMSProgressBlock, completion: @escaping CMSCompletionBlock) {
         do {
             let record = try model.makeRecord()
@@ -91,6 +97,14 @@ public final class CMSCommunityCenter: NSObject {
                 }
             }
         }
+    }
+    
+    public func processNotification(userInfo: [String : Any]) {
+        // TODO: process CloudKit notification
+    }
+    
+    @objc private func createSubscriptionsIfNeeded() {
+        // TODO: create subscriptions for relevant record types
     }
     
 }
