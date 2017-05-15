@@ -12,9 +12,7 @@
 
 - (CGImageRef)CGImage
 {
-    CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)[self TIFFRepresentation], NULL);
-    
-    return CGImageSourceCreateImageAtIndex(source, 1, NULL);
+    return [self CGImageForProposedRect:nil context:nil hints:nil];
 }
 
 @end

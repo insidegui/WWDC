@@ -111,6 +111,7 @@ class MainTabController: NSTabViewController {
         itemView.title = tabItem.label
         itemView.controllerIdentifier = tabItem.viewController?.identifier ?? ""
         itemView.image = NSImage(named: itemView.controllerIdentifier.lowercased())
+        itemView.alternateImage = NSImage(named: itemView.controllerIdentifier.lowercased() + "-filled")
         
         let item = NSToolbarItem(itemIdentifier: itemIdentifier)
         
