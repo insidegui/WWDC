@@ -70,6 +70,10 @@ extension NSImage {
         return playerBundle.image(forResource: "volume")!
     }
     
+    static var PUIVolumeMuted: NSImage {
+        return playerBundle.image(forResource: "nosound")!
+    }
+    
     static var PUISpeedOne: NSImage {
         return playerBundle.image(forResource: "speed-1")!
     }

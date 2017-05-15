@@ -199,6 +199,7 @@ public final class PUIPlayerView: NSView {
         addSubview(pictureContainer.view)
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
+        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.volume), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
         
@@ -214,6 +215,7 @@ public final class PUIPlayerView: NSView {
         
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
+        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.volume))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize))
         
@@ -227,6 +229,8 @@ public final class PUIPlayerView: NSView {
                 self.playerStatusChanged()
             } else if keyPath == #keyPath(AVPlayer.currentItem.loadedTimeRanges) {
                 self.updateBufferedSegments()
+            } else if keyPath == #keyPath(AVPlayer.volume) {
+                self.playerVolumeChanged()
             } else if keyPath == #keyPath(AVPlayer.rate) {
                 self.updatePlayingState()
             } else if keyPath == #keyPath(AVPlayer.currentItem.presentationSize) {
@@ -234,6 +238,16 @@ public final class PUIPlayerView: NSView {
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
+        }
+    }
+    
+    private func playerVolumeChanged() {
+        if player.volume.isZero {
+            self.volumeButton.image = .PUIVolumeMuted
+            self.volumeSlider.doubleValue = 0
+        } else {
+            self.volumeButton.image = .PUIVolume
+            self.volumeSlider.doubleValue = Double(player.volume)
         }
     }
     
@@ -384,6 +398,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUIVolume
         b.target = self
         b.action = #selector(toggleMute(_:))
+        b.widthAnchor.constraint(equalToConstant: 24).isActive = true
         
         return b
     }()
@@ -691,8 +706,15 @@ public final class PUIPlayerView: NSView {
     
     // MARK: - Control actions
     
+    private var playerVolumeBeforeMuting: Float = 1.0
+    
     @IBAction public func toggleMute(_ sender: Any?) {
-        player.isMuted = !player.isMuted
+        if player.volume.isZero {
+            player.volume = playerVolumeBeforeMuting
+        } else {
+            playerVolumeBeforeMuting = player.volume
+            player.volume = 0
+        }
     }
     
     @IBAction func volumeSliderAction(_ sender: Any?) {
