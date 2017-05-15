@@ -38,4 +38,8 @@ extension NSColor {
         return NSColor(calibratedRed:0.75, green:0.75, blue:0.75, alpha:1.00)
     }
     
+    static var externalPlaybackText: NSColor {
+        return #colorLiteral(red: 0.8980392156862745, green: 0.8980392156862745, blue: 0.8980392156862745, alpha: 1)
+    }
+    
 }

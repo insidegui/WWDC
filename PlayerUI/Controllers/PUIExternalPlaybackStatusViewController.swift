@@ -52,7 +52,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
         let f = NSTextField(labelWithString: "")
         
         f.font = NSFont.systemFont(ofSize: 20, weight: NSFontWeightMedium)
-        f.textColor = .buttonColor
+        f.textColor = .externalPlaybackText
         f.alignment = .center
         
         return f
