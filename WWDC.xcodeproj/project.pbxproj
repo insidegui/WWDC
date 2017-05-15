@@ -178,6 +178,13 @@
 		DDF721E01ECA12A40054C503 /* PUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C51ECA12A40054C503 /* PUISlider.swift */; };
 		DDF721E11ECA12A40054C503 /* PUITimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C61ECA12A40054C503 /* PUITimelineView.swift */; };
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
+		DDF721ED1ECA1DCF0054C503 /* CommunitySupport.h in Headers */ = {isa = PBXBuildFile; fileRef = DDF721EB1ECA1DCF0054C503 /* CommunitySupport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDF721F01ECA1DCF0054C503 /* CommunitySupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E91ECA1DCF0054C503 /* CommunitySupport.framework */; };
+		DDF721F11ECA1DCF0054C503 /* CommunitySupport.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E91ECA1DCF0054C503 /* CommunitySupport.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDF721F91ECA1E0E0054C503 /* CMSUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721F81ECA1E0E0054C503 /* CMSUserProfile.swift */; };
+		DDF721FD1ECA1EB20054C503 /* CMSCloudKitRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721FC1ECA1EB20054C503 /* CMSCloudKitRepresentable.swift */; };
+		DDF722001ECA23DA0054C503 /* CMSCommunityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721FF1ECA23DA0054C503 /* CMSCommunityCenter.swift */; };
+		DDF722021ECA26F70054C503 /* CMSCloudKitUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF722011ECA26F70054C503 /* CMSCloudKitUtil.swift */; };
 		DDFA10BD1EBEA584001DCF66 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BC1EBEA584001DCF66 /* Download.swift */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
@@ -226,6 +233,13 @@
 			remoteGlobalIDString = DDF721951ECA12780054C503;
 			remoteInfo = PlayerUI;
 		};
+		DDF721EE1ECA1DCF0054C503 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DDF721E81ECA1DCF0054C503;
+			remoteInfo = CommunitySupport;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -235,6 +249,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				DDF721F11ECA1DCF0054C503 /* CommunitySupport.framework in Embed Frameworks */,
 				DDDAA3F61EC7653300DF9D02 /* ThrowBack.framework in Embed Frameworks */,
 				DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */,
 				DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */,
@@ -438,6 +453,13 @@
 		DDF721C51ECA12A40054C503 /* PUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUISlider.swift; sourceTree = "<group>"; };
 		DDF721C61ECA12A40054C503 /* PUITimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineView.swift; sourceTree = "<group>"; };
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
+		DDF721E91ECA1DCF0054C503 /* CommunitySupport.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CommunitySupport.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDF721EB1ECA1DCF0054C503 /* CommunitySupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommunitySupport.h; sourceTree = "<group>"; };
+		DDF721EC1ECA1DCF0054C503 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDF721F81ECA1E0E0054C503 /* CMSUserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSUserProfile.swift; sourceTree = "<group>"; };
+		DDF721FC1ECA1EB20054C503 /* CMSCloudKitRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSCloudKitRepresentable.swift; sourceTree = "<group>"; };
+		DDF721FF1ECA23DA0054C503 /* CMSCommunityCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSCommunityCenter.swift; sourceTree = "<group>"; };
+		DDF722011ECA26F70054C503 /* CMSCloudKitUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSCloudKitUtil.swift; sourceTree = "<group>"; };
 		DDFA10BC1EBEA584001DCF66 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
@@ -454,6 +476,7 @@
 				DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
 				DDDAA3F51EC7653300DF9D02 /* ThrowBack.framework in Frameworks */,
+				DDF721F01ECA1DCF0054C503 /* CommunitySupport.framework in Frameworks */,
 				DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */,
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 				DD7F386C1EABF560002D8C00 /* IGListKit.framework in Frameworks */,
@@ -501,6 +524,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DDF721E51ECA1DCF0054C503 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -529,6 +559,7 @@
 				DD36A4D61E478D7E00B2EA88 /* ConfCoreTests */,
 				DDDAA3EF1EC7653300DF9D02 /* ThrowBack */,
 				DDF721971ECA12780054C503 /* PlayerUI */,
+				DDF721EA1ECA1DCF0054C503 /* CommunitySupport */,
 				DD36A4AD1E478C6A00B2EA88 /* Products */,
 				DDAE7C531E5BC6CD00CEA205 /* Frameworks */,
 			);
@@ -542,6 +573,7 @@
 				DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */,
 				DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */,
 				DDF721961ECA12780054C503 /* PlayerUI.framework */,
+				DDF721E91ECA1DCF0054C503 /* CommunitySupport.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1076,6 +1108,51 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		DDF721EA1ECA1DCF0054C503 /* CommunitySupport */ = {
+			isa = PBXGroup;
+			children = (
+				DDF721EC1ECA1DCF0054C503 /* Info.plist */,
+				DDF721EB1ECA1DCF0054C503 /* CommunitySupport.h */,
+				DDF721F71ECA1DD50054C503 /* Classes */,
+			);
+			path = CommunitySupport;
+			sourceTree = "<group>";
+		};
+		DDF721F71ECA1DD50054C503 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				DDF721FB1ECA1E9F0054C503 /* Models */,
+				DDF721FE1ECA23C70054C503 /* Networking */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		DDF721FA1ECA1E9C0054C503 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				DDF721FC1ECA1EB20054C503 /* CMSCloudKitRepresentable.swift */,
+			);
+			name = Base;
+			sourceTree = "<group>";
+		};
+		DDF721FB1ECA1E9F0054C503 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DDF721FA1ECA1E9C0054C503 /* Base */,
+				DDF721F81ECA1E0E0054C503 /* CMSUserProfile.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		DDF721FE1ECA23C70054C503 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				DDF722011ECA26F70054C503 /* CMSCloudKitUtil.swift */,
+				DDF721FF1ECA23DA0054C503 /* CMSCommunityCenter.swift */,
+			);
+			name = Networking;
+			sourceTree = "<group>";
+		};
 		DDFA10C71EBFD897001DCF66 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1116,6 +1193,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DDF721E61ECA1DCF0054C503 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDF721ED1ECA1DCF0054C503 /* CommunitySupport.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -1136,6 +1221,7 @@
 				DD36A4DC1E478D7E00B2EA88 /* PBXTargetDependency */,
 				DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */,
 				DDF7219C1ECA12780054C503 /* PBXTargetDependency */,
+				DDF721EF1ECA1DCF0054C503 /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			productName = WWDC;
@@ -1216,6 +1302,24 @@
 			productReference = DDF721961ECA12780054C503 /* PlayerUI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		DDF721E81ECA1DCF0054C503 /* CommunitySupport */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DDF721F21ECA1DCF0054C503 /* Build configuration list for PBXNativeTarget "CommunitySupport" */;
+			buildPhases = (
+				DDF721E41ECA1DCF0054C503 /* Sources */,
+				DDF721E51ECA1DCF0054C503 /* Frameworks */,
+				DDF721E61ECA1DCF0054C503 /* Headers */,
+				DDF721E71ECA1DCF0054C503 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CommunitySupport;
+			productName = CommunitySupport;
+			productReference = DDF721E91ECA1DCF0054C503 /* CommunitySupport.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1260,6 +1364,11 @@
 						CreatedOnToolsVersion = 8.3.2;
 						ProvisioningStyle = Manual;
 					};
+					DDF721E81ECA1DCF0054C503 = {
+						CreatedOnToolsVersion = 8.3.2;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Manual;
+					};
 				};
 			};
 			buildConfigurationList = DD36A4A71E478C6900B2EA88 /* Build configuration list for PBXProject "WWDC" */;
@@ -1280,6 +1389,7 @@
 				DD36A4CF1E478D7E00B2EA88 /* ConfCoreTests */,
 				DDDAA3ED1EC7653200DF9D02 /* ThrowBack */,
 				DDF721951ECA12780054C503 /* PlayerUI */,
+				DDF721E81ECA1DCF0054C503 /* CommunitySupport */,
 			);
 		};
 /* End PBXProject section */
@@ -1328,6 +1438,13 @@
 			files = (
 				DDF721D41ECA12A40054C503 /* WhiteSpinner.car in Resources */,
 				DDF721D31ECA12A40054C503 /* Media.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDF721E71ECA1DCF0054C503 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1518,6 +1635,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DDF721E41ECA1DCF0054C503 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDF722021ECA26F70054C503 /* CMSCloudKitUtil.swift in Sources */,
+				DDF721F91ECA1E0E0054C503 /* CMSUserProfile.swift in Sources */,
+				DDF722001ECA23DA0054C503 /* CMSCommunityCenter.swift in Sources */,
+				DDF721FD1ECA1EB20054C503 /* CMSCloudKitRepresentable.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1550,6 +1678,11 @@
 			isa = PBXTargetDependency;
 			target = DDF721951ECA12780054C503 /* PlayerUI */;
 			targetProxy = DDF7219B1ECA12780054C503 /* PBXContainerItemProxy */;
+		};
+		DDF721EF1ECA1DCF0054C503 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DDF721E81ECA1DCF0054C503 /* CommunitySupport */;
+			targetProxy = DDF721EE1ECA1DCF0054C503 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2305,6 +2438,116 @@
 			};
 			name = "Release with iCloud";
 		};
+		DDF721F31ECA1DCF0054C503 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = CommunitySupport/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.CommunitySupport;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DDF721F41ECA1DCF0054C503 /* Debug with iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = CommunitySupport/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.CommunitySupport;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Debug with iCloud";
+		};
+		DDF721F51ECA1DCF0054C503 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = CommunitySupport/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.CommunitySupport;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DDF721F61ECA1DCF0054C503 /* Release with iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = CommunitySupport/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.CommunitySupport;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = "Release with iCloud";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2370,6 +2613,16 @@
 				DDF721A11ECA12780054C503 /* Debug with iCloud */,
 				DDF721A21ECA12780054C503 /* Release */,
 				DDF721A31ECA12780054C503 /* Release with iCloud */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		DDF721F21ECA1DCF0054C503 /* Build configuration list for PBXNativeTarget "CommunitySupport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDF721F31ECA1DCF0054C503 /* Debug */,
+				DDF721F41ECA1DCF0054C503 /* Debug with iCloud */,
+				DDF721F51ECA1DCF0054C503 /* Release */,
+				DDF721F61ECA1DCF0054C503 /* Release with iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};
