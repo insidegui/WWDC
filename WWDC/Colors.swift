@@ -23,7 +23,7 @@ extension NSColor {
     }
     
     static var tertiaryText: NSColor {
-        return NSColor(calibratedWhite: 0.4, alpha: 1.0)
+        return NSColor(calibratedWhite: 0.55, alpha: 1.0)
     }
     
     static var primary: NSColor {
