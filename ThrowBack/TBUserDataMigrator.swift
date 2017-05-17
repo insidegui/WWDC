@@ -41,6 +41,10 @@ public final class TBUserDataMigrator {
     
     public var presentedMigrationPrompt: Bool {
         get {
+            if ProcessInfo.processInfo.arguments.contains("--force-migration") {
+                return false
+            }
+            
             return TBPreferences.shared.presentedVersionFiveMigrationPrompt
         }
         set {

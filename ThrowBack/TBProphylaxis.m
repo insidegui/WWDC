@@ -71,6 +71,9 @@
     
     NSString *newAppSupportPath = [appSupportPath stringByAppendingPathComponent:@"io.wwdc.app"];
     
+    // new folder already exists
+    if ([[NSFileManager defaultManager] fileExistsAtPath:newAppSupportPath]) return;
+    
     NSError *supportMoveError;
     if (![[NSFileManager defaultManager] moveItemAtPath:oldAppSupportPath toPath:newAppSupportPath error:&supportMoveError]) {
         NSAlert *alert = [NSAlert new];
