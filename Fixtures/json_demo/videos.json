@@ -135,7 +135,7 @@
 		"webpageURL": "https://developer.apple.com/wwdc16/703"
 	}, {
 		"date": "2017-06-05",
-		"description": "WWDC 2016 Keynote",
+		"description": "WWDC 2017 Keynote",
 		"focus": ["iOS", "macOS", "tvOS", "watchOS"],
 		"id": "101",
 		"title": "Keynote",
@@ -1675,7 +1675,7 @@
 		"webpageURL": "https://developer.apple.com/wwdc16/203"
 	}, {
 		"date": "2017-06-05",
-		"description": "WWDC 2016 Platforms State of the Union",
+		"description": "WWDC 2017 Platforms State of the Union",
 		"focus": ["iOS", "macOS", "tvOS", "watchOS"],
 		"id": "102",
 		"title": "Platforms State of the Union",
@@ -2162,7 +2162,7 @@
 		"description": "Hear about the newest features in Swift 3, the third major release of the safe, fast, and expressive language, and the first major release built with the open source community. Gain insight into the latest changes in Xcode including enhanced migration support to help move your code to Swift 3. Learn how you can get involved in the open source community at Swift.org.",
 		"focus": ["iOS", "macOS", "tvOS", "watchOS"],
 		"id": "402",
-		"title": "What's New in Swift",
+		"title": "What's New in Swift 4",
 		"track": "Developer Tools",
 		"images": {
 			"shelf": "http://devstreaming.apple.com/videos/wwdc/2016/402h429l9d0hy98c9m6/402/images/402_734x413.jpg"
@@ -4379,7 +4379,7 @@
 		"related": [],
 		"slides": "http://devstreaming.apple.com/videos/wwdc/2015/106z3yjwpfymnauri96m/106/106_whats_new_in_swift.pdf",
 		"subtitles": "http://devstreaming.apple.com/videos/wwdc/2015/106z3yjwpfymnauri96m/106/subtitles/eng/106_sd_whats_new_in_swift.vtt",
-		"title": "What's New in Swift",
+		"title": "What's New in Swift 4",
 		"track": "Featured",
 		"url": "http://devstreaming.apple.com/videos/wwdc/2015/106z3yjwpfymnauri96m/106/hls_vod_mvp.m3u8",
 		"webpageURL": "http://developer.apple.com/wwdc15/106",
