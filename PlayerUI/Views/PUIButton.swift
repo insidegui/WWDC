@@ -99,7 +99,7 @@ public final class PUIButton: NSControl {
             let color = shouldAlwaysDrawHighlighted ? activeTintColor : tintColor
             ctx.setFillColor(color.withAlphaComponent(0.5).cgColor)
         } else {
-            ctx.setFillColor(activeTintColor.cgColor)
+            ctx.setFillColor(tintColor.cgColor)
         }
         
         ctx.fill(bounds)
