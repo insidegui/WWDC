@@ -78,6 +78,9 @@ public class SessionInstance: Object {
     /// Whether this is being live streamed at the moment
     public dynamic var isCurrentlyLive = false
     
+    /// Whether the live flag is being forced by an external source
+    public dynamic var isForcedLive = false
+    
     public override static func primaryKey() -> String? {
         return "identifier"
     }

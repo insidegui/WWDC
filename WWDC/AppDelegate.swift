@@ -18,7 +18,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String : Any]) {
-        CMSCommunityCenter.shared.processNotification(userInfo: userInfo)
+        if CMSCommunityCenter.shared.processNotification(userInfo: userInfo) {
+            // Community center handled this notification
+            return
+        } else if coordinator.receiveNotification(with: userInfo) {
+            // Coordinator handled this notification
+            return
+        }
+        
+        // handle other types of notification
     }
 
 }

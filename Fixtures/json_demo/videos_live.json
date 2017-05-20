@@ -1,14 +1,6 @@
 {
 	"updated": "2016-06-17T17:43:42-07:00",
 	"live_sessions": {
-		"101": {
-			"iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
-			"tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
-			"actualEndDate": "2016-06-14T09:33:22-07:00",
-			"images": {
-				"shelf": "http://devstreaming.apple.com/videos/wwdc/2016/201h1g4asm31ti2l9n1/201/images/201_734x413.jpg"
-			}
-		},
 		"201": {
 			"iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
 			"tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",

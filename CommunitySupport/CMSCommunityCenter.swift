@@ -99,8 +99,9 @@ public final class CMSCommunityCenter: NSObject {
         }
     }
     
-    public func processNotification(userInfo: [String : Any]) {
+    public func processNotification(userInfo: [String : Any]) -> Bool {
         // TODO: process CloudKit notification
+        return false
     }
     
     @objc private func createSubscriptionsIfNeeded() {

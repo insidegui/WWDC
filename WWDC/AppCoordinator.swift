@@ -212,6 +212,10 @@ final class AppCoordinator {
         updateListsAfterSync()
     }
     
+    func receiveNotification(with userInfo: [String : Any]) -> Bool {
+        return liveObserver.processSubscriptionNotification(with: userInfo)
+    }
+    
     // MARK: - State restoration
     
     private var didRestoreLists = false
