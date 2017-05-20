@@ -11,7 +11,6 @@ import Cocoa
 public protocol PUITimelineDelegate: class {
     
     func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController?
-    func timelineDidReceiveForceTouch(at timestamp: Double)
     func timelineDidHighlightAnnotation(_ annotation: PUITimelineAnnotation?)
     
     func timelineCanDeleteAnnotation(_ annotation: PUITimelineAnnotation) -> Bool

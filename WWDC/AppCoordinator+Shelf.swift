@@ -73,10 +73,13 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             
             self.currentPlaybackViewModel = playbackViewModel
             
-            currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player)
+            currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel)
             currentPlayerController?.playerWillExitPictureInPicture = {
                 self.goBackToContextBeforePiP()
             }
+            
+            currentPlayerController?.delegate = self
+            currentPlayerController?.playerView.timelineDelegate = self
             
             attachPlayerToShelf(controller)
         } catch {

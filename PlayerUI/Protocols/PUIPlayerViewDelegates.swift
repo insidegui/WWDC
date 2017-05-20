@@ -12,7 +12,7 @@ public protocol PUIPlayerViewDelegate: class {
     
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView)
     func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView)
-    func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, from view: NSView?)
+    func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, at timestamp: Double)
     func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView)
     
 }

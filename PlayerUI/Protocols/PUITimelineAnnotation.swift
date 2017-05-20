@@ -11,4 +11,5 @@ import Cocoa
 public protocol PUITimelineAnnotation {
     var identifier: String { get }
     var timestamp: Double { get }
+    var isValid: Bool { get }
 }

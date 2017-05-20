@@ -14,6 +14,7 @@ protocol PUITimelineViewDelegate: class {
     func timelineViewWillBeginInteractiveSeek()
     func timelineViewDidSeek(to progress: Double)
     func timelineViewDidFinishInteractiveSeek()
+    func timelineDidReceiveForceTouch(at timestamp: Double)
     
 }
 
@@ -256,7 +257,7 @@ public final class PUITimelineView: NSView {
                     
                     DebugLog("Force touch at \(timestamp)s")
                     
-                    self.delegate?.timelineDidReceiveForceTouch(at: timestamp)
+                    self.viewDelegate?.timelineDidReceiveForceTouch(at: timestamp)
                     
                     stop.pointee = true
                 default: break

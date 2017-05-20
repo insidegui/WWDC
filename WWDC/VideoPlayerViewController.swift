@@ -9,16 +9,34 @@
 import Cocoa
 import AVFoundation
 import PlayerUI
+import RxSwift
+import RxCocoa
+import RealmSwift
+import RxRealm
+import ConfCore
 
-open class VideoPlayerViewController: NSViewController {
-
-    open let player: AVPlayer
+protocol VideoPlayerViewControllerDelegate: class {
     
-    open var detached = false
+    func createBookmark(at timecode: Double, with snapshot: NSImage?)
+    
+}
+
+final class VideoPlayerViewController: NSViewController {
+
+    private let disposeBag = DisposeBag()
+    
+    weak var delegate: VideoPlayerViewControllerDelegate?
+    
+    let sessionViewModel: SessionViewModel
+    
+    let player: AVPlayer
+    
+    var detached = false
     
     var playerWillExitPictureInPicture: (() -> Void)?
     
-    public init(player: AVPlayer) {
+    init(player: AVPlayer, session: SessionViewModel) {
+        self.sessionViewModel = session
         self.player = player
         
         super.init(nibName: nil, bundle: nil)!
@@ -28,17 +46,9 @@ open class VideoPlayerViewController: NSViewController {
         fatalError("VideoPlayerViewController can't be initialized with a coder")
     }
     
-    fileprivate lazy var playerContainer: PlayerContainerViewController = {
-        let c = PlayerContainerViewController(player: self.player)
-        
-        c.view.frame = self.view.bounds
-        
-        return c
+    lazy var playerView: PUIPlayerView = {
+        return PUIPlayerView(player: self.player)
     }()
-    
-    var playerView: PUIPlayerView {
-        return playerContainer.playerView
-    }
     
     fileprivate lazy var progressIndicator: NSProgressIndicator = {
         let p = NSProgressIndicator(frame: NSZeroRect)
@@ -57,16 +67,14 @@ open class VideoPlayerViewController: NSViewController {
         return p
     }()
     
-    open override func loadView() {
+    override func loadView() {
         view = NSView(frame: NSZeroRect)
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.black.cgColor
         
-        addChildViewController(playerContainer)
-        
-        playerContainer.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
-        playerContainer.view.frame = view.bounds
-        view.addSubview(playerContainer.view)
+        playerView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        playerView.frame = view.bounds
+        view.addSubview(playerView)
         
         view.addSubview(progressIndicator)
         view.addConstraints([
@@ -75,12 +83,17 @@ open class VideoPlayerViewController: NSViewController {
         ])
         
         progressIndicator.layer?.zPosition = 999
+        
+        let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode")
+        Observable.collection(from: bookmarks).observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
+            self?.playerView.annotations = bookmarks.toArray()
+        }).addDisposableTo(self.disposeBag)
     }
     
-    override open func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         
-        playerContainer.playerView.delegate = self
+        playerView.delegate = self
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize), options: [.initial, .new], context: nil)
@@ -92,7 +105,7 @@ open class VideoPlayerViewController: NSViewController {
     
     // MARK: - Player Observation
     
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard let keyPath = keyPath else { return }
         
         if keyPath == #keyPath(AVPlayer.currentItem.presentationSize) {
@@ -123,7 +136,7 @@ open class VideoPlayerViewController: NSViewController {
     
     fileprivate var detachedWindowController: VideoPlayerWindowController!
     
-    open func detach(forEnteringFullscreen fullscreen: Bool = false) {
+    func detach(forEnteringFullscreen fullscreen: Bool = false) {
         view.translatesAutoresizingMaskIntoConstraints = true
         
         detachedWindowController = VideoPlayerWindowController(playerViewController: self, fullscreenOnly: fullscreen, originalContainer: view.superview)
@@ -151,7 +164,7 @@ open class VideoPlayerViewController: NSViewController {
 
 extension VideoPlayerViewController: PUIPlayerViewDelegate {
     
-    public func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView) {
+    func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView) {
         if let playerWindow = playerView.window as? PUIPlayerWindow {
             playerWindow.toggleFullScreen(self)
         } else {
@@ -159,15 +172,39 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
         }
     }
     
-    public func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, from view: NSView?) {
-        
+    func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, at timestamp: Double) {
+        snapshotPlayer { snapshot in
+            self.delegate?.createBookmark(at: timestamp, with: snapshot)
+        }
     }
     
-    public func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView) {
+    private func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let welf = self else { return }
+            
+            var image: NSImage?
+            
+            defer { DispatchQueue.main.async { completion(image) } }
+            
+            guard let asset = welf.player.currentItem?.asset else { return }
+            
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            
+            do {
+                let rawImage = try generator.copyCGImage(at: welf.player.currentTime(), actualTime: nil)
+                image = NSImage(cgImage: rawImage, size: NSSize(width: rawImage.width, height: rawImage.height))
+            } catch {
+                NSLog("Error getting player snapshot: \(error)")
+            }
+        }
+    }
+    
+    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView) {
         self.playerWillExitPictureInPicture?()
     }
     
-    public func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
+    func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
         
     }
     

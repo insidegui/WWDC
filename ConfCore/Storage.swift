@@ -362,4 +362,49 @@ public final class Storage {
         return Observable.from(optional: download)
     }
     
+    public func bookmark(with identifier: String) -> Bookmark? {
+        return realm.object(ofType: Bookmark.self, forPrimaryKey: identifier)
+    }
+    
+    public func deleteBookmark(with identifier: String) {
+        _ = realm.refresh()
+        
+        update {
+            guard let bookmark = self.bookmark(with: identifier) else {
+                NSLog("DELETE ERROR: Unable to find bookmark with identifier \(identifier)")
+                return
+            }
+        
+            self.realm.delete(bookmark)
+        }
+    }
+    
+    public func softDeleteBookmark(with identifier: String) {
+        _ = realm.refresh()
+        
+        update {
+            guard let bookmark = self.bookmark(with: identifier) else {
+                NSLog("SOFT DELETE ERROR: Unable to find bookmark with identifier \(identifier)")
+                return
+            }
+            
+            bookmark.isDeleted = true
+            bookmark.deletedAt = Date()
+        }
+    }
+    
+    public func moveBookmark(with identifier: String, to timecode: Double) {
+        _ = realm.refresh()
+        
+        update {
+            guard let bookmark = self.bookmark(with: identifier) else {
+                NSLog("MOVE ERROR: Unable to find bookmark with identifier \(identifier)")
+                return
+            }
+            
+            bookmark.timecode = timecode
+            self.realm.add(bookmark, update: true)
+        }
+    }
+    
 }

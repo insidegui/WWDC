@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
+		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0353491E5545B300D5E343 /* SessionInstancesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */; };
 		DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F0C551E7B8DD600B52184 /* Storage.swift */; };
 		DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
@@ -285,6 +286,7 @@
 
 /* Begin PBXFileReference section */
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
+		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionInstancesJSONAdapter.swift; sourceTree = "<group>"; };
 		DD0F0C551E7B8DD600B52184 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfView.swift; sourceTree = "<group>"; };
@@ -610,6 +612,7 @@
 				DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */,
 				DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */,
 				DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */,
+				DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */,
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
 				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
 				DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */,
@@ -1521,6 +1524,7 @@
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* MainTabController.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
+				DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,

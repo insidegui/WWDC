@@ -42,7 +42,7 @@ public final class PUIPlayerView: NSView {
         get {
             return timelineView.delegate
         }
-        set {
+        set {            
             timelineView.delegate = newValue
         }
     }
@@ -52,7 +52,7 @@ public final class PUIPlayerView: NSView {
             return sortedAnnotations
         }
         set {
-            self.sortedAnnotations = newValue.sorted(by: { $0.timestamp < $1.timestamp })
+            self.sortedAnnotations = newValue.filter({ $0.isValid }).sorted(by: { $0.timestamp < $1.timestamp })
             
             timelineView.annotations = sortedAnnotations
         }
@@ -108,11 +108,19 @@ public final class PUIPlayerView: NSView {
     }
     
     public var firstAnnotationBeforeCurrentTime: PUITimelineAnnotation? {
-        return annotations.filter({ $0.timestamp + 1 < currentTimestamp }).last
+        return annotations.filter({ annotation in
+            guard annotation.isValid else { return false }
+            
+            return annotation.timestamp + 1 < currentTimestamp
+        }).last
     }
     
     public var firstAnnotationAfterCurrentTime: PUITimelineAnnotation? {
-        return annotations.filter({ $0.timestamp > currentTimestamp + 1 }).first
+        return annotations.filter({ annotation in
+            guard annotation.isValid else { return false }
+            
+            return annotation.timestamp > currentTimestamp + 1
+        }).first
     }
     
     public func seek(to annotation: PUITimelineAnnotation) {
@@ -780,7 +788,9 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction public func addAnnotation(_ sender: NSView?) {
-        delegate?.playerViewDidSelectAddAnnotation(self, from: sender)
+        let timestamp = Double(CMTimeGetSeconds(self.player.currentTime()))
+        
+        delegate?.playerViewDidSelectAddAnnotation(self, at: timestamp)
     }
     
     @IBAction public func togglePip(_ sender: NSView?) {
@@ -999,6 +1009,12 @@ public final class PUIPlayerView: NSView {
 // MARK: - PUITimelineViewDelegate
 
 extension PUIPlayerView: PUITimelineViewDelegate {
+    
+    func timelineDidReceiveForceTouch(at timestamp: Double) {
+        let timestamp = Double(CMTimeGetSeconds(self.player.currentTime()))
+        
+        delegate?.playerViewDidSelectAddAnnotation(self, at: timestamp)
+    }
     
     func timelineViewWillBeginInteractiveSeek() {
         wasPlayingBeforeStartingInteractiveSeek = isPlaying

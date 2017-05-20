@@ -13,7 +13,7 @@ import RealmSwift
 public class Bookmark: Object {
 
     /// Unique identifier
-    public dynamic var identifier = ""
+    public dynamic var identifier = UUID().uuidString
     
     /// Date/time the bookmark was created
     public dynamic var createdAt = Date.distantPast
@@ -38,6 +38,12 @@ public class Bookmark: Object {
     
     /// What the presenter was saying close to where the bookmark was created
     public dynamic var annotation: TranscriptAnnotation?
+    
+    /// Soft delete (for syncing)
+    public dynamic var isDeleted: Bool = false
+    
+    /// When was this item soft deleted (for syncing)
+    public dynamic var deletedAt: Date = .distantFuture
     
     /// The session this bookmark is associated with
     public let session = LinkingObjects(fromType: Session.self, property: "bookmarks")
