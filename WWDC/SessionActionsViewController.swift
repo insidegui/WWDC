@@ -89,6 +89,7 @@ class SessionActionsViewController: NSViewController {
         b.target = self
         b.action = #selector(share(_:))
         b.shouldAlwaysDrawHighlighted = true
+        b.sendsActionOnMouseDown = true
         
         return b
     }()

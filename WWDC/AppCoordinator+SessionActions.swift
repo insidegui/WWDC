@@ -61,7 +61,15 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     }
     
     func sessionActionsDidSelectShare(_ sender: NSView?) {
+        guard let sender = sender else { return }
+        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
         
+        guard let webpageAsset = viewModel.session.assets.filter({ $0.assetType == .webpage }).first else { return }
+        
+        guard let url = URL(string: webpageAsset.remoteURL) else { return }
+        
+        let picker = NSSharingServicePicker(items: [url])
+        picker.show(relativeTo: .zero, of: sender, preferredEdge: .minY)
     }
     
 }

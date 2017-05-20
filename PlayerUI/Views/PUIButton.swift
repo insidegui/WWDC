@@ -31,6 +31,7 @@ public final class PUIButton: NSControl {
     }
     
     public var showsMenuOnLeftClick = false
+    public var sendsActionOnMouseDown = false
     
     public var image: NSImage? {
         didSet {
@@ -147,10 +148,12 @@ public final class PUIButton: NSControl {
         
         shouldDrawHighlighted = true
         
-        window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged], timeout: NSEventDurationForever, mode: .eventTrackingRunLoopMode) { e, stop in
-            if e.type == .leftMouseUp {
-                self.shouldDrawHighlighted = false
-                stop.pointee = true
+        if !sendsActionOnMouseDown {
+            window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged], timeout: NSEventDurationForever, mode: .eventTrackingRunLoopMode) { e, stop in
+                if e.type == .leftMouseUp {
+                    self.shouldDrawHighlighted = false
+                    stop.pointee = true
+                }
             }
         }
         
