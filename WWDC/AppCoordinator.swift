@@ -24,7 +24,7 @@ final class AppCoordinator {
     var downloadManager: DownloadManager
     
     var windowController: MainWindowController
-    var tabController: MainTabController
+    var tabController: WWDCTabViewController<MainWindowTab>
     
     var scheduleController: SessionsSplitViewController
     var videosController: SessionsSplitViewController
@@ -33,10 +33,10 @@ final class AppCoordinator {
     
     var currentActivity: NSUserActivity?
     
-    var activeTab: MainTabController.Tab = .schedule
+    var activeTab: MainWindowTab = .schedule
     
     /// The tab that "owns" the current player (the one that was active when the "play" button was pressed)
-    var playerOwnerTab: MainTabController.Tab? = nil
+    var playerOwnerTab: MainWindowTab? = nil
     
     /// The session that "owns" the current player (the one that was selected on the active tab when "play" was pressed)
     var playerOwnerSessionIdentifier: String? = nil
@@ -65,7 +65,7 @@ final class AppCoordinator {
             fatalError("Realm initialization error: \(error)")
         }
         
-        self.tabController = MainTabController()
+        self.tabController = WWDCTabViewController()
         
         // Schedule
         self.scheduleController = SessionsSplitViewController(listStyle: .schedule)
@@ -88,7 +88,7 @@ final class AppCoordinator {
         setupBindings()
         setupDelegation()
         
-        NotificationCenter.default.addObserver(forName: .MainTabControllerDidFinishLoading, object: nil, queue: nil) { _ in self.restoreApplicationState() }
+        NotificationCenter.default.addObserver(forName: .WWDCTabViewControllerDidFinishLoading, object: nil, queue: nil) { _ in self.restoreApplicationState() }
         NotificationCenter.default.addObserver(forName: .NSApplicationDidFinishLaunching, object: nil, queue: nil) { _ in self.startup() }
         NotificationCenter.default.addObserver(forName: .NSApplicationWillTerminate, object: nil, queue: nil) { _ in self.saveApplicationState() }
     }
@@ -265,6 +265,14 @@ final class AppCoordinator {
             self.tabController.activeTab = .videos
             self.videosController.listViewController.selectSession(with: link.sessionIdentifier)
         }
+    }
+    
+    // MARK: - Preferences
+    
+    private lazy var preferencesCoordinator: PreferencesCoordinator = PreferencesCoordinator()
+    
+    func showPreferences(_ sender: Any?) {
+        preferencesCoordinator.show()
     }
     
     // MARK: - Data migration

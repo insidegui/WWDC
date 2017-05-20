@@ -8,6 +8,11 @@
 
 import Cocoa
 
+enum MainWindowTab: Int {
+    case schedule
+    case videos
+}
+
 final class MainWindowController: NSWindowController {
     
     static var defaultRect: NSRect {
@@ -23,6 +28,8 @@ final class MainWindowController: NSWindowController {
         let window = WWDCWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
         
         super.init(window: window)
+        
+        window.title = "WWDC"
         
         window.appearance = WWDCAppearance.appearance()
         window.center()

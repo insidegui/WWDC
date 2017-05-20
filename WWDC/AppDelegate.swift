@@ -42,5 +42,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator.handle(link: link)
     }
 
+    @IBAction func showPreferences(_ sender: Any) {
+        coordinator.showPreferences(sender)
+    }
 }
 

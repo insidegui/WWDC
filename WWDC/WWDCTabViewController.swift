@@ -1,5 +1,5 @@
 //
-//  MainTabController.swift
+//  WWDCTabViewController.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 22/04/17.
@@ -11,26 +11,21 @@ import RxSwift
 import RxCocoa
 
 extension Notification.Name {
-    static let MainTabControllerDidFinishLoading = Notification.Name("MainTabControllerDidFinishLoading")
+    static let WWDCTabViewControllerDidFinishLoading = Notification.Name("WWDCTabViewControllerDidFinishLoading")
 }
 
-class MainTabController: NSTabViewController {
-
-    enum Tab: Int {
-        case schedule
-        case videos
-    }
+class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Tab.RawValue == Int {
     
     var activeTab: Tab {
         get {
-            return Tab(rawValue: self.selectedTabViewItemIndex) ?? .schedule
+            return Tab(rawValue: self.selectedTabViewItemIndex)!
         }
         set {
             self.selectedTabViewItemIndex = newValue.rawValue
         }
     }
     
-    private var activeTabVar = Variable<Tab>(.schedule)
+    private var activeTabVar = Variable<Tab>(Tab(rawValue: 0)!)
     
     var rxActiveTab: Observable<Tab> {
         return activeTabVar.asObservable()
@@ -70,7 +65,7 @@ class MainTabController: NSTabViewController {
         
         if !sentStatupNotification {
             sentStatupNotification = true
-            NotificationCenter.default.post(name: .MainTabControllerDidFinishLoading, object: self)
+            NotificationCenter.default.post(name: .WWDCTabViewControllerDidFinishLoading, object: self)
         }
     }
     
@@ -93,7 +88,7 @@ class MainTabController: NSTabViewController {
                 }
             }
             
-            self.activeTabVar.value = Tab(rawValue: self.selectedTabViewItemIndex) ?? .schedule
+            self.activeTabVar.value = Tab(rawValue: self.selectedTabViewItemIndex)!
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }

@@ -27,11 +27,11 @@ final class Preferences {
         }
     }
     
-    var activeTab: MainTabController.Tab {
+    var activeTab: MainWindowTab {
         get {
             let rawValue = defaults.integer(forKey: #function)
             
-            return MainTabController.Tab(rawValue: rawValue) ?? .schedule
+            return MainWindowTab(rawValue: rawValue) ?? .schedule
         }
         set {
             defaults.set(newValue.rawValue, forKey: #function)
