@@ -13,6 +13,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     let coordinator = AppCoordinator(windowController: MainWindowController())
     
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
+    }
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.registerForRemoteNotifications(matching: [])
     }
@@ -27,6 +31,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         // handle other types of notification
+    }
+    
+    func handleURLEvent(_ event: NSAppleEventDescriptor?, replyEvent: NSAppleEventDescriptor?) {
+        guard let event = event else { return }
+        guard let urlString = event.paramDescriptor(forKeyword: UInt32(keyDirectObject))?.stringValue else { return }
+        guard let url = URL(string: urlString) else { return }
+        guard let link = DeepLink(url: url) else { return }
+        
+        coordinator.handle(link: link)
     }
 
 }

@@ -220,6 +220,8 @@ final class AppCoordinator {
     
     private var didRestoreLists = false
     
+    private var deferredLink: DeepLink?
+    
     private func saveApplicationState() {
         Preferences.shared.activeTab = activeTab
         Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
@@ -233,6 +235,10 @@ final class AppCoordinator {
     private func restoreListStatesIfNeeded() {
         defer { didRestoreLists = true }
         
+        if let link = deferredLink {
+            return handle(link: link)
+        }
+        
         guard !didRestoreLists else { return }
         
         if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
@@ -241,6 +247,23 @@ final class AppCoordinator {
         
         if let identifier = Preferences.shared.selectedVideoItemIdentifier {
             self.videosController.listViewController.selectSession(with: identifier)
+        }
+    }
+    
+    // MARK: - Deep linking
+    
+    func handle(link: DeepLink) {
+        guard didRestoreLists else {
+            self.deferredLink = link
+            return
+        }
+        
+        if link.isForCurrentYear {
+            self.tabController.activeTab = .schedule
+            self.scheduleController.listViewController.selectSession(with: link.sessionIdentifier)
+        } else {
+            self.tabController.activeTab = .videos
+            self.videosController.listViewController.selectSession(with: link.sessionIdentifier)
         }
     }
     
