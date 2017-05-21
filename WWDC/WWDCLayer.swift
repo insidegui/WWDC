@@ -15,3 +15,11 @@ final class WWDCLayer: CALayer {
     }
     
 }
+
+final class WWDCShapeLayer: CAShapeLayer {
+    
+    override func action(forKey event: String) -> CAAction? {
+        return nil
+    }
+    
+}

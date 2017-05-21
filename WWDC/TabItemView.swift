@@ -64,7 +64,7 @@ final class TabItemView: NSView {
         didSet {
             if state == NSOnState {
                 imageView.tintColor = .toolbarTintActive
-                imageView.image = alternateImage
+                imageView.image = alternateImage ?? image
                 titleLabel.textColor = .toolbarTintActive
                 titleLabel.font = NSFont.systemFont(ofSize: 14, weight: NSFontWeightMedium)
             } else {
@@ -109,7 +109,9 @@ final class TabItemView: NSView {
     
     override var intrinsicContentSize: NSSize {
         get {
-            return stackView.computedContentSize
+            var s = stackView.computedContentSize
+            s.width += 12
+            return s
         }
         set {
             
@@ -122,10 +124,8 @@ final class TabItemView: NSView {
         wantsLayer = true
         
         addSubview(stackView)
-        stackView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        stackView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        stackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
     
     required init?(coder: NSCoder) {

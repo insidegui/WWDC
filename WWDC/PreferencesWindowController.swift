@@ -15,7 +15,7 @@ class PreferencesWindowController: NSWindowController {
     }
     
     init() {
-        let mask: NSWindowStyleMask = [.titled, .miniaturizable, .closable]
+        let mask: NSWindowStyleMask = [.titled, .closable]
         let window = WWDCWindow(contentRect: PreferencesWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
         
         super.init(window: window)
@@ -33,6 +33,8 @@ class PreferencesWindowController: NSWindowController {
         window.minSize = PreferencesWindowController.defaultRect.size
         
         window.animationBehavior = .alertPanel
+        
+        window.backgroundColor = .auxWindowBackground
         
         windowDidLoad()
     }

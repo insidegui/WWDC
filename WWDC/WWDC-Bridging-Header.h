@@ -5,3 +5,4 @@
 #import "WWDCAppearance.h"
 #import "NSImage+CGImage.h"
 #import "MaskImageView.h"
+#import "ITSwitch.h"

@@ -11,24 +11,44 @@ import CloudKit
 
 public struct CMSUserProfile {
     
-    public static let recordType = "User"
+    public static let recordType = "Users"
     
     public var originatingRecord: CKRecord?
-    internal var avatarFileURL: URL?
+    public var avatarFileURL: URL?
     
     public let identifier: String
     public var name: String
-    public let nickname: String
     public var avatar: NSImage?
-    public var site: URL?
     public let isAdmin: Bool
+    
+    public static var empty: CMSUserProfile {
+        return CMSUserProfile(originatingRecord: nil,
+                              avatarFileURL: nil,
+                              identifier: "",
+                              name: "",
+                              avatar: nil,
+                              isAdmin: false)
+    }
+    
+}
+
+extension CMSUserProfile: Equatable {
+    
+    var isEmpty: Bool {
+        return identifier.isEmpty
+    }
+    
+    public static func ==(lhs: CMSUserProfile, rhs: CMSUserProfile) -> Bool {
+        return lhs.identifier == rhs.identifier
+            && lhs.avatarFileURL == rhs.avatarFileURL
+            && lhs.name == rhs.name
+            && lhs.isAdmin == rhs.isAdmin
+    }
     
 }
 
 enum CMSUserProfileKey: String {
     case name
-    case nickname
-    case url
     case isAdmin
     case avatar
 }
@@ -49,17 +69,7 @@ extension CKRecord {
 extension CMSUserProfile: CMSCloudKitRepresentable {
     
     public init(record: CKRecord) throws {
-        guard let name = record[.name] as? String else {
-            throw CMSCloudKitError.missingKey(CMSUserProfileKey.name.rawValue)
-        }
-        
-        guard let nickname = record[.nickname] as? String else {
-            throw CMSCloudKitError.missingKey(CMSUserProfileKey.nickname.rawValue)
-        }
-        
-        guard let url = record[.url] as? String else {
-            throw CMSCloudKitError.missingKey(CMSUserProfileKey.url.rawValue)
-        }
+        let name = record[.name] as? String ?? ""
         
         guard let avatar = record[.avatar] as? CKAsset else {
             throw CMSCloudKitError.missingKey(CMSUserProfileKey.avatar.rawValue)
@@ -69,25 +79,20 @@ extension CMSUserProfile: CMSCloudKitRepresentable {
             throw CMSCloudKitError.missingKey(CMSUserProfileKey.isAdmin.rawValue)
         }
         
+        self.originatingRecord = record
         self.identifier = record.recordID.recordName
         self.name = name
-        self.nickname = nickname
-        self.site = URL(string: url)
         self.isAdmin = (isAdmin == 1)
         self.avatarFileURL = avatar.fileURL
         self.avatar = NSImage(contentsOf: avatar.fileURL)
     }
     
     public func makeRecord() throws -> CKRecord {
-        guard let recordID = self.originatingRecord?.recordID else {
-            throw CMSCloudKitError.invalidData("User record must have a preexisting record ID")
+        guard let record = self.originatingRecord else {
+            throw CMSCloudKitError.invalidData("User record must have a preexisting record")
         }
         
-        let record = CKRecord(recordType: CMSUserProfile.recordType, recordID: recordID)
-        
         record[.name] = name
-        record[.nickname] = nickname
-        record[.url] = site?.absoluteString
         record[.isAdmin] = isAdmin ? 1 : 0
         
         if let avatarUrl = self.avatarFileURL, avatarUrl.isFileURL {

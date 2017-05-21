@@ -9,7 +9,17 @@
 import Cocoa
 
 class WWDCImageView: NSView {
-
+    
+    var isRounded = false {
+        didSet {
+            if isRounded {
+                self.layer?.mask = self.maskLayer
+            } else {
+                self.layer?.mask = nil
+            }
+        }
+    }
+    
     var drawsBackground = true {
         didSet {
             self.backgroundLayer.isHidden = !drawsBackground
@@ -17,7 +27,7 @@ class WWDCImageView: NSView {
     }
     
     override var isOpaque: Bool {
-        return drawsBackground
+        return drawsBackground && !isRounded
     }
     
     var backgroundColor: NSColor = .clear {
@@ -25,6 +35,16 @@ class WWDCImageView: NSView {
             backgroundLayer.backgroundColor = backgroundColor.cgColor
         }
     }
+    
+    private lazy var maskLayer: WWDCShapeLayer = {
+        let l = WWDCShapeLayer()
+        
+        l.frame = self.bounds
+        l.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
+        l.path = CGPath(ellipseIn: self.bounds, transform: nil)
+        
+        return l
+    }()
     
     var image: NSImage? = nil {
         didSet {
@@ -71,6 +91,12 @@ class WWDCImageView: NSView {
         
         layer?.addSublayer(backgroundLayer)
         layer?.addSublayer(imageLayer)
+    }
+    
+    override func layout() {
+        super.layout()
+        
+        maskLayer.frame = bounds
     }
     
 }

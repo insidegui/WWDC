@@ -11,6 +11,10 @@
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */; };
 		DD0159D11ED0CEF500F980F1 /* PreferencesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159D01ED0CEF500F980F1 /* PreferencesCoordinator.swift */; };
+		DD0159D31ED0D3AF00F980F1 /* AccountPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159D21ED0D3AF00F980F1 /* AccountPreferencesViewController.swift */; };
+		DD0159D61ED0D98F00F980F1 /* ITSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = DD0159D51ED0D98F00F980F1 /* ITSwitch.m */; };
+		DD0159D71ED0DDF700F980F1 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; };
+		DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159D81ED11A9800F980F1 /* ModalLoadingView.swift */; };
 		DD0353491E5545B300D5E343 /* SessionInstancesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */; };
 		DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F0C551E7B8DD600B52184 /* Storage.swift */; };
 		DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
@@ -291,6 +295,10 @@
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
 		DD0159D01ED0CEF500F980F1 /* PreferencesCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesCoordinator.swift; sourceTree = "<group>"; };
+		DD0159D21ED0D3AF00F980F1 /* AccountPreferencesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountPreferencesViewController.swift; sourceTree = "<group>"; };
+		DD0159D41ED0D98F00F980F1 /* ITSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITSwitch.h; sourceTree = "<group>"; };
+		DD0159D51ED0D98F00F980F1 /* ITSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITSwitch.m; sourceTree = "<group>"; };
+		DD0159D81ED11A9800F980F1 /* ModalLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalLoadingView.swift; sourceTree = "<group>"; };
 		DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionInstancesJSONAdapter.swift; sourceTree = "<group>"; };
 		DD0F0C551E7B8DD600B52184 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfView.swift; sourceTree = "<group>"; };
@@ -542,6 +550,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD0159D71ED0DDF700F980F1 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,6 +562,7 @@
 			children = (
 				DD0159D01ED0CEF500F980F1 /* PreferencesCoordinator.swift */,
 				DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */,
+				DD0159D21ED0D3AF00F980F1 /* AccountPreferencesViewController.swift */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -647,6 +657,8 @@
 		DD36A4C01E478CF500B2EA88 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DD0159D41ED0D98F00F980F1 /* ITSwitch.h */,
+				DD0159D51ED0D98F00F980F1 /* ITSwitch.m */,
 				DDF32EB11EBE34E10028E39D /* Base */,
 				DDF32EB01EBE34CE0028E39D /* TableView */,
 				DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */,
@@ -658,6 +670,7 @@
 				DDB352991EC8AB2800254815 /* WWDCImageView.swift */,
 				DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */,
 				DD4648461ECA5947005C57C6 /* WWDCWindow.swift */,
+				DD0159D81ED11A9800F980F1 /* ModalLoadingView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1502,6 +1515,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD0159D61ED0D98F00F980F1 /* ITSwitch.m in Sources */,
 				DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */,
 				DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */,
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
@@ -1515,8 +1529,10 @@
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
 				DDB3529A1EC8AB2800254815 /* WWDCImageView.swift in Sources */,
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
+				DD0159D31ED0D3AF00F980F1 /* AccountPreferencesViewController.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
 				DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */,
+				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
@@ -2479,6 +2495,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = CommunitySupport/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2507,6 +2527,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = CommunitySupport/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2535,6 +2559,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = CommunitySupport/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2562,6 +2590,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = CommunitySupport/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

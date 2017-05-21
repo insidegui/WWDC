@@ -54,8 +54,32 @@ extension NSColor {
         return .black
     }
     
+    static var avatarBorder: NSColor {
+        return NSColor(calibratedRed:0.92, green:0.92, blue:0.92, alpha:1.00)
+    }
+    
     static var darkTitlebarBackground: NSColor {
         return NSColor(calibratedRed:0.06, green:0.06, blue:0.06, alpha:1.00)
+    }
+    
+    static var prefsPrimaryText: NSColor {
+        return NSColor(calibratedRed:0.87, green:0.87, blue:0.87, alpha:1.00)
+    }
+    
+    static var prefsSecondaryText: NSColor {
+        return NSColor(calibratedRed:0.75, green:0.75, blue:0.75, alpha:1.00)
+    }
+    
+    static var prefsTertiaryText: NSColor {
+        return NSColor(calibratedRed:0.49, green:0.49, blue:0.49, alpha:1.00)
+    }
+    
+    static var errorText: NSColor {
+        return NSColor(calibratedRed:0.85, green:0.18, blue:0.18, alpha:1.00)
+    }
+    
+    static var auxWindowBackground: NSColor {
+        return NSColor(calibratedRed:0.07, green:0.07, blue:0.07, alpha:1.00)
     }
     
 }

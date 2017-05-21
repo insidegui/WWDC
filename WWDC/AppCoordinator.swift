@@ -210,6 +210,10 @@ final class AppCoordinator {
         
         refresh(nil)
         updateListsAfterSync()
+        
+        if Arguments.showPreferences {
+            showPreferences(nil)
+        }
     }
     
     func receiveNotification(with userInfo: [String : Any]) -> Bool {

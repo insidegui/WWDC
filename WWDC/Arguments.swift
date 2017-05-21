@@ -22,6 +22,10 @@ struct Arguments {
         return args.contains("--use-test-video")
     }
     
+    static var showPreferences: Bool {
+        return args.contains("--prefs")
+    }
+    
     static var deloreanDate: String? {
         guard let deloreanIndex = args.index(of: "--delorean") else { return nil }
         

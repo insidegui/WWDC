@@ -52,13 +52,22 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     
     private var sentStatupNotification = false
     
+    private var isConfigured = false
+    
     override func viewDidAppear() {
         super.viewDidAppear()
         
+        configureIfNeeded()
+    }
+    
+    private func configureIfNeeded() {
+        guard !isConfigured else { return }
+        
         guard let toolbar = view.window?.toolbar else { return }
         
+        isConfigured = true
+        
         toolbar.insertItem(withItemIdentifier: NSToolbarFlexibleSpaceItemIdentifier, at: 0)
-        toolbar.insertItem(withItemIdentifier: NSToolbarSpaceItemIdentifier, at: 2)
         toolbar.insertItem(withItemIdentifier: NSToolbarFlexibleSpaceItemIdentifier, at: toolbar.items.count)
         
         addObserver(self, forKeyPath: #keyPath(selectedTabViewItemIndex), options: [.initial, .new], context: nil)

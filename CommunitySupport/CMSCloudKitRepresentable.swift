@@ -12,6 +12,7 @@ import CloudKit
 public enum CMSCloudKitError: Error {
     case missingKey(String)
     case invalidData(String)
+    case notFound
 }
 
 public protocol CMSCloudKitRepresentable {
