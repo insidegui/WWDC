@@ -25,6 +25,8 @@ final class RemoteEnvironment: NSObject {
     static let shared: RemoteEnvironment = RemoteEnvironment()
     
     func start() {
+        guard !Arguments.disableRemoteEnvironment else { return }
+        
         fetch()
         createSubscriptionIfNeeded()
     }

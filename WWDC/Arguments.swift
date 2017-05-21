@@ -26,6 +26,10 @@ struct Arguments {
         return args.contains("--prefs")
     }
     
+    static var disableRemoteEnvironment: Bool {
+        return args.contains("--no-remote")
+    }
+    
     static var deloreanDate: String? {
         guard let deloreanIndex = args.index(of: "--delorean") else { return nil }
         
