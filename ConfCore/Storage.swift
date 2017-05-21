@@ -302,6 +302,10 @@ public final class Storage {
         }
     }
     
+    public var isEmpty: Bool {
+        return realm.objects(Event.self).count <= 0
+    }
+    
     public func removeFavorite(for session: Session) {
         guard let favorite = session.favorites.first else { return }
         

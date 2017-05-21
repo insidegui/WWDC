@@ -182,6 +182,10 @@ final class AppCoordinator {
     }
     
     private func doUpdateLists() {
+        if !storage.isEmpty {
+            tabController.hideLoading()
+        }
+        
         storage.tracksObservable.subscribe(onNext: { [weak self] tracks in
             self?.videosController.listViewController.tracks = tracks
         }).dispose()
@@ -203,6 +207,10 @@ final class AppCoordinator {
     func startup() {
         windowController.contentViewController = tabController
         windowController.showWindow(self)
+        
+        if storage.isEmpty {
+            tabController.showLoading()
+        }
         
         NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: OperationQueue.main) { _ in
             self.updateListsAfterSync(migrate: true)

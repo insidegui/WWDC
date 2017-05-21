@@ -145,4 +145,14 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         return self.view.window?.toolbar?.items.flatMap({ $0.view as? TabItemView }) ?? []
     }
     
+    private var loadingView: ModalLoadingView?
+    
+    func showLoading() {
+        loadingView = ModalLoadingView.show(attachedTo: self.view)
+    }
+    
+    func hideLoading() {
+        loadingView?.hide()
+    }
+    
 }
