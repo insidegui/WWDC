@@ -55,7 +55,7 @@ class SessionsTableViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func selectSession(with identifier: String) {
+    func selectSession(with identifier: String, scrollOnly: Bool = false) {
         guard let index = sessionRows.index(where: { row in
             guard case .session(let viewModel) = row.kind else { return false }
             
@@ -64,8 +64,21 @@ class SessionsTableViewController: NSViewController {
             return
         }
         
-        tableView.selectRowIndexes(IndexSet([index]), byExtendingSelection: false)
+        if !scrollOnly {
+            tableView.selectRowIndexes(IndexSet([index]), byExtendingSelection: false)
+        }
+        
         tableView.scrollRowToVisible(index)
+    }
+    
+    func scrollToToday() {
+        guard let sections = scheduleSections else { return }
+        
+        guard let section = sections.filter("representedDate >= %@", Today()).first else { return }
+        
+        guard let identifier = section.instances.first?.session?.identifier else { return }
+        
+        selectSession(with: identifier, scrollOnly: true)
     }
     
     private func updateVideosList() {

@@ -28,12 +28,16 @@ final class LiveObserver {
         self.specialEventsObserver = CloudKitLiveObserver(storage: storage)
     }
     
+    var isWWDCWeek: Bool {
+        return storage.realm.objects(Event.self).filter("startDate <= %@ AND endDate > %@ ", dateProvider(), dateProvider()).count > 0
+    }
+    
     func start() {
         guard !isRunning else { return }
         
         specialEventsObserver.fetch()
         
-        guard storage.realm.objects(Event.self).filter("startDate <= %@ AND endDate > %@ ", dateProvider(), dateProvider()).count > 0 else {
+        guard isWWDCWeek else {
             NSLog("Live event observer not started because we're not on WWDC week")
             isRunning = false
             return

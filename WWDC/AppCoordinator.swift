@@ -253,13 +253,23 @@ final class AppCoordinator {
         
         guard !didRestoreLists else { return }
         
-        if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
-            self.scheduleController.listViewController.selectSession(with: identifier)
+        if !scrollToToday() {
+            if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
+                self.scheduleController.listViewController.selectSession(with: identifier)
+            }
         }
         
         if let identifier = Preferences.shared.selectedVideoItemIdentifier {
             self.videosController.listViewController.selectSession(with: identifier)
         }
+    }
+    
+    private func scrollToToday() -> Bool {
+        guard liveObserver.isWWDCWeek else { return false }
+        
+        scheduleController.listViewController.scrollToToday()
+        
+        return true
     }
     
     // MARK: - Deep linking
