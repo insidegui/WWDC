@@ -15,6 +15,7 @@
 		DD0159D61ED0D98F00F980F1 /* ITSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = DD0159D51ED0D98F00F980F1 /* ITSwitch.m */; };
 		DD0159D71ED0DDF700F980F1 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; };
 		DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159D81ED11A9800F980F1 /* ModalLoadingView.swift */; };
+		DD0159FC1ED23F7700F980F1 /* RemoteEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159FB1ED23F7700F980F1 /* RemoteEnvironment.swift */; };
 		DD0353491E5545B300D5E343 /* SessionInstancesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */; };
 		DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F0C551E7B8DD600B52184 /* Storage.swift */; };
 		DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; };
@@ -299,6 +300,7 @@
 		DD0159D41ED0D98F00F980F1 /* ITSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITSwitch.h; sourceTree = "<group>"; };
 		DD0159D51ED0D98F00F980F1 /* ITSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITSwitch.m; sourceTree = "<group>"; };
 		DD0159D81ED11A9800F980F1 /* ModalLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalLoadingView.swift; sourceTree = "<group>"; };
+		DD0159FB1ED23F7700F980F1 /* RemoteEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteEnvironment.swift; sourceTree = "<group>"; };
 		DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionInstancesJSONAdapter.swift; sourceTree = "<group>"; };
 		DD0F0C551E7B8DD600B52184 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfView.swift; sourceTree = "<group>"; };
@@ -639,6 +641,7 @@
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
 				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
 				DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */,
+				DD0159FB1ED23F7700F980F1 /* RemoteEnvironment.swift */,
 				DDB3529D1EC8D8CD00254815 /* main.m */,
 			);
 			name = Bootstrap;
@@ -1558,6 +1561,7 @@
 				DD34A79B1EC3CD5900E0B575 /* Constants.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
 				DDF32EA91EBE29D70028E39D /* PlayerContainerViewController.swift in Sources */,
+				DD0159FC1ED23F7700F980F1 /* RemoteEnvironment.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
 				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,

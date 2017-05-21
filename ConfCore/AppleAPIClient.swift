@@ -14,14 +14,18 @@ import SwiftyJSON
 
 public final class AppleAPIClient {
     
-    fileprivate let environment: Environment
-    fileprivate let service: Service
+    fileprivate var environment: Environment
+    fileprivate var service: Service
     
     public init(environment: Environment) {
         self.environment = environment
         self.service = Service(baseURL: environment.baseURL)
         
         configureService()
+        
+        NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: OperationQueue.main) { _ in
+            self.updateEnvironment()
+        }
     }
     
     private let jsonParser = ResponseContentTransformer { JSON($0.content as AnyObject) }
@@ -74,55 +78,105 @@ public final class AppleAPIClient {
         }
     }
     
+    fileprivate func updateEnvironment() {
+        currentLiveVideosRequest?.cancel()
+        currentScheduleRequest?.cancel()
+        currentSessionsRequest?.cancel()
+        currentNewsItemsRequest?.cancel()
+        
+        self.environment = Environment.current
+        
+        self.service = Service(baseURL: environment.baseURL)
+        self.liveVideoAssets = self.makeLiveVideosResource()
+        self.sessions = self.makeSessionsResource()
+        self.schedule = self.makeScheduleResource()
+        self.news = self.makeNewsResource()
+    }
+    
     // MARK: - Resources
     
-    fileprivate lazy var liveVideoAssets: Resource = {
+    fileprivate lazy var liveVideoAssets: Resource = self.makeLiveVideosResource()
+    
+    fileprivate lazy var sessions: Resource = self.makeSessionsResource()
+    
+    fileprivate lazy var schedule: Resource = self.makeScheduleResource()
+    
+    fileprivate lazy var news: Resource = self.makeNewsResource()
+    
+    fileprivate func makeLiveVideosResource() -> Resource {
         return self.service.resource(self.environment.liveVideosPath)
-    }()
+    }
     
-    fileprivate lazy var sessions: Resource = {
+    fileprivate func makeSessionsResource() -> Resource {
         return self.service.resource(self.environment.videosPath)
-    }()
+    }
     
-    fileprivate lazy var schedule: Resource = {
+    fileprivate func makeScheduleResource() -> Resource {
         return self.service.resource(self.environment.sessionsPath)
-    }()
+    }
     
-    fileprivate lazy var news: Resource = {
+    fileprivate func makeNewsResource() -> Resource {
         return self.service.resource(self.environment.newsPath)
-    }()
+    }
     
-}
-
-// MARK: - Standard API requests
-
-extension AppleAPIClient {
-
+    // MARK: - Standard API requests
+    
+    private var liveVideoAssetsResource: Resource!
+    private var scheduleResource: Resource!
+    private var sessionsResource: Resource!
+    private var newsItemsResource: Resource!
+    
+    private var currentLiveVideosRequest: Request?
+    private var currentScheduleRequest: Request?
+    private var currentSessionsRequest: Request?
+    private var currentNewsItemsRequest: Request?
+    
     public func fetchLiveVideoAssets(completion: @escaping (Result<[SessionAsset], APIError>) -> Void) {
-        liveVideoAssets.addObserver(owner: self) { [weak self] resource, event in
-            self?.process(resource, event: event, with: completion)
-        }.loadIfNeeded()
+        if liveVideoAssetsResource == nil {
+            liveVideoAssetsResource = liveVideoAssets.addObserver(owner: self) { [weak self] resource, event in
+                self?.process(resource, event: event, with: completion)
+            }
+        }
+
+        currentLiveVideosRequest?.cancel()
+        currentLiveVideosRequest = liveVideoAssetsResource.loadIfNeeded()
     }
     
     public func fetchSchedule(completion: @escaping (Result<ScheduleResponse, APIError>) -> Void) {
-        schedule.addObserver(owner: self) { [weak self] resource, event in
-            self?.process(resource, event: event, with: completion)
-        }.loadIfNeeded()
+        if scheduleResource == nil {
+            scheduleResource = schedule.addObserver(owner: self) { [weak self] resource, event in
+                self?.process(resource, event: event, with: completion)
+            }
+        }
+        
+        currentScheduleRequest?.cancel()
+        currentScheduleRequest = scheduleResource.loadIfNeeded()
     }
     
     public func fetchSessions(completion: @escaping (Result<SessionsResponse, APIError>) -> Void) {
-        sessions.addObserver(owner: self) { [weak self] resource, event in
-            self?.process(resource, event: event, with: completion)
-        }.loadIfNeeded()
+        if sessionsResource == nil {
+            sessionsResource = sessions.addObserver(owner: self) { [weak self] resource, event in
+                self?.process(resource, event: event, with: completion)
+            }
+        }
+        
+        currentSessionsRequest?.cancel()
+        currentSessionsRequest = sessionsResource.loadIfNeeded()
     }
     
     public func fetchNewsItems(completion: @escaping (Result<[NewsItem], APIError>) -> Void) {
-        news.addObserver(owner: self) { [weak self] resource, event in
-            self?.process(resource, event: event, with: completion)
-        }.loadIfNeeded()
+        if newsItemsResource == nil {
+            newsItemsResource = news.addObserver(owner: self) { [weak self] resource, event in
+                self?.process(resource, event: event, with: completion)
+            }
+        }
+        
+        currentNewsItemsRequest?.cancel()
+        currentNewsItemsRequest = newsItemsResource.loadIfNeeded()
     }
     
 }
+
 
 // MARK: - API results processing
 

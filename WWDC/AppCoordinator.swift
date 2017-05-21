@@ -202,9 +202,12 @@ final class AppCoordinator {
     @IBAction func refresh(_ sender: Any?) {
         syncEngine.syncSessionsAndSchedule()
         syncEngine.syncLiveVideos()
+        liveObserver.refresh()
     }
     
     func startup() {
+        RemoteEnvironment.shared.start()
+        
         windowController.contentViewController = tabController
         windowController.showWindow(self)
         
@@ -216,6 +219,10 @@ final class AppCoordinator {
             self.updateListsAfterSync(migrate: true)
         }
         
+        NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: OperationQueue.main) { _ in
+            self.refresh(nil)
+        }
+        
         refresh(nil)
         updateListsAfterSync()
         
@@ -225,7 +232,13 @@ final class AppCoordinator {
     }
     
     func receiveNotification(with userInfo: [String : Any]) -> Bool {
-        return liveObserver.processSubscriptionNotification(with: userInfo)
+        if liveObserver.processSubscriptionNotification(with: userInfo) {
+            return true
+        } else if RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo) {
+            return true
+        } else {
+            return false
+        }
     }
     
     // MARK: - State restoration

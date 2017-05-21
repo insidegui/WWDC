@@ -45,5 +45,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func showPreferences(_ sender: Any) {
         coordinator.showPreferences(sender)
     }
+    
+    @IBAction func reload(_ sender: Any) {
+        coordinator.refresh(sender)
+    }
+    
 }
 

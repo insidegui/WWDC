@@ -55,6 +55,10 @@ final class LiveObserver {
         checkForLiveSessions(nil)
     }
     
+    func refresh() {
+        specialEventsObserver.fetch()
+    }
+    
     private var allLiveInstances: Results<SessionInstance> {
         return storage.realm.objects(SessionInstance.self).filter("isCurrentlyLive == true")
     }
