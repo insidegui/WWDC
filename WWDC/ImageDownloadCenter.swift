@@ -169,52 +169,54 @@ private final class ImageDownloadOperation: Operation {
     override func start() {
         _executing = true
         
-        URLSession.shared.dataTask(with: self.url) { [unowned self] data, response, error in
-            guard !self.isCancelled else { return }
+        URLSession.shared.dataTask(with: self.url) { [weak self] data, response, error in
+            guard let welf = self else { return }
+            
+            guard !welf.isCancelled else { return }
             
             guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
-                DispatchQueue.main.async { self.imageCompletionHandler?(self.url, nil, nil) }
-                self._executing = false
-                self._finished = true
+                DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
+                welf._executing = false
+                welf._finished = true
                 return
             }
             
             guard httpResponse.statusCode == 200 else {
-                DispatchQueue.main.async { self.imageCompletionHandler?(self.url, nil, nil) }
-                self._executing = false
-                self._finished = true
+                DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
+                welf._executing = false
+                welf._finished = true
                 return
             }
             
             guard data.count > 0 else {
-                DispatchQueue.main.async { self.imageCompletionHandler?(self.url, nil, nil) }
-                self._executing = false
-                self._finished = true
+                DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
+                welf._executing = false
+                welf._finished = true
                 return
             }
             
             guard let originalImage = NSImage(data: data) else {
-                DispatchQueue.main.async { self.imageCompletionHandler?(self.url, nil, nil) }
-                self._executing = false
-                self._finished = true
+                DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
+                welf._executing = false
+                welf._finished = true
                 return
             }
             
-            guard !self.isCancelled else { return }
+            guard !welf.isCancelled else { return }
             
-            let thumbnailImage = originalImage.resized(to: self.thumbnailHeight)
+            let thumbnailImage = originalImage.resized(to: welf.thumbnailHeight)
             
             originalImage.cacheMode = .never
             thumbnailImage.cacheMode = .never
             
             DispatchQueue.main.async {
-                self.imageCompletionHandler?(self.url, originalImage, thumbnailImage)
+                welf.imageCompletionHandler?(welf.url, originalImage, thumbnailImage)
             }
             
-            self.cacheProvider.cacheImage(for: self.url, original: data, thumbnail: thumbnailImage.tiffRepresentation)
+            welf.cacheProvider.cacheImage(for: welf.url, original: data, thumbnail: thumbnailImage.tiffRepresentation)
             
-            self._executing = false
-            self._finished = true
+            welf._executing = false
+            welf._finished = true
         }.resume()
     }
     
