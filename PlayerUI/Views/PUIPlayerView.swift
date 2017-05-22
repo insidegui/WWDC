@@ -820,6 +820,46 @@ public final class PUIPlayerView: NSView {
         }
     }
     
+    // MARK: - Key commands
+    
+    private var keyDownEventMonitor: Any?
+    
+    private func startMonitoringKeyEvents() {
+        if keyDownEventMonitor != nil {
+            stopMonitoringKeyEvents()
+        }
+        
+        keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            self.keyDown(with: event)
+            
+            return event
+        }
+    }
+    
+    private func stopMonitoringKeyEvents() {
+        if let keyDownEventMonitor = keyDownEventMonitor {
+            NSEvent.removeMonitor(keyDownEventMonitor)
+        }
+        
+        keyDownEventMonitor = nil
+    }
+    
+    private enum KeyCommands: UInt16 {
+        case spaceBar = 49
+    }
+    
+    public override func keyDown(with event: NSEvent) {
+        guard let command = KeyCommands(rawValue: event.keyCode) else {
+            super.keyDown(with: event)
+            return
+        }
+        
+        switch command {
+        case .spaceBar:
+            self.togglePlaying(nil)
+        }
+    }
+    
     // MARK: - PiP Support
     
     fileprivate var pipController: PIPViewController?
@@ -918,6 +958,7 @@ public final class PUIPlayerView: NSView {
         
         if window != nil {
             self.lastKnownWindow = window
+            startMonitoringKeyEvents()
         }
     }
     
@@ -974,6 +1015,14 @@ public final class PUIPlayerView: NSView {
         hideControls(animated: true)
         
         super.mouseExited(with: event)
+    }
+    
+    public override var acceptsFirstResponder: Bool {
+        return true
+    }
+    
+    public override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+        return true
     }
     
     public override func mouseDown(with event: NSEvent) {
