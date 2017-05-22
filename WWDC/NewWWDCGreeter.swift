@@ -62,11 +62,11 @@ private extension Date {
         (calendar as NSCalendar).range(of: .day, start: &fromDate, interval: nil, for: self)
         (calendar as NSCalendar).range(of: .day, start: &toDate, interval: nil, for: toDateTime)
         
-        guard fromDate != nil, toDate != nil else {
+        guard let actualFromDate = fromDate, let actualToDate = toDate else {
             return 0
         }
-        
-        let difference = calendar.dateComponents(Set([Calendar.Component.day]), from: fromDate as! Date, to: toDate as! Date)
+
+        let difference = calendar.dateComponents(Set([Calendar.Component.day]), from: actualFromDate as Date, to: actualToDate as Date)
         
         return difference.day ?? 0
     }

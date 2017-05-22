@@ -135,7 +135,7 @@ class SessionProgressView: NSView {
         halfCirclePath.addArc(center: CGPoint(x: shapeRect.midX, y: shapeRect.midY), radius: shapeRect.width / 2.0, startAngle: -90.degreesToRadians, endAngle: -270.degreesToRadians, clockwise: true, transform: .identity)
         
         starPath = CGMutablePath()
-        let a = (2 * M_PI) / 10
+        let a = (2 * Double.pi) / 10
         let starRadius = Int(shapeLayer.bounds.size.width/2)
         let span = Double(shapeLayer.bounds.size.width/2)
         for i in 0...10 {
@@ -163,6 +163,6 @@ class SessionProgressView: NSView {
 
 extension Int {
     var degreesToRadians : CGFloat {
-        return CGFloat(self) * CGFloat(M_PI) / 180.0
+        return CGFloat(self) * CGFloat(Double.pi) / 180.0
     }
 }
