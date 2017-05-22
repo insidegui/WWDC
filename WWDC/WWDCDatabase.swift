@@ -153,7 +153,7 @@ let TranscriptIndexingDidStopNotification = "TranscriptIndexingDidStopNotificati
     
     /// #### The best sort descriptors for the list of videos
     /// Orders the videos by year (descending) and session number (ascending)
-    lazy var sortDescriptorsForSessionList: [SortDescriptor] = [SortDescriptor(property: "year", ascending: false), SortDescriptor(property: "id", ascending: true)]
+    lazy var sortDescriptorsForSessionList: [SortDescriptor] = [SortDescriptor(keyPath: "year", ascending: false), SortDescriptor(keyPath: "id", ascending: true)]
     
     fileprivate let manager = Alamofire.SessionManager(configuration: URLSessionConfiguration.ephemeral)
     
