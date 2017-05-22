@@ -71,8 +71,12 @@ extension CMSUserProfile: CMSCloudKitRepresentable {
     public init(record: CKRecord) throws {
         let name = record[.name] as? String ?? ""
         
-        guard let avatar = record[.avatar] as? CKAsset else {
-            throw CMSCloudKitError.missingKey(CMSUserProfileKey.avatar.rawValue)
+        var avatarImage: NSImage?
+        var avatarFileURL: URL?
+        
+        if let avatar = record[.avatar] as? CKAsset {
+            avatarFileURL = avatar.fileURL
+            avatarImage = NSImage(contentsOf: avatar.fileURL)
         }
         
         guard let isAdmin = record[.isAdmin] as? Int else {
@@ -83,8 +87,8 @@ extension CMSUserProfile: CMSCloudKitRepresentable {
         self.identifier = record.recordID.recordName
         self.name = name
         self.isAdmin = (isAdmin == 1)
-        self.avatarFileURL = avatar.fileURL
-        self.avatar = NSImage(contentsOf: avatar.fileURL)
+        self.avatarFileURL = avatarFileURL
+        self.avatar = avatarImage
     }
     
     public func makeRecord() throws -> CKRecord {

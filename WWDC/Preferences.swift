@@ -56,4 +56,13 @@ final class Preferences {
         }
     }
     
+    var showedAccountPromptAtStartup: Bool {
+        get {
+            return defaults.bool(forKey: #function)
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
+    
 }

@@ -104,6 +104,7 @@
 		DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38871EAC2275002D8C00 /* PathUtil.swift */; };
 		DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */; };
 		DD9564211ED2792300051D07 /* app.icns in Resources */ = {isa = PBXBuildFile; fileRef = DD9564201ED2792300051D07 /* app.icns */; };
+		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */; };
@@ -392,6 +393,7 @@
 		DD7F38871EAC2275002D8C00 /* PathUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathUtil.swift; sourceTree = "<group>"; };
 		DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadCenter.swift; sourceTree = "<group>"; };
 		DD9564201ED2792300051D07 /* app.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = app.icns; path = Design/app.icns; sourceTree = SOURCE_ROOT; };
+		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptsJSONAdapter.swift; sourceTree = "<group>"; };
@@ -948,6 +950,7 @@
 				DDB352811EC7C55300254815 /* DateProvider.swift */,
 				DDB352831EC7C74C00254815 /* LiveObserver.swift */,
 				DD0159A61ECFE26200F980F1 /* DeepLink.swift */,
+				DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1529,6 +1532,7 @@
 				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
 				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
+				DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */,
 				DDB3529E1EC8D8CD00254815 /* main.m in Sources */,
 				DD7F38781EAC0C98002D8C00 /* ShelfViewController.swift in Sources */,
 				DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */,

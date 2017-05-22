@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import CommunitySupport
 
-class AccountPreferencesViewController: NSViewController {
+class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate {
 
     private let disposeBag = DisposeBag()
     
@@ -52,6 +52,8 @@ class AccountPreferencesViewController: NSViewController {
         v.widthAnchor.constraint(equalToConstant: 98).isActive = true
         v.heightAnchor.constraint(equalToConstant: 98).isActive = true
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.isEditable = true
+        v.delegate = self
         
         return v
     }()
@@ -158,7 +160,7 @@ class AccountPreferencesViewController: NSViewController {
         
         loadingView?.hide()
         
-        avatarImageView.image = profile.avatar
+        avatarImageView.image = profile.avatar ?? #imageLiteral(resourceName: "avatar")
         avatarImageView.isRounded = true
         
         nameLabel.stringValue = profile.name
@@ -181,6 +183,23 @@ class AccountPreferencesViewController: NSViewController {
                 alert.runModal()
             } else {
                 self?.profile = newProfile
+            }
+        }
+    }
+    
+    func wwdcImageView(_ imageView: WWDCImageView, didReceiveNewImageWithFileURL url: URL) {
+        guard var updatedProfile = profile else { return }
+        
+        loadingView?.show(in: view)
+        
+        updatedProfile.avatarFileURL = url
+        updatedProfile.avatar = imageView.image
+        
+        CMSCommunityCenter.shared.save(model: updatedProfile, progress: nil) { [unowned self] error in
+            self.loadingView?.hide()
+            
+            if let error = error {
+                WWDCAlert.show(with: error)
             }
         }
     }

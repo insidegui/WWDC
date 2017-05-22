@@ -226,7 +226,9 @@ final class AppCoordinator {
         refresh(nil)
         updateListsAfterSync()
         
-        if Arguments.showPreferences {
+        if Arguments.showPreferences || !Preferences.shared.showedAccountPromptAtStartup {
+            Preferences.shared.showedAccountPromptAtStartup = true
+            
             showPreferences(nil)
         }
     }

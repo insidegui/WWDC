@@ -8,7 +8,15 @@
 
 import Cocoa
 
+protocol WWDCImageViewDelegate: class {
+    
+    func wwdcImageView(_ imageView: WWDCImageView, didReceiveNewImageWithFileURL url: URL)
+    
+}
+
 class WWDCImageView: NSView {
+    
+    weak var delegate: WWDCImageViewDelegate?
     
     var isRounded = false {
         didSet {
@@ -33,6 +41,16 @@ class WWDCImageView: NSView {
     var backgroundColor: NSColor = .clear {
         didSet {
             backgroundLayer.backgroundColor = backgroundColor.cgColor
+        }
+    }
+    
+    var isEditable: Bool = false {
+        didSet {
+            if isEditable {
+                register(forDraggedTypes: [NSURLPboardType, NSFilenamesPboardType])
+            } else {
+                unregisterDraggedTypes()
+            }
         }
     }
     
@@ -97,6 +115,27 @@ class WWDCImageView: NSView {
         super.layout()
         
         maskLayer.frame = bounds
+    }
+    
+    // MARK: - Editing
+    
+    override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+        return .copy
+    }
+    
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        guard let file = (sender.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? [String])?.first else { return false }
+        
+        let fileURL = URL(fileURLWithPath: file)
+        
+        guard let image = NSImage.thumbnailImage(with: fileURL, maxWidth: 400) else {
+            return false
+        }
+        
+        self.image = image
+        delegate?.wwdcImageView(self, didReceiveNewImageWithFileURL: fileURL)
+        
+        return true
     }
     
 }
