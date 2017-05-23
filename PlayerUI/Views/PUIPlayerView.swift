@@ -942,7 +942,9 @@ public final class PUIPlayerView: NSView {
     @objc fileprivate func mouseIdleTimerAction(_ sender: Timer) {
         guard canHideControls else { return }
         
-        NSCursor.hide()
+        if !isInPictureInPictureMode {
+            NSCursor.hide()
+        }
         
         hideControls(animated: true)
     }
