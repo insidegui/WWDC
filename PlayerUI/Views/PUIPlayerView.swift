@@ -361,7 +361,8 @@ public final class PUIPlayerView: NSView {
     
     private var extrasMenuContainerView: NSStackView!
     
-    fileprivate var controlsVisualEffectView: NSVisualEffectView!
+//    fileprivate var controlsVisualEffectView: NSVisualEffectView!
+    fileprivate var scrimContainerView: PUIScrimContainerView!
     
     private var timeLabelsContainerView: NSStackView!
     private var controlsContainerView: NSStackView!
@@ -528,15 +529,16 @@ public final class PUIPlayerView: NSView {
         externalStatusController.view.topAnchor.constraint(equalTo: topAnchor).isActive = true
         externalStatusController.view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        // VFX view
-        controlsVisualEffectView = NSVisualEffectView(frame: bounds)
-        controlsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
-        controlsVisualEffectView.material = .ultraDark
-        controlsVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
-        controlsVisualEffectView.blendingMode = .withinWindow
-        controlsVisualEffectView.wantsLayer = true
-        controlsVisualEffectView.layer?.masksToBounds = false
-        controlsVisualEffectView.state = .active
+//        // VFX view
+//        controlsVisualEffectView = NSVisualEffectView(frame: bounds)
+//        controlsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
+//        controlsVisualEffectView.material = .ultraDark
+//        controlsVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
+//        controlsVisualEffectView.blendingMode = .withinWindow
+//        controlsVisualEffectView.wantsLayer = true
+//        controlsVisualEffectView.layer?.masksToBounds = false
+//        controlsVisualEffectView.state = .active
+        scrimContainerView = PUIScrimContainerView(frame: bounds)
         
         // Time labels
         timeLabelsContainerView = NSStackView(views: [elapsedTimeLabel, remainingTimeLabel])
@@ -609,18 +611,20 @@ public final class PUIPlayerView: NSView {
         controlsContainerView.translatesAutoresizingMaskIntoConstraints = false
         controlsContainerView.wantsLayer = true
         controlsContainerView.layer?.masksToBounds = false
+        controlsContainerView.layer?.zPosition = 10
         
-        controlsVisualEffectView.addSubview(controlsContainerView)
-        addSubview(controlsVisualEffectView)
+        addSubview(scrimContainerView)
+        addSubview(controlsContainerView)
         
-        controlsVisualEffectView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        controlsVisualEffectView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        controlsVisualEffectView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        scrimContainerView.translatesAutoresizingMaskIntoConstraints = false
+        scrimContainerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        scrimContainerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        scrimContainerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        controlsContainerView.leadingAnchor.constraint(equalTo: controlsVisualEffectView.leadingAnchor, constant: 12).isActive = true
-        controlsContainerView.trailingAnchor.constraint(equalTo: controlsVisualEffectView.trailingAnchor, constant: -12).isActive = true
-        controlsContainerView.topAnchor.constraint(equalTo: controlsVisualEffectView.topAnchor, constant: 12).isActive = true
-        controlsContainerView.bottomAnchor.constraint(equalTo: controlsVisualEffectView.bottomAnchor, constant: -12).isActive = true
+        controlsContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
+        controlsContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
+        controlsContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12).isActive = true
         
         timeLabelsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
         timeLabelsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
@@ -862,15 +866,35 @@ public final class PUIPlayerView: NSView {
     
     // MARK: - PiP Support
     
+    public func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let welf = self else { return }
+            
+            var image: NSImage?
+            
+            defer { DispatchQueue.main.async { completion(image) } }
+            
+            guard let asset = welf.player.currentItem?.asset else { return }
+            
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            
+            do {
+                let rawImage = try generator.copyCGImage(at: welf.player.currentTime(), actualTime: nil)
+                image = NSImage(cgImage: rawImage, size: NSSize(width: rawImage.width, height: rawImage.height))
+            } catch {
+                NSLog("Error getting player snapshot: \(error)")
+            }
+        }
+    }
+    
     fileprivate var pipController: PIPViewController?
     
     fileprivate func enterPictureInPictureMode() {
         delegate?.playerViewWillEnterPictureInPictureMode(self)
         
-        if let rect = superview?.convert(frame, to: nil) {
-            self.controlsVisualEffectView.isHidden = true
-            self.externalStatusController.snapshot = self.window?.snapshot(in: rect)
-            self.controlsVisualEffectView.isHidden = false
+        snapshotPlayer { [weak self] image in
+            self?.externalStatusController.snapshot = image
         }
         
         pipController = PIPViewController()
@@ -891,6 +915,7 @@ public final class PUIPlayerView: NSView {
     // MARK: - Visibility management
     
     fileprivate var canHideControls: Bool {
+        guard isPlaying else { return false }
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
         
@@ -937,7 +962,8 @@ public final class PUIPlayerView: NSView {
     private func setControls(opacity: CGFloat, animated: Bool) {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = animated ? 0.4 : 0.0
-            self.controlsVisualEffectView.animator().alphaValue = opacity
+            self.scrimContainerView.animator().alphaValue = opacity
+            self.controlsContainerView.animator().alphaValue = opacity
             self.extrasMenuContainerView.animator().alphaValue = opacity
         }, completionHandler: nil)
     }
@@ -1182,7 +1208,7 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
     public func pipDidClose(_ pip: PIPViewController) {
         pictureContainer.view.frame = self.bounds
         
-        self.addSubview(pictureContainer.view, positioned: .below, relativeTo: self.controlsVisualEffectView)
+        self.addSubview(pictureContainer.view, positioned: .below, relativeTo: self.scrimContainerView)
         
         self.isInPictureInPictureMode = false
         self.pipController = nil

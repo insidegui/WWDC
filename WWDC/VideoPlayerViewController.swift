@@ -179,25 +179,7 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
     }
     
     private func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let welf = self else { return }
-            
-            var image: NSImage?
-            
-            defer { DispatchQueue.main.async { completion(image) } }
-            
-            guard let asset = welf.player.currentItem?.asset else { return }
-            
-            let generator = AVAssetImageGenerator(asset: asset)
-            generator.appliesPreferredTrackTransform = true
-            
-            do {
-                let rawImage = try generator.copyCGImage(at: welf.player.currentTime(), actualTime: nil)
-                image = NSImage(cgImage: rawImage, size: NSSize(width: rawImage.width, height: rawImage.height))
-            } catch {
-                NSLog("Error getting player snapshot: \(error)")
-            }
-        }
+        playerView.snapshotPlayer(completion: completion)
     }
     
     func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView) {

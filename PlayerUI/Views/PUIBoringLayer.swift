@@ -70,3 +70,23 @@ final class PUIBoringTextLayer: CATextLayer {
     }
     
 }
+
+class PUIBoringGradientLayer: CAGradientLayer {
+    
+    private var shouldAnimate: Bool = false
+    
+    override func action(forKey event: String) -> CAAction? {
+        if shouldAnimate {
+            return super.action(forKey: event)
+        } else {
+            return nil
+        }
+    }
+    
+    func animate(with block: () -> Void) {
+        shouldAnimate = true
+        block()
+        shouldAnimate = false
+    }
+    
+}

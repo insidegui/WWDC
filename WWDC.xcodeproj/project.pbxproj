@@ -152,6 +152,7 @@
 		DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA40B1EC798B600DF9D02 /* Preferences.swift */; };
 		DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */; };
 		DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */; };
+		DDED75571ED3C1BF000BA817 /* PUIScrimContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */; };
 		DDF32EA91EBE29D70028E39D /* PlayerContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EA81EBE29D70028E39D /* PlayerContainerViewController.swift */; };
 		DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */; };
 		DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */; };
@@ -441,6 +442,7 @@
 		DDDAA40B1EC798B600DF9D02 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindowController.swift; sourceTree = "<group>"; };
+		DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIScrimContainerView.swift; sourceTree = "<group>"; };
 		DDF32EA81EBE29D70028E39D /* PlayerContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerContainerViewController.swift; sourceTree = "<group>"; };
 		DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableRowView.swift; sourceTree = "<group>"; };
 		DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRow.swift; sourceTree = "<group>"; };
@@ -1141,6 +1143,7 @@
 				DDF721BF1ECA12A40054C503 /* PUIAnnotationLayer.swift */,
 				DDF721C01ECA12A40054C503 /* PUIBoringLayer.swift */,
 				DDF721C11ECA12A40054C503 /* PUIBufferLayer.swift */,
+				DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */,
 				DDF721C21ECA12A40054C503 /* PUIButton.swift */,
 				DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */,
 				DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */,
@@ -1672,6 +1675,7 @@
 				DDF721DA1ECA12A40054C503 /* PUIAnnotationLayer.swift in Sources */,
 				DDF721CC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift in Sources */,
 				DDF721C91ECA12A40054C503 /* Colors.swift in Sources */,
+				DDED75571ED3C1BF000BA817 /* PUIScrimContainerView.swift in Sources */,
 				DDF721D01ECA12A40054C503 /* PUIPlayerViewDelegates.swift in Sources */,
 				DDF721CF1ECA12A40054C503 /* PUIExternalPlaybackProvider.swift in Sources */,
 				DDF721DE1ECA12A40054C503 /* PUIPlayerView.swift in Sources */,
