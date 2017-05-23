@@ -30,8 +30,6 @@ class SessionSummaryViewController: NSViewController {
     
     private lazy var titleLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
-        l.font = NSFont.systemFont(ofSize: 24)
-        l.textColor = .primaryText
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byWordWrapping
         l.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
@@ -126,7 +124,9 @@ class SessionSummaryViewController: NSViewController {
         
         self.disposeBag = DisposeBag()
         
-        viewModel.rxTitle.bind(to: titleLabel.rx.text).addDisposableTo(self.disposeBag)
+        viewModel.rxTitle.map(NSAttributedString.attributedBoldTitle(with:)).subscribe(onNext: { [weak self] title in
+            self?.titleLabel.attributedStringValue = title
+        }).addDisposableTo(self.disposeBag)
         viewModel.rxSummary.bind(to: summaryLabel.rx.text).addDisposableTo(self.disposeBag)
         viewModel.rxFooter.bind(to: contextLabel.rx.text).addDisposableTo(self.disposeBag)
     }

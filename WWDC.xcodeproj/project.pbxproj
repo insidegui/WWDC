@@ -139,6 +139,7 @@
 		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
 		DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */; };
+		DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930701ED4EF1F00D61BE3 /* Fonts.swift */; };
 		DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */; };
 		DDDAA3F21EC7653300DF9D02 /* ThrowBack.h in Headers */ = {isa = PBXBuildFile; fileRef = DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDDAA3F51EC7653300DF9D02 /* ThrowBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */; };
@@ -432,6 +433,7 @@
 		DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWDCAppearance.m; sourceTree = "<group>"; };
 		DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksJSONAdapter.swift; sourceTree = "<group>"; };
+		DDD930701ED4EF1F00D61BE3 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleSection.swift; sourceTree = "<group>"; };
 		DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ThrowBack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThrowBack.h; sourceTree = "<group>"; };
@@ -975,6 +977,7 @@
 				DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */,
 				DD7F38701EABF6C4002D8C00 /* Colors.swift */,
 				DD7F38751EABFB20002D8C00 /* NSColor+Hex.swift */,
+				DDD930701ED4EF1F00D61BE3 /* Fonts.swift */,
 			);
 			name = Look;
 			sourceTree = "<group>";
@@ -1552,6 +1555,7 @@
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
+				DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */,
 				DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */,
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DDB352821EC7C55300254815 /* DateProvider.swift in Sources */,
