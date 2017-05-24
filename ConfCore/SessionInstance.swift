@@ -70,7 +70,7 @@ public class SessionInstance: Object {
     public dynamic var trackName = ""
     
     /// The room where this session will be held
-    public let room = LinkingObjects(fromType: Room.self, property: "instances")
+//    public let room = LinkingObjects(fromType: Room.self, property: "instances")
     
     /// The track associated with the instance
     public let track = LinkingObjects(fromType: Track.self, property: "instances")

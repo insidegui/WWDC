@@ -16,7 +16,7 @@ public class Keyword: Object {
     public dynamic var name = ""
     
     /// Sessions containing this keyword
-    public let sessionInstances = LinkingObjects(fromType: SessionInstance.self, property: "keywords")
+//    public let sessionInstances = LinkingObjects(fromType: SessionInstance.self, property: "keywords")
     
     public override class func primaryKey() -> String? {
         return "name"

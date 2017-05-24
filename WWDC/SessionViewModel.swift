@@ -201,9 +201,7 @@ final class SessionViewModel: NSObject {
         if let instance = instance {
             var result = timeFormatter.string(from: instance.startTime) + " - " + timeFormatter.string(from: instance.endTime)
             
-            if let roomName = instance.room.first?.name {
-                result += " - " + roomName
-            }
+            result += " - " + instance.roomName
             
             return result
         } else {
