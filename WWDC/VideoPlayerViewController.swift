@@ -23,13 +23,23 @@ protocol VideoPlayerViewControllerDelegate: class {
 
 final class VideoPlayerViewController: NSViewController {
 
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     
     weak var delegate: VideoPlayerViewControllerDelegate?
     
-    let sessionViewModel: SessionViewModel
+    var sessionViewModel: SessionViewModel {
+        didSet {
+            self.disposeBag = DisposeBag()
+            
+            updateUI()
+        }
+    }
     
-    let player: AVPlayer
+    weak var player: AVPlayer! {
+        didSet {
+            reset(oldValue: oldValue)
+        }
+    }
     
     var detached = false
     
@@ -83,11 +93,6 @@ final class VideoPlayerViewController: NSViewController {
         ])
         
         progressIndicator.layer?.zPosition = 999
-        
-        let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode")
-        Observable.collection(from: bookmarks).observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
-            self?.playerView.annotations = bookmarks.toArray()
-        }).addDisposableTo(self.disposeBag)
     }
     
     override func viewDidLoad() {
@@ -95,12 +100,35 @@ final class VideoPlayerViewController: NSViewController {
         
         playerView.delegate = self
         
+        reset(oldValue: nil)
+        updateUI()
+    }
+    
+    func reset(oldValue: AVPlayer?) {
+        if let oldPlayer = oldValue {
+            playerView.player = nil
+            
+            oldPlayer.pause()
+            oldPlayer.cancelPendingPrerolls()
+            oldPlayer.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
+            oldPlayer.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize))
+        }
+        
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize), options: [.initial, .new], context: nil)
         
         player.play()
         
         progressIndicator.startAnimation(nil)
+        
+        playerView.player = player
+    }
+    
+    func updateUI() {
+        let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode")
+        Observable.collection(from: bookmarks).observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
+            self?.playerView.annotations = bookmarks.toArray()
+        }).addDisposableTo(self.disposeBag)
     }
     
     // MARK: - Player Observation

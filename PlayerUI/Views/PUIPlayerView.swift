@@ -58,9 +58,15 @@ public final class PUIPlayerView: NSView {
         }
     }
     
-    public var player: AVPlayer {
+    public weak var player: AVPlayer? {
         didSet {
-            teardown(player: oldValue)
+            guard oldValue != player else { return }
+            
+            if let oldPlayer = oldValue {
+                teardown(player: oldPlayer)
+            }
+            
+            guard player != nil else { return }
             
             setupPlayer()
         }
@@ -96,10 +102,14 @@ public final class PUIPlayerView: NSView {
     }
     
     public var isInternalPlayerPlaying: Bool {
+        guard let player = player else { return false }
+        
         return !player.rate.isZero
     }
     
     public var currentTimestamp: Double {
+        guard let player = player else { return 0 }
+        
         if let externalProvider = currentExternalPlaybackProvider {
             return Double(externalProvider.status.currentTime)
         } else {
@@ -124,6 +134,8 @@ public final class PUIPlayerView: NSView {
     }
     
     public func seek(to annotation: PUITimelineAnnotation) {
+        guard let player = player else { return }
+        
         let time = CMTimeMakeWithSeconds(Float64(annotation.timestamp), 9000)
         
         if isPlayingExternally {
@@ -135,6 +147,8 @@ public final class PUIPlayerView: NSView {
     
     public var playbackSpeed: PUIPlaybackSpeed = .normal {
         didSet {
+            guard let player = player else { return }
+            
             if isPlaying && !isPlayingExternally { player.rate = playbackSpeed.rawValue }
             
             updatePlaybackSpeedState()
@@ -191,20 +205,24 @@ public final class PUIPlayerView: NSView {
     private var playerTimeObserver: Any?
     
     fileprivate var asset: AVAsset? {
-        return player.currentItem?.asset
+        return player?.currentItem?.asset
     }
     
     private var playerLayer = PUIBoringPlayerLayer()
     
     private func setupPlayer() {
+        guard let player = player else { return }
+        
         playerLayer.player = player
         playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
         
-        pictureContainer = PUIPictureContainerViewController(playerLayer: playerLayer)
-        pictureContainer.delegate = self
-        pictureContainer.view.translatesAutoresizingMaskIntoConstraints = false
-        
-        addSubview(pictureContainer.view)
+        if pictureContainer == nil {
+            pictureContainer = PUIPictureContainerViewController(playerLayer: playerLayer)
+            pictureContainer.delegate = self
+            pictureContainer.view.translatesAutoresizingMaskIntoConstraints = false
+            
+            addSubview(pictureContainer.view)
+        }
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.volume), options: [.initial, .new], context: nil)
@@ -213,22 +231,24 @@ public final class PUIPlayerView: NSView {
         
         asset?.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: metadataBecameAvailable)
         
-        playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: DispatchQueue.main, using: playerTimeDidChange)
+        playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+            self?.playerTimeDidChange(time: currentTime)
+        }
     }
     
     private func teardown(player oldValue: AVPlayer) {
+        oldValue.pause()
+        oldValue.cancelPendingPrerolls()
+        
         if let observer = playerTimeObserver {
             oldValue.removeTimeObserver(observer)
+            playerTimeObserver = nil
         }
         
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.volume))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
-        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize))
-        
-        oldValue.pause()
-        oldValue.cancelPendingPrerolls()
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -241,8 +261,6 @@ public final class PUIPlayerView: NSView {
                 self.playerVolumeChanged()
             } else if keyPath == #keyPath(AVPlayer.rate) {
                 self.updatePlayingState()
-            } else if keyPath == #keyPath(AVPlayer.currentItem.presentationSize) {
-                self.playerPresentationSizeDidChange()
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
@@ -250,6 +268,8 @@ public final class PUIPlayerView: NSView {
     }
     
     private func playerVolumeChanged() {
+        guard let player = player else { return }
+        
         if player.volume.isZero {
             self.volumeButton.image = .PUIVolumeMuted
             self.volumeSlider.doubleValue = 0
@@ -260,6 +280,8 @@ public final class PUIPlayerView: NSView {
     }
     
     private func updateBufferedSegments() {
+        guard let player = player else { return }
+        
         guard let loadedRanges = player.currentItem?.loadedTimeRanges else { return }
         guard let durationTime = player.currentItem?.duration else { return }
         
@@ -299,18 +321,14 @@ public final class PUIPlayerView: NSView {
     }
     
     fileprivate var currentPresentationSize: NSSize? {
-        guard let size = player.currentItem?.presentationSize, size != NSZeroSize else { return nil }
+        guard let size = player?.currentItem?.presentationSize, size != NSZeroSize else { return nil }
         
         return size
     }
     
-    private func playerPresentationSizeDidChange() {
-        guard let size = currentPresentationSize else { return }
-        
-        pipController?.aspectRatio = size
-    }
-    
     private func playerStatusChanged() {
+        guard let player = player else { return }
+        
         switch player.status {
         case .readyToPlay:
             self.updateTimeLabels()
@@ -328,7 +346,9 @@ public final class PUIPlayerView: NSView {
     
     fileprivate func playerTimeDidChange(time: CMTime) {
         DispatchQueue.main.async {
-            guard self.player.hasValidMediaDuration else { return }
+            guard let player = self.player else { return }
+            
+            guard player.hasValidMediaDuration else { return }
             guard let duration = self.asset?.duration else { return }
             
             let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
@@ -340,7 +360,9 @@ public final class PUIPlayerView: NSView {
     }
     
     private func updateTimeLabels() {
-        guard self.player.hasValidMediaDuration else { return }
+        guard let player = player else { return }
+        
+        guard player.hasValidMediaDuration else { return }
         guard let duration = self.asset?.duration else { return }
         
         let time = player.currentTime()
@@ -352,7 +374,9 @@ public final class PUIPlayerView: NSView {
     }
     
     deinit {
-        teardown(player: player)
+        if let player = player {
+            teardown(player: player)
+        }
     }
     
     // MARK: Controls
@@ -721,6 +745,8 @@ public final class PUIPlayerView: NSView {
     private var playerVolumeBeforeMuting: Float = 1.0
     
     @IBAction public func toggleMute(_ sender: Any?) {
+        guard let player = player else { return }
+        
         if player.volume.isZero {
             player.volume = playerVolumeBeforeMuting
         } else {
@@ -730,6 +756,8 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction func volumeSliderAction(_ sender: Any?) {
+        guard let player = player else { return }
+        
         let v = Float(volumeSlider.doubleValue)
         
         if isPlayingExternally {
@@ -755,7 +783,7 @@ public final class PUIPlayerView: NSView {
         if isPlayingExternally {
             currentExternalPlaybackProvider?.pause()
         } else {
-            player.rate = 0
+            player?.rate = 0
         }
     }
     
@@ -763,7 +791,7 @@ public final class PUIPlayerView: NSView {
         if isPlayingExternally {
             currentExternalPlaybackProvider?.play()
         } else {
-            player.rate = playbackSpeed.rawValue
+            player?.rate = playbackSpeed.rawValue
         }
     }
     
@@ -792,7 +820,9 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction public func addAnnotation(_ sender: NSView?) {
-        let timestamp = Double(CMTimeGetSeconds(self.player.currentTime()))
+        guard let player = player else { return }
+        
+        let timestamp = Double(CMTimeGetSeconds(player.currentTime()))
         
         delegate?.playerViewDidSelectAddAnnotation(self, at: timestamp)
     }
@@ -810,6 +840,8 @@ public final class PUIPlayerView: NSView {
     }
     
     private func modifyCurrentTime(with seconds: Double, using function: (CMTime, CMTime) -> CMTime) {
+        guard let player = player else { return }
+        
         guard let durationTime = player.currentItem?.duration else { return }
         
         let modifier = CMTimeMakeWithSeconds(seconds, durationTime.timescale)
@@ -868,19 +900,19 @@ public final class PUIPlayerView: NSView {
     
     public func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let welf = self else { return }
+            guard let welf = self, let player = welf.player else { return }
             
             var image: NSImage?
             
             defer { DispatchQueue.main.async { completion(image) } }
             
-            guard let asset = welf.player.currentItem?.asset else { return }
+            guard let asset = player.currentItem?.asset else { return }
             
             let generator = AVAssetImageGenerator(asset: asset)
             generator.appliesPreferredTrackTransform = true
             
             do {
-                let rawImage = try generator.copyCGImage(at: welf.player.currentTime(), actualTime: nil)
+                let rawImage = try generator.copyCGImage(at: player.currentTime(), actualTime: nil)
                 image = NSImage(cgImage: rawImage, size: NSSize(width: rawImage.width, height: rawImage.height))
             } catch {
                 NSLog("Error getting player snapshot: \(error)")
@@ -915,6 +947,8 @@ public final class PUIPlayerView: NSView {
     // MARK: - Visibility management
     
     fileprivate var canHideControls: Bool {
+        guard let player = player else { return false }
+        
         guard isPlaying else { return false }
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
@@ -1088,7 +1122,9 @@ public final class PUIPlayerView: NSView {
 extension PUIPlayerView: PUITimelineViewDelegate {
     
     func timelineDidReceiveForceTouch(at timestamp: Double) {
-        let timestamp = Double(CMTimeGetSeconds(self.player.currentTime()))
+        guard let player = player else { return }
+        
+        let timestamp = Double(CMTimeGetSeconds(player.currentTime()))
         
         delegate?.playerViewDidSelectAddAnnotation(self, at: timestamp)
     }
@@ -1099,7 +1135,7 @@ extension PUIPlayerView: PUITimelineViewDelegate {
         if isPlayingExternally {
             currentExternalPlaybackProvider?.pause()
         } else {
-            player.pause()
+            player?.pause()
         }
     }
     
@@ -1112,7 +1148,7 @@ extension PUIPlayerView: PUITimelineViewDelegate {
         if isPlayingExternally {
             currentExternalPlaybackProvider?.seek(to: targetTime)
         } else {
-            player.seek(to: time)
+            player?.seek(to: time)
         }
     }
     
@@ -1121,7 +1157,7 @@ extension PUIPlayerView: PUITimelineViewDelegate {
             if isPlayingExternally {
                 currentExternalPlaybackProvider?.play()
             } else {
-                player.play()
+                player?.play()
             }
         }
     }
@@ -1169,7 +1205,7 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
             self.currentExternalPlaybackProvider = nil
             
             if wasPlaying {
-                self.player.play()
+                self.player?.play()
                 self.updatePlayingState()
             }
         }
@@ -1183,7 +1219,7 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
     
     public func externalPlaybackProviderDidBecomeCurrent(_ provider: PUIExternalPlaybackProvider) {
         if isInternalPlayerPlaying {
-            player.rate = 0
+            player?.rate = 0
         }
         
         self.currentExternalPlaybackProvider = provider

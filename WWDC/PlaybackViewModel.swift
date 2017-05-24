@@ -116,6 +116,7 @@ final class PlaybackViewModel {
     deinit {
         if let timeObserver = timeObserver {
             player.removeTimeObserver(timeObserver)
+            self.timeObserver = nil
         }
     }
     

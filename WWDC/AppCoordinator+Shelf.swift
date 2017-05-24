@@ -57,15 +57,15 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         currentPlayerController?.view.isHidden = false
     }
     
-    func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController) {
-        guard let viewModel = controller.viewModel else { return }
+    func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
+        self.currentPlaybackViewModel = nil
+        
+        guard let viewModel = shelfController.viewModel else { return }
         
         self.playerOwnerTab = activeTab
         self.playerOwnerSessionIdentifier = selectedViewModelRegardlessOfTab?.identifier
         
         do {
-            teardownPlayerIfNeeded()
-            
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
             
             canRestorePlaybackContext = false
@@ -73,41 +73,23 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             
             self.currentPlaybackViewModel = playbackViewModel
             
-            currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel)
-            currentPlayerController?.playerWillExitPictureInPicture = {
-                self.goBackToContextBeforePiP()
+            if currentPlayerController == nil {
+                currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel)
+                currentPlayerController?.playerWillExitPictureInPicture = { [weak self] in
+                    self?.goBackToContextBeforePiP()
+                }
+                
+                currentPlayerController?.delegate = self
+                currentPlayerController?.playerView.timelineDelegate = self
+            } else {
+                currentPlayerController?.player = playbackViewModel.player
+                currentPlayerController?.sessionViewModel = viewModel
             }
             
-            currentPlayerController?.delegate = self
-            currentPlayerController?.playerView.timelineDelegate = self
-            
-            attachPlayerToShelf(controller)
+            attachPlayerToShelf(shelfController)
         } catch {
             WWDCAlert.show(with: error)
         }
-    }
-    
-    private func teardownPlayerIfNeeded() {
-        guard let playerController = currentPlayerController else { return }
-        
-        if playerController.playerView.isInPictureInPictureMode {
-            playerController.playerView.togglePip(nil)
-        }
-        
-        playerController.player.pause()
-        playerController.player.cancelPendingPrerolls()
-        
-        // close detached window
-        if let window = playerController.view.window {
-            if window != windowController.window {
-                window.close()
-            }
-        }
-        
-        playerController.view.removeFromSuperview()
-        
-        currentPlayerController = nil
-        currentPlaybackViewModel = nil
     }
     
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
@@ -115,15 +97,15 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         
         shelf.playButton.isHidden = true
         
-        shelf.addChildViewController(playerController)
-        
         playerController.view.frame = shelf.view.bounds
         playerController.view.alphaValue = 0
+        playerController.view.isHidden = false
+        
         playerController.view.translatesAutoresizingMaskIntoConstraints = false
         
         shelf.view.addSubview(playerController.view)
-        
         shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+        
         shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
         
         playerController.view.alphaValue = 1

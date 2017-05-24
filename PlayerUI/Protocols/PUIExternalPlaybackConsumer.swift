@@ -42,6 +42,6 @@ public protocol PUIExternalPlaybackConsumer: class {
     var remoteMediaUrl: URL? { get }
     
     /// The `AVPlayer` instance the consumer is using to play its media
-    var player: AVPlayer { get }
+    var player: AVPlayer? { get }
     
 }
