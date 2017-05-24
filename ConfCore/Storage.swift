@@ -37,6 +37,10 @@ public final class Storage {
             migration.deleteData(forType: "SessionAsset")
             migration.deleteData(forType: "SessionAsset")
         }
+        if oldVersion < 15 {
+            // download model removal
+            migration.deleteData(forType: "Download")
+        }
     }
     
     /// Performs a write transaction on the database using `block`, on the main queue
@@ -322,36 +326,8 @@ public final class Storage {
         }
     }()
     
-    public lazy var activeDownloads: Observable<Results<Download>> = {
-        let results = self.realm.objects(Download.self).filter("rawStatus != %@ AND rawStatus != %@", "none", "deleted")
-        
-        return Observable.collection(from: results)
-    }()
-    
-    public func createDownload(for asset: SessionAsset) {
-        // prevent multiple download instances per session asset
-        guard asset.downloads.filter({ $0.status != .none }).count == 0 else { return }
-        
-        do {
-            try realm.write {
-                let download = Download()
-                download.sessionIdentifier = asset.sessionId
-                download.status = .paused
-                asset.downloads.append(download)
-            }
-        } catch {
-            NSLog("Error creating download for asset \(asset): \(error)")
-        }
-    }
-    
     public func asset(with remoteURL: URL) -> SessionAsset? {
         return realm.objects(SessionAsset.self).filter("remoteURL == %@", remoteURL.absoluteString).first
-    }
-    
-    public func download(for session: Session) -> Observable<Download?> {
-        let download = session.assets.filter("rawType == %@", SessionAssetType.hdVideo.rawValue).first?.downloads.first
-        
-        return Observable.from(optional: download)
     }
     
     public func bookmark(with identifier: String) -> Bookmark? {
@@ -396,6 +372,16 @@ public final class Storage {
             
             bookmark.timecode = timecode
             self.realm.add(bookmark, update: true)
+        }
+    }
+    
+    public func updateDownloadedFlag(_ isDownloaded: Bool, forAssetWithRelativeLocalURL filePath: String) {
+        DispatchQueue.main.async {
+            guard let asset = self.realm.objects(SessionAsset.self).filter("relativeLocalURL == %@", filePath).first else { return }
+            
+            self.update {
+                asset.session.first?.isDownloaded = isDownloaded
+            }
         }
     }
     

@@ -11,153 +11,386 @@ import RxSwift
 import ConfCore
 import RealmSwift
 
+extension Notification.Name {
+    
+    static let DownloadManagerFilesChangedNotification = Notification.Name("DownloadManagerFilesChangedNotification")
+    static let DownloadManagerDownloadStarted = Notification.Name("DownloadManagerDownloadStarted")
+    static let DownloadManagerDownloadCancelled = Notification.Name("DownloadManagerDownloadCancelled")
+    static let DownloadManagerDownloadPaused = Notification.Name("DownloadManagerDownloadPaused")
+    static let DownloadManagerDownloadResumed = Notification.Name("DownloadManagerDownloadResumed")
+    static let DownloadManagerDownloadFailed = Notification.Name("DownloadManagerDownloadFailed")
+    static let DownloadManagerDownloadFinished = Notification.Name("DownloadManagerDownloadFinished")
+    static let DownloadManagerDownloadProgressChanged = Notification.Name("DownloadManagerDownloadProgressChanged")
+    
+}
+
+enum DownloadStatus {
+    case none
+    case downloading(Double)
+    case paused
+    case cancelled
+    case finished
+    case failed(Error?)
+}
+
 final class DownloadManager: NSObject {
     
-    fileprivate let storage: Storage
+    fileprivate let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
+    fileprivate var backgroundSession: Foundation.URLSession!
+    fileprivate var downloadTasks: [String : URLSessionDownloadTask] = [:]
+    fileprivate let defaults = UserDefaults.standard
     
-    fileprivate var tasks: [String: URLSessionDownloadTask] = [:]
+    fileprivate var storage: Storage!
     
-    fileprivate lazy var downloadQueue: OperationQueue = {
-        let q = OperationQueue()
+    static let shared: DownloadManager = DownloadManager()
+    
+    override init() {
+        super.init()
         
-        q.underlyingQueue = DispatchQueue(label: "DownloadManager", qos: .background)
-        
-        return q
-    }()
-    
-    fileprivate lazy var downloadSession: URLSession = {
-        let s = URLSession(configuration: .default, delegate: self, delegateQueue: self.downloadQueue)
-        
-        return s
-    }()
-    
-    init(_ storage: Storage) {
-        self.storage = storage
+        self.backgroundSession = URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
     }
     
-    fileprivate func localStoragePath(for asset: SessionAsset) -> String? {
-        guard let dir = NSSearchPathForDirectoriesInDomains(.moviesDirectory, .userDomainMask, true).first else { return nil }
+    func start(with storage: Storage) {
+        self.storage = storage
         
-        return dir + "/WWDC/" + asset.relativeLocalURL
+        backgroundSession.getTasksWithCompletionHandler { _, _, pendingTasks in
+            for task in pendingTasks {
+                if let key = task.originalRequest?.url!.absoluteString {
+                    self.downloadTasks[key] = task
+                }
+            }
+        }
+        
+        NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
+            self.monitorDownloadsFolder()
+            NotificationCenter.default.post(name: .DownloadManagerFilesChangedNotification, object: nil)
+        }
+        
+        monitorDownloadsFolder()
+    }
+    
+    fileprivate func localStoragePath(for asset: SessionAsset) -> String {
+        return Preferences.shared.localVideoStorageURL.appendingPathComponent(asset.relativeLocalURL).path
+    }
+    
+    func allTasks() -> [URLSessionDownloadTask] {
+        return Array(self.downloadTasks.values)
     }
     
     func download(_ asset: SessionAsset) {
-        guard let url = URL(string: asset.remoteURL) else { return }
+        downloadRemoteUrl(asset.remoteURL)
+    }
+    
+    private func downloadRemoteUrl(_ url: String) {
+        if isDownloading(url) || hasVideo(url) {
+            return
+        }
         
-        storage.createDownload(for: asset)
-        
-        let task = downloadSession.downloadTask(with: url)
-        
-        self.tasks[asset.remoteURL] = task
-        
+        let task = backgroundSession.downloadTask(with: URL(string: url)!)
+        if let key = task.originalRequest?.url!.absoluteString {
+            self.downloadTasks[key] = task
+        }
         task.resume()
+        
+        NotificationCenter.default.post(name: .DownloadManagerDownloadStarted, object: url)
+    }
+    
+    func pauseDownload(_ url: String) -> Bool {
+        if let task = downloadTasks[url] {
+            task.suspend()
+            NotificationCenter.default.post(name: .DownloadManagerDownloadPaused, object: url)
+            return true
+        }
+        print("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
+        return false
+    }
+    
+    func resumeDownload(_ url: String) -> Bool {
+        if let task = downloadTasks[url] {
+            task.resume()
+            NotificationCenter.default.post(name: .DownloadManagerDownloadResumed, object: url)
+            return true
+        }
+        print("VideoStore was asked to resume downloading URL \(url), but there's no task for that URL")
+        return false
+    }
+    
+    func cancelDownload(_ url: String) -> Bool {
+        if let task = downloadTasks[url] {
+            task.cancel()
+            self.downloadTasks.removeValue(forKey: url)
+            NotificationCenter.default.post(name: Notification.Name.DownloadManagerDownloadCancelled, object: url)
+            return true
+        }
+        print("VideoStore was asked to cancel downloading URL \(url), but there's no task for that URL")
+        return false
+    }
+    
+    func isDownloading(_ url: String) -> Bool {
+        let downloading = downloadTasks.keys.filter { taskURL in
+            return url == taskURL
+        }
+        
+        return (downloading.count > 0)
+    }
+    
+    func localVideoPath(_ remoteURL: String) -> String? {
+        guard let url = URL(string: remoteURL) else { return nil }
+        
+        guard let asset = storage.asset(with: url) else {
+            return nil
+        }
+        
+        let path = localStoragePath(for: asset)
+        
+        return path
+    }
+    
+    func localFileURL(for session: Session) -> URL? {
+        guard let asset = session.asset(of: .hdVideo) else { return nil }
+        
+        let path = self.localStoragePath(for: asset)
+        
+        guard FileManager.default.fileExists(atPath: path) else { return nil }
+        
+        return URL(fileURLWithPath: path)
+    }
+    
+    func localVideoAbsoluteURLString(_ remoteURL: String) -> String? {
+        guard let localPath = localVideoPath(remoteURL) else { return nil }
+        
+        return URL(fileURLWithPath: localPath).absoluteString
+    }
+    
+    func hasVideo(_ url: String) -> Bool {
+        guard let path = self.localVideoPath(url) else { return false }
+        
+        return FileManager.default.fileExists(atPath: path)
+    }
+    
+    enum RemoveDownloadError: Error {
+        case notDownloaded
+        case fileSystem(Error)
+        case internalError(String)
+    }
+    
+    func removeDownload(_ url: String) throws {
+        if isDownloading(url) {
+            _ = cancelDownload(url)
+            return
+        }
+        
+        if hasVideo(url) {
+            guard let path = localVideoPath(url) else {
+                throw RemoveDownloadError.internalError("Unable to generate local video path from remote URL")
+            }
+            
+            do {
+                try FileManager.default.removeItem(atPath: path)
+            } catch {
+                throw RemoveDownloadError.fileSystem(error)
+            }
+        } else {
+            throw RemoveDownloadError.notDownloaded
+        }
     }
     
     func deleteDownload(for asset: SessionAsset) {
-        guard let download = asset.downloads.first else { return }
-        
-        guard let filePath = self.localStoragePath(for: asset) else { return }
-        
-        guard FileManager.default.fileExists(atPath: filePath) else { return }
-        
         do {
-            try FileManager.default.removeItem(atPath: filePath)
-            
-            storage.unmanagedUpdate { realm in
-                realm.delete(download)
-            }
+            try removeDownload(asset.remoteURL)
         } catch {
             WWDCAlert.show(with: error)
         }
     }
     
-    func localFileURL(for session: Session) -> URL? {
+    func downloadedFileURL(for session: Session) -> URL? {
         guard let asset = session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else {
             return nil
         }
         
-        let url = Preferences.shared.localVideoStorageURL.appendingPathComponent(asset.relativeLocalURL)
+        let path = self.localStoragePath(for: asset)
         
-        guard FileManager.default.fileExists(atPath: url.path) else { return nil }
+        guard FileManager.default.fileExists(atPath: path) else { return nil }
         
-        return url
+        return URL(fileURLWithPath: path)
     }
     
-    fileprivate var lastStorageUpdate = Date.distantPast
+    func downloadStatusObservable(for session: Session) -> Observable<DownloadStatus>? {
+        guard let asset = session.asset(of: .hdVideo) else { return nil }
+        
+        return Observable<DownloadStatus>.create { observer -> Disposable in
+            let nc = NotificationCenter.default
+            let q = OperationQueue.main
+            
+            let checkDownloadedState = {
+                if self.isDownloading(asset.remoteURL) {
+                    observer.onNext(.downloading(-1))
+                } else if self.hasVideo(asset.remoteURL) {
+                    observer.onNext(.finished)
+                }
+            }
+            
+            checkDownloadedState()
+            
+            let fileSystemChanged = nc.addObserver(forName: .DownloadManagerFilesChangedNotification, object: nil, queue: q) { _ in
+                checkDownloadedState()
+            }
+            
+            let started = nc.addObserver(forName: .DownloadManagerDownloadStarted, object: asset.remoteURL, queue: q) { _ in
+                observer.onNext(.downloading(-1))
+            }
+            
+            let cancelled = nc.addObserver(forName: .DownloadManagerDownloadCancelled, object: asset.remoteURL, queue: q) { _ in
+                observer.onNext(.cancelled)
+            }
+            
+            let paused = nc.addObserver(forName: .DownloadManagerDownloadPaused, object: asset.remoteURL, queue: q) { _ in
+                observer.onNext(.paused)
+            }
+            
+            let resumed = nc.addObserver(forName: .DownloadManagerDownloadResumed, object: asset.remoteURL, queue: q) { _ in
+                observer.onNext(.downloading(-1))
+            }
+            
+            let failed = nc.addObserver(forName: .DownloadManagerDownloadFailed, object: asset.remoteURL, queue: q) { note in
+                let error = note.userInfo?["error"] as? Error
+                observer.onNext(.failed(error))
+            }
+            
+            let finished = nc.addObserver(forName: .DownloadManagerDownloadFinished, object: asset.remoteURL, queue: q) { note in
+                observer.onNext(.finished)
+            }
+            
+            let progress = nc.addObserver(forName: .DownloadManagerDownloadProgressChanged, object: asset.remoteURL, queue: q) { note in
+                if let info = note.userInfo?["info"] as? DownloadInfo {
+                    observer.onNext(.downloading(info.progress))
+                } else {
+                    observer.onNext(.downloading(-1))
+                }
+            }
+            
+            return Disposables.create {
+                nc.removeObserver(fileSystemChanged)
+                nc.removeObserver(started)
+                nc.removeObserver(cancelled)
+                nc.removeObserver(paused)
+                nc.removeObserver(resumed)
+                nc.removeObserver(failed)
+                nc.removeObserver(finished)
+                nc.removeObserver(progress)
+            }
+        }
+    }
+    
+    // MARK: File observation
+    
+    fileprivate var folderMonitor: DTFolderMonitor!
+    fileprivate var existingVideoFiles = [String]()
+    
+    func monitorDownloadsFolder() {
+        if folderMonitor != nil {
+            folderMonitor.stopMonitoring()
+            folderMonitor = nil
+        }
+        
+        let videosPath = Preferences.shared.localVideoStorageURL.path
+        enumerateVideoFiles(videosPath)
+        
+        folderMonitor = DTFolderMonitor(for: URL(fileURLWithPath: videosPath)) {
+            self.enumerateVideoFiles(videosPath)
+            
+            NotificationCenter.default.post(name: .DownloadManagerFilesChangedNotification, object: nil)
+        }
+        
+        folderMonitor.startMonitoring()
+    }
+    
+    /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
+    fileprivate func enumerateVideoFiles(_ path: String) {
+        guard let enumerator = FileManager.default.enumerator(atPath: path) else { return }
+        guard let files = enumerator.allObjects as? [String] else { return }
+        
+        // existing/added files
+        for file in files {
+            storage.updateDownloadedFlag(true, forAssetWithRelativeLocalURL: file)
+        }
+        
+        if existingVideoFiles.count == 0 {
+            existingVideoFiles = files
+            return
+        }
+        
+        // removed files
+        let removedFiles = existingVideoFiles.filter { !files.contains($0) }
+        for file in removedFiles {
+            storage.updateDownloadedFlag(false, forAssetWithRelativeLocalURL: file)
+        }
+    }
+    
+    // MARK: Teardown
+    
+    deinit {
+        if folderMonitor != nil {
+            folderMonitor.stopMonitoring()
+        }
+    }
     
 }
 
-extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate, URLSessionTaskDelegate {
-    
-    private func download(for url: URL) -> Download? {
-        let predicate = NSPredicate(format: "remoteURL == %@", url.absoluteString)
-        
-        return storage.unmanagedObjects(of: SessionAsset.self, with: predicate)?.first?.downloads.first
-    }
-    
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        // limit storage writes to 1 per second
-        guard Date().timeIntervalSince(lastStorageUpdate) > 1 else { return }
-        
-        defer { lastStorageUpdate = Date() }
-        
-        guard let url = downloadTask.originalRequest?.url else { return }
-        
-        let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-        
-        guard let download = self.download(for: url) else {
-            return
-        }
-        
-        storage.unmanagedUpdate { realm in
-            download.status = .downloading
-            download.progress = progress
-            realm.add(download, update: true)
-        }
-    }
+extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        guard let url = downloadTask.originalRequest?.url else { return }
+        guard let originalURL = downloadTask.originalRequest?.url else { return }
         
-        guard let download = self.download(for: url) else {
-            return
-        }
+        let originalAbsoluteURLString = originalURL.absoluteString
         
-        guard let asset = download.asset.first else { return }
-
-        guard let finalPath = self.localStoragePath(for: asset) else { return }
+        guard let localPath = self.localVideoPath(originalAbsoluteURLString) else { return }
+        let destinationUrl = URL(fileURLWithPath: localPath)
+        let destinationDir = destinationUrl.deletingLastPathComponent()
         
         do {
-            let finalURL = URL(fileURLWithPath: finalPath)
-            let finalDirURL = finalURL.deletingLastPathComponent()
-            
-            try FileManager.default.createDirectory(at: finalDirURL, withIntermediateDirectories: true, attributes: nil)
-            try FileManager.default.moveItem(at: location, to: finalURL)
-            
-            storage.unmanagedUpdate { realm in
-                download.status = .completed
-                download.progress = 1
-                realm.add(download, update: true)
+            if !FileManager.default.fileExists(atPath: destinationDir.path) {
+                try FileManager.default.createDirectory(at: destinationDir, withIntermediateDirectories: true, attributes: nil)
             }
+            
+            try FileManager.default.moveItem(at: location, to: destinationUrl)
+            
+            downloadTasks.removeValue(forKey: originalAbsoluteURLString)
+            
+            NotificationCenter.default.post(name: .DownloadManagerDownloadFinished, object: originalAbsoluteURLString)
         } catch {
-            NSLog("Error copying file downloaded for \(asset): \(error)")
-            
-            storage.unmanagedUpdate { realm in
-                download.status = .failed
-                realm.add(download, update: true)
-            }
+            NotificationCenter.default.post(name: .DownloadManagerDownloadFailed, object: originalAbsoluteURLString, userInfo: ["error": error])
         }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        guard let url = task.originalRequest?.url else { return }
+        guard let originalURL = task.originalRequest?.url else { return }
         
-        guard let download = self.download(for: url) else { return }
+        let originalAbsoluteURLString = originalURL.absoluteString
         
-        storage.unmanagedUpdate { realm in
-            download.status = error != nil ? .failed : .completed
-            realm.add(download, update: true)
+        let info: [String: Error]?
+        
+        if let error = error {
+            info = ["error": error]
+        } else {
+            info = nil
         }
+        
+        NotificationCenter.default.post(name: .DownloadManagerDownloadFailed, object: originalAbsoluteURLString, userInfo: info)
+    }
+    
+    fileprivate struct DownloadInfo {
+        let totalBytesWritten: Int64
+        let totalBytesExpectedToWrite: Int64
+        let progress: Double
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        guard let originalURL = downloadTask.originalRequest?.url?.absoluteString else { return }
+        
+        let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+        let info = DownloadInfo(totalBytesWritten: totalBytesWritten, totalBytesExpectedToWrite: totalBytesExpectedToWrite, progress: progress)
+        NotificationCenter.default.post(name: .DownloadManagerDownloadProgressChanged, object: originalURL, userInfo: ["info": info])
     }
     
 }

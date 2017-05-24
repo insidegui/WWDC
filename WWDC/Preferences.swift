@@ -9,6 +9,12 @@
 import Foundation
 import ThrowBack
 
+extension Notification.Name {
+    
+    static let LocalVideoStoragePathPreferenceDidChange = Notification.Name("LocalVideoStoragePathPreferenceDidChange")
+    
+}
+
 final class Preferences {
     
     static let shared: Preferences = Preferences()
@@ -24,6 +30,8 @@ final class Preferences {
             TBPreferences.shared.localVideoStoragePath = newValue.path
             
             defaults.set(newValue.path, forKey: #function)
+            
+            NotificationCenter.default.post(name: .LocalVideoStoragePathPreferenceDidChange, object: nil)
         }
     }
     

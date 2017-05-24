@@ -120,12 +120,7 @@ public final class TBUserDataMigrator {
                         
                         try FileManager.default.moveItem(at: originalLocalFileURL, to: newLocalFileURL)
                         
-                        let download = Download()
-                        download.sessionIdentifier = newSession.identifier
-                        download.status = .completed
-                        download.progress = 1
-                        
-                        asset.downloads.append(download)
+                        newSession.isDownloaded = true
                     } catch {
                         NSLog("Error moving downloaded file from \(originalLocalFileURL) to \(newLocalFileURL): \(error)")
                     }

@@ -140,6 +140,8 @@
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
 		DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */; };
 		DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930701ED4EF1F00D61BE3 /* Fonts.swift */; };
+		DDD930731ED52B2900D61BE3 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930721ED52B2900D61BE3 /* Download.swift */; };
+		DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */; };
 		DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */; };
 		DDDAA3F21EC7653300DF9D02 /* ThrowBack.h in Headers */ = {isa = PBXBuildFile; fileRef = DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDDAA3F51EC7653300DF9D02 /* ThrowBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */; };
@@ -200,7 +202,6 @@
 		DDF721FD1ECA1EB20054C503 /* CMSCloudKitRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721FC1ECA1EB20054C503 /* CMSCloudKitRepresentable.swift */; };
 		DDF722001ECA23DA0054C503 /* CMSCommunityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721FF1ECA23DA0054C503 /* CMSCommunityCenter.swift */; };
 		DDF722021ECA26F70054C503 /* CMSCloudKitUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF722011ECA26F70054C503 /* CMSCloudKitUtil.swift */; };
-		DDFA10BD1EBEA584001DCF66 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BC1EBEA584001DCF66 /* Download.swift */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
 /* End PBXBuildFile section */
@@ -433,6 +434,9 @@
 		DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TracksJSONAdapter.swift; sourceTree = "<group>"; };
 		DDD930701ED4EF1F00D61BE3 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		DDD930721ED52B2900D61BE3 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
+		DDD930741ED52BD800D61BE3 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
+		DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderMonitor.m; sourceTree = "<group>"; };
 		DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleSection.swift; sourceTree = "<group>"; };
 		DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ThrowBack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThrowBack.h; sourceTree = "<group>"; };
@@ -490,7 +494,6 @@
 		DDF721FC1ECA1EB20054C503 /* CMSCloudKitRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSCloudKitRepresentable.swift; sourceTree = "<group>"; };
 		DDF721FF1ECA23DA0054C503 /* CMSCommunityCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSCommunityCenter.swift; sourceTree = "<group>"; };
 		DDF722011ECA26F70054C503 /* CMSCloudKitUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSCloudKitUtil.swift; sourceTree = "<group>"; };
-		DDFA10BC1EBEA584001DCF66 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -841,9 +844,9 @@
 		DD65FD701E48BE480054DD35 /* UserDefined */ = {
 			isa = PBXGroup;
 			children = (
+				DDD930721ED52B2900D61BE3 /* Download.swift */,
 				DD65FD6A1E48BD9F0054DD35 /* Favorite.swift */,
 				DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */,
-				DDFA10BC1EBEA584001DCF66 /* Download.swift */,
 				DD65FD6C1E48BE270054DD35 /* Bookmark.swift */,
 			);
 			name = UserDefined;
@@ -948,6 +951,8 @@
 		DDB352851EC7C75100254815 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				DDD930741ED52BD800D61BE3 /* DTFolderMonitor.h */,
+				DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */,
 				DDB3527F1EC7C4CA00254815 /* Arguments.swift */,
 				DDB352811EC7C55300254815 /* DateProvider.swift */,
 				DDB352831EC7C74C00254815 /* LiveObserver.swift */,
@@ -1542,6 +1547,7 @@
 				DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
 				DDB3529A1EC8AB2800254815 /* WWDCImageView.swift in Sources */,
+				DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */,
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
 				DD0159D31ED0D3AF00F980F1 /* AccountPreferencesViewController.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
@@ -1607,7 +1613,6 @@
 				DD65FD6B1E48BD9F0054DD35 /* Favorite.swift in Sources */,
 				DD65FD511E48A05C0054DD35 /* Session.swift in Sources */,
 				DD34DA0B1E4AB3E400F25C45 /* RoomsJSONAdapter.swift in Sources */,
-				DDFA10BD1EBEA584001DCF66 /* Download.swift in Sources */,
 				DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */,
 				DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */,
 				DD65FD5D1E48A11F0054DD35 /* Track.swift in Sources */,
@@ -1630,6 +1635,7 @@
 				DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */,
 				DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */,
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,
+				DDD930731ED52B2900D61BE3 /* Download.swift in Sources */,
 				DD3C4D2B1E564AE80093BBD0 /* NewsItemsJSONAdapter.swift in Sources */,
 				DD65FD5F1E48A3900054DD35 /* SessionInstance.swift in Sources */,
 				DD65FD571E48A0BD0054DD35 /* Event.swift in Sources */,

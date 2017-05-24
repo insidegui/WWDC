@@ -10,7 +10,8 @@ import Foundation
 
 struct Constants {
     
-    static let coreSchemaVersion: UInt64 = 14
+    static let coreSchemaVersion: UInt64 = 15
+    
     static let thumbnailHeight: CGFloat = 150
     
     /// The relative position within the video the user must be before it is considered fully watched

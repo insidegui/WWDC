@@ -29,7 +29,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         
         guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
         
-        downloadManager.download(videoAsset)
+        DownloadManager.shared.download(videoAsset)
     }
     
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {        
@@ -54,7 +54,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         
         switch choice {
         case .yes:
-            self.downloadManager.deleteDownload(for: videoAsset)
+            DownloadManager.shared.deleteDownload(for: videoAsset)
         case .no:
             break
         }

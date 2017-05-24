@@ -39,6 +39,9 @@ public class Session: Object {
     /// The session's assets (videos, slides, links)
     public let assets = List<SessionAsset>()
     
+    /// Whether this session is downloaded
+    public dynamic var isDownloaded = false
+    
     /// Session favorite
     public let favorites = List<Favorite>()
     

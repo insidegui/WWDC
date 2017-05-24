@@ -132,35 +132,59 @@ class SessionActionsViewController: NSViewController {
             self?.favoriteButton.state = isFavorite ? NSOnState : NSOffState
         }).addDisposableTo(self.disposeBag)
         
-        let rxActiveDownload = viewModel.rxActiveDownloads.map({ $0.first })
+        if let rxDownloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
+            rxDownloadState.subscribe(onNext: { [weak self] status in
+                switch status {
+                case .downloading(let progress):
+                    self?.downloadIndicator.startAnimation(nil)
+                    
+                    self?.downloadIndicator.isHidden = false
+                    self?.downloadButton.isHidden = true
+                    
+                    if progress < 0 {
+                        self?.downloadIndicator.isIndeterminate = true
+                    } else {
+                        self?.downloadIndicator.isIndeterminate = false
+                        self?.downloadIndicator.doubleValue = progress
+                    }
+                case .paused, .cancelled, .none, .failed:
+                    self?.resetDownloadButton()
+                    self?.downloadIndicator.isHidden = true
+                    self?.downloadButton.isHidden = false
+                case .finished:
+                    self?.downloadButton.isHidden = false
+                    self?.downloadIndicator.isHidden = true
+                    self?.downloadButton.image = #imageLiteral(resourceName: "trash")
+                    self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload(_:))
+                }
+            }).addDisposableTo(self.disposeBag)
+        } else {
+            downloadIndicator.isHidden = true
+            downloadButton.isHidden = false
+            resetDownloadButton()
+        }
         
-        viewModel.rxActiveDownloads.map({ $0.count > 0 }).subscribe(onNext: { [weak self] hasAnyDownload in
-            if !hasAnyDownload {
-                self?.resetDownloadButton()
-            }
-        }).addDisposableTo(self.disposeBag)
+//        let rxHideDownloadButton = rxActiveDownload.map({ $0?.status == .downloading })
         
-        let rxHideDownloadButton = rxActiveDownload.map({ $0?.status == .downloading })
+//        rxHideDownloadButton.observeOn(MainScheduler.instance).bind(to: downloadButton.rx.isHidden).addDisposableTo(self.disposeBag)
+//        rxHideDownloadButton.observeOn(MainScheduler.instance).map({ !$0 }).bind(to: downloadIndicator.rx.isHidden).addDisposableTo(self.disposeBag)
         
-        rxHideDownloadButton.observeOn(MainScheduler.instance).bind(to: downloadButton.rx.isHidden).addDisposableTo(self.disposeBag)
-        rxHideDownloadButton.observeOn(MainScheduler.instance).map({ !$0 }).bind(to: downloadIndicator.rx.isHidden).addDisposableTo(self.disposeBag)
-        
-        rxActiveDownload.subscribe(onNext: { [weak self] download in
-            guard let download = download else {
-                self?.downloadIndicator.doubleValue = 0
-                return
-            }
-            
-            switch download.status {
-            case .downloading:
-                self?.downloadIndicator.doubleValue = download.progress
-            case .completed:
-                self?.downloadButton.image = #imageLiteral(resourceName: "trash")
-                self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload(_:))
-            default:
-                self?.resetDownloadButton()
-            }
-        }).addDisposableTo(self.disposeBag)
+//        rxActiveDownload.subscribe(onNext: { [weak self] download in
+//            guard let download = download else {
+//                self?.downloadIndicator.doubleValue = 0
+//                return
+//            }
+//            
+//            switch download.status {
+//            case .downloading:
+//                self?.downloadIndicator.doubleValue = download.progress
+//            case .completed:
+//                self?.downloadButton.image = #imageLiteral(resourceName: "trash")
+//                self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload(_:))
+//            default:
+//                self?.resetDownloadButton()
+//            }
+//        }).addDisposableTo(self.disposeBag)
     }
     
     private func resetDownloadButton() {
@@ -173,6 +197,11 @@ class SessionActionsViewController: NSViewController {
     }
     
     @IBAction func download(_ sender: NSView?) {
+        self.downloadButton.isHidden = true
+        self.downloadIndicator.isIndeterminate = true
+        self.downloadIndicator.startAnimation(nil)
+        self.downloadIndicator.isHidden = false
+        
         delegate?.sessionActionsDidSelectDownload(sender)
     }
     

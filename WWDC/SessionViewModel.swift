@@ -77,16 +77,8 @@ final class SessionViewModel: NSObject {
         return Observable.from(object: self.session).map({ SessionViewModel.webUrl(for: $0) })
     }()
     
-    lazy var rxActiveDownloads: Observable<Results<Download>> = {
-        let query = self.session.realm!.objects(Download.self).filter("rawStatus != %@ AND sessionIdentifier == %@", DownloadStatus.none.rawValue, self.session.identifier)
-        
-        return Observable.collection(from: query)
-    }()
-    
     lazy var rxIsDownloaded: Observable<Bool> = {
-        let query = self.session.realm!.objects(Download.self).filter("rawStatus == %@ AND sessionIdentifier == %@", DownloadStatus.completed.rawValue, self.session.identifier)
-        
-        return Observable.collection(from: query).map({ $0.count > 0 })
+        return Observable.from(object: self.session).map({ $0.isDownloaded })
     }()
     
     lazy var rxIsFavorite: Observable<Bool> = {

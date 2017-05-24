@@ -21,7 +21,6 @@ final class AppCoordinator {
     
     var storage: Storage
     var syncEngine: SyncEngine
-    var downloadManager: DownloadManager
     
     var windowController: MainWindowController
     var tabController: WWDCTabViewController<MainWindowTab>
@@ -59,11 +58,11 @@ final class AppCoordinator {
             self.storage = try Storage(realmConfig)
             
             self.syncEngine = SyncEngine(storage: storage, client: client)
-            
-            self.downloadManager = DownloadManager(storage)
         } catch {
             fatalError("Realm initialization error: \(error)")
         }
+        
+        DownloadManager.shared.start(with: storage)
         
         self.tabController = WWDCTabViewController()
         

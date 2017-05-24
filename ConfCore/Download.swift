@@ -9,7 +9,8 @@
 import Cocoa
 import RealmSwift
 
-public enum DownloadStatus: String {
+@available(*, deprecated: 1.0.0, message: "Provided for legacy support only, do not use this!")
+enum DownloadStatus: String {
     case none
     case downloading
     case paused
@@ -17,7 +18,7 @@ public enum DownloadStatus: String {
     case completed
 }
 
-/// Defines a download for a session's asset
+@available(*, deprecated: 1.0.0, message: "Provided for legacy support only, do not use this!")
 public class Download: Object {
     
     /// Unique identifier
@@ -36,7 +37,7 @@ public class Download: Object {
     internal dynamic var rawStatus: String = DownloadStatus.none.rawValue
     
     /// The status of the download
-    public var status: DownloadStatus {
+    var status: DownloadStatus {
         get {
             return DownloadStatus(rawValue: rawStatus) ?? .none
         }
@@ -44,9 +45,6 @@ public class Download: Object {
             rawStatus = newValue.rawValue
         }
     }
-    
-    /// The asset this download is associated with
-    public let asset = LinkingObjects(fromType: SessionAsset.self, property: "downloads")
     
     public override class func primaryKey() -> String? {
         return "identifier"

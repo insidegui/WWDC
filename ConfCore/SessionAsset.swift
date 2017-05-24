@@ -71,9 +71,6 @@ public class SessionAsset: Object {
     /// The session this asset belongs to
     public let session = LinkingObjects(fromType: Session.self, property: "assets")
     
-    /// The downloads for this asset
-    public let downloads = List<Download>()
-    
     public override class func primaryKey() -> String? {
         return "identifier"
     }
