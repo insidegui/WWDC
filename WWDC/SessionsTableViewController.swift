@@ -117,6 +117,10 @@ class SessionsTableViewController: NSViewController {
         }
     }
     
+    lazy var searchController: SearchFiltersViewController = {
+        return SearchFiltersViewController.loadFromStoryboard()
+    }()
+    
     lazy var tableView: WWDCTableView = {
         let v = WWDCTableView()
         
@@ -144,7 +148,7 @@ class SessionsTableViewController: NSViewController {
         v.documentView = self.tableView
         v.hasVerticalScroller = true
         v.hasHorizontalScroller = false
-        v.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        v.translatesAutoresizingMaskIntoConstraints = false
         
         return v
     }()
@@ -152,14 +156,27 @@ class SessionsTableViewController: NSViewController {
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.blue.cgColor
-        
-        scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
+        view.layer?.backgroundColor = NSColor.darkWindowBackground.cgColor
         
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
         
+        scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
+        
         view.addSubview(scrollView)
+        view.addSubview(searchController.view)
+        
+        searchController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        scrollView.topAnchor.constraint(equalTo: searchController.view.bottomAnchor).isActive = true
+        
+        searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        searchController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     }
     
     override func viewDidLoad() {

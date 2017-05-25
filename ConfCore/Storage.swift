@@ -385,4 +385,8 @@ public final class Storage {
         }
     }
     
+    public var allEvents: [Event] {
+        return realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).toArray()
+    }
+    
 }

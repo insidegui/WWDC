@@ -3,6 +3,8 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -625,5 +627,167 @@
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
         </scene>
+        <!--Search Filters View Controller-->
+        <scene sceneID="FJ9-3f-Onc">
+            <objects>
+                <viewController storyboardIdentifier="SearchFiltersViewController" id="QVl-wd-WlW" customClass="SearchFiltersViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" wantsLayer="YES" id="hX1-jY-chB">
+                        <rect key="frame" x="0.0" y="0.0" width="343" height="150"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NlN-Z6-drQ">
+                                <rect key="frame" x="0.0" y="0.0" width="343" height="150"/>
+                                <subviews>
+                                    <stackView distribution="fillProportionally" orientation="horizontal" alignment="bottom" spacing="12" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qTs-9y-MbZ">
+                                        <rect key="frame" x="12" y="116" width="312.5" height="22"/>
+                                        <subviews>
+                                            <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U2p-0d-s5K">
+                                                <rect key="frame" x="-6" y="-7" width="91" height="32"/>
+                                                <buttonCell key="cell" type="push" title="Filter" bezelStyle="rounded" image="filter" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2aA-6Y-5tJ">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="system"/>
+                                                </buttonCell>
+                                            </button>
+                                            <searchField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-Ig-nku">
+                                                <rect key="frame" x="91" y="0.0" width="221.5" height="22"/>
+                                                <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="mC0-Jx-M3e">
+                                                    <font key="font" metaFont="system"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </searchFieldCell>
+                                            </searchField>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jW0-0M-Xya">
+                                        <rect key="frame" x="9" y="87" width="325" height="22"/>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="JF0-nF-AYP" id="wIo-Pd-ApE">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" id="l2w-hX-oZz">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="JF0-nF-AYP"/>
+                                                    <menuItem title="Item 2" id="fLe-Lm-VkY"/>
+                                                    <menuItem title="Item 3" id="4Ub-Ia-aCL"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="eventsPopUpAction:" target="QVl-wd-WlW" id="NpK-5c-Afm"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mft-xX-6dt">
+                                        <rect key="frame" x="9" y="61" width="325" height="22"/>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Hl8-Jf-3YQ" id="lKh-OJ-Ma5">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" id="Q7H-rU-Yd4">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="Hl8-Jf-3YQ"/>
+                                                    <menuItem title="Item 2" id="P55-ax-0Un"/>
+                                                    <menuItem title="Item 3" id="oVe-iG-UeB"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="focusesPopUpAction:" target="QVl-wd-WlW" id="gon-g6-flH"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d8i-uR-hrT">
+                                        <rect key="frame" x="9" y="35" width="325" height="22"/>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="aWW-Dt-aEc" id="e63-aO-rTw">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" id="U9w-bV-6BF">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="aWW-Dt-aEc"/>
+                                                    <menuItem title="Item 2" id="6An-PH-4CB"/>
+                                                    <menuItem title="Item 3" id="xQM-LU-uBn"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="tracksPopUpAction:" target="QVl-wd-WlW" id="vqI-ZI-Q95"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Teg-LY-Sf3">
+                                        <rect key="frame" x="10" y="10" width="323" height="20"/>
+                                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectAny" id="0Zl-mA-eiw">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <segments>
+                                                <segment label="Favorites"/>
+                                                <segment label="Downloaded" selected="YES" tag="1"/>
+                                                <segment label="Watched"/>
+                                            </segments>
+                                        </segmentedCell>
+                                        <connections>
+                                            <action selector="bottomSegmentedControlAction:" target="QVl-wd-WlW" id="Bq2-ec-1Tc"/>
+                                        </connections>
+                                    </segmentedControl>
+                                </subviews>
+                                <edgeInsets key="edgeInsets" left="12" right="12" top="12" bottom="12"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="d8i-uR-hrT" secondAttribute="trailing" constant="12" id="AZu-e1-t2n"/>
+                                    <constraint firstAttribute="trailing" secondItem="Mft-xX-6dt" secondAttribute="trailing" constant="12" id="Fof-rP-QDA"/>
+                                    <constraint firstAttribute="trailing" secondItem="jW0-0M-Xya" secondAttribute="trailing" constant="12" id="U6f-5i-CHp"/>
+                                    <constraint firstAttribute="trailing" secondItem="Teg-LY-Sf3" secondAttribute="trailing" constant="12" id="Z7a-Xt-05t"/>
+                                </constraints>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="NlN-Z6-drQ" firstAttribute="leading" secondItem="hX1-jY-chB" secondAttribute="leading" id="HXL-hQ-fkT"/>
+                            <constraint firstAttribute="bottom" secondItem="NlN-Z6-drQ" secondAttribute="bottom" id="KJx-q5-QJr"/>
+                            <constraint firstItem="NlN-Z6-drQ" firstAttribute="top" secondItem="hX1-jY-chB" secondAttribute="top" id="QqC-f2-PP2"/>
+                            <constraint firstAttribute="trailing" secondItem="NlN-Z6-drQ" secondAttribute="trailing" id="TeX-x1-fms"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="bottomSegmentedControl" destination="Teg-LY-Sf3" id="Wfg-57-cb2"/>
+                        <outlet property="eventsPopUp" destination="jW0-0M-Xya" id="802-ek-XkL"/>
+                        <outlet property="focusesPopUp" destination="Mft-xX-6dt" id="Ekq-uQ-Mgl"/>
+                        <outlet property="tracksPopUp" destination="d8i-uR-hrT" id="dyo-n0-cYV"/>
+                    </connections>
+                </viewController>
+                <customObject id="EQH-Em-zAw" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="97.5" y="225"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="WPh-zA-caj">
+            <objects>
+                <viewController id="tzZ-VD-ZMT" sceneMemberID="viewController">
+                    <view key="view" id="kET-dd-gtu">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="MMc-L9-auU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="527" y="229"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="filter" width="14" height="10"/>
+    </resources>
 </document>

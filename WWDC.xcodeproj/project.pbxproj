@@ -108,6 +108,8 @@
 		DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F387F1EAC15B4002D8C00 /* RxNil.swift */; };
 		DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38871EAC2275002D8C00 /* PathUtil.swift */; };
 		DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */; };
+		DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */; };
+		DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCA1ED77A4800CADE86 /* FilterType.swift */; };
 		DD9564211ED2792300051D07 /* app.icns in Resources */ = {isa = PBXBuildFile; fileRef = DD9564201ED2792300051D07 /* app.icns */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
@@ -403,6 +405,8 @@
 		DD7F387F1EAC15B4002D8C00 /* RxNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxNil.swift; sourceTree = "<group>"; };
 		DD7F38871EAC2275002D8C00 /* PathUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathUtil.swift; sourceTree = "<group>"; };
 		DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadCenter.swift; sourceTree = "<group>"; };
+		DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFiltersViewController.swift; sourceTree = "<group>"; };
+		DD90CDCA1ED77A4800CADE86 /* FilterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 		DD9564201ED2792300051D07 /* app.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = app.icns; path = Design/app.icns; sourceTree = SOURCE_ROOT; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
@@ -701,6 +705,7 @@
 		DD36A4C11E478CFC00B2EA88 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				DD90CDC91ED77A4000CADE86 /* Search */,
 				DDB28F921EAD48D70077703F /* UserActivityRepresentable.swift */,
 				DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */,
 				DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */,
@@ -869,6 +874,7 @@
 		DD7F38601EABD66D002D8C00 /* Sessions */ = {
 			isa = PBXGroup;
 			children = (
+				DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */,
 				DD36A4B11E478C6A00B2EA88 /* SessionsSplitViewController.swift */,
 				DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */,
 				DDEA85F81EB52AA6002AE0EB /* Playback */,
@@ -888,6 +894,14 @@
 				DDDAA40B1EC798B600DF9D02 /* Preferences.swift */,
 			);
 			name = Util;
+			sourceTree = "<group>";
+		};
+		DD90CDC91ED77A4000CADE86 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				DD90CDCA1ED77A4800CADE86 /* FilterType.swift */,
+			);
+			name = Search;
 			sourceTree = "<group>";
 		};
 		DDAE7C521E5BC6B000CEA205 /* Networking */ = {
@@ -1578,6 +1592,7 @@
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
 				DDB3529A1EC8AB2800254815 /* WWDCImageView.swift in Sources */,
 				DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */,
+				DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */,
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
 				DD0159D31ED0D3AF00F980F1 /* AccountPreferencesViewController.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
@@ -1625,6 +1640,7 @@
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
 				DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */,
 				DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */,
+				DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */,
 				DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -196,6 +196,17 @@ final class AppCoordinator {
         liveObserver.start()
         
         restoreListStatesIfNeeded()
+        
+        setupSearch()
+    }
+    
+    private func setupSearch() {
+        let scheduleSearchController = scheduleController.listViewController.searchController
+        
+        let eventOptions = storage.allEvents.map({ FilterOption(title: $0.name, value: $0.identifier) })
+        let eventFilter = FilterType(isSubquery: false, collectionKey: "", modelKey: "event", options: eventOptions, selectedOptions: [], emptyTitle: "All Events")
+        
+        scheduleSearchController.filters = [eventFilter]
     }
     
     @IBAction func refresh(_ sender: Any?) {
