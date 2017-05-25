@@ -79,14 +79,12 @@ extension CMSUserProfile: CMSCloudKitRepresentable {
             avatarImage = NSImage(contentsOf: avatar.fileURL)
         }
         
-        guard let isAdmin = record[.isAdmin] as? Int else {
-            throw CMSCloudKitError.missingKey(CMSUserProfileKey.isAdmin.rawValue)
-        }
+        let adminFlag = (record[.isAdmin] as? Int == 1)
         
         self.originatingRecord = record
         self.identifier = record.recordID.recordName
         self.name = name
-        self.isAdmin = (isAdmin == 1)
+        self.isAdmin = adminFlag
         self.avatarFileURL = avatarFileURL
         self.avatar = avatarImage
     }
