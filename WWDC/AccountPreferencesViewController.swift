@@ -80,6 +80,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
         f.maximumNumberOfLines = 5
         f.translatesAutoresizingMaskIntoConstraints = false
         f.alignment = .center
+        f.isSelectable = false
         
         return f
     }()
@@ -89,6 +90,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
         
         let f = WWDCTextField(wrappingLabelWithString: help)
         
+        f.isSelectable = false
         f.font = NSFont.systemFont(ofSize: 14, weight: NSFontWeightMedium)
         f.textColor = .prefsPrimaryText
         f.cell?.backgroundStyle = .dark
@@ -100,19 +102,18 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
     }()
     
     private lazy var errorLabel: NSTextField = {
-        let help = "This feature requires your macOS account to have an iCloud account. Please go to System Preferences and log in to your iCloud account."
+        let help = "This feature requires your macOS account to have an iCloud account.\nPlease go to System Preferences and log in to your iCloud account."
         
         let f = NSTextField(wrappingLabelWithString: help)
         
         f.font = NSFont.systemFont(ofSize: 14, weight: NSFontWeightRegular)
         f.textColor = .errorText
         f.cell?.backgroundStyle = .dark
-        f.isSelectable = true
-        f.lineBreakMode = .byWordWrapping
-        f.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
-        f.allowsDefaultTighteningForTruncation = true
+        f.maximumNumberOfLines = 5
         f.translatesAutoresizingMaskIntoConstraints = false
+        f.alignment = .center
         f.isHidden = true
+        f.isSelectable = false
         
         return f
     }()
@@ -130,6 +131,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
         view.addSubview(nameLabel)
         view.addSubview(avatarImageView)
         view.addSubview(infoLabel)
+        view.addSubview(errorLabel)
         view.addSubview(permissionLabel)
         view.addSubview(completeButton)
         
@@ -141,6 +143,9 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
         
         infoLabel.centerXAnchor.constraint(equalTo: nameLabel.centerXAnchor).isActive = true
         infoLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 40).isActive = true
+        
+        errorLabel.centerXAnchor.constraint(equalTo: nameLabel.centerXAnchor).isActive = true
+        errorLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 40).isActive = true
         
         permissionLabel.centerXAnchor.constraint(equalTo: infoLabel.centerXAnchor).isActive = true
         permissionLabel.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 12).isActive = true

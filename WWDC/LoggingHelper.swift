@@ -20,7 +20,7 @@ final class LoggingHelper {
         
         Fabric.with([Crashlytics.self])
         
-        observeCommunityCenterErrors()
+        observeCommunityCenterNotifications()
     }
     
     static func registerCloudKitUserIdentifier(_ identifier: String) {
@@ -41,7 +41,7 @@ final class LoggingHelper {
         Answers.logCustomEvent(withName: name, customAttributes: info)
     }
     
-    static func observeCommunityCenterErrors() {
+    static func observeCommunityCenterNotifications() {
         NotificationCenter.default.addObserver(forName: .CMSErrorOccurred, object: nil, queue: OperationQueue.main) { note in
             let error: Error
             
@@ -52,6 +52,12 @@ final class LoggingHelper {
             }
             
             LoggingHelper.registerError(error, info: note.userInfo as? [String: Any])
+        }
+        
+        NotificationCenter.default.addObserver(forName: .CMSUserIdentifierDidBecomeAvailable, object: nil, queue: OperationQueue.main) { note in
+            guard let identifier = note.object as? String else { return }
+            
+            LoggingHelper.registerCloudKitUserIdentifier(identifier)
         }
     }
     
