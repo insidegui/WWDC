@@ -7,8 +7,11 @@
 //
 
 import Cocoa
+
 import Fabric
 import Crashlytics
+
+import CommunitySupport
 
 final class LoggingHelper {
     
@@ -16,6 +19,8 @@ final class LoggingHelper {
         guard !Preferences.shared.userOptedOutOfCrashReporting else { return }
         
         Fabric.with([Crashlytics.self])
+        
+        observeCommunityCenterErrors()
     }
     
     static func registerCloudKitUserIdentifier(_ identifier: String) {
@@ -24,10 +29,30 @@ final class LoggingHelper {
         Crashlytics.sharedInstance().setUserIdentifier(identifier)
     }
     
-    static func registerError(_ error: Error) {
+    static func registerError(_ error: Error, info: [String: Any]? = nil) {
         guard !Preferences.shared.userOptedOutOfCrashReporting else { return }
         
-        Crashlytics.sharedInstance().recordError(error)
+        Crashlytics.sharedInstance().recordError(error, withAdditionalUserInfo: info)
+    }
+    
+    static func registerEvent(with name: String, info: [String: Any] = [:]) {
+        guard !Preferences.shared.userOptedOutOfCrashReporting else { return }
+        
+        Answers.logCustomEvent(withName: name, customAttributes: info)
+    }
+    
+    static func observeCommunityCenterErrors() {
+        NotificationCenter.default.addObserver(forName: .CMSErrorOccurred, object: nil, queue: OperationQueue.main) { note in
+            let error: Error
+            
+            if let noteError = note.object as? Error {
+                error = noteError
+            } else {
+                error = NSError(domain: "CMSCommunityCenter", code: -1, userInfo: note.userInfo)
+            }
+            
+            LoggingHelper.registerError(error, info: note.userInfo as? [String: Any])
+        }
     }
     
 }

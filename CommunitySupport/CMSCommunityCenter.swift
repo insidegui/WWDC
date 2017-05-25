@@ -21,7 +21,9 @@ public enum CMSCloudAccountStatus {
 }
 
 extension Notification.Name {
-    static let CMSUserProfileDidChange = Notification.Name("CMSUserProfileDidChangeNotificationName")
+    public static let CMSDidFindUserIdentifier = Notification.Name("CMSDidFindUserIdentifierNotificationName")
+    public static let CMSErrorOccurred = Notification.Name("CMSErrorOccurredNotificationName")
+    public static let CMSUserProfileDidChange = Notification.Name("CMSUserProfileDidChangeNotificationName")
 }
 
 public final class CMSCommunityCenter: NSObject {
@@ -82,45 +84,6 @@ public final class CMSCommunityCenter: NSObject {
         }
     }
     
-    public func profileForUser(withNickname nickname: String, completion: @escaping CMSUserCompletionBlock) {
-        let predicate = NSPredicate(format: "nickname == %@", nickname)
-        let query = CKQuery(recordType: CMSUserProfile.recordType, predicate: predicate)
-        
-        let operation = CKQueryOperation(query: query)
-        
-        var records: [CKRecord] = []
-        
-        operation.recordFetchedBlock = { record in
-            records.append(record)
-        }
-        
-        operation.queryCompletionBlock = { _, error in
-            let retryBlock = { self.profileForUser(withNickname: nickname, completion: completion) }
-            
-            if let error = retryCloudKitOperationIfPossible(with: error, block: retryBlock) {
-                let effectiveError = CMSCloudKitError.invalidData(error.localizedDescription)
-                DispatchQueue.main.async { completion(.error(effectiveError)) }
-                return
-            }
-            
-            guard let record = records.first else {
-                let error = CMSCloudKitError.notFound
-                DispatchQueue.main.async { completion(.error(error)) }
-                return
-            }
-            
-            do {
-                let profile = try CMSUserProfile(record: record)
-                
-                DispatchQueue.main.async { completion(.success(profile)) }
-            } catch {
-                DispatchQueue.main.async { completion(.error(error)) }
-            }
-        }
-        
-        database.add(operation)
-    }
-    
     public typealias CMSUserCompletionBlock = (_ result: CMSResult<CMSUserProfile>) -> Void
     
     public func fetchCurrentUserProfile(_ completion: @escaping CMSUserCompletionBlock) {
@@ -128,22 +91,30 @@ public final class CMSCommunityCenter: NSObject {
             
         container.fetchUserRecordID { userRecordID, error in
             if let error = retryCloudKitOperationIfPossible(with: error, block: retryBlock) {
-                DispatchQueue.main.async { completion(.error(error)) }
+                DispatchQueue.main.async {
+                    self.sendErrorNotification(with: error, info: "Trying to get user record ID")
+                    completion(.error(error))
+                }
                 return
             }
             
             guard let userRecordID = userRecordID else {
-                DispatchQueue.main.async { completion(.error(CMSCloudKitError.invalidData("No record ID found"))) }
+                DispatchQueue.main.async {
+                    self.sendErrorNotification(with: nil, info: "Nil user record ID")
+                    completion(.error(CMSCloudKitError.invalidData("No record ID found")))
+                }
                 return
             }
             
             self.database.fetch(withRecordID: userRecordID) { userRecord, error in
                 if let error = retryCloudKitOperationIfPossible(with: error, block: retryBlock) {
+                    self.sendErrorNotification(with: error, info: "Trying to get the user record itself")
                     DispatchQueue.main.async { completion(.error(error)) }
                     return
                 }
                 
                 guard let userRecord = userRecord else {
+                    self.sendErrorNotification(with: nil, info: "Nil user record")
                     DispatchQueue.main.async { completion(.error(CMSCloudKitError.invalidData("No user record"))) }
                     return
                 }
@@ -153,6 +124,7 @@ public final class CMSCommunityCenter: NSObject {
                     
                     DispatchQueue.main.async { completion(.success(model)) }
                 } catch {
+                    self.sendErrorNotification(with: error, info: "Parsing user profile")
                     DispatchQueue.main.async { completion(.error(error)) }
                 }
             }
@@ -162,32 +134,46 @@ public final class CMSCommunityCenter: NSObject {
     public func promptAndUpdateUserProfileWithDiscoveredInfo(with profile: CMSUserProfile, completion: @escaping (CMSUserProfile?, Error?) -> Void) {
         container.requestApplicationPermission(.userDiscoverability) { status, error in
             if let error = error {
-                DispatchQueue.main.async { completion(nil, CMSCloudKitError.invalidData("Unable to request permission:\n\(error.localizedDescription)")) }
+                DispatchQueue.main.async {
+                    self.sendErrorNotification(with: error, info: "Unable to request user discoverability permission")
+                    completion(nil, CMSCloudKitError.invalidData("Unable to request permission:\n\(error.localizedDescription)"))
+                }
                 return
             }
             
             switch status {
             case .granted:
                 self.fetchUserInfo(for: profile, completion: completion)
-            default: break
+            default:
+                self.sendErrorNotification(with: nil, info: "User discoverability permission denied with status \(status)")
+                break
             }
         }
     }
     
     private func fetchUserInfo(for profile: CMSUserProfile, completion: @escaping (CMSUserProfile?, Error?) -> Void) {
         guard let record = profile.originatingRecord else {
-            DispatchQueue.main.async { completion(nil, CMSCloudKitError.invalidData("Invalid profile: no originating record")) }
+            DispatchQueue.main.async {
+                self.sendErrorNotification(with: nil, info: "Unable to fetch user info because the profile has no originating record")
+                completion(nil, CMSCloudKitError.invalidData("Invalid profile: no originating record"))
+            }
             return
         }
         
         container.discoverUserIdentity(withUserRecordID: record.recordID) { identity, error in
             guard let identity = identity, error == nil else {
-                DispatchQueue.main.async { completion(nil, CMSCloudKitError.invalidData("Unable to get user identity")) }
+                DispatchQueue.main.async {
+                    self.sendErrorNotification(with: error, info: "Unable to fetch user info because the identity is nil or an error occurred")
+                    completion(nil, CMSCloudKitError.invalidData("Unable to get user identity"))
+                }
                 return
             }
             
             guard let nameComponents = identity.nameComponents else {
-                DispatchQueue.main.async { completion(nil, CMSCloudKitError.invalidData("Unable to parse user name")) }
+                DispatchQueue.main.async {
+                    self.sendErrorNotification(with: nil, info: "Error getting name components for identity: no name components found")
+                    completion(nil, CMSCloudKitError.invalidData("Unable to parse user name"))
+                }
                 return
             }
             
@@ -205,12 +191,16 @@ public final class CMSCommunityCenter: NSObject {
             
             self.save(model: newProfile, progress: nil) { error in
                 if let error = error {
-                    DispatchQueue.main.async { completion(nil, CMSCloudKitError.invalidData("Unable to save profile: \(error.localizedDescription)")) }
+                    DispatchQueue.main.async {
+                        self.sendErrorNotification(with: error, info: "Unable to save profile")
+                        completion(nil, CMSCloudKitError.invalidData("Unable to save profile: \(error.localizedDescription)"))
+                    }
                 } else {
                     DispatchQueue.main.async { completion(newProfile, nil) }
                 }
             }
         } catch {
+            self.sendErrorNotification(with: error, info: "Unable to create profile from record")
             DispatchQueue.main.async { completion(nil, CMSCloudKitError.invalidData("Unable to save profile: \(error.localizedDescription)")) }
         }
     }
@@ -233,6 +223,7 @@ public final class CMSCommunityCenter: NSObject {
             let checkAccountStatus = {
                 self.container.accountStatus { status, error in
                     guard error == nil else {
+                        self.sendErrorNotification(with: error, info: "CKContainer.accountStatus")
                         slog("Error checking CloudKit account status: \(error?.localizedDescription ?? "Unknown")")
                         observer.onNext(.unavailable)
                         return
@@ -274,6 +265,10 @@ public final class CMSCommunityCenter: NSObject {
             
             return Disposables.create { NotificationCenter.default.removeObserver(profileNotificationObserver) }
         }
+    }
+    
+    private func sendErrorNotification(with error: Error?, info: String) {
+        NotificationCenter.default.post(name: .CMSErrorOccurred, object: error, userInfo: ["info": info])
     }
     
 }
