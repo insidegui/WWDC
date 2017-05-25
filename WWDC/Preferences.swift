@@ -73,4 +73,13 @@ final class Preferences {
         }
     }
     
+    var userOptedOutOfCrashReporting: Bool {
+        get {
+            return defaults.bool(forKey: #function)
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
+    
 }

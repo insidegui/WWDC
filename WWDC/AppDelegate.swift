@@ -18,6 +18,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        LoggingHelper.install()
+        
         NSApp.registerForRemoteNotifications(matching: [])
     }
     

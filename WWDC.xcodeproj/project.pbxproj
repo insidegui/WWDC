@@ -45,6 +45,9 @@
 		DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */; };
 		DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED601ED6577100624EAF /* Sparkle.framework */; };
 		DD4DED641ED6579900624EAF /* Sparkle.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */; };
+		DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED661ED6604300624EAF /* Fabric.framework */; };
+		DD4DED691ED6604300624EAF /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED671ED6604300624EAF /* Crashlytics.framework */; };
+		DD4DED6B1ED6605D00624EAF /* LoggingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */; };
 		DD54CD101E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */; };
 		DD54CD121E4AB95F000BF5F2 /* FocusesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD111E4AB95F000BF5F2 /* FocusesJSONAdapter.swift */; };
 		DD54CD141E4AC21F000BF5F2 /* SessionAssetsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD131E4AC21F000BF5F2 /* SessionAssetsAdapter.swift */; };
@@ -336,6 +339,9 @@
 		DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSToolbarItemViewer+Overrides.m"; sourceTree = "<group>"; };
 		DD4DED601ED6577100624EAF /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Carthage/Build/Mac/Sparkle.framework; sourceTree = "<group>"; };
 		DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Sparkle.framework.dSYM; path = Carthage/Build/Mac/Sparkle.framework.dSYM; sourceTree = "<group>"; };
+		DD4DED661ED6604300624EAF /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		DD4DED671ED6604300624EAF /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingHelper.swift; sourceTree = "<group>"; };
 		DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordsJSONAdapter.swift; sourceTree = "<group>"; };
 		DD54CD111E4AB95F000BF5F2 /* FocusesJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusesJSONAdapter.swift; sourceTree = "<group>"; };
 		DD54CD131E4AC21F000BF5F2 /* SessionAssetsAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionAssetsAdapter.swift; sourceTree = "<group>"; };
@@ -507,6 +513,7 @@
 			files = (
 				DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
 				DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */,
+				DD4DED691ED6604300624EAF /* Crashlytics.framework in Frameworks */,
 				DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */,
 				DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
@@ -516,6 +523,7 @@
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 				DD7F386C1EABF560002D8C00 /* IGListKit.framework in Frameworks */,
 				DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */,
+				DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -791,6 +799,8 @@
 		DD5F517E1E47DE7D0017F9EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD4DED661ED6604300624EAF /* Fabric.framework */,
+				DD4DED671ED6604300624EAF /* Crashlytics.framework */,
 				DD4DED601ED6577100624EAF /* Sparkle.framework */,
 				DDB28F961EAD4DDA0077703F /* PIPContainer.framework */,
 				DD7F386B1EABF560002D8C00 /* IGListKit.framework */,
@@ -962,6 +972,7 @@
 				DDB352831EC7C74C00254815 /* LiveObserver.swift */,
 				DD0159A61ECFE26200F980F1 /* DeepLink.swift */,
 				DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */,
+				DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1269,6 +1280,7 @@
 				DD36A4E41E478D7E00B2EA88 /* Embed Frameworks */,
 				DD5F516B1E47DCC40017F9EC /* Carthage: Copy Frameworks */,
 				DD5F516D1E47DDDF0017F9EC /* Carthage: Copy DSYMs */,
+				DD4DED651ED6602700624EAF /* Fabric */,
 			);
 			buildRules = (
 			);
@@ -1507,6 +1519,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		DD4DED651ED6602700624EAF /* Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Fabric;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -f \"./Crashlytics.sh\" ]; then\n./Crashlytics.sh\nfi";
+		};
 		DD5F516B1E47DCC40017F9EC /* Carthage: Copy Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1567,6 +1593,7 @@
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DDB352821EC7C55300254815 /* DateProvider.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
+				DD4DED6B1ED6605D00624EAF /* LoggingHelper.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* SessionsSplitViewController.swift in Sources */,
 				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
@@ -1870,6 +1897,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = WWDC/Info.plist;
@@ -1896,6 +1924,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = WWDC/Info.plist;
@@ -2071,6 +2100,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = WWDC/Info.plist;
@@ -2223,6 +2253,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = WWDC/Info.plist;

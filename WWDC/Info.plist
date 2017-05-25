@@ -39,6 +39,20 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>8</string>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>69b44b9b0e1f177a7fb1b6199e9a040897e9dfc0</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+		</array>
+	</dict>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSAppTransportSecurity</key>
@@ -52,11 +66,11 @@
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-    <key>SUEnableAutomaticChecks</key>
-    <true/>
-    <key>SUFeedURL</key>
-    <string>https://github.com/insidegui/WWDC/raw/master/Releases/appcast_v5.xml</string>
-    <key>SUScheduledCheckInterval</key>
-    <integer>86400</integer>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://github.com/insidegui/WWDC/raw/master/Releases/appcast_v5.xml</string>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
 </dict>
 </plist>
