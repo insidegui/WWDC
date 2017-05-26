@@ -110,6 +110,7 @@
 		DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */; };
 		DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */; };
 		DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCA1ED77A4800CADE86 /* FilterType.swift */; };
+		DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */; };
 		DD9564211ED2792300051D07 /* app.icns in Resources */ = {isa = PBXBuildFile; fileRef = DD9564201ED2792300051D07 /* app.icns */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
@@ -407,6 +408,7 @@
 		DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadCenter.swift; sourceTree = "<group>"; };
 		DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFiltersViewController.swift; sourceTree = "<group>"; };
 		DD90CDCA1ED77A4800CADE86 /* FilterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
+		DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
 		DD9564201ED2792300051D07 /* app.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = app.icns; path = Design/app.icns; sourceTree = SOURCE_ROOT; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
@@ -674,6 +676,7 @@
 		DD36A4BF1E478CF100B2EA88 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DD90CDCE1ED7A5F900CADE86 /* Search */,
 				DDCE7ECB1EA7A0E400C7A3CA /* Base */,
 				DD7F38601EABD66D002D8C00 /* Sessions */,
 				DD0159CD1ED0CD1D00F980F1 /* Preferences */,
@@ -874,7 +877,6 @@
 		DD7F38601EABD66D002D8C00 /* Sessions */ = {
 			isa = PBXGroup;
 			children = (
-				DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */,
 				DD36A4B11E478C6A00B2EA88 /* SessionsSplitViewController.swift */,
 				DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */,
 				DDEA85F81EB52AA6002AE0EB /* Playback */,
@@ -900,6 +902,15 @@
 			isa = PBXGroup;
 			children = (
 				DD90CDCA1ED77A4800CADE86 /* FilterType.swift */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		DD90CDCE1ED7A5F900CADE86 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */,
+				DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -1623,6 +1634,7 @@
 				DDB3529C1EC8AB5D00254815 /* WWDCLayer.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,
 				DD34A79B1EC3CD5900E0B575 /* Constants.swift in Sources */,
+				DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
 				DD0159FC1ED23F7700F980F1 /* RemoteEnvironment.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,

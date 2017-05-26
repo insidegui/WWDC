@@ -200,13 +200,14 @@ final class AppCoordinator {
         setupSearch()
     }
     
+    private lazy var searchCoordinator: SearchCoordinator = {
+        return SearchCoordinator(self.storage,
+                                 sessionsController: self.scheduleController.listViewController,
+                                 videosController: self.videosController.listViewController)
+    }()
+    
     private func setupSearch() {
-        let scheduleSearchController = scheduleController.listViewController.searchController
-        
-        let eventOptions = storage.allEvents.map({ FilterOption(title: $0.name, value: $0.identifier) })
-        let eventFilter = FilterType(isSubquery: false, collectionKey: "", modelKey: "event", options: eventOptions, selectedOptions: [], emptyTitle: "All Events")
-        
-        scheduleSearchController.filters = [eventFilter]
+        searchCoordinator.configureFilters()
     }
     
     @IBAction func refresh(_ sender: Any?) {

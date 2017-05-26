@@ -25,6 +25,12 @@ class SessionsTableViewController: NSViewController {
     
     let style: SessionsListStyle
     
+    var searchResults: Results<Session>? {
+        didSet {
+            updateWithSearchResults()
+        }
+    }
+    
     var tracks: Results<Track>? {
         didSet {
             updateVideosList()
@@ -115,6 +121,26 @@ class SessionsTableViewController: NSViewController {
             
             return [titleRow] + instanceRows
         }
+    }
+    
+    private func updateWithSearchResults() {
+        guard let results = searchResults else {
+            switch style {
+            case .schedule:
+                updateScheduleList()
+            case .videos:
+                updateVideosList()
+            }
+            return
+        }
+        
+        let sessionRows: [SessionRow] = results.sorted(by: Session.standardSort).flatMap { session in
+            guard let viewModel = SessionViewModel(session: session) else { return nil }
+            
+            return SessionRow(viewModel: viewModel)
+        }
+        
+        self.sessionRows = sessionRows
     }
     
     lazy var searchController: SearchFiltersViewController = {

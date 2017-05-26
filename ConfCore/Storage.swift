@@ -389,4 +389,12 @@ public final class Storage {
         return realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).toArray()
     }
     
+    public var allFocuses: [Focus] {
+        return realm.objects(Focus.self).sorted(byKeyPath: "name").toArray()
+    }
+    
+    public var allTracks: [Track] {
+        return realm.objects(Track.self).sorted(byKeyPath: "order").toArray()
+    }
+    
 }
