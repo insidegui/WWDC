@@ -44,7 +44,7 @@ final class SearchCoordinator {
     }
     
     func configureFilters() {
-        let textualFilter = TextualFilter(identifier: FilterIdentifier.text.rawValue, value: nil, modelKeys: ["title"])
+        let textualFilter = TextualFilter(identifier: FilterIdentifier.text.rawValue, value: nil)
 
         let labOption = FilterOption(title: "Labs", value: "Lab")
         let sessionOption = labOption.negated(with: "Sessions")
