@@ -90,7 +90,29 @@ class SessionsTableViewController: NSViewController {
         selectSession(with: identifier, scrollOnly: true)
     }
     
+    private var setupDone = false
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        performFirstUpdateIfNeeded()
+    }
+    
+    private func performFirstUpdateIfNeeded() {
+        guard !setupDone else { return }
+        setupDone = true
+        
+        switch style {
+        case .schedule:
+            updateScheduleList()
+        case .videos:
+            updateVideosList()
+        }
+    }
+    
     private func updateVideosList() {
+        guard view.window != nil else { return }
+        
         guard let tracks = tracks else { return }
         
         let rows: [SessionRow] = tracks.flatMap { track -> [SessionRow] in
@@ -110,6 +132,8 @@ class SessionsTableViewController: NSViewController {
     }
     
     private func updateScheduleList() {
+        guard view.window != nil else { return }
+        
         guard let sections = scheduleSections else { return }
         
         var shownTimeZone = false
