@@ -147,14 +147,6 @@ final class SessionViewModel: NSObject {
         }
         
         super.init()
-        
-        rxWebUrl.subscribe(onNext: { [weak self] url in
-            self?.webUrl = url
-        }).addDisposableTo(self.disposeBag)
-        
-        rxTitle.subscribe(onNext: { [weak self] title in
-            self?.title = title
-        }).addDisposableTo(self.disposeBag)
     }
     
     static func subtitle(from session: Session, at event: ConfCore.Event?) -> String {

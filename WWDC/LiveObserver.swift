@@ -133,6 +133,8 @@ private final class CloudKitLiveObserver: NSObject {
         self.storage = storage
         
         super.init()
+        
+        createSubscriptionIfNeeded()
     }
     
     func fetch() {
@@ -157,39 +159,38 @@ private final class CloudKitLiveObserver: NSObject {
         }
         
         database.add(operation)
-        
-        subscribeIfNeeded()
     }
     
-    private func subscribeIfNeeded() {
-        guard subscriptionID == nil else { return }
-        
+    private func createSubscriptionIfNeeded() {
+        CloudKitHelper.subscriptionExists(with: specialLiveEventsSubscriptionID, in: database) { [unowned self] exists in
+            if !exists {
+                self.doCreateSubscription()
+            }
+        }
+    }
+    
+    private func doCreateSubscription() {
         let options: CKQuerySubscriptionOptions = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
         let subscription = CKQuerySubscription(recordType: SessionAsset.recordType,
                                                predicate: NSPredicate(value: true),
+                                               subscriptionID: self.specialLiveEventsSubscriptionID,
                                                options: options)
         
-        database.save(subscription) { [unowned self] savedSubscription, error in
-            self.subscriptionID = savedSubscription?.subscriptionID
+        database.save(subscription) { _, error in
+            if let error = error {
+                NSLog("[LiveObserver] Error creating subscriptions: \(error)")
+                return
+            }
         }
     }
     
-    private let subscriptionDefaultsKey = "specialEventsLiveObserverCKSubscriptionID"
-    
-    private var subscriptionID: String? {
-        get {
-            return UserDefaults.standard.object(forKey: subscriptionDefaultsKey) as? String
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: subscriptionDefaultsKey)
-        }
-    }
+    private let specialLiveEventsSubscriptionID: String = "SPECIAL-LIVE-EVENTS"
     
     func processSubscriptionNotification(with userInfo: [String : Any]) -> Bool {
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
         
         // check if the remote notification is for us, if not, tell the caller that we haven't handled it
-        guard notification.subscriptionID == self.subscriptionID else { return false }
+        guard notification.subscriptionID == self.specialLiveEventsSubscriptionID else { return false }
         
         // notification for special live events, just fetch everything again
         fetch()

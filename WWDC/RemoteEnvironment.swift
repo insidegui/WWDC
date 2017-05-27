@@ -56,25 +56,27 @@ final class RemoteEnvironment: NSObject {
         database.add(operation)
     }
     
-    private var subscriptionID: String? {
-        get {
-            return UserDefaults.standard.object(forKey: Constants.subscriptionDefaultsName) as? String
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: Constants.subscriptionDefaultsName)
+    private let environmentSubscriptionID = "REMOTE-ENVIRONMENT"
+    
+    private func createSubscriptionIfNeeded() {
+        CloudKitHelper.subscriptionExists(with: environmentSubscriptionID, in: database) { [unowned self] exists in
+            if !exists {
+                self.doCreateSubscription()
+            }
         }
     }
     
-    private func createSubscriptionIfNeeded() {
-        guard subscriptionID == nil else { return }
-        
+    private func doCreateSubscription() {
         let options: CKQuerySubscriptionOptions = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
         let subscription = CKQuerySubscription(recordType: Constants.environmentRecordType,
                                                predicate: NSPredicate(value: true),
+                                               subscriptionID: environmentSubscriptionID,
                                                options: options)
         
-        database.save(subscription) { [unowned self] savedSubscription, error in
-            self.subscriptionID = savedSubscription?.subscriptionID
+        database.save(subscription) { _, error in
+            if let error = error {
+                NSLog("[RemoteEnvironment] Error creating subscription: \(error)")
+            }
         }
     }
     
@@ -82,7 +84,7 @@ final class RemoteEnvironment: NSObject {
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
         
         // check if the remote notification is for us, if not, tell the caller that we haven't handled it
-        guard notification.subscriptionID == self.subscriptionID else { return false }
+        guard notification.subscriptionID == self.environmentSubscriptionID else { return false }
         
         // notification for environment change
         fetch()
