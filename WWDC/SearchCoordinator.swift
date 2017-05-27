@@ -10,6 +10,7 @@ import Cocoa
 import ConfCore
 
 enum FilterIdentifier: String {
+    case text
     case event
     case focus
     case track
@@ -43,6 +44,8 @@ final class SearchCoordinator {
     }
     
     func configureFilters() {
+        let textualFilter = TextualFilter(identifier: FilterIdentifier.text.rawValue, value: nil, modelKeys: ["title"])
+        
         let eventOptions = storage.allEvents.map({ FilterOption(title: $0.name, value: $0.identifier) })
         let eventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event.rawValue,
                                                isSubquery: false,
@@ -90,6 +93,7 @@ final class SearchCoordinator {
                                            customPredicate: unwatchedPredicate)
         
         scheduleSearchController.filters = [
+            textualFilter,
             eventFilter,
             focusFilter,
             trackFilter,

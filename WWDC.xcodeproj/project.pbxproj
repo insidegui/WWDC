@@ -165,6 +165,7 @@
 		DDED75571ED3C1BF000BA817 /* PUIScrimContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */; };
 		DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */; };
 		DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */; };
+		DDEDFCF31ED92F2A002477C8 /* TextualFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCF21ED92F2A002477C8 /* TextualFilter.swift */; };
 		DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */; };
 		DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */; };
 		DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */; };
@@ -466,6 +467,7 @@
 		DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIScrimContainerView.swift; sourceTree = "<group>"; };
 		DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleChoiceFilter.swift; sourceTree = "<group>"; };
 		DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleFilter.swift; sourceTree = "<group>"; };
+		DDEDFCF21ED92F2A002477C8 /* TextualFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextualFilter.swift; sourceTree = "<group>"; };
 		DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableRowView.swift; sourceTree = "<group>"; };
 		DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRow.swift; sourceTree = "<group>"; };
 		DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleTableCellView.swift; sourceTree = "<group>"; };
@@ -908,6 +910,7 @@
 				DD90CDCA1ED77A4800CADE86 /* FilterType.swift */,
 				DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */,
 				DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */,
+				DDEDFCF21ED92F2A002477C8 /* TextualFilter.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -1633,6 +1636,7 @@
 				DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
 				DD0159D11ED0CEF500F980F1 /* PreferencesCoordinator.swift in Sources */,
+				DDEDFCF31ED92F2A002477C8 /* TextualFilter.swift in Sources */,
 				DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,

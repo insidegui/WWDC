@@ -74,7 +74,9 @@ final class SearchFiltersViewController: NSViewController {
     }
     
     @IBAction func searchFieldAction(_ sender: Any) {
+        guard let textIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.text.rawValue }) else { return }
         
+        updateTextualFilter(at: textIndex, with: searchField.stringValue)
     }
     
     @IBAction func filterButtonAction(_ sender: Any) {
@@ -121,6 +123,19 @@ final class SearchFiltersViewController: NSViewController {
         guard var filter = effectiveFilters[filterIndex] as? ToggleFilter else { return }
         
         filter.isOn = state
+        
+        var updatedFilters = effectiveFilters
+        updatedFilters[filterIndex] = filter
+        
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
+        
+        effectiveFilters = updatedFilters
+    }
+    
+    private func updateTextualFilter(at filterIndex: Int, with text: String) {
+        guard var filter = effectiveFilters[filterIndex] as? TextualFilter else { return }
+        
+        filter.value = text
         
         var updatedFilters = effectiveFilters
         updatedFilters[filterIndex] = filter
