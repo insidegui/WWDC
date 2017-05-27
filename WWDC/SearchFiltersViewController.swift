@@ -42,19 +42,19 @@ final class SearchFiltersViewController: NSViewController {
     weak var delegate: SearchFiltersViewControllerDelegate?
     
     @IBAction func eventsPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.index(where: { $0.modelKey == "eventIdentifier" }) else { return }
+        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == "event" }) else { return }
 
         updateFilter(at: filterIndex, with: eventsPopUp)
     }
     
     @IBAction func focusesPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.index(where: { $0.collectionKey == "focuses" && $0.modelKey == "name" }) else { return }
+        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == "focus" }) else { return }
         
         updateFilter(at: filterIndex, with: focusesPopUp)
     }
     
     @IBAction func tracksPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.index(where: { $0.modelKey == "trackName" }) else { return }
+        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == "track" }) else { return }
         
         updateFilter(at: filterIndex, with: tracksPopUp)
     }
@@ -63,36 +63,50 @@ final class SearchFiltersViewController: NSViewController {
     }
     
     @IBAction func searchFieldAction(_ sender: Any) {
+        
     }
     
     @IBAction func filterButtonAction(_ sender: Any) {
+        toggleFiltersHidden(!eventsPopUp.isHidden)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        toggleFiltersHidden(true)
+        
         updateUI()
+    }
+    
+    private func toggleFiltersHidden(_ hidden: Bool) {
+        eventsPopUp.isHidden = hidden
+        focusesPopUp.isHidden = hidden
+        tracksPopUp.isHidden = hidden
+        bottomSegmentedControl.isHidden = hidden
     }
     
     private func updateFilter(at filterIndex: Int, with popUp: NSPopUpButton) {
         guard let selectedItem = popUp.selectedItem else { return }
         guard let menu = popUp.menu else { return }
+        guard var filter = effectiveFilters[filterIndex] as? MultipleChoiceFilter else { return }
         
         selectedItem.state = (selectedItem.state == NSOffState) ? NSOnState : NSOffState
         
         let selected = menu.items.filter({ $0.state == NSOnState }).flatMap({ $0.representedObject as? FilterOption })
         
+        filter.selectedOptions = selected
+        
         var updatedFilters = effectiveFilters
-        updatedFilters[filterIndex].selectedOptions = selected
+        updatedFilters[filterIndex] = filter
         
         delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
         
-        popUp.title = updatedFilters[filterIndex].title
+        popUp.title = filter.title
         
         effectiveFilters = updatedFilters
     }
     
-    private func popUpButton(for filter: FilterType) -> NSPopUpButton? {
+    private func popUpButton(for filter: MultipleChoiceFilter) -> NSPopUpButton? {
         switch (filter.collectionKey, filter.modelKey) {
         case ("","eventIdentifier"):
             return eventsPopUp
@@ -107,7 +121,8 @@ final class SearchFiltersViewController: NSViewController {
     private func updateUI() {
         guard isViewLoaded else { return }
         
-        filters.forEach { filter in
+        let multipleChoiceFilters = filters.flatMap({ $0 as? MultipleChoiceFilter })
+        multipleChoiceFilters.forEach { filter in
             guard let popUp = popUpButton(for: filter) else { return }
             
             popUp.removeAllItems()

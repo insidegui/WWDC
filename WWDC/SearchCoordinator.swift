@@ -35,13 +35,13 @@ final class SearchCoordinator {
     
     func configureFilters() {
         let eventOptions = storage.allEvents.map({ FilterOption(title: $0.name, value: $0.identifier) })
-        let eventFilter = FilterType(isSubquery: false, collectionKey: "", modelKey: "eventIdentifier", options: eventOptions, selectedOptions: [], emptyTitle: "All Events")
+        let eventFilter = MultipleChoiceFilter(identifier: "event", isSubquery: false, collectionKey: "", modelKey: "eventIdentifier", options: eventOptions, selectedOptions: [], emptyTitle: "All Events")
         
         let focusOptions = storage.allFocuses.map({ FilterOption(title: $0.name, value: $0.name) })
-        let focusFilter = FilterType(isSubquery: true, collectionKey: "focuses", modelKey: "name", options: focusOptions, selectedOptions: [], emptyTitle: "All Platforms")
+        let focusFilter = MultipleChoiceFilter(identifier: "focus", isSubquery: true, collectionKey: "focuses", modelKey: "name", options: focusOptions, selectedOptions: [], emptyTitle: "All Platforms")
         
         let trackOptions = storage.allTracks.map({ FilterOption(title: $0.name, value: $0.name) })
-        let trackFilter = FilterType(isSubquery: false, collectionKey: "", modelKey: "trackName", options: trackOptions, selectedOptions: [], emptyTitle: "All Tracks")
+        let trackFilter = MultipleChoiceFilter(identifier: "track", isSubquery: false, collectionKey: "", modelKey: "trackName", options: trackOptions, selectedOptions: [], emptyTitle: "All Tracks")
         
         scheduleSearchController.filters = [eventFilter, focusFilter, trackFilter]
         

@@ -632,17 +632,17 @@
             <objects>
                 <viewController storyboardIdentifier="SearchFiltersViewController" id="QVl-wd-WlW" customClass="SearchFiltersViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="hX1-jY-chB">
-                        <rect key="frame" x="0.0" y="0.0" width="343" height="150"/>
+                        <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <visualEffectView appearanceType="vibrantDark" blendingMode="withinWindow" material="dark" state="inactive" translatesAutoresizingMaskIntoConstraints="NO" id="5qS-lc-ZT8">
-                                <rect key="frame" x="0.0" y="0.0" width="343" height="150"/>
+                                <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NlN-Z6-drQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="150"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
                                         <subviews>
                                             <stackView distribution="fillProportionally" orientation="horizontal" alignment="bottom" spacing="12" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qTs-9y-MbZ">
-                                                <rect key="frame" x="12" y="116" width="312.5" height="22"/>
+                                                <rect key="frame" x="12" y="116" width="319" height="25"/>
                                                 <subviews>
                                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U2p-0d-s5K">
                                                         <rect key="frame" x="-6" y="-7" width="91" height="32"/>
@@ -655,7 +655,7 @@
                                                         </connections>
                                                     </button>
                                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-Ig-nku">
-                                                        <rect key="frame" x="91" y="0.0" width="221.5" height="22"/>
+                                                        <rect key="frame" x="91" y="0.0" width="228" height="22"/>
                                                         <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="mC0-Jx-M3e">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -732,8 +732,8 @@
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <segments>
                                                         <segment label="Favorites"/>
-                                                        <segment label="Downloaded" selected="YES" tag="1"/>
-                                                        <segment label="Watched"/>
+                                                        <segment label="Downloaded" tag="1"/>
+                                                        <segment label="Unwatched"/>
                                                     </segments>
                                                 </segmentedCell>
                                                 <connections>

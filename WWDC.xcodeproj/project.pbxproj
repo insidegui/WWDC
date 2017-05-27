@@ -163,6 +163,8 @@
 		DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */; };
 		DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */; };
 		DDED75571ED3C1BF000BA817 /* PUIScrimContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */; };
+		DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */; };
+		DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */; };
 		DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */; };
 		DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */; };
 		DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */; };
@@ -462,6 +464,8 @@
 		DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindowController.swift; sourceTree = "<group>"; };
 		DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIScrimContainerView.swift; sourceTree = "<group>"; };
+		DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleChoiceFilter.swift; sourceTree = "<group>"; };
+		DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleFilter.swift; sourceTree = "<group>"; };
 		DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableRowView.swift; sourceTree = "<group>"; };
 		DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRow.swift; sourceTree = "<group>"; };
 		DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleTableCellView.swift; sourceTree = "<group>"; };
@@ -902,6 +906,8 @@
 			isa = PBXGroup;
 			children = (
 				DD90CDCA1ED77A4800CADE86 /* FilterType.swift */,
+				DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */,
+				DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -1612,6 +1618,7 @@
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
+				DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */,
@@ -1649,6 +1656,7 @@
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
 				DD382B7C1EAC345F009760C4 /* NSImage+CGImage.m in Sources */,
+				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
 				DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */,
 				DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */,
