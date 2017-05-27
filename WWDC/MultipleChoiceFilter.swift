@@ -11,6 +11,17 @@ import Foundation
 struct FilterOption: Equatable {
     let title: String
     let value: String
+    let isNegative: Bool
+    
+    init(title: String, value: String, isNegative: Bool = false) {
+        self.title = title
+        self.value = value
+        self.isNegative = isNegative
+    }
+    
+    func negated(with newTitle: String) -> FilterOption {
+        return FilterOption(title: newTitle, value: self.value, isNegative: true)
+    }
     
     static func ==(lhs: FilterOption, rhs: FilterOption) -> Bool {
         return lhs.value == rhs.value
@@ -51,10 +62,12 @@ struct MultipleChoiceFilter: FilterType {
         let subpredicates = selectedOptions.map { option -> NSPredicate in
             let format: String
             
+            let op = option.isNegative ? "!=" : "=="
+            
             if isSubquery {
-                format = "SUBQUERY(\(collectionKey), $\(collectionKey), $\(collectionKey).\(modelKey) == %@).@count > 0"
+                format = "SUBQUERY(\(collectionKey), $\(collectionKey), $\(collectionKey).\(modelKey) \(op) %@).@count > 0"
             } else {
-                format = "\(modelKey) == %@"
+                format = "\(modelKey) \(op) %@"
             }
             
             return NSPredicate(format: format, option.value)

@@ -13,6 +13,8 @@ public enum SessionInstanceType: Int {
     case session
     case lab
     case video
+    case getTogether
+    case specialEvent
     
     init?(rawSessionType: String) {
         switch rawSessionType {
@@ -22,6 +24,10 @@ public enum SessionInstanceType: Int {
             self = .lab
         case "Video":
             self = .video
+        case "Get-Together":
+            self = .getTogether
+        case "Special Event":
+            self = .specialEvent
         default: return nil
         }
     }
@@ -41,6 +47,9 @@ public class SessionInstance: Object {
     
     /// The session
     public dynamic var session: Session? = nil
+    
+    /// The raw session type as returned by the API
+    public dynamic var rawSessionType = "Session"
     
     /// Type of session (0 = regular session, 1 = lab, 2 = video-only session)
     public dynamic var sessionType = 0
@@ -91,6 +100,7 @@ public class SessionInstance: Object {
             "number",
             "eventIdentifier",
             "sessionType",
+            "rawSessionType",
             "startTime",
             "endTime",
             "roomName",
@@ -112,6 +122,7 @@ public class SessionInstance: Object {
         assert(other.identifier == self.identifier, "Can't merge two objects with different identifiers!")
         
         self.number = other.number
+        self.rawSessionType = other.rawSessionType
         self.sessionType = other.sessionType
         self.startTime = other.startTime
         self.endTime = other.endTime

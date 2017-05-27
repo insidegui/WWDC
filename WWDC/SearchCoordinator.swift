@@ -45,6 +45,18 @@ final class SearchCoordinator {
     
     func configureFilters() {
         let textualFilter = TextualFilter(identifier: FilterIdentifier.text.rawValue, value: nil, modelKeys: ["title"])
+
+        let labOption = FilterOption(title: "Labs", value: "Lab")
+        let sessionOption = labOption.negated(with: "Sessions")
+        
+        let instanceTypeOptions = [sessionOption, labOption]
+        let instanceTypeFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event.rawValue,
+                                               isSubquery: true,
+                                               collectionKey: "instances",
+                                               modelKey: "rawSessionType",
+                                               options: instanceTypeOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Events")
         
         let eventOptions = storage.allEvents.map({ FilterOption(title: $0.name, value: $0.identifier) })
         let eventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event.rawValue,
@@ -94,7 +106,7 @@ final class SearchCoordinator {
         
         scheduleSearchController.filters = [
             textualFilter,
-            eventFilter,
+            instanceTypeFilter,
             focusFilter,
             trackFilter,
             favoriteFilter,

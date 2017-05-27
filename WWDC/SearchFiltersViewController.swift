@@ -146,12 +146,14 @@ final class SearchFiltersViewController: NSViewController {
     }
     
     private func popUpButton(for filter: MultipleChoiceFilter) -> NSPopUpButton? {
-        switch (filter.collectionKey, filter.modelKey) {
-        case ("","eventIdentifier"):
+        guard let filterIdentifier = FilterIdentifier(rawValue: filter.identifier) else { return nil }
+        
+        switch filterIdentifier {
+        case .event:
             return eventsPopUp
-        case ("focuses", "name"):
+        case .focus:
             return focusesPopUp
-        case ("", "trackName"):
+        case .track:
             return tracksPopUp
         default: return nil
         }

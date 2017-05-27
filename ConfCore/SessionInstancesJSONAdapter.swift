@@ -76,6 +76,7 @@ final class SessionInstancesJSONAdapter: Adapter {
         instance.session = session
         instance.trackName = trackName
         instance.roomName = roomName
+        instance.rawSessionType = rawType
         instance.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
         instance.startTime = startDate
         instance.endTime = endDate
