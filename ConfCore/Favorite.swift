@@ -18,6 +18,9 @@ public class Favorite: Object {
     /// When the favorite was created
     public dynamic var createdAt = Date()
     
+    /// Soft delete (for syncing)
+    public dynamic var isDeleted: Bool = false
+    
     /// The session this favorite is associated with
     public let session = LinkingObjects(fromType: Session.self, property: "favorites")
     

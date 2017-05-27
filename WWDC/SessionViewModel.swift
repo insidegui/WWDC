@@ -82,7 +82,7 @@ final class SessionViewModel: NSObject {
     }()
     
     lazy var rxIsFavorite: Observable<Bool> = {
-        return Observable.from(object: self.session).map({ $0.favorites.count > 0 })
+        return Observable.collection(from: self.session.favorites.filter("isDeleted == false")).map({ $0.count > 0 })
     }()
     
     lazy var rxIsCurrentlyLive: Observable<Bool> = {
@@ -311,7 +311,7 @@ extension SessionViewModel: UserActivityRepresentable { }
 extension SessionViewModel {
     
     var isFavorite: Bool {
-        return session.favorites.count > 0
+        return session.favorites.filter("isDeleted == false").count > 0
     }
     
 }
