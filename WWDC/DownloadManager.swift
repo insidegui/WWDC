@@ -33,6 +33,21 @@ enum DownloadStatus {
     case failed(Error?)
 }
 
+extension URL {
+    
+    var isDirectory: Bool {
+        guard isFileURL else { return false }
+        var directory: ObjCBool = false
+        return FileManager.default.fileExists(atPath: path, isDirectory: &directory) ? directory.boolValue : false
+    }
+    
+    var subDirectories: [URL] {
+        guard isDirectory else { return [] }
+        return (try? FileManager.default.contentsOfDirectory(at: self, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]).filter{ $0.isDirectory }) ?? []
+    }
+    
+}
+
 final class DownloadManager: NSObject {
     
     fileprivate let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
@@ -236,32 +251,46 @@ final class DownloadManager: NSObject {
                 checkDownloadedState()
             }
             
-            let started = nc.addObserver(forName: .DownloadManagerDownloadStarted, object: asset.remoteURL, queue: q) { _ in
+            let started = nc.addObserver(forName: .DownloadManagerDownloadStarted, object: nil, queue: q) { note in
+                guard asset.remoteURL == note.object as? String else { return }
+                
                 observer.onNext(.downloading(-1))
             }
             
-            let cancelled = nc.addObserver(forName: .DownloadManagerDownloadCancelled, object: asset.remoteURL, queue: q) { _ in
+            let cancelled = nc.addObserver(forName: .DownloadManagerDownloadCancelled, object: nil, queue: q) { note in
+                guard asset.remoteURL == note.object as? String else { return }
+                
                 observer.onNext(.cancelled)
             }
             
-            let paused = nc.addObserver(forName: .DownloadManagerDownloadPaused, object: asset.remoteURL, queue: q) { _ in
+            let paused = nc.addObserver(forName: .DownloadManagerDownloadPaused, object: nil, queue: q) { note in
+                guard asset.remoteURL == note.object as? String else { return }
+                
                 observer.onNext(.paused)
             }
             
-            let resumed = nc.addObserver(forName: .DownloadManagerDownloadResumed, object: asset.remoteURL, queue: q) { _ in
+            let resumed = nc.addObserver(forName: .DownloadManagerDownloadResumed, object: nil, queue: q) { note in
+                guard asset.remoteURL == note.object as? String else { return }
+                
                 observer.onNext(.downloading(-1))
             }
             
-            let failed = nc.addObserver(forName: .DownloadManagerDownloadFailed, object: asset.remoteURL, queue: q) { note in
+            let failed = nc.addObserver(forName: .DownloadManagerDownloadFailed, object: nil, queue: q) { note in
+                guard asset.remoteURL == note.object as? String else { return }
+                
                 let error = note.userInfo?["error"] as? Error
                 observer.onNext(.failed(error))
             }
             
-            let finished = nc.addObserver(forName: .DownloadManagerDownloadFinished, object: asset.remoteURL, queue: q) { note in
+            let finished = nc.addObserver(forName: .DownloadManagerDownloadFinished, object: nil, queue: q) { note in
+                guard asset.remoteURL == note.object as? String else { return }
+                
                 observer.onNext(.finished)
             }
             
-            let progress = nc.addObserver(forName: .DownloadManagerDownloadProgressChanged, object: asset.remoteURL, queue: q) { note in
+            let progress = nc.addObserver(forName: .DownloadManagerDownloadProgressChanged, object: nil, queue: q) { note in
+                guard asset.remoteURL == note.object as? String else { return }
+                
                 if let info = note.userInfo?["info"] as? DownloadInfo {
                     observer.onNext(.downloading(info.progress))
                 } else {
@@ -284,25 +313,46 @@ final class DownloadManager: NSObject {
     
     // MARK: File observation
     
-    fileprivate var folderMonitor: DTFolderMonitor!
+    fileprivate var topFolderMonitor: DTFolderMonitor!
+    fileprivate var subfoldersMonitors: [DTFolderMonitor] = []
     fileprivate var existingVideoFiles = [String]()
     
     func monitorDownloadsFolder() {
-        if folderMonitor != nil {
-            folderMonitor.stopMonitoring()
-            folderMonitor = nil
+        if topFolderMonitor != nil {
+            topFolderMonitor.stopMonitoring()
+            topFolderMonitor = nil
         }
         
         let videosPath = Preferences.shared.localVideoStorageURL.path
         enumerateVideoFiles(videosPath)
+        let mainDirURL = URL(fileURLWithPath: videosPath)
         
-        folderMonitor = DTFolderMonitor(for: URL(fileURLWithPath: videosPath)) {
+        topFolderMonitor = DTFolderMonitor(for: mainDirURL) { [unowned self] in
             self.enumerateVideoFiles(videosPath)
+            
+            self.setupSubdirectoryMonitors(on: mainDirURL)
             
             NotificationCenter.default.post(name: .DownloadManagerFilesChangedNotification, object: nil)
         }
         
-        folderMonitor.startMonitoring()
+        setupSubdirectoryMonitors(on: mainDirURL)
+        
+        topFolderMonitor.startMonitoring()
+    }
+    
+    private func setupSubdirectoryMonitors(on mainDirURL: URL) {
+        subfoldersMonitors.forEach({ $0.stopMonitoring() })
+        subfoldersMonitors.removeAll()
+        
+        mainDirURL.subDirectories.forEach { subdir in
+            guard let monitor = DTFolderMonitor(for: subdir, block: { [unowned self] in
+                self.enumerateVideoFiles(mainDirURL.path)
+            }) else { return }
+            
+            subfoldersMonitors.append(monitor)
+            
+            monitor.startMonitoring()
+        }
     }
     
     /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
@@ -330,8 +380,8 @@ final class DownloadManager: NSObject {
     // MARK: Teardown
     
     deinit {
-        if folderMonitor != nil {
-            folderMonitor.stopMonitoring()
+        if topFolderMonitor != nil {
+            topFolderMonitor.stopMonitoring()
         }
     }
     
