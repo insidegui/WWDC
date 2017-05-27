@@ -43,7 +43,10 @@ class SessionsTableViewController: NSViewController {
         }
     }
     
-    var sessionRows: [SessionRow] = [] {
+    private var searchRows: [SessionRow] = []
+    private var allRows: [SessionRow] = []
+    
+    var displayedRows: [SessionRow] = [] {
         didSet {
             tableView.reloadPreservingSelection()
         }
@@ -62,7 +65,7 @@ class SessionsTableViewController: NSViewController {
     }
     
     func selectSession(with identifier: String, scrollOnly: Bool = false) {
-        guard let index = sessionRows.index(where: { row in
+        guard let index = displayedRows.index(where: { row in
             guard case .session(let viewModel) = row.kind else { return false }
             
             return viewModel.identifier == identifier
@@ -90,7 +93,7 @@ class SessionsTableViewController: NSViewController {
     private func updateVideosList() {
         guard let tracks = tracks else { return }
         
-        self.sessionRows = tracks.flatMap { track -> [SessionRow] in
+        let rows: [SessionRow] = tracks.flatMap { track -> [SessionRow] in
             let titleRow = SessionRow(title: track.name)
             
             let sessionRows: [SessionRow] = track.sessions.filter("assets.@count > 0").sorted(by: Session.standardSort).flatMap { session in
@@ -101,6 +104,9 @@ class SessionsTableViewController: NSViewController {
             
             return [titleRow] + sessionRows
         }
+        
+        self.allRows = rows
+        self.displayedRows = allRows
     }
     
     private func updateScheduleList() {
@@ -108,7 +114,7 @@ class SessionsTableViewController: NSViewController {
         
         var shownTimeZone = false
         
-        self.sessionRows = sections.flatMap { section -> [SessionRow] in
+        let rows: [SessionRow] = sections.flatMap { section -> [SessionRow] in
             let titleRow = SessionRow(date: section.representedDate, showTimeZone: !shownTimeZone)
             
             shownTimeZone = true
@@ -121,16 +127,26 @@ class SessionsTableViewController: NSViewController {
             
             return [titleRow] + instanceRows
         }
+        
+        self.allRows = rows
+        self.displayedRows = allRows
     }
     
     private func updateWithSearchResults() {
         guard let results = searchResults else {
-            switch style {
-            case .schedule:
-                updateScheduleList()
-            case .videos:
-                updateVideosList()
+            if !allRows.isEmpty {
+                self.displayedRows = allRows
+            } else {
+                switch style {
+                case .schedule:
+                    updateScheduleList()
+                case .videos:
+                    updateVideosList()
+                }
             }
+            
+            self.searchRows = []
+            
             return
         }
         
@@ -140,7 +156,8 @@ class SessionsTableViewController: NSViewController {
             return SessionRow(viewModel: viewModel)
         }
         
-        self.sessionRows = sessionRows
+        self.searchRows = sessionRows
+        self.displayedRows = searchRows
     }
     
     lazy var searchController: SearchFiltersViewController = {
@@ -213,7 +230,7 @@ class SessionsTableViewController: NSViewController {
         
         tableView.rx.selectedRow.map { index -> SessionViewModel? in
             guard let index = index else { return nil }
-            guard case .session(let viewModel) = self.sessionRows[index].kind else { return nil }
+            guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
             
             return viewModel
         }.bind(to: selectedSession).addDisposableTo(self.disposeBag)
@@ -230,11 +247,11 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return sessionRows.count
+        return displayedRows.count
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let sessionRow = sessionRows[row]
+        let sessionRow = displayedRows[row]
         
         switch sessionRow.kind {
         case .session(let viewModel):
@@ -252,7 +269,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
             rowView?.identifier = Constants.rowIdentifier
         }
         
-        switch sessionRows[row].kind {
+        switch displayedRows[row].kind {
         case .sectionHeader:
             rowView?.isGroupRowStyle = true
         default:
@@ -289,7 +306,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
     
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {        
-        switch sessionRows[row].kind {
+        switch displayedRows[row].kind {
         case .session:
             return Metrics.sessionRowHeight
         case .sectionHeader:
@@ -298,7 +315,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        switch sessionRows[row].kind {
+        switch displayedRows[row].kind {
         case .sectionHeader:
             return false
         case .session:
@@ -307,7 +324,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
     
     func tableView(_ tableView: NSTableView, isGroupRow row: Int) -> Bool {
-        switch sessionRows[row].kind {
+        switch displayedRows[row].kind {
         case .sectionHeader:
             return true
         case .session:

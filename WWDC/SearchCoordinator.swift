@@ -99,7 +99,18 @@ final class SearchCoordinator {
             trackFilter,
             favoriteFilter,
             downloadedFilter,
-            unwatchedFilter]
+            unwatchedFilter
+        ]
+
+        videosSearchController.filters = [
+            textualFilter,
+            eventFilter,
+            focusFilter,
+            trackFilter,
+            favoriteFilter,
+            downloadedFilter,
+            unwatchedFilter
+        ]
         
         // set delegates
         scheduleSearchController.delegate = self
@@ -110,9 +121,9 @@ final class SearchCoordinator {
         return filters.reduce(true, { return $0.0 && $0.1.isEmpty })
     }
     
-    fileprivate func updateScheduleSearchResults(with filters: [FilterType]) {
+    fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
         guard !isAllEmpty(filters) else {
-            scheduleController.searchResults = nil
+            controller.searchResults = nil
             return
         }
         
@@ -125,14 +136,7 @@ final class SearchCoordinator {
         
         let results = storage.realm.objects(Session.self).filter(predicate)
         
-        scheduleController.searchResults = results
-    }
-    
-    fileprivate func updateVideosSearchResults(with filters: [FilterType]) {
-        guard !isAllEmpty(filters) else {
-            videosController.searchResults = nil
-            return
-        }
+        controller.searchResults = results
     }
     
 }
@@ -141,9 +145,9 @@ extension SearchCoordinator: SearchFiltersViewControllerDelegate {
     
     func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType]) {
         if controller == scheduleSearchController {
-            updateScheduleSearchResults(with: filters)
+            updateSearchResults(for: scheduleController, with: filters)
         } else {
-            updateVideosSearchResults(with: filters)
+            updateSearchResults(for: videosController, with: filters)
         }
     }
     
