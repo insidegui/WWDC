@@ -644,18 +644,8 @@
                                             <stackView distribution="fillProportionally" orientation="horizontal" alignment="bottom" spacing="12" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qTs-9y-MbZ">
                                                 <rect key="frame" x="12" y="116" width="319" height="25"/>
                                                 <subviews>
-                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U2p-0d-s5K">
-                                                        <rect key="frame" x="-6" y="-7" width="91" height="32"/>
-                                                        <buttonCell key="cell" type="push" title="Filter" bezelStyle="rounded" image="filter" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2aA-6Y-5tJ">
-                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="filterButtonAction:" target="QVl-wd-WlW" id="f0X-G9-itW"/>
-                                                        </connections>
-                                                    </button>
                                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-Ig-nku">
-                                                        <rect key="frame" x="91" y="0.0" width="228" height="22"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="228" height="22"/>
                                                         <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="mC0-Jx-M3e">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -665,6 +655,16 @@
                                                             <action selector="searchFieldAction:" target="QVl-wd-WlW" id="Ddj-Dd-VpH"/>
                                                         </connections>
                                                     </searchField>
+                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U2p-0d-s5K">
+                                                        <rect key="frame" x="234" y="-7" width="91" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Filter" bezelStyle="rounded" image="filter" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2aA-6Y-5tJ">
+                                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="filterButtonAction:" target="QVl-wd-WlW" id="f0X-G9-itW"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <visibilityPriorities>
                                                     <integer value="1000"/>
@@ -726,7 +726,7 @@
                                                     <action selector="tracksPopUpAction:" target="QVl-wd-WlW" id="vqI-ZI-Q95"/>
                                                 </connections>
                                             </popUpButton>
-                                            <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Teg-LY-Sf3">
+                                            <segmentedControl horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Teg-LY-Sf3" customClass="WWDCSegmentedControl" customModule="WWDC" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="10" width="323" height="20"/>
                                                 <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectAny" id="0Zl-mA-eiw">
                                                     <font key="font" metaFont="smallSystem"/>
@@ -746,7 +746,6 @@
                                             <constraint firstAttribute="trailing" secondItem="d8i-uR-hrT" secondAttribute="trailing" constant="12" id="AZu-e1-t2n"/>
                                             <constraint firstAttribute="trailing" secondItem="Mft-xX-6dt" secondAttribute="trailing" constant="12" id="Fof-rP-QDA"/>
                                             <constraint firstAttribute="trailing" secondItem="jW0-0M-Xya" secondAttribute="trailing" constant="12" id="U6f-5i-CHp"/>
-                                            <constraint firstAttribute="trailing" secondItem="Teg-LY-Sf3" secondAttribute="trailing" constant="12" id="Z7a-Xt-05t"/>
                                         </constraints>
                                         <visibilityPriorities>
                                             <integer value="1000"/>

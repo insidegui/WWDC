@@ -166,6 +166,7 @@
 		DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */; };
 		DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */; };
 		DDEDFCF31ED92F2A002477C8 /* TextualFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCF21ED92F2A002477C8 /* TextualFilter.swift */; };
+		DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCF41ED9FF8A002477C8 /* WWDCSegmentedControl.swift */; };
 		DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */; };
 		DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */; };
 		DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */; };
@@ -468,6 +469,7 @@
 		DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleChoiceFilter.swift; sourceTree = "<group>"; };
 		DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleFilter.swift; sourceTree = "<group>"; };
 		DDEDFCF21ED92F2A002477C8 /* TextualFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextualFilter.swift; sourceTree = "<group>"; };
+		DDEDFCF41ED9FF8A002477C8 /* WWDCSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCSegmentedControl.swift; sourceTree = "<group>"; };
 		DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableRowView.swift; sourceTree = "<group>"; };
 		DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionRow.swift; sourceTree = "<group>"; };
 		DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleTableCellView.swift; sourceTree = "<group>"; };
@@ -702,6 +704,7 @@
 				DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */,
 				DDB3529B1EC8AB5D00254815 /* WWDCLayer.swift */,
 				DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */,
+				DDEDFCF41ED9FF8A002477C8 /* WWDCSegmentedControl.swift */,
 				DDB28F901EAD2A050077703F /* WWDCAlert.swift */,
 				DDB352991EC8AB2800254815 /* WWDCImageView.swift */,
 				DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */,
@@ -1658,6 +1661,7 @@
 				DD382B7B1EAC345F009760C4 /* MaskImageView.m in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
+				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
 				DD382B7C1EAC345F009760C4 /* NSImage+CGImage.m in Sources */,
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
