@@ -37,6 +37,16 @@ public class Event: Object {
         return "identifier"
     }
     
+    public override static func indexedProperties() -> [String] {
+        return [
+            "identifier",
+            "name",
+            "startDate",
+            "endDate",
+            "isCurrent"
+        ]
+    }
+    
     public static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool) -> Event {
         let event = Event()
         

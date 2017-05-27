@@ -22,4 +22,10 @@ public class Keyword: Object {
         return "name"
     }
     
+    public override static func indexedProperties() -> [String] {
+        return [
+            "name"
+        ]
+    }
+    
 }

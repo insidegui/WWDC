@@ -21,6 +21,14 @@ public final class ScheduleSection: Object {
         return "identifier"
     }
     
+    public override static func indexedProperties() -> [String] {
+        return [
+            "identifier",
+            "eventIdentifier",
+            "representedDate"
+        ]
+    }
+    
     internal static var identifierFormatter: DateFormatter {
         let f = DateFormatter()
         

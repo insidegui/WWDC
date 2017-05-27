@@ -67,6 +67,19 @@ public class Session: Object {
         return "identifier"
     }
     
+    public override static func indexedProperties() -> [String] {
+        return [
+            "identifier",
+            "title",
+            "summary",
+            "trackName",
+            "isDownloaded",
+            "eventIdentifier",
+            "number",
+            "year"
+        ]
+    }
+    
     public static func standardSort(sessionA: Session, sessionB: Session) -> Bool {
         guard let eventA = sessionA.event.first, let eventB = sessionB.event.first else { return false }
         guard let trackA = sessionA.track.first, let trackB = sessionB.track.first else { return false }

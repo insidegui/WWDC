@@ -85,6 +85,19 @@ public class SessionInstance: Object {
         return "identifier"
     }
     
+    public override static func indexedProperties() -> [String] {
+        return [
+            "identifier",
+            "number",
+            "eventIdentifier",
+            "sessionType",
+            "startTime",
+            "endTime",
+            "roomName",
+            "trackName"
+        ]
+    }
+    
     public static func standardSort(instanceA: SessionInstance, instanceB: SessionInstance) -> Bool {
         guard let nA = Int(instanceA.number), let nB = Int(instanceB.number) else { return false }
         
