@@ -42,24 +42,35 @@ final class SearchFiltersViewController: NSViewController {
     weak var delegate: SearchFiltersViewControllerDelegate?
     
     @IBAction func eventsPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == "event" }) else { return }
+        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.event.rawValue }) else { return }
 
-        updateFilter(at: filterIndex, with: eventsPopUp)
+        updateMultipleChoiceFilter(at: filterIndex, with: eventsPopUp)
     }
     
     @IBAction func focusesPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == "focus" }) else { return }
+        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.focus.rawValue }) else { return }
         
-        updateFilter(at: filterIndex, with: focusesPopUp)
+        updateMultipleChoiceFilter(at: filterIndex, with: focusesPopUp)
     }
     
     @IBAction func tracksPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == "track" }) else { return }
+        guard let filterIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.track.rawValue }) else { return }
         
-        updateFilter(at: filterIndex, with: tracksPopUp)
+        updateMultipleChoiceFilter(at: filterIndex, with: tracksPopUp)
     }
     
     @IBAction func bottomSegmentedControlAction(_ sender: Any) {
+        if let favoriteIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isFavorite.rawValue }) {
+            updateToggleFilter(at: favoriteIndex, with: bottomSegmentedControl.isSelected(forSegment: 0))
+        }
+        
+        if let downloadedIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isDownloaded.rawValue }) {
+            updateToggleFilter(at: downloadedIndex, with: bottomSegmentedControl.isSelected(forSegment: 1))
+        }
+        
+        if let unwatchedIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isUnwatched.rawValue }) {
+            updateToggleFilter(at: unwatchedIndex, with: bottomSegmentedControl.isSelected(forSegment: 2))
+        }
     }
     
     @IBAction func searchFieldAction(_ sender: Any) {
@@ -85,7 +96,7 @@ final class SearchFiltersViewController: NSViewController {
         bottomSegmentedControl.isHidden = hidden
     }
     
-    private func updateFilter(at filterIndex: Int, with popUp: NSPopUpButton) {
+    private func updateMultipleChoiceFilter(at filterIndex: Int, with popUp: NSPopUpButton) {
         guard let selectedItem = popUp.selectedItem else { return }
         guard let menu = popUp.menu else { return }
         guard var filter = effectiveFilters[filterIndex] as? MultipleChoiceFilter else { return }
@@ -102,6 +113,19 @@ final class SearchFiltersViewController: NSViewController {
         delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
         
         popUp.title = filter.title
+        
+        effectiveFilters = updatedFilters
+    }
+    
+    private func updateToggleFilter(at filterIndex: Int, with state: Bool) {
+        guard var filter = effectiveFilters[filterIndex] as? ToggleFilter else { return }
+        
+        filter.isOn = state
+        
+        var updatedFilters = effectiveFilters
+        updatedFilters[filterIndex] = filter
+        
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
         
         effectiveFilters = updatedFilters
     }

@@ -9,6 +9,15 @@
 import Cocoa
 import ConfCore
 
+enum FilterIdentifier: String {
+    case event
+    case focus
+    case track
+    case isFavorite
+    case isDownloaded
+    case isUnwatched
+}
+
 final class SearchCoordinator {
     
     let storage: Storage
@@ -35,15 +44,58 @@ final class SearchCoordinator {
     
     func configureFilters() {
         let eventOptions = storage.allEvents.map({ FilterOption(title: $0.name, value: $0.identifier) })
-        let eventFilter = MultipleChoiceFilter(identifier: "event", isSubquery: false, collectionKey: "", modelKey: "eventIdentifier", options: eventOptions, selectedOptions: [], emptyTitle: "All Events")
+        let eventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event.rawValue,
+                                               isSubquery: false,
+                                               collectionKey: "",
+                                               modelKey: "eventIdentifier",
+                                               options: eventOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Events")
         
         let focusOptions = storage.allFocuses.map({ FilterOption(title: $0.name, value: $0.name) })
-        let focusFilter = MultipleChoiceFilter(identifier: "focus", isSubquery: true, collectionKey: "focuses", modelKey: "name", options: focusOptions, selectedOptions: [], emptyTitle: "All Platforms")
+        let focusFilter = MultipleChoiceFilter(identifier: FilterIdentifier.focus.rawValue,
+                                               isSubquery: true,
+                                               collectionKey: "focuses",
+                                               modelKey: "name",
+                                               options: focusOptions, 
+                                               selectedOptions: [],
+                                               emptyTitle: "All Platforms")
         
         let trackOptions = storage.allTracks.map({ FilterOption(title: $0.name, value: $0.name) })
-        let trackFilter = MultipleChoiceFilter(identifier: "track", isSubquery: false, collectionKey: "", modelKey: "trackName", options: trackOptions, selectedOptions: [], emptyTitle: "All Tracks")
+        let trackFilter = MultipleChoiceFilter(identifier: FilterIdentifier.track.rawValue,
+                                               isSubquery: false,
+                                               collectionKey: "",
+                                               modelKey: "trackName",
+                                               options: trackOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Tracks")
         
-        scheduleSearchController.filters = [eventFilter, focusFilter, trackFilter]
+        let favoritePredicate = NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == false).@count > 0")
+        let favoriteFilter = ToggleFilter(identifier: FilterIdentifier.isFavorite.rawValue,
+                                          isOn: false,
+                                          customPredicate: favoritePredicate)
+        
+        let downloadedPredicate = NSPredicate(format: "isDownloaded == true")
+        let downloadedFilter = ToggleFilter(identifier: FilterIdentifier.isDownloaded.rawValue,
+                                            isOn: false,
+                                            customPredicate: downloadedPredicate)
+        
+        let smallPositionPred = NSPredicate(format: "SUBQUERY(progresses, $progress, $progress.relativePosition < 0.9).@count > 0")
+        let noPositionPred = NSPredicate(format: "progresses.@count == 0")
+        
+        let unwatchedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [smallPositionPred, noPositionPred])
+        
+        let unwatchedFilter = ToggleFilter(identifier: FilterIdentifier.isUnwatched.rawValue,
+                                           isOn: false,
+                                           customPredicate: unwatchedPredicate)
+        
+        scheduleSearchController.filters = [
+            eventFilter,
+            focusFilter,
+            trackFilter,
+            favoriteFilter,
+            downloadedFilter,
+            unwatchedFilter]
         
         // set delegates
         scheduleSearchController.delegate = self
