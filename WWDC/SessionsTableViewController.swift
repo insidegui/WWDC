@@ -103,13 +103,14 @@ class SessionsTableViewController: NSViewController {
     }
     
     private func performFirstUpdateIfNeeded() {
-        guard !setupDone else { return }
-        setupDone = true
-        
         switch style {
         case .schedule:
             updateScheduleList()
+            setupDone = true
         case .videos:
+            guard !setupDone else { return }
+            setupDone = true
+            
             updateVideosList()
         }
     }
@@ -136,8 +137,6 @@ class SessionsTableViewController: NSViewController {
     }
     
     private func updateScheduleList() {
-        guard view.window != nil else { return }
-        
         guard let sections = scheduleSections else { return }
         
         var shownTimeZone = false
