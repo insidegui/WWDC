@@ -82,4 +82,13 @@ final class Preferences {
         }
     }
     
+    var searchInTranscripts: Bool {
+        get {
+            return defaults.bool(forKey: #function)
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
+    
 }

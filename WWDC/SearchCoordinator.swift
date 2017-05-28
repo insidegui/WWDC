@@ -143,15 +143,23 @@ final class SearchCoordinator {
     
     fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
         guard !isAllEmpty(filters) else {
-            controller.searchResults = nil
+            if controller.searchResults != nil {
+                controller.searchResults = nil
+            }
+            
             return
         }
         
+        let term = filters.flatMap({ $0 as? TextualFilter }).flatMap({ $0.value }).first
+        
         var subpredicates = filters.flatMap({ $0.predicate })
+        
+        var canIncludeTranscripts = false
         
         if controller == scheduleController {
             subpredicates.append(NSPredicate(format: "ANY event.isCurrent == true"))
         } else if controller == videosController {
+            canIncludeTranscripts = true
             subpredicates.append(NSPredicate(format: "ANY instances.rawSessionType != 'Lab'"))
         }
         
@@ -166,7 +174,16 @@ final class SearchCoordinator {
                 let realm = try Realm(configuration: self.storage.realmConfig)
                 
                 let results = realm.objects(Session.self).filter(predicate)
-                let keys: [String] = results.map({ $0.identifier })
+                var keys: Set<String> = Set<String>(results.map({ $0.identifier }))
+                
+                if Preferences.shared.searchInTranscripts, let term = term, canIncludeTranscripts {
+                    let transcriptsPredicate = NSPredicate(format: "ANY annotations.body CONTAINS[cd] %@", term)
+                    let transcripts = realm.objects(Transcript.self).filter(transcriptsPredicate)
+                    
+                    transcripts.forEach { transcript in
+                        keys.insert(transcript.identifier)
+                    }
+                }
                 
                 DispatchQueue.main.async {
                     let searchResults = self.storage.realm.objects(Session.self).filter("identifier IN %@", keys)
