@@ -528,7 +528,8 @@ public final class PUITimelineView: NSView {
                     let timestamp = makeTimestamp(for: point)
                     
                     self.delegate?.timelineDidMoveAnnotation(annotation, to: timestamp)
-                default: break
+                case .none:
+                    self.delegate?.timelineDidSelectAnnotation(annotation)
                 }
                 
                 mode = .none

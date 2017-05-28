@@ -39,6 +39,12 @@ extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate
         
     }
     
+    func timelineDidSelectAnnotation(_ annotation: PUITimelineAnnotation?) {
+        guard let annotation = annotation else { return }
+        
+        currentPlayerController?.playerView.seek(to: annotation)
+    }
+    
     func timelineCanDeleteAnnotation(_ annotation: PUITimelineAnnotation) -> Bool {
         return true
     }
