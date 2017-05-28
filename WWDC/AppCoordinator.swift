@@ -215,6 +215,8 @@ final class AppCoordinator {
         syncEngine.syncSessionsAndSchedule()
         syncEngine.syncLiveVideos()
         liveObserver.refresh()
+        
+        resetAutorefreshTimer()
     }
     
     func startup() {
@@ -354,6 +356,22 @@ final class AppCoordinator {
     
     func showAboutWindow() {
         aboutWindowController.showWindow(nil)
+    }
+    
+    // MARK: - Autorefresh
+    
+    private var autorefreshTimer: Timer!
+    
+    private func resetAutorefreshTimer() {
+        if autorefreshTimer != nil {
+            autorefreshTimer.invalidate()
+            autorefreshTimer = nil
+        }
+        
+        guard Preferences.shared.refreshPeriodically else { return }
+        
+        autorefreshTimer = Timer.scheduledTimer(timeInterval: Constants.autorefreshInterval, target: self, selector: #selector(refresh(_:)), userInfo: nil, repeats: false)
+        autorefreshTimer.tolerance = Constants.autorefreshInterval / 3
     }
     
     // MARK: - Data migration

@@ -14,6 +14,8 @@ struct Constants {
     
     static let thumbnailHeight: CGFloat = 150
     
+    static let autorefreshInterval: TimeInterval = 5 * 60
+    
     /// The relative position within the video the user must be before it is considered fully watched
     static let watchedVideoRelativePosition: Double = 0.97
     
