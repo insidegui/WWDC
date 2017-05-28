@@ -13,7 +13,8 @@ import RealmSwift
 
 extension Notification.Name {
     
-    static let DownloadManagerFilesChangedNotification = Notification.Name("DownloadManagerFilesChangedNotification")
+    static let DownloadManagerFileAddedNotification = Notification.Name("DownloadManagerFileAddedNotification")
+    static let DownloadManagerFileDeletedNotification = Notification.Name("DownloadManagerFileDeletedNotification")
     static let DownloadManagerDownloadStarted = Notification.Name("DownloadManagerDownloadStarted")
     static let DownloadManagerDownloadCancelled = Notification.Name("DownloadManagerDownloadCancelled")
     static let DownloadManagerDownloadPaused = Notification.Name("DownloadManagerDownloadPaused")
@@ -78,7 +79,6 @@ final class DownloadManager: NSObject {
         
         NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
-            NotificationCenter.default.post(name: .DownloadManagerFilesChangedNotification, object: nil)
         }
         
         monitorDownloadsFolder()
@@ -249,8 +249,16 @@ final class DownloadManager: NSObject {
             
             checkDownloadedState()
             
-            let fileSystemChanged = nc.addObserver(forName: .DownloadManagerFilesChangedNotification, object: nil, queue: q) { _ in
-                checkDownloadedState()
+            let fileDeleted = nc.addObserver(forName: .DownloadManagerFileDeletedNotification, object: nil, queue: q) { note in
+                guard asset.relativeLocalURL == note.object as? String else { return }
+                
+                observer.onNext(.none)
+            }
+            
+            let fileAdded = nc.addObserver(forName: .DownloadManagerFileAddedNotification, object: nil, queue: q) { note in
+                guard asset.relativeLocalURL == note.object as? String else { return }
+                
+                observer.onNext(.finished)
             }
             
             let started = nc.addObserver(forName: .DownloadManagerDownloadStarted, object: nil, queue: q) { note in
@@ -301,7 +309,8 @@ final class DownloadManager: NSObject {
             }
             
             return Disposables.create {
-                nc.removeObserver(fileSystemChanged)
+                nc.removeObserver(fileDeleted)
+                nc.removeObserver(fileAdded)
                 nc.removeObserver(started)
                 nc.removeObserver(cancelled)
                 nc.removeObserver(paused)
@@ -333,8 +342,6 @@ final class DownloadManager: NSObject {
             self.enumerateVideoFiles(videosPath)
             
             self.setupSubdirectoryMonitors(on: mainDirURL)
-            
-            NotificationCenter.default.post(name: .DownloadManagerFilesChangedNotification, object: nil)
         }
         
         setupSubdirectoryMonitors(on: mainDirURL)
@@ -365,6 +372,10 @@ final class DownloadManager: NSObject {
         // existing/added files
         for file in files {
             storage.updateDownloadedFlag(true, forAssetWithRelativeLocalURL: file)
+            
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .DownloadManagerFileAddedNotification, object: file)
+            }
         }
         
         if existingVideoFiles.count == 0 {
@@ -376,6 +387,10 @@ final class DownloadManager: NSObject {
         let removedFiles = existingVideoFiles.filter { !files.contains($0) }
         for file in removedFiles {
             storage.updateDownloadedFlag(false, forAssetWithRelativeLocalURL: file)
+            
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: file)
+            }
         }
     }
     

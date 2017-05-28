@@ -133,16 +133,15 @@ class SessionActionsViewController: NSViewController {
         }).addDisposableTo(self.disposeBag)
         
         if let rxDownloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
-            rxDownloadState.subscribe(onNext: { [weak self] status in
+            rxDownloadState.throttle(0.8, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] status in
                 switch status {
                 case .downloading(let progress):
-                    self?.downloadIndicator.startAnimation(nil)
-                    
                     self?.downloadIndicator.isHidden = false
                     self?.downloadButton.isHidden = true
                     
                     if progress < 0 {
                         self?.downloadIndicator.isIndeterminate = true
+                        self?.downloadIndicator.startAnimation(nil)
                     } else {
                         self?.downloadIndicator.isIndeterminate = false
                         self?.downloadIndicator.doubleValue = progress
