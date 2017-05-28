@@ -96,6 +96,10 @@ class SessionsTableViewController: NSViewController {
         super.viewDidAppear()
         
         performFirstUpdateIfNeeded()
+        
+        searchController.searchField.isEnabled = false
+        view.window?.makeFirstResponder(tableView)
+        searchController.searchField.isEnabled = true
     }
     
     private func performFirstUpdateIfNeeded() {
