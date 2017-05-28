@@ -13,6 +13,10 @@ enum MainWindowTab: Int {
     case videos
 }
 
+extension Notification.Name {
+    static let MainWindowWantsToSelectSearchField = Notification.Name("MainWindowWantsToSelectSearchField")
+}
+
 final class MainWindowController: NSWindowController {
     
     static var defaultRect: NSRect {
@@ -50,6 +54,10 @@ final class MainWindowController: NSWindowController {
     
     override func windowDidLoad() {
         super.windowDidLoad()
+    }
+    
+    @IBAction func performFindPanelAction(_ sender: Any) {
+        NotificationCenter.default.post(name: .MainWindowWantsToSelectSearchField, object: nil)
     }
 
 }

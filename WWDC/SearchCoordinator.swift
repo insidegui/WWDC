@@ -42,6 +42,11 @@ final class SearchCoordinator {
         self.storage = storage
         self.scheduleController = sessionsController
         self.videosController = videosController
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(activateSearchField),
+                                               name: .MainWindowWantsToSelectSearchField,
+                                               object: nil)
     }
     
     func configureFilters() {
@@ -170,6 +175,16 @@ final class SearchCoordinator {
             } catch {
                 LoggingHelper.registerError(error, info: ["when": "Searching"])
             }
+        }
+    }
+    
+    @objc fileprivate func activateSearchField() {
+        if let window = scheduleSearchController.view.window {
+            window.makeFirstResponder(scheduleSearchController.searchField)
+        }
+        
+        if let window = videosSearchController.view.window {
+            window.makeFirstResponder(videosSearchController.searchField)
         }
     }
     
