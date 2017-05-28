@@ -91,4 +91,13 @@ final class Preferences {
         }
     }
     
+    var searchInBookmarks: Bool {
+        get {
+            return defaults.bool(forKey: #function)
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+        }
+    }
+    
 }

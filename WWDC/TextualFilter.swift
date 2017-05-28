@@ -29,13 +29,19 @@ struct TextualFilter: FilterType {
         guard let value = value else { return nil }
         guard value.characters.count > 2 else { return nil }
         
-        let subpredicates = modelKeys.map { key -> NSPredicate in
+        var subpredicates = modelKeys.map { key -> NSPredicate in
             return NSPredicate(format: "\(key) CONTAINS[cd] %@", value)
         }
         
         let keywords = NSPredicate(format: "SUBQUERY(instances, $instances, ANY $instances.keywords.name CONTAINS[cd] %@).@count > 0", value)
+        subpredicates.append(keywords)
         
-        return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates + [keywords])
+        if Preferences.shared.searchInBookmarks {
+            let bookmarks = NSPredicate(format: "ANY bookmarks.body CONTAINS[cd] %@", value)
+            subpredicates.append(bookmarks)
+        }
+        
+        return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates)
     }
     
 }
