@@ -50,7 +50,11 @@ public final class TranscriptIndexer {
     }
     
     func indexTranscriptsForSessionsWithKeys(_ sessionKeys: [String]) {
-        guard sessionKeys.count > 0 else { return }
+        // ignore very low session counts
+        guard sessionKeys.count > 10 else {
+            self.waitAndExit()
+            return
+        }
         
         transcriptIndexingProgress = Progress(totalUnitCount: Int64(sessionKeys.count))
         
@@ -156,9 +160,17 @@ public final class TranscriptIndexer {
                 DispatchQueue.main.async {
                     DistributedNotificationCenter.default().post(name: .TranscriptIndexingDidStop, object: nil)
                 }
+                
+                self.waitAndExit()
             } catch {
                 NSLog("Error writing indexed transcripts to storage: \(error)")
             }
+        }
+    }
+    
+    fileprivate func waitAndExit() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            exit(0)
         }
     }
     
