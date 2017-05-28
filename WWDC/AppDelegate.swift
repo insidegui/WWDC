@@ -52,6 +52,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator.refresh(sender)
     }
     
+    @IBAction func showAboutWindow(_ sender: Any) {
+        coordinator.showAboutWindow()
+    }
+    
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         coordinator.windowController.showWindow(sender)
         

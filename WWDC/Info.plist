@@ -72,5 +72,13 @@
 	<string>https://github.com/insidegui/WWDC/raw/master/Releases/appcast_v5.xml</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
+	<key>GRBundleLicenseName</key>
+	<string>BSD</string>
+	<key>GRBundleMainDeveloperName</key>
+	<string>Guilherme Rambo</string>
+	<key>GRBundleIconCreatorWebsite</key>
+	<string>http://www.raphalopes.com</string>
+	<key>GRBundleUserInterfaceCreatorWebsite</key>
+	<string>http://slides.com/vicenteborrell/portfolio/fullscreen#/</string>
 </dict>
 </plist>

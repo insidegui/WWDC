@@ -151,6 +151,10 @@
 		DDC678091EDA76EC00A4E19C /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
 		DDC6780B1EDA76FD00A4E19C /* TranscriptIndexingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */; };
 		DDC6780C1EDA77CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */; };
+		DDC6780F1EDB253D00A4E19C /* AboutWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6780E1EDB253D00A4E19C /* AboutWindowController.swift */; };
+		DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC678101EDB26D000A4E19C /* AboutWindowController.xib */; };
+		DDC678171EDB27EF00A4E19C /* ContributorsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */; };
+		DDC678191EDB2CD300A4E19C /* ActionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678181EDB2CD300A4E19C /* ActionLabel.swift */; };
 		DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */; };
 		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
@@ -480,6 +484,10 @@
 		DDC678041EDA76CD00A4E19C /* TranscriptIndexingService-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TranscriptIndexingService-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingServiceProtocol.swift; sourceTree = "<group>"; };
 		DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingService.swift; sourceTree = "<group>"; };
+		DDC6780E1EDB253D00A4E19C /* AboutWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutWindowController.swift; sourceTree = "<group>"; };
+		DDC678111EDB26D000A4E19C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AboutWindowController.xib; sourceTree = "<group>"; };
+		DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContributorsFetcher.swift; sourceTree = "<group>"; };
+		DDC678181EDB2CD300A4E19C /* ActionLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionLabel.swift; sourceTree = "<group>"; };
 		DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWDCAppearance.h; sourceTree = "<group>"; };
@@ -733,6 +741,7 @@
 		DD36A4BF1E478CF100B2EA88 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DDC6780D1EDB251E00A4E19C /* About */,
 				DD90CDCE1ED7A5F900CADE86 /* Search */,
 				DDCE7ECB1EA7A0E400C7A3CA /* Base */,
 				DD7F38601EABD66D002D8C00 /* Sessions */,
@@ -759,6 +768,7 @@
 				DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */,
 				DD4648461ECA5947005C57C6 /* WWDCWindow.swift */,
 				DD0159D81ED11A9800F980F1 /* ModalLoadingView.swift */,
+				DDC678181EDB2CD300A4E19C /* ActionLabel.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -780,6 +790,7 @@
 			children = (
 				DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */,
 				DD36A4B51E478C6A00B2EA88 /* Main.storyboard */,
+				DDC678101EDB26D000A4E19C /* AboutWindowController.xib */,
 				DD36A4B81E478C6A00B2EA88 /* Info.plist */,
 			);
 			name = Resources;
@@ -789,11 +800,11 @@
 			isa = PBXGroup;
 			children = (
 				DD7F385C1EABD449002D8C00 /* SyncEngine.swift */,
-				DDEDFCF61EDA33AE002477C8 /* CloudKit */,
 				DD0F0C541E7B8DB100B52184 /* Storage */,
 				DDAE7C521E5BC6B000CEA205 /* Networking */,
 				DD65FD4A1E489FDA0054DD35 /* Models */,
 				DD5DEC1C1E4AA68F00426FA6 /* Adapters */,
+				DDC678151EDB27C100A4E19C /* Helpers */,
 				DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */,
 				DD36A4CB1E478D7E00B2EA88 /* Info.plist */,
 			);
@@ -1076,6 +1087,23 @@
 			path = TranscriptIndexingService;
 			sourceTree = "<group>";
 		};
+		DDC6780D1EDB251E00A4E19C /* About */ = {
+			isa = PBXGroup;
+			children = (
+				DDC6780E1EDB253D00A4E19C /* AboutWindowController.swift */,
+			);
+			name = About;
+			sourceTree = "<group>";
+		};
+		DDC678151EDB27C100A4E19C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */,
+				DDEDFCF71EDA33C3002477C8 /* CloudKitHelper.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		DDCE7ECB1EA7A0E400C7A3CA /* Base */ = {
 			isa = PBXGroup;
 			children = (
@@ -1144,14 +1172,6 @@
 				DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */,
 			);
 			name = Playback;
-			sourceTree = "<group>";
-		};
-		DDEDFCF61EDA33AE002477C8 /* CloudKit */ = {
-			isa = PBXGroup;
-			children = (
-				DDEDFCF71EDA33C3002477C8 /* CloudKitHelper.swift */,
-			);
-			name = CloudKit;
 			sourceTree = "<group>";
 		};
 		DDF32EB01EBE34CE0028E39D /* TableView */ = {
@@ -1602,6 +1622,7 @@
 				DD9564211ED2792300051D07 /* app.icns in Resources */,
 				DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */,
 				DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */,
+				DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */,
 				DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1721,6 +1742,7 @@
 				DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */,
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
 				DD0159D31ED0D3AF00F980F1 /* AccountPreferencesViewController.swift in Sources */,
+				DDC678191EDB2CD300A4E19C /* ActionLabel.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
 				DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */,
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
@@ -1763,6 +1785,7 @@
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DD382B7B1EAC345F009760C4 /* MaskImageView.m in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
+				DDC6780F1EDB253D00A4E19C /* AboutWindowController.swift in Sources */,
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
@@ -1821,6 +1844,7 @@
 				DD65FD5F1E48A3900054DD35 /* SessionInstance.swift in Sources */,
 				DD65FD571E48A0BD0054DD35 /* Event.swift in Sources */,
 				DD6477311E55231A00386D93 /* LiveVideosAdapter.swift in Sources */,
+				DDC678171EDB27EF00A4E19C /* ContributorsFetcher.swift in Sources */,
 				DDAE7C6B1E5CA97A00CEA205 /* SessionsResponseAdapter.swift in Sources */,
 				DD65FD611E48A86A0054DD35 /* PhotoRepresentation.swift in Sources */,
 				DD6477331E5535DE00386D93 /* SessionsJSONAdapter.swift in Sources */,
@@ -1955,6 +1979,14 @@
 				DD36A4B61E478C6A00B2EA88 /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		DDC678101EDB26D000A4E19C /* AboutWindowController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DDC678111EDB26D000A4E19C /* Base */,
+			);
+			name = AboutWindowController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

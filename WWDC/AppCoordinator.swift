@@ -219,6 +219,8 @@ final class AppCoordinator {
     func startup() {
         RemoteEnvironment.shared.start()
         
+        ContributorsFetcher.shared.load()
+        
         windowController.contentViewController = tabController
         windowController.showWindow(self)
         
@@ -321,6 +323,22 @@ final class AppCoordinator {
     
     func showPreferences(_ sender: Any?) {
         preferencesCoordinator.show()
+    }
+    
+    // MARK: - About window
+    
+    fileprivate lazy var aboutWindowController: AboutWindowController = {
+        var aboutWC = AboutWindowController(infoText: ContributorsFetcher.shared.infoText)
+        
+        ContributorsFetcher.shared.infoTextChangedCallback = { [unowned self] newText in
+            self.aboutWindowController.infoText = newText
+        }
+        
+        return aboutWC
+    }()
+    
+    func showAboutWindow() {
+        aboutWindowController.showWindow(nil)
     }
     
     // MARK: - Data migration
