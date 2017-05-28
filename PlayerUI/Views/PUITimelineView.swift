@@ -416,6 +416,8 @@ public final class PUITimelineView: NSView {
         guard let (ha, hal) = self.hoveredAnnotation else { return }
         
         mouseOut(ha, layer: hal)
+        
+        self.hoveredAnnotation = nil
     }
     
     private func mouseOver(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
