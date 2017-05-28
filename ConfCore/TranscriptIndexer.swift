@@ -40,7 +40,7 @@ public final class TranscriptIndexer {
     }()
     
     public static let minTranscriptableSessionLimit: Int = 10
-    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND transcript == nil AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
+    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
     
     public static func needsUpdate(in storage: Storage) -> Bool {
         let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
@@ -69,7 +69,7 @@ public final class TranscriptIndexer {
         for key in sessionKeys {
             guard let session = storage.realm.object(ofType: Session.self, forPrimaryKey: key) else { return }
             
-            guard session.transcript == nil else { continue }
+            guard session.transcriptIdentifier.isEmpty else { continue }
             
             indexTranscript(for: session.number, in: session.year, primaryKey: key)
         }
@@ -155,7 +155,7 @@ public final class TranscriptIndexer {
                     return
                 }
                 
-                session.transcript = transcript
+                session.transcriptIdentifier = transcript.identifier
                 
                 realm.add(transcript)
             }

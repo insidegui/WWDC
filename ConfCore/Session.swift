@@ -52,7 +52,7 @@ public class Session: Object {
     public let bookmarks = List<Bookmark>()
     
     /// Transcript for the session
-    public dynamic var transcript: Transcript?
+    public dynamic var transcriptIdentifier: String = ""
     
     /// The session's track
     public let track = LinkingObjects(fromType: Track.self, property: "sessions")
