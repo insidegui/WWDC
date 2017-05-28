@@ -345,6 +345,8 @@ final class DownloadManager: NSObject {
         setupSubdirectoryMonitors(on: mainDirURL)
         
         topFolderMonitor.startMonitoring()
+        
+        enumerateVideoFiles(videosPath)
     }
     
     private func setupSubdirectoryMonitors(on mainDirURL: URL) {
@@ -369,9 +371,6 @@ final class DownloadManager: NSObject {
         
         // existing/added files
         for file in files {
-            let url = URL(fileURLWithPath: path).appendingPathComponent(file)
-            guard !url.isDirectory else { return }
-            
             storage.updateDownloadedFlag(true, forAssetWithRelativeLocalURL: file)
             
             DispatchQueue.main.async {
@@ -387,9 +386,6 @@ final class DownloadManager: NSObject {
         // removed files
         let removedFiles = existingVideoFiles.filter { !files.contains($0) }
         for file in removedFiles {
-            let url = URL(fileURLWithPath: path).appendingPathComponent(file)
-            guard !url.isDirectory else { return }
-            
             storage.updateDownloadedFlag(false, forAssetWithRelativeLocalURL: file)
             
             DispatchQueue.main.async {
