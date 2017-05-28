@@ -18,9 +18,17 @@ public final class SyncEngine {
     public let storage: Storage
     public let client: AppleAPIClient
     
+    public let transcriptIndexer: TranscriptIndexer
+    
     public init(storage: Storage, client: AppleAPIClient) {
         self.storage = storage
         self.client = client
+        
+        self.transcriptIndexer = TranscriptIndexer(storage)
+        
+        NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: OperationQueue.main) { [unowned self] _ in
+            self.transcriptIndexer.downloadTranscriptsIfNeeded()
+        }
     }
     
     public func syncSessionsAndSchedule() {

@@ -31,9 +31,9 @@ final class TranscriptsJSONAdapter: Adapter {
             return .error(.missingKey(TranscriptKeys.number))
         }
         
-        guard let fullText = input[TranscriptKeys.transcript].string else {
-            return .error(.missingKey(TranscriptKeys.transcript))
-        }
+//        guard let fullText = input[TranscriptKeys.transcript].string else {
+//            return .error(.missingKey(TranscriptKeys.transcript))
+//        }
         
         guard let timecodes = input[TranscriptKeys.timecodes].array else {
             return .error(.missingKey(TranscriptKeys.timecodes))
@@ -57,7 +57,7 @@ final class TranscriptsJSONAdapter: Adapter {
         let transcript = Transcript()
         
         transcript.identifier = "\(year)-\(number)"
-        transcript.fullText = fullText
+//        transcript.fullText = fullText
         transcript.annotations.append(objectsIn: annotations)
         
         return .success(transcript)

@@ -15,9 +15,6 @@ public class Transcript: Object {
     /// Unique identifier
     public dynamic var identifier = ""
     
-    /// Full text
-    public dynamic var fullText = ""
-    
     /// The annotations the transcript contains
     public let annotations = List<TranscriptAnnotation>()
     

@@ -13,7 +13,7 @@ import RxRealm
 
 public final class Storage {
     
-    private let realmConfig: Realm.Configuration
+    public let realmConfig: Realm.Configuration
     public let realm: Realm
         
     public init(_ configuration: Realm.Configuration) throws {

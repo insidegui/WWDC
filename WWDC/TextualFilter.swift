@@ -34,8 +34,9 @@ struct TextualFilter: FilterType {
         }
         
         let keywords = NSPredicate(format: "SUBQUERY(instances, $instances, ANY $instances.keywords.name CONTAINS[cd] %@).@count > 0", value)
+        let transcripts = NSPredicate(format: "ANY transcript.annotations.body CONTAINS[cd] %@", value)
         
-        return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates + [keywords])
+        return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates + [keywords, transcripts])
     }
     
 }
