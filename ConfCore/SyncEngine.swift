@@ -18,6 +18,8 @@ public final class SyncEngine {
     public let storage: Storage
     public let client: AppleAPIClient
     
+    private var didRunIndexingService = false
+    
     private lazy var transcriptIndexingConnection: NSXPCConnection = {
         let c = NSXPCConnection(serviceName: "io.wwdc.app.TranscriptIndexingService")
         
@@ -63,6 +65,9 @@ public final class SyncEngine {
     
     private func startTranscriptIndexingIfNeeded() {
         guard let url = storage.realmConfig.fileURL else { return }
+        
+        guard !didRunIndexingService else { return }
+        didRunIndexingService = true
         
         transcriptIndexingConnection.resume()
         
