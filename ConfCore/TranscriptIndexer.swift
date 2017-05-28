@@ -39,10 +39,18 @@ public final class TranscriptIndexer {
         return q
     }()
     
+    public static let minTranscriptableSessionLimit: Int = 10
+    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND transcript == nil AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
+    
+    public static func needsUpdate(in storage: Storage) -> Bool {
+        let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
+        
+        return transcriptedSessions.count > minTranscriptableSessionLimit
+    }
+    
     /// Try to download transcripts for sessions that don't have transcripts yet
     public func downloadTranscriptsIfNeeded() {
-        
-        let transcriptedSessions = storage.realm.objects(Session.self).filter("year > 2012 AND transcript == nil AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
+        let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
         
         let sessionKeys: [String] = transcriptedSessions.map({ $0.identifier })
         
@@ -51,7 +59,7 @@ public final class TranscriptIndexer {
     
     func indexTranscriptsForSessionsWithKeys(_ sessionKeys: [String]) {
         // ignore very low session counts
-        guard sessionKeys.count > 10 else {
+        guard sessionKeys.count > TranscriptIndexer.minTranscriptableSessionLimit else {
             self.waitAndExit()
             return
         }

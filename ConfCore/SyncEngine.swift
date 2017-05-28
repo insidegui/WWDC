@@ -64,6 +64,10 @@ public final class SyncEngine {
     }
     
     private func startTranscriptIndexingIfNeeded() {
+        guard !ProcessInfo.processInfo.arguments.contains("--disable-transcripts") else { return }
+        
+        guard TranscriptIndexer.needsUpdate(in: storage) else { return }
+        
         guard let url = storage.realmConfig.fileURL else { return }
         
         guard !didRunIndexingService else { return }
