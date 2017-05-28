@@ -39,7 +39,7 @@ public final class TBUserDataMigrator {
     
     public var isPerformingMigration = false
     
-    public var presentedMigrationPrompt: Bool {
+    public static var presentedMigrationPrompt: Bool {
         get {
             if ProcessInfo.processInfo.arguments.contains("--force-migration") {
                 return false

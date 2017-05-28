@@ -50,9 +50,11 @@ final class PreferencesCoordinator {
         setupAccountBindings()
     }
     
-    func show() {
+    func show(in tab: PreferencesTab = .general) {
         windowController.window?.center()
         windowController.showWindow(nil)
+        
+        tabController.activeTab = tab
     }
     
     func setupAccountBindings() {

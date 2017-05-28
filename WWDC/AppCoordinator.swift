@@ -174,6 +174,7 @@ final class AppCoordinator {
         if migrate {
             presentMigrationInterfaceIfNeeded { [weak self] in
                 self?.doUpdateLists()
+                self?.showAccountPreferencesIfAppropriate()
             }
         } else {
             doUpdateLists()
@@ -239,11 +240,21 @@ final class AppCoordinator {
         refresh(nil)
         updateListsAfterSync()
         
-        if Arguments.showPreferences || !Preferences.shared.showedAccountPromptAtStartup {
-            Preferences.shared.showedAccountPromptAtStartup = true
-            
+        if Arguments.showPreferences {
             showPreferences(nil)
+        } else {
+            showAccountPreferencesIfAppropriate()
         }
+    }
+    
+    private func showAccountPreferencesIfAppropriate() {
+        guard !Preferences.shared.showedAccountPromptAtStartup else { return }
+        
+        guard TBUserDataMigrator.presentedMigrationPrompt else { return }
+        
+        Preferences.shared.showedAccountPromptAtStartup = true
+        
+        showAccountPreferences()
     }
     
     func receiveNotification(with userInfo: [String : Any]) -> Bool {
@@ -321,6 +332,10 @@ final class AppCoordinator {
     
     private lazy var preferencesCoordinator: PreferencesCoordinator = PreferencesCoordinator()
     
+    func showAccountPreferences() {
+        preferencesCoordinator.show(in: .account)
+    }
+    
     func showPreferences(_ sender: Any?) {
         preferencesCoordinator.show()
     }
@@ -362,7 +377,7 @@ final class AppCoordinator {
         let legacyURL = URL(fileURLWithPath: PathUtil.appSupportPath + "/default.realm")
         self.migrator = TBUserDataMigrator(legacyDatabaseFileURL: legacyURL, newRealm: storage.realm)
         
-        guard self.migrator.needsMigration && !self.migrator.presentedMigrationPrompt else {
+        guard self.migrator.needsMigration && !TBUserDataMigrator.presentedMigrationPrompt else {
             completion()
             return
         }
@@ -394,7 +409,7 @@ final class AppCoordinator {
             NSApp.terminate(nil)
         }
         
-        self.migrator.presentedMigrationPrompt = true
+        TBUserDataMigrator.presentedMigrationPrompt = true
     }
     
     private func migrationFinished(with result: TBMigrationResult, completion: @escaping () -> Void) {

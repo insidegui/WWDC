@@ -746,9 +746,9 @@
 		DD36A4BF1E478CF100B2EA88 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DDCE7ECB1EA7A0E400C7A3CA /* Base */,
 				DDC6780D1EDB251E00A4E19C /* About */,
 				DD90CDCE1ED7A5F900CADE86 /* Search */,
-				DDCE7ECB1EA7A0E400C7A3CA /* Base */,
 				DD7F38601EABD66D002D8C00 /* Sessions */,
 				DD0159CD1ED0CD1D00F980F1 /* Preferences */,
 			);
