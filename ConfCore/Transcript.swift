@@ -18,9 +18,6 @@ public class Transcript: Object {
     /// The annotations the transcript contains
     public let annotations = List<TranscriptAnnotation>()
     
-    /// The session this transcript is for
-    public let session = LinkingObjects(fromType: Session.self, property: "transcript")
-    
     public override class func primaryKey() -> String? {
         return "identifier"
     }
