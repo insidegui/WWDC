@@ -167,7 +167,7 @@ final class VideoPlayerViewController: NSViewController {
     
     // MARK: - Detach
     
-    fileprivate var detachedWindowController: VideoPlayerWindowController!
+    var detachedWindowController: VideoPlayerWindowController!
     
     func detach(forEnteringFullscreen fullscreen: Bool = false) {
         view.translatesAutoresizingMaskIntoConstraints = true

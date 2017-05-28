@@ -72,6 +72,10 @@ public final class PUIPlayerView: NSView {
         }
     }
     
+    public var isInFullScreenPlayerWindow: Bool {
+        return window is PUIPlayerWindow
+    }
+    
     public var remoteMediaUrl: URL?
     
     var pictureContainer: PUIPictureContainerViewController!

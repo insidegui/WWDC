@@ -30,6 +30,9 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         // ignore when not playing or when playing externally
         guard playerController.playerView.isInternalPlayerPlaying else { return }
         
+        // ignore when playing in fullscreen
+        guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
+        
         guard !canRestorePlaybackContext else { return }
         
         // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
@@ -58,6 +61,13 @@ extension AppCoordinator: ShelfViewControllerDelegate {
     }
     
     func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
+        if let playerController = currentPlayerController {
+            if playerController.playerView.isInFullScreenPlayerWindow {
+                // close video playing in fullscreen
+                playerController.detachedWindowController.close()
+            }
+        }
+        
         self.currentPlaybackViewModel = nil
         
         guard let viewModel = shelfController.viewModel else { return }
