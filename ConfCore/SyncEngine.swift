@@ -18,16 +18,24 @@ public final class SyncEngine {
     public let storage: Storage
     public let client: AppleAPIClient
     
-    public let transcriptIndexer: TranscriptIndexer
+    private lazy var transcriptIndexingConnection: NSXPCConnection = {
+        let c = NSXPCConnection(serviceName: "io.wwdc.app.TranscriptIndexingService")
+        
+        c.remoteObjectInterface = NSXPCInterface(with: TranscriptIndexingServiceProtocol.self)
+        
+        return c
+    }()
+    
+    private var transcriptIndexingService: TranscriptIndexingServiceProtocol? {
+        return transcriptIndexingConnection.remoteObjectProxy as? TranscriptIndexingServiceProtocol
+    }
     
     public init(storage: Storage, client: AppleAPIClient) {
         self.storage = storage
         self.client = client
         
-        self.transcriptIndexer = TranscriptIndexer(storage)
-        
         NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: OperationQueue.main) { [unowned self] _ in
-            self.transcriptIndexer.downloadTranscriptsIfNeeded()
+            self.startTranscriptIndexingIfNeeded()
         }
     }
     
@@ -51,6 +59,14 @@ public final class SyncEngine {
                 self?.storage.store(liveVideosResult: result)
             }
         }
+    }
+    
+    private func startTranscriptIndexingIfNeeded() {
+        guard let url = storage.realmConfig.fileURL else { return }
+        
+        transcriptIndexingConnection.resume()
+        
+        transcriptIndexingService?.indexTranscriptsIfNeeded(storageURL: url, schemaVersion: storage.realmConfig.schemaVersion)
     }
     
 }

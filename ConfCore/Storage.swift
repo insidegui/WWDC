@@ -22,6 +22,22 @@ public final class Storage {
         
         self.realmConfig = config
         self.realm = try Realm(configuration: config)
+        
+        DistributedNotificationCenter.default().addObserver(forName: .TranscriptIndexingDidStart, object: nil, queue: OperationQueue.main) { [unowned self] _ in
+            #if DEBUG
+                NSLog("[Storage] Locking realm autoupdates until transcript indexing is finished")
+            #endif
+            
+            self.realm.autorefresh = false
+        }
+        
+        DistributedNotificationCenter.default().addObserver(forName: .TranscriptIndexingDidStop, object: nil, queue: OperationQueue.main) { [unowned self] _ in
+            #if DEBUG
+                NSLog("[Storage] Realm autoupdates unlocked")
+            #endif
+            
+            self.realm.autorefresh = true
+        }
     }
     
     internal static func migrate(migration: Migration, oldVersion: UInt64) {

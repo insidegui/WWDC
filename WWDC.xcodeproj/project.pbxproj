@@ -143,6 +143,14 @@
 		DDB352A51EC90ACA00254815 /* TBProphylaxis.h in Headers */ = {isa = PBXBuildFile; fileRef = DDB352A31EC90ACA00254815 /* TBProphylaxis.h */; };
 		DDB352A61EC90ACA00254815 /* TBProphylaxis.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB352A41EC90ACA00254815 /* TBProphylaxis.m */; };
 		DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */; };
+		DDC677F91EDA76A100A4E19C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC677F81EDA76A100A4E19C /* main.m */; };
+		DDC677FD1EDA76A100A4E19C /* TranscriptIndexingService.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DDC678061EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */; };
+		DDC678071EDA76E000A4E19C /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
+		DDC678081EDA76E800A4E19C /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
+		DDC678091EDA76EC00A4E19C /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
+		DDC6780B1EDA76FD00A4E19C /* TranscriptIndexingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */; };
+		DDC6780C1EDA77CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */; };
 		DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */; };
 		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
@@ -248,6 +256,13 @@
 			remoteGlobalIDString = DD36A4C71E478D7E00B2EA88;
 			remoteInfo = ConfCore;
 		};
+		DDC677FB1EDA76A100A4E19C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DDC677F11EDA76A100A4E19C;
+			remoteInfo = TranscriptIndexingService;
+		};
 		DDDAA3F31EC7653300DF9D02 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
@@ -304,6 +319,17 @@
 				DD4DED641ED6579900624EAF /* Sparkle.framework.dSYM in Carthage: Copy DSYMs */,
 			);
 			name = "Carthage: Copy DSYMs";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDC678031EDA76A100A4E19C /* Embed XPC Services */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
+			dstSubfolderSpec = 16;
+			files = (
+				DDC677FD1EDA76A100A4E19C /* TranscriptIndexingService.xpc in Embed XPC Services */,
+			);
+			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -448,6 +474,12 @@
 		DDB352A31EC90ACA00254815 /* TBProphylaxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBProphylaxis.h; sourceTree = "<group>"; };
 		DDB352A41EC90ACA00254815 /* TBProphylaxis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBProphylaxis.m; sourceTree = "<group>"; };
 		DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexer.swift; sourceTree = "<group>"; };
+		DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = TranscriptIndexingService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDC677F81EDA76A100A4E19C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DDC677FA1EDA76A100A4E19C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDC678041EDA76CD00A4E19C /* TranscriptIndexingService-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TranscriptIndexingService-Bridging-Header.h"; sourceTree = "<group>"; };
+		DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingServiceProtocol.swift; sourceTree = "<group>"; };
+		DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingService.swift; sourceTree = "<group>"; };
 		DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWDCAppearance.h; sourceTree = "<group>"; };
@@ -568,6 +600,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DDC677EF1EDA76A100A4E19C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDC678071EDA76E000A4E19C /* ConfCore.framework in Frameworks */,
+				DDC678081EDA76E800A4E19C /* Realm.framework in Frameworks */,
+				DDC678091EDA76EC00A4E19C /* RealmSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DDDAA3EA1EC7653200DF9D02 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -634,6 +676,7 @@
 				DDDAA3EF1EC7653300DF9D02 /* ThrowBack */,
 				DDF721971ECA12780054C503 /* PlayerUI */,
 				DDF721EA1ECA1DCF0054C503 /* CommunitySupport */,
+				DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */,
 				DD36A4AD1E478C6A00B2EA88 /* Products */,
 				DDAE7C531E5BC6CD00CEA205 /* Frameworks */,
 			);
@@ -648,6 +691,7 @@
 				DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */,
 				DDF721961ECA12780054C503 /* PlayerUI.framework */,
 				DDF721E91ECA1DCF0054C503 /* CommunitySupport.framework */,
+				DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1020,6 +1064,18 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */ = {
+			isa = PBXGroup;
+			children = (
+				DDC677F81EDA76A100A4E19C /* main.m */,
+				DDC677FA1EDA76A100A4E19C /* Info.plist */,
+				DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */,
+				DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */,
+				DDC678041EDA76CD00A4E19C /* TranscriptIndexingService-Bridging-Header.h */,
+			);
+			path = TranscriptIndexingService;
+			sourceTree = "<group>";
+		};
 		DDCE7ECB1EA7A0E400C7A3CA /* Base */ = {
 			isa = PBXGroup;
 			children = (
@@ -1332,6 +1388,7 @@
 				DD5F516B1E47DCC40017F9EC /* Carthage: Copy Frameworks */,
 				DD5F516D1E47DDDF0017F9EC /* Carthage: Copy DSYMs */,
 				DD4DED651ED6602700624EAF /* Fabric */,
+				DDC678031EDA76A100A4E19C /* Embed XPC Services */,
 			);
 			buildRules = (
 			);
@@ -1340,6 +1397,7 @@
 				DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */,
 				DDF7219C1ECA12780054C503 /* PBXTargetDependency */,
 				DDF721EF1ECA1DCF0054C503 /* PBXTargetDependency */,
+				DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			productName = WWDC;
@@ -1382,6 +1440,23 @@
 			productName = ConfCoreTests;
 			productReference = DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DDC677FE1EDA76A100A4E19C /* Build configuration list for PBXNativeTarget "TranscriptIndexingService" */;
+			buildPhases = (
+				DDC677EE1EDA76A100A4E19C /* Sources */,
+				DDC677EF1EDA76A100A4E19C /* Frameworks */,
+				DDC677F01EDA76A100A4E19C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TranscriptIndexingService;
+			productName = TranscriptIndexingService;
+			productReference = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */;
+			productType = "com.apple.product-type.xpc-service";
 		};
 		DDDAA3ED1EC7653200DF9D02 /* ThrowBack */ = {
 			isa = PBXNativeTarget;
@@ -1473,6 +1548,11 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = DD36A4AB1E478C6900B2EA88;
 					};
+					DDC677F11EDA76A100A4E19C = {
+						CreatedOnToolsVersion = 8.3.2;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Automatic;
+					};
 					DDDAA3ED1EC7653200DF9D02 = {
 						CreatedOnToolsVersion = 8.3.2;
 						LastSwiftMigration = 0830;
@@ -1508,6 +1588,7 @@
 				DDDAA3ED1EC7653200DF9D02 /* ThrowBack */,
 				DDF721951ECA12780054C503 /* PlayerUI */,
 				DDF721E81ECA1DCF0054C503 /* CommunitySupport */,
+				DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */,
 			);
 		};
 /* End PBXProject section */
@@ -1541,6 +1622,13 @@
 				DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */,
 				DD5DEC291E4AA8C800426FA6 /* news.json in Resources */,
 				DD5DEC2B1E4AA8C800426FA6 /* videos.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDC677F01EDA76A100A4E19C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1696,6 +1784,7 @@
 				DDAE7C5A1E5C652600CEA205 /* Environment.swift in Sources */,
 				DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */,
 				DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */,
+				DDC6780C1EDA77CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */,
 				DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */,
 				DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */,
 				DDAE7C651E5CA81C00CEA205 /* SessionsResponse.swift in Sources */,
@@ -1745,6 +1834,16 @@
 				DD36A4D81E478D7E00B2EA88 /* DatabaseTests.swift in Sources */,
 				DDAE7C5C1E5C707A00CEA205 /* NetworkingTests.swift in Sources */,
 				DD34DA071E4AB0E400F25C45 /* AdapterTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDC677EE1EDA76A100A4E19C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDC6780B1EDA76FD00A4E19C /* TranscriptIndexingService.swift in Sources */,
+				DDC677F91EDA76A100A4E19C /* main.m in Sources */,
+				DDC678061EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1825,6 +1924,11 @@
 			isa = PBXTargetDependency;
 			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
 			targetProxy = DDB352941EC7FFE900254815 /* PBXContainerItemProxy */;
+		};
+		DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */;
+			targetProxy = DDC677FB1EDA76A100A4E19C /* PBXContainerItemProxy */;
 		};
 		DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2410,6 +2514,94 @@
 			};
 			name = "Release with iCloud";
 		};
+		DDC677FF1EDA76A100A4E19C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		DDC678001EDA76A100A4E19C /* Debug with iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = "Debug with iCloud";
+		};
+		DDC678011EDA76A100A4E19C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		DDC678021EDA76A100A4E19C /* Release with iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = "Release with iCloud";
+		};
 		DDDAA3F81EC7653300DF9D02 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2767,6 +2959,16 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		DDC677FE1EDA76A100A4E19C /* Build configuration list for PBXNativeTarget "TranscriptIndexingService" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDC677FF1EDA76A100A4E19C /* Debug */,
+				DDC678001EDA76A100A4E19C /* Debug with iCloud */,
+				DDC678011EDA76A100A4E19C /* Release */,
+				DDC678021EDA76A100A4E19C /* Release with iCloud */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DDDAA3F71EC7653300DF9D02 /* Build configuration list for PBXNativeTarget "ThrowBack" */ = {
 			isa = XCConfigurationList;
