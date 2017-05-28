@@ -80,7 +80,7 @@ final class DownloadManager: NSObject {
         NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
         }
-        
+
         monitorDownloadsFolder()
     }
     
@@ -339,8 +339,6 @@ final class DownloadManager: NSObject {
         let mainDirURL = URL(fileURLWithPath: videosPath)
         
         topFolderMonitor = DTFolderMonitor(for: mainDirURL) { [unowned self] in
-            self.enumerateVideoFiles(videosPath)
-            
             self.setupSubdirectoryMonitors(on: mainDirURL)
         }
         
@@ -371,6 +369,9 @@ final class DownloadManager: NSObject {
         
         // existing/added files
         for file in files {
+            let url = URL(fileURLWithPath: path).appendingPathComponent(file)
+            guard !url.isDirectory else { return }
+            
             storage.updateDownloadedFlag(true, forAssetWithRelativeLocalURL: file)
             
             DispatchQueue.main.async {
@@ -386,6 +387,9 @@ final class DownloadManager: NSObject {
         // removed files
         let removedFiles = existingVideoFiles.filter { !files.contains($0) }
         for file in removedFiles {
+            let url = URL(fileURLWithPath: path).appendingPathComponent(file)
+            guard !url.isDirectory else { return }
+            
             storage.updateDownloadedFlag(false, forAssetWithRelativeLocalURL: file)
             
             DispatchQueue.main.async {
