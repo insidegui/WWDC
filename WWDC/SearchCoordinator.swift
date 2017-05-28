@@ -8,6 +8,7 @@
 
 import Cocoa
 import ConfCore
+import RealmSwift
 
 enum FilterIdentifier: String {
     case text
@@ -133,6 +134,8 @@ final class SearchCoordinator {
         return filters.reduce(true, { return $0.0 && $0.1.isEmpty })
     }
     
+    fileprivate lazy var searchQueue: DispatchQueue = DispatchQueue(label: "Search", qos: .userInteractive)
+    
     fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
         guard !isAllEmpty(filters) else {
             controller.searchResults = nil
@@ -146,9 +149,21 @@ final class SearchCoordinator {
             print(predicate)
         #endif
         
-        let results = storage.realm.objects(Session.self).filter(predicate)
-        
-        controller.searchResults = results
+        searchQueue.async { [unowned self] in
+            do {
+                let realm = try Realm(configuration: self.storage.realmConfig)
+                
+                let results = realm.objects(Session.self).filter(predicate)
+                let keys: [String] = results.map({ $0.identifier })
+                
+                DispatchQueue.main.async {
+                    let searchResults = self.storage.realm.objects(Session.self).filter("identifier IN %@", keys)
+                    controller.searchResults = searchResults
+                }
+            } catch {
+                LoggingHelper.registerError(error, info: ["when": "Searching"])
+            }
+        }
     }
     
 }
