@@ -82,9 +82,14 @@ final class VideoPlayerViewController: NSViewController {
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.black.cgColor
         
-        playerView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        playerView.translatesAutoresizingMaskIntoConstraints = false
         playerView.frame = view.bounds
         view.addSubview(playerView)
+        
+        playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        playerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        playerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         view.addSubview(progressIndicator)
         view.addConstraints([

@@ -219,7 +219,8 @@ public final class PUIPlayerView: NSView {
         if pictureContainer == nil {
             pictureContainer = PUIPictureContainerViewController(playerLayer: playerLayer)
             pictureContainer.delegate = self
-            pictureContainer.view.translatesAutoresizingMaskIntoConstraints = false
+            pictureContainer.view.frame = bounds
+            pictureContainer.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
             
             addSubview(pictureContainer.view)
         }
@@ -1276,7 +1277,6 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
         guard let superview = superview else { return }
         
         pictureContainer.view.frame = superview.bounds
-        pictureContainer.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
         
         if superview == self, pipController != nil {
             if self.pictureContainer.presenting == pipController {
