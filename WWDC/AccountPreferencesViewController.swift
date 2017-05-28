@@ -157,11 +157,24 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
     private var loadingView: ModalLoadingView?
     
     private func updateUI() {
+        guard cloudAccountIsAvailable else {
+            errorLabel.isHidden = false
+            infoLabel.isHidden = true
+            permissionLabel.isHidden = true
+            completeButton.isHidden = true
+            return
+        }
+        
         guard let profile = profile else {
             loadingView = ModalLoadingView.show(attachedTo: view)
             
             return
         }
+        
+        errorLabel.isHidden = true
+        infoLabel.isHidden = false
+        permissionLabel.isHidden = false
+        completeButton.isHidden = false
         
         loadingView?.hide()
         
