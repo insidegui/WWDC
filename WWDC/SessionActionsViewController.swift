@@ -159,8 +159,9 @@ class SessionActionsViewController: NSViewController {
                 }
             }).addDisposableTo(self.disposeBag)
         } else {
+            // session can't be downloaded (maybe Lab or download not available yet)
             downloadIndicator.isHidden = true
-            downloadButton.isHidden = false
+            downloadButton.isHidden = true
             resetDownloadButton()
         }
         

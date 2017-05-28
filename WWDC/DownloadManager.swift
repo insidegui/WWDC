@@ -242,6 +242,8 @@ final class DownloadManager: NSObject {
                     observer.onNext(.downloading(-1))
                 } else if self.hasVideo(asset.remoteURL) {
                     observer.onNext(.finished)
+                } else {
+                    observer.onNext(.none)
                 }
             }
             
