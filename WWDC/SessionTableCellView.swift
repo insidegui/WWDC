@@ -44,11 +44,11 @@ final class SessionTableCellView: NSTableCellView {
         imageDownloadOperation?.cancel()
         
         thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
-        
-        self.disposeBag = DisposeBag()
     }
     
     private func bindUI() {
+        self.disposeBag = DisposeBag()
+        
         guard let viewModel = viewModel else { return }
         
         viewModel.rxTitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).addDisposableTo(self.disposeBag)
