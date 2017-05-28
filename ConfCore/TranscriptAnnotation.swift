@@ -18,7 +18,4 @@ public class TranscriptAnnotation: Object {
     /// The annotation's text
     public dynamic var body = ""
     
-    /// The transcript this annotation is associated with
-    public let transcript = LinkingObjects(fromType: Transcript.self, property: "annotations")
-    
 }
