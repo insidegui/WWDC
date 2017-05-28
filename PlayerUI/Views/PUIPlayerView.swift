@@ -891,9 +891,11 @@ public final class PUIPlayerView: NSView {
     
     public override func keyDown(with event: NSEvent) {
         guard let command = KeyCommands(rawValue: event.keyCode) else {
-            super.keyDown(with: event)
             return
         }
+        
+        // ignore keystrokes when editing text
+        guard !(window?.firstResponder is NSTextView) else { return }
         
         switch command {
         case .spaceBar:
