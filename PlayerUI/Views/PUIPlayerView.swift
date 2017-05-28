@@ -871,6 +871,8 @@ public final class PUIPlayerView: NSView {
         }
         
         keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            guard self.window?.firstResponder != self else { return event }
+            
             self.keyDown(with: event)
             
             return event
