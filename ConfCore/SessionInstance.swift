@@ -84,6 +84,9 @@ public class SessionInstance: Object {
     /// The track associated with the instance
     public let track = LinkingObjects(fromType: Track.self, property: "instances")
     
+    /// The event this instance is associated with
+    public let event = LinkingObjects(fromType: Event.self, property: "sessionInstances")
+    
     /// Whether this is being live streamed at the moment
     public dynamic var isCurrentlyLive = false
     

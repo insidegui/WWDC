@@ -142,7 +142,12 @@ final class SearchCoordinator {
             return
         }
         
-        let subpredicates = filters.flatMap({ $0.predicate })
+        var subpredicates = filters.flatMap({ $0.predicate })
+        
+        if controller == scheduleController {
+            subpredicates.append(NSPredicate(format: "ANY event.isCurrent == true"))
+        }
+        
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
         
         #if DEBUG
