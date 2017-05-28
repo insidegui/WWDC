@@ -12,6 +12,7 @@ import ThrowBack
 extension Notification.Name {
     
     static let LocalVideoStoragePathPreferenceDidChange = Notification.Name("LocalVideoStoragePathPreferenceDidChange")
+    static let RefreshPeriodicallyPreferenceDidChange = Notification.Name("RefreshPeriodicallyPreferenceDidChange")
     
 }
 
@@ -97,6 +98,17 @@ final class Preferences {
         }
         set {
             defaults.set(newValue, forKey: #function)
+        }
+    }
+    
+    var refreshPeriodically: Bool {
+        get {
+            return defaults.bool(forKey: #function)
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+            
+            NotificationCenter.default.post(name: .RefreshPeriodicallyPreferenceDidChange, object: nil)
         }
     }
     

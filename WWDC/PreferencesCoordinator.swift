@@ -12,6 +12,7 @@ import RxCocoa
 import RxSwift
 
 enum PreferencesTab: Int {
+    case general
     case account
 }
 
@@ -22,11 +23,20 @@ final class PreferencesCoordinator {
     private let windowController: PreferencesWindowController
     
     private let tabController: WWDCTabViewController<PreferencesTab>
+    
+    private let generalController: GeneralPreferencesViewController
     private let accountController: AccountPreferencesViewController
     
     init() {
         self.windowController = PreferencesWindowController()
         self.tabController = WWDCTabViewController()
+        
+        // General
+        self.generalController = GeneralPreferencesViewController.loadFromStoryboard()
+        generalController.identifier = "General"
+        let generalItem = NSTabViewItem(viewController: generalController)
+        generalItem.label = "General"
+        self.tabController.addTabViewItem(generalItem)
         
         // Account
         self.accountController = AccountPreferencesViewController()

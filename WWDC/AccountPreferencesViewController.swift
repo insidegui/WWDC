@@ -179,6 +179,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
         loadingView?.hide()
         
         avatarImageView.image = profile.avatar ?? #imageLiteral(resourceName: "avatar")
+        avatarImageView.isHidden = false
         avatarImageView.isRounded = true
         
         nameLabel.stringValue = profile.name
@@ -220,6 +221,12 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
                 WWDCAlert.show(with: error)
             }
         }
+    }
+    
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        updateUI()
     }
     
 }

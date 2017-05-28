@@ -20,11 +20,7 @@ class WWDCImageView: NSView {
     
     var isRounded = false {
         didSet {
-            if isRounded {
-                self.layer?.mask = self.maskLayer
-            } else {
-                self.layer?.mask = nil
-            }
+            updateRoundness()
         }
     }
     
@@ -53,16 +49,6 @@ class WWDCImageView: NSView {
             }
         }
     }
-    
-    private lazy var maskLayer: WWDCShapeLayer = {
-        let l = WWDCShapeLayer()
-        
-        l.frame = self.bounds
-        l.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
-        l.path = CGPath(ellipseIn: self.bounds, transform: nil)
-        
-        return l
-    }()
     
     var image: NSImage? = nil {
         didSet {
@@ -114,7 +100,7 @@ class WWDCImageView: NSView {
     override func layout() {
         super.layout()
         
-        maskLayer.frame = bounds
+        updateRoundness()
     }
     
     // MARK: - Editing
@@ -136,6 +122,12 @@ class WWDCImageView: NSView {
         delegate?.wwdcImageView(self, didReceiveNewImageWithFileURL: fileURL)
         
         return true
+    }
+    
+    private func updateRoundness() {
+        guard let layer = layer else { return }
+        
+        layer.cornerRadius = isRounded ? layer.bounds.height / 2 : 0
     }
     
 }

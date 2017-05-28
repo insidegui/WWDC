@@ -11,7 +11,6 @@
 /**
  *  ITSwitch is a replica of UISwitch for Mac OS X
  */
-IB_DESIGNABLE
 @interface ITSwitch : NSControl
 
 /**

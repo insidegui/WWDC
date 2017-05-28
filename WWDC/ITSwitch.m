@@ -112,6 +112,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
     _backgroundLayer.bounds = _rootLayer.bounds;
     _backgroundLayer.anchorPoint = (CGPoint){ .x = 0.f, .y = 0.f };
     _backgroundLayer.borderWidth = kBorderLineWidth;
+    _backgroundLayer.borderColor = [NSColor darkGrayColor].CGColor;
     [_rootLayer addSublayer:_backgroundLayer];
     
     // Knob layer
@@ -205,6 +206,10 @@ static CGFloat const kDisabledOpacity = 0.5f;
         
         self.knobLayer.frame = [self rectForKnob];
         self.knobInsideLayer.frame = self.knobLayer.bounds;
+        
+        if (![self checked]) {
+            _backgroundLayer.borderColor = [NSColor darkGrayColor].CGColor;
+        }
     }
     [CATransaction commit];
 }
