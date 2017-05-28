@@ -14,6 +14,20 @@ protocol SearchFiltersViewControllerDelegate: class {
     
 }
 
+enum FilterSegment: Int {
+    case favorite
+    case downloaded
+    case unwatched
+}
+
+extension NSSegmentedControl {
+    
+    func isSelected(for segment: FilterSegment) -> Bool {
+        return isSelected(forSegment: segment.rawValue)
+    }
+    
+}
+
 final class SearchFiltersViewController: NSViewController {
    
     static func loadFromStoryboard() -> SearchFiltersViewController {
@@ -59,18 +73,32 @@ final class SearchFiltersViewController: NSViewController {
         updateMultipleChoiceFilter(at: filterIndex, with: tracksPopUp)
     }
     
+    private var favoriteSegmentSelected = false
+    private var downloadedSegmentSelected = false
+    private var unwatchedSegmentSelected = false
+    
     @IBAction func bottomSegmentedControlAction(_ sender: Any) {
-        if let favoriteIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isFavorite.rawValue }) {
-            updateToggleFilter(at: favoriteIndex, with: bottomSegmentedControl.isSelected(forSegment: 0))
+        if favoriteSegmentSelected != bottomSegmentedControl.isSelected(for: .favorite) {
+            if let favoriteIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isFavorite.rawValue }) {
+                updateToggleFilter(at: favoriteIndex, with: bottomSegmentedControl.isSelected(for: .favorite))
+            }
         }
         
-        if let downloadedIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isDownloaded.rawValue }) {
-            updateToggleFilter(at: downloadedIndex, with: bottomSegmentedControl.isSelected(forSegment: 1))
+        if downloadedSegmentSelected != bottomSegmentedControl.isSelected(for: .downloaded) {
+            if let downloadedIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isDownloaded.rawValue }) {
+                updateToggleFilter(at: downloadedIndex, with: bottomSegmentedControl.isSelected(for: .downloaded))
+            }
         }
         
-        if let unwatchedIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isUnwatched.rawValue }) {
-            updateToggleFilter(at: unwatchedIndex, with: bottomSegmentedControl.isSelected(forSegment: 2))
+        if unwatchedSegmentSelected != bottomSegmentedControl.isSelected(for: .unwatched) {
+            if let unwatchedIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.isUnwatched.rawValue }) {
+                updateToggleFilter(at: unwatchedIndex, with: bottomSegmentedControl.isSelected(for: .unwatched))
+            }
         }
+        
+        favoriteSegmentSelected = bottomSegmentedControl.isSelected(for: .favorite)
+        downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
+        unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
     }
     
     @IBAction func searchFieldAction(_ sender: Any) {
@@ -85,6 +113,10 @@ final class SearchFiltersViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        favoriteSegmentSelected = bottomSegmentedControl.isSelected(for: .favorite)
+        downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
+        unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
         
         toggleFiltersHidden(true)
         

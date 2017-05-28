@@ -146,6 +146,8 @@ final class SearchCoordinator {
         
         if controller == scheduleController {
             subpredicates.append(NSPredicate(format: "ANY event.isCurrent == true"))
+        } else if controller == videosController {
+            subpredicates.append(NSPredicate(format: "ANY instances.rawSessionType != 'Lab'"))
         }
         
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
