@@ -233,6 +233,7 @@ public final class PUIPlayerView: NSView {
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.volume), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
+        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration), options: [.initial, .new], context: nil)
         
         asset?.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: metadataBecameAvailable)
         
@@ -254,6 +255,7 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.volume))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
+        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration))
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -266,6 +268,8 @@ public final class PUIPlayerView: NSView {
                 self.playerVolumeChanged()
             } else if keyPath == #keyPath(AVPlayer.rate) {
                 self.updatePlayingState()
+            } else if keyPath == #keyPath(AVPlayer.currentItem.duration) {
+                self.metadataBecameAvailable()
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
@@ -374,7 +378,7 @@ public final class PUIPlayerView: NSView {
         
         self.elapsedTimeLabel.stringValue = String(time: time) ?? ""
         
-        let remainingTime = CMTimeSubtract(time, duration)
+        let remainingTime = CMTimeSubtract(duration, time)
         self.remainingTimeLabel.stringValue = String(time: remainingTime) ?? ""
     }
     
