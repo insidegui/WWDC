@@ -160,7 +160,7 @@ class SessionDetailsViewController: NSViewController {
         shelfController.view.translatesAutoresizingMaskIntoConstraints = false
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 400).isActive = true
+        shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
         
         view.addSubview(shelfController.view)
         view.addSubview(mainStackView)

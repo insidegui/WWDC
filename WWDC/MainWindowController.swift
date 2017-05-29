@@ -21,9 +21,9 @@ final class MainWindowController: NSWindowController {
     
     static var defaultRect: NSRect {
         if let screen = NSScreen.main() {
-            return screen.visibleFrame.insetBy(dx: 50, dy: 70)
+            return screen.visibleFrame.insetBy(dx: 50, dy: 120)
         } else {
-            return NSRect(x: 0, y: 0, width: 1200, height: 640)
+            return NSRect(x: 0, y: 0, width: 1200, height: 600)
         }
     }
     
