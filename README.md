@@ -1,6 +1,4 @@
-If you want to support my open source projects financially, you can do so by purchasing a copy of [BrowserFreedom](https://getbrowserfreedom.com), [Mediunic](https://itunes.apple.com/app/mediunic-medium-client/id1088945121?mt=12) or sending Bitcoin to `3DH9B42m6k2A89hy1Diz3Vr3cpDNQTQCbJ` 😁
-
-**IMPORTANT: [Development of the next version is happening in the Version 5 branch, I will not accept pull requests to master until version5 is merged](https://github.com/insidegui/WWDC/tree/version5)**
+**IMPORTANT: [This branch is a retired version of the app that is not in development anymore, development is happening in the master branch](https://github.com/insidegui/WWDC)**
 
 # The unofficial WWDC app for macOS
 
