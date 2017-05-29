@@ -70,6 +70,8 @@ public final class PUITimelineView: NSView {
     
     // MARK: - Private API
     
+    private var annotationWindowController: PUIAnnotationWindowController?
+    
     weak var viewDelegate: PUITimelineViewDelegate?
     
     var loadedSegments = Set<PUIBufferSegment>() {
@@ -111,8 +113,6 @@ public final class PUITimelineView: NSView {
         bufferingProgressLayer.frame = bounds
         bufferingProgressLayer.cornerRadius = Metrics.cornerRadius
         bufferingProgressLayer.masksToBounds = true
-        // TODO: hide buffering layer only when media is not a stream
-        bufferingProgressLayer.opacity = 0
         
         layer?.addSublayer(bufferingProgressLayer)
         
@@ -228,6 +228,10 @@ public final class PUITimelineView: NSView {
             mouseDown(targetAnnotation.0, layer: targetAnnotation.1, originalEvent: event)
             return
         }
+        
+        selectedAnnotation = nil
+        delegate?.timelineDidSelectAnnotation(nil)
+        unhighlightCurrentHoveredAnnotationIfNeeded()
         
         var startedInteractiveSeek = false
         
@@ -383,6 +387,17 @@ public final class PUITimelineView: NSView {
     }
     
     private var hoveredAnnotation: (PUITimelineAnnotation, PUIAnnotationLayer)?
+    private var selectedAnnotation: (PUITimelineAnnotation, PUIAnnotationLayer)? {
+        didSet {
+            unhighlight(annotationTuple: oldValue)
+            
+            if selectedAnnotation != nil {
+                showAnnotationWindow()
+            } else {
+                hideAnnotationWindow()
+            }
+        }
+    }
     
     private func annotationUnderMouse(with event: NSEvent, diameter: CGFloat = Metrics.annotationBubbleDiameter) -> (annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer)? {
         var point = convert(event.locationInWindow, from: nil)
@@ -415,9 +430,19 @@ public final class PUITimelineView: NSView {
     private func unhighlightCurrentHoveredAnnotationIfNeeded() {
         guard let (ha, hal) = self.hoveredAnnotation else { return }
         
+        if let (sa, _) = self.selectedAnnotation {
+            guard sa.identifier != ha.identifier else { return }
+        }
+        
         mouseOut(ha, layer: hal)
         
         self.hoveredAnnotation = nil
+    }
+    
+    private func unhighlight(annotationTuple: (PUITimelineAnnotation, PUIAnnotationLayer)?) {
+        guard let (sa, sal) = annotationTuple else { return }
+        
+        mouseOut(sa, layer: sal)
     }
     
     private func mouseOver(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -531,17 +556,18 @@ public final class PUITimelineView: NSView {
                     
                     self.delegate?.timelineDidMoveAnnotation(annotation, to: timestamp)
                 case .none:
+                    self.selectedAnnotation = (annotation, layer)
                     self.delegate?.timelineDidSelectAnnotation(annotation)
                 }
                 
                 mode = .none
                 self.hoveredAnnotation = nil
-                self.mouseOut(annotation, layer: layer)
-                
                 updateAnnotationTextLayer(at: point)
                 
                 stop.pointee = true
             case .leftMouseDragged:
+                self.selectedAnnotation = nil
+                
                 if mode != .delete {
                     guard point.x - layer.bounds.width / 2 > 0 else { return }
                     guard point.x < self.borderLayer.frame.width - layer.bounds.width / 2 else { return }
@@ -583,6 +609,77 @@ public final class PUITimelineView: NSView {
             default: break
             }
         }
+    }
+    
+    // MARK: - Annotation editing management
+    
+    private var annotationCommandsMonitor: Any?
+    
+    private func showAnnotationWindow() {
+        guard let (annotation, annotationLayer) = self.selectedAnnotation else { return }
+        guard let controller = delegate?.viewControllerForTimelineAnnotation(annotation) else { return }
+        
+        if annotationWindowController == nil {
+            annotationWindowController = PUIAnnotationWindowController()
+        }
+        
+        guard let windowController = annotationWindowController else { return }
+        guard let annotationWindow = windowController.window else { return }
+        guard let contentView = annotationWindowController?.window?.contentView else { return }
+        
+        controller.view.frame = contentView.bounds
+        controller.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        contentView.addSubview(controller.view)
+        
+        let layerRect = convertFromLayer(annotationLayer.frame)
+        let windowRect = convert(layerRect, to: nil)
+        guard var screenRect = window?.convertToScreen(windowRect) else { return }
+        
+        screenRect.origin.y += 56
+        screenRect.origin.x -= round((contentView.bounds.width / 2) - annotationLayer.bounds.width)
+        
+        annotationWindow.alphaValue = 0
+        
+        window?.addChildWindow(annotationWindow, ordered: .above)
+        annotationWindow.setFrameOrigin(screenRect.origin)
+        annotationWindow.orderFront(nil)
+        
+        annotationWindow.animator().alphaValue = 1
+        
+        enum AnnotationKeyCommand: UInt16 {
+            case escape = 53
+        }
+        
+        annotationCommandsMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyUp]) { event in
+            guard let command = AnnotationKeyCommand(rawValue: event.keyCode) else { return event }
+            
+            switch command {
+            case .escape:
+                self.selectedAnnotation = nil
+                self.unhighlightCurrentHoveredAnnotationIfNeeded()
+            }
+            
+            return event
+        }
+    }
+    
+    private func hideAnnotationWindow() {
+        if let monitor = annotationCommandsMonitor {
+            NSEvent.removeMonitor(monitor)
+            annotationCommandsMonitor = nil
+        }
+        
+        NSAnimationContext.beginGrouping()
+        NSAnimationContext.current().completionHandler = {
+            self.annotationWindowController?.close()
+            self.annotationWindowController = nil
+        }
+        self.annotationWindowController?.window?.animator().alphaValue = 0
+        NSAnimationContext.endGrouping()
+    }
+    
+    var isEditingAnnotation: Bool {
+        return annotationWindowController != nil
     }
     
 }

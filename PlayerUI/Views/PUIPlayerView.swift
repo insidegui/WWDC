@@ -966,6 +966,8 @@ public final class PUIPlayerView: NSView {
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
         
+        guard !timelineView.isEditingAnnotation else { return false }
+        
         let windowMouseRect = window.convertFromScreen(NSRect(origin: NSEvent.mouseLocation(), size: CGSize(width: 1, height: 1)))
         let viewMouseRect = convert(windowMouseRect, from: nil)
         
