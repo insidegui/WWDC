@@ -59,8 +59,12 @@
 	<string>BSD</string>
 	<key>GRBundleMainDeveloperName</key>
 	<string>Guilherme Rambo</string>
+	<key>GRBundleMainDeveloperWebsite</key>
+	<string>https://twitter.com/_inside</string>
 	<key>GRBundleUserInterfaceCreatorWebsite</key>
-	<string>http://slides.com/vicenteborrell/portfolio/fullscreen#/</string>
+	<string>https://twitter.com/VicenteBorrell</string>
+	<key>GRBundleDesignContributorWebsite</key>
+	<string>https://twitter.com/bcmn96</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSAppTransportSecurity</key>

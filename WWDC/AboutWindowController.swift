@@ -18,6 +18,7 @@ final class AboutWindowController: NSWindowController {
     @IBOutlet weak fileprivate var iconCreatorLabel: ActionLabel!
     @IBOutlet weak fileprivate var uiCreatorLabel: ActionLabel!
     @IBOutlet weak fileprivate var licenseLabel: NSTextField!
+    @IBOutlet weak var designContributorLabel: ActionLabel!
     
     var infoText: String? {
         didSet {
@@ -77,7 +78,7 @@ final class AboutWindowController: NSWindowController {
         }
         
         if let creator = info["GRBundleMainDeveloperName"] as? String {
-            creatorLabel.stringValue = "Created by \(creator)"
+            creatorLabel.stringValue = creator
         } else {
             creatorLabel.stringValue = ""
         }
@@ -97,13 +98,33 @@ final class AboutWindowController: NSWindowController {
             uiCreatorLabel.alphaValue = 0.8
             uiCreatorLabel.textColor = .primary
             uiCreatorLabel.target = self
-            iconCreatorLabel.action = #selector(openUserInterfaceCreatorWebsite(_:))
+            uiCreatorLabel.action = #selector(openUserInterfaceCreatorWebsite(_:))
+        }
+        
+        if let website = info["GRBundleDesignContributorWebsite"] as? String {
+            self.designContributorWebsite = URL(string: website)
+            
+            designContributorLabel.alphaValue = 0.8
+            designContributorLabel.textColor = .primary
+            designContributorLabel.target = self
+            designContributorLabel.action = #selector(openDesignContributorWebsite(_:))
+        }
+        
+        if let website = info["GRBundleMainDeveloperWebsite"] as? String {
+            self.mainDeveloperWebsite = URL(string: website)
+            
+            creatorLabel.alphaValue = 0.8
+            creatorLabel.textColor = .primary
+            creatorLabel.target = self
+            creatorLabel.action = #selector(openMainDeveloperWebsite(_:))
         }
         
     }
     
     private var iconCreatorWebsite: URL?
     private var uiCreatorWebsite: URL?
+    private var mainDeveloperWebsite: URL?
+    private var designContributorWebsite: URL?
     
     @IBAction func openIconCreatorWebsite(_ sender: Any) {
         guard let iconCreatorWebsite = iconCreatorWebsite else { return }
@@ -115,6 +136,18 @@ final class AboutWindowController: NSWindowController {
         guard let uiCreatorWebsite = uiCreatorWebsite else { return }
         
         NSWorkspace.shared().open(uiCreatorWebsite)
+    }
+    
+    @IBAction func openDesignContributorWebsite(_ sender: Any) {
+        guard let designContributorWebsite = designContributorWebsite else { return }
+        
+        NSWorkspace.shared().open(designContributorWebsite)
+    }
+    
+    @IBAction func openMainDeveloperWebsite(_ sender: Any) {
+        guard let mainDeveloperWebsite = mainDeveloperWebsite else { return }
+        
+        NSWorkspace.shared().open(mainDeveloperWebsite)
     }
     
     override func showWindow(_ sender: Any?) {
