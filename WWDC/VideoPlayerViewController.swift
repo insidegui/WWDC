@@ -67,10 +67,7 @@ final class VideoPlayerViewController: NSViewController {
         p.style = .spinningStyle
         p.isIndeterminate = true
         p.translatesAutoresizingMaskIntoConstraints = false
-        
-        if #available(OSX 10.11, *) {
-            p.appearance = NSAppearance(appearanceNamed: "WhiteSpinner", bundle: Bundle(for: VideoPlayerViewController.self))
-        }
+        p.appearance = NSAppearance(named: "WhiteSpinner")
         
         p.sizeToFit()
         

@@ -117,6 +117,7 @@
 		DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */; };
 		DD9564211ED2792300051D07 /* app.icns in Resources */ = {isa = PBXBuildFile; fileRef = DD9564201ED2792300051D07 /* app.icns */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
+		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */; };
@@ -460,6 +461,7 @@
 		DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
 		DD9564201ED2792300051D07 /* app.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = app.icns; path = Design/app.icns; sourceTree = SOURCE_ROOT; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
+		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptsJSONAdapter.swift; sourceTree = "<group>"; };
@@ -1167,6 +1169,7 @@
 			children = (
 				DD9564201ED2792300051D07 /* app.icns */,
 				DDFA10C51EBFA578001DCF66 /* WWDC.car */,
+				DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */,
 				DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */,
 				DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */,
 				DD7F38701EABF6C4002D8C00 /* Colors.swift */,
@@ -1676,6 +1679,7 @@
 				DDC6781D1EDB638400A4E19C /* Preferences.storyboard in Resources */,
 				DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */,
 				DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */,
+				DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
