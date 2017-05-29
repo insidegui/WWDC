@@ -38,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>11</string>
+	<string>12</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -53,6 +53,8 @@
 			</dict>
 		</array>
 	</dict>
+	<key>GRBundleDesignContributorWebsite</key>
+	<string>https://twitter.com/bcmn96</string>
 	<key>GRBundleIconCreatorWebsite</key>
 	<string>http://www.raphalopes.com</string>
 	<key>GRBundleLicenseName</key>
@@ -63,8 +65,6 @@
 	<string>https://twitter.com/_inside</string>
 	<key>GRBundleUserInterfaceCreatorWebsite</key>
 	<string>https://twitter.com/VicenteBorrell</string>
-	<key>GRBundleDesignContributorWebsite</key>
-	<string>https://twitter.com/bcmn96</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSAppTransportSecurity</key>
