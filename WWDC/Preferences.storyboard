@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
+        <capability name="system font weights other than Regular or Bold" minToolsVersion="7.0"/>
+    </dependencies>
+    <scenes>
+        <!--General Preferences View Controller-->
+        <scene sceneID="LoD-1q-ewc">
+            <objects>
+                <viewController storyboardIdentifier="GeneralPreferencesViewController" id="9dt-pe-Bsa" customClass="GeneralPreferencesViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="scn-7e-mlv">
+                        <rect key="frame" x="0.0" y="0.0" width="460" height="500"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="16" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hoo-Kt-Gtl">
+                                <rect key="frame" x="72" y="394" width="316" height="86"/>
+                                <subviews>
+                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="16" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Df-LH-fRL">
+                                        <rect key="frame" x="0.0" y="68" width="277" height="18"/>
+                                        <subviews>
+                                            <textField toolTip="When searching in the videos tab, the search results will include any session where the transcript contains the searched phrase" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X7h-FH-GQx">
+                                                <rect key="frame" x="-2" y="0.0" width="236" height="18"/>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include transcripts when searching" id="ZmW-Hz-3Wv">
+                                                    <font key="font" metaFont="systemMedium" size="14"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <customView toolTip="When searching in the videos tab, the search results will include any session where the transcript contains the searched phrase" translatesAutoresizingMaskIntoConstraints="NO" id="Gek-dw-FjI" customClass="ITSwitch">
+                                                <rect key="frame" x="248" y="0.0" width="29" height="18"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="29" id="vUf-Dk-RFt"/>
+                                                    <constraint firstAttribute="height" constant="18" id="yYu-bf-E60"/>
+                                                </constraints>
+                                                <connections>
+                                                    <action selector="searchInTranscriptsSwitchAction:" target="9dt-pe-Bsa" id="Gnp-gE-jQR"/>
+                                                </connections>
+                                            </customView>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="16" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26q-h0-pki">
+                                        <rect key="frame" x="0.0" y="34" width="279" height="18"/>
+                                        <subviews>
+                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gpY-Ee-hHn">
+                                                <rect key="frame" x="-2" y="0.0" width="238" height="18"/>
+                                                <string key="toolTip">When searching in the schedule or videos tab, the search results will include any session where any of its bookmarks contains the searched phrase</string>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include bookmarks when searching" id="KyF-jf-5DT">
+                                                    <font key="font" metaFont="systemMedium" size="14"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="gnP-EQ-XJc" customClass="ITSwitch">
+                                                <rect key="frame" x="250" y="0.0" width="29" height="18"/>
+                                                <string key="toolTip">When searching in the schedule or videos tab, the search results will include any session where any of its bookmarks contains the searched phrase</string>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="18" id="C06-uA-ink"/>
+                                                    <constraint firstAttribute="width" constant="29" id="ywA-xa-gIy"/>
+                                                </constraints>
+                                                <connections>
+                                                    <action selector="searchInBookmarksSwitchAction:" target="9dt-pe-Bsa" id="ihC-kl-7AR"/>
+                                                </connections>
+                                            </customView>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="16" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zwv-1W-QZH">
+                                        <rect key="frame" x="0.0" y="0.0" width="316" height="18"/>
+                                        <subviews>
+                                            <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGp-6Z-M3P">
+                                                <rect key="frame" x="-2" y="0.0" width="275" height="18"/>
+                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Refresh schedule and videos periodically" id="IAy-ez-t4U">
+                                                    <font key="font" metaFont="systemMedium" size="14"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <customView toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" translatesAutoresizingMaskIntoConstraints="NO" id="RNy-Rf-Ks0" customClass="ITSwitch">
+                                                <rect key="frame" x="287" y="0.0" width="29" height="18"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="18" id="Mj5-Ku-jzP"/>
+                                                    <constraint firstAttribute="width" constant="29" id="Oij-eY-MSE"/>
+                                                </constraints>
+                                                <connections>
+                                                    <action selector="refreshPeriodicallySwitchAction:" target="9dt-pe-Bsa" id="Swa-wC-XU2"/>
+                                                </connections>
+                                            </customView>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="hoo-Kt-Gtl" firstAttribute="top" secondItem="scn-7e-mlv" secondAttribute="top" constant="20" id="8Rb-R7-R7d"/>
+                            <constraint firstItem="hoo-Kt-Gtl" firstAttribute="centerX" secondItem="scn-7e-mlv" secondAttribute="centerX" id="Zjq-Vj-SAN"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="includeBookmarksLabel" destination="gpY-Ee-hHn" id="tog-mI-mW0"/>
+                        <outlet property="includeTranscriptsLabel" destination="X7h-FH-GQx" id="jB1-ga-IDT"/>
+                        <outlet property="refreshPeriodicallyLabel" destination="TGp-6Z-M3P" id="hiH-Lt-JX1"/>
+                        <outlet property="refreshPeriodicallySwitch" destination="RNy-Rf-Ks0" id="Ike-2d-2am"/>
+                        <outlet property="searchInBookmarksSwitch" destination="gnP-EQ-XJc" id="VxL-3g-oxA"/>
+                        <outlet property="searchInTranscriptsSwitch" destination="Gek-dw-FjI" id="EGx-ct-LHG"/>
+                    </connections>
+                </viewController>
+                <customObject id="Cjz-NA-wrV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="56" y="262"/>
+        </scene>
+    </scenes>
+</document>

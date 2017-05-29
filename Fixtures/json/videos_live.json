@@ -1,0 +1,893 @@
+{
+  "updated": "2017-06-17T17:43:42-07:00",
+  "live_sessions": {
+    "201": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T09:33:22-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/201h1g4asm31ti2l9n1/201/images/201_734x413.jpg"
+      }
+    },
+    "202": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T09:36:58-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/202w2zhc4l8yomptqnt/202/images/202_734x413.jpg"
+      }
+    },
+    "203": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/203x2w42att1kdzg1ce/203/images/203_734x413.jpg"
+      }
+    },
+    "204": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T11:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/204t23fvanrkj7a1oj7/204/images/204_734x413.jpg"
+      }
+    },
+    "205": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/205n2okotvilcayc8rc/205/images/205_734x413.jpg"
+      }
+    },
+    "206": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/206a38wgme6uponcuwd/206/images/206_734x413.jpg"
+      }
+    },
+    "207": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T16:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/207i37356qcyyh2yxos/207/images/207_734x413.jpg"
+      }
+    },
+    "208": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T19:09:39-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/208j30f4v1a1i9i5fg9/208/images/208_734x413.jpg"
+      }
+    },
+    "209": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T09:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/209e37d5ks3pfj21ij5/209/images/209_734x413.jpg"
+      }
+    },
+    "210": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/210e4481b1cnwor4n1q/210/images/210_734x413.jpg"
+      }
+    },
+    "211": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T11:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/211m4cro5y3rrsfzfdj/211/images/211_734x413.jpg"
+      }
+    },
+    "212": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/212s41rh77qgdg26s86/212/images/212_734x413.jpg"
+      }
+    },
+    "213": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/213r47rtymgcyythv7w/213/images/213_734x413.jpg"
+      }
+    },
+    "214": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": null,
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/214b51jlndqja1bpptt/214/images/214_734x413.jpg"
+      }
+    },
+    "215": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": null,
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/215e597a1en6wrh89hm/215/images/215_734x413.jpg"
+      }
+    },
+    "216": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T17:46:19-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/216v55u6zpxizxkml6k/216/images/216_734x413.jpg"
+      }
+    },
+    "217": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T17:56:38-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/217x5143f51ztsxao1u/217/images/217_734x413.jpg"
+      }
+    },
+    "218": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T09:40:22-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/218e59uvbkp1smncrss/218/images/218_734x413.jpg"
+      }
+    },
+    "219": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T09:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/219g66mxt0n74iogsgp/219/images/219_734x413.jpg"
+      }
+    },
+    "220": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/220c6lnr7wkcjewnj1g/220/images/220_734x413.jpg"
+      }
+    },
+    "221": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/221l723gdmjyvv5pmw7/221/images/221_734x413.jpg"
+      }
+    },
+    "222": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T11:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/222l873ttj77llkzbzs/222/images/222_734x413.jpg"
+      }
+    },
+    "223": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/223j90dqr7q1xyld1mv/223/images/223_734x413.jpg"
+      }
+    },
+    "224": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/224g9mui5qb06o6ukpf/224/images/224_734x413.jpg"
+      }
+    },
+    "225": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T14:40:55-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/225e97ww3majsu3bvt8/225/images/225_734x413.jpg"
+      }
+    },
+    "226": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T15:44:52-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/226aey4ryxex6rvqvn1/226/images/226_734x413.jpg"
+      }
+    },
+    "227": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T15:42:23-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/227a480gfx4hwinv5x9/227/images/227_734x413.jpg"
+      }
+    },
+    "228": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T16:42:09-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/228a1kbxogojm4fviqc/228/images/228_734x413.jpg"
+      }
+    },
+    "229": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T16:42:33-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/229b09xkrv3t6tdzwsu/229/images/229_734x413.jpg"
+      }
+    },
+    "230": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T17:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/230b83wfxc7m69dm90q/230/images/230_734x413.jpg"
+      }
+    },
+    "231": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T09:43:30-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/app_frameworks_734x413.png"
+      }
+    },
+    "232": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T09:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/232biqdny8x84wjag07/232/images/232_734x413.jpg"
+      }
+    },
+    "233": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T09:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/app_frameworks_734x413.png"
+      }
+    },
+    "234": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/234dvn2mhmc3klk7vy4/234/images/234_734x413.jpg"
+      }
+    },
+    "235": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/app_frameworks_734x413.png"
+      }
+    },
+    "236": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T15:40:47-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/app_frameworks_734x413.png"
+      }
+    },
+    "237": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/app_frameworks_734x413.png"
+      }
+    },
+    "238": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T16:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/app_frameworks_734x413.png"
+      }
+    },
+    "239": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T17:43:33-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/app_frameworks_734x413.png"
+      }
+    },
+    "240": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/app_frameworks_734x413.png"
+      }
+    },
+    "242": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/242vdhuk4hmwrxnb465/242/images/242_734x413.jpg"
+      }
+    },
+    "301": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T16:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/301fbtjd9exjetky78s/301/images/301_734x413.jpg"
+      }
+    },
+    "302": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T17:30:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/302f5hkfjyg13j84oda/302/images/302_734x413.jpg"
+      }
+    },
+    "303": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/303g7ecrjttz4lpqd7y/303/images/303_734x413.jpg"
+      }
+    },
+    "304": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/304heg1mrvxxz5lhd4h/304/images/304_734x413.jpg"
+      }
+    },
+    "305": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/distribution_734x413.png"
+      }
+    },
+    "401": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T09:33:33-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/401hmew12wifry4svvi/401/images/401_734x413.jpg"
+      }
+    },
+    "402": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T09:41:59-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/402h429l9d0hy98c9m6/402/images/402_734x413.jpg"
+      }
+    },
+    "403": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T10:42:43-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/403hb0ie2m86hvs7yyn/403/images/403_734x413.jpg"
+      }
+    },
+    "404": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/404hskg1ijeev16mdej/404/images/404_734x413.jpg"
+      }
+    },
+    "405": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T19:11:43-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/405i2ilotov3bazyei1/405/images/405_734x413.jpg"
+      }
+    },
+    "406": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T10:40:19-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/406i3zbazbegkeh0udt/406/images/406_734x413.jpg"
+      }
+    },
+    "407": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/407itxn2ujs52fwcgw5/407/images/407_734x413.jpg"
+      }
+    },
+    "408": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/408j7syjtdlxnl2rq4j/408/images/408_734x413.jpg"
+      }
+    },
+    "409": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T15:44:43-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/409jh83sf1h8dqrt00q/409/images/409_734x413.jpg"
+      }
+    },
+    "410": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": null,
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/410jaf5ko3ob8asajlf/410/images/410_734x413.jpg"
+      }
+    },
+    "411": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T09:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/411jge60tmuuh7dolja/411/images/411_734x413.jpg"
+      }
+    },
+    "412": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/412jzguxz4h8hykgjlm/412/images/412_734x413.jpg"
+      }
+    },
+    "413": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/413jz6eb2wkfuzwx1me/413/images/413_734x413.jpg"
+      }
+    },
+    "414": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T17:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/414k6h6qdzyihpowpaa/414/images/414_734x413.jpg"
+      }
+    },
+    "415": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T09:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/developer_tools_734x413.png"
+      }
+    },
+    "416": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/developer_tools_734x413.png"
+      }
+    },
+    "417": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T14:46:49-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/developer_tools_734x413.png"
+      }
+    },
+    "418": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/developer_tools_734x413.png"
+      }
+    },
+    "419": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T16:40:04-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/developer_tools_734x413.png"
+      }
+    },
+    "420": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T16:41:44-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/developer_tools_734x413.png"
+      }
+    },
+    "501": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/501l32ujtbnw2ad06wy/501/images/501_734x413.jpg"
+      }
+    },
+    "502": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/502lezynlddsti4drbq/502/images/502_734x413.jpg"
+      }
+    },
+    "503": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T09:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/503lkp4vimgv7tqecn7/503/images/503_734x413.jpg"
+      }
+    },
+    "504": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/504m956dgg4hlw2uez9/504/images/504_734x413.jpg"
+      }
+    },
+    "505": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/505mia12r7dwmk3aumw/505/images/505_734x413.jpg"
+      }
+    },
+    "506": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T11:40:46-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/media_734x413.png"
+      }
+    },
+    "507": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T14:40:05-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/media_734x413.png"
+      }
+    },
+    "508": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T17:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/media_734x413.png"
+      }
+    },
+    "601": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T10:27:36-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/601nsio90cd7ylwimk9/601/images/601_734x413.jpg"
+      }
+    },
+    "602": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T14:47:17-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/602o05a86ysk0ngvlgj/602/images/602_734x413.jpg"
+      }
+    },
+    "603": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/603oba298b1v4z54011/603/images/603_734x413.jpg"
+      }
+    },
+    "604": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/604oezpg3wmqrkxl0t7/604/images/604_734x413.jpg"
+      }
+    },
+    "605": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T14:42:08-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/605ooaey8tbzegv8fth/605/images/605_734x413.jpg"
+      }
+    },
+    "606": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T15:42:02-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/606oluchfgwakjbymy8/606/images/606_734x413.jpg"
+      }
+    },
+    "607": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T17:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/607odzb3n443nv9ei5p/607/images/607_734x413.jpg"
+      }
+    },
+    "608": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T09:41:54-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/608p3mqohp4bat0id7s/608/images/608_734x413.jpg"
+      }
+    },
+    "609": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/609pxdzx9vsps1l0qdh/609/images/609_734x413.jpg"
+      }
+    },
+    "610": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T18:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/610p9xtklo7t2au11md/610/images/610_734x413.jpg"
+      }
+    },
+    "611": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/611qdyg26bqfivpaww1/611/images/611_734x413.jpg"
+      }
+    },
+    "612": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/graphics_and_games_734x413.png"
+      }
+    },
+    "701": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T10:37:30-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/701q0pnn0ietcautcrv/701/images/701_734x413.jpg"
+      }
+    },
+    "702": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/702rhpkb0ux7uuzixps/702/images/702_734x413.jpg"
+      }
+    },
+    "703": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/703rx8zlfedjfom6l93/703/images/703_734x413.jpg"
+      }
+    },
+    "704": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/704s1a6rjyi2dqhhyi7/704/images/704_734x413.jpg"
+      }
+    },
+    "705": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T16:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/705s57mrvm8so193i8c/705/images/705_734x413.jpg"
+      }
+    },
+    "706": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T19:10:14-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/706sgjvzkvg6rrg9icw/706/images/706_734x413.jpg"
+      }
+    },
+    "707": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T09:44:42-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/707s77u9e6pv0dy9ggm/707/images/707_734x413.jpg"
+      }
+    },
+    "708": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T10:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/708tbh8wnspsg01hxwx/708/images/708_734x413.jpg"
+      }
+    },
+    "709": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T16:40:30-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/709tvxadw201avg5v7n/709/images/709_734x413.jpg"
+      }
+    },
+    "710": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T17:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/710tkhyprou9hhbnc6g/710/images/710_734x413.jpg"
+      }
+    },
+    "711": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T10:45:10-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/711tlraheg74mofg3uq/711/images/711_734x413.jpg"
+      }
+    },
+    "712": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/712ugi7vg8jznn3pc3u/712/images/712_734x413.jpg"
+      }
+    },
+    "713": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T15:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/713uqrvfj3uo0xewc37/713/images/713_734x413.jpg"
+      }
+    },
+    "714": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T15:41:56-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/714urluxe140lardrb7/714/images/714_734x413.jpg"
+      }
+    },
+    "715": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T16:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/system_frameworks_734x413.png"
+      }
+    },
+    "716": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T16:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/716vyncka4gcaxxwuvq/716/images/716_734x413.jpg"
+      }
+    },
+    "717": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-16T17:40:39-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/717vo8hqv28kwa9wngg/717/images/717_734x413.jpg"
+      }
+    },
+    "719": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T12:00:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/system_frameworks_734x413.png"
+      }
+    },
+    "720": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T16:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/system_frameworks_734x413.png"
+      }
+    },
+    "721": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/nobhill_im1va1heedd7ith/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T17:43:40-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/system_frameworks_734x413.png"
+      }
+    },
+    "801": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/pacheights_ob2wof8og5tu3if/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T10:37:01-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/801y753jw8vxmjblocq/801/images/801_734x413.jpg"
+      }
+    },
+    "802": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-14T16:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/802z6j79sd7g5drr7k7/802/images/802_734x413.jpg"
+      }
+    },
+    "803": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T09:50:12-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/803z7m1ln9vmbpg35x9/803/images/803_734x413.jpg"
+      }
+    },
+    "804": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-15T14:40:00-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/804zpr8et6qv87n8j1z/804/images/804_734x413.jpg"
+      }
+    },
+    "805": {
+      "iosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/hls_mvp.m3u8",
+      "tvosUrl": "http://devstreaming.apple.com/videos/wwdc/2016/live/presidio_greys2jog1ot6u7/atv_mvp.m3u8",
+      "actualEndDate": "2017-06-17T10:41:46-07:00",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/thumbnails/g7tk3guq/2016/design_734x413.png"
+      }
+    }
+  }
+}

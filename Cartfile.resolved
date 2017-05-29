@@ -1,0 +1,7 @@
+github "Instagram/IGListKit" "2.1.0"
+github "ReactiveX/RxSwift" "3.4.0"
+github "sparkle-project/Sparkle" "1.17.0"
+github "SwiftyJSON/SwiftyJSON" "3.1.4"
+github "realm/realm-cocoa" "v2.6.1"
+github "bustoutsolutions/siesta" "1.1.1"
+github "RxSwiftCommunity/RxRealm" "0.5.2"

@@ -18,3 +18,7 @@ DerivedData
 Crashlytics.sh
 generatechangelog.sh
 Pods/
+Carthage
+Provisioning
+Design/app.icns
+Crashlytics.sh
