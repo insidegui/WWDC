@@ -77,7 +77,7 @@ extension Environment {
                                          newsPath: "/news.json",
                                          liveVideosPath: "/videos_live.json")
     
-    public static let production = Environment(baseURL: "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/xhgbpyutb6wvn2xcrbcz",
+    public static let production = Environment(baseURL: "https://api.wwdc.io",
                                          videosPath: "/videos.json",
                                          sessionsPath: "/sessions.json",
                                          newsPath: "/news.json",
