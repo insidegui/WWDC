@@ -10,6 +10,10 @@ import Cocoa
 import ConfCore
 import RealmSwift
 
+extension Notification.Name {
+    static let TranscriptControllerDidSelectAnnotation = Notification.Name("TranscriptControllerDidSelectAnnotation")
+}
+
 class TranscriptTableViewController: NSViewController {
 
     var viewModel: SessionViewModel? {
@@ -119,6 +123,17 @@ extension TranscriptTableViewController: NSTableViewDataSource, NSTableViewDeleg
         cell?.annotation = annotations[row]
         
         return cell
+    }
+    
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        guard let transcript = transcript else { return }
+        guard tableView.selectedRow >= 0 && tableView.selectedRow < transcript.annotations.count else { return }
+        
+        let row = tableView.selectedRow
+        
+        let notificationObject = (transcript, transcript.annotations[row])
+        
+        NotificationCenter.default.post(name: NSNotification.Name.TranscriptControllerDidSelectAnnotation, object: notificationObject)
     }
     
 }

@@ -107,6 +107,8 @@ final class VideoPlayerViewController: NSViewController {
         
         reset(oldValue: nil)
         updateUI()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
     }
     
     func reset(oldValue: AVPlayer?) {
@@ -134,6 +136,14 @@ final class VideoPlayerViewController: NSViewController {
         Observable.collection(from: bookmarks).observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
             self?.playerView.annotations = bookmarks.toArray()
         }).addDisposableTo(self.disposeBag)
+    }
+    
+    @objc private func annotationSelected(notification: Notification) {
+        guard let (transcript, annotation) = notification.object as? (Transcript, TranscriptAnnotation) else { return }
+        guard transcript.identifier == sessionViewModel.session.transcriptIdentifier else { return }
+        
+        let time = CMTimeMakeWithSeconds(annotation.timecode, 90000)
+        player.seek(to: time)
     }
     
     // MARK: - Player Observation
