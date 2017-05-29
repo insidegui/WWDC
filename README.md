@@ -1,6 +1,6 @@
 # The unofficial WWDC app for macOS
 
-WWDC for macOS allows both attendees and non-attendees access to WWDC videos and sessions during the conference and as a year-round resource.
+WWDC for macOS allows both attendees and non-attendees access to WWDC livestreams, videos and sessions during the conference and as a year-round resource.
 
 ⬇️ If you just want to download the latest release, go to [the website](https://wwdc.io).
 
