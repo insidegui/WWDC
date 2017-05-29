@@ -18,6 +18,8 @@ class SessionDetailsViewController: NSViewController {
     
     var viewModel: SessionViewModel? = nil {
         didSet {
+            menuButtonsContainer.isHidden = (viewModel == nil)
+            
             self.shelfController.viewModel = viewModel
             self.summaryController.viewModel = viewModel
             
@@ -26,6 +28,11 @@ class SessionDetailsViewController: NSViewController {
                 
                 showOverview()
             }
+            
+            self.transcriptButton.isHidden = (viewModel?.session.transcript() == nil)
+            
+            let shouldHideButtonsBar = self.transcriptButton.isHidden && self.bookmarksButton.isHidden
+            self.menuButtonsContainer.isHidden = shouldHideButtonsBar
         }
     }
     
@@ -47,6 +54,7 @@ class SessionDetailsViewController: NSViewController {
         b.state = NSOffState
         b.target = self
         b.action = #selector(tabButtonAction(_:))
+        b.isHidden = true
         
         return b
     }()
@@ -58,6 +66,9 @@ class SessionDetailsViewController: NSViewController {
         b.state = NSOffState
         b.target = self
         b.action = #selector(tabButtonAction(_:))
+        
+        // TODO: enable bookmarks section
+        b.isHidden = true
         
         return b
     }()
@@ -79,6 +90,7 @@ class SessionDetailsViewController: NSViewController {
     private lazy var menuButtonsContainer: WWDCBottomBorderView = {
         let v = WWDCBottomBorderView()
         
+        v.isHidden = true
         v.wantsLayer = true
         
         v.heightAnchor.constraint(equalToConstant: 50).isActive = true
