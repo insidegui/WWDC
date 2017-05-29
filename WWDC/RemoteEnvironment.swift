@@ -25,35 +25,39 @@ final class RemoteEnvironment: NSObject {
     static let shared: RemoteEnvironment = RemoteEnvironment()
     
     func start() {
-        guard !Arguments.disableRemoteEnvironment else { return }
-        
-        fetch()
-        createSubscriptionIfNeeded()
+        #if ICLOUD
+            guard !Arguments.disableRemoteEnvironment else { return }
+            
+            fetch()
+            createSubscriptionIfNeeded()
+        #endif
     }
     
     private func fetch() {
-        let query = CKQuery(recordType: Constants.environmentRecordType, predicate: NSPredicate(value: true))
-        
-        let operation = CKQueryOperation(query: query)
-        
-        operation.recordFetchedBlock = { record in
-            guard let env = Environment(record) else {
-                NSLog("Error parsing remote environment")
-                return
+        #if ICLOUD
+            let query = CKQuery(recordType: Constants.environmentRecordType, predicate: NSPredicate(value: true))
+            
+            let operation = CKQueryOperation(query: query)
+            
+            operation.recordFetchedBlock = { record in
+                guard let env = Environment(record) else {
+                    NSLog("Error parsing remote environment")
+                    return
+                }
+                
+                Environment.setCurrent(env)
             }
             
-            Environment.setCurrent(env)
-        }
-        
-        operation.queryCompletionBlock = { [unowned self] _, error in
-            if let error = error {
-                NSLog("Error fetching remote environment: \(error)")
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { self.fetch() }
+            operation.queryCompletionBlock = { [unowned self] _, error in
+                if let error = error {
+                    NSLog("Error fetching remote environment: \(error)")
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) { self.fetch() }
+                }
             }
-        }
-        
-        database.add(operation)
+            
+            database.add(operation)
+        #endif
     }
     
     private let environmentSubscriptionID = "REMOTE-ENVIRONMENT"

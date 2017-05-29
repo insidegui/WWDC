@@ -58,13 +58,15 @@ final class PreferencesCoordinator {
     }
     
     func setupAccountBindings() {
-        CMSCommunityCenter.shared.accountStatus.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] status in
-            self?.accountController.cloudAccountIsAvailable = (status == .available)
-        }).addDisposableTo(self.disposeBag)
-        
-        CMSCommunityCenter.shared.userProfile.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] profile in
-            self?.accountController.profile = profile
-        }).addDisposableTo(self.disposeBag)
+        #if ICLOUD
+            CMSCommunityCenter.shared.accountStatus.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] status in
+                self?.accountController.cloudAccountIsAvailable = (status == .available)
+            }).addDisposableTo(self.disposeBag)
+            
+            CMSCommunityCenter.shared.userProfile.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] profile in
+                self?.accountController.profile = profile
+            }).addDisposableTo(self.disposeBag)
+        #endif
     }
     
 }

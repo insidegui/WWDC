@@ -138,6 +138,7 @@ private final class CloudKitLiveObserver: NSObject {
     }
     
     func fetch() {
+        #if ICLOUD
         let query = CKQuery(recordType: SessionAsset.recordType, predicate: NSPredicate(value: true))
         let operation = CKQueryOperation(query: query)
         
@@ -159,17 +160,21 @@ private final class CloudKitLiveObserver: NSObject {
         }
         
         database.add(operation)
+        #endif
     }
     
     private func createSubscriptionIfNeeded() {
+        #if ICLOUD
         CloudKitHelper.subscriptionExists(with: specialLiveEventsSubscriptionID, in: database) { [unowned self] exists in
             if !exists {
                 self.doCreateSubscription()
             }
         }
+        #endif
     }
     
     private func doCreateSubscription() {
+        #if ICLOUD
         let options: CKQuerySubscriptionOptions = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
         let subscription = CKQuerySubscription(recordType: SessionAsset.recordType,
                                                predicate: NSPredicate(value: true),
@@ -182,11 +187,13 @@ private final class CloudKitLiveObserver: NSObject {
                 return
             }
         }
+        #endif
     }
     
     private let specialLiveEventsSubscriptionID: String = "SPECIAL-LIVE-EVENTS"
     
     func processSubscriptionNotification(with userInfo: [String : Any]) -> Bool {
+        #if ICLOUD
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
         
         // check if the remote notification is for us, if not, tell the caller that we haven't handled it
@@ -196,6 +203,9 @@ private final class CloudKitLiveObserver: NSObject {
         fetch()
         
         return true
+        #else
+            return false
+        #endif
     }
     
     private func store(_ records: [CKRecord]) {
