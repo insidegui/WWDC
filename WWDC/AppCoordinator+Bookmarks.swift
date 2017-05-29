@@ -34,7 +34,7 @@ extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate
     func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController? {
         guard let bookmark = annotation as? Bookmark else { return nil }
         
-        return BookmarkViewController(bookmark: bookmark)
+        return BookmarkViewController(bookmark: bookmark, storage: storage)
     }
     
     func timelineDidHighlightAnnotation(_ annotation: PUITimelineAnnotation?) {

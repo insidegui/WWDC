@@ -16,7 +16,7 @@ class PUIAnnotationWindowController: NSWindowController {
     }
     
     init() {
-        let window = NSWindow(contentRect: Metrics.defaultRect, styleMask: [.borderless], backing: .buffered, defer: false)
+        let window = PUIAnnotationWindow(contentRect: Metrics.defaultRect, styleMask: [.borderless], backing: .buffered, defer: false)
         
         super.init(window: window)
         

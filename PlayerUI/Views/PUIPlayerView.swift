@@ -902,6 +902,7 @@ public final class PUIPlayerView: NSView {
         
         // ignore keystrokes when editing text
         guard !(window?.firstResponder is NSTextView) else { return }
+        guard !timelineView.isEditingAnnotation else { return }
         
         switch command {
         case .spaceBar:

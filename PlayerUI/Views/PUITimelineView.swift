@@ -393,7 +393,9 @@ public final class PUITimelineView: NSView {
             
             if selectedAnnotation != nil {
                 showAnnotationWindow()
+                hoveredAnnotation = nil
             } else {
+                unhighlightCurrentHoveredAnnotationIfNeeded()
                 hideAnnotationWindow()
             }
         }
@@ -642,18 +644,23 @@ public final class PUITimelineView: NSView {
         
         window?.addChildWindow(annotationWindow, ordered: .above)
         annotationWindow.setFrameOrigin(screenRect.origin)
-        annotationWindow.orderFront(nil)
+        annotationWindow.makeKeyAndOrderFront(nil)
         
         annotationWindow.animator().alphaValue = 1
         
         enum AnnotationKeyCommand: UInt16 {
             case escape = 53
+            case enter = 36
         }
         
         annotationCommandsMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyUp]) { event in
             guard let command = AnnotationKeyCommand(rawValue: event.keyCode) else { return event }
             
             switch command {
+            case .enter:
+                if event.modifierFlags.contains(.command) {
+                    fallthrough
+                }
             case .escape:
                 self.selectedAnnotation = nil
                 self.unhighlightCurrentHoveredAnnotationIfNeeded()
