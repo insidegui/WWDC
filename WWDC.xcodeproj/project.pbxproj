@@ -92,6 +92,10 @@
 		DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD681E48BBEF0054DD35 /* TranscriptAnnotation.swift */; };
 		DD65FD6B1E48BD9F0054DD35 /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD6A1E48BD9F0054DD35 /* Favorite.swift */; };
 		DD65FD6D1E48BE270054DD35 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD6C1E48BE270054DD35 /* Bookmark.swift */; };
+		DD6E06F41EDBC11F000EAEA4 /* WWDCTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F31EDBC11F000EAEA4 /* WWDCTextButton.swift */; };
+		DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */; };
+		DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */; };
+		DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
@@ -430,6 +434,10 @@
 		DD65FD681E48BBEF0054DD35 /* TranscriptAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptAnnotation.swift; sourceTree = "<group>"; };
 		DD65FD6A1E48BD9F0054DD35 /* Favorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorite.swift; sourceTree = "<group>"; };
 		DD65FD6C1E48BE270054DD35 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		DD6E06F31EDBC11F000EAEA4 /* WWDCTextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTextButton.swift; sourceTree = "<group>"; };
+		DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCBottomBorderView.swift; sourceTree = "<group>"; };
+		DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableViewController.swift; sourceTree = "<group>"; };
+		DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableCellView.swift; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTabViewController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
@@ -781,6 +789,8 @@
 				DD4648461ECA5947005C57C6 /* WWDCWindow.swift */,
 				DD0159D81ED11A9800F980F1 /* ModalLoadingView.swift */,
 				DDC678181EDB2CD300A4E19C /* ActionLabel.swift */,
+				DD6E06F31EDBC11F000EAEA4 /* WWDCTextButton.swift */,
+				DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -955,6 +965,24 @@
 				DD65FD6C1E48BE270054DD35 /* Bookmark.swift */,
 			);
 			name = UserDefined;
+			sourceTree = "<group>";
+		};
+		DD6E06F91EDBC636000EAEA4 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				DD6E06FA1EDBC644000EAEA4 /* Summary */,
+				DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */,
+			);
+			name = Tabs;
+			sourceTree = "<group>";
+		};
+		DD6E06FA1EDBC644000EAEA4 /* Summary */ = {
+			isa = PBXGroup;
+			children = (
+				DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */,
+				DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */,
+			);
+			name = Summary;
 			sourceTree = "<group>";
 		};
 		DD7F38601EABD66D002D8C00 /* Sessions */ = {
@@ -1203,6 +1231,7 @@
 				DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */,
 				DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */,
 				DDB3529F1EC9088000254815 /* WWDCTableView.swift */,
+				DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */,
 			);
 			name = TableView;
 			sourceTree = "<group>";
@@ -1374,8 +1403,7 @@
 			children = (
 				DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */,
 				DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */,
-				DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */,
-				DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */,
+				DD6E06F91EDBC636000EAEA4 /* Tabs */,
 			);
 			name = Detail;
 			sourceTree = "<group>";
@@ -1768,6 +1796,7 @@
 				DD0159D31ED0D3AF00F980F1 /* AccountPreferencesViewController.swift in Sources */,
 				DDC678191EDB2CD300A4E19C /* ActionLabel.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
+				DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */,
 				DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */,
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
@@ -1791,9 +1820,12 @@
 				DD0159D11ED0CEF500F980F1 /* PreferencesCoordinator.swift in Sources */,
 				DDEDFCF31ED92F2A002477C8 /* TextualFilter.swift in Sources */,
 				DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */,
+				DD6E06F41EDBC11F000EAEA4 /* WWDCTextButton.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
+				DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
+				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
 				DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */,
 				DDB3529C1EC8AB5D00254815 /* WWDCLayer.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,

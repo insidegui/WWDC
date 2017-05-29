@@ -11,7 +11,7 @@ import AVFoundation
 
 extension String {
     
-    init?(timestamp: Double) {
+    public init?(timestamp: Double) {
         let prefix = timestamp < 0 ? "-" : ""
         
         let date = Date(timeInterval: TimeInterval(timestamp), since: Date())
@@ -34,7 +34,7 @@ extension String {
         self.init(prefix + bits.joined(separator: ":"))
     }
     
-    init?(time: CMTime) {
+    public init?(time: CMTime) {
         let secondCount = time.value / Int64(time.timescale)
         
         self.init(timestamp: Double(secondCount))

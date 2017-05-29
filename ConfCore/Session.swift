@@ -80,6 +80,13 @@ public class Session: Object {
         ]
     }
     
+    public func transcript() -> Transcript? {
+        guard let realm = self.realm else { return nil }
+        guard !transcriptIdentifier.isEmpty else { return nil }
+        
+        return realm.objects(Transcript.self).filter("identifier == %@", self.transcriptIdentifier).first
+    }
+    
     public static func standardSort(sessionA: Session, sessionB: Session) -> Bool {
         guard let eventA = sessionA.event.first, let eventB = sessionB.event.first else { return false }
         guard let trackA = sessionA.track.first, let trackB = sessionB.track.first else { return false }
