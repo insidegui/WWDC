@@ -10,6 +10,20 @@ import Cocoa
 import ConfCore
 import PlayerUI
 
+private final class WWDCTextView: NSTextView {
+    
+    var textDidChangeHandler: ((_ text: String) -> Void)?
+    
+    override func didChangeText() {
+        super.didChangeText()
+        
+        if let str = self.string {
+            textDidChangeHandler?(str)
+        }
+    }
+    
+}
+
 final class BookmarkViewController: NSViewController {
 
     let bookmark: Bookmark
@@ -36,8 +50,8 @@ final class BookmarkViewController: NSViewController {
         return v
     }()
     
-    private lazy var textView: NSTextView = {
-        let v = NSTextView()
+    private lazy var textView: WWDCTextView = {
+        let v = WWDCTextView()
         
         v.drawsBackground = false
         v.backgroundColor = .clear
@@ -91,6 +105,12 @@ final class BookmarkViewController: NSViewController {
         
         imageView.image = NSImage(data: bookmark.snapshot)
         textView.string = bookmark.body
+        
+        textView.textDidChangeHandler = { [weak self] str in
+            self?.storage.update {
+                self?.bookmark.body = str
+            }
+        }
     }
     
 }

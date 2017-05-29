@@ -384,6 +384,12 @@ public final class PUITimelineView: NSView {
             layer.frame = f
             layer.cornerRadius = f.width / 2
         }
+        
+        if let (sa, _) = selectedAnnotation {
+            if sa.identifier == annotation.identifier {
+                configureAnnotationLayerAsHighlighted(layer: layer)
+            }
+        }
     }
     
     private var hoveredAnnotation: (PUITimelineAnnotation, PUIAnnotationLayer)?
@@ -452,13 +458,19 @@ public final class PUITimelineView: NSView {
         defer { CATransaction.commit() }
         
         layer.animate {
-            let s = Metrics.annotationBubbleDiameterHoverScale
-            layer.transform = CATransform3DMakeScale(s, s, s)
-            layer.borderWidth = 1
-            layer.attachedLayer.animate { layer.attachedLayer.opacity = 1 }
+            configureAnnotationLayerAsHighlighted(layer: layer)
         }
         
         delegate?.timelineDidHighlightAnnotation(annotation)
+    }
+    
+    private func configureAnnotationLayerAsHighlighted(layer: PUIBoringLayer) {
+        guard let layer = layer as? PUIAnnotationLayer else { return }
+        
+        let s = Metrics.annotationBubbleDiameterHoverScale
+        layer.transform = CATransform3DMakeScale(s, s, s)
+        layer.borderWidth = 1
+        layer.attachedLayer.animate { layer.attachedLayer.opacity = 1 }
     }
     
     private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -616,10 +628,13 @@ public final class PUITimelineView: NSView {
     // MARK: - Annotation editing management
     
     private var annotationCommandsMonitor: Any?
+    private var currentAnnotationEditor: NSViewController?
     
     private func showAnnotationWindow() {
         guard let (annotation, annotationLayer) = self.selectedAnnotation else { return }
         guard let controller = delegate?.viewControllerForTimelineAnnotation(annotation) else { return }
+        
+        self.currentAnnotationEditor = controller
         
         if annotationWindowController == nil {
             annotationWindowController = PUIAnnotationWindowController()
@@ -679,6 +694,8 @@ public final class PUITimelineView: NSView {
         NSAnimationContext.beginGrouping()
         NSAnimationContext.current().completionHandler = {
             self.annotationWindowController?.close()
+            self.currentAnnotationEditor?.view.removeFromSuperview()
+            self.currentAnnotationEditor = nil
             self.annotationWindowController = nil
         }
         self.annotationWindowController?.window?.animator().alphaValue = 0
