@@ -33,6 +33,15 @@ class SessionDetailsViewController: NSViewController {
             
             let shouldHideButtonsBar = self.transcriptButton.isHidden && self.bookmarksButton.isHidden
             self.menuButtonsContainer.isHidden = shouldHideButtonsBar
+            
+            let shouldHideShelf = (viewModel?.sessionInstance.type == .lab)
+            self.shelfController.view.isHidden = shouldHideShelf
+            
+            if isViewLoaded {
+                shelfBottomConstraint.isActive = !shouldHideShelf
+                mainStackViewTopConstraint.isActive = shouldHideShelf
+                mainStackViewBottomConstraint.isActive = !shouldHideShelf
+            }
         }
     }
     
@@ -153,6 +162,18 @@ class SessionDetailsViewController: NSViewController {
         }
     }
     
+    private lazy var shelfBottomConstraint: NSLayoutConstraint = {
+        return self.shelfController.view.bottomAnchor.constraint(equalTo: self.mainStackView.topAnchor)
+    }()
+    
+    private lazy var mainStackViewTopConstraint: NSLayoutConstraint = {
+        return self.mainStackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 22)
+    }()
+    
+    private lazy var mainStackViewBottomConstraint: NSLayoutConstraint = {
+        return self.mainStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -46)
+    }()
+    
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
@@ -171,9 +192,10 @@ class SessionDetailsViewController: NSViewController {
         
         mainStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
         mainStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
-        mainStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -46).isActive = true
+        mainStackViewBottomConstraint.isActive = true
         
-        shelfController.view.bottomAnchor.constraint(equalTo: mainStackView.topAnchor, constant: 0).isActive = true
+        shelfBottomConstraint.isActive = true
+        mainStackViewTopConstraint.isActive = false
         
         showOverview()
     }
