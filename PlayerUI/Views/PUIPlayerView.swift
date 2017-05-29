@@ -430,6 +430,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUIFullScreen
         b.target = self
         b.action = #selector(toggleFullscreen(_:))
+        b.toolTip = "Toggle full screen"
         
         return b
     }()
@@ -441,6 +442,7 @@ public final class PUIPlayerView: NSView {
         b.target = self
         b.action = #selector(toggleMute(_:))
         b.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        b.toolTip = "Mute/unmute"
         
         return b
     }()
@@ -464,6 +466,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUISubtitles
         b.target = self
         b.action = #selector(showSubtitlesMenu(_:))
+        b.toolTip = "Subtitles"
         
         return b
     }()
@@ -474,6 +477,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUIPlay
         b.target = self
         b.action = #selector(togglePlaying(_:))
+        b.toolTip = "Play/pause"
         
         return b
     }()
@@ -484,6 +488,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUIPreviousBookmark
         b.target = self
         b.action = #selector(previousAnnotation(_:))
+        b.toolTip = "Go to previous bookmark"
         
         return b
     }()
@@ -494,6 +499,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUINextBookmark
         b.target = self
         b.action = #selector(nextAnnotation(_:))
+        b.toolTip = "Go to next bookmark"
         
         return b
     }()
@@ -504,6 +510,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUIBack30s
         b.target = self
         b.action = #selector(goBackInTime(_:))
+        b.toolTip = "Go back 30s"
         
         return b
     }()
@@ -514,6 +521,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUIForward30s
         b.target = self
         b.action = #selector(goForwardInTime(_:))
+        b.toolTip = "Go forward 30s"
         
         return b
     }()
@@ -524,6 +532,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUISpeedOne
         b.target = self
         b.action = #selector(toggleSpeed(_:))
+        b.toolTip = "Change playback speed"
         
         return b
     }()
@@ -534,6 +543,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUIBookmark
         b.target = self
         b.action = #selector(addAnnotation(_:))
+        b.toolTip = "Add bookmark"
         
         return b
     }()
@@ -545,6 +555,7 @@ public final class PUIPlayerView: NSView {
         b.image = .PUIPictureInPicture
         b.target = self
         b.action = #selector(togglePip(_:))
+        b.toolTip = "Toggle picture in picture"
         
         return b
     }()
