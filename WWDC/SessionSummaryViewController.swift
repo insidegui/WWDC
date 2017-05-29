@@ -35,6 +35,7 @@ class SessionSummaryViewController: NSViewController {
         l.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
         l.allowsDefaultTighteningForTruncation = true
         l.maximumNumberOfLines = 2
+        l.translatesAutoresizingMaskIntoConstraints = false
         
         return l
     }()
@@ -43,18 +44,7 @@ class SessionSummaryViewController: NSViewController {
         let v = SessionActionsViewController()
         
         v.view.isHidden = true
-        
-        return v
-    }()
-    
-    private lazy var titleStack: NSStackView = {
-        let v = NSStackView(views: [self.titleLabel, self.actionsViewController.view])
-        
-        v.orientation = .horizontal
-        v.alignment = .top
-        v.distribution = .fill
-        v.spacing = 22
-        v.translatesAutoresizingMaskIntoConstraints = false
+        v.view.translatesAutoresizingMaskIntoConstraints = false
         
         return v
     }()
@@ -85,16 +75,13 @@ class SessionSummaryViewController: NSViewController {
     }()
     
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.titleStack, self.summaryLabel, self.contextLabel])
+        let v = NSStackView(views: [self.summaryLabel, self.contextLabel])
         
         v.orientation = .vertical
         v.alignment = .leading
         v.distribution = .fill
         v.spacing = 24
         v.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.titleStack.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
-        self.titleStack.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
         
         return v
     }()
@@ -103,10 +90,23 @@ class SessionSummaryViewController: NSViewController {
         view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
         view.wantsLayer = true
         
+        view.addSubview(titleLabel)
+        view.addSubview(actionsViewController.view)
         view.addSubview(stackView)
+        
+        titleLabel.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        
+        actionsViewController.view.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
+        actionsViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: actionsViewController.view.leadingAnchor, constant: -24).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        
+        stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24).isActive = true
+        
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        stackView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     

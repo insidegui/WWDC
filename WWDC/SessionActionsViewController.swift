@@ -14,6 +14,7 @@ import RxCocoa
 
 protocol SessionActionsViewControllerDelegate: class {
     
+    func sessionActionsDidSelectSlides(_ sender: NSView?)
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
     func sessionActionsDidSelectDownload(_ sender: NSView?)
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?)
@@ -55,6 +56,18 @@ class SessionActionsViewController: NSViewController {
         return b
     }()
     
+    private lazy var slidesButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = #imageLiteral(resourceName: "slides")
+        b.target = self
+        b.action = #selector(showSlides(_:))
+        b.shouldAlwaysDrawHighlighted = true
+        b.toolTip = "Open slides"
+        
+        return b
+    }()
+    
     private lazy var downloadButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
@@ -90,31 +103,34 @@ class SessionActionsViewController: NSViewController {
         b.action = #selector(share(_:))
         b.shouldAlwaysDrawHighlighted = true
         b.sendsActionOnMouseDown = true
+        b.toolTip = "Share session"
         
         return b
     }()
     
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.favoriteButton, self.downloadButton, self.downloadIndicator, self.shareButton])
+        let v = NSStackView(views: [
+            self.slidesButton,
+            self.favoriteButton,
+            self.downloadButton,
+            self.downloadIndicator,
+            self.shareButton
+            ])
         
         v.orientation = .horizontal
         v.spacing = 22
         v.alignment = .centerY
         v.distribution = .equalSpacing
-        v.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
         
         return v
     }()
     
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 122, height: 28))
+        view = stackView
         view.wantsLayer = true
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: 122).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 28).isActive = true
         
-        stackView.frame = view.bounds
-        view.addSubview(stackView)
+        view.setContentHuggingPriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
     }
     
     override func viewDidLoad() {
@@ -128,8 +144,16 @@ class SessionActionsViewController: NSViewController {
         
         guard let viewModel = viewModel else { return }
         
+        slidesButton.isHidden = (viewModel.session.asset(of: .slides) == nil)
+        
         viewModel.rxIsFavorite.subscribe(onNext: { [weak self] isFavorite in
             self?.favoriteButton.state = isFavorite ? NSOnState : NSOffState
+            
+            if isFavorite {
+                self?.favoriteButton.toolTip = "Remove from favorites"
+            } else {
+                self?.favoriteButton.toolTip = "Add to favorites"
+            }
         }).addDisposableTo(self.disposeBag)
         
         if let rxDownloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
@@ -151,6 +175,7 @@ class SessionActionsViewController: NSViewController {
                     self?.downloadIndicator.isHidden = true
                     self?.downloadButton.isHidden = false
                 case .finished:
+                    self?.downloadButton.toolTip = "Delete downloaded video"
                     self?.downloadButton.isHidden = false
                     self?.downloadIndicator.isHidden = true
                     self?.downloadButton.image = #imageLiteral(resourceName: "trash")
@@ -166,12 +191,17 @@ class SessionActionsViewController: NSViewController {
     }
     
     private func resetDownloadButton() {
+        downloadButton.toolTip = "Download video for offline watching"
         downloadButton.image = #imageLiteral(resourceName: "download")
         downloadButton.action = #selector(SessionActionsViewController.download(_:))
     }
     
     @IBAction func toggleFavorite(_ sender: NSView?) {
         delegate?.sessionActionsDidSelectFavorite(sender)
+    }
+
+    @IBAction func showSlides(_ sender: NSView?) {
+        delegate?.sessionActionsDidSelectSlides(sender)
     }
     
     @IBAction func download(_ sender: NSView?) {

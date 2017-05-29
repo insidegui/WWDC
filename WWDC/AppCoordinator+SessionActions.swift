@@ -24,6 +24,16 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         }
     }
     
+    func sessionActionsDidSelectSlides(_ sender: NSView?) {
+        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        
+        guard let slidesAsset = viewModel.session.asset(of: .slides) else { return }
+        
+        guard let url = URL(string: slidesAsset.remoteURL) else { return }
+        
+        NSWorkspace.shared().open(url)
+    }
+    
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
         
