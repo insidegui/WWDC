@@ -15,6 +15,10 @@ import RealmSwift
 import RxRealm
 import ConfCore
 
+extension Notification.Name {
+    static let HighlightTranscriptAtCurrentTimecode = Notification.Name("HighlightTranscriptAtCurrentTimecode")
+}
+
 protocol VideoPlayerViewControllerDelegate: class {
     
     func createBookmark(at timecode: Double, with snapshot: NSImage?)
@@ -110,6 +114,10 @@ final class VideoPlayerViewController: NSViewController {
     
     func reset(oldValue: AVPlayer?) {
         if let oldPlayer = oldValue {
+            if let boundaryObserver = boundaryObserver {
+                oldPlayer.removeTimeObserver(boundaryObserver)
+            }
+            
             playerView.player = nil
             
             oldPlayer.pause()
@@ -126,6 +134,8 @@ final class VideoPlayerViewController: NSViewController {
         progressIndicator.startAnimation(nil)
         
         playerView.player = player
+        
+        setupTranscriptSync()
     }
     
     func updateUI() {
@@ -169,6 +179,27 @@ final class VideoPlayerViewController: NSViewController {
             progressIndicator.stopAnimation(nil)
             progressIndicator.isHidden = true
         default: break
+        }
+    }
+    
+    // MARK: - Transcript sync
+    
+    private var boundaryObserver: Any?
+    
+    private func setupTranscriptSync() {
+        guard let player = player else { return }
+        guard let transcript = sessionViewModel.session.transcript() else { return }
+        
+        let timecodes = transcript.timecodesWithTimescale(9000)
+        guard timecodes.count > 0 else { return }
+        
+        boundaryObserver = player.addBoundaryTimeObserver(forTimes: timecodes, queue: DispatchQueue.main) { [unowned self] in
+            guard !transcript.isInvalidated, self.player != nil else { return }
+            
+            let ct = CMTimeGetSeconds(self.player.currentTime())
+            let roundedTimecode = Transcript.roundedStringFromTimecode(ct)
+            
+            NotificationCenter.default.post(name: .HighlightTranscriptAtCurrentTimecode, object: roundedTimecode)
         }
     }
     
@@ -228,6 +259,25 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
     
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
         
+    }
+    
+}
+
+extension Transcript {
+    
+    func timecodesWithTimescale(_ timescale: Int32) -> [NSValue] {
+        return annotations.map { annotation -> NSValue in
+            let time = CMTimeMakeWithSeconds(annotation.timecode, timescale)
+            
+            return NSValue(time: time)
+        }
+    }
+    
+    class func roundedStringFromTimecode(_ timecode: Float64) -> String {
+        let formatter = NumberFormatter()
+        formatter.positiveFormat = "0.#"
+        
+        return formatter.string(from: NSNumber(value: timecode)) ?? "0.0"
     }
     
 }
