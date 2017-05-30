@@ -15,12 +15,20 @@ extension Notification.Name {
     public static let TranscriptIndexingDidStop = Notification.Name("io.wwdc.app.TranscriptIndexingDidStopNotification")
 }
 
-public final class TranscriptIndexer {
+public final class TranscriptIndexer: NSObject {
     
     private let storage: Storage
+    private var timeoutWorkItem: DispatchWorkItem!
     
     public init(_ storage: Storage) {
         self.storage = storage
+        
+        super.init()
+        
+        self.timeoutWorkItem = DispatchWorkItem { [unowned self] in
+            self.backgroundOperationQueue.cancelAllOperations()
+            self.storeDownloadedTranscripts()
+        }
     }
     
     /// The progress when the transcripts are being downloaded/indexed
@@ -83,7 +91,11 @@ public final class TranscriptIndexer {
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: self.timeoutWorkItem)
+        
         let task = URLSession.shared.dataTask(with: request) { [unowned self] data, response, error in
+            defer { self.timeoutWorkItem.cancel() }
+            
             guard let jsonData = data else {
                 self.transcriptIndexingProgress?.completedUnitCount += 1
                 self.checkForCompletion()
@@ -114,6 +126,14 @@ public final class TranscriptIndexer {
         }
         
         task.resume()
+    }
+    
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == #keyPath(OperationQueue.operationCount) {
+            NSLog("operationCount = \(backgroundOperationQueue.operationCount)")
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
     }
     
     private func checkForCompletion() {
