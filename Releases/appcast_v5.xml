@@ -7,16 +7,12 @@
         <language>en</language>
 		
 		<item>
-            <title>Version 5.0.2 beta</title>
+            <title>Version 5.0.3</title>
 			<description><![CDATA[
-						<ul>
-							<li>Transcripts now sync with the video while playing</li>
-							<li>Transcript indexing is more reliable</li>
-							<li>Downloads sync with the filesystem more realiably</li>
-						</ul>
+						<h3>WWDC 2017 schedule is now available</h3>
 						]]></description>
-            <pubDate>Tue, 30 May 2017 11:30:00 -0300</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.2/WWDC_v5.0.2.zip" sparkle:version="15" sparkle:shortVersionString="5.0.2" length="13150587" type="application/octet-stream" />
+            <pubDate>Tue, 30 May 2017 17:45:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.3/WWDC_v5.0.3.zip" sparkle:version="17" sparkle:shortVersionString="5.0.3" length="13141367" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
         </item>
 		
