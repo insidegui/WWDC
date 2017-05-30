@@ -100,7 +100,7 @@ final class TabItemView: NSView {
         let v = NSStackView(views: [self.imageView, self.titleLabel])
         
         v.orientation = .horizontal
-        v.spacing = 5
+        v.spacing = 10
         v.alignment = .centerY
         v.distribution = .equalCentering
         
@@ -110,7 +110,7 @@ final class TabItemView: NSView {
     override var intrinsicContentSize: NSSize {
         get {
             var s = stackView.computedContentSize
-            s.width += 12
+            s.width += 29
             return s
         }
         set {
@@ -126,6 +126,8 @@ final class TabItemView: NSView {
         addSubview(stackView)
         stackView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+        titleLabel.centerYAnchor.constraint(equalTo: stackView.centerYAnchor, constant: -1).isActive = true
     }
     
     required init?(coder: NSCoder) {
