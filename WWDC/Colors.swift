@@ -82,4 +82,8 @@ extension NSColor {
         return NSColor(calibratedRed:0.07, green:0.07, blue:0.07, alpha:1.00)
     }
     
+    static var darkGridColor: NSColor {
+        return NSColor(calibratedRed:0.12, green:0.12, blue:0.12, alpha:1.00)
+    }
+    
 }

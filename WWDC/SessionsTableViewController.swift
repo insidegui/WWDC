@@ -206,6 +206,8 @@ class SessionsTableViewController: NSViewController {
         v.rowHeight = Metrics.sessionRowHeight
         v.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
         v.floatsGroupRows = true
+        v.gridStyleMask = .solidHorizontalGridLineMask
+        v.gridColor = .darkGridColor
         
         let column = NSTableColumn(identifier: "session")
         v.addTableColumn(column)
