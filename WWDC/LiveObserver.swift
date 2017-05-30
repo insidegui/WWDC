@@ -116,9 +116,10 @@ private extension SessionAsset {
         self.init()
         
         self.assetType = .liveStreamVideo
+        self.year = Calendar.current.component(.year, from: Today())
         self.sessionId = "\(number)"
         self.remoteURL = hls
-        self.year = Calendar.current.component(.year, from: Today())
+        self.identifier = self.generateIdentifier()
     }
     
 }
@@ -214,7 +215,16 @@ private final class CloudKitLiveObserver: NSObject {
         storage.unmanagedUpdate { [unowned self] realm in
             records.forEach { record in
                 guard let asset = SessionAsset(record: record) else { return }
-                guard let instance = self.storage.session(with: "\(asset.year)-\(asset.sessionId)")?.instances.first else { return }
+                guard let session = self.storage.session(with: "\(asset.year)-\(asset.sessionId)") else { return }
+                guard let instance = session.instances.first else { return }
+                
+                if let existingAsset = realm.object(ofType: SessionAsset.self, forPrimaryKey: asset.identifier) {
+                    // update existing asset hls URL if appropriate
+                    existingAsset.remoteURL = asset.remoteURL
+                } else {
+                    // add new live asset to corresponding session
+                    session.assets.append(asset)
+                }
                 
                 instance.isForcedLive = (record["isLive"] as? Int == 1)
                 instance.isCurrentlyLive = instance.isForcedLive

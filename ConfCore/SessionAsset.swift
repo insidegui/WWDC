@@ -94,7 +94,7 @@ public class SessionAsset: Object {
         self.relativeLocalURL = other.relativeLocalURL
     }
     
-    internal func generateIdentifier() -> String {
+    public func generateIdentifier() -> String {
         return String(self.year) + "@" + self.sessionId + "~" + self.rawAssetType.replacingOccurrences(of: "WWDCSessionAssetType", with: "")
     }
     

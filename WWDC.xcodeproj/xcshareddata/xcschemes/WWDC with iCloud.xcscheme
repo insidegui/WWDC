@@ -74,7 +74,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--test"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
@@ -102,11 +102,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--delorean"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "2016-06-13T11:00:00-07:00"
-            isEnabled = "NO">
+            argument = "2017-06-05T11:00:00-07:00"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
