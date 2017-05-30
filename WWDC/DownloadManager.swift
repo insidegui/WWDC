@@ -328,6 +328,11 @@ final class DownloadManager: NSObject {
     fileprivate var subfoldersMonitors: [DTFolderMonitor] = []
     fileprivate var existingVideoFiles = [String]()
     
+    func syncWithFileSystem() {
+        let videosPath = Preferences.shared.localVideoStorageURL.path
+        enumerateVideoFiles(videosPath)
+    }
+    
     func monitorDownloadsFolder() {
         if topFolderMonitor != nil {
             topFolderMonitor.stopMonitoring()

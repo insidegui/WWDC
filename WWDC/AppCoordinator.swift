@@ -179,6 +179,8 @@ final class AppCoordinator {
         } else {
             doUpdateLists()
         }
+        
+        DownloadManager.shared.syncWithFileSystem()
     }
     
     private func doUpdateLists() {
