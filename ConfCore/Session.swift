@@ -120,6 +120,13 @@ public class Session: Object {
         self.trackIdentifier = other.trackIdentifier
         self.staticContentId = other.staticContentId
         
+        // merge assets
+        let assets = other.assets.filter { otherAsset in
+            return !self.assets.contains(where: { $0.identifier == otherAsset.identifier })
+        }
+        
+        self.assets.append(objectsIn: assets)
+        
         let otherFocuses = other.focuses.map { newFocus -> (Focus) in
             if newFocus.realm == nil,
                 let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name)

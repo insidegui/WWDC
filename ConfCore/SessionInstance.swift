@@ -133,8 +133,8 @@ public class SessionInstance: Object {
         self.trackIdentifier = other.trackIdentifier
         self.eventIdentifier = other.eventIdentifier
         
-        if let otherSession = other.session {
-            self.session = realm.object(ofType: Session.self, forPrimaryKey: otherSession.identifier)
+        if let otherSession = other.session, let session = self.session {
+            session.merge(with: otherSession, in: realm)
         }
         
         let otherKeywords = other.keywords.map { newKeyword -> (Keyword) in

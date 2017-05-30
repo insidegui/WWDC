@@ -73,7 +73,7 @@ extension Environment {
     
     public static let test = Environment(baseURL: "http://localhost:9042",
                                          videosPath: "/videos.json",
-                                         sessionsPath: "/sessions.json",
+                                         sessionsPath: "/contents.json",
                                          newsPath: "/news.json",
                                          liveVideosPath: "/videos_live.json")
     

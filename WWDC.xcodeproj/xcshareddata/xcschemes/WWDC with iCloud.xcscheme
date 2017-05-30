@@ -74,11 +74,11 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--test"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--prefs"
