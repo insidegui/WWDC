@@ -102,6 +102,12 @@ public class Session: Object {
         }
     }
     
+    public static func standardSortForSchedule(sessionA: Session, sessionB: Session) -> Bool {
+        guard let instanceA = sessionA.instances.first, let instanceB = sessionB.instances.first else { return false }
+        
+        return SessionInstance.standardSort(instanceA: instanceA, instanceB: instanceB)
+    }
+    
     func merge(with other: Session, in realm: Realm) {
         assert(other.identifier == self.identifier, "Can't merge two objects with different identifiers!")
         

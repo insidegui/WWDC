@@ -179,7 +179,9 @@ class SessionsTableViewController: NSViewController {
             return
         }
         
-        let sessionRows: [SessionRow] = results.sorted(by: Session.standardSort).flatMap { session in
+        let sortingFunction = (style == .schedule) ? Session.standardSortForSchedule : Session.standardSort
+        
+        let sessionRows: [SessionRow] = results.sorted(by: sortingFunction).flatMap { session in
             guard let viewModel = SessionViewModel(session: session) else { return nil }
             
             return SessionRow(viewModel: viewModel)
