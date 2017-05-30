@@ -90,7 +90,7 @@ class SessionDetailsViewController: NSViewController {
             ])
         
         v.orientation = .horizontal
-        v.alignment = .centerY
+        v.alignment = .bottom
         v.spacing = 40
         
         return v
@@ -102,7 +102,7 @@ class SessionDetailsViewController: NSViewController {
         v.isHidden = true
         v.wantsLayer = true
         
-        v.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        v.heightAnchor.constraint(equalToConstant: 28).isActive = true
         
         v.addSubview(self.buttonsStackView)
         
@@ -116,6 +116,7 @@ class SessionDetailsViewController: NSViewController {
         let v = NSView()
         
         v.wantsLayer = true
+        v.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
         
         return v
     }()
@@ -124,9 +125,13 @@ class SessionDetailsViewController: NSViewController {
         let v = NSStackView(views: [self.menuButtonsContainer, self.contentView])
         
         v.orientation = .vertical
-        v.spacing = 20
+        v.spacing = 22
         v.alignment = .leading
         v.distribution = .fill
+        v.edgeInsets = EdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
+        
+        self.contentView.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
+        self.contentView.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
         
         return v
     }()
@@ -181,7 +186,8 @@ class SessionDetailsViewController: NSViewController {
         shelfController.view.translatesAutoresizingMaskIntoConstraints = false
         mainStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
+        shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 280).isActive = true
+        shelfController.view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultHigh, for: .vertical)
         
         view.addSubview(shelfController.view)
         view.addSubview(mainStackView)

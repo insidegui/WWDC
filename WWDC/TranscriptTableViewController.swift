@@ -75,7 +75,8 @@ class TranscriptTableViewController: NSViewController {
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
         
-        scrollView.heightAnchor.constraint(greaterThanOrEqualToConstant: 180).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 180).isActive = true
+        view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .vertical)
         
         view.addSubview(scrollView)
         
