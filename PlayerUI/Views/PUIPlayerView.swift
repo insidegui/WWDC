@@ -880,17 +880,29 @@ public final class PUIPlayerView: NSView {
     
     private var keyDownEventMonitor: Any?
     
+    private enum KeyCommands: UInt16 {
+        case spaceBar = 49
+    }
+    
     private func startMonitoringKeyEvents() {
         if keyDownEventMonitor != nil {
             stopMonitoringKeyEvents()
         }
         
-        keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
-            guard self.window?.firstResponder != self else { return event }
+        keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [unowned self] event in
+            guard let command = KeyCommands(rawValue: event.keyCode) else {
+                return event
+            }
             
-            self.keyDown(with: event)
+            // ignore keystrokes when editing text
+            guard !(self.window?.firstResponder is NSTextView) else { return event }
+            guard !self.timelineView.isEditingAnnotation else { return event }
             
-            return event
+            switch command {
+            case .spaceBar:
+                self.togglePlaying(nil)
+                return nil
+            }
         }
     }
     
@@ -902,24 +914,7 @@ public final class PUIPlayerView: NSView {
         keyDownEventMonitor = nil
     }
     
-    private enum KeyCommands: UInt16 {
-        case spaceBar = 49
-    }
     
-    public override func keyDown(with event: NSEvent) {
-        guard let command = KeyCommands(rawValue: event.keyCode) else {
-            return
-        }
-        
-        // ignore keystrokes when editing text
-        guard !(window?.firstResponder is NSTextView) else { return }
-        guard !timelineView.isEditingAnnotation else { return }
-        
-        switch command {
-        case .spaceBar:
-            self.togglePlaying(nil)
-        }
-    }
     
     // MARK: - PiP Support
     
