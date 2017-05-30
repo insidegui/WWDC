@@ -29,4 +29,5 @@
             <enclosure url="https://github.com/insidegui/WWDC/raw/master/Releases/WWDC_latest.zip" sparkle:version="14" sparkle:shortVersionString="5.0.1" length="13138632" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
         </item>
+	</channel>
 </rss>
