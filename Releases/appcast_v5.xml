@@ -7,12 +7,26 @@
         <language>en</language>
 		
 		<item>
-            <title>Version 5.0</title>
+            <title>Version 5.0.1 beta</title>
 			<description><![CDATA[
-						<p>This is the first beta release of WWDC for macOS v5</p>
+						<h3>Fixed lots of bugs and other issues from the first beta:</h3>
+						<ul>
+							<li>When filtering in the schedule view, the chronological order is now kept</li>
+							<li>The sidebar can now be shown/hidden using the "Toggle Sidebar" menu item or Command + Option + S</li>
+							<li>Many layout improvements and fixes here and there</li>
+							<li>Lists don't lose the filtering when switching tabs anymore</li>
+							<li>The text field for the bookmark annotation is only shown when an empty bookmark is selected</li>
+							<li>Filter popups no longer grow beyond the limits of the sidebar</li>
+							<li>Main tab items are now better aligned and spaced</li>
+							<li>ESC will now exit fullscreen correctly</li>
+							<li>Using the spacebar to play/pause is more responsive</li>
+							<li>(Almost invisible) table view separators</li>
+							<li>Better tooltips on the player (and dark tooltip frames)</li>
+							<li>When a lab is selected, the session detail view doesn't show a huge empty image anymore</li>
+						</ul>
 						]]></description>
             <pubDate>Tue, 30 May 2017 20:00:00 -0300</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0/WWDC_v5.0.zip" sparkle:version="42" sparkle:shortVersionString="5.0" length="8353208" type="application/octet-stream" />
+            <enclosure url="https://github.com/insidegui/WWDC/raw/master/Releases/WWDC_latest.zip" sparkle:version="14" sparkle:shortVersionString="5.0.1" length="13138632" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
         </item>
 </rss>
