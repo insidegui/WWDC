@@ -659,7 +659,12 @@ public final class PUITimelineView: NSView {
         
         window?.addChildWindow(annotationWindow, ordered: .above)
         annotationWindow.setFrameOrigin(screenRect.origin)
-        annotationWindow.makeKeyAndOrderFront(nil)
+        
+        if annotation.isEmpty {
+            annotationWindow.makeKeyAndOrderFront(nil)
+        } else {
+            annotationWindow.orderFront(nil)
+        }
         
         annotationWindow.animator().alphaValue = 1
         

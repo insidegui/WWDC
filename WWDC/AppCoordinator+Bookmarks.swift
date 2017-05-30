@@ -67,6 +67,10 @@ extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate
 
 extension Bookmark: PUITimelineAnnotation {
     
+    public var isEmpty: Bool {
+        return body.isEmpty
+    }
+    
     public var timestamp: Double {
         return timecode
     }
