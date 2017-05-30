@@ -154,7 +154,7 @@ final class SessionViewModel: NSObject {
         
         let year = Calendar.current.component(.year, from: event.startDate)
         
-        return "WWDC \(year) - Session \(session.number)"
+        return "WWDC \(year) · Session \(session.number)"
     }
     
     static func focusesDescription(from focuses: [Focus], collapse: Bool) -> String {
@@ -185,7 +185,7 @@ final class SessionViewModel: NSObject {
         if let instance = instance {
             var result = timeFormatter.string(from: instance.startTime) + " - " + timeFormatter.string(from: instance.endTime)
             
-            result += " - " + instance.roomName
+            result += " · " + instance.roomName
             
             return result
         } else {
@@ -196,7 +196,7 @@ final class SessionViewModel: NSObject {
             var result = session.track.first?.name ?? ""
             
             if focusesArray.count > 0 {
-                result = "\(focuses) - " + result
+                result = "\(focuses) · " + result
             }
             
             return result
