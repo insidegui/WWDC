@@ -90,7 +90,7 @@ class SessionDetailsViewController: NSViewController {
             ])
         
         v.orientation = .horizontal
-        v.alignment = .bottom
+        v.alignment = .top
         v.spacing = 40
         
         return v
@@ -102,11 +102,11 @@ class SessionDetailsViewController: NSViewController {
         v.isHidden = true
         v.wantsLayer = true
         
-        v.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        v.heightAnchor.constraint(equalToConstant: 36).isActive = true
         
         v.addSubview(self.buttonsStackView)
         
-        self.buttonsStackView.centerYAnchor.constraint(equalTo: v.centerYAnchor).isActive = true
+        self.buttonsStackView.topAnchor.constraint(equalTo: v.topAnchor).isActive = true
         self.buttonsStackView.centerXAnchor.constraint(equalTo: v.centerXAnchor).isActive = true
         
         return v
@@ -128,7 +128,7 @@ class SessionDetailsViewController: NSViewController {
         v.spacing = 22
         v.alignment = .leading
         v.distribution = .fill
-        v.edgeInsets = EdgeInsets(top: 22, left: 0, bottom: 0, right: 0)
+        v.edgeInsets = EdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
         
         self.contentView.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
         self.contentView.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
