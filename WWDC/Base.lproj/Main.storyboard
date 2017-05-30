@@ -675,7 +675,7 @@
                                                     <real value="3.4028234663852886e+38"/>
                                                 </customSpacing>
                                             </stackView>
-                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jW0-0M-Xya">
+                                            <popUpButton verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="jW0-0M-Xya">
                                                 <rect key="frame" x="9" y="87" width="325" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="JF0-nF-AYP" id="wIo-Pd-ApE">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -692,7 +692,7 @@
                                                     <action selector="eventsPopUpAction:" target="QVl-wd-WlW" id="NpK-5c-Afm"/>
                                                 </connections>
                                             </popUpButton>
-                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mft-xX-6dt">
+                                            <popUpButton verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Mft-xX-6dt">
                                                 <rect key="frame" x="9" y="61" width="325" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="Hl8-Jf-3YQ" id="lKh-OJ-Ma5">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -709,7 +709,7 @@
                                                     <action selector="focusesPopUpAction:" target="QVl-wd-WlW" id="gon-g6-flH"/>
                                                 </connections>
                                             </popUpButton>
-                                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d8i-uR-hrT">
+                                            <popUpButton verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="d8i-uR-hrT">
                                                 <rect key="frame" x="9" y="35" width="325" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="aWW-Dt-aEc" id="e63-aO-rTw">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
