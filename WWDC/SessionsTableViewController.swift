@@ -116,6 +116,7 @@ class SessionsTableViewController: NSViewController {
     }
     
     private func updateVideosList() {
+        guard searchResults == nil else { return }
         guard view.window != nil else { return }
         
         guard let tracks = tracks else { return }
@@ -137,6 +138,7 @@ class SessionsTableViewController: NSViewController {
     }
     
     private func updateScheduleList() {
+        guard searchResults == nil else { return }
         guard let sections = scheduleSections else { return }
         
         var shownTimeZone = false
