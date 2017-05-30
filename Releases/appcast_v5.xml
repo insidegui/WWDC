@@ -7,6 +7,20 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.0.2 beta</title>
+			<description><![CDATA[
+						<ul>
+							<li>Transcripts now sync with the video while playing</li>
+							<li>Transcript indexing is more reliable</li>
+							<li>Downloads sync with the filesystem more realiably</li>
+						</ul>
+						]]></description>
+            <pubDate>Tue, 30 May 2017 11:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.2/WWDC_v5.0.2.zip" sparkle:version="15" sparkle:shortVersionString="5.0.2" length="13150587" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.0.1 beta</title>
 			<description><![CDATA[
 						<h3>Fixed lots of bugs and other issues from the first beta:</h3>
@@ -25,7 +39,7 @@
 							<li>When a lab is selected, the session detail view doesn't show a huge empty image anymore</li>
 						</ul>
 						]]></description>
-            <pubDate>Tue, 30 May 2017 20:00:00 -0300</pubDate>
+            <pubDate>Tue, 29 May 2017 23:00:00 -0300</pubDate>
             <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.1/WWDC_v5.0.1.zip" sparkle:version="14" sparkle:shortVersionString="5.0.1" length="13138632" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
         </item>
