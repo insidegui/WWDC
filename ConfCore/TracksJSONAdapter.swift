@@ -10,7 +10,8 @@ import Foundation
 import SwiftyJSON
 
 private enum TrackKeys: String, JSONSubscriptType {
-    case name, color, darkColor, titleColor, lightBGColor
+    case name, color, darkColor, titleColor, lightBGColor, ordinal
+    case identifier = "id"
     
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -23,6 +24,10 @@ final class TracksJSONAdapter: Adapter {
     typealias OutputType = Track
     
     func adapt(_ input: JSON) -> Result<Track, AdapterError> {
+        guard let identifier = input[TrackKeys.identifier].int else {
+            return .error(.missingKey(TrackKeys.identifier))
+        }
+        
         guard let name = input[TrackKeys.name].string else {
             return .error(.missingKey(TrackKeys.name))
         }
@@ -43,11 +48,14 @@ final class TracksJSONAdapter: Adapter {
             return .error(.missingKey(TrackKeys.lightBGColor))
         }
         
-        let track = Track.make(name: name,
+        let track = Track.make(identifier: "\(identifier)",
+                               name: name,
                                darkColor: darkColor,
                                lightBackgroundColor: lightBGColor,
                                lightColor: color,
                                titleColor: titleColor)
+        
+        track.order = input[TrackKeys.ordinal].intValue
         
         return .success(track)
     }

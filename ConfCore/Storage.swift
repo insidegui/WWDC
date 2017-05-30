@@ -103,15 +103,12 @@ public final class Storage {
         }
     }
     
-    func store(sessionsResult: Result<SessionsResponse, APIError>, scheduleResult: Result<ScheduleResponse, APIError>, completion: @escaping () -> Void) {
-        if case let .error(sessionsError) = sessionsResult {
-            print("Error downloading sessions: \(sessionsError)")
-        }
-        if case let .error(scheduleError) = scheduleResult {
-            print("Error downloading schedule: \(scheduleError)")
+    func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping () -> Void) {
+        if case let .error(error) = contentResult {
+            print("Error downloading sessions: \(error)")
         }
         
-        guard case let .success(sessionsResponse) = sessionsResult, case let .success(scheduleResponse) = scheduleResult else {
+        guard case let .success(sessionsResponse) = contentResult else {
             return
         }
         
@@ -139,32 +136,8 @@ public final class Storage {
             }
         }
         
-        // Associate assets with sessions
-        consolidatedSessions.forEach { session in
-            autoreleasepool {
-                let components = session.identifier.components(separatedBy: "-")
-                guard components.count == 2 else { return }
-                guard let year = Int(components[0]) else { return }
-                
-                session.assets.removeAll()
-                
-                // Merge assets, preserving user-defined data
-                let assets = sessionsResponse.assets.filter({ $0.year == year && $0.sessionId == components[1] }).map { newAsset -> (SessionAsset) in
-                    if let existingAsset = self.realm.object(ofType: SessionAsset.self, forPrimaryKey: newAsset.identifier) {
-                        existingAsset.merge(with: newAsset, in: self.realm)
-                        
-                        return existingAsset
-                    } else {
-                        return newAsset
-                    }
-                }
-                
-                session.assets.append(objectsIn: assets)
-            }
-        }
-        
         // Merge existing instance data, preserving user-defined data
-        scheduleResponse.instances.forEach { newInstance in
+        sessionsResponse.instances.forEach { newInstance in
             return autoreleasepool {
                 if let existingInstance = self.realm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
                     existingInstance.merge(with: newInstance, in: self.realm)
@@ -177,8 +150,8 @@ public final class Storage {
         }
         
         // Save everything
-        self.realm.add(scheduleResponse.rooms, update: true)
-        self.realm.add(scheduleResponse.tracks, update: true)
+        self.realm.add(sessionsResponse.rooms, update: true)
+        self.realm.add(sessionsResponse.tracks, update: true)
         self.realm.add(sessionsResponse.events, update: true)
         
         do {
@@ -195,8 +168,9 @@ public final class Storage {
         
         // add instances to rooms
         targetRealm.objects(Room.self).forEach { room in
-            let instances = targetRealm.objects(SessionInstance.self).filter("roomName == %@", room.name)
+            let instances = targetRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
             
+            instances.forEach({ $0.roomName = room.name })
             room.instances.append(objectsIn: instances)
         }
         
@@ -211,11 +185,13 @@ public final class Storage {
         
         // add instances and sessions to tracks
         targetRealm.objects(Track.self).forEach { track in
-            let instances = targetRealm.objects(SessionInstance.self).filter("trackName == %@", track.name)
-            let sessions = targetRealm.objects(Session.self).filter("trackName == %@", track.name)
+            let instances = targetRealm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
+            let sessions = targetRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
             
             track.instances.append(objectsIn: instances)
             track.sessions.append(objectsIn: sessions)
+            
+            instances.forEach({ $0.trackName = track.name })
         }
         
         // add live video assets to sessions

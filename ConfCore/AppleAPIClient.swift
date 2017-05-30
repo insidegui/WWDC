@@ -45,10 +45,10 @@ public final class AppleAPIClient {
             return try self?.failableAdaptCollection(newsItemsJson, using: NewsItemsJSONAdapter())
         }
         
-        service.configureTransformer(environment.sessionsPath) { [weak self] (entity: Entity<JSON>) throws -> ScheduleResponse? in
+        service.configureTransformer(environment.sessionsPath) { [weak self] (entity: Entity<JSON>) throws -> ContentsResponse? in
             let json = entity.content as JSON
             
-            return try self?.failableAdapt(json, using: ScheduleResponseAdapter())
+            return try self?.failableAdapt(json, using: ContentsResponseAdapter())
         }
         
         service.configureTransformer(environment.videosPath) { [weak self] (entity: Entity<JSON>) throws -> SessionsResponse? in
@@ -122,7 +122,7 @@ public final class AppleAPIClient {
     // MARK: - Standard API requests
     
     private var liveVideoAssetsResource: Resource!
-    private var scheduleResource: Resource!
+    private var contentsResource: Resource!
     private var sessionsResource: Resource!
     private var newsItemsResource: Resource!
     
@@ -142,26 +142,15 @@ public final class AppleAPIClient {
         currentLiveVideosRequest = liveVideoAssetsResource.loadIfNeeded()
     }
     
-    public func fetchSchedule(completion: @escaping (Result<ScheduleResponse, APIError>) -> Void) {
-        if scheduleResource == nil {
-            scheduleResource = schedule.addObserver(owner: self) { [weak self] resource, event in
+    public func fetchContent(completion: @escaping (Result<ContentsResponse, APIError>) -> Void) {
+        if contentsResource == nil {
+            contentsResource = schedule.addObserver(owner: self) { [weak self] resource, event in
                 self?.process(resource, event: event, with: completion)
             }
         }
         
         currentScheduleRequest?.cancel()
-        currentScheduleRequest = scheduleResource.loadIfNeeded()
-    }
-    
-    public func fetchSessions(completion: @escaping (Result<SessionsResponse, APIError>) -> Void) {
-        if sessionsResource == nil {
-            sessionsResource = sessions.addObserver(owner: self) { [weak self] resource, event in
-                self?.process(resource, event: event, with: completion)
-            }
-        }
-        
-        currentSessionsRequest?.cancel()
-        currentSessionsRequest = sessionsResource.loadIfNeeded()
+        currentScheduleRequest = contentsResource.loadIfNeeded()
     }
     
     public func fetchNewsItems(completion: @escaping (Result<[NewsItem], APIError>) -> Void) {

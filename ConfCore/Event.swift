@@ -30,6 +30,8 @@ public class Event: Object {
     /// Sessions held at this event
     public let sessions = List<Session>()
     
+    public dynamic var imagesPath = ""
+    
     /// Session instances for schedule
     public var sessionInstances = List<SessionInstance>()
     
@@ -47,7 +49,7 @@ public class Event: Object {
         ]
     }
     
-    public static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool) -> Event {
+    public static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool, imagesPath: String) -> Event {
         let event = Event()
         
         event.identifier = identifier
@@ -55,6 +57,7 @@ public class Event: Object {
         event.startDate = startDate
         event.endDate = endDate
         event.isCurrent = isCurrent
+        event.imagesPath = imagesPath
         
         return event
     }

@@ -9,9 +9,11 @@
 import Foundation
 import SwiftyJSON
 
-private enum SessionInstanceKeys: String, JSONSubscriptType {
-    case id, track, room, keywords, startGMT, endGMT, type
+enum SessionInstanceKeys: String, JSONSubscriptType {
+    case id, keywords, startTime, endTime, type
     case favId = "fav_id"
+    case room = "roomId"
+    case track = "trackId"
     
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -28,36 +30,33 @@ final class SessionInstancesJSONAdapter: Adapter {
             return .error(.invalidData)
         }
         
-        guard let id = input[SessionInstanceKeys.id].string else {
-            return .error(.missingKey(SessionInstanceKeys.id))
+        // not an instance
+        guard session.year == Calendar.current.component(.year, from: Date()) else {
+            return .error(.invalidData)
         }
         
-        guard let trackName = input[SessionInstanceKeys.track].string else {
-            return .error(.missingKey(SessionInstanceKeys.track))
+        guard let startGMT = input[SessionInstanceKeys.startTime].string else {
+            return .error(.missingKey(SessionInstanceKeys.startTime))
         }
         
-        guard let roomName = input[SessionInstanceKeys.room].string else {
-            return .error(.missingKey(SessionInstanceKeys.room))
-        }
-        
-        guard let startGMT = input[SessionInstanceKeys.startGMT].string else {
-            return .error(.missingKey(SessionInstanceKeys.startGMT))
-        }
-        
-        guard let endGMT = input[SessionInstanceKeys.endGMT].string else {
-            return .error(.missingKey(SessionInstanceKeys.endGMT))
+        guard let endGMT = input[SessionInstanceKeys.endTime].string else {
+            return .error(.missingKey(SessionInstanceKeys.startTime))
         }
         
         guard let rawType = input[SessionInstanceKeys.type].string else {
             return .error(.missingKey(SessionInstanceKeys.type))
         }
-        
-        guard let keywordsJson = input[SessionInstanceKeys.keywords].array else {
-            return .error(.missingKey(SessionInstanceKeys.keywords))
+
+        guard let id = input[SessionInstanceKeys.id].string else {
+            return .error(.missingKey(SessionInstanceKeys.id))
         }
-        
-        guard case .success(let keywords) = KeywordsJSONAdapter().adapt(keywordsJson) else {
-            return .error(.invalidData)
+
+        guard let roomIdentifier = input[SessionInstanceKeys.room].int else {
+            return .error(.missingKey(SessionInstanceKeys.room))
+        }
+
+        guard let trackIdentifier = input[SessionInstanceKeys.track].int else {
+            return .error(.missingKey(SessionInstanceKeys.track))
         }
         
         guard case .success(let startDate) = DateTimeAdapter().adapt(startGMT) else {
@@ -70,17 +69,22 @@ final class SessionInstancesJSONAdapter: Adapter {
         
         let instance = SessionInstance()
         
+        if let keywordsJson = input[SessionInstanceKeys.keywords].array {
+            if case .success(let keywords) = KeywordsJSONAdapter().adapt(keywordsJson) {
+                instance.keywords.append(objectsIn: keywords)
+            }
+        }
+        
         instance.identifier = session.identifier
         instance.eventIdentifier = Event.identifier(from: startDate)
         instance.number = id
         instance.session = session
-        instance.trackName = trackName
-        instance.roomName = roomName
+        instance.trackIdentifier = "\(trackIdentifier)"
+        instance.roomIdentifier = "\(roomIdentifier)"
         instance.rawSessionType = rawType
         instance.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
         instance.startTime = startDate
         instance.endTime = endDate
-        instance.keywords.append(objectsIn: keywords)
         
         return .success(instance)
     }

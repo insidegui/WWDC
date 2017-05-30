@@ -9,8 +9,18 @@
 import Foundation
 import SwiftyJSON
 
+enum AssetKeys: String, JSONSubscriptType {
+    case id, year, title, downloadHD, downloadSD, slides, hls, images, shelf
+    
+    var jsonKey: JSONKey {
+        return JSONKey.key(rawValue)
+    }
+}
+
 private enum SessionKeys: String, JSONSubscriptType {
-    case id, year, title, track, focus, description, startGMT
+    case id, year, title, platforms, description, startTime, eventContentId, eventId, media, webPermalink, staticContentId
+    
+    case track = "trackId"
     
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -23,24 +33,15 @@ final class SessionsJSONAdapter: Adapter {
     typealias OutputType = Session
     
     func adapt(_ input: JSON) -> Result<Session, AdapterError> {
-        guard let id = input[SessionKeys.id].string else {
+        guard let id = input[SessionKeys.id].string?.replacingOccurrences(of: "wwdc", with: "") else {
             return .error(.missingKey(SessionKeys.id))
         }
         
-        var eventYear = ""
-        
-        if let year = input[SessionKeys.year].int {
-            eventYear = "\(year)"
-        } else if let startGMT = input[SessionKeys.startGMT].string {
-            guard let year = startGMT.components(separatedBy: "-").first else {
-                return .error(.missingKey(SessionKeys.year))
-            }
-            
-            eventYear = year
+        guard let eventIdentifier = input[SessionKeys.eventId].string else {
+            return .error(.missingKey(SessionKeys.eventId))
         }
         
-        let identifier = "\(eventYear)-\(id)"
-        let eventIdentifier = "wwdc\(eventYear)"
+        let eventYear = eventIdentifier.replacingOccurrences(of: "wwdc", with: "")
         
         guard let title = input[SessionKeys.title].string else {
             return .error(.missingKey(SessionKeys.title))
@@ -50,27 +51,87 @@ final class SessionsJSONAdapter: Adapter {
             return .error(.missingKey(SessionKeys.description))
         }
         
-        guard let trackName = input[SessionKeys.track].string else {
+        guard let trackIdentifier = input[SessionKeys.track].int else {
             return .error(.missingKey(SessionKeys.track))
         }
         
-        guard let focusesJson = input[SessionKeys.focus].array else {
-            return .error(.missingKey(SessionKeys.focus))
-        }
-        
-        guard case .success(let focuses) = FocusesJSONAdapter().adapt(focusesJson) else {
-            return .error(.invalidData)
+        guard let eventContentId = input[SessionKeys.eventContentId].int else {
+            return .error(.missingKey(SessionKeys.eventContentId))
         }
         
         let session = Session()
         
-        session.identifier = identifier
+        if let focusesJson = input[SessionKeys.platforms].array {
+            if case .success(let focuses) = FocusesJSONAdapter().adapt(focusesJson) {
+                session.focuses.append(objectsIn: focuses)
+            }
+        }
+        
+        if let url = input[SessionKeys.media][AssetKeys.hls].string {
+            let streaming = SessionAsset()
+            
+            streaming.rawAssetType = SessionAssetType.streamingVideo.rawValue
+            streaming.remoteURL = url
+            streaming.year = Int(eventYear) ?? -1
+            streaming.sessionId = id
+            
+            session.assets.append(streaming)
+        }
+        
+        if let hd = input[SessionKeys.media][AssetKeys.downloadHD].string {
+            let hdVideo = SessionAsset()
+            hdVideo.rawAssetType = SessionAssetType.hdVideo.rawValue
+            hdVideo.remoteURL = hd
+            hdVideo.year = Int(eventYear) ?? -1
+            hdVideo.sessionId = id
+            
+            let filename = URL(string: hd)?.lastPathComponent ?? "\(title).mp4"
+            hdVideo.relativeLocalURL = "\(eventYear)/\(filename)"
+            
+            session.assets.append(hdVideo)
+        }
+        
+        if let sd = input[SessionKeys.media][AssetKeys.downloadSD].string {
+            let sdVideo = SessionAsset()
+            sdVideo.rawAssetType = SessionAssetType.sdVideo.rawValue
+            sdVideo.remoteURL = sd
+            sdVideo.year = Int(eventYear) ?? -1
+            sdVideo.sessionId = id
+            
+            let filename = URL(string: sd)?.lastPathComponent ?? "\(title).mp4"
+            sdVideo.relativeLocalURL = "\(eventYear)/\(filename)"
+            
+            session.assets.append(sdVideo)
+        }
+        
+        if let slides = input[SessionKeys.media][AssetKeys.slides].string {
+            let slidesAsset = SessionAsset()
+            slidesAsset.rawAssetType = SessionAssetType.slides.rawValue
+            slidesAsset.remoteURL = slides
+            slidesAsset.year = Int(eventYear) ?? -1
+            slidesAsset.sessionId = id
+            
+            session.assets.append(slidesAsset)
+        }
+        
+        if let permalink = input[SessionKeys.webPermalink].string {
+            let webPageAsset = SessionAsset()
+            webPageAsset.rawAssetType = SessionAssetType.webpage.rawValue
+            webPageAsset.remoteURL = permalink
+            webPageAsset.year = Int(eventYear) ?? -1
+            webPageAsset.sessionId = id
+            
+            session.assets.append(webPageAsset)
+        }
+        
+        session.staticContentId = "\(input[SessionKeys.staticContentId].intValue)"
+        session.identifier = id
         session.year = Int(eventYear) ?? -1
-        session.number = id
+        session.number = "\(eventContentId)"
         session.title = title
         session.summary = summary
-        session.trackName = trackName
-        session.focuses.append(objectsIn: focuses)
+        session.trackIdentifier = "\(trackIdentifier)"
+        
         session.eventIdentifier = eventIdentifier
         
         return .success(session)

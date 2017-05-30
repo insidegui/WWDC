@@ -31,7 +31,27 @@ enum PlaybackError: Error {
 extension Session {
     
     func asset(of type: SessionAssetType) -> SessionAsset? {
-        return assets.filter({ $0.assetType == type }).first
+        if type == .image {
+            return imageAsset()
+        } else {
+            return assets.filter({ $0.assetType == type }).first
+        }
+    }
+    
+    func imageAsset() -> SessionAsset? {
+        guard let path = event.first?.imagesPath else { return nil }
+        guard let baseURL = URL(string: path) else { return nil }
+        
+        let filename = "\(staticContentId)_wide_900x506_1x.jpg"
+        
+        let url = baseURL.appendingPathComponent("\(staticContentId)/\(filename)")
+        
+        let asset = SessionAsset()
+        
+        asset.assetType = .image
+        asset.remoteURL = url.absoluteString
+        
+        return asset
     }
     
 }

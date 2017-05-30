@@ -75,8 +75,13 @@ public class SessionInstance: Object {
     /// Room name
     public dynamic var roomName = ""
     
+    /// Room unique identifier
+    public dynamic var roomIdentifier = ""
+    
     // Track name
     public dynamic var trackName = ""
+    
+    public dynamic var trackIdentifier = ""
     
     /// The track associated with the instance
     public let track = LinkingObjects(fromType: Track.self, property: "instances")
@@ -123,8 +128,10 @@ public class SessionInstance: Object {
         self.sessionType = other.sessionType
         self.startTime = other.startTime
         self.endTime = other.endTime
-        self.roomName = other.roomName
+        self.roomIdentifier = other.roomIdentifier
         self.trackName = other.trackName
+        self.trackIdentifier = other.trackIdentifier
+        self.eventIdentifier = other.eventIdentifier
         
         if let otherSession = other.session {
             self.session = realm.object(ofType: Session.self, forPrimaryKey: otherSession.identifier)

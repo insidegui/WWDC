@@ -214,7 +214,7 @@ final class AppCoordinator {
     }
     
     @IBAction func refresh(_ sender: Any?) {
-        syncEngine.syncSessionsAndSchedule()
+        syncEngine.syncContent()
         syncEngine.syncLiveVideos()
         liveObserver.refresh()
         

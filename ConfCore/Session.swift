@@ -24,6 +24,8 @@ public class Session: Object {
     /// Title
     public dynamic var title = ""
     
+    public dynamic var staticContentId = ""
+    
     /// Description
     public dynamic var summary = ""
     
@@ -31,7 +33,7 @@ public class Session: Object {
     public dynamic var eventIdentifier = ""
     
     /// Track name
-    public dynamic var trackName = ""
+    public dynamic var trackIdentifier = ""
     
     /// The session's focuses
     public let focuses = List<Focus>()
@@ -115,7 +117,8 @@ public class Session: Object {
         self.number = other.number
         self.summary = other.summary
         self.eventIdentifier = other.eventIdentifier
-        self.trackName = other.trackName
+        self.trackIdentifier = other.trackIdentifier
+        self.staticContentId = other.staticContentId
         
         let otherFocuses = other.focuses.map { newFocus -> (Focus) in
             if newFocus.realm == nil,

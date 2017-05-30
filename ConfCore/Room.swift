@@ -12,6 +12,8 @@ import RealmSwift
 /// Represents a room or venue where sessions are held
 public class Room: Object {
     
+    public dynamic var identifier = ""
+    
     /// Name of the map file (maps are not present in the macOS app because they are embedded in the iOS app's binary, not given by the API)
     public dynamic var mapName = ""
     
@@ -34,9 +36,10 @@ public class Room: Object {
         ]
     }
     
-    public static func make(name: String, mapName: String, floor: String) -> Room {
+    public static func make(identifier: String, name: String, mapName: String, floor: String) -> Room {
         let room = Room()
         
+        room.identifier = identifier
         room.name = name
         room.mapName = mapName
         room.floor = floor

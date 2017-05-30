@@ -11,6 +11,7 @@ import SwiftyJSON
 
 private enum RoomKeys: String, JSONSubscriptType {
     case name, mapName, floor
+    case identifier = "id"
     
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -22,19 +23,15 @@ final class RoomsJSONAdapter: Adapter {
     typealias OutputType = Room
     
     func adapt(_ input: JSON) -> Result<Room, AdapterError> {
+        guard let identifier = input[RoomKeys.identifier].int else {
+            return .error(.missingKey(RoomKeys.identifier))
+        }
+        
         guard let name = input[RoomKeys.name].string else {
             return .error(.missingKey(RoomKeys.name))
         }
         
-        guard let mapName = input[RoomKeys.mapName].string else {
-            return .error(.missingKey(RoomKeys.mapName))
-        }
-        
-        guard let floor = input[RoomKeys.floor].string else {
-            return .error(.missingKey(RoomKeys.floor))
-        }
-        
-        let room = Room.make(name: name, mapName: mapName, floor: floor)
+        let room = Room.make(identifier: "\(identifier)", name: name, mapName: "", floor: "")
         
         return .success(room)
     }

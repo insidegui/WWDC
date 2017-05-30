@@ -12,6 +12,9 @@ import RealmSwift
 /// Tracks represent a specific are of interest (ex: "System Frameworks", "Graphics and Games")
 public class Track: Object {
     
+    /// Unique identifier
+    public dynamic var identifier = ""
+    
     /// The name of the track
     public dynamic var name = ""
     
@@ -47,13 +50,15 @@ public class Track: Object {
         ]
     }
     
-    public static func make(name: String,
-                     darkColor: String,
-                     lightBackgroundColor: String,
-                     lightColor: String,
-                     titleColor: String) -> Track {
+    public static func make(identifier: String,
+                            name: String,
+                            darkColor: String,
+                            lightBackgroundColor: String,
+                            lightColor: String,
+                            titleColor: String) -> Track {
         let track = Track()
         
+        track.identifier = identifier
         track.name = name
         track.darkColor = darkColor
         track.lightBackgroundColor = lightBackgroundColor

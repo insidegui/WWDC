@@ -41,15 +41,11 @@ public final class SyncEngine {
         }
     }
     
-    public func syncSessionsAndSchedule() {
-        client.fetchSessions { [weak self] sessionsResult in
+    public func syncContent() {
+        client.fetchContent { [unowned self] scheduleResult in
             DispatchQueue.main.async {
-                self?.client.fetchSchedule { scheduleResult in
-                    DispatchQueue.main.async {
-                        self?.storage.store(sessionsResult: sessionsResult, scheduleResult: scheduleResult) {
-                            NotificationCenter.default.post(name: .SyncEngineDidSyncSessionsAndSchedule, object: self)
-                        }
-                    }
+                self.storage.store(contentResult: scheduleResult) {
+                    NotificationCenter.default.post(name: .SyncEngineDidSyncSessionsAndSchedule, object: self)
                 }
             }
         }
