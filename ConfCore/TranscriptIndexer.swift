@@ -48,7 +48,8 @@ public final class TranscriptIndexer: NSObject {
     }()
     
     public static let minTranscriptableSessionLimit: Int = 10
-    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
+    // TODO: increase 2017 to 2018 when transcripts for 2017 become available
+    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND year < 2017 AND transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
     
     public static func needsUpdate(in storage: Storage) -> Bool {
         let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
