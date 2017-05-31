@@ -52,8 +52,8 @@ final class SearchCoordinator {
     func configureFilters() {
         let textualFilter = TextualFilter(identifier: FilterIdentifier.text.rawValue, value: nil)
 
-        let labOption = FilterOption(title: "Labs", value: "Lab")
-        let sessionOption = labOption.negated(with: "Sessions")
+        let sessionOption = FilterOption(title: "Sessions", value: "Session")
+        let labOption = sessionOption.negated(with: "Labs and Others")
         
         let instanceTypeOptions = [sessionOption, labOption]
         let instanceTypeFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event.rawValue,
