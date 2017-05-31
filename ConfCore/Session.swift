@@ -124,6 +124,7 @@ public class Session: Object {
         self.eventIdentifier = other.eventIdentifier
         self.trackIdentifier = other.trackIdentifier
         self.staticContentId = other.staticContentId
+        self.trackName = other.trackName
         
         // merge assets
         let assets = other.assets.filter { otherAsset in
