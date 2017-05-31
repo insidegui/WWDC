@@ -191,7 +191,11 @@ public final class Storage {
             track.instances.append(objectsIn: instances)
             track.sessions.append(objectsIn: sessions)
             
-            instances.forEach({ $0.trackName = track.name })
+            sessions.forEach({ $0.trackName = track.name })
+            instances.forEach { instance in
+                instance.trackName = track.name
+                instance.session?.trackName = track.name
+            }
         }
         
         // add live video assets to sessions

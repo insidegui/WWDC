@@ -33,6 +33,9 @@ public class Session: Object {
     public dynamic var eventIdentifier = ""
     
     /// Track name
+    public dynamic var trackName = ""
+    
+    /// Track identifier
     public dynamic var trackIdentifier = ""
     
     /// The session's focuses
