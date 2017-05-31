@@ -124,7 +124,7 @@ class SessionsTableViewController: NSViewController {
         let rows: [SessionRow] = tracks.flatMap { track -> [SessionRow] in
             let titleRow = SessionRow(title: track.name)
             
-            let sessionRows: [SessionRow] = track.sessions.filter("ANY assets.rawAssetType == %@", SessionAssetType.streamingVideo.rawValue).sorted(by: Session.standardSort).flatMap { session in
+            let sessionRows: [SessionRow] = track.sessions.filter(Session.videoPredicate).sorted(by: Session.standardSort).flatMap { session in
                 guard let viewModel = SessionViewModel(session: session) else { return nil }
                 
                 return SessionRow(viewModel: viewModel)
