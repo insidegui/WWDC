@@ -7,6 +7,19 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.0.4</title>
+			<description><![CDATA[
+				<ul>
+					<li>Fixed a crash that would occur when filtering</li>
+					<li>Improved search results on both tabs</li>
+				</ul>
+						]]></description>
+            <pubDate>Tue, 30 May 2017 22:10:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.4/WWDC_v5.0.4.zip" sparkle:version="19" sparkle:shortVersionString="5.0.4" length="13142617" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.0.3</title>
 			<description><![CDATA[
 						<h3>WWDC 2017 schedule is now available</h3>
