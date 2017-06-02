@@ -81,6 +81,10 @@ extension NSImage {
     static var PUISpeedHalf: NSImage {
         return playerBundle.image(forResource: "speed-h")!
     }
+
+    static var PUISpeedOneAndFourth: NSImage {
+        return playerBundle.image(forResource: "speed-125")!
+    }
     
     static var PUISpeedOneAndHalf: NSImage {
         return playerBundle.image(forResource: "speed-15")!

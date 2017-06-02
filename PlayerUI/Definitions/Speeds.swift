@@ -11,6 +11,7 @@ import Foundation
 public enum PUIPlaybackSpeed: Float {
     case slow = 0.5
     case normal = 1
+    case midFast = 1.25
     case fast = 1.5
     case fastest = 2
     
@@ -20,6 +21,8 @@ public enum PUIPlaybackSpeed: Float {
             return .PUISpeedHalf
         case .normal:
             return .PUISpeedOne
+        case .midFast:
+            return .PUISpeedOneAndFourth
         case .fast:
             return .PUISpeedOneAndHalf
         case .fastest:
@@ -28,7 +31,7 @@ public enum PUIPlaybackSpeed: Float {
     }
     
     private var all: [PUIPlaybackSpeed] {
-        return [.slow, .normal, .fast, .fastest]
+        return [.slow, .normal, .midFast, .fast, .fastest]
     }
     
     public var next: PUIPlaybackSpeed {
