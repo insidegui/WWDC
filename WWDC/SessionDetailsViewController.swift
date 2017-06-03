@@ -34,7 +34,7 @@ class SessionDetailsViewController: NSViewController {
             let shouldHideButtonsBar = self.transcriptButton.isHidden && self.bookmarksButton.isHidden
             self.menuButtonsContainer.isHidden = shouldHideButtonsBar
             
-            let shouldHideShelf = (viewModel?.sessionInstance.type == .lab)
+            let shouldHideShelf = (viewModel?.sessionInstance.type != .session)
             self.shelfController.view.isHidden = shouldHideShelf
             
             if isViewLoaded {
