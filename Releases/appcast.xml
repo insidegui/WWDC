@@ -7,6 +7,21 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5 is now available</title>
+			<description><![CDATA[
+				<div style="background-color:red;color:white;font-weight:bold;padding:10px">IMPORTANT: Version 5 is now available. Due to this being a brand new version written from the ground up, version 4 can't be updated automatically. If you want to get version 5 and watch WWDC 2017, please click the "learn more" button below.</div>
+						<h1>A brand new app, ready for WWDC 2017</h1>
+						<p>This is a brand new version we've been working on, with lots of new features and a beautiful new UI.</p>
+						<p><img style="width:90%;height:auto" src="https://wwdc.io/images/hero@2x.png" /></p>
+						]]></description>
+            <pubDate>Tue, 03 Jun 2017 01:45:00 -0300</pubDate>
+			<sparkle:version>450</sparkle:version>
+            <sparkle:shortVersionString>5.0</sparkle:shortVersionString>
+			<link>https://wwdc.io</link>
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.3.1</title>
 			<description><![CDATA[
 							<h3>Important: starting on this version, WWDC will not run on OS X 10.10 anymore</h3>
