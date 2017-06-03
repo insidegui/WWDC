@@ -961,7 +961,9 @@ public final class PUIPlayerView: NSView {
     }
     
     fileprivate func exitPictureInPictureMode() {
-        pipController?.dismissViewController(pictureContainer)
+		if self.pictureContainer.presenting == pipController {
+			pipController?.dismissViewController(pictureContainer)
+		}
     }
     
     // MARK: - Visibility management
