@@ -148,7 +148,7 @@ class SessionsTableViewController: NSViewController {
             
             shownTimeZone = true
             
-            let instanceRows: [SessionRow] = section.instances.flatMap { instance in
+            let instanceRows: [SessionRow] = section.instances.sorted(by: SessionInstance.standardSort).flatMap { instance in
                 guard let viewModel = SessionViewModel(session: instance.session, instance: instance, style: .schedule) else { return nil }
                 
                 return SessionRow(viewModel: viewModel)

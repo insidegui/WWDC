@@ -42,6 +42,12 @@ public class SessionInstance: Object {
     /// Instance number
     public dynamic var number = ""
     
+    public var code: Int {
+        guard let n = number.components(separatedBy: "-").last else { return NSNotFound }
+        
+        return Int(n) ?? NSNotFound
+    }
+    
     /// The event identifier for the event this instance belongs to
     public dynamic var eventIdentifier = ""
     
@@ -110,13 +116,28 @@ public class SessionInstance: Object {
         ]
     }
     
+    public override static func ignoredProperties() -> [String] {
+        return ["code"]
+    }
+    
     public static func standardSort(instanceA: SessionInstance, instanceB: SessionInstance) -> Bool {
-        guard let nA = Int(instanceA.number), let nB = Int(instanceB.number) else { return false }
+        guard let sessionA = instanceA.session, let sessionB = instanceB.session else { return false }
         
-        if instanceA.startTime == instanceB.startTime {
-            return nA < nB
+        let nA = instanceA.code
+        let nB = instanceB.code
+        
+        if instanceA.sessionType == instanceB.sessionType {
+            if instanceA.sessionType == SessionInstanceType.session.rawValue {
+                if instanceA.startTime == instanceB.startTime {
+                    return nA < nB
+                } else {
+                    return instanceA.startTime < instanceB.startTime
+                }
+            } else {
+                return Session.standardSort(sessionA: sessionA, sessionB: sessionB)
+            }
         } else {
-            return instanceA.startTime < instanceB.startTime
+            return instanceA.sessionType < instanceB.sessionType
         }
     }
     
