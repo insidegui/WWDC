@@ -100,6 +100,17 @@ final class SessionTableCellView: NSTableCellView {
                 self?.contextColorView.progress = 0
             }
         }).addDisposableTo(self.disposeBag)
+        
+        viewModel.rxSessionType.distinctUntilChanged().subscribe(onNext: { [weak self] type in
+            guard type != .session && type != .lab else { return }
+            
+            switch type {
+            case .getTogether:
+                self?.thumbnailImageView.image = #imageLiteral(resourceName: "get-together")
+            default:
+                self?.thumbnailImageView.image = #imageLiteral(resourceName: "special")
+            }
+        }).addDisposableTo(self.disposeBag)
     }
     
     private lazy var titleLabel: NSTextField = {

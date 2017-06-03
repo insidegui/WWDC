@@ -61,6 +61,10 @@ final class SessionViewModel: NSObject {
         return Observable.from(object: self.session).map({ SessionViewModel.footer(for: $0, at: $0.event.first) })
     }()
     
+    lazy var rxSessionType: Observable<SessionInstanceType> = {
+        return Observable.from(object: self.session).map({ $0.instances.first?.type }).ignoreNil()
+    }()
+    
     lazy var rxColor: Observable<NSColor> = {
         return Observable.from(object: self.session).map({ SessionViewModel.trackColor(for: $0) }).ignoreNil()
     }()
@@ -222,6 +226,10 @@ final class SessionViewModel: NSObject {
     }
     
     static func imageUrl(for session: Session) -> URL? {
+        guard session.instances.first?.type == .session || session.instances.first?.type == .lab else {
+            return nil
+        }
+        
         let imageAsset = session.asset(of: .image)
         
         guard let thumbnail = imageAsset?.remoteURL, let thumbnailUrl = URL(string: thumbnail) else { return nil }
