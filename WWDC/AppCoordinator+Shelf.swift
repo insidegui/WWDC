@@ -96,6 +96,8 @@ extension AppCoordinator: ShelfViewControllerDelegate {
                 currentPlayerController?.sessionViewModel = viewModel
             }
             
+            currentPlayerController?.playbackViewModel = playbackViewModel
+            
             attachPlayerToShelf(shelfController)
         } catch {
             WWDCAlert.show(with: error)

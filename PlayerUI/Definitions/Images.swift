@@ -34,10 +34,6 @@ extension NSImage {
         return playerBundle.image(forResource: "bookmark")!
     }
     
-    static var PUIChromeCast: NSImage {
-        return playerBundle.image(forResource: "chromecast")!
-    }
-    
     static var PUIForward30s: NSImage {
         return playerBundle.image(forResource: "forward30s")!
     }

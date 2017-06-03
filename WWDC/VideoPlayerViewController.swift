@@ -31,6 +31,8 @@ final class VideoPlayerViewController: NSViewController {
     
     weak var delegate: VideoPlayerViewControllerDelegate?
     
+    var playbackViewModel: PlaybackViewModel?
+    
     var sessionViewModel: SessionViewModel {
         didSet {
             self.disposeBag = DisposeBag()
@@ -87,6 +89,8 @@ final class VideoPlayerViewController: NSViewController {
         playerView.frame = view.bounds
         view.addSubview(playerView)
         
+        playerView.registerExternalPlaybackProvider(ChromeCastPlaybackProvider.self)
+        
         playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         playerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -135,6 +139,10 @@ final class VideoPlayerViewController: NSViewController {
         progressIndicator.startAnimation(nil)
         
         playerView.player = player
+        
+        if let remoteURL = playbackViewModel?.remoteMediaURL {
+            playerView.remoteMediaUrl = remoteURL
+        }
         
         setupTranscriptSync()
     }

@@ -61,11 +61,13 @@ final class PlaybackViewModel {
     let sessionViewModel: SessionViewModel
     let player: AVPlayer
     let isLiveStream: Bool
+    var remoteMediaURL: URL?
     
     private var timeObserver: Any?
     
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
         self.sessionViewModel = sessionViewModel
+        self.remoteMediaURL = nil
         
         guard let session = storage.session(with: sessionViewModel.identifier) else {
             throw PlaybackError.sessionNotFound(sessionViewModel.identifier)
@@ -77,6 +79,7 @@ final class PlaybackViewModel {
         if session.instances.filter("isCurrentlyLive == true").count > 0 {
             if let liveAsset = session.assets.filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).first, let liveURL = URL(string: liveAsset.remoteURL) {
                 streamUrl = liveURL
+                self.remoteMediaURL = liveURL
                 self.isLiveStream = true
             } else {
                 self.isLiveStream = false
@@ -96,6 +99,8 @@ final class PlaybackViewModel {
             guard let remoteUrl = URL(string: asset.remoteURL) else {
                 throw PlaybackError.invalidAsset(asset.remoteURL)
             }
+            
+            self.remoteMediaURL = remoteUrl
             
             // check if we have a downloaded file and use it instead
             if let localUrl = DownloadManager.shared.localFileURL(for: session) {
