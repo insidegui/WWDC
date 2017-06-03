@@ -226,8 +226,10 @@ final class SessionViewModel: NSObject {
     }
     
     static func imageUrl(for session: Session) -> URL? {
-        guard session.instances.first?.type == .session || session.instances.first?.type == .lab else {
-            return nil
+        if let instance = session.instances.first {
+            guard instance.type == .session || instance.type == .lab else {
+                return nil
+            }
         }
         
         let imageAsset = session.asset(of: .image)
