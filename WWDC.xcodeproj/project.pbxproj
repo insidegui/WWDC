@@ -115,6 +115,10 @@
 		DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */; };
 		DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCA1ED77A4800CADE86 /* FilterType.swift */; };
 		DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */; };
+		DD9301B81EE3202F00BE724B /* ChromeCastCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */; };
+		DD9301B91EE3202F00BE724B /* ProtocolBuffers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9301B71EE3202F00BE724B /* ProtocolBuffers.framework */; };
+		DD9301BC1EE3205800BE724B /* ChromeCastCore.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */; };
+		DD9301BD1EE3205800BE724B /* ProtocolBuffers.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD9301BB1EE3205800BE724B /* ProtocolBuffers.framework.dSYM */; };
 		DD9564211ED2792300051D07 /* app.icns in Resources */ = {isa = PBXBuildFile; fileRef = DD9564201ED2792300051D07 /* app.icns */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
@@ -330,6 +334,8 @@
 				DD5F51791E47DE0F0017F9EC /* RxRealm.framework.dSYM in Carthage: Copy DSYMs */,
 				DD5F517A1E47DE0F0017F9EC /* RxSwift.framework.dSYM in Carthage: Copy DSYMs */,
 				DD5F517B1E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM in Carthage: Copy DSYMs */,
+				DD9301BC1EE3205800BE724B /* ChromeCastCore.framework.dSYM in Carthage: Copy DSYMs */,
+				DD9301BD1EE3205800BE724B /* ProtocolBuffers.framework.dSYM in Carthage: Copy DSYMs */,
 				DD4DED641ED6579900624EAF /* Sparkle.framework.dSYM in Carthage: Copy DSYMs */,
 			);
 			name = "Carthage: Copy DSYMs";
@@ -459,6 +465,10 @@
 		DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFiltersViewController.swift; sourceTree = "<group>"; };
 		DD90CDCA1ED77A4800CADE86 /* FilterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 		DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
+		DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ChromeCastCore.framework; path = Carthage/Build/Mac/ChromeCastCore.framework; sourceTree = "<group>"; };
+		DD9301B71EE3202F00BE724B /* ProtocolBuffers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ProtocolBuffers.framework; path = Carthage/Build/Mac/ProtocolBuffers.framework; sourceTree = "<group>"; };
+		DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = ChromeCastCore.framework.dSYM; path = Carthage/Build/Mac/ChromeCastCore.framework.dSYM; sourceTree = "<group>"; };
+		DD9301BB1EE3205800BE724B /* ProtocolBuffers.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = ProtocolBuffers.framework.dSYM; path = Carthage/Build/Mac/ProtocolBuffers.framework.dSYM; sourceTree = "<group>"; };
 		DD9564201ED2792300051D07 /* app.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = app.icns; path = Design/app.icns; sourceTree = SOURCE_ROOT; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
@@ -601,6 +611,8 @@
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 				DD7F386C1EABF560002D8C00 /* IGListKit.framework in Frameworks */,
 				DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */,
+				DD9301B81EE3202F00BE724B /* ChromeCastCore.framework in Frameworks */,
+				DD9301B91EE3202F00BE724B /* ProtocolBuffers.framework in Frameworks */,
 				DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -894,6 +906,8 @@
 				DD5F51711E47DE0F0017F9EC /* RxCocoa.framework.dSYM */,
 				DD5F51721E47DE0F0017F9EC /* RxRealm.framework.dSYM */,
 				DD5F51731E47DE0F0017F9EC /* RxSwift.framework.dSYM */,
+				DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */,
+				DD9301BB1EE3205800BE724B /* ProtocolBuffers.framework.dSYM */,
 				DD5F51741E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM */,
 			);
 			name = DSYMs;
@@ -902,6 +916,8 @@
 		DD5F517E1E47DE7D0017F9EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */,
+				DD9301B71EE3202F00BE724B /* ProtocolBuffers.framework */,
 				DD4DED661ED6604300624EAF /* Fabric.framework */,
 				DD4DED671ED6604300624EAF /* Crashlytics.framework */,
 				DD4DED601ED6577100624EAF /* Sparkle.framework */,
@@ -1765,6 +1781,8 @@
 				"$(SRCROOT)/Carthage/Build/Mac/Siesta.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/IGListKit.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/Sparkle.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/ChromeCastCore.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/ProtocolBuffers.framework",
 			);
 			name = "Carthage: Copy Frameworks";
 			outputPaths = (
