@@ -116,7 +116,7 @@ final class VideoPlayerViewController: NSViewController {
         if let oldPlayer = oldValue {
             if let boundaryObserver = boundaryObserver {
                 oldPlayer.removeTimeObserver(boundaryObserver)
-				self.boundaryObserver = nil
+                self.boundaryObserver = nil
             }
             
             playerView.player = nil
