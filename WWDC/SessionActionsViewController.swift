@@ -92,6 +92,7 @@ class SessionActionsViewController: NSViewController {
         pi.heightAnchor.constraint(equalToConstant: 24).isActive = true
         pi.isHidden = true
         pi.addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(cancelDownload(_:))))
+        pi.toolTip = "Click to cancel"
         
         return pi
     }()
