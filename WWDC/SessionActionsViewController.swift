@@ -18,8 +18,8 @@ protocol SessionActionsViewControllerDelegate: class {
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
     func sessionActionsDidSelectDownload(_ sender: NSView?)
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?)
+    func sessionActionsDidSelectCancelDownload(_ sender: NSView?)
     func sessionActionsDidSelectShare(_ sender: NSView?)
-    
 }
 
 class SessionActionsViewController: NSViewController {
@@ -223,5 +223,6 @@ class SessionActionsViewController: NSViewController {
     }
     
     @IBAction func cancelDownload(_ sender: NSView?) {
+        delegate?.sessionActionsDidSelectCancelDownload(sender)
     }
 }
