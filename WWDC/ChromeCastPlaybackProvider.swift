@@ -153,6 +153,10 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
         scanner.stopScanning()
         
         if let previousClient = client {
+            if let app = mediaPlayerApp {
+                client?.stop(app: app)
+            }
+            
             mediaStatusRefreshTimer?.invalidate()
             mediaStatusRefreshTimer = nil
             
