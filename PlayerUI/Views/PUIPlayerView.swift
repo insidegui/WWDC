@@ -894,8 +894,6 @@ public final class PUIPlayerView: NSView {
         
         self.subtitlesGroup = subtitlesGroup
         
-        let currentMediaSelection = playerItem.currentMediaSelection
-        
         subtitlesButton.isHidden = false
         
         let menu = NSMenu()
