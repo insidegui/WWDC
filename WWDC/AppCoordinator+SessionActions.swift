@@ -14,6 +14,14 @@ import PlayerUI
 
 extension AppCoordinator: SessionActionsViewControllerDelegate {
     
+    func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
+        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        
+        guard let url = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first?.remoteURL else { return }
+        
+        _ = DownloadManager.shared.cancelDownload(url)
+    }
+    
     func sessionActionsDidSelectFavorite(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
         
