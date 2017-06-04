@@ -49,6 +49,9 @@ public protocol PUIExternalPlaybackProvider: class {
     /// The current media status
     var status: PUIExternalPlaybackMediaStatus { get }
     
+    /// Extra information to be displayed on-screen when this playback provider is current
+    var info: String { get }
+    
     /// Return whether this playback system is available
     var isAvailable: Bool { get }
     

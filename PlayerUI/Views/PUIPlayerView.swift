@@ -1161,12 +1161,28 @@ public final class PUIPlayerView: NSView {
         
         externalStatusController.providerIcon = current.image
         externalStatusController.providerName = currentProviderName
-        externalStatusController.providerDescription = "Playing in \(currentProviderName)"
+        externalStatusController.providerDescription = "Playing in \(currentProviderName)" + "\n" + current.info
         externalStatusController.view.isHidden = false
+        
+        pipButton.isEnabled = false
+        subtitlesButton.isEnabled = false
+        speedButton.isEnabled = false
+        forwardButton.isEnabled = false
+        backButton.isEnabled = false
+        
+        controlsContainerView.alphaValue = 0.5
     }
     
     @objc private func transitionToInternalPlayback() {
         unhighlightExternalPlaybackButtons()
+        
+        pipButton.isEnabled = true
+        subtitlesButton.isEnabled = true
+        speedButton.isEnabled = true
+        forwardButton.isEnabled = true
+        backButton.isEnabled = true
+        
+        controlsContainerView.alphaValue = 1
         
         externalStatusController.view.isHidden = true
     }

@@ -81,6 +81,10 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
         return #imageLiteral(resourceName: "chromecast-large")
     }
     
+    var info: String {
+        return "To control playback, use the Google Home app on your phone"
+    }
+    
     /// The current media status
     var status: PUIExternalPlaybackMediaStatus
     
