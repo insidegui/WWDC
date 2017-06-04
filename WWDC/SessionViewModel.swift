@@ -22,6 +22,7 @@ final class SessionViewModel: NSObject {
     let sessionInstance: SessionInstance
     let identifier: String
     var webUrl: URL?
+    var imageUrl: URL?
     let trackName: String
     
     private var disposeBag = DisposeBag()
@@ -145,6 +146,7 @@ final class SessionViewModel: NSObject {
         self.sessionInstance = instance ?? session.instances.first ?? SessionInstance()
         self.title = session.title
         self.identifier = session.identifier
+        self.imageUrl = SessionViewModel.imageUrl(for: session)
         
         if let webUrlStr = session.asset(of: .webpage)?.remoteURL {
             self.webUrl = URL(string: webUrlStr)

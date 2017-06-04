@@ -77,6 +77,9 @@ public final class PUIPlayerView: NSView {
     }
     
     public var remoteMediaUrl: URL?
+    public var mediaPosterUrl: URL?
+    public var mediaTitle: String?
+    public var mediaIsLiveStream: Bool = false
     
     var pictureContainer: PUIPictureContainerViewController!
     

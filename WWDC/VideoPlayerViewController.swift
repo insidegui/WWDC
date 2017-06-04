@@ -140,8 +140,11 @@ final class VideoPlayerViewController: NSViewController {
         
         playerView.player = player
         
-        if let remoteURL = playbackViewModel?.remoteMediaURL {
-            playerView.remoteMediaUrl = remoteURL
+        if let playbackViewModel = playbackViewModel {
+            playerView.remoteMediaUrl = playbackViewModel.remoteMediaURL
+            playerView.mediaTitle = playbackViewModel.title
+            playerView.mediaPosterUrl = playbackViewModel.imageURL
+            playerView.mediaIsLiveStream = playbackViewModel.isLiveStream
         }
         
         setupTranscriptSync()

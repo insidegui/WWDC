@@ -14,6 +14,7 @@ import CoreMedia
 private struct ChromeCastConstants {
     static let defaultHost = "devstreaming-cdn.apple.com"
     static let chromeCastSupportedHost = "devstreaming.apple.com"
+    static let placeholderImageURL = URL(string: "https://wwdc.io/images/placeholder.jpg")!
 }
 
 private extension URL {
@@ -170,7 +171,29 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
             NSLog("ChromeCast-compatible media URL = \(mediaURL)")
         #endif
         
-        let posterURL = URL(string: "http://cdn.wccftech.com/wp-content/uploads/2017/01/tim-cook-trump.jpg")!
+        let posterURL: URL
+        
+        if let poster = consumer?.mediaPosterUrl {
+            posterURL = poster
+        } else {
+            posterURL = ChromeCastConstants.placeholderImageURL
+        }
+        
+        let title: String
+        
+        if let playerTitle = consumer?.mediaTitle {
+            title = playerTitle
+        } else {
+            title = "WWDC Video"
+        }
+        
+        let streamType: CastMediaStreamType
+        
+        if let isLive = consumer?.mediaIsLiveStream {
+            streamType = isLive ? .live : .buffered
+        } else {
+            streamType = .buffered
+        }
         
         var currentTime: Double = 0
         
@@ -178,11 +201,11 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
             currentTime = Double(CMTimeGetSeconds(playerTime))
         }
         
-        let media = CastMedia(title: "WWDC Video",
+        let media = CastMedia(title: title,
                               url: mediaURL,
                               poster: posterURL,
                               contentType: "application/vnd.apple.mpegurl",
-                              streamType: .buffered,
+                              streamType: streamType,
                               autoplay: true,
                               currentTime: currentTime)
         

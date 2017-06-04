@@ -61,11 +61,17 @@ final class PlaybackViewModel {
     let sessionViewModel: SessionViewModel
     let player: AVPlayer
     let isLiveStream: Bool
+    
     var remoteMediaURL: URL?
+    var title: String?
+    var imageURL: URL?
     
     private var timeObserver: Any?
     
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
+        self.title = sessionViewModel.title
+        self.imageURL = sessionViewModel.imageUrl
+        
         self.sessionViewModel = sessionViewModel
         self.remoteMediaURL = nil
         

@@ -41,6 +41,15 @@ public protocol PUIExternalPlaybackConsumer: class {
     /// The media for the remote URL to be played by the provider
     var remoteMediaUrl: URL? { get }
     
+    /// The URL for a poster image representing the current media
+    var mediaPosterUrl: URL? { get }
+    
+    /// The title for the program being played
+    var mediaTitle: String? { get }
+    
+    /// Whether the current media is a live stream
+    var mediaIsLiveStream: Bool { get }
+    
     /// The `AVPlayer` instance the consumer is using to play its media
     var player: AVPlayer? { get }
     
