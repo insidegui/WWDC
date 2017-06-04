@@ -63,7 +63,7 @@ extension NSColor {
     }
     
     static var prefsPrimaryText: NSColor {
-        return NSColor(calibratedRed:0.87, green:0.87, blue:0.87, alpha:1.00)
+        return NSColor(calibratedRed:0.90, green:0.90, blue:0.90, alpha:1.00)
     }
     
     static var prefsSecondaryText: NSColor {

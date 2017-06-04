@@ -14,7 +14,7 @@ extension NSAttributedString {
         let attrs: [String: Any] = [
             NSFontAttributeName: NSFont.boldSystemFont(ofSize: 24),
             NSForegroundColorAttributeName: NSColor.white,
-            NSKernAttributeName: -0.8
+            NSKernAttributeName: -0.5
         ]
         
         return NSAttributedString(string: string, attributes: attrs)

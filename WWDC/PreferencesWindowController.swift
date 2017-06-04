@@ -11,7 +11,7 @@ import Cocoa
 class PreferencesWindowController: NSWindowController {
 
     static var defaultRect: NSRect {
-        return NSRect(x: 0, y: 0, width: 460, height: 500)
+        return NSRect(x: 0, y: 0, width: 650, height: 500)
     }
     
     init() {
