@@ -237,6 +237,7 @@ public final class PUIPlayerView: NSView {
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration), options: [.initial, .new], context: nil)
+        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection), options: [.initial, .new], context: nil)
         
         asset?.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: metadataBecameAvailable)
         
@@ -259,6 +260,7 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.volume))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration))
+        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection))
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -273,6 +275,8 @@ public final class PUIPlayerView: NSView {
                 self.updatePlayingState()
             } else if keyPath == #keyPath(AVPlayer.currentItem.duration) {
                 self.metadataBecameAvailable()
+            } else if keyPath == #keyPath(AVPlayer.currentItem.currentMediaSelection) {
+                self.updateMediaSelection()
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
@@ -790,10 +794,6 @@ public final class PUIPlayerView: NSView {
         }
     }
     
-    @IBAction func showSubtitlesMenu(_ sender: PUIButton) {
-        // TODO: show subtitles menu
-    }
-    
     @IBAction public func togglePlaying(_ sender: Any?) {
         if isPlaying {
             pause(sender)
@@ -877,6 +877,60 @@ public final class PUIPlayerView: NSView {
         } else {
             player.seek(to: targetTime)
         }
+    }
+    
+    // MARK: - Subtitles
+    
+    private var subtitlesMenu: NSMenu?
+    private var subtitlesGroup: AVMediaSelectionGroup?
+    
+    private func updateMediaSelection() {
+        guard let playerItem = player?.currentItem else { return }
+        
+        guard let subtitlesGroup = playerItem.asset.mediaSelectionGroup(forMediaCharacteristic: AVMediaCharacteristicLegible) else {
+            subtitlesButton.isHidden = true
+            return
+        }
+        
+        self.subtitlesGroup = subtitlesGroup
+        
+        let currentMediaSelection = playerItem.currentMediaSelection
+        
+        subtitlesButton.isHidden = false
+        
+        let menu = NSMenu()
+        
+        subtitlesGroup.options.forEach { option in
+            let item = NSMenuItem(title: option.displayName, action: #selector(didSelectSubtitleOption(_:)), keyEquivalent: "")
+            item.representedObject = option
+            item.target = self
+            
+            menu.addItem(item)
+        }
+        
+        self.subtitlesMenu = menu
+    }
+    
+    @objc fileprivate func didSelectSubtitleOption(_ sender: NSMenuItem) {
+        guard let subtitlesGroup = self.subtitlesGroup else { return }
+        guard let option = sender.representedObject as? AVMediaSelectionOption else { return }
+        
+        // reset all item's states
+        sender.menu?.items.forEach({ $0.state = NSOffState })
+        
+        if option.extendedLanguageTag == player?.currentItem?.selectedMediaOption(in: subtitlesGroup)?.extendedLanguageTag {
+            player?.currentItem?.select(nil, in: subtitlesGroup)
+            sender.state = NSOffState
+            return
+        }
+        
+        player?.currentItem?.select(option, in: subtitlesGroup)
+        
+        sender.state = NSOnState
+    }
+    
+    @IBAction func showSubtitlesMenu(_ sender: PUIButton) {
+        subtitlesMenu?.popUp(positioning: nil, at: .zero, in: sender)
     }
     
     // MARK: - Key commands
