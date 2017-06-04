@@ -99,7 +99,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yew-yF-ZWD">
-                                <rect key="frame" x="186" y="371" width="50" height="17"/>
+                                <rect key="frame" x="186" y="373" width="50" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Search:" id="fto-X6-Q8v">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -138,7 +138,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YmL-o7-wzA">
-                                <rect key="frame" x="119" y="454" width="117" height="17"/>
+                                <rect key="frame" x="119" y="456" width="117" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Downloads Folder:" id="wBE-cT-TAg">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -212,8 +212,8 @@
                             <constraint firstAttribute="trailing" secondItem="OZk-0e-tyQ" secondAttribute="trailing" id="XjQ-NC-K2O"/>
                             <constraint firstItem="Yew-yF-ZWD" firstAttribute="trailing" secondItem="YmL-o7-wzA" secondAttribute="trailing" id="Y8B-RI-3h4"/>
                             <constraint firstItem="jme-OU-7GG" firstAttribute="top" secondItem="scn-7e-mlv" secondAttribute="top" constant="29" id="YsL-oL-7FX"/>
-                            <constraint firstItem="YmL-o7-wzA" firstAttribute="top" secondItem="jme-OU-7GG" secondAttribute="top" id="cfW-zf-bJk"/>
-                            <constraint firstItem="Yew-yF-ZWD" firstAttribute="top" secondItem="N9Z-iX-jvK" secondAttribute="top" id="fxi-jB-18m"/>
+                            <constraint firstItem="YmL-o7-wzA" firstAttribute="top" secondItem="jme-OU-7GG" secondAttribute="top" constant="-2" id="cfW-zf-bJk"/>
+                            <constraint firstItem="Yew-yF-ZWD" firstAttribute="top" secondItem="N9Z-iX-jvK" secondAttribute="top" constant="-2" id="fxi-jB-18m"/>
                             <constraint firstItem="GJT-d9-qvO" firstAttribute="leading" secondItem="N9Z-iX-jvK" secondAttribute="leading" id="nXM-1D-bSD"/>
                             <constraint firstItem="N9Z-iX-jvK" firstAttribute="leading" secondItem="jme-OU-7GG" secondAttribute="leading" id="pGf-PU-WzS"/>
                             <constraint firstAttribute="trailing" secondItem="jme-OU-7GG" secondAttribute="trailing" constant="190" id="tyN-cS-DJP"/>
