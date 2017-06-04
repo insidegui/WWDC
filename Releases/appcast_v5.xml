@@ -7,6 +7,24 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.0.6</title>
+			<description><![CDATA[
+				<ul>
+					<li><strong>ChromeCast support!</strong> You can now stream videos to your ChromeCast.</li>
+					<li>You can now see and change the downloads folder in general preferences</li>
+					<li>Added 1.25x speed option to player</li>
+					<li>Improved thumbnails on the schedule</li>
+					<li>Improved sorting on the schedule</li>
+					<li>You can now cancel downloads by clicking the progress indicator</li>
+					<li>Fixed a crash that would occur sometimes when selecting "play" on a video</li>
+				</ul>
+						]]></description>
+            <pubDate>Tue, 04 Jun 2017 19:15:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.6/WWDC_v5.0.6.zip" sparkle:version="560" sparkle:shortVersionString="5.0.6" length="15646059" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.0.4</title>
 			<description><![CDATA[
 				<ul>
