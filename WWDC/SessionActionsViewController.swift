@@ -91,6 +91,7 @@ class SessionActionsViewController: NSViewController {
         pi.widthAnchor.constraint(equalToConstant: 24).isActive = true
         pi.heightAnchor.constraint(equalToConstant: 24).isActive = true
         pi.isHidden = true
+        pi.addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(cancelDownload(_:))))
         
         return pi
     }()
@@ -221,4 +222,6 @@ class SessionActionsViewController: NSViewController {
         delegate?.sessionActionsDidSelectShare(sender)
     }
     
+    @IBAction func cancelDownload(_ sender: NSView?) {
+    }
 }
