@@ -32,6 +32,8 @@ final class Preferences {
             
             defaults.set(newValue.path, forKey: #function)
             
+            defaults.synchronize()
+            
             NotificationCenter.default.post(name: .LocalVideoStoragePathPreferenceDidChange, object: nil)
         }
     }

@@ -339,19 +339,20 @@ final class DownloadManager: NSObject {
             topFolderMonitor = nil
         }
         
-        let videosPath = Preferences.shared.localVideoStorageURL.path
-        enumerateVideoFiles(videosPath)
-        let mainDirURL = URL(fileURLWithPath: videosPath)
+        subfoldersMonitors.forEach({ $0.stopMonitoring() })
+        subfoldersMonitors.removeAll()
         
-        topFolderMonitor = DTFolderMonitor(for: mainDirURL) { [unowned self] in
-            self.setupSubdirectoryMonitors(on: mainDirURL)
+        let url = Preferences.shared.localVideoStorageURL
+        
+        topFolderMonitor = DTFolderMonitor(for: url) { [unowned self] in
+            self.setupSubdirectoryMonitors(on: url)
         }
         
-        setupSubdirectoryMonitors(on: mainDirURL)
+        setupSubdirectoryMonitors(on: url)
         
         topFolderMonitor.startMonitoring()
         
-        enumerateVideoFiles(videosPath)
+        enumerateVideoFiles(url.path)
     }
     
     private func setupSubdirectoryMonitors(on mainDirURL: URL) {
