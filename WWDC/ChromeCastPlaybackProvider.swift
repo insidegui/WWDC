@@ -133,6 +133,11 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
             let item = NSMenuItem(title: device.name, action: #selector(didSelectDeviceOnMenu(_:)), keyEquivalent: "")
             item.representedObject = device
             item.target = self
+            
+            if device.hostName == selectedDevice?.hostName {
+                item.state = NSOnState
+            }
+            
             menu.addItem(item)
         }
         
@@ -140,8 +145,12 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
         consumer?.externalPlaybackProvider(self, deviceSelectionMenuDidChangeWith: menu)
     }
     
+    private var selectedDevice: CastDevice?
+    
     @objc private func didSelectDeviceOnMenu(_ sender: NSMenuItem) {
         guard let device = sender.representedObject as? CastDevice else { return }
+        
+        scanner.stopScanning()
         
         if let previousClient = client {
             mediaStatusRefreshTimer?.invalidate()
@@ -151,16 +160,21 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
             client = nil
         }
         
-        if sender.state == NSOffState {
+        if device.hostName == selectedDevice?.hostName {
+            sender.state = NSOffState
+            
+            consumer?.externalPlaybackProviderDidInvalidatePlaybackSession(self)
+        } else {
+            selectedDevice = device
+            sender.state = NSOnState
+            
             client = CastClient(device: device)
             client?.delegate = self
             
             client?.connect()
             
-            sender.state = NSOnState
-        } else {
-            sender.state = NSOffState
-        }        
+            consumer?.externalPlaybackProviderDidBecomeCurrent(self)
+        }
     }
     
     fileprivate var mediaForChromeCast: CastMedia? {
@@ -289,8 +303,6 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
         #if DEBUG
             NSLog("Did connect to \(device.name) (\(device.id))")
         #endif
-        
-        consumer?.externalPlaybackProviderDidBecomeCurrent(self)
         
         #if DEBUG
             NSLog("Launching app \(CastAppIdentifier.defaultMediaPlayer.rawValue)")
