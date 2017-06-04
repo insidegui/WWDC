@@ -77,6 +77,10 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
         return #imageLiteral(resourceName: "chromecast")
     }
     
+    var image: NSImage {
+        return #imageLiteral(resourceName: "chromecast-large")
+    }
+    
     /// The current media status
     var status: PUIExternalPlaybackMediaStatus
     
@@ -213,55 +217,48 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
     }
     
     fileprivate func loadMediaOnDevice() {
-//        guard let app = mediaPlayerApp else { return }
-//        guard let url = consumer?.remoteMediaUrl else { return }
-//        
-//        #if DEBUG
-//            NSLog("Load media \(url) with \(app.sessionId)")
-//        #endif
-//        
-//        var currentTime: Double = 0
-//        
-//        if let playerTime = consumer?.player?.currentTime() {
-//            currentTime = Double(CMTimeGetSeconds(playerTime))
-//        }
-//        
-//        #if DEBUG
-//            NSLog("Current time is \(currentTime)s")
-//        #endif
-//        
-//        let posterURL = URL(string: "http://cdn.wccftech.com/wp-content/uploads/2017/01/tim-cook-trump.jpg")!
-//        
-//        let media = CastMedia(title: "WWDC Video",
-//                              url: URL(string: "http://devstreaming-cdn.apple.com/videos/wwdc/2016/101g0jrsvv5qcoduisk/101/vod/8500/8500_vod.m3u8")!,
-//                              poster: posterURL,
-//                              contentType: "application/vnd.apple.mpegurl",
-//                              streamType: .buffered,
-//                              autoplay: true,
-//                              currentTime: currentTime)
-//        
-//        client?.load(media: media, with: app) { [weak self] error, mediaStatus in
-//            guard let mediaStatus = mediaStatus, error == nil else {
-//                if let error = error {
-//                    WWDCAlert.show(with: error)
-//                    #if DEBUG
-//                        NSLog("Error loading media: \(error)")
-//                    #endif
-//                }
-//                return
-//            }
-//            
-//            self?.currentSessionId = mediaStatus.mediaSessionId
-//            
-//            #if DEBUG
-//                NSLog("Media loaded. SessionID: \(mediaStatus.mediaSessionId).")
-//                NSLog("MEDIA STATUS:\n\(mediaStatus)")
-//            #endif
-//        }
+        guard let media = mediaForChromeCast else { return }
+        guard let app = mediaPlayerApp else { return }
+        guard let url = consumer?.remoteMediaUrl else { return }
+        
+        #if DEBUG
+            NSLog("Load media \(url) with \(app.sessionId)")
+        #endif
+        
+        var currentTime: Double = 0
+        
+        if let playerTime = consumer?.player?.currentTime() {
+            currentTime = Double(CMTimeGetSeconds(playerTime))
+        }
+        
+        #if DEBUG
+            NSLog("Current time is \(currentTime)s")
+        #endif
+        
+        client?.load(media: media, with: app) { [weak self] error, mediaStatus in
+            guard let mediaStatus = mediaStatus, error == nil else {
+                if let error = error {
+                    WWDCAlert.show(with: error)
+                    #if DEBUG
+                        NSLog("Error loading media: \(error)")
+                    #endif
+                }
+                return
+            }
+            
+            self?.currentSessionId = mediaStatus.mediaSessionId
+            
+            #if DEBUG
+                NSLog("Media loaded. SessionID: \(mediaStatus.mediaSessionId).")
+                NSLog("MEDIA STATUS:\n\(mediaStatus)")
+            #endif
+            
+            self?.startFetchingMediaStatusPeriodically()
+        }
     }
     
     fileprivate func startFetchingMediaStatusPeriodically() {
-        mediaStatusRefreshTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(requestMediaStatus(_:)), userInfo: nil, repeats: true)
+        mediaStatusRefreshTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(requestMediaStatus(_:)), userInfo: nil, repeats: true)
     }
     
     @objc private func requestMediaStatus(_ sender: Any?) {
@@ -285,8 +282,6 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
     }
     
     public func castClient(_ client: CastClient, didConnectTo device: CastDevice) {
-        guard let media = self.mediaForChromeCast else { return }
-        
         #if DEBUG
             NSLog("Did connect to \(device.name) (\(device.id))")
         #endif
@@ -297,7 +292,7 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
             NSLog("Launching app \(CastAppIdentifier.defaultMediaPlayer.rawValue)")
         #endif
         
-        client.launch(appId: .defaultMediaPlayer) { [unowned self] error, app in
+        client.launch(appId: .defaultMediaPlayer) { [weak self] error, app in
             guard let app = app, error == nil else {
                 if let error = error {
                     #if DEBUG
@@ -313,26 +308,8 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
                 NSLog("App \(CastAppIdentifier.defaultMediaPlayer.rawValue) launched. Session: \(app.sessionId)")
             #endif
             
-            self.mediaPlayerApp = app
-            
-            client.load(media: media, with: app) { [weak self] error, mediaStatus in
-                guard let mediaStatus = mediaStatus, error == nil else {
-                    if let error = error {
-                        WWDCAlert.show(with: error)
-                        #if DEBUG
-                            NSLog("Error loading media: \(error)")
-                        #endif
-                    }
-                    return
-                }
-                
-                self?.currentSessionId = mediaStatus.mediaSessionId
-                
-                #if DEBUG
-                    NSLog("Media loaded. SessionID: \(mediaStatus.mediaSessionId).")
-                    NSLog("MEDIA STATUS:\n\(mediaStatus)")
-                #endif
-            }
+            self?.mediaPlayerApp = app
+            self?.loadMediaOnDevice()
         }
     }
     
@@ -342,10 +319,14 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
     
     public func castClient(_ client: CastClient, connectionTo device: CastDevice, didFailWith error: NSError) {
         WWDCAlert.show(with: error)
+        
+        consumer?.externalPlaybackProviderDidInvalidatePlaybackSession(self)
     }
     
     public func castClient(_ client: CastClient, deviceStatusDidChange status: CastStatus) {
         self.status.volume = Float(status.volume)
+        
+        consumer?.externalPlaybackProviderDidChangeMediaStatus(self)
     }
     
     public func castClient(_ client: CastClient, mediaStatusDidChange status: CastMediaStatus) {
@@ -360,6 +341,8 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
         #if DEBUG
             NSLog("# MEDIA STATUS #\n\(newStatus)\n---")
         #endif
+        
+        consumer?.externalPlaybackProviderDidChangeMediaStatus(self)
     }
     
 }

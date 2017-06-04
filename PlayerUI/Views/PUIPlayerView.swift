@@ -922,24 +922,27 @@ public final class PUIPlayerView: NSView {
     // MARK: - PiP Support
     
     public func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let welf = self, let player = welf.player else { return }
-            
-            var image: NSImage?
-            
-            defer { DispatchQueue.main.async { completion(image) } }
-            
-            guard let asset = player.currentItem?.asset else { return }
-            
-            let generator = AVAssetImageGenerator(asset: asset)
-            generator.appliesPreferredTrackTransform = true
-            
-            do {
-                let rawImage = try generator.copyCGImage(at: player.currentTime(), actualTime: nil)
-                image = NSImage(cgImage: rawImage, size: NSSize(width: rawImage.width, height: rawImage.height))
-            } catch {
-                NSLog("Error getting player snapshot: \(error)")
+        guard let currentTime = player?.currentTime() else {
+            completion(nil)
+            return
+        }
+        guard let asset = player?.currentItem?.asset else {
+            completion(nil)
+            return
+        }
+        
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        
+        let time = NSValue(time: currentTime)
+        generator.generateCGImagesAsynchronously(forTimes: [time]) { _, rawImage, _, result, error in
+            guard let rawImage = rawImage, error == nil else {
+                DispatchQueue.main.async { completion(nil) }
+                return
             }
+            
+            let image = NSImage(cgImage: rawImage, size: NSSize(width: rawImage.width, height: rawImage.height))
+            DispatchQueue.main.async { completion(image) }
         }
     }
     
@@ -1122,22 +1125,50 @@ public final class PUIPlayerView: NSView {
     
     // MARK: - External playback state management
     
+    private func unhighlightExternalPlaybackButtons() {
+        externalPlaybackProviders.forEach { registration in
+            registration.button.tintColor = .buttonColor
+        }
+    }
+    
     fileprivate var currentExternalPlaybackProvider: PUIExternalPlaybackProvider? {
         didSet {
             if currentExternalPlaybackProvider != nil {
-                transitionToExternalPlayback()
+                perform(#selector(transitionToExternalPlayback), with: nil, afterDelay: 0)
             } else {
                 transitionToInternalPlayback()
             }
         }
     }
     
-    private func transitionToExternalPlayback() {
-        // TODO: show some UI to indicate that the video is now being played externally
+    @objc private func transitionToExternalPlayback() {
+        guard let current = self.currentExternalPlaybackProvider else {
+            transitionToInternalPlayback()
+            return
+        }
+        
+        let currentProviderName = type(of: current).name
+        
+        unhighlightExternalPlaybackButtons()
+        
+        guard let registration = externalPlaybackProviders.filter({ type(of: $0.provider).name == currentProviderName }).first else { return }
+        
+        registration.button.tintColor = .playerHighlight
+        
+        snapshotPlayer { [weak self] image in
+            self?.externalStatusController.snapshot = image
+        }
+        
+        externalStatusController.providerIcon = current.image
+        externalStatusController.providerName = currentProviderName
+        externalStatusController.providerDescription = "Playing in \(currentProviderName)"
+        externalStatusController.view.isHidden = false
     }
     
-    private func transitionToInternalPlayback() {
-        // TODO: reset the UI to internal playback mode
+    @objc private func transitionToInternalPlayback() {
+        unhighlightExternalPlaybackButtons()
+        
+        externalStatusController.view.isHidden = true
     }
     
 }

@@ -43,6 +43,9 @@ public protocol PUIExternalPlaybackProvider: class {
     /// An image to be used as the icon in the UI
     var icon: NSImage { get }
     
+    /// A larger image to be used when the provider is current
+    var image: NSImage { get }
+    
     /// The current media status
     var status: PUIExternalPlaybackMediaStatus { get }
     
