@@ -154,17 +154,7 @@ public final class Storage {
         self.realm.add(sessionsResponse.tracks, update: true)
         self.realm.add(sessionsResponse.events, update: true)
         
-        do {
-            try self.realm.commitWrite()
-            
-            self.updateAssociationsAndCreateViews(in: self.realm, completion: completion)
-        } catch {
-            NSLog("Realm error: \(error)")
-        }
-    }
-    
-    private func updateAssociationsAndCreateViews(in targetRealm: Realm, completion: @escaping () -> Void) {
-        targetRealm.beginWrite()
+        let targetRealm = self.realm
         
         // add instances to rooms
         targetRealm.objects(Room.self).forEach { room in
@@ -232,15 +222,29 @@ public final class Storage {
         }
         
         do {
-            try targetRealm.commitWrite()
-            
-            DispatchQueue.main.async {
-                completion()
-            }
+            try self.realm.commitWrite()
+            completion()
+//            self.updateAssociationsAndCreateViews(in: self.realm, completion: completion)
         } catch {
-            NSLog("Realm error while consolidating schedule: \(error)")
+            NSLog("Realm error: \(error)")
         }
     }
+    
+//    private func updateAssociationsAndCreateViews(in targetRealm: Realm, completion: @escaping () -> Void) {
+//        targetRealm.beginWrite()
+//        
+//        
+//        
+//        do {
+//            try targetRealm.commitWrite()
+//            
+//            DispatchQueue.main.async {
+//                completion()
+//            }
+//        } catch {
+//            NSLog("Realm error while consolidating schedule: \(error)")
+//        }
+//    }
     
     internal func store(liveVideosResult: Result<[SessionAsset], APIError>) {
         guard case .success(let assets) = liveVideosResult else { return }
