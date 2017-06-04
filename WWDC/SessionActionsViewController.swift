@@ -18,8 +18,8 @@ protocol SessionActionsViewControllerDelegate: class {
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
     func sessionActionsDidSelectDownload(_ sender: NSView?)
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?)
+    func sessionActionsDidSelectCancelDownload(_ sender: NSView?)
     func sessionActionsDidSelectShare(_ sender: NSView?)
-    
 }
 
 class SessionActionsViewController: NSViewController {
@@ -91,6 +91,8 @@ class SessionActionsViewController: NSViewController {
         pi.widthAnchor.constraint(equalToConstant: 24).isActive = true
         pi.heightAnchor.constraint(equalToConstant: 24).isActive = true
         pi.isHidden = true
+        pi.addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(cancelDownload(_:))))
+        pi.toolTip = "Click to cancel"
         
         return pi
     }()
@@ -221,4 +223,7 @@ class SessionActionsViewController: NSViewController {
         delegate?.sessionActionsDidSelectShare(sender)
     }
     
+    @IBAction func cancelDownload(_ sender: NSView?) {
+        delegate?.sessionActionsDidSelectCancelDownload(sender)
+    }
 }
