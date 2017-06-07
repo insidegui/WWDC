@@ -50,6 +50,10 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         DownloadManager.shared.download(videoAsset)
     }
     
+    func sessionActionsDidSelectCalendar(_ sender: NSView?) {
+        
+    }
+    
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {        
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
         

@@ -17,6 +17,7 @@ protocol SessionActionsViewControllerDelegate: class {
     func sessionActionsDidSelectSlides(_ sender: NSView?)
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
     func sessionActionsDidSelectDownload(_ sender: NSView?)
+    func sessionActionsDidSelectCalendar(_ sender: NSView?)
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?)
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?)
     func sessionActionsDidSelectShare(_ sender: NSView?)
@@ -79,6 +80,18 @@ class SessionActionsViewController: NSViewController {
         return b
     }()
     
+    private lazy var calendarButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = #imageLiteral(resourceName: "schedule")
+        b.target = self
+        b.action = #selector(download(_:))
+        b.shouldAlwaysDrawHighlighted = true
+        b.toolTip = "Add to Calendar"
+        
+        return b
+    }()
+    
     private lazy var downloadIndicator: NSProgressIndicator = {
         let pi = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: 24, height: 24))
         
@@ -116,7 +129,8 @@ class SessionActionsViewController: NSViewController {
             self.favoriteButton,
             self.downloadButton,
             self.downloadIndicator,
-            self.shareButton
+            self.shareButton,
+            self.calendarButton
             ])
         
         v.orientation = .horizontal
@@ -213,6 +227,11 @@ class SessionActionsViewController: NSViewController {
         self.downloadIndicator.isHidden = false
         
         delegate?.sessionActionsDidSelectDownload(sender)
+    }
+    
+    @IBAction func addCalendar(_ sender: NSView?) {
+        
+        delegate?.sessionActionsDidSelectCalendar(sender)
     }
     
     @IBAction func deleteDownload(_ sender: NSView?) {
