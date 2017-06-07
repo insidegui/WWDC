@@ -7,6 +7,65 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5 is now available</title>
+			<description><![CDATA[
+				<div style="background-color:red;color:white;font-weight:bold;padding:10px">IMPORTANT: Version 5 is now available. Due to this being a brand new version written from the ground up, version 4 can't be updated automatically. If you want to get version 5 and watch WWDC 2017, please click the "learn more" button below.</div>
+						<h1>A brand new app, ready for WWDC 2017</h1>
+						<p>This is a brand new version we've been working on, with lots of new features and a beautiful new UI.</p>
+						<p><img style="width:90%;height:auto" src="https://wwdc.io/images/hero@2x.png" /></p>
+						]]></description>
+            <pubDate>Tue, 03 Jun 2017 01:45:00 -0300</pubDate>
+			<sparkle:version>450</sparkle:version>
+            <sparkle:shortVersionString>5.0</sparkle:shortVersionString>
+			<link>https://wwdc.io</link>
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 4.3.1</title>
+			<description><![CDATA[
+							<h3>Important: starting on this version, WWDC will not run on OS X 10.10 anymore</h3>
+							<p>If you're still running Yosemite, you can keep using the previous version.</p>
+							<p>&nbsp;</p>
+							<h3>What's new:</h3>
+							<ul>
+								<li>The app is now converted to Swift 3</li>
+								<li>Improved the resizing behavior on the video window, it now works for streamed videos as well as downloaded videos</li>
+							</ul>
+						]]></description>
+            <pubDate>Wed, 28 Dec 2016 15:40:00 -0200</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.3.1/WWDC_v4.3.1.zip" sparkle:version="440" sparkle:shortVersionString="4.3.1" length="8353208" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.11</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 4.3</title>
+			<description><![CDATA[
+							<ul>
+								<li>Transcripts for 2016 are now available</li>
+								<li>Improves the downloads window, allowing the removal of multiple downloads at once</li>
+								<li>Fixes a crash that would occur when trying to open the transcripts for a session without transcripts available</li>
+							</ul>
+						]]></description>
+            <pubDate>Sun, 26 Jun 2016 11:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.3/WWDC_v4.3.zip" sparkle:version="430" sparkle:shortVersionString="4.3" length="7243768" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 4.2.4</title>
+			<description><![CDATA[
+							<ul>
+								<li>Improves the behavior of the contextual menu on the sidebar</li>
+								<li>Networking efficiency improvements</li>
+							</ul>
+						]]></description>
+            <pubDate>Wed, 19 Jun 2016 22:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/4.2.4/WWDC_v4.2.4.zip" sparkle:version="424" sparkle:shortVersionString="4.2.4" length="7236051" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.10</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 4.2.3</title>
 			<description><![CDATA[
 							<ul>

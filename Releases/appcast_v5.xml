@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>WWDC Changelog</title>
+        <link>https://github.com/insidegui/WWDC/raw/master/Releases/appcast_v5.xml</link>
+        <description>Most recent changes with links to updates.</description>
+        <language>en</language>
+		
+		<item>
+            <title>Version 5.0.6</title>
+			<description><![CDATA[
+				<ul>
+					<li><strong>ChromeCast support!</strong> You can now stream videos to your ChromeCast.</li>
+					<li>You can now see and change the downloads folder in general preferences</li>
+					<li>Added 1.25x speed option to player</li>
+					<li>Improved thumbnails on the schedule</li>
+					<li>Improved sorting on the schedule</li>
+					<li>You can now cancel downloads by clicking the progress indicator</li>
+					<li>Fixed a crash that would occur sometimes when selecting "play" on a video</li>
+				</ul>
+						]]></description>
+            <pubDate>Tue, 04 Jun 2017 19:15:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.6/WWDC_v5.0.6.zip" sparkle:version="560" sparkle:shortVersionString="5.0.6" length="15646059" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 5.0.4</title>
+			<description><![CDATA[
+				<ul>
+					<li>Fixed a crash that would occur when filtering</li>
+					<li>Improved search results on both tabs</li>
+				</ul>
+						]]></description>
+            <pubDate>Tue, 30 May 2017 22:10:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.4/WWDC_v5.0.4.zip" sparkle:version="19" sparkle:shortVersionString="5.0.4" length="13142617" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 5.0.3</title>
+			<description><![CDATA[
+						<h3>WWDC 2017 schedule is now available</h3>
+						]]></description>
+            <pubDate>Tue, 30 May 2017 17:45:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.3/WWDC_v5.0.3.zip" sparkle:version="17" sparkle:shortVersionString="5.0.3" length="13141367" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 5.0.1 beta</title>
+			<description><![CDATA[
+						<h3>Fixed lots of bugs and other issues from the first beta:</h3>
+						<ul>
+							<li>When filtering in the schedule view, the chronological order is now kept</li>
+							<li>The sidebar can now be shown/hidden using the "Toggle Sidebar" menu item or Command + Option + S</li>
+							<li>Many layout improvements and fixes here and there</li>
+							<li>Lists don't lose the filtering when switching tabs anymore</li>
+							<li>The text field for the bookmark annotation is only shown when an empty bookmark is selected</li>
+							<li>Filter popups no longer grow beyond the limits of the sidebar</li>
+							<li>Main tab items are now better aligned and spaced</li>
+							<li>ESC will now exit fullscreen correctly</li>
+							<li>Using the spacebar to play/pause is more responsive</li>
+							<li>(Almost invisible) table view separators</li>
+							<li>Better tooltips on the player (and dark tooltip frames)</li>
+							<li>When a lab is selected, the session detail view doesn't show a huge empty image anymore</li>
+						</ul>
+						]]></description>
+            <pubDate>Tue, 29 May 2017 23:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.1/WWDC_v5.0.1.zip" sparkle:version="14" sparkle:shortVersionString="5.0.1" length="13138632" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+	</channel>
+</rss>

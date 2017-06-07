@@ -2,105 +2,67 @@
 //  AppDelegate.swift
 //  WWDC
 //
-//  Created by Guilherme Rambo on 18/04/15.
-//  Copyright (c) 2015 Guilherme Rambo. All rights reserved.
+//  Created by Guilherme Rambo on 05/02/17.
+//  Copyright © 2017 Guilherme Rambo. All rights reserved.
 //
 
 import Cocoa
-import Crashlytics
-import Sparkle
+import CommunitySupport
 
-@NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    var window: NSWindow?
-	
-    private var downloadListWindowController: DownloadListWindowController?
-    private var preferencesWindowController: PreferencesWindowController?
+    let coordinator = AppCoordinator(windowController: MainWindowController())
     
-    func applicationOpenUntitledFile(sender: NSApplication) -> Bool {
-        window?.makeKeyAndOrderFront(nil)
-        return false
-    }
-
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
-        NSUserDefaults.standardUserDefaults().registerDefaults(["NSApplicationCrashOnExceptions": true])
-        
-        // prefetch info for the about window
-        About.sharedInstance.load()
-        
-        // start checking for live event
-        LiveEventObserver.SharedObserver().start()
-        
-        // Keep a reference to the main application window
-        window = NSApplication.sharedApplication().windows.last 
-        
-        // continue any paused downloads
-        VideoStore.SharedStore().initialize()
-        
-        // initialize Crashlytics
-        GRCrashlyticsHelper.install()
-        
-        // tell user about nice new things
-        showCourtesyDialogs()
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
     }
     
-    func applicationWillFinishLaunching(notification: NSNotification) {
-        // register custom URL scheme handler
-        URLSchemeHandler.SharedHandler().register()
-    }
-
-    func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
-    }
-    
-    @IBAction func checkForUpdates(sender: AnyObject?) {
-        SUUpdater.sharedUpdater().checkForUpdates(sender)
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
+        
+        LoggingHelper.install()
+        
+        NSApp.registerForRemoteNotifications(matching: [])
     }
     
-    @IBAction func showDownloadsWindow(sender: AnyObject?) {
-        if downloadListWindowController == nil {
-            downloadListWindowController = DownloadListWindowController()
+    func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String : Any]) {
+        if CMSCommunityCenter.shared.processNotification(userInfo: userInfo) {
+            // Community center handled this notification
+            return
+        } else if coordinator.receiveNotification(with: userInfo) {
+            // Coordinator handled this notification
+            return
         }
         
-        downloadListWindowController?.showWindow(self)
+        // handle other types of notification
     }
     
-    @IBAction func showPreferencesWindow(sender: AnyObject?) {
-        if preferencesWindowController == nil {
-            preferencesWindowController = PreferencesWindowController()
-        }
+    func handleURLEvent(_ event: NSAppleEventDescriptor?, replyEvent: NSAppleEventDescriptor?) {
+        guard let event = event else { return }
+        guard let urlString = event.paramDescriptor(forKeyword: UInt32(keyDirectObject))?.stringValue else { return }
+        guard let url = URL(string: urlString) else { return }
+        guard let link = DeepLink(url: url) else { return }
         
-        preferencesWindowController?.showWindow(self)
-    }
-    
-    // MARK: - Courtesy Dialogs
-    
-    private func showCourtesyDialogs() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(WWDCWeekDidStart), name: WWDCWeekDidStartNotification, object: nil)
-        
-        NewWWDCGreeter().presentAutomaticRefreshSuggestionIfAppropriate()
-    }
-    
-    @objc private func WWDCWeekDidStart() {
-        NewWWDCGreeter().presentAutomaticRefreshSuggestionIfAppropriate()
-    }
-    
-    // MARK: - About Panel
-    
-    private lazy var aboutWindowController: AboutWindowController = {
-        var aboutWC = AboutWindowController(infoText: About.sharedInstance.infoText)
-        
-        About.sharedInstance.infoTextChangedCallback = { newText in
-            self.aboutWindowController.infoText = newText
-        }
-        
-        return aboutWC
-    }()
-    
-    @IBAction func showAboutWindow(sender: AnyObject?) {
-        aboutWindowController.showWindow(sender)
+        coordinator.handle(link: link)
     }
 
+    @IBAction func showPreferences(_ sender: Any) {
+        coordinator.showPreferences(sender)
+    }
+    
+    @IBAction func reload(_ sender: Any) {
+        coordinator.refresh(sender)
+    }
+    
+    @IBAction func showAboutWindow(_ sender: Any) {
+        coordinator.showAboutWindow()
+    }
+    
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        coordinator.windowController.showWindow(sender)
+        
+        return true
+    }
+    
 }
 

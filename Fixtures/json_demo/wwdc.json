@@ -1,0 +1,32 @@
+{
+  "features": {
+    "videos": true,
+    "maps": true,
+    "calendar": true,
+    "contingency": false,
+    "liveStreaming": false
+  },
+  "intervals": {
+    "timedFetch": 5,
+    "appResumeFetch": 0,
+    "liveVideosFetch": 1
+  },
+  "analytics": {
+    "enabled": true,
+    "interval": 30,
+    "batchSize": 10,
+    "maxPending": 1000,
+    "disabled": []
+  },
+  "urls": {
+    "videoAnalytics": "http://ma85-r.analytics.edgesuite.net/config/beacon-15695.xml",
+    "sessions": "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/xhgbpyutb6wvn2xcrbcz/sessions.json",
+    "news": "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/xhgbpyutb6wvn2xcrbcz/news.json",
+    "videos": "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/xhgbpyutb6wvn2xcrbcz/videos.json",
+    "videos_live": "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/xhgbpyutb6wvn2xcrbcz/videos_live.json",
+    "alerts": "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/xhgbpyutb6wvn2xcrbcz/alerts.json",
+    "photos": "https://devimages-cdn.apple.com/wwdc-services/g7tk3guq/photos/",
+    "services": "https://developerservices4.apple.com/services/R8TD32/wwdc",
+    "pushRegistration": "https://krakatau.apple.com/apns/device"
+  }
+}

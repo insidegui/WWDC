@@ -1,21 +1,25 @@
 //
 //  AboutWindowController.swift
-//  About
+//  WWDC
 //
-//  Created by Guilherme Rambo on 20/12/15.
-//  Copyright © 2015 Guilherme Rambo. All rights reserved.
+//  Created by Guilherme Rambo on 28/05/17.
+//  Copyright © 2017 Guilherme Rambo. All rights reserved.
 //
 
 import Cocoa
 
-class AboutWindowController: NSWindowController {
-
-    @IBOutlet weak private var applicationNameLabel: NSTextField!
-    @IBOutlet weak private var versionLabel: NSTextField!
+final class AboutWindowController: NSWindowController {
+    
+    @IBOutlet weak var backgroundView: NSVisualEffectView!
+    @IBOutlet weak fileprivate var applicationNameLabel: NSTextField!
+    @IBOutlet weak fileprivate var versionLabel: NSTextField!
     @IBOutlet weak var contributorsLabel: NSTextField!
-    @IBOutlet weak private var creatorLabel: NSTextField!
-    @IBOutlet weak private var licenseLabel: NSTextField!
-
+    @IBOutlet weak fileprivate var creatorLabel: NSTextField!
+    @IBOutlet weak fileprivate var iconCreatorLabel: ActionLabel!
+    @IBOutlet weak fileprivate var uiCreatorLabel: ActionLabel!
+    @IBOutlet weak fileprivate var licenseLabel: NSTextField!
+    @IBOutlet weak var designContributorLabel: ActionLabel!
+    
     var infoText: String? {
         didSet {
             guard let infoText = infoText else { return }
@@ -30,9 +34,9 @@ class AboutWindowController: NSWindowController {
     
     override func windowDidLoad() {
         super.windowDidLoad()
-
+        
         // close the window when the escape key is pressed
-        NSEvent.addLocalMonitorForEventsMatchingMask(.KeyDownMask) { event in
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
             guard event.keyCode == 53 else { return event }
             
             self.closeAnimated()
@@ -40,12 +44,14 @@ class AboutWindowController: NSWindowController {
             return nil
         }
         
-        window?.collectionBehavior = [.Transient, .IgnoresCycle]
-        window?.movable = false
+        window?.collectionBehavior = [.transient, .ignoresCycle]
+        window?.isMovableByWindowBackground = true
         window?.titlebarAppearsTransparent = true
-        window?.titleVisibility = .Hidden
+        window?.titleVisibility = .hidden
         
-        let info = NSBundle.mainBundle().infoDictionary!
+        window?.appearance = WWDCAppearance.appearance()
+        
+        guard let info = Bundle.main.infoDictionary else { return }
         
         if let appName = info["CFBundleName"] as? String {
             applicationNameLabel.stringValue = appName
@@ -72,13 +78,79 @@ class AboutWindowController: NSWindowController {
         }
         
         if let creator = info["GRBundleMainDeveloperName"] as? String {
-            creatorLabel.stringValue = "Created by \(creator)"
+            creatorLabel.stringValue = creator
         } else {
             creatorLabel.stringValue = ""
         }
+        
+        if let website = info["GRBundleIconCreatorWebsite"] as? String {
+            self.iconCreatorWebsite = URL(string: website)
+            
+            iconCreatorLabel.alphaValue = 0.8
+            iconCreatorLabel.textColor = .primary
+            iconCreatorLabel.target = self
+            iconCreatorLabel.action = #selector(openIconCreatorWebsite(_:))
+        }
+        
+        if let website = info["GRBundleUserInterfaceCreatorWebsite"] as? String {
+            self.uiCreatorWebsite = URL(string: website)
+            
+            uiCreatorLabel.alphaValue = 0.8
+            uiCreatorLabel.textColor = .primary
+            uiCreatorLabel.target = self
+            uiCreatorLabel.action = #selector(openUserInterfaceCreatorWebsite(_:))
+        }
+        
+        if let website = info["GRBundleDesignContributorWebsite"] as? String {
+            self.designContributorWebsite = URL(string: website)
+            
+            designContributorLabel.alphaValue = 0.8
+            designContributorLabel.textColor = .primary
+            designContributorLabel.target = self
+            designContributorLabel.action = #selector(openDesignContributorWebsite(_:))
+        }
+        
+        if let website = info["GRBundleMainDeveloperWebsite"] as? String {
+            self.mainDeveloperWebsite = URL(string: website)
+            
+            creatorLabel.alphaValue = 0.8
+            creatorLabel.textColor = .primary
+            creatorLabel.target = self
+            creatorLabel.action = #selector(openMainDeveloperWebsite(_:))
+        }
+        
     }
     
-    override func showWindow(sender: AnyObject?) {
+    private var iconCreatorWebsite: URL?
+    private var uiCreatorWebsite: URL?
+    private var mainDeveloperWebsite: URL?
+    private var designContributorWebsite: URL?
+    
+    @IBAction func openIconCreatorWebsite(_ sender: Any) {
+        guard let iconCreatorWebsite = iconCreatorWebsite else { return }
+        
+        NSWorkspace.shared().open(iconCreatorWebsite)
+    }
+    
+    @IBAction func openUserInterfaceCreatorWebsite(_ sender: Any) {
+        guard let uiCreatorWebsite = uiCreatorWebsite else { return }
+        
+        NSWorkspace.shared().open(uiCreatorWebsite)
+    }
+    
+    @IBAction func openDesignContributorWebsite(_ sender: Any) {
+        guard let designContributorWebsite = designContributorWebsite else { return }
+        
+        NSWorkspace.shared().open(designContributorWebsite)
+    }
+    
+    @IBAction func openMainDeveloperWebsite(_ sender: Any) {
+        guard let mainDeveloperWebsite = mainDeveloperWebsite else { return }
+        
+        NSWorkspace.shared().open(mainDeveloperWebsite)
+    }
+    
+    override func showWindow(_ sender: Any?) {
         window?.center()
         window?.alphaValue = 0.0
         
@@ -89,8 +161,8 @@ class AboutWindowController: NSWindowController {
     
     func closeAnimated() {
         NSAnimationContext.beginGrouping()
-        NSAnimationContext.currentContext().duration = 0.4
-        NSAnimationContext.currentContext().completionHandler = {
+        NSAnimationContext.current().duration = 0.4
+        NSAnimationContext.current().completionHandler = {
             self.close()
         }
         window?.animator().alphaValue = 0.0

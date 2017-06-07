@@ -1,0 +1,558 @@
+{
+  "items": [
+    {
+      "body": "We’re looking forward to an exciting week at the Apple Worldwide Developers Conference. Use this app to stream session videos, browse the conference schedule, mark schedule items as favorites, keep up with the latest conference news, and view maps of Moscone West.",
+      "id": "991DF480-4435-4930-B0BC-8F75EFB85002",
+      "title": "Welcome",
+      "timestamp": 1464973210
+    },
+    {
+      "visibility": "user.accessLevel == 6",
+      "id": "9FCDE8BD-F029-4E6F-82C4-AAE8FCBC9CEC",
+      "title": "Add Your Pass to Wallet",
+      "timestamp": 1464973266,
+      "body": "To check in faster at WWDC, add your pass to Wallet and have your government-issued photo ID ready.",
+      "type": "pass"
+    },
+    {
+      "visibility": "user.accessLevel == 6",
+      "id": "74C86280-622B-4BC0-B56A-5C270C5B18D1",
+      "title": "Check-In",
+      "timestamp": 1464973595,
+      "body": "Badges will be available to pick up starting Sunday, June 12.\n\nBill Graham Civic Auditorium: \nSunday (9 AM – 7 PM)\nMonday (7 AM – 7 PM)\n\nMoscone West: \nTuesday – Friday (8 AM – 6 PM)"
+    },
+    {
+      "body": "Browse the conference schedule to find the Get Togethers, guest speakers, and other special events you’re most interested in. We’ll post the full schedule and session-related resources after the Keynote, so be sure to check back.",
+      "id": "E606D917-7123-4276-9F1C-F3100506498C",
+      "title": "View the Schedule",
+      "timestamp": 1464973400
+    },
+    {
+      "visibility": "user.accessLevel == 6",
+      "id": "A580A23D-3230-445A-8254-6EFED74F9173",
+      "title": "Reminders",
+      "timestamp": 1464973459,
+      "body": "Wear your badge at all times and make sure it’s visible. We don't re-issue badges, so please take care of yours and do not share it with anyone else.\n\nBring your Mac with the latest developer tools installed, devices for testing, and essential peripherals like power and Ethernet adapters. If you wish to get feedback on your app, bring it installed on a device.\n\nWe’ll provide lunch daily, as well as beverages and snacks.\n"
+    },
+    {
+      "visibility": "user.accessLevel == 6",
+      "id": "855FBC9A-CF59-4198-B075-3A13C37D0E28",
+      "title": "Wi-Fi and Ethernet",
+      "timestamp": 1464973501,
+      "body": "To connect to Wi-Fi during the conference, select the “WWDC” network and enter the password “wwdcwifi”. Ethernet connections will be available throughout Moscone West."
+    },
+    {
+      "photos": [
+        {
+          "id": "6F3D98B4-71A9-4321-9D4E-974346E784FD",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "BA5E29F3-6819-454D-BADD-F475A923A5E4",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "B32B6A59-CF2A-4268-B13F-5BFC095B47C2",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "7931D436-3AA2-4A59-A820-31AC3F529479",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "4926BFAE-6271-479B-8439-675EBF6B248C",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "CDDAA660-02BC-47CA-B572-572A4B22EE74",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "BFF9587D-1CC1-4E2F-AB84-9E694748B2E2",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "9F009B98-992E-4462-AC48-0B749E6FEBE3",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "3252378E-46D0-41F7-8178-B08B952B0454",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "84FE362D-9435-4E0A-B136-747993B9CB7D",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E1F94D36-170E-4BC6-91F1-8B541D1FF192",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "4FF1EAAF-7D24-4F20-A182-0AA1FBB4D8DE",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "CC9D2377-90B0-4750-8C97-549DEC08C028",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "955A29E0-FE4D-4C9F-9873-20A47E1A74CC",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "D0D0CBCA-C0D1-4D5B-A885-28FA0C42EE41",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "0CE73DED-7328-445F-96F1-A61712479870",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "B625C1FB-32B1-4461-A0E7-2CF575CE2057",
+          "ratio": 1.506024096385542
+        }
+      ],
+      "id": "047E4F0B-2B8C-499A-BB23-F2CFDB3EB730",
+      "title": "Scholarship Winners Get the Excitement Started",
+      "timestamp": 1465833604
+    },
+    {
+      "photos": [
+        {
+          "id": "A2F53421-5525-4062-968B-1CAB66C60190",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "97A560F0-17DF-405B-9DAB-310760A00C48",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "345F4181-3556-42A0-9EE5-E77830083556",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "602D6472-34F2-488B-99AD-EACF0A7F9978",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "7F457E44-249E-4929-AFAF-4DE29B567CAD",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "1C5ED64E-E5B2-4452-8A7C-5751EEE96FE6",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "3D1D19E3-6306-4EC0-AD38-AB204E674289",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "8D5B84E6-8674-4168-9D5D-4DCFF17453E0",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "6DBED91D-B8D6-4CE7-8F52-8E0C69AD4F04",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E2258EEF-8CEB-40B7-8AF2-3079AF5CFFAF",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "A9D13C7B-2910-401F-AEDE-B045CC6A9FB3",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "F9EFCF1F-C059-48D1-97A8-07AD01B47809",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "4A829D28-09A7-4310-94CF-7057142B4B8D",
+          "ratio": 1.506024096385542
+        }
+      ],
+      "id": "DF6706F9-D074-48E1-A7A0-DF142C9EF3D3",
+      "title": "The Day We've All Been Waiting For",
+      "timestamp": 1465873220
+    },
+    {
+      "photos": [
+        {
+          "id": "40150243-E655-43C2-AFA2-8B864464733F",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E7278CD2-D2C0-4887-B633-E7A894B00788",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "BC212965-1220-4303-B621-BEB7D1357884",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "6241EBE3-F279-4CF5-AC20-DAEFA1B895AC",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "D2C9CBDE-3AC4-4879-B846-32BE717D92C0",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "6E8C2223-4E1F-42FC-BA00-9F3519B66B52",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "D414AEA8-0A7D-4BC9-9996-06CC13951F0A",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "736839BA-3355-4000-8D35-119E34E96757",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "85F9A87F-9A4B-49AA-8FB9-10F494473D9C",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "32F56C6F-439F-43AE-8D16-206D00B41967",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "4E24092D-EF11-4BAC-8431-6289EFC1BB70",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "52CBDC70-3388-453B-B519-B5E66E59885C",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E718E21D-1F3B-4FB7-A7DC-2357ED381A39",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "03E5FCCD-9992-4AD2-8C55-B11A47CDF4BA",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "FE552579-6049-4575-8052-08B7C14B020F",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E7E369E4-6B51-4DF5-A1DE-1D7ED5ED48E0",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "ABEB72CD-3E85-4B49-B1BA-9525ACC17F70",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "1A40A760-8DC5-4098-925E-E5AC55572CB2",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "BB1BAE8E-EE79-42C0-80A5-2E6748D0B6F1",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E0039F34-34DC-4052-812E-FECDEC510960",
+          "ratio": 1.506024096385542
+        }
+      ],
+      "id": "5E352644-2CB7-48C6-8B3C-F928E846835B",
+      "title": "Congrats to the Apple Design Award Winners",
+      "timestamp": 1465930825
+    },
+    {
+      "photos": [
+        {
+          "id": "E8B4E47E-557F-4DCA-BEB5-42CFE769564F",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "CA11B753-BEAB-4A60-BF06-3C011F7703CD",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "BA162638-60A4-402A-B5D7-ACF375C103E9",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "A4E38A76-5F0F-4EE1-91CD-3B70BDD5034D",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E55831D4-8CC0-4073-8D22-6F8F9DDE8DF4",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E34ED5B0-B033-402A-B889-E8B043487C34",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "B72B1ED2-EC0B-46CD-A09D-B3A33B360D2F",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "D8951949-0DA3-40F1-8F7D-151CC8A4E182",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "936B0CE4-C8CA-43B5-95EC-B50ADA4CF283",
+          "ratio": 1.506024096385542
+        }
+      ],
+      "id": "13874010-AD41-468D-9EA1-5ED7025D5DF1",
+      "title": "State of the Union",
+      "timestamp": 1465952404.073439
+    },
+    {
+      "photos": [
+        {
+          "id": "32D4AB9B-3807-4D76-AB23-FFC5F40A0CB0",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "36BEDACA-6FC2-426B-A391-C6D43372684C",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "A571CB25-D9C1-4EB8-9A6B-9AEC5799C058",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "A846204E-691F-4937-9F65-C870ACDC392F",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "47F6748A-D3BD-47DF-9F4F-D512841675AE",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "B7A3DECD-A4AE-4432-9543-296F320AB2F9",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "479E5D3F-73A7-48E0-A857-AF28C8F2A83A",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "3AE4BC6A-011E-4648-97CE-45091C9818C2",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "12EF2440-6AF2-473A-9139-4E9A9DF1A36B",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "2D056890-2D6B-40AD-85A0-5F93D804DC65",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "68D221B3-C9B4-4BA6-A0AF-8C51C4AA1219",
+          "ratio": 1.506024096385542
+        }
+      ],
+      "id": "E3258F05-D5DF-4682-A4B5-4F40E392A798",
+      "title": "Inclusion Inspires Innovation",
+      "timestamp": 1465952478.430804
+    },
+    {
+      "photos": [
+        {
+          "id": "950E64EE-46BE-4A1A-A419-9A47DBBC6812",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E4D2FEC7-8FE6-4FFB-8858-B167E8BB9450",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "967B3BC7-28D9-4EDD-958E-3EEAFB8C7D75",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "A850FA05-3E91-4597-A6BB-D44E830D6EF9",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "DA874676-4DD7-41F4-A70C-D27F158434B8",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "A009F08B-ADC5-497E-9363-7F8D505CF1C1",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "33500AC5-7ABD-4E41-859C-98081FC0CE6D",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "7D245E0F-7D37-4D69-9318-BD3BB90C4E9E",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "B02D95B2-9144-41C6-8F7F-2815E2F3CF48",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "71F147B2-EEA4-4996-8FCB-0BF44718AE47",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "6C106E67-CA55-457F-881E-B321248C2270",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "1AD9D859-5336-4ADC-BD96-FF967E8BFCEB",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "BEE782D8-D13A-49AF-AD22-BDDA77204E02",
+          "ratio": 1.506024096385542
+        }
+      ],
+      "id": "3E45BF8E-C9D9-4DBB-A686-D046AF7C3E0E",
+      "title": "Connecting at the Get Togethers",
+      "timestamp": 1466017207.645007
+    },
+    {
+      "visibility": "user.accessLevel == 6",
+      "id": "083913C7-F349-4CAE-BD4F-FC54AA07FD20",
+      "title": "Room Changes ",
+      "timestamp": 1466024446.821671,
+      "body": "The 3:00 p.m. session rooms have changed. Advanced Metal Shader Optimization will be in Nob Hill. Advanced Testing and Continuous Integration will be in Pacific Heights."
+    },
+    {
+      "visibility": "user.accessLevel == 6",
+      "id": "01A510A5-0737-4617-8C6B-71A06F6C7CEC",
+      "title": "Additional Room Changes",
+      "timestamp": 1466089204.752104,
+      "body": "The following session rooms have changed. \n\nThursday 10 a.m.\nNSURLSession: New Features and Best Practices - Presidio\nThread Sanitizer and Static Analysis - Mission\nLeveraging Touch Input on iOS - Pacific Heights\nOptimizing On-Demand Resources - Nob Hill\n\nThursday 1:40 p.m.\nExtending Your Apps with SiriKit - Presidio\nIntroduction to Xcode - Nob Hill\niMessage Apps and Stickers, Part 2 - Pacific Heights\n\nThursday 4 p.m.\nNeural Networks and Accelerate - Mission\nDeveloping tvOS Apps Using TVMLKit, Part 2 - Nob Hill\n\nFriday 4 p.m.\nProtocol and Value Oriented Programming in UIKit - Presidio\nMeasurements and Units - Nob Hill"
+    },
+    {
+      "visibility": "user.accessLevel == 6",
+      "id": "5E497333-0F69-4E2F-8754-C0E871948D9B",
+      "title": "The Bash",
+      "timestamp": 1466096432.695992,
+      "body": "Tonight’s event will take place from 7:00 until 10:00 p.m. at Bill Graham Civic Auditorium. To enter, you will need your badge and a wristband. To get a wristband, visit Attendee Services on the first floor of Moscone West any time today and show your government-issued photo ID. \n\nBuses will run from Moscone West to Bill Graham Civic Auditorium from 6:00 until 8:15 p.m., and return to Moscone West from 8:15 until 10:30 p.m. You will be asked to show your badge and wristband upon boarding.\n\nIf you are under 18, you and one parent or guardian are welcome to attend, and you can also choose to enjoy the Scholarship Suite on the second floor. Attendees 21 years or older may drink alcohol. "
+    },
+    {
+      "photos": [
+        {
+          "id": "D3FE23B3-F50B-4D61-9571-E0BCA81BAFDC",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "667A8BC0-EF92-48F5-8EE4-97DFED98B934",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "D33A1672-58F1-49DD-9A9D-57FCD52B8DE6",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "C8D4E81D-4E45-46AE-8B50-6DC8F36E61A6",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "DBF49067-96EE-4050-B870-B51B344B84E9",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "8D3BD289-75DA-4A1B-9DDC-5671A7F2C58C",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "F4AC2151-D947-4676-A9B0-3B9497B899B4",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "79EFBD6B-6085-4B5B-8C46-FE78352D4059",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "1B607442-8EB3-4286-B510-F6321BB3A908",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "7F8675D3-0C71-4F31-8A18-F67CACAA53C5",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "5E2D13E9-C318-4DFF-A629-6B8F58B5D31C",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "65376B9C-3DB7-431F-A096-2FA466748E30",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "45716740-76BE-48C1-A11C-58455A3F1656",
+          "ratio": 1.506024096385542
+        }
+      ],
+      "id": "4029B7DC-A873-48B3-BB8C-F3E96B492E11",
+      "title": "Beyond the Sessions",
+      "timestamp": 1466103633.419732
+    },
+    {
+      "photos": [
+        {
+          "id": "1788D39C-9221-4A43-BBD3-1D6F729287B0",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "91D44BAF-1EEB-436D-AFB5-83B84D50EA72",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "E5F8936B-4A53-4AE3-BFA7-3F6AE983EE04",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "B80D6EB0-2D4C-4453-9FA4-80891FB0EFA6",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "BE9A5641-13EC-401B-859B-105D16F02CC8",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "C720F641-6928-4023-9EA4-B7AF5C3206D0",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "EF7E648A-BD82-4257-AA36-0234A51A3A29",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "3BAB10ED-396F-4623-A200-4C290A01C9E0",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "5FC33BAE-E160-45F5-AB33-C304BC3807DF",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "C149DF81-BA8D-44B8-A655-215365B2689E",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "06E09B3A-2094-42BA-BCA6-05A16B7110CB",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "843988EB-04D4-4A84-9F77-6AE2476E8334",
+          "ratio": 1.506024096385542
+        },
+        {
+          "id": "56F2C826-A130-4560-93F5-B5EA78B21DC5",
+          "ratio": 1.506024096385542
+        }
+      ],
+      "id": "14730890-7711-43D4-A4F6-6B00E8927121",
+      "title": "Wrapping Up a Great Week",
+      "timestamp": 1466204428.232742
+    }
+  ]
+}
