@@ -11,6 +11,7 @@ import RealmSwift
 import RxSwift
 import ConfCore
 import PlayerUI
+import EventKit
 
 extension AppCoordinator: SessionActionsViewControllerDelegate {
     
@@ -51,7 +52,45 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     }
     
     func sessionActionsDidSelectCalendar(_ sender: NSView?) {
+        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+
+        let status = EKEventStore.authorizationStatus(for: .event)
+        let eventStore = EKEventStore()
         
+        if status == .notDetermined || status == .denied {
+
+            eventStore.requestAccess(to: .event, completion: { (hasAccess, error) in
+                
+                if hasAccess == true {
+                    self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
+                }
+            })
+            
+        } else if status == .authorized {
+            
+            self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
+            
+        } else {
+        
+            return
+        }
+    }
+    
+    private func saveCalendarEvent(viewModel:SessionViewModel!, eventStore:EKEventStore!)  {
+        let event = EKEvent.init(eventStore: eventStore)
+        event.startDate = viewModel.sessionInstance.startTime
+        event.endDate = viewModel.sessionInstance.endTime
+        event.title = viewModel.session.title
+        event.location = viewModel.sessionInstance.roomName
+        event.url = viewModel.webUrl
+        event.calendar = eventStore.defaultCalendarForNewEvents
+       
+        do {
+            try eventStore.save(event, span: .thisEvent, commit: true)
+            
+        } catch let e as NSError {
+            print("Failed to add event to calender due to error: \(e)")
+        }
     }
     
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {        

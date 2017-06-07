@@ -85,7 +85,7 @@ class SessionActionsViewController: NSViewController {
         
         b.image = #imageLiteral(resourceName: "schedule")
         b.target = self
-        b.action = #selector(download(_:))
+        b.action = #selector(addCalendar(_:))
         b.shouldAlwaysDrawHighlighted = true
         b.toolTip = "Add to Calendar"
         
