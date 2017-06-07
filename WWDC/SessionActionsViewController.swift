@@ -230,7 +230,6 @@ class SessionActionsViewController: NSViewController {
     }
     
     @IBAction func addCalendar(_ sender: NSView?) {
-        
         delegate?.sessionActionsDidSelectCalendar(sender)
     }
     
