@@ -261,6 +261,22 @@ class SessionsTableViewController: NSViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
+        let contextMenu = NSMenu.init(title: "Context Menu")
+        
+        contextMenu.addItem(NSMenuItem.init(title: "Mark as Watched", action: nil, keyEquivalent: ""))
+        contextMenu.addItem(NSMenuItem.init(title: "Mark as Unwatched", action: nil, keyEquivalent: ""))
+        contextMenu.addItem(NSMenuItem.separator())
+        
+        contextMenu.addItem(NSMenuItem.init(title: "Add to Favorites", action: nil, keyEquivalent: ""))
+        contextMenu.addItem(NSMenuItem.init(title: "Remove From Favorites", action: nil, keyEquivalent: ""))
+        contextMenu.addItem(NSMenuItem.separator())
+        
+        contextMenu.addItem(NSMenuItem.init(title: "Download", action: nil, keyEquivalent: ""))
+        contextMenu.addItem(NSMenuItem.init(title: "Cancel Download", action: nil, keyEquivalent: ""))
+        contextMenu.addItem(NSMenuItem.separator())
+        
+        tableView.menu = contextMenu
+        
         tableView.rx.selectedRow.map { index -> SessionViewModel? in
             guard let index = index else { return nil }
             guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
