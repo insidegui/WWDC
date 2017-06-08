@@ -802,9 +802,16 @@ public final class PUIPlayerView: NSView {
         }
     }
     
+    fileprivate var activity: NSObjectProtocol?
+    
     @IBAction public func pause(_ sender: Any?) {
         if isPlayingExternally {
             currentExternalPlaybackProvider?.pause()
+            
+            if let activity = self.activity {
+                ProcessInfo.processInfo.endActivity(activity)
+                self.activity = nil
+            }
         } else {
             player?.rate = 0
         }
@@ -813,6 +820,8 @@ public final class PUIPlayerView: NSView {
     @IBAction public func play(_ sender: Any?) {
         if isPlayingExternally {
             currentExternalPlaybackProvider?.play()
+            
+            activity = ProcessInfo.processInfo.beginActivity(options: [.idleDisplaySleepDisabled, .idleSystemSleepDisabled, .userInitiated], reason: "Playing WWDC session video")
         } else {
             player?.rate = playbackSpeed.rawValue
         }
