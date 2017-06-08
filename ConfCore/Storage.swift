@@ -104,147 +104,143 @@ public final class Storage {
     }
     
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping () -> Void) {
-        if case let .error(error) = contentResult {
-            print("Error downloading sessions: \(error)")
-        }
-        
-        guard case let .success(sessionsResponse) = contentResult else {
-            return
-        }
-        
-        self.realm.beginWrite()
-        
-        // Merge existing session data, preserving user-defined data
-        let consolidatedSessions = sessionsResponse.sessions.map { newSession -> (Session) in
-            return autoreleasepool {
-                if let existingSession = self.realm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
-                    existingSession.merge(with: newSession, in: self.realm)
-                    
-                    return existingSession
-                } else {
-                    return newSession
+        DispatchQueue.global(qos: .utility).async {
+            DispatchQueue.main.async {
+                self.realm.autorefresh = false
+            }
+            
+            defer {
+                DispatchQueue.main.async {
+                    self.realm.autorefresh = true
                 }
             }
-        }
-        
-        // Associate sessions with events
-        sessionsResponse.events.forEach { event in
-            autoreleasepool {
-                let sessions = consolidatedSessions.filter({ $0.eventIdentifier == event.identifier })
+            
+            let backgroundRealm = try! Realm(configuration: self.realmConfig)
+            
+            if case let .error(error) = contentResult {
+                print("Error downloading sessions: \(error)")
+            }
+            
+            guard case let .success(sessionsResponse) = contentResult else {
+                return
+            }
+            
+            backgroundRealm.beginWrite()
+            
+            // Merge existing session data, preserving user-defined data
+            let consolidatedSessions = sessionsResponse.sessions.map { newSession -> (Session) in
+                return autoreleasepool {
+                    if let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
+                        existingSession.merge(with: newSession, in: backgroundRealm)
+                        
+                        return existingSession
+                    } else {
+                        return newSession
+                    }
+                }
+            }
+            
+            // Associate sessions with events
+            sessionsResponse.events.forEach { event in
+                autoreleasepool {
+                    let sessions = consolidatedSessions.filter({ $0.eventIdentifier == event.identifier })
+                    
+                    event.sessions.append(objectsIn: sessions)
+                }
+            }
+            
+            // Merge existing instance data, preserving user-defined data
+            sessionsResponse.instances.forEach { newInstance in
+                return autoreleasepool {
+                    if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
+                        existingInstance.merge(with: newInstance, in: backgroundRealm)
+                        
+                        backgroundRealm.add(existingInstance, update: true)
+                    } else {
+                        backgroundRealm.add(newInstance, update: true)
+                    }
+                }
+            }
+            
+            // Save everything
+            backgroundRealm.add(sessionsResponse.rooms, update: true)
+            backgroundRealm.add(sessionsResponse.tracks, update: true)
+            backgroundRealm.add(sessionsResponse.events, update: true)
+            
+            // add instances to rooms
+            backgroundRealm.objects(Room.self).forEach { room in
+                let instances = backgroundRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
                 
+                instances.forEach({ $0.roomName = room.name })
+                room.instances.append(objectsIn: instances)
+            }
+            
+            // add instances and sessions to events
+            backgroundRealm.objects(Event.self).forEach { event in
+                let instances = backgroundRealm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
+                let sessions = backgroundRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
+                
+                event.sessionInstances.append(objectsIn: instances)
                 event.sessions.append(objectsIn: sessions)
             }
-        }
-        
-        // Merge existing instance data, preserving user-defined data
-        sessionsResponse.instances.forEach { newInstance in
-            return autoreleasepool {
-                if let existingInstance = self.realm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
-                    existingInstance.merge(with: newInstance, in: self.realm)
-                    
-                    self.realm.add(existingInstance, update: true)
-                } else {
-                    self.realm.add(newInstance, update: true)
+            
+            // add instances and sessions to tracks
+            backgroundRealm.objects(Track.self).forEach { track in
+                let instances = backgroundRealm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
+                let sessions = backgroundRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
+                
+                track.instances.append(objectsIn: instances)
+                track.sessions.append(objectsIn: sessions)
+                
+                sessions.forEach({ $0.trackName = track.name })
+                instances.forEach { instance in
+                    instance.trackName = track.name
+                    instance.session?.trackName = track.name
                 }
             }
-        }
-        
-        // Save everything
-        self.realm.add(sessionsResponse.rooms, update: true)
-        self.realm.add(sessionsResponse.tracks, update: true)
-        self.realm.add(sessionsResponse.events, update: true)
-        
-        let targetRealm = self.realm
-        
-        // add instances to rooms
-        targetRealm.objects(Room.self).forEach { room in
-            let instances = targetRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
             
-            instances.forEach({ $0.roomName = room.name })
-            room.instances.append(objectsIn: instances)
-        }
-        
-        // add instances and sessions to events
-        targetRealm.objects(Event.self).forEach { event in
-            let instances = targetRealm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
-            let sessions = targetRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
-            
-            event.sessionInstances.append(objectsIn: instances)
-            event.sessions.append(objectsIn: sessions)
-        }
-        
-        // add instances and sessions to tracks
-        targetRealm.objects(Track.self).forEach { track in
-            let instances = targetRealm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
-            let sessions = targetRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
-            
-            track.instances.append(objectsIn: instances)
-            track.sessions.append(objectsIn: sessions)
-            
-            sessions.forEach({ $0.trackName = track.name })
-            instances.forEach { instance in
-                instance.trackName = track.name
-                instance.session?.trackName = track.name
+            // add live video assets to sessions
+            backgroundRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
+                if let session = backgroundRealm.objects(Session.self).filter("year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
+                    session.assets.append(liveAsset)
+                }
             }
-        }
-        
-        // add live video assets to sessions
-        targetRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
-            if let session = targetRealm.objects(Session.self).filter("year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
-                session.assets.append(liveAsset)
-            }
-        }
-        
-        // Create schedule view
-        
-        targetRealm.objects(ScheduleSection.self).forEach({ targetRealm.delete($0) })
-        
-        let instances = targetRealm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
-        
-        var previousStartTime: Date? = nil
-        for instance in instances {
-            guard instance.startTime != previousStartTime else { continue }
             
-            autoreleasepool {
-                let instancesForSection = instances.filter({ $0.startTime == instance.startTime })
+            // Create schedule view
+            
+            backgroundRealm.objects(ScheduleSection.self).forEach({ backgroundRealm.delete($0) })
+            
+            let instances = backgroundRealm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
+            
+            var previousStartTime: Date? = nil
+            for instance in instances {
+                guard instance.startTime != previousStartTime else { continue }
                 
-                let section = ScheduleSection()
-                
-                section.representedDate = instance.startTime
-                section.eventIdentifier = instance.eventIdentifier
-                section.instances.append(objectsIn: instancesForSection)
-                section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
-                
-                targetRealm.add(section, update: true)
-                
-                previousStartTime = instance.startTime
+                autoreleasepool {
+                    let instancesForSection = instances.filter({ $0.startTime == instance.startTime })
+                    
+                    let section = ScheduleSection()
+                    
+                    section.representedDate = instance.startTime
+                    section.eventIdentifier = instance.eventIdentifier
+                    section.instances.append(objectsIn: instancesForSection)
+                    section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
+                    
+                    backgroundRealm.add(section, update: true)
+                    
+                    previousStartTime = instance.startTime
+                }
             }
-        }
-        
-        do {
-            try self.realm.commitWrite()
-            completion()
-//            self.updateAssociationsAndCreateViews(in: self.realm, completion: completion)
-        } catch {
-            NSLog("Realm error: \(error)")
+            
+            do {
+                try backgroundRealm.commitWrite()
+                
+                DispatchQueue.main.async { completion() }
+            } catch {
+                NSLog("Realm error: \(error)")
+            }
         }
     }
-    
-//    private func updateAssociationsAndCreateViews(in targetRealm: Realm, completion: @escaping () -> Void) {
-//        targetRealm.beginWrite()
-//        
-//        
-//        
-//        do {
-//            try targetRealm.commitWrite()
-//            
-//            DispatchQueue.main.async {
-//                completion()
-//            }
-//        } catch {
-//            NSLog("Realm error while consolidating schedule: \(error)")
-//        }
-//    }
     
     internal func store(liveVideosResult: Result<[SessionAsset], APIError>) {
         guard case .success(let assets) = liveVideosResult else { return }
