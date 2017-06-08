@@ -83,7 +83,7 @@ class SessionActionsViewController: NSViewController {
     private lazy var calendarButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
-        b.image = #imageLiteral(resourceName: "schedule")
+        b.image = #imageLiteral(resourceName: "calendar")
         b.target = self
         b.action = #selector(addCalendar(_:))
         b.shouldAlwaysDrawHighlighted = true
