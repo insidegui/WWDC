@@ -82,7 +82,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--prefs"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--no-remote"

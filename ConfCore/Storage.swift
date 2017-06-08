@@ -252,10 +252,16 @@ public final class Storage {
         self.realm.beginWrite()
         
         assets.forEach { asset in
-            self.realm.add(asset, update: true)
+            asset.identifier = asset.generateIdentifier()
             
-            if let session = self.realm.objects(Session.self).filter("year == %d AND number == %@", asset.year, asset.sessionId).first {
-                session.assets.append(asset)
+            if let existingAsset = self.realm.objects(SessionAsset.self).filter("identifier == %@", asset.identifier).first {
+                existingAsset.remoteURL = asset.remoteURL
+            } else {
+                self.realm.add(asset, update: true)
+                
+                if let session = self.realm.objects(Session.self).filter("year == %d AND number == %@", asset.year, asset.sessionId).first {
+                    session.assets.append(asset)
+                }
             }
         }
         
