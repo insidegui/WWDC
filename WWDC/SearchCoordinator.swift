@@ -20,6 +20,12 @@ enum FilterIdentifier: String {
     case isUnwatched
 }
 
+extension Sequence {
+    func all(predicate: (Iterator.Element) -> Bool) -> Bool {
+        return !contains { !predicate($0) }
+    }
+}
+
 final class SearchCoordinator {
     
     let storage: Storage
@@ -136,7 +142,7 @@ final class SearchCoordinator {
     }
     
     private func isAllEmpty(_ filters: [FilterType]) -> Bool {
-        return filters.reduce(true, { return $0.0 && $0.1.isEmpty })
+        return filters.all { $0.isEmpty }
     }
     
     fileprivate lazy var searchQueue: DispatchQueue = DispatchQueue(label: "Search", qos: .userInteractive)

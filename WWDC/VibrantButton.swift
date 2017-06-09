@@ -46,7 +46,7 @@ class VibrantButton: NSView {
     
     private lazy var titleLabel: NSTextField = {
         let l = NSTextField(labelWithString: "")
-        l.font = NSFont.systemFont(ofSize: 18)
+        l.font = .systemFont(ofSize: 18)
         l.textColor = .primaryText
         l.lineBreakMode = .byTruncatingTail
         l.alignment = .center

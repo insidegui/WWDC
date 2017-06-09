@@ -51,7 +51,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
     private lazy var titleLabel: NSTextField = {
         let f = NSTextField(labelWithString: "")
         
-        f.font = NSFont.systemFont(ofSize: 20, weight: NSFontWeightMedium)
+        f.font = .systemFont(ofSize: 20, weight: NSFontWeightMedium)
         f.textColor = .externalPlaybackText
         f.alignment = .center
         
@@ -61,7 +61,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
     private lazy var descriptionLabel: NSTextField = {
         let f = NSTextField(labelWithString: "")
         
-        f.font = NSFont.systemFont(ofSize: 16)
+        f.font = .systemFont(ofSize: 16)
         f.textColor = .timeLabel
         f.alignment = .center
         

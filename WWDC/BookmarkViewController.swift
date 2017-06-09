@@ -12,7 +12,7 @@ import PlayerUI
 
 private final class WWDCTextView: NSTextView {
     
-    var textDidChangeHandler: ((_ text: String) -> Void)?
+    var textDidChangeHandler: ((String) -> Void)?
     
     override func didChangeText() {
         super.didChangeText()

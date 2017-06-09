@@ -353,20 +353,19 @@ public final class PUIPlayerView: NSView {
     }
     
     private func metadataBecameAvailable() {
+        guard let duration = self.asset?.duration else { return }
+
         DispatchQueue.main.async {
-            guard let duration = self.asset?.duration else { return }
-            
             self.timelineView.mediaDuration = Double(CMTimeGetSeconds(duration))
         }
     }
     
     fileprivate func playerTimeDidChange(time: CMTime) {
+        guard let player = player, player.hasValidMediaDuration,
+              let duration = asset?.duration else { return }
+
         DispatchQueue.main.async {
-            guard let player = self.player else { return }
-            
-            guard player.hasValidMediaDuration else { return }
-            guard let duration = self.asset?.duration else { return }
-            
+
             let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
             self.timelineView.playbackProgress = progress
             
@@ -376,11 +375,9 @@ public final class PUIPlayerView: NSView {
     }
     
     private func updateTimeLabels() {
-        guard let player = player else { return }
-        
-        guard player.hasValidMediaDuration else { return }
-        guard let duration = self.asset?.duration else { return }
-        
+        guard let player = player, player.hasValidMediaDuration,
+              let duration = asset?.duration else { return }
+
         let time = player.currentTime()
         
         self.elapsedTimeLabel.stringValue = String(time: time) ?? ""
@@ -390,8 +387,8 @@ public final class PUIPlayerView: NSView {
     }
     
     deinit {
-        if let player = player {
-            teardown(player: player)
+        player.map {
+            self.teardown(player: $0)
         }
     }
     

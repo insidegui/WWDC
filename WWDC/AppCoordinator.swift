@@ -262,13 +262,8 @@ final class AppCoordinator {
     }
     
     func receiveNotification(with userInfo: [String : Any]) -> Bool {
-        if liveObserver.processSubscriptionNotification(with: userInfo) {
-            return true
-        } else if RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo) {
-            return true
-        } else {
-            return false
-        }
+        return liveObserver.processSubscriptionNotification(with: userInfo) &&
+               RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo)
     }
     
     // MARK: - State restoration

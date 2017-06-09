@@ -52,7 +52,7 @@ final class SessionsSplitViewController: NSSplitViewController {
         if let item = sender as? NSMenuItem {
             item.isEnabled = true
             item.target = self
-            item.action = #selector(toggleSidebar(_:))
+            item.action = #selector(toggleSidebar)
         }
     }
     

@@ -138,11 +138,11 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     }
     
     private func indexForChild(with identifier: String) -> Int? {
-        return tabViewItems.index(where: { $0.viewController?.identifier == identifier })
+        return tabViewItems.index { $0.viewController?.identifier == identifier }
     }
     
     private var tabItemViews: [TabItemView] {
-        return self.view.window?.toolbar?.items.flatMap({ $0.view as? TabItemView }) ?? []
+        return self.view.window?.toolbar?.items.flatMap { $0.view as? TabItemView } ?? []
     }
     
     private var loadingView: ModalLoadingView?
