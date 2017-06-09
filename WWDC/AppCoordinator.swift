@@ -367,7 +367,7 @@ final class AppCoordinator {
         
         guard Preferences.shared.refreshPeriodically else { return }
         
-        autorefreshTimer = Timer.scheduledTimer(timeInterval: Constants.autorefreshInterval, target: self, selector: #selector(refresh(_:)), userInfo: nil, repeats: false)
+        autorefreshTimer = Timer.scheduledTimer(timeInterval: Constants.autorefreshInterval, target: self, selector: #selector(refresh), userInfo: nil, repeats: false)
         autorefreshTimer.tolerance = Constants.autorefreshInterval / 3
     }
     

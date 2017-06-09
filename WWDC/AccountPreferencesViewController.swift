@@ -119,7 +119,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
     }()
     
     private lazy var completeButton: NSButton = {
-        let b = NSButton(title: "Complete my profile", target: self, action: #selector(completeProfile(_:)))
+        let b = NSButton(title: "Complete my profile", target: self, action: #selector(completeProfile))
         
         b.keyEquivalent = "\r"
         b.translatesAutoresizingMaskIntoConstraints = false

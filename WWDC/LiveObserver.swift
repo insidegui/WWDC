@@ -47,7 +47,7 @@ final class LiveObserver {
         
         NSLog("Live event observer started")
         
-        self.timer = Timer.scheduledTimer(timeInterval: Constants.liveSessionCheckInterval, target: self, selector: #selector(checkForLiveSessions(_:)), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: Constants.liveSessionCheckInterval, target: self, selector: #selector(checkForLiveSessions), userInfo: nil, repeats: true)
         
         // This timer doesn't have to be very precise, giving it a tolerance improves CPU and battery usage ;)
         self.timer?.tolerance = 10.0

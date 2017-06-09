@@ -94,7 +94,7 @@ class TranscriptTableViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(highlightTranscriptLine(_:)), name: .HighlightTranscriptAtCurrentTimecode, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(highlightTranscriptLine), name: .HighlightTranscriptAtCurrentTimecode, object: nil)
     }
     
     private func updateUI() {

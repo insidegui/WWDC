@@ -124,7 +124,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         item.view = itemView
         
         item.target = self
-        item.action = #selector(changeTab(_:))
+        item.action = #selector(changeTab)
         
         itemView.state = (tabViewItems.index(of: tabItem) == self.selectedTabViewItemIndex) ? NSOnState : NSOffState
         

@@ -49,7 +49,7 @@ class SessionActionsViewController: NSViewController {
         b.image = #imageLiteral(resourceName: "favorite")
         b.alternateImage = #imageLiteral(resourceName: "favorite-filled")
         b.target = self
-        b.action = #selector(toggleFavorite(_:))
+        b.action = #selector(toggleFavorite)
         b.isToggle = true
         b.shouldAlwaysDrawHighlighted = true
         
@@ -61,7 +61,7 @@ class SessionActionsViewController: NSViewController {
         
         b.image = #imageLiteral(resourceName: "slides")
         b.target = self
-        b.action = #selector(showSlides(_:))
+        b.action = #selector(showSlides)
         b.shouldAlwaysDrawHighlighted = true
         b.toolTip = "Open slides"
         
@@ -73,7 +73,7 @@ class SessionActionsViewController: NSViewController {
         
         b.image = #imageLiteral(resourceName: "download")
         b.target = self
-        b.action = #selector(download(_:))
+        b.action = #selector(download)
         b.shouldAlwaysDrawHighlighted = true
         
         return b
@@ -91,7 +91,7 @@ class SessionActionsViewController: NSViewController {
         pi.widthAnchor.constraint(equalToConstant: 24).isActive = true
         pi.heightAnchor.constraint(equalToConstant: 24).isActive = true
         pi.isHidden = true
-        pi.addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(cancelDownload(_:))))
+        pi.addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(cancelDownload)))
         pi.toolTip = "Click to cancel"
         
         return pi
@@ -102,7 +102,7 @@ class SessionActionsViewController: NSViewController {
         
         b.image = #imageLiteral(resourceName: "share")
         b.target = self
-        b.action = #selector(share(_:))
+        b.action = #selector(share)
         b.shouldAlwaysDrawHighlighted = true
         b.sendsActionOnMouseDown = true
         b.toolTip = "Share session"
@@ -181,7 +181,7 @@ class SessionActionsViewController: NSViewController {
                     self?.downloadButton.isHidden = false
                     self?.downloadIndicator.isHidden = true
                     self?.downloadButton.image = #imageLiteral(resourceName: "trash")
-                    self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload(_:))
+                    self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload)
                 }
             }).addDisposableTo(self.disposeBag)
         } else {
@@ -195,7 +195,7 @@ class SessionActionsViewController: NSViewController {
     private func resetDownloadButton() {
         downloadButton.toolTip = "Download video for offline watching"
         downloadButton.image = #imageLiteral(resourceName: "download")
-        downloadButton.action = #selector(SessionActionsViewController.download(_:))
+        downloadButton.action = #selector(SessionActionsViewController.download)
     }
     
     @IBAction func toggleFavorite(_ sender: NSView?) {

@@ -40,7 +40,7 @@ class ShelfViewController: NSViewController {
         b.title = "Play"
         b.translatesAutoresizingMaskIntoConstraints = false
         b.target = self
-        b.action = #selector(play(_:))
+        b.action = #selector(play)
         b.isHidden = true
         
         return b

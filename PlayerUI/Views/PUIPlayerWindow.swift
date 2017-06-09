@@ -276,7 +276,7 @@ private class PUIPlayerWindowOverlayView: NSView {
             mouseIdleTimer = nil
         }
         
-        mouseIdleTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction(_:)), userInfo: nil, repeats: false)
+        mouseIdleTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction), userInfo: nil, repeats: false)
     }
     
     @objc fileprivate func mouseIdleTimerAction(_ sender: Timer) {

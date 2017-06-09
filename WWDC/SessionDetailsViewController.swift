@@ -51,7 +51,7 @@ class SessionDetailsViewController: NSViewController {
         b.title = "Overview"
         b.state = NSOnState
         b.target = self
-        b.action = #selector(tabButtonAction(_:))
+        b.action = #selector(tabButtonAction)
         
         return b
     }()
@@ -62,7 +62,7 @@ class SessionDetailsViewController: NSViewController {
         b.title = "Transcript"
         b.state = NSOffState
         b.target = self
-        b.action = #selector(tabButtonAction(_:))
+        b.action = #selector(tabButtonAction)
         b.isHidden = true
         
         return b
@@ -74,7 +74,7 @@ class SessionDetailsViewController: NSViewController {
         b.title = "Bookmarks"
         b.state = NSOffState
         b.target = self
-        b.action = #selector(tabButtonAction(_:))
+        b.action = #selector(tabButtonAction)
         
         // TODO: enable bookmarks section
         b.isHidden = true

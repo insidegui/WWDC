@@ -433,7 +433,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUIFullScreen
         b.target = self
-        b.action = #selector(toggleFullscreen(_:))
+        b.action = #selector(toggleFullscreen)
         b.toolTip = "Toggle full screen"
         
         return b
@@ -444,7 +444,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUIVolume
         b.target = self
-        b.action = #selector(toggleMute(_:))
+        b.action = #selector(toggleMute)
         b.widthAnchor.constraint(equalToConstant: 24).isActive = true
         b.toolTip = "Mute/unmute"
         
@@ -459,7 +459,7 @@ public final class PUIPlayerView: NSView {
         s.target = self
         s.minValue = 0
         s.maxValue = 1
-        s.action = #selector(volumeSliderAction(_:))
+        s.action = #selector(volumeSliderAction)
         
         return s
     }()
@@ -469,7 +469,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUISubtitles
         b.target = self
-        b.action = #selector(showSubtitlesMenu(_:))
+        b.action = #selector(showSubtitlesMenu)
         b.toolTip = "Subtitles"
         
         return b
@@ -480,7 +480,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUIPlay
         b.target = self
-        b.action = #selector(togglePlaying(_:))
+        b.action = #selector(togglePlaying)
         b.toolTip = "Play/pause"
         
         return b
@@ -491,7 +491,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUIPreviousBookmark
         b.target = self
-        b.action = #selector(previousAnnotation(_:))
+        b.action = #selector(previousAnnotation)
         b.toolTip = "Go to previous bookmark"
         
         return b
@@ -502,7 +502,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUINextBookmark
         b.target = self
-        b.action = #selector(nextAnnotation(_:))
+        b.action = #selector(nextAnnotation)
         b.toolTip = "Go to next bookmark"
         
         return b
@@ -513,7 +513,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUIBack30s
         b.target = self
-        b.action = #selector(goBackInTime(_:))
+        b.action = #selector(goBackInTime)
         b.toolTip = "Go back 30s"
         
         return b
@@ -524,7 +524,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUIForward30s
         b.target = self
-        b.action = #selector(goForwardInTime(_:))
+        b.action = #selector(goForwardInTime)
         b.toolTip = "Go forward 30s"
         
         return b
@@ -535,7 +535,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUISpeedOne
         b.target = self
-        b.action = #selector(toggleSpeed(_:))
+        b.action = #selector(toggleSpeed)
         b.toolTip = "Change playback speed"
         
         return b
@@ -546,7 +546,7 @@ public final class PUIPlayerView: NSView {
         
         b.image = .PUIBookmark
         b.target = self
-        b.action = #selector(addAnnotation(_:))
+        b.action = #selector(addAnnotation)
         b.toolTip = "Add bookmark"
         
         return b
@@ -558,7 +558,7 @@ public final class PUIPlayerView: NSView {
         b.isToggle = true
         b.image = .PUIPictureInPicture
         b.target = self
-        b.action = #selector(togglePip(_:))
+        b.action = #selector(togglePip)
         b.toolTip = "Toggle picture in picture"
         
         return b
@@ -905,7 +905,7 @@ public final class PUIPlayerView: NSView {
         let menu = NSMenu()
         
         subtitlesGroup.options.forEach { option in
-            let item = NSMenuItem(title: option.displayName, action: #selector(didSelectSubtitleOption(_:)), keyEquivalent: "")
+            let item = NSMenuItem(title: option.displayName, action: #selector(didSelectSubtitleOption), keyEquivalent: "")
             item.representedObject = option
             item.target = self
             
@@ -1057,7 +1057,7 @@ public final class PUIPlayerView: NSView {
         }
         
         if start {
-            mouseIdleTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction(_:)), userInfo: nil, repeats: false)
+            mouseIdleTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction), userInfo: nil, repeats: false)
         }
     }
     
