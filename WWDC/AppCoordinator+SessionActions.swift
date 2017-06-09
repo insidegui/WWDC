@@ -89,5 +89,4 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         let picker = NSSharingServicePicker(items: [url])
         picker.show(relativeTo: .zero, of: sender, preferredEdge: .minY)
     }
-
 }

@@ -13,22 +13,22 @@ import ConfCore
 import PlayerUI
 
 extension AppCoordinator {
-    
+
     func updateCurrentActivity(with item: UserActivityRepresentable?) {
         guard let item = item else {
             currentActivity?.invalidate()
             currentActivity = nil
             return
         }
-        
+
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
-        
+
         activity.title = item.title
         activity.webpageURL = item.webUrl
-        
+
         activity.becomeCurrent()
-        
+
         currentActivity = activity
     }
-    
+
 }
