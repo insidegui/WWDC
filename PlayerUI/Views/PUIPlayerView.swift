@@ -265,19 +265,21 @@ public final class PUIPlayerView: NSView {
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         DispatchQueue.main.async {
-            if keyPath == #keyPath(AVPlayer.status) {
+            guard let path = keyPath else { return }
+            switch path {
+            case #keyPath(AVPlayer.status):
                 self.playerStatusChanged()
-            } else if keyPath == #keyPath(AVPlayer.currentItem.loadedTimeRanges) {
+            case #keyPath(AVPlayer.currentItem.loadedTimeRanges):
                 self.updateBufferedSegments()
-            } else if keyPath == #keyPath(AVPlayer.volume) {
+            case #keyPath(AVPlayer.volume):
                 self.playerVolumeChanged()
-            } else if keyPath == #keyPath(AVPlayer.rate) {
+            case #keyPath(AVPlayer.rate):
                 self.updatePlayingState()
-            } else if keyPath == #keyPath(AVPlayer.currentItem.duration) {
+            case #keyPath(AVPlayer.currentItem.duration):
                 self.metadataBecameAvailable()
-            } else if keyPath == #keyPath(AVPlayer.currentItem.currentMediaSelection) {
+            case #keyPath(AVPlayer.currentItem.currentMediaSelection):
                 self.updateMediaSelection()
-            } else {
+            default:
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
         }
