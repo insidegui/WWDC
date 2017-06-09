@@ -345,9 +345,7 @@ public final class PUIPlayerView: NSView {
     }
     
     private func playerStatusChanged() {
-        guard let player = player else { return }
-        
-        switch player.status {
+        switch player?.status {
         case .readyToPlay:
             self.updateTimeLabels()
         default: break
@@ -355,7 +353,7 @@ public final class PUIPlayerView: NSView {
     }
     
     private func metadataBecameAvailable() {
-        guard let duration = self.asset?.duration else { return }
+        guard let duration = asset?.duration else { return }
 
         DispatchQueue.main.async {
             self.timelineView.mediaDuration = Double(CMTimeGetSeconds(duration))
@@ -363,8 +361,8 @@ public final class PUIPlayerView: NSView {
     }
     
     fileprivate func playerTimeDidChange(time: CMTime) {
-        guard let player = player, player.hasValidMediaDuration,
-              let duration = asset?.duration else { return }
+        guard let duration = asset?.duration,
+                  player?.hasValidMediaDuration else { return }
 
         DispatchQueue.main.async {
 

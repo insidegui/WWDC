@@ -54,7 +54,7 @@ final class BookmarkViewController: NSViewController {
         
         v.drawsBackground = false
         v.backgroundColor = .clear
-        v.font = NSFont.systemFont(ofSize: 12)
+        v.font = .systemFont(ofSize: 12)
         v.textColor = .secondaryText
         v.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
         

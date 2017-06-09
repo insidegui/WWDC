@@ -86,23 +86,23 @@ public final class Storage {
     public func unmanagedObject<T: Object>(of type: T.Type, with primaryKey: String) -> T? {
         do {
             let tempRealm = try Realm(configuration: self.realmConfig)
-            
+
             return tempRealm.object(ofType: type, forPrimaryKey: primaryKey)
         } catch {
             return nil
         }
     }
-    
+
     public func unmanagedObjects<T: Object>(of type: T.Type, with predicate: NSPredicate) -> Results<T>? {
         do {
             let tempRealm = try Realm(configuration: self.realmConfig)
-            
+
             return tempRealm.objects(type).filter(predicate)
         } catch {
             return nil
         }
     }
-    
+
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping () -> Void) {
         self.realm.autorefresh = false
         
@@ -287,7 +287,7 @@ public final class Storage {
     }
     
     public var isEmpty: Bool {
-        return realm.objects(Event.self).count <= 0
+        return realm.objects(Event.self).isEmpty
     }
     
     public func removeFavorite(for session: Session) {
