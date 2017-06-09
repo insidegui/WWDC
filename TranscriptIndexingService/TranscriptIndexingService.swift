@@ -11,9 +11,9 @@ import ConfCore
 import RealmSwift
 
 final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtocol {
-    
+
     private var transcriptIndexer: TranscriptIndexer!
-    
+
     func indexTranscriptsIfNeeded(storageURL: URL, schemaVersion: UInt64) {
         if transcriptIndexer == nil {
             do {
@@ -25,8 +25,8 @@ final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtoc
                 return
             }
         }
-        
+
         transcriptIndexer.downloadTranscriptsIfNeeded()
     }
-    
+
 }

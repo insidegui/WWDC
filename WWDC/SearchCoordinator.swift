@@ -22,9 +22,9 @@ enum FilterIdentifier: String {
 }
 
 final class SearchCoordinator {
-    
+
     let storage: Storage
-    
+
     let scheduleController: SessionsTableViewController
     let videosController: SessionsTableViewController
 
@@ -34,11 +34,11 @@ final class SearchCoordinator {
     fileprivate var scheduleSearchController: SearchFiltersViewController {
         return scheduleController.searchController
     }
-    
+
     fileprivate var videosSearchController: SearchFiltersViewController {
         return videosController.searchController
     }
-    
+
     init(_ storage: Storage,
          sessionsController: SessionsTableViewController,
          videosController: SessionsTableViewController,
@@ -54,7 +54,7 @@ final class SearchCoordinator {
                                                name: .MainWindowWantsToSelectSearchField,
                                                object: nil)
     }
-    
+
     func configureFilters() {
 
         // Schedule Filters Configuration
@@ -182,36 +182,36 @@ final class SearchCoordinator {
         if activeVideosFilters.count > 0 {
             updateSearchResults(for: videosController, with: activeVideosFilters)
         }
-        
+
         // set delegates
         scheduleSearchController.delegate = self
         videosSearchController.delegate = self
     }
-    
+
     private func isAllEmpty(_ filters: [FilterType]) -> Bool {
         return filters.reduce(true, { return $0.0 && $0.1.isEmpty })
     }
-    
+
     fileprivate lazy var searchQueue: DispatchQueue = DispatchQueue(label: "Search", qos: .userInteractive)
-    
+
     fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
         guard !isAllEmpty(filters) else {
             if controller.searchResults != nil {
                 controller.searchResults = nil
             }
-            
+
             return
         }
-        
+
         var subpredicates = filters.flatMap { $0.predicate }
-        
+
         if controller == scheduleController {
             subpredicates.append(NSPredicate(format: "ANY event.isCurrent == true"))
             subpredicates.append(NSPredicate(format: "instances.@count > 0"))
         } else if controller == videosController {
             subpredicates.append(Session.videoPredicate)
         }
-        
+
         var predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
 
         if let appDelegate = NSApplication.shared().delegate as? AppDelegate,
@@ -220,18 +220,18 @@ final class SearchCoordinator {
             // Keep the currently playing video in the list to ensure PIP can re-select it if needed
             predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [predicate, NSPredicate(format: "identifier == %@", currentlyPlayingSession.identifier)])
         }
-        
+
         #if DEBUG
             print(predicate)
         #endif
-        
+
         searchQueue.async { [unowned self] in
             do {
                 let realm = try Realm(configuration: self.storage.realmConfig)
-                
+
                 let results = realm.objects(Session.self).filter(predicate)
-                let keys: Set<String> = Set<String>(results.map({ $0.identifier }))
-                
+                let keys: Set<String> = Set(results.map { $0.identifier })
+
                 DispatchQueue.main.async {
                     let searchResults = self.storage.realm.objects(Session.self).filter("identifier IN %@", keys)
                     controller.searchResults = searchResults
@@ -241,12 +241,12 @@ final class SearchCoordinator {
             }
         }
     }
-    
+
     @objc fileprivate func activateSearchField() {
         if let window = scheduleSearchController.view.window {
             window.makeFirstResponder(scheduleSearchController.searchField)
         }
-        
+
         if let window = videosSearchController.view.window {
             window.makeFirstResponder(videosSearchController.searchField)
         }
@@ -267,7 +267,7 @@ final class SearchCoordinator {
 }
 
 extension SearchCoordinator: SearchFiltersViewControllerDelegate {
-    
+
     func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType]) {
         if controller == scheduleSearchController {
             updateSearchResults(for: scheduleController, with: filters)
