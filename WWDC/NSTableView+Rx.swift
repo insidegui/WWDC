@@ -40,8 +40,8 @@ final class RxTableViewDelegateProxy: DelegateProxy, NSTableViewDelegate, Delega
     func tableViewSelectionDidChange(_ notification: Notification) {
         guard let numberOfRows = tableView?.numberOfRows, numberOfRows > 0 else { return }
         guard let selectedRow = tableView?.selectedRow else { return }
-        
-        let row: Int? = (selectedRow >= 0 && selectedRow < numberOfRows) ? selectedRow : nil
+
+        let row: Int? = (0..<numberOfRows).contains(selectedRow) ? selectedRow : nil
         
         selectedRowSubject.on(.next(row))
     }

@@ -21,7 +21,6 @@ private final class WWDCTextView: NSTextView {
             textDidChangeHandler?(str)
         }
     }
-    
 }
 
 final class BookmarkViewController: NSViewController {

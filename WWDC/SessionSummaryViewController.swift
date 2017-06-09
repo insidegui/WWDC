@@ -51,7 +51,7 @@ class SessionSummaryViewController: NSViewController {
     
     private lazy var summaryLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
-        l.font = NSFont.systemFont(ofSize: 18)
+        l.font = .systemFont(ofSize: 18)
         l.textColor = .secondaryText
         l.cell?.backgroundStyle = .dark
         l.isSelectable = true
@@ -65,7 +65,7 @@ class SessionSummaryViewController: NSViewController {
     
     private lazy var contextLabel: NSTextField = {
         let l = NSTextField(labelWithString: "")
-        l.font = NSFont.systemFont(ofSize: 16)
+        l.font = .systemFont(ofSize: 16)
         l.textColor = .tertiaryText
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byTruncatingTail

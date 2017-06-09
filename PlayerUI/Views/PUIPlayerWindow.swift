@@ -93,7 +93,7 @@ open class PUIPlayerWindow: NSWindow {
         titleTextField!.isBezeled = false
         titleTextField!.isBordered = false
         titleTextField!.stringValue = title
-        titleTextField!.font = NSFont.titleBarFont(ofSize: 13.0)
+        titleTextField!.font = .titleBarFont(ofSize: 13.0)
         titleTextField!.textColor = NSColor(calibratedWhite: 0.9, alpha: 0.8)
         titleTextField!.alignment = .center
         titleTextField!.translatesAutoresizingMaskIntoConstraints = false

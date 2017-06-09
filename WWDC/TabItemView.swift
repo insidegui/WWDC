@@ -66,12 +66,12 @@ final class TabItemView: NSView {
                 imageView.tintColor = .toolbarTintActive
                 imageView.image = alternateImage ?? image
                 titleLabel.textColor = .toolbarTintActive
-                titleLabel.font = NSFont.systemFont(ofSize: 14, weight: NSFontWeightMedium)
+                titleLabel.font = .systemFont(ofSize: 14, weight: NSFontWeightMedium)
             } else {
                 imageView.tintColor = .toolbarTint
                 imageView.image = image
                 titleLabel.textColor = .toolbarTint
-                titleLabel.font = NSFont.systemFont(ofSize: 14)
+                titleLabel.font = .systemFont(ofSize: 14)
             }
         }
     }
@@ -89,7 +89,7 @@ final class TabItemView: NSView {
     lazy var titleLabel: NSTextField = {
         let l = NSTextField(labelWithString: "")
         
-        l.font = NSFont.systemFont(ofSize: 14)
+        l.font = .systemFont(ofSize: 14)
         l.textColor = .toolbarTint
         l.cell?.backgroundStyle = .dark
         

@@ -32,7 +32,7 @@ class TranscriptTableCellView: NSTableCellView {
         let l = NSTextField(labelWithString: "")
         
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = NSFont.systemFont(ofSize: 14, weight: NSFontWeightMedium)
+        l.font = .systemFont(ofSize: 14, weight: NSFontWeightMedium)
         l.textColor = .primaryText
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byTruncatingTail
@@ -44,7 +44,7 @@ class TranscriptTableCellView: NSTableCellView {
         let l = NSTextField(labelWithString: "")
         
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = NSFont.systemFont(ofSize: 12)
+        l.font = .systemFont(ofSize: 12)
         l.textColor = .secondaryText
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byTruncatingTail
