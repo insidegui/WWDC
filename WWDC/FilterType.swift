@@ -9,9 +9,9 @@
 import Foundation
 
 protocol FilterType {
-    
+
     var identifier: String { get set }
     var isEmpty: Bool { get }
     var predicate: NSPredicate? { get }
-    
+
 }

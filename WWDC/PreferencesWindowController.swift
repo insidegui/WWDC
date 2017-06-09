@@ -13,38 +13,38 @@ class PreferencesWindowController: NSWindowController {
     static var defaultRect: NSRect {
         return NSRect(x: 0, y: 0, width: 650, height: 500)
     }
-    
+
     init() {
         let mask: NSWindowStyleMask = [.titled, .closable]
         let window = WWDCWindow(contentRect: PreferencesWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
-        
+
         super.init(window: window)
-        
+
         window.title = "Preferences"
-        
+
         window.appearance = WWDCAppearance.appearance()
         window.center()
-        
+
         window.titleVisibility = .hidden
-        
+
         window.toolbar = NSToolbar(identifier: "WWDCPreferences")
-        
+
         window.identifier = "preferences"
         window.minSize = PreferencesWindowController.defaultRect.size
-        
+
         window.animationBehavior = .alertPanel
-        
+
         window.backgroundColor = .auxWindowBackground
-        
+
         windowDidLoad()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func windowDidLoad() {
         super.windowDidLoad()
     }
-
+    
 }

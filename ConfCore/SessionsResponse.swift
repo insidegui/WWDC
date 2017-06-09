@@ -9,10 +9,10 @@
 import Foundation
 
 public struct SessionsResponse {
-    
+
     public let events: [Event]
     public let sessions: [Session]
     public let assets: [SessionAsset]
     public let tracks: [Track]
-    
+
 }

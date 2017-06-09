@@ -51,7 +51,7 @@ final class ImageDownloadCenter {
             guard let op = op as? ImageDownloadOperation else { return false }
 
             return op.url == url && op.isExecuting
-        }.count > 0
+            }.count > 0
     }
 
 }
