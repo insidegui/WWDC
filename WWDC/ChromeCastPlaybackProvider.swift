@@ -130,7 +130,7 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
         let menu = NSMenu()
         
         scanner.devices.forEach { device in
-            let item = NSMenuItem(title: device.name, action: #selector(didSelectDeviceOnMenu(_:)), keyEquivalent: "")
+            let item = NSMenuItem(title: device.name, action: #selector(didSelectDeviceOnMenu), keyEquivalent: "")
             item.representedObject = device
             item.target = self
             
@@ -280,7 +280,7 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
     }
     
     fileprivate func startFetchingMediaStatusPeriodically() {
-        mediaStatusRefreshTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(requestMediaStatus(_:)), userInfo: nil, repeats: true)
+        mediaStatusRefreshTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(requestMediaStatus), userInfo: nil, repeats: true)
     }
     
     @objc private func requestMediaStatus(_ sender: Any?) {

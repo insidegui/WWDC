@@ -22,7 +22,7 @@ public enum SessionAssetType: String {
 
 /// Session assets are resources associated with sessions, like videos, PDFs and useful links
 public class SessionAsset: Object {
-    
+
     /// The type of asset:
     ///
     /// - WWDCSessionAssetTypeHDVideo
@@ -36,9 +36,9 @@ public class SessionAsset: Object {
             self.identifier = generateIdentifier()
         }
     }
-    
+
     public dynamic var identifier = ""
-    
+
     public var assetType: SessionAssetType {
         get {
             return SessionAssetType(rawValue: rawAssetType) ?? .none
@@ -47,34 +47,34 @@ public class SessionAsset: Object {
             rawAssetType = newValue.rawValue
         }
     }
-    
+
     /// The year of the session this asset belongs to
     public dynamic var year = 0 {
         didSet {
             self.identifier = generateIdentifier()
         }
     }
-    
+
     /// The id of the session this asset belongs to
     public dynamic var sessionId = "" {
         didSet {
             self.identifier = generateIdentifier()
         }
     }
-    
+
     /// URL for this asset
     public dynamic var remoteURL = ""
-    
+
     /// Relative local URL to save the asset to when downloading
     public dynamic var relativeLocalURL = ""
-    
+
     /// The session this asset belongs to
     public let session = LinkingObjects(fromType: Session.self, property: "assets")
-    
+
     public override class func primaryKey() -> String? {
         return "identifier"
     }
-    
+
     public override static func indexedProperties() -> [String] {
         return [
             "identifier",
@@ -85,17 +85,17 @@ public class SessionAsset: Object {
             "relativeLocalURL"
         ]
     }
-    
+
     func merge(with other: SessionAsset, in realm: Realm) {
         assert(other.remoteURL == self.remoteURL, "Can't merge two objects with different identifiers!")
-        
+
         self.year = other.year
         self.sessionId = other.sessionId
         self.relativeLocalURL = other.relativeLocalURL
     }
-    
+
     public func generateIdentifier() -> String {
         return String(self.year) + "@" + self.sessionId + "~" + self.rawAssetType.replacingOccurrences(of: "WWDCSessionAssetType", with: "")
     }
-    
+
 }

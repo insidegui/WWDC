@@ -14,35 +14,35 @@ enum SessionInstanceKeys: String, JSONSubscriptType {
     case favId = "fav_id"
     case room = "roomId"
     case track = "trackId"
-    
+
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
     }
 }
 
 final class SessionInstancesJSONAdapter: Adapter {
-    
+
     typealias InputType = JSON
     typealias OutputType = SessionInstance
-    
+
     func adapt(_ input: JSON) -> Result<SessionInstance, AdapterError> {
         guard case .success(let session) = SessionsJSONAdapter().adapt(input) else {
             return .error(.invalidData)
         }
-        
+
         // not an instance
         guard session.year == Calendar.current.component(.year, from: Date()) else {
             return .error(.invalidData)
         }
-        
+
         guard let startGMT = input[SessionInstanceKeys.startTime].string else {
             return .error(.missingKey(SessionInstanceKeys.startTime))
         }
-        
+
         guard let endGMT = input[SessionInstanceKeys.endTime].string else {
             return .error(.missingKey(SessionInstanceKeys.startTime))
         }
-        
+
         guard let rawType = input[SessionInstanceKeys.type].string else {
             return .error(.missingKey(SessionInstanceKeys.type))
         }
@@ -58,23 +58,23 @@ final class SessionInstancesJSONAdapter: Adapter {
         guard let trackIdentifier = input[SessionInstanceKeys.track].int else {
             return .error(.missingKey(SessionInstanceKeys.track))
         }
-        
+
         guard case .success(let startDate) = DateTimeAdapter().adapt(startGMT) else {
             return .error(.invalidData)
         }
-        
+
         guard case .success(let endDate) = DateTimeAdapter().adapt(endGMT) else {
             return .error(.invalidData)
         }
-        
+
         let instance = SessionInstance()
-        
+
         if let keywordsJson = input[SessionInstanceKeys.keywords].array {
             if case .success(let keywords) = KeywordsJSONAdapter().adapt(keywordsJson) {
                 instance.keywords.append(objectsIn: keywords)
             }
         }
-        
+
         instance.identifier = session.identifier
         instance.eventIdentifier = Event.identifier(from: startDate)
         instance.number = id
@@ -85,7 +85,7 @@ final class SessionInstancesJSONAdapter: Adapter {
         instance.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
         instance.startTime = startDate
         instance.endTime = endDate
-        
+
         return .success(instance)
     }
     

@@ -11,11 +11,11 @@ import Cocoa
 class WWDCTableView: NSTableView {
 
     private var selectedRowIndexesBeforeReload: IndexSet = IndexSet([])
-    
+
     func reloadPreservingSelection() {
         selectedRowIndexesBeforeReload = selectedRowIndexes
         reloadData()
         selectRowIndexes(selectedRowIndexesBeforeReload, byExtendingSelection: false)
     }
-    
+
 }

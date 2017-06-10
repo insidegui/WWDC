@@ -17,11 +17,11 @@ enum PUITouchForce: Int {
 }
 
 extension NSEvent {
-    
+
     var touchForce: PUITouchForce {
         return PUITouchForce(rawValue: synthesizedStage)!
     }
-    
+
     private var synthesizedStage: Int {
         switch type {
         case .tabletPoint:
@@ -36,5 +36,5 @@ extension NSEvent {
             return 1
         }
     }
-    
+
 }

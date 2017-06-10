@@ -724,6 +724,7 @@
 				DDAE7C531E5BC6CD00CEA205 /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			wrapsLines = 0;
 		};
 		DD36A4AD1E478C6A00B2EA88 /* Products */ = {
 			isa = PBXGroup;

@@ -9,18 +9,18 @@
 import Cocoa
 
 class WWDCTableRowView: NSTableRowView {
-    
+
     override var isGroupRowStyle: Bool {
         didSet {
             setNeedsDisplay(bounds)
         }
     }
-    
+
     override func drawSelection(in dirtyRect: NSRect) {
         NSColor.selection.set()
         NSRectFill(dirtyRect)
     }
-    
+
     override func drawBackground(in dirtyRect: NSRect) {
         if isGroupRowStyle {
             NSColor.sectionHeaderBackground.set()
@@ -29,5 +29,5 @@ class WWDCTableRowView: NSTableRowView {
             super.drawBackground(in: dirtyRect)
         }
     }
-    
+
 }

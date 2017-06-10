@@ -13,16 +13,16 @@ final class KeywordsJSONAdapter: Adapter {
 
     typealias InputType = JSON
     typealias OutputType = Keyword
-    
+
     func adapt(_ input: JSON) -> Result<Keyword, AdapterError> {
         guard let name = input.string else {
             return .error(.invalidData)
         }
-        
+
         let keyword = Keyword()
         keyword.name = name
-        
+
         return .success(keyword)
     }
-    
+
 }

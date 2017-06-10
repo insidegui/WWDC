@@ -89,7 +89,7 @@ final class AboutWindowController: NSWindowController {
             iconCreatorLabel.alphaValue = 0.8
             iconCreatorLabel.textColor = .primary
             iconCreatorLabel.target = self
-            iconCreatorLabel.action = #selector(openIconCreatorWebsite(_:))
+            iconCreatorLabel.action = #selector(openIconCreatorWebsite)
         }
         
         if let website = info["GRBundleUserInterfaceCreatorWebsite"] as? String {
@@ -98,7 +98,7 @@ final class AboutWindowController: NSWindowController {
             uiCreatorLabel.alphaValue = 0.8
             uiCreatorLabel.textColor = .primary
             uiCreatorLabel.target = self
-            uiCreatorLabel.action = #selector(openUserInterfaceCreatorWebsite(_:))
+            uiCreatorLabel.action = #selector(openUserInterfaceCreatorWebsite)
         }
         
         if let website = info["GRBundleDesignContributorWebsite"] as? String {
@@ -107,7 +107,7 @@ final class AboutWindowController: NSWindowController {
             designContributorLabel.alphaValue = 0.8
             designContributorLabel.textColor = .primary
             designContributorLabel.target = self
-            designContributorLabel.action = #selector(openDesignContributorWebsite(_:))
+            designContributorLabel.action = #selector(openDesignContributorWebsite)
         }
         
         if let website = info["GRBundleMainDeveloperWebsite"] as? String {
@@ -116,7 +116,7 @@ final class AboutWindowController: NSWindowController {
             creatorLabel.alphaValue = 0.8
             creatorLabel.textColor = .primary
             creatorLabel.target = self
-            creatorLabel.action = #selector(openMainDeveloperWebsite(_:))
+            creatorLabel.action = #selector(openMainDeveloperWebsite)
         }
         
     }

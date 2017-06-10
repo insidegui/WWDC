@@ -9,7 +9,7 @@
 import Foundation
 
 @objc protocol TranscriptIndexingServiceProtocol: NSObjectProtocol {
-    
+
     func indexTranscriptsIfNeeded(storageURL: URL, schemaVersion: UInt64)
-    
+
 }
