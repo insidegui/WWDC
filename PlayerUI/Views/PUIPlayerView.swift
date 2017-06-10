@@ -715,6 +715,8 @@ public final class PUIPlayerView: NSView {
         updateExternalPlaybackControlsAvailability()
         
         fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
+        timelineView.isHidden = !d.playerViewShouldShowTimelineView(self)
+        timeLabelsContainerView.isHidden = !d.playerViewShouldShowTimestampLabels(self)
     }
     
     fileprivate func updateExternalPlaybackControlsAvailability() {

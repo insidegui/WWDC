@@ -38,6 +38,7 @@ final class VideoPlayerViewController: NSViewController {
             self.disposeBag = DisposeBag()
             
             updateUI()
+            resetAppearanceDelegate()
         }
     }
     
@@ -109,13 +110,16 @@ final class VideoPlayerViewController: NSViewController {
         super.viewDidLoad()
         
         playerView.delegate = self
-        
+        resetAppearanceDelegate()
         reset(oldValue: nil)
         updateUI()
         
         NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
     }
     
+    func resetAppearanceDelegate()  {
+        playerView.appearanceDelegate = self
+    }
     func reset(oldValue: AVPlayer?) {
         if let oldPlayer = oldValue {
             if let boundaryObserver = boundaryObserver {
@@ -273,6 +277,45 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
         
     }
     
+}
+
+extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
+    
+    func playerViewShouldShowSubtitlesControl(_ playerView: PUIPlayerView) -> Bool {
+       return true
+    }
+    
+    func playerViewShouldShowPictureInPictureControl(_ playerView: PUIPlayerView) -> Bool {
+       return true
+    }
+    
+    func playerViewShouldShowSpeedControl(_ playerView: PUIPlayerView) -> Bool {
+        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+    }
+    
+    func playerViewShouldShowAnnotationControls(_ playerView: PUIPlayerView) -> Bool {
+        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+    }
+    
+    func playerViewShouldShowBackAndForwardControls(_ playerView: PUIPlayerView) -> Bool {
+        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+    }
+    
+    func playerViewShouldShowExternalPlaybackControls(_ playerView: PUIPlayerView) -> Bool {
+        return true
+    }
+    
+    func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool {
+        return true
+    }
+    
+    func playerViewShouldShowTimelineView(_ playerView: PUIPlayerView) -> Bool {
+        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+    }
+    
+    func playerViewShouldShowTimestampLabels(_ playerView: PUIPlayerView) -> Bool {
+        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+    }
 }
 
 extension Transcript {
