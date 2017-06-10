@@ -156,8 +156,11 @@ public final class PUIPlayerView: NSView {
         didSet {
             guard let player = player else { return }
             
-            if isPlaying && !isPlayingExternally { player.rate = playbackSpeed.rawValue }
-            
+            if isPlaying && !isPlayingExternally {
+                player.rate = playbackSpeed.rawValue
+                player.seek(to: player.currentTime()) // Helps the AV sync when speeds change with the TimeDomain algorithm enabled
+            }
+
             updatePlaybackSpeedState()
         }
     }
@@ -235,6 +238,7 @@ public final class PUIPlayerView: NSView {
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.volume), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
+        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection), options: [.initial, .new], context: nil)
@@ -261,6 +265,7 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection))
+        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem))
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -277,6 +282,10 @@ public final class PUIPlayerView: NSView {
                 self.metadataBecameAvailable()
             } else if keyPath == #keyPath(AVPlayer.currentItem.currentMediaSelection) {
                 self.updateMediaSelection()
+            } else if keyPath == #keyPath(AVPlayer.currentItem) {
+                if let playerItem = self.player?.currentItem {
+                    playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmTimeDomain
+                }
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
