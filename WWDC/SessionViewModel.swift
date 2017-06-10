@@ -300,22 +300,22 @@ extension SessionViewModel: IGListDiffable {
     func diffIdentifier() -> NSObjectProtocol {
         return identifier as NSObjectProtocol
     }
-
+    
     func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
         guard let other = object as? SessionViewModel else { return false }
-
+        
         return self.identifier == other.identifier &&
             self.title == other.title
     }
-
+    
 }
 
 extension SessionViewModel: UserActivityRepresentable { }
 
 extension SessionViewModel {
-
+    
     var isFavorite: Bool {
         return session.favorites.filter("isDeleted == false").count > 0
     }
-
+    
 }

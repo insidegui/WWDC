@@ -9,9 +9,9 @@
 import Foundation
 
 public final class TBPreferences {
-    
+
     public static let shared: TBPreferences = TBPreferences()
-    
+
     var presentedVersionFiveMigrationPrompt: Bool {
         get {
             return UserDefaults.standard.bool(forKey: #function)
@@ -20,12 +20,12 @@ public final class TBPreferences {
             UserDefaults.standard.set(newValue, forKey: #function)
         }
     }
-    
+
     // MARK: - Legacy Preferences
-    
+
     fileprivate let defaults = UserDefaults.standard
     fileprivate let nc = NotificationCenter.default
-    
+
     // keys for NSUserDefault's dictionary
     fileprivate struct Keys {
         static let mainWindowFrame = "mainWindowFrame"
@@ -38,20 +38,20 @@ public final class TBPreferences {
         static let automaticRefreshEnabled = "automaticRefreshEnabled"
         static let floatOnTopEnabled = "floatOnTopEnabled"
         static let automaticRefreshSuggestionPresentedAt = "automaticRefreshSuggestionPresentedAt"
-        
+
         struct transcript {
             static let font = "transcript.font"
             static let textColor = "transcript.textColor"
             static let bgColor = "transcript.bgColor"
         }
-        
+
         struct VideosController {
             static let selectedItem = "VideosController.selectedItem"
             static let searchTerm = "VideosController.searchTerm"
             static let dividerPosition = "VideosController.dividerPosition"
         }
     }
-    
+
     // default values if preferences were not set
     fileprivate struct DefaultValues {
         static let localVideoStoragePath = NSString.path(withComponents: [NSHomeDirectory(), "Library", "Application Support", "WWDC"])
@@ -65,20 +65,20 @@ public final class TBPreferences {
         static let automaticRefreshIntervalRegular = 3600.0
         static let floatOnTopEnabled = false
         static let automaticRefreshSuggestionPresentedAt = Date.distantPast
-        
+
         struct transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
             static let textColor = NSColor.black
             static let bgColor = NSColor.white
         }
-        
+
         struct VideosController {
             static let selectedItem = -1
             static let searchTerm = ""
             static let dividerPosition = 260.0
         }
     }
-    
+
     // the main window's frame
     var mainWindowFrame: NSRect {
         set {
@@ -92,7 +92,7 @@ public final class TBPreferences {
             }
         }
     }
-    
+
     // the selected session on the list
     var selectedSession: Int {
         set {
@@ -106,7 +106,7 @@ public final class TBPreferences {
             }
         }
     }
-    
+
     // the splitView's divider position
     var dividerPosition: CGFloat {
         set {
@@ -120,7 +120,7 @@ public final class TBPreferences {
             }
         }
     }
-    
+
     // the search term
     var searchTerm: String {
         set {
@@ -134,7 +134,7 @@ public final class TBPreferences {
             }
         }
     }
-    
+
     // where to save downloaded videos
     public var localVideoStoragePath: String {
         set {
@@ -148,7 +148,7 @@ public final class TBPreferences {
             }
         }
     }
-    
+
     // the transcript font
     var transcriptFont: NSFont {
         set {
@@ -168,7 +168,7 @@ public final class TBPreferences {
             }
         }
     }
-    
+
     // the transcript's text color
     var transcriptTextColor: NSColor {
         // NSColor can't be put into NSUserDefaults directly, so we archive It and store as a NSData blob
@@ -188,7 +188,7 @@ public final class TBPreferences {
             }
         }
     }
-    
+
     // the transcript's background color
     var transcriptBgColor: NSColor {
         // NSColor can't be put into NSUserDefaults directly, so we archive It and store as a NSData blob
@@ -208,7 +208,7 @@ public final class TBPreferences {
             }
         }
     }
-    
+
     // the last scale selected for the video window
     var lastVideoWindowScale: CGFloat {
         get {
@@ -222,7 +222,7 @@ public final class TBPreferences {
             defaults.set(NSNumber(value: Double(newValue) as Double), forKey: Keys.lastVideoWindowScale)
         }
     }
-    
+
     // play live events automatically or not
     var autoplayLiveEvents: Bool {
         get {
@@ -236,7 +236,7 @@ public final class TBPreferences {
             defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.autoplayLiveEvents)
         }
     }
-    
+
     // how often to check for live events (in seconds)
     var liveEventCheckInterval: Double {
         get {
@@ -250,7 +250,7 @@ public final class TBPreferences {
             defaults.set(NSNumber(value: newValue as Double), forKey: Keys.liveEventCheckInterval)
         }
     }
-    
+
     // user was informed about the possibility to watch the live keynote here :)
     var userKnowsLiveEventThing: Bool {
         get {
@@ -264,7 +264,7 @@ public final class TBPreferences {
             defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.userKnowsLiveEventThing)
         }
     }
-    
+
     // user was informed about the possibility to watch the 2016 Apple TV Tech Talks
     var tvTechTalksAlerted: Bool {
         get {
@@ -278,7 +278,7 @@ public final class TBPreferences {
             defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.tvTechTalksAlerted)
         }
     }
-    
+
     // periodically refresh the list of sessions
     var automaticRefreshEnabled: Bool {
         get {
@@ -292,7 +292,7 @@ public final class TBPreferences {
             defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.automaticRefreshEnabled)
         }
     }
-    
+
     var floatOnTopEnabled: Bool {
         get {
             if let object = defaults.object(forKey: Keys.floatOnTopEnabled) as? NSNumber {
@@ -305,7 +305,7 @@ public final class TBPreferences {
             defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.floatOnTopEnabled)
         }
     }
-    
+
     var automaticRefreshSuggestionPresentedAt: Date? {
         get {
             if let object = defaults.object(forKey: Keys.automaticRefreshSuggestionPresentedAt) as? Date {
@@ -318,5 +318,5 @@ public final class TBPreferences {
             defaults.set(newValue, forKey: Keys.automaticRefreshSuggestionPresentedAt)
         }
     }
-    
+
 }

@@ -58,5 +58,4 @@ extension SessionRow: IGListDiffable {
             return false
         }
     }
-
 }

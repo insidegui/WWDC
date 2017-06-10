@@ -10,12 +10,12 @@ import Foundation
 import SwiftyJSON
 
 final class SessionAssetsJSONAdapter: Adapter {
-    
+
     typealias InputType = JSON
     typealias OutputType = [SessionAsset]
-    
+
     func adapt(_ input: JSON) -> Result<[SessionAsset], AdapterError> {
         return .error(.invalidData)
     }
-    
+
 }
