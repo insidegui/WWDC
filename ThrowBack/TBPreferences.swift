@@ -318,5 +318,5 @@ public final class TBPreferences {
             defaults.set(newValue, forKey: Keys.automaticRefreshSuggestionPresentedAt)
         }
     }
-
+    
 }
