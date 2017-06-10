@@ -131,9 +131,9 @@ final class SessionsJSONAdapter: Adapter {
         session.title = title
         session.summary = summary
         session.trackIdentifier = "\(trackIdentifier)"
-
+        
         session.eventIdentifier = eventIdentifier
-
+        
         return .success(session)
     }
     

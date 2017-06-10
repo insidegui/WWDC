@@ -167,9 +167,9 @@ public class SessionInstance: Object {
                 return newKeyword
             }
         }
-
+        
         self.keywords.removeAll()
         self.keywords.append(objectsIn: otherKeywords)
     }
-
+    
 }

@@ -40,5 +40,4 @@ final class LiveVideosAdapter: Adapter {
 
         return .success(asset)
     }
-
 }

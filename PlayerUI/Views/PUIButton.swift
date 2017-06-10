@@ -172,9 +172,9 @@ public final class PUIButton: NSControl {
     public override var effectiveAppearance: NSAppearance {
         return NSAppearance(named: NSAppearanceNameVibrantDark)!
     }
-
+    
     public override var allowsVibrancy: Bool {
         return true
     }
-
+    
 }

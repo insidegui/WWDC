@@ -24,5 +24,4 @@ final class FocusesJSONAdapter: Adapter {
 
         return .success(focus)
     }
-
 }

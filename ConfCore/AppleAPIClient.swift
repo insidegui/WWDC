@@ -104,19 +104,19 @@ public final class AppleAPIClient {
     fileprivate lazy var news: Resource = self.makeNewsResource()
 
     fileprivate func makeLiveVideosResource() -> Resource {
-        return self.service.resource(self.environment.liveVideosPath)
+        return self.service.resource(environment.liveVideosPath)
     }
 
     fileprivate func makeSessionsResource() -> Resource {
-        return self.service.resource(self.environment.videosPath)
+        return self.service.resource(environment.videosPath)
     }
 
     fileprivate func makeScheduleResource() -> Resource {
-        return self.service.resource(self.environment.sessionsPath)
+        return self.service.resource(environment.sessionsPath)
     }
 
     fileprivate func makeNewsResource() -> Resource {
-        return self.service.resource(self.environment.newsPath)
+        return self.service.resource(environment.newsPath)
     }
 
     // MARK: - Standard API requests
@@ -163,7 +163,6 @@ public final class AppleAPIClient {
         currentNewsItemsRequest?.cancel()
         currentNewsItemsRequest = newsItemsResource.loadIfNeeded()
     }
-
 }
 
 
@@ -176,9 +175,9 @@ extension AppleAPIClient {
         let result = adapter.adapt(input)
 
         switch result {
-        case .error(let error):
+        case let .error(error):
             throw error
-        case .success(let output):
+        case let .success(output):
             return output
         }
     }
@@ -188,9 +187,9 @@ extension AppleAPIClient {
         let result = adapter.adapt(input)
 
         switch result {
-        case .error(let error):
+        case let .error(error):
             throw error
-        case .success(let output):
+        case let .success(output):
             return output
         }
     }

@@ -61,5 +61,4 @@ final class PUIPictureContainerViewController: NSViewController {
     deinit {
         view.removeObserver(self, forKeyPath: #keyPath(NSView.superview))
     }
-
 }

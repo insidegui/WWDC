@@ -14,12 +14,12 @@ public class Transcript: Object {
 
     /// Unique identifier
     public dynamic var identifier = ""
-    
+
     /// The annotations the transcript contains
     public let annotations = List<TranscriptAnnotation>()
-    
+
     public override class func primaryKey() -> String? {
         return "identifier"
     }
-    
+
 }

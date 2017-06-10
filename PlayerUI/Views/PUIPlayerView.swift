@@ -268,17 +268,17 @@ public final class PUIPlayerView: NSView {
             guard let path = keyPath else { return }
             switch path {
             case #keyPath(AVPlayer.status):
-                playerStatusChanged()
+                self.playerStatusChanged()
             case #keyPath(AVPlayer.currentItem.loadedTimeRanges):
-                updateBufferedSegments()
+                self.updateBufferedSegments()
             case #keyPath(AVPlayer.volume):
-                playerVolumeChanged()
+                self.playerVolumeChanged()
             case #keyPath(AVPlayer.rate):
-                updatePlayingState()
+                self.updatePlayingState()
             case #keyPath(AVPlayer.currentItem.duration):
-                metadataBecameAvailable()
+                self.metadataBecameAvailable()
             case #keyPath(AVPlayer.currentItem.currentMediaSelection):
-                updateMediaSelection()
+                self.updateMediaSelection()
             default:
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }

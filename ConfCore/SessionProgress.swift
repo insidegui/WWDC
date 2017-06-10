@@ -33,7 +33,6 @@ public class SessionProgress: Object {
     public override class func primaryKey() -> String? {
         return "identifier"
     }
-
 }
 
 extension Session {
