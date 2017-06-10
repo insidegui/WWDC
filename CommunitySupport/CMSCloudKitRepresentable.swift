@@ -16,14 +16,14 @@ public enum CMSCloudKitError: Error {
 }
 
 public protocol CMSCloudKitRepresentable {
-    
+
     static var recordType: String { get }
-    
+
     var originatingRecord: CKRecord? { get set }
     var identifier: String { get }
-    
+
     init(record: CKRecord) throws
-    
+
     func makeRecord() throws -> CKRecord
-    
+
 }
