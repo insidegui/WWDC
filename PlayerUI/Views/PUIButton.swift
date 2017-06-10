@@ -107,9 +107,7 @@ public final class PUIButton: NSControl {
     }
 
     private func drawImage(_ image: NSImage?) {
-        guard let image = image else { return }
-
-        image.draw(in: bounds)
+        image?.draw(in: bounds)
     }
 
     public override var intrinsicContentSize: NSSize {
