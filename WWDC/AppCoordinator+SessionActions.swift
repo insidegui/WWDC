@@ -78,19 +78,62 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     
     private func saveCalendarEvent(viewModel:SessionViewModel!, eventStore:EKEventStore!)  {
         let event = EKEvent.init(eventStore: eventStore)
+        
+        if let storedEvent = eventStore.event(withIdentifier: viewModel.sessionInstance.calendarEventIdentifier) {
+            
+            let alert = WWDCAlert.create()
+            
+            alert.messageText = "You've already scheduled this session"
+            alert.informativeText = "Would you like to remove it from your Calender?"
+            
+            alert.addButton(withTitle: "Remove from Calender")
+            alert.addButton(withTitle: "Cancel")
+            alert.window.center()
+            
+            enum Choice: Int {
+                case removeCalender = 1000
+                case cancel = 1001
+            }
+            
+            guard let choice = Choice(rawValue: alert.runModal()) else { return }
+            
+            switch choice {
+            case .removeCalender:
+                do {
+                    try eventStore.remove(storedEvent, span: .thisEvent, commit: true)
+                    
+                } catch let error as NSError {
+                    
+                    print("Failed to remove event from calender due to error: \(error)")
+                }
+                break
+            case .cancel:
+                break
+            }
+
+            return
+        }
+        
         event.startDate = viewModel.sessionInstance.startTime
         event.endDate = viewModel.sessionInstance.endTime
         event.title = viewModel.session.title
         event.location = viewModel.sessionInstance.roomName
         event.url = viewModel.webUrl
         event.calendar = eventStore.defaultCalendarForNewEvents
+        self.storage.realm.beginWrite()
         viewModel.sessionInstance.calendarEventIdentifier = event.eventIdentifier
+        do {
+            try self.storage.realm.commitWrite()
+            
+        } catch let error as NSError {
+            print("Error writing session instance to storage: \(error)")
+        }
        
         do {
             try eventStore.save(event, span: .thisEvent, commit: true)
             
-        } catch let e as NSError {
-            print("Failed to add event to calender due to error: \(e)")
+        } catch let error as NSError {
+            print("Failed to add event to calender due to error: \(error)")
         }
     }
     
