@@ -12,6 +12,7 @@ import RxCocoa
 import RealmSwift
 import ConfCore
 
+class SessionsTableViewController: NSViewController {
     
     fileprivate struct Metrics {
         static let headerRowHeight: CGFloat = 20
