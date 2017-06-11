@@ -12,11 +12,20 @@ import RxCocoa
 import RealmSwift
 import ConfCore
 
-class SessionsTableViewController: NSViewController {
     
     fileprivate struct Metrics {
         static let headerRowHeight: CGFloat = 20
         static let sessionRowHeight: CGFloat = 64
+    }
+    
+    private enum SessionsTableViewControllerMenuItemTags: Int {
+        
+        case Watched = 1000
+        case Unwatched = 1001
+        case Favorite = 1002
+        case RemoveFavorite = 1003
+        case Download = 1004
+        case CancelDownload = 1005
     }
     
     private let disposeBag = DisposeBag()
@@ -263,17 +272,36 @@ class SessionsTableViewController: NSViewController {
         
         let contextMenu = NSMenu.init(title: "Context Menu")
         
-        contextMenu.addItem(NSMenuItem.init(title: "Mark as Watched", action: nil, keyEquivalent: ""))
-        contextMenu.addItem(NSMenuItem.init(title: "Mark as Unwatched", action: nil, keyEquivalent: ""))
+        let watchedMenuItem = NSMenuItem.init(title: "Mark as Watched", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        watchedMenuItem.tag = SessionsTableViewControllerMenuItemTags.Watched.rawValue
+        contextMenu.addItem(watchedMenuItem)
+        
+        let unwatchedMenuItem = NSMenuItem.init(title: "Mark as Unwatched", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        unwatchedMenuItem.tag = SessionsTableViewControllerMenuItemTags.Unwatched.rawValue
+        contextMenu.addItem(unwatchedMenuItem)
+        
         contextMenu.addItem(NSMenuItem.separator())
         
-        contextMenu.addItem(NSMenuItem.init(title: "Add to Favorites", action: nil, keyEquivalent: ""))
-        contextMenu.addItem(NSMenuItem.init(title: "Remove From Favorites", action: nil, keyEquivalent: ""))
+        let favoriteMenuItem = NSMenuItem.init(title: "Add to Favorites", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        favoriteMenuItem.tag = SessionsTableViewControllerMenuItemTags.Favorite.rawValue
+        contextMenu.addItem(favoriteMenuItem)
+        
+        let removeFavoriteMenuItem = NSMenuItem.init(title: "Remove From Favorites", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        removeFavoriteMenuItem.tag = SessionsTableViewControllerMenuItemTags.RemoveFavorite.rawValue
+        contextMenu.addItem(removeFavoriteMenuItem)
+        
         contextMenu.addItem(NSMenuItem.separator())
         
-        contextMenu.addItem(NSMenuItem.init(title: "Download", action: nil, keyEquivalent: ""))
-        contextMenu.addItem(NSMenuItem.init(title: "Cancel Download", action: nil, keyEquivalent: ""))
+        let downloadMenuItem = NSMenuItem.init(title: "Download", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        downloadMenuItem.tag = SessionsTableViewControllerMenuItemTags.Download.rawValue
+        contextMenu.addItem(downloadMenuItem)
+        
+        let cancelDownloadMenuItem = NSMenuItem.init(title: "Cancel Download", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        contextMenu.addItem(cancelDownloadMenuItem)
+        cancelDownloadMenuItem.tag = SessionsTableViewControllerMenuItemTags.CancelDownload.rawValue
+        
         contextMenu.addItem(NSMenuItem.separator())
+        
         
         tableView.menu = contextMenu
         
@@ -285,6 +313,15 @@ class SessionsTableViewController: NSViewController {
         }.bind(to: selectedSession).addDisposableTo(self.disposeBag)
     }
     
+    func tableViewMenuItemClicked(_ menuItem: NSMenuItem) {
+        
+
+    }
+    
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        
+        return true
+    }
 }
 
 extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
