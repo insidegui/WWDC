@@ -304,8 +304,8 @@ extension SessionViewModel: IGListDiffable {
     func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
         guard let other = object as? SessionViewModel else { return false }
         
-        return self.identifier == other.identifier &&
-            self.title == other.title
+        return identifier == other.identifier &&
+               title == other.title
     }
     
 }

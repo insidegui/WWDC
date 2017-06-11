@@ -88,5 +88,5 @@ final class SessionInstancesJSONAdapter: Adapter {
 
         return .success(instance)
     }
-    
+
 }

@@ -47,9 +47,11 @@ final class PUIPictureContainerViewController: NSViewController {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(NSView.superview) {
+        guard let path = keyPath else { return }
+        switch path {
+        case #keyPath(NSView.superview):
             viewDidMoveToSuperview()
-        } else {
+        default:
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
