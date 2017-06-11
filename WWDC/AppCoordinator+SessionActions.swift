@@ -84,6 +84,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         event.location = viewModel.sessionInstance.roomName
         event.url = viewModel.webUrl
         event.calendar = eventStore.defaultCalendarForNewEvents
+        viewModel.sessionInstance.calendarEventIdentifier = event.eventIdentifier
        
         do {
             try eventStore.save(event, span: .thisEvent, commit: true)
