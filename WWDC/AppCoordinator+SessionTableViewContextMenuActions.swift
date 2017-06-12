@@ -16,68 +16,70 @@ import EventKit
 extension AppCoordinator: SessionsTableViewControllerDelegate  {
     
     func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel]) {
-        
-        for viewModel in viewModels {
-        
-            if viewModel.sessionInstance.isCurrentlyLive {
-               continue
-            } else {
-                viewModel.session.setCurrentPosition(1, 1)
+        backgroundUpdate(objects: viewModels.map({ $0.session })) { session in
+            if let instance = session.instances.first {
+                guard !instance.isCurrentlyLive else { return }
+                
+                guard instance.type == .session || instance.type == .video else { return }
             }
+            
+            session.setCurrentPosition(1, 1)
         }
-    
     }
     
     func sessionTableViewContextMenuActionUnWatch(viewModels: [SessionViewModel]) {
-        
-        for viewModel in viewModels {
-            
-            viewModel.session.resetProgress()
+        backgroundUpdate(objects: viewModels.map({ $0.session })) { session in
+            session.resetProgress()
         }
     }
     
     func sessionTableViewContextMenuActionFavorite(viewModels: [SessionViewModel]) {
-    
-        for viewModel in viewModels {
-            
-            if !viewModel.isFavorite {
-                storage.createFavorite(for: viewModel.session)
-            }
+        backgroundUpdate(objects: viewModels.map({ $0.session })) { session in
+            session.favorites.append(Favorite())
         }
     }
     
     func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel]) {
-        
-        for viewModel in viewModels {
-            
-            if viewModel.isFavorite {
-                storage.removeFavorite(for: viewModel.session)
-            }
+        backgroundUpdate(objects: viewModels.map({ $0.session })) { session in
+            session.favorites.removeAll()
         }
     }
     
     func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel]) {
-        
-        for viewModel in viewModels {
-            
-            guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { continue }
+        viewModels.forEach { viewModel in
+            guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
             
             DownloadManager.shared.download(videoAsset)
         }
     }
     
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel]) {
-        
-        for viewModel in viewModels {
-        
-            if let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
-                if !DownloadManager.shared.isDownloading(videoAsset.remoteURL) {
-                    continue
-                }
+        viewModels.forEach { viewModel in
+            guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
+            
+            guard DownloadManager.shared.isDownloading(videoAsset.remoteURL) else { return }
                 
-                DownloadManager.shared.deleteDownload(for: videoAsset)
+            DownloadManager.shared.deleteDownload(for: videoAsset)
+        }
+    }
+    
+    private func backgroundUpdate<T: ThreadConfined>(objects inputObjects: [T], updateBlock: @escaping (T) -> Void) {
+        let safeReferences = inputObjects.map({ ThreadSafeReference(to: $0) })
+        let config = storage.realmConfig
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let realm = try Realm(configuration: config)
+                let objects = safeReferences.flatMap({ realm.resolve($0) })
+                
+                try realm.write {
+                    objects.forEach(updateBlock)
+                }
+            } catch {
+                NSApp.presentError(error)
             }
         }
     }
+    
 }
 
