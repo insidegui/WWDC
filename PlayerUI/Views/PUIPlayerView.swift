@@ -356,7 +356,6 @@ public final class PUIPlayerView: NSView {
             }
         }
     }
-    
 
     fileprivate func updatePlaybackSpeedState() {
         speedButton.image = playbackSpeed.icon
