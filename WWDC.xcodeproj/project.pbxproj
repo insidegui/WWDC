@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		012BEFA41EE8658F007E72CA /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 012BEFA31EE8658F007E72CA /* EventKit.framework */; };
+		01B3EB4A1EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */; };
@@ -358,6 +359,7 @@
 
 /* Begin PBXFileReference section */
 		012BEFA31EE8658F007E72CA /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+SessionTableViewContextMenuActions.swift"; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -764,6 +766,7 @@
 		DD36A4BE1E478CEC00B2EA88 /* Bootstrap */ = {
 			isa = PBXGroup;
 			children = (
+				01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */,
 				DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */,
 				DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */,
 				DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */,
@@ -1881,6 +1884,7 @@
 				DD382B7B1EAC345F009760C4 /* MaskImageView.m in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
 				DDC6780F1EDB253D00A4E19C /* AboutWindowController.swift in Sources */,
+				01B3EB4A1EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift in Sources */,
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,

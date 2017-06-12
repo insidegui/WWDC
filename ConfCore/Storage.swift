@@ -104,6 +104,10 @@ public final class Storage {
     }
     
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping () -> Void) {
+        self.realm.autorefresh = false
+        
+        defer { self.realm.autorefresh = true }
+        
         if case let .error(error) = contentResult {
             print("Error downloading sessions: \(error)")
         }
@@ -154,29 +158,27 @@ public final class Storage {
         self.realm.add(sessionsResponse.tracks, update: true)
         self.realm.add(sessionsResponse.events, update: true)
         
-        let targetRealm = self.realm
-        
         // add instances to rooms
-        targetRealm.objects(Room.self).forEach { room in
-            let instances = targetRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
+        self.realm.objects(Room.self).forEach { room in
+            let instances = self.realm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
             
             instances.forEach({ $0.roomName = room.name })
             room.instances.append(objectsIn: instances)
         }
         
         // add instances and sessions to events
-        targetRealm.objects(Event.self).forEach { event in
-            let instances = targetRealm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
-            let sessions = targetRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
+        self.realm.objects(Event.self).forEach { event in
+            let instances = self.realm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
+            let sessions = self.realm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
             
             event.sessionInstances.append(objectsIn: instances)
             event.sessions.append(objectsIn: sessions)
         }
         
         // add instances and sessions to tracks
-        targetRealm.objects(Track.self).forEach { track in
-            let instances = targetRealm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
-            let sessions = targetRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
+        self.realm.objects(Track.self).forEach { track in
+            let instances = self.realm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
+            let sessions = self.realm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
             
             track.instances.append(objectsIn: instances)
             track.sessions.append(objectsIn: sessions)
@@ -189,17 +191,17 @@ public final class Storage {
         }
         
         // add live video assets to sessions
-        targetRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
-            if let session = targetRealm.objects(Session.self).filter("year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
+        self.realm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
+            if let session = self.realm.objects(Session.self).filter("year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
                 session.assets.append(liveAsset)
             }
         }
         
         // Create schedule view
         
-        targetRealm.objects(ScheduleSection.self).forEach({ targetRealm.delete($0) })
+        self.realm.objects(ScheduleSection.self).forEach({ self.realm.delete($0) })
         
-        let instances = targetRealm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
+        let instances = self.realm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
         
         var previousStartTime: Date? = nil
         for instance in instances {
@@ -215,7 +217,7 @@ public final class Storage {
                 section.instances.append(objectsIn: instancesForSection)
                 section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
                 
-                targetRealm.add(section, update: true)
+                self.realm.add(section, update: true)
                 
                 previousStartTime = instance.startTime
             }
@@ -223,28 +225,12 @@ public final class Storage {
         
         do {
             try self.realm.commitWrite()
-            completion()
-//            self.updateAssociationsAndCreateViews(in: self.realm, completion: completion)
+            
+            DispatchQueue.main.async { completion() }
         } catch {
             NSLog("Realm error: \(error)")
         }
     }
-    
-//    private func updateAssociationsAndCreateViews(in targetRealm: Realm, completion: @escaping () -> Void) {
-//        targetRealm.beginWrite()
-//        
-//        
-//        
-//        do {
-//            try targetRealm.commitWrite()
-//            
-//            DispatchQueue.main.async {
-//                completion()
-//            }
-//        } catch {
-//            NSLog("Realm error while consolidating schedule: \(error)")
-//        }
-//    }
     
     internal func store(liveVideosResult: Result<[SessionAsset], APIError>) {
         guard case .success(let assets) = liveVideosResult else { return }
@@ -252,10 +238,16 @@ public final class Storage {
         self.realm.beginWrite()
         
         assets.forEach { asset in
-            self.realm.add(asset, update: true)
+            asset.identifier = asset.generateIdentifier()
             
-            if let session = self.realm.objects(Session.self).filter("year == %d AND number == %@", asset.year, asset.sessionId).first {
-                session.assets.append(asset)
+            if let existingAsset = self.realm.objects(SessionAsset.self).filter("identifier == %@", asset.identifier).first {
+                existingAsset.remoteURL = asset.remoteURL
+            } else {
+                self.realm.add(asset, update: true)
+                
+                if let session = self.realm.objects(Session.self).filter("year == %d AND number == %@", asset.year, asset.sessionId).first {
+                    session.assets.append(asset)
+                }
             }
         }
         
