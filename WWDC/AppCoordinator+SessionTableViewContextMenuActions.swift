@@ -46,6 +46,26 @@ extension AppCoordinator: SessionsTableViewControllerDelegate  {
     }
     
     func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel]) {
+        if viewModels.count > 5 {
+            // asking to download many videos, warn
+            let alert = WWDCAlert.create()
+            
+            alert.messageText = "Download several videos"
+            alert.informativeText = "You're about to download \(viewModels.count) videos. This can consume several gigabytes of internet bandwidth and disk space. Are you sure you want to download all \(viewModels.count) videos at once?"
+            
+            alert.addButton(withTitle: "No")
+            alert.addButton(withTitle: "Yes")
+            
+            enum Choice: Int {
+                case yes = 1001
+                case no = 1000
+            }
+            
+            guard let choice = Choice(rawValue: alert.runModal()) else { return }
+            
+            guard case .yes = choice else { return }
+        }
+        
         viewModels.forEach { viewModel in
             guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
             
