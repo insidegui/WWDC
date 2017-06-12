@@ -17,7 +17,7 @@ final class DateAdapter: Adapter {
     func adapt(_ input: String) -> Result<Date, AdapterError> {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        formatter.locale = Locale.current
+        formatter.locale = Locale(identifier: "en-US")
         formatter.timeZone = TimeZone.current
         
         if let date = formatter.date(from: input) {
@@ -35,7 +35,7 @@ final class DateTimeAdapter: Adapter {
     func adapt(_ input: String) -> Result<Date, AdapterError> {
         let formatter = DateFormatter()
         formatter.dateFormat = ConfCoreDateFormat
-        formatter.locale = Locale.current
+        formatter.locale = Locale(identifier: "en-US")
         formatter.timeZone = TimeZone.current
         
         if let date = formatter.date(from: input) {

@@ -7,6 +7,32 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.0.8</title>
+			<description><![CDATA[
+				<ul>
+					<li>Fixed a common crash in the previous version</li>
+				</ul>
+						]]></description>
+            <pubDate>Tue, 09 Jun 2017 00:25:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.8/WWDC_v5.0.8.zip" sparkle:version="580" sparkle:shortVersionString="5.0.8" length="15649684" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
+            <title>Version 5.0.7</title>
+			<description><![CDATA[
+				<ul>
+					<li>Preventing screensaver and computer sleep while playing videos</li>
+					<li>Fixed an issue that would prevent data from being loaded on some locales</li>
+					<li>Improved loading time</li>
+				</ul>
+						]]></description>
+            <pubDate>Tue, 08 Jun 2017 19:45:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.7/WWDC_v5.0.7.zip" sparkle:version="570" sparkle:shortVersionString="5.0.7" length="15650055" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.0.6</title>
 			<description><![CDATA[
 				<ul>

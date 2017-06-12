@@ -39,38 +39,55 @@ public class SessionProgress: Object {
 extension Session {
     
     public func setCurrentPosition(_ position: Double, _ duration: Double) {
-        guard Thread.isMainThread else { return }
+        guard let realm = self.realm else { return }
+        
         guard !duration.isNaN, !duration.isZero, !duration.isInfinite else { return }
         guard !position.isNaN, !position.isZero, !position.isInfinite else { return }
         
         do {
-            try self.realm?.write {
-                var progress: SessionProgress
-                
-                if let p = progresses.first {
-                    progress = p
-                } else {
-                    progress = SessionProgress()
-                    progresses.append(progress)
-                }
-                
-                progress.currentPosition = position
-                progress.relativePosition = position / duration
-                progress.updatedAt = Date()
+            let mustCommit: Bool
+            
+            if !realm.isInWriteTransaction {
+                realm.beginWrite()
+                mustCommit = true
+            } else {
+                mustCommit = false
             }
+            
+            var progress: SessionProgress
+            
+            if let p = progresses.first {
+                progress = p
+            } else {
+                progress = SessionProgress()
+                progresses.append(progress)
+            }
+            
+            progress.currentPosition = position
+            progress.relativePosition = position / duration
+            progress.updatedAt = Date()
+            
+            if mustCommit { try realm.commitWrite() }
         } catch {
             NSLog("Error updating session progress: \(error)")
         }
     }
     
     public func resetProgress() {
-        
-        guard Thread.isMainThread else { return }
-       
+        guard let realm = self.realm else { return }
         do {
-            try self.realm?.write {
-               progresses.removeAll()
+            let mustCommit: Bool
+            
+            if !realm.isInWriteTransaction {
+                realm.beginWrite()
+                mustCommit = true
+            } else {
+                mustCommit = false
             }
+            
+            progresses.removeAll()
+            
+            if mustCommit { try realm.commitWrite() }
         } catch {
             NSLog("Error updating session progress: \(error)")
         }
