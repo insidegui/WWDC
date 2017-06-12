@@ -63,6 +63,19 @@ extension Session {
         }
     }
     
+    public func resetProgress() {
+        
+        guard Thread.isMainThread else { return }
+       
+        do {
+            try self.realm?.write {
+               progresses.removeAll()
+            }
+        } catch {
+            NSLog("Error updating session progress: \(error)")
+        }
+    }
+    
     public func currentPosition() -> Double {
         return progresses.first?.currentPosition ?? 0
     }

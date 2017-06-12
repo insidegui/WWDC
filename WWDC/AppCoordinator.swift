@@ -168,6 +168,9 @@ final class AppCoordinator {
         
         scheduleDetail.shelfController.delegate = self
         scheduleDetail.summaryController.actionsViewController.delegate = self
+        
+        videosController.listViewController.delegate = self
+        scheduleController.listViewController.delegate = self
     }
     
     private func updateListsAfterSync(migrate: Bool = false) {

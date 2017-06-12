@@ -12,6 +12,17 @@ import RxCocoa
 import RealmSwift
 import ConfCore
 
+
+protocol SessionsTableViewControllerDelegate: class {
+    
+    func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionUnWatch(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionFavorite(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel])
+}
+
 class SessionsTableViewController: NSViewController {
     
     fileprivate struct Metrics {
@@ -19,7 +30,19 @@ class SessionsTableViewController: NSViewController {
         static let sessionRowHeight: CGFloat = 64
     }
     
+    private enum SessionsTableViewControllerMenuItemTags: Int {
+        
+        case Watched = 1000
+        case Unwatched = 1001
+        case Favorite = 1002
+        case RemoveFavorite = 1003
+        case Download = 1004
+        case CancelDownload = 1005
+    }
+    
     private let disposeBag = DisposeBag()
+    
+    weak var delegate: SessionsTableViewControllerDelegate?
     
     var selectedSession = Variable<SessionViewModel?>(nil)
     
@@ -261,6 +284,41 @@ class SessionsTableViewController: NSViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
+        let contextMenu = NSMenu.init(title: "Context Menu")
+        
+        let watchedMenuItem = NSMenuItem.init(title: "Mark as Watched", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        watchedMenuItem.tag = SessionsTableViewControllerMenuItemTags.Watched.rawValue
+        contextMenu.addItem(watchedMenuItem)
+        
+        let unwatchedMenuItem = NSMenuItem.init(title: "Mark as Unwatched", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        unwatchedMenuItem.tag = SessionsTableViewControllerMenuItemTags.Unwatched.rawValue
+        contextMenu.addItem(unwatchedMenuItem)
+        
+        contextMenu.addItem(NSMenuItem.separator())
+        
+        let favoriteMenuItem = NSMenuItem.init(title: "Add to Favorites", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        favoriteMenuItem.tag = SessionsTableViewControllerMenuItemTags.Favorite.rawValue
+        contextMenu.addItem(favoriteMenuItem)
+        
+        let removeFavoriteMenuItem = NSMenuItem.init(title: "Remove From Favorites", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        removeFavoriteMenuItem.tag = SessionsTableViewControllerMenuItemTags.RemoveFavorite.rawValue
+        contextMenu.addItem(removeFavoriteMenuItem)
+        
+        contextMenu.addItem(NSMenuItem.separator())
+        
+        let downloadMenuItem = NSMenuItem.init(title: "Download", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        downloadMenuItem.tag = SessionsTableViewControllerMenuItemTags.Download.rawValue
+        contextMenu.addItem(downloadMenuItem)
+        
+        let cancelDownloadMenuItem = NSMenuItem.init(title: "Cancel Download", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        contextMenu.addItem(cancelDownloadMenuItem)
+        cancelDownloadMenuItem.tag = SessionsTableViewControllerMenuItemTags.CancelDownload.rawValue
+        
+        contextMenu.addItem(NSMenuItem.separator())
+        
+        
+        tableView.menu = contextMenu
+        
         tableView.rx.selectedRow.map { index -> SessionViewModel? in
             guard let index = index else { return nil }
             guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
@@ -269,6 +327,122 @@ class SessionsTableViewController: NSViewController {
         }.bind(to: selectedSession).addDisposableTo(self.disposeBag)
     }
     
+    func tableViewMenuItemClicked(_ menuItem: NSMenuItem) {
+        
+        let selectedRowIndexes = self.tableView.selectedRowIndexes
+        var viewModels = [SessionViewModel]()
+        
+        if selectedRowIndexes.isEmpty == false {
+            
+            for row in selectedRowIndexes {
+                
+                let sessionRow = displayedRows[row]
+                
+                switch sessionRow.kind {
+                case .session(let viewModel):
+                    viewModels.append(viewModel)
+                    break
+                    
+                case .sectionHeader( _): break
+              
+              }
+            }
+        } else {
+            
+            let sessionRow = displayedRows[self.tableView.clickedRow]
+            switch sessionRow.kind {
+            case .session(let viewModel):
+                viewModels.append(viewModel)
+                break
+                
+            case .sectionHeader( _): break
+            
+            }
+        }
+        
+        guard !viewModels.isEmpty else { return }
+        
+        switch menuItem.tag {
+        case SessionsTableViewControllerMenuItemTags.Watched.rawValue:
+            delegate?.sessionTableViewContextMenuActionWatch(viewModels: viewModels)
+            break
+            
+        case SessionsTableViewControllerMenuItemTags.Unwatched.rawValue:
+            delegate?.sessionTableViewContextMenuActionUnWatch(viewModels: viewModels)
+            break
+        case SessionsTableViewControllerMenuItemTags.Favorite.rawValue:
+            delegate?.sessionTableViewContextMenuActionFavorite(viewModels: viewModels)
+            break
+            
+        case SessionsTableViewControllerMenuItemTags.RemoveFavorite.rawValue:
+            delegate?.sessionTableViewContextMenuActionRemoveFavorite(viewModels: viewModels)
+            break
+        case SessionsTableViewControllerMenuItemTags.Download.rawValue:
+            delegate?.sessionTableViewContextMenuActionDownload(viewModels: viewModels)
+            break
+        case SessionsTableViewControllerMenuItemTags.CancelDownload.rawValue:
+            delegate?.sessionTableViewContextMenuActionCancelDownload(viewModels: viewModels)
+            break
+        default:
+            
+            break
+        }
+    }
+    
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        
+        let selectedRowIndexes = self.tableView.selectedRowIndexes
+        
+        if !selectedRowIndexes.isEmpty {
+            
+            for row in selectedRowIndexes {
+                
+                let sessionRow = displayedRows[row]
+                guard case .session(let viewModel) = sessionRow.kind else { break }
+                
+                if shouldEnableMenuItem(menuItem: menuItem, viewModel: viewModel) { return true }
+            }
+            
+        } else {
+            
+            let sessionRow = displayedRows[self.tableView.clickedRow]
+            guard case .session(let viewModel) = sessionRow.kind else { return false }
+            
+            if shouldEnableMenuItem(menuItem: menuItem, viewModel: viewModel) { return true }
+        }
+        
+        return false
+    }
+    
+    private func shouldEnableMenuItem(menuItem: NSMenuItem, viewModel: SessionViewModel) -> Bool {
+        switch menuItem.tag {
+            
+        case SessionsTableViewControllerMenuItemTags.Watched.rawValue:
+            if viewModel.session.progresses.first == nil || viewModel.session.progresses.first?.relativePosition != 1 {
+                return true }
+            
+        case SessionsTableViewControllerMenuItemTags.Unwatched.rawValue:
+            if viewModel.session.progresses.first?.relativePosition == 1 { return true }
+            
+        case SessionsTableViewControllerMenuItemTags.Favorite.rawValue:
+            if !viewModel.isFavorite { return true }
+            
+        case SessionsTableViewControllerMenuItemTags.RemoveFavorite.rawValue:
+            if viewModel.isFavorite { return true }
+            
+        case SessionsTableViewControllerMenuItemTags.Download.rawValue:
+            if viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first != nil { return true }
+            
+        case SessionsTableViewControllerMenuItemTags.CancelDownload.rawValue:
+            if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
+               if DownloadManager.shared.isDownloading(sessionAsset.remoteURL) { return true }
+            }
+        default:
+            return false
+        }
+        
+        return false
+    }
 }
 
 extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
