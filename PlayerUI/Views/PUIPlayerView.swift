@@ -813,14 +813,7 @@ public final class PUIPlayerView: NSView {
         }
     }
     
-    fileprivate var activity: NSObjectProtocol?
-    
     @IBAction public func pause(_ sender: Any?) {
-        if let activity = self.activity {
-            ProcessInfo.processInfo.endActivity(activity)
-            self.activity = nil
-        }
-        
         if isPlayingExternally {
             currentExternalPlaybackProvider?.pause()
         } else {
@@ -829,8 +822,6 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction public func play(_ sender: Any?) {
-        activity = ProcessInfo.processInfo.beginActivity(options: [.idleDisplaySleepDisabled, .idleSystemSleepDisabled, .userInitiated], reason: "Playing WWDC session video")
-        
         if isPlayingExternally {
             currentExternalPlaybackProvider?.play()
         } else {
