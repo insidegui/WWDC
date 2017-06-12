@@ -12,6 +12,17 @@ import RxCocoa
 import RealmSwift
 import ConfCore
 
+
+protocol SessionsTableViewControllerDelegate: class {
+    
+    func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionUnWatch(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionFavorite(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel])
+}
+
 class SessionsTableViewController: NSViewController {
     
     fileprivate struct Metrics {
@@ -30,6 +41,8 @@ class SessionsTableViewController: NSViewController {
     }
     
     private let disposeBag = DisposeBag()
+    
+    weak var delegate: SessionsTableViewControllerDelegate?
     
     var selectedSession = Variable<SessionViewModel?>(nil)
     
@@ -316,12 +329,119 @@ class SessionsTableViewController: NSViewController {
     
     func tableViewMenuItemClicked(_ menuItem: NSMenuItem) {
         
-
+        let selectedRowIndexes = self.tableView.selectedRowIndexes
+        var viewModels = [SessionViewModel]()
+        
+        if selectedRowIndexes.isEmpty == false {
+            
+            for row in selectedRowIndexes {
+                
+                let sessionRow = displayedRows[row]
+                
+                switch sessionRow.kind {
+                case .session(let viewModel):
+                    viewModels.append(viewModel)
+                    break
+                    
+                case .sectionHeader( _): break
+              
+              }
+            }
+        } else {
+            
+            let sessionRow = displayedRows[self.tableView.clickedRow]
+            switch sessionRow.kind {
+            case .session(let viewModel):
+                viewModels.append(viewModel)
+                break
+                
+            case .sectionHeader( _): break
+            
+            }
+        }
+        
+        guard !viewModels.isEmpty else { return }
+        
+        switch menuItem.tag {
+        case SessionsTableViewControllerMenuItemTags.Watched.rawValue:
+            delegate?.sessionTableViewContextMenuActionWatch(viewModels: viewModels)
+            break
+            
+        case SessionsTableViewControllerMenuItemTags.Unwatched.rawValue:
+            delegate?.sessionTableViewContextMenuActionUnWatch(viewModels: viewModels)
+            break
+        case SessionsTableViewControllerMenuItemTags.Favorite.rawValue:
+            delegate?.sessionTableViewContextMenuActionFavorite(viewModels: viewModels)
+            break
+            
+        case SessionsTableViewControllerMenuItemTags.RemoveFavorite.rawValue:
+            delegate?.sessionTableViewContextMenuActionRemoveFavorite(viewModels: viewModels)
+            break
+        case SessionsTableViewControllerMenuItemTags.Download.rawValue:
+            delegate?.sessionTableViewContextMenuActionDownload(viewModels: viewModels)
+            break
+        case SessionsTableViewControllerMenuItemTags.CancelDownload.rawValue:
+            delegate?.sessionTableViewContextMenuActionCancelDownload(viewModels: viewModels)
+            break
+        default:
+            
+            break
+        }
     }
     
     override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         
-        return true
+        let selectedRowIndexes = self.tableView.selectedRowIndexes
+        
+        if !selectedRowIndexes.isEmpty {
+            
+            for row in selectedRowIndexes {
+                
+                let sessionRow = displayedRows[row]
+                guard case .session(let viewModel) = sessionRow.kind else { break }
+                
+                if shouldEnableMenuItem(menuItem: menuItem, viewModel: viewModel) { return true }
+            }
+            
+        } else {
+            
+            let sessionRow = displayedRows[self.tableView.clickedRow]
+            guard case .session(let viewModel) = sessionRow.kind else { return false }
+            
+            if shouldEnableMenuItem(menuItem: menuItem, viewModel: viewModel) { return true }
+        }
+        
+        return false
+    }
+    
+    private func shouldEnableMenuItem(menuItem: NSMenuItem, viewModel: SessionViewModel) -> Bool {
+        switch menuItem.tag {
+            
+        case SessionsTableViewControllerMenuItemTags.Watched.rawValue:
+            if viewModel.session.progresses.first == nil || viewModel.session.progresses.first?.relativePosition != 1 {
+                return true }
+            
+        case SessionsTableViewControllerMenuItemTags.Unwatched.rawValue:
+            if viewModel.session.progresses.first?.relativePosition == 1 { return true }
+            
+        case SessionsTableViewControllerMenuItemTags.Favorite.rawValue:
+            if !viewModel.isFavorite { return true }
+            
+        case SessionsTableViewControllerMenuItemTags.RemoveFavorite.rawValue:
+            if viewModel.isFavorite { return true }
+            
+        case SessionsTableViewControllerMenuItemTags.Download.rawValue:
+            if viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first != nil { return true }
+            
+        case SessionsTableViewControllerMenuItemTags.CancelDownload.rawValue:
+            if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
+               if DownloadManager.shared.isDownloading(sessionAsset.remoteURL) { return true }
+            }
+        default:
+            return false
+        }
+        
+        return false
     }
 }
 
