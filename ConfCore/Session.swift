@@ -72,19 +72,6 @@ public class Session: Object {
         return "identifier"
     }
     
-    public override static func indexedProperties() -> [String] {
-        return [
-            "identifier",
-            "title",
-            "summary",
-            "trackName",
-            "isDownloaded",
-            "eventIdentifier",
-            "number",
-            "year"
-        ]
-    }
-    
     public func transcript() -> Transcript? {
         guard let realm = self.realm else { return nil }
         guard !transcriptIdentifier.isEmpty else { return nil }

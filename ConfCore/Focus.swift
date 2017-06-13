@@ -22,10 +22,4 @@ public class Focus: Object {
         return "name"
     }
     
-    public override static func indexedProperties() -> [String] {
-        return [
-            "name"
-        ]
-    }
-    
 }

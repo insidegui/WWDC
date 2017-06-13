@@ -75,17 +75,6 @@ public class SessionAsset: Object {
         return "identifier"
     }
     
-    public override static func indexedProperties() -> [String] {
-        return [
-            "identifier",
-            "rawAssetType",
-            "sessionId",
-            "year",
-            "remoteURL",
-            "relativeLocalURL"
-        ]
-    }
-    
     func merge(with other: SessionAsset, in realm: Realm) {
         assert(other.remoteURL == self.remoteURL, "Can't merge two objects with different identifiers!")
         
