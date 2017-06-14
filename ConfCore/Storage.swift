@@ -15,7 +15,7 @@ public final class Storage {
     
     public let realmConfig: Realm.Configuration
     public let realm: Realm
-        
+    
     public init(_ configuration: Realm.Configuration) throws {
         var config = configuration
         config.migrationBlock = Storage.migrate(migration:oldVersion:)
@@ -37,6 +37,21 @@ public final class Storage {
             #endif
             
             self.realm.autorefresh = true
+        }
+        
+        deleteOldEventsIfNeeded()
+    }
+    
+    private func deleteOldEventsIfNeeded() {
+        guard let wwdc2012 = realm.objects(Event.self).filter("identifier == %@", "wwdc2012").first else { return }
+        
+        do {
+            try realm.write {
+                realm.delete(wwdc2012.sessions)
+                realm.delete(wwdc2012)
+            }
+        } catch {
+            NSLog("Error deleting old events: \(error)")
         }
     }
     
@@ -69,6 +84,11 @@ public final class Storage {
                     migration.delete(asset)
                 }
             }
+        }
+        if oldVersion < 32 {
+            migration.deleteData(forType: "Event")
+            migration.deleteData(forType: "Track")
+            migration.deleteData(forType: "ScheduleSection")
         }
     }
     
@@ -144,15 +164,6 @@ public final class Storage {
             }
         }
         
-        // Associate sessions with events
-        sessionsResponse.events.forEach { event in
-            autoreleasepool {
-                let sessions = consolidatedSessions.filter({ $0.eventIdentifier == event.identifier })
-                
-                event.sessions.append(objectsIn: sessions)
-            }
-        }
-        
         // Merge existing instance data, preserving user-defined data
         sessionsResponse.instances.forEach { newInstance in
             return autoreleasepool {
@@ -176,6 +187,8 @@ public final class Storage {
             let instances = self.realm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
             
             instances.forEach({ $0.roomName = room.name })
+            
+            room.instances.removeAll()
             room.instances.append(objectsIn: instances)
         }
         
@@ -184,7 +197,10 @@ public final class Storage {
             let instances = self.realm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
             let sessions = self.realm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
             
+			event.sessionInstances.removeAll()
             event.sessionInstances.append(objectsIn: instances)
+			
+			event.sessions.removeAll()
             event.sessions.append(objectsIn: sessions)
         }
         
@@ -193,7 +209,10 @@ public final class Storage {
             let instances = self.realm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
             let sessions = self.realm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
             
+			track.instances.removeAll()
             track.instances.append(objectsIn: instances)
+			
+			track.sessions.removeAll()
             track.sessions.append(objectsIn: sessions)
             
             sessions.forEach({ $0.trackName = track.name })
@@ -206,7 +225,9 @@ public final class Storage {
         // add live video assets to sessions
         self.realm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
             if let session = self.realm.objects(Session.self).filter("year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
-                session.assets.append(liveAsset)
+                if !session.assets.contains(liveAsset) {
+                    session.assets.append(liveAsset)
+                }
             }
         }
         
@@ -227,6 +248,7 @@ public final class Storage {
                 
                 section.representedDate = instance.startTime
                 section.eventIdentifier = instance.eventIdentifier
+                section.instances.removeAll()
                 section.instances.append(objectsIn: instancesForSection)
                 section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
                 
@@ -259,7 +281,9 @@ public final class Storage {
                 self.realm.add(asset, update: true)
                 
                 if let session = self.realm.objects(Session.self).filter("year == %d AND number == %@", asset.year, asset.sessionId).first {
-                    session.assets.append(asset)
+                    if !session.assets.contains(asset) {
+                        session.assets.append(asset)
+                    }
                 }
             }
         }
