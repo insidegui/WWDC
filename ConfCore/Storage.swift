@@ -57,6 +57,19 @@ public final class Storage {
             // download model removal
             migration.deleteData(forType: "Download")
         }
+        if oldVersion < 31 {
+            // remove cached images which might have generic session thumbs instead of the correct ones
+            migration.deleteData(forType: "ImageCacheEntity")
+            
+            // delete live stream assets (some of them got duplicated during the week)
+            migration.enumerateObjects(ofType: "SessionAsset") { asset, _ in
+                guard let asset = asset else { return }
+                
+                if asset["rawAssetType"] as? String == SessionAssetType.liveStreamVideo.rawValue {
+                    migration.delete(asset)
+                }
+            }
+        }
     }
     
     /// Performs a write transaction on the database using `block`, on the main queue
