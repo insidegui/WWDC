@@ -7,13 +7,28 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.1</title>
+			<description><![CDATA[
+				<ul>
+					<li>Fixed an issue where the app would hang for several seconds when launched</li>
+					<li>Improved look of special events and get-together thumbnails</li>
+					<li>Adds contextual menu to lists so you can easily change favorites, mark sessions as watched or download multiple sessions</li>
+					<li>Improved audio when playing videos at speeds higher than 1x</li>
+				</ul>
+						]]></description>
+            <pubDate>Tue, 13 Jun 2017 23:10:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.1/WWDC_v5.1.zip" sparkle:version="600" sparkle:shortVersionString="5.1" length="15927807" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.0.8</title>
 			<description><![CDATA[
 				<ul>
 					<li>Fixed a common crash in the previous version</li>
 				</ul>
 						]]></description>
-            <pubDate>Tue, 09 Jun 2017 00:25:00 -0300</pubDate>
+            <pubDate>Fri, 09 Jun 2017 00:25:00 -0300</pubDate>
             <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.0.8/WWDC_v5.0.8.zip" sparkle:version="580" sparkle:shortVersionString="5.0.8" length="15649684" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
         </item>
