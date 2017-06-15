@@ -41,6 +41,11 @@ struct TextualFilter: FilterType {
             subpredicates.append(bookmarks)
         }
         
+        if Preferences.shared.searchInTranscripts {
+            let transcripts = NSPredicate(format: "transcriptText CONTAINS[cd] %@", value)
+            subpredicates.append(transcripts)
+        }
+        
         return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates)
     }
     

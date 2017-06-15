@@ -29,7 +29,7 @@ class SessionDetailsViewController: NSViewController {
                 showOverview()
             }
             
-            self.transcriptButton.isHidden = (viewModel?.session.transcript() == nil)
+            self.transcriptButton.isHidden = (viewModel?.session.transcript == nil)
             
             let shouldHideButtonsBar = self.transcriptButton.isHidden && self.bookmarksButton.isHidden
             self.menuButtonsContainer.isHidden = shouldHideButtonsBar

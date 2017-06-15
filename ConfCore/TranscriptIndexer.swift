@@ -178,7 +178,9 @@ public final class TranscriptIndexer: NSObject {
                 
                 session.transcriptIdentifier = transcript.identifier
                 
-                realm.add(transcript)
+                realm.add(transcript, update: true)
+                
+                session.transcriptText = transcript.fullText
             }
             
             self.downloadedTranscripts.removeAll()

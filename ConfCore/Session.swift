@@ -56,8 +56,19 @@ public class Session: Object {
     /// Session bookmarks
     public let bookmarks = List<Bookmark>()
     
-    /// Transcript for the session
+    /// Transcript identifier for the session
     public dynamic var transcriptIdentifier: String = ""
+    
+    /// Shortcut to get the full transcript text (used during search)
+    public dynamic var transcriptText: String = ""
+    
+    /// Fetches and returns the transcript object associated with the session
+    public func transcript() -> Transcript? {
+        guard let realm = self.realm else { return nil }
+        guard !transcriptIdentifier.isEmpty else { return nil }
+        
+        return realm.objects(Transcript.self).filter("identifier == %@", self.transcriptIdentifier).first
+    }
     
     /// The session's track
     public let track = LinkingObjects(fromType: Track.self, property: "sessions")
@@ -72,12 +83,12 @@ public class Session: Object {
         return "identifier"
     }
     
-    public func transcript() -> Transcript? {
-        guard let realm = self.realm else { return nil }
-        guard !transcriptIdentifier.isEmpty else { return nil }
-        
-        return realm.objects(Transcript.self).filter("identifier == %@", self.transcriptIdentifier).first
-    }
+//    public func transcript() -> Transcript? {
+//        guard let realm = self.realm else { return nil }
+//        guard !transcriptIdentifier.isEmpty else { return nil }
+//        
+//        return realm.objects(Transcript.self).filter("identifier == %@", self.transcriptIdentifier).first
+//    }
     
     public static let videoPredicate: NSPredicate = NSPredicate(format: "ANY assets.rawAssetType == %@", SessionAssetType.streamingVideo.rawValue)
     

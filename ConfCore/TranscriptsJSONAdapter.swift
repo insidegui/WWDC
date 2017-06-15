@@ -10,7 +10,9 @@ import Foundation
 import SwiftyJSON
 
 private enum TranscriptKeys: String, JSONSubscriptType {
-    case year, number, transcript, timecodes, annotations
+    case year, number, timecodes, annotations
+    
+    case fullText = "transcript"
     
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -30,10 +32,6 @@ final class TranscriptsJSONAdapter: Adapter {
         guard let number = input[TranscriptKeys.number].int else {
             return .error(.missingKey(TranscriptKeys.number))
         }
-        
-//        guard let fullText = input[TranscriptKeys.transcript].string else {
-//            return .error(.missingKey(TranscriptKeys.transcript))
-//        }
         
         guard let timecodes = input[TranscriptKeys.timecodes].array else {
             return .error(.missingKey(TranscriptKeys.timecodes))
@@ -57,7 +55,7 @@ final class TranscriptsJSONAdapter: Adapter {
         let transcript = Transcript()
         
         transcript.identifier = "\(year)-\(number)"
-//        transcript.fullText = fullText
+        transcript.fullText = input[TranscriptKeys.fullText].string ?? ""
         transcript.annotations.append(objectsIn: annotations)
         
         return .success(transcript)

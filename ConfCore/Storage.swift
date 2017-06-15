@@ -90,6 +90,14 @@ public final class Storage {
             migration.deleteData(forType: "Track")
             migration.deleteData(forType: "ScheduleSection")
         }
+        if oldVersion < 34 {
+            migration.deleteData(forType: "Transcript")
+            migration.deleteData(forType: "TranscriptAnnotation")
+            
+            migration.enumerateObjects(ofType: "Session") { _, session in
+                session?["transcriptIdentifier"] = ""
+            }
+        }
     }
     
     /// Performs a write transaction on the database using `block`, on the main queue
@@ -152,14 +160,14 @@ public final class Storage {
         self.realm.beginWrite()
         
         // Merge existing session data, preserving user-defined data
-        let consolidatedSessions = sessionsResponse.sessions.map { newSession -> (Session) in
-            return autoreleasepool {
+        sessionsResponse.sessions.forEach { newSession in
+            autoreleasepool {
                 if let existingSession = self.realm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
                     existingSession.merge(with: newSession, in: self.realm)
                     
-                    return existingSession
+                    self.realm.add(existingSession, update: true)
                 } else {
-                    return newSession
+                    self.realm.add(newSession, update: true)
                 }
             }
         }
