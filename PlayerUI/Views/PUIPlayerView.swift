@@ -278,6 +278,7 @@ public final class PUIPlayerView: NSView {
                 self.playerVolumeChanged()
             } else if keyPath == #keyPath(AVPlayer.rate) {
                 self.updatePlayingState()
+                self.updatePowerAssertion()
             } else if keyPath == #keyPath(AVPlayer.currentItem.duration) {
                 self.metadataBecameAvailable()
             } else if keyPath == #keyPath(AVPlayer.currentItem.currentMediaSelection) {
@@ -341,6 +342,21 @@ public final class PUIPlayerView: NSView {
         }
     }
     
+    fileprivate var activity: NSObjectProtocol?
+    
+    fileprivate func updatePowerAssertion() {
+        if self.player?.rate == 0 {
+            if let activity = self.activity {
+                ProcessInfo.processInfo.endActivity(activity)
+                self.activity = nil
+            }
+        } else {
+            if self.activity == nil {
+                self.activity = ProcessInfo.processInfo.beginActivity(options: [.idleDisplaySleepDisabled, .userInitiated], reason: "Playing WWDC session video")
+            }
+        }
+    }
+
     fileprivate func updatePlaybackSpeedState() {
         speedButton.image = playbackSpeed.icon
     }
@@ -813,14 +829,7 @@ public final class PUIPlayerView: NSView {
         }
     }
     
-    fileprivate var activity: NSObjectProtocol?
-    
     @IBAction public func pause(_ sender: Any?) {
-        if let activity = self.activity {
-            ProcessInfo.processInfo.endActivity(activity)
-            self.activity = nil
-        }
-        
         if isPlayingExternally {
             currentExternalPlaybackProvider?.pause()
         } else {
@@ -829,8 +838,6 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction public func play(_ sender: Any?) {
-        activity = ProcessInfo.processInfo.beginActivity(options: [.idleDisplaySleepDisabled, .idleSystemSleepDisabled, .userInitiated], reason: "Playing WWDC session video")
-        
         if isPlayingExternally {
             currentExternalPlaybackProvider?.play()
         } else {
