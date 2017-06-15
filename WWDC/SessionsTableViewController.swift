@@ -399,7 +399,11 @@ class SessionsTableViewController: NSViewController {
         case .removeFavorite:
             if viewModel.isFavorite { return true }
         case .download:
-            if viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first != nil { return true }
+            if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
+                if !DownloadManager.shared.isDownloading(sessionAsset.remoteURL) {
+                    if DownloadManager.shared.localFileURL(for: viewModel.session) == nil { return true }
+                }
+            }
         case .cancelDownload:
             if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
                if DownloadManager.shared.isDownloading(sessionAsset.remoteURL) { return true }
