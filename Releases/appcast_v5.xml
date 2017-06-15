@@ -7,6 +7,22 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.1.1</title>
+			<description><![CDATA[
+				<p><em>NOTE: when you first launch this version of the app, it's going to redownload and reindex the session transcripts, this is neccessary to fix an issue that would occur when searching in previous versions.</em></p>
+				<ul>
+					<li>Fixed an issue where searching with transcripts enabled would return sessions that didn't match the selected filters</li>
+					<li>Improved behavior of the contextual menu for downloaded sessions</li>
+					<li>Fixed an issue where the computer would still enter screen saver or sleep during video playback</li>
+					<li>Overall performance improvements</li>
+				</ul>
+						]]></description>
+            <pubDate>Thu, 15 Jun 2017 14:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.1.1/WWDC_v5.1.1.zip" sparkle:version="620" sparkle:shortVersionString="5.1.1" length="15926652" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.1</title>
 			<description><![CDATA[
 				<ul>
