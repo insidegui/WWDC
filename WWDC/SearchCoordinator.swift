@@ -150,16 +150,11 @@ final class SearchCoordinator {
             return
         }
         
-        let term = filters.flatMap({ $0 as? TextualFilter }).flatMap({ $0.value }).first
-        
         var subpredicates = filters.flatMap({ $0.predicate })
-        
-        var canIncludeTranscripts = false
         
         if controller == scheduleController {
             subpredicates.append(NSPredicate(format: "ANY event.isCurrent == true"))
         } else if controller == videosController {
-            canIncludeTranscripts = true
             subpredicates.append(Session.videoPredicate)
         }
         
@@ -174,16 +169,7 @@ final class SearchCoordinator {
                 let realm = try Realm(configuration: self.storage.realmConfig)
                 
                 let results = realm.objects(Session.self).filter(predicate)
-                var keys: Set<String> = Set<String>(results.map({ $0.identifier }))
-                
-                if Preferences.shared.searchInTranscripts, let term = term, term.characters.count > 0, canIncludeTranscripts {
-                    let transcriptsPredicate = NSPredicate(format: "ANY annotations.body CONTAINS[cd] %@", term)
-                    let transcripts = realm.objects(Transcript.self).filter(transcriptsPredicate)
-                    
-                    transcripts.forEach { transcript in
-                        keys.insert(transcript.identifier)
-                    }
-                }
+                let keys: Set<String> = Set<String>(results.map({ $0.identifier }))
                 
                 DispatchQueue.main.async {
                     let searchResults = self.storage.realm.objects(Session.self).filter("identifier IN %@", keys)

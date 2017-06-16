@@ -156,8 +156,11 @@ public final class PUIPlayerView: NSView {
         didSet {
             guard let player = player else { return }
             
-            if isPlaying && !isPlayingExternally { player.rate = playbackSpeed.rawValue }
-            
+            if isPlaying && !isPlayingExternally {
+                player.rate = playbackSpeed.rawValue
+                player.seek(to: player.currentTime()) // Helps the AV sync when speeds change with the TimeDomain algorithm enabled
+            }
+
             updatePlaybackSpeedState()
         }
     }
@@ -235,6 +238,7 @@ public final class PUIPlayerView: NSView {
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.volume), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
+        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection), options: [.initial, .new], context: nil)
@@ -261,6 +265,7 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection))
+        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem))
     }
     
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -273,10 +278,15 @@ public final class PUIPlayerView: NSView {
                 self.playerVolumeChanged()
             } else if keyPath == #keyPath(AVPlayer.rate) {
                 self.updatePlayingState()
+                self.updatePowerAssertion()
             } else if keyPath == #keyPath(AVPlayer.currentItem.duration) {
                 self.metadataBecameAvailable()
             } else if keyPath == #keyPath(AVPlayer.currentItem.currentMediaSelection) {
                 self.updateMediaSelection()
+            } else if keyPath == #keyPath(AVPlayer.currentItem) {
+                if let playerItem = self.player?.currentItem {
+                    playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmTimeDomain
+                }
             } else {
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
@@ -332,6 +342,21 @@ public final class PUIPlayerView: NSView {
         }
     }
     
+    fileprivate var activity: NSObjectProtocol?
+    
+    fileprivate func updatePowerAssertion() {
+        if self.player?.rate == 0 {
+            if let activity = self.activity {
+                ProcessInfo.processInfo.endActivity(activity)
+                self.activity = nil
+            }
+        } else {
+            if self.activity == nil {
+                self.activity = ProcessInfo.processInfo.beginActivity(options: [.idleDisplaySleepDisabled, .userInitiated], reason: "Playing WWDC session video")
+            }
+        }
+    }
+
     fileprivate func updatePlaybackSpeedState() {
         speedButton.image = playbackSpeed.icon
     }
@@ -743,6 +768,8 @@ public final class PUIPlayerView: NSView {
         updateExternalPlaybackControlsAvailability()
         
         fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
+        timelineView.isHidden = !d.playerViewShouldShowTimelineView(self)
+        timeLabelsContainerView.isHidden = !d.playerViewShouldShowTimestampLabels(self)
     }
     
     fileprivate func updateExternalPlaybackControlsAvailability() {
@@ -830,14 +857,7 @@ public final class PUIPlayerView: NSView {
         }
     }
     
-    fileprivate var activity: NSObjectProtocol?
-    
     @IBAction public func pause(_ sender: Any?) {
-        if let activity = self.activity {
-            ProcessInfo.processInfo.endActivity(activity)
-            self.activity = nil
-        }
-        
         if isPlayingExternally {
             currentExternalPlaybackProvider?.pause()
         } else {
@@ -846,8 +866,6 @@ public final class PUIPlayerView: NSView {
     }
     
     @IBAction public func play(_ sender: Any?) {
-        activity = ProcessInfo.processInfo.beginActivity(options: [.idleDisplaySleepDisabled, .idleSystemSleepDisabled, .userInitiated], reason: "Playing WWDC session video")
-        
         if isPlayingExternally {
             currentExternalPlaybackProvider?.play()
         } else {

@@ -102,20 +102,6 @@ public class SessionInstance: Object {
         return "identifier"
     }
     
-    public override static func indexedProperties() -> [String] {
-        return [
-            "identifier",
-            "number",
-            "eventIdentifier",
-            "sessionType",
-            "rawSessionType",
-            "startTime",
-            "endTime",
-            "roomName",
-            "trackName"
-        ]
-    }
-    
     public override static func ignoredProperties() -> [String] {
         return ["code"]
     }
