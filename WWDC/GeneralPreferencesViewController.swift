@@ -19,6 +19,7 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var searchInTranscriptsSwitch: ITSwitch!
     @IBOutlet weak var searchInBookmarksSwitch: ITSwitch!
     @IBOutlet weak var refreshPeriodicallySwitch: ITSwitch!
+    @IBOutlet weak var skipBackAndForwardBy30SecondsSwitch: ITSwitch!
     
     @IBOutlet weak var downloadsFolderLabel: NSTextField!
     
@@ -27,9 +28,11 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var includeBookmarksLabel: NSTextField!
     @IBOutlet weak var includeTranscriptsLabel: NSTextField!
     @IBOutlet weak var refreshAutomaticallyLabel: NSTextField!
+    @IBOutlet weak var skipBackAndForwardBy30SecondsLabel: NSTextField!
     
     @IBOutlet weak var dividerA: NSBox!
     @IBOutlet weak var dividerB: NSBox!
+    @IBOutlet weak var dividerC: NSBox!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,18 +42,22 @@ class GeneralPreferencesViewController: NSViewController {
         includeBookmarksLabel.textColor = .prefsPrimaryText
         includeTranscriptsLabel.textColor = .prefsPrimaryText
         refreshAutomaticallyLabel.textColor = .prefsPrimaryText
+        skipBackAndForwardBy30SecondsLabel.textColor = .prefsPrimaryText
         downloadsFolderLabel.textColor = .prefsSecondaryText
         
         dividerA.fillColor = .darkGridColor
         dividerB.fillColor = .darkGridColor
+        dividerC.fillColor = .darkGridColor
         
         searchInTranscriptsSwitch.tintColor = .primary
         searchInBookmarksSwitch.tintColor = .primary
         refreshPeriodicallySwitch.tintColor = .primary
+        skipBackAndForwardBy30SecondsSwitch.tintColor = .primary
         
         searchInTranscriptsSwitch.checked = Preferences.shared.searchInTranscripts
         searchInBookmarksSwitch.checked = Preferences.shared.searchInBookmarks
         refreshPeriodicallySwitch.checked = Preferences.shared.refreshPeriodically
+        skipBackAndForwardBy30SecondsSwitch.checked = Preferences.shared.skipBackAndForwardBy30Seconds
         
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
     }
@@ -65,6 +72,10 @@ class GeneralPreferencesViewController: NSViewController {
     
     @IBAction func refreshPeriodicallySwitchAction(_ sender: Any) {
         Preferences.shared.refreshPeriodically = refreshPeriodicallySwitch.checked
+    }
+    
+    @IBAction func skipBackAndForwardBy30SecondsSwitchAction(_ sender: Any) {
+        Preferences.shared.skipBackAndForwardBy30Seconds = skipBackAndForwardBy30SecondsSwitch.checked
     }
     
     @IBAction func revealDownloadsFolderInFinder(_ sender: NSButton) {

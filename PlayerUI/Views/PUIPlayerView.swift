@@ -536,7 +536,7 @@ public final class PUIPlayerView: NSView {
         return b
     }()
     
-    private lazy var backButton15: PUIButton = {
+    private lazy var backButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
         b.image = .PUIBack15s
@@ -547,35 +547,13 @@ public final class PUIPlayerView: NSView {
         return b
     }()
     
-    private lazy var backButton30: PUIButton = {
-        let b = PUIButton(frame: .zero)
-        
-        b.image = .PUIBack30s
-        b.target = self
-        b.action = #selector(goBackInTime30(_:))
-        b.toolTip = "Go back 30s"
-        
-        return b
-    }()
-    
-    private lazy var forwardButton15: PUIButton = {
+    private lazy var forwardButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
         b.image = .PUIForward15s
         b.target = self
         b.action = #selector(goForwardInTime15(_:))
         b.toolTip = "Go forward 15s"
-        
-        return b
-    }()
-    
-    private lazy var forwardButton30: PUIButton = {
-        let b = PUIButton(frame: .zero)
-        
-        b.image = .PUIForward30s
-        b.target = self
-        b.action = #selector(goForwardInTime30(_:))
-        b.toolTip = "Go forward 30s"
         
         return b
     }()
@@ -666,13 +644,11 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setCustomSpacing(6, after: volumeButton)
         
         // Center controls (play, annotations, forward, backward)
-        centerButtonsContainerView.addView(backButton15, in: .center)
-        centerButtonsContainerView.addView(backButton30, in: .center)
+        centerButtonsContainerView.addView(backButton, in: .center)
         centerButtonsContainerView.addView(previousAnnotationButton, in: .center)
         centerButtonsContainerView.addView(playButton, in: .center)
         centerButtonsContainerView.addView(nextAnnotationButton, in: .center)
-        centerButtonsContainerView.addView(forwardButton30, in: .center)
-        centerButtonsContainerView.addView(forwardButton15, in: .center)
+        centerButtonsContainerView.addView(forwardButton, in: .center)
         
         // Trailing controls (speed, add annotation, pip)
         centerButtonsContainerView.addView(speedButton, in: .trailing)
@@ -688,12 +664,10 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: volumeButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: volumeSlider)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: subtitlesButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: backButton15)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: backButton30)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: backButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: previousAnnotationButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityMustHold, for: playButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: forwardButton30)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: forwardButton15)
+        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: forwardButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: nextAnnotationButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: speedButton)
         centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: addAnnotationButton)
@@ -760,10 +734,16 @@ public final class PUIPlayerView: NSView {
         nextAnnotationButton.isHidden = disableAnnotationControls
         
         let disableBackAndForward = !d.playerViewShouldShowBackAndForwardControls(self)
-        backButton15.isHidden = disableBackAndForward
-        backButton30.isHidden = disableBackAndForward
-        forwardButton30.isHidden = disableBackAndForward
-        forwardButton15.isHidden = disableBackAndForward
+        backButton.isHidden = disableBackAndForward
+        forwardButton.isHidden = disableBackAndForward
+        
+        let skipBy30 = d.PlayerViewShouldShowBackAndForward30SecondsButtons(self)
+        backButton.image = skipBy30 ? .PUIBack30s : .PUIBack15s
+        backButton.action = skipBy30 ? #selector(goBackInTime30(_:)) : #selector(goBackInTime15(_:))
+        backButton.toolTip = skipBy30 ? "Go back 30s" : "Go back 15s"
+        forwardButton.image = skipBy30 ? .PUIForward30s : .PUIForward15s
+        forwardButton.action = skipBy30 ? #selector(goForwardInTime30(_:)) : #selector(goForwardInTime15(_:))
+        forwardButton.toolTip = skipBy30 ? "Go forward 30s" : "Go forward 15s"
         
         updateExternalPlaybackControlsAvailability()
         
@@ -1284,10 +1264,8 @@ public final class PUIPlayerView: NSView {
         pipButton.isEnabled = false
         subtitlesButton.isEnabled = false
         speedButton.isEnabled = false
-        forwardButton15.isEnabled = false
-        forwardButton30.isEnabled = false
-        backButton30.isEnabled = false
-        backButton15.isEnabled = false
+        forwardButton.isEnabled = false
+        backButton.isEnabled = false
         
         controlsContainerView.alphaValue = 0.5
     }
@@ -1298,10 +1276,8 @@ public final class PUIPlayerView: NSView {
         pipButton.isEnabled = true
         subtitlesButton.isEnabled = true
         speedButton.isEnabled = true
-        forwardButton15.isEnabled = true
-        forwardButton30.isEnabled = true
-        backButton30.isEnabled = true
-        backButton15.isEnabled = true
+        forwardButton.isEnabled = true
+        backButton.isEnabled = true
         
         controlsContainerView.alphaValue = 1
         
