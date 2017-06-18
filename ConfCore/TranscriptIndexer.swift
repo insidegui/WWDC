@@ -41,7 +41,7 @@ public final class TranscriptIndexer: NSObject {
         return q
     }()
     
-    public static let minTranscriptableSessionLimit: Int = 10
+    public static let minTranscriptableSessionLimit: Int = 20
     // TODO: increase 2017 to 2018 when transcripts for 2017 become available
     public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND year < 2017 AND transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
     
@@ -118,9 +118,6 @@ public final class TranscriptIndexer: NSObject {
             }
             
             guard let jsonData = data else {
-                self.transcriptIndexingProgress?.completedUnitCount += 1
-                self.checkForCompletion()
-                
                 NSLog("No data returned from ASCIIWWDC for \(primaryKey)")
                 
                 return
@@ -156,7 +153,7 @@ public final class TranscriptIndexer: NSObject {
             NSLog("Completed: \(progress.completedUnitCount) Total: \(progress.totalUnitCount)")
         #endif
         
-        if progress.completedUnitCount >= progress.totalUnitCount - 1 {
+        if progress.completedUnitCount >= progress.totalUnitCount {
             DispatchQueue.main.async {
                 #if DEBUG
                     NSLog("Transcript indexing finished")
