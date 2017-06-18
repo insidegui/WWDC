@@ -83,9 +83,6 @@ private final class ImageCacheProvider {
         realmConfig.objectTypes = [ImageCacheEntity.self]
         realmConfig.schemaVersion = 1
         realmConfig.migrationBlock = { _, _ in }
-        realmConfig.shouldCompactOnLaunch = { _, _ in
-            return true
-        }
         
         return try? Realm(configuration: realmConfig)
     }

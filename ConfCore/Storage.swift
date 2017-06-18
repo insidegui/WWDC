@@ -23,12 +23,6 @@ public final class Storage {
         
         self.realmConfig = config
         
-        config.shouldCompactOnLaunch = { totalSize, dataSize in
-            let freeSpace = totalSize - dataSize
-            
-            return freeSpace >= dataSize
-        }
-        
         self.realm = try Realm(configuration: config)
         
         DistributedNotificationCenter.default().addObserver(forName: .TranscriptIndexingDidStart, object: nil, queue: OperationQueue.main) { [unowned self] _ in
