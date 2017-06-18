@@ -346,6 +346,8 @@ final class DownloadManager: NSObject {
         
         topFolderMonitor = DTFolderMonitor(for: url) { [unowned self] in
             self.setupSubdirectoryMonitors(on: url)
+            
+            self.updateDownloadedFlagsByEnumeratingFilesAtPath(url.path)
         }
         
         setupSubdirectoryMonitors(on: url)
@@ -373,43 +375,20 @@ final class DownloadManager: NSObject {
         guard let enumerator = FileManager.default.enumerator(atPath: path) else { return }
         guard let files = enumerator.allObjects as? [String] else { return }
         
-        // existing/added files
-        DispatchQueue.main.async {
-            self.storage.update {
-                
-                // added/existing files
-                
-                files.forEach { file in
-                    guard let asset = self.storage.realm.objects(SessionAsset.self).filter("relativeLocalURL == %@", file).first else { return }
-                    
-                    if asset.session.first?.isDownloaded == false {
-                        asset.session.first?.isDownloaded = true
-                    }
-                    
-                    NotificationCenter.default.post(name: .DownloadManagerFileAddedNotification, object: file)
-                }
-                
-                if self.existingVideoFiles.count == 0 {
-                    self.existingVideoFiles = files
-                    return
-                }
-                
-                // removed files
-                
-                let removedFiles = self.existingVideoFiles.filter { !files.contains($0) }
-                
-                removedFiles.forEach { file in
-                    guard let asset = self.storage.realm.objects(SessionAsset.self).filter("relativeLocalURL == %@", file).first else { return }
-                    
-                    if asset.session.first?.isDownloaded == true {
-                        asset.session.first?.isDownloaded = false
-                    }
-                    
-                    NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: file)
-                }
-                
-            }
+        self.storage.updateDownloadedFlag(true, forAssetsAtPahs: files)
+        
+        files.forEach { NotificationCenter.default.post(name: .DownloadManagerFileAddedNotification, object: $0) }
+        
+        if self.existingVideoFiles.count == 0 {
+            self.existingVideoFiles = files
+            return
         }
+        
+        let removedFiles = self.existingVideoFiles.filter { !files.contains($0) }
+        
+        self.storage.updateDownloadedFlag(false, forAssetsAtPahs: removedFiles)
+        
+        removedFiles.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
     }
     
     // MARK: Teardown

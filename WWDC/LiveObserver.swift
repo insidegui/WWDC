@@ -83,17 +83,12 @@ final class LiveObserver {
     }
     
     private func setLiveFlag(_ value: Bool, for instances: [SessionInstance]) {
-        do {
-            try storage.realm.write {
-                // reset live flag for every instance
-                instances.forEach { instance in
-                    guard !instance.isForcedLive else { return }
-                    
-                    instance.isCurrentlyLive = value
-                }
+        storage.modify(instances) { bgInstances in
+            bgInstances.forEach { instance in
+                guard !instance.isForcedLive else { return }
+
+                instance.isCurrentlyLive = value
             }
-        } catch {
-            NSLog("Error resetting live flags: \(error)")
         }
     }
     
@@ -212,10 +207,10 @@ private final class CloudKitLiveObserver: NSObject {
     private func store(_ records: [CKRecord]) {
         print("storing live records")
         
-        storage.unmanagedUpdate { [unowned self] realm in
+        storage.backgroundUpdate { realm in
             records.forEach { record in
                 guard let asset = SessionAsset(record: record) else { return }
-                guard let session = self.storage.session(with: "\(asset.year)-\(asset.sessionId)") else { return }
+                guard let session = realm.object(ofType: Session.self, forPrimaryKey: "\(asset.year)-\(asset.sessionId)") else { return }
                 guard let instance = session.instances.first else { return }
                 
                 if let existingAsset = realm.object(ofType: SessionAsset.self, forPrimaryKey: asset.identifier) {

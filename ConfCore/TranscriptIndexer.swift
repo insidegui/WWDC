@@ -53,7 +53,7 @@ public final class TranscriptIndexer: NSObject {
     
     public static func needsUpdate(in storage: Storage) -> Bool {
         let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
-        
+
         return transcriptedSessions.count > minTranscriptableSessionLimit
     }
     
@@ -165,36 +165,25 @@ public final class TranscriptIndexer: NSObject {
             DistributedNotificationCenter.default().post(name: .TranscriptIndexingDidStart, object: nil)
         }
         
-        self.backgroundOperationQueue.addOperation { [unowned self] in
-            guard let realm = try? Realm(configuration: self.storage.realmConfig) else { return }
-            
-            realm.beginWrite()
-            
+        storage.backgroundUpdate { [unowned self] backgroundRealm in
             self.downloadedTranscripts.forEach { transcript in
-                guard let session = realm.object(ofType: Session.self, forPrimaryKey: transcript.identifier) else {
+                guard let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: transcript.identifier) else {
                     NSLog("Session not found for \(transcript.identifier)")
                     return
                 }
                 
                 session.transcriptIdentifier = transcript.identifier
-                
-                realm.add(transcript, update: true)
-                
                 session.transcriptText = transcript.fullText
+                
+                backgroundRealm.add(transcript, update: true)
             }
             
             self.downloadedTranscripts.removeAll()
             
-            do {
-                try realm.commitWrite()
-                
-                DispatchQueue.main.async {
-                    DistributedNotificationCenter.default().post(name: .TranscriptIndexingDidStop, object: nil)
-                }
+            DispatchQueue.main.async {
+                DistributedNotificationCenter.default().post(name: .TranscriptIndexingDidStop, object: nil)
                 
                 self.waitAndExit()
-            } catch {
-                NSLog("Error writing indexed transcripts to storage: \(error)")
             }
         }
     }

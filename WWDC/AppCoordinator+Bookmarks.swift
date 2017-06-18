@@ -20,12 +20,12 @@ extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate
     func createBookmark(at timecode: Double, with snapshot: NSImage?) {
         guard let session = currentPlayerController?.sessionViewModel.session else { return }
         
-        let bookmark = Bookmark()
-        bookmark.timecode = timecode
-        bookmark.snapshot = snapshot?.tiffRepresentation ?? Data()
-        
-        storage.update {
-            session.bookmarks.append(bookmark)
+        storage.modify(session) { bgSession in
+            let bookmark = Bookmark()
+            bookmark.timecode = timecode
+            bookmark.snapshot = snapshot?.tiffRepresentation ?? Data()
+            
+            bgSession.bookmarks.append(bookmark)
         }
         
         // TODO: begin editing new bookmark
