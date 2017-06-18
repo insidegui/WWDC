@@ -56,7 +56,7 @@ public final class Storage {
         return try Realm(configuration: c)
     }
     
-    private lazy var storageQueue: OperationQueue = {
+    public lazy var storageQueue: OperationQueue = {
         let q = OperationQueue()
         
         q.name = "WWDC Storage"
