@@ -7,6 +7,24 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.1.2</title>
+			<description><![CDATA[
+				<p><em>NOTE: when you first launch this version of the app, it's going to redownload and reindex the session transcripts, this is neccessary to fix an issue that would occur when searching in previous versions.</em></p>
+				<ul>
+					<li>Fixes an issue where previously downloaded sessions with files deleted would still appear as downloaded</li>
+					<li>Improves transcript indexing, now transcripts become available as they're being indexed, not just after all transcripts have been indexed</li>
+					<li>Uses less disk space for the main database file</li>
+					<li>Fixes an issue where sessions would appear as downloaded on the sidebar when filtering even though they were not</li>
+					<li>Adds a "Reveal in Finder" menu item to the contextual menu on the sidebar</li>
+					<li>Improves performance of storage operations</li>
+				</ul>
+						]]></description>
+            <pubDate>Thu, 22 Jun 2017 19:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.1.2/WWDC_v5.1.2.zip" sparkle:version="650" sparkle:shortVersionString="5.1.2" length="15938766" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.1.1</title>
 			<description><![CDATA[
 				<p><em>NOTE: when you first launch this version of the app, it's going to redownload and reindex the session transcripts, this is neccessary to fix an issue that would occur when searching in previous versions.</em></p>
