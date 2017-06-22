@@ -448,7 +448,7 @@ public final class Storage {
         }
     }
     
-    public func updateDownloadedFlag(_ isDownloaded: Bool, forAssetsAtPahs filePaths: [String]) {
+    public func updateDownloadedFlag(_ isDownloaded: Bool, forAssetsAtPaths filePaths: [String]) {
         DispatchQueue.main.async {
             let assets = filePaths.flatMap { self.realm.objects(SessionAsset.self).filter("relativeLocalURL == %@", $0).first }
             

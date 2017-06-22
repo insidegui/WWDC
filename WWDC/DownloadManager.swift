@@ -80,7 +80,8 @@ final class DownloadManager: NSObject {
         NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
         }
-
+        
+        updateDownloadedFlagsOfPreviouslyDownloaded()
         monitorDownloadsFolder()
     }
     
@@ -370,12 +371,27 @@ final class DownloadManager: NSObject {
         }
     }
     
+    fileprivate func updateDownloadedFlagsOfPreviouslyDownloaded() {
+        let expectedOnDisk = storage.sessions.filter { $0.isDownloaded == true }
+        var notPresent = [String]()
+        
+        for session in expectedOnDisk {
+            if let asset = session.asset(of: SessionAssetType.hdVideo) {
+                if !hasVideo(asset.remoteURL) {
+                    notPresent.append(asset.relativeLocalURL)
+                }
+            }
+        }
+        
+        storage.updateDownloadedFlag(false, forAssetsAtPaths: notPresent)
+    }
+    
     /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
     fileprivate func updateDownloadedFlagsByEnumeratingFilesAtPath(_ path: String) {
         guard let enumerator = FileManager.default.enumerator(atPath: path) else { return }
         guard let files = enumerator.allObjects as? [String] else { return }
         
-        self.storage.updateDownloadedFlag(true, forAssetsAtPahs: files)
+        self.storage.updateDownloadedFlag(true, forAssetsAtPaths: files)
         
         files.forEach { NotificationCenter.default.post(name: .DownloadManagerFileAddedNotification, object: $0) }
         
@@ -386,7 +402,7 @@ final class DownloadManager: NSObject {
         
         let removedFiles = self.existingVideoFiles.filter { !files.contains($0) }
         
-        self.storage.updateDownloadedFlag(false, forAssetsAtPahs: removedFiles)
+        self.storage.updateDownloadedFlag(false, forAssetsAtPaths: removedFiles)
         
         removedFiles.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
     }
