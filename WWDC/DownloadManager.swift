@@ -372,7 +372,7 @@ final class DownloadManager: NSObject {
     }
     
     fileprivate func updateDownloadedFlagsOfPreviouslyDownloaded() {
-        let expectedOnDisk = storage.sessions.filter { $0.isDownloaded == true }
+        let expectedOnDisk = storage.sessions.filter(NSPredicate(format: "isDownloaded == true"))
         var notPresent = [String]()
         
         for session in expectedOnDisk {
@@ -384,6 +384,7 @@ final class DownloadManager: NSObject {
         }
         
         storage.updateDownloadedFlag(false, forAssetsAtPaths: notPresent)
+        notPresent.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
     }
     
     /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
