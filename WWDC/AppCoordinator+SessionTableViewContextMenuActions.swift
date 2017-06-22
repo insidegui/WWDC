@@ -85,5 +85,12 @@ extension AppCoordinator: SessionsTableViewControllerDelegate  {
         }
     }
     
+    func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel]) {
+        guard let firstSession = viewModels.first?.session else { return }
+        guard let localURL = DownloadManager.shared.localFileURL(for: firstSession) else { return }
+        
+        NSWorkspace.shared().selectFile(localURL.path, inFileViewerRootedAtPath: localURL.deletingLastPathComponent().path)
+    }
+    
 }
 
