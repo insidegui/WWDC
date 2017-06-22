@@ -43,6 +43,9 @@ final class SessionTableCellView: NSTableCellView {
         
         imageDownloadOperation?.cancel()
         
+        downloadedImageView.isHidden = true
+        favoritedImageView.isHidden = true
+        
         thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
     }
     
