@@ -9,7 +9,6 @@
 		<item>
             <title>Version 5.1.2</title>
 			<description><![CDATA[
-				<p><em>NOTE: when you first launch this version of the app, it's going to redownload and reindex the session transcripts, this is neccessary to fix an issue that would occur when searching in previous versions.</em></p>
 				<ul>
 					<li>Fixes an issue where previously downloaded sessions with files deleted would still appear as downloaded</li>
 					<li>Improves transcript indexing, now transcripts become available as they're being indexed, not just after all transcripts have been indexed</li>
