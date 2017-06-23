@@ -20,6 +20,7 @@ protocol SessionsTableViewControllerDelegate: class {
     func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel])
     func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel])
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel])
 }
 
 class SessionsTableViewController: NSViewController {
@@ -292,6 +293,7 @@ class SessionsTableViewController: NSViewController {
         case removeFavorite = 1003
         case download = 1004
         case cancelDownload = 1005
+        case revealInFinder = 1006
     }
     
     private func setupContextualMenu() {
@@ -325,7 +327,9 @@ class SessionsTableViewController: NSViewController {
         contextualMenu.addItem(cancelDownloadMenuItem)
         cancelDownloadMenuItem.option = .cancelDownload
         
-        contextualMenu.addItem(.separator())
+        let revealInFinderMenuItem = NSMenuItem(title: "Reveal in Finder", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        contextualMenu.addItem(revealInFinderMenuItem)
+        revealInFinderMenuItem.option = .revealInFinder
         
         tableView.menu = contextualMenu
     }
@@ -361,6 +365,8 @@ class SessionsTableViewController: NSViewController {
             delegate?.sessionTableViewContextMenuActionDownload(viewModels: viewModels)
         case .cancelDownload:
             delegate?.sessionTableViewContextMenuActionCancelDownload(viewModels: viewModels)
+        case .revealInFinder:
+            delegate?.sessionTableViewContextMenuActionRevealInFinder(viewModels: viewModels)
         }
     }
     
@@ -399,10 +405,18 @@ class SessionsTableViewController: NSViewController {
         case .removeFavorite:
             if viewModel.isFavorite { return true }
         case .download:
-            if viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first != nil { return true }
+            if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
+                if !DownloadManager.shared.isDownloading(sessionAsset.remoteURL) {
+                    if DownloadManager.shared.localFileURL(for: viewModel.session) == nil { return true }
+                }
+            }
         case .cancelDownload:
             if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
                if DownloadManager.shared.isDownloading(sessionAsset.remoteURL) { return true }
+            }
+        case .revealInFinder:
+            if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
+                if DownloadManager.shared.hasVideo(sessionAsset.remoteURL) { return true }
             }
         }
         

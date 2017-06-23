@@ -80,7 +80,8 @@ final class DownloadManager: NSObject {
         NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
         }
-
+        
+        updateDownloadedFlagsOfPreviouslyDownloaded()
         monitorDownloadsFolder()
     }
     
@@ -330,7 +331,7 @@ final class DownloadManager: NSObject {
     
     func syncWithFileSystem() {
         let videosPath = Preferences.shared.localVideoStorageURL.path
-        enumerateVideoFiles(videosPath)
+        updateDownloadedFlagsByEnumeratingFilesAtPath(videosPath)
     }
     
     func monitorDownloadsFolder() {
@@ -346,13 +347,13 @@ final class DownloadManager: NSObject {
         
         topFolderMonitor = DTFolderMonitor(for: url) { [unowned self] in
             self.setupSubdirectoryMonitors(on: url)
+            
+            self.updateDownloadedFlagsByEnumeratingFilesAtPath(url.path)
         }
         
         setupSubdirectoryMonitors(on: url)
         
         topFolderMonitor.startMonitoring()
-        
-        enumerateVideoFiles(url.path)
     }
     
     private func setupSubdirectoryMonitors(on mainDirURL: URL) {
@@ -361,7 +362,7 @@ final class DownloadManager: NSObject {
         
         mainDirURL.subDirectories.forEach { subdir in
             guard let monitor = DTFolderMonitor(for: subdir, block: { [unowned self] in
-                self.enumerateVideoFiles(mainDirURL.path)
+                self.updateDownloadedFlagsByEnumeratingFilesAtPath(mainDirURL.path)
             }) else { return }
             
             subfoldersMonitors.append(monitor)
@@ -370,34 +371,41 @@ final class DownloadManager: NSObject {
         }
     }
     
+    fileprivate func updateDownloadedFlagsOfPreviouslyDownloaded() {
+        let expectedOnDisk = storage.sessions.filter(NSPredicate(format: "isDownloaded == true"))
+        var notPresent = [String]()
+        
+        for session in expectedOnDisk {
+            if let asset = session.asset(of: SessionAssetType.hdVideo) {
+                if !hasVideo(asset.remoteURL) {
+                    notPresent.append(asset.relativeLocalURL)
+                }
+            }
+        }
+        
+        storage.updateDownloadedFlag(false, forAssetsAtPaths: notPresent)
+        notPresent.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
+    }
+    
     /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
-    fileprivate func enumerateVideoFiles(_ path: String) {
+    fileprivate func updateDownloadedFlagsByEnumeratingFilesAtPath(_ path: String) {
         guard let enumerator = FileManager.default.enumerator(atPath: path) else { return }
         guard let files = enumerator.allObjects as? [String] else { return }
         
-        // existing/added files
-        for file in files {
-            storage.updateDownloadedFlag(true, forAssetWithRelativeLocalURL: file)
-            
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: .DownloadManagerFileAddedNotification, object: file)
-            }
-        }
+        self.storage.updateDownloadedFlag(true, forAssetsAtPaths: files)
         
-        if existingVideoFiles.count == 0 {
-            existingVideoFiles = files
+        files.forEach { NotificationCenter.default.post(name: .DownloadManagerFileAddedNotification, object: $0) }
+        
+        if self.existingVideoFiles.count == 0 {
+            self.existingVideoFiles = files
             return
         }
         
-        // removed files
-        let removedFiles = existingVideoFiles.filter { !files.contains($0) }
-        for file in removedFiles {
-            storage.updateDownloadedFlag(false, forAssetWithRelativeLocalURL: file)
-            
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: file)
-            }
-        }
+        let removedFiles = self.existingVideoFiles.filter { !files.contains($0) }
+        
+        self.storage.updateDownloadedFlag(false, forAssetsAtPaths: removedFiles)
+        
+        removedFiles.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
     }
     
     // MARK: Teardown

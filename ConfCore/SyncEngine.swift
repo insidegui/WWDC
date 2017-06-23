@@ -44,8 +44,8 @@ public final class SyncEngine {
     public func syncContent() {
         client.fetchContent { [unowned self] scheduleResult in
             DispatchQueue.main.async {
-                self.storage.store(contentResult: scheduleResult) {
-                    NotificationCenter.default.post(name: .SyncEngineDidSyncSessionsAndSchedule, object: self)
+                self.storage.store(contentResult: scheduleResult) { error in
+                    NotificationCenter.default.post(name: .SyncEngineDidSyncSessionsAndSchedule, object: error)
                 }
             }
         }

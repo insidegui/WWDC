@@ -26,12 +26,20 @@ extension NSImage {
         return playerBundle.image(forResource: "airplay")!
     }
     
+    static var PUIBack15s: NSImage {
+        return playerBundle.image(forResource: "back15s")!
+    }
+    
     static var PUIBack30s: NSImage {
         return playerBundle.image(forResource: "back30s")!
     }
     
     static var PUIBookmark: NSImage {
         return playerBundle.image(forResource: "bookmark")!
+    }
+    
+    static var PUIForward15s: NSImage {
+        return playerBundle.image(forResource: "forward15s")!
     }
     
     static var PUIForward30s: NSImage {

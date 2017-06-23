@@ -101,20 +101,24 @@ private final class ImageCacheProvider {
         guard original.count < upperLimit, thumbnail.count < upperLimit else { return }
         
         DispatchQueue.global(qos: .utility).async {
-            let bgRealm = self.makeRealm()
-            
-            let entity = ImageCacheEntity()
-            
-            entity.key = key.absoluteString
-            entity.original = original
-            entity.thumbnail = thumbnail
-            
-            do {
-                try bgRealm?.write {
-                    bgRealm?.add(entity, update: true)
+            autoreleasepool {
+                guard let bgRealm = self.makeRealm() else { return }
+                
+                let entity = ImageCacheEntity()
+                
+                entity.key = key.absoluteString
+                entity.original = original
+                entity.thumbnail = thumbnail
+                
+                do {
+                    try bgRealm.write {
+                        bgRealm.add(entity, update: true)
+                    }
+                    
+                    bgRealm.invalidate()
+                } catch {
+                    NSLog("Error saving cached image: \(error)")
                 }
-            } catch {
-                NSLog("Error saving cached image: \(error)")
             }
         }
     }

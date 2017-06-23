@@ -199,7 +199,7 @@ extension AppleAPIClient {
         switch event {
         case .error:
             completion(.error(resource.error))
-        case .newData(_), .notModified:
+        case .newData(_):
             if let results: M = resource.typedContent() {
                 completion(.success(results))
             } else {

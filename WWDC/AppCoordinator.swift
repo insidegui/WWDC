@@ -236,8 +236,12 @@ final class AppCoordinator {
             tabController.showLoading()
         }
         
-        NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: OperationQueue.main) { _ in
-            self.updateListsAfterSync(migrate: true)
+        NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: OperationQueue.main) { note in
+            if let error = note.object as? Error {
+                NSApp.presentError(error)
+            } else {
+                self.updateListsAfterSync(migrate: true)
+            }
         }
         
         NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: OperationQueue.main) { _ in

@@ -30,12 +30,6 @@ public class Room: Object {
         return "name"
     }
     
-    public override static func indexedProperties() -> [String] {
-        return [
-            "name"
-        ]
-    }
-    
     public static func make(identifier: String, name: String, mapName: String, floor: String) -> Room {
         let room = Room()
         

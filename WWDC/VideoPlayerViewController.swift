@@ -115,6 +115,11 @@ final class VideoPlayerViewController: NSViewController {
         updateUI()
         
         NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
+        
+        NotificationCenter.default.addObserver(forName: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil, queue: OperationQueue.main) { _ in
+            Swift.print("hello there!")
+            self.playerView.invalidateAppearance()
+        }
     }
     
     func resetAppearanceDelegate()  {
@@ -137,8 +142,6 @@ final class VideoPlayerViewController: NSViewController {
         
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize), options: [.initial, .new], context: nil)
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
-
         
         player.play()
         
@@ -172,7 +175,6 @@ final class VideoPlayerViewController: NSViewController {
     }
     
     // MARK: - Player Observation
-    fileprivate var activity: NSObjectProtocol?
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard let keyPath = keyPath else { return }
@@ -181,19 +183,6 @@ final class VideoPlayerViewController: NSViewController {
             DispatchQueue.main.async(execute: playerItemPresentationSizeDidChange)
         } else if keyPath == #keyPath(AVPlayer.status) {
             DispatchQueue.main.async(execute: playerStatusDidChange)
-        } else if keyPath == #keyPath (AVPlayer.rate) {
-            DispatchQueue.main.async {
-                if self.player.rate == 0 {
-                    if let activity = self.activity {
-                        ProcessInfo.processInfo.endActivity(activity)
-                        self.activity = nil
-                    }
-                } else {
-                    if self.activity == nil {
-                       self.activity = ProcessInfo.processInfo.beginActivity(options: [.idleDisplaySleepDisabled, .userInitiated], reason: "Playing WWDC session video")
-                    }
-                }
-            }
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
@@ -261,7 +250,6 @@ final class VideoPlayerViewController: NSViewController {
         
         player.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize))
         player.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
-        player.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
     }
     
 }
@@ -332,6 +320,10 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
     
     func playerViewShouldShowTimestampLabels(_ playerView: PUIPlayerView) -> Bool {
         return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+    }
+    
+    func PlayerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {
+        return Preferences.shared.skipBackAndForwardBy30Seconds
     }
 }
 

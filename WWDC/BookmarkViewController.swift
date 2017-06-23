@@ -9,17 +9,31 @@
 import Cocoa
 import ConfCore
 import PlayerUI
+import RxSwift
+import RxCocoa
+
+extension Notification.Name {
+    fileprivate static let WWDCTextViewTextChanged = Notification.Name("WWDCTextViewTextChanged")
+}
 
 private final class WWDCTextView: NSTextView {
     
-    var textDidChangeHandler: ((_ text: String) -> Void)?
+    lazy var rxText: Observable<String> = {
+        return Observable<String>.create { [weak self] observer -> Disposable in
+            let token = NotificationCenter.default.addObserver(forName: .WWDCTextViewTextChanged, object: self, queue: OperationQueue.main) { _ in
+                observer.onNext(self?.string ?? "")
+            }
+            
+            return Disposables.create {
+                NotificationCenter.default.removeObserver(token)
+            }
+        }
+    }()
     
     override func didChangeText() {
         super.didChangeText()
         
-        if let str = self.string {
-            textDidChangeHandler?(str)
-        }
+        NotificationCenter.default.post(name: .WWDCTextViewTextChanged, object: self)
     }
     
 }
@@ -100,17 +114,19 @@ final class BookmarkViewController: NSViewController {
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         imageView.image = NSImage(data: bookmark.snapshot)
         textView.string = bookmark.body
         
-        textView.textDidChangeHandler = { [weak self] str in
-            self?.storage.update {
-                self?.bookmark.body = str
-            }
-        }
+        textView.rxText.throttle(1, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] text in
+            guard let bookmark = self?.bookmark else { return }
+            
+            self?.storage.modify(bookmark) { $0.body = text }
+        }).addDisposableTo(self.disposeBag)
     }
     
 }

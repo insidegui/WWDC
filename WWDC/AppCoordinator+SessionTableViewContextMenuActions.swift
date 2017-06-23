@@ -16,32 +16,34 @@ import EventKit
 extension AppCoordinator: SessionsTableViewControllerDelegate  {
     
     func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel]) {
-        backgroundUpdate(objects: viewModels.map({ $0.session })) { session in
-            if let instance = session.instances.first {
-                guard !instance.isCurrentlyLive else { return }
+        storage.modify(viewModels.map({ $0.session })) { sessions in
+            sessions.forEach { session in
+                if let instance = session.instances.first {
+                    guard !instance.isCurrentlyLive else { return }
+                    
+                    guard instance.type == .session || instance.type == .video else { return }
+                }
                 
-                guard instance.type == .session || instance.type == .video else { return }
+                session.setCurrentPosition(1, 1)
             }
-            
-            session.setCurrentPosition(1, 1)
         }
     }
     
     func sessionTableViewContextMenuActionUnWatch(viewModels: [SessionViewModel]) {
-        backgroundUpdate(objects: viewModels.map({ $0.session })) { session in
-            session.resetProgress()
+        storage.modify(viewModels.map({ $0.session })) { sessions in
+            sessions.forEach { $0.resetProgress() }
         }
     }
     
     func sessionTableViewContextMenuActionFavorite(viewModels: [SessionViewModel]) {
-        backgroundUpdate(objects: viewModels.map({ $0.session })) { session in
-            session.favorites.append(Favorite())
+        storage.modify(viewModels.map({ $0.session })) { sessions in
+            sessions.forEach { $0.favorites.append(Favorite()) }
         }
     }
     
     func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel]) {
-        backgroundUpdate(objects: viewModels.map({ $0.session })) { session in
-            session.favorites.removeAll()
+        storage.modify(viewModels.map({ $0.session })) { sessions in
+            sessions.forEach { $0.favorites.removeAll() }
         }
     }
     
@@ -83,22 +85,11 @@ extension AppCoordinator: SessionsTableViewControllerDelegate  {
         }
     }
     
-    private func backgroundUpdate<T: ThreadConfined>(objects inputObjects: [T], updateBlock: @escaping (T) -> Void) {
-        let safeReferences = inputObjects.map({ ThreadSafeReference(to: $0) })
-        let config = storage.realmConfig
+    func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel]) {
+        guard let firstSession = viewModels.first?.session else { return }
+        guard let localURL = DownloadManager.shared.localFileURL(for: firstSession) else { return }
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                let realm = try Realm(configuration: config)
-                let objects = safeReferences.flatMap({ realm.resolve($0) })
-                
-                try realm.write {
-                    objects.forEach(updateBlock)
-                }
-            } catch {
-                NSApp.presentError(error)
-            }
-        }
+        NSWorkspace.shared().selectFile(localURL.path, inFileViewerRootedAtPath: localURL.deletingLastPathComponent().path)
     }
     
 }

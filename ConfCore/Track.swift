@@ -43,13 +43,6 @@ public class Track: Object {
         return "name"
     }
     
-    public override static func indexedProperties() -> [String] {
-        return [
-            "name",
-            "order"
-        ]
-    }
-    
     public static func make(identifier: String,
                             name: String,
                             darkColor: String,
