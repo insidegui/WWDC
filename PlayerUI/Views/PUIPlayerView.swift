@@ -539,10 +539,10 @@ public final class PUIPlayerView: NSView {
     private lazy var backButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
-        b.image = .PUIBack30s
+        b.image = .PUIBack15s
         b.target = self
-        b.action = #selector(goBackInTime(_:))
-        b.toolTip = "Go back 30s"
+        b.action = #selector(goBackInTime15(_:))
+        b.toolTip = "Go back 15s"
         
         return b
     }()
@@ -550,10 +550,10 @@ public final class PUIPlayerView: NSView {
     private lazy var forwardButton: PUIButton = {
         let b = PUIButton(frame: .zero)
         
-        b.image = .PUIForward30s
+        b.image = .PUIForward15s
         b.target = self
-        b.action = #selector(goForwardInTime(_:))
-        b.toolTip = "Go forward 30s"
+        b.action = #selector(goForwardInTime15(_:))
+        b.toolTip = "Go forward 15s"
         
         return b
     }()
@@ -737,6 +737,14 @@ public final class PUIPlayerView: NSView {
         backButton.isHidden = disableBackAndForward
         forwardButton.isHidden = disableBackAndForward
         
+        let skipBy30 = d.PlayerViewShouldShowBackAndForward30SecondsButtons(self)
+        backButton.image = skipBy30 ? .PUIBack30s : .PUIBack15s
+        backButton.action = skipBy30 ? #selector(goBackInTime30(_:)) : #selector(goBackInTime15(_:))
+        backButton.toolTip = skipBy30 ? "Go back 30s" : "Go back 15s"
+        forwardButton.image = skipBy30 ? .PUIForward30s : .PUIForward15s
+        forwardButton.action = skipBy30 ? #selector(goForwardInTime30(_:)) : #selector(goForwardInTime15(_:))
+        forwardButton.toolTip = skipBy30 ? "Go forward 30s" : "Go forward 15s"
+        
         updateExternalPlaybackControlsAvailability()
         
         fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
@@ -857,11 +865,19 @@ public final class PUIPlayerView: NSView {
         seek(to: annotation)
     }
     
-    @IBAction public func goBackInTime(_ sender: Any?) {
+    @IBAction public func goBackInTime15(_ sender: Any?) {
+        modifyCurrentTime(with: 15, using: CMTimeSubtract)
+    }
+    
+    @IBAction public func goForwardInTime15(_ sender: Any?) {
+        modifyCurrentTime(with: 15, using: CMTimeAdd)
+    }
+    
+    @IBAction public func goBackInTime30(_ sender: Any?) {
         modifyCurrentTime(with: 30, using: CMTimeSubtract)
     }
     
-    @IBAction public func goForwardInTime(_ sender: Any?) {
+    @IBAction public func goForwardInTime30(_ sender: Any?) {
         modifyCurrentTime(with: 30, using: CMTimeAdd)
     }
     

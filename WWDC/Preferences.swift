@@ -13,6 +13,7 @@ extension Notification.Name {
     
     static let LocalVideoStoragePathPreferenceDidChange = Notification.Name("LocalVideoStoragePathPreferenceDidChange")
     static let RefreshPeriodicallyPreferenceDidChange = Notification.Name("RefreshPeriodicallyPreferenceDidChange")
+    static let SkipBackAndForwardBy30SecondsPreferenceDidChange = Notification.Name("SkipBackAndForwardBy30SecondsPreferenceDidChange")
     
 }
 
@@ -111,6 +112,17 @@ final class Preferences {
             defaults.set(newValue, forKey: #function)
             
             NotificationCenter.default.post(name: .RefreshPeriodicallyPreferenceDidChange, object: nil)
+        }
+    }
+    
+    var skipBackAndForwardBy30Seconds: Bool {
+        get {
+            return defaults.bool(forKey: #function)
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+            
+            NotificationCenter.default.post(name: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil)
         }
     }
     

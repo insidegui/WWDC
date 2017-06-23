@@ -115,6 +115,11 @@ final class VideoPlayerViewController: NSViewController {
         updateUI()
         
         NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
+        
+        NotificationCenter.default.addObserver(forName: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil, queue: OperationQueue.main) { _ in
+            Swift.print("hello there!")
+            self.playerView.invalidateAppearance()
+        }
     }
     
     func resetAppearanceDelegate()  {
@@ -315,6 +320,10 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
     
     func playerViewShouldShowTimestampLabels(_ playerView: PUIPlayerView) -> Bool {
         return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+    }
+    
+    func PlayerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {
+        return Preferences.shared.skipBackAndForwardBy30Seconds
     }
 }
 
