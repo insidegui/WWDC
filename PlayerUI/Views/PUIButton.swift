@@ -31,6 +31,7 @@ public final class PUIButton: NSControl {
     }
     
     public var showsMenuOnLeftClick = false
+    public var showsMenuOnRightClick = false
     public var sendsActionOnMouseDown = false
     
     public var image: NSImage? {
@@ -164,7 +165,14 @@ public final class PUIButton: NSControl {
             NSApp.sendAction(action, to: target, from: self)
         }
     }
-    
+  
+    public override func rightMouseDown(with event: NSEvent) {
+        guard showsMenuOnRightClick else {
+          return
+        }
+        showMenu(with: event)
+    }
+
     private func showMenu(with event: NSEvent) {
         guard let menu = self.menu else { return }
         
