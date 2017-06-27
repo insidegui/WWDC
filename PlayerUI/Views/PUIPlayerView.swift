@@ -982,7 +982,7 @@ public final class PUIPlayerView: NSView {
     fileprivate lazy var speedsMenu: NSMenu = {
         let m = NSMenu()
         for speed in PUIPlaybackSpeed.all {
-            let item = NSMenuItem(title: "\(speed.rawValue)x", action: #selector(didSelectSpeed(_:)), keyEquivalent: "")
+            let item = NSMenuItem(title: "\(String(format: "%g", speed.rawValue))x", action: #selector(didSelectSpeed(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = speed
             item.state = speed == self.playbackSpeed ? NSOnState : NSOffState
