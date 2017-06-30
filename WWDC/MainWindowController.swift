@@ -11,6 +11,14 @@ import Cocoa
 enum MainWindowTab: Int {
     case schedule
     case videos
+
+    func stringValue() -> String {
+        var name = ""
+
+        debugPrint(self, separator: "", terminator: "", to: &name)
+
+        return name
+    }
 }
 
 extension Notification.Name {

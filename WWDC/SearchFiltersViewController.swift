@@ -18,6 +18,21 @@ enum FilterSegment: Int {
     case favorite
     case downloaded
     case unwatched
+
+    init?(_ id: FilterIdentifier) {
+
+        switch id {
+        case .isFavorite:
+            self = .favorite
+        case .isDownloaded:
+            self = .downloaded
+        case .isUnwatched:
+            self = .unwatched
+
+        default:
+            return nil
+        }
+    }
 }
 
 extension NSSegmentedControl {
@@ -43,11 +58,14 @@ final class SearchFiltersViewController: NSViewController {
     @IBOutlet weak var filterButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
     
-    var filters: [FilterType] = [] {
-        didSet {
-            effectiveFilters = filters
+    var filters: [FilterType] {
+        set {
+            effectiveFilters = newValue
             
             updateUI()
+        }
+        get {
+            return effectiveFilters
         }
     }
     
@@ -108,22 +126,19 @@ final class SearchFiltersViewController: NSViewController {
     }
     
     @IBAction func filterButtonAction(_ sender: Any) {
-        toggleFiltersHidden(!eventsPopUp.isHidden)
+        setFilters(hidden: !eventsPopUp.isHidden)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        favoriteSegmentSelected = bottomSegmentedControl.isSelected(for: .favorite)
-        downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
-        unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
-        
-        toggleFiltersHidden(true)
+        setFilters(hidden: true)
         
         updateUI()
     }
     
-    private func toggleFiltersHidden(_ hidden: Bool) {
+    func setFilters(hidden: Bool) {
+        filterButton.state = hidden ? 0 : 1
         eventsPopUp.isHidden = hidden
         focusesPopUp.isHidden = hidden
         tracksPopUp.isHidden = hidden
@@ -193,23 +208,54 @@ final class SearchFiltersViewController: NSViewController {
     
     private func updateUI() {
         guard isViewLoaded else { return }
-        
-        let multipleChoiceFilters = filters.flatMap({ $0 as? MultipleChoiceFilter })
-        multipleChoiceFilters.forEach { filter in
-            guard let popUp = popUpButton(for: filter) else { return }
-            
-            popUp.removeAllItems()
-            
-            popUp.addItem(withTitle: filter.title)
-            
-            filter.options.forEach { option in
-                let item = NSMenuItem(title: option.title, action: nil, keyEquivalent: "")
-                item.representedObject = option
-                item.state = filter.selectedOptions.contains(option) ? NSOnState : NSOffState
-                popUp.menu?.addItem(item)
+
+        let activeFilters = filters.filter { !$0.isEmpty }
+        let count = activeFilters.count
+        if count == 0 {
+            setFilters(hidden: true)
+
+        } else if count == 1 && activeFilters[0] is TextualFilter {
+
+            setFilters(hidden: true)
+        } else {
+            setFilters(hidden: false)
+        }
+
+        for filter in filters {
+
+            switch filter {
+
+            case let filter as MultipleChoiceFilter:
+                guard let popUp = popUpButton(for: filter) else { return }
+
+                popUp.removeAllItems()
+
+                popUp.addItem(withTitle: filter.title)
+
+                filter.options.forEach { option in
+                    let item = NSMenuItem(title: option.title, action: nil, keyEquivalent: "")
+                    item.representedObject = option
+                    item.state = filter.selectedOptions.contains(option) ? NSOnState : NSOffState
+                    popUp.menu?.addItem(item)
+                }
+            case let filter as TextualFilter:
+                if let value = filter.value {
+                    searchField.stringValue = value
+                }
+            case let filter as ToggleFilter:
+                guard let filterID = FilterIdentifier(rawValue: filter.identifier), let segmentIndex = FilterSegment(filterID)?.rawValue else {
+                    break
+                }
+
+                bottomSegmentedControl.setSelected(filter.isOn, forSegment: segmentIndex)
+
+            default:
+                break
             }
         }
+
+        favoriteSegmentSelected = bottomSegmentedControl.isSelected(for: .favorite)
+        downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
+        unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
     }
-    
-    
 }

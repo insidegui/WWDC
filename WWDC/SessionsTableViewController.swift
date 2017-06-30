@@ -76,7 +76,7 @@ class SessionsTableViewController: NSViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func selectSession(with identifier: String, scrollOnly: Bool = false) {
         guard let index = displayedRows.index(where: { row in
             guard case .session(let viewModel) = row.kind else { return false }

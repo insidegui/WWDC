@@ -209,7 +209,8 @@ final class AppCoordinator {
     private lazy var searchCoordinator: SearchCoordinator = {
         return SearchCoordinator(self.storage,
                                  sessionsController: self.scheduleController.listViewController,
-                                 videosController: self.videosController.listViewController)
+                                 videosController: self.videosController.listViewController,
+                                 restorationFiltersState: Preferences.shared.filtersState)
     }()
     
     private func setupSearch() {
@@ -288,6 +289,7 @@ final class AppCoordinator {
         Preferences.shared.activeTab = activeTab
         Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
         Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
+        Preferences.shared.filtersState = searchCoordinator.currentFiltersState()
     }
     
     private func restoreApplicationState() {
