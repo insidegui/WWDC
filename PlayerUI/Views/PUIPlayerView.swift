@@ -424,6 +424,7 @@ public final class PUIPlayerView: NSView {
     // MARK: Controls
     
     fileprivate var wasPlayingBeforeStartingInteractiveSeek = false
+    private var isSkippingBy30 = false
     
     private var extrasMenuContainerView: NSStackView!
     
@@ -740,13 +741,13 @@ public final class PUIPlayerView: NSView {
         backButton.isHidden = disableBackAndForward
         forwardButton.isHidden = disableBackAndForward
         
-        let skipBy30 = d.PlayerViewShouldShowBackAndForward30SecondsButtons(self)
-        backButton.image = skipBy30 ? .PUIBack30s : .PUIBack15s
-        backButton.action = skipBy30 ? #selector(goBackInTime30(_:)) : #selector(goBackInTime15(_:))
-        backButton.toolTip = skipBy30 ? "Go back 30s" : "Go back 15s"
-        forwardButton.image = skipBy30 ? .PUIForward30s : .PUIForward15s
-        forwardButton.action = skipBy30 ? #selector(goForwardInTime30(_:)) : #selector(goForwardInTime15(_:))
-        forwardButton.toolTip = skipBy30 ? "Go forward 30s" : "Go forward 15s"
+        isSkippingBy30 = d.PlayerViewShouldShowBackAndForward30SecondsButtons(self)
+        backButton.image = isSkippingBy30 ? .PUIBack30s : .PUIBack15s
+        backButton.action = isSkippingBy30 ? #selector(goBackInTime30(_:)) : #selector(goBackInTime15(_:))
+        backButton.toolTip = isSkippingBy30 ? "Go back 30s" : "Go back 15s"
+        forwardButton.image = isSkippingBy30 ? .PUIForward30s : .PUIForward15s
+        forwardButton.action = isSkippingBy30 ? #selector(goForwardInTime30(_:)) : #selector(goForwardInTime15(_:))
+        forwardButton.toolTip = isSkippingBy30 ? "Go forward 30s" : "Go forward 15s"
         
         updateExternalPlaybackControlsAvailability()
         
@@ -1010,6 +1011,8 @@ public final class PUIPlayerView: NSView {
     
     private enum KeyCommands: UInt16 {
         case spaceBar = 49
+        case leftArrow = 123
+        case rightArrow = 124
     }
     
     private func startMonitoringKeyEvents() {
@@ -1029,8 +1032,13 @@ public final class PUIPlayerView: NSView {
             switch command {
             case .spaceBar:
                 self.togglePlaying(nil)
-                return nil
+            case .leftArrow:
+                self.isSkippingBy30 ? self.goBackInTime30(nil) : self.goBackInTime15(nil)
+            case .rightArrow:
+                self.isSkippingBy30 ? self.goForwardInTime30(nil) : self.goForwardInTime15(nil)
             }
+            
+            return nil
         }
     }
     
