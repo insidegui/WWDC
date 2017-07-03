@@ -43,6 +43,7 @@ final class MainWindowController: NSWindowController {
         window.toolbar = NSToolbar(identifier: "WWDC")
         
         window.identifier = "main"
+        window.setFrameAutosaveName("main")
         window.minSize = NSSize(width: 1060, height: 700)
         
         windowDidLoad()

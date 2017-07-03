@@ -31,9 +31,15 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         return activeTabVar.asObservable()
     }
     
-    init() {
+    init(windowController: NSWindowController) {
         super.init(nibName: nil, bundle: nil)!
-        
+
+        // Preserve the window's size, essentially passing in saved window frame sizes
+        let superFrame = view.frame
+        if let windowFrame = windowController.window?.frame {
+            view.frame = NSRect(origin: superFrame.origin, size: windowFrame.size)
+        }
+
         identifier = "tabs"
     }
     

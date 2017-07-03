@@ -64,7 +64,7 @@ final class AppCoordinator {
         
         DownloadManager.shared.start(with: storage)
         
-        self.tabController = WWDCTabViewController()
+        self.tabController = WWDCTabViewController(windowController: windowController)
         
         // Schedule
         self.scheduleController = SessionsSplitViewController(listStyle: .schedule)

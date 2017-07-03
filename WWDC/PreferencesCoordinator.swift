@@ -29,7 +29,7 @@ final class PreferencesCoordinator {
     
     init() {
         self.windowController = PreferencesWindowController()
-        self.tabController = WWDCTabViewController()
+        self.tabController = WWDCTabViewController(windowController: self.windowController)
         
         // General
         self.generalController = GeneralPreferencesViewController.loadFromStoryboard()
