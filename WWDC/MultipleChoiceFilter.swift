@@ -139,7 +139,6 @@ struct MultipleChoiceFilter: FilterType {
     func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
         var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
 
-        dictionary["options"] = options.dictionaryRepresentation()
         dictionary["selectedOptions"] = selectedOptions.dictionaryRepresentation()
 
         return dictionary
