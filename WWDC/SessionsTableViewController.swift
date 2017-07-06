@@ -55,16 +55,95 @@ class SessionsTableViewController: NSViewController {
             updateScheduleList()
         }
     }
-    
-    private var searchRows: [SessionRow] = []
+
     private var allRows: [SessionRow] = []
     
-    var displayedRows: [SessionRow] = [] {
-        didSet {
-            tableView.reloadPreservingSelection()
+    private(set) var displayedRows: [SessionRow] = []
+
+    func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
+
+        let oldValue = displayedRows
+
+        let selectedRows = tableView.selectedRowIndexes.flatMap { (i) -> SessionRow? in
+            guard i < oldValue.endIndex else { return nil }
+
+            return oldValue[i]
         }
+
+        let oldRowsSet = Set<SessionRow>(oldValue)
+        let newRowsSet = Set<SessionRow>(newValue)
+        let removed = oldRowsSet.subtracting(newRowsSet)
+        let added = newRowsSet.subtracting(oldRowsSet)
+        let moved = newRowsSet.intersection(oldRowsSet)
+        let selected = newRowsSet.intersection(selectedRows)
+
+        var removedIndexes = IndexSet()
+        var addedIndexes = IndexSet()
+        var reloadedIndexes = IndexSet()
+        var selectedIndexes = IndexSet()
+
+        for row in removed {
+            guard let index = oldValue.index(of: row) else { continue }
+            removedIndexes.insert(index)
+        }
+
+        for row in added {
+            guard let index = newValue.index(of: row) else { continue }
+            addedIndexes.insert(index)
+        }
+
+        for row in moved {
+            guard let index = newValue.index(of: row) else { continue }
+            reloadedIndexes.insert(index)
+        }
+
+        for row in selected {
+            guard let index = newValue.index(of: row) else { continue }
+            selectedIndexes.insert(index)
+        }
+
+        if selectedIndexes.isEmpty {
+            for row in newValue {
+                if case SessionRowKind.session(_) = row.kind {
+                    guard let index = newValue.index(of: row) else { continue }
+                    selectedIndexes.insert(index)
+                    break
+                }
+            }
+        }
+
+        NSAnimationContext.beginGrouping()
+        let context = NSAnimationContext.current()
+        if !animated {
+            context.duration = 0
+        }
+
+        context.completionHandler = {
+            NSAnimationContext.runAnimationGroup({ (context) in
+                context.allowsImplicitAnimation = true
+                self.tableView.scrollRowToVisible(selectedIndexes.first ?? 0)
+            }, completionHandler: nil)
+        }
+
+        tableView.beginUpdates()
+
+        tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
+
+        tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
+
+        // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
+        // so we delay updating the data model until after those methods have done their thing
+        displayedRows = newValue
+
+        // This must be after you update the backing model
+        tableView.reloadData(forRowIndexes: reloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
+
+        tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
+
+        tableView.endUpdates()
+        NSAnimationContext.endGrouping()
     }
-    
+
     init(style: SessionsListStyle) {
         self.style = style
         
@@ -114,7 +193,7 @@ class SessionsTableViewController: NSViewController {
         view.window?.makeFirstResponder(tableView)
         searchController.searchField.isEnabled = true
     }
-    
+
     private func performFirstUpdateIfNeeded() {
         switch style {
         case .schedule:
@@ -147,7 +226,8 @@ class SessionsTableViewController: NSViewController {
         }
         
         self.allRows = rows
-        self.displayedRows = allRows
+
+        setDisplayedRows(allRows, animated: false)
     }
     
     private func updateScheduleList() {
@@ -171,13 +251,14 @@ class SessionsTableViewController: NSViewController {
         }
         
         self.allRows = rows
-        self.displayedRows = allRows
+
+        setDisplayedRows(allRows, animated: false)
     }
     
     private func updateWithSearchResults() {
         guard let results = searchResults else {
             if !allRows.isEmpty {
-                self.displayedRows = allRows
+                setDisplayedRows(allRows, animated: true)
             } else {
                 switch style {
                 case .schedule:
@@ -187,21 +268,35 @@ class SessionsTableViewController: NSViewController {
                 }
             }
             
-            self.searchRows = []
-            
             return
         }
-        
+
+        if allRows.isEmpty {
+            switch style {
+            case .schedule:
+                updateScheduleList()
+            case .videos:
+                updateVideosList()
+            }
+        }
+
         let sortingFunction = (style == .schedule) ? Session.standardSortForSchedule : Session.standardSort
         
         let sessionRows: [SessionRow] = results.sorted(by: sortingFunction).flatMap { session in
             guard let viewModel = SessionViewModel(session: session) else { return nil }
+
+            for row in self.allRows {
+                if case .session(let sessionViewModel) = row.kind {
+                    if sessionViewModel.session.identifier == session.identifier {
+                        return row
+                    }
+                }
+            }
             
             return SessionRow(viewModel: viewModel)
         }
-        
-        self.searchRows = sessionRows
-        self.displayedRows = searchRows
+
+        setDisplayedRows(sessionRows, animated: true)
     }
     
     lazy var searchController: SearchFiltersViewController = {
@@ -210,7 +305,8 @@ class SessionsTableViewController: NSViewController {
     
     lazy var tableView: WWDCTableView = {
         let v = WWDCTableView()
-        
+
+        v.allowsEmptySelection = false
         v.wantsLayer = true
         v.focusRingType = .none
         v.allowsMultipleSelection = true

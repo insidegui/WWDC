@@ -33,7 +33,29 @@ final class SessionRow: NSObject {
         
         self.init(title: title)
     }
-    
+
+    override var debugDescription: String {
+        switch self.kind {
+        case .sectionHeader(let title):
+            return "Header: " + title
+        case .session(let viewModel):
+            return "Session: " + viewModel.identifier
+        }
+    }
+
+    // `hashValue` and `isEqual` both need to be provided to
+    // work correctly in sequences
+    override var hashValue: Int {
+        return diffIdentifier().hash
+    }
+
+    override func isEqual(_ object: Any?) -> Bool {
+        if let diffable = object as? IGListDiffable {
+            return self.isEqual(toDiffableObject: diffable)
+        } else {
+            return false
+        }
+    }
 }
 
 extension SessionRow: IGListDiffable {
