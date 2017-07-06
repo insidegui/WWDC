@@ -22,7 +22,6 @@ final class TrackColorView: NSView {
         super.init(frame: frameRect)
         
         wantsLayer = true
-        layer = WWDCLayer()
         
         layer?.cornerRadius = 2
         layer?.masksToBounds = true
@@ -78,5 +77,9 @@ final class TrackColorView: NSView {
         let progressFrame = NSRect(x: 0, y: 0, width: bounds.width, height: progressHeight)
         progressLayer.frame = progressFrame
     }
-    
+
+    override func makeBackingLayer() -> CALayer {
+        return WWDCLayer() as CALayer
+    }
+
 }

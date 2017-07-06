@@ -33,7 +33,15 @@ final class SessionRow: NSObject {
         
         self.init(title: title)
     }
-    
+
+    override var debugDescription: String {
+        switch self.kind {
+        case .sectionHeader(let title):
+            return "Header: " + title
+        case .session(let viewModel):
+            return "Session: " + viewModel.identifier
+        }
+    }
 }
 
 extension SessionRow: IGListDiffable {
