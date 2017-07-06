@@ -24,5 +24,13 @@ struct ToggleFilter: FilterType {
         
         return customPredicate
     }
-    
+
+    func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
+        var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
+
+        dictionary["isOn"] = isOn
+
+        return dictionary
+    }
+
 }

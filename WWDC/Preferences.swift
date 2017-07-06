@@ -8,6 +8,7 @@
 
 import Foundation
 import ThrowBack
+import SwiftyJSON
 
 extension Notification.Name {
     
@@ -65,6 +66,21 @@ final class Preferences {
         }
         set {
             defaults.set(newValue, forKey: #function)
+        }
+    }
+
+    var filtersState: JSON? {
+        get {
+            if let string = defaults.object(forKey: #function) as? String {
+                return JSON(parseJSON: string)
+            } else {
+                return nil
+            }
+        }
+        set {
+            if let myString = newValue?.rawString() {
+                defaults.set(myString, forKey: #function)
+            }
         }
     }
     
