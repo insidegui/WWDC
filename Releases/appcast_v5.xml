@@ -7,6 +7,19 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.1.3</title>
+			<description><![CDATA[
+				<ul>
+					<li>You can now go back/forward in the video by 15 or 30 seconds</li>
+					<li>Filters are now saved and restored between app launches</li>
+				</ul>
+						]]></description>
+            <pubDate>Thu, 6 Jul 2017 10:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.1.3/WWDC_v5.1.3.zip" sparkle:version="660" sparkle:shortVersionString="5.1.3" length="15979200" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.1.2</title>
 			<description><![CDATA[
 				<ul>
