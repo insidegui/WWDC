@@ -1331,11 +1331,7 @@ extension PUIPlayerView: PUITimelineViewDelegate {
     func timelineViewWillBeginInteractiveSeek() {
         wasPlayingBeforeStartingInteractiveSeek = isPlaying
         
-        if isPlayingExternally {
-            currentExternalPlaybackProvider?.pause()
-        } else {
-            player?.pause()
-        }
+        self.pause(nil)
     }
     
     func timelineViewDidSeek(to progress: Double) {
@@ -1353,11 +1349,7 @@ extension PUIPlayerView: PUITimelineViewDelegate {
     
     func timelineViewDidFinishInteractiveSeek() {
         if wasPlayingBeforeStartingInteractiveSeek {
-            if isPlayingExternally {
-                currentExternalPlaybackProvider?.play()
-            } else {
-                player?.play()
-            }
+            self.play(nil)
         }
     }
     
