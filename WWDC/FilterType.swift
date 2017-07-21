@@ -37,18 +37,12 @@ extension Dictionary where Key == String, Value == [ String : Any ] {
             case .text:
                 //TextualFilter
                 self[filterID.rawValue] = filter.dictionaryRepresentation()
-            case .event:
-                fallthrough
-            case .focus:
-                fallthrough
-            case .track:
+
+            case .event, .focus, .track:
                 //MultipleChoiceFilter
                 self[filterID.rawValue] = filter.dictionaryRepresentation()
-            case .isFavorite:
-                fallthrough
-            case .isDownloaded:
-                fallthrough
-            case .isUnwatched:
+
+            case .isFavorite, .isDownloaded, .isUnwatched:
                 //ToggleFilters
                 self[filterID.rawValue] = filter.dictionaryRepresentation()
             }
