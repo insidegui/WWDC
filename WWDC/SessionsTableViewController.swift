@@ -334,22 +334,26 @@ class SessionsTableViewController: NSViewController {
         tableView.menu = contextualMenu
     }
     
-    @objc private func tableViewMenuItemClicked(_ menuItem: NSMenuItem) {
+    private func selectedRowIndexes() -> IndexSet {
+        let clickedRow = self.tableView.clickedRow
         let selectedRowIndexes = self.tableView.selectedRowIndexes
+        
+        if clickedRow < 0 || selectedRowIndexes.contains(clickedRow) {
+            return selectedRowIndexes
+        } else {
+            return IndexSet(integer: clickedRow)
+        }
+    }
+
+    @objc private func tableViewMenuItemClicked(_ menuItem: NSMenuItem) {
         var viewModels = [SessionViewModel]()
         
-        if selectedRowIndexes.isEmpty == false {
-            selectedRowIndexes.forEach { row in
-                guard case .session(let viewModel) = displayedRows[row].kind else { return }
-
-                viewModels.append(viewModel)
-            }
-        } else {
-            if case .session(let viewModel) = displayedRows[self.tableView.clickedRow].kind {
-                viewModels.append(viewModel)
-            }
+        selectedRowIndexes().forEach { row in
+            guard case .session(let viewModel) = displayedRows[row].kind else { return }
+            
+            viewModels.append(viewModel)
         }
-        
+
         guard !viewModels.isEmpty else { return }
         
         switch menuItem.option {
@@ -371,20 +375,10 @@ class SessionsTableViewController: NSViewController {
     }
     
     override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-        let selectedRowIndexes = self.tableView.selectedRowIndexes
-        
-        if !selectedRowIndexes.isEmpty {
-            for row in selectedRowIndexes {
-                let sessionRow = displayedRows[row]
-                
-                guard case .session(let viewModel) = sessionRow.kind else { break }
-                
-                if shouldEnableMenuItem(menuItem: menuItem, viewModel: viewModel) { return true }
-            }
-        } else {
-            let sessionRow = displayedRows[self.tableView.clickedRow]
+        for row in selectedRowIndexes() {
+            let sessionRow = displayedRows[row]
             
-            guard case .session(let viewModel) = sessionRow.kind else { return false }
+            guard case .session(let viewModel) = sessionRow.kind else { break }
             
             if shouldEnableMenuItem(menuItem: menuItem, viewModel: viewModel) { return true }
         }
