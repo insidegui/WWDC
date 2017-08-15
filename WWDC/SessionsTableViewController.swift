@@ -335,12 +335,13 @@ class SessionsTableViewController: NSViewController {
     }
     
     private func selectedRowIndexes() -> IndexSet {
+        let clickedRow = self.tableView.clickedRow
         let selectedRowIndexes = self.tableView.selectedRowIndexes
         
-        if selectedRowIndexes.contains(self.tableView.clickedRow) {
+        if clickedRow < 0 || selectedRowIndexes.contains(clickedRow) {
             return selectedRowIndexes
         } else {
-            return IndexSet(integer: self.tableView.clickedRow)
+            return IndexSet(integer: clickedRow)
         }
     }
 
