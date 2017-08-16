@@ -68,14 +68,18 @@ final class AppCoordinator {
         
         // Schedule
         self.scheduleController = SessionsSplitViewController(listStyle: .schedule)
-        scheduleController.identifier = "Schedule"
+        self.scheduleController.identifier = "Schedule"
+        self.scheduleController.splitView.identifier = "ScheduleSplitView"
+        self.scheduleController.splitView.autosaveName = "ScheduleSplitView"
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
         self.tabController.addTabViewItem(scheduleItem)
         
         // Videos
         self.videosController = SessionsSplitViewController(listStyle: .videos)
-        videosController.identifier = "Videos"
+        self.videosController.identifier = "Videos"
+        self.scheduleController.splitView.identifier = "VideosSplitView"
+        self.videosController.splitView.autosaveName = "VideosSplitView"
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
         self.tabController.addTabViewItem(videosItem)
