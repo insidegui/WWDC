@@ -43,18 +43,6 @@ final class SessionsSplitViewController: NSSplitViewController {
         listViewController.view.setContentHuggingPriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
         detailViewController.view.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
         detailViewController.view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
-    }
-    
-    override func toggleSidebar(_ sender: Any?) {
-        super.toggleSidebar(sender)
-        
-        // for some reason the item was getting disabled after the user clicked on it ¯\_(ツ)_/¯
-        if let item = sender as? NSMenuItem {
-            item.isEnabled = true
-            item.target = self
-            item.action = #selector(toggleSidebar(_:))
-        }
-    }
-    
+    }    
 }
 
