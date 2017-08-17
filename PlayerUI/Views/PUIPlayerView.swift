@@ -1426,6 +1426,20 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
         self.pause(pip)
     }
     
+    public func pipActionReturn(_ pip: PIPViewController) {
+        if !NSApp.isActive {
+            NSApp.activate(ignoringOtherApps: true)
+        }
+        
+        if let window = self.lastKnownWindow {
+            window.makeKeyAndOrderFront(pip)
+            
+            if window.isMiniaturized {
+                window.deminiaturize(nil)
+            }
+        }
+    }
+    
     public func pipActionPause(_ pip: PIPViewController) {
         self.pause(pip)
     }
@@ -1445,18 +1459,6 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
     
     public func pipWillClose(_ pip: PIPViewController) {
         delegate?.playerViewWillExitPictureInPictureMode(self)
-        
-        if !NSApp.isActive {
-            NSApp.activate(ignoringOtherApps: true)
-        }
-        
-        if let window = self.lastKnownWindow {
-            window.makeKeyAndOrderFront(pip)
-            
-            if window.isMiniaturized {
-                window.deminiaturize(nil)
-            }
-        }
         
         pip.replacementRect = self.frame
         pip.replacementView = self
