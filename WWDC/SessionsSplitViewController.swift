@@ -37,6 +37,7 @@ final class SessionsSplitViewController: NSSplitViewController {
         view.wantsLayer = true
         
         let listItem = NSSplitViewItem(sidebarWithViewController: listViewController)
+        listItem.canCollapse = false
         let detailItem = NSSplitViewItem(viewController: detailViewController)
         
         addSplitViewItem(listItem)
