@@ -21,7 +21,9 @@ extension AppCoordinator: SessionsTableViewControllerDelegate  {
                 if let instance = session.instances.first {
                     guard !instance.isCurrentlyLive else { return }
                     
-                    guard instance.type == .session || instance.type == .video else { return }
+                    guard session.asset(of: .streamingVideo) != nil else {
+                        return
+                    }
                 }
                 
                 session.setCurrentPosition(1, 1)
