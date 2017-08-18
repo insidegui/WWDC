@@ -1424,9 +1424,12 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
     
     public func pipActionStop(_ pip: PIPViewController) {
         self.pause(pip)
+        delegate?.playerViewWillExitPictureInPictureMode(self, isReturningFromPiP: false)
     }
     
     public func pipActionReturn(_ pip: PIPViewController) {
+        delegate?.playerViewWillExitPictureInPictureMode(self, isReturningFromPiP: true)
+        
         if !NSApp.isActive {
             NSApp.activate(ignoringOtherApps: true)
         }
@@ -1458,8 +1461,6 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
     }
     
     public func pipWillClose(_ pip: PIPViewController) {
-        delegate?.playerViewWillExitPictureInPictureMode(self)
-        
         pip.replacementRect = self.frame
         pip.replacementView = self
         pip.replacementWindow = self.lastKnownWindow

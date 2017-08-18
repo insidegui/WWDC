@@ -50,7 +50,7 @@ final class VideoPlayerViewController: NSViewController {
     
     var detached = false
     
-    var playerWillExitPictureInPicture: (() -> Void)?
+    var playerWillExitPictureInPicture: ((Bool) -> Void)?
     
     init(player: AVPlayer, session: SessionViewModel) {
         self.sessionViewModel = session
@@ -274,8 +274,8 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
         playerView.snapshotPlayer(completion: completion)
     }
     
-    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView) {
-        self.playerWillExitPictureInPicture?()
+    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, isReturningFromPiP: Bool) {
+        self.playerWillExitPictureInPicture?(isReturningFromPiP)
     }
     
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {

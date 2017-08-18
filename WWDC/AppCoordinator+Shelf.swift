@@ -44,7 +44,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         canRestorePlaybackContext = true
     }
     
-    func goBackToContextBeforePiP() {
+    func goBackToContextBeforePiP(_ isReturningFromPip: Bool) {
         isTransitioningPlayerContext = true
         defer { isTransitioningPlayerContext = false }
         
@@ -53,11 +53,13 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard let identifier = playerOwnerSessionIdentifier else { return }
         guard let tab = playerOwnerTab else { return }
         
-        tabController.activeTab = tab
-        currentListController.selectSession(with: identifier)
+        if isReturningFromPip {
+            tabController.activeTab = tab
+            currentListController.selectSession(with: identifier)
+            currentPlayerController?.view.isHidden = false
+        }
         
         canRestorePlaybackContext = false
-        currentPlayerController?.view.isHidden = false
     }
     
     func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
@@ -85,8 +87,8 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             
             if currentPlayerController == nil {
                 currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel)
-                currentPlayerController?.playerWillExitPictureInPicture = { [weak self] in
-                    self?.goBackToContextBeforePiP()
+                currentPlayerController?.playerWillExitPictureInPicture = { [weak self] isReturningFromPip in
+                    self?.goBackToContextBeforePiP(isReturningFromPip)
                 }
                 
                 currentPlayerController?.delegate = self
