@@ -67,7 +67,7 @@ final class AppCoordinator {
         self.tabController = WWDCTabViewController(windowController: windowController)
         
         // Schedule
-        self.scheduleController = SessionsSplitViewController(listStyle: .schedule)
+        self.scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
         self.scheduleController.identifier = "Schedule"
         self.scheduleController.splitView.identifier = "ScheduleSplitView"
         self.scheduleController.splitView.autosaveName = "ScheduleSplitView"
@@ -76,9 +76,9 @@ final class AppCoordinator {
         self.tabController.addTabViewItem(scheduleItem)
         
         // Videos
-        self.videosController = SessionsSplitViewController(listStyle: .videos)
+        self.videosController = SessionsSplitViewController(windowController: windowController, listStyle: .videos)
         self.videosController.identifier = "Videos"
-        self.scheduleController.splitView.identifier = "VideosSplitView"
+        self.videosController.splitView.identifier = "VideosSplitView"
         self.videosController.splitView.autosaveName = "VideosSplitView"
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
