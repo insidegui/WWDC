@@ -18,8 +18,11 @@ final class SessionsSplitViewController: NSSplitViewController {
     var listViewController: SessionsTableViewController
     var detailViewController: SessionDetailsViewController
     var isResizingSplitView: Bool = false
+    var windowController: MainWindowController
+    var setupDone: Bool = false
     
-    init(listStyle: SessionsListStyle) {
+    init(windowController: MainWindowController, listStyle: SessionsListStyle) {
+        self.windowController = windowController
         listViewController = SessionsTableViewController(style: listStyle)
         detailViewController = SessionDetailsViewController(listStyle: listStyle)
         
@@ -48,6 +51,16 @@ final class SessionsSplitViewController: NSSplitViewController {
         detailViewController.view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
     }
     
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
+        if !setupDone {
+            if let sidebarInitWidth = windowController.sidebarInitWidth {
+                self.splitView.setPosition(sidebarInitWidth, ofDividerAt: 0)
+            }
+        }
+    }
+        
     @objc private func syncSplitView(notification: Notification) {
         guard isResizingSplitView == false else {
             return
@@ -59,6 +72,8 @@ final class SessionsSplitViewController: NSSplitViewController {
             return
         }
         guard otherSplitView != self.splitView else {
+            // If own split view is altered, change split view initialisation width for other tabs
+            windowController.sidebarInitWidth = otherSplitView.subviews[0].bounds.width
             return
         }
         guard  splitView.subviews.count > 0, otherSplitView.subviews.count > 0 else {

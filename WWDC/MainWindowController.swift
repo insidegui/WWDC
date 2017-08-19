@@ -34,6 +34,7 @@ final class MainWindowController: NSWindowController {
             return NSRect(x: 0, y: 0, width: 1200, height: 600)
         }
     }
+    public var sidebarInitWidth: CGFloat?
     
     init() {        
         let mask: NSWindowStyleMask = [.titled, .resizable, .miniaturizable, .closable]
