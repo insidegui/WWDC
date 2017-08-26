@@ -80,7 +80,10 @@ class ShelfViewController: NSViewController {
     private func updateBindings() {
         self.disposeBag = DisposeBag()
         
-        guard let viewModel = viewModel else { return }
+        guard let viewModel = viewModel else {
+            self.shelfView.image = nil
+            return
+        }
         
         viewModel.rxCanBePlayed.map({ !$0 }).bind(to: playButton.rx.isHidden).addDisposableTo(self.disposeBag)
         

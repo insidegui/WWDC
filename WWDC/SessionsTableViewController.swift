@@ -55,16 +55,60 @@ class SessionsTableViewController: NSViewController {
             updateScheduleList()
         }
     }
-    
-    private var searchRows: [SessionRow] = []
+
     private var allRows: [SessionRow] = []
     
-    var displayedRows: [SessionRow] = [] {
-        didSet {
-            tableView.reloadPreservingSelection()
+    var displayedRows: [SessionRow] = []
+
+    func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
+        guard animated else {
+            displayedRows = newValue
+            self.tableView.reloadData()
+            return
         }
+
+        let oldValue = displayedRows
+
+        let oldRowsSet = Set<SessionRow>(oldValue)
+        let newRowsSet = Set<SessionRow>(newValue)
+        let removed = oldRowsSet.subtracting(newRowsSet)
+        let added = newRowsSet.subtracting(oldRowsSet)
+        let moved = newRowsSet.intersection(oldRowsSet)
+
+        var removedIndexes = IndexSet()
+        var addedIndexes = IndexSet()
+        var reloadedIndexes = IndexSet()
+
+        for row in removed {
+            guard let index = oldValue.index(of: row) else { continue }
+            removedIndexes.insert(index)
+        }
+
+        for row in added {
+            guard let index = newValue.index(of: row) else { continue }
+            addedIndexes.insert(index)
+        }
+
+        for row in moved {
+            guard let index = newValue.index(of: row), index < oldValue.endIndex else { continue }
+            reloadedIndexes.insert(index)
+        }
+
+        tableView.beginUpdates()
+
+        tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
+
+        tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
+
+        tableView.reloadData(forRowIndexes: reloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
+
+        // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
+        // so we delay updating the data model until after those methods have done their thing
+        displayedRows = newValue
+
+        self.tableView.endUpdates()
     }
-    
+
     init(style: SessionsListStyle) {
         self.style = style
         
@@ -147,7 +191,8 @@ class SessionsTableViewController: NSViewController {
         }
         
         self.allRows = rows
-        self.displayedRows = allRows
+
+        setDisplayedRows(allRows, animated: false)
     }
     
     private func updateScheduleList() {
@@ -171,13 +216,14 @@ class SessionsTableViewController: NSViewController {
         }
         
         self.allRows = rows
-        self.displayedRows = allRows
+
+        setDisplayedRows(allRows, animated: false)
     }
     
     private func updateWithSearchResults() {
         guard let results = searchResults else {
             if !allRows.isEmpty {
-                self.displayedRows = allRows
+                setDisplayedRows(allRows, animated: true)
             } else {
                 switch style {
                 case .schedule:
@@ -187,21 +233,35 @@ class SessionsTableViewController: NSViewController {
                 }
             }
             
-            self.searchRows = []
-            
             return
         }
-        
+
+        if allRows.isEmpty {
+            switch style {
+            case .schedule:
+                updateScheduleList()
+            case .videos:
+                updateVideosList()
+            }
+        }
+
         let sortingFunction = (style == .schedule) ? Session.standardSortForSchedule : Session.standardSort
         
         let sessionRows: [SessionRow] = results.sorted(by: sortingFunction).flatMap { session in
             guard let viewModel = SessionViewModel(session: session) else { return nil }
+
+            for row in self.allRows {
+                if case .session(let sessionViewModel) = row.kind {
+                    if sessionViewModel.session.identifier == session.identifier {
+                        return row
+                    }
+                }
+            }
             
             return SessionRow(viewModel: viewModel)
         }
-        
-        self.searchRows = sessionRows
-        self.displayedRows = searchRows
+
+        setDisplayedRows(sessionRows, animated: true)
     }
     
     lazy var searchController: SearchFiltersViewController = {
