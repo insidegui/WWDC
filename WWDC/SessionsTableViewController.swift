@@ -58,13 +58,7 @@ class SessionsTableViewController: NSViewController {
 
     private var allRows: [SessionRow] = []
     
-    var displayedRows: [SessionRow] = [] {
-        didSet {
-            if displayedRows.count == 0 {
-                print("What")
-            }
-        }
-    }
+    var displayedRows: [SessionRow] = []
 
     func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
         guard animated else {
@@ -75,13 +69,15 @@ class SessionsTableViewController: NSViewController {
 
         let oldValue = displayedRows
 
-        let oldRowsSet = Set<SessionRow>.init(oldValue)
-        let newRowsSet = Set<SessionRow>.init(newValue)
+        let oldRowsSet = Set<SessionRow>(oldValue)
+        let newRowsSet = Set<SessionRow>(newValue)
         let removed = oldRowsSet.subtracting(newRowsSet)
         let added = newRowsSet.subtracting(oldRowsSet)
+        let moved = newRowsSet.intersection(oldRowsSet)
 
         var removedIndexes = IndexSet()
         var addedIndexes = IndexSet()
+        var reloadedIndexes = IndexSet()
 
         for row in removed {
             guard let index = oldValue.index(of: row) else { continue }
@@ -93,10 +89,18 @@ class SessionsTableViewController: NSViewController {
             addedIndexes.insert(index)
         }
 
-        self.tableView.beginUpdates()
+        for row in moved {
+            guard let index = newValue.index(of: row), index < oldValue.endIndex else { continue }
+            reloadedIndexes.insert(index)
+        }
 
-        self.tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
-        self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
+        tableView.beginUpdates()
+
+        tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
+
+        tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
+
+        tableView.reloadData(forRowIndexes: reloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
 
         // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
         // so we delay updating the data model until after those methods have done their thing
