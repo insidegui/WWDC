@@ -86,7 +86,6 @@ class WWDCImageView: NSView {
     
     private func buildUI() {
         self.wantsLayer = true
-        self.layer = WWDCLayer()
         self.layer?.cornerRadius = 2
         self.layer?.masksToBounds = true
         
@@ -101,6 +100,10 @@ class WWDCImageView: NSView {
         super.layout()
         
         updateRoundness()
+    }
+
+    override func makeBackingLayer() -> CALayer {
+        return WWDCLayer() as CALayer
     }
     
     // MARK: - Editing
