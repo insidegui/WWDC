@@ -15,22 +15,22 @@ enum SessionRowKind {
 }
 
 final class SessionRow: NSObject {
-    
+
     let kind: SessionRowKind
-    
+
     init(viewModel: SessionViewModel) {
         self.kind = .session(viewModel)
-        
+
         super.init()
     }
-    
+
     init(title: String) {
         self.kind = .sectionHeader(title)
     }
-    
+
     convenience init(date: Date, showTimeZone: Bool = false) {
         let title = SessionViewModel.standardFormatted(date: date, withTimeZoneName: showTimeZone)
-        
+
         self.init(title: title)
     }
 
@@ -59,7 +59,7 @@ final class SessionRow: NSObject {
 }
 
 extension SessionRow: IGListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
         switch self.kind {
         case .sectionHeader(let title):
@@ -68,10 +68,10 @@ extension SessionRow: IGListDiffable {
             return viewModel.diffIdentifier()
         }
     }
-    
+
     func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
         guard let other = object as? SessionRow else { return false }
-        
+
         if case .session(let otherViewModel) = other.kind, case .session(let viewModel) = self.kind {
             return otherViewModel.isEqual(toDiffableObject: viewModel)
         } else if case .sectionHeader(let otherTitle) = other.kind, case .sectionHeader(let title) = self.kind {
@@ -80,5 +80,4 @@ extension SessionRow: IGListDiffable {
             return false
         }
     }
-    
 }

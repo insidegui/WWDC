@@ -18,10 +18,10 @@ private enum SessionResponseKeys: String, JSONSubscriptType {
 }
 
 final class SessionsResponseAdapter: Adapter {
-    
+
     typealias InputType = JSON
     typealias OutputType = SessionsResponse
-    
+
     func adapt(_ input: JSON) -> Result<SessionsResponse, AdapterError> {
         return .error(.invalidData)
 //        guard let eventsJson = input[SessionResponseKeys.events].array else {

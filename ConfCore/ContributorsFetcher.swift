@@ -10,18 +10,18 @@ import Cocoa
 import SwiftyJSON
 
 public final class ContributorsFetcher {
-    
+
     public static let shared: ContributorsFetcher = ContributorsFetcher()
-    
+
     fileprivate struct Constants {
         static let contributorsURL = "https://api.github.com/repos/insidegui/WWDC/contributors"
     }
 
     private let syncQueue = DispatchQueue(label: "io.wwdc.app.contributorsfetcher.sync")
     private var names = [String]()
-    
+
     public var infoTextChangedCallback: (_ newText: String) -> () = { _ in }
-    
+
     public var infoText = "" {
         didSet {
             DispatchQueue.main.async {
@@ -29,7 +29,7 @@ public final class ContributorsFetcher {
             }
         }
     }
-    
+
     /// Loads the list of contributors from the GitHub repository and builds the infoText
     public func load() {
         guard let url = URL(string: Constants.contributorsURL) else { return }
@@ -64,33 +64,33 @@ public final class ContributorsFetcher {
                 }
             }
         }
-        
+
         task.resume()
     }
-    
+
     fileprivate func parseResponse(_ data: Data) -> [String] {
         let jsonData = JSON(data: data)
         guard let contributors = jsonData.array else { return [String]() }
-        
+
         var contributorNames = [String]()
         for contributor in contributors {
             if let name = contributor["login"].string {
                 contributorNames.append(name)
             }
         }
-        
+
         return contributorNames
     }
-    
+
     fileprivate func buildInfoText(_ names: [String]) {
         var text = "Contributors (GitHub usernames):\n"
-        
+
         var prefix = ""
         for name in names {
             text.append("\(prefix)\(name)")
             prefix = ", "
         }
-        
+
         infoText = text
     }
 }

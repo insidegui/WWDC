@@ -11,9 +11,9 @@ import QuartzCore
 import AVFoundation
 
 class PUIBoringLayer: CALayer {
-    
+
     private var shouldAnimate: Bool = false
-    
+
     override func action(forKey event: String) -> CAAction? {
         if shouldAnimate {
             return super.action(forKey: event)
@@ -21,19 +21,19 @@ class PUIBoringLayer: CALayer {
             return nil
         }
     }
-    
+
     func animate(with block: () -> Void) {
         shouldAnimate = true
         block()
         shouldAnimate = false
     }
-    
+
 }
 
 final class PUIBoringPlayerLayer: AVPlayerLayer {
-    
+
     private var shouldAnimate: Bool = false
-    
+
     override func action(forKey event: String) -> CAAction? {
         if shouldAnimate {
             return super.action(forKey: event)
@@ -41,20 +41,20 @@ final class PUIBoringPlayerLayer: AVPlayerLayer {
             return nil
         }
     }
-    
+
     func animate(with block: () -> Void) {
         shouldAnimate = true
         block()
         shouldAnimate = false
     }
-    
+
 }
 
 
 final class PUIBoringTextLayer: CATextLayer {
-    
+
     private var shouldAnimate: Bool = false
-    
+
     override func action(forKey event: String) -> CAAction? {
         if shouldAnimate {
             return super.action(forKey: event)
@@ -62,19 +62,19 @@ final class PUIBoringTextLayer: CATextLayer {
             return nil
         }
     }
-    
+
     func animate(with block: () -> Void) {
         shouldAnimate = true
         block()
         shouldAnimate = false
     }
-    
+
 }
 
 class PUIBoringGradientLayer: CAGradientLayer {
-    
+
     private var shouldAnimate: Bool = false
-    
+
     override func action(forKey event: String) -> CAAction? {
         if shouldAnimate {
             return super.action(forKey: event)
@@ -82,11 +82,11 @@ class PUIBoringGradientLayer: CAGradientLayer {
             return nil
         }
     }
-    
+
     func animate(with block: () -> Void) {
         shouldAnimate = true
         block()
         shouldAnimate = false
     }
-    
+
 }

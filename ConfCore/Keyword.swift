@@ -14,12 +14,11 @@ public class Keyword: Object {
 
     /// The keyword
     public dynamic var name = ""
-    
+
     /// Sessions containing this keyword
-//    public let sessionInstances = LinkingObjects(fromType: SessionInstance.self, property: "keywords")
-    
+    //    public let sessionInstances = LinkingObjects(fromType: SessionInstance.self, property: "keywords")
+
     public override class func primaryKey() -> String? {
         return "name"
     }
-    
 }

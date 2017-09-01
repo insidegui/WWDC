@@ -13,7 +13,7 @@ enum AdapterError: Error {
     case invalidData
     case unsupported
     case missingKey(JSONSubscriptType)
-    
+
     var localizedDescription: String {
         switch self {
         case .invalidData:
@@ -29,13 +29,13 @@ enum AdapterError: Error {
 protocol Adapter {
     associatedtype InputType
     associatedtype OutputType
-    
+
     func adapt(_ input: InputType) -> Result<OutputType, AdapterError>
     func adapt(_ input: [InputType]) -> Result<[OutputType], AdapterError>
 }
 
 extension Adapter {
-    
+
     func adapt(_ input: [InputType]) -> Result<[OutputType], AdapterError> {
         let collection = input.flatMap { (item: InputType) -> OutputType? in
             let itemResult = self.adapt(item)
@@ -45,8 +45,8 @@ extension Adapter {
             default: return nil
             }
         }
-        
+
         return .success(collection)
     }
-    
+
 }

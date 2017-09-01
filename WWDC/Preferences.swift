@@ -11,19 +11,17 @@ import ThrowBack
 import SwiftyJSON
 
 extension Notification.Name {
-    
     static let LocalVideoStoragePathPreferenceDidChange = Notification.Name("LocalVideoStoragePathPreferenceDidChange")
     static let RefreshPeriodicallyPreferenceDidChange = Notification.Name("RefreshPeriodicallyPreferenceDidChange")
     static let SkipBackAndForwardBy30SecondsPreferenceDidChange = Notification.Name("SkipBackAndForwardBy30SecondsPreferenceDidChange")
-    
 }
 
 final class Preferences {
-    
+
     static let shared: Preferences = Preferences()
-    
+
     private let defaults = UserDefaults.standard
-    
+
     /// The URL for the folder where downloaded videos will be saved
     var localVideoStorageURL: URL {
         get {
@@ -31,26 +29,26 @@ final class Preferences {
         }
         set {
             TBPreferences.shared.localVideoStoragePath = newValue.path
-            
+
             defaults.set(newValue.path, forKey: #function)
-            
+
             defaults.synchronize()
-            
+
             NotificationCenter.default.post(name: .LocalVideoStoragePathPreferenceDidChange, object: nil)
         }
     }
-    
+
     var activeTab: MainWindowTab {
         get {
             let rawValue = defaults.integer(forKey: #function)
-            
+
             return MainWindowTab(rawValue: rawValue) ?? .schedule
         }
         set {
             defaults.set(newValue.rawValue, forKey: #function)
         }
     }
-    
+
     var selectedScheduleItemIdentifier: String? {
         get {
             return defaults.object(forKey: #function) as? String
@@ -59,7 +57,7 @@ final class Preferences {
             defaults.set(newValue, forKey: #function)
         }
     }
-    
+
     var selectedVideoItemIdentifier: String? {
         get {
             return defaults.object(forKey: #function) as? String
@@ -83,7 +81,7 @@ final class Preferences {
             }
         }
     }
-    
+
     var showedAccountPromptAtStartup: Bool {
         get {
             return defaults.bool(forKey: #function)
@@ -92,7 +90,7 @@ final class Preferences {
             defaults.set(newValue, forKey: #function)
         }
     }
-    
+
     var userOptedOutOfCrashReporting: Bool {
         get {
             return defaults.bool(forKey: #function)
@@ -101,7 +99,7 @@ final class Preferences {
             defaults.set(newValue, forKey: #function)
         }
     }
-    
+
     var searchInTranscripts: Bool {
         get {
             return defaults.bool(forKey: #function)
@@ -110,7 +108,7 @@ final class Preferences {
             defaults.set(newValue, forKey: #function)
         }
     }
-    
+
     var searchInBookmarks: Bool {
         get {
             return defaults.bool(forKey: #function)
@@ -119,18 +117,18 @@ final class Preferences {
             defaults.set(newValue, forKey: #function)
         }
     }
-    
+
     var refreshPeriodically: Bool {
         get {
             return defaults.bool(forKey: #function)
         }
         set {
             defaults.set(newValue, forKey: #function)
-            
+
             NotificationCenter.default.post(name: .RefreshPeriodicallyPreferenceDidChange, object: nil)
         }
     }
-    
+
     var skipBackAndForwardBy30Seconds: Bool {
         get {
             return defaults.bool(forKey: #function)
@@ -141,5 +139,5 @@ final class Preferences {
             NotificationCenter.default.post(name: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil)
         }
     }
-    
+
 }
