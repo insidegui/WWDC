@@ -110,7 +110,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     }
 
     private func tabItem(with identifier: String) -> NSTabViewItem? {
-        return tabViewItems.filter({ $0.identifier as? String == identifier }).first
+        return tabViewItems.first { $0.identifier as? String == identifier }
     }
 
     override func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: String, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {

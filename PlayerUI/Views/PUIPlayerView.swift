@@ -125,19 +125,11 @@ public final class PUIPlayerView: NSView {
     }
 
     public var firstAnnotationBeforeCurrentTime: PUITimelineAnnotation? {
-        return annotations.filter({ annotation in
-            guard annotation.isValid else { return false }
-
-            return annotation.timestamp + 1 < currentTimestamp
-        }).last
+        return annotations.reversed().first { $0.isValid && $0.timestamp + 1 < currentTimestamp }
     }
 
     public var firstAnnotationAfterCurrentTime: PUITimelineAnnotation? {
-        return annotations.filter({ annotation in
-            guard annotation.isValid else { return false }
-
-            return annotation.timestamp > currentTimestamp + 1
-        }).first
+        return annotations.first { $0.isValid && $0.timestamp > currentTimestamp + 1 }
     }
 
     public func seek(to annotation: PUITimelineAnnotation) {
@@ -1282,7 +1274,7 @@ public final class PUIPlayerView: NSView {
 
         unhighlightExternalPlaybackButtons()
 
-        guard let registration = externalPlaybackProviders.filter({ type(of: $0.provider).name == currentProviderName }).first else { return }
+        guard let registration = externalPlaybackProviders.first(where: { type(of: $0.provider).name == currentProviderName }) else { return }
 
         registration.button.tintColor = .playerHighlight
 

@@ -52,9 +52,9 @@ open class PUIPlayerWindow: NSWindow {
         guard _storedTitlebarView == nil else { return _storedTitlebarView }
         guard let containerClass = NSClassFromString("NSTitlebarContainerView") else { return nil }
 
-        guard let containerView = contentView?.superview?.subviews.filter({ $0.isKind(of: containerClass) }).last else { return nil }
+        guard let containerView = contentView?.superview?.subviews.reversed().first(where: { $0.isKind(of: containerClass) }) else { return nil }
 
-        guard let titlebar = containerView.subviews.filter({ $0.isKind(of: NSVisualEffectView.self) }).last as? NSVisualEffectView else { return nil }
+        guard let titlebar = containerView.subviews.reversed().first(where: { $0.isKind(of: NSVisualEffectView.self) }) as? NSVisualEffectView else { return nil }
 
         _storedTitlebarView = titlebar
 
