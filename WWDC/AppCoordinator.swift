@@ -274,7 +274,7 @@ final class AppCoordinator {
     }
 
     func receiveNotification(with userInfo: [String : Any]) -> Bool {
-        return liveObserver.processSubscriptionNotification(with: userInfo) &&
+        return liveObserver.processSubscriptionNotification(with: userInfo) ||
             RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo)
     }
 
