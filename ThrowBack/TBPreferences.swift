@@ -110,7 +110,7 @@ public final class TBPreferences {
     // the splitView's divider position
     var dividerPosition: CGFloat {
         set {
-            defaults.set(NSNumber(value: Double(newValue) as Double), forKey: Keys.VideosController.dividerPosition)
+            defaults.set(NSNumber(value: Double(newValue)), forKey: Keys.VideosController.dividerPosition)
         }
         get {
             if let width = defaults.object(forKey: Keys.VideosController.dividerPosition) as? NSNumber {
@@ -219,7 +219,7 @@ public final class TBPreferences {
             }
         }
         set {
-            defaults.set(NSNumber(value: Double(newValue) as Double), forKey: Keys.lastVideoWindowScale)
+            defaults.set(NSNumber(value: Double(newValue)), forKey: Keys.lastVideoWindowScale)
         }
     }
 
@@ -233,7 +233,7 @@ public final class TBPreferences {
             }
         }
         set {
-            defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.autoplayLiveEvents)
+            defaults.set(NSNumber(value: newValue), forKey: Keys.autoplayLiveEvents)
         }
     }
 
@@ -247,7 +247,7 @@ public final class TBPreferences {
             }
         }
         set {
-            defaults.set(NSNumber(value: newValue as Double), forKey: Keys.liveEventCheckInterval)
+            defaults.set(NSNumber(value: newValue), forKey: Keys.liveEventCheckInterval)
         }
     }
 
@@ -261,7 +261,7 @@ public final class TBPreferences {
             }
         }
         set {
-            defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.userKnowsLiveEventThing)
+            defaults.set(NSNumber(value: newValue), forKey: Keys.userKnowsLiveEventThing)
         }
     }
 
@@ -275,7 +275,7 @@ public final class TBPreferences {
             }
         }
         set {
-            defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.tvTechTalksAlerted)
+            defaults.set(NSNumber(value: newValue), forKey: Keys.tvTechTalksAlerted)
         }
     }
 
@@ -289,7 +289,7 @@ public final class TBPreferences {
             }
         }
         set {
-            defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.automaticRefreshEnabled)
+            defaults.set(NSNumber(value: newValue), forKey: Keys.automaticRefreshEnabled)
         }
     }
 
@@ -302,7 +302,7 @@ public final class TBPreferences {
             }
         }
         set {
-            defaults.set(NSNumber(value: newValue as Bool), forKey: Keys.floatOnTopEnabled)
+            defaults.set(NSNumber(value: newValue), forKey: Keys.floatOnTopEnabled)
         }
     }
 

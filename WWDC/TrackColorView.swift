@@ -78,6 +78,6 @@ final class TrackColorView: NSView {
     }
 
     override func makeBackingLayer() -> CALayer {
-        return WWDCLayer() as CALayer
+        return WWDCLayer()
     }
 }

@@ -49,7 +49,7 @@ class WWDCTextField: NSTextField {
     }
 
     override func textDidChange(_ notification: Notification) {
-        super.textDidChange(notification as Notification)
+        super.textDidChange(notification)
 
         invalidateIntrinsicContentSize()
     }
