@@ -47,11 +47,11 @@ final class ImageDownloadCenter {
     }
 
     func hasActiveOperation(for url: URL) -> Bool {
-        return queue.operations.filter { op in
+        return queue.operations.contains { op in
             guard let op = op as? ImageDownloadOperation else { return false }
 
             return op.url == url && op.isExecuting
-            }.count > 0
+        }
     }
 
 }

@@ -143,11 +143,7 @@ final class DownloadManager: NSObject {
     }
 
     func isDownloading(_ url: String) -> Bool {
-        let downloading = downloadTasks.keys.filter { taskURL in
-            return url == taskURL
-        }
-
-        return (downloading.count > 0)
+        return downloadTasks.keys.contains { $0 == url }
     }
 
     func localVideoPath(_ remoteURL: String) -> String? {
