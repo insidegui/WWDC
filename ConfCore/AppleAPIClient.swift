@@ -36,9 +36,7 @@ public final class AppleAPIClient {
         }
 
         service.configureTransformer(environment.newsPath) { [weak self] (entity: Entity<JSON>) throws -> [NewsItem]? in
-            let json = entity.content as JSON
-
-            guard let newsItemsJson = json["items"].array else {
+            guard let newsItemsJson = entity.content["items"].array else {
                 throw APIError.adapter
             }
 
@@ -46,21 +44,15 @@ public final class AppleAPIClient {
         }
 
         service.configureTransformer(environment.sessionsPath) { [weak self] (entity: Entity<JSON>) throws -> ContentsResponse? in
-            let json = entity.content as JSON
-
-            return try self?.failableAdapt(json, using: ContentsResponseAdapter())
+            return try self?.failableAdapt(entity.content, using: ContentsResponseAdapter())
         }
 
         service.configureTransformer(environment.videosPath) { [weak self] (entity: Entity<JSON>) throws -> SessionsResponse? in
-            let json = entity.content as JSON
-
-            return try self?.failableAdapt(json, using: SessionsResponseAdapter())
+            return try self?.failableAdapt(entity.content, using: SessionsResponseAdapter())
         }
 
         service.configureTransformer(environment.liveVideosPath) { [weak self] (entity: Entity<JSON>) throws -> [SessionAsset]? in
-            let json = entity.content as JSON
-
-            guard let sessionsDict = json["live_sessions"].dictionary else {
+            guard let sessionsDict = entity.content["live_sessions"].dictionary else {
                 throw APIError.adapter
             }
 
