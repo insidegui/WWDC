@@ -46,14 +46,14 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
     /// - Parameter consumer: The consumer that's going to be using this provider
     init(consumer: PUIExternalPlaybackConsumer) {
         self.consumer = consumer
-        self.status = PUIExternalPlaybackMediaStatus()
+        status = PUIExternalPlaybackMediaStatus()
         
         super.init()
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceListDidChange),
                                                name: CastDeviceScanner.DeviceListDidChange,
-                                               object: self.scanner)
+                                               object: scanner)
         
         scanner.startScanning()
     }
@@ -121,7 +121,7 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
     fileprivate var mediaStatusRefreshTimer: Timer?
     
     @objc private func deviceListDidChange() {
-        self.isAvailable = scanner.devices.count > 0
+        isAvailable = scanner.devices.count > 0
         
         buildMenu()
     }
@@ -182,7 +182,7 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
     }
     
     fileprivate var mediaForChromeCast: CastMedia? {
-        guard let originalMediaURL = self.consumer?.remoteMediaUrl else {
+        guard let originalMediaURL = consumer?.remoteMediaUrl else {
             NSLog("Unable to play because the player view doesn't have a remote media URL associated with it")
             return nil
         }

@@ -42,7 +42,7 @@ class PUIAnnotationLayer: PUIBoringLayer {
         }
 
         let y: CGFloat = -f.height - attachmentSpacing
-        let x: CGFloat = -f.width / 2 + self.bounds.width / 2
+        let x: CGFloat = -f.width / 2 + bounds.width / 2
 
         f.origin.x = x
         f.origin.y = y

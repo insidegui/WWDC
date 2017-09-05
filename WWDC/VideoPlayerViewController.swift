@@ -35,7 +35,7 @@ final class VideoPlayerViewController: NSViewController {
 
     var sessionViewModel: SessionViewModel {
         didSet {
-            self.disposeBag = DisposeBag()
+            disposeBag = DisposeBag()
 
             updateUI()
             resetAppearanceDelegate()
@@ -53,7 +53,7 @@ final class VideoPlayerViewController: NSViewController {
     var playerWillExitPictureInPicture: ((Bool) -> Void)?
 
     init(player: AVPlayer, session: SessionViewModel) {
-        self.sessionViewModel = session
+        sessionViewModel = session
         self.player = player
 
         super.init(nibName: nil, bundle: nil)!
@@ -164,7 +164,7 @@ final class VideoPlayerViewController: NSViewController {
         let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode")
         Observable.collection(from: bookmarks).observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
             self?.playerView.annotations = bookmarks.toArray()
-        }).addDisposableTo(self.disposeBag)
+        }).addDisposableTo(disposeBag)
     }
 
     @objc private func annotationSelected(notification: Notification) {
@@ -276,7 +276,7 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
     }
 
     func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, isReturningFromPiP: Bool) {
-        self.playerWillExitPictureInPicture?(isReturningFromPiP)
+        playerWillExitPictureInPicture?(isReturningFromPiP)
     }
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
@@ -296,15 +296,15 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
     }
     
     func playerViewShouldShowSpeedControl(_ playerView: PUIPlayerView) -> Bool {
-        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+        return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
     
     func playerViewShouldShowAnnotationControls(_ playerView: PUIPlayerView) -> Bool {
-        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+        return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
     
     func playerViewShouldShowBackAndForwardControls(_ playerView: PUIPlayerView) -> Bool {
-        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+        return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
     
     func playerViewShouldShowExternalPlaybackControls(_ playerView: PUIPlayerView) -> Bool {
@@ -316,11 +316,11 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
     }
     
     func playerViewShouldShowTimelineView(_ playerView: PUIPlayerView) -> Bool {
-        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+        return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
     
     func playerViewShouldShowTimestampLabels(_ playerView: PUIPlayerView) -> Bool {
-        return !self.sessionViewModel.sessionInstance.isCurrentlyLive
+        return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
     
     func PlayerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {

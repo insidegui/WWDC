@@ -63,7 +63,7 @@ final class DownloadManager: NSObject {
     override init() {
         super.init()
 
-        self.backgroundSession = URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
+        backgroundSession = URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
     }
 
     func start(with storage: Storage) {
@@ -90,7 +90,7 @@ final class DownloadManager: NSObject {
     }
 
     func allTasks() -> [URLSessionDownloadTask] {
-        return Array(self.downloadTasks.values)
+        return Array(downloadTasks.values)
     }
 
     func download(_ asset: SessionAsset) {
@@ -104,7 +104,7 @@ final class DownloadManager: NSObject {
 
         let task = backgroundSession.downloadTask(with: URL(string: url)!)
         if let key = task.originalRequest?.url!.absoluteString {
-            self.downloadTasks[key] = task
+            downloadTasks[key] = task
         }
         task.resume()
 
@@ -134,7 +134,7 @@ final class DownloadManager: NSObject {
     func cancelDownload(_ url: String) -> Bool {
         if let task = downloadTasks[url] {
             task.cancel()
-            self.downloadTasks.removeValue(forKey: url)
+            downloadTasks.removeValue(forKey: url)
             NotificationCenter.default.post(name: Notification.Name.DownloadManagerDownloadCancelled, object: url)
             return true
         }
@@ -161,7 +161,7 @@ final class DownloadManager: NSObject {
     func localFileURL(for session: Session) -> URL? {
         guard let asset = session.asset(of: .hdVideo) else { return nil }
 
-        let path = self.localStoragePath(for: asset)
+        let path = localStoragePath(for: asset)
 
         guard FileManager.default.fileExists(atPath: path) else { return nil }
 
@@ -175,7 +175,7 @@ final class DownloadManager: NSObject {
     }
 
     func hasVideo(_ url: String) -> Bool {
-        guard let path = self.localVideoPath(url) else { return false }
+        guard let path = localVideoPath(url) else { return false }
 
         return FileManager.default.fileExists(atPath: path)
     }
@@ -220,7 +220,7 @@ final class DownloadManager: NSObject {
             return nil
         }
 
-        let path = self.localStoragePath(for: asset)
+        let path = localStoragePath(for: asset)
 
         guard FileManager.default.fileExists(atPath: path) else { return nil }
 
@@ -388,18 +388,18 @@ final class DownloadManager: NSObject {
         guard let enumerator = FileManager.default.enumerator(atPath: path) else { return }
         guard let files = enumerator.allObjects as? [String] else { return }
 
-        self.storage.updateDownloadedFlag(true, forAssetsAtPaths: files)
+        storage.updateDownloadedFlag(true, forAssetsAtPaths: files)
 
         files.forEach { NotificationCenter.default.post(name: .DownloadManagerFileAddedNotification, object: $0) }
 
-        if self.existingVideoFiles.count == 0 {
-            self.existingVideoFiles = files
+        if existingVideoFiles.count == 0 {
+            existingVideoFiles = files
             return
         }
 
-        let removedFiles = self.existingVideoFiles.filter { !files.contains($0) }
+        let removedFiles = existingVideoFiles.filter { !files.contains($0) }
 
-        self.storage.updateDownloadedFlag(false, forAssetsAtPaths: removedFiles)
+        storage.updateDownloadedFlag(false, forAssetsAtPaths: removedFiles)
 
         removedFiles.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
     }
@@ -421,7 +421,7 @@ extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
 
         let originalAbsoluteURLString = originalURL.absoluteString
 
-        guard let localPath = self.localVideoPath(originalAbsoluteURLString) else { return }
+        guard let localPath = localVideoPath(originalAbsoluteURLString) else { return }
         let destinationUrl = URL(fileURLWithPath: localPath)
         let destinationDir = destinationUrl.deletingLastPathComponent()
 

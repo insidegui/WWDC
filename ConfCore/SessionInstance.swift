@@ -61,7 +61,7 @@ public class SessionInstance: Object {
             return SessionInstanceType(rawValue: sessionType) ?? .session
         }
         set {
-            self.sessionType = newValue.rawValue
+            sessionType = newValue.rawValue
         }
     }
 
@@ -124,19 +124,19 @@ public class SessionInstance: Object {
     }
 
     func merge(with other: SessionInstance, in realm: Realm) {
-        assert(other.identifier == self.identifier, "Can't merge two objects with different identifiers!")
+        assert(other.identifier == identifier, "Can't merge two objects with different identifiers!")
 
-        self.number = other.number
-        self.rawSessionType = other.rawSessionType
-        self.sessionType = other.sessionType
-        self.startTime = other.startTime
-        self.endTime = other.endTime
-        self.roomIdentifier = other.roomIdentifier
-        self.trackName = other.trackName
-        self.trackIdentifier = other.trackIdentifier
-        self.eventIdentifier = other.eventIdentifier
+        number = other.number
+        rawSessionType = other.rawSessionType
+        sessionType = other.sessionType
+        startTime = other.startTime
+        endTime = other.endTime
+        roomIdentifier = other.roomIdentifier
+        trackName = other.trackName
+        trackIdentifier = other.trackIdentifier
+        eventIdentifier = other.eventIdentifier
 
-        if let otherSession = other.session, let session = self.session {
+        if let otherSession = other.session, let session = session {
             session.merge(with: otherSession, in: realm)
         }
 
@@ -150,8 +150,8 @@ public class SessionInstance: Object {
             }
         }
         
-        self.keywords.removeAll()
-        self.keywords.append(objectsIn: otherKeywords)
+        keywords.removeAll()
+        keywords.append(objectsIn: otherKeywords)
     }
     
 }

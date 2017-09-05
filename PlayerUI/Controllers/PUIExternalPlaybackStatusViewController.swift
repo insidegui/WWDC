@@ -17,17 +17,17 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
     }
     var providerIcon: NSImage? {
         didSet {
-            self.iconImageView.image = providerIcon
+            iconImageView.image = providerIcon
         }
     }
     var providerName: String = "" {
         didSet {
-            self.titleLabel.stringValue = providerName
+            titleLabel.stringValue = providerName
         }
     }
     var providerDescription: String = "" {
         didSet {
-            self.descriptionLabel.stringValue = providerDescription
+            descriptionLabel.stringValue = providerDescription
         }
     }
 

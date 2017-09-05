@@ -39,9 +39,9 @@ public final class PUIButton: NSControl {
             guard let image = image else { return }
 
             if image.isTemplate {
-                self.maskImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
+                maskImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
             } else {
-                self.maskImage = nil
+                maskImage = nil
             }
 
             invalidateIntrinsicContentSize()
@@ -53,9 +53,9 @@ public final class PUIButton: NSControl {
             guard let alternateImage = alternateImage else { return }
 
             if alternateImage.isTemplate {
-                self.alternateMaskImage = alternateImage.cgImage(forProposedRect: nil, context: nil, hints: nil)
+                alternateMaskImage = alternateImage.cgImage(forProposedRect: nil, context: nil, hints: nil)
             } else {
-                self.alternateMaskImage = nil
+                alternateMaskImage = nil
             }
 
             invalidateIntrinsicContentSize()
@@ -158,7 +158,7 @@ public final class PUIButton: NSControl {
 
         if let action = action, let target = target {
             if isToggle {
-                self.state = (self.state == NSOnState) ? NSOffState : NSOnState
+                state = (state == NSOnState) ? NSOffState : NSOnState
             }
             NSApp.sendAction(action, to: target, from: self)
         }
@@ -172,7 +172,7 @@ public final class PUIButton: NSControl {
     }
 
     private func showMenu(with event: NSEvent) {
-        guard let menu = self.menu else { return }
+        guard let menu = menu else { return }
 
         menu.popUp(positioning: nil, at: .zero, in: self)
     }

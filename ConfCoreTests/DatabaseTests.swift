@@ -29,7 +29,7 @@ class DatabaseTests: XCTestCase {
 
     /// Make sure all objects and relationships are correct
     func testRealmObjectsAndRelationships() {
-        guard let config = self.realmConfiguration else {
+        guard let config = realmConfiguration else {
             XCTFail("Unable to create realm for tests")
             return
         }

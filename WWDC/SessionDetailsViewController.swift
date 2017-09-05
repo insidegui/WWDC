@@ -38,7 +38,7 @@ class SessionDetailsViewController: NSViewController {
             transcriptButton.isHidden = (viewModel.session.transcript() == nil)
 
             let shouldHideButtonsBar = transcriptButton.isHidden && bookmarksButton.isHidden
-            self.menuButtonsContainer.isHidden = shouldHideButtonsBar
+            menuButtonsContainer.isHidden = shouldHideButtonsBar
 
             let instance = viewModel.sessionInstance
             let type = instance.type
@@ -157,9 +157,9 @@ class SessionDetailsViewController: NSViewController {
     init(listStyle: SessionsListStyle) {
         self.listStyle = listStyle
 
-        self.shelfController = ShelfViewController()
-        self.summaryController = SessionSummaryViewController()
-        self.transcriptController = TranscriptTableViewController()
+        shelfController = ShelfViewController()
+        summaryController = SessionSummaryViewController()
+        transcriptController = TranscriptTableViewController()
 
         super.init(nibName: nil, bundle: nil)!
     }
@@ -255,9 +255,9 @@ fileprivate class SessionDetailsTabContainer: NSView {
 
             if let newView = currentView {
                 newView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
-                newView.frame = self.frame
+                newView.frame = frame
 
-                self.addSubview(newView)
+                addSubview(newView)
             }
         }
     }

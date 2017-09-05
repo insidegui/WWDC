@@ -25,7 +25,7 @@ final class LiveObserver {
     init(dateProvider: @escaping DateProvider, storage: Storage) {
         self.dateProvider = dateProvider
         self.storage = storage
-        self.specialEventsObserver = CloudKitLiveObserver(storage: storage)
+        specialEventsObserver = CloudKitLiveObserver(storage: storage)
     }
 
     var isWWDCWeek: Bool {
@@ -47,10 +47,10 @@ final class LiveObserver {
 
         NSLog("Live event observer started")
 
-        self.timer = Timer.scheduledTimer(timeInterval: Constants.liveSessionCheckInterval, target: self, selector: #selector(checkForLiveSessions), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: Constants.liveSessionCheckInterval, target: self, selector: #selector(checkForLiveSessions), userInfo: nil, repeats: true)
 
         // This timer doesn't have to be very precise, giving it a tolerance improves CPU and battery usage ;)
-        self.timer?.tolerance = 10.0
+        timer?.tolerance = 10.0
 
         checkForLiveSessions(nil)
     }
@@ -93,7 +93,7 @@ final class LiveObserver {
     }
 
     func processSubscriptionNotification(with userInfo: [String : Any]) -> Bool {
-        return self.specialEventsObserver.processSubscriptionNotification(with: userInfo)
+        return specialEventsObserver.processSubscriptionNotification(with: userInfo)
     }
 
 }
@@ -110,11 +110,11 @@ private extension SessionAsset {
 
         self.init()
 
-        self.assetType = .liveStreamVideo
-        self.year = Calendar.current.component(.year, from: Today())
-        self.sessionId = "\(number)"
-        self.remoteURL = hls
-        self.identifier = self.generateIdentifier()
+        assetType = .liveStreamVideo
+        year = Calendar.current.component(.year, from: Today())
+        sessionId = "\(number)"
+        remoteURL = hls
+        identifier = generateIdentifier()
     }
 
 }
@@ -174,7 +174,7 @@ private final class CloudKitLiveObserver: NSObject {
             let options: CKQuerySubscriptionOptions = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
             let subscription = CKQuerySubscription(recordType: SessionAsset.recordType,
                                                    predicate: NSPredicate(value: true),
-                                                   subscriptionID: self.specialLiveEventsSubscriptionID,
+                                                   subscriptionID: specialLiveEventsSubscriptionID,
                                                    options: options)
 
             database.save(subscription) { _, error in
@@ -193,7 +193,7 @@ private final class CloudKitLiveObserver: NSObject {
             let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
 
             // check if the remote notification is for us, if not, tell the caller that we haven't handled it
-            guard notification.subscriptionID == self.specialLiveEventsSubscriptionID else { return false }
+            guard notification.subscriptionID == specialLiveEventsSubscriptionID else { return false }
 
             // notification for special live events, just fetch everything again
             fetch()

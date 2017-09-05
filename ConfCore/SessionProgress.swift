@@ -38,7 +38,7 @@ public class SessionProgress: Object {
 extension Session {
 
     public func setCurrentPosition(_ position: Double, _ duration: Double) {
-        guard let realm = self.realm else { return }
+        guard let realm = realm else { return }
         
         guard !duration.isNaN, !duration.isZero, !duration.isInfinite else { return }
         guard !position.isNaN, !position.isZero, !position.isInfinite else { return }
@@ -73,7 +73,7 @@ extension Session {
     }
     
     public func resetProgress() {
-        guard let realm = self.realm else { return }
+        guard let realm = realm else { return }
         do {
             let mustCommit: Bool
             

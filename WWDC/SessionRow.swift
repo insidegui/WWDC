@@ -19,13 +19,13 @@ final class SessionRow: NSObject {
     let kind: SessionRowKind
 
     init(viewModel: SessionViewModel) {
-        self.kind = .session(viewModel)
+        kind = .session(viewModel)
 
         super.init()
     }
 
     init(title: String) {
-        self.kind = .sectionHeader(title)
+        kind = .sectionHeader(title)
     }
 
     convenience init(date: Date, showTimeZone: Bool = false) {
@@ -35,7 +35,7 @@ final class SessionRow: NSObject {
     }
 
     override var debugDescription: String {
-        switch self.kind {
+        switch kind {
         case .sectionHeader(let title):
             return "Header: " + title
         case .session(let viewModel):
@@ -51,7 +51,7 @@ final class SessionRow: NSObject {
 
     override func isEqual(_ object: Any?) -> Bool {
         if let diffable = object as? IGListDiffable {
-            return self.isEqual(toDiffableObject: diffable)
+            return isEqual(toDiffableObject: diffable)
         } else {
             return false
         }
@@ -61,7 +61,7 @@ final class SessionRow: NSObject {
 extension SessionRow: IGListDiffable {
 
     func diffIdentifier() -> NSObjectProtocol {
-        switch self.kind {
+        switch kind {
         case .sectionHeader(let title):
             return title as NSObjectProtocol
         case .session(let viewModel):
@@ -72,9 +72,9 @@ extension SessionRow: IGListDiffable {
     func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
         guard let other = object as? SessionRow else { return false }
 
-        if case .session(let otherViewModel) = other.kind, case .session(let viewModel) = self.kind {
+        if case .session(let otherViewModel) = other.kind, case .session(let viewModel) = kind {
             return otherViewModel.isEqual(toDiffableObject: viewModel)
-        } else if case .sectionHeader(let otherTitle) = other.kind, case .sectionHeader(let title) = self.kind {
+        } else if case .sectionHeader(let otherTitle) = other.kind, case .sectionHeader(let title) = kind {
             return otherTitle == title
         } else {
             return false

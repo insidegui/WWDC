@@ -26,7 +26,7 @@ class WWDCImageView: NSView {
 
     var drawsBackground = true {
         didSet {
-            self.backgroundLayer.isHidden = !drawsBackground
+            backgroundLayer.isHidden = !drawsBackground
         }
     }
 
@@ -85,9 +85,9 @@ class WWDCImageView: NSView {
     }()
 
     private func buildUI() {
-        self.wantsLayer = true
-        self.layer?.cornerRadius = 2
-        self.layer?.masksToBounds = true
+        wantsLayer = true
+        layer?.cornerRadius = 2
+        layer?.masksToBounds = true
 
         backgroundLayer.frame = bounds
         imageLayer.frame = bounds

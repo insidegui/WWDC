@@ -84,7 +84,7 @@ final class AboutWindowController: NSWindowController {
         }
         
         if let website = info["GRBundleIconCreatorWebsite"] as? String {
-            self.iconCreatorWebsite = URL(string: website)
+            iconCreatorWebsite = URL(string: website)
             
             iconCreatorLabel.alphaValue = 0.8
             iconCreatorLabel.textColor = .primary
@@ -93,7 +93,7 @@ final class AboutWindowController: NSWindowController {
         }
         
         if let website = info["GRBundleUserInterfaceCreatorWebsite"] as? String {
-            self.uiCreatorWebsite = URL(string: website)
+            uiCreatorWebsite = URL(string: website)
             
             uiCreatorLabel.alphaValue = 0.8
             uiCreatorLabel.textColor = .primary
@@ -102,7 +102,7 @@ final class AboutWindowController: NSWindowController {
         }
         
         if let website = info["GRBundleDesignContributorWebsite"] as? String {
-            self.designContributorWebsite = URL(string: website)
+            designContributorWebsite = URL(string: website)
             
             designContributorLabel.alphaValue = 0.8
             designContributorLabel.textColor = .primary
@@ -111,7 +111,7 @@ final class AboutWindowController: NSWindowController {
         }
         
         if let website = info["GRBundleMainDeveloperWebsite"] as? String {
-            self.mainDeveloperWebsite = URL(string: website)
+            mainDeveloperWebsite = URL(string: website)
             
             creatorLabel.alphaValue = 0.8
             creatorLabel.textColor = .primary

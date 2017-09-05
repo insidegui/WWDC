@@ -53,7 +53,7 @@ public final class TBUserDataMigrator {
     }
 
     public init(legacyDatabaseFileURL: URL, newRealm: Realm) {
-        self.fileURL = legacyDatabaseFileURL
+        fileURL = legacyDatabaseFileURL
         self.newRealm = newRealm
     }
 
@@ -74,10 +74,10 @@ public final class TBUserDataMigrator {
                                                objectTypes: [])
 
         legacyConfig.schemaVersion = TBConstants.migratedSchemaVersion
-        legacyConfig.migrationBlock = self.migrationBlock
+        legacyConfig.migrationBlock = migrationBlock
 
         do {
-            self.realm = try Realm(configuration: legacyConfig)
+            realm = try Realm(configuration: legacyConfig)
 
             completion(.success)
         } catch {
@@ -86,12 +86,12 @@ public final class TBUserDataMigrator {
     }
 
     private func migrationBlock(migration: Migration, version: UInt64) {
-        self.newRealm.beginWrite()
+        newRealm.beginWrite()
 
         migration.enumerateObjects(ofType: "Session") { legacySession, _ in
             guard let migrationSession = TBSession(legacySession) else { return }
 
-            guard let newSession = self.newRealm.object(ofType: Session.self, forPrimaryKey: migrationSession.identifier) else { return }
+            guard let newSession = newRealm.object(ofType: Session.self, forPrimaryKey: migrationSession.identifier) else { return }
 
             if migrationSession.isFavorite {
                 newSession.favorites.append(Favorite())
@@ -129,15 +129,15 @@ public final class TBUserDataMigrator {
         }
 
         do {
-            try self.newRealm.commitWrite()
+            try newRealm.commitWrite()
         } catch {
             NSLog("Error saving migrated realm data: \(error)")
         }
 
-        let backupFileURL = self.fileURL.deletingPathExtension().appendingPathExtension("backup")
+        let backupFileURL = fileURL.deletingPathExtension().appendingPathExtension("backup")
 
         do {
-            try FileManager.default.moveItem(at: self.fileURL, to: backupFileURL)
+            try FileManager.default.moveItem(at: fileURL, to: backupFileURL)
         } catch {
             NSLog("Error moving backup file to \(backupFileURL)")
         }

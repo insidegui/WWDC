@@ -199,7 +199,7 @@ public final class CMSCommunityCenter: NSObject {
             var newProfile = try CMSUserProfile(record: record)
             newProfile.name = fullName
 
-            self.save(model: newProfile, progress: nil) { error in
+            save(model: newProfile, progress: nil) { error in
                 if let error = error {
                     DispatchQueue.main.async {
                         self.sendErrorNotification(with: error, info: "Unable to save profile")
@@ -210,7 +210,7 @@ public final class CMSCommunityCenter: NSObject {
                 }
             }
         } catch {
-            self.sendErrorNotification(with: error, info: "Unable to create profile from record")
+            sendErrorNotification(with: error, info: "Unable to create profile from record")
             DispatchQueue.main.async { completion(nil, CMSCloudKitError.invalidData("Unable to save profile: \(error.localizedDescription)")) }
         }
     }

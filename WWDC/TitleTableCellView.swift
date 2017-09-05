@@ -12,7 +12,7 @@ class TitleTableCellView: NSTableCellView {
 
     var title: String? {
         didSet {
-            self.titleLabel.stringValue = title ?? ""
+            titleLabel.stringValue = title ?? ""
         }
     }
 

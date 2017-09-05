@@ -20,7 +20,7 @@ struct FilterOption: Equatable {
     }
 
     func negated(with newTitle: String) -> FilterOption {
-        return FilterOption(title: newTitle, value: self.value, isNegative: true)
+        return FilterOption(title: newTitle, value: value, isNegative: true)
     }
 
     static func ==(lhs: FilterOption, rhs: FilterOption) -> Bool {
@@ -49,7 +49,7 @@ extension Array where Element == FilterOption {
 
         for i in fromArray {
             if let title = i["title"], let value = i["value"] {
-                self.append(FilterOption(title: title, value: value))
+                append(FilterOption(title: title, value: value))
             }
         }
     }

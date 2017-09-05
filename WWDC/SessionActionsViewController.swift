@@ -142,7 +142,7 @@ class SessionActionsViewController: NSViewController {
     }
 
     private func updateBindings() {
-        self.disposeBag = DisposeBag()
+        disposeBag = DisposeBag()
 
         guard let viewModel = viewModel else { return }
 
@@ -156,7 +156,7 @@ class SessionActionsViewController: NSViewController {
             } else {
                 self?.favoriteButton.toolTip = "Add to favorites"
             }
-        }).addDisposableTo(self.disposeBag)
+        }).addDisposableTo(disposeBag)
 
         if let rxDownloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
             rxDownloadState.throttle(0.8, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] status in
@@ -183,7 +183,7 @@ class SessionActionsViewController: NSViewController {
                     self?.downloadButton.image = #imageLiteral(resourceName: "trash")
                     self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload)
                 }
-            }).addDisposableTo(self.disposeBag)
+            }).addDisposableTo(disposeBag)
         } else {
             // session can't be downloaded (maybe Lab or download not available yet)
             downloadIndicator.isHidden = true
@@ -207,10 +207,10 @@ class SessionActionsViewController: NSViewController {
     }
 
     @IBAction func download(_ sender: NSView?) {
-        self.downloadButton.isHidden = true
-        self.downloadIndicator.isIndeterminate = true
-        self.downloadIndicator.startAnimation(nil)
-        self.downloadIndicator.isHidden = false
+        downloadButton.isHidden = true
+        downloadIndicator.isIndeterminate = true
+        downloadIndicator.startAnimation(nil)
+        downloadIndicator.isHidden = false
 
         delegate?.sessionActionsDidSelectDownload(sender)
     }

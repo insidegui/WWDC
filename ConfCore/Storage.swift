@@ -21,9 +21,9 @@ public final class Storage {
 
         config.migrationBlock = Storage.migrate(migration:oldVersion:)
 
-        self.realmConfig = config
+        realmConfig = config
 
-        self.realm = try Realm(configuration: config)
+        realm = try Realm(configuration: config)
 
         DistributedNotificationCenter.default().addObserver(forName: .TranscriptIndexingDidStart, object: nil, queue: OperationQueue.main) { [unowned self] _ in
             #if DEBUG
@@ -45,7 +45,7 @@ public final class Storage {
     }
 
     private func makeRealm() throws -> Realm {
-        let c = Realm.Configuration(fileURL: self.realmConfig.fileURL, schemaVersion: self.realmConfig.schemaVersion, migrationBlock: self.realmConfig.migrationBlock)
+        let c = Realm.Configuration(fileURL: realmConfig.fileURL, schemaVersion: realmConfig.schemaVersion, migrationBlock: realmConfig.migrationBlock)
 
         return try Realm(configuration: c)
     }
@@ -261,7 +261,7 @@ public final class Storage {
     ///   - disableAutorefresh: Whether to disable autorefresh on the main Realm instance while the write is in progress
     ///   - completionBlock: A block to be called when the operation is completed (called on the main queue)
     private func performSerializedBackgroundWrite(writeBlock: @escaping (Realm) throws -> Void, disableAutorefresh: Bool = false, createTransaction: Bool = true, completionBlock: ((Error?) -> Void)? = nil) {
-        if disableAutorefresh { self.realm.autorefresh = false }
+        if disableAutorefresh { realm.autorefresh = false }
 
         DispatchQueue.global(qos: .userInitiated).async {
             var storageError: Error?
@@ -363,7 +363,7 @@ public final class Storage {
     }()
 
     public var sessions: Results<Session> {
-        return self.realm.objects(Session.self).filter("assets.@count > 0")
+        return realm.objects(Session.self).filter("assets.@count > 0")
     }
 
     public func session(with identifier: String) -> Session? {
@@ -409,13 +409,13 @@ public final class Storage {
     }
 
     public func bookmark(with identifier: String, in inputRealm: Realm? = nil) -> Bookmark? {
-        let effectiveRealm = inputRealm ?? self.realm
+        let effectiveRealm = inputRealm ?? realm
 
         return effectiveRealm.object(ofType: Bookmark.self, forPrimaryKey: identifier)
     }
 
     public func deleteBookmark(with identifier: String) {
-        guard let bookmark = self.bookmark(with: identifier) else {
+        guard let bookmark = bookmark(with: identifier) else {
             NSLog("DELETE ERROR: Unable to find bookmark with identifier \(identifier)")
             return
         }
@@ -426,7 +426,7 @@ public final class Storage {
     }
 
     public func softDeleteBookmark(with identifier: String) {
-        guard let bookmark = self.bookmark(with: identifier) else {
+        guard let bookmark = bookmark(with: identifier) else {
             NSLog("SOFT DELETE ERROR: Unable to find bookmark with identifier \(identifier)")
             return
         }
@@ -438,7 +438,7 @@ public final class Storage {
     }
 
     public func moveBookmark(with identifier: String, to timecode: Double) {
-        guard let bookmark = self.bookmark(with: identifier) else {
+        guard let bookmark = bookmark(with: identifier) else {
             NSLog("MOVE ERROR: Unable to find bookmark with identifier \(identifier)")
             return
         }

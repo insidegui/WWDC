@@ -55,38 +55,38 @@ final class AppCoordinator {
         let client = AppleAPIClient(environment: .current)
 
         do {
-            self.storage = try Storage(realmConfig)
+            storage = try Storage(realmConfig)
 
-            self.syncEngine = SyncEngine(storage: storage, client: client)
+            syncEngine = SyncEngine(storage: storage, client: client)
         } catch {
             fatalError("Realm initialization error: \(error)")
         }
 
         DownloadManager.shared.start(with: storage)
 
-        self.tabController = WWDCTabViewController(windowController: windowController)
+        tabController = WWDCTabViewController(windowController: windowController)
 
         // Schedule
-        self.scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
-        self.scheduleController.identifier = "Schedule"
-        self.scheduleController.splitView.identifier = "ScheduleSplitView"
-        self.scheduleController.splitView.autosaveName = "ScheduleSplitView"
+        scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
+        scheduleController.identifier = "Schedule"
+        scheduleController.splitView.identifier = "ScheduleSplitView"
+        scheduleController.splitView.autosaveName = "ScheduleSplitView"
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
-        self.tabController.addTabViewItem(scheduleItem)
+        tabController.addTabViewItem(scheduleItem)
 
         // Videos
-        self.videosController = SessionsSplitViewController(windowController: windowController, listStyle: .videos)
-        self.videosController.identifier = "Videos"
-        self.videosController.splitView.identifier = "VideosSplitView"
-        self.videosController.splitView.autosaveName = "VideosSplitView"
+        videosController = SessionsSplitViewController(windowController: windowController, listStyle: .videos)
+        videosController.identifier = "Videos"
+        videosController.splitView.identifier = "VideosSplitView"
+        videosController.splitView.autosaveName = "VideosSplitView"
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
-        self.tabController.addTabViewItem(videosItem)
+        tabController.addTabViewItem(videosItem)
 
         self.windowController = windowController
 
-        self.liveObserver = LiveObserver(dateProvider: Today, storage: storage)
+        liveObserver = LiveObserver(dateProvider: Today, storage: storage)
 
         setupBindings()
         setupDelegation()
@@ -137,29 +137,29 @@ final class AppCoordinator {
             self?.activeTab = activeTab
 
             self?.updateSelectedViewModelRegardlessOfTab()
-        }).addDisposableTo(self.disposeBag)
+        }).addDisposableTo(disposeBag)
 
         selectedSession.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
             self?.videosController.detailViewController.viewModel = viewModel
             self?.updateSelectedViewModelRegardlessOfTab()
-        }).addDisposableTo(self.disposeBag)
+        }).addDisposableTo(disposeBag)
 
         selectedScheduleItem.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
             self?.scheduleController.detailViewController.viewModel = viewModel
             self?.updateSelectedViewModelRegardlessOfTab()
-        }).addDisposableTo(self.disposeBag)
+        }).addDisposableTo(disposeBag)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
         switch activeTab {
         case .schedule:
-            self.selectedViewModelRegardlessOfTab = selectedScheduleItemValue
+            selectedViewModelRegardlessOfTab = selectedScheduleItemValue
         case .videos:
-            self.selectedViewModelRegardlessOfTab = selectedSessionValue
+            selectedViewModelRegardlessOfTab = selectedSessionValue
         }
 
-        self.updateShelfBasedOnSelectionChange()
-        self.updateCurrentActivity(with: selectedViewModelRegardlessOfTab)
+        updateShelfBasedOnSelectionChange()
+        updateCurrentActivity(with: selectedViewModelRegardlessOfTab)
     }
 
     private func setupDelegation() {
@@ -292,7 +292,7 @@ final class AppCoordinator {
     }
 
     private func restoreApplicationState() {
-        self.tabController.activeTab = Preferences.shared.activeTab
+        tabController.activeTab = Preferences.shared.activeTab
     }
 
     private func restoreListStatesIfNeeded() {
@@ -306,12 +306,12 @@ final class AppCoordinator {
 
         if !scrollToToday() {
             if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
-                self.scheduleController.listViewController.selectSession(with: identifier)
+                scheduleController.listViewController.selectSession(with: identifier)
             }
         }
 
         if let identifier = Preferences.shared.selectedVideoItemIdentifier {
-            self.videosController.listViewController.selectSession(with: identifier)
+            videosController.listViewController.selectSession(with: identifier)
         }
     }
 
@@ -327,16 +327,16 @@ final class AppCoordinator {
 
     func handle(link: DeepLink) {
         guard didRestoreLists else {
-            self.deferredLink = link
+            deferredLink = link
             return
         }
 
         if link.isForCurrentYear {
-            self.tabController.activeTab = .schedule
-            self.scheduleController.listViewController.selectSession(with: link.sessionIdentifier)
+            tabController.activeTab = .schedule
+            scheduleController.listViewController.selectSession(with: link.sessionIdentifier)
         } else {
-            self.tabController.activeTab = .videos
-            self.videosController.listViewController.selectSession(with: link.sessionIdentifier)
+            tabController.activeTab = .videos
+            videosController.listViewController.selectSession(with: link.sessionIdentifier)
         }
     }
 
@@ -403,9 +403,9 @@ final class AppCoordinator {
         if migrator != nil { guard !migrator.isPerformingMigration else { return } }
 
         let legacyURL = URL(fileURLWithPath: PathUtil.appSupportPath + "/default.realm")
-        self.migrator = TBUserDataMigrator(legacyDatabaseFileURL: legacyURL, newRealm: storage.realm)
+        migrator = TBUserDataMigrator(legacyDatabaseFileURL: legacyURL, newRealm: storage.realm)
 
-        guard self.migrator.needsMigration && !TBUserDataMigrator.presentedMigrationPrompt else {
+        guard migrator.needsMigration && !TBUserDataMigrator.presentedMigrationPrompt else {
             completion()
             return
         }

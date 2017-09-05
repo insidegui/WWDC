@@ -38,7 +38,7 @@ extension Adapter {
 
     func adapt(_ input: [InputType]) -> Result<[OutputType], AdapterError> {
         let collection = input.flatMap { (item: InputType) -> OutputType? in
-            let itemResult = self.adapt(item)
+            let itemResult = adapt(item)
             switch itemResult {
             case .success(let resultingItem):
                 return resultingItem
