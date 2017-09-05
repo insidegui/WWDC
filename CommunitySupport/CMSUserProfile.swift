@@ -69,35 +69,28 @@ extension CKRecord {
 extension CMSUserProfile: CMSCloudKitRepresentable {
 
     public init(record: CKRecord) throws {
-        let name = record[.name] as? String ?? ""
-
-        var avatarImage: NSImage?
-        var avatarFileURL: URL?
-
-        if let avatar = record[.avatar] as? CKAsset {
-            avatarFileURL = avatar.fileURL
-            avatarImage = NSImage(contentsOf: avatar.fileURL)
+        if let avatarAsset = record[.avatar] as? CKAsset {
+            avatarFileURL = avatarAsset.fileURL
+            avatar = NSImage(contentsOf: avatarAsset.fileURL)
         }
 
         let adminFlag = (record[.isAdmin] as? Int == 1)
 
-        self.originatingRecord = record
-        self.identifier = record.recordID.recordName
-        self.name = name
-        self.isAdmin = adminFlag
-        self.avatarFileURL = avatarFileURL
-        self.avatar = avatarImage
+        originatingRecord = record
+        identifier = record.recordID.recordName
+        name = record[.name] as? String ?? ""
+        isAdmin = adminFlag
     }
 
     public func makeRecord() throws -> CKRecord {
-        guard let record = self.originatingRecord else {
+        guard let record = originatingRecord else {
             throw CMSCloudKitError.invalidData("User record must have a preexisting record")
         }
 
         record[.name] = name
         record[.isAdmin] = isAdmin ? 1 : 0
 
-        if let avatarUrl = self.avatarFileURL, avatarUrl.isFileURL {
+        if let avatarUrl = avatarFileURL, avatarUrl.isFileURL {
             record[.avatar] = CKAsset(fileURL: avatarUrl)
         } else {
             record[.avatar] = nil

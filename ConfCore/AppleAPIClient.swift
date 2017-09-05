@@ -19,7 +19,7 @@ public final class AppleAPIClient {
 
     public init(environment: Environment) {
         self.environment = environment
-        self.service = Service(baseURL: environment.baseURL)
+        service = Service(baseURL: environment.baseURL)
 
         configureService()
 
@@ -76,13 +76,13 @@ public final class AppleAPIClient {
         currentSessionsRequest?.cancel()
         currentNewsItemsRequest?.cancel()
 
-        self.environment = Environment.current
+        environment = Environment.current
 
-        self.service = Service(baseURL: environment.baseURL)
-        self.liveVideoAssets = self.makeLiveVideosResource()
-        self.sessions = self.makeSessionsResource()
-        self.schedule = self.makeScheduleResource()
-        self.news = self.makeNewsResource()
+        service = Service(baseURL: environment.baseURL)
+        liveVideoAssets = makeLiveVideosResource()
+        sessions = makeSessionsResource()
+        schedule = makeScheduleResource()
+        news = makeNewsResource()
     }
 
     // MARK: - Resources
@@ -96,19 +96,19 @@ public final class AppleAPIClient {
     fileprivate lazy var news: Resource = self.makeNewsResource()
 
     fileprivate func makeLiveVideosResource() -> Resource {
-        return self.service.resource(environment.liveVideosPath)
+        return service.resource(environment.liveVideosPath)
     }
 
     fileprivate func makeSessionsResource() -> Resource {
-        return self.service.resource(environment.videosPath)
+        return service.resource(environment.videosPath)
     }
 
     fileprivate func makeScheduleResource() -> Resource {
-        return self.service.resource(environment.sessionsPath)
+        return service.resource(environment.sessionsPath)
     }
 
     fileprivate func makeNewsResource() -> Resource {
-        return self.service.resource(environment.newsPath)
+        return service.resource(environment.newsPath)
     }
 
     // MARK: - Standard API requests

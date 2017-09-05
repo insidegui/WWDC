@@ -18,10 +18,10 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
     var activeTab: Tab {
         get {
-            return Tab(rawValue: self.selectedTabViewItemIndex)!
+            return Tab(rawValue: selectedTabViewItemIndex)!
         }
         set {
-            self.selectedTabViewItemIndex = newValue.rawValue
+            selectedTabViewItemIndex = newValue.rawValue
         }
     }
 
@@ -94,16 +94,16 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
             tabViewItems.forEach { item in
                 guard let identifier = item.viewController?.identifier else { return }
-                guard let view = self.tabItemViews.first(where: { $0.controllerIdentifier == identifier }) else { return }
+                guard let view = tabItemViews.first(where: { $0.controllerIdentifier == identifier }) else { return }
 
-                if self.indexForChild(with: identifier) == self.selectedTabViewItemIndex {
+                if indexForChild(with: identifier) == selectedTabViewItemIndex {
                     view.state = NSOnState
                 } else {
                     view.state = NSOffState
                 }
             }
 
-            self.activeTabVar.value = Tab(rawValue: self.selectedTabViewItemIndex)!
+            activeTabVar.value = Tab(rawValue: selectedTabViewItemIndex)!
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
@@ -132,7 +132,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         item.target = self
         item.action = #selector(changeTab)
 
-        itemView.state = (tabViewItems.index(of: tabItem) == self.selectedTabViewItemIndex) ? NSOnState : NSOffState
+        itemView.state = (tabViewItems.index(of: tabItem) == selectedTabViewItemIndex) ? NSOnState : NSOffState
 
         return item
     }
@@ -140,7 +140,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     @objc private func changeTab(_ sender: TabItemView) {
         guard let index = indexForChild(with: sender.controllerIdentifier) else { return }
 
-        self.selectedTabViewItemIndex = index
+        selectedTabViewItemIndex = index
     }
 
     private func indexForChild(with identifier: String) -> Int? {
@@ -148,13 +148,13 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     }
 
     private var tabItemViews: [TabItemView] {
-        return self.view.window?.toolbar?.items.flatMap { $0.view as? TabItemView } ?? []
+        return view.window?.toolbar?.items.flatMap { $0.view as? TabItemView } ?? []
     }
 
     private var loadingView: ModalLoadingView?
 
     func showLoading() {
-        loadingView = ModalLoadingView.show(attachedTo: self.view)
+        loadingView = ModalLoadingView.show(attachedTo: view)
     }
 
     func hideLoading() {

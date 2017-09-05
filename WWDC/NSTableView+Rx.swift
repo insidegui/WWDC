@@ -17,7 +17,7 @@ final class RxTableViewDelegateProxy: DelegateProxy, NSTableViewDelegate, Delega
     fileprivate var selectedRowSubject = PublishSubject<Int?>()
 
     required init(parentObject: AnyObject) {
-        self.tableView = parentObject as? NSTableView
+        tableView = parentObject as? NSTableView
 
         super.init(parentObject: parentObject)
     }
@@ -65,7 +65,7 @@ extension Reactive where Base: NSTableView {
     public var selectedRow: ControlProperty<Int?> {
         let delegate = RxTableViewDelegateProxy.proxyForObject(base)
 
-        let source = Observable.deferred { [weak tableView = self.base] () -> Observable<Int?> in
+        let source = Observable.deferred { [weak tableView = base] () -> Observable<Int?> in
             if let startingRow = tableView?.selectedRow, startingRow >= 0 {
                 return delegate.selectedRowSubject.startWith(startingRow)
             } else {

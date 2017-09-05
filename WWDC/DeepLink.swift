@@ -49,13 +49,13 @@ struct DeepLink {
         }
 
         guard let yearNumber = Int(fullYear) else { return nil }
-        let currentYear = "\(Calendar.current.component(.year, from: Today()))"
+        let currentYear = "\(Calendar.current.component(.year, from: Today()))" // Force gregorian here
         let currentYearDigits = currentYear.substring(from: currentYear.index(currentYear.startIndex, offsetBy: 2))
 
         self.year = yearNumber
-        self.eventIdentifier = "wwdc\(year)"
+        eventIdentifier = "wwdc\(year)"
         self.sessionNumber = sessionNumber
-        self.isForCurrentYear = (year == currentYearDigits)
+        isForCurrentYear = (year == currentYearDigits)
     }
 
 }

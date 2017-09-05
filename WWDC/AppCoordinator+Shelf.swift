@@ -70,12 +70,12 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             }
         }
 
-        self.currentPlaybackViewModel = nil
+        currentPlaybackViewModel = nil
 
         guard let viewModel = shelfController.viewModel else { return }
 
-        self.playerOwnerTab = activeTab
-        self.playerOwnerSessionIdentifier = selectedViewModelRegardlessOfTab?.identifier
+        playerOwnerTab = activeTab
+        playerOwnerSessionIdentifier = selectedViewModelRegardlessOfTab?.identifier
 
         do {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
@@ -83,7 +83,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             canRestorePlaybackContext = false
             isTransitioningPlayerContext = false
 
-            self.currentPlaybackViewModel = playbackViewModel
+            currentPlaybackViewModel = playbackViewModel
 
             if currentPlayerController == nil {
                 currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel)

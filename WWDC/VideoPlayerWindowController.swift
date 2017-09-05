@@ -113,7 +113,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     func window(_ window: NSWindow, startCustomAnimationToExitFullScreenWithDuration duration: TimeInterval) {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = duration
-            let frame = PUIPlayerWindow.bestScreenRectFromDetachingContainer(self.originalContainer)
+            let frame = PUIPlayerWindow.bestScreenRectFromDetachingContainer(originalContainer)
             window.animator().setFrame(frame, display: false)
         }, completionHandler: nil)
     }

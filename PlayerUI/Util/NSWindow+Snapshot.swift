@@ -25,7 +25,7 @@ extension NSWindow {
     }
 
     func snapshot(in rect: NSRect) -> NSImage? {
-        guard let fullImage = self.snapshot else { return nil }
+        guard let fullImage = snapshot else { return nil }
 
         let croppedImage = NSImage(size: rect.size)
         croppedImage.cacheMode = .never

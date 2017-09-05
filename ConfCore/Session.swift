@@ -64,10 +64,10 @@ public class Session: Object {
 
     /// Fetches and returns the transcript object associated with the session
     public func transcript() -> Transcript? {
-        guard let realm = self.realm else { return nil }
+        guard let realm = realm else { return nil }
         guard !transcriptIdentifier.isEmpty else { return nil }
 
-        return realm.objects(Transcript.self).filter("identifier == %@", self.transcriptIdentifier).first
+        return realm.objects(Transcript.self).filter("identifier == %@", transcriptIdentifier).first
     }
 
     /// The session's track
@@ -114,15 +114,15 @@ public class Session: Object {
     }
 
     func merge(with other: Session, in realm: Realm) {
-        assert(other.identifier == self.identifier, "Can't merge two objects with different identifiers!")
+        assert(other.identifier == identifier, "Can't merge two objects with different identifiers!")
 
-        self.title = other.title
-        self.number = other.number
-        self.summary = other.summary
-        self.eventIdentifier = other.eventIdentifier
-        self.trackIdentifier = other.trackIdentifier
-        self.staticContentId = other.staticContentId
-        self.trackName = other.trackName
+        title = other.title
+        number = other.number
+        summary = other.summary
+        eventIdentifier = other.eventIdentifier
+        trackIdentifier = other.trackIdentifier
+        staticContentId = other.staticContentId
+        trackName = other.trackName
 
         // merge assets
         let assets = other.assets.filter { otherAsset in
@@ -141,8 +141,8 @@ public class Session: Object {
             }
         }
 
-        self.focuses.removeAll()
-        self.focuses.append(objectsIn: otherFocuses)
+        focuses.removeAll()
+        focuses.append(objectsIn: otherFocuses)
     }
     
 }

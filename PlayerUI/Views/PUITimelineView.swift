@@ -285,19 +285,19 @@ public final class PUITimelineView: NSView {
     private func reactToMouse() {
         if hasMouseInside {
             borderLayer.animate {
-                self.borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor
+                borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor
             }
 
             ghostProgressLayer.animate {
-                self.ghostProgressLayer.opacity = 1
+                ghostProgressLayer.opacity = 1
             }
         } else {
             borderLayer.animate {
-                self.borderLayer.borderColor = NSColor.playerBorder.cgColor
+                borderLayer.borderColor = NSColor.playerBorder.cgColor
             }
 
             ghostProgressLayer.animate {
-                self.ghostProgressLayer.opacity = 0
+                ghostProgressLayer.opacity = 0
             }
         }
     }
@@ -320,7 +320,7 @@ public final class PUITimelineView: NSView {
         annotationLayers.forEach({ $0.removeFromSuperlayer() })
         annotationLayers.removeAll()
 
-        let sf = self.window?.screen?.backingScaleFactor ?? 1
+        let sf = window?.screen?.backingScaleFactor ?? 1
 
         annotationLayers = annotations.map { annotation in
             let l = PUIAnnotationLayer()
@@ -334,7 +334,7 @@ public final class PUITimelineView: NSView {
 
             let textLayer = PUIBoringTextLayer()
 
-            textLayer.string = self.attributedString(for: annotation.timestamp)
+            textLayer.string = attributedString(for: annotation.timestamp)
             textLayer.contentsScale = sf
             textLayer.opacity = 0
 
@@ -346,10 +346,10 @@ public final class PUITimelineView: NSView {
         annotations.forEach { annotation in
             guard let l = annotationLayers.first(where: { $0.name == annotation.identifier }) else { return }
 
-            self.layoutAnnotationLayer(l, for: annotation, with: Metrics.annotationBubbleDiameter)
+            layoutAnnotationLayer(l, for: annotation, with: Metrics.annotationBubbleDiameter)
         }
 
-        annotationLayers.forEach({ self.layer?.addSublayer($0) })
+        annotationLayers.forEach({ layer?.addSublayer($0) })
     }
 
     private func attributedString(for timestamp: Double) -> NSAttributedString {
@@ -370,8 +370,8 @@ public final class PUITimelineView: NSView {
     private func layoutAnnotationLayer(_ layer: PUIBoringLayer, for annotation: PUITimelineAnnotation, with diameter: CGFloat, animated: Bool = false) {
         guard hasValidMediaDuration else { return }
 
-        let x: CGFloat = (CGFloat(annotation.timestamp / self.mediaDuration) * self.bounds.width) - (diameter / 2)
-        let y: CGFloat = self.bounds.height / 2 - diameter / 2
+        let x: CGFloat = (CGFloat(annotation.timestamp / mediaDuration) * bounds.width) - (diameter / 2)
+        let y: CGFloat = bounds.height / 2 - diameter / 2
 
         let f = CGRect(x: x, y: y, width: diameter, height: diameter)
 
@@ -436,15 +436,15 @@ public final class PUITimelineView: NSView {
     }
 
     private func unhighlightCurrentHoveredAnnotationIfNeeded() {
-        guard let (ha, hal) = self.hoveredAnnotation else { return }
+        guard let (ha, hal) = hoveredAnnotation else { return }
 
-        if let (sa, _) = self.selectedAnnotation {
+        if let (sa, _) = selectedAnnotation {
             guard sa.identifier != ha.identifier else { return }
         }
 
         mouseOut(ha, layer: hal)
 
-        self.hoveredAnnotation = nil
+        hoveredAnnotation = nil
     }
 
     private func unhighlight(annotationTuple: (PUITimelineAnnotation, PUIAnnotationLayer)?) {
@@ -493,7 +493,7 @@ public final class PUITimelineView: NSView {
     }
 
     private func mouseDown(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer, originalEvent: NSEvent) {
-        let startingPoint = self.convert(originalEvent.locationInWindow, from: nil)
+        let startingPoint = convert(originalEvent.locationInWindow, from: nil)
         let originalPosition = layer.position
 
         let originalTimestampString = layer.attachedLayer.string
@@ -519,12 +519,12 @@ public final class PUITimelineView: NSView {
         }
 
         func makeTimestamp(for point: CGPoint) -> Double {
-            var timestamp = Double(point.x / self.bounds.width) * self.mediaDuration
+            var timestamp = Double(point.x / bounds.width) * mediaDuration
 
             if timestamp < 0 {
                 timestamp = 0
-            } else if timestamp > self.mediaDuration {
-                timestamp = self.mediaDuration
+            } else if timestamp > mediaDuration {
+                timestamp = mediaDuration
             }
 
             return timestamp
@@ -533,7 +533,7 @@ public final class PUITimelineView: NSView {
         func updateAnnotationTextLayer(at point: CGPoint) {
             let timestamp = makeTimestamp(for: point)
 
-            layer.attachedLayer.string = self.attributedString(for: timestamp)
+            layer.attachedLayer.string = attributedString(for: timestamp)
         }
 
         func updateAnnotationTextLayer(with string: Any?) {
@@ -631,10 +631,10 @@ public final class PUITimelineView: NSView {
     private var currentAnnotationEditor: NSViewController?
 
     private func showAnnotationWindow() {
-        guard let (annotation, annotationLayer) = self.selectedAnnotation else { return }
+        guard let (annotation, annotationLayer) = selectedAnnotation else { return }
         guard let controller = delegate?.viewControllerForTimelineAnnotation(annotation) else { return }
 
-        self.currentAnnotationEditor = controller
+        currentAnnotationEditor = controller
 
         if annotationWindowController == nil {
             annotationWindowController = PUIAnnotationWindowController()
@@ -703,7 +703,7 @@ public final class PUITimelineView: NSView {
             self.currentAnnotationEditor = nil
             self.annotationWindowController = nil
         }
-        self.annotationWindowController?.window?.animator().alphaValue = 0
+        annotationWindowController?.window?.animator().alphaValue = 0
         NSAnimationContext.endGrouping()
     }
 

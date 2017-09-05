@@ -88,7 +88,7 @@ final class RemoteEnvironment: NSObject {
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
 
         // check if the remote notification is for us, if not, tell the caller that we haven't handled it
-        guard notification.subscriptionID == self.environmentSubscriptionID else { return false }
+        guard notification.subscriptionID == environmentSubscriptionID else { return false }
 
         // notification for environment change
         fetch()
@@ -103,11 +103,11 @@ extension Environment {
     init?(_ record: CKRecord) {
         guard let baseURLStr = record["baseURL"] as? String, URL(string: baseURLStr) != nil else { return nil }
 
-        self.baseURL = baseURLStr
-        self.videosPath = "/videos.json"
-        self.liveVideosPath = "/videos_live.json"
-        self.newsPath = "/news.json"
-        self.sessionsPath = "/sessions.json"
+        baseURL = baseURLStr
+        videosPath = "/videos.json"
+        liveVideosPath = "/videos_live.json"
+        newsPath = "/news.json"
+        sessionsPath = "/sessions.json"
     }
 
 }

@@ -56,7 +56,7 @@ final class SessionsSplitViewController: NSSplitViewController {
 
         if !setupDone {
             if let sidebarInitWidth = windowController.sidebarInitWidth {
-                self.splitView.setPosition(sidebarInitWidth, ofDividerAt: 0)
+                splitView.setPosition(sidebarInitWidth, ofDividerAt: 0)
             }
         }
     }
@@ -71,7 +71,7 @@ final class SessionsSplitViewController: NSSplitViewController {
         guard let otherSplitView = notification.object as? NSSplitView else {
             return
         }
-        guard otherSplitView != self.splitView else {
+        guard otherSplitView != splitView else {
             // If own split view is altered, change split view initialisation width for other tabs
             windowController.sidebarInitWidth = otherSplitView.subviews[0].bounds.width
             return

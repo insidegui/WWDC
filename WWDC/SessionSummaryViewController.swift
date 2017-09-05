@@ -122,13 +122,13 @@ class SessionSummaryViewController: NSViewController {
 
         guard let viewModel = viewModel else { return }
 
-        self.disposeBag = DisposeBag()
+        disposeBag = DisposeBag()
 
         viewModel.rxTitle.map(NSAttributedString.attributedBoldTitle(with:)).subscribe(onNext: { [weak self] title in
             self?.titleLabel.attributedStringValue = title
-        }).addDisposableTo(self.disposeBag)
-        viewModel.rxSummary.bind(to: summaryLabel.rx.text).addDisposableTo(self.disposeBag)
-        viewModel.rxFooter.bind(to: contextLabel.rx.text).addDisposableTo(self.disposeBag)
+        }).addDisposableTo(disposeBag)
+        viewModel.rxSummary.bind(to: summaryLabel.rx.text).addDisposableTo(disposeBag)
+        viewModel.rxFooter.bind(to: contextLabel.rx.text).addDisposableTo(disposeBag)
     }
 
 }

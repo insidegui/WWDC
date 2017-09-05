@@ -36,8 +36,8 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
     }
 
     override func loadView() {
-        self.view = NSView()
-        self.view.wantsLayer = true
+        view = NSView()
+        view.wantsLayer = true
     }
 
     override func viewDidLoad() {

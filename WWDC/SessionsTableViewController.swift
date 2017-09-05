@@ -225,7 +225,7 @@ class SessionsTableViewController: NSViewController {
             return [titleRow] + sessionRows
         }
 
-        self.allRows = rows
+        allRows = rows
 
         setDisplayedRows(allRows, animated: false)
     }
@@ -250,7 +250,7 @@ class SessionsTableViewController: NSViewController {
             return [titleRow] + instanceRows
         }
 
-        self.allRows = rows
+        allRows = rows
 
         setDisplayedRows(allRows, animated: false)
     }
@@ -285,7 +285,7 @@ class SessionsTableViewController: NSViewController {
         let sessionRows: [SessionRow] = results.sorted(by: sortingFunction).flatMap { session in
             guard let viewModel = SessionViewModel(session: session) else { return nil }
 
-            for row in self.allRows {
+            for row in allRows {
                 if case .session(let sessionViewModel) = row.kind {
                     if sessionViewModel.session.identifier == session.identifier {
                         return row
@@ -378,7 +378,7 @@ class SessionsTableViewController: NSViewController {
             guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
 
             return viewModel
-            }.bind(to: selectedSession).addDisposableTo(self.disposeBag)
+            }.bind(to: selectedSession).addDisposableTo(disposeBag)
     }
 
     // MARK: - Contextual menu
@@ -432,8 +432,8 @@ class SessionsTableViewController: NSViewController {
     }
 
     private func selectedRowIndexes() -> IndexSet {
-        let clickedRow = self.tableView.clickedRow
-        let selectedRowIndexes = self.tableView.selectedRowIndexes
+        let clickedRow = tableView.clickedRow
+        let selectedRowIndexes = tableView.selectedRowIndexes
 
         if clickedRow < 0 || selectedRowIndexes.contains(clickedRow) {
             return selectedRowIndexes
@@ -615,14 +615,14 @@ private extension NSMenuItem {
 
     var option: SessionsTableViewController.ContextualMenuOption {
         get {
-            guard let value = SessionsTableViewController.ContextualMenuOption(rawValue: self.tag) else {
-                fatalError("Invalid ContextualMenuOption: \(self.tag)")
+            guard let value = SessionsTableViewController.ContextualMenuOption(rawValue: tag) else {
+                fatalError("Invalid ContextualMenuOption: \(tag)")
             }
             
             return value
         }
         set {
-            self.tag = newValue.rawValue
+            tag = newValue.rawValue
         }
     }
     

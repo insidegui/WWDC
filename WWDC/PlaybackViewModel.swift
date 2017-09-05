@@ -69,11 +69,11 @@ final class PlaybackViewModel {
     private var timeObserver: Any?
 
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
-        self.title = sessionViewModel.title
-        self.imageURL = sessionViewModel.imageUrl
+        title = sessionViewModel.title
+        imageURL = sessionViewModel.imageUrl
 
         self.sessionViewModel = sessionViewModel
-        self.remoteMediaURL = nil
+        remoteMediaURL = nil
 
         guard let session = storage.session(with: sessionViewModel.identifier) else {
             throw PlaybackError.sessionNotFound(sessionViewModel.identifier)
@@ -85,17 +85,17 @@ final class PlaybackViewModel {
         if session.instances.filter("isCurrentlyLive == true").count > 0 {
             if let liveAsset = session.assets.filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).first, let liveURL = URL(string: liveAsset.remoteURL) {
                 streamUrl = liveURL
-                self.remoteMediaURL = liveURL
-                self.isLiveStream = true
+                remoteMediaURL = liveURL
+                isLiveStream = true
             } else {
-                self.isLiveStream = false
+                isLiveStream = false
             }
         } else {
-            self.isLiveStream = false
+            isLiveStream = false
         }
 
         // not live
-        if !self.isLiveStream {
+        if !isLiveStream {
             // must have at least streaming video asset
             guard let asset = session.asset(of: .streamingVideo) else {
                 throw PlaybackError.assetNotFound(session.identifier)
@@ -106,7 +106,7 @@ final class PlaybackViewModel {
                 throw PlaybackError.invalidAsset(asset.remoteURL)
             }
 
-            self.remoteMediaURL = remoteUrl
+            remoteMediaURL = remoteUrl
 
             // check if we have a downloaded file and use it instead
             if let localUrl = DownloadManager.shared.localFileURL(for: session) {
@@ -126,13 +126,13 @@ final class PlaybackViewModel {
             }
         #endif
 
-        self.player = AVPlayer(url: finalUrl)
+        player = AVPlayer(url: finalUrl)
 
-        if !self.isLiveStream {
+        if !isLiveStream {
             let p = session.currentPosition()
-            self.player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
+            player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
 
-            self.timeObserver = self.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+            timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
                 guard let duration = self?.player.currentItem?.asset.duration else { return }
                 guard CMTIME_IS_VALID(duration) else { return }
 

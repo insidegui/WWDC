@@ -141,15 +141,15 @@ final class SessionViewModel: NSObject {
         guard let session = session ?? instance?.session else { return nil }
         guard let track = session.track.first ?? instance?.track.first else { return nil }
 
-        self.trackName = track.name
+        trackName = track.name
         self.session = session
-        self.sessionInstance = instance ?? session.instances.first ?? SessionInstance()
-        self.title = session.title
-        self.identifier = session.identifier
-        self.imageUrl = SessionViewModel.imageUrl(for: session)
+        sessionInstance = instance ?? session.instances.first ?? SessionInstance()
+        title = session.title
+        identifier = session.identifier
+        imageUrl = SessionViewModel.imageUrl(for: session)
 
         if let webUrlStr = session.asset(of: .webpage)?.remoteURL {
-            self.webUrl = URL(string: webUrlStr)
+            webUrl = URL(string: webUrlStr)
         }
 
         super.init()

@@ -45,7 +45,7 @@ final class SearchCoordinator {
          restorationFiltersState: JSON? = nil)
     {
         self.storage = storage
-        self.scheduleController = sessionsController
+        scheduleController = sessionsController
         self.videosController = videosController
         self.restorationFiltersState = restorationFiltersState
 

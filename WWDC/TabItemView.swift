@@ -14,12 +14,12 @@ extension NSStackView {
         switch orientation {
         case .horizontal:
             let height = arrangedSubviews.map({ $0.bounds.height }).max() ?? CGFloat(0)
-            let width = arrangedSubviews.reduce(CGFloat(0), { $0 + $1.intrinsicContentSize.width + self.spacing })
+            let width = arrangedSubviews.reduce(CGFloat(0), { $0 + $1.intrinsicContentSize.width + spacing })
 
             return CGSize(width: width - spacing, height: height)
         case .vertical:
             let width = arrangedSubviews.map({ $0.bounds.width }).max() ?? CGFloat(0)
-            let height = arrangedSubviews.reduce(CGFloat(0), { $0 + $1.intrinsicContentSize.height + self.spacing })
+            let height = arrangedSubviews.reduce(CGFloat(0), { $0 + $1.intrinsicContentSize.height + spacing })
 
             return CGSize(width: width, height: height - spacing)
         }

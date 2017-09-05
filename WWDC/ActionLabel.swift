@@ -35,7 +35,7 @@ final class ActionLabel: NSTextField {
     }
 
     override func mouseDown(with event: NSEvent) {
-        if let action = self.action {
+        if let action = action {
             NSApp.sendAction(action, to: target, from: self)
         }
     }

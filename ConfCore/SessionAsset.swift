@@ -33,7 +33,7 @@ public class SessionAsset: Object {
     /// - WWDCSessionAssetTypeWebpageURL
     internal dynamic var rawAssetType = "" {
         didSet {
-            self.identifier = generateIdentifier()
+            identifier = generateIdentifier()
         }
     }
 
@@ -51,14 +51,14 @@ public class SessionAsset: Object {
     /// The year of the session this asset belongs to
     public dynamic var year = 0 {
         didSet {
-            self.identifier = generateIdentifier()
+            identifier = generateIdentifier()
         }
     }
 
     /// The id of the session this asset belongs to
     public dynamic var sessionId = "" {
         didSet {
-            self.identifier = generateIdentifier()
+            identifier = generateIdentifier()
         }
     }
 
@@ -76,15 +76,15 @@ public class SessionAsset: Object {
     }
 
     func merge(with other: SessionAsset, in realm: Realm) {
-        assert(other.remoteURL == self.remoteURL, "Can't merge two objects with different identifiers!")
+        assert(other.remoteURL == remoteURL, "Can't merge two objects with different identifiers!")
 
-        self.year = other.year
-        self.sessionId = other.sessionId
-        self.relativeLocalURL = other.relativeLocalURL
+        year = other.year
+        sessionId = other.sessionId
+        relativeLocalURL = other.relativeLocalURL
     }
 
     public func generateIdentifier() -> String {
-        return String(self.year) + "@" + self.sessionId + "~" + self.rawAssetType.replacingOccurrences(of: "WWDCSessionAssetType", with: "")
+        return String(year) + "@" + sessionId + "~" + rawAssetType.replacingOccurrences(of: "WWDCSessionAssetType", with: "")
     }
 
 }

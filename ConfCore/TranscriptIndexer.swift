@@ -57,13 +57,13 @@ public final class TranscriptIndexer: NSObject {
 
         let sessionKeys: [String] = transcriptedSessions.map({ $0.identifier })
 
-        self.indexTranscriptsForSessionsWithKeys(sessionKeys)
+        indexTranscriptsForSessionsWithKeys(sessionKeys)
     }
 
     func indexTranscriptsForSessionsWithKeys(_ sessionKeys: [String]) {
         // ignore very low session counts
         guard sessionKeys.count > TranscriptIndexer.minTranscriptableSessionLimit else {
-            self.waitAndExit()
+            waitAndExit()
             return
         }
 
@@ -147,7 +147,7 @@ public final class TranscriptIndexer: NSObject {
     }
 
     private func checkForCompletion() {
-        guard let progress = self.transcriptIndexingProgress else { return }
+        guard let progress = transcriptIndexingProgress else { return }
 
         #if DEBUG
             NSLog("Completed: \(progress.completedUnitCount) Total: \(progress.totalUnitCount)")

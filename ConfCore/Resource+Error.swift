@@ -29,7 +29,7 @@ public enum APIError: Error {
 extension Resource {
 
     var error: APIError {
-        if let underlyingError = self.latestError {
+        if let underlyingError = latestError {
             return .http(underlyingError)
         } else {
             return .unknown

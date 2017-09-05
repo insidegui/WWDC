@@ -92,7 +92,7 @@ private final class ImageCacheProvider {
     }()
 
     func cacheEntity(for url: URL) -> ImageCacheEntity? {
-        return self.realm?.object(ofType: ImageCacheEntity.self, forPrimaryKey: url.absoluteString)
+        return realm?.object(ofType: ImageCacheEntity.self, forPrimaryKey: url.absoluteString)
     }
 
     func cacheImage(for key: URL, original: Data?, thumbnail: Data?) {
@@ -136,7 +136,7 @@ private final class ImageDownloadOperation: Operation {
 
     init(url: URL, cache: ImageCacheProvider, thumbnailHeight: CGFloat = 1.0) {
         self.url = url
-        self.cacheProvider = cache
+        cacheProvider = cache
         self.thumbnailHeight = thumbnailHeight
     }
 
@@ -173,7 +173,7 @@ private final class ImageDownloadOperation: Operation {
     override func start() {
         _executing = true
 
-        URLSession.shared.dataTask(with: self.url) { [weak self] data, response, error in
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let welf = self else { return }
 
             guard !welf.isCancelled else { return }
@@ -236,7 +236,7 @@ private extension NSImage {
         let resizedImage = NSImage(size: NSSize(width: newWidth, height: newHeight))
 
         resizedImage.lockFocus()
-        self.draw(in: NSRect(x: 0, y: 0, width: newWidth, height: newHeight))
+        draw(in: NSRect(x: 0, y: 0, width: newWidth, height: newHeight))
         resizedImage.unlockFocus()
 
         return resizedImage

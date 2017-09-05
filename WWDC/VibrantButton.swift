@@ -89,7 +89,7 @@ class VibrantButton: NSView {
 
     func sizeToFit() {
         titleLabel.sizeToFit()
-        self.frame = NSRect(origin: frame.origin, size: intrinsicContentSize)
+        frame = NSRect(origin: frame.origin, size: intrinsicContentSize)
     }
 
     override func mouseDown(with event: NSEvent) {
