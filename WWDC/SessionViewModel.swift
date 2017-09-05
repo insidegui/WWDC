@@ -171,17 +171,8 @@ final class SessionViewModel: NSObject {
         } else {
             let separator = ", "
 
-            result = focuses.reduce("") { partial, focus in
-                if partial.isEmpty {
-                    return focus.name + separator
-                } else {
-                    return partial + focus.name + separator
-                }
-            }
-
-            if let lastCommaRange = result.range(of: separator, options: .backwards, range: nil, locale: nil) {
-                result = result.replacingCharacters(in: lastCommaRange, with: "")
-            }
+            result = focuses.reduce("") { $0 + $1.name + separator }
+            result = result.trimmingCharacters(in: CharacterSet(charactersIn: separator))
         }
 
         return result
