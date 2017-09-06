@@ -60,88 +60,124 @@ class SessionsTableViewController: NSViewController {
 
     private(set) var displayedRows: [SessionRow] = []
 
+    lazy var displayedRowsLock: DispatchQueue = {
+
+        return DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
+    }()
+
     func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
 
-        let oldValue = displayedRows
+        displayedRowsLock.async {
 
-        let selectedRows = tableView.selectedRowIndexes.flatMap { (i) -> SessionRow? in
-            guard i < oldValue.endIndex else { return nil }
+            let oldValue = self.displayedRows
 
-            return oldValue[i]
-        }
+            let selectedRows = self.tableView.selectedRowIndexes.flatMap { (i) -> SessionRow? in
+                guard i < oldValue.endIndex else { return nil }
 
-        let oldRowsSet = Set<SessionRow>(oldValue)
-        let newRowsSet = Set<SessionRow>(newValue)
-        let removed = oldRowsSet.subtracting(newRowsSet)
-        let added = newRowsSet.subtracting(oldRowsSet)
-        let moved = newRowsSet.intersection(oldRowsSet)
-        let selected = newRowsSet.intersection(selectedRows)
+                return oldValue[i]
+            }
 
-        var removedIndexes = IndexSet()
-        var addedIndexes = IndexSet()
-        var reloadedIndexes = IndexSet()
-        var selectedIndexes = IndexSet()
+            let oldRowsSet = Set<SessionRow>(oldValue)
+            let newRowsSet = Set<SessionRow>(newValue)
 
-        for row in removed {
-            guard let index = oldValue.index(of: row) else { continue }
-            removedIndexes.insert(index)
-        }
+            // Same elements
+            if oldRowsSet == newRowsSet {
 
-        for row in added {
-            guard let index = newValue.index(of: row) else { continue }
-            addedIndexes.insert(index)
-        }
+                // in the same order
+                var newDisplayedRowsAreIdentical = true
+                for (i, row) in oldValue.enumerated() {
 
-        for row in moved {
-            guard let index = newValue.index(of: row) else { continue }
-            reloadedIndexes.insert(index)
-        }
+                    guard i < newValue.endIndex, newValue[i] == row else {
+                        newDisplayedRowsAreIdentical = false
+                        break
+                    }
+                }
 
-        for row in selected {
-            guard let index = newValue.index(of: row) else { continue }
-            selectedIndexes.insert(index)
-        }
-
-        if selectedIndexes.isEmpty {
-            for row in newValue {
-                if case SessionRowKind.session(_) = row.kind {
-                    guard let index = newValue.index(of: row) else { continue }
-                    selectedIndexes.insert(index)
-                    break
+                if newDisplayedRowsAreIdentical {
+                    return
                 }
             }
+
+            let removed = oldRowsSet.subtracting(newRowsSet)
+            let added = newRowsSet.subtracting(oldRowsSet)
+            let selected = newRowsSet.intersection(selectedRows)
+
+            var removedIndexes = IndexSet()
+            var addedIndexes = IndexSet()
+            var reloadedIndexes = IndexSet()
+            var selectedIndexes = IndexSet()
+
+            for row in removed {
+                guard let index = oldValue.index(of: row) else { continue }
+                removedIndexes.insert(index)
+            }
+
+            for row in added {
+                guard let index = newValue.index(of: row) else { continue }
+                addedIndexes.insert(index)
+            }
+
+            // Only reload rows if their relative positioning changes
+            let orderedIntersection = newValue.filter { oldValue.contains($0)}
+            for (i, row) in orderedIntersection.enumerated() {
+                if let oldIndex = oldValue.index(of: row),
+                    i != oldIndex {
+
+                    if let index = newValue.index(of: row) {
+                        reloadedIndexes.insert(index)
+                    }
+                }
+            }
+
+            for row in selected {
+                guard let index = newValue.index(of: row) else { continue }
+                selectedIndexes.insert(index)
+            }
+
+            if selectedIndexes.isEmpty {
+                for row in newValue {
+                    if case SessionRowKind.session(_) = row.kind {
+                        guard let index = newValue.index(of: row) else { continue }
+                        selectedIndexes.insert(index)
+                        break
+                    }
+                }
+            }
+
+            DispatchQueue.main.sync {
+
+                NSAnimationContext.beginGrouping()
+                let context = NSAnimationContext.current()
+                if !animated {
+                    context.duration = 0
+                }
+
+                context.completionHandler = {
+                    NSAnimationContext.runAnimationGroup({ (context) in
+                        context.allowsImplicitAnimation = true
+                        self.tableView.scrollRowToVisible(selectedIndexes.first ?? 0)
+                    }, completionHandler: nil)
+                }
+
+                self.tableView.beginUpdates()
+
+                self.tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
+
+                self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
+
+                // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
+                // so we delay updating the data model until after those methods have done their thing
+                self.displayedRows = newValue
+
+                // This must be after you update the backing model
+                self.tableView.reloadData(forRowIndexes: reloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
+
+                self.tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
+
+                self.tableView.endUpdates()
+                NSAnimationContext.endGrouping()
+            }
         }
-
-        NSAnimationContext.beginGrouping()
-        let context = NSAnimationContext.current()
-        if !animated {
-            context.duration = 0
-        }
-
-        context.completionHandler = {
-            NSAnimationContext.runAnimationGroup({ (context) in
-                context.allowsImplicitAnimation = true
-                self.tableView.scrollRowToVisible(selectedIndexes.first ?? 0)
-            }, completionHandler: nil)
-        }
-
-        tableView.beginUpdates()
-
-        tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
-
-        tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
-
-        // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
-        // so we delay updating the data model until after those methods have done their thing
-        displayedRows = newValue
-
-        // This must be after you update the backing model
-        tableView.reloadData(forRowIndexes: reloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
-
-        tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
-
-        tableView.endUpdates()
-        NSAnimationContext.endGrouping()
     }
 
     init(style: SessionsListStyle) {

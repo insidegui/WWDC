@@ -39,7 +39,7 @@ final class SessionRow: NSObject {
         case .sectionHeader(let title):
             return "Header: " + title
         case .session(let viewModel):
-            return "Session: " + viewModel.identifier
+            return "Session: " + viewModel.identifier + " " + viewModel.title
         }
     }
 

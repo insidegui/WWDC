@@ -20,9 +20,11 @@ final class SessionTableCellView: NSTableCellView {
 
             disposeBag = DisposeBag()
 
-            thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
+            DispatchQueue.main.async {
+                self.thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
 
-            bindUI()
+                self.bindUI()
+            }
         }
     }
 
