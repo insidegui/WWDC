@@ -61,21 +61,6 @@ final class SearchFiltersViewController: NSViewController {
     var filters: [FilterType] {
         set {
 
-            if newValue.count == effectiveFilters.count {
-                var newFiltersAreIdentical = true
-                for filter in newValue {
-
-                    if !effectiveFilters.contains(where: { $0.identifier == filter.identifier }) {
-                        newFiltersAreIdentical = false
-                        break
-                    }
-                }
-
-                if newFiltersAreIdentical {
-                    return
-                }
-            }
-
             effectiveFilters = newValue
 
             updateUI()

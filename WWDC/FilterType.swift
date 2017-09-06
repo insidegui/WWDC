@@ -46,9 +46,29 @@ extension Dictionary where Key == String, Value == [ String : Any ] {
                 //ToggleFilters
                 self[filterID.rawValue] = filter.dictionaryRepresentation()
             }
+        }
+    }
+}
 
+extension Array where Element == FilterType {
+
+    func isIdentical(to otherArray: [Element]) -> Bool {
+
+        var isIdentical = false
+
+        if self.count == otherArray.count {
+
+            isIdentical = true
+
+            for filter in self {
+
+                if !otherArray.contains(where: { $0.identifier == filter.identifier }) {
+                    isIdentical = false
+                    break
+                }
+            }
         }
 
+        return isIdentical
     }
-
 }
