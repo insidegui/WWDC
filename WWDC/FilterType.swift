@@ -52,6 +52,12 @@ extension Dictionary where Key == String, Value == [ String : Any ] {
 
 extension Array where Element == FilterType {
 
+    /// This performs a comparison to ensure the two arrays
+    /// have the same elements by comparing their identifiers
+    ///
+    /// It is very slow. If the size of the arrays or frequency
+    /// of use becomes greater in the future, a new approach
+    /// may be required
     func isIdentical(to otherArray: [Element]) -> Bool {
 
         var isIdentical = false

@@ -18,14 +18,18 @@ final class SessionRow: NSObject {
 
     let kind: SessionRowKind
 
+    var _diffIdentifier: NSObjectProtocol
+
     init(viewModel: SessionViewModel) {
         kind = .session(viewModel)
+        _diffIdentifier = viewModel.diffIdentifier()
 
         super.init()
     }
 
     init(title: String) {
         kind = .sectionHeader(title)
+        _diffIdentifier = title as NSObjectProtocol
     }
 
     convenience init(date: Date, showTimeZone: Bool = false) {
@@ -51,7 +55,7 @@ final class SessionRow: NSObject {
 
     override func isEqual(_ object: Any?) -> Bool {
         if let diffable = object as? IGListDiffable {
-            return isEqual(toDiffableObject: diffable)
+            return diffIdentifier().isEqual(diffable.diffIdentifier())
         } else {
             return false
         }
@@ -61,12 +65,7 @@ final class SessionRow: NSObject {
 extension SessionRow: IGListDiffable {
 
     func diffIdentifier() -> NSObjectProtocol {
-        switch kind {
-        case .sectionHeader(let title):
-            return title as NSObjectProtocol
-        case .session(let viewModel):
-            return viewModel.diffIdentifier()
-        }
+        return _diffIdentifier
     }
 
     func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
@@ -79,5 +78,19 @@ extension SessionRow: IGListDiffable {
         } else {
             return false
         }
+    }
+}
+
+struct IndexedSessionRow: Hashable {
+
+    let sessionRow: SessionRow
+    let index: Int
+
+    var hashValue: Int {
+        return sessionRow.hashValue
+    }
+
+    static func ==(lhs: IndexedSessionRow, rhs: IndexedSessionRow) -> Bool {
+        return lhs.sessionRow == rhs.sessionRow
     }
 }

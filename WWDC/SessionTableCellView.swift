@@ -18,8 +18,6 @@ final class SessionTableCellView: NSTableCellView {
         didSet {
             guard viewModel != oldValue else { return }
 
-            disposeBag = DisposeBag()
-
             DispatchQueue.main.async {
                 self.thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
 
@@ -47,8 +45,6 @@ final class SessionTableCellView: NSTableCellView {
 
         downloadedImageView.isHidden = true
         favoritedImageView.isHidden = true
-
-        thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
     }
 
     private func bindUI() {
@@ -254,6 +250,9 @@ final class SessionTableCellView: NSTableCellView {
         iconsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4).isActive = true
         iconsStackView.topAnchor.constraint(equalTo: textStackView.topAnchor).isActive = true
         iconsStackView.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor).isActive = true
+
+        downloadedImageView.isHidden = true
+        favoritedImageView.isHidden = true
     }
     
 }

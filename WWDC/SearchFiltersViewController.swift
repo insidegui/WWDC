@@ -182,6 +182,7 @@ final class SearchFiltersViewController: NSViewController {
 
     private func updateTextualFilter(at filterIndex: Int, with text: String) {
         guard var filter = effectiveFilters[filterIndex] as? TextualFilter else { return }
+        guard filter.value != text else { return }
 
         filter.value = text
 

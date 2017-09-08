@@ -69,70 +69,64 @@ class SessionsTableViewController: NSViewController {
 
         displayedRowsLock.async {
 
+            let methodStart = Date()
+
             let oldValue = self.displayedRows
 
-            let selectedRows = self.tableView.selectedRowIndexes.flatMap { (i) -> SessionRow? in
+            // Same elements, same order: https://github.com/apple/swift/blob/master/stdlib/public/core/Arrays.swift.gyb#L2203
+            if oldValue == newValue {
+
+                print("Time to short circuit: \(Date().timeIntervalSince(methodStart))")
+                return
+            }
+
+            let selectedRows = self.tableView.selectedRowIndexes.flatMap { (i) -> IndexedSessionRow? in
                 guard i < oldValue.endIndex else { return nil }
 
-                return oldValue[i]
+                return IndexedSessionRow(sessionRow: oldValue[i], index: i)
             }
 
-            let oldRowsSet = Set<SessionRow>(oldValue)
-            let newRowsSet = Set<SessionRow>(newValue)
-
-            // Same elements
-            if oldRowsSet == newRowsSet {
-
-                // in the same order
-                var newDisplayedRowsAreIdentical = true
-                for (i, row) in oldValue.enumerated() {
-
-                    guard i < newValue.endIndex, newValue[i] == row else {
-                        newDisplayedRowsAreIdentical = false
-                        break
-                    }
-                }
-
-                if newDisplayedRowsAreIdentical {
-                    return
-                }
-            }
+            let oldRowsSet = Set(oldValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
+            let newRowsSet = Set(newValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
 
             let removed = oldRowsSet.subtracting(newRowsSet)
             let added = newRowsSet.subtracting(oldRowsSet)
             let selected = newRowsSet.intersection(selectedRows)
 
-            var removedIndexes = IndexSet()
-            var addedIndexes = IndexSet()
-            var reloadedIndexes = IndexSet()
-            var selectedIndexes = IndexSet()
+            let removedIndexes = IndexSet(removed.map { $0.index })
+            let addedIndexes = IndexSet(added.map { $0.index })
+            var needReloadedIndexes = IndexSet()
+            var selectedIndexes = IndexSet(selected.map { $0.index })
 
-            for row in removed {
-                guard let index = oldValue.index(of: row) else { continue }
-                removedIndexes.insert(index)
-            }
+            let complicatedOperationStart = Date()
 
-            for row in added {
-                guard let index = newValue.index(of: row) else { continue }
-                addedIndexes.insert(index)
-            }
+            // Only reload rows if their relative positioning changes. This prevents
+            // cell contents from flashing when cells are unnecessarily reloaded
+            //
+            // This is most time consuming operation and is not currently solvable with the IndexedSessionRow
+            // wrapper technique since we need to know the indexes relative to each other. This why we filter
+            // the arrays in both directions.
+            //
+            // All that being said, I'm sure there is still room to optimize it
+            let oldValueIntersection = oldValue.filter { newValue.contains($0) }
+            let orderedIntersection = newValue.filter { oldValue.contains($0) }
 
-            // Only reload rows if their relative positioning changes
-            let orderedIntersection = newValue.filter { oldValue.contains($0)}
+            print("Building the arrays took: \(Date().timeIntervalSince(complicatedOperationStart))")
+
+            let loopStart = Date()
             for (i, row) in orderedIntersection.enumerated() {
-                if let oldIndex = oldValue.index(of: row),
+                if let oldIndex = oldValueIntersection.index(of: row),
                     i != oldIndex {
 
                     if let index = newValue.index(of: row) {
-                        reloadedIndexes.insert(index)
+                        needReloadedIndexes.insert(index)
                     }
                 }
             }
 
-            for row in selected {
-                guard let index = newValue.index(of: row) else { continue }
-                selectedIndexes.insert(index)
-            }
+            print("The loop took: \(Date().timeIntervalSince(loopStart))")
+
+            print("The complicated calculation took: \(Date().timeIntervalSince(complicatedOperationStart))")
 
             if selectedIndexes.isEmpty {
                 for row in newValue {
@@ -143,6 +137,8 @@ class SessionsTableViewController: NSViewController {
                     }
                 }
             }
+
+            print("Set calculations took: \(Date().timeIntervalSince(methodStart))")
 
             DispatchQueue.main.sync {
 
@@ -170,12 +166,14 @@ class SessionsTableViewController: NSViewController {
                 self.displayedRows = newValue
 
                 // This must be after you update the backing model
-                self.tableView.reloadData(forRowIndexes: reloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
+                self.tableView.reloadData(forRowIndexes: needReloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
 
                 self.tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
 
                 self.tableView.endUpdates()
                 NSAnimationContext.endGrouping()
+
+                print("Total time to table update took: \(Date().timeIntervalSince(methodStart))")
             }
         }
     }
