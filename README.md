@@ -22,6 +22,12 @@ Watch this year's videos as they're released and access videos from previous yea
 - Fullscreen and native picture-in-picture support
 - Navigate video contents easily with the help of transcripts
 
+## ChromeCast
+
+You can watch WWDC videos (both live and on-demand) on your ChromeCast. Just click the ChromeCast button while playing a video, choose your device from the list and control playback using the Google Home app on your phone.
+
+![chromecast](./screenshots/v5/ChromeCast.png)
+
 ## Bookmarks
 
 Have you ever found yourself watching a WWDC session and wishing you could take notes at a specific point in the video to refer back to later on? This is now possible with bookmarks.
