@@ -110,19 +110,23 @@ class SessionsTableViewController: NSViewController {
             let sortedNewRows = newRowsSet.intersection(oldRowsSet).sorted(by: { (row1, row2) -> Bool in
                 return row1.index < row2.index
             })
-
-            print("Building the arrays took: \(Date().timeIntervalSince(complicatedOperationStart))")
-
+            
+            #if DEBUG
+                print("Building the arrays took: \(Date().timeIntervalSince(complicatedOperationStart))")
+            #endif
+            
             let loopStart = Date()
             for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) {
                 if oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
                     needReloadedIndexes.insert(newSessionRowIndex.index)
                 }
             }
-
-            print("The loop took: \(Date().timeIntervalSince(loopStart))")
-
-            print("The complicated calculation took: \(Date().timeIntervalSince(complicatedOperationStart))")
+            
+            #if DEBUG
+                print("The loop took: \(Date().timeIntervalSince(loopStart))")
+            
+                print("The complicated calculation took: \(Date().timeIntervalSince(complicatedOperationStart))")
+            #endif
 
             if selectedIndexes.isEmpty {
                 for row in newValue {
@@ -169,7 +173,9 @@ class SessionsTableViewController: NSViewController {
                 self.tableView.endUpdates()
                 NSAnimationContext.endGrouping()
 
-                print("Total time to table update took: \(Date().timeIntervalSince(methodStart))")
+                #if DEBUG
+                    print("Total time to table update took: \(Date().timeIntervalSince(methodStart))")
+                #endif
             }
         }
     }
