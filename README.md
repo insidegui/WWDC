@@ -38,10 +38,6 @@ You can easily share links to sessions or videos by using the share button. The 
 
 With the latest version of the app you can already begin creating an account (if you have iCloud set up on your device). In future versions, your account will be used to sync your favorites and bookmarks across your Macs and to share your bookmarks with other users of the app.
 
-## *COMING SOON:* AirPlay and ChromeCast support
-
-In a future update, AirPlay and ChromeCast support will be added so you can stream session videos to your AirPlay ® or GoogleCast ® enabled devices.
-
 ## Nerdy bits 🤓
 
 ### External libraries
