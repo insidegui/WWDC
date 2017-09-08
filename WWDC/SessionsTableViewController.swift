@@ -95,32 +95,28 @@ class SessionsTableViewController: NSViewController {
 
             let removedIndexes = IndexSet(removed.map { $0.index })
             let addedIndexes = IndexSet(added.map { $0.index })
-            var needReloadedIndexes = IndexSet()
             var selectedIndexes = IndexSet(selected.map { $0.index })
 
             let complicatedOperationStart = Date()
 
             // Only reload rows if their relative positioning changes. This prevents
             // cell contents from flashing when cells are unnecessarily reloaded
-            //
-            // This is most time consuming operation and is not currently solvable with the IndexedSessionRow
-            // wrapper technique since we need to know the indexes relative to each other. This why we filter
-            // the arrays in both directions.
-            //
-            // All that being said, I'm sure there is still room to optimize it
-            let oldValueIntersection = oldValue.filter { newValue.contains($0) }
-            let orderedIntersection = newValue.filter { oldValue.contains($0) }
+            var needReloadedIndexes = IndexSet()
+
+            let sortedOldRows = oldRowsSet.intersection(newRowsSet).sorted(by: { (row1, row2) -> Bool in
+                return row1.index < row2.index
+            })
+
+            let sortedNewRows = newRowsSet.intersection(oldRowsSet).sorted(by: { (row1, row2) -> Bool in
+                return row1.index < row2.index
+            })
 
             print("Building the arrays took: \(Date().timeIntervalSince(complicatedOperationStart))")
 
             let loopStart = Date()
-            for (i, row) in orderedIntersection.enumerated() {
-                if let oldIndex = oldValueIntersection.index(of: row),
-                    i != oldIndex {
-
-                    if let index = newValue.index(of: row) {
-                        needReloadedIndexes.insert(index)
-                    }
+            for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) {
+                if oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
+                    needReloadedIndexes.insert(newSessionRowIndex.index)
                 }
             }
 
