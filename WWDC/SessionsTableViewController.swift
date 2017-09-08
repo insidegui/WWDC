@@ -60,88 +60,122 @@ class SessionsTableViewController: NSViewController {
 
     private(set) var displayedRows: [SessionRow] = []
 
+    lazy var displayedRowsLock: DispatchQueue = {
+
+        return DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
+    }()
+
     func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
 
-        let oldValue = displayedRows
+        displayedRowsLock.async {
 
-        let selectedRows = tableView.selectedRowIndexes.flatMap { (i) -> SessionRow? in
-            guard i < oldValue.endIndex else { return nil }
+            let methodStart = Date()
 
-            return oldValue[i]
-        }
+            let oldValue = self.displayedRows
 
-        let oldRowsSet = Set<SessionRow>(oldValue)
-        let newRowsSet = Set<SessionRow>(newValue)
-        let removed = oldRowsSet.subtracting(newRowsSet)
-        let added = newRowsSet.subtracting(oldRowsSet)
-        let moved = newRowsSet.intersection(oldRowsSet)
-        let selected = newRowsSet.intersection(selectedRows)
+            // Same elements, same order: https://github.com/apple/swift/blob/master/stdlib/public/core/Arrays.swift.gyb#L2203
+            if oldValue == newValue {
 
-        var removedIndexes = IndexSet()
-        var addedIndexes = IndexSet()
-        var reloadedIndexes = IndexSet()
-        var selectedIndexes = IndexSet()
+                print("Time to short circuit: \(Date().timeIntervalSince(methodStart))")
+                return
+            }
 
-        for row in removed {
-            guard let index = oldValue.index(of: row) else { continue }
-            removedIndexes.insert(index)
-        }
+            let selectedRows = self.tableView.selectedRowIndexes.flatMap { (i) -> IndexedSessionRow? in
+                guard i < oldValue.endIndex else { return nil }
 
-        for row in added {
-            guard let index = newValue.index(of: row) else { continue }
-            addedIndexes.insert(index)
-        }
+                return IndexedSessionRow(sessionRow: oldValue[i], index: i)
+            }
 
-        for row in moved {
-            guard let index = newValue.index(of: row) else { continue }
-            reloadedIndexes.insert(index)
-        }
+            let oldRowsSet = Set(oldValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
+            let newRowsSet = Set(newValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
 
-        for row in selected {
-            guard let index = newValue.index(of: row) else { continue }
-            selectedIndexes.insert(index)
-        }
+            let removed = oldRowsSet.subtracting(newRowsSet)
+            let added = newRowsSet.subtracting(oldRowsSet)
+            let selected = newRowsSet.intersection(selectedRows)
 
-        if selectedIndexes.isEmpty {
-            for row in newValue {
-                if case SessionRowKind.session(_) = row.kind {
-                    guard let index = newValue.index(of: row) else { continue }
-                    selectedIndexes.insert(index)
-                    break
+            let removedIndexes = IndexSet(removed.map { $0.index })
+            let addedIndexes = IndexSet(added.map { $0.index })
+            var needReloadedIndexes = IndexSet()
+            var selectedIndexes = IndexSet(selected.map { $0.index })
+
+            let complicatedOperationStart = Date()
+
+            // Only reload rows if their relative positioning changes. This prevents
+            // cell contents from flashing when cells are unnecessarily reloaded
+            //
+            // This is most time consuming operation and is not currently solvable with the IndexedSessionRow
+            // wrapper technique since we need to know the indexes relative to each other. This why we filter
+            // the arrays in both directions.
+            //
+            // All that being said, I'm sure there is still room to optimize it
+            let oldValueIntersection = oldValue.filter { newValue.contains($0) }
+            let orderedIntersection = newValue.filter { oldValue.contains($0) }
+
+            print("Building the arrays took: \(Date().timeIntervalSince(complicatedOperationStart))")
+
+            let loopStart = Date()
+            for (i, row) in orderedIntersection.enumerated() {
+                if let oldIndex = oldValueIntersection.index(of: row),
+                    i != oldIndex {
+
+                    if let index = newValue.index(of: row) {
+                        needReloadedIndexes.insert(index)
+                    }
                 }
             }
+
+            print("The loop took: \(Date().timeIntervalSince(loopStart))")
+
+            print("The complicated calculation took: \(Date().timeIntervalSince(complicatedOperationStart))")
+
+            if selectedIndexes.isEmpty {
+                for row in newValue {
+                    if case SessionRowKind.session(_) = row.kind {
+                        guard let index = newValue.index(of: row) else { continue }
+                        selectedIndexes.insert(index)
+                        break
+                    }
+                }
+            }
+
+            print("Set calculations took: \(Date().timeIntervalSince(methodStart))")
+
+            DispatchQueue.main.sync {
+
+                NSAnimationContext.beginGrouping()
+                let context = NSAnimationContext.current()
+                if !animated {
+                    context.duration = 0
+                }
+
+                context.completionHandler = {
+                    NSAnimationContext.runAnimationGroup({ (context) in
+                        context.allowsImplicitAnimation = true
+                        self.tableView.scrollRowToVisible(selectedIndexes.first ?? 0)
+                    }, completionHandler: nil)
+                }
+
+                self.tableView.beginUpdates()
+
+                self.tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
+
+                self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
+
+                // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
+                // so we delay updating the data model until after those methods have done their thing
+                self.displayedRows = newValue
+
+                // This must be after you update the backing model
+                self.tableView.reloadData(forRowIndexes: needReloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
+
+                self.tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
+
+                self.tableView.endUpdates()
+                NSAnimationContext.endGrouping()
+
+                print("Total time to table update took: \(Date().timeIntervalSince(methodStart))")
+            }
         }
-
-        NSAnimationContext.beginGrouping()
-        let context = NSAnimationContext.current()
-        if !animated {
-            context.duration = 0
-        }
-
-        context.completionHandler = {
-            NSAnimationContext.runAnimationGroup({ (context) in
-                context.allowsImplicitAnimation = true
-                self.tableView.scrollRowToVisible(selectedIndexes.first ?? 0)
-            }, completionHandler: nil)
-        }
-
-        tableView.beginUpdates()
-
-        tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
-
-        tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
-
-        // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
-        // so we delay updating the data model until after those methods have done their thing
-        displayedRows = newValue
-
-        // This must be after you update the backing model
-        tableView.reloadData(forRowIndexes: reloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
-
-        tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
-
-        tableView.endUpdates()
-        NSAnimationContext.endGrouping()
     }
 
     init(style: SessionsListStyle) {

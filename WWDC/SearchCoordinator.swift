@@ -130,11 +130,13 @@ final class SearchCoordinator {
                                                    scheduleDownloadedFilter,
                                                    scheduleUnwatchedFilter]
 
-        scheduleSearchController.filters = scheduleSearchFilters
+        if !scheduleSearchController.filters.isIdentical(to: scheduleSearchFilters) {
+            scheduleSearchController.filters = scheduleSearchFilters
 
-        let activeScheduleFilters = scheduleSearchFilters.filter { !$0.isEmpty }
-        if activeScheduleFilters.count > 0 {
-            updateSearchResults(for: scheduleController, with: activeScheduleFilters)
+            let activeScheduleFilters = scheduleSearchFilters.filter { !$0.isEmpty }
+            if activeScheduleFilters.count > 0 {
+                updateSearchResults(for: scheduleController, with: activeScheduleFilters)
+            }
         }
 
         // Videos Filter Configuration
@@ -176,11 +178,13 @@ final class SearchCoordinator {
                                                  videosDownloadedFilter,
                                                  videosUnwatchedFilter]
 
-        videosSearchController.filters = videosSearchFilters
+        if !videosSearchController.filters.isIdentical(to: videosSearchFilters) {
+            videosSearchController.filters = videosSearchFilters
 
-        let activeVideosFilters = videosSearchFilters.filter { !$0.isEmpty }
-        if activeVideosFilters.count > 0 {
-            updateSearchResults(for: videosController, with: activeVideosFilters)
+            let activeVideosFilters = videosSearchFilters.filter { !$0.isEmpty }
+            if activeVideosFilters.count > 0 {
+                updateSearchResults(for: videosController, with: activeVideosFilters)
+            }
         }
 
         // set delegates
