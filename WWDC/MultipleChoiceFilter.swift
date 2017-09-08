@@ -24,7 +24,7 @@ struct FilterOption: Equatable {
     }
 
     static func ==(lhs: FilterOption, rhs: FilterOption) -> Bool {
-        return lhs.value == rhs.value
+        return lhs.value == rhs.value && lhs.isNegative == rhs.isNegative && lhs.title == rhs.title
     }
 
     func dictionaryRepresentation() -> [String : String] {
