@@ -122,7 +122,6 @@
 		DD9301BC1EE3205800BE724B /* ChromeCastCore.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */; };
 		DD9301BD1EE3205800BE724B /* ProtocolBuffers.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD9301BB1EE3205800BE724B /* ProtocolBuffers.framework.dSYM */; };
 		DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */; };
-		DD9564211ED2792300051D07 /* app.icns in Resources */ = {isa = PBXBuildFile; fileRef = DD9564201ED2792300051D07 /* app.icns */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
@@ -475,7 +474,6 @@
 		DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = ChromeCastCore.framework.dSYM; path = Carthage/Build/Mac/ChromeCastCore.framework.dSYM; sourceTree = "<group>"; };
 		DD9301BB1EE3205800BE724B /* ProtocolBuffers.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = ProtocolBuffers.framework.dSYM; path = Carthage/Build/Mac/ProtocolBuffers.framework.dSYM; sourceTree = "<group>"; };
 		DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromeCastPlaybackProvider.swift; sourceTree = "<group>"; };
-		DD9564201ED2792300051D07 /* app.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = app.icns; path = Design/app.icns; sourceTree = SOURCE_ROOT; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
@@ -1202,7 +1200,6 @@
 		DDCE7ECE1EA7A1A600C7A3CA /* Look */ = {
 			isa = PBXGroup;
 			children = (
-				DD9564201ED2792300051D07 /* app.icns */,
 				DDFA10C51EBFA578001DCF66 /* WWDC.car */,
 				DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */,
 				DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */,
@@ -1708,7 +1705,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD9564211ED2792300051D07 /* app.icns in Resources */,
 				DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */,
 				DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */,
 				DDC6781D1EDB638400A4E19C /* Preferences.storyboard in Resources */,
@@ -2189,6 +2185,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
@@ -2216,6 +2213,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
@@ -2392,6 +2390,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
@@ -2546,6 +2545,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				CODE_SIGN_IDENTITY = "Developer ID Application";
