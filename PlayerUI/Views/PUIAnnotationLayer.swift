@@ -11,11 +11,11 @@ import Cocoa
 class PUIAnnotationLayer: PUIBoringLayer {
 
     private var attachmentSpacing: CGFloat = 0
-    private var attachmentAttribute: NSLayoutAttribute = .notAnAttribute
+    private var attachmentAttribute: NSLayoutConstraint.Attribute = .notAnAttribute
 
     private(set) var attachedLayer: PUIBoringTextLayer = PUIBoringTextLayer()
 
-    func attach(layer: PUIBoringTextLayer, attribute: NSLayoutAttribute, spacing: CGFloat) {
+    func attach(layer: PUIBoringTextLayer, attribute: NSLayoutConstraint.Attribute, spacing: CGFloat) {
         guard attribute == .top else {
             fatalError("Only .top is implemented for now")
         }

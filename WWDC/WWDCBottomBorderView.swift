@@ -15,7 +15,7 @@ class WWDCBottomBorderView: NSView {
 
         let borderRect = NSRect(x: 0, y: 0, width: bounds.width, height: 0.5)
         NSColor.tertiaryText.withAlphaComponent(0.7).setFill()
-        NSRectFill(borderRect)
+        borderRect.fill()
     }
     
 }

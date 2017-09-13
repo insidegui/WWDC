@@ -13,24 +13,24 @@ import RealmSwift
 public class Event: Object {
 
     /// Unique identifier (ex: wwdc2017)
-    public dynamic var identifier = ""
+    @objc public dynamic var identifier = ""
 
     /// Event name
-    public dynamic var name = ""
+    @objc public dynamic var name = ""
 
     /// When the event starts
-    public dynamic var startDate = Date.distantPast
+    @objc public dynamic var startDate = Date.distantPast
 
     /// When the event ends
-    public dynamic var endDate = Date.distantPast
+    @objc public dynamic var endDate = Date.distantPast
 
     /// Is this the current event?
-    public dynamic var isCurrent = false
+    @objc public dynamic var isCurrent = false
 
     /// Sessions held at this event
     public let sessions = List<Session>()
 
-    public dynamic var imagesPath = ""
+    @objc public dynamic var imagesPath = ""
 
     /// Session instances for schedule
     public var sessionInstances = List<SessionInstance>()

@@ -68,18 +68,18 @@ final class AppCoordinator {
 
         // Schedule
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
-        scheduleController.identifier = "Schedule"
-        scheduleController.splitView.identifier = "ScheduleSplitView"
-        scheduleController.splitView.autosaveName = "ScheduleSplitView"
+        scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
+        scheduleController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
+        scheduleController.splitView.autosaveName = NSSplitView.AutosaveName(rawValue: "ScheduleSplitView")
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
         tabController.addTabViewItem(scheduleItem)
 
         // Videos
         videosController = SessionsSplitViewController(windowController: windowController, listStyle: .videos)
-        videosController.identifier = "Videos"
-        videosController.splitView.identifier = "VideosSplitView"
-        videosController.splitView.autosaveName = "VideosSplitView"
+        videosController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Videos")
+        videosController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "VideosSplitView")
+        videosController.splitView.autosaveName = NSSplitView.AutosaveName(rawValue: "VideosSplitView")
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
         tabController.addTabViewItem(videosItem)
@@ -92,8 +92,8 @@ final class AppCoordinator {
         setupDelegation()
 
         NotificationCenter.default.addObserver(forName: .WWDCTabViewControllerDidFinishLoading, object: nil, queue: nil) { _ in self.restoreApplicationState() }
-        NotificationCenter.default.addObserver(forName: .NSApplicationDidFinishLaunching, object: nil, queue: nil) { _ in self.startup() }
-        NotificationCenter.default.addObserver(forName: .NSApplicationWillTerminate, object: nil, queue: nil) { _ in self.saveApplicationState() }
+        NotificationCenter.default.addObserver(forName: NSApplication.didFinishLaunchingNotification, object: nil, queue: nil) { _ in self.startup() }
+        NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: nil) { _ in self.saveApplicationState() }
     }
 
     /// The list controller for the active tab
@@ -424,7 +424,7 @@ final class AppCoordinator {
             case quit = 1002
         }
 
-        guard let choice = Choice(rawValue: alert.runModal()) else { return }
+        guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
 
         switch choice {
         case .migrate:

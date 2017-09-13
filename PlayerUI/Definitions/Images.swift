@@ -15,87 +15,87 @@ extension NSImage {
     }
 
     static var PUIPlay: NSImage {
-        return playerBundle.image(forResource: "play")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "play"))!
     }
 
     static var PUIPause: NSImage {
-        return playerBundle.image(forResource: "pause")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "pause"))!
     }
 
     static var PUIAirplay: NSImage {
-        return playerBundle.image(forResource: "airplay")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "airplay"))!
     }
 
     static var PUIBack15s: NSImage {
-        return playerBundle.image(forResource: "back15s")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "back15s"))!
     }
 
     static var PUIBack30s: NSImage {
-        return playerBundle.image(forResource: "back30s")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "back30s"))!
     }
 
     static var PUIBookmark: NSImage {
-        return playerBundle.image(forResource: "bookmark")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "bookmark"))!
     }
 
     static var PUIForward15s: NSImage {
-        return playerBundle.image(forResource: "forward15s")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "forward15s"))!
     }
 
     static var PUIForward30s: NSImage {
-        return playerBundle.image(forResource: "forward30s")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "forward30s"))!
     }
 
     static var PUIFullScreen: NSImage {
-        return playerBundle.image(forResource: "fullscreen")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "fullscreen"))!
     }
 
     static var PUINextBookmark: NSImage {
-        return playerBundle.image(forResource: "nextbookmark")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "nextbookmark"))!
     }
 
     static var PUIPreviousBookmark: NSImage {
-        return playerBundle.image(forResource: "prevbookmark")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "prevbookmark"))!
     }
 
     static var PUIPictureInPicture: NSImage {
-        return playerBundle.image(forResource: "pip")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "pip"))!
     }
 
     static var PUIPictureInPictureLarge: NSImage {
-        return playerBundle.image(forResource: "pip-big")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "pip-big"))!
     }
 
     static var PUISubtitles: NSImage {
-        return playerBundle.image(forResource: "subtitles")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "subtitles"))!
     }
 
     static var PUIVolume: NSImage {
-        return playerBundle.image(forResource: "volume")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "volume"))!
     }
 
     static var PUIVolumeMuted: NSImage {
-        return playerBundle.image(forResource: "nosound")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "nosound"))!
     }
 
     static var PUISpeedOne: NSImage {
-        return playerBundle.image(forResource: "speed-1")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "speed-1"))!
     }
 
     static var PUISpeedHalf: NSImage {
-        return playerBundle.image(forResource: "speed-h")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "speed-h"))!
     }
 
     static var PUISpeedOneAndFourth: NSImage {
-        return playerBundle.image(forResource: "speed-125")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "speed-125"))!
     }
 
     static var PUISpeedOneAndHalf: NSImage {
-        return playerBundle.image(forResource: "speed-15")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "speed-15"))!
     }
 
     static var PUISpeedTwo: NSImage {
-        return playerBundle.image(forResource: "speed-2")!
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "speed-2"))!
     }
 
 }

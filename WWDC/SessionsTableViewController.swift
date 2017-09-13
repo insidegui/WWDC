@@ -143,7 +143,7 @@ class SessionsTableViewController: NSViewController {
             DispatchQueue.main.sync {
 
                 NSAnimationContext.beginGrouping()
-                let context = NSAnimationContext.current()
+                let context = NSAnimationContext.current
                 if !animated {
                     context.duration = 0
                 }
@@ -157,9 +157,9 @@ class SessionsTableViewController: NSViewController {
 
                 self.tableView.beginUpdates()
 
-                self.tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
+                self.tableView.removeRows(at: removedIndexes, withAnimation: [NSTableView.AnimationOptions.slideLeft])
 
-                self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
+                self.tableView.insertRows(at: addedIndexes, withAnimation: [NSTableView.AnimationOptions.slideDown])
 
                 // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
                 // so we delay updating the data model until after those methods have done their thing
@@ -183,9 +183,9 @@ class SessionsTableViewController: NSViewController {
     init(style: SessionsListStyle) {
         self.style = style
 
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
 
-        identifier = "videosList"
+        identifier = NSUserInterfaceItemIdentifier(rawValue: "videosList")
     }
 
     required init?(coder: NSCoder) {
@@ -349,12 +349,12 @@ class SessionsTableViewController: NSViewController {
         v.backgroundColor = .listBackground
         v.headerView = nil
         v.rowHeight = Metrics.sessionRowHeight
-        v.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        v.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
         v.floatsGroupRows = true
-        v.gridStyleMask = .solidHorizontalGridLineMask
+        v.gridStyleMask = NSTableView.GridLineStyle.solidHorizontalGridLineMask
         v.gridColor = .darkGridColor
 
-        let column = NSTableColumn(identifier: "session")
+        let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
         v.addTableColumn(column)
 
         return v
@@ -532,17 +532,17 @@ class SessionsTableViewController: NSViewController {
         case .removeFavorite:
             if viewModel.isFavorite { return true }
         case .download:
-            if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
+            if let sessionAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first {
                 if !DownloadManager.shared.isDownloading(sessionAsset.remoteURL) {
                     if DownloadManager.shared.localFileURL(for: viewModel.session) == nil { return true }
                 }
             }
         case .cancelDownload:
-            if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
+            if let sessionAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first {
                 if DownloadManager.shared.isDownloading(sessionAsset.remoteURL) { return true }
             }
         case .revealInFinder:
-            if let sessionAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first {
+            if let sessionAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first {
                 if DownloadManager.shared.hasVideo(sessionAsset.remoteURL) { return true }
             }
         }
@@ -575,11 +575,11 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        var rowView = tableView.make(withIdentifier: Constants.rowIdentifier, owner: tableView) as? WWDCTableRowView
+        var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier), owner: tableView) as? WWDCTableRowView
 
         if rowView == nil {
             rowView = WWDCTableRowView(frame: .zero)
-            rowView?.identifier = Constants.rowIdentifier
+            rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier)
         }
 
         switch displayedRows[row].kind {
@@ -593,11 +593,11 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
 
     private func cellForSessionViewModel(_ viewModel: SessionViewModel) -> SessionTableCellView? {
-        var cell = tableView.make(withIdentifier: Constants.sessionCellIdentifier, owner: tableView) as? SessionTableCellView
+        var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.sessionCellIdentifier), owner: tableView) as? SessionTableCellView
 
         if cell == nil {
             cell = SessionTableCellView(frame: .zero)
-            cell?.identifier = Constants.sessionCellIdentifier
+            cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.sessionCellIdentifier)
         }
 
         cell?.viewModel = viewModel
@@ -606,11 +606,11 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
 
     private func cellForSectionTitle(_ title: String) -> TitleTableCellView? {
-        var cell = tableView.make(withIdentifier: Constants.titleCellIdentifier, owner: tableView) as? TitleTableCellView
+        var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.titleCellIdentifier), owner: tableView) as? TitleTableCellView
 
         if cell == nil {
             cell = TitleTableCellView(frame: .zero)
-            cell?.identifier = Constants.titleCellIdentifier
+            cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.titleCellIdentifier)
         }
 
         cell?.title = title

@@ -33,14 +33,14 @@ final class PreferencesCoordinator {
 
         // General
         generalController = GeneralPreferencesViewController.loadFromStoryboard()
-        generalController.identifier = "General"
+        generalController.identifier = NSUserInterfaceItemIdentifier(rawValue: "General")
         let generalItem = NSTabViewItem(viewController: generalController)
         generalItem.label = "General"
         tabController.addTabViewItem(generalItem)
 
         // Account
         accountController = AccountPreferencesViewController()
-        accountController.identifier = "Account"
+        accountController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Account")
         let accountItem = NSTabViewItem(viewController: accountController)
         accountItem.label = "Account"
         tabController.addTabViewItem(accountItem)

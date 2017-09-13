@@ -13,25 +13,25 @@ import RealmSwift
 public class Track: Object {
 
     /// Unique identifier
-    public dynamic var identifier = ""
+    @objc public dynamic var identifier = ""
 
     /// The name of the track
-    public dynamic var name = ""
+    @objc public dynamic var name = ""
 
     /// The order in which the track should be listed
-    public dynamic var order = 0
+    @objc public dynamic var order = 0
 
     /// Dark theme color
-    public dynamic var darkColor = ""
+    @objc public dynamic var darkColor = ""
 
     /// Color for light backgrounds
-    public dynamic var lightBackgroundColor = ""
+    @objc public dynamic var lightBackgroundColor = ""
 
     /// Color for light contexts
-    public dynamic var lightColor = ""
+    @objc public dynamic var lightColor = ""
 
     /// Theme title color
-    public dynamic var titleColor = ""
+    @objc public dynamic var titleColor = ""
 
     /// Sessions related to this track
     public let sessions = List<Session>()

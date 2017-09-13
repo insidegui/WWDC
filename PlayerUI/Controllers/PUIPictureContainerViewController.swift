@@ -24,7 +24,7 @@ final class PUIPictureContainerViewController: NSViewController {
     init(playerLayer: AVPlayerLayer) {
         self.playerLayer = playerLayer
 
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {

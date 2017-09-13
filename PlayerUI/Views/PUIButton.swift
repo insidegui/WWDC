@@ -24,7 +24,7 @@ public final class PUIButton: NSControl {
         }
     }
 
-    public var state: Int = NSOffState {
+    public var state: NSControl.StateValue = .off {
         didSet {
             setNeedsDisplay()
         }
@@ -76,13 +76,13 @@ public final class PUIButton: NSControl {
 
     public override func draw(_ dirtyRect: NSRect) {
         if let maskImage = maskImage {
-            if let alternateMaskImage = alternateMaskImage, state == NSOnState {
+            if let alternateMaskImage = alternateMaskImage, state == .on {
                 drawMask(alternateMaskImage)
             } else {
                 drawMask(maskImage)
             }
         } else {
-            if let alternateImage = alternateImage, state == NSOnState {
+            if let alternateImage = alternateImage, state == .on {
                 drawImage(alternateImage)
             } else {
                 drawImage(image)
@@ -91,11 +91,11 @@ public final class PUIButton: NSControl {
     }
 
     private func drawMask(_ maskImage: CGImage) {
-        guard let ctx = NSGraphicsContext.current()?.cgContext else { return }
+        guard let ctx = NSGraphicsContext.current?.cgContext else { return }
 
         ctx.clip(to: bounds, mask: maskImage)
 
-        if shouldDrawHighlighted || state == NSOnState || shouldAlwaysDrawHighlighted {
+        if shouldDrawHighlighted || state == .on || shouldAlwaysDrawHighlighted {
             ctx.setFillColor(activeTintColor.cgColor)
         } else if !isEnabled {
             let color = shouldAlwaysDrawHighlighted ? activeTintColor : tintColor
@@ -148,8 +148,8 @@ public final class PUIButton: NSControl {
         shouldDrawHighlighted = true
 
         if !sendsActionOnMouseDown {
-            window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged], timeout: NSEventDurationForever, mode: .eventTrackingRunLoopMode) { e, stop in
-                if e.type == .leftMouseUp {
+            window?.trackEvents(matching: [NSEvent.EventTypeMask.leftMouseUp, NSEvent.EventTypeMask.leftMouseDragged], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { e, stop in
+                if e?.type == .leftMouseUp {
                     self.shouldDrawHighlighted = false
                     stop.pointee = true
                 }
@@ -158,7 +158,7 @@ public final class PUIButton: NSControl {
 
         if let action = action, let target = target {
             if isToggle {
-                state = (state == NSOnState) ? NSOffState : NSOnState
+                state = (state == .on) ? .off : .on
             }
             NSApp.sendAction(action, to: target, from: self)
         }
@@ -178,7 +178,7 @@ public final class PUIButton: NSControl {
     }
 
     public override var effectiveAppearance: NSAppearance {
-        return NSAppearance(named: NSAppearanceNameVibrantDark)!
+        return NSAppearance(named: NSAppearance.Name.vibrantDark)!
     }
     
     public override var allowsVibrancy: Bool {

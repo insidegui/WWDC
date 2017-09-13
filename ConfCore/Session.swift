@@ -13,30 +13,30 @@ import RealmSwift
 public class Session: Object {
 
     /// Unique identifier
-    public dynamic var identifier = ""
+    @objc public dynamic var identifier = ""
 
     /// Session year
-    public dynamic var year = 0
+    @objc public dynamic var year = 0
 
     /// Session number
-    public dynamic var number = ""
+    @objc public dynamic var number = ""
 
     /// Title
-    public dynamic var title = ""
+    @objc public dynamic var title = ""
 
-    public dynamic var staticContentId = ""
+    @objc public dynamic var staticContentId = ""
 
     /// Description
-    public dynamic var summary = ""
+    @objc public dynamic var summary = ""
 
     /// The event identifier for the event this session belongs to
-    public dynamic var eventIdentifier = ""
+    @objc public dynamic var eventIdentifier = ""
 
     /// Track name
-    public dynamic var trackName = ""
+    @objc public dynamic var trackName = ""
 
     /// Track identifier
-    public dynamic var trackIdentifier = ""
+    @objc public dynamic var trackIdentifier = ""
 
     /// The session's focuses
     public let focuses = List<Focus>()
@@ -45,7 +45,7 @@ public class Session: Object {
     public let assets = List<SessionAsset>()
 
     /// Whether this session is downloaded
-    public dynamic var isDownloaded = false
+    @objc public dynamic var isDownloaded = false
 
     /// Session favorite
     public let favorites = List<Favorite>()
@@ -57,10 +57,10 @@ public class Session: Object {
     public let bookmarks = List<Bookmark>()
 
     /// Transcript identifier for the session
-    public dynamic var transcriptIdentifier: String = ""
+    @objc public dynamic var transcriptIdentifier: String = ""
 
     /// Shortcut to get the full transcript text (used during search)
-    public dynamic var transcriptText: String = ""
+    @objc public dynamic var transcriptText: String = ""
 
     /// Fetches and returns the transcript object associated with the session
     public func transcript() -> Transcript? {

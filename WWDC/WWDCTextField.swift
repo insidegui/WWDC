@@ -11,7 +11,7 @@ import Cocoa
 class WWDCTextField: NSTextField {
 
     override func viewWillMove(toSuperview newSuperview: NSView?) {
-        NotificationCenter.default.removeObserver(self, name: .NSViewFrameDidChange, object: superview)
+        NotificationCenter.default.removeObserver(self, name: NSView.frameDidChangeNotification, object: superview)
 
         super.viewWillMove(toSuperview: newSuperview)
     }
@@ -41,7 +41,7 @@ class WWDCTextField: NSTextField {
 
     func fixApplesTextFieldSizingBehavior() {
         superview?.postsFrameChangedNotifications = true
-        NotificationCenter.default.addObserver(self, selector: #selector(superviewFrameDidChange), name: .NSViewFrameDidChange, object: superview)
+        NotificationCenter.default.addObserver(self, selector: #selector(superviewFrameDidChange), name: NSView.frameDidChangeNotification, object: superview)
     }
 
     @objc private func superviewFrameDidChange() {

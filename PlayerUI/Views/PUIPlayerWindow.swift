@@ -15,9 +15,9 @@ open class PUIPlayerWindow: NSWindow {
 
     // MARK: - Initialization
 
-    public override init(contentRect: NSRect, styleMask style: NSWindowStyleMask, backing bufferingType: NSBackingStoreType, defer flag: Bool) {
+    public override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing bufferingType: NSWindow.BackingStoreType, defer flag: Bool) {
         var effectiveStyle = style
-        effectiveStyle.insert(.fullSizeContentView)
+        effectiveStyle.insert(NSWindow.StyleMask.fullSizeContentView)
 
         super.init(contentRect: contentRect, styleMask: effectiveStyle, backing: bufferingType, defer: flag)
 
@@ -33,13 +33,13 @@ open class PUIPlayerWindow: NSWindow {
     // MARK: - Custom appearance
 
     open override var effectiveAppearance: NSAppearance {
-        return NSAppearance(named: NSAppearanceNameVibrantDark)!
+        return NSAppearance(named: NSAppearance.Name.vibrantDark)!
     }
 
     fileprivate var titlebarWidgets = Set<NSButton>()
 
     fileprivate func appearanceForWidgets() -> NSAppearance? {
-        return NSAppearance(named: NSAppearanceNameAqua)
+        return NSAppearance(named: NSAppearance.Name.aqua)
     }
 
     fileprivate func applyAppearanceToWidgets() {
@@ -104,7 +104,7 @@ open class PUIPlayerWindow: NSWindow {
         titleTextField!.centerYAnchor.constraint(equalTo: titlebarView!.centerYAnchor).isActive = true
         titleTextField!.centerXAnchor.constraint(equalTo: titlebarView!.centerXAnchor).isActive = true
         titleTextField!.leadingAnchor.constraint(greaterThanOrEqualTo: titlebarView!.leadingAnchor, constant: 67.0).isActive = true
-        titleTextField!.setContentCompressionResistancePriority(0.1, for: .horizontal)
+        titleTextField!.setContentCompressionResistancePriority(NSLayoutConstraint.Priority(rawValue: 0.1), for: .horizontal)
 
         titleTextField!.layer?.compositingFilter = "lightenBlendMode"
     }
@@ -136,8 +136,8 @@ open class PUIPlayerWindow: NSWindow {
         let nc = NotificationCenter.default
 
         // the customizations (especially the title text field ones) have to be reapplied when entering and exiting fullscreen
-        nc.addObserver(forName: NSNotification.Name.NSWindowDidEnterFullScreen, object: self, queue: nil, using: applyCustomizations)
-        nc.addObserver(forName: NSNotification.Name.NSWindowDidExitFullScreen, object: self, queue: nil, using: applyCustomizations)
+        nc.addObserver(forName: NSWindow.didEnterFullScreenNotification, object: self, queue: nil, using: applyCustomizations)
+        nc.addObserver(forName: NSWindow.didExitFullScreenNotification, object: self, queue: nil, using: applyCustomizations)
     }
 
     open override func makeKeyAndOrderFront(_ sender: Any?) {
@@ -183,7 +183,7 @@ open class PUIPlayerWindow: NSWindow {
         }, completionHandler: nil)
     }
 
-    open override func standardWindowButton(_ b: NSWindowButton) -> NSButton? {
+    open override func standardWindowButton(_ b: NSWindow.ButtonType) -> NSButton? {
         guard let button = super.standardWindowButton(b) else { return nil }
 
         titlebarWidgets.insert(button)
@@ -203,7 +203,7 @@ open class PUIPlayerWindow: NSWindow {
         set {
             let darkContentView = PUIPlayerWindowContentView(frame: newValue?.frame ?? NSZeroRect)
             if let newContentView = newValue {
-                newContentView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+                newContentView.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
                 darkContentView.addSubview(newContentView)
             }
             super.contentView = darkContentView
@@ -221,7 +221,7 @@ private class PUIPlayerWindowContentView: NSView {
 
     fileprivate func installOverlayView() {
         overlayView = PUIPlayerWindowOverlayView(frame: bounds)
-        overlayView!.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        overlayView!.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
         addSubview(overlayView!, positioned: .above, relativeTo: subviews.last)
     }
 
@@ -236,7 +236,7 @@ private class PUIPlayerWindowContentView: NSView {
 
     fileprivate override func draw(_ dirtyRect: NSRect) {
         NSColor.black.setFill()
-        NSRectFill(dirtyRect)
+        dirtyRect.fill()
     }
 
     fileprivate override func addSubview(_ aView: NSView) {
@@ -264,7 +264,7 @@ private class PUIPlayerWindowOverlayView: NSView {
             removeTrackingArea(mouseTrackingArea)
         }
 
-        mouseTrackingArea = NSTrackingArea(rect: bounds, options: [.inVisibleRect, .mouseEnteredAndExited, .mouseMoved, .activeAlways], owner: self, userInfo: nil)
+        mouseTrackingArea = NSTrackingArea(rect: bounds, options: [NSTrackingArea.Options.inVisibleRect, NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.mouseMoved, NSTrackingArea.Options.activeAlways], owner: self, userInfo: nil)
         addTrackingArea(mouseTrackingArea)
     }
 
@@ -286,7 +286,7 @@ private class PUIPlayerWindowOverlayView: NSView {
     fileprivate override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullscreen), name: NSNotification.Name.NSWindowWillExitFullScreen, object: window)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullscreen), name: NSWindow.willExitFullScreenNotification, object: window)
         resetMouseIdleTimer()
     }
 

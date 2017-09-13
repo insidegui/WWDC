@@ -20,9 +20,9 @@ class VibrantButton: NSView {
         }
     }
 
-    var state: Int = NSOffState {
+    var state: NSControl.StateValue = .off {
         didSet {
-            if state == NSOnState {
+            if state == .on {
                 titleLabel.textColor = .primary
             } else {
                 titleLabel.textColor = .primaryText
@@ -61,7 +61,7 @@ class VibrantButton: NSView {
         v.translatesAutoresizingMaskIntoConstraints = false
         v.blendingMode = .withinWindow
         v.material = .ultraDark
-        v.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
+        v.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
         v.state = .active
 
         return v
@@ -93,7 +93,7 @@ class VibrantButton: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
-        state = NSOnState
+        state = .on
     }
 
     override func mouseUp(with event: NSEvent) {
@@ -101,7 +101,7 @@ class VibrantButton: NSView {
             NSApp.sendAction(action, to: target, from: self)
         }
 
-        state = NSOffState
+        state = .off
     }
 
 }

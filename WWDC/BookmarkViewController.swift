@@ -46,7 +46,7 @@ final class BookmarkViewController: NSViewController {
         self.storage = storage
         self.bookmark = bookmark
 
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -70,7 +70,7 @@ final class BookmarkViewController: NSViewController {
         v.backgroundColor = .clear
         v.font = .systemFont(ofSize: 12)
         v.textColor = .secondaryText
-        v.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        v.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
 
         return v
     }()
@@ -93,7 +93,7 @@ final class BookmarkViewController: NSViewController {
         v.spacing = 8
         v.alignment = .centerY
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.edgeInsets = EdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        v.edgeInsets = NSEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 
         return v
     }()

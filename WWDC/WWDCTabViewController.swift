@@ -32,7 +32,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     }
 
     init(windowController: NSWindowController) {
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
 
         // Preserve the window's size, essentially passing in saved window frame sizes
         let superFrame = view.frame
@@ -40,7 +40,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
             view.frame = NSRect(origin: superFrame.origin, size: windowFrame.size)
         }
 
-        identifier = "tabs"
+        identifier = NSUserInterfaceItemIdentifier(rawValue: "tabs")
     }
 
     required init?(coder: NSCoder) {
@@ -50,7 +50,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        transitionOptions = [.allowUserInteraction]
+        transitionOptions = [NSViewController.TransitionOptions.allowUserInteraction]
 
         tabStyle = .toolbar
         view.wantsLayer = true
@@ -73,8 +73,8 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
         isConfigured = true
 
-        toolbar.insertItem(withItemIdentifier: NSToolbarFlexibleSpaceItemIdentifier, at: 0)
-        toolbar.insertItem(withItemIdentifier: NSToolbarFlexibleSpaceItemIdentifier, at: toolbar.items.count)
+        toolbar.insertItem(withItemIdentifier: NSToolbarItem.Identifier.flexibleSpace, at: 0)
+        toolbar.insertItem(withItemIdentifier: NSToolbarItem.Identifier.flexibleSpace, at: toolbar.items.count)
 
         addObserver(self, forKeyPath: #keyPath(selectedTabViewItemIndex), options: [.initial, .new], context: nil)
 
@@ -94,12 +94,12 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
             tabViewItems.forEach { item in
                 guard let identifier = item.viewController?.identifier else { return }
-                guard let view = tabItemViews.first(where: { $0.controllerIdentifier == identifier }) else { return }
+                guard let view = tabItemViews.first(where: { $0.controllerIdentifier == identifier.rawValue }) else { return }
 
-                if indexForChild(with: identifier) == selectedTabViewItemIndex {
-                    view.state = NSOnState
+                if indexForChild(with: identifier.rawValue) == selectedTabViewItemIndex {
+                    view.state = .on
                 } else {
-                    view.state = NSOffState
+                    view.state = .off
                 }
             }
 
@@ -113,15 +113,15 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         return tabViewItems.first { $0.identifier as? String == identifier }
     }
 
-    override func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: String, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
-        guard let tabItem = tabItem(with: itemIdentifier) else { return nil }
+    override func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        guard let tabItem = tabItem(with: itemIdentifier.rawValue) else { return nil }
 
         let itemView = TabItemView(frame: .zero)
 
         itemView.title = tabItem.label
-        itemView.controllerIdentifier = tabItem.viewController?.identifier ?? ""
-        itemView.image = NSImage(named: itemView.controllerIdentifier.lowercased())
-        itemView.alternateImage = NSImage(named: itemView.controllerIdentifier.lowercased() + "-filled")
+        itemView.controllerIdentifier = (tabItem.viewController?.identifier).map { $0.rawValue } ?? ""
+        itemView.image = NSImage(named: NSImage.Name(rawValue: itemView.controllerIdentifier.lowercased()))
+        itemView.alternateImage = NSImage(named: NSImage.Name(rawValue: itemView.controllerIdentifier.lowercased() + "-filled"))
 
         let item = NSToolbarItem(itemIdentifier: itemIdentifier)
 
@@ -132,7 +132,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         item.target = self
         item.action = #selector(changeTab)
 
-        itemView.state = (tabViewItems.index(of: tabItem) == selectedTabViewItemIndex) ? NSOnState : NSOffState
+        itemView.state = (tabViewItems.index(of: tabItem) == selectedTabViewItemIndex) ? .on : .off
 
         return item
     }
@@ -144,7 +144,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     }
 
     private func indexForChild(with identifier: String) -> Int? {
-        return tabViewItems.index { $0.viewController?.identifier == identifier }
+        return tabViewItems.index { $0.viewController?.identifier?.rawValue == identifier }
     }
 
     private var tabItemViews: [TabItemView] {

@@ -44,7 +44,7 @@ final class TabItemView: NSView {
 
     var image: NSImage? {
         didSet {
-            if state == NSOffState {
+            if state == .off {
                 imageView.image = image
                 sizeToFit()
             }
@@ -53,20 +53,20 @@ final class TabItemView: NSView {
 
     var alternateImage: NSImage? {
         didSet {
-            if state == NSOnState {
+            if state == .on {
                 imageView.image = alternateImage
                 sizeToFit()
             }
         }
     }
 
-    var state: Int = NSOffState {
+    var state: NSControl.StateValue = .off {
         didSet {
-            if state == NSOnState {
+            if state == .on {
                 imageView.tintColor = .toolbarTintActive
                 imageView.image = alternateImage ?? image
                 titleLabel.textColor = .toolbarTintActive
-                titleLabel.font = .systemFont(ofSize: 14, weight: NSFontWeightMedium)
+                titleLabel.font = .systemFont(ofSize: 14, weight: NSFont.Weight.medium)
             } else {
                 imageView.tintColor = .toolbarTint
                 imageView.image = image

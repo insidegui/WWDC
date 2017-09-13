@@ -12,16 +12,16 @@ import RealmSwift
 /// Represents a room or venue where sessions are held
 public class Room: Object {
 
-    public dynamic var identifier = ""
+    @objc public dynamic var identifier = ""
 
     /// Name of the map file (maps are not present in the macOS app because they are embedded in the iOS app's binary, not given by the API)
-    public dynamic var mapName = ""
+    @objc public dynamic var mapName = ""
 
     /// Name of the room
-    public dynamic var name = ""
+    @objc public dynamic var name = ""
 
     /// Room floor name
-    public dynamic var floor = ""
+    @objc public dynamic var floor = ""
 
     /// Session instances held at this room
     public let instances = List<SessionInstance>()

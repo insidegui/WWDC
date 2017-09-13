@@ -26,7 +26,7 @@ class ModalLoadingView: NSView {
         let p = NSProgressIndicator()
 
         p.isIndeterminate = true
-        p.style = .spinningStyle
+        p.style = .spinning
         p.translatesAutoresizingMaskIntoConstraints = false
 
         return p
@@ -63,7 +63,7 @@ class ModalLoadingView: NSView {
 
     func show(in view: NSView) {
         alphaValue = 0
-        autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
         spinner.startAnimation(nil)
 
         view.addSubview(self)

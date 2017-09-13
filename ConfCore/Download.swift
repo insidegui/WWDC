@@ -22,19 +22,19 @@ enum DownloadStatus: String {
 public class Download: Object {
 
     /// Unique identifier
-    public dynamic var identifier = UUID().uuidString
+    @objc public dynamic var identifier = UUID().uuidString
 
     /// The session this download is associated with
-    public dynamic var sessionIdentifier = ""
+    @objc public dynamic var sessionIdentifier = ""
 
     /// When the download was started
-    public dynamic var createdAt = Date()
+    @objc public dynamic var createdAt = Date()
 
     /// The current progress of the download (from 0 to 1)
-    public dynamic var progress: Double = 0.0
+    @objc public dynamic var progress: Double = 0.0
 
     /// The raw status of the download
-    internal dynamic var rawStatus: String = DownloadStatus.none.rawValue
+    @objc internal dynamic var rawStatus: String = DownloadStatus.none.rawValue
 
     /// The status of the download
     var status: DownloadStatus {

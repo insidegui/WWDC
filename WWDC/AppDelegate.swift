@@ -37,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // handle other types of notification
     }
 
-    func handleURLEvent(_ event: NSAppleEventDescriptor?, replyEvent: NSAppleEventDescriptor?) {
+    @objc func handleURLEvent(_ event: NSAppleEventDescriptor?, replyEvent: NSAppleEventDescriptor?) {
         guard let event = event else { return }
         guard let urlString = event.paramDescriptor(forKeyword: UInt32(keyDirectObject))?.stringValue else { return }
         guard let url = URL(string: urlString) else { return }

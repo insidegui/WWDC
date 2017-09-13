@@ -13,13 +13,13 @@ import RealmSwift
 public class Favorite: Object {
 
     /// Unique identifier
-    public dynamic var identifier = UUID().uuidString
+    @objc public dynamic var identifier = UUID().uuidString
 
     /// When the favorite was created
-    public dynamic var createdAt = Date()
+    @objc public dynamic var createdAt = Date()
 
     /// Soft delete (for syncing)
-    public dynamic var isDeleted: Bool = false
+    @objc public dynamic var isDeleted: Bool = false
 
     /// The session this favorite is associated with
     public let session = LinkingObjects(fromType: Session.self, property: "favorites")

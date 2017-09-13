@@ -56,7 +56,7 @@ final class VideoPlayerViewController: NSViewController {
         sessionViewModel = session
         self.player = player
 
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
     }
 
     required public init?(coder: NSCoder) {
@@ -71,10 +71,10 @@ final class VideoPlayerViewController: NSViewController {
         let p = NSProgressIndicator(frame: NSZeroRect)
 
         p.controlSize = .regular
-        p.style = .spinningStyle
+        p.style = .spinning
         p.isIndeterminate = true
         p.translatesAutoresizingMaskIntoConstraints = false
-        p.appearance = NSAppearance(named: "WhiteSpinner")
+        p.appearance = NSAppearance(named: NSAppearance.Name(rawValue: "WhiteSpinner"))
 
         p.sizeToFit()
 

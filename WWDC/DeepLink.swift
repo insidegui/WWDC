@@ -40,17 +40,17 @@ struct DeepLink {
         let fullYear: String
 
         if yearParameter.characters.count > 6 {
-            year = yearParameter.substring(from: yearParameter.index(yearParameter.endIndex, offsetBy: -4))
+            year = String(yearParameter.suffix(4))
             fullYear = year
         } else {
-            year = yearParameter.substring(from: yearParameter.index(yearParameter.endIndex, offsetBy: -2))
+            year = String(yearParameter.suffix(2))
             // this will only work for the next 983 years ¯\_(ツ)_/¯
             fullYear = "20\(year)"
         }
 
         guard let yearNumber = Int(fullYear) else { return nil }
-        let currentYear = "\(Calendar.current.component(.year, from: Today()))" // Force gregorian here
-        let currentYearDigits = currentYear.substring(from: currentYear.index(currentYear.startIndex, offsetBy: 2))
+        let currentYear = "\(Calendar.current.component(.year, from: Today()))"
+        let currentYearDigits = String(currentYear[currentYear.index(currentYear.startIndex, offsetBy: 2)...])
 
         self.year = yearNumber
         eventIdentifier = "wwdc\(year)"

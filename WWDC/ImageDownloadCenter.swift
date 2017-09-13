@@ -58,10 +58,10 @@ final class ImageDownloadCenter {
 
 final class ImageCacheEntity: Object {
 
-    dynamic var key: String = ""
-    dynamic var createdAt: Date = Date()
-    dynamic var original: Data = Data()
-    dynamic var thumbnail: Data = Data()
+    @objc dynamic var key: String = ""
+    @objc dynamic var createdAt: Date = Date()
+    @objc dynamic var original: Data = Data()
+    @objc dynamic var thumbnail: Data = Data()
 
     override class func primaryKey() -> String {
         return "key"

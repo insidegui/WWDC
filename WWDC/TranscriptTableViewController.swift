@@ -25,9 +25,9 @@ class TranscriptTableViewController: NSViewController {
     }
 
     init() {
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
 
-        identifier = "transcriptList"
+        identifier = NSUserInterfaceItemIdentifier(rawValue: "transcriptList")
     }
 
     required init?(coder: NSCoder) {
@@ -43,10 +43,10 @@ class TranscriptTableViewController: NSViewController {
         v.backgroundColor = .clear
         v.headerView = nil
         v.rowHeight = 36
-        v.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        v.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
         v.floatsGroupRows = true
 
-        let column = NSTableColumn(identifier: "transcript")
+        let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "transcript"))
         v.addTableColumn(column)
 
         return v
@@ -76,7 +76,7 @@ class TranscriptTableViewController: NSViewController {
         tableView.frame = view.bounds
 
         view.heightAnchor.constraint(equalToConstant: 180).isActive = true
-        view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .vertical)
+        view.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultLow, for: .vertical)
 
         view.addSubview(scrollView)
 
@@ -124,7 +124,8 @@ class TranscriptTableViewController: NSViewController {
             guard let transcript = transcript else { return }
             guard let timecode = note.object as? String else { return }
 
-            guard let annotation = transcript.annotations.filter({ Transcript.roundedStringFromTimecode($0.timecode) == timecode }).first else { return }
+            let annotations = transcript.annotations.filter({ Transcript.roundedStringFromTimecode($0.timecode) == timecode })
+            guard let annotation = annotations.first else { return }
 
             guard let row = transcript.annotations.index(of: annotation) else { return }
 
@@ -149,11 +150,11 @@ extension TranscriptTableViewController: NSTableViewDataSource, NSTableViewDeleg
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard let annotations = transcript?.annotations else { return nil }
 
-        var cell = tableView.make(withIdentifier: Constants.cellIdentifier, owner: tableView) as? TranscriptTableCellView
+        var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.cellIdentifier), owner: tableView) as? TranscriptTableCellView
 
         if cell == nil {
             cell = TranscriptTableCellView(frame: .zero)
-            cell?.identifier = Constants.cellIdentifier
+            cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.cellIdentifier)
         }
 
         cell?.annotation = annotations[row]
@@ -175,11 +176,11 @@ extension TranscriptTableViewController: NSTableViewDataSource, NSTableViewDeleg
     }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        var rowView = tableView.make(withIdentifier: Constants.rowIdentifier, owner: tableView) as? WWDCTableRowView
+        var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier), owner: tableView) as? WWDCTableRowView
 
         if rowView == nil {
             rowView = WWDCTableRowView(frame: .zero)
-            rowView?.identifier = Constants.rowIdentifier
+            rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier)
         }
 
         return rowView

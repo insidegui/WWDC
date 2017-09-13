@@ -46,9 +46,9 @@ extension NSSegmentedControl {
 final class SearchFiltersViewController: NSViewController {
 
     static func loadFromStoryboard() -> SearchFiltersViewController {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
 
-        return storyboard.instantiateController(withIdentifier: "SearchFiltersViewController") as! SearchFiltersViewController
+        return storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "SearchFiltersViewController")) as! SearchFiltersViewController
     }
 
     @IBOutlet weak var eventsPopUp: NSPopUpButton!
@@ -139,7 +139,7 @@ final class SearchFiltersViewController: NSViewController {
     }
 
     func setFilters(hidden: Bool) {
-        filterButton.state = hidden ? 0 : 1
+        filterButton.state = NSControl.StateValue(rawValue: hidden ? 0 : 1)
         eventsPopUp.isHidden = hidden
         focusesPopUp.isHidden = hidden
         tracksPopUp.isHidden = hidden
@@ -151,9 +151,9 @@ final class SearchFiltersViewController: NSViewController {
         guard let menu = popUp.menu else { return }
         guard var filter = effectiveFilters[filterIndex] as? MultipleChoiceFilter else { return }
 
-        selectedItem.state = (selectedItem.state == NSOffState) ? NSOnState : NSOffState
+        selectedItem.state = (selectedItem.state == .off) ? .on : .off
 
-        let selected = menu.items.filter({ $0.state == NSOnState }).flatMap({ $0.representedObject as? FilterOption })
+        let selected = menu.items.filter({ $0.state == .on }).flatMap({ $0.representedObject as? FilterOption })
 
         filter.selectedOptions = selected
 
@@ -237,7 +237,7 @@ final class SearchFiltersViewController: NSViewController {
                 filter.options.forEach { option in
                     let item = NSMenuItem(title: option.title, action: nil, keyEquivalent: "")
                     item.representedObject = option
-                    item.state = filter.selectedOptions.contains(option) ? NSOnState : NSOffState
+                    item.state = filter.selectedOptions.contains(option) ? .on : .off
                     popUp.menu?.addItem(item)
                 }
             case let filter as TextualFilter:

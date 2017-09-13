@@ -51,7 +51,7 @@ public final class CMSCommunityCenter: NSObject {
     public override init() {
         super.init()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(createSubscriptionsIfNeeded), name: .NSApplicationDidFinishLaunching, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(createSubscriptionsIfNeeded), name: NSApplication.didFinishLaunchingNotification, object: nil)
     }
 
     public func save(model: CMSCloudKitRepresentable, progress: CMSProgressBlock?, completion: @escaping CMSCompletionBlock) {

@@ -31,13 +31,13 @@ public class SessionAsset: Object {
     /// - WWDCSessionAssetTypeSlidesPDF
     /// - WWDCSessionAssetTypeStreamingVideo
     /// - WWDCSessionAssetTypeWebpageURL
-    internal dynamic var rawAssetType = "" {
+    @objc internal dynamic var rawAssetType = "" {
         didSet {
             identifier = generateIdentifier()
         }
     }
 
-    public dynamic var identifier = ""
+    @objc public dynamic var identifier = ""
 
     public var assetType: SessionAssetType {
         get {
@@ -49,24 +49,24 @@ public class SessionAsset: Object {
     }
 
     /// The year of the session this asset belongs to
-    public dynamic var year = 0 {
+    @objc public dynamic var year = 0 {
         didSet {
             identifier = generateIdentifier()
         }
     }
 
     /// The id of the session this asset belongs to
-    public dynamic var sessionId = "" {
+    @objc public dynamic var sessionId = "" {
         didSet {
             identifier = generateIdentifier()
         }
     }
 
     /// URL for this asset
-    public dynamic var remoteURL = ""
+    @objc public dynamic var remoteURL = ""
 
     /// Relative local URL to save the asset to when downloading
-    public dynamic var relativeLocalURL = ""
+    @objc public dynamic var relativeLocalURL = ""
 
     /// The session this asset belongs to
     public let session = LinkingObjects(fromType: Session.self, property: "assets")

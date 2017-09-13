@@ -10,8 +10,15 @@ import Cocoa
 
 class PUISlider: NSSlider {
 
-    override class func cellClass() -> AnyClass? {
-        return PUISliderCell.self
+    override class var cellClass: AnyClass? {
+        set {
+            super.cellClass = cellClass
+        }
+
+        get {
+            return PUISliderCell.self
+        }
+
     }
 
 }

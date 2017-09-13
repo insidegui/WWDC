@@ -13,13 +13,13 @@ import RealmSwift
 public class Transcript: Object {
 
     /// Unique identifier
-    public dynamic var identifier = ""
+    @objc public dynamic var identifier = ""
 
     /// The annotations the transcript contains
     public let annotations = List<TranscriptAnnotation>()
 
     /// The text of the transcript
-    public dynamic var fullText = ""
+    @objc public dynamic var fullText = ""
 
     public override class func primaryKey() -> String? {
         return "identifier"

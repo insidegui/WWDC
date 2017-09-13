@@ -19,7 +19,7 @@ public final class PUIPlayerView: NSView {
         didSet {
             guard isInPictureInPictureMode != oldValue else { return }
 
-            pipButton.state = isInPictureInPictureMode ? NSOnState : NSOffState
+            pipButton.state = isInPictureInPictureMode ? .on : .off
 
             if isInPictureInPictureMode {
                 externalStatusController.providerIcon = .PUIPictureInPictureLarge
@@ -217,13 +217,13 @@ public final class PUIPlayerView: NSView {
         guard let player = player else { return }
 
         playerLayer.player = player
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
+        playerLayer.videoGravity = AVLayerVideoGravity.resizeAspect
 
         if pictureContainer == nil {
             pictureContainer = PUIPictureContainerViewController(playerLayer: playerLayer)
             pictureContainer.delegate = self
             pictureContainer.view.frame = bounds
-            pictureContainer.view.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+            pictureContainer.view.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
 
             addSubview(pictureContainer.view)
         }
@@ -281,7 +281,7 @@ public final class PUIPlayerView: NSView {
                 self.updateMediaSelection()
             case #keyPath(AVPlayer.currentItem):
                 if let playerItem = self.player?.currentItem {
-                    playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmTimeDomain
+                    playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithm.timeDomain
                 }
             default:
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
@@ -437,7 +437,7 @@ public final class PUIPlayerView: NSView {
         let l = NSTextField(labelWithString: "00:00:00")
 
         l.alignment = .left
-        l.font = .systemFont(ofSize: 14, weight: NSFontWeightMedium)
+        l.font = .systemFont(ofSize: 14, weight: NSFont.Weight.medium)
         l.textColor = .timeLabel
 
         return l
@@ -447,7 +447,7 @@ public final class PUIPlayerView: NSView {
         let l = NSTextField(labelWithString: "-00:00:00")
 
         l.alignment = .right
-        l.font = .systemFont(ofSize: 14, weight: NSFontWeightMedium)
+        l.font = .systemFont(ofSize: 14, weight: NSFont.Weight.medium)
         l.textColor = .timeLabel
 
         return l
@@ -636,9 +636,9 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView = NSStackView(frame: bounds)
 
         // Leading controls (volume, subtitles)
-        centerButtonsContainerView.addView(volumeButton, in: .leading)
-        centerButtonsContainerView.addView(volumeSlider, in: .leading)
-        centerButtonsContainerView.addView(subtitlesButton, in: .leading)
+        centerButtonsContainerView.addView(volumeButton, in: NSStackView.Gravity.leading)
+        centerButtonsContainerView.addView(volumeSlider, in: NSStackView.Gravity.leading)
+        centerButtonsContainerView.addView(subtitlesButton, in: NSStackView.Gravity.leading)
 
         centerButtonsContainerView.setCustomSpacing(6, after: volumeButton)
 
@@ -650,9 +650,9 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.addView(forwardButton, in: .center)
 
         // Trailing controls (speed, add annotation, pip)
-        centerButtonsContainerView.addView(speedButton, in: .trailing)
-        centerButtonsContainerView.addView(addAnnotationButton, in: .trailing)
-        centerButtonsContainerView.addView(pipButton, in: .trailing)
+        centerButtonsContainerView.addView(speedButton, in: NSStackView.Gravity.trailing)
+        centerButtonsContainerView.addView(addAnnotationButton, in: NSStackView.Gravity.trailing)
+        centerButtonsContainerView.addView(pipButton, in: NSStackView.Gravity.trailing)
 
         centerButtonsContainerView.orientation = .horizontal
         centerButtonsContainerView.spacing = 24
@@ -660,18 +660,18 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.alignment = .centerY
 
         // Visibility priorities
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: volumeButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: volumeSlider)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: subtitlesButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: backButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: previousAnnotationButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityMustHold, for: playButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: forwardButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: nextAnnotationButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: speedButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: addAnnotationButton)
-        centerButtonsContainerView.setVisibilityPriority(NSStackViewVisibilityPriorityDetachOnlyIfNecessary, for: pipButton)
-        centerButtonsContainerView.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: volumeButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: volumeSlider)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: subtitlesButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: backButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: previousAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.mustHold, for: playButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: forwardButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: nextAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: speedButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: addAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(NSStackView.VisibilityPriority.detachOnlyIfNecessary, for: pipButton)
+        centerButtonsContainerView.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
 
         // Main stack view
         controlsContainerView = NSStackView(views: [
@@ -929,7 +929,7 @@ public final class PUIPlayerView: NSView {
     private func updateMediaSelection() {
         guard let playerItem = player?.currentItem else { return }
 
-        guard let subtitlesGroup = playerItem.asset.mediaSelectionGroup(forMediaCharacteristic: AVMediaCharacteristicLegible) else {
+        guard let subtitlesGroup = playerItem.asset.mediaSelectionGroup(forMediaCharacteristic: AVMediaCharacteristic.legible) else {
             subtitlesButton.isHidden = true
             return
         }
@@ -956,17 +956,17 @@ public final class PUIPlayerView: NSView {
         guard let option = sender.representedObject as? AVMediaSelectionOption else { return }
 
         // reset all item's states
-        sender.menu?.items.forEach({ $0.state = NSOffState })
+        sender.menu?.items.forEach({ $0.state = .on })
 
         if option.extendedLanguageTag == player?.currentItem?.selectedMediaOption(in: subtitlesGroup)?.extendedLanguageTag {
             player?.currentItem?.select(nil, in: subtitlesGroup)
-            sender.state = NSOffState
+            sender.state = .off
             return
         }
 
         player?.currentItem?.select(option, in: subtitlesGroup)
 
-        sender.state = NSOnState
+        sender.state = .on
     }
 
     @IBAction func showSubtitlesMenu(_ sender: PUIButton) {
@@ -981,7 +981,7 @@ public final class PUIPlayerView: NSView {
             let item = NSMenuItem(title: "\(String(format: "%g", speed.rawValue))x", action: #selector(didSelectSpeed), keyEquivalent: "")
             item.target = self
             item.representedObject = speed
-            item.state = speed == self.playbackSpeed ? NSOnState : NSOffState
+            item.state = speed == self.playbackSpeed ? .on : .off
             m.addItem(item)
         }
         return m
@@ -989,7 +989,7 @@ public final class PUIPlayerView: NSView {
 
     fileprivate func updateSelectedMenuItem(forPlaybackSpeed speed: PUIPlaybackSpeed) {
         for item in speedsMenu.items {
-            item.state = (item.representedObject as? PUIPlaybackSpeed) == speed ? NSOnState : NSOffState
+            item.state = (item.representedObject as? PUIPlaybackSpeed) == speed ? .on : .off
         }
     }
 
@@ -1013,7 +1013,7 @@ public final class PUIPlayerView: NSView {
             stopMonitoringKeyEvents()
         }
 
-        keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown]) { [unowned self] event in
+        keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [NSEvent.EventTypeMask.keyDown]) { [unowned self] event in
             guard let command = KeyCommands(rawValue: event.keyCode) else {
                 return event
             }
@@ -1104,7 +1104,7 @@ public final class PUIPlayerView: NSView {
 
         guard !timelineView.isEditingAnnotation else { return false }
 
-        let windowMouseRect = window.convertFromScreen(NSRect(origin: NSEvent.mouseLocation(), size: CGSize(width: 1, height: 1)))
+        let windowMouseRect = window.convertFromScreen(NSRect(origin: NSEvent.mouseLocation, size: CGSize(width: 1, height: 1)))
         let viewMouseRect = convert(windowMouseRect, from: nil)
 
         // don't hide the controls when the mouse is over them
@@ -1156,11 +1156,11 @@ public final class PUIPlayerView: NSView {
     }
 
     public override func viewWillMove(toWindow newWindow: NSWindow?) {
-        NotificationCenter.default.removeObserver(self, name: .NSWindowWillEnterFullScreen, object: window)
-        NotificationCenter.default.removeObserver(self, name: .NSWindowWillExitFullScreen, object: window)
+        NotificationCenter.default.removeObserver(self, name: NSWindow.willEnterFullScreenNotification, object: window)
+        NotificationCenter.default.removeObserver(self, name: NSWindow.willExitFullScreenNotification, object: window)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(windowWillEnterFullScreen), name: .NSWindowWillEnterFullScreen, object: newWindow)
-        NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullScreen), name: .NSWindowWillExitFullScreen, object: newWindow)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillEnterFullScreen), name: NSWindow.willEnterFullScreenNotification, object: newWindow)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullScreen), name: NSWindow.willExitFullScreenNotification, object: newWindow)
     }
 
     public override func viewDidMoveToWindow() {
@@ -1178,7 +1178,7 @@ public final class PUIPlayerView: NSView {
     private var windowIsInFullScreen: Bool {
         guard let window = window else { return false }
 
-        return window.styleMask.contains(.fullScreen)
+        return window.styleMask.contains(NSWindow.StyleMask.fullScreen)
     }
 
     @objc private func windowWillEnterFullScreen() {
@@ -1202,7 +1202,7 @@ public final class PUIPlayerView: NSView {
             removeTrackingArea(mouseTrackingArea)
         }
 
-        let options: NSTrackingAreaOptions = [.mouseEnteredAndExited, .mouseMoved, .activeAlways, .inVisibleRect]
+        let options: NSTrackingArea.Options = [NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.mouseMoved, NSTrackingArea.Options.activeAlways, NSTrackingArea.Options.inVisibleRect]
         mouseTrackingArea = NSTrackingArea(rect: bounds, options: options, owner: self, userInfo: nil)
 
         addTrackingArea(mouseTrackingArea)

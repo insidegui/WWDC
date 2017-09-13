@@ -13,19 +13,19 @@ import RealmSwift
 public class SessionProgress: Object {
 
     /// Unique identifier
-    public dynamic var identifier = UUID().uuidString
+    @objc public dynamic var identifier = UUID().uuidString
 
     /// When the progress was created
-    public dynamic var createdAt = Date()
+    @objc public dynamic var createdAt = Date()
 
     /// When the progress was last update
-    public dynamic var updatedAt = Date()
+    @objc public dynamic var updatedAt = Date()
 
     /// The current position in the video (in seconds)
-    public dynamic var currentPosition: Double = 0
+    @objc public dynamic var currentPosition: Double = 0
 
     /// The current position in the video, relative to the duration (from 0 to 1)
-    public dynamic var relativePosition: Double = 0
+    @objc public dynamic var relativePosition: Double = 0
 
     /// The session this progress is associated with
     public let session = LinkingObjects(fromType: Session.self, property: "progresses")

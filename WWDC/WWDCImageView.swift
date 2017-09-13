@@ -8,6 +8,14 @@
 
 import Cocoa
 
+// See:
+//  https://forums.developer.apple.com/thread/79144
+//  https://stackoverflow.com/q/44537356/3927536
+#if swift(>=4.0)
+let NSURLPboardType = NSPasteboard.PasteboardType(kUTTypeURL as String)
+let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
+#endif
+
 protocol WWDCImageViewDelegate: class {
 
     func wwdcImageView(_ imageView: WWDCImageView, didReceiveNewImageWithFileURL url: URL)
@@ -43,7 +51,7 @@ class WWDCImageView: NSView {
     var isEditable: Bool = false {
         didSet {
             if isEditable {
-                register(forDraggedTypes: [NSURLPboardType, NSFilenamesPboardType])
+                registerForDraggedTypes([NSURLPboardType, NSFilenamesPboardType])
             } else {
                 unregisterDraggedTypes()
             }

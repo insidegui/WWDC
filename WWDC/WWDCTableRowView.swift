@@ -18,13 +18,13 @@ class WWDCTableRowView: NSTableRowView {
 
     override func drawSelection(in dirtyRect: NSRect) {
         NSColor.selection.set()
-        NSRectFill(dirtyRect)
+        dirtyRect.fill()
     }
 
     override func drawBackground(in dirtyRect: NSRect) {
         if isGroupRowStyle {
             NSColor.sectionHeaderBackground.set()
-            NSRectFill(dirtyRect)
+            dirtyRect.fill()
         } else {
             super.drawBackground(in: dirtyRect)
         }

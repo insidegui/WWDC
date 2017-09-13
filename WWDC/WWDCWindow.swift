@@ -12,7 +12,7 @@ class WWDCWindow: NSWindow {
 
     // MARK: - Initialization
 
-    public override init(contentRect: NSRect, styleMask style: NSWindowStyleMask, backing bufferingType: NSBackingStoreType, defer flag: Bool) {
+    public override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing bufferingType: NSWindow.BackingStoreType, defer flag: Bool) {
         super.init(contentRect: contentRect, styleMask: style, backing: bufferingType, defer: flag)
 
         applyCustomizations()
@@ -45,7 +45,7 @@ class WWDCWindow: NSWindow {
 
         titleVisibility = .hidden
         isMovableByWindowBackground = true
-        tabbingMode = NSWindowTabbingMode.disallowed
+        tabbingMode = NSWindow.TabbingMode.disallowed
 
         titlebarView?.material = .ultraDark
         titlebarView?.state = .inactive
