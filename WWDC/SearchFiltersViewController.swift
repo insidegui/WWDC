@@ -133,9 +133,45 @@ final class SearchFiltersViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        accessibilityOptionsChanged(nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.accessibilityOptionsChanged), name: Notification.Name.NSWorkspaceAccessibilityDisplayOptionsDidChange, object: nil)
+
         setFilters(hidden: true)
 
         updateUI()
+    }
+
+    override func viewWillDisappear() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.NSWorkspaceAccessibilityDisplayOptionsDidChange, object: nil)
+    }
+
+    // Taken from https://stackoverflow.com/a/25952895
+
+    func tintedImage(_ image: NSImage, tint: NSColor) -> NSImage {
+        guard let tinted = image.copy() as? NSImage else { return image }
+        tinted.lockFocus()
+        tint.set()
+
+        let imageRect = NSRect(origin: NSZeroPoint, size: image.size)
+        NSRectFillUsingOperation(imageRect, .sourceAtop)
+
+        tinted.unlockFocus()
+        return tinted
+    }
+
+    func accessibilityOptionsChanged(_: Notification?) {
+        if NSWorkspace.shared().accessibilityDisplayShouldIncreaseContrast {
+            searchField.textColor = NSColor.white
+        } else {
+            searchField.textColor = NSColor.textColor
+        }
+
+        if let cell = (searchField.cell as? NSSearchFieldCell)?.searchButtonCell {
+            if let image = cell.image {
+                cell.image = tintedImage(image, tint: searchField.textColor!)
+            }
+        }
     }
 
     func setFilters(hidden: Bool) {
