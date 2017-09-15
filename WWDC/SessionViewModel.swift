@@ -203,13 +203,13 @@ final class SessionViewModel: NSObject {
     static func footer(for session: Session, at event: ConfCore.Event?) -> String {
         guard let event = event else { return "" }
 
-        let year = Calendar.current.component(.year, from: event.startDate)
+        let eventName = event.name
 
         let focusesArray = session.focuses.toArray()
 
         let allFocuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: false)
 
-        var result = "WWDC \(year) · Session \(session.number)"
+        var result = "\(eventName) · Session \(session.number)"
 
         if focusesArray.count > 0 {
             result += " · \(allFocuses)"
