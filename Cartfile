@@ -11,4 +11,4 @@ github "Instagram/IGListKit" ~> 2.0.0
 github "sparkle-project/Sparkle" ~> 1.17
 
 github "insidegui/ChromeCastCore" "swift4"
-
+github "alexeyxo/protobuf-swift"
