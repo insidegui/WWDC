@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 enum AssetKeys: String, JSONSubscriptType {
-    case id, year, title, downloadHD, downloadSD, slides, hls, images, shelf
+    case id, year, title, downloadHD, downloadSD, slides, hls, images, shelf, duration
 
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -131,6 +131,7 @@ final class SessionsJSONAdapter: Adapter {
         session.title = title
         session.summary = summary
         session.trackIdentifier = "\(trackIdentifier)"
+        session.mediaDuration = input[SessionKeys.media][AssetKeys.duration].doubleValue
         
         session.eventIdentifier = eventIdentifier
         

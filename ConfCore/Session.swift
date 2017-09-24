@@ -61,6 +61,9 @@ public class Session: Object {
 
     /// Shortcut to get the full transcript text (used during search)
     @objc public dynamic var transcriptText: String = ""
+    
+    /// Media duration (in seconds)
+    @objc public dynamic var mediaDuration: Double = 0
 
     /// Fetches and returns the transcript object associated with the session
     public func transcript() -> Transcript? {
@@ -123,6 +126,7 @@ public class Session: Object {
         trackIdentifier = other.trackIdentifier
         staticContentId = other.staticContentId
         trackName = other.trackName
+        mediaDuration = other.mediaDuration
 
         // merge assets
         let assets = other.assets.filter { otherAsset in
