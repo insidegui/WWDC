@@ -7,6 +7,20 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 5.3</title>
+			<description><![CDATA[
+				<ul>
+					<li>High Sierra compatibility improvements</li>
+					<li>The duration for a session's video is now shown in the detail view when available</li>
+					<li>The app has been converted to Swift 4 (thanks @otaviolima)</li>
+				</ul>
+						]]></description>
+            <pubDate>Sun, 24 Sep 2017 15:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/5.3/WWDC_v5.3.zip" sparkle:version="720" sparkle:shortVersionString="5.3" length="17551444" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 5.2</title>
 			<description><![CDATA[
 				<ul>
