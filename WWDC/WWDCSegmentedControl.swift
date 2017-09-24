@@ -10,14 +10,14 @@ import Cocoa
 
 final class WWDCSegmentedControl: NSSegmentedControl {
 
-    var padding: EdgeInsets = EdgeInsets(top: 0, left: 12, bottom: 0, right: 12) {
+    var padding: NSEdgeInsets = NSEdgeInsets(top: 0, left: 12, bottom: 0, right: 12) {
         didSet {
             resizeSegments()
         }
     }
 
     override func viewWillMove(toSuperview newSuperview: NSView?) {
-        NotificationCenter.default.removeObserver(self, name: .NSViewFrameDidChange, object: superview)
+        NotificationCenter.default.removeObserver(self, name: NSView.frameDidChangeNotification, object: superview)
         superview?.postsFrameChangedNotifications = false
     }
 
@@ -40,7 +40,7 @@ final class WWDCSegmentedControl: NSSegmentedControl {
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(resizeSegments),
-                                               name: .NSViewFrameDidChange,
+                                               name: NSView.frameDidChangeNotification,
                                                object: superview)
 
         resizeSegments()

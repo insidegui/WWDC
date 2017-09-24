@@ -28,7 +28,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         self.fullscreenOnly = fullscreenOnly
         self.originalContainer = originalContainer
 
-        let styleMask: NSWindowStyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
+        let styleMask: NSWindow.StyleMask = [NSWindow.StyleMask.titled, NSWindow.StyleMask.closable, NSWindow.StyleMask.miniaturizable, NSWindow.StyleMask.resizable, NSWindow.StyleMask.fullSizeContentView]
 
         var rect = PUIPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view.superview)
         if rect == NSZeroRect { rect = PUIPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
@@ -39,7 +39,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         if #available(OSX 10.11, *) {
             // ¯\_(ツ)_/¯
         } else {
-            window.collectionBehavior = .fullScreenPrimary
+            window.collectionBehavior = NSWindow.CollectionBehavior.fullScreenPrimary
         }
 
         super.init(window: window)
@@ -131,18 +131,18 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     }
 
     @IBAction func floatOnTop(_ sender: NSMenuItem) {
-        if sender.state == NSOnState {
+        if sender.state == .on {
             toggleFloatOnTop(false)
-            sender.state = NSOffState
+            sender.state = .off
         } else {
             toggleFloatOnTop(true)
-            sender.state = NSOnState
+            sender.state = .on
         }
     }
 
     fileprivate func toggleFloatOnTop(_ enable: Bool) {
         let level = enable ? Int(CGWindowLevelForKey(CGWindowLevelKey.floatingWindow)) : Int(CGWindowLevelForKey(CGWindowLevelKey.normalWindow))
-        window?.level = level
+        window?.level = NSWindow.Level(rawValue: level)
     }
 
     deinit {
@@ -156,7 +156,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 private extension PUIPlayerWindow {
 
     class func centerRectForProposedContentRect(_ rect: NSRect) -> NSRect {
-        guard let screen = NSScreen.main() else { return NSZeroRect }
+        guard let screen = NSScreen.main else { return NSZeroRect }
 
         return NSRect(x: screen.frame.width / 2.0 - rect.width / 2.0, y: screen.frame.height / 2.0 - rect.height / 2.0, width: rect.width, height: rect.height)
     }

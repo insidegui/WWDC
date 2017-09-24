@@ -21,7 +21,7 @@ class SessionSummaryViewController: NSViewController {
     }
 
     init() {
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -32,7 +32,7 @@ class SessionSummaryViewController: NSViewController {
         let l = WWDCTextField(labelWithString: "")
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byWordWrapping
-        l.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        l.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
         l.allowsDefaultTighteningForTruncation = true
         l.maximumNumberOfLines = 2
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -56,7 +56,7 @@ class SessionSummaryViewController: NSViewController {
         l.cell?.backgroundStyle = .dark
         l.isSelectable = true
         l.lineBreakMode = .byWordWrapping
-        l.setContentCompressionResistancePriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        l.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
         l.allowsDefaultTighteningForTruncation = true
         l.maximumNumberOfLines = 5
 
@@ -94,7 +94,7 @@ class SessionSummaryViewController: NSViewController {
         view.addSubview(actionsViewController.view)
         view.addSubview(stackView)
 
-        titleLabel.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
+        titleLabel.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
 
         actionsViewController.view.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
         actionsViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true

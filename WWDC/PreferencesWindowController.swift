@@ -15,7 +15,7 @@ class PreferencesWindowController: NSWindowController {
     }
 
     init() {
-        let mask: NSWindowStyleMask = [.titled, .closable]
+        let mask: NSWindow.StyleMask = [NSWindow.StyleMask.titled, NSWindow.StyleMask.closable]
         let window = WWDCWindow(contentRect: PreferencesWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
 
         super.init(window: window)
@@ -27,9 +27,9 @@ class PreferencesWindowController: NSWindowController {
 
         window.titleVisibility = .hidden
 
-        window.toolbar = NSToolbar(identifier: "WWDCPreferences")
+        window.toolbar = NSToolbar(identifier: NSToolbar.Identifier(rawValue: "WWDCPreferences"))
 
-        window.identifier = "preferences"
+        window.identifier = NSUserInterfaceItemIdentifier(rawValue: "preferences")
         window.minSize = PreferencesWindowController.defaultRect.size
 
         window.animationBehavior = .alertPanel

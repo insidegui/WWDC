@@ -12,9 +12,9 @@ import RealmSwift
 /// A section from the schedule, representing a time slot of the conference
 public final class ScheduleSection: Object {
 
-    public dynamic var identifier: String = ""
-    public dynamic var eventIdentifier: String = ""
-    public dynamic var representedDate: Date = .distantPast
+    @objc public dynamic var identifier: String = ""
+    @objc public dynamic var eventIdentifier: String = ""
+    @objc public dynamic var representedDate: Date = .distantPast
     public let instances = List<SessionInstance>()
 
     public override class func primaryKey() -> String {

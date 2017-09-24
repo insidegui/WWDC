@@ -25,7 +25,7 @@ protocol SessionActionsViewControllerDelegate: class {
 class SessionActionsViewController: NSViewController {
 
     init() {
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -82,7 +82,7 @@ class SessionActionsViewController: NSViewController {
     private lazy var downloadIndicator: NSProgressIndicator = {
         let pi = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: 24, height: 24))
 
-        pi.style = .spinningStyle
+        pi.style = .spinning
         pi.isIndeterminate = false
         pi.minValue = 0
         pi.maxValue = 1
@@ -132,7 +132,7 @@ class SessionActionsViewController: NSViewController {
         view.wantsLayer = true
         view.translatesAutoresizingMaskIntoConstraints = false
 
-        view.setContentHuggingPriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
+        view.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
     }
 
     override func viewDidLoad() {
@@ -149,7 +149,7 @@ class SessionActionsViewController: NSViewController {
         slidesButton.isHidden = (viewModel.session.asset(of: .slides) == nil)
 
         viewModel.rxIsFavorite.subscribe(onNext: { [weak self] isFavorite in
-            self?.favoriteButton.state = isFavorite ? NSOnState : NSOffState
+            self?.favoriteButton.state = isFavorite ? .on : .off
 
             if isFavorite {
                 self?.favoriteButton.toolTip = "Remove from favorites"

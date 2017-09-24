@@ -26,8 +26,8 @@ final class SessionsSplitViewController: NSSplitViewController {
         listViewController = SessionsTableViewController(style: listStyle)
         detailViewController = SessionDetailsViewController(listStyle: listStyle)
 
-        super.init(nibName: nil, bundle: nil)!
-        NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView(notification:)), name: Notification.Name.NSSplitViewDidResizeSubviews, object: nil)
+        super.init(nibName: nil, bundle: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView(notification:)), name: NSSplitView.didResizeSubviewsNotification, object: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -46,9 +46,9 @@ final class SessionsSplitViewController: NSSplitViewController {
         addSplitViewItem(listItem)
         addSplitViewItem(detailItem)
 
-        listViewController.view.setContentHuggingPriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
-        detailViewController.view.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
-        detailViewController.view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultHigh, for: .horizontal)
+        listViewController.view.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
+        detailViewController.view.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
+        detailViewController.view.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
     }
 
     override func viewDidAppear() {

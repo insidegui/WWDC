@@ -62,7 +62,7 @@ class SessionDetailsViewController: NSViewController {
         let b = WWDCTextButton()
 
         b.title = "Overview"
-        b.state = NSOnState
+        b.state = .on
         b.target = self
         b.action = #selector(tabButtonAction)
 
@@ -73,7 +73,7 @@ class SessionDetailsViewController: NSViewController {
         let b = WWDCTextButton()
 
         b.title = "Transcript"
-        b.state = NSOffState
+        b.state = .off
         b.target = self
         b.action = #selector(tabButtonAction)
         b.isHidden = true
@@ -85,7 +85,7 @@ class SessionDetailsViewController: NSViewController {
         let b = WWDCTextButton()
 
         b.title = "Bookmarks"
-        b.state = NSOffState
+        b.state = .off
         b.target = self
         b.action = #selector(tabButtonAction)
 
@@ -129,8 +129,8 @@ class SessionDetailsViewController: NSViewController {
         let v = SessionDetailsTabContainer()
 
         v.wantsLayer = true
-        v.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
-        v.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .vertical)
+        v.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
+        v.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .vertical)
 
         return v
     }()
@@ -142,7 +142,7 @@ class SessionDetailsViewController: NSViewController {
         v.spacing = 22
         v.alignment = .leading
         v.distribution = .fill
-        v.edgeInsets = EdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
+        v.edgeInsets = NSEdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
 
         self.tabContainer.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
         self.tabContainer.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
@@ -161,7 +161,7 @@ class SessionDetailsViewController: NSViewController {
         summaryController = SessionSummaryViewController()
         transcriptController = TranscriptTableViewController()
 
-        super.init(nibName: nil, bundle: nil)!
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -188,10 +188,10 @@ class SessionDetailsViewController: NSViewController {
         informationStackView.translatesAutoresizingMaskIntoConstraints = false
 
         let constraint = shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 280)
-        constraint.priority = 999
+        constraint.priority = NSLayoutConstraint.Priority(rawValue: 999)
         constraint.isActive = true
 
-        shelfController.view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultHigh, for: .vertical)
+        shelfController.view.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultHigh, for: .vertical)
 
         view.addSubview(shelfController.view)
         view.addSubview(informationStackView)
@@ -225,25 +225,25 @@ class SessionDetailsViewController: NSViewController {
     }
 
     func showOverview() {
-        overviewButton.state = NSOnState
-        transcriptButton.state = NSOffState
-        bookmarksButton.state = NSOffState
+        overviewButton.state = .on
+        transcriptButton.state = .off
+        bookmarksButton.state = .off
 
         tabContainer.currentView = summaryController.view
     }
 
     func showTranscript() {
-        transcriptButton.state = NSOnState
-        overviewButton.state = NSOffState
-        bookmarksButton.state = NSOffState
+        transcriptButton.state = .on
+        overviewButton.state = .off
+        bookmarksButton.state = .off
 
         tabContainer.currentView = transcriptController.view
     }
 
     func showBookmarks() {
-        bookmarksButton.state = NSOnState
-        overviewButton.state = NSOffState
-        transcriptButton.state = NSOffState
+        bookmarksButton.state = .on
+        overviewButton.state = .off
+        transcriptButton.state = .off
     }
 }
 
@@ -254,7 +254,7 @@ fileprivate class SessionDetailsTabContainer: NSView {
             oldValue?.removeFromSuperview()
 
             if let newView = currentView {
-                newView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+                newView.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
                 newView.frame = frame
 
                 addSubview(newView)

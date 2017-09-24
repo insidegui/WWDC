@@ -13,9 +13,9 @@ import RealmSwift
 public class TranscriptAnnotation: Object {
 
     /// The time this annotation occurs within the video
-    public dynamic var timecode = 0.0
+    @objc public dynamic var timecode = 0.0
 
     /// The annotation's text
-    public dynamic var body = ""
+    @objc public dynamic var body = ""
 
 }

@@ -135,7 +135,7 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
             item.target = self
             
             if device.hostName == selectedDevice?.hostName {
-                item.state = NSOnState
+                item.state = .on
             }
             
             menu.addItem(item)
@@ -165,12 +165,12 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
         }
         
         if device.hostName == selectedDevice?.hostName {
-            sender.state = NSOffState
+            sender.state = .off
             
             consumer?.externalPlaybackProviderDidInvalidatePlaybackSession(self)
         } else {
             selectedDevice = device
-            sender.state = NSOnState
+            sender.state = .on
             
             client = CastClient(device: device)
             client?.delegate = self

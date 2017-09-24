@@ -20,7 +20,7 @@ final class ActionLabel: NSTextField {
         }
 
         cursorTrackingArea = NSTrackingArea(rect: bounds,
-                                            options: [.cursorUpdate, .inVisibleRect, .activeInActiveApp],
+                                            options: [NSTrackingArea.Options.cursorUpdate, NSTrackingArea.Options.inVisibleRect, NSTrackingArea.Options.activeInActiveApp],
                                             owner: self,
                                             userInfo: nil)
         addTrackingArea(cursorTrackingArea)
@@ -28,7 +28,7 @@ final class ActionLabel: NSTextField {
 
     override func cursorUpdate(with event: NSEvent) {
         if event.trackingArea == cursorTrackingArea {
-            NSCursor.pointingHand().push()
+            NSCursor.pointingHand.push()
         } else {
             super.cursorUpdate(with: event)
         }

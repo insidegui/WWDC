@@ -99,7 +99,7 @@ struct MultipleChoiceFilter: FilterType {
 
             guard !t.isEmpty else { return t }
 
-            return t.substring(from: t.index(t.startIndex, offsetBy: 2))
+            return String(t[t.index(t.startIndex, offsetBy: 2)...])
         }
     }
 

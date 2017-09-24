@@ -28,7 +28,7 @@ final class AboutWindowController: NSWindowController {
     }
     
     convenience init(infoText: String?) {
-        self.init(windowNibName: "AboutWindowController")
+        self.init(windowNibName: NSNib.Name(rawValue: "AboutWindowController"))
         self.infoText = infoText
     }
     
@@ -36,7 +36,7 @@ final class AboutWindowController: NSWindowController {
         super.windowDidLoad()
         
         // close the window when the escape key is pressed
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+        NSEvent.addLocalMonitorForEvents(matching: NSEvent.EventTypeMask.keyDown) { event in
             guard event.keyCode == 53 else { return event }
             
             self.closeAnimated()
@@ -44,7 +44,7 @@ final class AboutWindowController: NSWindowController {
             return nil
         }
         
-        window?.collectionBehavior = [.transient, .ignoresCycle]
+        window?.collectionBehavior = [NSWindow.CollectionBehavior.transient, NSWindow.CollectionBehavior.ignoresCycle]
         window?.isMovableByWindowBackground = true
         window?.titlebarAppearsTransparent = true
         window?.titleVisibility = .hidden
@@ -129,25 +129,25 @@ final class AboutWindowController: NSWindowController {
     @IBAction func openIconCreatorWebsite(_ sender: Any) {
         guard let iconCreatorWebsite = iconCreatorWebsite else { return }
         
-        NSWorkspace.shared().open(iconCreatorWebsite)
+        NSWorkspace.shared.open(iconCreatorWebsite)
     }
     
     @IBAction func openUserInterfaceCreatorWebsite(_ sender: Any) {
         guard let uiCreatorWebsite = uiCreatorWebsite else { return }
         
-        NSWorkspace.shared().open(uiCreatorWebsite)
+        NSWorkspace.shared.open(uiCreatorWebsite)
     }
     
     @IBAction func openDesignContributorWebsite(_ sender: Any) {
         guard let designContributorWebsite = designContributorWebsite else { return }
         
-        NSWorkspace.shared().open(designContributorWebsite)
+        NSWorkspace.shared.open(designContributorWebsite)
     }
     
     @IBAction func openMainDeveloperWebsite(_ sender: Any) {
         guard let mainDeveloperWebsite = mainDeveloperWebsite else { return }
         
-        NSWorkspace.shared().open(mainDeveloperWebsite)
+        NSWorkspace.shared.open(mainDeveloperWebsite)
     }
     
     override func showWindow(_ sender: Any?) {
@@ -161,8 +161,8 @@ final class AboutWindowController: NSWindowController {
     
     func closeAnimated() {
         NSAnimationContext.beginGrouping()
-        NSAnimationContext.current().duration = 0.4
-        NSAnimationContext.current().completionHandler = {
+        NSAnimationContext.current.duration = 0.4
+        NSAnimationContext.current.completionHandler = {
             self.close()
         }
         window?.animator().alphaValue = 0.0

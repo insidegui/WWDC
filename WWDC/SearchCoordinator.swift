@@ -212,7 +212,7 @@ final class SearchCoordinator {
 
         var predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
 
-        if let appDelegate = NSApplication.shared().delegate as? AppDelegate,
+        if let appDelegate = NSApplication.shared.delegate as? AppDelegate,
             let currentlyPlayingSession = appDelegate.coordinator.currentPlayerController?.sessionViewModel.session {
 
             // Keep the currently playing video in the list to ensure PIP can re-select it if needed

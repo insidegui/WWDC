@@ -17,7 +17,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let url = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first?.remoteURL else { return }
+        guard let url = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first?.remoteURL else { return }
 
         _ = DownloadManager.shared.cancelDownload(url)
     }
@@ -39,13 +39,13 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
 
         guard let url = URL(string: slidesAsset.remoteURL) else { return }
 
-        NSWorkspace.shared().open(url)
+        NSWorkspace.shared.open(url)
     }
 
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
+        guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
 
         DownloadManager.shared.download(videoAsset)
     }
@@ -53,7 +53,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
+        guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
 
         let alert = WWDCAlert.create()
 
@@ -68,7 +68,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
             case no = 1000
         }
 
-        guard let choice = Choice(rawValue: alert.runModal()) else { return }
+        guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
 
         switch choice {
         case .yes:
@@ -82,7 +82,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         guard let sender = sender else { return }
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let webpageAsset = viewModel.session.assets.filter({ $0.assetType == .webpage }).first else { return }
+        guard let webpageAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.webpage.rawValue).first else { return }
 
         guard let url = URL(string: webpageAsset.remoteURL) else { return }
 

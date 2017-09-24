@@ -13,7 +13,7 @@ import RealmSwift
 public class Keyword: Object {
 
     /// The keyword
-    public dynamic var name = ""
+    @objc public dynamic var name = ""
 
     /// Sessions containing this keyword
     //    public let sessionInstances = LinkingObjects(fromType: SessionInstance.self, property: "keywords")

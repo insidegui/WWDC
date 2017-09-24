@@ -33,10 +33,10 @@ public enum SessionInstanceType: Int {
 public class SessionInstance: Object {
 
     /// Unique identifier
-    public dynamic var identifier = ""
+    @objc public dynamic var identifier = ""
 
     /// Instance number
-    public dynamic var number = ""
+    @objc public dynamic var number = ""
 
     public var code: Int {
         guard let n = number.components(separatedBy: "-").last else { return NSNotFound }
@@ -45,16 +45,16 @@ public class SessionInstance: Object {
     }
 
     /// The event identifier for the event this instance belongs to
-    public dynamic var eventIdentifier = ""
+    @objc public dynamic var eventIdentifier = ""
 
     /// The session
-    public dynamic var session: Session? = nil
+    @objc public dynamic var session: Session? = nil
 
     /// The raw session type as returned by the API
-    public dynamic var rawSessionType = "Session"
+    @objc public dynamic var rawSessionType = "Session"
 
     /// Type of session (0 = regular session, 1 = lab, 2 = video-only session)
-    public dynamic var sessionType = 0
+    @objc public dynamic var sessionType = 0
 
     public var type: SessionInstanceType {
         get {
@@ -66,33 +66,33 @@ public class SessionInstance: Object {
     }
 
     /// The start time
-    public dynamic var startTime: Date = .distantPast
+    @objc public dynamic var startTime: Date = .distantPast
 
     /// The end time
-    public dynamic var endTime: Date = .distantPast
+    @objc public dynamic var endTime: Date = .distantPast
 
     /// Keywords for this session
     public let keywords = List<Keyword>()
 
     /// Room name
-    public dynamic var roomName = ""
+    @objc public dynamic var roomName = ""
 
     /// Room unique identifier
-    public dynamic var roomIdentifier = ""
+    @objc public dynamic var roomIdentifier = ""
 
     // Track name
-    public dynamic var trackName = ""
+    @objc public dynamic var trackName = ""
 
-    public dynamic var trackIdentifier = ""
+    @objc public dynamic var trackIdentifier = ""
 
     /// The track associated with the instance
     public let track = LinkingObjects(fromType: Track.self, property: "instances")
 
     /// Whether this is being live streamed at the moment
-    public dynamic var isCurrentlyLive = false
+    @objc public dynamic var isCurrentlyLive = false
 
     /// Whether the live flag is being forced by an external source
-    public dynamic var isForcedLive = false
+    @objc public dynamic var isForcedLive = false
 
     public override static func primaryKey() -> String? {
         return "identifier"
