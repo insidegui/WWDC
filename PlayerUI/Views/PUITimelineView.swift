@@ -96,7 +96,8 @@ public final class PUITimelineView: NSView {
     private func buildUI() {
         wantsLayer = true
         layer = PUIBoringLayer()
-
+        layer?.masksToBounds = false
+        
         // Main border
 
         borderLayer = PUIBoringLayer()
