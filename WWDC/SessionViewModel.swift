@@ -13,6 +13,7 @@ import RxRealm
 import RxSwift
 import RxCocoa
 import RealmSwift
+import PlayerUI
 
 final class SessionViewModel: NSObject {
 
@@ -213,6 +214,10 @@ final class SessionViewModel: NSObject {
 
         if focusesArray.count > 0 {
             result += " · \(allFocuses)"
+        }
+        
+        if session.mediaDuration > 0, let duration = String(timestamp: session.mediaDuration) {
+            result += " · " + duration
         }
 
         return result
