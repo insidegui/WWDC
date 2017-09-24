@@ -67,6 +67,8 @@ A number of third-party libraries are used by the app:
 
 ## Building the app
 
+**Building requires Xcode 9 or later.**
+
 Building the app requires [Carthage](https://github.com/Carthage/Carthage) to be installed.
 
 **Clone this branch and before opening the project, run `./bootstrap.sh`** to fetch the dependencies (this script can take a while to run, that's normal).
