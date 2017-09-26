@@ -29,8 +29,8 @@ extension NSStackView {
 
 final class TabItemView: NSView {
 
-    var target: Any?
-    var action: Selector?
+    @objc var target: Any?
+    @objc var action: Selector?
 
     var controllerIdentifier: String = ""
 
