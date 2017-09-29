@@ -48,7 +48,7 @@ class WWDCImageView: NSView {
         }
     }
 
-    var isEditable: Bool = false {
+    @objc var isEditable: Bool = false {
         didSet {
             if isEditable {
                 registerForDraggedTypes([NSURLPboardType, NSFilenamesPboardType])
