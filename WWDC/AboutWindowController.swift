@@ -15,6 +15,7 @@ final class AboutWindowController: NSWindowController {
     @IBOutlet weak fileprivate var versionLabel: NSTextField!
     @IBOutlet weak var contributorsLabel: NSTextField!
     @IBOutlet weak fileprivate var creatorLabel: NSTextField!
+    @IBOutlet weak fileprivate var repositoryLabel: ActionLabel!
     @IBOutlet weak fileprivate var iconCreatorLabel: ActionLabel!
     @IBOutlet weak fileprivate var uiCreatorLabel: ActionLabel!
     @IBOutlet weak fileprivate var licenseLabel: NSTextField!
@@ -83,6 +84,12 @@ final class AboutWindowController: NSWindowController {
             creatorLabel.stringValue = ""
         }
         
+        if let repository = info["GRBundleRepositoryName"] as? String {
+            repositoryLabel.stringValue = repository
+        } else {
+            repositoryLabel.stringValue = ""
+        }
+        
         if let website = info["GRBundleIconCreatorWebsite"] as? String {
             iconCreatorWebsite = URL(string: website)
             
@@ -119,12 +126,21 @@ final class AboutWindowController: NSWindowController {
             creatorLabel.action = #selector(openMainDeveloperWebsite)
         }
         
+        if let website = info["GRBundleRepositoryWebsite"] as? String {
+            repositoryWebsite = URL(string: website)
+            
+            repositoryLabel.alphaValue = 0.8
+            repositoryLabel.textColor = .primary
+            repositoryLabel.target = self
+            repositoryLabel.action = #selector(openRepositoryWebsite)
+        }
     }
     
     private var iconCreatorWebsite: URL?
     private var uiCreatorWebsite: URL?
     private var mainDeveloperWebsite: URL?
     private var designContributorWebsite: URL?
+    private var repositoryWebsite: URL?
     
     @IBAction func openIconCreatorWebsite(_ sender: Any) {
         guard let iconCreatorWebsite = iconCreatorWebsite else { return }
@@ -148,6 +164,12 @@ final class AboutWindowController: NSWindowController {
         guard let mainDeveloperWebsite = mainDeveloperWebsite else { return }
         
         NSWorkspace.shared.open(mainDeveloperWebsite)
+    }
+    
+    @IBAction func openRepositoryWebsite(_ sender: Any) {
+        guard let repositoryWebsite = repositoryWebsite else { return }
+        
+        NSWorkspace.shared.open(repositoryWebsite)
     }
     
     override func showWindow(_ sender: Any?) {
