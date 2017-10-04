@@ -518,6 +518,15 @@ public final class PUITimelineView: NSView {
                 }
             }
         }
+        
+        var isSnappingBack = false {
+            didSet {
+                if !oldValue && isSnappingBack {
+                    // give haptic feedback when snapping the annotation back to its original position
+                    NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .default)
+                }
+            }
+        }
 
         func makeTimestamp(for point: CGPoint) -> Double {
             var timestamp = Double(point.x / bounds.width) * mediaDuration
@@ -596,15 +605,21 @@ public final class PUITimelineView: NSView {
                 if abs(verticalDiff) > Metrics.annotationDragThresholdVertical && canDelete {
                     newPosition = point
                     mode = .delete
+                    
+                    isSnappingBack = false
                 } else if abs(horizontalDiff) > Metrics.annotationDragThresholdHorizontal && canMove {
                     newPosition.y = originalPosition.y
                     newPosition.x = point.x
                     mode = .move
 
                     updateAnnotationTextLayer(at: point)
+                    
+                    isSnappingBack = false
                 } else {
                     layer.position = originalPosition
                     mode = .none
+                    
+                    isSnappingBack = true
                 }
 
                 if mode != .none {
