@@ -66,7 +66,7 @@ class SessionsTableViewController: NSViewController {
     }()
 
     func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
-        
+
         displayedRowsLock.async {
 
             let methodStart = Date()
