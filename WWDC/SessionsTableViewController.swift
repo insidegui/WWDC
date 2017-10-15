@@ -67,9 +67,6 @@ class SessionsTableViewController: NSViewController {
 
     func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
         
-        // This data should be requested on main thread only
-        let selectedRowIndexes = self.tableView.selectedRowIndexes
-        
         displayedRowsLock.async {
 
             let methodStart = Date()
@@ -83,7 +80,7 @@ class SessionsTableViewController: NSViewController {
                 return
             }
 
-            let selectedRows = selectedRowIndexes.flatMap { (i) -> IndexedSessionRow? in
+            let selectedRows = self.tableView.selectedRowIndexes.flatMap { (i) -> IndexedSessionRow? in
                 guard i < oldValue.endIndex else { return nil }
 
                 return IndexedSessionRow(sessionRow: oldValue[i], index: i)
