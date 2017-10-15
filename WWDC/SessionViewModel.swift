@@ -210,7 +210,7 @@ final class SessionViewModel: NSObject {
 
         var result = "\(event.name) · Session \(session.number)"
 
-        if let date = session.instances.first?.startTime {
+        if (event.startDate...event.endDate).contains(Date()), let date = session.instances.first?.startTime {
             result += " · " + standardFormatted(date: date, withTimeZoneName: false)
         }
 
