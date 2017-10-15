@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		012BEFA41EE8658F007E72CA /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 012BEFA31EE8658F007E72CA /* EventKit.framework */; };
 		01B3EB4A1EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */; };
+		3A0840B41F924665002BC828 /* Realm+InMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0840B31F924665002BC828 /* Realm+InMemory.swift */; };
+		3A6227031F9272A300D5F687 /* contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A6227021F9272A300D5F687 /* contents.json */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */; };
@@ -31,7 +33,7 @@
 		DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */; };
 		DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD36A4B51E478C6A00B2EA88 /* Main.storyboard */; };
 		DD36A4D11E478D7E00B2EA88 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
-		DD36A4D81E478D7E00B2EA88 /* DatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4D71E478D7E00B2EA88 /* DatabaseTests.swift */; };
+		DD36A4D81E478D7E00B2EA88 /* StorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD36A4D71E478D7E00B2EA88 /* StorageTests.swift */; };
 		DD36A4DA1E478D7E00B2EA88 /* ConfCore.h in Headers */ = {isa = PBXBuildFile; fileRef = DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
 		DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -359,6 +361,8 @@
 /* Begin PBXFileReference section */
 		012BEFA31EE8658F007E72CA /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+SessionTableViewContextMenuActions.swift"; sourceTree = "<group>"; };
+		3A0840B31F924665002BC828 /* Realm+InMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+InMemory.swift"; sourceTree = "<group>"; };
+		3A6227021F9272A300D5F687 /* contents.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = contents.json; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -384,7 +388,7 @@
 		DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfCore.h; sourceTree = "<group>"; };
 		DD36A4CB1E478D7E00B2EA88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConfCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD36A4D71E478D7E00B2EA88 /* DatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseTests.swift; sourceTree = "<group>"; };
+		DD36A4D71E478D7E00B2EA88 /* StorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTests.swift; sourceTree = "<group>"; };
 		DD36A4D91E478D7E00B2EA88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD382B771EAC345F009760C4 /* MaskImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaskImageView.h; sourceTree = "<group>"; };
 		DD382B781EAC345F009760C4 /* MaskImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaskImageView.m; sourceTree = "<group>"; };
@@ -684,6 +688,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A0840B21F924442002BC828 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				3A0840B31F924665002BC828 /* Realm+InMemory.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		DD0159CD1ED0CD1D00F980F1 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
@@ -859,8 +871,9 @@
 		DD36A4D61E478D7E00B2EA88 /* ConfCoreTests */ = {
 			isa = PBXGroup;
 			children = (
+				3A0840B21F924442002BC828 /* Util */,
 				DD5DEC231E4AA8C800426FA6 /* Fixtures */,
-				DD36A4D71E478D7E00B2EA88 /* DatabaseTests.swift */,
+				DD36A4D71E478D7E00B2EA88 /* StorageTests.swift */,
 				DD34DA061E4AB0E400F25C45 /* AdapterTests.swift */,
 				DDAE7C5B1E5C707A00CEA205 /* NetworkingTests.swift */,
 				DD36A4D91E478D7E00B2EA88 /* Info.plist */,
@@ -882,6 +895,7 @@
 		DD5DEC231E4AA8C800426FA6 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				3A6227021F9272A300D5F687 /* contents.json */,
 				DD5DEC241E4AA8C800426FA6 /* news.json */,
 				DD5DEC251E4AA8C800426FA6 /* sessions.json */,
 				DD5DEC261E4AA8C800426FA6 /* videos.json */,
@@ -1732,6 +1746,7 @@
 				DD5DEC2D1E4AA8C800426FA6 /* wwdc.json in Resources */,
 				DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */,
 				DD5DEC291E4AA8C800426FA6 /* news.json in Resources */,
+				3A6227031F9272A300D5F687 /* contents.json in Resources */,
 				DD5DEC2B1E4AA8C800426FA6 /* videos.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1955,9 +1970,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD36A4D81E478D7E00B2EA88 /* DatabaseTests.swift in Sources */,
+				DD36A4D81E478D7E00B2EA88 /* StorageTests.swift in Sources */,
 				DDAE7C5C1E5C707A00CEA205 /* NetworkingTests.swift in Sources */,
 				DD34DA071E4AB0E400F25C45 /* AdapterTests.swift in Sources */,
+				3A0840B41F924665002BC828 /* Realm+InMemory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2319,6 +2335,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2339,6 +2356,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2477,6 +2495,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2638,6 +2657,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				FRAMEWORK_SEARCH_PATHS = (

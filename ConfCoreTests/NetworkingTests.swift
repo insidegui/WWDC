@@ -30,10 +30,10 @@ class NetworkingTests: XCTestCase {
         waitForExpectations(timeout: 10)
     }
 
-    func testScheduleEndpoint() {
+    func testContentEndpoint() {
         let exp = expectation(description: "Schedule response")
 
-        client.fetchSchedule { result in
+        client.fetchContent { result in
             switch result {
             case .error(let error):
                 XCTFail(error.localizedDescription)
@@ -41,25 +41,6 @@ class NetworkingTests: XCTestCase {
                 XCTAssertEqual(response.tracks.count, 8)
                 XCTAssertEqual(response.rooms.count, 29)
                 XCTAssertEqual(response.instances.count, 316)
-            }
-
-            exp.fulfill()
-        }
-
-        waitForExpectations(timeout: 10)
-    }
-
-    func testSessionsAndAssetsEndpoint() {
-        let exp = expectation(description: "Sessions and assets response")
-
-        client.fetchSessions { result in
-            switch result {
-            case .error(let error):
-                XCTFail(error.localizedDescription)
-            case .success(let response):
-                XCTAssertEqual(response.events.count, 5)
-                XCTAssertEqual(response.sessions.count, 550)
-                XCTAssertEqual(response.assets.count, 2947)
             }
 
             exp.fulfill()
