@@ -125,7 +125,7 @@ final class BookmarkViewController: NSViewController {
             guard let bookmark = self?.bookmark else { return }
             
             self?.storage.modify(bookmark) { $0.body = text }
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
     }
 
 }

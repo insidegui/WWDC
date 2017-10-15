@@ -85,7 +85,7 @@ class ShelfViewController: NSViewController {
             return
         }
 
-        viewModel.rxCanBePlayed.map({ !$0 }).bind(to: playButton.rx.isHidden).addDisposableTo(disposeBag)
+        viewModel.rxCanBePlayed.map({ !$0 }).bind(to: playButton.rx.isHidden).disposed(by: disposeBag)
 
         viewModel.rxImageUrl.subscribe(onNext: { [weak self] imageUrl in
             self?.currentImageDownloadOperation?.cancel()
@@ -101,7 +101,7 @@ class ShelfViewController: NSViewController {
 
                 self?.shelfView.image = original
             }
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
     }
 
     @objc private func play(_ sender: Any?) {

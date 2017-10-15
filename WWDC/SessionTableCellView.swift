@@ -52,17 +52,17 @@ final class SessionTableCellView: NSTableCellView {
 
         guard let viewModel = viewModel else { return }
 
-        viewModel.rxTitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).addDisposableTo(disposeBag)
-        viewModel.rxSubtitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(subtitleLabel.rx.text).addDisposableTo(disposeBag)
-        viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).addDisposableTo(disposeBag)
+        viewModel.rxTitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).disposed(by: disposeBag)
+        viewModel.rxSubtitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(subtitleLabel.rx.text).disposed(by: disposeBag)
+        viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).disposed(by: disposeBag)
 
-        viewModel.rxIsFavorite.distinctUntilChanged().map({ !$0 }).bind(to: favoritedImageView.rx.isHidden).addDisposableTo(disposeBag)
-        viewModel.rxIsDownloaded.distinctUntilChanged().map({ !$0 }).bind(to: downloadedImageView.rx.isHidden).addDisposableTo(disposeBag)
+        viewModel.rxIsFavorite.distinctUntilChanged().map({ !$0 }).bind(to: favoritedImageView.rx.isHidden).disposed(by: disposeBag)
+        viewModel.rxIsDownloaded.distinctUntilChanged().map({ !$0 }).bind(to: downloadedImageView.rx.isHidden).disposed(by: disposeBag)
 
         let isSnowFlake = Observable.zip(viewModel.rxIsCurrentlyLive, viewModel.rxIsLab)
 
-        isSnowFlake.map({ !$0.0 && !$0.1 }).bind(to: snowFlakeView.rx.isHidden).addDisposableTo(disposeBag)
-        isSnowFlake.map({ $0.0 || $0.1 }).bind(to: thumbnailImageView.rx.isHidden).addDisposableTo(disposeBag)
+        isSnowFlake.map({ !$0.0 && !$0.1 }).bind(to: snowFlakeView.rx.isHidden).disposed(by: disposeBag)
+        isSnowFlake.map({ $0.0 || $0.1 }).bind(to: thumbnailImageView.rx.isHidden).disposed(by: disposeBag)
 
         isSnowFlake.subscribe(onNext: { [weak self] (isLive: Bool, isLab: Bool) -> Void in
             if isLive {
@@ -70,7 +70,7 @@ final class SessionTableCellView: NSTableCellView {
             } else if isLab {
                 self?.snowFlakeView.image = #imageLiteral(resourceName: "lab-indicator")
             }
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         viewModel.rxImageUrl.distinctUntilChanged({ $0 != $1 }).subscribe(onNext: { [weak self] imageUrl in
             guard let imageUrl = imageUrl else { return }
@@ -82,15 +82,15 @@ final class SessionTableCellView: NSTableCellView {
 
                 self?.thumbnailImageView.image = thumb
             }
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         viewModel.rxColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
             self?.contextColorView.color = color
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         viewModel.rxDarkColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
             self?.snowFlakeView.backgroundColor = color
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
             if let progress = progresses.first {
@@ -100,7 +100,7 @@ final class SessionTableCellView: NSTableCellView {
                 self?.contextColorView.hasValidProgress = false
                 self?.contextColorView.progress = 0
             }
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         viewModel.rxSessionType.distinctUntilChanged().subscribe(onNext: { [weak self] type in
             guard type != .session && type != .lab else { return }
@@ -111,7 +111,7 @@ final class SessionTableCellView: NSTableCellView {
             default:
                 self?.thumbnailImageView.image = #imageLiteral(resourceName: "special")
             }
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
     }
 
     private lazy var titleLabel: NSTextField = {

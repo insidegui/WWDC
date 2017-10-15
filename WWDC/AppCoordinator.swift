@@ -137,17 +137,17 @@ final class AppCoordinator {
             self?.activeTab = activeTab
 
             self?.updateSelectedViewModelRegardlessOfTab()
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         selectedSession.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
             self?.videosController.detailViewController.viewModel = viewModel
             self?.updateSelectedViewModelRegardlessOfTab()
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         selectedScheduleItem.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
             self?.scheduleController.detailViewController.viewModel = viewModel
             self?.updateSelectedViewModelRegardlessOfTab()
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -195,13 +195,17 @@ final class AppCoordinator {
             tabController.hideLoading()
         }
 
-        storage.tracksObservable.subscribe(onNext: { [weak self] tracks in
-            self?.videosController.listViewController.tracks = tracks
-        }).dispose()
+        storage.tracksObservable
+            .take(1)
+            .subscribe(onNext: { [weak self] tracks in
+                self?.videosController.listViewController.tracks = tracks
+            }).disposed(by: disposeBag)
 
-        storage.scheduleObservable.subscribe(onNext: { [weak self] sections in
-            self?.scheduleController.listViewController.scheduleSections = sections
-        }).dispose()
+        storage.scheduleObservable
+            .take(1)
+            .subscribe(onNext: { [weak self] sections in
+                self?.scheduleController.listViewController.scheduleSections = sections
+            }).disposed(by: disposeBag)
 
         liveObserver.start()
 

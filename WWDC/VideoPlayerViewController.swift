@@ -164,7 +164,7 @@ final class VideoPlayerViewController: NSViewController {
         let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode")
         Observable.collection(from: bookmarks).observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
             self?.playerView.annotations = bookmarks.toArray()
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
     }
 
     @objc private func annotationSelected(notification: Notification) {

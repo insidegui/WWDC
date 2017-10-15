@@ -126,9 +126,9 @@ class SessionSummaryViewController: NSViewController {
 
         viewModel.rxTitle.map(NSAttributedString.attributedBoldTitle(with:)).subscribe(onNext: { [weak self] title in
             self?.titleLabel.attributedStringValue = title
-        }).addDisposableTo(disposeBag)
-        viewModel.rxSummary.bind(to: summaryLabel.rx.text).addDisposableTo(disposeBag)
-        viewModel.rxFooter.bind(to: contextLabel.rx.text).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
+        viewModel.rxSummary.bind(to: summaryLabel.rx.text).disposed(by: disposeBag)
+        viewModel.rxFooter.bind(to: contextLabel.rx.text).disposed(by: disposeBag)
     }
 
 }
