@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		012BEFA41EE8658F007E72CA /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 012BEFA31EE8658F007E72CA /* EventKit.framework */; };
 		01B3EB4A1EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */; };
+		6834F3771F6D227E004BB419 /* WWDCSearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6834F3761F6D227E004BB419 /* WWDCSearchField.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */; };
@@ -359,6 +360,7 @@
 /* Begin PBXFileReference section */
 		012BEFA31EE8658F007E72CA /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+SessionTableViewContextMenuActions.swift"; sourceTree = "<group>"; };
+		6834F3761F6D227E004BB419 /* WWDCSearchField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCSearchField.swift; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -813,6 +815,7 @@
 				DDC678181EDB2CD300A4E19C /* ActionLabel.swift */,
 				DD6E06F31EDBC11F000EAEA4 /* WWDCTextButton.swift */,
 				DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */,
+				6834F3761F6D227E004BB419 /* WWDCSearchField.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1881,6 +1884,7 @@
 				DD7F386F1EABF631002D8C00 /* NSTableView+IGListKit.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DD382B7B1EAC345F009760C4 /* MaskImageView.m in Sources */,
+				6834F3771F6D227E004BB419 /* WWDCSearchField.swift in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
 				DDC6780F1EDB253D00A4E19C /* AboutWindowController.swift in Sources */,
 				01B3EB4A1EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift in Sources */,
