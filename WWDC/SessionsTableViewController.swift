@@ -80,22 +80,14 @@ class SessionsTableViewController: NSViewController {
                 return
             }
 
-            let selectedRows = self.tableView.selectedRowIndexes.flatMap { (i) -> IndexedSessionRow? in
-                guard i < oldValue.endIndex else { return nil }
-
-                return IndexedSessionRow(sessionRow: oldValue[i], index: i)
-            }
-
             let oldRowsSet = Set(oldValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
             let newRowsSet = Set(newValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
 
             let removed = oldRowsSet.subtracting(newRowsSet)
             let added = newRowsSet.subtracting(oldRowsSet)
-            let selected = newRowsSet.intersection(selectedRows)
 
             let removedIndexes = IndexSet(removed.map { $0.index })
             let addedIndexes = IndexSet(added.map { $0.index })
-            var selectedIndexes = IndexSet(selected.map { $0.index })
 
             let complicatedOperationStart = Date()
 
@@ -128,19 +120,26 @@ class SessionsTableViewController: NSViewController {
                 print("The complicated calculation took: \(Date().timeIntervalSince(complicatedOperationStart))")
             #endif
 
-            if selectedIndexes.isEmpty {
-                for row in newValue {
-                    if case SessionRowKind.session(_) = row.kind {
-                        guard let index = newValue.index(of: row) else { continue }
-                        selectedIndexes.insert(index)
-                        break
-                    }
-                }
-            }
-
             print("Set calculations took: \(Date().timeIntervalSince(methodStart))")
 
             DispatchQueue.main.sync {
+
+                // Preserve selected rows
+                let selectedRows = self.tableView.selectedRowIndexes.flatMap { (i) -> IndexedSessionRow? in
+                    guard i < oldValue.endIndex else { return nil }
+                    return IndexedSessionRow(sessionRow: oldValue[i], index: i)
+                }
+
+                var selectedIndexes = IndexSet(newRowsSet.intersection(selectedRows).map { $0.index })
+                if selectedIndexes.isEmpty {
+                    for row in newValue {
+                        if case SessionRowKind.session(_) = row.kind {
+                            guard let index = newValue.index(of: row) else { continue }
+                            selectedIndexes.insert(index)
+                            break
+                        }
+                    }
+                }
 
                 NSAnimationContext.beginGrouping()
                 let context = NSAnimationContext.current
