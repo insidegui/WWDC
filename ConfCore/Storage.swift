@@ -45,9 +45,7 @@ public final class Storage {
     }
 
     private func makeRealm() throws -> Realm {
-        let c = Realm.Configuration(fileURL: realmConfig.fileURL, schemaVersion: realmConfig.schemaVersion, migrationBlock: realmConfig.migrationBlock)
-
-        return try Realm(configuration: c)
+        return try Realm(configuration: realmConfig)
     }
 
     public lazy var storageQueue: OperationQueue = {
