@@ -204,20 +204,22 @@ final class SessionViewModel: NSObject {
     static func footer(for session: Session, at event: ConfCore.Event?) -> String {
         guard let event = event else { return "" }
 
-        let eventName = event.name
-
         let focusesArray = session.focuses.toArray()
 
         let allFocuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: false)
 
-        var result = "\(eventName) · Session \(session.number)"
+        var result = "\(event.name) · Session \(session.number)"
+
+        if let date = session.instances.first?.startTime {
+            result += " · " + standardFormatted(date: date, withTimeZoneName: false)
+        }
+
+        if session.mediaDuration > 0, let duration = String(timestamp: session.mediaDuration) {
+            result += " · " + duration
+        }
 
         if focusesArray.count > 0 {
             result += " · \(allFocuses)"
-        }
-        
-        if session.mediaDuration > 0, let duration = String(timestamp: session.mediaDuration) {
-            result += " · " + duration
         }
 
         return result
