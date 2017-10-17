@@ -61,11 +61,11 @@ final class PreferencesCoordinator {
         #if ICLOUD
             CMSCommunityCenter.shared.accountStatus.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] status in
                 self?.accountController.cloudAccountIsAvailable = (status == .available)
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
 
             CMSCommunityCenter.shared.userProfile.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] profile in
                 self?.accountController.profile = profile
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
         #endif
     }
 

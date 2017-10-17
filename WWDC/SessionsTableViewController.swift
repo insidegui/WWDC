@@ -413,7 +413,7 @@ class SessionsTableViewController: NSViewController {
             guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
 
             return viewModel
-            }.bind(to: selectedSession).addDisposableTo(disposeBag)
+            }.bind(to: selectedSession).disposed(by: disposeBag)
     }
 
     // MARK: - Contextual menu

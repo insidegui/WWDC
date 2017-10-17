@@ -156,7 +156,7 @@ class SessionActionsViewController: NSViewController {
             } else {
                 self?.favoriteButton.toolTip = "Add to favorites"
             }
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
 
         if let rxDownloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
             rxDownloadState.throttle(0.8, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] status in
@@ -183,7 +183,7 @@ class SessionActionsViewController: NSViewController {
                     self?.downloadButton.image = #imageLiteral(resourceName: "trash")
                     self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload)
                 }
-            }).addDisposableTo(disposeBag)
+            }).disposed(by: disposeBag)
         } else {
             // session can't be downloaded (maybe Lab or download not available yet)
             downloadIndicator.isHidden = true
