@@ -49,6 +49,21 @@ class SessionSummaryViewController: NSViewController {
         return v
     }()
 
+    private lazy var summaryScroll: NSScrollView = {
+        var scroll = NSScrollView()
+        let summary = self.summaryLabel
+        scroll.translatesAutoresizingMaskIntoConstraints = true
+        scroll.bounds = summary.bounds
+        scroll.frame = summary.frame
+        scroll.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
+        //scroll.autoresizingMask
+        scroll.hasVerticalScroller = true
+        scroll.hasHorizontalScroller = false
+        scroll.documentView = summary
+
+        return scroll
+    }()
+
     private lazy var summaryLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
         l.font = .systemFont(ofSize: 18)
@@ -58,7 +73,8 @@ class SessionSummaryViewController: NSViewController {
         l.lineBreakMode = .byWordWrapping
         l.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
         l.allowsDefaultTighteningForTruncation = true
-        l.maximumNumberOfLines = 5
+        //l.maximumNumberOfLines = 5
+        l.translatesAutoresizingMaskIntoConstraints = false
 
         return l
     }()
@@ -75,7 +91,7 @@ class SessionSummaryViewController: NSViewController {
     }()
 
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.summaryLabel, self.contextLabel])
+        let v = NSStackView(views: [self.summaryScroll, self.contextLabel])
 
         v.orientation = .vertical
         v.alignment = .leading
