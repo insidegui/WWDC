@@ -112,18 +112,18 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
             let alert = WWDCAlert.create()
             
             alert.messageText = "You've already scheduled this session"
-            alert.informativeText = "Would you like to remove it from your Calender?"
+            alert.informativeText = "Would you like to remove it from your calendar?"
             
-            alert.addButton(withTitle: "Remove from Calender")
+            alert.addButton(withTitle: "Remove")
             alert.addButton(withTitle: "Cancel")
             alert.window.center()
             
-            enum Choice: Int {
+            enum Choice: NSApplication.ModalResponse.RawValue {
                 case removeCalender = 1000
                 case cancel = 1001
             }
             
-            guard let choice = Choice(rawValue: alert.runModal()) else { return }
+            guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
             
             switch choice {
             case .removeCalender:
