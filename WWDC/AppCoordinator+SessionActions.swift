@@ -11,6 +11,7 @@ import RealmSwift
 import RxSwift
 import ConfCore
 import PlayerUI
+import EventKit
 
 extension AppCoordinator: SessionActionsViewControllerDelegate {
 
@@ -50,7 +51,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         DownloadManager.shared.download(videoAsset)
     }
 
-    func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {
+    func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {        
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
         guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
@@ -75,6 +76,92 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
             DownloadManager.shared.deleteDownload(for: videoAsset)
         case .no:
             break
+        }
+    }
+    
+    func sessionActionsDidSelectCalendar(_ sender: NSView?) {
+        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+
+        let status = EKEventStore.authorizationStatus(for: .event)
+        let eventStore = EKEventStore()
+        
+        if status == .notDetermined || status == .denied {
+
+            eventStore.requestAccess(to: .event, completion: { (hasAccess, error) in
+                
+                if hasAccess == true {
+                    self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
+                }
+            })
+            
+        } else if status == .authorized {
+            
+            self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
+            
+        } else {
+        
+            return
+        }
+    }
+    
+    private func saveCalendarEvent(viewModel:SessionViewModel!, eventStore:EKEventStore!)  {
+        let event = EKEvent.init(eventStore: eventStore)
+        
+        if let storedEvent = eventStore.event(withIdentifier: viewModel.sessionInstance.calendarEventIdentifier) {
+            
+            let alert = WWDCAlert.create()
+            
+            alert.messageText = "You've already scheduled this session"
+            alert.informativeText = "Would you like to remove it from your Calender?"
+            
+            alert.addButton(withTitle: "Remove from Calender")
+            alert.addButton(withTitle: "Cancel")
+            alert.window.center()
+            
+            enum Choice: Int {
+                case removeCalender = 1000
+                case cancel = 1001
+            }
+            
+            guard let choice = Choice(rawValue: alert.runModal()) else { return }
+            
+            switch choice {
+            case .removeCalender:
+                do {
+                    try eventStore.remove(storedEvent, span: .thisEvent, commit: true)
+                    
+                } catch let error as NSError {
+                    
+                    print("Failed to remove event from calender due to error: \(error)")
+                }
+                break
+            case .cancel:
+                break
+            }
+
+            return
+        }
+        
+        event.startDate = viewModel.sessionInstance.startTime
+        event.endDate = viewModel.sessionInstance.endTime
+        event.title = viewModel.session.title
+        event.location = viewModel.sessionInstance.roomName
+        event.url = viewModel.webUrl
+        event.calendar = eventStore.defaultCalendarForNewEvents
+        self.storage.realm.beginWrite()
+        viewModel.sessionInstance.calendarEventIdentifier = event.eventIdentifier
+        do {
+            try self.storage.realm.commitWrite()
+            
+        } catch let error as NSError {
+            print("Error writing session instance to storage: \(error)")
+        }
+       
+        do {
+            try eventStore.save(event, span: .thisEvent, commit: true)
+            
+        } catch let error as NSError {
+            print("Failed to add event to calender due to error: \(error)")
         }
     }
 

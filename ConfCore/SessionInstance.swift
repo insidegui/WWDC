@@ -94,6 +94,10 @@ public class SessionInstance: Object {
     /// Whether the live flag is being forced by an external source
     @objc public dynamic var isForcedLive = false
 
+    /// The EKEvent's eventIdentifier 
+    /// See https://developer.apple.com/reference/eventkit/ekevent/1507437-eventidentifier
+    public dynamic var calendarEventIdentifier = ""
+
     public override static func primaryKey() -> String? {
         return "identifier"
     }
@@ -124,6 +128,7 @@ public class SessionInstance: Object {
     }
 
     func merge(with other: SessionInstance, in realm: Realm) {
+<<<<<<< HEAD
         assert(other.identifier == identifier, "Can't merge two objects with different identifiers!")
 
         number = other.number
@@ -137,6 +142,22 @@ public class SessionInstance: Object {
         eventIdentifier = other.eventIdentifier
 
         if let otherSession = other.session, let session = session {
+=======
+        assert(other.identifier == self.identifier, "Can't merge two objects with different identifiers!")
+        
+        self.number = other.number
+        self.rawSessionType = other.rawSessionType
+        self.sessionType = other.sessionType
+        self.startTime = other.startTime
+        self.endTime = other.endTime
+        self.roomIdentifier = other.roomIdentifier
+        self.trackName = other.trackName
+        self.trackIdentifier = other.trackIdentifier
+        self.eventIdentifier = other.eventIdentifier
+        self.calendarEventIdentifier = other.calendarEventIdentifier
+        
+        if let otherSession = other.session, let session = self.session {
+>>>>>>> 7c1e0ac55b9295f507993ee6ff99fe9ccab63cc2
             session.merge(with: otherSession, in: realm)
         }
 
