@@ -96,7 +96,7 @@ public class SessionInstance: Object {
 
     /// The EKEvent's eventIdentifier 
     /// See https://developer.apple.com/reference/eventkit/ekevent/1507437-eventidentifier
-    public dynamic var calendarEventIdentifier = ""
+    @objc public dynamic var calendarEventIdentifier = ""
 
     public override static func primaryKey() -> String? {
         return "identifier"
