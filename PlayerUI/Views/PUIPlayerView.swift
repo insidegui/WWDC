@@ -544,13 +544,20 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    private lazy var forwardButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
+    private lazy var forwardButton: NSButton = {
+        /*let b = PUIButton(frame: .zero)
 
         b.image = .PUIForward15s
         b.target = self
         b.action = #selector(goForwardInTime15)
-        b.toolTip = "Go forward 15s"
+        b.toolTip = "Go forward 15s"*/
+
+        let b = NSButton()
+        b.setButtonType(NSButton.ButtonType.multiLevelAccelerator)
+        b.maxAcceleratorLevel = 5
+        b.target = self
+        b.action = #selector(goForwardInTime15)
+        b.toolTip = "Go forward 15s, or by a multiple by force touching"
 
         return b
     }()
@@ -741,7 +748,8 @@ public final class PUIPlayerView: NSView {
         backButton.action = skipBy30 ? #selector(goBackInTime30) : #selector(goBackInTime15)
         backButton.toolTip = skipBy30 ? "Go back 30s" : "Go back 15s"
         forwardButton.image = skipBy30 ? .PUIForward30s : .PUIForward15s
-        forwardButton.action = skipBy30 ? #selector(goForwardInTime30) : #selector(goForwardInTime15)
+        //forwardButton.action = skipBy30 ? #selector(goForwardInTime30) : #selector(goForwardInTime15)
+        forwardButton.sendAction(on: [NSEvent.EventTypeMask.leftMouseDown, NSEvent.EventTypeMask.leftMouseUp])
         forwardButton.toolTip = skipBy30 ? "Go forward 30s" : "Go forward 15s"
 
         updateExternalPlaybackControlsAvailability()
@@ -868,9 +876,64 @@ public final class PUIPlayerView: NSView {
         modifyCurrentTime(with: 15, using: CMTimeSubtract)
     }
 
-    @IBAction public func goForwardInTime15(_ sender: Any?) {
-        modifyCurrentTime(with: 15, using: CMTimeAdd)
+    var playtimeWhenFirstClicked: CMTime?;
+    @IBAction public func goForwardInTime15(_ sender: NSButton) {
+        guard let player = player else { return }
+        guard sender.integerValue != 0 else {
+            player.play()
+            return
+        }
+
+        if playtimeWhenFirstClicked == nil {
+            playtimeWhenFirstClicked = player.currentTime()
+        }
+
+        player.pause()
+        let durationTime = player.currentItem?.duration
+        var modifier: CMTime?
+
+        switch sender.integerValue {
+        case 5:
+            modifier = CMTimeMakeWithSeconds(150, (durationTime?.timescale)!)
+            break;
+        case 4:
+            modifier = CMTimeMakeWithSeconds(60, (durationTime?.timescale)!)
+            break;
+        case 3:
+            modifier = CMTimeMakeWithSeconds(45, (durationTime?.timescale)!)
+            break;
+        case 2:
+            modifier = CMTimeMakeWithSeconds(30, (durationTime?.timescale)!)
+            break;
+        case 1:
+            modifier = CMTimeMakeWithSeconds(15, (durationTime?.timescale)!)
+        default:
+            break;
+        }
+
+        if playtimeWhenFirstClicked != nil {
+            let targetTime = CMTimeAdd(playtimeWhenFirstClicked!, modifier!)
+            guard targetTime.isValid && targetTime.isNumeric else { return }
+            player.seek(to: targetTime)
+        }
     }
+
+    /*private func modifyCurrentTime(with seconds: Double, using function: (CMTime, CMTime) -> CMTime) {
+        guard let player = player else { return }
+
+        guard let durationTime = player.currentItem?.duration else { return }
+
+        let modifier = CMTimeMakeWithSeconds(seconds, durationTime.timescale)
+        let targetTime = function(player.currentTime(), modifier)
+
+        guard targetTime.isValid && targetTime.isNumeric else { return }
+
+        if isPlayingExternally {
+            currentExternalPlaybackProvider?.seek(to: targetTime)
+        } else {
+            player.seek(to: targetTime)
+        }
+    }*/
 
     @IBAction public func goBackInTime30(_ sender: Any?) {
         modifyCurrentTime(with: 30, using: CMTimeSubtract)
