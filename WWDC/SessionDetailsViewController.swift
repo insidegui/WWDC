@@ -13,203 +13,207 @@ import RxCocoa
 class SessionDetailsViewController: NSViewController {
 
     private let disposeBag = DisposeBag()
-    
+
     let listStyle: SessionsListStyle
-    
+
     var viewModel: SessionViewModel? = nil {
         didSet {
-            menuButtonsContainer.isHidden = (viewModel == nil)
-            
-            self.shelfController.viewModel = viewModel
-            self.summaryController.viewModel = viewModel
-            
-            if viewModel?.identifier != oldValue?.identifier {
-                self.transcriptController.viewModel = viewModel
-                
+
+            informationStackView.animator().isHidden = (viewModel == nil)
+            shelfController.view.animator().isHidden = (viewModel == nil)
+
+            shelfController.viewModel = viewModel
+            summaryController.viewModel = viewModel
+            transcriptController.viewModel = viewModel
+
+            guard let viewModel = viewModel else {
+                return
+            }
+
+            if viewModel.identifier != oldValue?.identifier {
+
                 showOverview()
             }
-            
-            self.transcriptButton.isHidden = (viewModel?.session.transcript() == nil)
-            
-            let shouldHideButtonsBar = self.transcriptButton.isHidden && self.bookmarksButton.isHidden
-            self.menuButtonsContainer.isHidden = shouldHideButtonsBar
-            
-            let shouldHideShelf = (viewModel?.sessionInstance.type == .lab || viewModel?.sessionInstance.type == .getTogether) && !(viewModel?.sessionInstance.isCurrentlyLive == true)
-            self.shelfController.view.isHidden = shouldHideShelf
-            
+
+            transcriptButton.isHidden = (viewModel.session.transcript() == nil)
+
+            let shouldHideButtonsBar = transcriptButton.isHidden && bookmarksButton.isHidden
+            menuButtonsContainer.isHidden = shouldHideButtonsBar
+
+            let instance = viewModel.sessionInstance
+            let type = instance.type
+
+            let sessionHasNoVideo = (type == .lab || type == .getTogether) && !(instance.isCurrentlyLive == true)
+
+            shelfController.view.isHidden = sessionHasNoVideo
+
+            // Connect stack view (bottom half of screen), to the top of the view
+            // or to the bottom of the video, if it's present
             if isViewLoaded {
-                shelfBottomConstraint.isActive = !shouldHideShelf
-                mainStackViewTopConstraint.isActive = shouldHideShelf
-                mainStackViewBottomConstraint.isActive = !shouldHideShelf
+
+                shelfBottomConstraint.isActive = !sessionHasNoVideo
+                informationStackViewTopConstraint.isActive = sessionHasNoVideo
+                informationStackViewBottomConstraint.isActive = !sessionHasNoVideo
             }
         }
     }
-    
+
     private lazy var overviewButton: WWDCTextButton = {
         let b = WWDCTextButton()
-        
+
         b.title = "Overview"
-        b.state = NSOnState
+        b.state = .on
         b.target = self
-        b.action = #selector(tabButtonAction(_:))
-        
+        b.action = #selector(tabButtonAction)
+
         return b
     }()
-    
+
     private lazy var transcriptButton: WWDCTextButton = {
         let b = WWDCTextButton()
-        
+
         b.title = "Transcript"
-        b.state = NSOffState
+        b.state = .off
         b.target = self
-        b.action = #selector(tabButtonAction(_:))
+        b.action = #selector(tabButtonAction)
         b.isHidden = true
-        
+
         return b
     }()
-    
+
     private lazy var bookmarksButton: WWDCTextButton = {
         let b = WWDCTextButton()
-        
+
         b.title = "Bookmarks"
-        b.state = NSOffState
+        b.state = .off
         b.target = self
-        b.action = #selector(tabButtonAction(_:))
-        
+        b.action = #selector(tabButtonAction)
+
         // TODO: enable bookmarks section
         b.isHidden = true
-        
+
         return b
     }()
-    
+
     private lazy var buttonsStackView: NSStackView = {
         let v = NSStackView(views: [
             self.overviewButton,
             self.transcriptButton,
             self.bookmarksButton
             ])
-        
+
         v.orientation = .horizontal
         v.alignment = .top
         v.spacing = 40
-        
+
         return v
     }()
-    
+
     private lazy var menuButtonsContainer: WWDCBottomBorderView = {
         let v = WWDCBottomBorderView()
-        
+
         v.isHidden = true
         v.wantsLayer = true
-        
+
         v.heightAnchor.constraint(equalToConstant: 36).isActive = true
-        
+
         v.addSubview(self.buttonsStackView)
-        
+
         self.buttonsStackView.topAnchor.constraint(equalTo: v.topAnchor).isActive = true
         self.buttonsStackView.centerXAnchor.constraint(equalTo: v.centerXAnchor).isActive = true
-        
+
         return v
     }()
-    
-    private lazy var contentView: NSView = {
-        let v = NSView()
-        
+
+    private lazy var tabContainer: SessionDetailsTabContainer = {
+        let v = SessionDetailsTabContainer()
+
         v.wantsLayer = true
-        v.setContentHuggingPriority(NSLayoutPriorityDefaultLow, for: .horizontal)
-        
+        v.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
+        v.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .vertical)
+
         return v
     }()
-    
-    private lazy var mainStackView: NSStackView = {
-        let v = NSStackView(views: [self.menuButtonsContainer, self.contentView])
-        
+
+    private lazy var informationStackView: NSStackView = {
+        let v = NSStackView(views: [self.menuButtonsContainer, self.tabContainer])
+
         v.orientation = .vertical
         v.spacing = 22
         v.alignment = .leading
         v.distribution = .fill
-        v.edgeInsets = EdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
-        
-        self.contentView.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
-        self.contentView.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
-        
+        v.edgeInsets = NSEdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
+
+        self.tabContainer.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
+        self.tabContainer.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
+
         return v
     }()
-    
+
     let shelfController: ShelfViewController
     let summaryController: SessionSummaryViewController
     let transcriptController: TranscriptTableViewController
-    
+
     init(listStyle: SessionsListStyle) {
         self.listStyle = listStyle
-        
-        self.shelfController = ShelfViewController()
-        self.summaryController = SessionSummaryViewController()
-        self.transcriptController = TranscriptTableViewController()
-        
-        super.init(nibName: nil, bundle: nil)!
+
+        shelfController = ShelfViewController()
+        summaryController = SessionSummaryViewController()
+        transcriptController = TranscriptTableViewController()
+
+        super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private var currentTabContentView: NSView? {
-        didSet {
-            oldValue?.removeFromSuperview()
-            
-            if let newView = currentTabContentView {
-                newView.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
-                newView.frame = contentView.frame
-                
-                contentView.addSubview(newView)
-            }
-        }
-    }
-    
+
     private lazy var shelfBottomConstraint: NSLayoutConstraint = {
-        return self.shelfController.view.bottomAnchor.constraint(equalTo: self.mainStackView.topAnchor)
+        return self.shelfController.view.bottomAnchor.constraint(equalTo: self.informationStackView.topAnchor)
     }()
-    
-    private lazy var mainStackViewTopConstraint: NSLayoutConstraint = {
-        return self.mainStackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 22)
+
+    private lazy var informationStackViewTopConstraint: NSLayoutConstraint = {
+        return self.informationStackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 22)
     }()
-    
-    private lazy var mainStackViewBottomConstraint: NSLayoutConstraint = {
-        return self.mainStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -46)
+
+    private lazy var informationStackViewBottomConstraint: NSLayoutConstraint = {
+        return self.informationStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -46)
     }()
-    
+
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
-        
+
         shelfController.view.translatesAutoresizingMaskIntoConstraints = false
-        mainStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 280).isActive = true
-        shelfController.view.setContentCompressionResistancePriority(NSLayoutPriorityDefaultHigh, for: .vertical)
-        
+        informationStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        let constraint = shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 280)
+        constraint.priority = NSLayoutConstraint.Priority(rawValue: 999)
+        constraint.isActive = true
+
+        shelfController.view.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultHigh, for: .vertical)
+
         view.addSubview(shelfController.view)
-        view.addSubview(mainStackView)
-        
+        view.addSubview(informationStackView)
+
         shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
         shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
         shelfController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 22).isActive = true
-        
-        mainStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
-        mainStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
-        mainStackViewBottomConstraint.isActive = true
-        
+
+        informationStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
+        informationStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
+        informationStackViewBottomConstraint.isActive = true
+
         shelfBottomConstraint.isActive = true
-        mainStackViewTopConstraint.isActive = false
-        
+        informationStackViewTopConstraint.isActive = false
+
         showOverview()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     @objc private func tabButtonAction(_ sender: WWDCTextButton) {
         if sender == overviewButton {
             showOverview()
@@ -219,27 +223,42 @@ class SessionDetailsViewController: NSViewController {
             showBookmarks()
         }
     }
-    
+
     func showOverview() {
-        overviewButton.state = NSOnState
-        transcriptButton.state = NSOffState
-        bookmarksButton.state = NSOffState
-        
-        currentTabContentView = summaryController.view
+        overviewButton.state = .on
+        transcriptButton.state = .off
+        bookmarksButton.state = .off
+
+        tabContainer.currentView = summaryController.view
     }
-    
+
     func showTranscript() {
-        transcriptButton.state = NSOnState
-        overviewButton.state = NSOffState
-        bookmarksButton.state = NSOffState
-        
-        currentTabContentView = transcriptController.view
+        transcriptButton.state = .on
+        overviewButton.state = .off
+        bookmarksButton.state = .off
+
+        tabContainer.currentView = transcriptController.view
     }
-    
+
     func showBookmarks() {
-        bookmarksButton.state = NSOnState
-        overviewButton.state = NSOffState
-        transcriptButton.state = NSOffState
+        bookmarksButton.state = .on
+        overviewButton.state = .off
+        transcriptButton.state = .off
     }
-    
+}
+
+fileprivate class SessionDetailsTabContainer: NSView {
+
+    var currentView: NSView? {
+        didSet {
+            oldValue?.removeFromSuperview()
+
+            if let newView = currentView {
+                newView.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+                newView.frame = frame
+
+                addSubview(newView)
+            }
+        }
+    }
 }

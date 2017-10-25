@@ -9,15 +9,15 @@
 import Cocoa
 
 public protocol PUITimelineDelegate: class {
-    
+
     func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController?
     func timelineDidHighlightAnnotation(_ annotation: PUITimelineAnnotation?)
     func timelineDidSelectAnnotation(_ annotation: PUITimelineAnnotation?)
-    
+
     func timelineCanDeleteAnnotation(_ annotation: PUITimelineAnnotation) -> Bool
     func timelineCanMoveAnnotation(_ annotation: PUITimelineAnnotation) -> Bool
-    
+
     func timelineDidMoveAnnotation(_ annotation: PUITimelineAnnotation, to timestamp: Double)
     func timelineDidDeleteAnnotation(_ annotation: PUITimelineAnnotation)
-    
+
 }

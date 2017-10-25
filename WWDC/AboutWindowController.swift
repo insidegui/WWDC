@@ -15,6 +15,7 @@ final class AboutWindowController: NSWindowController {
     @IBOutlet weak fileprivate var versionLabel: NSTextField!
     @IBOutlet weak var contributorsLabel: NSTextField!
     @IBOutlet weak fileprivate var creatorLabel: NSTextField!
+    @IBOutlet weak fileprivate var repositoryLabel: ActionLabel!
     @IBOutlet weak fileprivate var iconCreatorLabel: ActionLabel!
     @IBOutlet weak fileprivate var uiCreatorLabel: ActionLabel!
     @IBOutlet weak fileprivate var licenseLabel: NSTextField!
@@ -28,7 +29,7 @@ final class AboutWindowController: NSWindowController {
     }
     
     convenience init(infoText: String?) {
-        self.init(windowNibName: "AboutWindowController")
+        self.init(windowNibName: NSNib.Name(rawValue: "AboutWindowController"))
         self.infoText = infoText
     }
     
@@ -36,7 +37,7 @@ final class AboutWindowController: NSWindowController {
         super.windowDidLoad()
         
         // close the window when the escape key is pressed
-        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+        NSEvent.addLocalMonitorForEvents(matching: NSEvent.EventTypeMask.keyDown) { event in
             guard event.keyCode == 53 else { return event }
             
             self.closeAnimated()
@@ -44,7 +45,7 @@ final class AboutWindowController: NSWindowController {
             return nil
         }
         
-        window?.collectionBehavior = [.transient, .ignoresCycle]
+        window?.collectionBehavior = [NSWindow.CollectionBehavior.transient, NSWindow.CollectionBehavior.ignoresCycle]
         window?.isMovableByWindowBackground = true
         window?.titlebarAppearsTransparent = true
         window?.titleVisibility = .hidden
@@ -83,71 +84,92 @@ final class AboutWindowController: NSWindowController {
             creatorLabel.stringValue = ""
         }
         
+        if let repository = info["GRBundleRepositoryName"] as? String {
+            repositoryLabel.stringValue = repository
+        } else {
+            repositoryLabel.stringValue = ""
+        }
+        
         if let website = info["GRBundleIconCreatorWebsite"] as? String {
-            self.iconCreatorWebsite = URL(string: website)
+            iconCreatorWebsite = URL(string: website)
             
             iconCreatorLabel.alphaValue = 0.8
             iconCreatorLabel.textColor = .primary
             iconCreatorLabel.target = self
-            iconCreatorLabel.action = #selector(openIconCreatorWebsite(_:))
+            iconCreatorLabel.action = #selector(openIconCreatorWebsite)
         }
         
         if let website = info["GRBundleUserInterfaceCreatorWebsite"] as? String {
-            self.uiCreatorWebsite = URL(string: website)
+            uiCreatorWebsite = URL(string: website)
             
             uiCreatorLabel.alphaValue = 0.8
             uiCreatorLabel.textColor = .primary
             uiCreatorLabel.target = self
-            uiCreatorLabel.action = #selector(openUserInterfaceCreatorWebsite(_:))
+            uiCreatorLabel.action = #selector(openUserInterfaceCreatorWebsite)
         }
         
         if let website = info["GRBundleDesignContributorWebsite"] as? String {
-            self.designContributorWebsite = URL(string: website)
+            designContributorWebsite = URL(string: website)
             
             designContributorLabel.alphaValue = 0.8
             designContributorLabel.textColor = .primary
             designContributorLabel.target = self
-            designContributorLabel.action = #selector(openDesignContributorWebsite(_:))
+            designContributorLabel.action = #selector(openDesignContributorWebsite)
         }
         
         if let website = info["GRBundleMainDeveloperWebsite"] as? String {
-            self.mainDeveloperWebsite = URL(string: website)
+            mainDeveloperWebsite = URL(string: website)
             
             creatorLabel.alphaValue = 0.8
             creatorLabel.textColor = .primary
             creatorLabel.target = self
-            creatorLabel.action = #selector(openMainDeveloperWebsite(_:))
+            creatorLabel.action = #selector(openMainDeveloperWebsite)
         }
         
+        if let website = info["GRBundleRepositoryWebsite"] as? String {
+            repositoryWebsite = URL(string: website)
+            
+            repositoryLabel.alphaValue = 0.8
+            repositoryLabel.textColor = .primary
+            repositoryLabel.target = self
+            repositoryLabel.action = #selector(openRepositoryWebsite)
+        }
     }
     
     private var iconCreatorWebsite: URL?
     private var uiCreatorWebsite: URL?
     private var mainDeveloperWebsite: URL?
     private var designContributorWebsite: URL?
+    private var repositoryWebsite: URL?
     
     @IBAction func openIconCreatorWebsite(_ sender: Any) {
         guard let iconCreatorWebsite = iconCreatorWebsite else { return }
         
-        NSWorkspace.shared().open(iconCreatorWebsite)
+        NSWorkspace.shared.open(iconCreatorWebsite)
     }
     
     @IBAction func openUserInterfaceCreatorWebsite(_ sender: Any) {
         guard let uiCreatorWebsite = uiCreatorWebsite else { return }
         
-        NSWorkspace.shared().open(uiCreatorWebsite)
+        NSWorkspace.shared.open(uiCreatorWebsite)
     }
     
     @IBAction func openDesignContributorWebsite(_ sender: Any) {
         guard let designContributorWebsite = designContributorWebsite else { return }
         
-        NSWorkspace.shared().open(designContributorWebsite)
+        NSWorkspace.shared.open(designContributorWebsite)
     }
     
     @IBAction func openMainDeveloperWebsite(_ sender: Any) {
         guard let mainDeveloperWebsite = mainDeveloperWebsite else { return }
         
-        NSWorkspace.shared().open(mainDeveloperWebsite)
+        NSWorkspace.shared.open(mainDeveloperWebsite)
+    }
+    
+    @IBAction func openRepositoryWebsite(_ sender: Any) {
+        guard let repositoryWebsite = repositoryWebsite else { return }
+        
+        NSWorkspace.shared.open(repositoryWebsite)
     }
     
     override func showWindow(_ sender: Any?) {
@@ -161,8 +183,8 @@ final class AboutWindowController: NSWindowController {
     
     func closeAnimated() {
         NSAnimationContext.beginGrouping()
-        NSAnimationContext.current().duration = 0.4
-        NSAnimationContext.current().completionHandler = {
+        NSAnimationContext.current.duration = 0.4
+        NSAnimationContext.current.completionHandler = {
             self.close()
         }
         window?.animator().alphaValue = 0.0

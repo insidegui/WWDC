@@ -13,7 +13,7 @@ public enum APIError: Error {
     case http(Error)
     case adapter
     case unknown
-    
+
     public var localizedDescription: String {
         switch self {
         case .http(let error):
@@ -27,13 +27,13 @@ public enum APIError: Error {
 }
 
 extension Resource {
-    
+
     var error: APIError {
-        if let underlyingError = self.latestError {
+        if let underlyingError = latestError {
             return .http(underlyingError)
         } else {
             return .unknown
         }
     }
-    
+
 }

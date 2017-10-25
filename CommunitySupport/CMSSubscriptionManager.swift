@@ -10,9 +10,9 @@ import Foundation
 import CloudKit
 
 internal final class CMSSubscriptionManager {
-    
+
     private let defaults = UserDefaults.standard
-    
+
     var profileSubscriptionCreated: Bool {
         get {
             return defaults.bool(forKey: #function)
@@ -21,5 +21,5 @@ internal final class CMSSubscriptionManager {
             defaults.set(newValue, forKey: #function)
         }
     }
-    
+
 }

@@ -15,48 +15,82 @@ enum SessionRowKind {
 }
 
 final class SessionRow: NSObject {
-    
+
     let kind: SessionRowKind
-    
+
+    var _diffIdentifier: NSObjectProtocol
+
     init(viewModel: SessionViewModel) {
-        self.kind = .session(viewModel)
-        
+        kind = .session(viewModel)
+        _diffIdentifier = viewModel.diffIdentifier()
+
         super.init()
     }
-    
+
     init(title: String) {
-        self.kind = .sectionHeader(title)
+        kind = .sectionHeader(title)
+        _diffIdentifier = title as NSObjectProtocol
     }
-    
+
     convenience init(date: Date, showTimeZone: Bool = false) {
         let title = SessionViewModel.standardFormatted(date: date, withTimeZoneName: showTimeZone)
-        
+
         self.init(title: title)
     }
-    
+
+    override var debugDescription: String {
+        switch kind {
+        case .sectionHeader(let title):
+            return "Header: " + title
+        case .session(let viewModel):
+            return "Session: " + viewModel.identifier + " " + viewModel.title
+        }
+    }
+
+    // `hashValue` and `isEqual` both need to be provided to
+    // work correctly in sequences
+    override var hashValue: Int {
+        return diffIdentifier().hash
+    }
+
+    override func isEqual(_ object: Any?) -> Bool {
+        if let diffable = object as? IGListDiffable {
+            return diffIdentifier().isEqual(diffable.diffIdentifier())
+        } else {
+            return false
+        }
+    }
 }
 
 extension SessionRow: IGListDiffable {
-    
+
     func diffIdentifier() -> NSObjectProtocol {
-        switch self.kind {
-        case .sectionHeader(let title):
-            return title as NSObjectProtocol
-        case .session(let viewModel):
-            return viewModel.diffIdentifier()
-        }
+        return _diffIdentifier
     }
-    
+
     func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
         guard let other = object as? SessionRow else { return false }
-        
-        if case .session(let otherViewModel) = other.kind, case .session(let viewModel) = self.kind {
+
+        if case .session(let otherViewModel) = other.kind, case .session(let viewModel) = kind {
             return otherViewModel.isEqual(toDiffableObject: viewModel)
-        } else if case .sectionHeader(let otherTitle) = other.kind, case .sectionHeader(let title) = self.kind {
+        } else if case .sectionHeader(let otherTitle) = other.kind, case .sectionHeader(let title) = kind {
             return otherTitle == title
         } else {
             return false
         }
     }
-    
+}
+
+struct IndexedSessionRow: Hashable {
+
+    let sessionRow: SessionRow
+    let index: Int
+
+    var hashValue: Int {
+        return sessionRow.hashValue
+    }
+
+    static func ==(lhs: IndexedSessionRow, rhs: IndexedSessionRow) -> Bool {
+        return lhs.sessionRow == rhs.sessionRow
+    }
 }

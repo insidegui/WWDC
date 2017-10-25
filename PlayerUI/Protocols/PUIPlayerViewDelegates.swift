@@ -9,16 +9,16 @@
 import Cocoa
 
 public protocol PUIPlayerViewDelegate: class {
-    
+
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView)
-    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView)
+    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, isReturningFromPiP: Bool)
     func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, at timestamp: Double)
     func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView)
-    
+
 }
 
 public protocol PUIPlayerViewAppearanceDelegate: class {
-    
+
     func playerViewShouldShowTimelineView(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowSubtitlesControl(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowPictureInPictureControl(_ playerView: PUIPlayerView) -> Bool
@@ -29,5 +29,5 @@ public protocol PUIPlayerViewAppearanceDelegate: class {
     func playerViewShouldShowExternalPlaybackControls(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool
     func PlayerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool
-    
+
 }

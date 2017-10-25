@@ -11,7 +11,7 @@ import RxSwift
 
 protocol OptionalType {
     associatedtype Wrapped
-    
+
     var optional: Wrapped? { get }
 }
 

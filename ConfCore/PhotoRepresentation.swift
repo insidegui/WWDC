@@ -27,10 +27,10 @@ public enum PhotoRepresentationSize: Int {
 public class PhotoRepresentation: Object {
 
     /// The path for the photo
-    public dynamic var remotePath = ""
+    @objc public dynamic var remotePath = ""
     
     /// The width of the photo
-    public dynamic var width = 0
+    @objc public dynamic var width = 0
     
     /// The photo object this representation is associated with
     public let photo = LinkingObjects(fromType: Photo.self, property: "representations")

@@ -10,17 +10,17 @@ import Cocoa
 import CloudKit
 
 public struct CMSUserProfile {
-    
+
     public static let recordType = "Users"
-    
+
     public var originatingRecord: CKRecord?
     public var avatarFileURL: URL?
-    
+
     public let identifier: String
     public var name: String
     public var avatar: NSImage?
     public let isAdmin: Bool
-    
+
     public static var empty: CMSUserProfile {
         return CMSUserProfile(originatingRecord: nil,
                               avatarFileURL: nil,
@@ -29,22 +29,22 @@ public struct CMSUserProfile {
                               avatar: nil,
                               isAdmin: false)
     }
-    
+
 }
 
 extension CMSUserProfile: Equatable {
-    
+
     var isEmpty: Bool {
         return identifier.isEmpty
     }
-    
+
     public static func ==(lhs: CMSUserProfile, rhs: CMSUserProfile) -> Bool {
         return lhs.identifier == rhs.identifier
             && lhs.avatarFileURL == rhs.avatarFileURL
             && lhs.name == rhs.name
             && lhs.isAdmin == rhs.isAdmin
     }
-    
+
 }
 
 enum CMSUserProfileKey: String {
@@ -54,7 +54,7 @@ enum CMSUserProfileKey: String {
 }
 
 extension CKRecord {
-    
+
     subscript(key: CMSUserProfileKey) -> Any? {
         get {
             return self[key.rawValue]
@@ -63,47 +63,40 @@ extension CKRecord {
             self[key.rawValue] = newValue as? CKRecordValue
         }
     }
-    
+
 }
 
 extension CMSUserProfile: CMSCloudKitRepresentable {
-    
+
     public init(record: CKRecord) throws {
-        let name = record[.name] as? String ?? ""
-        
-        var avatarImage: NSImage?
-        var avatarFileURL: URL?
-        
-        if let avatar = record[.avatar] as? CKAsset {
-            avatarFileURL = avatar.fileURL
-            avatarImage = NSImage(contentsOf: avatar.fileURL)
+        if let avatarAsset = record[.avatar] as? CKAsset {
+            avatarFileURL = avatarAsset.fileURL
+            avatar = NSImage(contentsOf: avatarAsset.fileURL)
         }
-        
+
         let adminFlag = (record[.isAdmin] as? Int == 1)
-        
-        self.originatingRecord = record
-        self.identifier = record.recordID.recordName
-        self.name = name
-        self.isAdmin = adminFlag
-        self.avatarFileURL = avatarFileURL
-        self.avatar = avatarImage
+
+        originatingRecord = record
+        identifier = record.recordID.recordName
+        name = record[.name] as? String ?? ""
+        isAdmin = adminFlag
     }
-    
+
     public func makeRecord() throws -> CKRecord {
-        guard let record = self.originatingRecord else {
+        guard let record = originatingRecord else {
             throw CMSCloudKitError.invalidData("User record must have a preexisting record")
         }
-        
+
         record[.name] = name
         record[.isAdmin] = isAdmin ? 1 : 0
-        
-        if let avatarUrl = self.avatarFileURL, avatarUrl.isFileURL {
+
+        if let avatarUrl = avatarFileURL, avatarUrl.isFileURL {
             record[.avatar] = CKAsset(fileURL: avatarUrl)
         } else {
             record[.avatar] = nil
         }
-        
+
         return record
     }
-    
+
 }

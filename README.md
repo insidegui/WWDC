@@ -22,6 +22,12 @@ Watch this year's videos as they're released and access videos from previous yea
 - Fullscreen and native picture-in-picture support
 - Navigate video contents easily with the help of transcripts
 
+## ChromeCast
+
+You can watch WWDC videos (both live and on-demand) on your ChromeCast. Just click the ChromeCast button while playing a video, choose your device from the list and control playback using the Google Home app on your phone.
+
+![chromecast](./screenshots/v5/ChromeCast.png)
+
 ## Bookmarks
 
 Have you ever found yourself watching a WWDC session and wishing you could take notes at a specific point in the video to refer back to later on? This is now possible with bookmarks.
@@ -37,10 +43,6 @@ You can easily share links to sessions or videos by using the share button. The 
 ## *COMING SOON:* Syncing and bookmark sharing
 
 With the latest version of the app you can already begin creating an account (if you have iCloud set up on your device). In future versions, your account will be used to sync your favorites and bookmarks across your Macs and to share your bookmarks with other users of the app.
-
-## *COMING SOON:* AirPlay and ChromeCast support
-
-In a future update, AirPlay and ChromeCast support will be added so you can stream session videos to your AirPlay ® or GoogleCast ® enabled devices.
 
 ## Nerdy bits 🤓
 
@@ -64,6 +66,8 @@ A number of third-party libraries are used by the app:
 - **CommunitySupport** manages your account information with iCloud and will be used for the bookmark sharing functionality in the future
 
 ## Building the app
+
+**Building requires Xcode 9 or later.**
 
 Building the app requires [Carthage](https://github.com/Carthage/Carthage) to be installed.
 

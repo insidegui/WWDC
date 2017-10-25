@@ -29,17 +29,17 @@ class WWDCTextButton: NSButton {
     private func configure() {
         isBordered = false
         
-        if state == NSOnState {
-            let attrs: [String: Any] = [
-                NSFontAttributeName: NSFont.systemFont(ofSize: 16, weight: NSFontWeightMedium),
-                NSForegroundColorAttributeName: NSColor.primary
+        if state == .on {
+            let attrs: [NSAttributedStringKey: Any] = [
+                .font: NSFont.systemFont(ofSize: 16, weight: NSFont.Weight.medium),
+                .foregroundColor: NSColor.primary
             ]
             
             attributedTitle = NSAttributedString(string: title, attributes: attrs)
         } else {
-            let attrs: [String: Any] = [
-                NSFontAttributeName: NSFont.systemFont(ofSize: 16),
-                NSForegroundColorAttributeName: NSColor.tertiaryText
+            let attrs: [NSAttributedStringKey: Any] = [
+                .font: NSFont.systemFont(ofSize: 16),
+                .foregroundColor: NSColor.tertiaryText
             ]
             
             attributedTitle = NSAttributedString(string: title, attributes: attrs)
@@ -50,7 +50,7 @@ class WWDCTextButton: NSButton {
         cell?.backgroundStyle = .dark
     }
     
-    override var state: Int {
+    override var state: NSControl.StateValue {
         didSet {
             configure()
         }

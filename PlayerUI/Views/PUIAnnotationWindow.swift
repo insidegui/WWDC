@@ -13,5 +13,5 @@ class PUIAnnotationWindow: NSWindow {
     override var canBecomeKey: Bool {
         return true
     }
-    
+
 }

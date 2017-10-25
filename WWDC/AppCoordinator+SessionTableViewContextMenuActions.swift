@@ -21,7 +21,9 @@ extension AppCoordinator: SessionsTableViewControllerDelegate  {
                 if let instance = session.instances.first {
                     guard !instance.isCurrentlyLive else { return }
                     
-                    guard instance.type == .session || instance.type == .video else { return }
+                    guard session.asset(of: .streamingVideo) != nil else {
+                        return
+                    }
                 }
                 
                 session.setCurrentPosition(1, 1)
@@ -63,13 +65,13 @@ extension AppCoordinator: SessionsTableViewControllerDelegate  {
                 case no = 1000
             }
             
-            guard let choice = Choice(rawValue: alert.runModal()) else { return }
+            guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
             
             guard case .yes = choice else { return }
         }
-        
+
         viewModels.forEach { viewModel in
-            guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
+            guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
             
             DownloadManager.shared.download(videoAsset)
         }
@@ -77,7 +79,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate  {
     
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel]) {
         viewModels.forEach { viewModel in
-            guard let videoAsset = viewModel.session.assets.filter({ $0.assetType == .hdVideo }).first else { return }
+            guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
             
             guard DownloadManager.shared.isDownloading(videoAsset.remoteURL) else { return }
                 
@@ -89,7 +91,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate  {
         guard let firstSession = viewModels.first?.session else { return }
         guard let localURL = DownloadManager.shared.localFileURL(for: firstSession) else { return }
         
-        NSWorkspace.shared().selectFile(localURL.path, inFileViewerRootedAtPath: localURL.deletingLastPathComponent().path)
+        NSWorkspace.shared.selectFile(localURL.path, inFileViewerRootedAtPath: localURL.deletingLastPathComponent().path)
     }
     
 }

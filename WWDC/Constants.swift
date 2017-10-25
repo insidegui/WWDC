@@ -10,8 +10,8 @@ import Foundation
 
 struct Constants {
     
-    static let coreSchemaVersion: UInt64 = 34
-  
+    static let coreSchemaVersion: UInt64 = 36
+    
     static let thumbnailHeight: CGFloat = 150
     
     static let autorefreshInterval: TimeInterval = 5 * 60

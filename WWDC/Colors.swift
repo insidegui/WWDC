@@ -8,7 +8,7 @@
 
 import Cocoa
 
-extension NSColor {
+@objc extension NSColor {
     
     static var listBackground: NSColor {
         return NSColor(calibratedRed:0.13, green:0.13, blue:0.13, alpha:1.00)

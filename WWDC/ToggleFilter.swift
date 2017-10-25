@@ -9,20 +9,27 @@
 import Foundation
 
 struct ToggleFilter: FilterType {
-    
+
     var identifier: String
     var isOn: Bool
-    
+
     var customPredicate: NSPredicate?
-    
+
     var isEmpty: Bool {
         return !isOn
     }
-    
+
     var predicate: NSPredicate? {
         guard isOn else { return nil }
-        
+
         return customPredicate
     }
-    
+
+    func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
+        var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
+
+        dictionary["isOn"] = isOn
+
+        return dictionary
+    }
 }

@@ -11,10 +11,10 @@ import Cocoa
 extension NSAttributedString {
     
     static func attributedBoldTitle(with string: String) -> NSAttributedString {
-        let attrs: [String: Any] = [
-            NSFontAttributeName: NSFont.boldSystemFont(ofSize: 24),
-            NSForegroundColorAttributeName: NSColor.white,
-            NSKernAttributeName: -0.5
+        let attrs: [NSAttributedStringKey: Any] = [
+            .font: NSFont.boldSystemFont(ofSize: 24),
+            .foregroundColor: NSColor.white,
+            .kern: -0.5
         ]
         
         return NSAttributedString(string: string, attributes: attrs)

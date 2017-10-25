@@ -9,16 +9,16 @@
 import Cocoa
 
 final class PathUtil {
-    
+
     static var appSupportPath: String {
         guard let identifier = Bundle.main.bundleIdentifier else {
             fatalError("Bundle identifier is nil, this should never happen")
         }
-        
+
         let dir = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first!
         let path = dir + "/\(identifier)"
-        
+
         return path
     }
-    
+
 }

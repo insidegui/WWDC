@@ -11,7 +11,7 @@ import Cocoa
 class GeneralPreferencesViewController: NSViewController {
     
     static func loadFromStoryboard() -> GeneralPreferencesViewController {
-        let vc = NSStoryboard(name: "Preferences", bundle: nil).instantiateController(withIdentifier: "GeneralPreferencesViewController")
+        let vc = NSStoryboard(name: NSStoryboard.Name(rawValue: "Preferences"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "GeneralPreferencesViewController"))
         
         return vc as! GeneralPreferencesViewController
     }
@@ -80,7 +80,7 @@ class GeneralPreferencesViewController: NSViewController {
     
     @IBAction func revealDownloadsFolderInFinder(_ sender: NSButton) {
         let url = Preferences.shared.localVideoStorageURL
-        NSWorkspace.shared().selectFile(nil, inFileViewerRootedAtPath: url.path)
+        NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: url.path)
     }
     
     @IBAction func selectDownloadsFolder(_ sender: NSButton) {

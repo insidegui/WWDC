@@ -10,19 +10,18 @@ import Foundation
 import SwiftyJSON
 
 final class FocusesJSONAdapter: Adapter {
-    
+
     typealias InputType = JSON
     typealias OutputType = Focus
-    
+
     func adapt(_ input: JSON) -> Result<Focus, AdapterError> {
         guard let name = input.string else {
             return .error(.invalidData)
         }
-        
+
         let focus = Focus()
         focus.name = name
-        
+
         return .success(focus)
     }
-    
 }

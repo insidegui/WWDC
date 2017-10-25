@@ -11,7 +11,7 @@ import Cocoa
 class WWDCTableView: NSTableView {
 
     private var selectedRowIndexesBeforeReload: IndexSet = IndexSet([])
-    
+
     func reloadPreservingSelection() {
         selectedRowIndexesBeforeReload = selectedRowIndexes
         reloadData()
@@ -19,7 +19,6 @@ class WWDCTableView: NSTableView {
     }
     
     override var effectiveAppearance: NSAppearance {
-        return NSAppearance(named: NSAppearanceNameVibrantDark)!
+        return NSAppearance(named: NSAppearance.Name.vibrantDark)!
     }
-    
 }

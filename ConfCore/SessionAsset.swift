@@ -22,7 +22,7 @@ public enum SessionAssetType: String {
 
 /// Session assets are resources associated with sessions, like videos, PDFs and useful links
 public class SessionAsset: Object {
-    
+
     /// The type of asset:
     ///
     /// - WWDCSessionAssetTypeHDVideo
@@ -31,14 +31,14 @@ public class SessionAsset: Object {
     /// - WWDCSessionAssetTypeSlidesPDF
     /// - WWDCSessionAssetTypeStreamingVideo
     /// - WWDCSessionAssetTypeWebpageURL
-    internal dynamic var rawAssetType = "" {
+    @objc internal dynamic var rawAssetType = "" {
         didSet {
-            self.identifier = generateIdentifier()
+            identifier = generateIdentifier()
         }
     }
-    
-    public dynamic var identifier = ""
-    
+
+    @objc public dynamic var identifier = ""
+
     public var assetType: SessionAssetType {
         get {
             return SessionAssetType(rawValue: rawAssetType) ?? .none
@@ -47,44 +47,44 @@ public class SessionAsset: Object {
             rawAssetType = newValue.rawValue
         }
     }
-    
+
     /// The year of the session this asset belongs to
-    public dynamic var year = 0 {
+    @objc public dynamic var year = 0 {
         didSet {
-            self.identifier = generateIdentifier()
+            identifier = generateIdentifier()
         }
     }
-    
+
     /// The id of the session this asset belongs to
-    public dynamic var sessionId = "" {
+    @objc public dynamic var sessionId = "" {
         didSet {
-            self.identifier = generateIdentifier()
+            identifier = generateIdentifier()
         }
     }
-    
+
     /// URL for this asset
-    public dynamic var remoteURL = ""
-    
+    @objc public dynamic var remoteURL = ""
+
     /// Relative local URL to save the asset to when downloading
-    public dynamic var relativeLocalURL = ""
-    
+    @objc public dynamic var relativeLocalURL = ""
+
     /// The session this asset belongs to
     public let session = LinkingObjects(fromType: Session.self, property: "assets")
-    
+
     public override class func primaryKey() -> String? {
         return "identifier"
     }
-    
+
     func merge(with other: SessionAsset, in realm: Realm) {
-        assert(other.remoteURL == self.remoteURL, "Can't merge two objects with different identifiers!")
-        
-        self.year = other.year
-        self.sessionId = other.sessionId
-        self.relativeLocalURL = other.relativeLocalURL
+        assert(other.remoteURL == remoteURL, "Can't merge two objects with different identifiers!")
+
+        year = other.year
+        sessionId = other.sessionId
+        relativeLocalURL = other.relativeLocalURL
     }
-    
+
     public func generateIdentifier() -> String {
-        return String(self.year) + "@" + self.sessionId + "~" + self.rawAssetType.replacingOccurrences(of: "WWDCSessionAssetType", with: "")
+        return String(year) + "@" + sessionId + "~" + rawAssetType.replacingOccurrences(of: "WWDCSessionAssetType", with: "")
     }
-    
+
 }

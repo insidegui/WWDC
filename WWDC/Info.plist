@@ -6,8 +6,6 @@
 	<string>en</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIconFile</key>
-	<string>app</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>5.1.2</string>
+	<string>5.3</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -38,7 +36,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>650</string>
+	<string>720</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -65,6 +63,10 @@
 	<string>https://twitter.com/_inside</string>
 	<key>GRBundleUserInterfaceCreatorWebsite</key>
 	<string>https://twitter.com/VicenteBorrell</string>
+	<key>GRBundleRepositoryName</key>
+	<string>insidegui/WWDC</string>
+	<key>GRBundleRepositoryWebsite</key>
+	<string>https://github.com/insidegui/WWDC</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSAppTransportSecurity</key>
