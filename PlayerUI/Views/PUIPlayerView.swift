@@ -863,70 +863,31 @@ public final class PUIPlayerView: NSView {
         seek(to: annotation)
     }
 
-    var playtimeWhenFirstClicked: CMTime?;
     @IBAction public func goBackInTime(_ sender: NSButton) {
-        guard let player = player else { return }
-
-        if playtimeWhenFirstClicked == nil {
-            playtimeWhenFirstClicked = player.currentTime()
-        }
-
-        player.pause()
-        let durationTime = player.currentItem?.duration
-        var modifier: CMTime?
-
-        switch sender.integerValue {
-        case 5:
-            modifier = CMTimeMakeWithSeconds(150, (durationTime?.timescale)!)
-            break;
-        case 4:
-            modifier = CMTimeMakeWithSeconds(60, (durationTime?.timescale)!)
-            break;
-        case 3:
-            modifier = CMTimeMakeWithSeconds(45, (durationTime?.timescale)!)
-            break;
-        case 2:
-            modifier = CMTimeMakeWithSeconds(30, (durationTime?.timescale)!)
-            break;
-        case 1:
-            modifier = CMTimeMakeWithSeconds(15, (durationTime?.timescale)!)
-        default:
-            player.play()
-            playtimeWhenFirstClicked = nil
-            return
-        }
-
-        guard modifier != nil else { return }
-
-        if (self.appearanceDelegate?.PlayerViewShouldShowBackAndForward30SecondsButtons(self))! {
-            CMTimeAdd(modifier!, modifier!)
-        }
-
-        if playtimeWhenFirstClicked != nil {
-            let targetTime = CMTimeSubtract(playtimeWhenFirstClicked!, modifier!)
-            guard targetTime.isValid && targetTime.isNumeric else { return }
-            if isPlayingExternally {
-                currentExternalPlaybackProvider?.seek(to: targetTime.seconds)
-            } else {
-                player.seek(to: targetTime)
-            }
-        }
+        skipPlaybackTime(by: sender.integerValue, using: CMTimeSubtract)
     }
 
     @IBAction public func goForwardInTime(_ sender: NSButton) {
+        skipPlaybackTime(by: sender.integerValue, using: CMTimeAdd)
+    }
+
+    var playtimeWhenFirstClicked: CMTime?
+    var playrateWhenFirstClicked: Float?
+    func skipPlaybackTime(by pressure: Int, using function: (CMTime, CMTime) -> CMTime) {
         guard let player = player else { return }
 
         if playtimeWhenFirstClicked == nil {
             playtimeWhenFirstClicked = player.currentTime()
+            playrateWhenFirstClicked = player.rate
         }
 
         player.pause()
         let durationTime = player.currentItem?.duration
         var modifier: CMTime?
 
-        switch sender.integerValue {
+        switch pressure {
         case 5:
-            modifier = CMTimeMakeWithSeconds(150, (durationTime?.timescale)!)
+            modifier = CMTimeMakeWithSeconds(90, (durationTime?.timescale)!)
             break;
         case 4:
             modifier = CMTimeMakeWithSeconds(60, (durationTime?.timescale)!)
@@ -940,15 +901,16 @@ public final class PUIPlayerView: NSView {
         case 1:
             modifier = CMTimeMakeWithSeconds(15, (durationTime?.timescale)!)
         default:
-            player.play()
+            player.rate = playrateWhenFirstClicked ?? 1
             playtimeWhenFirstClicked = nil
+            playrateWhenFirstClicked = nil
             return
         }
 
         guard modifier != nil else { return }
 
         if (self.appearanceDelegate?.PlayerViewShouldShowBackAndForward30SecondsButtons(self))! {
-            CMTimeAdd(modifier!, modifier!)
+            modifier = function(modifier!, modifier!)
         }
 
         if playtimeWhenFirstClicked != nil {
