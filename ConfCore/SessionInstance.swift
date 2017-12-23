@@ -94,6 +94,10 @@ public class SessionInstance: Object {
     /// Whether the live flag is being forced by an external source
     @objc public dynamic var isForcedLive = false
 
+    /// The EKEvent's eventIdentifier 
+    /// See https://developer.apple.com/reference/eventkit/ekevent/1507437-eventidentifier
+    @objc public dynamic var calendarEventIdentifier = ""
+
     public override static func primaryKey() -> String? {
         return "identifier"
     }
@@ -135,7 +139,8 @@ public class SessionInstance: Object {
         trackName = other.trackName
         trackIdentifier = other.trackIdentifier
         eventIdentifier = other.eventIdentifier
-
+        calendarEventIdentifier = other.calendarEventIdentifier
+        
         if let otherSession = other.session, let session = session {
             session.merge(with: otherSession, in: realm)
         }

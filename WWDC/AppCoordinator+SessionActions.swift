@@ -11,6 +11,7 @@ import RealmSwift
 import RxSwift
 import ConfCore
 import PlayerUI
+import EventKit
 
 extension AppCoordinator: SessionActionsViewControllerDelegate {
 
@@ -50,31 +51,101 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         DownloadManager.shared.download(videoAsset)
     }
 
-    func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {
+    func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {        
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
-
+        
         guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
-
+        
         let alert = WWDCAlert.create()
-
+        
         alert.messageText = "Remove downloaded video"
         alert.informativeText = "Are you sure you want to delete the downloaded video? This action can't be undone."
-
+        
         alert.addButton(withTitle: "No")
         alert.addButton(withTitle: "Yes")
-
+        
         enum Choice: Int {
             case yes = 1001
             case no = 1000
         }
-
+        
         guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
-
+        
         switch choice {
         case .yes:
             DownloadManager.shared.deleteDownload(for: videoAsset)
         case .no:
             break
+        }
+    }
+    
+    @objc func sessionActionsDidSelectCalendar(_ sender: NSView?) {
+        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        
+        let status = EKEventStore.authorizationStatus(for: .event)
+        let eventStore = EKEventStore()
+        
+        switch status {
+        case .notDetermined, .denied, .restricted:
+            eventStore.requestAccess(to: .event) { hasAccess, _ in
+                guard hasAccess else { return }
+                
+                DispatchQueue.main.async {
+                    self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
+                }
+            }
+        case .authorized:
+            self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
+        }
+    }
+    
+    private func saveCalendarEvent(viewModel: SessionViewModel, eventStore: EKEventStore)  {
+        let event = EKEvent(eventStore: eventStore)
+        
+        if let storedEvent = eventStore.event(withIdentifier: viewModel.sessionInstance.calendarEventIdentifier) {
+            let alert = WWDCAlert.create()
+            
+            alert.messageText = "You've already scheduled this session"
+            alert.informativeText = "Would you like to remove it from your calendar?"
+            
+            alert.addButton(withTitle: "Remove")
+            alert.addButton(withTitle: "Cancel")
+            alert.window.center()
+            
+            enum Choice: NSApplication.ModalResponse.RawValue {
+                case removeCalender = 1000
+                case cancel = 1001
+            }
+            
+            guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
+            
+            switch choice {
+            case .removeCalender:
+                do {
+                    try eventStore.remove(storedEvent, span: .thisEvent, commit: true)
+                } catch let error as NSError {
+                    print("Failed to remove event from calender due to error: \(error)")
+                }
+            default:
+                break
+            }
+            
+            return
+        }
+        
+        event.startDate = viewModel.sessionInstance.startTime
+        event.endDate = viewModel.sessionInstance.endTime
+        event.title = viewModel.session.title
+        event.location = viewModel.sessionInstance.roomName
+        event.url = viewModel.webUrl
+        event.calendar = eventStore.defaultCalendarForNewEvents
+        
+        storage.modify(viewModel.sessionInstance) { $0.calendarEventIdentifier = event.eventIdentifier }
+        
+        do {
+            try eventStore.save(event, span: .thisEvent, commit: true)
+        } catch let error as NSError {
+            print("Failed to add event to calender due to error: \(error)")
         }
     }
 

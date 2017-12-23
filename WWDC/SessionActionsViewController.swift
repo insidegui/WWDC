@@ -17,6 +17,7 @@ protocol SessionActionsViewControllerDelegate: class {
     func sessionActionsDidSelectSlides(_ sender: NSView?)
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
     func sessionActionsDidSelectDownload(_ sender: NSView?)
+    func sessionActionsDidSelectCalendar(_ sender: NSView?)
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?)
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?)
     func sessionActionsDidSelectShare(_ sender: NSView?)
@@ -78,7 +79,19 @@ class SessionActionsViewController: NSViewController {
 
         return b
     }()
-
+    
+    private lazy var calendarButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = #imageLiteral(resourceName: "calendar")
+        b.target = self
+        b.action = #selector(addCalendar(_:))
+        b.shouldAlwaysDrawHighlighted = true
+        b.toolTip = "Add to Calendar"
+        
+        return b
+    }()
+    
     private lazy var downloadIndicator: NSProgressIndicator = {
         let pi = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: 24, height: 24))
 
@@ -116,7 +129,8 @@ class SessionActionsViewController: NSViewController {
             self.favoriteButton,
             self.downloadButton,
             self.downloadIndicator,
-            self.shareButton
+            self.shareButton,
+            self.calendarButton
             ])
 
         v.orientation = .horizontal
@@ -147,7 +161,8 @@ class SessionActionsViewController: NSViewController {
         guard let viewModel = viewModel else { return }
 
         slidesButton.isHidden = (viewModel.session.asset(of: .slides) == nil)
-
+        calendarButton.isHidden = (viewModel.sessionInstance.startTime < Date()) 
+        
         viewModel.rxIsFavorite.subscribe(onNext: { [weak self] isFavorite in
             self?.favoriteButton.state = isFavorite ? .on : .off
 
@@ -214,7 +229,11 @@ class SessionActionsViewController: NSViewController {
 
         delegate?.sessionActionsDidSelectDownload(sender)
     }
-
+    
+    @IBAction func addCalendar(_ sender: NSView?) {
+        delegate?.sessionActionsDidSelectCalendar(sender)
+    }
+    
     @IBAction func deleteDownload(_ sender: NSView?) {
         delegate?.sessionActionsDidSelectDeleteDownload(sender)
     }
