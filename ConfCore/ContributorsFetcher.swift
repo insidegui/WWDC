@@ -113,7 +113,7 @@ private struct GitHubPagination {
                 return nil
             }
 
-            let urlRange = NSRange(location: 0, length: section[0].characters.count)
+            let urlRange = NSRange(location: 0, length: section[0].count)
             var urlString = GitHubPagination.urlRegex.stringByReplacingMatches(in: section[0],
                                                                                range: urlRange,
                                                                                withTemplate: "$1")
@@ -123,7 +123,7 @@ private struct GitHubPagination {
                 return nil
             }
 
-            let typeRange = NSRange(location: 0, length: section[1].characters.count)
+            let typeRange = NSRange(location: 0, length: section[1].count)
             var type = GitHubPagination.typeRegex.stringByReplacingMatches(in: section[1],
                                                                            range: typeRange,
                                                                            withTemplate: "$1")

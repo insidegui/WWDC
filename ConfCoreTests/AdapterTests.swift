@@ -365,7 +365,7 @@ class AdapterTests: XCTestCase {
             XCTFail(error.localizedDescription)
         case .success(let transcript):
             XCTAssertEqual(transcript.identifier, "2014-101")
-            XCTAssertEqual(transcript.fullText.characters.count, 92023)
+            XCTAssertEqual(transcript.fullText.count, 92023)
             XCTAssertEqual(transcript.annotations.count, 2219)
             XCTAssertEqual(transcript.annotations.first!.timecode, 0.506)
             XCTAssertEqual(transcript.annotations.first!.body, "[ Silence ]")

@@ -28,7 +28,7 @@ struct TextualFilter: FilterType {
 
     var predicate: NSPredicate? {
         guard let value = value else { return nil }
-        guard value.characters.count > 2 else { return nil }
+        guard value.count > 2 else { return nil }
 
         if Int(value) != nil {
             return NSPredicate(format: "%K CONTAINS[cd] %@", #keyPath(Session.number), value)
