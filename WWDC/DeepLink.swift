@@ -39,7 +39,7 @@ struct DeepLink {
         let year: String
         let fullYear: String
 
-        if yearParameter.characters.count > 6 {
+        if yearParameter.count > 6 {
             year = String(yearParameter.suffix(4))
             fullYear = year
         } else {
