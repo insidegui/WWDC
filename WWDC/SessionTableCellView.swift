@@ -116,7 +116,7 @@ final class SessionTableCellView: NSTableCellView {
 
     private lazy var titleLabel: NSTextField = {
         let l = NSTextField(labelWithString: "")
-        l.font = .systemFont(ofSize: 14, weight: NSFont.Weight.medium)
+        l.font = .systemFont(ofSize: 14, weight: .medium)
         l.textColor = .primaryText
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byTruncatingTail

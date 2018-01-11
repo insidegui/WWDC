@@ -66,7 +66,7 @@ final class TabItemView: NSView {
                 imageView.tintColor = .toolbarTintActive
                 imageView.image = alternateImage ?? image
                 titleLabel.textColor = .toolbarTintActive
-                titleLabel.font = .systemFont(ofSize: 14, weight: NSFont.Weight.medium)
+                titleLabel.font = .systemFont(ofSize: 14, weight: .medium)
             } else {
                 imageView.tintColor = .toolbarTint
                 imageView.image = image

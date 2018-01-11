@@ -20,8 +20,8 @@ extension NSTableView {
         let diff = IGListDiff(oldValue, newValue, .equality)
 
         beginUpdates()
-        insertRows(at: diff.inserts, withAnimation: NSTableView.AnimationOptions.effectGap)
-        removeRows(at: diff.deletes, withAnimation: NSTableView.AnimationOptions.effectGap)
+        insertRows(at: diff.inserts, withAnimation: .effectGap)
+        removeRows(at: diff.deletes, withAnimation: .effectGap)
         reloadData(forRowIndexes: diff.updates, columnIndexes: IndexSet([0]))
         endUpdates()
     }

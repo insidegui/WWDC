@@ -20,7 +20,7 @@ final class ActionLabel: NSTextField {
         }
 
         cursorTrackingArea = NSTrackingArea(rect: bounds,
-                                            options: [NSTrackingArea.Options.cursorUpdate, NSTrackingArea.Options.inVisibleRect, NSTrackingArea.Options.activeInActiveApp],
+                                            options: [.cursorUpdate, .inVisibleRect, .activeInActiveApp],
                                             owner: self,
                                             userInfo: nil)
         addTrackingArea(cursorTrackingArea)

@@ -17,7 +17,7 @@ open class PUIPlayerWindow: NSWindow {
 
     public override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing bufferingType: NSWindow.BackingStoreType, defer flag: Bool) {
         var effectiveStyle = style
-        effectiveStyle.insert(NSWindow.StyleMask.fullSizeContentView)
+        effectiveStyle.insert(.fullSizeContentView)
 
         super.init(contentRect: contentRect, styleMask: effectiveStyle, backing: bufferingType, defer: flag)
 
@@ -33,13 +33,13 @@ open class PUIPlayerWindow: NSWindow {
     // MARK: - Custom appearance
 
     open override var effectiveAppearance: NSAppearance {
-        return NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        return NSAppearance(named: .vibrantDark)!
     }
 
     fileprivate var titlebarWidgets = Set<NSButton>()
 
     fileprivate func appearanceForWidgets() -> NSAppearance? {
-        return NSAppearance(named: NSAppearance.Name.aqua)
+        return NSAppearance(named: .aqua)
     }
 
     fileprivate func applyAppearanceToWidgets() {
@@ -203,7 +203,7 @@ open class PUIPlayerWindow: NSWindow {
         set {
             let darkContentView = PUIPlayerWindowContentView(frame: newValue?.frame ?? NSZeroRect)
             if let newContentView = newValue {
-                newContentView.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+                newContentView.autoresizingMask = [.width, .height]
                 darkContentView.addSubview(newContentView)
             }
             super.contentView = darkContentView
@@ -221,7 +221,7 @@ private class PUIPlayerWindowContentView: NSView {
 
     fileprivate func installOverlayView() {
         overlayView = PUIPlayerWindowOverlayView(frame: bounds)
-        overlayView!.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+        overlayView!.autoresizingMask = [.width, .height]
         addSubview(overlayView!, positioned: .above, relativeTo: subviews.last)
     }
 
@@ -264,7 +264,7 @@ private class PUIPlayerWindowOverlayView: NSView {
             removeTrackingArea(mouseTrackingArea)
         }
 
-        mouseTrackingArea = NSTrackingArea(rect: bounds, options: [NSTrackingArea.Options.inVisibleRect, NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.mouseMoved, NSTrackingArea.Options.activeAlways], owner: self, userInfo: nil)
+        mouseTrackingArea = NSTrackingArea(rect: bounds, options: [.inVisibleRect, .mouseEnteredAndExited, .mouseMoved, .activeAlways], owner: self, userInfo: nil)
         addTrackingArea(mouseTrackingArea)
     }
 

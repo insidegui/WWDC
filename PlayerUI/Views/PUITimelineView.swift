@@ -176,7 +176,7 @@ public final class PUITimelineView: NSView {
             removeTrackingArea(mouseTrackingArea)
         }
 
-        let options: NSTrackingArea.Options = [NSTrackingArea.Options.mouseEnteredAndExited, NSTrackingArea.Options.mouseMoved, NSTrackingArea.Options.activeInActiveApp]
+        let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .mouseMoved, .activeInActiveApp]
         let trackingBounds = bounds.insetBy(dx: -2.5, dy: -7)
         mouseTrackingArea = NSTrackingArea(rect: trackingBounds, options: options, owner: self, userInfo: nil)
 
@@ -236,7 +236,7 @@ public final class PUITimelineView: NSView {
 
         var startedInteractiveSeek = false
 
-        window?.trackEvents(matching: [NSEvent.EventTypeMask.pressure, NSEvent.EventTypeMask.leftMouseUp, NSEvent.EventTypeMask.leftMouseDragged, NSEvent.EventTypeMask.tabletPoint], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { e, stop in
+        window?.trackEvents(matching: [.pressure, .leftMouseUp, .leftMouseDragged, .tabletPoint], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { e, stop in
             let point = self.convert((e?.locationInWindow)!, from: nil)
             let progress = Double(point.x / self.bounds.width)
 
@@ -280,7 +280,7 @@ public final class PUITimelineView: NSView {
             }
         }
 
-        NSApp.discardEvents(matching: NSEvent.EventTypeMask.leftMouseDown, before: nil)
+        NSApp.discardEvents(matching: .leftMouseDown, before: nil)
     }
 
     private func reactToMouse() {
@@ -358,7 +358,7 @@ public final class PUITimelineView: NSView {
         pStyle.alignment = .center
 
         let timeTextAttributes: [NSAttributedStringKey: Any] = [
-            .font: NSFont.systemFont(ofSize: 14, weight: NSFont.Weight.medium),
+            .font: NSFont.systemFont(ofSize: 14, weight: .medium),
             .foregroundColor: NSColor.playerHighlight,
             .paragraphStyle: pStyle
         ]
@@ -552,7 +552,7 @@ public final class PUITimelineView: NSView {
             layer.attachedLayer.string = str
         }
 
-        window?.trackEvents(matching: [NSEvent.EventTypeMask.leftMouseUp, NSEvent.EventTypeMask.leftMouseDragged, NSEvent.EventTypeMask.keyUp], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { event, stop in
+        window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged, .keyUp], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { event, stop in
             let point = self.convert((event?.locationInWindow)!, from: nil)
 
             switch event?.type {
@@ -661,7 +661,7 @@ public final class PUITimelineView: NSView {
         guard let contentView = annotationWindowController?.window?.contentView else { return }
 
         controller.view.frame = contentView.bounds
-        controller.view.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+        controller.view.autoresizingMask = [.width, .height]
         contentView.addSubview(controller.view)
 
         let layerRect = convertFromLayer(annotationLayer.frame)
@@ -689,12 +689,12 @@ public final class PUITimelineView: NSView {
             case enter = 36
         }
 
-        annotationCommandsMonitor = NSEvent.addLocalMonitorForEvents(matching: [NSEvent.EventTypeMask.keyUp]) { event in
+        annotationCommandsMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyUp) { event in
             guard let command = AnnotationKeyCommand(rawValue: event.keyCode) else { return event }
 
             switch command {
             case .enter:
-                if event.modifierFlags.contains(NSEvent.ModifierFlags.command) {
+                if event.modifierFlags.contains(.command) {
                     fallthrough
                 }
             case .escape:

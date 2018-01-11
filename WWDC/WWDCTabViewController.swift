@@ -50,7 +50,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        transitionOptions = [NSViewController.TransitionOptions.allowUserInteraction]
+        transitionOptions = .allowUserInteraction
 
         tabStyle = .toolbar
         view.wantsLayer = true
@@ -73,8 +73,8 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
         isConfigured = true
 
-        toolbar.insertItem(withItemIdentifier: NSToolbarItem.Identifier.flexibleSpace, at: 0)
-        toolbar.insertItem(withItemIdentifier: NSToolbarItem.Identifier.flexibleSpace, at: toolbar.items.count)
+        toolbar.insertItem(withItemIdentifier: .flexibleSpace, at: 0)
+        toolbar.insertItem(withItemIdentifier: .flexibleSpace, at: toolbar.items.count)
 
         addObserver(self, forKeyPath: #keyPath(selectedTabViewItemIndex), options: [.initial, .new], context: nil)
 

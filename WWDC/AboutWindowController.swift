@@ -37,15 +37,15 @@ final class AboutWindowController: NSWindowController {
         super.windowDidLoad()
         
         // close the window when the escape key is pressed
-        NSEvent.addLocalMonitorForEvents(matching: NSEvent.EventTypeMask.keyDown) { event in
+        NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
             guard event.keyCode == 53 else { return event }
             
             self.closeAnimated()
             
             return nil
         }
-        
-        window?.collectionBehavior = [NSWindow.CollectionBehavior.transient, NSWindow.CollectionBehavior.ignoresCycle]
+
+        window?.collectionBehavior = [.transient, .ignoresCycle]
         window?.isMovableByWindowBackground = true
         window?.titlebarAppearsTransparent = true
         window?.titleVisibility = .hidden

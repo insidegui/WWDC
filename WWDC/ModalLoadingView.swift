@@ -63,7 +63,7 @@ class ModalLoadingView: NSView {
 
     func show(in view: NSView) {
         alphaValue = 0
-        autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+        autoresizingMask = [.width, .height]
         spinner.startAnimation(nil)
 
         view.addSubview(self)

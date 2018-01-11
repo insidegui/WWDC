@@ -70,7 +70,7 @@ final class BookmarkViewController: NSViewController {
         v.backgroundColor = .clear
         v.font = .systemFont(ofSize: 12)
         v.textColor = .secondaryText
-        v.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+        v.autoresizingMask = [.width, .height]
 
         return v
     }()

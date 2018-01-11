@@ -348,9 +348,9 @@ class SessionsTableViewController: NSViewController {
         v.backgroundColor = .listBackground
         v.headerView = nil
         v.rowHeight = Metrics.sessionRowHeight
-        v.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+        v.autoresizingMask = [.width, .height]
         v.floatsGroupRows = true
-        v.gridStyleMask = NSTableView.GridLineStyle.solidHorizontalGridLineMask
+        v.gridStyleMask = .solidHorizontalGridLineMask
         v.gridColor = .darkGridColor
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))

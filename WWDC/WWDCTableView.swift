@@ -19,6 +19,6 @@ class WWDCTableView: NSTableView {
     }
     
     override var effectiveAppearance: NSAppearance {
-        return NSAppearance(named: NSAppearance.Name.vibrantDark)!
+        return NSAppearance(named: .vibrantDark)!
     }
 }
