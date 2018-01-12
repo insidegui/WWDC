@@ -31,7 +31,7 @@ class WWDCTextButton: NSButton {
         
         if state == .on {
             let attrs: [NSAttributedStringKey: Any] = [
-                .font: NSFont.systemFont(ofSize: 16, weight: NSFont.Weight.medium),
+                .font: NSFont.systemFont(ofSize: 16, weight: .medium),
                 .foregroundColor: NSColor.primary
             ]
             

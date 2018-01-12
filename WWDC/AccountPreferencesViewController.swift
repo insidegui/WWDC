@@ -61,7 +61,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
     private lazy var nameLabel: NSTextField = {
         let f = NSTextField(labelWithString: "")
 
-        f.font = .systemFont(ofSize: 18, weight: NSFont.Weight.medium)
+        f.font = .systemFont(ofSize: 18, weight: .medium)
         f.textColor = .prefsPrimaryText
         f.translatesAutoresizingMaskIntoConstraints = false
         f.alignment = .center
@@ -74,7 +74,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
 
         let f = WWDCTextField(wrappingLabelWithString: help)
 
-        f.font = .systemFont(ofSize: 14, weight: NSFont.Weight.regular)
+        f.font = .systemFont(ofSize: 14, weight: .regular)
         f.textColor = .prefsSecondaryText
         f.cell?.backgroundStyle = .dark
         f.maximumNumberOfLines = 5
@@ -91,7 +91,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
         let f = WWDCTextField(wrappingLabelWithString: help)
 
         f.isSelectable = false
-        f.font = .systemFont(ofSize: 14, weight: NSFont.Weight.medium)
+        f.font = .systemFont(ofSize: 14, weight: .medium)
         f.textColor = .prefsPrimaryText
         f.cell?.backgroundStyle = .dark
         f.maximumNumberOfLines = 5
@@ -106,7 +106,7 @@ class AccountPreferencesViewController: NSViewController, WWDCImageViewDelegate 
 
         let f = NSTextField(wrappingLabelWithString: help)
 
-        f.font = .systemFont(ofSize: 14, weight: NSFont.Weight.regular)
+        f.font = .systemFont(ofSize: 14, weight: .regular)
         f.textColor = .errorText
         f.cell?.backgroundStyle = .dark
         f.maximumNumberOfLines = 5

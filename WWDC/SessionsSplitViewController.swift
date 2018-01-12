@@ -46,9 +46,9 @@ final class SessionsSplitViewController: NSSplitViewController {
         addSplitViewItem(listItem)
         addSplitViewItem(detailItem)
 
-        listViewController.view.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
-        detailViewController.view.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
-        detailViewController.view.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
+        listViewController.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        detailViewController.view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        detailViewController.view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
 
     override func viewDidAppear() {

@@ -43,7 +43,7 @@ class TranscriptTableViewController: NSViewController {
         v.backgroundColor = .clear
         v.headerView = nil
         v.rowHeight = 36
-        v.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+        v.autoresizingMask = [.width, .height]
         v.floatsGroupRows = true
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "transcript"))
@@ -76,7 +76,7 @@ class TranscriptTableViewController: NSViewController {
         tableView.frame = view.bounds
 
         view.heightAnchor.constraint(equalToConstant: 180).isActive = true
-        view.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultLow, for: .vertical)
+        view.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
 
         view.addSubview(scrollView)
 

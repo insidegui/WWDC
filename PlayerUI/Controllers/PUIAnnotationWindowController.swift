@@ -16,7 +16,7 @@ class PUIAnnotationWindowController: NSWindowController {
     }
 
     init() {
-        let window = PUIAnnotationWindow(contentRect: Metrics.defaultRect, styleMask: [NSWindow.StyleMask.borderless], backing: .buffered, defer: false)
+        let window = PUIAnnotationWindow(contentRect: Metrics.defaultRect, styleMask: .borderless, backing: .buffered, defer: false)
 
         super.init(window: window)
 
@@ -33,7 +33,7 @@ class PUIAnnotationWindowController: NSWindowController {
         v.state = .active
         v.blendingMode = .behindWindow
         v.material = .dark
-        v.appearance = NSAppearance(named: NSAppearance.Name.vibrantDark)
+        v.appearance = NSAppearance(named: .vibrantDark)
         v.maskImage = self.maskImage(with: Metrics.cornerRadius)
 
         return v

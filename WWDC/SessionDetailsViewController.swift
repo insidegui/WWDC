@@ -129,8 +129,8 @@ class SessionDetailsViewController: NSViewController {
         let v = SessionDetailsTabContainer()
 
         v.wantsLayer = true
-        v.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .horizontal)
-        v.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultLow, for: .vertical)
+        v.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        v.setContentHuggingPriority(.defaultLow, for: .vertical)
 
         return v
     }()
@@ -191,7 +191,7 @@ class SessionDetailsViewController: NSViewController {
         constraint.priority = NSLayoutConstraint.Priority(rawValue: 999)
         constraint.isActive = true
 
-        shelfController.view.setContentCompressionResistancePriority(NSLayoutConstraint.Priority.defaultHigh, for: .vertical)
+        shelfController.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
 
         view.addSubview(shelfController.view)
         view.addSubview(informationStackView)
@@ -254,7 +254,7 @@ fileprivate class SessionDetailsTabContainer: NSView {
             oldValue?.removeFromSuperview()
 
             if let newView = currentView {
-                newView.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+                newView.autoresizingMask = [.width, .height]
                 newView.frame = frame
 
                 addSubview(newView)

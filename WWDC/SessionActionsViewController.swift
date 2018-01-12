@@ -146,7 +146,7 @@ class SessionActionsViewController: NSViewController {
         view.wantsLayer = true
         view.translatesAutoresizingMaskIntoConstraints = false
 
-        view.setContentHuggingPriority(NSLayoutConstraint.Priority.defaultHigh, for: .horizontal)
+        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
 
     override func viewDidLoad() {

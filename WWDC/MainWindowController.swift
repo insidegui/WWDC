@@ -34,7 +34,7 @@ final class MainWindowController: NSWindowController {
     public var sidebarInitWidth: CGFloat?
 
     init() {
-        let mask: NSWindow.StyleMask = [NSWindow.StyleMask.titled, NSWindow.StyleMask.resizable, NSWindow.StyleMask.miniaturizable, NSWindow.StyleMask.closable]
+        let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable]
         let window = WWDCWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
 
         super.init(window: window)

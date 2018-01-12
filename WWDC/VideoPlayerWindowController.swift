@@ -28,7 +28,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         self.fullscreenOnly = fullscreenOnly
         self.originalContainer = originalContainer
 
-        let styleMask: NSWindow.StyleMask = [NSWindow.StyleMask.titled, NSWindow.StyleMask.closable, NSWindow.StyleMask.miniaturizable, NSWindow.StyleMask.resizable, NSWindow.StyleMask.fullSizeContentView]
+        let styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
 
         var rect = PUIPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view.superview)
         if rect == NSZeroRect { rect = PUIPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
@@ -39,7 +39,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         if #available(OSX 10.11, *) {
             // ¯\_(ツ)_/¯
         } else {
-            window.collectionBehavior = NSWindow.CollectionBehavior.fullScreenPrimary
+            window.collectionBehavior = .fullScreenPrimary
         }
 
         super.init(window: window)
