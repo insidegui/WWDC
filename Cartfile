@@ -6,7 +6,6 @@ github "realm/realm-cocoa" ~> 2.8.1
 github "RxSwiftCommunity/RxRealm" ~> 0.5
 
 github "bustoutsolutions/siesta" ~> 1.0
-github "Instagram/IGListKit" ~> 2.0.0
 
 github "sparkle-project/Sparkle" ~> 1.17
 

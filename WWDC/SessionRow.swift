@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import IGListKit
 
 enum SessionRowKind {
     case sectionHeader(String)
@@ -18,18 +17,14 @@ final class SessionRow: NSObject {
 
     let kind: SessionRowKind
 
-    var _diffIdentifier: NSObjectProtocol
-
     init(viewModel: SessionViewModel) {
         kind = .session(viewModel)
-        _diffIdentifier = viewModel.diffIdentifier()
 
         super.init()
     }
 
     init(title: String) {
         kind = .sectionHeader(title)
-        _diffIdentifier = title as NSObjectProtocol
     }
 
     convenience init(date: Date, showTimeZone: Bool = false) {
@@ -44,39 +39,6 @@ final class SessionRow: NSObject {
             return "Header: " + title
         case .session(let viewModel):
             return "Session: " + viewModel.identifier + " " + viewModel.title
-        }
-    }
-
-    // `hashValue` and `isEqual` both need to be provided to
-    // work correctly in sequences
-    override var hashValue: Int {
-        return diffIdentifier().hash
-    }
-
-    override func isEqual(_ object: Any?) -> Bool {
-        if let diffable = object as? IGListDiffable {
-            return diffIdentifier().isEqual(diffable.diffIdentifier())
-        } else {
-            return false
-        }
-    }
-}
-
-extension SessionRow: IGListDiffable {
-
-    func diffIdentifier() -> NSObjectProtocol {
-        return _diffIdentifier
-    }
-
-    func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
-        guard let other = object as? SessionRow else { return false }
-
-        if case .session(let otherViewModel) = other.kind, case .session(let viewModel) = kind {
-            return otherViewModel.isEqual(toDiffableObject: viewModel)
-        } else if case .sectionHeader(let otherTitle) = other.kind, case .sectionHeader(let title) = kind {
-            return otherTitle == title
-        } else {
-            return false
         }
     }
 }
