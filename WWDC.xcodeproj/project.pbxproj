@@ -106,8 +106,6 @@
 		DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */; };
 		DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */; };
 		DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */; };
-		DD7F386C1EABF560002D8C00 /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7F386B1EABF560002D8C00 /* IGListKit.framework */; };
-		DD7F386F1EABF631002D8C00 /* NSTableView+IGListKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F386E1EABF631002D8C00 /* NSTableView+IGListKit.swift */; };
 		DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38701EABF6C4002D8C00 /* Colors.swift */; };
 		DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38751EABFB20002D8C00 /* NSColor+Hex.swift */; };
 		DD7F38781EAC0C98002D8C00 /* ShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */; };
@@ -143,7 +141,6 @@
 		DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */; };
 		DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F901EAD2A050077703F /* WWDCAlert.swift */; };
 		DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F921EAD48D70077703F /* UserActivityRepresentable.swift */; };
-		DDB28F941EAD4DBF0077703F /* IGListKit.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD7F386D1EABF576002D8C00 /* IGListKit.framework.dSYM */; };
 		DDB28F951EAD4DC40077703F /* Siesta.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DDAE7C561E5BC6E300CEA205 /* Siesta.framework.dSYM */; };
 		DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3527F1EC7C4CA00254815 /* Arguments.swift */; };
 		DDB352821EC7C55300254815 /* DateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB352811EC7C55300254815 /* DateProvider.swift */; };
@@ -328,7 +325,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				DDB28F941EAD4DBF0077703F /* IGListKit.framework.dSYM in Carthage: Copy DSYMs */,
 				DDB28F951EAD4DC40077703F /* Siesta.framework.dSYM in Carthage: Copy DSYMs */,
 				DD5F51751E47DE0F0017F9EC /* Realm.framework.dSYM in Carthage: Copy DSYMs */,
 				DD5F51761E47DE0F0017F9EC /* RealmSwift.framework.dSYM in Carthage: Copy DSYMs */,
@@ -458,9 +454,6 @@
 		DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDetailsViewController.swift; sourceTree = "<group>"; };
 		DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionTableCellView.swift; sourceTree = "<group>"; };
-		DD7F386B1EABF560002D8C00 /* IGListKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IGListKit.framework; path = Carthage/Build/Mac/IGListKit.framework; sourceTree = "<group>"; };
-		DD7F386D1EABF576002D8C00 /* IGListKit.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = IGListKit.framework.dSYM; path = Carthage/Build/Mac/IGListKit.framework.dSYM; sourceTree = "<group>"; };
-		DD7F386E1EABF631002D8C00 /* NSTableView+IGListKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTableView+IGListKit.swift"; sourceTree = "<group>"; };
 		DD7F38701EABF6C4002D8C00 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		DD7F38751EABFB20002D8C00 /* NSColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSColor+Hex.swift"; sourceTree = "<group>"; };
 		DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfViewController.swift; sourceTree = "<group>"; };
@@ -616,7 +609,6 @@
 				DDF721F01ECA1DCF0054C503 /* CommunitySupport.framework in Frameworks */,
 				DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */,
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
-				DD7F386C1EABF560002D8C00 /* IGListKit.framework in Frameworks */,
 				DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */,
 				DD9301B81EE3202F00BE724B /* ChromeCastCore.framework in Frameworks */,
 				DD9301B91EE3202F00BE724B /* ProtocolBuffers.framework in Frameworks */,
@@ -917,7 +909,6 @@
 			isa = PBXGroup;
 			children = (
 				DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */,
-				DD7F386D1EABF576002D8C00 /* IGListKit.framework.dSYM */,
 				DDAE7C561E5BC6E300CEA205 /* Siesta.framework.dSYM */,
 				DD5F516E1E47DE0F0017F9EC /* Realm.framework.dSYM */,
 				DD5F516F1E47DE0F0017F9EC /* RealmSwift.framework.dSYM */,
@@ -941,7 +932,6 @@
 				DD4DED671ED6604300624EAF /* Crashlytics.framework */,
 				DD4DED601ED6577100624EAF /* Sparkle.framework */,
 				DDB28F961EAD4DDA0077703F /* PIPContainer.framework */,
-				DD7F386B1EABF560002D8C00 /* IGListKit.framework */,
 				DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */,
 				DD5F517F1E47DE7E0017F9EC /* Realm.framework */,
 				DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */,
@@ -1285,7 +1275,6 @@
 		DDF32EB11EBE34E10028E39D /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				DD7F386E1EABF631002D8C00 /* NSTableView+IGListKit.swift */,
 				DD382B771EAC345F009760C4 /* MaskImageView.h */,
 				DD382B781EAC345F009760C4 /* MaskImageView.m */,
 				DD382B791EAC345F009760C4 /* NSImage+CGImage.h */,
@@ -1808,7 +1797,6 @@
 				"$(SRCROOT)/Carthage/Build/Mac/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/RxSwift.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/Siesta.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/IGListKit.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/Sparkle.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/ChromeCastCore.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/ProtocolBuffers.framework",
@@ -1890,7 +1878,6 @@
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
-				DD7F386F1EABF631002D8C00 /* NSTableView+IGListKit.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DD382B7B1EAC345F009760C4 /* MaskImageView.m in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,

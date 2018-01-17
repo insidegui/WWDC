@@ -8,7 +8,6 @@
 
 import Cocoa
 import ConfCore
-import IGListKit
 import RxRealm
 import RxSwift
 import RxCocoa
@@ -291,21 +290,6 @@ final class SessionViewModel: NSObject {
         return withTimeZoneName ? result + timeZoneNameSuffix : result
     }
 
-}
-
-extension SessionViewModel: IGListDiffable {
-
-    func diffIdentifier() -> NSObjectProtocol {
-        return identifier as NSObjectProtocol
-    }
-    
-    func isEqual(toDiffableObject object: IGListDiffable?) -> Bool {
-        guard let other = object as? SessionViewModel else { return false }
-        
-        return identifier == other.identifier &&
-               title == other.title
-    }
-    
 }
 
 extension SessionViewModel: UserActivityRepresentable { }
