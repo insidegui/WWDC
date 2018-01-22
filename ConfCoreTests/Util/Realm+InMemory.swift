@@ -13,7 +13,7 @@ extension Realm {
     static func makeInMemoryConfiguration() -> Realm.Configuration {
         return Realm.Configuration(inMemoryIdentifier: UUID().uuidString)
     }
-    
+
     static func makeInMemory() -> Realm {
         return try! Realm(configuration: makeInMemoryConfiguration())
     }

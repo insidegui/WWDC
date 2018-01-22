@@ -247,7 +247,7 @@ class SessionDetailsViewController: NSViewController {
     }
 }
 
-fileprivate class SessionDetailsTabContainer: NSView {
+private class SessionDetailsTabContainer: NSView {
 
     var currentView: NSView? {
         didSet {

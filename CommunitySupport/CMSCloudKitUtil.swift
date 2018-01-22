@@ -15,7 +15,7 @@ import CloudKit
 ///   - error: The error returned from a CloudKit operation
 ///   - block: A block to be executed after a delay if the error is recoverable
 /// - Returns: If the error can't be retried, returns the error
-internal func retryCloudKitOperationIfPossible(with error: Error?, block: @escaping () -> ()) -> Error? {
+internal func retryCloudKitOperationIfPossible(with error: Error?, block: @escaping () -> Void) -> Error? {
     guard error != nil else { return nil }
 
     guard let effectiveError = error as? CKError else {

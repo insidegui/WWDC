@@ -102,21 +102,19 @@ class SessionsTableViewController: NSViewController {
             let sortedNewRows = newRowsSet.intersection(oldRowsSet).sorted(by: { (row1, row2) -> Bool in
                 return row1.index < row2.index
             })
-            
+
             #if DEBUG
                 print("Building the arrays took: \(Date().timeIntervalSince(complicatedOperationStart))")
             #endif
-            
+
             let loopStart = Date()
-            for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) {
-                if oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
-                    needReloadedIndexes.insert(newSessionRowIndex.index)
-                }
+            for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) where oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
+                needReloadedIndexes.insert(newSessionRowIndex.index)
             }
-            
+
             #if DEBUG
                 print("The loop took: \(Date().timeIntervalSince(loopStart))")
-            
+
                 print("The complicated calculation took: \(Date().timeIntervalSince(complicatedOperationStart))")
             #endif
 
@@ -653,12 +651,12 @@ private extension NSMenuItem {
             guard let value = SessionsTableViewController.ContextualMenuOption(rawValue: tag) else {
                 fatalError("Invalid ContextualMenuOption: \(tag)")
             }
-            
+
             return value
         }
         set {
             tag = newValue.rawValue
         }
     }
-    
+
 }

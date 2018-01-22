@@ -157,7 +157,6 @@ public final class AppleAPIClient {
     }
 }
 
-
 // MARK: - API results processing
 
 extension AppleAPIClient {
@@ -186,11 +185,11 @@ extension AppleAPIClient {
         }
     }
 
-    fileprivate func process<M>(_ resource: Resource, event: ResourceEvent, with completion: @escaping (Result<M, APIError>) -> ()) {
+    fileprivate func process<M>(_ resource: Resource, event: ResourceEvent, with completion: @escaping (Result<M, APIError>) -> Void) {
         switch event {
         case .error:
             completion(.error(resource.error))
-        case .newData(_):
+        case .newData:
             if let results: M = resource.typedContent() {
                 completion(.success(results))
             } else {
@@ -199,5 +198,5 @@ extension AppleAPIClient {
         default: break
         }
     }
-    
+
 }

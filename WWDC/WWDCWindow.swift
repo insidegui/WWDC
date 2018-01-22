@@ -51,5 +51,5 @@ class WWDCWindow: NSWindow {
         titlebarView?.state = .inactive
         titlebarView?.layer?.backgroundColor = NSColor.darkTitlebarBackground.cgColor
     }
-    
+
 }

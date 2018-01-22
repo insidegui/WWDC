@@ -41,9 +41,9 @@ public struct Environment {
 
 }
 
-fileprivate let _storedEnvDefaultsKey = "_confCoreEnvironmentBaseURL"
+private let _storedEnvDefaultsKey = "_confCoreEnvironmentBaseURL"
 
-fileprivate var _storedEnvironment: Environment? = Environment.readFromDefaults()
+private var _storedEnvironment: Environment? = Environment.readFromDefaults()
 
 extension Environment {
 
@@ -87,12 +87,12 @@ extension Environment {
 
 extension Environment: Equatable {
 
-    public static func ==(lhs: Environment, rhs: Environment) -> Bool {
+    public static func == (lhs: Environment, rhs: Environment) -> Bool {
         return lhs.baseURL == rhs.baseURL
             && lhs.videosPath == rhs.videosPath
             && lhs.sessionsPath == rhs.sessionsPath
             && lhs.newsPath == rhs.newsPath
             && lhs.liveVideosPath == rhs.liveVideosPath
     }
-    
+
 }

@@ -52,7 +52,7 @@ struct IndexedSessionRow: Hashable {
         return sessionRow.hashValue
     }
 
-    static func ==(lhs: IndexedSessionRow, rhs: IndexedSessionRow) -> Bool {
+    static func == (lhs: IndexedSessionRow, rhs: IndexedSessionRow) -> Bool {
         return lhs.sessionRow == rhs.sessionRow
     }
 }

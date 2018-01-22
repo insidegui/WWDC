@@ -150,5 +150,5 @@ final class PlaybackViewModel {
             self.timeObserver = nil
         }
     }
-    
+
 }

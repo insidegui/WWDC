@@ -14,7 +14,7 @@ public enum PhotoRepresentationSize: Int {
     case small = 512
     case medium = 1024
     case large = 2048
-    
+
     static let all: [PhotoRepresentationSize] = [
         .mini,
         .small,
@@ -28,15 +28,15 @@ public class PhotoRepresentation: Object {
 
     /// The path for the photo
     @objc public dynamic var remotePath = ""
-    
+
     /// The width of the photo
     @objc public dynamic var width = 0
-    
+
     /// The photo object this representation is associated with
     public let photo = LinkingObjects(fromType: Photo.self, property: "representations")
-    
+
     public override class func primaryKey() -> String? {
         return "remotePath"
     }
-    
+
 }

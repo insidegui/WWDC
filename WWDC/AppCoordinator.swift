@@ -35,10 +35,10 @@ final class AppCoordinator {
     var activeTab: MainWindowTab = .schedule
 
     /// The tab that "owns" the current player (the one that was active when the "play" button was pressed)
-    var playerOwnerTab: MainWindowTab? = nil
+    var playerOwnerTab: MainWindowTab?
 
     /// The session that "owns" the current player (the one that was selected on the active tab when "play" was pressed)
-    var playerOwnerSessionIdentifier: String? = nil
+    var playerOwnerSessionIdentifier: String?
 
     /// Whether playback can be restored to the previous context when exiting PiP mode (go back to tab/session)
     var canRestorePlaybackContext = false
@@ -172,7 +172,7 @@ final class AppCoordinator {
 
         scheduleDetail.shelfController.delegate = self
         scheduleDetail.summaryController.actionsViewController.delegate = self
-        
+
         videosController.listViewController.delegate = self
         scheduleController.listViewController.delegate = self
     }
@@ -277,7 +277,7 @@ final class AppCoordinator {
         showAccountPreferences()
     }
 
-    func receiveNotification(with userInfo: [String : Any]) -> Bool {
+    func receiveNotification(with userInfo: [String: Any]) -> Bool {
         return liveObserver.processSubscriptionNotification(with: userInfo) ||
             RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo)
     }

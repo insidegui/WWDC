@@ -138,7 +138,7 @@ public final class TranscriptIndexer: NSObject {
         task.resume()
     }
 
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(OperationQueue.operationCount) {
             NSLog("operationCount = \(backgroundOperationQueue.operationCount)")
         } else {
@@ -170,5 +170,5 @@ public final class TranscriptIndexer: NSObject {
             exit(0)
         }
     }
-    
+
 }

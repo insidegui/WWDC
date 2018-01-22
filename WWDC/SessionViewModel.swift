@@ -295,9 +295,9 @@ final class SessionViewModel: NSObject {
 extension SessionViewModel: UserActivityRepresentable { }
 
 extension SessionViewModel {
-    
+
     var isFavorite: Bool {
         return session.favorites.filter("isDeleted == false").count > 0
     }
-    
+
 }

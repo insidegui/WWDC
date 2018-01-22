@@ -60,6 +60,5 @@ final class TranscriptsJSONAdapter: Adapter {
 
         return .success(transcript)
     }
-    
-}
 
+}

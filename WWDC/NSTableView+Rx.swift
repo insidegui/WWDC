@@ -83,5 +83,5 @@ extension Reactive where Base: NSTableView {
 
         return ControlProperty(values: source, valueSink: observer.asObserver())
     }
-    
+
 }

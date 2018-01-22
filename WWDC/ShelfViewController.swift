@@ -107,5 +107,5 @@ class ShelfViewController: NSViewController {
     @objc private func play(_ sender: Any?) {
         delegate?.shelfViewControllerDidSelectPlay(self)
     }
-    
+
 }

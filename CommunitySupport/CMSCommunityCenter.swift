@@ -156,7 +156,6 @@ public final class CMSCommunityCenter: NSObject {
                 self.fetchUserInfo(for: profile, completion: completion)
             default:
                 self.sendErrorNotification(with: nil, info: "User discoverability permission denied with status \(status)")
-                break
             }
         }
     }
@@ -217,7 +216,7 @@ public final class CMSCommunityCenter: NSObject {
 
     // MARK: - Subscriptions
 
-    public func processNotification(userInfo: [String : Any]) -> Bool {
+    public func processNotification(userInfo: [String: Any]) -> Bool {
         // TODO: process CloudKit notification
         return false
     }

@@ -97,7 +97,7 @@ public final class PUITimelineView: NSView {
         wantsLayer = true
         layer = PUIBoringLayer()
         layer?.masksToBounds = false
-        
+
         // Main border
 
         borderLayer = PUIBoringLayer()
@@ -518,7 +518,7 @@ public final class PUITimelineView: NSView {
                 }
             }
         }
-        
+
         var isSnappingBack = false {
             didSet {
                 if !oldValue && isSnappingBack {
@@ -605,7 +605,7 @@ public final class PUITimelineView: NSView {
                 if abs(verticalDiff) > Metrics.annotationDragThresholdVertical && canDelete {
                     newPosition = point
                     mode = .delete
-                    
+
                     isSnappingBack = false
                 } else if abs(horizontalDiff) > Metrics.annotationDragThresholdHorizontal && canMove {
                     newPosition.y = originalPosition.y
@@ -613,12 +613,12 @@ public final class PUITimelineView: NSView {
                     mode = .move
 
                     updateAnnotationTextLayer(at: point)
-                    
+
                     isSnappingBack = false
                 } else {
                     layer.position = originalPosition
                     mode = .none
-                    
+
                     isSnappingBack = true
                 }
 

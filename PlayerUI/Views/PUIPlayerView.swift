@@ -197,7 +197,7 @@ public final class PUIPlayerView: NSView {
 
     // MARK: - Private API
 
-    fileprivate var lastKnownWindow: NSWindow? = nil
+    fileprivate var lastKnownWindow: NSWindow?
 
     private var sortedAnnotations: [PUITimelineAnnotation] = [] {
         didSet {
@@ -261,7 +261,7 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem))
     }
 
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         DispatchQueue.main.async {
             guard let keyPath = keyPath else { return }
 
@@ -358,7 +358,7 @@ public final class PUIPlayerView: NSView {
     }
 
     fileprivate var currentPresentationSize: NSSize? {
-        guard let size = player?.currentItem?.presentationSize, size != NSZeroSize else { return nil }
+        guard let size = player?.currentItem?.presentationSize, size != NSSize.zero else { return nil }
 
         return size
     }
@@ -1038,8 +1038,6 @@ public final class PUIPlayerView: NSView {
         keyDownEventMonitor = nil
     }
 
-
-
     // MARK: - PiP Support
 
     public func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
@@ -1471,9 +1469,9 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
             if pictureContainer.presenting == pipController {
                 pipController?.dismissViewController(pictureContainer)
             }
-            
+
             pipController = nil
         }
     }
-    
+
 }

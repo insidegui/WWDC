@@ -23,12 +23,12 @@ struct FilterOption: Equatable {
         return FilterOption(title: newTitle, value: value, isNegative: true)
     }
 
-    static func ==(lhs: FilterOption, rhs: FilterOption) -> Bool {
+    static func == (lhs: FilterOption, rhs: FilterOption) -> Bool {
         return lhs.value == rhs.value && lhs.isNegative == rhs.isNegative && lhs.title == rhs.title
     }
 
-    func dictionaryRepresentation() -> [String : String] {
-        var dictionary = [String : String]()
+    func dictionaryRepresentation() -> [String: String] {
+        var dictionary = [String: String]()
 
         dictionary["value"] = value
         dictionary["title"] = title
@@ -39,13 +39,13 @@ struct FilterOption: Equatable {
 
 extension Array where Element == FilterOption {
 
-    init?(_ fromArray: Array<Any>?) {
+    init?(_ fromArray: [Any]?) {
 
-        guard let fromArray = fromArray as? Array<Dictionary<String, String>> else {
+        guard let fromArray = fromArray as? [[String: String]] else {
             return nil
         }
 
-        self = Array<FilterOption>()
+        self = [FilterOption]()
 
         for i in fromArray {
             if let title = i["title"], let value = i["value"] {
@@ -54,8 +54,8 @@ extension Array where Element == FilterOption {
         }
     }
 
-    func dictionaryRepresentation() -> Array<Dictionary<String, String>> {
-        var array = Array<Dictionary<String, String>>()
+    func dictionaryRepresentation() -> [[String: String]] {
+        var array = [[String: String]]()
 
         for option in self {
             array.append(option.dictionaryRepresentation())
@@ -85,7 +85,6 @@ struct MultipleChoiceFilter: FilterType {
     }
 
     var emptyTitle: String
-
 
     var isEmpty: Bool {
         return selectedOptions.isEmpty

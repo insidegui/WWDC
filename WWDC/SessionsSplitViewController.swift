@@ -88,4 +88,3 @@ final class SessionsSplitViewController: NSSplitViewController {
         isResizingSplitView = false
     }
 }
-
