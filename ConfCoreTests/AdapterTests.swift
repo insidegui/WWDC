@@ -14,7 +14,7 @@ class AdapterTests: XCTestCase {
 
     private let dateTimeFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = ConfCoreDateFormat
+        formatter.dateFormat = confCoreDateFormat
         formatter.locale = Locale(identifier: "en-US")
         formatter.timeZone = TimeZone.current
         return formatter

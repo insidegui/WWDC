@@ -183,8 +183,8 @@ open class PUIPlayerWindow: NSWindow {
         }, completionHandler: nil)
     }
 
-    open override func standardWindowButton(_ b: NSWindow.ButtonType) -> NSButton? {
-        guard let button = super.standardWindowButton(b) else { return nil }
+    open override func standardWindowButton(_ type: NSWindow.ButtonType) -> NSButton? {
+        guard let button = super.standardWindowButton(type) else { return nil }
 
         titlebarWidgets.insert(button)
 

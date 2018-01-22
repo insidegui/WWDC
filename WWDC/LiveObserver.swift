@@ -111,7 +111,7 @@ private extension SessionAsset {
         self.init()
 
         assetType = .liveStreamVideo
-        year = Calendar.current.component(.year, from: Today())
+        year = Calendar.current.component(.year, from: today())
         sessionId = "\(number)"
         remoteURL = hls
         identifier = generateIdentifier()

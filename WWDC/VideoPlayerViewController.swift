@@ -323,7 +323,7 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
         return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
 
-    func PlayerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {
+    func playerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {
         return Preferences.shared.skipBackAndForwardBy30Seconds
     }
 }

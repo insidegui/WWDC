@@ -11,10 +11,10 @@ import ConfCore
 
 typealias DateProvider = () -> Date
 
-let Today: DateProvider = {
+let today: DateProvider = {
     if let fakeDate = Arguments.deloreanDate {
         let formatter = DateFormatter()
-        formatter.dateFormat = ConfCoreDateFormat
+        formatter.dateFormat = confCoreDateFormat
         return formatter.date(from: fakeDate)!
     } else {
         return Date()

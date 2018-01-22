@@ -86,7 +86,7 @@ final class AppCoordinator {
 
         self.windowController = windowController
 
-        liveObserver = LiveObserver(dateProvider: Today, storage: storage)
+        liveObserver = LiveObserver(dateProvider: today, storage: storage)
 
         setupBindings()
         setupDelegation()

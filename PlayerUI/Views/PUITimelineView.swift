@@ -236,11 +236,11 @@ public final class PUITimelineView: NSView {
 
         var startedInteractiveSeek = false
 
-        window?.trackEvents(matching: [.pressure, .leftMouseUp, .leftMouseDragged, .tabletPoint], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { e, stop in
-            let point = self.convert((e?.locationInWindow)!, from: nil)
+        window?.trackEvents(matching: [.pressure, .leftMouseUp, .leftMouseDragged, .tabletPoint], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { event, stop in
+            let point = self.convert((event?.locationInWindow)!, from: nil)
             let progress = Double(point.x / self.bounds.width)
 
-            switch e?.type {
+            switch event?.type {
             case .leftMouseUp?:
                 if startedInteractiveSeek {
                     self.viewDelegate?.timelineViewDidFinishInteractiveSeek()
@@ -251,7 +251,7 @@ public final class PUITimelineView: NSView {
 
                 stop.pointee = true
             case .pressure?, .tabletPoint?:
-                switch e?.touchForce {
+                switch event?.touchForce {
                 case .forceTouch?:
                     guard self.hasValidMediaDuration else {
                         stop.pointee = true
@@ -260,7 +260,7 @@ public final class PUITimelineView: NSView {
 
                     let timestamp = self.mediaDuration * progress
 
-                    DebugLog("Force touch at \(timestamp)s")
+                    debugLog("Force touch at \(timestamp)s")
 
                     self.viewDelegate?.timelineDidReceiveForceTouch(at: timestamp)
 

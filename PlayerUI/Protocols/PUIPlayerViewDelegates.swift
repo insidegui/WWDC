@@ -28,6 +28,6 @@ public protocol PUIPlayerViewAppearanceDelegate: class {
     func playerViewShouldShowTimestampLabels(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowExternalPlaybackControls(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool
-    func PlayerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool
+    func playerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool
 
 }
