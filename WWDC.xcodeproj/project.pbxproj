@@ -1495,6 +1495,7 @@
 				DD5F516D1E47DDDF0017F9EC /* Carthage: Copy DSYMs */,
 				DD4DED651ED6602700624EAF /* Fabric */,
 				DDC678031EDA76A100A4E19C /* Embed XPC Services */,
+				F72964482015787100A7A571 /* SwiftLint Warnings */,
 			);
 			buildRules = (
 			);
@@ -1807,6 +1808,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		F72964482015787100A7A571 /* SwiftLint Warnings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "SwiftLint Warnings";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo 'warning: SwiftLint not installed, please run \"brew install swiftlint\" or download from https://github.com/realm/SwiftLint'\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

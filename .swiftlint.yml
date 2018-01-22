@@ -1,0 +1,18 @@
+disabled_rules:
+  - line_length
+  - function_body_length
+  - file_length
+  - type_body_length
+  - identifier_name
+  - todo
+  - function_parameter_count
+  - fallthrough
+  - unused_closure_parameter
+
+excluded:
+  - Carthage
+
+force_cast:
+  severity: warning
+force_try:
+  severity: warning
