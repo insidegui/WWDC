@@ -46,6 +46,9 @@ With the latest version of the app you can already begin creating an account (if
 
 ## Nerdy bits 🤓
 
+### Code of Conduct
+We expect all of our contributors to help uphold the values set out in our [code of conduct](./CODE_OF_CONDUCT.md). We fundamentally believe this will help us build a better community, and with it a better app.
+
 ### External libraries
 
 A number of third-party libraries are used by the app:
