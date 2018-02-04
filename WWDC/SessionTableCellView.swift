@@ -16,7 +16,7 @@ final class SessionTableCellView: NSTableCellView {
 
     var viewModel: SessionViewModel? {
         didSet {
-            guard viewModel != oldValue else { return }
+            guard viewModel !== oldValue else { return }
 
             DispatchQueue.main.async {
                 self.thumbnailImageView.image = #imageLiteral(resourceName: "noimage")

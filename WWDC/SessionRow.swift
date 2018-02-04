@@ -13,14 +13,12 @@ enum SessionRowKind {
     case session(SessionViewModel)
 }
 
-final class SessionRow: NSObject {
+final class SessionRow: CustomDebugStringConvertible {
 
     let kind: SessionRowKind
 
     init(viewModel: SessionViewModel) {
         kind = .session(viewModel)
-
-        super.init()
     }
 
     init(title: String) {
@@ -33,13 +31,24 @@ final class SessionRow: NSObject {
         self.init(title: title)
     }
 
-    override var debugDescription: String {
+    var debugDescription: String {
         switch kind {
         case .sectionHeader(let title):
             return "Header: " + title
         case .session(let viewModel):
             return "Session: " + viewModel.identifier + " " + viewModel.title
         }
+    }
+}
+
+extension SessionRow: Hashable {
+
+    var hashValue: Int {
+        return ObjectIdentifier(self).hashValue
+    }
+
+    static func ==(lhs: SessionRow, rhs: SessionRow) -> Bool {
+        return lhs.hashValue == rhs.hashValue
     }
 }
 
