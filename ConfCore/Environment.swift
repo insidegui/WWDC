@@ -12,7 +12,7 @@ public extension Notification.Name {
     public static let WWDCEnvironmentDidChange = Notification.Name("WWDCEnvironmentDidChange")
 }
 
-public struct Environment {
+public struct Environment: Equatable {
 
     public let baseURL: String
     public let videosPath: String
@@ -94,17 +94,5 @@ extension Environment {
                                                sessionsPath: "/contents.json",
                                                newsPath: "/news.json",
                                                liveVideosPath: "/videos_live.json")
-
-}
-
-extension Environment: Equatable {
-
-    public static func == (lhs: Environment, rhs: Environment) -> Bool {
-        return lhs.baseURL == rhs.baseURL
-            && lhs.videosPath == rhs.videosPath
-            && lhs.sessionsPath == rhs.sessionsPath
-            && lhs.newsPath == rhs.newsPath
-            && lhs.liveVideosPath == rhs.liveVideosPath
-    }
 
 }
