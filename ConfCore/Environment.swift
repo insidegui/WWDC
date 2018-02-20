@@ -20,6 +20,18 @@ public struct Environment {
     public let newsPath: String
     public let liveVideosPath: String
 
+    public init(baseURL: String,
+                videosPath: String,
+                sessionsPath: String,
+                newsPath: String,
+                liveVideosPath: String) {
+        self.baseURL = baseURL
+        self.videosPath = videosPath
+        self.sessionsPath = sessionsPath
+        self.newsPath = newsPath
+        self.liveVideosPath = liveVideosPath
+    }
+
     public static func setCurrent(_ environment: Environment) {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }

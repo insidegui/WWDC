@@ -109,7 +109,7 @@ private struct GitHubPagination {
     // swiftlint:enable force_try
 
     init?(linkHeader: String) {
-        let links: [(URL, String)] = linkHeader.components(separatedBy: ",").flatMap { link in
+        let links: [(URL, String)] = linkHeader.components(separatedBy: ",").compactMap { link in
             let section = link.components(separatedBy: ";")
 
             if section.count < 2 {

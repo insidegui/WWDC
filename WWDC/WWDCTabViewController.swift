@@ -132,7 +132,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     }
 
     private var tabItemViews: [TabItemView] {
-        return view.window?.toolbar?.items.flatMap { $0.view as? TabItemView } ?? []
+        return view.window?.toolbar?.items.compactMap { $0.view as? TabItemView } ?? []
     }
 
     private var loadingView: ModalLoadingView?

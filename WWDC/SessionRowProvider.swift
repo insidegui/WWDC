@@ -29,7 +29,7 @@ struct VideosSessionRowProvider: SessionRowProvider {
         let rows: [SessionRow] = tracks.flatMap { track -> [SessionRow] in
             let titleRow = SessionRow(title: track.name)
 
-            let sessionRows: [SessionRow] = track.sessions.filter(Session.videoPredicate).sorted(by: Session.standardSort).flatMap { session in
+            let sessionRows: [SessionRow] = track.sessions.filter(Session.videoPredicate).sorted(by: Session.standardSort).compactMap { session in
                 guard let viewModel = SessionViewModel(session: session) else { return nil }
 
                 return SessionRow(viewModel: viewModel)
@@ -66,7 +66,7 @@ struct ScheduleSessionRowProvider: SessionRowProvider {
 
             shownTimeZone = true
 
-            let instanceRows: [SessionRow] = section.instances.sorted(by: SessionInstance.standardSort).flatMap { instance in
+            let instanceRows: [SessionRow] = section.instances.sorted(by: SessionInstance.standardSort).compactMap { instance in
                 guard let viewModel = SessionViewModel(session: instance.session, instance: instance, style: .schedule) else { return nil }
 
                 return SessionRow(viewModel: viewModel)
