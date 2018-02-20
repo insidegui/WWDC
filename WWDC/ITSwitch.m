@@ -350,6 +350,8 @@ static CGFloat const kDisabledOpacity = 0.5f;
     if (_checked != checked) {
 		_checked = checked;
         [self propagateValue:@(checked) forBinding:@"checked"];
+
+        NSAccessibilityPostNotification(self, NSAccessibilityValueChangedNotification);
     }
     
     [self reloadLayer];
@@ -397,102 +399,12 @@ static CGFloat const kDisabledOpacity = 0.5f;
 #pragma mark - Accessibility
 // -----------------------------------
 
-- (BOOL)accessibilityIsIgnored {
-	return NO;
+- (BOOL)isAccessibilityElement {
+    return YES;
 }
 
 - (id)accessibilityHitTest:(NSPoint)point {
 	return self;
-}
-
-- (NSArray *)accessibilityAttributeNames {
-	static NSArray *attributes = nil;
-	if (attributes == nil)
-	{
-		NSMutableArray *mutableAttributes = [[super accessibilityAttributeNames] mutableCopy];
-		if (mutableAttributes == nil)
-			mutableAttributes = [NSMutableArray new];
-		
-		// Add attributes
-		if (![mutableAttributes containsObject:NSAccessibilityValueAttribute])
-			[mutableAttributes addObject:NSAccessibilityValueAttribute];
-		
-		if (![mutableAttributes containsObject:NSAccessibilityEnabledAttribute])
-			[mutableAttributes addObject:NSAccessibilityEnabledAttribute];
-		
-		if (![mutableAttributes containsObject:NSAccessibilityDescriptionAttribute])
-			[mutableAttributes addObject:NSAccessibilityDescriptionAttribute];
-		
-		// Remove attributes
-		if ([mutableAttributes containsObject:NSAccessibilityChildrenAttribute])
-			[mutableAttributes removeObject:NSAccessibilityChildrenAttribute];
-		
-		attributes = [mutableAttributes copy];
-	}
-	return attributes;
-}
-
-- (id)accessibilityAttributeValue:(NSString *)attribute {
-	id retVal = nil;
-	if ([attribute isEqualToString:NSAccessibilityRoleAttribute])
-		retVal = NSAccessibilityCheckBoxRole;
-	else if ([attribute isEqualToString:NSAccessibilityValueAttribute])
-		retVal = [NSNumber numberWithInt:self.checked];
-	else if ([attribute isEqualToString:NSAccessibilityEnabledAttribute])
-		retVal = [NSNumber numberWithBool:self.enabled];
-	else
-		retVal = [super accessibilityAttributeValue:attribute];
-	return retVal;
-}
-
-- (BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
-	BOOL retVal;
-	if ([attribute isEqualToString:NSAccessibilityValueAttribute])
-		retVal = YES;
-	else if ([attribute isEqualToString:NSAccessibilityEnabledAttribute])
-		retVal = NO;
-	else if ([attribute isEqualToString:NSAccessibilityDescriptionAttribute])
-		retVal = NO;
-	else
-		retVal = [super accessibilityIsAttributeSettable:attribute];
-	return retVal;
-}
-
-- (void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute {
-	if ([attribute isEqualToString:NSAccessibilityValueAttribute]) {
-		BOOL invokeTargetAction = self.checked != [value boolValue];
-		self.checked = [value boolValue];
-		if (invokeTargetAction) {
-			[self _invokeTargetAction];
-		}
-	}
-	else {
-		[super accessibilitySetValue:value forAttribute:attribute];
-	}
-}
-
-- (NSArray *)accessibilityActionNames {
-	static NSArray *actions = nil;
-	if (actions == nil)
-	{
-		NSMutableArray *mutableActions = [[super accessibilityActionNames] mutableCopy];
-		if (mutableActions == nil)
-			mutableActions = [NSMutableArray new];
-		if (![mutableActions containsObject:NSAccessibilityPressAction])
-			[mutableActions addObject:NSAccessibilityPressAction];
-		actions = [mutableActions copy];
-	}
-	return actions;
-}
-
-- (void)accessibilityPerformAction:(NSString *)actionString {
-	if ([actionString isEqualToString:NSAccessibilityPressAction]) {
-		self.checked = ![self checked];
-		[self _invokeTargetAction];
-	}
-	else {
-		[super accessibilityPerformAction:actionString];
-	}
 }
 
 #pragma mark -
@@ -540,6 +452,21 @@ static CGFloat const kDisabledOpacity = 0.5f;
     }
     
     [boundObject setValue:value forKeyPath:boundKeyPath];
+}
+
+- (nullable NSNumber *)accessibilityValue {
+    return @(self.checked);
+}
+
+- (nullable NSString *)accessibilityLabel {
+    return @"switch";
+}
+
+- (BOOL)accessibilityPerformPress {
+    self.checked = ![self checked];
+    [self _invokeTargetAction];
+
+    return YES;
 }
 
 @end

@@ -8,12 +8,17 @@
 
 #import "DTFolderMonitor.h"
 
+@interface DTFolderMonitor()
+
+@property (assign, nonatomic) int fileDescriptor;
+
+@end
+
 @implementation DTFolderMonitor
 {
 	NSURL *_URL;
 	DTFolderMonitorBlock _block;
 	
-	int _fileDescriptor;
 	dispatch_queue_t _queue;
 	dispatch_source_t _source;
 }
@@ -74,7 +79,7 @@
 		// close the file descriptor when the dispatch source is cancelled
 		dispatch_source_set_cancel_handler(_source, ^{
 			
-			close(_fileDescriptor);
+			close(self.fileDescriptor);
 		});
 		
 		// at this point the dispatch source is paused, so start watching

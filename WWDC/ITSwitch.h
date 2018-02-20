@@ -11,7 +11,7 @@
 /**
  *  ITSwitch is a replica of UISwitch for Mac OS X
  */
-@interface ITSwitch : NSControl
+@interface ITSwitch : NSControl <NSAccessibilityCheckBox>
 
 /**
  *  @property checked - Gets or sets the switches state
