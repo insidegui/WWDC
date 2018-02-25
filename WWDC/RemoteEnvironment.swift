@@ -10,7 +10,7 @@ import Foundation
 import CloudKit
 import ConfCore
 
-final class RemoteEnvironment: NSObject {
+final class RemoteEnvironment {
 
     private struct Constants {
         static let environmentRecordType = "Environment"

@@ -14,7 +14,7 @@ import RxCocoa
 import RealmSwift
 import PlayerUI
 
-final class SessionViewModel: NSObject {
+final class SessionViewModel {
 
     let style: SessionsListStyle
     var title: String
@@ -151,8 +151,6 @@ final class SessionViewModel: NSObject {
         if let webUrlStr = session.asset(of: .webpage)?.remoteURL {
             webUrl = URL(string: webUrlStr)
         }
-
-        super.init()
     }
 
     static func subtitle(from session: Session, at event: ConfCore.Event?) -> String {

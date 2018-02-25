@@ -15,14 +15,12 @@ extension Notification.Name {
     public static let TranscriptIndexingDidStop = Notification.Name("io.wwdc.app.TranscriptIndexingDidStopNotification")
 }
 
-public final class TranscriptIndexer: NSObject {
+public final class TranscriptIndexer {
 
     private let storage: Storage
 
     public init(_ storage: Storage) {
         self.storage = storage
-
-        super.init()
     }
 
     /// The progress when the transcripts are being downloaded/indexed
@@ -136,14 +134,6 @@ public final class TranscriptIndexer: NSObject {
         }
 
         task.resume()
-    }
-
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(OperationQueue.operationCount) {
-            NSLog("operationCount = \(backgroundOperationQueue.operationCount)")
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
     }
 
     private func checkForCompletion() {

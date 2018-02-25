@@ -27,11 +27,11 @@ extension Notification.Name {
     public static let CMSUserIdentifierDidBecomeAvailable = Notification.Name("CMSUserIdentifierDidBecomeAvailableNotificationName")
 }
 
-public final class CMSCommunityCenter: NSObject {
+public final class CMSCommunityCenter {
 
     private lazy var container: CKContainer = CKContainer.default()
 
-    private lazy var database: CKDatabase = {
+    private lazy var database = {
         return self.container.publicCloudDatabase
     }()
 
@@ -48,9 +48,7 @@ public final class CMSCommunityCenter: NSObject {
         return self.createUserProfileObservable()
     }()
 
-    public override init() {
-        super.init()
-
+    public init() {
         NotificationCenter.default.addObserver(self, selector: #selector(createSubscriptionsIfNeeded), name: NSApplication.didFinishLaunchingNotification, object: nil)
     }
 

@@ -119,7 +119,7 @@ private extension SessionAsset {
 
 }
 
-private final class CloudKitLiveObserver: NSObject {
+private final class CloudKitLiveObserver {
 
     private let storage: Storage
 
@@ -127,8 +127,6 @@ private final class CloudKitLiveObserver: NSObject {
 
     init(storage: Storage) {
         self.storage = storage
-
-        super.init()
 
         createSubscriptionIfNeeded()
     }

@@ -35,8 +35,8 @@ private extension URL {
 
 }
 
-final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
-
+final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
+    
     fileprivate weak var consumer: PUIExternalPlaybackConsumer?
 
     private lazy var scanner: CastDeviceScanner = CastDeviceScanner()
@@ -47,9 +47,7 @@ final class ChromeCastPlaybackProvider: NSObject, PUIExternalPlaybackProvider {
     init(consumer: PUIExternalPlaybackConsumer) {
         self.consumer = consumer
         status = PUIExternalPlaybackMediaStatus()
-
-        super.init()
-
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(deviceListDidChange),
                                                name: CastDeviceScanner.DeviceListDidChange,
