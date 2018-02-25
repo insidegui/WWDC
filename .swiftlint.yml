@@ -8,6 +8,7 @@ disabled_rules:
   - function_parameter_count
   - fallthrough
   - unused_closure_parameter
+  - nesting
 
 excluded:
   - Carthage
