@@ -1821,7 +1821,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo 'warning: SwiftLint not installed, please run \"brew install swiftlint\" or download from https://github.com/realm/SwiftLint'\nfi";
+			shellScript = "SWIFTLINT_MIN=\"0.24\"\n\nlessThanOrEqual() {\n    [  \"$1\" = \"`echo -e \"$1\\n$2\" | sort -V | head -n1`\" ]\n}\n\nlessThan() {\n    [ \"$1\" = \"$2\" ] && return 1 || lessThanOrEqual $1 $2\n}\n\nif command -v swiftlint >/dev/null; then\n    if lessThan `swiftlint version` $SWIFTLINT_MIN; then\n        echo \"warning: WWDC for macOS uses SwiftLint ${SWIFTLINT_MIN} or above to ensure a consistent codestyle. Please be aware that the installed version of SwiftLint may behave unexpectedly.\"\n    fi\n\n    swiftlint\nelse\n    echo 'warning: SwiftLint not installed, please run \"brew install swiftlint\" or download from https://github.com/realm/SwiftLint'\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
