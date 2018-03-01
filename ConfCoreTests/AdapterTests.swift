@@ -26,12 +26,12 @@ class AdapterTests: XCTestCase {
             fatalError()
         }
 
-        guard let data = try? Data(contentsOf: fileURL) else {
+        guard let data = try? Data(contentsOf: fileURL), let json = try? JSON(data: data) else {
             XCTFail("Unable to load fixture named \(filename)")
             fatalError()
         }
 
-        return JSON(data: data)
+        return json
     }
 
     func testEventsAdapter() {
