@@ -5,7 +5,7 @@ install:
   - bundle install
 script:
   - "./bootstrap.sh"
-  - xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty
+  - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty
 env:
   global:
     # Variable added per the suggestion here https://github.com/Carthage/Carthage/issues/1236#issuecomment-205215986
