@@ -121,7 +121,16 @@ public final class TranscriptIndexer {
                 return
             }
 
-            let result = TranscriptsJSONAdapter().adapt(JSON(data: jsonData))
+            var json: JSON
+
+            do {
+                json = try JSON(data: jsonData)
+            } catch {
+                NSLog("Error parsing JSON data for \(primaryKey)")
+                return
+            }
+
+            let result = TranscriptsJSONAdapter().adapt(json)
 
             guard case .success(let transcript) = result else {
                 NSLog("Error parsing transcript for \(primaryKey)")
