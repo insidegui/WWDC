@@ -10,31 +10,19 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
-final class RxTableViewDelegateProxy: DelegateProxy, NSTableViewDelegate, DelegateProxyType {
+final class RxTableViewDelegateProxy: DelegateProxy<NSTableView, NSTableViewDelegate>, NSTableViewDelegate, DelegateProxyType {
 
     weak private(set) var tableView: NSTableView?
 
     fileprivate var selectedRowSubject = PublishSubject<Int?>()
 
-    required init(parentObject: AnyObject) {
-        tableView = parentObject as? NSTableView
-
-        super.init(parentObject: parentObject)
+    init(tableView: NSTableView) {
+        self.tableView = tableView
+        super.init(parentObject: tableView, delegateProxy: RxTableViewDelegateProxy.self)
     }
 
-    public override class func createProxyForObject(_ object: AnyObject) -> AnyObject {
-        let control: NSTableView = object as! NSTableView
-        return control.createRxDelegateProxy()
-    }
-
-    public class func currentDelegateFor(_ object: AnyObject) -> AnyObject? {
-        let tableView: NSTableView = object as! NSTableView
-        return tableView.delegate
-    }
-
-    public class func setCurrentDelegate(_ delegate: AnyObject?, toObject object: AnyObject) {
-        let tableView: NSTableView = object as! NSTableView
-        tableView.delegate = delegate as? NSTableViewDelegate
+    static func registerKnownImplementations() {
+        self.register(make: { RxTableViewDelegateProxy(tableView: $0)})
     }
 
     func tableViewSelectionDidChange(_ notification: Notification) {
@@ -46,24 +34,23 @@ final class RxTableViewDelegateProxy: DelegateProxy, NSTableViewDelegate, Delega
         selectedRowSubject.on(.next(row))
     }
 
-}
-
-extension NSTableView {
-
-    func createRxDelegateProxy() -> RxTableViewDelegateProxy {
-        return RxTableViewDelegateProxy(parentObject: self)
+    static func currentDelegate(for object: NSTableView) -> NSTableViewDelegate? {
+        return object.delegate
     }
 
+    static func setCurrentDelegate(_ delegate: NSTableViewDelegate?, to object: NSTableView) {
+        object.delegate = delegate
+    }
 }
 
 extension Reactive where Base: NSTableView {
 
-    public var delegate: DelegateProxy {
-        return RxTableViewDelegateProxy.proxyForObject(base)
+    public var delegate: DelegateProxy<NSTableView, NSTableViewDelegate> {
+        return RxTableViewDelegateProxy.proxy(for: base)
     }
 
     public var selectedRow: ControlProperty<Int?> {
-        let delegate = RxTableViewDelegateProxy.proxyForObject(base)
+        let delegate = RxTableViewDelegateProxy.proxy(for: base)
 
         let source = Observable.deferred { [weak tableView = base] () -> Observable<Int?> in
             if let startingRow = tableView?.selectedRow, startingRow >= 0 {
@@ -73,7 +60,7 @@ extension Reactive where Base: NSTableView {
             }
             }.takeUntil(deallocated)
 
-        let observer = UIBindingObserver(UIElement: base) { (control, value: Int?) in
+        let observer = Binder(base) { (control, value: Int?) in
             if let row = value {
                 control.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
             } else {
