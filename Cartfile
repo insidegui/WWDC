@@ -1,13 +1,16 @@
-github "SwiftyJSON/SwiftyJSON" ~> 3.1
+github "SwiftyJSON/SwiftyJSON" ~> 4.0
 
-github "ReactiveX/RxSwift" ~> 3.0
+github "ReactiveX/RxSwift" ~> 4.0
 
-github "realm/realm-cocoa" ~> 2.8.1
-github "RxSwiftCommunity/RxRealm" ~> 0.5
+github "realm/realm-cocoa" ~> 3.0
+github "RxSwiftCommunity/RxRealm" ~> 0.7
 
 github "bustoutsolutions/siesta" ~> 1.0
 
 github "sparkle-project/Sparkle" ~> 1.17
 
 github "insidegui/ChromeCastCore" "swift4"
-github "alexeyxo/protobuf-swift"
+
+# ChromeCastCore's dependencies are currently met manually
+github "alexeyxo/protobuf-swift" == 3.0.23
+# SwiftJSON is compiled directly into ChromeCastCore

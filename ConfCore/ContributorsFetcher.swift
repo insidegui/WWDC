@@ -69,8 +69,8 @@ public final class ContributorsFetcher {
     }
 
     fileprivate func parseResponse(_ data: Data) -> [String] {
-        let jsonData = JSON(data: data)
-        guard let contributors = jsonData.array else { return [String]() }
+
+        guard let jsonData = try? JSON(data: data), let contributors = jsonData.array else { return [String]() }
 
         var contributorNames = [String]()
         for contributor in contributors {

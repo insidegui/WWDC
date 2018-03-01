@@ -34,7 +34,8 @@ extension Session {
         if type == .image {
             return imageAsset()
         } else {
-            return assets.filter({ $0.assetType == type }).first
+            let filtered = assets.filter({ $0.assetType == type })
+            return filtered.first
         }
     }
 
