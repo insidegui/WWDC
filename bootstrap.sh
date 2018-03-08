@@ -1,7 +1,5 @@
 #!/bin/bash
 
-SWIFTLINT_MIN="0.24"
-
 lessThanOrEqual() {
     [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
 }
@@ -10,29 +8,38 @@ lessThan() {
     [ "$1" = "$2" ] && return 1 || lessThanOrEqual $1 $2
 }
 
-brewInstalled() {
-    command -v brew >/dev/null && return 0 || return 1
-}
+SWIFTLINT_MIN="0.24"
+SWIFTLINT_INSTALLED=$([ `command -v swiftlint` ] && echo true || echo false )
+BREW_INSTALLED=$([ `command -v brew` ] && echo true || echo false )
 
-if command -v swiftlint >/dev/null; then
-    if lessThan `swiftlint version` $SWIFTLINT_MIN; then
-        if brewInstalled; then
-            read -p "WWDC for macOS uses SwiftLint ${SWIFTLINT_MIN} or above to ensure a consistent codestyle. Upgrade SwiftLint version? [Y/n] " -n 1 -r
-            echo
+SWIFTLINT_UPDATED=false
+if $SWIFTLINT_INSTALLED; then 
+    if ! lessThan `swiftlint version` $SWIFTLINT_MIN; then
+        SWIFTLINT_UPDATED=true
+    fi
+fi
 
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
+if ! $SWIFTLINT_INSTALLED || ! $SWIFTLINT_UPDATED; then
+    echo "WWDC for macOS uses SwiftLint ${SWIFTLINT_MIN} or above to ensure a consistent codestyle. SwiftLint is either not installed or does not meet this minimum version."
+
+    if $BREW_INSTALLED; then
+        read -p "Use Homebrew to globally install the latest version of SwiftLint? [Y/n] " -n 1 -r
+        echo
+        
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            if $SWIFTLINT_INSTALLED; then
                 brew upgrade swiftlint
             else 
-                echo "Please be aware that the installed version of SwiftLint may behave unexpectedly."
+                brew install swiftlint
             fi
         else
-            echo "WWDC for macOS uses SwiftLint ${SWIFTLINT_MIN} or above to ensure a consistent codestyle. Please be aware that the installed version of SwiftLint may behave unexpectedly."
+            echo 'Please install SwiftLint & try again to continue.'
+            exit 1
         fi
-    fi  
-elif brewInstalled; then
-    brew install swiftlint
-else
-    echo "WWDC for macOS uses SwiftLint to ensure a consistent codestyle. Please install SwiftLint or Homebrew & try again to continue."
+    else
+        echo 'Please install SwiftLint & try again to continue.'
+        exit 1
+    fi
 fi
 
 carthage bootstrap --platform macOS
