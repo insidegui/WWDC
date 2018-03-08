@@ -8,6 +8,7 @@
 
 import Cocoa
 import CommunitySupport
+import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -64,4 +65,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 
+}
+
+extension AppDelegate: SUUpdaterDelegate {
+
+    func updaterMayCheck(forUpdates updater: SUUpdater) -> Bool {
+        #if DEBUG
+            return false
+        #else
+            return true
+        #endif
+    }
 }
