@@ -11,7 +11,7 @@ import SwiftyJSON
 
 private enum SessionResponseKeys: String, JSONSubscriptType {
     case events, sessions
-    
+
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
     }
@@ -63,5 +63,5 @@ final class SessionsResponseAdapter: Adapter {
 //        
 //        return .success(response)
     }
-    
+
 }

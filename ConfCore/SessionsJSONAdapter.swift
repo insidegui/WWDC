@@ -132,10 +132,10 @@ final class SessionsJSONAdapter: Adapter {
         session.summary = summary
         session.trackIdentifier = "\(trackIdentifier)"
         session.mediaDuration = input[SessionKeys.media][AssetKeys.duration].doubleValue
-        
+
         session.eventIdentifier = eventIdentifier
-        
+
         return .success(session)
     }
-    
+
 }

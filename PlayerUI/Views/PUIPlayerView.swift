@@ -197,7 +197,7 @@ public final class PUIPlayerView: NSView {
 
     // MARK: - Private API
 
-    fileprivate var lastKnownWindow: NSWindow? = nil
+    fileprivate var lastKnownWindow: NSWindow?
 
     private var sortedAnnotations: [PUITimelineAnnotation] = [] {
         didSet {
@@ -261,7 +261,7 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem))
     }
 
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         DispatchQueue.main.async {
             guard let keyPath = keyPath else { return }
 
@@ -358,7 +358,7 @@ public final class PUIPlayerView: NSView {
     }
 
     fileprivate var currentPresentationSize: NSSize? {
-        guard let size = player?.currentItem?.presentationSize, size != NSZeroSize else { return nil }
+        guard let size = player?.currentItem?.presentationSize, size != NSSize.zero else { return nil }
 
         return size
     }
@@ -736,7 +736,7 @@ public final class PUIPlayerView: NSView {
         backButton.isHidden = disableBackAndForward
         forwardButton.isHidden = disableBackAndForward
 
-        let skipBy30 = d.PlayerViewShouldShowBackAndForward30SecondsButtons(self)
+        let skipBy30 = d.playerViewShouldShowBackAndForward30SecondsButtons(self)
         backButton.image = skipBy30 ? .PUIBack30s : .PUIBack15s
         backButton.action = skipBy30 ? #selector(goBackInTime30) : #selector(goBackInTime15)
         backButton.toolTip = skipBy30 ? "Go back 30s" : "Go back 15s"
@@ -778,10 +778,10 @@ public final class PUIPlayerView: NSView {
 
     fileprivate func updateExternalPlaybackMenus() {
         // clean menu
-        extrasMenuContainerView.arrangedSubviews.enumerated().forEach { idx, v in
+        extrasMenuContainerView.arrangedSubviews.enumerated().forEach { idx, view in
             guard idx < extrasMenuContainerView.arrangedSubviews.count - 1 else { return }
 
-            extrasMenuContainerView.removeArrangedSubview(v)
+            extrasMenuContainerView.removeArrangedSubview(view)
         }
 
         // repopulate
@@ -1037,8 +1037,6 @@ public final class PUIPlayerView: NSView {
 
         keyDownEventMonitor = nil
     }
-
-
 
     // MARK: - PiP Support
 
@@ -1471,9 +1469,9 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
             if pictureContainer.presenting == pipController {
                 pipController?.dismissViewController(pictureContainer)
             }
-            
+
             pipController = nil
         }
     }
-    
+
 }

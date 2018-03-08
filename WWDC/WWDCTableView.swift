@@ -17,7 +17,7 @@ class WWDCTableView: NSTableView {
         reloadData()
         selectRowIndexes(selectedRowIndexesBeforeReload, byExtendingSelection: false)
     }
-    
+
     override var effectiveAppearance: NSAppearance {
         return NSAppearance(named: .vibrantDark)!
     }

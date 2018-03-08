@@ -169,5 +169,5 @@ public final class TranscriptIndexer {
             exit(0)
         }
     }
-    
+
 }

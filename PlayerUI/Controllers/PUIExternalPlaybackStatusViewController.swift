@@ -110,10 +110,10 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
     }
-    
+
 }

@@ -68,5 +68,5 @@ public protocol PUIExternalPlaybackProvider: class {
     ///
     /// - Parameter volume: The volume (value between 0 and 1)
     func setVolume(_ volume: Float)
-    
+
 }

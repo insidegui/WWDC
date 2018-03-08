@@ -31,7 +31,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         let styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
 
         var rect = PUIPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view.superview)
-        if rect == NSZeroRect { rect = PUIPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
+        if rect == NSRect.zero { rect = PUIPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
 
         let window = PUIPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = true
@@ -49,7 +49,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         contentViewController = playerViewController
         window.title = playerViewController.title ?? ""
 
-        if let aspect = playerViewController.player.currentItem?.presentationSize, aspect != NSZeroSize {
+        if let aspect = playerViewController.player.currentItem?.presentationSize, aspect != NSSize.zero {
             window.aspectRatio = aspect
         }
     }
@@ -156,15 +156,15 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 private extension PUIPlayerWindow {
 
     class func centerRectForProposedContentRect(_ rect: NSRect) -> NSRect {
-        guard let screen = NSScreen.main else { return NSZeroRect }
+        guard let screen = NSScreen.main else { return NSRect.zero }
 
         return NSRect(x: screen.frame.width / 2.0 - rect.width / 2.0, y: screen.frame.height / 2.0 - rect.height / 2.0, width: rect.width, height: rect.height)
     }
 
     class func bestScreenRectFromDetachingContainer(_ containerView: NSView?) -> NSRect {
-        guard let view = containerView, let superview = view.superview else { return NSZeroRect }
+        guard let view = containerView, let superview = view.superview else { return NSRect.zero }
 
-        return view.window?.convertToScreen(superview.convert(view.frame, to: nil)) ?? NSZeroRect
+        return view.window?.convertToScreen(superview.convert(view.frame, to: nil)) ?? NSRect.zero
     }
 
     func applySizePreset(_ preset: PUIPlayerWindowSizePreset, center: Bool = true, animated: Bool = true) {
@@ -189,5 +189,5 @@ private extension PUIPlayerWindow {
 
         setFrame(NSRect(origin: origin, size: idealSize), display: true, animate: animated)
     }
-    
+
 }

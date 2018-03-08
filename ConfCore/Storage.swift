@@ -251,7 +251,6 @@ public final class Storage {
         })
     }
 
-
     /// Performs a write transaction in the background
     ///
     /// - Parameters:
@@ -311,7 +310,7 @@ public final class Storage {
     ///   Since this method must pass your object between threads,
     ///   it is not guaranteed that your writeBlock will be called.
     ///   Your write block is not called if the method fails to transfer your object between threads.
-    public func modify<T>(_ object: T, with writeBlock: @escaping (T) -> Void) where T : ThreadConfined {
+    public func modify<T>(_ object: T, with writeBlock: @escaping (T) -> Void) where T: ThreadConfined {
         let safeObject = ThreadSafeReference(to: object)
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
@@ -333,7 +332,7 @@ public final class Storage {
     ///   Since this method must pass your objects between threads,
     ///   it is not guaranteed that your writeBlock will be called.
     ///   Your write block is not called if any of the objects can't be transfered between threads.
-    public func modify<T>(_ objects: [T], with writeBlock: @escaping ([T]) -> Void) where T : ThreadConfined {
+    public func modify<T>(_ objects: [T], with writeBlock: @escaping ([T]) -> Void) where T: ThreadConfined {
         let safeObjects = objects.map { ThreadSafeReference(to: $0) }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
@@ -469,5 +468,5 @@ public final class Storage {
     public var allTracks: [Track] {
         return realm.objects(Track.self).sorted(byKeyPath: "order").toArray()
     }
-    
+
 }

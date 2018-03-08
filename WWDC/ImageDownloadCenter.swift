@@ -103,18 +103,18 @@ private final class ImageCacheProvider {
         DispatchQueue.global(qos: .utility).async {
             autoreleasepool {
                 guard let bgRealm = self.makeRealm() else { return }
-                
+
                 let entity = ImageCacheEntity()
-                
+
                 entity.key = key.absoluteString
                 entity.original = original
                 entity.thumbnail = thumbnail
-                
+
                 do {
                     try bgRealm.write {
                         bgRealm.add(entity, update: true)
                     }
-                    
+
                     bgRealm.invalidate()
                 } catch {
                     NSLog("Error saving cached image: \(error)")
@@ -241,5 +241,5 @@ private extension NSImage {
 
         return resizedImage
     }
-    
+
 }

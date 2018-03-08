@@ -68,7 +68,7 @@ final class VideoPlayerViewController: NSViewController {
     }()
 
     fileprivate lazy var progressIndicator: NSProgressIndicator = {
-        let p = NSProgressIndicator(frame: NSZeroRect)
+        let p = NSProgressIndicator(frame: NSRect.zero)
 
         p.controlSize = .regular
         p.style = .spinning
@@ -82,7 +82,7 @@ final class VideoPlayerViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSZeroRect)
+        view = NSView(frame: NSRect.zero)
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.black.cgColor
 
@@ -100,7 +100,7 @@ final class VideoPlayerViewController: NSViewController {
         view.addSubview(progressIndicator)
         view.addConstraints([
             NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: progressIndicator, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: progressIndicator, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0)
             ])
 
         progressIndicator.layer?.zPosition = 999
@@ -115,14 +115,14 @@ final class VideoPlayerViewController: NSViewController {
         updateUI()
 
         NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
-        
+
         NotificationCenter.default.addObserver(forName: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil, queue: OperationQueue.main) { _ in
             Swift.print("hello there!")
             self.playerView.invalidateAppearance()
         }
     }
 
-    func resetAppearanceDelegate()  {
+    func resetAppearanceDelegate() {
         playerView.appearanceDelegate = self
     }
 
@@ -177,7 +177,7 @@ final class VideoPlayerViewController: NSViewController {
 
     // MARK: - Player Observation
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let keyPath = keyPath else { return }
 
         if keyPath == #keyPath(AVPlayer.currentItem.presentationSize) {
@@ -190,7 +190,7 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     private func playerItemPresentationSizeDidChange() {
-        guard let size = player.currentItem?.presentationSize, size != NSZeroSize else { return }
+        guard let size = player.currentItem?.presentationSize, size != NSSize.zero else { return }
 
         (view.window as? PUIPlayerWindow)?.aspectRatio = size
     }
@@ -286,44 +286,44 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
 }
 
 extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
-    
+
     func playerViewShouldShowSubtitlesControl(_ playerView: PUIPlayerView) -> Bool {
        return true
     }
-    
+
     func playerViewShouldShowPictureInPictureControl(_ playerView: PUIPlayerView) -> Bool {
        return true
     }
-    
+
     func playerViewShouldShowSpeedControl(_ playerView: PUIPlayerView) -> Bool {
         return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
-    
+
     func playerViewShouldShowAnnotationControls(_ playerView: PUIPlayerView) -> Bool {
         return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
-    
+
     func playerViewShouldShowBackAndForwardControls(_ playerView: PUIPlayerView) -> Bool {
         return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
-    
+
     func playerViewShouldShowExternalPlaybackControls(_ playerView: PUIPlayerView) -> Bool {
         return true
     }
-    
+
     func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool {
         return true
     }
-    
+
     func playerViewShouldShowTimelineView(_ playerView: PUIPlayerView) -> Bool {
         return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
-    
+
     func playerViewShouldShowTimestampLabels(_ playerView: PUIPlayerView) -> Bool {
         return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
-    
-    func PlayerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {
+
+    func playerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {
         return Preferences.shared.skipBackAndForwardBy30Seconds
     }
 }
@@ -344,5 +344,5 @@ extension Transcript {
 
         return formatter.string(from: NSNumber(value: timecode)) ?? "0.0"
     }
-    
+
 }

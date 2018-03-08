@@ -29,7 +29,7 @@ private final class WWDCTextView: NSTextView {
             }
         }
     }()
-    
+
     override func didChangeText() {
         super.didChangeText()
 
@@ -123,7 +123,7 @@ final class BookmarkViewController: NSViewController {
 
         textView.rxText.throttle(1, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] text in
             guard let bookmark = self?.bookmark else { return }
-            
+
             self?.storage.modify(bookmark) { $0.body = text }
         }).disposed(by: disposeBag)
     }

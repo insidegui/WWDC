@@ -84,7 +84,7 @@ final class RemoteEnvironment {
         }
     }
 
-    func processSubscriptionNotification(with userInfo: [String : Any]) -> Bool {
+    func processSubscriptionNotification(with userInfo: [String: Any]) -> Bool {
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
 
         // check if the remote notification is for us, if not, tell the caller that we haven't handled it

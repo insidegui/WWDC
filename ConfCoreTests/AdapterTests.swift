@@ -14,12 +14,12 @@ class AdapterTests: XCTestCase {
 
     private let dateTimeFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = ConfCoreDateFormat
+        formatter.dateFormat = confCoreDateFormat
         formatter.locale = Locale(identifier: "en-US")
         formatter.timeZone = TimeZone.current
         return formatter
     }()
-    
+
     private func getJson(from filename: String) -> JSON {
         guard let fileURL = Bundle(for: AdapterTests.self).url(forResource: filename, withExtension: "json") else {
             XCTFail("Unable to find URL for fixture named \(filename)")
@@ -140,7 +140,7 @@ class AdapterTests: XCTestCase {
                 "playback",
                 "recording",
                 "video"
-                ]);
+                ])
         }
     }
 
@@ -163,7 +163,7 @@ class AdapterTests: XCTestCase {
                 "iOS",
                 "macOS",
                 "tvOS"
-                ]);
+                ])
         }
     }
 
@@ -371,5 +371,5 @@ class AdapterTests: XCTestCase {
             XCTAssertEqual(transcript.annotations.first!.body, "[ Silence ]")
         }
     }
-    
+
 }

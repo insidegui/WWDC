@@ -50,7 +50,6 @@ final class PUIBoringPlayerLayer: AVPlayerLayer {
 
 }
 
-
 final class PUIBoringTextLayer: CATextLayer {
 
     private var shouldAnimate: Bool = false

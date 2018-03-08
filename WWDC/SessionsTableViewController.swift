@@ -102,21 +102,19 @@ class SessionsTableViewController: NSViewController {
             let sortedNewRows = newRowsSet.intersection(oldRowsSet).sorted(by: { (row1, row2) -> Bool in
                 return row1.index < row2.index
             })
-            
+
             #if DEBUG
                 print("Building the arrays took: \(Date().timeIntervalSince(complicatedOperationStart))")
             #endif
-            
+
             let loopStart = Date()
-            for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) {
-                if oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
-                    needReloadedIndexes.insert(newSessionRowIndex.index)
-                }
+            for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) where oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
+                needReloadedIndexes.insert(newSessionRowIndex.index)
             }
-            
+
             #if DEBUG
                 print("The loop took: \(Date().timeIntervalSince(loopStart))")
-            
+
                 print("The complicated calculation took: \(Date().timeIntervalSince(complicatedOperationStart))")
             #endif
 
@@ -125,9 +123,9 @@ class SessionsTableViewController: NSViewController {
             DispatchQueue.main.sync {
 
                 // Preserve selected rows
-                let selectedRows = self.tableView.selectedRowIndexes.flatMap { (i) -> IndexedSessionRow? in
-                    guard i < oldValue.endIndex else { return nil }
-                    return IndexedSessionRow(sessionRow: oldValue[i], index: i)
+                let selectedRows = self.tableView.selectedRowIndexes.flatMap { (index) -> IndexedSessionRow? in
+                    guard index < oldValue.endIndex else { return nil }
+                    return IndexedSessionRow(sessionRow: oldValue[index], index: index)
                 }
 
                 var selectedIndexes = IndexSet(newRowsSet.intersection(selectedRows).map { $0.index })
@@ -210,7 +208,7 @@ class SessionsTableViewController: NSViewController {
     func scrollToToday() {
         guard let sections = scheduleSections else { return }
 
-        guard let section = sections.filter("representedDate >= %@", Today()).first else { return }
+        guard let section = sections.filter("representedDate >= %@", today()).first else { return }
 
         guard let identifier = section.instances.first?.session?.identifier else { return }
 
@@ -653,12 +651,12 @@ private extension NSMenuItem {
             guard let value = SessionsTableViewController.ContextualMenuOption(rawValue: tag) else {
                 fatalError("Invalid ContextualMenuOption: \(tag)")
             }
-            
+
             return value
         }
         set {
             tag = newValue.rawValue
         }
     }
-    
+
 }

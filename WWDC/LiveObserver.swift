@@ -92,7 +92,7 @@ final class LiveObserver {
         }
     }
 
-    func processSubscriptionNotification(with userInfo: [String : Any]) -> Bool {
+    func processSubscriptionNotification(with userInfo: [String: Any]) -> Bool {
         return specialEventsObserver.processSubscriptionNotification(with: userInfo)
     }
 
@@ -111,7 +111,7 @@ private extension SessionAsset {
         self.init()
 
         assetType = .liveStreamVideo
-        year = Calendar.current.component(.year, from: Today())
+        year = Calendar.current.component(.year, from: today())
         sessionId = "\(number)"
         remoteURL = hls
         identifier = generateIdentifier()
@@ -186,7 +186,7 @@ private final class CloudKitLiveObserver {
 
     private let specialLiveEventsSubscriptionID: String = "SPECIAL-LIVE-EVENTS"
 
-    func processSubscriptionNotification(with userInfo: [String : Any]) -> Bool {
+    func processSubscriptionNotification(with userInfo: [String: Any]) -> Bool {
         #if ICLOUD
             let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
 
@@ -224,5 +224,5 @@ private final class CloudKitLiveObserver {
             }
         }
     }
-    
+
 }

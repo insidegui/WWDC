@@ -44,7 +44,7 @@ extension URL {
 
     var subDirectories: [URL] {
         guard isDirectory else { return [] }
-        return (try? FileManager.default.contentsOfDirectory(at: self, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]).filter{ $0.isDirectory }) ?? []
+        return (try? FileManager.default.contentsOfDirectory(at: self, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]).filter { $0.isDirectory }) ?? []
     }
 
 }
@@ -53,7 +53,7 @@ final class DownloadManager: NSObject {
 
     fileprivate let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
     fileprivate var backgroundSession: Foundation.URLSession!
-    fileprivate var downloadTasks: [String : URLSessionDownloadTask] = [:]
+    fileprivate var downloadTasks: [String: URLSessionDownloadTask] = [:]
     fileprivate let defaults = UserDefaults.standard
 
     fileprivate var storage: Storage!
@@ -80,7 +80,7 @@ final class DownloadManager: NSObject {
         NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
         }
-        
+
         updateDownloadedFlagsOfPreviouslyDownloaded()
         monitorDownloadsFolder()
     }
@@ -343,7 +343,7 @@ final class DownloadManager: NSObject {
 
         topFolderMonitor = DTFolderMonitor(for: url) { [unowned self] in
             self.setupSubdirectoryMonitors(on: url)
-            
+
             self.updateDownloadedFlagsByEnumeratingFilesAtPath(url.path)
         }
 
@@ -370,7 +370,7 @@ final class DownloadManager: NSObject {
     fileprivate func updateDownloadedFlagsOfPreviouslyDownloaded() {
         let expectedOnDisk = storage.sessions.filter(NSPredicate(format: "isDownloaded == true"))
         var notPresent = [String]()
-        
+
         for session in expectedOnDisk {
             if let asset = session.asset(of: SessionAssetType.hdVideo) {
                 if !hasVideo(asset.remoteURL) {
@@ -378,7 +378,7 @@ final class DownloadManager: NSObject {
                 }
             }
         }
-        
+
         storage.updateDownloadedFlag(false, forAssetsAtPaths: notPresent)
         notPresent.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
     }
@@ -469,5 +469,5 @@ extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
         let info = DownloadInfo(totalBytesWritten: totalBytesWritten, totalBytesExpectedToWrite: totalBytesExpectedToWrite, progress: progress)
         NotificationCenter.default.post(name: .DownloadManagerDownloadProgressChanged, object: originalURL, userInfo: ["info": info])
     }
-    
+
 }

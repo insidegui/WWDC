@@ -46,7 +46,7 @@ final class PUIPictureContainerViewController: NSViewController {
         view.addObserver(self, forKeyPath: #keyPath(NSView.superview), options: [.new], context: nil)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let path = keyPath else { return }
         switch path {
         case #keyPath(NSView.superview):

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="17A344b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12121"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
     </dependencies>
@@ -610,7 +610,11 @@
                     </connections>
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WWDC" customModuleProvider="target"/>
-                <customObject id="IGa-MZ-Wn5" customClass="SUUpdater"/>
+                <customObject id="IGa-MZ-Wn5" customClass="SUUpdater">
+                    <connections>
+                        <outlet property="delegate" destination="Voe-Tx-rLC" id="J4V-C9-2KN"/>
+                    </connections>
+                </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
@@ -632,7 +636,7 @@
                                             <stackView distribution="fillProportionally" orientation="horizontal" alignment="bottom" spacing="12" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qTs-9y-MbZ">
                                                 <rect key="frame" x="12" y="116" width="319" height="25"/>
                                                 <subviews>
-                                                    <searchField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-Ig-nku">
+                                                    <searchField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-Ig-nku">
                                                         <rect key="frame" x="0.0" y="0.0" width="228" height="22"/>
                                                         <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="mC0-Jx-M3e">
                                                             <font key="font" metaFont="system"/>

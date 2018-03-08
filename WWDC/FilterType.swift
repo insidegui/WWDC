@@ -8,8 +8,8 @@
 
 import Foundation
 
-typealias WWDCFiltersStateDictionary = [ String : [ FilterIdentifier.RawValue : WWDCFilterTypeDictionary ] ]
-typealias WWDCFilterTypeDictionary = [ String : Any ]
+typealias WWDCFiltersStateDictionary = [ String : [ FilterIdentifier.RawValue: WWDCFilterTypeDictionary ] ]
+typealias WWDCFilterTypeDictionary = [ String: Any ]
 
 protocol FilterType {
 
@@ -21,11 +21,11 @@ protocol FilterType {
 }
 
 // Can't use WWDCFilterTypeDictionary as Value's type, likely a bug in Swift
-extension Dictionary where Key == String, Value == [ String : Any ] {
+extension Dictionary where Key == String, Value == [ String: Any ] {
 
     init?(filters: [FilterType]) {
 
-        self = [String : WWDCFilterTypeDictionary]()
+        self = [String: WWDCFilterTypeDictionary]()
 
         for filter in filters {
 

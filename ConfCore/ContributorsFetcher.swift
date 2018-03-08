@@ -20,7 +20,7 @@ public final class ContributorsFetcher {
     private let syncQueue = DispatchQueue(label: "io.wwdc.app.contributorsfetcher.sync")
     private var names = [String]()
 
-    public var infoTextChangedCallback: (_ newText: String) -> () = { _ in }
+    public var infoTextChangedCallback: (_ newText: String) -> Void = { _ in }
 
     public var infoText = "" {
         didSet {
@@ -142,12 +142,12 @@ private struct GitHubPagination {
 
             case "prev":
                 previous = url
-                
+
             case "last":
                 last = url
-                
+
             default:
-                break;
+                break
             }
         }
     }

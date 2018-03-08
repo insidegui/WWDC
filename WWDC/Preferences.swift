@@ -135,7 +135,7 @@ final class Preferences {
         }
         set {
             defaults.set(newValue, forKey: #function)
-            
+
             NotificationCenter.default.post(name: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil)
         }
     }

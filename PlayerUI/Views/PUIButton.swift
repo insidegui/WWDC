@@ -148,8 +148,8 @@ public final class PUIButton: NSControl {
         shouldDrawHighlighted = true
 
         if !sendsActionOnMouseDown {
-            window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { e, stop in
-                if e?.type == .leftMouseUp {
+            window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { event, stop in
+                if event?.type == .leftMouseUp {
                     self.shouldDrawHighlighted = false
                     stop.pointee = true
                 }
@@ -180,9 +180,9 @@ public final class PUIButton: NSControl {
     public override var effectiveAppearance: NSAppearance {
         return NSAppearance(named: .vibrantDark)!
     }
-    
+
     public override var allowsVibrancy: Bool {
         return true
     }
-    
+
 }

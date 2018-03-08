@@ -16,7 +16,7 @@ struct PUIBufferSegment: Hashable {
         return "\(start)->\(duration)".hashValue
     }
 
-    static func ==(lhs: PUIBufferSegment, rhs: PUIBufferSegment) -> Bool {
+    static func == (lhs: PUIBufferSegment, rhs: PUIBufferSegment) -> Bool {
         return lhs.start == rhs.start && lhs.duration == rhs.duration
     }
 }

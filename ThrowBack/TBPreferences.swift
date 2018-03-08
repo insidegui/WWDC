@@ -39,7 +39,7 @@ public final class TBPreferences {
         static let floatOnTopEnabled = "floatOnTopEnabled"
         static let automaticRefreshSuggestionPresentedAt = "automaticRefreshSuggestionPresentedAt"
 
-        struct transcript {
+        struct Transcript {
             static let font = "transcript.font"
             static let textColor = "transcript.textColor"
             static let bgColor = "transcript.bgColor"
@@ -66,7 +66,7 @@ public final class TBPreferences {
         static let floatOnTopEnabled = false
         static let automaticRefreshSuggestionPresentedAt = Date.distantPast
 
-        struct transcript {
+        struct Transcript {
             static let font = NSFont(name: "Avenir Next", size: 16.0)!
             static let textColor = NSColor.black
             static let bgColor = NSColor.white
@@ -88,7 +88,7 @@ public final class TBPreferences {
             if let rectString = defaults.object(forKey: Keys.mainWindowFrame) as? String {
                 return NSRectFromString(rectString)
             } else {
-                return NSZeroRect
+                return NSRect.zero
             }
         }
     }
@@ -154,17 +154,17 @@ public final class TBPreferences {
         set {
             // NSFont can't be put into NSUserDefaults directly, so we archive It and store as a NSData blob
             let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
-            defaults.set(data, forKey: Keys.transcript.font)
+            defaults.set(data, forKey: Keys.Transcript.font)
         }
         get {
-            if let fontData = defaults.data(forKey: Keys.transcript.font) {
+            if let fontData = defaults.data(forKey: Keys.Transcript.font) {
                 if let font = NSKeyedUnarchiver.unarchiveObject(with: fontData) as? NSFont {
                     return font
                 } else {
-                    return DefaultValues.transcript.font
+                    return DefaultValues.Transcript.font
                 }
             } else {
-                return DefaultValues.transcript.font
+                return DefaultValues.Transcript.font
             }
         }
     }
@@ -174,17 +174,17 @@ public final class TBPreferences {
         // NSColor can't be put into NSUserDefaults directly, so we archive It and store as a NSData blob
         set {
             let colorData = NSKeyedArchiver.archivedData(withRootObject: newValue)
-            defaults.set(colorData, forKey: Keys.transcript.textColor)
+            defaults.set(colorData, forKey: Keys.Transcript.textColor)
         }
         get {
-            if let colorData = defaults.data(forKey: Keys.transcript.textColor) {
+            if let colorData = defaults.data(forKey: Keys.Transcript.textColor) {
                 if let color = NSKeyedUnarchiver.unarchiveObject(with: colorData) as? NSColor {
                     return color
                 } else {
-                    return DefaultValues.transcript.textColor
+                    return DefaultValues.Transcript.textColor
                 }
             } else {
-                return DefaultValues.transcript.textColor
+                return DefaultValues.Transcript.textColor
             }
         }
     }
@@ -194,17 +194,17 @@ public final class TBPreferences {
         // NSColor can't be put into NSUserDefaults directly, so we archive It and store as a NSData blob
         set {
             let colorData = NSKeyedArchiver.archivedData(withRootObject: newValue)
-            defaults.set(colorData, forKey: Keys.transcript.bgColor)
+            defaults.set(colorData, forKey: Keys.Transcript.bgColor)
         }
         get {
-            if let colorData = defaults.data(forKey: Keys.transcript.bgColor) {
+            if let colorData = defaults.data(forKey: Keys.Transcript.bgColor) {
                 if let color = NSKeyedUnarchiver.unarchiveObject(with: colorData) as? NSColor {
                     return color
                 } else {
-                    return DefaultValues.transcript.bgColor
+                    return DefaultValues.Transcript.bgColor
                 }
             } else {
-                return DefaultValues.transcript.bgColor
+                return DefaultValues.Transcript.bgColor
             }
         }
     }
@@ -318,5 +318,5 @@ public final class TBPreferences {
             defaults.set(newValue, forKey: Keys.automaticRefreshSuggestionPresentedAt)
         }
     }
-    
+
 }

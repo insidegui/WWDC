@@ -48,7 +48,7 @@ public class SessionInstance: Object {
     @objc public dynamic var eventIdentifier = ""
 
     /// The session
-    @objc public dynamic var session: Session? = nil
+    @objc public dynamic var session: Session?
 
     /// The raw session type as returned by the API
     @objc public dynamic var rawSessionType = "Session"
@@ -140,23 +140,22 @@ public class SessionInstance: Object {
         trackIdentifier = other.trackIdentifier
         eventIdentifier = other.eventIdentifier
         calendarEventIdentifier = other.calendarEventIdentifier
-        
+
         if let otherSession = other.session, let session = session {
             session.merge(with: otherSession, in: realm)
         }
 
         let otherKeywords = other.keywords.map { newKeyword -> (Keyword) in
             if newKeyword.realm == nil,
-                let existingKeyword = realm.object(ofType: Keyword.self, forPrimaryKey: newKeyword.name)
-            {
+                let existingKeyword = realm.object(ofType: Keyword.self, forPrimaryKey: newKeyword.name) {
                 return existingKeyword
             } else {
                 return newKeyword
             }
         }
-        
+
         keywords.removeAll()
         keywords.append(objectsIn: otherKeywords)
     }
-    
+
 }

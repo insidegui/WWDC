@@ -26,7 +26,7 @@ final class SessionTableCellView: NSTableCellView {
         }
     }
 
-    private var imageDownloadOperation: Operation? = nil
+    private var imageDownloadOperation: Operation?
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -254,5 +254,5 @@ final class SessionTableCellView: NSTableCellView {
         downloadedImageView.isHidden = true
         favoritedImageView.isHidden = true
     }
-    
+
 }

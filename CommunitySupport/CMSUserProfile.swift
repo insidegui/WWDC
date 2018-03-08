@@ -38,7 +38,7 @@ extension CMSUserProfile: Equatable {
         return identifier.isEmpty
     }
 
-    public static func ==(lhs: CMSUserProfile, rhs: CMSUserProfile) -> Bool {
+    public static func == (lhs: CMSUserProfile, rhs: CMSUserProfile) -> Bool {
         return lhs.identifier == rhs.identifier
             && lhs.avatarFileURL == rhs.avatarFileURL
             && lhs.name == rhs.name

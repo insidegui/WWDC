@@ -63,5 +63,5 @@ class PUIAnnotationWindowController: NSWindowController {
 
         return image
     }
-    
+
 }

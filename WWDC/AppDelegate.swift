@@ -8,6 +8,7 @@
 
 import Cocoa
 import CommunitySupport
+import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -25,7 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.registerForRemoteNotifications(matching: [])
     }
 
-    func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String : Any]) {
+    func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
         if CMSCommunityCenter.shared.processNotification(userInfo: userInfo) {
             // Community center handled this notification
             return
@@ -63,6 +64,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         return true
     }
-    
+
 }
 
+extension AppDelegate: SUUpdaterDelegate {
+
+    func updaterMayCheck(forUpdates updater: SUUpdater) -> Bool {
+        #if DEBUG
+            return false
+        #else
+            return true
+        #endif
+    }
+}

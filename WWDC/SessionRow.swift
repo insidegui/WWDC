@@ -47,7 +47,7 @@ extension SessionRow: Hashable {
         return ObjectIdentifier(self).hashValue
     }
 
-    static func ==(lhs: SessionRow, rhs: SessionRow) -> Bool {
+    static func == (lhs: SessionRow, rhs: SessionRow) -> Bool {
         return lhs.hashValue == rhs.hashValue
     }
 }
@@ -61,7 +61,7 @@ struct IndexedSessionRow: Hashable {
         return sessionRow.hashValue
     }
 
-    static func ==(lhs: IndexedSessionRow, rhs: IndexedSessionRow) -> Bool {
+    static func == (lhs: IndexedSessionRow, rhs: IndexedSessionRow) -> Bool {
         return lhs.sessionRow == rhs.sessionRow
     }
 }

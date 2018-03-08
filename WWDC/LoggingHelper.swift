@@ -48,7 +48,7 @@ final class LoggingHelper {
             if let noteError = note.object as? Error {
                 error = noteError
             } else {
-                error = NSError(domain: "CMSCommunityCenter", code: -1, userInfo: note.userInfo as? [String : Any])
+                error = NSError(domain: "CMSCommunityCenter", code: -1, userInfo: note.userInfo as? [String: Any])
             }
 
             LoggingHelper.registerError(error, info: note.userInfo as? [String: Any])

@@ -30,8 +30,11 @@ final class SessionInstancesJSONAdapter: Adapter {
             return .error(.invalidData)
         }
 
-        // not an instance
-        guard session.year == Calendar.current.component(.year, from: Date()) else {
+        var year = Calendar.current.component(.year, from: Date())
+        if Calendar.current.component(.month, from: Date()) < 6 {
+            year -= 1
+        }
+        guard session.year == year else {
             return .error(.invalidData)
         }
 

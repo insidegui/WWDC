@@ -88,7 +88,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         removeObserver(self, forKeyPath: #keyPath(selectedTabViewItemIndex))
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(selectedTabViewItemIndex) {
             guard selectedTabViewItemIndex >= 0 && selectedTabViewItemIndex < tabViewItems.count else { return }
 

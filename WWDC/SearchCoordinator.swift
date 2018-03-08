@@ -42,8 +42,7 @@ final class SearchCoordinator {
     init(_ storage: Storage,
          sessionsController: SessionsTableViewController,
          videosController: SessionsTableViewController,
-         restorationFiltersState: JSON? = nil)
-    {
+         restorationFiltersState: JSON? = nil) {
         self.storage = storage
         scheduleController = sessionsController
         self.videosController = videosController
@@ -273,5 +272,5 @@ extension SearchCoordinator: SearchFiltersViewControllerDelegate {
             updateSearchResults(for: videosController, with: filters)
         }
     }
-    
+
 }

@@ -1,0 +1,12 @@
+os: osx
+osx_image: xcode9.2
+install:
+  - brew bundle
+  - bundle install
+script:
+  - "./bootstrap.sh"
+  - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty
+env:
+  global:
+    # Variable added per the suggestion here https://github.com/Carthage/Carthage/issues/1236#issuecomment-205215986
+    - secure: ZrhNiHFI0AYeoNaikdaBLmiXJg2/Yq9yI2+IpNKqCNVP2HdsQrl5//C16I5ybmmnhvoJMMHrG6JPhi5K7tG9fY02TYbk+392ztzHHJz1VMK4HpmDDkvl9nIZOfXJ4ZizKsMtcZdAPygKTYyNK3iwm3U6gvqQs2dCk4i5YflTBT4Rs27Wqvz9v2jyi/UybuwKAZxgAkDPAnKaqGJdFMdXNKmPclSpap/YHBXo5pXYVN7OlFonbDTB6QbNQnEGfHTWUEJKNuc3gU1MIxbE4qt9EZAmwbPj8bTpk/vlb26si7LANtrerKL9Y9ckfKrJ9yV+yU2iPevvw9k+5lRXl2Q88pGDxUfUfp7ZrooQWTz83yI05InK1wDZcCKhiASalwtjD/hIIEOHGFKigrRNFlJHjgobBI0KJMoTpMSvsr4kg4uU7ggL5DfLLlMSYZGiUve+rDxWj4DpF9Y9lrbZSy38XlpAlASmxvLUcw0roO/I55t5258EEH1i5FE4HNAYglQNgy2umjCL2twuiQCL39pUrK0+VaTiWhS/JGNifbxK/5P/5JO+TQ5XdG5MNjA86d13Xxw1Ts5wPz+XOZb422qbDih+XrEB71O252L5k64GYWrj53Y1l8z83xTj8sci3TwP+Ba36dsKBuAUyha+9u9mRXI4coF+Kcc3C2pgjG8lbfQ=

@@ -61,7 +61,7 @@ public class Session: Object {
 
     /// Shortcut to get the full transcript text (used during search)
     @objc public dynamic var transcriptText: String = ""
-    
+
     /// Media duration (in seconds)
     @objc public dynamic var mediaDuration: Double = 0
 
@@ -137,8 +137,7 @@ public class Session: Object {
 
         let otherFocuses = other.focuses.map { newFocus -> (Focus) in
             if newFocus.realm == nil,
-                let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name)
-            {
+                let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) {
                 return existingFocus
             } else {
                 return newFocus
@@ -148,5 +147,5 @@ public class Session: Object {
         focuses.removeAll()
         focuses.append(objectsIn: otherFocuses)
     }
-    
+
 }

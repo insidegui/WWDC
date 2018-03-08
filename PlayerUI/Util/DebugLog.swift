@@ -8,7 +8,7 @@
 
 import Foundation
 
-func DebugLog(_ items: Any...) {
+func debugLog(_ items: Any...) {
     #if DEBUG
         print(items)
     #endif
