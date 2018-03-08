@@ -15,6 +15,6 @@ extension Realm {
     }
 
     static func makeInMemory() -> Realm {
-        return try! Realm(configuration: makeInMemoryConfiguration())
+        return tryOrXCTFail(try Realm(configuration: makeInMemoryConfiguration()))
     }
 }

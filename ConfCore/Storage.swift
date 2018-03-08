@@ -10,11 +10,14 @@ import Foundation
 import RealmSwift
 import RxSwift
 import RxRealm
+import RxCocoa
 
 public final class Storage {
 
     public let realmConfig: Realm.Configuration
     public let realm: Realm
+
+    let disposeBag = DisposeBag()
 
     public init(_ configuration: Realm.Configuration) throws {
         var config = configuration
@@ -25,21 +28,21 @@ public final class Storage {
 
         realm = try Realm(configuration: config)
 
-        DistributedNotificationCenter.default().addObserver(forName: .TranscriptIndexingDidStart, object: nil, queue: OperationQueue.main) { [unowned self] _ in
+        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStart).subscribe(onNext: { [unowned self] _ in
             #if DEBUG
                 NSLog("[Storage] Locking realm autoupdates until transcript indexing is finished")
             #endif
 
             self.realm.autorefresh = false
-        }
+        }).disposed(by: disposeBag)
 
-        DistributedNotificationCenter.default().addObserver(forName: .TranscriptIndexingDidStop, object: nil, queue: OperationQueue.main) { [unowned self] _ in
+        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStop).subscribe(onNext: { [unowned self] _ in
             #if DEBUG
                 NSLog("[Storage] Realm autoupdates unlocked")
             #endif
 
             self.realm.autorefresh = true
-        }
+        }).disposed(by: disposeBag)
 
         deleteOldEventsIfNeeded()
     }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxCocoa
 import RxSwift
 
 extension Notification.Name {
@@ -32,13 +33,15 @@ public final class SyncEngine {
         return transcriptIndexingConnection.remoteObjectProxy as? TranscriptIndexingServiceProtocol
     }
 
+    private let disposeBag = DisposeBag()
+
     public init(storage: Storage, client: AppleAPIClient) {
         self.storage = storage
         self.client = client
 
-        NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: OperationQueue.main) { [unowned self] _ in
+        NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
             self.startTranscriptIndexingIfNeeded()
-        }
+        }).disposed(by: disposeBag)
     }
 
     public func syncContent() {

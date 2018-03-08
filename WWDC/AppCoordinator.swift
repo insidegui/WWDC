@@ -91,9 +91,9 @@ final class AppCoordinator {
         setupBindings()
         setupDelegation()
 
-        NotificationCenter.default.addObserver(forName: .WWDCTabViewControllerDidFinishLoading, object: nil, queue: nil) { _ in self.restoreApplicationState() }
-        NotificationCenter.default.addObserver(forName: NSApplication.didFinishLaunchingNotification, object: nil, queue: nil) { _ in self.startup() }
-        NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: nil) { _ in self.saveApplicationState() }
+        NotificationCenter.default.rx.notification(.WWDCTabViewControllerDidFinishLoading).subscribe(onNext: { [weak self] _ in self?.restoreApplicationState() }).disposed(by: disposeBag)
+        NotificationCenter.default.rx.notification(NSApplication.didFinishLaunchingNotification).subscribe(onNext: { [weak self] _ in self?.startup() }).disposed(by: disposeBag)
+        NotificationCenter.default.rx.notification(NSApplication.willTerminateNotification).subscribe(onNext: { [weak self] _ in self?.saveApplicationState() }).disposed(by: disposeBag)
     }
 
     /// The list controller for the active tab
@@ -245,17 +245,17 @@ final class AppCoordinator {
             tabController.showLoading()
         }
 
-        NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: OperationQueue.main) { note in
+        NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observeOn(MainScheduler.instance).subscribe(onNext: { note in
             if let error = note.object as? Error {
                 NSApp.presentError(error)
             } else {
                 self.updateListsAfterSync(migrate: true)
             }
-        }
+        }).disposed(by: disposeBag)
 
-        NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: OperationQueue.main) { _ in
+        NotificationCenter.default.rx.notification(.WWDCEnvironmentDidChange).observeOn(MainScheduler.instance).subscribe(onNext: { _ in
             self.refresh(nil)
-        }
+        }).disposed(by: disposeBag)
 
         refresh(nil)
         updateListsAfterSync()

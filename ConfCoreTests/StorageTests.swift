@@ -14,17 +14,16 @@ class StorageTests: XCTestCase {
 
     private var realmConfig: Realm.Configuration!
     private var realm: Realm!
+    private var storage: Storage!
 
     override func setUp() {
         super.setUp()
 
-        realmConfig = Realm.makeInMemoryConfiguration()
-        realm = try! Realm(configuration: realmConfig)
+        storage = tryOrXCTFail(try Storage(Realm.makeInMemoryConfiguration()))
+        realm = storage.realm
     }
 
     func test() {
-        let storage = try! Storage(realmConfig)
-
         let contentsResponse = makeContentsResponse()
 
         let storeExpectation = expectation(description: "Store completion")
