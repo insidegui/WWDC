@@ -21,4 +21,20 @@ class WWDCTableView: NSTableView {
     override var effectiveAppearance: NSAppearance {
         return NSAppearance(named: .vibrantDark)!
     }
+
+    override func menu(for event: NSEvent) -> NSMenu? {
+
+        let windowLocation = event.locationInWindow
+        let tableLocation = convert(windowLocation, from: nil)
+        let clickedRow = row(at: tableLocation)
+
+        if clickedRow >= 0,
+            let rowView = rowView(atRow: clickedRow, makeIfNecessary: false),
+            rowView.isGroupRowStyle {
+
+            return nil
+        }
+
+        return super.menu(for: event)
+    }
 }
