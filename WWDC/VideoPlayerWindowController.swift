@@ -24,6 +24,13 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 
     var actionOnWindowClosed = {}
 
+    var playerWindow: PUIPlayerWindow? {
+        let playerWindow = window as? PUIPlayerWindow
+        assert(playerWindow != nil, "Expected a valid window and found none")
+
+        return playerWindow
+    }
+
     init(playerViewController: VideoPlayerViewController, fullscreenOnly: Bool = false, originalContainer: NSView? = nil) {
         self.fullscreenOnly = fullscreenOnly
         self.originalContainer = originalContainer
@@ -62,7 +69,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         super.showWindow(sender)
 
         if !fullscreenOnly {
-            (window as! PUIPlayerWindow).applySizePreset(.half)
+            playerWindow?.applySizePreset(.half)
         } else {
             window?.toggleFullScreen(sender)
         }
@@ -119,15 +126,15 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     }
 
     @IBAction func sizeWindowToHalfSize(_ sender: AnyObject?) {
-        (window as! PUIPlayerWindow).applySizePreset(.half)
+        playerWindow?.applySizePreset(.half)
     }
 
     @IBAction func sizeWindowToQuarterSize(_ sender: AnyObject?) {
-        (window as! PUIPlayerWindow).applySizePreset(.quarter)
+        playerWindow?.applySizePreset(.quarter)
     }
 
     @IBAction func sizeWindowToFill(_ sender: AnyObject?) {
-        (window as! PUIPlayerWindow).applySizePreset(.max)
+        playerWindow?.applySizePreset(.max)
     }
 
     @IBAction func floatOnTop(_ sender: NSMenuItem) {

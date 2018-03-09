@@ -102,8 +102,11 @@ private struct GitHubPagination {
     var previous: URL?
     var last: URL?
 
+    // swiftlint:disable force_try
+    // As these regex's are constants, we don't need to worry about the failures
     private static let urlRegex = try! NSRegularExpression(pattern: "<(.*)>", options: [])
     private static let typeRegex = try! NSRegularExpression(pattern: "rel=\"(.*)\"", options: [])
+    // swiftlint:enable force_try
 
     init?(linkHeader: String) {
         let links: [(URL, String)] = linkHeader.components(separatedBy: ",").flatMap { link in

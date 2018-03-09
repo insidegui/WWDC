@@ -31,6 +31,25 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         return activeTabVar.asObservable()
     }
 
+    override var selectedTabViewItemIndex: Int {
+        didSet {
+            guard selectedTabViewItemIndex >= 0 && selectedTabViewItemIndex < tabViewItems.count else { return }
+
+            tabViewItems.forEach { item in
+                guard let identifier = item.viewController?.identifier else { return }
+                guard let view = tabItemViews.first(where: { $0.controllerIdentifier == identifier.rawValue }) else { return }
+
+                if indexForChild(with: identifier.rawValue) == selectedTabViewItemIndex {
+                    view.state = .on
+                } else {
+                    view.state = .off
+                }
+            }
+
+            activeTabVar.value = Tab(rawValue: selectedTabViewItemIndex)!
+        }
+    }
+
     init(windowController: NSWindowController) {
         super.init(nibName: nil, bundle: nil)
 
@@ -76,36 +95,9 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         toolbar.insertItem(withItemIdentifier: .flexibleSpace, at: 0)
         toolbar.insertItem(withItemIdentifier: .flexibleSpace, at: toolbar.items.count)
 
-        addObserver(self, forKeyPath: #keyPath(selectedTabViewItemIndex), options: [.initial, .new], context: nil)
-
         if !sentStatupNotification {
             sentStatupNotification = true
             NotificationCenter.default.post(name: .WWDCTabViewControllerDidFinishLoading, object: self)
-        }
-    }
-
-    deinit {
-        removeObserver(self, forKeyPath: #keyPath(selectedTabViewItemIndex))
-    }
-
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(selectedTabViewItemIndex) {
-            guard selectedTabViewItemIndex >= 0 && selectedTabViewItemIndex < tabViewItems.count else { return }
-
-            tabViewItems.forEach { item in
-                guard let identifier = item.viewController?.identifier else { return }
-                guard let view = tabItemViews.first(where: { $0.controllerIdentifier == identifier.rawValue }) else { return }
-
-                if indexForChild(with: identifier.rawValue) == selectedTabViewItemIndex {
-                    view.state = .on
-                } else {
-                    view.state = .off
-                }
-            }
-
-            activeTabVar.value = Tab(rawValue: selectedTabViewItemIndex)!
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
 

@@ -42,7 +42,7 @@ final class LoggingHelper {
     }
 
     static func observeCommunityCenterNotifications() {
-        NotificationCenter.default.addObserver(forName: .CMSErrorOccurred, object: nil, queue: OperationQueue.main) { note in
+        _ = NotificationCenter.default.addObserver(forName: .CMSErrorOccurred, object: nil, queue: OperationQueue.main) { note in
             let error: Error
 
             if let noteError = note.object as? Error {
@@ -54,7 +54,7 @@ final class LoggingHelper {
             LoggingHelper.registerError(error, info: note.userInfo as? [String: Any])
         }
 
-        NotificationCenter.default.addObserver(forName: .CMSUserIdentifierDidBecomeAvailable, object: nil, queue: OperationQueue.main) { note in
+        _ = NotificationCenter.default.addObserver(forName: .CMSUserIdentifierDidBecomeAvailable, object: nil, queue: OperationQueue.main) { note in
             guard let identifier = note.object as? String else { return }
 
             LoggingHelper.registerCloudKitUserIdentifier(identifier)

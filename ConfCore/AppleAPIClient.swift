@@ -17,14 +17,22 @@ public final class AppleAPIClient {
     fileprivate var environment: Environment
     fileprivate var service: Service
 
+    private var environmentChangeToken: NSObjectProtocol?
+
     public init(environment: Environment) {
         self.environment = environment
         service = Service(baseURL: environment.baseURL)
 
         configureService()
 
-        NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: OperationQueue.main) { _ in
-            self.updateEnvironment()
+        environmentChangeToken = NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: .main) { [weak self] _ in
+            self?.updateEnvironment()
+        }
+    }
+
+    deinit {
+        if let token = environmentChangeToken {
+            NotificationCenter.default.removeObserver(token)
         }
     }
 

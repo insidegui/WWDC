@@ -77,7 +77,7 @@ final class DownloadManager: NSObject {
             }
         }
 
-        NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
+        _ = NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
         }
 

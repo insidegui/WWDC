@@ -65,7 +65,8 @@ open class PUIPlayerWindow: NSWindow {
     fileprivate var titlebarSeparatorLayer: CALayer?
     fileprivate var titlebarGradientLayer: CAGradientLayer?
 
-    fileprivate var fullscreenObserver: NSObjectProtocol?
+    fileprivate var didEnterFullscreenObserver: NSObjectProtocol?
+    fileprivate var didExitFullscreenObserver: NSObjectProtocol?
 
     fileprivate func applyCustomizations(_ note: Notification? = nil) {
         titleVisibility = .hidden
@@ -131,13 +132,13 @@ open class PUIPlayerWindow: NSWindow {
     }
 
     fileprivate func installFullscreenObserverIfNeeded() {
-        guard fullscreenObserver == nil else { return }
+        guard didEnterFullscreenObserver == nil else { return }
 
         let nc = NotificationCenter.default
 
         // the customizations (especially the title text field ones) have to be reapplied when entering and exiting fullscreen
-        nc.addObserver(forName: NSWindow.didEnterFullScreenNotification, object: self, queue: nil, using: applyCustomizations)
-        nc.addObserver(forName: NSWindow.didExitFullScreenNotification, object: self, queue: nil, using: applyCustomizations)
+        didEnterFullscreenObserver = nc.addObserver(forName: NSWindow.didEnterFullScreenNotification, object: self, queue: nil, using: applyCustomizations)
+        didExitFullscreenObserver = nc.addObserver(forName: NSWindow.didExitFullScreenNotification, object: self, queue: nil, using: applyCustomizations)
     }
 
     open override func makeKeyAndOrderFront(_ sender: Any?) {

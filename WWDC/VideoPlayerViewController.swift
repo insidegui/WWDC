@@ -116,10 +116,9 @@ final class VideoPlayerViewController: NSViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
 
-        NotificationCenter.default.addObserver(forName: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil, queue: OperationQueue.main) { _ in
-            Swift.print("hello there!")
+        NotificationCenter.default.rx.notification(.SkipBackAndForwardBy30SecondsPreferenceDidChange).observeOn(MainScheduler.instance).subscribe { _ in
             self.playerView.invalidateAppearance()
-        }
+        }.disposed(by: disposeBag)
     }
 
     func resetAppearanceDelegate() {
@@ -137,12 +136,9 @@ final class VideoPlayerViewController: NSViewController {
 
             oldPlayer.pause()
             oldPlayer.cancelPendingPrerolls()
-            oldPlayer.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
-            oldPlayer.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize))
         }
 
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize), options: [.initial, .new], context: nil)
+        setupPlayerObservers()
 
         player.play()
 
@@ -177,15 +173,22 @@ final class VideoPlayerViewController: NSViewController {
 
     // MARK: - Player Observation
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        guard let keyPath = keyPath else { return }
+    private var playerStatusObserver: NSKeyValueObservation?
+    private var presentationSizeObserver: NSKeyValueObservation?
+    private var currentItemObserver: NSKeyValueObservation?
 
-        if keyPath == #keyPath(AVPlayer.currentItem.presentationSize) {
-            DispatchQueue.main.async(execute: playerItemPresentationSizeDidChange)
-        } else if keyPath == #keyPath(AVPlayer.status) {
-            DispatchQueue.main.async(execute: playerStatusDidChange)
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+    private func setupPlayerObservers() {
+
+        playerStatusObserver = player.observe(\.status, options: [.initial, .new], changeHandler: { [weak self] (player, change) in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async(execute: self.playerStatusDidChange)
+        })
+
+        currentItemObserver = player.observe(\.currentItem, options: [.initial, .new]) { [weak self] (player, change) in
+            self?.presentationSizeObserver = player.currentItem?.observe(\.presentationSize, options: [.initial, .new]) { [weak self] (player, change) in
+                guard let `self` = self else { return }
+                DispatchQueue.main.async(execute: self.playerItemPresentationSizeDidChange)
+            }
         }
     }
 
