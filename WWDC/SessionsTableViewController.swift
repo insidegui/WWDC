@@ -319,10 +319,8 @@ class SessionsTableViewController: NSViewController {
             guard let viewModel = SessionViewModel(session: session) else { return nil }
 
             for row in allRows {
-                if case .session(let sessionViewModel) = row.kind {
-                    if sessionViewModel.session.identifier == session.identifier {
-                        return row
-                    }
+                if case .session(let sessionViewModel) = row.kind, sessionViewModel.session.identifier == session.identifier {
+                    return row
                 }
             }
 
@@ -517,31 +515,29 @@ class SessionsTableViewController: NSViewController {
     }
 
     private func shouldEnableMenuItem(menuItem: NSMenuItem, viewModel: SessionViewModel) -> Bool {
+
         switch menuItem.option {
         case .watched:
-            if viewModel.session.progresses.first == nil || viewModel.session.progresses.first?.relativePosition != 1 {
-                return true
-            }
+            return viewModel.session.progresses.first == nil || viewModel.session.progresses.first?.relativePosition != 1
         case .unwatched:
-            if viewModel.session.progresses.first?.relativePosition == 1 { return true }
+            return viewModel.session.progresses.first?.relativePosition == 1
         case .favorite:
-            if !viewModel.isFavorite { return true }
+            return !viewModel.isFavorite
         case .removeFavorite:
-            if viewModel.isFavorite { return true }
-        case .download:
-            if let sessionAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first {
-                if !DownloadManager.shared.isDownloading(sessionAsset.remoteURL) {
-                    if DownloadManager.shared.localFileURL(for: viewModel.session) == nil { return true }
-                }
-            }
-        case .cancelDownload:
-            if let sessionAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first {
-                if DownloadManager.shared.isDownloading(sessionAsset.remoteURL) { return true }
-            }
-        case .revealInFinder:
-            if let sessionAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first {
-                if DownloadManager.shared.hasVideo(sessionAsset.remoteURL) { return true }
-            }
+            return viewModel.isFavorite
+        default: ()
+        }
+
+        let remoteURL = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first?.remoteURL
+
+        switch (menuItem.option, remoteURL) {
+        case let (.download, remoteURL?):
+            return !DownloadManager.shared.isDownloading(remoteURL) && DownloadManager.shared.localFileURL(for: viewModel.session) == nil
+        case let (.cancelDownload, remoteURL?):
+            return DownloadManager.shared.isDownloading(remoteURL)
+        case let (.revealInFinder, remoteURL?):
+            return DownloadManager.shared.hasVideo(remoteURL)
+        default: ()
         }
 
         return false
