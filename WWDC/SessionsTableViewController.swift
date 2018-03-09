@@ -69,16 +69,10 @@ class SessionsTableViewController: NSViewController {
 
         displayedRowsLock.async {
 
-            let methodStart = Date()
-
             let oldValue = self.displayedRows
 
             // Same elements, same order: https://github.com/apple/swift/blob/master/stdlib/public/core/Arrays.swift.gyb#L2203
-            if oldValue == newValue {
-
-                print("Time to short circuit: \(Date().timeIntervalSince(methodStart))")
-                return
-            }
+            if oldValue == newValue { return }
 
             let oldRowsSet = Set(oldValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
             let newRowsSet = Set(newValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
@@ -88,8 +82,6 @@ class SessionsTableViewController: NSViewController {
 
             let removedIndexes = IndexSet(removed.map { $0.index })
             let addedIndexes = IndexSet(added.map { $0.index })
-
-            let complicatedOperationStart = Date()
 
             // Only reload rows if their relative positioning changes. This prevents
             // cell contents from flashing when cells are unnecessarily reloaded
@@ -103,22 +95,9 @@ class SessionsTableViewController: NSViewController {
                 return row1.index < row2.index
             })
 
-            #if DEBUG
-                print("Building the arrays took: \(Date().timeIntervalSince(complicatedOperationStart))")
-            #endif
-
-            let loopStart = Date()
             for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) where oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
                 needReloadedIndexes.insert(newSessionRowIndex.index)
             }
-
-            #if DEBUG
-                print("The loop took: \(Date().timeIntervalSince(loopStart))")
-
-                print("The complicated calculation took: \(Date().timeIntervalSince(complicatedOperationStart))")
-            #endif
-
-            print("Set calculations took: \(Date().timeIntervalSince(methodStart))")
 
             DispatchQueue.main.sync {
 
@@ -169,10 +148,6 @@ class SessionsTableViewController: NSViewController {
 
                 self.tableView.endUpdates()
                 NSAnimationContext.endGrouping()
-
-                #if DEBUG
-                    print("Total time to table update took: \(Date().timeIntervalSince(methodStart))")
-                #endif
             }
         }
     }

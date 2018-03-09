@@ -91,9 +91,9 @@ final class AppCoordinator {
         setupBindings()
         setupDelegation()
 
-        NotificationCenter.default.rx.notification(.WWDCTabViewControllerDidFinishLoading).subscribe(onNext: { [weak self] _ in self?.restoreApplicationState() }).disposed(by: disposeBag)
-        NotificationCenter.default.rx.notification(NSApplication.didFinishLaunchingNotification).subscribe(onNext: { [weak self] _ in self?.startup() }).disposed(by: disposeBag)
-        NotificationCenter.default.rx.notification(NSApplication.willTerminateNotification).subscribe(onNext: { [weak self] _ in self?.saveApplicationState() }).disposed(by: disposeBag)
+        _ = NotificationCenter.default.addObserver(forName: .WWDCTabViewControllerDidFinishLoading, object: nil, queue: nil) { _ in self.restoreApplicationState() }
+        _ = NotificationCenter.default.addObserver(forName: NSApplication.didFinishLaunchingNotification, object: nil, queue: nil) { _ in self.startup() }
+        _ = NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: nil) { _ in self.saveApplicationState() }
     }
 
     /// The list controller for the active tab
@@ -233,7 +233,7 @@ final class AppCoordinator {
         resetAutorefreshTimer()
     }
 
-    func startup() {
+    private func startup() {
         RemoteEnvironment.shared.start()
 
         ContributorsFetcher.shared.load()
@@ -245,17 +245,17 @@ final class AppCoordinator {
             tabController.showLoading()
         }
 
-        NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observeOn(MainScheduler.instance).subscribe(onNext: { note in
+        _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: .main) { note in
             if let error = note.object as? Error {
                 NSApp.presentError(error)
             } else {
                 self.updateListsAfterSync(migrate: true)
             }
-        }).disposed(by: disposeBag)
+        }
 
-        NotificationCenter.default.rx.notification(.WWDCEnvironmentDidChange).observeOn(MainScheduler.instance).subscribe(onNext: { _ in
+        _ = NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: .main) { _ in
             self.refresh(nil)
-        }).disposed(by: disposeBag)
+        }
 
         refresh(nil)
         updateListsAfterSync()

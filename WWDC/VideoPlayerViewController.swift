@@ -179,15 +179,15 @@ final class VideoPlayerViewController: NSViewController {
 
     private func setupPlayerObservers() {
 
-        playerStatusObserver = player.observe(\AVPlayer.status, options: [.initial, .new], changeHandler: { [weak self] (player, change) in
-            guard let strongSelf = self else { return }
-            DispatchQueue.main.async(execute: strongSelf.playerItemPresentationSizeDidChange)
+        playerStatusObserver = player.observe(\.status, options: [.initial, .new], changeHandler: { [weak self] (player, change) in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async(execute: self.playerStatusDidChange)
         })
 
-        currentItemObserver = player.observe(\AVPlayer.currentItem, options: [.initial, .new]) { [weak self] (player, change) in
+        currentItemObserver = player.observe(\.currentItem, options: [.initial, .new]) { [weak self] (player, change) in
             self?.presentationSizeObserver = player.currentItem?.observe(\.presentationSize, options: [.initial, .new]) { [weak self] (player, change) in
-                guard let strongSelf = self else { return }
-                DispatchQueue.main.async(execute: strongSelf.playerStatusDidChange)
+                guard let `self` = self else { return }
+                DispatchQueue.main.async(execute: self.playerItemPresentationSizeDidChange)
             }
         }
     }
