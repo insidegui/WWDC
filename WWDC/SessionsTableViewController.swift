@@ -67,6 +67,9 @@ class SessionsTableViewController: NSViewController {
 
     func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
 
+        // Dismiss the menu when the displayed rows are about to change otherwise it will crash
+        tableView.menu?.cancelTrackingWithoutAnimation()
+
         displayedRowsLock.async {
 
             let methodStart = Date()
