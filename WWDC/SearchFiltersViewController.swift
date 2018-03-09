@@ -241,9 +241,7 @@ final class SearchFiltersViewController: NSViewController {
                     popUp.menu?.addItem(item)
                 }
             case let filter as TextualFilter:
-                if let value = filter.value {
-                    searchField.stringValue = value
-                }
+                searchField.stringValue = filter.value ?? ""
             case let filter as ToggleFilter:
                 guard let filterID = FilterIdentifier(rawValue: filter.identifier), let segmentIndex = FilterSegment(filterID)?.rawValue else {
                     break
