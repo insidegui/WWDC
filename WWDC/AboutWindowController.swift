@@ -14,7 +14,7 @@ final class AboutWindowController: NSWindowController {
     @IBOutlet weak fileprivate var applicationNameLabel: NSTextField!
     @IBOutlet weak fileprivate var versionLabel: NSTextField!
     @IBOutlet weak var contributorsLabel: NSTextField!
-    @IBOutlet weak fileprivate var creatorLabel: NSTextField!
+    @IBOutlet weak fileprivate var creatorLabel: ActionLabel!
     @IBOutlet weak fileprivate var repositoryLabel: ActionLabel!
     @IBOutlet weak fileprivate var iconCreatorLabel: ActionLabel!
     @IBOutlet weak fileprivate var uiCreatorLabel: ActionLabel!
@@ -54,86 +54,36 @@ final class AboutWindowController: NSWindowController {
 
         guard let info = Bundle.main.infoDictionary else { return }
 
-        if let appName = info["CFBundleName"] as? String {
-            applicationNameLabel.stringValue = appName
-        } else {
-            applicationNameLabel.stringValue = ""
-        }
+        configureUIFor(infoDictionary: info)
+    }
 
-        if let version = info["CFBundleShortVersionString"] as? String {
-            versionLabel.stringValue = "Version \(version)"
-        } else {
-            versionLabel.stringValue = ""
-        }
+    func configureUIFor(infoDictionary info: [String: Any]) {
 
-        if let infoText = infoText {
-            contributorsLabel.stringValue = infoText
-        } else {
-            contributorsLabel.stringValue = ""
-        }
+        applicationNameLabel.stringValue = info.stringOrEmpty(for: "CFBundleName")
+        versionLabel.stringValue = info.stringOrEmpty(for: "CFBundleShortVersionString")
+        contributorsLabel.stringValue = infoText ?? ""
+        licenseLabel.stringValue = info.stringOrEmpty(for: "GRBundleLicenseName")
+        creatorLabel.stringValue = info.stringOrEmpty(for: "GRBundleMainDeveloperName")
+        repositoryLabel.stringValue = info.stringOrEmpty(for: "GRBundleRepositoryName")
 
-        if let license = info["GRBundleLicenseName"] as? String {
-            licenseLabel.stringValue = "License: \(license)"
-        } else {
-            licenseLabel.stringValue = ""
-        }
+        iconCreatorWebsite = URL(string: info.stringOrEmpty(for: "GRBundleIconCreatorWebsite"))
+        uiCreatorWebsite = URL(string: info.stringOrEmpty(for: "GRBundleUserInterfaceCreatorWebsite"))
+        designContributorWebsite = URL(string: info.stringOrEmpty(for: "GRBundleDesignContributorWebsite"))
+        mainDeveloperWebsite = URL(string: info.stringOrEmpty(for: "GRBundleMainDeveloperWebsite"))
+        repositoryWebsite = URL(string: info.stringOrEmpty(for: "GRBundleRepositoryWebsite"))
 
-        if let creator = info["GRBundleMainDeveloperName"] as? String {
-            creatorLabel.stringValue = creator
-        } else {
-            creatorLabel.stringValue = ""
-        }
+        configureActionLabel(iconCreatorLabel, selector: #selector(openIconCreatorWebsite))
+        configureActionLabel(uiCreatorLabel, selector: #selector(openUserInterfaceCreatorWebsite))
+        configureActionLabel(designContributorLabel, selector: #selector(openDesignContributorWebsite))
+        configureActionLabel(creatorLabel, selector: #selector(openMainDeveloperWebsite))
+        configureActionLabel(repositoryLabel, selector: #selector(openRepositoryWebsite))
+    }
 
-        if let repository = info["GRBundleRepositoryName"] as? String {
-            repositoryLabel.stringValue = repository
-        } else {
-            repositoryLabel.stringValue = ""
-        }
-
-        if let website = info["GRBundleIconCreatorWebsite"] as? String {
-            iconCreatorWebsite = URL(string: website)
-
-            iconCreatorLabel.alphaValue = 0.8
-            iconCreatorLabel.textColor = .primary
-            iconCreatorLabel.target = self
-            iconCreatorLabel.action = #selector(openIconCreatorWebsite)
-        }
-
-        if let website = info["GRBundleUserInterfaceCreatorWebsite"] as? String {
-            uiCreatorWebsite = URL(string: website)
-
-            uiCreatorLabel.alphaValue = 0.8
-            uiCreatorLabel.textColor = .primary
-            uiCreatorLabel.target = self
-            uiCreatorLabel.action = #selector(openUserInterfaceCreatorWebsite)
-        }
-
-        if let website = info["GRBundleDesignContributorWebsite"] as? String {
-            designContributorWebsite = URL(string: website)
-
-            designContributorLabel.alphaValue = 0.8
-            designContributorLabel.textColor = .primary
-            designContributorLabel.target = self
-            designContributorLabel.action = #selector(openDesignContributorWebsite)
-        }
-
-        if let website = info["GRBundleMainDeveloperWebsite"] as? String {
-            mainDeveloperWebsite = URL(string: website)
-
-            creatorLabel.alphaValue = 0.8
-            creatorLabel.textColor = .primary
-            creatorLabel.target = self
-            creatorLabel.action = #selector(openMainDeveloperWebsite)
-        }
-
-        if let website = info["GRBundleRepositoryWebsite"] as? String {
-            repositoryWebsite = URL(string: website)
-
-            repositoryLabel.alphaValue = 0.8
-            repositoryLabel.textColor = .primary
-            repositoryLabel.target = self
-            repositoryLabel.action = #selector(openRepositoryWebsite)
-        }
+    func configureActionLabel(_ label: ActionLabel, selector: Selector) {
+        label.alphaValue = 0.8
+        label.textColor = .primary
+        label.target = self
+        label.action = selector
     }
 
     private var iconCreatorWebsite: URL?
@@ -191,4 +141,12 @@ final class AboutWindowController: NSWindowController {
         NSAnimationContext.endGrouping()
     }
 
+}
+
+fileprivate extension Dictionary where Key == String, Value == Any {
+
+    fileprivate func stringOrEmpty(for key: String) -> String {
+
+        return (self[key] as? String) ?? ""
+    }
 }
