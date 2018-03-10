@@ -79,6 +79,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-WWDCUseDebugStorage YES"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--disable-transcripts"
             isEnabled = "NO">
          </CommandLineArgument>

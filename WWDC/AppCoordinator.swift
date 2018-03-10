@@ -47,14 +47,16 @@ final class AppCoordinator {
     var isTransitioningPlayerContext = false
 
     init(windowController: MainWindowController) {
-        let filePath = PathUtil.appSupportPath + "/ConfCore.realm"
-
-        var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
-        realmConfig.schemaVersion = Constants.coreSchemaVersion
-
-        let client = AppleAPIClient(environment: .current)
-
         do {
+            let supportPath = try PathUtil.appSupportPathCreatingIfNeeded()
+
+            let filePath = supportPath + "/ConfCore.realm"
+
+            var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
+            realmConfig.schemaVersion = Constants.coreSchemaVersion
+
+            let client = AppleAPIClient(environment: .current)
+
             storage = try Storage(realmConfig)
 
             syncEngine = SyncEngine(storage: storage, client: client)
@@ -406,7 +408,7 @@ final class AppCoordinator {
 
         if migrator != nil { guard !migrator.isPerformingMigration else { return } }
 
-        let legacyURL = URL(fileURLWithPath: PathUtil.appSupportPath + "/default.realm")
+        let legacyURL = URL(fileURLWithPath: PathUtil.appSupportPathAssumingExisting + "/default.realm")
         migrator = TBUserDataMigrator(legacyDatabaseFileURL: legacyURL, newRealm: storage.realm)
 
         guard migrator.needsMigration && !TBUserDataMigrator.presentedMigrationPrompt else {
