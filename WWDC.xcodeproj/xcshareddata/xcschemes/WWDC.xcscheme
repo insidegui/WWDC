@@ -73,6 +73,12 @@
             ReferencedContainer = "container:WWDC.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-WWDCUseDebugStorage YES"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "SWIFT_DEBUG_IMPLICIT_OBJC_ENTRYPOINT"
