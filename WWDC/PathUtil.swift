@@ -48,7 +48,7 @@ final class PathUtil {
         return path
     }
 
-    /// appSupportPathCreatingIfNeeded
+    /// Creates and returns the app support path
     ///
     /// - Returns: The path to the app support directory
     /// - Throws: If the directory doesn't exist and can't be created
