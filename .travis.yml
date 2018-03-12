@@ -1,5 +1,5 @@
 os: osx
-osx_image: xcode9.2
+osx_image: xcode9.3
 script:
   - "./bootstrap.sh"
   - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty
