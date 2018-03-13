@@ -1,2 +1,0 @@
-brew "swiftlint"
-brew "carthage"
