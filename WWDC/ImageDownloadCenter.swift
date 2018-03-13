@@ -77,7 +77,7 @@ private final class ImageCacheProvider {
     private let upperLimit = 16 * 1024 * 1024
 
     private func makeRealm() -> Realm? {
-        let filePath = PathUtil.appSupportPath + "/ImageCache.realm"
+        let filePath = PathUtil.appSupportPathAssumingExisting + "/ImageCache.realm"
 
         var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
         realmConfig.objectTypes = [ImageCacheEntity.self]
