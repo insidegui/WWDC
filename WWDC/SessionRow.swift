@@ -41,14 +41,29 @@ final class SessionRow: CustomDebugStringConvertible {
     }
 }
 
-extension SessionRow: Hashable {
+extension SessionRow: Equatable {
 
     var hashValue: Int {
-        return ObjectIdentifier(self).hashValue
+        let caseNameStringHash = String(reflecting: kind).hashValue
+        switch kind {
+        case let .sectionHeader(title):
+            return caseNameStringHash ^ title.hashValue
+        case let .session(viewModel):
+            return caseNameStringHash ^ viewModel.identifier.hashValue
+        }
     }
 
+    /// This definition of equality of 2 rows depends largely on the fact that
+    /// each view is bound to a realm object so there is no need to create a new row
     static func == (lhs: SessionRow, rhs: SessionRow) -> Bool {
-        return lhs.hashValue == rhs.hashValue
+        switch (lhs.kind, rhs.kind) {
+        case let (.sectionHeader(lhsTitle), .sectionHeader(rhsTitle)) where lhsTitle == rhsTitle:
+            return true
+        case let (.session(lhsViewModel), .session(rhsViewModel)) where lhsViewModel.identifier == rhsViewModel.identifier:
+            return true
+        default:
+            return false
+        }
     }
 }
 

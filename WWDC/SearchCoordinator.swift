@@ -54,7 +54,7 @@ final class SearchCoordinator {
                                                object: nil)
     }
 
-    func configureFilters() {
+    func restoreSavedFilters() {
 
         // Schedule Filters Configuration
 
@@ -131,11 +131,6 @@ final class SearchCoordinator {
 
         if !scheduleSearchController.filters.isIdentical(to: scheduleSearchFilters) {
             scheduleSearchController.filters = scheduleSearchFilters
-
-            let activeScheduleFilters = scheduleSearchFilters.filter { !$0.isEmpty }
-            if activeScheduleFilters.count > 0 {
-                updateSearchResults(for: scheduleController, with: activeScheduleFilters)
-            }
         }
 
         // Videos Filter Configuration
@@ -179,16 +174,19 @@ final class SearchCoordinator {
 
         if !videosSearchController.filters.isIdentical(to: videosSearchFilters) {
             videosSearchController.filters = videosSearchFilters
-
-            let activeVideosFilters = videosSearchFilters.filter { !$0.isEmpty }
-            if activeVideosFilters.count > 0 {
-                updateSearchResults(for: videosController, with: activeVideosFilters)
-            }
         }
 
         // set delegates
         scheduleSearchController.delegate = self
         videosSearchController.delegate = self
+    }
+
+    func applyScheduleFilters() {
+        updateSearchResults(for: scheduleController, with: scheduleSearchController.filters)
+    }
+
+    func applyVideosFilters() {
+        updateSearchResults(for: videosController, with: videosSearchController.filters)
     }
 
     fileprivate lazy var searchQueue: DispatchQueue = DispatchQueue(label: "Search", qos: .userInteractive)

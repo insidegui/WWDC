@@ -18,11 +18,8 @@ final class SessionTableCellView: NSTableCellView {
         didSet {
             guard viewModel !== oldValue else { return }
 
-            DispatchQueue.main.async {
-                self.thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
-
-                self.bindUI()
-            }
+            thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
+            bindUI()
         }
     }
 

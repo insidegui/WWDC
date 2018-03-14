@@ -65,14 +65,25 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        transitionOptions = .allowUserInteraction
-
         tabStyle = .toolbar
         view.wantsLayer = true
     }
 
     private func tabItem(with identifier: String) -> NSTabViewItem? {
         return tabViewItems.first { $0.identifier as? String == identifier }
+    }
+
+    override func transition(from fromViewController: NSViewController, to toViewController: NSViewController, options: NSViewController.TransitionOptions = [], completionHandler completion: (() -> Void)? = nil) {
+
+        // Disable the crossfade animation here instead of removing it from the transition options
+        // This works around a bug in NSSearchField in which the animation of resigning first responder
+        // would get stuck if you switched tabs while the search field was first responder. Upon returning
+        // to the original tab, you would see the search field's placeholder animate back to center
+        // search_field_responder_tag
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = 0
+            super.transition(from: fromViewController, to: toViewController, options: options, completionHandler: completion)
+        })
     }
 
     override func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {

@@ -19,8 +19,7 @@ class SessionDetailsViewController: NSViewController {
     var viewModel: SessionViewModel? = nil {
         didSet {
 
-            informationStackView.animator().isHidden = (viewModel == nil)
-            shelfController.view.animator().isHidden = (viewModel == nil)
+            view.animator().alphaValue = (viewModel == nil) ? 0 : 1
 
             shelfController.viewModel = viewModel
             summaryController.viewModel = viewModel
@@ -47,10 +46,12 @@ class SessionDetailsViewController: NSViewController {
 
             shelfController.view.isHidden = sessionHasNoVideo
 
-            // Connect stack view (bottom half of screen), to the top of the view
-            // or to the bottom of the video, if it's present
+            // It's worth noting that this condition will always be true since the view
+            // gets loaded when add to the split view controller
             if isViewLoaded {
 
+                // Connect stack view (bottom half of screen), to the top of the view
+                // or to the bottom of the video, if it's present
                 shelfBottomConstraint.isActive = !sessionHasNoVideo
                 informationStackViewTopConstraint.isActive = sessionHasNoVideo
                 informationStackViewBottomConstraint.isActive = !sessionHasNoVideo
@@ -208,10 +209,6 @@ class SessionDetailsViewController: NSViewController {
         informationStackViewTopConstraint.isActive = false
 
         showOverview()
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
     }
 
     @objc private func tabButtonAction(_ sender: WWDCTextButton) {

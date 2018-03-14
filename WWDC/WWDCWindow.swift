@@ -52,4 +52,22 @@ class WWDCWindow: NSWindow {
         titlebarView?.layer?.backgroundColor = NSColor.darkTitlebarBackground.cgColor
     }
 
+    override func makeFirstResponder(_ responder: NSResponder?) -> Bool {
+
+        // Prevent NSSearchField in the filters controller from becoming the first responder automatically
+        // search_field_responder_tag
+        if let event = currentEvent,
+            let searchField = responder as? NSSearchField {
+
+            let pointInView = searchField.convert(event.locationInWindow, from: nil)
+            if !searchField.mouse(pointInView, in: searchField.bounds) {
+                return false
+            }
+        } else if currentEvent == nil {
+            // Prevents automatic state restoration
+            return false
+        }
+
+        return super.makeFirstResponder(responder)
+    }
 }
