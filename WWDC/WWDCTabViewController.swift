@@ -10,10 +10,6 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
-extension Notification.Name {
-    static let WWDCTabViewControllerDidFinishLoading = Notification.Name("WWDCTabViewControllerDidFinishLoading")
-}
-
 class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Tab.RawValue == Int {
 
     var activeTab: Tab {
@@ -75,34 +71,19 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         view.wantsLayer = true
     }
 
-    private var sentStatupNotification = false
-
-    private var isConfigured = false
-
-    override func viewDidAppear() {
-        super.viewDidAppear()
-
-        configureIfNeeded()
-    }
-
-    private func configureIfNeeded() {
-        guard !isConfigured else { return }
-
-        guard let toolbar = view.window?.toolbar else { return }
-
-        isConfigured = true
-
-        toolbar.insertItem(withItemIdentifier: .flexibleSpace, at: 0)
-        toolbar.insertItem(withItemIdentifier: .flexibleSpace, at: toolbar.items.count)
-
-        if !sentStatupNotification {
-            sentStatupNotification = true
-            NotificationCenter.default.post(name: .WWDCTabViewControllerDidFinishLoading, object: self)
-        }
-    }
-
     private func tabItem(with identifier: String) -> NSTabViewItem? {
         return tabViewItems.first { $0.identifier as? String == identifier }
+    }
+
+    override func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+
+        // Center the tab bar's NSToolbarItem's be putting flexible space at the beginning and end of
+        // the array. Super's implementation returns the NSToolbarItems that represent the NSTabViewItems
+        var defaultItemIdentifiers = super.toolbarDefaultItemIdentifiers(toolbar)
+        defaultItemIdentifiers.insert(.flexibleSpace, at: 0)
+        defaultItemIdentifiers.append(.flexibleSpace)
+
+        return defaultItemIdentifiers
     }
 
     override func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
