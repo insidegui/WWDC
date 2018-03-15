@@ -86,6 +86,8 @@ final class AppCoordinator {
         videosItem.label = "Videos"
         tabController.addTabViewItem(videosItem)
 
+        tabController.activeTab = Preferences.shared.activeTab
+
         self.windowController = windowController
 
         liveObserver = LiveObserver(dateProvider: today, storage: storage)
@@ -93,7 +95,6 @@ final class AppCoordinator {
         setupBindings()
         setupDelegation()
 
-        _ = NotificationCenter.default.addObserver(forName: .WWDCTabViewControllerDidFinishLoading, object: nil, queue: nil) { _ in self.restoreApplicationState() }
         _ = NotificationCenter.default.addObserver(forName: NSApplication.didFinishLaunchingNotification, object: nil, queue: nil) { _ in self.startup() }
         _ = NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: nil) { _ in self.saveApplicationState() }
     }
@@ -295,10 +296,6 @@ final class AppCoordinator {
         Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
         Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
         Preferences.shared.filtersState = searchCoordinator.currentFiltersState()
-    }
-
-    private func restoreApplicationState() {
-        tabController.activeTab = Preferences.shared.activeTab
     }
 
     private func restoreListStatesIfNeeded() {

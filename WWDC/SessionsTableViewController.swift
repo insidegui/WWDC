@@ -193,8 +193,6 @@ class SessionsTableViewController: NSViewController {
         selectSession(with: identifier, scrollOnly: true)
     }
 
-    private var setupDone = false
-
     override func viewDidAppear() {
         super.viewDidAppear()
 
@@ -205,15 +203,21 @@ class SessionsTableViewController: NSViewController {
         searchController.searchField.isEnabled = true
     }
 
+    /// Variable used to track whether the initial display of rows has occurred
+    /// - warning: Not meant to be used outside of `performFirstUpdateIfNeeded`
+    private var setupDone = false
+
+    /// This function is meant to ensure the table view gets populated
+    /// even if its data model gets added while it is offscreen. Specifically,
+    /// when this table view is not the initial active tab.
     private func performFirstUpdateIfNeeded() {
+        guard !setupDone else { return }
+        setupDone = true
+
         switch style {
         case .schedule:
             updateScheduleList()
-            setupDone = true
         case .videos:
-            guard !setupDone else { return }
-            setupDone = true
-
             updateVideosList()
         }
     }
