@@ -16,7 +16,14 @@ final class LiveObserver {
     private let dateProvider: DateProvider
     private let storage: Storage
 
-    private var timer: Timer?
+    private lazy var backgroundActivity: NSBackgroundActivityScheduler = {
+        let backgroundActivity = NSBackgroundActivityScheduler(identifier: "io.wwdc.liveobserver.backgroundactivity")
+        backgroundActivity.interval = Constants.liveSessionCheckInterval
+        backgroundActivity.repeats = true
+        backgroundActivity.qualityOfService = .utility
+
+        return backgroundActivity
+    }()
 
     var isRunning = false
 
@@ -47,12 +54,9 @@ final class LiveObserver {
 
         NSLog("Live event observer started")
 
-        timer = Timer.scheduledTimer(timeInterval: Constants.liveSessionCheckInterval, target: self, selector: #selector(checkForLiveSessions), userInfo: nil, repeats: true)
-
-        // This timer doesn't have to be very precise, giving it a tolerance improves CPU and battery usage ;)
-        timer?.tolerance = 10.0
-
-        checkForLiveSessions(nil)
+        backgroundActivity.schedule { [weak self] completion in
+            self?.checkForLiveSessions()
+        }
     }
 
     func refresh() {
@@ -63,7 +67,7 @@ final class LiveObserver {
         return storage.realm.objects(SessionInstance.self).filter("isCurrentlyLive == true")
     }
 
-    @objc private func checkForLiveSessions(_ sender: Any?) {
+    private func checkForLiveSessions() {
         let startTime = dateProvider()
         let endTime = dateProvider().addingTimeInterval(Constants.liveSessionEndTimeTolerance)
 

@@ -97,6 +97,7 @@ final class AppCoordinator {
 
         _ = NotificationCenter.default.addObserver(forName: NSApplication.didFinishLaunchingNotification, object: nil, queue: nil) { _ in self.startup() }
         _ = NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: nil) { _ in self.saveApplicationState() }
+        _ = NotificationCenter.default.addObserver(forName: .RefreshPeriodicallyPreferenceDidChange, object: nil, queue: nil, using: { _  in self.resetAutorefreshTimer() })
     }
 
     /// The list controller for the active tab
@@ -226,14 +227,6 @@ final class AppCoordinator {
 
     private func setupSearch() {
         searchCoordinator.configureFilters()
-    }
-
-    @IBAction func refresh(_ sender: Any?) {
-        syncEngine.syncContent()
-        syncEngine.syncLiveVideos()
-        liveObserver.refresh()
-
-        resetAutorefreshTimer()
     }
 
     private func startup() {
@@ -371,20 +364,49 @@ final class AppCoordinator {
         aboutWindowController.showWindow(nil)
     }
 
-    // MARK: - Autorefresh
+    // MARK: - Refresh
 
-    private var autorefreshTimer: Timer!
+    /// Used to prevent the refresh system from being spammed. Resetting
+    /// NSBackgroundActivitySchedule can result in the scheduled activity happening immediately
+    /// especially if the `interval` is sufficiently low.
+    private var lastRefresh = Date.distantPast
 
-    private func resetAutorefreshTimer() {
-        if autorefreshTimer != nil {
-            autorefreshTimer.invalidate()
-            autorefreshTimer = nil
+    func refresh(_ sender: Any?) {
+        let now = Date()
+        guard now.timeIntervalSince(lastRefresh) > 5 else { return }
+        lastRefresh = now
+
+        DispatchQueue.main.async {
+            self.syncEngine.syncContent()
+            self.syncEngine.syncLiveVideos()
+
+            self.liveObserver.refresh()
+
+            if self.autorefreshActivity == nil
+                || (sender as? NSBackgroundActivityScheduler) !== self.autorefreshActivity {
+                self.resetAutorefreshTimer()
+            }
+        }
+    }
+
+    private var autorefreshActivity: NSBackgroundActivityScheduler?
+
+    func makeAutorefreshActivity() -> NSBackgroundActivityScheduler {
+        let activityScheduler = NSBackgroundActivityScheduler(identifier: "io.wwdc.autorefresh.backgroundactivity")
+        activityScheduler.interval = Constants.autorefreshInterval
+        activityScheduler.repeats = true
+        activityScheduler.qualityOfService = .utility
+        activityScheduler.schedule { [weak self] completion in
+            self?.refresh(self?.autorefreshActivity)
+            completion(.finished)
         }
 
-        guard Preferences.shared.refreshPeriodically else { return }
+        return activityScheduler
+    }
 
-        autorefreshTimer = Timer.scheduledTimer(timeInterval: Constants.autorefreshInterval, target: self, selector: #selector(refresh), userInfo: nil, repeats: false)
-        autorefreshTimer.tolerance = Constants.autorefreshInterval / 3
+    private func resetAutorefreshTimer() {
+        autorefreshActivity?.invalidate()
+        autorefreshActivity = Preferences.shared.refreshPeriodically ? makeAutorefreshActivity() : nil
     }
 
     // MARK: - Data migration
