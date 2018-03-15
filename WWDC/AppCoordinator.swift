@@ -373,10 +373,8 @@ final class AppCoordinator {
 
     func refresh(_ sender: Any?) {
         let now = Date()
-        guard now.timeIntervalSince(lastRefresh) > 5 else { print("Skipping refresh"); return }
+        guard now.timeIntervalSince(lastRefresh) > 5 else { return }
         lastRefresh = now
-
-        print("Refreshing")
 
         DispatchQueue.main.async {
             self.syncEngine.syncContent()
@@ -399,7 +397,6 @@ final class AppCoordinator {
         activityScheduler.repeats = true
         activityScheduler.qualityOfService = .utility
         activityScheduler.schedule { [weak self] completion in
-            print("Auto refresh")
             self?.refresh(self?.autorefreshActivity)
             completion(.finished)
         }
