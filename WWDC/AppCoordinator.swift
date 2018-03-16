@@ -284,8 +284,12 @@ final class AppCoordinator {
 
     private func saveApplicationState() {
         Preferences.shared.activeTab = activeTab
-        Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
-        Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
+        if let identifier = selectedScheduleItemValue?.identifier {
+            Preferences.shared.selectedScheduleItemIdentifier = identifier
+        }
+        if let identifier = selectedSessionValue?.identifier {
+            Preferences.shared.selectedVideoItemIdentifier = identifier
+        }
         Preferences.shared.filtersState = searchCoordinator.currentFiltersState()
     }
 
