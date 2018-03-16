@@ -158,7 +158,7 @@ class SessionsTableViewController: NSViewController {
                 context.completionHandler = {
                     NSAnimationContext.runAnimationGroup({ (context) in
                         context.allowsImplicitAnimation = true
-                        self.tableView.scrollRowToVisible(selectedIndexes.first ?? 0)
+                        self.tableView.scrollRowToCenter(selectedIndexes.first ?? 0)
                     }, completionHandler: nil)
                 }
 
@@ -213,7 +213,7 @@ class SessionsTableViewController: NSViewController {
             return
         }
 
-        tableView.scrollRowToVisible(index)
+        tableView.scrollRowToCenter(index)
 
         if !scrollOnly {
             tableView.selectRowIndexes(IndexSet([index]), byExtendingSelection: false)
