@@ -471,9 +471,13 @@ class SessionsTableViewController: NSViewController {
 
         switch menuItem.option {
         case .watched:
-            return viewModel.session.progresses.first == nil || viewModel.session.progresses.first?.relativePosition != 1
+            let canMarkAsWatched = !viewModel.session.isWatched
+                && viewModel.session.instances.first?.isCurrentlyLive != true
+                && viewModel.session.asset(of: .streamingVideo) != nil
+
+            return canMarkAsWatched
         case .unwatched:
-            return viewModel.session.progresses.first?.relativePosition == 1
+            return viewModel.session.isWatched
         case .favorite:
             return !viewModel.isFavorite
         case .removeFavorite:
@@ -491,6 +495,17 @@ class SessionsTableViewController: NSViewController {
         case let (.revealInFinder, remoteURL?):
             return DownloadManager.shared.hasVideo(remoteURL)
         default: ()
+        }
+
+        return false
+    }
+}
+
+extension Session {
+
+    var isWatched: Bool {
+        if let progress = progresses.first {
+            return progress.relativePosition > Constants.watchedVideoRelativePosition
         }
 
         return false
