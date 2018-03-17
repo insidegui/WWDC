@@ -66,6 +66,10 @@ final class AppCoordinator {
 
         DownloadManager.shared.start(with: storage)
 
+        liveObserver = LiveObserver(dateProvider: today, storage: storage)
+
+        // Primary UI Intialization
+
         tabController = WWDCTabViewController(windowController: windowController)
 
         // Schedule
@@ -86,11 +90,9 @@ final class AppCoordinator {
         videosItem.label = "Videos"
         tabController.addTabViewItem(videosItem)
 
-        tabController.activeTab = Preferences.shared.activeTab
-
         self.windowController = windowController
 
-        liveObserver = LiveObserver(dateProvider: today, storage: storage)
+        restoreApplicationState()
 
         setupBindings()
         setupDelegation()
@@ -138,6 +140,7 @@ final class AppCoordinator {
 
     private func setupBindings() {
         tabController.rxActiveTab.subscribe(onNext: { [weak self] activeTab in
+
             self?.activeTab = activeTab
 
             self?.updateSelectedViewModelRegardlessOfTab()
@@ -202,20 +205,23 @@ final class AppCoordinator {
         storage.tracksObservable
             .take(1)
             .subscribe(onNext: { [weak self] tracks in
-                self?.videosController.listViewController.tracks = tracks
+                // Currently these two things must happen together and in this order for
+                // new information to be displayed. It's not ideal
+                self?.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(tracks: tracks)
+                self?.searchCoordinator.applyVideosFilters()
             }).disposed(by: disposeBag)
 
         storage.scheduleObservable
             .take(1)
             .subscribe(onNext: { [weak self] sections in
-                self?.scheduleController.listViewController.scheduleSections = sections
+                // Currently these two things must happen together and in this order for
+                // new information to be displayed. It's not ideal
+                self?.scheduleController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
+                self?.scrollToTodayIfWWDC()
+                self?.searchCoordinator.applyScheduleFilters()
             }).disposed(by: disposeBag)
 
         liveObserver.start()
-
-        restoreListStatesIfNeeded()
-
-        setupSearch()
     }
 
     private lazy var searchCoordinator: SearchCoordinator = {
@@ -224,10 +230,6 @@ final class AppCoordinator {
                                  videosController: self.videosController.listViewController,
                                  restorationFiltersState: Preferences.shared.filtersState)
     }()
-
-    private func setupSearch() {
-        searchCoordinator.configureFilters()
-    }
 
     private func startup() {
         RemoteEnvironment.shared.start()
@@ -280,59 +282,48 @@ final class AppCoordinator {
 
     // MARK: - State restoration
 
-    private var didRestoreLists = false
-
-    private var deferredLink: DeepLink?
-
     private func saveApplicationState() {
         Preferences.shared.activeTab = activeTab
-        Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
-        Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
+        if let identifier = selectedScheduleItemValue?.identifier {
+            Preferences.shared.selectedScheduleItemIdentifier = identifier
+        }
+        if let identifier = selectedSessionValue?.identifier {
+            Preferences.shared.selectedVideoItemIdentifier = identifier
+        }
         Preferences.shared.filtersState = searchCoordinator.currentFiltersState()
     }
 
-    private func restoreListStatesIfNeeded() {
-        defer { didRestoreLists = true }
+    private func restoreApplicationState() {
 
-        if let link = deferredLink {
-            return handle(link: link)
-        }
+        searchCoordinator.restoreSavedFilters()
+        let activeTab = Preferences.shared.activeTab
+        tabController.activeTab = activeTab
 
-        guard !didRestoreLists else { return }
-
-        if !scrollToToday() {
-            if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
-                scheduleController.listViewController.selectSession(with: identifier)
-            }
+        if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
+            scheduleController.listViewController.selectSession(with: identifier, deferIfNeeded: true)
         }
 
         if let identifier = Preferences.shared.selectedVideoItemIdentifier {
-            videosController.listViewController.selectSession(with: identifier)
+            videosController.listViewController.selectSession(with: identifier, deferIfNeeded: true)
         }
     }
 
-    private func scrollToToday() -> Bool {
-        guard liveObserver.isWWDCWeek else { return false }
+    private func scrollToTodayIfWWDC() {
+        guard liveObserver.isWWDCWeek else { return }
 
         scheduleController.listViewController.scrollToToday()
-
-        return true
     }
 
     // MARK: - Deep linking
 
-    func handle(link: DeepLink) {
-        guard didRestoreLists else {
-            deferredLink = link
-            return
-        }
+    func handle(link: DeepLink, deferIfNeeded: Bool) {
 
         if link.isForCurrentYear {
             tabController.activeTab = .schedule
-            scheduleController.listViewController.selectSession(with: link.sessionIdentifier)
+            scheduleController.listViewController.selectSession(with: link.sessionIdentifier, deferIfNeeded: true)
         } else {
             tabController.activeTab = .videos
-            videosController.listViewController.selectSession(with: link.sessionIdentifier)
+            videosController.listViewController.selectSession(with: link.sessionIdentifier, deferIfNeeded: true)
         }
     }
 

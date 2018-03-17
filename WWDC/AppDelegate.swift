@@ -44,7 +44,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let url = URL(string: urlString) else { return }
         guard let link = DeepLink(url: url) else { return }
 
-        coordinator.handle(link: link)
+        coordinator.handle(link: link, deferIfNeeded: true)
     }
 
     @IBAction func showPreferences(_ sender: Any) {

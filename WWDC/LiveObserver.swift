@@ -55,7 +55,10 @@ final class LiveObserver {
         NSLog("Live event observer started")
 
         backgroundActivity.schedule { [weak self] completion in
-            self?.checkForLiveSessions()
+            // Because of Realm
+            DispatchQueue.main.async {
+                self?.checkForLiveSessions()
+            }
         }
     }
 

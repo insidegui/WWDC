@@ -38,3 +38,30 @@ class WWDCTableView: NSTableView {
         return super.menu(for: event)
     }
 }
+
+extension NSTableView {
+
+    func scrollRowToCenter(_ row: Int) {
+
+        guard let clipView = superview as? NSClipView,
+              let scrollView = clipView.superview as? NSScrollView else {
+
+                assertionFailure("Unexpected NSTableView view hiearchy")
+                return
+        }
+
+        let rowRect = rect(ofRow: row)
+        var scrollOrigin = rowRect.origin
+
+        let tableHalfHeight = clipView.frame.height * 0.5
+        let rowRectHalfHeight = rowRect.height * 0.5
+
+        scrollOrigin.y = (scrollOrigin.y - tableHalfHeight) + rowRectHalfHeight
+
+        if scrollView.responds(to: #selector(NSScrollView.flashScrollers)) {
+            scrollView.flashScrollers()
+        }
+
+        clipView.setBoundsOrigin(scrollOrigin)
+    }
+}
