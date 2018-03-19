@@ -75,7 +75,7 @@ class ShelfViewController: NSViewController {
         updateBindings()
     }
 
-    private var currentImageDownloadOperation: Operation?
+    private weak var currentImageDownloadOperation: Operation?
 
     private func updateBindings() {
         disposeBag = DisposeBag()

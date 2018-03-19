@@ -23,7 +23,7 @@ final class SessionTableCellView: NSTableCellView {
         }
     }
 
-    private var imageDownloadOperation: Operation?
+    private weak var imageDownloadOperation: Operation?
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
