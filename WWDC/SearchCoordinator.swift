@@ -54,7 +54,7 @@ final class SearchCoordinator {
                                                object: nil)
     }
 
-    func restoreSavedFilters() {
+    func configureFilters() {
 
         // Schedule Filters Configuration
 

@@ -198,27 +198,31 @@ final class AppCoordinator {
     }
 
     private func doUpdateLists() {
-        if !storage.isEmpty {
-            tabController.hideLoading()
-        }
 
-        storage.tracksObservable
+        let starupDependencies = Observable.combineLatest(storage.tracksObservable,
+                                                          storage.eventsObservable,
+                                                          storage.focusesObservable,
+                                                          storage.scheduleObservable)
+
+        starupDependencies
+            .filter { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty }
             .take(1)
-            .subscribe(onNext: { [weak self] tracks in
+            .subscribe(onNext: { [weak self] tracks, _, _, sections in
+                guard let `self` = self else { return }
+
+                self.tabController.hideLoading()
+                self.searchCoordinator.configureFilters()
+
                 // Currently these two things must happen together and in this order for
                 // new information to be displayed. It's not ideal
-                self?.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(tracks: tracks)
-                self?.searchCoordinator.applyVideosFilters()
-            }).disposed(by: disposeBag)
+                self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(tracks: tracks)
+                self.searchCoordinator.applyVideosFilters()
 
-        storage.scheduleObservable
-            .take(1)
-            .subscribe(onNext: { [weak self] sections in
                 // Currently these two things must happen together and in this order for
                 // new information to be displayed. It's not ideal
-                self?.scheduleController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
-                self?.scrollToTodayIfWWDC()
-                self?.searchCoordinator.applyScheduleFilters()
+                self.scheduleController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
+                self.scrollToTodayIfWWDC()
+                self.searchCoordinator.applyScheduleFilters()
             }).disposed(by: disposeBag)
 
         liveObserver.start()
@@ -295,7 +299,6 @@ final class AppCoordinator {
 
     private func restoreApplicationState() {
 
-        searchCoordinator.restoreSavedFilters()
         let activeTab = Preferences.shared.activeTab
         tabController.activeTab = activeTab
 
