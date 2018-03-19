@@ -58,9 +58,7 @@ extension NSTableView {
 
         scrollOrigin.y = (scrollOrigin.y - tableHalfHeight) + rowRectHalfHeight
 
-        if scrollView.responds(to: #selector(NSScrollView.flashScrollers)) {
-            scrollView.flashScrollers()
-        }
+        scrollView.flashScrollers()
 
         clipView.setBoundsOrigin(scrollOrigin)
     }

@@ -233,6 +233,8 @@ class SessionsTableViewController: NSViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
 
+        view.window?.makeFirstResponder(tableView)
+
         performFirstUpdateIfNeeded()
     }
 
