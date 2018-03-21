@@ -36,7 +36,10 @@ final class ImageDownloadCenter {
             return nil
         }
 
-        guard !hasActiveOperation(for: url) else { return nil }
+        guard !hasActiveOperation(for: url) else {
+            print("Unhandled case: Valid operation already exists")
+            return nil
+        }
 
         let operation = ImageDownloadOperation(url: url, cache: cacheProvider, thumbnailHeight: thumbnailHeight)
         operation.imageCompletionHandler = completion
@@ -50,7 +53,7 @@ final class ImageDownloadCenter {
         return queue.operations.contains { op in
             guard let op = op as? ImageDownloadOperation else { return false }
 
-            return op.url == url && op.isExecuting
+            return op.url == url && op.isExecuting && !op.isCancelled
         }
     }
 
@@ -176,7 +179,11 @@ private final class ImageDownloadOperation: Operation {
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let welf = self else { return }
 
-            guard !welf.isCancelled else { return }
+            guard !welf.isCancelled else {
+                welf._executing = false
+                welf._finished = true
+                return
+            }
 
             guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
                 DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
@@ -206,7 +213,11 @@ private final class ImageDownloadOperation: Operation {
                 return
             }
 
-            guard !welf.isCancelled else { return }
+            guard !welf.isCancelled else {
+                welf._executing = false
+                welf._finished = true
+                return
+            }
 
             let thumbnailImage = originalImage.resized(to: welf.thumbnailHeight)
 
@@ -221,7 +232,7 @@ private final class ImageDownloadOperation: Operation {
 
             welf._executing = false
             welf._finished = true
-            }.resume()
+        }.resume()
     }
 
 }
