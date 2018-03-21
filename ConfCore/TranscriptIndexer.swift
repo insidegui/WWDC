@@ -9,10 +9,83 @@
 import Cocoa
 import RealmSwift
 import SwiftyJSON
+import CoreMedia
 
 extension Notification.Name {
     public static let TranscriptIndexingDidStart = Notification.Name("io.wwdc.app.TranscriptIndexingDidStartNotification")
     public static let TranscriptIndexingDidStop = Notification.Name("io.wwdc.app.TranscriptIndexingDidStopNotification")
+}
+
+struct Subtitle: Equatable {
+
+    let startTime: WebVTTTimestamp
+    let endTime: WebVTTTimestamp
+
+    let text: String
+
+    static func == (lhs: Subtitle, rhs: Subtitle) -> Bool {
+        return lhs.startTime == rhs.startTime
+            && lhs.endTime == rhs.endTime
+            && lhs.text == rhs.text
+    }
+}
+
+struct WebVTTTimestamp: Equatable {
+
+    let string: String
+
+    init(string: String) {
+        self.string = string
+
+        var startIndex = string.startIndex
+        var endIndex = string.index(startIndex, offsetBy: 2)
+        let hours = string[startIndex..<endIndex]
+
+        startIndex = string.index(endIndex, offsetBy: 1)
+        endIndex = string.index(startIndex, offsetBy: 2)
+        let minutes = string[startIndex..<endIndex]
+
+        startIndex = string.index(endIndex, offsetBy: 1)
+        endIndex = string.index(startIndex, offsetBy: 2)
+        let seconds = string[startIndex..<endIndex]
+
+        startIndex = string.index(endIndex, offsetBy: 1)
+        endIndex = string.index(startIndex, offsetBy: 2)
+        let fractionalSeconds = string[startIndex..<endIndex]
+    }
+
+    static func == (lhs: WebVTTTimestamp, rhs: WebVTTTimestamp) -> Bool {
+        return lhs.string == rhs.string
+    }
+}
+
+public struct WebVTT {
+
+    private(set) var subtitles = [Subtitle]()
+
+    public init(string: String) {
+
+        var string = string
+
+        string = string.replacingOccurrences(of: "\r\n", with: "\n")
+        string = string.replacingOccurrences(of: "\r", with: "\n")
+
+        // Double newline is the fundamental separator of a WebVTT file
+        var things = string.split(regex: "\n\n").makeIterator()
+
+        while let block = things.next() {
+
+            if block.contains(" --> ") {
+                let components = String(block).captureGroups(for: "^(\\d{2}:\\d{2}:\\d{2}.\\d{3}) --> (\\d{2}:\\d{2}:\\d{2}.\\d{3})[^\\n]*\n([\\W\\w]*)").flatMap { $0 }
+                if components.count == 3 {
+                    let start = WebVTTTimestamp(string: components[0])
+                    let end = WebVTTTimestamp(string: components[1])
+
+                    subtitles.append(Subtitle(startTime: start, endTime: end, text: components[2]))
+                }
+            }
+        }
+    }
 }
 
 struct MediaSelectionGroup {
@@ -322,6 +395,8 @@ public final class TranscriptIndexer {
         task.resume()
     }
 
+    let semaphore = DispatchSemaphore(value: 10)
+
     func indexTranscript(for session: Session) {
         guard let urlString = session.assets.first(where: { $0.assetType == .streamingVideo} )?.remoteURL, let url = URL(string: urlString) else { return }
         if url.pathExtension == "mov" {
@@ -342,12 +417,24 @@ public final class TranscriptIndexer {
         //       - rmda
         //       - rmda
 
+        let identifier = session.identifier
+        semaphore.wait()
+
         self.downloadMasterPlaylist(url: url) { masterPlaylist in
-            guard let masterPlaylist = masterPlaylist else { return }
-            guard let subtitleMedium = masterPlaylist.selectionGroups.first(where: { $0.type == .subtitles }) else { return }
+            guard let masterPlaylist = masterPlaylist else {
+                self.semaphore.signal()
+                return
+            }
+            guard let subtitleMedium = masterPlaylist.selectionGroups.first(where: { $0.type == .subtitles }) else {
+                self.semaphore.signal()
+                return
+            }
 
             self.downloadMediaPlaylist(url: subtitleMedium.url) { subtitleMediaPlaylist in
-                guard let subtitleMediaPlaylist = subtitleMediaPlaylist else { return }
+                guard let subtitleMediaPlaylist = subtitleMediaPlaylist else {
+                    self.semaphore.signal()
+                    return
+                }
 
                 var subtitles = [Medium: String]()
                 let dispatchGroup = DispatchGroup()
@@ -369,12 +456,37 @@ public final class TranscriptIndexer {
 
                 dispatchGroup.notify(queue: .main, execute: {
                     // Convert each file into a webvtt file
-                    // Then give all webvtt files to a transcript creator
+                    // Then give all webvtt files to a json creator
+                    print(url)
+                    print(identifier)
                     print(subtitles.count)
+                    print("\n\n")
+//                    subtitles.sorted(by: { $0.key.sequence < $1.key.sequence }).reduce("", { return $0 + $1.value })
+//                    print(subtitleMediaPlaylist)
+
+                    let webVTTs = subtitles.sorted(by: { $0.key.sequence < $1.key.sequence }).map { WebVTT(string: $0.value) }
+
+                    var accumulatedSubtitles = [Subtitle]()
+                    for (i, webVTT) in webVTTs.enumerated() {
+                        let nextIndex = i + 1
+                        if nextIndex >= webVTTs.endIndex {
+                            accumulatedSubtitles.append(contentsOf: webVTT.subtitles)
+                            break
+                        } else {
+                            for subtitle in webVTT.subtitles {
+                                let nextSubtitles = webVTTs[nextIndex].subtitles
+
+                                if !nextSubtitles.contains(subtitle) {
+                                    accumulatedSubtitles.append(subtitle)
+                                }
+                            }
+                        }
+                    }
+
+
+                    self.semaphore.signal()
                 })
             }
-
-            self.storage.storageQueue.waitUntilAllOperationsAreFinished()
         }
     }
 
@@ -501,6 +613,34 @@ extension String {
             return results.map {
                 String(self[Range($0.range, in: self)!])
             }
+        } catch let error {
+            print("invalid regex: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+    func split(regex: String) -> [Substring] {
+        do {
+
+            let regex = try NSRegularExpression(pattern: regex, options: [.anchorsMatchLines])
+            let results = regex.matches(in: self, range: NSRange(startIndex..., in: self))
+
+            var result = [Substring]()
+
+            var s = self.startIndex
+            var e = self.startIndex
+
+            for (index, match) in results.enumerated() {
+                let previousIndex = index - 1
+                if previousIndex >= 0 {
+                    s = Range(results[previousIndex].range, in: self)!.upperBound
+                }
+
+                e = Range(match.range, in: self)!.lowerBound
+
+                result.append(self[s..<e])
+            }
+            return result
         } catch let error {
             print("invalid regex: \(error.localizedDescription)")
             return []
