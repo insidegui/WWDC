@@ -59,12 +59,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator.showAboutWindow()
     }
 
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        coordinator.windowController.showWindow(sender)
+    func applicationWillBecomeActive(_ notification: Notification) {
 
-        return true
+        if coordinator.windowController.window?.isVisible == false {
+            coordinator.windowController.showWindow(self)
+        }
     }
 
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+
+        if !flag {
+            coordinator.windowController.showWindow(sender)
+
+            return true
+        }
+
+        return false
+    }
 }
 
 extension AppDelegate: SUUpdaterDelegate {

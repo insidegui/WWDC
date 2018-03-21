@@ -79,6 +79,7 @@ final class AppCoordinator {
         scheduleController.splitView.autosaveName = NSSplitView.AutosaveName(rawValue: "ScheduleSplitView")
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
+        scheduleItem.initialFirstResponder = scheduleController.listViewController.tableView
         tabController.addTabViewItem(scheduleItem)
 
         // Videos
@@ -88,6 +89,7 @@ final class AppCoordinator {
         videosController.splitView.autosaveName = NSSplitView.AutosaveName(rawValue: "VideosSplitView")
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
+        videosItem.initialFirstResponder = videosController.listViewController.tableView
         tabController.addTabViewItem(videosItem)
 
         self.windowController = windowController
