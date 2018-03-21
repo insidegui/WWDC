@@ -68,7 +68,14 @@ extension Array where Element == FilterType {
 
             for filter in self {
 
-                if !otherArray.contains(where: { $0.identifier == filter.identifier }) {
+                if !otherArray.contains(where: {
+                    if let mc0 = $0 as? MultipleChoiceFilter, let mc1 = filter as? MultipleChoiceFilter {
+                        return mc0.identifier == mc1.identifier && mc0.options == mc1.options
+                    } else {
+                        return $0.identifier == filter.identifier
+                    }
+
+                }) {
                     isIdentical = false
                     break
                 }

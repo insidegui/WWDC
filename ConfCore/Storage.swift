@@ -388,6 +388,18 @@ public final class Storage {
         }
     }
 
+    public lazy var eventsObservable: Observable<Results<Event>> = {
+        let events = realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false)
+
+        return Observable.collection(from: events)
+    }()
+
+    public lazy var focusesObservable: Observable<Results<Focus>> = {
+        let focuses = realm.objects(Focus.self).sorted(byKeyPath: "name")
+
+        return Observable.collection(from: focuses)
+    }()
+
     public lazy var tracksObservable: Observable<Results<Track>> = {
         let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
 
