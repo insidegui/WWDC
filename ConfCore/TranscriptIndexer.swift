@@ -41,21 +41,155 @@ public final class TranscriptIndexer {
 
     public static let minTranscriptableSessionLimit: Int = 20
     // TODO: increase 2017 to 2018 when transcripts for 2017 become available
-    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND year < 2017 AND transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
+    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND year < 2013 AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
 
     public static func needsUpdate(in storage: Storage) -> Bool {
-        let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
+        let transcriptedSessions = storage.realm.objects(Session.self)//.filter(TranscriptIndexer.transcriptableSessionsPredicate)
 
+        return true
         return transcriptedSessions.count > minTranscriptableSessionLimit
     }
 
     /// Try to download transcripts for sessions that don't have transcripts yet
     public func downloadTranscriptsIfNeeded() {
-        let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
+        let transcriptedSessions = storage.realm.objects(Session.self)//.filter(TranscriptIndexer.transcriptableSessionsPredicate)
 
-        let sessionKeys: [String] = transcriptedSessions.map({ $0.identifier })
+        for session in transcriptedSessions {
+            indexTranscript(for: session)
+            break
+        }
+//        let sessionKeys: [String] = transcriptedSessions.map({ $0.identifier })
+//
+//        indexTranscriptsForSessionsWithKeys(sessionKeys)
+    }
 
-        indexTranscriptsForSessionsWithKeys(sessionKeys)
+    let subtitleFetcherQueue = DispatchQueue(label: "subtitleFetcherQueue")
+
+    func indexTranscript(for session: Session) {
+        guard let urlString = session.assets.first(where: { $0.assetType == .streamingVideo} )?.remoteURL, let url = URL(string: urlString) else { return }
+        if url.pathExtension == "mov" {
+            print("We'll need to parse the movie atom")
+            return
+        }
+
+        // moov
+        //  |
+        //   - rmra
+        //      |
+        //       - rmda
+        //          |
+        //           - rdrf # reference file
+        //           - rmdr # data rate
+        //           -
+        //           -
+        //       - rmda
+        //       - rmda
+        let primaryKey = session.value(forKey: Session.primaryKey()!) as! String
+
+//        guard let url = URL(string: "\(asciiWWDCURL)\(session.year)//sessions/\(session.number)") else { return }
+
+        var request = URLRequest(url: url)
+//        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        let task = URLSession.shared.dataTask(with: request) { [unowned self] data, response, error in
+            defer {
+                self.transcriptIndexingProgress?.completedUnitCount += 1
+
+                self.checkForCompletion()
+            }
+
+            guard let masterPlaylistData = data else {
+                NSLog("Playlist returned no data for \(primaryKey)")
+
+                return
+            }
+
+            var masterPlaylist = String(data: masterPlaylistData, encoding: .utf8)!
+
+            if !masterPlaylist.contains("#EXT-X-VERSION:4") { //3, 4, 6
+                print("Unhandled protocol version")
+                return
+            }
+//            var json: JSON
+
+            let matches = masterPlaylist.matches(for: "^#EXT-X-MEDIA:TYPE=SUBTITLES[^\\n]+")
+
+            var subtitleURL = url.deletingLastPathComponent()
+
+            for subtitleSpecifier in matches {
+                for subsection in subtitleSpecifier.split(separator: ",") {
+                    let keyAndValue = subsection.split(separator: "=")
+                    if keyAndValue.count == 2 {
+//                        print("key = \(keyAndValue[0]), value = \(keyAndValue[1])")
+                        if keyAndValue[0] == "URI" {
+                            subtitleURL.appendPathComponent(String(keyAndValue[1]).replacingOccurrences(of: "\"", with: ""))
+                        }
+                    }
+                }
+            }
+
+            let subtitleListingRequest = URLRequest(url: subtitleURL)
+            let subtitleListingTask = URLSession.shared.dataTask(with: subtitleListingRequest) { [unowned self] data, response, error in
+
+                DispatchQueue.global().async {
+
+                    guard let subtitlesListingData = data else {
+                        NSLog("Playlist returned no data for \(primaryKey)")
+
+                        return
+                    }
+
+                    var subtitlesListing = String(data: subtitlesListingData, encoding: .utf8)!
+
+                    let baseSubtitleURL = subtitleURL.deletingLastPathComponent()
+
+                    let files = subtitlesListing.captureGroups(for: "^#EXTINF:[\\d]+.[\\d]+,.*\\n([^\\n]+)").flatMap { $0 }
+                    var subtitles = ""
+                    for file in files {
+
+                        let semaphore = DispatchSemaphore(value: 0)
+                        let subtitleRequest = URLRequest(url: baseSubtitleURL.appendingPathComponent(file))
+
+                        self.subtitleFetcherQueue.async {
+                            let subtitleTask = URLSession.shared.dataTask(with: subtitleRequest) { data, response, error in
+                                defer {
+                                    semaphore.signal()
+                                }
+                                guard let data = data else { return }
+                                subtitles += String(data: data, encoding: .utf8)!
+                            }
+                            subtitleTask.resume()
+                        }
+
+                        semaphore.wait()
+                    }
+
+                    print(subtitles)
+                }
+            }
+            subtitleListingTask.resume()
+
+//#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="English",DEFAULT=YES,AUTOSELECT=YES,FORCED=NO,LANGUAGE="eng",URI="subtitles/eng/prog_index.m3u8"
+//            do {
+//                json = try JSON(data: jsonData)
+//            } catch {
+//                NSLog("Error parsing JSON data for \(primaryKey)")
+//                return
+//            }
+//
+//            let result = TranscriptsJSONAdapter().adapt(json)
+//
+//            guard case .success(let transcript) = result else {
+//                NSLog("Error parsing transcript for \(primaryKey)")
+//                return
+//            }
+
+            self.storage.storageQueue.waitUntilAllOperationsAreFinished()
+
+//            self.batch.append(transcript)
+        }
+
+        task.resume()
     }
 
     func indexTranscriptsForSessionsWithKeys(_ sessionKeys: [String]) {
@@ -170,4 +304,37 @@ public final class TranscriptIndexer {
         }
     }
 
+}
+
+extension String {
+
+    func matches(for regex: String) -> [String] {
+        do {
+            let regex = try NSRegularExpression(pattern: regex, options: [.anchorsMatchLines])
+            let results = regex.matches(in: self, range: NSRange(startIndex..., in: self))
+            return results.map {
+                String(self[Range($0.range, in: self)!])
+            }
+        } catch let error {
+            print("invalid regex: \(error.localizedDescription)")
+            return []
+        }
+    }
+
+    func captureGroups(for regex: String) -> [[String]] {
+        do {
+            let regex = try NSRegularExpression(pattern: regex, options: [.anchorsMatchLines])
+            let results = regex.matches(in: self, range: NSRange(startIndex..., in: self))
+            return results.map { match in
+                var groupMatches = [String]()
+                for i in 1..<match.numberOfRanges {
+                    groupMatches.append(String(self[Range(match.range(at: i), in: self)!]))
+                }
+                return groupMatches
+            }
+        } catch let error {
+            print("invalid regex: \(error.localizedDescription)")
+            return []
+        }
+    }
 }
