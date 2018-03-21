@@ -50,11 +50,11 @@ struct MasterPlaylist {
         self.baseURL = baseURL
 
         let capturedStrings = string.captureGroups(for: "#EXT-X-VERSION:(\\d)").flatMap { $0 }
-        guard capturedStrings.count == 1, let version = Int(capturedStrings[0]) else {
-            throw PlaylistError.unknown
+        if capturedStrings.count == 1, let version = Int(capturedStrings[0]) {
+            self.version = version
+        } else {
+            self.version = 1
         }
-
-        self.version = version
 
         let matches = string.matches(for: "^#EXT-X-MEDIA:[^\\n]+")
 
@@ -105,13 +105,18 @@ struct MasterPlaylist {
                 throw PlaylistError.unknown
             }
 
+            var selectionGroupURL = baseURL.appendingPathComponent(uri)
+            if let url = URL(string: uri), url.scheme != nil {
+                selectionGroupURL = url
+            }
+
             selectionGroups.append(MediaSelectionGroup(type: mediumType,
                                 groupID: groupID,
                                 name: name, isDefault: isDefault,
                                 shouldAutoselect: shouldAutoSelect,
                                 shouldForce: shouldForce,
                                 language: language,
-                                url: baseURL.appendingPathComponent(uri)))
+                                url: selectionGroupURL))
         }
     }
 }
@@ -192,8 +197,14 @@ struct MediaPlaylist {
                 throw PlaylistError.unknown
             }
 
+            var mediaURL = baseURL.appendingPathComponent(medium[2])
+
+            if let url = URL(string: medium[2]), url.scheme != nil {
+                mediaURL = url
+            }
+
             self.media.append(Medium(sequence: sequence,
-                                     url: baseURL.appendingPathComponent(medium[2]),
+                                     url: mediaURL,
                                      title: medium[1],
                                      duration: duration))
             sequence += 1
@@ -242,7 +253,7 @@ public final class TranscriptIndexer {
 
         for session in transcriptedSessions {
             indexTranscript(for: session)
-            break
+//            break
         }
 //        let sessionKeys: [String] = transcriptedSessions.map({ $0.identifier })
 //
@@ -330,22 +341,15 @@ public final class TranscriptIndexer {
         //           -
         //       - rmda
         //       - rmda
-        let primaryKey = session.value(forKey: Session.primaryKey()!) as! String
-
-//        guard let url = URL(string: "\(asciiWWDCURL)\(session.year)//sessions/\(session.number)") else { return }
-
-        var request = URLRequest(url: url)
 
         self.downloadMasterPlaylist(url: url) { masterPlaylist in
             guard let masterPlaylist = masterPlaylist else { return }
-
             guard let subtitleMedium = masterPlaylist.selectionGroups.first(where: { $0.type == .subtitles }) else { return }
 
             self.downloadMediaPlaylist(url: subtitleMedium.url) { subtitleMediaPlaylist in
                 guard let subtitleMediaPlaylist = subtitleMediaPlaylist else { return }
 
                 var subtitles = [Medium: String]()
-
                 let dispatchGroup = DispatchGroup()
 
                 for medium in subtitleMediaPlaylist.media {
@@ -364,7 +368,9 @@ public final class TranscriptIndexer {
                 }
 
                 dispatchGroup.notify(queue: .main, execute: {
-                    print(subtitles)
+                    // Convert each file into a webvtt file
+                    // Then give all webvtt files to a transcript creator
+                    print(subtitles.count)
                 })
             }
 
