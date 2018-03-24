@@ -285,12 +285,15 @@ struct MediaPlaylist {
     }
 }
 
-public final class TranscriptIndexer {
+public final class TranscriptIndexer: NSObject {
 
     private let storage: Storage
 
+    lazy var session: URLSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
+
     public init(_ storage: Storage) {
         self.storage = storage
+
     }
 
     /// The progress when the transcripts are being downloaded/indexed
@@ -311,7 +314,7 @@ public final class TranscriptIndexer {
 
     public static let minTranscriptableSessionLimit: Int = 20
     // TODO: increase 2017 to 2018 when transcripts for 2017 become available
-    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND year < 2013 AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
+    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "year > 2012 AND year < 2014 AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
 
     public static func needsUpdate(in storage: Storage) -> Bool {
         let transcriptedSessions = storage.realm.objects(Session.self)//.filter(TranscriptIndexer.transcriptableSessionsPredicate)
@@ -322,11 +325,12 @@ public final class TranscriptIndexer {
 
     /// Try to download transcripts for sessions that don't have transcripts yet
     public func downloadTranscriptsIfNeeded() {
-        let transcriptedSessions = storage.realm.objects(Session.self)//.filter(TranscriptIndexer.transcriptableSessionsPredicate)
+        let transcriptedSessions = storage.realm.objects(Session.self).filter("year == 2016 AND number == \"102\"")
 
         for session in transcriptedSessions {
-            indexTranscript(for: session)
-//            break
+//            indexTranscript(for: session)
+            scrapeTranscript(for: session)
+            break
         }
 //        let sessionKeys: [String] = transcriptedSessions.map({ $0.identifier })
 //
@@ -397,8 +401,30 @@ public final class TranscriptIndexer {
 
     let semaphore = DispatchSemaphore(value: 10)
 
+    func scrapeTranscript(for session: Session) {
+        guard let urlString = session.assets.first(where: { $0.assetType == .webpage } )?.remoteURL, let url = URL(string: urlString) else { return }
+
+        var request = URLRequest(url: url)
+        request.setValue("curl/7.54.0", forHTTPHeaderField: "User-Agent")
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+            guard let data = data else {
+                print("No data")
+                return
+            }
+
+            guard let htmlString = String(data: data, encoding: .utf8) else {
+                print("Data isn't utf8")
+                return
+            }
+
+            print(htmlString)
+        }
+
+        task.resume()
+    }
+
     func indexTranscript(for session: Session) {
-        guard let urlString = session.assets.first(where: { $0.assetType == .streamingVideo} )?.remoteURL, let url = URL(string: urlString) else { return }
+        guard let urlString = session.assets.first(where: { $0.assetType == .streamingVideo } )?.remoteURL, let url = URL(string: urlString) else { return }
         if url.pathExtension == "mov" {
             print("We'll need to parse the movie atom")
             return
@@ -602,6 +628,13 @@ public final class TranscriptIndexer {
         }
     }
 
+}
+
+extension TranscriptIndexer: URLSessionTaskDelegate {
+
+//    public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
+//        completionHandler(request)
+//    }
 }
 
 extension String {

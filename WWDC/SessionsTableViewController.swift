@@ -481,6 +481,15 @@ class SessionsTableViewController: NSViewController {
         default: ()
         }
 
+        let myNumber: Optional<Int> = nil
+
+        switch myNumber {
+        case .none:
+            print("no value")
+        case .some(let value):
+            print(value)
+        }
+
         let remoteURL = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first?.remoteURL
 
         switch (menuItem.option, remoteURL) {
@@ -495,6 +504,32 @@ class SessionsTableViewController: NSViewController {
 
         return false
     }
+}
+
+enum MyEnum: RawRepresentable {
+    init?(rawValue: Int) {
+        if rawValue == 1 {
+            self = .one
+        } else if rawValue == 2 {
+            self = .two
+        }
+
+        return nil
+    }
+
+    var rawValue: Int {
+        switch self {
+        case .one:
+            return 1
+        case .two:
+            return 2
+        }
+    }
+
+    typealias RawValue = Int
+
+    case one
+    case two
 }
 
 extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
