@@ -61,16 +61,18 @@
 	<string>Guilherme Rambo</string>
 	<key>GRBundleMainDeveloperWebsite</key>
 	<string>https://twitter.com/_inside</string>
-	<key>GRBundleUserInterfaceCreatorWebsite</key>
-	<string>https://twitter.com/VicenteBorrell</string>
 	<key>GRBundleRepositoryName</key>
 	<string>insidegui/WWDC</string>
 	<key>GRBundleRepositoryWebsite</key>
 	<string>https://github.com/insidegui/WWDC</string>
+	<key>GRBundleUserInterfaceCreatorWebsite</key>
+	<string>https://twitter.com/VicenteBorrell</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoadsForMedia</key>
+		<true/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
