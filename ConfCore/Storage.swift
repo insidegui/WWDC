@@ -131,8 +131,22 @@ public final class Storage {
         }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
-            // Merge existing session data, preserving user-defined data
             sessionsResponse.sessions.forEach { newSession in
+                // Begin saving outlines of related resources
+                newSession.sessionResources.forEach { sessionResource in
+                    if let existingResource = backgroundRealm.object(ofType: ResourceRepresentation.self, forPrimaryKey: sessionResource.identifier) {
+                        newSession.related.append(existingResource)
+                    } else {
+                        let resource = ResourceRepresentation()
+                        resource.identifier = sessionResource.identifier
+                        if sessionResource.type == SessionResourceType.activity {
+                            resource.type = ResourceType.session.rawValue
+                        }
+                        newSession.related.append(resource)
+                    }
+                }
+
+                // Merge existing session data, preserving user-defined data
                 if let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
                     existingSession.merge(with: newSession, in: backgroundRealm)
                 } else {
@@ -149,10 +163,20 @@ public final class Storage {
                 }
             }
 
+            // Merge non-Session Resources with existing resource data
+            sessionsResponse.resources.forEach { newResource in
+                if let existingResource = backgroundRealm.object(ofType: ResourceRepresentation.self, forPrimaryKey: newResource.identifier) {
+                    existingResource.merge(with: newResource, in: backgroundRealm)
+                } else {
+                    backgroundRealm.add(newResource, update: true)
+                }
+            }
+
             // Save everything
             backgroundRealm.add(sessionsResponse.rooms, update: true)
             backgroundRealm.add(sessionsResponse.tracks, update: true)
             backgroundRealm.add(sessionsResponse.events, update: true)
+            backgroundRealm.add(sessionsResponse.resources, update: true)
 
             // add instances to rooms
             backgroundRealm.objects(Room.self).forEach { room in
@@ -203,8 +227,17 @@ public final class Storage {
                 }
             }
 
-            // Create schedule view
+            // Associate "related session" resources with Session objects in database
+            backgroundRealm.objects(ResourceRepresentation.self).filter("type == %@", ResourceType.session.rawValue).forEach { resource in
+                let identifier = resource.identifier.replacingOccurrences(of: "wwdc", with: "")
+                if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: identifier) {
+                    resource.session = session
+                } else {
+                    print("Expected session to match related activity identifier: \(identifier)")
+                }
+            }
 
+            // Create schedule view
             backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
 
             let instances = backgroundRealm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)

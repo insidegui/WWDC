@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 private enum ContentKeys: String, JSONSubscriptType {
-    case response, rooms, tracks, sessions, events, contents
+    case response, rooms, tracks, sessions, events, contents, resources
 
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -47,6 +47,14 @@ final class ContentsResponseAdapter: Adapter {
             return .error(.missingKey(ContentKeys.tracks))
         }
 
+        guard let resourcesJSON = input[ContentKeys.resources].array else {
+            return .error(.missingKey(ContentKeys.resources))
+        }
+
+        guard case .success(let resources) = ResourcesJSONAdapter().adapt(resourcesJSON) else {
+            return .error(.invalidData)
+        }
+
         guard let sessionsJson = input[ContentKeys.contents].array else {
             return .error(.missingKey(ContentKeys.contents))
         }
@@ -66,7 +74,7 @@ final class ContentsResponseAdapter: Adapter {
             sessions.remove(at: index)
         }
 
-        let response = ContentsResponse(events: events, rooms: rooms, tracks: tracks, instances: instances, sessions: sessions)
+        let response = ContentsResponse(events: events, rooms: rooms, tracks: tracks, resources: resources, instances: instances, sessions: sessions)
 
         return .success(response)
     }

@@ -44,6 +44,10 @@ public class Session: Object {
     /// The session's assets (videos, slides, links)
     public let assets = List<SessionAsset>()
 
+    // The session's "related" resources -- other sessions, documentation, guides and sample code
+    public var sessionResources = [SessionResource]()
+    public var related = List<ResourceRepresentation>()
+
     /// Whether this session is downloaded
     @objc public dynamic var isDownloaded = false
 
@@ -132,8 +136,13 @@ public class Session: Object {
         let assets = other.assets.filter { otherAsset in
             return !self.assets.contains(where: { $0.identifier == otherAsset.identifier })
         }
-
         self.assets.append(objectsIn: assets)
+
+        // merge related
+        let related = other.related.filter { otherRelated in
+            return !self.related.contains(where: { $0.identifier == otherRelated.identifier })
+        }
+        self.related.append(objectsIn: related)
 
         let otherFocuses = other.focuses.map { newFocus -> (Focus) in
             if newFocus.realm == nil,
