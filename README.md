@@ -70,7 +70,7 @@ A number of third-party libraries are used by the app:
 
 ## Building the app
 
-**Building requires Xcode 9 or later.**
+**Building requires Xcode 9.3 or later.**
 
 Building the app requires [Carthage](https://github.com/Carthage/Carthage) to be installed.
 
