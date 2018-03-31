@@ -13,7 +13,7 @@ SWIFTLINT_INSTALLED=$([ `command -v swiftlint` ] && echo true || echo false )
 BREW_INSTALLED=$([ `command -v brew` ] && echo true || echo false )
 
 SWIFTLINT_UPDATED=false
-if $SWIFTLINT_INSTALLED; then 
+if $SWIFTLINT_INSTALLED; then
     if ! lessThan `swiftlint version` $SWIFTLINT_MIN; then
         SWIFTLINT_UPDATED=true
     fi
@@ -25,11 +25,11 @@ if ! $SWIFTLINT_INSTALLED || ! $SWIFTLINT_UPDATED; then
     if $BREW_INSTALLED; then
         read -p "Use Homebrew to globally install the latest version of SwiftLint? [Y/n] " -n 1 -r
         echo
-        
+
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             if $SWIFTLINT_INSTALLED; then
                 brew upgrade swiftlint
-            else 
+            else
                 brew install swiftlint
             fi
         else
@@ -42,4 +42,10 @@ if ! $SWIFTLINT_INSTALLED || ! $SWIFTLINT_UPDATED; then
     fi
 fi
 
-carthage bootstrap --platform macOS
+if [[ ${CI} ]]; then
+    echo "CI"
+    carthage bootstrap --verbose --platform macOS
+else
+    echo "Not CI"
+    carthage bootstrap --platform macOS
+fi
