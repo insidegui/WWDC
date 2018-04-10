@@ -43,9 +43,8 @@ if ! $SWIFTLINT_INSTALLED || ! $SWIFTLINT_UPDATED; then
 fi
 
 if [[ ${CI} ]]; then
-    echo "CI"
-    carthage bootstrap --verbose --platform macOS
+    echo "Bootstrapping in CI mode"
+    set -o pipefail && env "NSUnbufferedIO=YES" carthage bootstrap --verbose --platform macOS | xcpretty
 else
-    echo "Not CI"
     carthage bootstrap --platform macOS
 fi
