@@ -64,7 +64,7 @@ public final class AppleAPIClient {
                 throw APIError.adapter
             }
 
-            let sessionsArray = sessionsDict.flatMap { key, value -> JSON? in
+            let sessionsArray = sessionsDict.compactMap { key, value -> JSON? in
                 guard let id = JSON.init(rawValue: key) else { return nil }
 
                 var v = value

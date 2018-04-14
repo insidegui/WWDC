@@ -339,7 +339,7 @@ public final class Storage {
         let safeObjects = objects.map { ThreadSafeReference(to: $0) }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
-            let resolvedObjects = safeObjects.flatMap { backgroundRealm.resolve($0) }
+            let resolvedObjects = safeObjects.compactMap { backgroundRealm.resolve($0) }
 
             guard resolvedObjects.count == safeObjects.count else {
                 NSLog("Failed to perform modify in the background. Some objects couldn't be resolved.")
@@ -462,7 +462,7 @@ public final class Storage {
 
     public func updateDownloadedFlag(_ isDownloaded: Bool, forAssetsAtPaths filePaths: [String]) {
         DispatchQueue.main.async {
-            let assets = filePaths.flatMap { self.realm.objects(SessionAsset.self).filter("relativeLocalURL == %@", $0).first }
+            let assets = filePaths.compactMap { self.realm.objects(SessionAsset.self).filter("relativeLocalURL == %@", $0).first }
 
             self.modify(assets) { bgAssets in
                 bgAssets.forEach { bgAsset in

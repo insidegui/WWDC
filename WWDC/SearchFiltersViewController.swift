@@ -154,7 +154,7 @@ final class SearchFiltersViewController: NSViewController {
 
         selectedItem.state = (selectedItem.state == .off) ? .on : .off
 
-        let selected = menu.items.filter({ $0.state == .on }).flatMap({ $0.representedObject as? FilterOption })
+        let selected = menu.items.filter({ $0.state == .on }).compactMap({ $0.representedObject as? FilterOption })
 
         filter.selectedOptions = selected
 

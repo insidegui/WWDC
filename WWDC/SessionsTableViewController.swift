@@ -139,7 +139,7 @@ class SessionsTableViewController: NSViewController {
             DispatchQueue.main.sync {
 
                 // Preserve selected rows
-                let selectedRows = self.tableView.selectedRowIndexes.flatMap { (index) -> IndexedSessionRow? in
+                let selectedRows = self.tableView.selectedRowIndexes.compactMap { (index) -> IndexedSessionRow? in
                     guard index < oldValue.endIndex else { return nil }
                     return IndexedSessionRow(sessionRow: oldValue[index], index: index)
                 }
@@ -267,7 +267,7 @@ class SessionsTableViewController: NSViewController {
 
         let sortingFunction = sessionRowProvider.sessionSortingFunction
 
-        let sessionRows: [SessionRow] = results.sorted(by: sortingFunction).flatMap { session in
+        let sessionRows: [SessionRow] = results.sorted(by: sortingFunction).compactMap { session in
             guard let viewModel = SessionViewModel(session: session) else { return nil }
 
             for row in allRows {

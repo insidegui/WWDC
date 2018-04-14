@@ -103,11 +103,11 @@ extension Environment {
     init?(_ record: CKRecord) {
         guard let baseURLStr = record["baseURL"] as? String, URL(string: baseURLStr) != nil else { return nil }
 
-        baseURL = baseURLStr
-        videosPath = "/videos.json"
-        liveVideosPath = "/videos_live.json"
-        newsPath = "/news.json"
-        sessionsPath = "/sessions.json"
+        self.init(baseURL: baseURLStr,
+                  videosPath: "/videos.json",
+                  sessionsPath: "/sessions.json",
+                  newsPath: "/news.json",
+                  liveVideosPath: "/videos_live.json")
     }
 
 }

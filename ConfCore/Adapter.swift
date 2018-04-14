@@ -37,7 +37,7 @@ protocol Adapter {
 extension Adapter {
 
     func adapt(_ input: [InputType]) -> Result<[OutputType], AdapterError> {
-        let collection = input.flatMap { (item: InputType) -> OutputType? in
+        let collection = input.compactMap { (item: InputType) -> OutputType? in
             let itemResult = adapt(item)
             switch itemResult {
             case .success(let resultingItem):
