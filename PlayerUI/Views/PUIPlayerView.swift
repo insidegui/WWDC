@@ -100,6 +100,12 @@ public final class PUIPlayerView: NSView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public var nowPlayingInfo: PUINowPlayingInfo? {
+        didSet {
+            nowPlayingCoordinator?.basicNowPlayingInfo = nowPlayingInfo
+        }
+    }
+
     public var isPlaying: Bool {
         if let externalProvider = currentExternalPlaybackProvider {
             return !externalProvider.status.rate.isZero
@@ -241,6 +247,8 @@ public final class PUIPlayerView: NSView {
         playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
         }
+
+        setupNowPlayingCoordinatorIfSupported()
     }
 
     private func teardown(player oldValue: AVPlayer) {
@@ -377,7 +385,6 @@ public final class PUIPlayerView: NSView {
         guard let duration = asset?.duration else { return }
 
         DispatchQueue.main.async {
-
             self.timelineView.mediaDuration = Double(CMTimeGetSeconds(duration))
         }
     }
@@ -388,7 +395,6 @@ public final class PUIPlayerView: NSView {
         guard let duration = asset?.duration else { return }
 
         DispatchQueue.main.async {
-
             let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
             self.timelineView.playbackProgress = progress
 
@@ -415,6 +421,18 @@ public final class PUIPlayerView: NSView {
         if let player = player {
             teardown(player: player)
         }
+    }
+
+    // MARK: - Now Playing Coordination
+
+    private var nowPlayingCoordinator: PUINowPlayingInfoCoordinator?
+
+    private func setupNowPlayingCoordinatorIfSupported() {
+        guard #available(macOS 10.12.2, *) else { return }
+        guard let player = player else { return }
+
+        nowPlayingCoordinator = PUINowPlayingInfoCoordinator(player: player)
+        nowPlayingCoordinator?.basicNowPlayingInfo = nowPlayingInfo
     }
 
     // MARK: Controls

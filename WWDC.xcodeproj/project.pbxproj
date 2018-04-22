@@ -151,6 +151,8 @@
 		DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3529F1EC9088000254815 /* WWDCTableView.swift */; };
 		DDB352A51EC90ACA00254815 /* TBProphylaxis.h in Headers */ = {isa = PBXBuildFile; fileRef = DDB352A31EC90ACA00254815 /* TBProphylaxis.h */; };
 		DDB352A61EC90ACA00254815 /* TBProphylaxis.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB352A41EC90ACA00254815 /* TBProphylaxis.m */; };
+		DDBA0D79208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */; };
+		DDBA0D7B208D3DE70075670F /* PUINowPlayingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */; };
 		DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */; };
 		DDC677F91EDA76A100A4E19C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC677F81EDA76A100A4E19C /* main.m */; };
 		DDC677FD1EDA76A100A4E19C /* TranscriptIndexingService.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -500,6 +502,8 @@
 		DDB352A31EC90ACA00254815 /* TBProphylaxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBProphylaxis.h; sourceTree = "<group>"; };
 		DDB352A41EC90ACA00254815 /* TBProphylaxis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBProphylaxis.m; sourceTree = "<group>"; };
 		DDBA0D74208CD5430075670F /* SwiftProtobuf.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftProtobuf.framework.dSYM; path = Carthage/Build/Mac/SwiftProtobuf.framework.dSYM; sourceTree = "<group>"; };
+		DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfoCoordinator.swift; sourceTree = "<group>"; };
+		DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfo.swift; sourceTree = "<group>"; };
 		DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexer.swift; sourceTree = "<group>"; };
 		DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = TranscriptIndexingService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC677F81EDA76A100A4E19C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1150,6 +1154,15 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		DDBA0D77208D21920075670F /* MediaPlayer Support */ = {
+			isa = PBXGroup;
+			children = (
+				DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */,
+				DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */,
+			);
+			path = "MediaPlayer Support";
+			sourceTree = "<group>";
+		};
 		DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1285,6 +1298,7 @@
 		DDF721971ECA12780054C503 /* PlayerUI */ = {
 			isa = PBXGroup;
 			children = (
+				DDBA0D77208D21920075670F /* MediaPlayer Support */,
 				DDF721A41ECA12A40054C503 /* Controllers */,
 				DDF721A71ECA12A40054C503 /* Definitions */,
 				DDF721AB1ECA12A40054C503 /* Models */,
@@ -2011,11 +2025,13 @@
 				DDF721C91ECA12A40054C503 /* Colors.swift in Sources */,
 				DDED75571ED3C1BF000BA817 /* PUIScrimContainerView.swift in Sources */,
 				DDF721D01ECA12A40054C503 /* PUIPlayerViewDelegates.swift in Sources */,
+				DDBA0D79208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift in Sources */,
 				DDF721CF1ECA12A40054C503 /* PUIExternalPlaybackProvider.swift in Sources */,
 				DDF721DE1ECA12A40054C503 /* PUIPlayerView.swift in Sources */,
 				DDF721D21ECA12A40054C503 /* PUITimelineDelegate.swift in Sources */,
 				DDF721D61ECA12A40054C503 /* DebugLog.swift in Sources */,
 				DDF721D81ECA12A40054C503 /* NSWindow+Snapshot.swift in Sources */,
+				DDBA0D7B208D3DE70075670F /* PUINowPlayingInfo.swift in Sources */,
 				DDC678241EDBA25A00A4E19C /* PUIAnnotationWindow.swift in Sources */,
 				DDF721C71ECA12A40054C503 /* PUIExternalPlaybackStatusViewController.swift in Sources */,
 				DDF721E11ECA12A40054C503 /* PUITimelineView.swift in Sources */,
