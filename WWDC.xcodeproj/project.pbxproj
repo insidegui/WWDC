@@ -120,9 +120,7 @@
 		DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCA1ED77A4800CADE86 /* FilterType.swift */; };
 		DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */; };
 		DD9301B81EE3202F00BE724B /* ChromeCastCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */; };
-		DD9301B91EE3202F00BE724B /* ProtocolBuffers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9301B71EE3202F00BE724B /* ProtocolBuffers.framework */; };
 		DD9301BC1EE3205800BE724B /* ChromeCastCore.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */; };
-		DD9301BD1EE3205800BE724B /* ProtocolBuffers.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD9301BB1EE3205800BE724B /* ProtocolBuffers.framework.dSYM */; };
 		DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
@@ -336,7 +334,6 @@
 				DD5F517A1E47DE0F0017F9EC /* RxSwift.framework.dSYM in Carthage: Copy DSYMs */,
 				DD5F517B1E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM in Carthage: Copy DSYMs */,
 				DD9301BC1EE3205800BE724B /* ChromeCastCore.framework.dSYM in Carthage: Copy DSYMs */,
-				DD9301BD1EE3205800BE724B /* ProtocolBuffers.framework.dSYM in Carthage: Copy DSYMs */,
 				DD4DED641ED6579900624EAF /* Sparkle.framework.dSYM in Carthage: Copy DSYMs */,
 			);
 			name = "Carthage: Copy DSYMs";
@@ -470,9 +467,7 @@
 		DD90CDCA1ED77A4800CADE86 /* FilterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 		DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
 		DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ChromeCastCore.framework; path = Carthage/Build/Mac/ChromeCastCore.framework; sourceTree = "<group>"; };
-		DD9301B71EE3202F00BE724B /* ProtocolBuffers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ProtocolBuffers.framework; path = Carthage/Build/Mac/ProtocolBuffers.framework; sourceTree = "<group>"; };
 		DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = ChromeCastCore.framework.dSYM; path = Carthage/Build/Mac/ChromeCastCore.framework.dSYM; sourceTree = "<group>"; };
-		DD9301BB1EE3205800BE724B /* ProtocolBuffers.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = ProtocolBuffers.framework.dSYM; path = Carthage/Build/Mac/ProtocolBuffers.framework.dSYM; sourceTree = "<group>"; };
 		DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromeCastPlaybackProvider.swift; sourceTree = "<group>"; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
@@ -495,7 +490,6 @@
 		DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackViewModel.swift; sourceTree = "<group>"; };
 		DDB28F901EAD2A050077703F /* WWDCAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCAlert.swift; sourceTree = "<group>"; };
 		DDB28F921EAD48D70077703F /* UserActivityRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserActivityRepresentable.swift; sourceTree = "<group>"; };
-		DDB28F961EAD4DDA0077703F /* PIPContainer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIPContainer.framework; path = Carthage/Build/Mac/PIPContainer.framework; sourceTree = "<group>"; };
 		DDB3527F1EC7C4CA00254815 /* Arguments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Arguments.swift; sourceTree = "<group>"; };
 		DDB352811EC7C55300254815 /* DateProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateProvider.swift; sourceTree = "<group>"; };
 		DDB352831EC7C74C00254815 /* LiveObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveObserver.swift; sourceTree = "<group>"; };
@@ -505,6 +499,7 @@
 		DDB3529F1EC9088000254815 /* WWDCTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableView.swift; sourceTree = "<group>"; };
 		DDB352A31EC90ACA00254815 /* TBProphylaxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBProphylaxis.h; sourceTree = "<group>"; };
 		DDB352A41EC90ACA00254815 /* TBProphylaxis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBProphylaxis.m; sourceTree = "<group>"; };
+		DDBA0D74208CD5430075670F /* SwiftProtobuf.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftProtobuf.framework.dSYM; path = Carthage/Build/Mac/SwiftProtobuf.framework.dSYM; sourceTree = "<group>"; };
 		DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexer.swift; sourceTree = "<group>"; };
 		DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = TranscriptIndexingService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC677F81EDA76A100A4E19C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -615,7 +610,6 @@
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 				DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */,
 				DD9301B81EE3202F00BE724B /* ChromeCastCore.framework in Frameworks */,
-				DD9301B91EE3202F00BE724B /* ProtocolBuffers.framework in Frameworks */,
 				DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -921,8 +915,8 @@
 				DD5F51711E47DE0F0017F9EC /* RxCocoa.framework.dSYM */,
 				DD5F51721E47DE0F0017F9EC /* RxRealm.framework.dSYM */,
 				DD5F51731E47DE0F0017F9EC /* RxSwift.framework.dSYM */,
+				DDBA0D74208CD5430075670F /* SwiftProtobuf.framework.dSYM */,
 				DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */,
-				DD9301BB1EE3205800BE724B /* ProtocolBuffers.framework.dSYM */,
 				DD5F51741E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM */,
 			);
 			name = DSYMs;
@@ -932,11 +926,9 @@
 			isa = PBXGroup;
 			children = (
 				DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */,
-				DD9301B71EE3202F00BE724B /* ProtocolBuffers.framework */,
 				DD4DED661ED6604300624EAF /* Fabric.framework */,
 				DD4DED671ED6604300624EAF /* Crashlytics.framework */,
 				DD4DED601ED6577100624EAF /* Sparkle.framework */,
-				DDB28F961EAD4DDA0077703F /* PIPContainer.framework */,
 				DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */,
 				DD5F517F1E47DE7E0017F9EC /* Realm.framework */,
 				DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */,
@@ -1806,7 +1798,7 @@
 				"$(SRCROOT)/Carthage/Build/Mac/Siesta.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/Sparkle.framework",
 				"$(SRCROOT)/Carthage/Build/Mac/ChromeCastCore.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/ProtocolBuffers.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/SwiftProtobuf.framework",
 			);
 			name = "Carthage: Copy Frameworks";
 			outputPaths = (

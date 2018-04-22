@@ -9,8 +9,4 @@ github "bustoutsolutions/siesta" ~> 1.0
 
 github "sparkle-project/Sparkle" ~> 1.17
 
-github "insidegui/ChromeCastCore" "swift4"
-
-# ChromeCastCore's dependencies are currently met manually
-github "alexeyxo/protobuf-swift" == 3.0.23
-# SwiftJSON is compiled directly into ChromeCastCore
+github "insidegui/ChromeCastCore" ~> 0.2.1
