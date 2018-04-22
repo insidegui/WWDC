@@ -14,11 +14,13 @@ public struct PUINowPlayingInfo {
     public var title: String
     public var artist: String
     public var progress: Double
+    public var isLive: Bool
 
-    public init(title: String, artist: String, progress: Double = 0) {
+    public init(title: String, artist: String, progress: Double = 0, isLive: Bool = false) {
         self.title = title
         self.artist = artist
         self.progress = progress
+        self.isLive = isLive
     }
 
 }
@@ -33,6 +35,7 @@ extension PUINowPlayingInfo {
 
         if #available(OSX 10.12.2, *) {
             info[MPNowPlayingInfoPropertyPlaybackProgress] = progress
+            info[MPNowPlayingInfoPropertyIsLiveStream] = isLive
         }
 
         return info

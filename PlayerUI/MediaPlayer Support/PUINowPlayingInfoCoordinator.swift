@@ -36,13 +36,13 @@ final class PUINowPlayingInfoCoordinator {
         guard let item = player.currentItem else { return nil }
 
         var info: [String: Any] = [
-            MPNowPlayingInfoPropertyMediaType: MPNowPlayingInfoMediaType.video,
+            MPNowPlayingInfoPropertyMediaType: MPNowPlayingInfoMediaType.video.rawValue,
             MPNowPlayingInfoPropertyPlaybackRate: player.rate,
             MPNowPlayingInfoPropertyElapsedPlaybackTime: CMTimeGetSeconds(player.currentTime())
         ]
 
         if #available(macOS 10.12.3, *), let urlAsset = item.asset as? AVURLAsset {
-            info[MPNowPlayingInfoPropertyAssetURL] = urlAsset
+            info[MPNowPlayingInfoPropertyAssetURL] = urlAsset.url
         }
 
         if #available(macOS 10.13.1, *) {

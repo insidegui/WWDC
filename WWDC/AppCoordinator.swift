@@ -138,7 +138,11 @@ final class AppCoordinator {
     var selectedViewModelRegardlessOfTab: SessionViewModel?
 
     /// The viewModel for the current playback session
-    var currentPlaybackViewModel: PlaybackViewModel?
+    var currentPlaybackViewModel: PlaybackViewModel? {
+        didSet {
+            observeNowPlayingInfo()
+        }
+    }
 
     private func setupBindings() {
         tabController.rxActiveTab.subscribe(onNext: { [weak self] activeTab in
@@ -284,6 +288,18 @@ final class AppCoordinator {
     func receiveNotification(with userInfo: [String: Any]) -> Bool {
         return liveObserver.processSubscriptionNotification(with: userInfo) ||
             RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo)
+    }
+
+    // MARK: - Now playing info
+
+    private var nowPlayingInfoBag = DisposeBag()
+
+    private func observeNowPlayingInfo() {
+        nowPlayingInfoBag = DisposeBag()
+
+        currentPlaybackViewModel?.nowPlayingInfo.asObservable().subscribe(onNext: { [weak self] _ in
+            self?.publishNowPlayingInfo()
+        }).disposed(by: nowPlayingInfoBag)
     }
 
     // MARK: - State restoration
