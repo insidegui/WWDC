@@ -342,7 +342,7 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
     }
 
     public func castClient(_ client: CastClient, deviceStatusDidChange status: CastStatus) {
-        self.status.volume = Float(status.volume)
+        self.status.volume = Float(status.volume.level)
 
         consumer?.externalPlaybackProviderDidChangeMediaStatus(self)
     }

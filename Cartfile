@@ -9,4 +9,4 @@ github "bustoutsolutions/siesta" ~> 1.0
 
 github "sparkle-project/Sparkle" ~> 1.17
 
-github "insidegui/ChromeCastCore" ~> 0.2
+github "insidegui/ChromeCastCore" ~> 0.2.1
