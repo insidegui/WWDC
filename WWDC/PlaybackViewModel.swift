@@ -67,6 +67,7 @@ final class PlaybackViewModel {
     var remoteMediaURL: URL?
     var title: String?
     var imageURL: URL?
+    var image: NSImage?
 
     private var timeObserver: Any?
 
@@ -170,7 +171,8 @@ extension PUINowPlayingInfo {
             title: title,
             artist: eventName,
             progress: 0,
-            isLive: playbackViewModel.isLiveStream
+            isLive: playbackViewModel.isLiveStream,
+            image: playbackViewModel.image
         )
     }
 

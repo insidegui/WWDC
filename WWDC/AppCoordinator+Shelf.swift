@@ -79,6 +79,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         do {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
+            playbackViewModel.image = shelfController.shelfView.image
 
             canRestorePlaybackContext = false
             isTransitioningPlayerContext = false
