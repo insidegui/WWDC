@@ -22,6 +22,7 @@ extension Notification.Name {
 protocol VideoPlayerViewControllerDelegate: class {
 
     func createBookmark(at timecode: Double, with snapshot: NSImage?)
+    func createFavorite()
 
 }
 
@@ -284,6 +285,10 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
 
+    }
+
+    func playerViewDidSelectLike(_ playerView: PUIPlayerView) {
+        delegate?.createFavorite()
     }
 
 }

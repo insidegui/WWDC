@@ -31,6 +31,12 @@ extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate
         // TODO: begin editing new bookmark
     }
 
+    func createFavorite() {
+        guard let session = currentPlayerController?.sessionViewModel.session else { return }
+
+        storage.createFavorite(for: session)
+    }
+
     func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController? {
         guard let bookmark = annotation as? Bookmark else { return nil }
 

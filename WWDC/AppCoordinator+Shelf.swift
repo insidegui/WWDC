@@ -79,6 +79,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         do {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
+            playbackViewModel.image = shelfController.shelfView.image
 
             canRestorePlaybackContext = false
             isTransitioningPlayerContext = false
@@ -123,6 +124,10 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
 
         playerController.view.alphaValue = 1
+    }
+
+    func publishNowPlayingInfo() {
+        currentPlayerController?.playerView.nowPlayingInfo = currentPlaybackViewModel?.nowPlayingInfo.value
     }
 
 }

@@ -100,6 +100,12 @@ public final class PUIPlayerView: NSView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public var nowPlayingInfo: PUINowPlayingInfo? {
+        didSet {
+            nowPlayingCoordinator?.basicNowPlayingInfo = nowPlayingInfo
+        }
+    }
+
     public var isPlaying: Bool {
         if let externalProvider = currentExternalPlaybackProvider {
             return !externalProvider.status.rate.isZero
@@ -133,15 +139,7 @@ public final class PUIPlayerView: NSView {
     }
 
     public func seek(to annotation: PUITimelineAnnotation) {
-        guard let player = player else { return }
-
-        let time = CMTimeMakeWithSeconds(Float64(annotation.timestamp), 9000)
-
-        if isPlayingExternally {
-            currentExternalPlaybackProvider?.seek(to: annotation.timestamp)
-        } else {
-            player.seek(to: time)
-        }
+        seek(to: annotation.timestamp)
     }
 
     public var playbackSpeed: PUIPlaybackSpeed = .normal {
@@ -241,6 +239,9 @@ public final class PUIPlayerView: NSView {
         playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
         }
+
+        setupNowPlayingCoordinatorIfSupported()
+        setupRemoteCommandCoordinatorIfSupported()
     }
 
     private func teardown(player oldValue: AVPlayer) {
@@ -377,7 +378,6 @@ public final class PUIPlayerView: NSView {
         guard let duration = asset?.duration else { return }
 
         DispatchQueue.main.async {
-
             self.timelineView.mediaDuration = Double(CMTimeGetSeconds(duration))
         }
     }
@@ -388,7 +388,6 @@ public final class PUIPlayerView: NSView {
         guard let duration = asset?.duration else { return }
 
         DispatchQueue.main.async {
-
             let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
             self.timelineView.playbackProgress = progress
 
@@ -417,13 +416,64 @@ public final class PUIPlayerView: NSView {
         }
     }
 
+    // MARK: - Now Playing Coordination
+
+    private var nowPlayingCoordinator: PUINowPlayingInfoCoordinator?
+
+    private func setupNowPlayingCoordinatorIfSupported() {
+        guard #available(macOS 10.12.2, *) else { return }
+        guard let player = player else { return }
+
+        nowPlayingCoordinator = PUINowPlayingInfoCoordinator(player: player)
+        nowPlayingCoordinator?.basicNowPlayingInfo = nowPlayingInfo
+    }
+
+    // MARK: - Remote command support (AirPlay 2)
+
+    private var remoteCommandCoordinator: PUIRemoteCommandCoordinator?
+
+    private func setupRemoteCommandCoordinatorIfSupported() {
+        guard #available(macOS 10.12.2, *) else { return }
+
+        remoteCommandCoordinator = PUIRemoteCommandCoordinator()
+
+        remoteCommandCoordinator?.pauseHandler = { [weak self] in
+            self?.pause(nil)
+        }
+        remoteCommandCoordinator?.playHandler = { [weak self] in
+            self?.play(nil)
+        }
+        remoteCommandCoordinator?.stopHandler = { [weak self] in
+            self?.pause(nil)
+        }
+        remoteCommandCoordinator?.togglePlayingHandler = { [weak self] in
+            self?.togglePlaying(nil)
+        }
+        remoteCommandCoordinator?.nextTrackHandler = { [weak self] in
+            self?.goForwardInTime15(nil)
+        }
+        remoteCommandCoordinator?.previousTrackHandler = { [weak self] in
+            self?.goBackInTime15(nil)
+        }
+        remoteCommandCoordinator?.likeHandler = { [weak self] in
+            guard let `self` = self else { return }
+
+            self.delegate?.playerViewDidSelectLike(self)
+        }
+        remoteCommandCoordinator?.changePlaybackPositionHandler = { [weak self] time in
+            self?.seek(to: time)
+        }
+        remoteCommandCoordinator?.changePlaybackRateHandler = { [weak self] speed in
+            self?.playbackSpeed = speed
+        }
+    }
+
     // MARK: Controls
 
     fileprivate var wasPlayingBeforeStartingInteractiveSeek = false
 
     private var extrasMenuContainerView: NSStackView!
 
-    //    fileprivate var controlsVisualEffectView: NSVisualEffectView!
     fileprivate var scrimContainerView: PUIScrimContainerView!
 
     private var timeLabelsContainerView: NSStackView!
@@ -604,15 +654,6 @@ public final class PUIPlayerView: NSView {
         externalStatusController.view.topAnchor.constraint(equalTo: topAnchor).isActive = true
         externalStatusController.view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
-        //        // VFX view
-        //        controlsVisualEffectView = NSVisualEffectView(frame: bounds)
-        //        controlsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
-        //        controlsVisualEffectView.material = .ultraDark
-        //        controlsVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
-        //        controlsVisualEffectView.blendingMode = .withinWindow
-        //        controlsVisualEffectView.wantsLayer = true
-        //        controlsVisualEffectView.layer?.masksToBounds = false
-        //        controlsVisualEffectView.state = .active
         scrimContainerView = PUIScrimContainerView(frame: bounds)
 
         // Time labels
@@ -912,12 +953,20 @@ public final class PUIPlayerView: NSView {
         let modifier = CMTimeMakeWithSeconds(seconds, durationTime.timescale)
         let targetTime = function(player.currentTime(), modifier)
 
-        guard targetTime.isValid && targetTime.isNumeric else { return }
+        seek(to: targetTime)
+    }
+
+    private func seek(to timestamp: TimeInterval) {
+        seek(to: CMTimeMakeWithSeconds(timestamp, 90000))
+    }
+
+    private func seek(to time: CMTime) {
+        guard time.isValid && time.isNumeric else { return }
 
         if isPlayingExternally {
-            currentExternalPlaybackProvider?.seek(to: seconds)
+            currentExternalPlaybackProvider?.seek(to: CMTimeGetSeconds(time))
         } else {
-            player.seek(to: targetTime)
+            player?.seek(to: time)
         }
     }
 

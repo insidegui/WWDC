@@ -14,6 +14,7 @@ public protocol PUIPlayerViewDelegate: class {
     func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, isReturningFromPiP: Bool)
     func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, at timestamp: Double)
     func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView)
+    func playerViewDidSelectLike(_ playerView: PUIPlayerView)
 
 }
 

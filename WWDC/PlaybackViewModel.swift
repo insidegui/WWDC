@@ -10,6 +10,7 @@ import Foundation
 import ConfCore
 import AVFoundation
 import PlayerUI
+import RxSwift
 
 enum PlaybackError: Error {
     case sessionNotFound(String)
@@ -66,8 +67,11 @@ final class PlaybackViewModel {
     var remoteMediaURL: URL?
     var title: String?
     var imageURL: URL?
+    var image: NSImage?
 
     private var timeObserver: Any?
+
+    var nowPlayingInfo: Variable<PUINowPlayingInfo?> = Variable(nil)
 
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
         title = sessionViewModel.title
@@ -128,6 +132,7 @@ final class PlaybackViewModel {
         #endif
 
         player = AVPlayer(url: finalUrl)
+        nowPlayingInfo.value = PUINowPlayingInfo(playbackViewModel: self)
 
         if !isLiveStream {
             let p = session.currentPosition()
@@ -141,6 +146,8 @@ final class PlaybackViewModel {
                 let d = Double(CMTimeGetSeconds(duration))
 
                 self?.sessionViewModel.session.setCurrentPosition(p, d)
+
+                if !d.isZero { self?.nowPlayingInfo.value?.progress = p / d }
             }
         }
     }
@@ -150,6 +157,23 @@ final class PlaybackViewModel {
             player.removeTimeObserver(timeObserver)
             self.timeObserver = nil
         }
+    }
+
+}
+
+extension PUINowPlayingInfo {
+
+    init(playbackViewModel: PlaybackViewModel) {
+        let title = playbackViewModel.title ?? "WWDC Session"
+        let eventName = playbackViewModel.sessionViewModel.session.event.first?.name ?? "WWDC"
+
+        self = PUINowPlayingInfo(
+            title: title,
+            artist: eventName,
+            progress: 0,
+            isLive: playbackViewModel.isLiveStream,
+            image: playbackViewModel.image
+        )
     }
 
 }
