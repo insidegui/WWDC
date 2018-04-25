@@ -35,13 +35,13 @@ final class PUIRemoteCommandCoordinator {
         }
     }
 
-    var skipForwardHandler: (() -> Void)? {
+    var nextTrackHandler: (() -> Void)? {
         didSet {
             updateCommandAvailability()
         }
     }
 
-    var skipBackwardHandler: (() -> Void)? {
+    var previousTrackHandler: (() -> Void)? {
         didSet {
             updateCommandAvailability()
         }
@@ -88,14 +88,14 @@ final class PUIRemoteCommandCoordinator {
             return .success
         }
 
-        center.skipForwardCommand.addTarget { [weak self] _ in
-            DispatchQueue.main.async { self?.skipForwardHandler?() }
+        center.nextTrackCommand.addTarget { [weak self] _ in
+            DispatchQueue.main.async { self?.nextTrackHandler?() }
 
             return .success
         }
 
-        center.skipBackwardCommand.addTarget { [weak self] _ in
-            DispatchQueue.main.async { self?.skipBackwardHandler?() }
+        center.previousTrackCommand.addTarget { [weak self] _ in
+            DispatchQueue.main.async { self?.previousTrackHandler?() }
 
             return .success
         }
@@ -126,12 +126,14 @@ final class PUIRemoteCommandCoordinator {
         center.playCommand.isEnabled = playHandler != nil
         center.stopCommand.isEnabled = stopHandler != nil
         center.togglePlayPauseCommand.isEnabled = togglePlayingHandler != nil
-        center.skipForwardCommand.isEnabled = skipForwardHandler != nil
-        center.skipBackwardCommand.isEnabled = skipBackwardHandler != nil
+        center.nextTrackCommand.isEnabled = nextTrackHandler != nil
+        center.previousTrackCommand.isEnabled = previousTrackHandler != nil
         center.likeCommand.isEnabled = likeHandler != nil
         center.changePlaybackPositionCommand.isEnabled = changePlaybackPositionHandler != nil
 
         // Unsupported commands
+        center.skipForwardCommand.isEnabled = false
+        center.skipBackwardCommand.isEnabled = false
         center.changePlaybackRateCommand.isEnabled = false
         center.ratingCommand.isEnabled = false
         center.dislikeCommand.isEnabled = false
