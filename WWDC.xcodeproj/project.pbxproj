@@ -189,6 +189,7 @@
 		DDDAA4071EC76D9300DF9D02 /* TBPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA4061EC76D9300DF9D02 /* TBPreferences.swift */; };
 		DDDAA40A1EC775B500DF9D02 /* TBSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA4091EC775B500DF9D02 /* TBSession.swift */; };
 		DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA40B1EC798B600DF9D02 /* Preferences.swift */; };
+		DDEA82FC20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA82FB20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift */; };
 		DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */; };
 		DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */; };
 		DDED75571ED3C1BF000BA817 /* PUIScrimContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */; };
@@ -538,6 +539,7 @@
 		DDDAA4061EC76D9300DF9D02 /* TBPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBPreferences.swift; sourceTree = "<group>"; };
 		DDDAA4091EC775B500DF9D02 /* TBSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBSession.swift; sourceTree = "<group>"; };
 		DDDAA40B1EC798B600DF9D02 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		DDEA82FB20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIRemoteCommandCoordinator.swift; sourceTree = "<group>"; };
 		DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindowController.swift; sourceTree = "<group>"; };
 		DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIScrimContainerView.swift; sourceTree = "<group>"; };
@@ -1159,6 +1161,7 @@
 			children = (
 				DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */,
 				DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */,
+				DDEA82FB20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift */,
 			);
 			path = "MediaPlayer Support";
 			sourceTree = "<group>";
@@ -2041,6 +2044,7 @@
 				DDF721DD1ECA12A40054C503 /* PUIButton.swift in Sources */,
 				DDF721D71ECA12A40054C503 /* NSEvent+ForceTouch.swift in Sources */,
 				DDC6781F1EDB8EDA00A4E19C /* PUIAnnotationWindowController.swift in Sources */,
+				DDEA82FC20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift in Sources */,
 				DDF721D91ECA12A40054C503 /* String+CMTime.swift in Sources */,
 				DDF721DC1ECA12A40054C503 /* PUIBufferLayer.swift in Sources */,
 			);

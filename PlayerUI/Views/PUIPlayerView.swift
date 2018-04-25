@@ -249,6 +249,7 @@ public final class PUIPlayerView: NSView {
         }
 
         setupNowPlayingCoordinatorIfSupported()
+        setupRemoteCommandCoordinatorIfSupported()
     }
 
     private func teardown(player oldValue: AVPlayer) {
@@ -433,6 +434,40 @@ public final class PUIPlayerView: NSView {
 
         nowPlayingCoordinator = PUINowPlayingInfoCoordinator(player: player)
         nowPlayingCoordinator?.basicNowPlayingInfo = nowPlayingInfo
+    }
+
+    // MARK: - Remote command support (AirPlay 2)
+
+    private var remoteCommandCoordinator: PUIRemoteCommandCoordinator?
+
+    private func setupRemoteCommandCoordinatorIfSupported() {
+        guard #available(macOS 10.12.2, *) else { return }
+
+        remoteCommandCoordinator = PUIRemoteCommandCoordinator()
+
+        remoteCommandCoordinator?.pauseHandler = { [weak self] in
+            self?.pause(nil)
+        }
+        remoteCommandCoordinator?.playHandler = { [weak self] in
+            self?.play(nil)
+        }
+        remoteCommandCoordinator?.stopHandler = { [weak self] in
+            self?.pause(nil)
+        }
+        remoteCommandCoordinator?.togglePlayingHandler = { [weak self] in
+            self?.togglePlaying(nil)
+        }
+        remoteCommandCoordinator?.skipForwardHandler = { [weak self] in
+            self?.goForwardInTime15(nil)
+        }
+        remoteCommandCoordinator?.skipBackwardHandler = { [weak self] in
+            self?.goBackInTime15(nil)
+        }
+        remoteCommandCoordinator?.likeHandler = { [weak self] in
+            guard let `self` = self else { return }
+
+            self.delegate?.playerViewDidSelectLike(self)
+        }
     }
 
     // MARK: Controls
