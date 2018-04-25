@@ -53,6 +53,10 @@ final class PUINowPlayingInfoCoordinator {
             info.merge(basicInfo, uniquingKeysWith: { a, b in b })
         }
 
+        if item.duration.isValid, item.duration.isNumeric {
+            info[MPMediaItemPropertyPlaybackDuration] = TimeInterval(CMTimeGetSeconds(item.duration))
+        }
+
         return info
     }
 
