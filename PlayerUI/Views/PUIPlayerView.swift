@@ -139,15 +139,7 @@ public final class PUIPlayerView: NSView {
     }
 
     public func seek(to annotation: PUITimelineAnnotation) {
-        guard let player = player else { return }
-
-        let time = CMTimeMakeWithSeconds(Float64(annotation.timestamp), 9000)
-
-        if isPlayingExternally {
-            currentExternalPlaybackProvider?.seek(to: annotation.timestamp)
-        } else {
-            player.seek(to: time)
-        }
+        seek(to: annotation.timestamp)
     }
 
     public var playbackSpeed: PUIPlaybackSpeed = .normal {
@@ -467,6 +459,9 @@ public final class PUIPlayerView: NSView {
             guard let `self` = self else { return }
 
             self.delegate?.playerViewDidSelectLike(self)
+        }
+        remoteCommandCoordinator?.changePlaybackPositionHandler = { [weak self] time in
+            self?.seek(to: time)
         }
     }
 
@@ -965,12 +960,20 @@ public final class PUIPlayerView: NSView {
         let modifier = CMTimeMakeWithSeconds(seconds, durationTime.timescale)
         let targetTime = function(player.currentTime(), modifier)
 
-        guard targetTime.isValid && targetTime.isNumeric else { return }
+        seek(to: targetTime)
+    }
+
+    private func seek(to timestamp: TimeInterval) {
+        seek(to: CMTimeMakeWithSeconds(timestamp, 90000))
+    }
+
+    private func seek(to time: CMTime) {
+        guard time.isValid && time.isNumeric else { return }
 
         if isPlayingExternally {
-            currentExternalPlaybackProvider?.seek(to: seconds)
+            currentExternalPlaybackProvider?.seek(to: CMTimeGetSeconds(time))
         } else {
-            player.seek(to: targetTime)
+            player?.seek(to: time)
         }
     }
 
