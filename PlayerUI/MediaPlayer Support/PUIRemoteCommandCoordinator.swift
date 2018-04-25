@@ -59,6 +59,12 @@ final class PUIRemoteCommandCoordinator {
         }
     }
 
+    var changePlaybackRateHandler: ((PUIPlaybackSpeed) -> Void)? {
+        didSet {
+            updateCommandAvailability()
+        }
+    }
+
     init() {
         guard #available(macOS 10.12.2, *) else { return }
 
@@ -114,6 +120,16 @@ final class PUIRemoteCommandCoordinator {
             return .success
         }
 
+        center.changePlaybackRateCommand.addTarget { [weak self] event in
+            guard let effectiveEvent = event as? MPChangePlaybackRateCommandEvent else { return .commandFailed }
+
+            guard let speed = PUIPlaybackSpeed(rawValue: effectiveEvent.playbackRate) else { return .commandFailed }
+
+            self?.changePlaybackRateHandler?(speed)
+
+            return .success
+        }
+
         updateCommandAvailability()
     }
 
@@ -131,10 +147,16 @@ final class PUIRemoteCommandCoordinator {
         center.likeCommand.isEnabled = likeHandler != nil
         center.changePlaybackPositionCommand.isEnabled = changePlaybackPositionHandler != nil
 
+        if changePlaybackRateHandler != nil {
+            center.changePlaybackRateCommand.isEnabled = true
+            center.changePlaybackRateCommand.supportedPlaybackRates = PUIPlaybackSpeed.supportedPlaybackRates
+        } else {
+            center.changePlaybackRateCommand.isEnabled = false
+        }
+
         // Unsupported commands
         center.skipForwardCommand.isEnabled = false
         center.skipBackwardCommand.isEnabled = false
-        center.changePlaybackRateCommand.isEnabled = false
         center.ratingCommand.isEnabled = false
         center.dislikeCommand.isEnabled = false
         center.nextTrackCommand.isEnabled = false

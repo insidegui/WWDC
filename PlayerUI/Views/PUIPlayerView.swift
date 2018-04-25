@@ -463,6 +463,9 @@ public final class PUIPlayerView: NSView {
         remoteCommandCoordinator?.changePlaybackPositionHandler = { [weak self] time in
             self?.seek(to: time)
         }
+        remoteCommandCoordinator?.changePlaybackRateHandler = { [weak self] speed in
+            self?.playbackSpeed = speed
+        }
     }
 
     // MARK: Controls
