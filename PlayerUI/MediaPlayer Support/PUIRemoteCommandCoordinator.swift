@@ -9,7 +9,7 @@
 import Foundation
 import MediaPlayer
 
-final class PUIRemoteCommandCoordinator {
+final class PUIRemoteCommandCoordinator: NSObject {
 
     var pauseHandler: (() -> Void)? {
         didSet {
@@ -65,7 +65,9 @@ final class PUIRemoteCommandCoordinator {
         }
     }
 
-    init() {
+    override init() {
+        super.init()
+
         guard #available(macOS 10.12.2, *) else { return }
 
         let center = MPRemoteCommandCenter.shared()
@@ -134,6 +136,12 @@ final class PUIRemoteCommandCoordinator {
     }
 
     private func updateCommandAvailability() {
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+
+        perform(#selector(doUpdateCommandAvailability), with: nil, afterDelay: 0)
+    }
+
+    @objc private func doUpdateCommandAvailability() {
         guard #available(macOS 10.12.2, *) else { return }
 
         let center = MPRemoteCommandCenter.shared()
