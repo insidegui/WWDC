@@ -471,7 +471,6 @@ public final class PUIPlayerView: NSView {
 
     private var extrasMenuContainerView: NSStackView!
 
-    //    fileprivate var controlsVisualEffectView: NSVisualEffectView!
     fileprivate var scrimContainerView: PUIScrimContainerView!
 
     private var timeLabelsContainerView: NSStackView!
@@ -652,15 +651,6 @@ public final class PUIPlayerView: NSView {
         externalStatusController.view.topAnchor.constraint(equalTo: topAnchor).isActive = true
         externalStatusController.view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
-        //        // VFX view
-        //        controlsVisualEffectView = NSVisualEffectView(frame: bounds)
-        //        controlsVisualEffectView.translatesAutoresizingMaskIntoConstraints = false
-        //        controlsVisualEffectView.material = .ultraDark
-        //        controlsVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantDark)
-        //        controlsVisualEffectView.blendingMode = .withinWindow
-        //        controlsVisualEffectView.wantsLayer = true
-        //        controlsVisualEffectView.layer?.masksToBounds = false
-        //        controlsVisualEffectView.state = .active
         scrimContainerView = PUIScrimContainerView(frame: bounds)
 
         // Time labels
