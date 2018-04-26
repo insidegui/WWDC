@@ -46,7 +46,7 @@ public class Session: Object {
 
     // The session's "related" resources -- other sessions, documentation, guides and sample code
     public var sessionResources = [SessionResource]()
-    public var related = List<ResourceRepresentation>()
+    public var related = List<RelatedResource>()
 
     /// Whether this session is downloaded
     @objc public dynamic var isDownloaded = false

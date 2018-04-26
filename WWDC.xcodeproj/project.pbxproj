@@ -246,7 +246,7 @@
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
 		F74CDA12207AB70A00A16C97 /* SessionAssetsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74CDA11207AB70A00A16C97 /* SessionAssetsAdapter.swift */; };
-		F7EBDF202067FEDB00EF6460 /* ResourceRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF1F2067FEDB00EF6460 /* ResourceRepresentation.swift */; };
+		F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */; };
 		F7EBDF222067FF1700EF6460 /* ResourcesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF212067FF1700EF6460 /* ResourcesJSONAdapter.swift */; };
 		F7EBDF242067FFD500EF6460 /* SessionResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF232067FFD500EF6460 /* SessionResource.swift */; };
 		F7EBDF2A2068008800EF6460 /* SessionRelatedJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF292068008800EF6460 /* SessionRelatedJSONAdapter.swift */; };
@@ -600,7 +600,7 @@
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
 		F74CDA11207AB70A00A16C97 /* SessionAssetsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionAssetsAdapter.swift; sourceTree = "<group>"; };
-		F7EBDF1F2067FEDB00EF6460 /* ResourceRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceRepresentation.swift; sourceTree = "<group>"; };
+		F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedResource.swift; sourceTree = "<group>"; };
 		F7EBDF212067FF1700EF6460 /* ResourcesJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesJSONAdapter.swift; sourceTree = "<group>"; };
 		F7EBDF232067FFD500EF6460 /* SessionResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionResource.swift; sourceTree = "<group>"; };
 		F7EBDF292068008800EF6460 /* SessionRelatedJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRelatedJSONAdapter.swift; sourceTree = "<group>"; };
@@ -981,7 +981,7 @@
 				DD65FD521E48A06A0054DD35 /* NewsItem.swift */,
 				DD65FD581E48A0C90054DD35 /* Photo.swift */,
 				DD65FD601E48A86A0054DD35 /* PhotoRepresentation.swift */,
-				F7EBDF1F2067FEDB00EF6460 /* ResourceRepresentation.swift */,
+				F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */,
 				F7EBDF232067FFD500EF6460 /* SessionResource.swift */,
 			);
 			name = Apple;
@@ -1980,7 +1980,7 @@
 				DD54CD101E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift in Sources */,
 				DD65FD551E48A0A70054DD35 /* Room.swift in Sources */,
 				DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */,
-				F7EBDF202067FEDB00EF6460 /* ResourceRepresentation.swift in Sources */,
+				F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */,
 				F7EBDF2A2068008800EF6460 /* SessionRelatedJSONAdapter.swift in Sources */,
 				DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */,
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,

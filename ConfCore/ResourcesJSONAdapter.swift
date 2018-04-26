@@ -20,9 +20,9 @@ enum ResourceKeys: String, JSONSubscriptType {
 
 class ResourcesJSONAdapter: Adapter {
     typealias InputType = JSON
-    typealias OutputType = ResourceRepresentation
+    typealias OutputType = RelatedResource
 
-    func adapt(_ input: JSON) -> Result<ResourceRepresentation, AdapterError> {
+    func adapt(_ input: JSON) -> Result<RelatedResource, AdapterError> {
         guard let id = input[ResourceKeys.id].int else {
             return .error(.missingKey(ResourceKeys.id))
         }
@@ -39,11 +39,11 @@ class ResourcesJSONAdapter: Adapter {
             return .error(.missingKey(ResourceKeys.type))
         }
 
-        let resource = ResourceRepresentation()
+        let resource = RelatedResource()
         resource.identifier = String(id)
         resource.title = title
         resource.url = url
-        resource.type = ResourceType(rawSessionType: rawType)?.rawValue ?? ""
+        resource.type = RelatedResourceType(rawSessionType: rawType)?.rawValue ?? ""
 
         if let description = input[ResourceKeys.description].string {
             resource.descriptor = description

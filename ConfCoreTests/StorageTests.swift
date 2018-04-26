@@ -167,15 +167,15 @@ class StorageTests: XCTestCase {
 
         session.sessionResources.append(relatedSessionResource)
 
-        let resourceRepresentation = ResourceRepresentation()
-        resourceRepresentation.identifier = "wwdc2014-206"
-        resourceRepresentation.type = "WWDCSessionResourceTypeSession"
+        let relatedResource = RelatedResource()
+        relatedResource.identifier = "wwdc2014-206"
+        relatedResource.type = "WWDCSessionResourceTypeSession"
 
         return ContentsResponse(
             events: [event],
             rooms: [room],
             tracks: [track],
-            resources: [resourceRepresentation],
+            resources: [relatedResource],
             instances: [instance],
             sessions: [session, session2])
     }

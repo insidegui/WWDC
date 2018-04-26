@@ -1,5 +1,5 @@
 //
-//  ResourceRepresentation.swift
+//  RelatedResource.swift
 //  ConfCore
 //
 //  Created by Ben Newcombe on 21/01/2018.
@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-public enum ResourceType: String {
+public enum RelatedResourceType: String {
     case guide = "WWDCSessionResourceTypeGuide"
     case documentation = "WWDCSessionResourceTypeDocumentation"
     case sampleCode = "WWDCSessionResourceTypeSampleCode"
@@ -29,7 +29,7 @@ public enum ResourceType: String {
     }
 }
 
-public class ResourceRepresentation: Object {
+public class RelatedResource: Object {
     @objc public dynamic var identifier = ""
     @objc public dynamic var title = ""
     @objc public dynamic var url = ""
@@ -41,7 +41,7 @@ public class ResourceRepresentation: Object {
         return "identifier"
     }
 
-    func merge(with other: ResourceRepresentation, in realm: Realm) {
+    func merge(with other: RelatedResource, in realm: Realm) {
         assert(other.identifier == identifier, "Can't merge two objects with different identifiers!")
 
         title = other.title

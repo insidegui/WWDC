@@ -134,13 +134,13 @@ public final class Storage {
             sessionsResponse.sessions.forEach { newSession in
                 // Begin saving outlines of related resources
                 newSession.sessionResources.forEach { sessionResource in
-                    if let existingResource = backgroundRealm.object(ofType: ResourceRepresentation.self, forPrimaryKey: sessionResource.identifier) {
+                    if let existingResource = backgroundRealm.object(ofType: RelatedResource.self, forPrimaryKey: sessionResource.identifier) {
                         newSession.related.append(existingResource)
                     } else {
-                        let resource = ResourceRepresentation()
+                        let resource = RelatedResource()
                         resource.identifier = sessionResource.identifier
                         if sessionResource.type == SessionResourceType.activity {
-                            resource.type = ResourceType.session.rawValue
+                            resource.type = RelatedResourceType.session.rawValue
                         }
                         newSession.related.append(resource)
                     }
@@ -165,7 +165,7 @@ public final class Storage {
 
             // Merge non-Session Resources with existing resource data
             sessionsResponse.resources.forEach { newResource in
-                if let existingResource = backgroundRealm.object(ofType: ResourceRepresentation.self, forPrimaryKey: newResource.identifier) {
+                if let existingResource = backgroundRealm.object(ofType: RelatedResource.self, forPrimaryKey: newResource.identifier) {
                     existingResource.merge(with: newResource, in: backgroundRealm)
                 } else {
                     backgroundRealm.add(newResource, update: true)
@@ -228,7 +228,7 @@ public final class Storage {
             }
 
             // Associate "related session" resources with Session objects in database
-            backgroundRealm.objects(ResourceRepresentation.self).filter("type == %@", ResourceType.session.rawValue).forEach { resource in
+            backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
                 let identifier = resource.identifier.replacingOccurrences(of: "wwdc", with: "")
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: identifier) {
                     resource.session = session

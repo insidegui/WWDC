@@ -129,7 +129,7 @@ final class SessionsJSONAdapter: Adapter {
         }
 
         if let activitiesJSON = input[SessionKeys.related][RelatedKeys.activities].array {
-            session.sessionResources.append(contentsOf: activitiesJSON.flatMap {
+            session.sessionResources.append(contentsOf: activitiesJSON.compactMap {
                 let resource = SessionResource()
                 resource.identifier = $0.string!
                 resource.type = .activity
