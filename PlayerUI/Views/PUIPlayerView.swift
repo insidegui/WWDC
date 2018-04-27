@@ -564,7 +564,7 @@ public final class PUIPlayerView: NSView {
     private lazy var previousAnnotationButton: PUIButton = {
         let b = PUIButton(frame: .zero)
 
-        b.image = .PUIPreviousBookmark
+        b.image = .PUIPreviousAnnotation
         b.target = self
         b.action = #selector(previousAnnotation)
         b.toolTip = "Go to previous bookmark"
@@ -575,7 +575,7 @@ public final class PUIPlayerView: NSView {
     private lazy var nextAnnotationButton: PUIButton = {
         let b = PUIButton(frame: .zero)
 
-        b.image = .PUINextBookmark
+        b.image = .PUINextAnnotation
         b.target = self
         b.action = #selector(nextAnnotation)
         b.toolTip = "Go to next bookmark"
@@ -621,7 +621,7 @@ public final class PUIPlayerView: NSView {
     private lazy var addAnnotationButton: PUIButton = {
         let b = PUIButton(frame: .zero)
 
-        b.image = .PUIBookmark
+        b.image = .PUIAnnotation
         b.target = self
         b.action = #selector(addAnnotation)
         b.toolTip = "Add bookmark"
@@ -761,6 +761,12 @@ public final class PUIPlayerView: NSView {
         updateExtrasMenuPosition()
     }
 
+    var isConfiguredForBackAndForward30s = false {
+        didSet {
+            invalidateTouchBar()
+        }
+    }
+
     private func configureWithAppearanceFromDelegate() {
         guard let d = appearanceDelegate else { return }
 
@@ -777,13 +783,13 @@ public final class PUIPlayerView: NSView {
         backButton.isHidden = disableBackAndForward
         forwardButton.isHidden = disableBackAndForward
 
-        let skipBy30 = d.playerViewShouldShowBackAndForward30SecondsButtons(self)
-        backButton.image = skipBy30 ? .PUIBack30s : .PUIBack15s
-        backButton.action = skipBy30 ? #selector(goBackInTime30) : #selector(goBackInTime15)
-        backButton.toolTip = skipBy30 ? "Go back 30s" : "Go back 15s"
-        forwardButton.image = skipBy30 ? .PUIForward30s : .PUIForward15s
-        forwardButton.action = skipBy30 ? #selector(goForwardInTime30) : #selector(goForwardInTime15)
-        forwardButton.toolTip = skipBy30 ? "Go forward 30s" : "Go forward 15s"
+        isConfiguredForBackAndForward30s = d.playerViewShouldShowBackAndForward30SecondsButtons(self)
+        backButton.image = isConfiguredForBackAndForward30s ? .PUIBack30s : .PUIBack15s
+        backButton.action = isConfiguredForBackAndForward30s ? #selector(goBackInTime30) : #selector(goBackInTime15)
+        backButton.toolTip = isConfiguredForBackAndForward30s ? "Go back 30s" : "Go back 15s"
+        forwardButton.image = isConfiguredForBackAndForward30s ? .PUIForward30s : .PUIForward15s
+        forwardButton.action = isConfiguredForBackAndForward30s ? #selector(goForwardInTime30) : #selector(goForwardInTime15)
+        forwardButton.toolTip = isConfiguredForBackAndForward30s ? "Go forward 30s" : "Go forward 15s"
 
         updateExternalPlaybackControlsAvailability()
 
@@ -875,6 +881,8 @@ public final class PUIPlayerView: NSView {
         } else {
             play(sender)
         }
+
+        invalidateTouchBar()
     }
 
     @IBAction public func pause(_ sender: Any?) {
@@ -968,6 +976,12 @@ public final class PUIPlayerView: NSView {
         } else {
             player?.seek(to: time)
         }
+    }
+
+    private func invalidateTouchBar() {
+        guard #available(OSX 10.12.2, *) else { return }
+
+        touchBar = nil
     }
 
     // MARK: - Subtitles
@@ -1289,6 +1303,8 @@ public final class PUIPlayerView: NSView {
         if event.type == .leftMouseDown && event.clickCount == 2 {
             toggleFullscreen(self)
         } else {
+            window?.makeFirstResponder(self)
+
             super.mouseDown(with: event)
         }
     }

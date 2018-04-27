@@ -34,7 +34,7 @@ extension NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "back30s"))!
     }
 
-    static var PUIBookmark: NSImage {
+    static var PUIAnnotation: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "bookmark"))!
     }
 
@@ -50,11 +50,11 @@ extension NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "fullscreen"))!
     }
 
-    static var PUINextBookmark: NSImage {
+    static var PUINextAnnotation: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "nextbookmark"))!
     }
 
-    static var PUIPreviousBookmark: NSImage {
+    static var PUIPreviousAnnotation: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "prevbookmark"))!
     }
 
@@ -96,6 +96,45 @@ extension NSImage {
 
     static var PUISpeedTwo: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "speed-2"))!
+    }
+
+}
+
+// MARK: - Touch Bar
+
+extension NSImage {
+
+    func touchBarImage(with scale: CGFloat) -> NSImage {
+        return PUITouchBarImageCache.shared.touchBarImage(for: self, with: scale)
+    }
+
+}
+
+private final class PUITouchBarImageCache {
+
+    static let shared = PUITouchBarImageCache()
+
+    private var cachedImages: [NSImage.Name: NSImage] = [:]
+
+    func touchBarImage(for inputImage: NSImage, with scale: CGFloat) -> NSImage {
+        if let name = inputImage.name(), let cachedImage = cachedImages[name] { return cachedImage }
+
+        let newSize = NSSize(width: round(inputImage.size.width * scale),
+                             height: round(inputImage.size.height * scale))
+
+        let outputImage = NSImage(size: newSize)
+        outputImage.lockFocus()
+        NSGraphicsContext.current?.imageInterpolation = .high
+
+        inputImage.draw(in: NSRect(origin: .zero, size: newSize))
+
+        outputImage.unlockFocus()
+
+        if let name = inputImage.name() {
+            cachedImages[name] = outputImage
+        }
+
+        return outputImage
     }
 
 }

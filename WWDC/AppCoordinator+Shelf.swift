@@ -124,6 +124,8 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
 
         playerController.view.alphaValue = 1
+
+        playerController.view.window?.makeFirstResponder(playerController.playerView)
     }
 
     func publishNowPlayingInfo() {
