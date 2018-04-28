@@ -449,10 +449,10 @@ public final class PUIPlayerView: NSView {
             self?.togglePlaying(nil)
         }
         remoteCommandCoordinator?.nextTrackHandler = { [weak self] in
-            self?.goForwardInTime15(nil)
+            self?.goForwardInTime(nil)
         }
         remoteCommandCoordinator?.previousTrackHandler = { [weak self] in
-            self?.goBackInTime15(nil)
+            self?.goBackInTime(nil)
         }
         remoteCommandCoordinator?.likeHandler = { [weak self] in
             guard let `self` = self else { return }
