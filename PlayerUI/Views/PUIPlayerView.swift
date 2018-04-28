@@ -153,6 +153,8 @@ public final class PUIPlayerView: NSView {
 
             updatePlaybackSpeedState()
             updateSelectedMenuItem(forPlaybackSpeed: playbackSpeed)
+
+            invalidateTouchBar()
         }
     }
 
@@ -767,6 +769,22 @@ public final class PUIPlayerView: NSView {
         }
     }
 
+    var goBackInTimeImage: NSImage {
+        return isConfiguredForBackAndForward30s ? .PUIBack30s : .PUIBack15s
+    }
+
+    var goBackInTimeDescription: String {
+        return isConfiguredForBackAndForward30s ? "Go back 30s" : "Go back 15s"
+    }
+
+    var goForwardInTimeImage: NSImage {
+        return isConfiguredForBackAndForward30s ? .PUIForward30s : .PUIForward15s
+    }
+
+    var goForwardInTimeDescription: String {
+        return isConfiguredForBackAndForward30s ? "Go forward 30s" : "Go forward 15s"
+    }
+
     private func configureWithAppearanceFromDelegate() {
         guard let d = appearanceDelegate else { return }
 
@@ -784,12 +802,12 @@ public final class PUIPlayerView: NSView {
         forwardButton.isHidden = disableBackAndForward
 
         isConfiguredForBackAndForward30s = d.playerViewShouldShowBackAndForward30SecondsButtons(self)
-        backButton.image = isConfiguredForBackAndForward30s ? .PUIBack30s : .PUIBack15s
-        backButton.action = isConfiguredForBackAndForward30s ? #selector(goBackInTime30) : #selector(goBackInTime15)
-        backButton.toolTip = isConfiguredForBackAndForward30s ? "Go back 30s" : "Go back 15s"
-        forwardButton.image = isConfiguredForBackAndForward30s ? .PUIForward30s : .PUIForward15s
-        forwardButton.action = isConfiguredForBackAndForward30s ? #selector(goForwardInTime30) : #selector(goForwardInTime15)
-        forwardButton.toolTip = isConfiguredForBackAndForward30s ? "Go forward 30s" : "Go forward 15s"
+        backButton.image = goBackInTimeImage
+        backButton.action = #selector(goBackInTime)
+        backButton.toolTip = goBackInTimeDescription
+        forwardButton.image = goForwardInTimeImage
+        forwardButton.action = #selector(goForwardInTime)
+        forwardButton.toolTip = goForwardInTimeDescription
 
         updateExternalPlaybackControlsAvailability()
 
@@ -913,6 +931,22 @@ public final class PUIPlayerView: NSView {
         seek(to: annotation)
     }
 
+    @IBAction public func goBackInTime(_ sender: Any?) {
+        if isConfiguredForBackAndForward30s {
+            goBackInTime30(sender)
+        } else {
+            goBackInTime15(sender)
+        }
+    }
+
+    @IBAction public func goForwardInTime(_ sender: Any?) {
+        if isConfiguredForBackAndForward30s {
+            goForwardInTime30(sender)
+        } else {
+            goForwardInTime15(sender)
+        }
+    }
+
     @IBAction public func goBackInTime15(_ sender: Any?) {
         modifyCurrentTime(with: 15, using: CMTimeSubtract)
     }
@@ -981,7 +1015,7 @@ public final class PUIPlayerView: NSView {
     private func invalidateTouchBar() {
         guard #available(OSX 10.12.2, *) else { return }
 
-        touchBar = nil
+        touchBarController.invalidate()
     }
 
     // MARK: - Subtitles
