@@ -1273,6 +1273,8 @@ public final class PUIPlayerView: NSView {
             lastKnownWindow = window
             startMonitoringKeyEvents()
         }
+
+        window?.makeFirstResponder(self)
     }
 
     private var windowIsInFullScreen: Bool {
