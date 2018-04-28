@@ -22,15 +22,27 @@ final class PUITouchBarController: NSObject {
     public func makeTouchBar() -> NSTouchBar? {
         let bar = NSTouchBar()
 
-        bar.customizationIdentifier = .player
         bar.delegate = self
+        bar.customizationIdentifier = .player
+
         bar.defaultItemIdentifiers = [
             .goBackInTime,
-            .previousAnnotation,
             .playPauseButton,
-            .nextAnnotation,
             .goForwardInTime,
-            .extraOptionsGroup
+            .addAnnotation,
+            .togglePictureInPicture,
+            .toggleFullscreen
+        ]
+
+        bar.customizationAllowedItemIdentifiers = [
+            .goBackInTime,
+            .goForwardInTime,
+            .playPauseButton,
+            .previousAnnotation,
+            .nextAnnotation,
+            .addAnnotation,
+            .togglePictureInPicture,
+            .toggleFullscreen
         ]
 
         return bar
@@ -45,6 +57,7 @@ final class PUITouchBarController: NSObject {
         let item = NSCustomTouchBarItem(identifier: identifier)
 
         item.view = button
+        item.customizationLabel = identifier.rawValue
 
         return item
     }
@@ -149,15 +162,14 @@ extension PUITouchBarController: NSTouchBarDelegate {
             return makeTouchBarButtonItem(with: identifier, button: previousAnnotationButton)
         case .nextAnnotation:
             return makeTouchBarButtonItem(with: identifier, button: nextAnnotationButton)
-        case .extraOptionsGroup:
-            let items: [NSTouchBarItem] = [
-                makeTouchBarButtonItem(with: .speed, button: speedButton),
-                makeTouchBarButtonItem(with: .addAnnotation, button: addAnnotationButton),
-                makeTouchBarButtonItem(with: .togglePictureInPicture, button: togglePictureInPictureButton),
-                makeTouchBarButtonItem(with: .toggleFullscreen, button: toggleFullscreenButton)
-            ]
-
-            return NSGroupTouchBarItem(identifier: identifier, items: items)
+        case .speed:
+            return makeTouchBarButtonItem(with: identifier, button: speedButton)
+        case .addAnnotation:
+            return makeTouchBarButtonItem(with: identifier, button: addAnnotationButton)
+        case .togglePictureInPicture:
+            return makeTouchBarButtonItem(with: identifier, button: togglePictureInPictureButton)
+        case .toggleFullscreen:
+            return makeTouchBarButtonItem(with: identifier, button: toggleFullscreenButton)
         default: return nil
         }
 
