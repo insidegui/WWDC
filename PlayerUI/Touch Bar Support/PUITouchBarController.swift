@@ -28,6 +28,7 @@ final class PUITouchBarController: NSObject {
             .goBackInTime,
             .playPauseButton,
             .goForwardInTime,
+            .speed,
             .addAnnotation,
             .togglePictureInPicture,
             .toggleFullscreen
@@ -39,6 +40,7 @@ final class PUITouchBarController: NSObject {
             .playPauseButton,
             .previousAnnotation,
             .nextAnnotation,
+            .speed,
             .addAnnotation,
             .togglePictureInPicture,
             .toggleFullscreen
