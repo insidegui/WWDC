@@ -243,7 +243,7 @@ public final class PUIPlayerView: NSView {
         }
 
         setupNowPlayingCoordinatorIfSupported()
-        setupRemoteCommandCoordinatorIfSupported()
+        setupRemoteCommandCoordinator()
     }
 
     private func teardown(player oldValue: AVPlayer) {
@@ -423,7 +423,6 @@ public final class PUIPlayerView: NSView {
     private var nowPlayingCoordinator: PUINowPlayingInfoCoordinator?
 
     private func setupNowPlayingCoordinatorIfSupported() {
-        guard #available(macOS 10.12.2, *) else { return }
         guard let player = player else { return }
 
         nowPlayingCoordinator = PUINowPlayingInfoCoordinator(player: player)
@@ -434,9 +433,7 @@ public final class PUIPlayerView: NSView {
 
     private var remoteCommandCoordinator: PUIRemoteCommandCoordinator?
 
-    private func setupRemoteCommandCoordinatorIfSupported() {
-        guard #available(macOS 10.12.2, *) else { return }
-
+    private func setupRemoteCommandCoordinator() {
         remoteCommandCoordinator = PUIRemoteCommandCoordinator()
 
         remoteCommandCoordinator?.pauseHandler = { [weak self] in
@@ -1013,8 +1010,6 @@ public final class PUIPlayerView: NSView {
     }
 
     private func invalidateTouchBar() {
-        guard #available(OSX 10.12.2, *) else { return }
-
         touchBarController.invalidate()
     }
 
@@ -1141,7 +1136,6 @@ public final class PUIPlayerView: NSView {
         return PUITouchBarController(playerView: self)
     }()
 
-    @available(OSX 10.12.2, *)
     public override func makeTouchBar() -> NSTouchBar? {
         return touchBarController.makeTouchBar()
     }

@@ -18,7 +18,6 @@ final class PUITouchBarController: NSObject {
         super.init()
     }
 
-    @available(macOS 10.12.2, *)
     public func makeTouchBar() -> NSTouchBar? {
         let bar = NSTouchBar()
 
@@ -52,7 +51,6 @@ final class PUITouchBarController: NSObject {
         return NSButton(image: image, target: playerView, action: action)
     }
 
-    @available(macOS 10.12.2, *)
     private func makeTouchBarButtonItem(with identifier: NSTouchBarItem.Identifier, button: NSButton) -> NSTouchBarItem {
         let item = NSCustomTouchBarItem(identifier: identifier)
 
@@ -145,7 +143,6 @@ final class PUITouchBarController: NSObject {
 
 // MARK: - Touch Bar Delegate
 
-@available(macOS 10.12.2, *)
 extension PUITouchBarController: NSTouchBarDelegate {
 
     public func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {

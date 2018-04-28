@@ -8,12 +8,10 @@
 
 import Cocoa
 
-@available(macOS 10.12.2, *)
 extension NSTouchBar.CustomizationIdentifier {
     static let player = NSTouchBar.CustomizationIdentifier("Player")
 }
 
-@available(macOS 10.12.2, *)
 extension NSTouchBarItem.Identifier {
     static let playPauseButton = NSTouchBarItem.Identifier("Play/Pause")
     static let scrubber = NSTouchBarItem.Identifier("Scrubber")

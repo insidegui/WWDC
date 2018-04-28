@@ -13,7 +13,6 @@ final class PUINowPlayingInfoCoordinator {
 
     let player: AVPlayer
 
-    @available(macOS 10.12.2, *)
     init(player: AVPlayer) {
         self.player = player
 
@@ -24,14 +23,12 @@ final class PUINowPlayingInfoCoordinator {
 
     // MARK: - Playback state
 
-    @available(macOS 10.12.2, *)
     var playbackStateAppropriateForPlayer: MPNowPlayingPlaybackState {
         return player.rate.isZero ? .paused : .playing
     }
 
     // MARK: - Playback info
 
-    @available(macOS 10.12.2, *)
     var nowPlayingInfo: [String: Any]? {
         guard let item = player.currentItem else { return nil }
 
@@ -81,14 +78,10 @@ final class PUINowPlayingInfoCoordinator {
     }
 
     private func playbackRateDidChange() {
-        guard #available(macOS 10.12.2, *) else { return }
-
         MPNowPlayingInfoCenter.default().playbackState = playbackStateAppropriateForPlayer
     }
 
     private func updateNowPlayingInfo() {
-        guard #available(macOS 10.12.2, *) else { return }
-
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
 

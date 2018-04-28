@@ -68,8 +68,6 @@ final class PUIRemoteCommandCoordinator: NSObject {
     override init() {
         super.init()
 
-        guard #available(macOS 10.12.2, *) else { return }
-
         let center = MPRemoteCommandCenter.shared()
 
         center.pauseCommand.addTarget { [weak self] _ in
@@ -142,8 +140,6 @@ final class PUIRemoteCommandCoordinator: NSObject {
     }
 
     @objc private func doUpdateCommandAvailability() {
-        guard #available(macOS 10.12.2, *) else { return }
-
         let center = MPRemoteCommandCenter.shared()
 
         center.pauseCommand.isEnabled = pauseHandler != nil

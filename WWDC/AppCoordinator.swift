@@ -103,9 +103,7 @@ final class AppCoordinator {
         _ = NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: nil) { _ in self.saveApplicationState() }
         _ = NotificationCenter.default.addObserver(forName: .RefreshPeriodicallyPreferenceDidChange, object: nil, queue: nil, using: { _  in self.resetAutorefreshTimer() })
 
-        if #available(OSX 10.12.2, *) {
-            NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
-        }
+        NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
     }
 
     /// The list controller for the active tab
