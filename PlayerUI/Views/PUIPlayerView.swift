@@ -1101,6 +1101,17 @@ public final class PUIPlayerView: NSView {
         keyDownEventMonitor = nil
     }
 
+    // MARK: - Touch Bar
+
+    private lazy var touchBarController: PUITouchBarController = {
+        return PUITouchBarController(playerView: self)
+    }()
+
+    @available(OSX 10.12.2, *)
+    public override func makeTouchBar() -> NSTouchBar? {
+        return touchBarController.makeTouchBar()
+    }
+
     // MARK: - PiP Support
 
     public func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
