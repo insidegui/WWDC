@@ -132,17 +132,10 @@ public final class Storage {
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
             sessionsResponse.sessions.forEach { newSession in
-                // Begin saving outlines of related resources
-                newSession.unknownResources.forEach { unknownResource in
-                    if let existingResource = backgroundRealm.object(ofType: RelatedResource.self, forPrimaryKey: unknownResource.identifier) {
-                        newSession.related.append(existingResource)
-                    } else {
-                        let resource = RelatedResource()
-                        resource.identifier = unknownResource.identifier
-                        if unknownResource.type == RelatedResourceType.session.rawValue {
-                            resource.type = RelatedResourceType.session.rawValue
-                        }
-                        newSession.related.append(resource)
+                // Replace any "unknown" resources with their full data
+                newSession.related.filter({$0.type == RelatedResourceType.unknown.rawValue}).forEach { unknownResource in
+                    if let fullResource = sessionsResponse.resources.filter({$0.identifier == unknownResource.identifier}).first {
+                        newSession.related.replace(index: newSession.related.index(of: unknownResource)!, object: fullResource)
                     }
                 }
 
@@ -160,15 +153,6 @@ public final class Storage {
                     existingInstance.merge(with: newInstance, in: backgroundRealm)
                 } else {
                     backgroundRealm.add(newInstance, update: true)
-                }
-            }
-
-            // Merge non-Session Resources with existing resource data
-            sessionsResponse.resources.forEach { newResource in
-                if let existingResource = backgroundRealm.object(ofType: RelatedResource.self, forPrimaryKey: newResource.identifier) {
-                    existingResource.merge(with: newResource, in: backgroundRealm)
-                } else {
-                    backgroundRealm.add(newResource, update: true)
                 }
             }
 
@@ -227,7 +211,7 @@ public final class Storage {
                 }
             }
 
-            // Associate "related session" resources with Session objects in database
+            // Associate session resources with Session objects in database
             backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
                 let identifier = resource.identifier.replacingOccurrences(of: "wwdc", with: "")
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: identifier) {

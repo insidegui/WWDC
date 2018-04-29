@@ -45,7 +45,6 @@ public class Session: Object {
     public let assets = List<SessionAsset>()
 
     // The session's "related" resources -- other sessions, documentation, guides and sample code
-    public var unknownResources = [RelatedResource]()
     public var related = List<RelatedResource>()
 
     /// Whether this session is downloaded
