@@ -132,17 +132,19 @@ public class Session: Object {
 
         self.assets.append(objectsIn: assets)
 
-        let otherFocuses = other.focuses.map { newFocus -> (Focus) in
-            if newFocus.realm == nil,
-                let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) {
-                return existingFocus
-            } else {
-                return newFocus
-            }
-        }
+        other.focuses.forEach { newFocus in
+            let effectiveFocus: Focus
 
-        focuses.removeAll()
-        focuses.append(objectsIn: otherFocuses)
+            if let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) {
+                effectiveFocus = existingFocus
+            } else {
+                effectiveFocus = newFocus
+            }
+
+            guard !focuses.contains(where: { $0.name == effectiveFocus.name }) else { return }
+
+            focuses.append(effectiveFocus)
+        }
     }
 
 }
