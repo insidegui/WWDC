@@ -69,10 +69,11 @@ public final class TranscriptIndexer {
 
         for key in sessionKeys {
             guard let session = storage.realm.object(ofType: Session.self, forPrimaryKey: key) else { return }
+            guard let event = session.event.first else { return }
 
             guard session.transcriptIdentifier.isEmpty else { continue }
 
-            indexTranscript(for: session.number, in: session.year, primaryKey: key)
+            indexTranscript(for: session.number, in: event.year, primaryKey: key)
         }
     }
 

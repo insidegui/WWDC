@@ -39,6 +39,10 @@ public class Event: Object {
         return "identifier"
     }
 
+    public var year: Int {
+        return Calendar.current.component(.year, from: startDate)
+    }
+
     public static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool, imagesPath: String) -> Event {
         let event = Event()
 
