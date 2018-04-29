@@ -30,14 +30,6 @@ final class SessionInstancesJSONAdapter: Adapter {
             return .error(.invalidData)
         }
 
-        var year = Calendar.current.component(.year, from: Date())
-        if Calendar.current.component(.month, from: Date()) < 6 {
-            year -= 1
-        }
-        guard session.year == year else {
-            return .error(.invalidData)
-        }
-
         guard let startGMT = input[SessionInstanceKeys.startTime].string else {
             return .error(.missingKey(SessionInstanceKeys.startTime))
         }

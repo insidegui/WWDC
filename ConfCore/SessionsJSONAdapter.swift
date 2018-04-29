@@ -126,7 +126,6 @@ final class SessionsJSONAdapter: Adapter {
 
         session.staticContentId = "\(input[SessionKeys.staticContentId].intValue)"
         session.identifier = id
-        session.year = Int(eventYear) ?? -1
         session.number = "\(eventContentId)"
         session.title = title
         session.summary = summary

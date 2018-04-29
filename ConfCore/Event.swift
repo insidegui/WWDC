@@ -19,7 +19,13 @@ public class Event: Object {
     @objc public dynamic var name = ""
 
     /// When the event starts
-    @objc public dynamic var startDate = Date.distantPast
+    @objc public dynamic var startDate = Date.distantPast {
+        didSet {
+            year = Calendar.current.component(.year, from: startDate)
+        }
+    }
+
+    @objc public dynamic var year = -1
 
     /// When the event ends
     @objc public dynamic var endDate = Date.distantPast
@@ -37,10 +43,6 @@ public class Event: Object {
 
     public override class func primaryKey() -> String? {
         return "identifier"
-    }
-
-    public var year: Int {
-        return Calendar.current.component(.year, from: startDate)
     }
 
     public static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool, imagesPath: String) -> Event {

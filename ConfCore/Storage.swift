@@ -196,7 +196,7 @@ public final class Storage {
 
             // add live video assets to sessions
             backgroundRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
-                if let session = backgroundRealm.objects(Session.self).filter("year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
+                if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
                     if !session.assets.contains(liveAsset) {
                         session.assets.append(liveAsset)
                     }
@@ -244,7 +244,7 @@ public final class Storage {
                 } else {
                     backgroundRealm.add(asset, update: true)
 
-                    if let session = backgroundRealm.objects(Session.self).filter("year == %d AND number == %@", asset.year, asset.sessionId).first {
+                    if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", asset.year, asset.sessionId).first {
                         if !session.assets.contains(asset) {
                             session.assets.append(asset)
                         }
