@@ -16,8 +16,8 @@ public enum RelatedResourceType: String {
     case sampleCode = "WWDCSessionResourceTypeSampleCode"
     case session = "WWDCSessionResourceTypeSession"
 
-    init?(rawSessionType: String) {
-        switch rawSessionType {
+    init?(rawResourceType: String) {
+        switch rawResourceType {
         case "guide":
             self = .guide
         case "documentation":

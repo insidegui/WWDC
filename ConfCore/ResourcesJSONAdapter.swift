@@ -43,7 +43,7 @@ class ResourcesJSONAdapter: Adapter {
         resource.identifier = String(id)
         resource.title = title
         resource.url = url
-        resource.type = RelatedResourceType(rawSessionType: rawType)?.rawValue ?? ""
+        resource.type = RelatedResourceType(rawResourceType: rawType)?.rawValue ?? ""
 
         if let description = input[ResourceKeys.description].string {
             resource.descriptor = description
