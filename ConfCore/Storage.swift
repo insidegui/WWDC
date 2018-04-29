@@ -106,6 +106,14 @@ public final class Storage {
                 if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
                     existingInstance.merge(with: newInstance, in: backgroundRealm)
                 } else {
+                    // This handles the case where an existing session (which might have user data associated with it) is added to an instance,
+                    // it shouldn't happen in the wild but since we goofed up the year/identifier thing and caused an empty schedule view in 2018,
+                    // we have to make sure we handle this edge case
+                    if let newSession = newInstance.session, let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
+                        existingSession.merge(with: newSession, in: backgroundRealm)
+                        newInstance.session = existingSession
+                    }
+
                     backgroundRealm.add(newInstance, update: true)
                 }
             }
