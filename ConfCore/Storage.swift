@@ -133,13 +133,13 @@ public final class Storage {
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
             sessionsResponse.sessions.forEach { newSession in
                 // Begin saving outlines of related resources
-                newSession.sessionResources.forEach { sessionResource in
-                    if let existingResource = backgroundRealm.object(ofType: RelatedResource.self, forPrimaryKey: sessionResource.identifier) {
+                newSession.unknownResources.forEach { unknownResource in
+                    if let existingResource = backgroundRealm.object(ofType: RelatedResource.self, forPrimaryKey: unknownResource.identifier) {
                         newSession.related.append(existingResource)
                     } else {
                         let resource = RelatedResource()
-                        resource.identifier = sessionResource.identifier
-                        if sessionResource.type == SessionResourceType.activity {
+                        resource.identifier = unknownResource.identifier
+                        if unknownResource.type == RelatedResourceType.session.rawValue {
                             resource.type = RelatedResourceType.session.rawValue
                         }
                         newSession.related.append(resource)

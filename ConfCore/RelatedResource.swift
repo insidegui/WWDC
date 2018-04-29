@@ -10,6 +10,7 @@ import Foundation
 import RealmSwift
 
 public enum RelatedResourceType: String {
+    case unknown = "WWDCSessionResourceTypeUnknown"
     case guide = "WWDCSessionResourceTypeGuide"
     case documentation = "WWDCSessionResourceTypeDocumentation"
     case sampleCode = "WWDCSessionResourceTypeSampleCode"
@@ -23,6 +24,8 @@ public enum RelatedResourceType: String {
             self = .documentation
         case "samplecode":
             self = .sampleCode
+        case "unknown":
+            self = .unknown
         default:
             return nil
         }

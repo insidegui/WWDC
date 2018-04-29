@@ -11,16 +11,16 @@ import SwiftyJSON
 
 final class SessionRelatedJSONAdapter: Adapter {
     typealias InputType = JSON
-    typealias OutputType = SessionResource
+    typealias OutputType = RelatedResource
 
-    func adapt(_ input: JSON) -> Result<SessionResource, AdapterError> {
+    func adapt(_ input: JSON) -> Result<RelatedResource, AdapterError> {
         guard let id = input.int else {
             return .error(.invalidData)
         }
 
-        let resource = SessionResource()
+        let resource = RelatedResource()
         resource.identifier = String(id)
-        resource.type = .resource
+        resource.type = RelatedResourceType.unknown.rawValue
 
         return .success(resource)
     }

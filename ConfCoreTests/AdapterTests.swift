@@ -267,9 +267,9 @@ class AdapterTests: XCTestCase {
             XCTAssertEqual(sessions[0].number, "820")
             XCTAssertEqual(sessions[0].summary, "iMessage Apps help people easily create and share content, play games, and collaborate with friends without needing to leave the conversation. Explore how you can design iMessage apps and sticker packs that are perfectly suited for a deeply social context.")
             XCTAssertEqual(sessions[0].focuses[0].name, "iOS")
-            XCTAssertEqual(sessions[0].sessionResources.count, 1)
-            XCTAssertEqual(sessions[0].sessionResources[0].identifier, "17")
-            XCTAssertEqual(sessions[0].sessionResources[0].type, .resource)
+            XCTAssertEqual(sessions[0].unknownResources.count, 1)
+            XCTAssertEqual(sessions[0].unknownResources[0].identifier, "17")
+            XCTAssertEqual(sessions[0].unknownResources[0].type, RelatedResourceType.unknown.rawValue)
         }
     }
 

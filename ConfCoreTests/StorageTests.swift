@@ -161,11 +161,11 @@ class StorageTests: XCTestCase {
         session.assets.append(asset)
         session.assets.append(asset2)
 
-        let relatedSessionResource = SessionResource()
+        let relatedSessionResource = RelatedResource()
         relatedSessionResource.identifier = "wwdc2014-206"
-        relatedSessionResource.type = .activity
+        relatedSessionResource.type = RelatedResourceType.session.rawValue
 
-        session.sessionResources.append(relatedSessionResource)
+        session.unknownResources.append(relatedSessionResource)
 
         let relatedResource = RelatedResource()
         relatedResource.identifier = "wwdc2014-206"

@@ -248,7 +248,6 @@
 		F74CDA12207AB70A00A16C97 /* SessionAssetsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74CDA11207AB70A00A16C97 /* SessionAssetsAdapter.swift */; };
 		F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */; };
 		F7EBDF222067FF1700EF6460 /* ResourcesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF212067FF1700EF6460 /* ResourcesJSONAdapter.swift */; };
-		F7EBDF242067FFD500EF6460 /* SessionResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF232067FFD500EF6460 /* SessionResource.swift */; };
 		F7EBDF2A2068008800EF6460 /* SessionRelatedJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF292068008800EF6460 /* SessionRelatedJSONAdapter.swift */; };
 /* End PBXBuildFile section */
 
@@ -602,7 +601,6 @@
 		F74CDA11207AB70A00A16C97 /* SessionAssetsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionAssetsAdapter.swift; sourceTree = "<group>"; };
 		F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedResource.swift; sourceTree = "<group>"; };
 		F7EBDF212067FF1700EF6460 /* ResourcesJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesJSONAdapter.swift; sourceTree = "<group>"; };
-		F7EBDF232067FFD500EF6460 /* SessionResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionResource.swift; sourceTree = "<group>"; };
 		F7EBDF292068008800EF6460 /* SessionRelatedJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRelatedJSONAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -982,7 +980,6 @@
 				DD65FD581E48A0C90054DD35 /* Photo.swift */,
 				DD65FD601E48A86A0054DD35 /* PhotoRepresentation.swift */,
 				F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */,
-				F7EBDF232067FFD500EF6460 /* SessionResource.swift */,
 			);
 			name = Apple;
 			sourceTree = "<group>";
@@ -1973,7 +1970,6 @@
 				DDAE7C581E5C629800CEA205 /* AppleAPIClient.swift in Sources */,
 				F7EBDF222067FF1700EF6460 /* ResourcesJSONAdapter.swift in Sources */,
 				DD3C4D291E5622950093BBD0 /* PhotosJSONAdapter.swift in Sources */,
-				F7EBDF242067FFD500EF6460 /* SessionResource.swift in Sources */,
 				DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */,
 				DD0353491E5545B300D5E343 /* SessionInstancesJSONAdapter.swift in Sources */,
 				DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */,
