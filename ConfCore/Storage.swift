@@ -75,48 +75,9 @@ public final class Storage {
     }
 
     internal static func migrate(migration: Migration, oldVersion: UInt64) {
-        if oldVersion < 10 {
-            // alpha cleanup
-            migration.deleteData(forType: "Event")
-            migration.deleteData(forType: "Track")
-            migration.deleteData(forType: "Room")
-            migration.deleteData(forType: "Favorite")
-            migration.deleteData(forType: "SessionProgress")
-            migration.deleteData(forType: "Session")
-            migration.deleteData(forType: "SessionInstance")
-            migration.deleteData(forType: "SessionAsset")
-            migration.deleteData(forType: "SessionAsset")
-        }
-        if oldVersion < 15 {
-            // download model removal
-            migration.deleteData(forType: "Download")
-        }
-        if oldVersion < 31 {
-            // remove cached images which might have generic session thumbs instead of the correct ones
-            migration.deleteData(forType: "ImageCacheEntity")
+        let migrator = StorageMigrator(migration: migration, oldVersion: oldVersion)
 
-            // delete live stream assets (some of them got duplicated during the week)
-            migration.enumerateObjects(ofType: "SessionAsset") { asset, _ in
-                guard let asset = asset else { return }
-
-                if asset["rawAssetType"] as? String == SessionAssetType.liveStreamVideo.rawValue {
-                    migration.delete(asset)
-                }
-            }
-        }
-        if oldVersion < 32 {
-            migration.deleteData(forType: "Event")
-            migration.deleteData(forType: "Track")
-            migration.deleteData(forType: "ScheduleSection")
-        }
-        if oldVersion < 34 {
-            migration.deleteData(forType: "Transcript")
-            migration.deleteData(forType: "TranscriptAnnotation")
-
-            migration.enumerateObjects(ofType: "Session") { _, session in
-                session?["transcriptIdentifier"] = ""
-            }
-        }
+        migrator.perform()
     }
 
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping (Error?) -> Void) {
