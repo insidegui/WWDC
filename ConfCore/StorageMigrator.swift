@@ -141,7 +141,7 @@ final class StorageMigrator {
             session?["identifier"] = identifierWithPrefix
 
             guard let transcriptIdentifier = session?["transcriptIdentifier"] as? String, !transcriptIdentifier.isEmpty else {
-                os_log("Session %@{public} had no transcript, skipping", log: log, type: .debug, identifier)
+                os_log("Session %{public}@ had no transcript, skipping", log: log, type: .debug, identifier)
                 return
             }
 
