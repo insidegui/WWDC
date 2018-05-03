@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 /// Specifies a session in an event, with its related keywords, assets, instances, user favorites and user bookmarks
-public class Session: Object {
+public class Session: Object, Decodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -160,6 +160,142 @@ public class Session: Object {
 
             focuses.append(effectiveFocus)
         }
+    }
+
+    // MARK: - Decodable
+
+    private enum AssetCodingKeys: String, CodingKey {
+        case id
+        case year
+        case title
+        case downloadHD
+        case downloadSD
+        case slides
+        case hls
+        case images
+        case shelf
+        case duration
+    }
+
+    private enum SessionCodingKeys: String, CodingKey {
+        case id
+        case year
+        case title
+        case platforms
+        case description
+        case startTime
+        case eventContentId
+        case eventId
+        case media
+        case webPermalink
+        case staticContentId
+        case related
+        case track = "trackId"
+    }
+
+    private enum RelatedCodingKeys: String, CodingKey {
+        case activities
+        case resources
+    }
+
+    public convenience required init(from decoder: Decoder) throws {
+        let sessionContainer = try decoder.container(keyedBy: SessionCodingKeys.self)
+
+        let id = try sessionContainer.decode(String.self, forKey: .id)
+        let eventIdentifier = try sessionContainer.decode(String.self, forKey: .eventId)
+        let eventYear = eventIdentifier.replacingOccurrences(of: "wwdc", with: "")
+        let title = try sessionContainer.decode(String.self, forKey: .title)
+        let summary = try sessionContainer.decode(String.self, forKey: .description)
+        let trackIdentifier = try sessionContainer.decode(Int.self, forKey: .track)
+        let eventContentId = try sessionContainer.decode(Int.self, forKey: .eventContentId)
+
+        self.init()
+
+        var mediaDuration: Double?
+
+        if let assetContainer = try? sessionContainer.nestedContainer(keyedBy: AssetCodingKeys.self, forKey: .media) {
+            mediaDuration = try assetContainer.decodeIfPresent(Double.self, forKey: .duration) ?? 0.0
+
+            if let url = try assetContainer.decodeIfPresent(String.self, forKey: .hls) {
+                let streaming = SessionAsset()
+
+                streaming.rawAssetType = SessionAssetType.streamingVideo.rawValue
+                streaming.remoteURL = url
+                streaming.year = Int(eventYear) ?? -1
+                streaming.sessionId = id
+
+                self.assets.append(streaming)
+            }
+
+            if let hd = try assetContainer.decodeIfPresent(String.self, forKey: .downloadHD) {
+                let hdVideo = SessionAsset()
+                hdVideo.rawAssetType = SessionAssetType.hdVideo.rawValue
+                hdVideo.remoteURL = hd
+                hdVideo.year = Int(eventYear) ?? -1
+                hdVideo.sessionId = id
+
+                let filename = URL(string: hd)?.lastPathComponent ?? "\(title).mp4"
+                hdVideo.relativeLocalURL = "\(eventYear)/\(filename)"
+
+                self.assets.append(hdVideo)
+            }
+
+            if let sd = try assetContainer.decodeIfPresent(String.self, forKey: .downloadSD) {
+                let sdVideo = SessionAsset()
+                sdVideo.rawAssetType = SessionAssetType.sdVideo.rawValue
+                sdVideo.remoteURL = sd
+                sdVideo.year = Int(eventYear) ?? -1
+                sdVideo.sessionId = id
+
+                let filename = URL(string: sd)?.lastPathComponent ?? "\(title).mp4"
+                sdVideo.relativeLocalURL = "\(eventYear)/\(filename)"
+
+                self.assets.append(sdVideo)
+            }
+
+            if let slides = try assetContainer.decodeIfPresent(String.self, forKey: .slides) {
+                let slidesAsset = SessionAsset()
+                slidesAsset.rawAssetType = SessionAssetType.slides.rawValue
+                slidesAsset.remoteURL = slides
+                slidesAsset.year = Int(eventYear) ?? -1
+                slidesAsset.sessionId = id
+
+                self.assets.append(slidesAsset)
+            }
+
+            if let permalink = try sessionContainer.decodeIfPresent(String.self, forKey: .webPermalink) {
+                let webPageAsset = SessionAsset()
+                webPageAsset.rawAssetType = SessionAssetType.webpage.rawValue
+                webPageAsset.remoteURL = permalink
+                webPageAsset.year = Int(eventYear) ?? -1
+                webPageAsset.sessionId = id
+
+                self.assets.append(webPageAsset)
+            }
+        }
+
+        if let relatedContainer = try? sessionContainer.nestedContainer(keyedBy: RelatedCodingKeys.self, forKey: .related) {
+            if let resources = try relatedContainer.decodeIfPresent(FailableItemArrayWrapper<UnknownRelatedResource>.self, forKey: .resources)?.items.map({ $0.resource }) {
+                self.related.append(contentsOf: resources)
+            }
+            
+            if let resources = try relatedContainer.decodeIfPresent(FailableItemArrayWrapper<ActivityRelatedResource>.self, forKey: .activities)?.items.map({ $0.resource }) {
+                self.related.append(contentsOf: resources)
+            }
+        }
+
+        if let focuses = try sessionContainer.decodeIfPresent([Focus].self, forKey: .platforms) {
+            self.focuses.append(objectsIn: focuses)
+        }
+
+        self.staticContentId = "\(try sessionContainer.decodeIfPresent(Int.self, forKey: .staticContentId) ?? 0)"
+        self.identifier = id
+        self.number = "\(eventContentId)"
+        self.title = title
+        self.summary = summary
+        self.trackIdentifier = "\(trackIdentifier)"
+        self.mediaDuration = mediaDuration ?? 0
+        self.eventIdentifier = eventIdentifier
     }
 
 }

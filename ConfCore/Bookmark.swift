@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 /// Bookmarks are notes the user can create while watching session videos to reference later, bookmarks can be private or shared with other users
-public final class Bookmark: Object, HasCloudKitFields, SoftDeletable {
+public final class Bookmark: Object, HasCloudKitFields, SoftDeletable, Decodable {
 
     @objc public dynamic var ckFields = Data()
 
@@ -55,6 +55,35 @@ public final class Bookmark: Object, HasCloudKitFields, SoftDeletable {
 
     public override class func primaryKey() -> String? {
         return "identifier"
+    }
+
+    // MARK: - Codable
+
+    private enum CodingKeys: String, CodingKey {
+        case body
+        case attributedBody
+        case timecode
+        case duration
+    }
+
+    public required convenience init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let body = try container.decode(String.self, forKey: .body)
+        let timecode = try container.decode(Double.self, forKey: .timecode)
+        let duration = try container.decode(Double.self, forKey: .duration)
+
+        self.init()
+
+        self.body = body
+        self.timecode = timecode
+        self.duration = duration
+        self.isShared = true
+
+        if let attributedBody = try container.decodeIfPresent(String.self, forKey: .attributedBody),
+            let attributedBodyData = Data(base64Encoded: attributedBody) {
+            self.attributedBody = attributedBodyData
+        }
     }
 
 }

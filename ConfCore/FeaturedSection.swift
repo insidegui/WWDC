@@ -25,7 +25,7 @@ public enum FeaturedSectionFormat: String {
 }
 
 /// Specifies a playlist that's shown in the Featured tab
-public class FeaturedSection: Object {
+public class FeaturedSection: Object, Decodable {
 
     /// The order in which to display the featured section
     @objc public dynamic var order = 0
@@ -66,4 +66,40 @@ public class FeaturedSection: Object {
         return "title"
     }
 
+    // MARK: - Codable
+
+    private enum CodingKeys: String, CodingKey {
+        case ordinal
+        case format
+        case title
+        case description
+        case content
+        case author
+        case published
+        case colorA = "ios_color"
+        case colorB = "tvos_light_style_color"
+        case colorC = "tvos_dark_style_color"
+    }
+
+    public required convenience init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let contents = try container.decode(FailableItemArrayWrapper<FeaturedContent>.self, forKey: .content).items
+        let ordinal = try container.decode(Int.self, forKey: .ordinal)
+        let title = try container.decode(String.self, forKey: .title)
+        let summary = try container.decode(String.self, forKey: .description)
+
+        self.init()
+
+        self.content.append(objectsIn: contents)
+        self.author = try container.decodeIfPresent(FeaturedAuthor.self, forKey: .author)
+        self.order = ordinal
+        self.isPublished = try container.decodeIfPresent(Bool.self, forKey: .published) ?? true
+        self.rawFormat = try container.decodeIfPresent(String.self, forKey: .format) ?? FeaturedSectionFormat.largeGrid.rawValue
+        self.title = title
+        self.summary = summary
+        self.colorA = try container.decodeIfPresent(String.self, forKey: .colorA)
+        self.colorB = try container.decodeIfPresent(String.self, forKey: .colorB)
+        self.colorC = try container.decodeIfPresent(String.self, forKey: .colorC)
+    }
 }
