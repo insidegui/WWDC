@@ -7,46 +7,28 @@
 //
 
 import Foundation
-import SwiftyJSON
 
-enum AdapterError: Error {
-    case invalidData
-    case unsupported
-    case missingKey(JSONSubscriptType)
+// This is needed to keep the same behavior that adapters had before
+// Where it could adapt array of items even if some of the individual items failed to adapt
+struct FailableItemArrayWrapper<T: Decodable>: Decodable {
 
-    var localizedDescription: String {
-        switch self {
-        case .invalidData:
-            return "Invalid input data"
-        case .unsupported:
-            return "This type of entity is not supported"
-        case .missingKey(let key):
-            return "Input is missing a required key: \"\(key)\""
-        }
-    }
-}
+    private struct Empty: Codable {}
 
-protocol Adapter {
-    associatedtype InputType
-    associatedtype OutputType
+    let items: [T]
 
-    func adapt(_ input: InputType) -> Result<OutputType, AdapterError>
-    func adapt(_ input: [InputType]) -> Result<[OutputType], AdapterError>
-}
+    public init(from decoder: Decoder) throws {
+        var container = try decoder.unkeyedContainer()
+        var items = [T]()
 
-extension Adapter {
-
-    func adapt(_ input: [InputType]) -> Result<[OutputType], AdapterError> {
-        let collection = input.compactMap { (item: InputType) -> OutputType? in
-            let itemResult = adapt(item)
-            switch itemResult {
-            case .success(let resultingItem):
-                return resultingItem
-            default: return nil
+        while !container.isAtEnd {
+            if let item = try? container.decode(T.self) {
+                items.append(item)
+            } else {
+                // container.currentIndex is not incremented unless something is decoded
+                _ = try? container.decode(Empty.self)
             }
         }
 
-        return .success(collection)
+        self.items = items
     }
-
 }

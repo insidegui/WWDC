@@ -7,7 +7,6 @@
 //
 
 import Cocoa
-import SwiftyJSON
 import os.log
 
 public final class ContributorsFetcher {
@@ -72,17 +71,11 @@ public final class ContributorsFetcher {
     }
 
     fileprivate func parseResponse(_ data: Data) -> [String] {
-
-        guard let jsonData = try? JSON(data: data), let contributors = jsonData.array else { return [String]() }
-
-        var contributorNames = [String]()
-        for contributor in contributors {
-            if let name = contributor["login"].string {
-                contributorNames.append(name)
-            }
+        guard let contributors = try? JSONDecoder().decode(Array<GitHubUser>.self, from: data) else {
+            return [String]()
         }
 
-        return contributorNames
+        return contributors.map { $0.login }
     }
 
     fileprivate func buildInfoText(_ names: [String]) {
@@ -96,6 +89,10 @@ public final class ContributorsFetcher {
 
         infoText = text
     }
+}
+
+private struct GitHubUser: Codable {
+    var login: String
 }
 
 private struct GitHubPagination {

@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 /// Represents a past, present or future WWDC edition (ex: WWDC-2016)
-public class Event: Object {
+public class Event: Object, Decodable {
 
     /// Unique identifier (ex: wwdc2017)
     @objc public dynamic var identifier = ""
@@ -45,23 +45,41 @@ public class Event: Object {
         return "identifier"
     }
 
-    public static func make(identifier: String, name: String, startDate: Date, endDate: Date, isCurrent: Bool, imagesPath: String) -> Event {
-        let event = Event()
-
-        event.identifier = identifier
-        event.name = name
-        event.startDate = startDate
-        event.endDate = endDate
-        event.isCurrent = isCurrent
-        event.imagesPath = imagesPath
-
-        return event
-    }
-
     internal static func identifier(from date: Date) -> String {
         let year = Calendar.current.component(.year, from: date)
 
         return "wwdc\(year)"
+    }
+
+    // MARK: - Codable
+
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case current
+        case start = "startTime"
+        case end = "endTime"
+        case identifier = "id"
+        case imagesPath
+    }
+
+    public required convenience init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let identifier = try container.decode(String.self, forKey: .identifier)
+        let name = try container.decode(String.self, forKey: .name)
+        let current = try container.decode(Bool.self, forKey: .current)
+        let imagesPath = try container.decode(String.self, forKey: .imagesPath)
+        let startDate = try container.decode(Date.self, forKey: .start)
+        let endDate = try container.decode(Date.self, forKey: .end)
+
+        self.init()
+
+        self.identifier = identifier
+        self.name = name
+        self.startDate = startDate
+        self.endDate = endDate
+        self.isCurrent = current
+        self.imagesPath = imagesPath
     }
 
 }

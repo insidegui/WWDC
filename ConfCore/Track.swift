@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 /// Tracks represent a specific are of interest (ex: "System Frameworks", "Graphics and Games")
-public class Track: Object {
+public class Track: Object, Decodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -43,22 +43,32 @@ public class Track: Object {
         return "name"
     }
 
-    public static func make(identifier: String,
-                            name: String,
-                            darkColor: String,
-                            lightBackgroundColor: String,
-                            lightColor: String,
-                            titleColor: String) -> Track {
-        let track = Track()
+    // MARK: - Decodable
 
-        track.identifier = identifier
-        track.name = name
-        track.darkColor = darkColor
-        track.lightBackgroundColor = lightBackgroundColor
-        track.lightColor = lightColor
-        track.titleColor = titleColor
-
-        return track
+    private enum CodingKeys: String, CodingKey {
+        case name, color, darkColor, titleColor, lightBGColor, ordinal
+        case identifier = "id"
     }
 
+    public convenience required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let identifier = try container.decode(Int.self, forKey: .identifier)
+        let name = try container.decode(String.self, forKey: .name)
+        let color = try container.decode(String.self, forKey: .color)
+        let darkColor = try container.decode(String.self, forKey: .darkColor)
+        let titleColor = try container.decode(String.self, forKey: .titleColor)
+        let lightBGColor = try container.decode(String.self, forKey: .lightBGColor)
+        let ordinal = try container.decodeIfPresent(Int.self, forKey: .ordinal) ?? 0
+
+        self.init()
+
+        self.identifier = "\(identifier)"
+        self.name = name
+        self.darkColor = darkColor
+        self.lightBackgroundColor = lightBGColor
+        self.lightColor = color
+        self.titleColor = titleColor
+        self.order = ordinal
+    }
 }

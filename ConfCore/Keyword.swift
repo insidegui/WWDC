@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 /// Keywords used when searching sessions
-public class Keyword: Object {
+public class Keyword: Object, Decodable {
 
     /// The keyword
     @objc public dynamic var name = ""
@@ -21,4 +21,16 @@ public class Keyword: Object {
     public override class func primaryKey() -> String? {
         return "name"
     }
+
+    // MARK: Decodable
+
+    public convenience required init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let name = try container.decode(String.self)
+
+        self.init()
+
+        self.name = name
+    }
+
 }

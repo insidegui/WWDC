@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 /// Specifies an author for a curated playlist
-public class FeaturedContent: Object {
+public class FeaturedContent: Object, Decodable {
 
     /// The session id for the relevant session
     @objc public dynamic var sessionId: String = ""
@@ -23,5 +23,31 @@ public class FeaturedContent: Object {
 
     /// A list of bookmarks
     public let bookmarks = List<Bookmark>()
+
+    // MARK: - Codable
+
+    enum CodingKeys: String, CodingKey {
+        case sessionId = "identifier"
+        case essay
+        case bookmarks
+    }
+
+    public required convenience init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let sessionId = try container.decode(String.self, forKey: .sessionId)
+
+        self.init()
+
+        self.sessionId = sessionId
+
+        if let encodedEssay = try? container.decode(String.self, forKey: .essay) {
+            self.essay = Data(base64Encoded: encodedEssay)
+        }
+
+        if let bookmarks = try container.decodeIfPresent(FailableItemArrayWrapper<Bookmark>.self, forKey: .bookmarks)?.items {
+            self.bookmarks.append(objectsIn: bookmarks)
+        }
+    }
 
 }

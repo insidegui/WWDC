@@ -32,7 +32,7 @@ public enum SessionInstanceType: Int {
 }
 
 /// A session instance represents a specific occurence of a session with a location and start/end times
-public class SessionInstance: Object {
+public class SessionInstance: Object, Decodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -162,6 +162,49 @@ public class SessionInstance: Object {
 
         keywords.removeAll()
         keywords.append(objectsIn: otherKeywords)
+    }
+
+    // MARK: - Decodable
+
+    private enum CodingKeys: String, CodingKey {
+        case id, keywords, startTime, endTime, type
+        case eventId, actionLinkPrompt, actionLinkURL
+        case favId = "fav_id"
+        case room = "roomId"
+        case track = "trackId"
+    }
+
+    public convenience required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        let session = try Session(from: decoder)
+        let startDate = try container.decode(Date.self, forKey: .startTime)
+        let endDate = try container.decode(Date.self, forKey: .endTime)
+        let rawType = try container.decode(String.self, forKey: .type)
+        let id = try container.decode(String.self, forKey: .id)
+        let eventId = try container.decode(String.self, forKey: .eventId)
+        let roomIdentifier = try container.decode(Int.self, forKey: .room)
+        let trackIdentifier = try container.decode(Int.self, forKey: .track)
+
+        self.init()
+
+        if let keywords = try container.decodeIfPresent([Keyword].self, forKey: .keywords) {
+            self.keywords.append(objectsIn: keywords)
+        }
+
+        self.identifier = session.identifier
+        self.eventIdentifier = eventId
+        self.number = id
+        self.session = session
+        self.trackIdentifier = "\(trackIdentifier)"
+        self.roomIdentifier = "\(roomIdentifier)"
+        self.rawSessionType = rawType
+        self.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
+        self.startTime = startDate
+        self.endTime = endDate
+        self.actionLinkPrompt = try container.decodeIfPresent(String.self, forKey: .actionLinkPrompt)
+        self.actionLinkURL = try container.decodeIfPresent(String.self, forKey: .actionLinkURL)
+
     }
 
 }

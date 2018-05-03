@@ -17,7 +17,7 @@ public enum NewsType: Int {
 }
 
 /// NewsItem can be a simple news text or a photo gallery
-public class NewsItem: Object {
+public class NewsItem: Object, Decodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -42,6 +42,45 @@ public class NewsItem: Object {
 
     public override class func primaryKey() -> String? {
         return "identifier"
+    }
+
+    // MARK: - Decodable
+
+    private enum CodingKeys: String, CodingKey {
+        case id, title, body, timestamp, visibility, photos, type
+    }
+
+    public convenience required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        if let type = try container.decodeIfPresent(String.self, forKey: .type) {
+            guard type != "pass" else {
+                let context = DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "'Pass' is not a supported NewsItem type",
+                    underlyingError: nil)
+                throw DecodingError.dataCorrupted(context)
+            }
+        }
+
+        let id = try container.decode(String.self, forKey: .id)
+        let title = try container.decode(String.self, forKey: .title)
+        let timestamp = try container.decode(Double.self, forKey: .timestamp)
+        let visibility = try container.decodeIfPresent(String.self, forKey: .visibility) ?? ""
+        let body = try container.decodeIfPresent(String.self, forKey: .body) ?? ""
+
+        self.init()
+
+        if let photos = try container.decodeIfPresent([Photo].self, forKey: .photos) {
+            self.photos.append(objectsIn: photos)
+        }
+
+        self.identifier = id
+        self.title = title
+        self.body = body
+        self.visibility = visibility
+        self.date = Date(timeIntervalSince1970: timestamp)
+        self.newsType = self.photos.count > 0 ? NewsType.gallery.rawValue : NewsType.news.rawValue
     }
 
 }
