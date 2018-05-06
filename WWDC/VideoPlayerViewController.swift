@@ -122,6 +122,12 @@ final class VideoPlayerViewController: NSViewController {
         }.disposed(by: disposeBag)
     }
 
+    override func viewDidAppear() {
+        super.viewDidAppear()
+
+        view.window?.makeFirstResponder(playerView)
+    }
+
     func resetAppearanceDelegate() {
         playerView.appearanceDelegate = self
     }
