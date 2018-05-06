@@ -1273,8 +1273,6 @@ public final class PUIPlayerView: NSView {
             lastKnownWindow = window
             startMonitoringKeyEvents()
         }
-
-        window?.makeFirstResponder(self)
     }
 
     private var windowIsInFullScreen: Bool {
@@ -1344,8 +1342,6 @@ public final class PUIPlayerView: NSView {
         if event.type == .leftMouseDown && event.clickCount == 2 {
             toggleFullscreen(self)
         } else {
-            window?.makeFirstResponder(self)
-
             super.mouseDown(with: event)
         }
     }

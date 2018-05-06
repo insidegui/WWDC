@@ -107,6 +107,10 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         }
     }
 
+    private var playerTouchBarContainer: MainWindowController? {
+        return currentPlayerController?.view.window?.windowController as? MainWindowController
+    }
+
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
         guard let playerController = currentPlayerController else { return }
 
@@ -125,7 +129,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         playerController.view.alphaValue = 1
 
-        playerController.view.window?.makeFirstResponder(playerController.playerView)
+        playerTouchBarContainer?.activePlayerView = playerController.playerView
     }
 
     func publishNowPlayingInfo() {
