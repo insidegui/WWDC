@@ -105,7 +105,11 @@ extension NSImage {
 extension NSImage {
 
     func touchBarImage(with scale: CGFloat) -> NSImage {
-        return PUITouchBarImageCache.shared.touchBarImage(for: self, with: scale)
+        let image = PUITouchBarImageCache.shared.touchBarImage(for: self, with: scale)
+
+        image.isTemplate = true
+
+        return image
     }
 
 }
