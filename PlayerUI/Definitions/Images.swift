@@ -62,6 +62,10 @@ extension NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "pip"))!
     }
 
+    static var PUIExitPictureInPicture: NSImage {
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "pipExit"))!
+    }
+
     static var PUIPictureInPictureLarge: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "pip-big"))!
     }

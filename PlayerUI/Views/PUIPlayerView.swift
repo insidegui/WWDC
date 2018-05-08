@@ -29,6 +29,8 @@ public final class PUIPlayerView: NSView {
             } else {
                 externalStatusController.view.isHidden = true
             }
+
+            invalidateTouchBar()
         }
     }
 
@@ -1284,11 +1286,13 @@ public final class PUIPlayerView: NSView {
     @objc private func windowWillEnterFullScreen() {
         fullScreenButton.isHidden = true
         updateExtrasMenuPosition()
+        invalidateTouchBar()
     }
 
     @objc private func windowWillExitFullScreen() {
         fullScreenButton.isHidden = false
         updateExtrasMenuPosition()
+        invalidateTouchBar()
     }
 
     // MARK: - Events

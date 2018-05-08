@@ -90,6 +90,14 @@ final class PUITouchBarController: NSObject {
         return image.touchBarImage(with: 0.8)
     }
 
+    private var pipImage: NSImage {
+        if playerView?.isInPictureInPictureMode == true {
+            return .PUIExitPictureInPicture
+        } else {
+            return .PUIPictureInPicture
+        }
+    }
+
     func invalidate() {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
 
@@ -101,6 +109,8 @@ final class PUITouchBarController: NSObject {
         backButton.image = goBackImage
         forwardButton.image = goForwardImage
         speedButton.image = playbackSpeed.icon
+        togglePictureInPictureButton.image = pipImage
+        toggleFullscreenButton.isHidden = playerView?.isInFullScreenPlayerWindow == true
     }
 
     // MARK: - Controls
@@ -134,7 +144,7 @@ final class PUITouchBarController: NSObject {
     }()
 
     private lazy var togglePictureInPictureButton: NSButton = {
-        return makeTouchBarButton(image: .PUIPictureInPicture, action: #selector(PUIPlayerView.togglePip))
+        return makeTouchBarButton(image: pipImage, action: #selector(PUIPlayerView.togglePip))
     }()
 
     private lazy var toggleFullscreenButton: NSButton = {
