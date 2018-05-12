@@ -122,6 +122,7 @@
 		DD9301BC1EE3205800BE724B /* ChromeCastCore.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */; };
 		DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
+		DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
@@ -475,6 +476,7 @@
 		DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = ChromeCastCore.framework.dSYM; path = Carthage/Build/Mac/ChromeCastCore.framework.dSYM; sourceTree = "<group>"; };
 		DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromeCastPlaybackProvider.swift; sourceTree = "<group>"; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
+		DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMigrator.swift; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
@@ -712,6 +714,7 @@
 			isa = PBXGroup;
 			children = (
 				DD0F0C551E7B8DD600B52184 /* Storage.swift */,
+				DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */,
 				DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */,
 			);
 			name = Storage;
@@ -1974,6 +1977,7 @@
 				DD0353491E5545B300D5E343 /* SessionInstancesJSONAdapter.swift in Sources */,
 				DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */,
 				DD54CD101E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift in Sources */,
+				DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */,
 				DD65FD551E48A0A70054DD35 /* Room.swift in Sources */,
 				DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */,
 				F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */,

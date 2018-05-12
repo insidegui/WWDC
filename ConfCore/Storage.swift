@@ -75,48 +75,9 @@ public final class Storage {
     }
 
     internal static func migrate(migration: Migration, oldVersion: UInt64) {
-        if oldVersion < 10 {
-            // alpha cleanup
-            migration.deleteData(forType: "Event")
-            migration.deleteData(forType: "Track")
-            migration.deleteData(forType: "Room")
-            migration.deleteData(forType: "Favorite")
-            migration.deleteData(forType: "SessionProgress")
-            migration.deleteData(forType: "Session")
-            migration.deleteData(forType: "SessionInstance")
-            migration.deleteData(forType: "SessionAsset")
-            migration.deleteData(forType: "SessionAsset")
-        }
-        if oldVersion < 15 {
-            // download model removal
-            migration.deleteData(forType: "Download")
-        }
-        if oldVersion < 31 {
-            // remove cached images which might have generic session thumbs instead of the correct ones
-            migration.deleteData(forType: "ImageCacheEntity")
+        let migrator = StorageMigrator(migration: migration, oldVersion: oldVersion)
 
-            // delete live stream assets (some of them got duplicated during the week)
-            migration.enumerateObjects(ofType: "SessionAsset") { asset, _ in
-                guard let asset = asset else { return }
-
-                if asset["rawAssetType"] as? String == SessionAssetType.liveStreamVideo.rawValue {
-                    migration.delete(asset)
-                }
-            }
-        }
-        if oldVersion < 32 {
-            migration.deleteData(forType: "Event")
-            migration.deleteData(forType: "Track")
-            migration.deleteData(forType: "ScheduleSection")
-        }
-        if oldVersion < 34 {
-            migration.deleteData(forType: "Transcript")
-            migration.deleteData(forType: "TranscriptAnnotation")
-
-            migration.enumerateObjects(ofType: "Session") { _, session in
-                session?["transcriptIdentifier"] = ""
-            }
-        }
+        migrator.perform()
     }
 
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping (Error?) -> Void) {
@@ -152,6 +113,14 @@ public final class Storage {
                 if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
                     existingInstance.merge(with: newInstance, in: backgroundRealm)
                 } else {
+                    // This handles the case where an existing session (which might have user data associated with it) is added to an instance,
+                    // it shouldn't happen in the wild but since we goofed up the year/identifier thing and caused an empty schedule view in 2018,
+                    // we have to make sure we handle this edge case
+                    if let newSession = newInstance.session, let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
+                        existingSession.merge(with: newSession, in: backgroundRealm)
+                        newInstance.session = existingSession
+                    }
+
                     backgroundRealm.add(newInstance, update: true)
                 }
             }
@@ -204,7 +173,7 @@ public final class Storage {
 
             // add live video assets to sessions
             backgroundRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
-                if let session = backgroundRealm.objects(Session.self).filter("year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
+                if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
                     if !session.assets.contains(liveAsset) {
                         session.assets.append(liveAsset)
                     }
@@ -261,7 +230,7 @@ public final class Storage {
                 } else {
                     backgroundRealm.add(asset, update: true)
 
-                    if let session = backgroundRealm.objects(Session.self).filter("year == %d AND number == %@", asset.year, asset.sessionId).first {
+                    if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", asset.year, asset.sessionId).first {
                         if !session.assets.contains(asset) {
                             session.assets.append(asset)
                         }
