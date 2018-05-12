@@ -249,10 +249,6 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     deinit {
-        #if DEBUG
-            Swift.print("VideoPlayerViewController is gone")
-        #endif
-
         player.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.presentationSize))
         player.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
     }

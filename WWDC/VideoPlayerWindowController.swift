@@ -152,12 +152,6 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         window?.level = NSWindow.Level(rawValue: level)
     }
 
-    deinit {
-        #if DEBUG
-            Swift.print("VideoPlayerWindowController is gone")
-        #endif
-    }
-
 }
 
 private extension PUIPlayerWindow {

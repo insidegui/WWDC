@@ -8,6 +8,7 @@
 
 import Cocoa
 import RealmSwift
+import os.log
 
 typealias ImageDownloadCompletionBlock = (_ sourceURL: URL, _ original: NSImage?, _ thumbnail: NSImage?) -> Void
 
@@ -17,6 +18,7 @@ final class ImageDownloadCenter {
 
     private let cacheProvider = ImageCacheProvider()
     private let queue = OperationQueue()
+    private let log = OSLog(subsystem: "WWDC", category: "ImageDownloadCenter")
 
     func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
         if let cache = cacheProvider.cacheEntity(for: url) {
@@ -37,7 +39,11 @@ final class ImageDownloadCenter {
         }
 
         guard !hasActiveOperation(for: url) else {
-            print("Unhandled case: Valid operation already exists")
+            os_log("Unhandled case: A valid download operation already exists for the URL %{public}@",
+                   log: self.log,
+                   type: .error,
+                   url.absoluteString)
+
             return nil
         }
 
@@ -78,6 +84,7 @@ private final class ImageCacheProvider {
     private var thumbCaches: [URL: URL] = [:]
 
     private let upperLimit = 16 * 1024 * 1024
+    private let log = OSLog(subsystem: "WWDC", category: "ImageCacheProvider")
 
     private func makeRealm() -> Realm? {
         let filePath = PathUtil.appSupportPathAssumingExisting + "/ImageCache.realm"
@@ -120,7 +127,10 @@ private final class ImageCacheProvider {
 
                     bgRealm.invalidate()
                 } catch {
-                    NSLog("Error saving cached image: \(error)")
+                    os_log("Failed to save cached image to disk: %{public}@",
+                           log: self.log,
+                           type: .error,
+                           String(describing: error))
                 }
             }
         }

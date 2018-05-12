@@ -9,10 +9,12 @@
 import Foundation
 import ConfCore
 import RealmSwift
+import os.log
 
 final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtocol {
 
     private var transcriptIndexer: TranscriptIndexer!
+    private let log = OSLog(subsystem: "TranscriptIndexingService", category: "TranscriptIndexingService")
 
     func indexTranscriptsIfNeeded(storageURL: URL, schemaVersion: UInt64) {
         if transcriptIndexer == nil {
@@ -21,7 +23,7 @@ final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtoc
                 let storage = try Storage(config)
                 transcriptIndexer = TranscriptIndexer(storage)
             } catch {
-                NSLog("[TranscriptIndexingService] Error initializing: \(error)")
+                os_log("Error initializing indexing service: %{public}@", log: self.log, type: .fault, String(describing: error))
                 return
             }
         }

@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 import ConfCore
+import os.log
 
 private struct TBConstants {
     static let legacySchemaVersion: UInt64 = 6
@@ -36,6 +37,8 @@ public final class TBUserDataMigrator {
     private let fileURL: URL
     private var realm: Realm!
     private weak var newRealm: Realm!
+
+    private let log = OSLog(subsystem: "ThrowBack", category: "TBUserDataMigrator")
 
     public var isPerformingMigration = false
 
@@ -122,7 +125,12 @@ public final class TBUserDataMigrator {
 
                         newSession.isDownloaded = true
                     } catch {
-                        NSLog("Error moving downloaded file from \(originalLocalFileURL) to \(newLocalFileURL): \(error)")
+                        os_log("Error moving downloaded file from %{public}@ to %{public}@: %{public}@",
+                               log: self.log,
+                               type: .error,
+                               originalLocalFileURL.absoluteString,
+                               newLocalFileURL.absoluteString,
+                               String(describing: error))
                     }
                 }
             }
@@ -131,7 +139,10 @@ public final class TBUserDataMigrator {
         do {
             try newRealm.commitWrite()
         } catch {
-            NSLog("Error saving migrated realm data: \(error)")
+            os_log("Error saving migrated Realm data: %{public}@",
+                   log: self.log,
+                   type: .error,
+                   String(describing: error))
         }
 
         let backupFileURL = fileURL.deletingPathExtension().appendingPathExtension("backup")
@@ -139,7 +150,11 @@ public final class TBUserDataMigrator {
         do {
             try FileManager.default.moveItem(at: fileURL, to: backupFileURL)
         } catch {
-            NSLog("Error moving backup file to \(backupFileURL)")
+            os_log("Error moving backup file to %{public}@: %{public}@",
+                   log: self.log,
+                   type: .error,
+                   backupFileURL.absoluteString,
+                   String(describing: error))
         }
     }
 

@@ -8,10 +8,13 @@
 
 import Cocoa
 import SwiftyJSON
+import os.log
 
 public final class ContributorsFetcher {
 
     public static let shared: ContributorsFetcher = ContributorsFetcher()
+
+    private let log = OSLog(subsystem: "WWDC", category: "ContributorsFetcher")
 
     fileprivate struct Constants {
         static let contributorsURL = "https://api.github.com/repos/insidegui/WWDC/contributors"
@@ -43,9 +46,9 @@ public final class ContributorsFetcher {
         let task = URLSession.shared.dataTask(with: url) { [unowned self] data, response, error in
             guard let data = data, error == nil else {
                 if let error = error {
-                    NSLog("[ContributorsFetcher] Error fetching contributors: \(error)")
+                    os_log("Error fetching contributors: %{public}@", log: self.log, type: .error, String(describing: error))
                 } else {
-                    NSLog("[ContributorsFetcher] Error fetching contributors: no data returned")
+                    os_log("Error fetching contributors: network call returned no data", log: self.log, type: .error)
                 }
 
                 self.buildInfoText(self.names)

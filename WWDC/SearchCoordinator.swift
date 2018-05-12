@@ -10,6 +10,7 @@ import Cocoa
 import ConfCore
 import RealmSwift
 import SwiftyJSON
+import os.log
 
 enum FilterIdentifier: String {
     case text
@@ -27,6 +28,8 @@ final class SearchCoordinator {
 
     let scheduleController: SessionsTableViewController
     let videosController: SessionsTableViewController
+
+    private let log = OSLog(subsystem: "WWDC", category: "SearchCoordinator")
 
     /// The desired state of the filters upon configuration
     private let restorationFiltersState: JSON?
@@ -216,9 +219,7 @@ final class SearchCoordinator {
             predicate = NSCompoundPredicate(orPredicateWithSubpredicates: [predicate, NSPredicate(format: "identifier == %@", currentlyPlayingSession.identifier)])
         }
 
-        #if DEBUG
-            print(predicate)
-        #endif
+        os_log("%{public}@", log: log, type: .debug, String(describing: predicate))
 
         searchQueue.async { [unowned self] in
             do {
@@ -232,6 +233,10 @@ final class SearchCoordinator {
                     controller.searchResults = searchResults
                 }
             } catch {
+                os_log("Failed to initialize Realm for searching: %{public}@",
+                       log: self.log,
+                       type: .error,
+                       String(describing: error))
                 LoggingHelper.registerError(error, info: ["when": "Searching"])
             }
         }

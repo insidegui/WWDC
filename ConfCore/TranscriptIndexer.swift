@@ -9,6 +9,7 @@
 import Cocoa
 import RealmSwift
 import SwiftyJSON
+import os.log
 
 extension Notification.Name {
     public static let TranscriptIndexingDidStart = Notification.Name("io.wwdc.app.TranscriptIndexingDidStartNotification")
@@ -18,6 +19,7 @@ extension Notification.Name {
 public final class TranscriptIndexer {
 
     private let storage: Storage
+    private let log = OSLog(subsystem: "ConfCore", category: "TranscriptIndexer")
 
     public init(_ storage: Storage) {
         self.storage = storage
@@ -88,10 +90,16 @@ public final class TranscriptIndexer {
     }
 
     fileprivate func store(_ transcripts: [Transcript]) {
-        storage.backgroundUpdate { backgroundRealm in
+        storage.backgroundUpdate { [weak self] backgroundRealm in
+            guard let `self` = self else { return }
+
             transcripts.forEach { transcript in
                 guard let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: transcript.identifier) else {
-                    NSLog("Session not found for \(transcript.identifier)")
+                    os_log("Corresponding session not found for transcript with identifier %{public}@",
+                           log: self.log,
+                           type: .error,
+                           transcript.identifier)
+
                     return
                 }
 
@@ -117,7 +125,10 @@ public final class TranscriptIndexer {
             }
 
             guard let jsonData = data else {
-                NSLog("No data returned from ASCIIWWDC for \(primaryKey)")
+                os_log("No data returned from ASCIIWWDC for transcript with identifier %{public}@",
+                       log: self.log,
+                       type: .error,
+                       primaryKey)
 
                 return
             }
@@ -127,14 +138,23 @@ public final class TranscriptIndexer {
             do {
                 json = try JSON(data: jsonData)
             } catch {
-                NSLog("Error parsing JSON data for \(primaryKey)")
+                os_log("Error parsing JSON for transcript with identifier %{public}@: %{public}@",
+                       log: self.log,
+                       type: .error,
+                       primaryKey,
+                       String(describing: error))
+
                 return
             }
 
             let result = TranscriptsJSONAdapter().adapt(json)
 
             guard case .success(let transcript) = result else {
-                NSLog("Error parsing transcript for \(primaryKey)")
+                os_log("Error unserializing transcript with identifier %{public}@",
+                       log: self.log,
+                       type: .error,
+                       primaryKey)
+
                 return
             }
 
@@ -149,15 +169,11 @@ public final class TranscriptIndexer {
     private func checkForCompletion() {
         guard let progress = transcriptIndexingProgress else { return }
 
-        #if DEBUG
-            NSLog("Completed: \(progress.completedUnitCount) Total: \(progress.totalUnitCount)")
-        #endif
+        os_log("Indexed %{public}d/%{public}d", log: log, type: .debug, progress.completedUnitCount, progress.totalUnitCount)
 
         if progress.completedUnitCount >= progress.totalUnitCount {
             DispatchQueue.main.async {
-                #if DEBUG
-                    NSLog("Transcript indexing finished")
-                #endif
+                os_log("Transcript indexing finished 🎉", log: self.log, type: .info)
 
                 self.storage.storageQueue.waitUntilAllOperationsAreFinished()
                 self.waitAndExit()

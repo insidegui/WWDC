@@ -9,6 +9,7 @@
 import Foundation
 import CloudKit
 import ConfCore
+import os.log
 
 final class RemoteEnvironment {
 
@@ -23,6 +24,8 @@ final class RemoteEnvironment {
     }()
 
     static let shared: RemoteEnvironment = RemoteEnvironment()
+
+    private let log = OSLog(subsystem: "WWDC", category: "RemoteEnvironment")
 
     func start() {
         #if ICLOUD
@@ -41,7 +44,7 @@ final class RemoteEnvironment {
 
             operation.recordFetchedBlock = { record in
                 guard let env = Environment(record) else {
-                    NSLog("Error parsing remote environment")
+                    os_log("Error parsing remote environment", log: self.log, type: .error)
                     return
                 }
 
@@ -50,7 +53,10 @@ final class RemoteEnvironment {
 
             operation.queryCompletionBlock = { [unowned self] _, error in
                 if let error = error {
-                    NSLog("Error fetching remote environment: \(error)")
+                    os_log("Error fetching remote environment: %{public}@",
+                           log: self.log,
+                           type: .error,
+                           String(describing: error))
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 10) { self.fetch() }
                 }
@@ -79,7 +85,12 @@ final class RemoteEnvironment {
 
         database.save(subscription) { _, error in
             if let error = error {
-                NSLog("[RemoteEnvironment] Error creating subscription: \(error)")
+                os_log("Error creating remote environment subscription: %{public}@",
+                       log: self.log,
+                       type: .error,
+                       String(describing: error))
+            } else {
+                os_log("Remote environment subscription created", log: self.log, type: .info)
             }
         }
     }

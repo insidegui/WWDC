@@ -8,6 +8,7 @@
 
 import Cocoa
 import AVFoundation
+import os.log
 
 protocol PUITimelineViewDelegate: class {
 
@@ -19,6 +20,8 @@ protocol PUITimelineViewDelegate: class {
 }
 
 public final class PUITimelineView: NSView {
+
+    private let log = OSLog(subsystem: "PlayerUI", category: "PUITimelineView")
 
     // MARK: - Public API
 
@@ -260,7 +263,7 @@ public final class PUITimelineView: NSView {
 
                     let timestamp = self.mediaDuration * progress
 
-                    debugLog("Force touch at \(timestamp)s")
+                    os_log("Force touch at %{public}f", log: log, type: .debug, timestamp)
 
                     self.viewDelegate?.timelineDidReceiveForceTouch(at: timestamp)
 

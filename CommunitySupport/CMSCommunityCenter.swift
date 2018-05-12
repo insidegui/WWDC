@@ -9,6 +9,7 @@
 import Cocoa
 import CloudKit
 import RxSwift
+import os.log
 
 public enum CMSResult<T> {
     case success(T)
@@ -47,6 +48,8 @@ public final class CMSCommunityCenter {
     public lazy var userProfile: Observable<CMSUserProfile> = {
         return self.createUserProfileObservable()
     }()
+
+    private let log = OSLog(subsystem: "CommunitySupport", category: "CMSCommunityCenter")
 
     public init() {
         NotificationCenter.default.addObserver(self, selector: #selector(createSubscriptionsIfNeeded), name: NSApplication.didFinishLaunchingNotification, object: nil)
@@ -91,7 +94,7 @@ public final class CMSCommunityCenter {
         container.fetchUserRecordID { userRecordID, error in
             if let error = retryCloudKitOperationIfPossible(with: error, block: retryBlock) {
                 DispatchQueue.main.async {
-                    NSLog("[CMSCommunityCenter] Unable to get user record ID from CloudKit: \(error)")
+                    os_log("Unable to get user record ID from CloudKit: %{public}@", log: self.log, type: .error, String(describing: error))
                     self.sendErrorNotification(with: error, info: "Trying to get user record ID")
                     completion(.error(error))
                 }
@@ -100,7 +103,7 @@ public final class CMSCommunityCenter {
 
             guard let userRecordID = userRecordID else {
                 DispatchQueue.main.async {
-                    NSLog("[CMSCommunityCenter] Nil user record ID")
+                    os_log("Nil user record ID", log: self.log, type: .error)
                     self.sendErrorNotification(with: nil, info: "Nil user record ID")
                     completion(.error(CMSCloudKitError.invalidData("No record ID found")))
                 }
@@ -108,20 +111,20 @@ public final class CMSCommunityCenter {
             }
 
             DispatchQueue.main.async {
-                NSLog("[CMSCommunityCenter] User record ID: \(userRecordID.recordName)")
+                os_log("User record ID is %@", log: self.log, type: .info, userRecordID.recordName)
                 NotificationCenter.default.post(name: .CMSUserIdentifierDidBecomeAvailable, object: userRecordID.recordName)
             }
 
             self.database.fetch(withRecordID: userRecordID) { userRecord, error in
                 if let error = retryCloudKitOperationIfPossible(with: error, block: retryBlock) {
-                    NSLog("[CMSCommunityCenter] Unable to get the user record from CloudKit: \(error)")
+                    os_log("Unable to get the user record from CloudKit: %{public}@", log: self.log, type: .error, String(describing: error))
                     self.sendErrorNotification(with: error, info: "Trying to get the user record itself")
                     DispatchQueue.main.async { completion(.error(error)) }
                     return
                 }
 
                 guard let userRecord = userRecord else {
-                    NSLog("[CMSCommunityCenter] Nil user record")
+                    os_log("Nil user record", log: self.log, type: .error)
                     self.sendErrorNotification(with: nil, info: "Nil user record")
                     DispatchQueue.main.async { completion(.error(CMSCloudKitError.invalidData("No user record"))) }
                     return
@@ -231,7 +234,7 @@ public final class CMSCommunityCenter {
                 self.container.accountStatus { status, error in
                     guard error == nil else {
                         self.sendErrorNotification(with: error, info: "CKContainer.accountStatus")
-                        slog("Error checking CloudKit account status: \(error?.localizedDescription ?? "Unknown")")
+                        os_log("Error checking CloudKit account status: %{public}@", log: self.log, type: .error, String(describing: error))
                         observer.onNext(.unavailable)
                         return
                     }

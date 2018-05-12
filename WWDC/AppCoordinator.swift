@@ -12,9 +12,11 @@ import RxSwift
 import ConfCore
 import PlayerUI
 import ThrowBack
+import os.log
 
 final class AppCoordinator {
 
+    let log = OSLog(subsystem: "WWDC", category: "AppCoordinator")
     private let disposeBag = DisposeBag()
 
     var liveObserver: LiveObserver
