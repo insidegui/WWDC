@@ -19,7 +19,13 @@ public class Event: Object {
     @objc public dynamic var name = ""
 
     /// When the event starts
-    @objc public dynamic var startDate = Date.distantPast
+    @objc public dynamic var startDate = Date.distantPast {
+        didSet {
+            year = Calendar.current.component(.year, from: startDate)
+        }
+    }
+
+    @objc public dynamic var year = -1
 
     /// When the event ends
     @objc public dynamic var endDate = Date.distantPast

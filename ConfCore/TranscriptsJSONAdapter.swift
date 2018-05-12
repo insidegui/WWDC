@@ -54,7 +54,7 @@ final class TranscriptsJSONAdapter: Adapter {
 
         let transcript = Transcript()
 
-        transcript.identifier = "\(year)-\(number)"
+        transcript.identifier = "wwdc\(year)-\(number)"
         transcript.fullText = input[TranscriptKeys.fullText].string ?? ""
         transcript.annotations.append(objectsIn: annotations)
 

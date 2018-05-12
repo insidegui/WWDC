@@ -33,7 +33,7 @@ final class SessionsJSONAdapter: Adapter {
     typealias OutputType = Session
 
     func adapt(_ input: JSON) -> Result<Session, AdapterError> {
-        guard let id = input[SessionKeys.id].string?.replacingOccurrences(of: "wwdc", with: "") else {
+        guard let id = input[SessionKeys.id].string else {
             return .error(.missingKey(SessionKeys.id))
         }
 
@@ -126,7 +126,6 @@ final class SessionsJSONAdapter: Adapter {
 
         session.staticContentId = "\(input[SessionKeys.staticContentId].intValue)"
         session.identifier = id
-        session.year = Int(eventYear) ?? -1
         session.number = "\(eventContentId)"
         session.title = title
         session.summary = summary
