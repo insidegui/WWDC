@@ -8,8 +8,11 @@
 
 import Cocoa
 import AVFoundation
+import os.log
 
 public final class PUIPlayerView: NSView {
+
+    private let log = OSLog(subsystem: "PlayerUI", category: "PUIPlayerView")
 
     // MARK: - Public API
 
@@ -178,7 +181,7 @@ public final class PUIPlayerView: NSView {
     public func registerExternalPlaybackProvider(_ provider: PUIExternalPlaybackProvider.Type) {
         // prevent registering the same provider multiple times
         guard !externalPlaybackProviders.contains(where: { type(of: $0.provider).name == provider.name }) else {
-            NSLog("PUIPlayerView WARNING: tried to register provider \(provider.name) which was already registered")
+            os_log("Tried to register provider %{public}@ which was already registered", log: log, type: .error, provider.name)
             return
         }
 

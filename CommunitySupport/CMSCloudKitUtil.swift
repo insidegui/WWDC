@@ -8,6 +8,7 @@
 
 import Foundation
 import CloudKit
+import os.log
 
 /// Helper method to retry a CloudKit operation when its error suggests it
 ///
@@ -19,26 +20,27 @@ internal func retryCloudKitOperationIfPossible(with error: Error?, block: @escap
     guard error != nil else { return nil }
 
     guard let effectiveError = error as? CKError else {
-        slog("CloudKit puked ¯\\_(ツ)_/¯")
+        os_log("CloudKit returned an error that was not a CKError, this is nuts! The offending error was: %{public}@",
+               log: .default,
+               type: .fault,
+               String(describing: error))
+
         return error
     }
 
     guard let retryAfter = effectiveError.retryAfterSeconds else {
-        slog("CloudKit error: \(effectiveError)")
+        os_log("CloudKit error: %{public}@", log: .default, type: .error, String(describing: effectiveError))
         return effectiveError
     }
 
-    slog("CloudKit operation error, retrying after \(retryAfter) seconds... \(effectiveError)")
+    os_log("Recoverable CloudKit error, will retry operation in %{public}f seconds: %{public}@",
+           log: .default,
+           type: .error,
+           retryAfter, String(describing: effectiveError))
 
     DispatchQueue.main.asyncAfter(deadline: .now() + retryAfter) {
         block()
     }
 
     return nil
-}
-
-internal func slog(_ format: String, _ args: CVarArg...) {
-    #if DEBUG
-        NSLog("[CMSCommunityCenter] " + format, args)
-    #endif
 }

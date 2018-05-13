@@ -8,6 +8,7 @@
 
 import Cocoa
 import RealmSwift
+import os.log
 
 /// Defines the user action of adding a session as favorite
 public class SessionProgress: Object {
@@ -68,7 +69,7 @@ extension Session {
 
             if mustCommit { try realm.commitWrite() }
         } catch {
-            NSLog("Error updating session progress: \(error)")
+            os_log("Error updating session progress: %{public}@", log: .default, type: .error, String(describing: error))
         }
     }
 
@@ -88,7 +89,7 @@ extension Session {
 
             if mustCommit { try realm.commitWrite() }
         } catch {
-            NSLog("Error updating session progress: \(error)")
+            os_log("Error updating session progress: %{public}@", log: .default, type: .error, String(describing: error))
         }
     }
 

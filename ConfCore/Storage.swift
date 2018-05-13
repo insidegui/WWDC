@@ -31,17 +31,13 @@ public final class Storage {
         realm = try Realm(configuration: config)
 
         DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStart).subscribe(onNext: { [unowned self] _ in
-            #if DEBUG
-                NSLog("[Storage] Locking realm autoupdates until transcript indexing is finished")
-            #endif
+            os_log("Locking Realm auto-updates until transcript indexing is finished", log: self.log, type: .info)
 
             self.realm.autorefresh = false
         }).disposed(by: disposeBag)
 
         DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStop).subscribe(onNext: { [unowned self] _ in
-            #if DEBUG
-                NSLog("[Storage] Realm autoupdates unlocked")
-            #endif
+            os_log("Realm auto-updates unlocked", log: self.log, type: .info)
 
             self.realm.autorefresh = true
         }).disposed(by: disposeBag)
@@ -72,7 +68,10 @@ public final class Storage {
                 realm.delete(wwdc2012)
             }
         } catch {
-            NSLog("Error deleting old events: \(error)")
+            os_log("Error deleting old events: %{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
         }
     }
 
@@ -84,8 +83,13 @@ public final class Storage {
 
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping (Error?) -> Void) {
         if case let .error(error) = contentResult {
-            NSLog("Error downloading sessions: \(error)")
+            os_log("Error downloading contents: %{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
+
             completion(error)
+
             return
         }
 
@@ -324,11 +328,13 @@ public final class Storage {
     public func modify<T>(_ objects: [T], with writeBlock: @escaping ([T]) -> Void) where T: ThreadConfined {
         let safeObjects = objects.map { ThreadSafeReference(to: $0) }
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(writeBlock: { [weak self] backgroundRealm in
+            guard let `self` = self else { return }
+
             let resolvedObjects = safeObjects.compactMap { backgroundRealm.resolve($0) }
 
             guard resolvedObjects.count == safeObjects.count else {
-                NSLog("Failed to perform modify in the background. Some objects couldn't be resolved.")
+                os_log("A background database modification failed because some objects couldn't be resolved'", log: self.log, type: .fault)
                 return
             }
 
@@ -414,7 +420,7 @@ public final class Storage {
 
     public func deleteBookmark(with identifier: String) {
         guard let bookmark = bookmark(with: identifier) else {
-            NSLog("DELETE ERROR: Unable to find bookmark with identifier \(identifier)")
+            os_log("DELETE ERROR: Bookmark not found with identifier %{public}@", log: log, type: .error, identifier)
             return
         }
 
@@ -425,7 +431,7 @@ public final class Storage {
 
     public func softDeleteBookmark(with identifier: String) {
         guard let bookmark = bookmark(with: identifier) else {
-            NSLog("SOFT DELETE ERROR: Unable to find bookmark with identifier \(identifier)")
+            os_log("SOFT DELETE ERROR: Bookmark not found with identifier %{public}@", log: log, type: .error, identifier)
             return
         }
 
@@ -437,7 +443,7 @@ public final class Storage {
 
     public func moveBookmark(with identifier: String, to timecode: Double) {
         guard let bookmark = bookmark(with: identifier) else {
-            NSLog("MOVE ERROR: Unable to find bookmark with identifier \(identifier)")
+            os_log("MOVE ERROR: Bookmark not found with identifier %{public}@", log: log, type: .error, identifier)
             return
         }
 

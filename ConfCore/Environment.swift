@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 public extension Notification.Name {
     public static let WWDCEnvironmentDidChange = Notification.Name("WWDCEnvironmentDidChange")
@@ -44,7 +45,7 @@ public struct Environment: Equatable {
 
         if shouldNotify {
             DispatchQueue.main.async {
-                NSLog("ENVIRONMENT CHANGED! New base URL: \(environment.baseURL)")
+                os_log("Environment base URL: %@", log: .default, type: .info, environment.baseURL)
 
                 NotificationCenter.default.post(name: .WWDCEnvironmentDidChange, object: environment)
             }

@@ -10,6 +10,7 @@ import Cocoa
 import ChromeCastCore
 import PlayerUI
 import CoreMedia
+import os.log
 
 private struct ChromeCastConstants {
     static let defaultHost = "devstreaming-cdn.apple.com"
@@ -40,6 +41,8 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
     fileprivate weak var consumer: PUIExternalPlaybackConsumer?
 
     private lazy var scanner: CastDeviceScanner = CastDeviceScanner()
+
+    private let log = OSLog(subsystem: "WWDC", category: "ChromeCastPlaybackProvider")
 
     /// Initializes the external playback provider to start playing the media at the specified URL
     ///
@@ -181,19 +184,16 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
 
     fileprivate var mediaForChromeCast: CastMedia? {
         guard let originalMediaURL = consumer?.remoteMediaUrl else {
-            NSLog("Unable to play because the player view doesn't have a remote media URL associated with it")
+            os_log("Unable to play because the player view doesn't have a remote media URL associated with it", log: log, type: .error)
             return nil
         }
 
         guard let mediaURL = originalMediaURL.chromeCastSupportedURL else {
-            NSLog("Error generating ChromeCast-compatible media URL")
+            os_log("Error generating ChromeCast-compatible media URL", log: log, type: .error)
             return nil
         }
 
-        #if DEBUG
-            NSLog("Original media URL = \(originalMediaURL)")
-            NSLog("ChromeCast-compatible media URL = \(mediaURL)")
-        #endif
+        os_log("ChromeCast media URL is %{public}@", log: log, type: .info, mediaURL.absoluteString)
 
         let posterURL: URL
 
@@ -241,9 +241,7 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
         guard let app = mediaPlayerApp else { return }
         guard let url = consumer?.remoteMediaUrl else { return }
 
-        #if DEBUG
-            NSLog("Load media \(url) with \(app.sessionId)")
-        #endif
+        os_log("Load media at %{public}@ on session ID %{public}@", log: log, type: .debug, url.absoluteString, app.sessionId)
 
         var currentTime: Double = 0
 
@@ -251,29 +249,25 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
             currentTime = Double(CMTimeGetSeconds(playerTime))
         }
 
-        #if DEBUG
-            NSLog("Current time is \(currentTime)s")
-        #endif
+        os_log("Will start media on ChromeCast at %{public}fs", log: log, type: .info, currentTime)
 
         client?.load(media: media, with: app) { [weak self] error, mediaStatus in
+            guard let `self` = self else { return }
+
             guard let mediaStatus = mediaStatus, error == nil else {
                 if let error = error {
+                    os_log("Failed to load media on ChromeCast: %{public}@", log: self.log, type: .error, String(describing: error))
                     WWDCAlert.show(with: error)
-                    #if DEBUG
-                        NSLog("Error loading media: \(error)")
-                    #endif
                 }
                 return
             }
 
-            self?.currentSessionId = mediaStatus.mediaSessionId
+            self.currentSessionId = mediaStatus.mediaSessionId
 
-            #if DEBUG
-                NSLog("Media loaded. SessionID: \(mediaStatus.mediaSessionId).")
-                NSLog("MEDIA STATUS:\n\(mediaStatus)")
-            #endif
+            os_log("The media is now loaded with session ID %{public}d", log: self.log, type: .info, mediaStatus.mediaSessionId)
+            os_log("Current media status is %{public}@", log: self.log, type: .info, String(describing: mediaStatus))
 
-            self?.startFetchingMediaStatusPeriodically()
+            self.startFetchingMediaStatusPeriodically()
         }
     }
 
@@ -285,9 +279,7 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
         do {
             try client?.requestStatus()
         } catch {
-            #if DEBUG
-                NSLog("Error requesting status from connected device: \(error)")
-            #endif
+            os_log("Failed to obtain status from connected ChromeCast device: %{public}@", log: log, type: .error, String(describing: error))
         }
     }
 
@@ -296,38 +288,27 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
 extension ChromeCastPlaybackProvider: CastClientDelegate {
 
     public func castClient(_ client: CastClient, willConnectTo device: CastDevice) {
-        #if DEBUG
-            NSLog("Will connect to \(device.name) (\(device.id))")
-        #endif
+        os_log("Will connect to device %{public}@", log: log, type: .debug, device.name)
     }
 
     public func castClient(_ client: CastClient, didConnectTo device: CastDevice) {
-        #if DEBUG
-            NSLog("Did connect to \(device.name) (\(device.id))")
-        #endif
-
-        #if DEBUG
-            NSLog("Launching app \(CastAppIdentifier.defaultMediaPlayer.rawValue)")
-        #endif
+        os_log("Connected to device %{public}@. Launching media player app.", log: log, type: .debug, device.name)
 
         client.launch(appId: .defaultMediaPlayer) { [weak self] error, app in
+            guard let `self` = self else { return }
+
             guard let app = app, error == nil else {
                 if let error = error {
-                    #if DEBUG
-                        NSLog("Error launching app \(CastAppIdentifier.defaultMediaPlayer.rawValue): \(error)")
-                    #endif
-
+                    os_log("Failed to launch media player app: %{public}@", log: self.log, type: .error, String(describing: error))
                     WWDCAlert.show(with: error)
                 }
                 return
             }
 
-            #if DEBUG
-                NSLog("App \(CastAppIdentifier.defaultMediaPlayer.rawValue) launched. Session: \(app.sessionId)")
-            #endif
+            os_log("Media player launched. Session id is %{public}@", log: self.log, type: .info, app.sessionId)
 
-            self?.mediaPlayerApp = app
-            self?.loadMediaOnDevice()
+            self.mediaPlayerApp = app
+            self.loadMediaOnDevice()
         }
     }
 
@@ -356,9 +337,7 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
 
         self.status = newStatus
 
-        #if DEBUG
-            NSLog("# MEDIA STATUS #\n\(newStatus)\n---")
-        #endif
+        os_log("Media status: %{public}@", log: log, type: .debug, String(describing: newStatus))
 
         consumer?.externalPlaybackProviderDidChangeMediaStatus(self)
     }

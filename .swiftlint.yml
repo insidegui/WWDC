@@ -17,3 +17,12 @@ force_cast:
   severity: warning
 force_try:
   severity: warning
+
+custom_rules:
+  os_log_over_all:
+    name: "Logging"
+    regex: '(print|NSLog)\('
+    message: "Project convention favours os_log for logging."
+    match_kinds:
+      - identifier
+    severity: warning

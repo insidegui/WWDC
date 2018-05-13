@@ -10,6 +10,7 @@ import Cocoa
 import RxSwift
 import ConfCore
 import RealmSwift
+import os.log
 
 extension Notification.Name {
 
@@ -51,12 +52,13 @@ extension URL {
 
 final class DownloadManager: NSObject {
 
-    fileprivate let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
-    fileprivate var backgroundSession: Foundation.URLSession!
-    fileprivate var downloadTasks: [String: URLSessionDownloadTask] = [:]
-    fileprivate let defaults = UserDefaults.standard
+    private let log = OSLog(subsystem: "WWDC", category: "DownloadManager")
+    private let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
+    private var backgroundSession: Foundation.URLSession!
+    private var downloadTasks: [String: URLSessionDownloadTask] = [:]
+    private let defaults = UserDefaults.standard
 
-    fileprivate var storage: Storage!
+    private var storage: Storage!
 
     static let shared: DownloadManager = DownloadManager()
 
@@ -117,7 +119,12 @@ final class DownloadManager: NSObject {
             NotificationCenter.default.post(name: .DownloadManagerDownloadPaused, object: url)
             return true
         }
-        print("VideoStore was asked to pause downloading URL \(url), but there's no task for that URL")
+
+        os_log("Unable to pause download of %{public}@ because there's no task for that URL",
+               log: log,
+               type: .error,
+               url)
+
         return false
     }
 
@@ -127,7 +134,12 @@ final class DownloadManager: NSObject {
             NotificationCenter.default.post(name: .DownloadManagerDownloadResumed, object: url)
             return true
         }
-        print("VideoStore was asked to resume downloading URL \(url), but there's no task for that URL")
+
+        os_log("Unable to resume download of %{public}@ because there's no task for that URL",
+               log: log,
+               type: .error,
+               url)
+
         return false
     }
 
@@ -138,7 +150,12 @@ final class DownloadManager: NSObject {
             NotificationCenter.default.post(name: Notification.Name.DownloadManagerDownloadCancelled, object: url)
             return true
         }
-        print("VideoStore was asked to cancel downloading URL \(url), but there's no task for that URL")
+
+        os_log("Unable to cancel download of %{public}@ because there's no task for that URL",
+               log: log,
+               type: .error,
+               url)
+
         return false
     }
 

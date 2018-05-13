@@ -22,7 +22,6 @@ public final class CloudKitHelper {
             }
 
             guard let subscriptions = subscriptions else {
-                NSLog("[LiveObserver] No subscriptions returned: nil value")
                 return
             }
 

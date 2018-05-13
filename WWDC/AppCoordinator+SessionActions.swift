@@ -12,6 +12,7 @@ import RxSwift
 import ConfCore
 import PlayerUI
 import EventKit
+import os.log
 
 extension AppCoordinator: SessionActionsViewControllerDelegate {
 
@@ -124,7 +125,10 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
                 do {
                     try eventStore.remove(storedEvent, span: .thisEvent, commit: true)
                 } catch let error as NSError {
-                    print("Failed to remove event from calender due to error: \(error)")
+                    os_log("Failed to remove event from calender: %{public}@",
+                           log: self.log,
+                           type: .error,
+                           String(describing: error))
                 }
             default:
                 break
@@ -144,8 +148,11 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
 
         do {
             try eventStore.save(event, span: .thisEvent, commit: true)
-        } catch let error as NSError {
-            print("Failed to add event to calender due to error: \(error)")
+        } catch {
+            os_log("Failed to add event to calendar: %{public}@",
+                   log: self.log,
+                   type: .error,
+                   String(describing: error))
         }
     }
 
