@@ -93,7 +93,7 @@ class StorageTests: XCTestCase {
 
         let session = Session()
 
-        session.identifier = "2014-415"
+        session.identifier = "wwdc2014-415"
         session.number = "415"
         session.summary = "Xcode bots provide a seamless way to continually build, analyze, and test your applications across many devices. See the Xcode team show how to set up and configure bots, review unit and performance testing data, and set up custom triggers and integration points."
         session.title = "Continuous Integration with Xcode 6"
@@ -102,7 +102,7 @@ class StorageTests: XCTestCase {
 
         let session2 = Session()
 
-        session2.identifier = "2014-206"
+        session2.identifier = "wwdc2014-206"
         session2.number = "206"
         session2.summary = "The modern WebKit framework enables developers to integrate web content into their native app experience with more features and fewer lines of code. Dive into the latest WebKit enhancements including modern Objective-C features such as blocks and explicit object types, advanced bridging between JavaScript and Objective-C, increased JavaScript performance via WebKit's super-fast JIT, and more—all delivered in an API unified for both iOS and OS X."
         session2.title = "Introducing the Modern WebKit API"
