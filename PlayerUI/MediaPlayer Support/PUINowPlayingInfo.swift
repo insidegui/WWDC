@@ -35,10 +35,8 @@ extension PUINowPlayingInfo {
             MPMediaItemPropertyArtist: artist
         ]
 
-        if #available(OSX 10.12.2, *) {
-            info[MPNowPlayingInfoPropertyPlaybackProgress] = progress
-            info[MPNowPlayingInfoPropertyIsLiveStream] = isLive
-        }
+        info[MPNowPlayingInfoPropertyPlaybackProgress] = progress
+        info[MPNowPlayingInfoPropertyIsLiveStream] = isLive
 
         if #available(macOS 10.13.2, *), let image = self.image {
             info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { _ in image })

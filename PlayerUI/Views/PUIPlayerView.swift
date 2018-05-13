@@ -32,6 +32,8 @@ public final class PUIPlayerView: NSView {
             } else {
                 externalStatusController.view.isHidden = true
             }
+
+            invalidateTouchBar()
         }
     }
 
@@ -156,6 +158,8 @@ public final class PUIPlayerView: NSView {
 
             updatePlaybackSpeedState()
             updateSelectedMenuItem(forPlaybackSpeed: playbackSpeed)
+
+            invalidateTouchBar()
         }
     }
 
@@ -244,7 +248,7 @@ public final class PUIPlayerView: NSView {
         }
 
         setupNowPlayingCoordinatorIfSupported()
-        setupRemoteCommandCoordinatorIfSupported()
+        setupRemoteCommandCoordinator()
     }
 
     private func teardown(player oldValue: AVPlayer) {
@@ -424,7 +428,6 @@ public final class PUIPlayerView: NSView {
     private var nowPlayingCoordinator: PUINowPlayingInfoCoordinator?
 
     private func setupNowPlayingCoordinatorIfSupported() {
-        guard #available(macOS 10.12.2, *) else { return }
         guard let player = player else { return }
 
         nowPlayingCoordinator = PUINowPlayingInfoCoordinator(player: player)
@@ -435,9 +438,7 @@ public final class PUIPlayerView: NSView {
 
     private var remoteCommandCoordinator: PUIRemoteCommandCoordinator?
 
-    private func setupRemoteCommandCoordinatorIfSupported() {
-        guard #available(macOS 10.12.2, *) else { return }
-
+    private func setupRemoteCommandCoordinator() {
         remoteCommandCoordinator = PUIRemoteCommandCoordinator()
 
         remoteCommandCoordinator?.pauseHandler = { [weak self] in
@@ -453,10 +454,10 @@ public final class PUIPlayerView: NSView {
             self?.togglePlaying(nil)
         }
         remoteCommandCoordinator?.nextTrackHandler = { [weak self] in
-            self?.goForwardInTime15(nil)
+            self?.goForwardInTime(nil)
         }
         remoteCommandCoordinator?.previousTrackHandler = { [weak self] in
-            self?.goBackInTime15(nil)
+            self?.goBackInTime(nil)
         }
         remoteCommandCoordinator?.likeHandler = { [weak self] in
             guard let `self` = self else { return }
@@ -567,7 +568,7 @@ public final class PUIPlayerView: NSView {
     private lazy var previousAnnotationButton: PUIButton = {
         let b = PUIButton(frame: .zero)
 
-        b.image = .PUIPreviousBookmark
+        b.image = .PUIPreviousAnnotation
         b.target = self
         b.action = #selector(previousAnnotation)
         b.toolTip = "Go to previous bookmark"
@@ -578,7 +579,7 @@ public final class PUIPlayerView: NSView {
     private lazy var nextAnnotationButton: PUIButton = {
         let b = PUIButton(frame: .zero)
 
-        b.image = .PUINextBookmark
+        b.image = .PUINextAnnotation
         b.target = self
         b.action = #selector(nextAnnotation)
         b.toolTip = "Go to next bookmark"
@@ -624,7 +625,7 @@ public final class PUIPlayerView: NSView {
     private lazy var addAnnotationButton: PUIButton = {
         let b = PUIButton(frame: .zero)
 
-        b.image = .PUIBookmark
+        b.image = .PUIAnnotation
         b.target = self
         b.action = #selector(addAnnotation)
         b.toolTip = "Add bookmark"
@@ -764,6 +765,28 @@ public final class PUIPlayerView: NSView {
         updateExtrasMenuPosition()
     }
 
+    var isConfiguredForBackAndForward30s = false {
+        didSet {
+            invalidateTouchBar()
+        }
+    }
+
+    var goBackInTimeImage: NSImage {
+        return isConfiguredForBackAndForward30s ? .PUIBack30s : .PUIBack15s
+    }
+
+    var goBackInTimeDescription: String {
+        return isConfiguredForBackAndForward30s ? "Go back 30s" : "Go back 15s"
+    }
+
+    var goForwardInTimeImage: NSImage {
+        return isConfiguredForBackAndForward30s ? .PUIForward30s : .PUIForward15s
+    }
+
+    var goForwardInTimeDescription: String {
+        return isConfiguredForBackAndForward30s ? "Go forward 30s" : "Go forward 15s"
+    }
+
     private func configureWithAppearanceFromDelegate() {
         guard let d = appearanceDelegate else { return }
 
@@ -780,13 +803,13 @@ public final class PUIPlayerView: NSView {
         backButton.isHidden = disableBackAndForward
         forwardButton.isHidden = disableBackAndForward
 
-        let skipBy30 = d.playerViewShouldShowBackAndForward30SecondsButtons(self)
-        backButton.image = skipBy30 ? .PUIBack30s : .PUIBack15s
-        backButton.action = skipBy30 ? #selector(goBackInTime30) : #selector(goBackInTime15)
-        backButton.toolTip = skipBy30 ? "Go back 30s" : "Go back 15s"
-        forwardButton.image = skipBy30 ? .PUIForward30s : .PUIForward15s
-        forwardButton.action = skipBy30 ? #selector(goForwardInTime30) : #selector(goForwardInTime15)
-        forwardButton.toolTip = skipBy30 ? "Go forward 30s" : "Go forward 15s"
+        isConfiguredForBackAndForward30s = d.playerViewShouldShowBackAndForward30SecondsButtons(self)
+        backButton.image = goBackInTimeImage
+        backButton.action = #selector(goBackInTime)
+        backButton.toolTip = goBackInTimeDescription
+        forwardButton.image = goForwardInTimeImage
+        forwardButton.action = #selector(goForwardInTime)
+        forwardButton.toolTip = goForwardInTimeDescription
 
         updateExternalPlaybackControlsAvailability()
 
@@ -878,6 +901,8 @@ public final class PUIPlayerView: NSView {
         } else {
             play(sender)
         }
+
+        invalidateTouchBar()
     }
 
     @IBAction public func pause(_ sender: Any?) {
@@ -906,6 +931,22 @@ public final class PUIPlayerView: NSView {
         guard let annotation = firstAnnotationAfterCurrentTime else { return }
 
         seek(to: annotation)
+    }
+
+    @IBAction public func goBackInTime(_ sender: Any?) {
+        if isConfiguredForBackAndForward30s {
+            goBackInTime30(sender)
+        } else {
+            goBackInTime15(sender)
+        }
+    }
+
+    @IBAction public func goForwardInTime(_ sender: Any?) {
+        if isConfiguredForBackAndForward30s {
+            goForwardInTime30(sender)
+        } else {
+            goForwardInTime15(sender)
+        }
     }
 
     @IBAction public func goBackInTime15(_ sender: Any?) {
@@ -971,6 +1012,10 @@ public final class PUIPlayerView: NSView {
         } else {
             player?.seek(to: time)
         }
+    }
+
+    private func invalidateTouchBar(destructive: Bool = false) {
+        touchBarController.invalidate(destructive)
     }
 
     // MARK: - Subtitles
@@ -1088,6 +1133,16 @@ public final class PUIPlayerView: NSView {
         }
 
         keyDownEventMonitor = nil
+    }
+
+    // MARK: - Touch Bar
+
+    private lazy var touchBarController: PUITouchBarController = {
+        return PUITouchBarController(playerView: self)
+    }()
+
+    public override func makeTouchBar() -> NSTouchBar? {
+        return touchBarController.makeTouchBar()
     }
 
     // MARK: - PiP Support
@@ -1222,10 +1277,11 @@ public final class PUIPlayerView: NSView {
         if window != nil {
             lastKnownWindow = window
             startMonitoringKeyEvents()
+            invalidateTouchBar(destructive: true)
         }
     }
 
-    private var windowIsInFullScreen: Bool {
+    var windowIsInFullScreen: Bool {
         guard let window = window else { return false }
 
         return window.styleMask.contains(.fullScreen)

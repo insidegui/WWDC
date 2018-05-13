@@ -34,7 +34,7 @@ extension NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "back30s"))!
     }
 
-    static var PUIBookmark: NSImage {
+    static var PUIAnnotation: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "bookmark"))!
     }
 
@@ -50,16 +50,24 @@ extension NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "fullscreen"))!
     }
 
-    static var PUINextBookmark: NSImage {
+    static var PUIFullScreenExit: NSImage {
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "fullscreenExit"))!
+    }
+
+    static var PUINextAnnotation: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "nextbookmark"))!
     }
 
-    static var PUIPreviousBookmark: NSImage {
+    static var PUIPreviousAnnotation: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "prevbookmark"))!
     }
 
     static var PUIPictureInPicture: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "pip"))!
+    }
+
+    static var PUIExitPictureInPicture: NSImage {
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "pipExit"))!
     }
 
     static var PUIPictureInPictureLarge: NSImage {
@@ -96,6 +104,49 @@ extension NSImage {
 
     static var PUISpeedTwo: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "speed-2"))!
+    }
+
+}
+
+// MARK: - Touch Bar
+
+extension NSImage {
+
+    func touchBarImage(with scale: CGFloat) -> NSImage {
+        let image = PUITouchBarImageCache.shared.touchBarImage(for: self, with: scale)
+
+        image.isTemplate = true
+
+        return image
+    }
+
+}
+
+private final class PUITouchBarImageCache {
+
+    static let shared = PUITouchBarImageCache()
+
+    private var cachedImages: [NSImage.Name: NSImage] = [:]
+
+    func touchBarImage(for inputImage: NSImage, with scale: CGFloat) -> NSImage {
+        if let name = inputImage.name(), let cachedImage = cachedImages[name] { return cachedImage }
+
+        let newSize = NSSize(width: round(inputImage.size.width * scale),
+                             height: round(inputImage.size.height * scale))
+
+        let outputImage = NSImage(size: newSize)
+        outputImage.lockFocus()
+        NSGraphicsContext.current?.imageInterpolation = .high
+
+        inputImage.draw(in: NSRect(origin: .zero, size: newSize))
+
+        outputImage.unlockFocus()
+
+        if let name = inputImage.name() {
+            cachedImages[name] = outputImage
+        }
+
+        return outputImage
     }
 
 }
