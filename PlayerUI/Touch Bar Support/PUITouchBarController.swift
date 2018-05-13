@@ -12,6 +12,11 @@ final class PUITouchBarController: NSObject {
 
     weak var playerView: PUIPlayerView?
 
+    private var touchBarContainer: NSWindowController? {
+        // The TouchBar is actually held by the window controller
+        return playerView?.window?.windowController
+    }
+
     init(playerView: PUIPlayerView) {
         self.playerView = playerView
 
@@ -45,6 +50,12 @@ final class PUITouchBarController: NSObject {
             .togglePictureInPicture,
             .toggleFullscreen
         ]
+
+        if playerView?.windowIsInFullScreen == true {
+             bar.escapeKeyReplacementItemIdentifier = .exitFullscreen
+        } else {
+            bar.escapeKeyReplacementItemIdentifier = nil
+        }
 
         return bar
     }
@@ -98,19 +109,25 @@ final class PUITouchBarController: NSObject {
         }
     }
 
-    func invalidate() {
-        NSObject.cancelPreviousPerformRequests(withTarget: self)
-
-        perform(#selector(doInvalidate), with: nil, afterDelay: 0)
+    private var exitFullscreenImage: NSImage {
+        return NSImage.PUIFullScreenExit.touchBarImage(with: 0.5)
     }
 
-    @objc private func doInvalidate() {
+    func invalidate(_ destructive: Bool = false) {
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+
+        perform(#selector(doInvalidate), with: destructive, afterDelay: 0)
+    }
+
+    @objc private func doInvalidate(_ destructive: Bool) {
         playPauseButton.image = playPauseButtonImage
         backButton.image = goBackImage
         forwardButton.image = goForwardImage
         speedButton.image = playbackSpeed.icon
         togglePictureInPictureButton.image = pipImage
-        toggleFullscreenButton.isHidden = playerView?.isInFullScreenPlayerWindow == true
+        toggleFullscreenButton.isHidden = playerView?.windowIsInFullScreen == true
+
+        if destructive { touchBarContainer?.touchBar = nil }
     }
 
     // MARK: - Controls
@@ -151,6 +168,10 @@ final class PUITouchBarController: NSObject {
         return makeTouchBarButton(image: .PUIFullScreen, action: #selector(PUIPlayerView.toggleFullscreen))
     }()
 
+    private lazy var exitFullscreenButton: NSButton = {
+        return makeTouchBarButton(image: exitFullscreenImage, action: #selector(PUIPlayerView.toggleFullscreen))
+    }()
+
 }
 
 // MARK: - Touch Bar Delegate
@@ -179,6 +200,8 @@ extension PUITouchBarController: NSTouchBarDelegate {
             return makeTouchBarButtonItem(with: identifier, button: togglePictureInPictureButton)
         case .toggleFullscreen:
             return makeTouchBarButtonItem(with: identifier, button: toggleFullscreenButton)
+        case .exitFullscreen:
+            return makeTouchBarButtonItem(with: identifier, button: exitFullscreenButton)
         default: return nil
         }
 

@@ -23,4 +23,5 @@ extension NSTouchBarItem.Identifier {
     static let addAnnotation = NSTouchBarItem.Identifier("Add Annotation")
     static let togglePictureInPicture = NSTouchBarItem.Identifier("Toggle PiP")
     static let toggleFullscreen = NSTouchBarItem.Identifier("Toggle Fullscreen")
+    static let exitFullscreen = NSTouchBarItem.Identifier("Exit Fullscreen")
 }

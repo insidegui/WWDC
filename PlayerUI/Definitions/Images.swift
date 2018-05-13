@@ -50,6 +50,10 @@ extension NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "fullscreen"))!
     }
 
+    static var PUIFullScreenExit: NSImage {
+        return playerBundle.image(forResource: NSImage.Name(rawValue: "fullscreenExit"))!
+    }
+
     static var PUINextAnnotation: NSImage {
         return playerBundle.image(forResource: NSImage.Name(rawValue: "nextbookmark"))!
     }

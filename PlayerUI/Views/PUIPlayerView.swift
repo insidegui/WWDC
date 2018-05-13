@@ -1011,8 +1011,8 @@ public final class PUIPlayerView: NSView {
         }
     }
 
-    private func invalidateTouchBar() {
-        touchBarController.invalidate()
+    private func invalidateTouchBar(destructive: Bool = false) {
+        touchBarController.invalidate(destructive)
     }
 
     // MARK: - Subtitles
@@ -1274,10 +1274,11 @@ public final class PUIPlayerView: NSView {
         if window != nil {
             lastKnownWindow = window
             startMonitoringKeyEvents()
+            invalidateTouchBar(destructive: true)
         }
     }
 
-    private var windowIsInFullScreen: Bool {
+    var windowIsInFullScreen: Bool {
         guard let window = window else { return false }
 
         return window.styleMask.contains(.fullScreen)
@@ -1286,13 +1287,11 @@ public final class PUIPlayerView: NSView {
     @objc private func windowWillEnterFullScreen() {
         fullScreenButton.isHidden = true
         updateExtrasMenuPosition()
-        invalidateTouchBar()
     }
 
     @objc private func windowWillExitFullScreen() {
         fullScreenButton.isHidden = false
         updateExtrasMenuPosition()
-        invalidateTouchBar()
     }
 
     // MARK: - Events
