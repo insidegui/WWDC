@@ -18,9 +18,17 @@ enum AssetKeys: String, JSONSubscriptType {
 }
 
 private enum SessionKeys: String, JSONSubscriptType {
-    case id, year, title, platforms, description, startTime, eventContentId, eventId, media, webPermalink, staticContentId
+    case id, year, title, platforms, description, startTime, eventContentId, eventId, media, webPermalink, staticContentId, related
 
     case track = "trackId"
+
+    var jsonKey: JSONKey {
+        return JSONKey.key(rawValue)
+    }
+}
+
+private enum RelatedKeys: String, JSONSubscriptType {
+    case activities, resources
 
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -112,6 +120,21 @@ final class SessionsJSONAdapter: Adapter {
             slidesAsset.sessionId = id
 
             session.assets.append(slidesAsset)
+        }
+
+        if let resourcesJSON = input[SessionKeys.related][RelatedKeys.resources].array {
+            if case .success(let resources) = SessionRelatedJSONAdapter().adapt(resourcesJSON) {
+                session.related.append(contentsOf: resources)
+            }
+        }
+
+        if let activitiesJSON = input[SessionKeys.related][RelatedKeys.activities].array {
+            session.related.append(contentsOf: activitiesJSON.compactMap {
+                let resource = RelatedResource()
+                resource.identifier = $0.string!
+                resource.type = RelatedResourceType.session.rawValue
+                return resource
+            })
         }
 
         if let permalink = input[SessionKeys.webPermalink].string {

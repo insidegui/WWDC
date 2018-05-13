@@ -13,6 +13,7 @@ public struct ContentsResponse {
     public let events: [Event]
     public let rooms: [Room]
     public let tracks: [Track]
+    public let resources: [RelatedResource]
     public let instances: [SessionInstance]
     public let sessions: [Session]
 

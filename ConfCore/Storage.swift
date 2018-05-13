@@ -11,6 +11,7 @@ import RealmSwift
 import RxSwift
 import RxRealm
 import RxCocoa
+import os.log
 
 public final class Storage {
 
@@ -18,6 +19,7 @@ public final class Storage {
     public let realm: Realm
 
     let disposeBag = DisposeBag()
+    private let log = OSLog(subsystem: "ConfCore", category: "Storage")
 
     public init(_ configuration: Realm.Configuration) throws {
         var config = configuration
@@ -92,8 +94,15 @@ public final class Storage {
         }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
-            // Merge existing session data, preserving user-defined data
             sessionsResponse.sessions.forEach { newSession in
+                // Replace any "unknown" resources with their full data
+                newSession.related.filter({$0.type == RelatedResourceType.unknown.rawValue}).forEach { unknownResource in
+                    if let fullResource = sessionsResponse.resources.filter({$0.identifier == unknownResource.identifier}).first {
+                        newSession.related.replace(index: newSession.related.index(of: unknownResource)!, object: fullResource)
+                    }
+                }
+
+                // Merge existing session data, preserving user-defined data
                 if let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
                     existingSession.merge(with: newSession, in: backgroundRealm)
                 } else {
@@ -172,8 +181,16 @@ public final class Storage {
                 }
             }
 
-            // Create schedule view
+            // Associate session resources with Session objects in database
+            backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
+                if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
+                    resource.session = session
+                } else {
+                    os_log("Expected session to match related activity identifier: %{resource.identifier}", log: self.log, type: .info)
+                }
+            }
 
+            // Create schedule view
             backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
 
             let instances = backgroundRealm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)

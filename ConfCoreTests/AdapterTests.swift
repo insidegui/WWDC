@@ -251,7 +251,7 @@ class AdapterTests: XCTestCase {
         let json = getJson(from: "contents")
 
         guard let sessionsArray = json["contents"].array else {
-            XCTFail("Couldn't find an array of sessions in videos.json")
+            XCTFail("Couldn't find an array of sessions in contents.json")
             fatalError()
         }
 
@@ -267,6 +267,9 @@ class AdapterTests: XCTestCase {
             XCTAssertEqual(sessions[0].number, "820")
             XCTAssertEqual(sessions[0].summary, "iMessage Apps help people easily create and share content, play games, and collaborate with friends without needing to leave the conversation. Explore how you can design iMessage apps and sticker packs that are perfectly suited for a deeply social context.")
             XCTAssertEqual(sessions[0].focuses[0].name, "iOS")
+            XCTAssertEqual(sessions[0].related.count, 1)
+            XCTAssertEqual(sessions[0].related[0].identifier, "17")
+            XCTAssertEqual(sessions[0].related[0].type, RelatedResourceType.unknown.rawValue)
         }
     }
 

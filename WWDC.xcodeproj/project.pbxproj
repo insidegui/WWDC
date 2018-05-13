@@ -56,7 +56,6 @@
 		DD4DED6B1ED6605D00624EAF /* LoggingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */; };
 		DD54CD101E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */; };
 		DD54CD121E4AB95F000BF5F2 /* FocusesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD111E4AB95F000BF5F2 /* FocusesJSONAdapter.swift */; };
-		DD54CD141E4AC21F000BF5F2 /* SessionAssetsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD54CD131E4AC21F000BF5F2 /* SessionAssetsAdapter.swift */; };
 		DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD59106F1ECA0C3B003C32A4 /* CloudKit.framework */; };
 		DD5DEC1E1E4AA6B800426FA6 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5DEC1D1E4AA6B800426FA6 /* Result.swift */; };
 		DD5DEC201E4AA6F800426FA6 /* Adapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5DEC1F1E4AA6F800426FA6 /* Adapter.swift */; };
@@ -247,6 +246,10 @@
 		DDF722021ECA26F70054C503 /* CMSCloudKitUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF722011ECA26F70054C503 /* CMSCloudKitUtil.swift */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
+		F74CDA12207AB70A00A16C97 /* SessionAssetsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74CDA11207AB70A00A16C97 /* SessionAssetsAdapter.swift */; };
+		F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */; };
+		F7EBDF222067FF1700EF6460 /* ResourcesJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF212067FF1700EF6460 /* ResourcesJSONAdapter.swift */; };
+		F7EBDF2A2068008800EF6460 /* SessionRelatedJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF292068008800EF6460 /* SessionRelatedJSONAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -407,7 +410,6 @@
 		DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingHelper.swift; sourceTree = "<group>"; };
 		DD54CD0F1E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeywordsJSONAdapter.swift; sourceTree = "<group>"; };
 		DD54CD111E4AB95F000BF5F2 /* FocusesJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusesJSONAdapter.swift; sourceTree = "<group>"; };
-		DD54CD131E4AC21F000BF5F2 /* SessionAssetsAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionAssetsAdapter.swift; sourceTree = "<group>"; };
 		DD59106E1ECA0C2F003C32A4 /* WWDC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WWDC.entitlements; sourceTree = "<group>"; };
 		DD59106F1ECA0C3B003C32A4 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		DD5DEC1D1E4AA6B800426FA6 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -598,6 +600,10 @@
 		DDF722011ECA26F70054C503 /* CMSCloudKitUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSCloudKitUtil.swift; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
+		F74CDA11207AB70A00A16C97 /* SessionAssetsAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionAssetsAdapter.swift; sourceTree = "<group>"; };
+		F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedResource.swift; sourceTree = "<group>"; };
+		F7EBDF212067FF1700EF6460 /* ResourcesJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesJSONAdapter.swift; sourceTree = "<group>"; };
+		F7EBDF292068008800EF6460 /* SessionRelatedJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRelatedJSONAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -976,6 +982,7 @@
 				DD65FD521E48A06A0054DD35 /* NewsItem.swift */,
 				DD65FD581E48A0C90054DD35 /* Photo.swift */,
 				DD65FD601E48A86A0054DD35 /* PhotoRepresentation.swift */,
+				F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */,
 			);
 			name = Apple;
 			sourceTree = "<group>";
@@ -1122,7 +1129,6 @@
 			isa = PBXGroup;
 			children = (
 				DD5DEC211E4AA7F100426FA6 /* EventsJSONAdapter.swift */,
-				DD54CD131E4AC21F000BF5F2 /* SessionAssetsAdapter.swift */,
 				DD6477301E55231A00386D93 /* LiveVideosAdapter.swift */,
 				DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */,
 				DDD3797C1E4AB655005FE876 /* TracksJSONAdapter.swift */,
@@ -1132,6 +1138,9 @@
 				DD0353481E5545B300D5E343 /* SessionInstancesJSONAdapter.swift */,
 				DD3C4D281E5622950093BBD0 /* PhotosJSONAdapter.swift */,
 				DD3C4D2A1E564AE80093BBD0 /* NewsItemsJSONAdapter.swift */,
+				F7EBDF212067FF1700EF6460 /* ResourcesJSONAdapter.swift */,
+				F7EBDF292068008800EF6460 /* SessionRelatedJSONAdapter.swift */,
+				F74CDA11207AB70A00A16C97 /* SessionAssetsAdapter.swift */,
 			);
 			name = Apple;
 			sourceTree = "<group>";
@@ -1952,6 +1961,7 @@
 				DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */,
 				DDEDFCF81EDA33C3002477C8 /* CloudKitHelper.swift in Sources */,
 				DD65FD5D1E48A11F0054DD35 /* Track.swift in Sources */,
+				F74CDA12207AB70A00A16C97 /* SessionAssetsAdapter.swift in Sources */,
 				DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */,
 				DDAE7C631E5C7E7800CEA205 /* ScheduleResponse.swift in Sources */,
 				DD5DEC201E4AA6F800426FA6 /* Adapter.swift in Sources */,
@@ -1960,8 +1970,8 @@
 				DD65FD6D1E48BE270054DD35 /* Bookmark.swift in Sources */,
 				DD5DEC1E1E4AA6B800426FA6 /* Result.swift in Sources */,
 				DD65FD5B1E48A1080054DD35 /* Focus.swift in Sources */,
-				DD54CD141E4AC21F000BF5F2 /* SessionAssetsAdapter.swift in Sources */,
 				DDAE7C581E5C629800CEA205 /* AppleAPIClient.swift in Sources */,
+				F7EBDF222067FF1700EF6460 /* ResourcesJSONAdapter.swift in Sources */,
 				DD3C4D291E5622950093BBD0 /* PhotosJSONAdapter.swift in Sources */,
 				DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */,
 				DD0353491E5545B300D5E343 /* SessionInstancesJSONAdapter.swift in Sources */,
@@ -1970,6 +1980,8 @@
 				DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */,
 				DD65FD551E48A0A70054DD35 /* Room.swift in Sources */,
 				DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */,
+				F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */,
+				F7EBDF2A2068008800EF6460 /* SessionRelatedJSONAdapter.swift in Sources */,
 				DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */,
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,
 				DDD930731ED52B2900D61BE3 /* Download.swift in Sources */,

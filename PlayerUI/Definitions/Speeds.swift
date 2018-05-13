@@ -20,7 +20,7 @@ public enum PUIPlaybackSpeed: Float {
     }
 
     static var supportedPlaybackRates: [NSNumber] {
-        return all.map { NSNumber(value : $0.rawValue) }
+        return all.map { NSNumber(value: $0.rawValue) }
     }
 
     var icon: NSImage {

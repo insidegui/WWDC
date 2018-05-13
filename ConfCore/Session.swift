@@ -41,6 +41,9 @@ public class Session: Object {
     /// The session's assets (videos, slides, links)
     public let assets = List<SessionAsset>()
 
+    // The session's "related" resources -- other sessions, documentation, guides and sample code
+    public var related = List<RelatedResource>()
+
     /// Whether this session is downloaded
     @objc public dynamic var isDownloaded = false
 
@@ -129,8 +132,20 @@ public class Session: Object {
         let assets = other.assets.filter { otherAsset in
             return !self.assets.contains(where: { $0.identifier == otherAsset.identifier })
         }
-
         self.assets.append(objectsIn: assets)
+
+        other.related.forEach { newRelated in
+            let effectiveRelated: RelatedResource
+
+            if let existingResource = realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) {
+                effectiveRelated = existingResource
+            } else {
+                effectiveRelated = newRelated
+            }
+
+            guard !related.contains(where: { $0.identifier == effectiveRelated.identifier }) else { return }
+            related.append(effectiveRelated)
+        }
 
         other.focuses.forEach { newFocus in
             let effectiveFocus: Focus

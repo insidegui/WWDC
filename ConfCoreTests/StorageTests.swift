@@ -36,17 +36,17 @@ class StorageTests: XCTestCase {
 
         let event = realm.objects(Event.self).first
         XCTAssertNotNil(event)
-        XCTAssertEqual(event?.sessions.count, 1)
+        XCTAssertEqual(event?.sessions.count, 2)
         XCTAssertEqual(event?.sessions.first?.event.first?.name, event?.name)
 
         let track = realm.objects(Track.self).first
         XCTAssertNotNil(track)
-        XCTAssertEqual(track?.sessions.count, 1)
+        XCTAssertEqual(track?.sessions.count, 2)
         XCTAssertEqual(track?.sessions.first?.track.first?.name, track?.name)
 
         let focus = realm.objects(Focus.self).first
         XCTAssertNotNil(focus)
-        XCTAssertEqual(focus?.sessions.count, 1)
+        XCTAssertEqual(focus?.sessions.count, 2)
         XCTAssertEqual(focus?.sessions.first?.focuses.first?.name, focus?.name)
 
         let room = realm.objects(Room.self).first
@@ -63,6 +63,10 @@ class StorageTests: XCTestCase {
         XCTAssertEqual(session?.track.count, 1)
         XCTAssertEqual(session?.event.count, 1)
         XCTAssertNotNil(session?.transcript)
+        XCTAssertEqual(session?.related.count, 1)
+        XCTAssertEqual(session?.related[0].identifier, "wwdc2014-206")
+        XCTAssertEqual(session?.related[0].type, "WWDCSessionResourceTypeSession")
+        XCTAssertNotNil(session?.related[0].session)
     }
 
     private func makeContentsResponse() -> ContentsResponse {
@@ -89,12 +93,21 @@ class StorageTests: XCTestCase {
 
         let session = Session()
 
-        session.identifier = "wwdc2014-206"
-        session.number = "206"
-        session.summary = "The modern WebKit framework enables developers to integrate web content into their native app experience with more features and fewer lines of code. Dive into the latest WebKit enhancements including modern Objective-C features such as blocks and explicit object types, advanced bridging between JavaScript and Objective-C, increased JavaScript performance via WebKit's super-fast JIT, and more—all delivered in an API unified for both iOS and OS X."
-        session.title = "Introducing the Modern WebKit API"
+        session.identifier = "wwdc2014-415"
+        session.number = "415"
+        session.summary = "Xcode bots provide a seamless way to continually build, analyze, and test your applications across many devices. See the Xcode team show how to set up and configure bots, review unit and performance testing data, and set up custom triggers and integration points."
+        session.title = "Continuous Integration with Xcode 6"
         session.eventIdentifier = event.identifier
         session.focuses.append(focus)
+
+        let session2 = Session()
+
+        session2.identifier = "wwdc2014-206"
+        session2.number = "206"
+        session2.summary = "The modern WebKit framework enables developers to integrate web content into their native app experience with more features and fewer lines of code. Dive into the latest WebKit enhancements including modern Objective-C features such as blocks and explicit object types, advanced bridging between JavaScript and Objective-C, increased JavaScript performance via WebKit's super-fast JIT, and more—all delivered in an API unified for both iOS and OS X."
+        session2.title = "Introducing the Modern WebKit API"
+        session2.eventIdentifier = event.identifier
+        session2.focuses.append(focus)
 
         let asset = SessionAsset()
         asset.assetType = .hdVideo
@@ -148,11 +161,22 @@ class StorageTests: XCTestCase {
         session.assets.append(asset)
         session.assets.append(asset2)
 
+        let relatedSessionResource = RelatedResource()
+        relatedSessionResource.identifier = "wwdc2014-206"
+        relatedSessionResource.type = RelatedResourceType.session.rawValue
+
+        session.related.append(relatedSessionResource)
+
+        let relatedResource = RelatedResource()
+        relatedResource.identifier = "wwdc2014-206"
+        relatedResource.type = "WWDCSessionResourceTypeSession"
+
         return ContentsResponse(
             events: [event],
             rooms: [room],
             tracks: [track],
+            resources: [relatedResource],
             instances: [instance],
-            sessions: [session])
+            sessions: [session, session2])
     }
 }
