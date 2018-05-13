@@ -134,11 +134,18 @@ public class Session: Object {
         }
         self.assets.append(objectsIn: assets)
 
-        // merge related
-        let related = other.related.filter { otherRelated in
-            return !self.related.contains(where: { $0.identifier == otherRelated.identifier })
+        other.related.forEach { newRelated in
+            let effectiveRelated: RelatedResource
+
+            if let existingResource = realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) {
+                effectiveRelated = existingResource
+            } else {
+                effectiveRelated = newRelated
+            }
+
+            guard !related.contains(where: { $0.identifier == effectiveRelated.identifier }) else { return }
+            related.append(effectiveRelated)
         }
-        self.related.append(objectsIn: related)
 
         other.focuses.forEach { newFocus in
             let effectiveFocus: Focus

@@ -129,7 +129,6 @@ public final class Storage {
             backgroundRealm.add(sessionsResponse.rooms, update: true)
             backgroundRealm.add(sessionsResponse.tracks, update: true)
             backgroundRealm.add(sessionsResponse.events, update: true)
-            backgroundRealm.add(sessionsResponse.resources, update: true)
 
             // add instances to rooms
             backgroundRealm.objects(Room.self).forEach { room in
