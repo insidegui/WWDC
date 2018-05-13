@@ -11,6 +11,7 @@ import RealmSwift
 import RxSwift
 import RxRealm
 import RxCocoa
+import os.log
 
 public final class Storage {
 
@@ -18,6 +19,7 @@ public final class Storage {
     public let realm: Realm
 
     let disposeBag = DisposeBag()
+    private let log = OSLog(subsystem: "ConfCore", category: "Storage")
 
     public init(_ configuration: Realm.Configuration) throws {
         var config = configuration
@@ -184,7 +186,7 @@ public final class Storage {
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
                     resource.session = session
                 } else {
-                    print("Expected session to match related activity identifier: \(resource.identifier)")
+                    os_log("Expected session to match related activity identifier: %{resource.identifier}", log: self.log, type: .info)
                 }
             }
 
