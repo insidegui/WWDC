@@ -4,6 +4,7 @@ GEM
     rouge (2.0.7)
     xcpretty (0.2.8)
       rouge (~> 2.0.7)
+    xcpretty-travis-formatter (1.0.0)
 
 PLATFORMS
   ruby
