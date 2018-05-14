@@ -4,5 +4,7 @@ script:
   - xcodebuild -version
   - carthage version
   - swiftlint version
+  - echo 'Bootstrap' && echo -en 'travis_fold:start:Bootstrap\\r'
   - "./bootstrap.sh"
+  - echo -en 'travis_fold:start:Bootstrap\\r'
   - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty -f `xcpretty-travis-formatter`
