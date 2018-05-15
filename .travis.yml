@@ -8,6 +8,7 @@ script:
 - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty -f `xcpretty-travis-formatter`
 notifications:
   slack:
+    on_pull_requests: true
     secure: m3twEsCyuhGrplaE28Ec+Da2CSLkBMaJT0LXUyGyteAzH1iAqR/sKfjq29C29aETQHSC47UuYMCdRt+KLEF6wYfkDZbsj42J9Jq/v/Tryfjz4WuNfwYbG6wScp8RNGkmOJwAft+v86v6L7g1CTP2syiynlkGoKoPaOQTgBqkvkiT6piAkb0qQcDCEqxhKHM5Qa+nwiAjjkEyHEjoGmK8dpqH05HoC7+tugGNydnl6us1DsOhwcyJtH4TgVLaxZ06tu0C6/HF8XPAh7FuH0qm3OCHBMqg3OHqLQuGT7gLkmamXvPM9vRpgKM0i+9ctj0IPukq4xAua6j9cZPfZ3Ywhi4Id6GCvi8KSn1TWSWzNETkhT9lgH7jeNATF87xRiHAIPT2rJOCDT+7qt1oNOTSSr0XhiB0jXL5Aj4r3cjJd8J6Dq8T/NwKSVUcGt1rPeCCsDko7LpRUR27muYs8v68GjnXIOwUBob2fcL42GElbdPEdkHYFbI6KZrT83iJYkjF8F/mdgwW0Q+6wR01gCO+bhH4PFX2BQV6+P8tUtNSlwkwvMtOnfBUzJpEhAO8DFT+eZeJ2bsgeLQdS3f3I6BuSQMAF/xDhn+bTbzIkxED1utLDhqDwtSSguv4gFpeM66JQd7X6q9uVzgM55TlwRa0dif9CMaEih7zlwXEghxptZU=
     template:
       - "%{result}: Build <%{build_url}|#%{build_number}> (<%{compare_url}|`%{commit}`>) on %{branch} in PR <%{pull_request_url}|#%{pull_request_number}> by %{author}"
