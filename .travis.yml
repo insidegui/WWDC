@@ -1,8 +1,8 @@
 os: osx
 osx_image: xcode9.3
 script:
-- xcodebuild -version
-- carthage version
-- swiftlint version
-- "./bootstrap.sh"
-- set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty -f `xcpretty-travis-formatter`
+  - xcodebuild -version
+  - carthage version
+  - swiftlint version
+  - "./bootstrap.sh"
+  - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty -f `xcpretty-travis-formatter`
