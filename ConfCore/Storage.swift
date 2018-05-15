@@ -190,7 +190,7 @@ public final class Storage {
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
                     resource.session = session
                 } else {
-                    os_log("Expected session to match related activity identifier: %{resource.identifier}", log: self.log, type: .info)
+                    os_log("Expected session to match related activity identifier: %{public}@", log: self.log, type: .info, String(describing: resource.identifier))
                 }
             }
 
