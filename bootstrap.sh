@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ ${CI} ]]; then
+    echo -en '\033[33;1mBootstrap\033[0m travis_fold:start:bootstrap\\r'
+fi
 
 lessThanOrEqual() {
     [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
@@ -45,6 +48,7 @@ fi
 if [[ ${CI} ]]; then
     echo "Bootstrapping in CI mode"
     set -o pipefail && env "NSUnbufferedIO=YES" carthage bootstrap --verbose --platform macOS | xcpretty -f `xcpretty-travis-formatter`
+    echo 'travis_fold:end:bootstrap\n'
 else
     carthage bootstrap --platform macOS
 fi
