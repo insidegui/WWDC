@@ -6,9 +6,3 @@ script:
 - swiftlint version
 - "./bootstrap.sh"
 - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty -f `xcpretty-travis-formatter`
-notifications:
-  slack:
-    on_pull_requests: true
-    secure: "GMfJ28iZVZwT/287GDU0ANW2b+fm01gO8d0fMbBJendwNQDWmaqhgTCQD21EUxyymH3cRrl5AQEgr+na0X67JIAcOH+tTs/sCHAA1G7JgzqYA8StQENYWGPg/IApJ1veP2+MGbFrBgJJ98vNX5P6sab+tsNSfmd3g+IKynoX+i+ZzOoVB1pp+Ik6gvIT+2QU10q+xSw98mcSyOk8JQr1phP2Y9CPJ16nw57JwVNtEX9ml/l+BFMoH08/LdrAgmHZWIq+DvO0TplJlB8JcfNi3WuqcB2xPAAp9FsdEUEK16dmJ54PCc9YcX+FoXWSJRZ5dVDEfxmd4ShG/Ikise6ns3WAwzHatj8nBHteQ+48LBzj0J739+he4JcL68VnwyyAjqbZpRsxNpmdy1I/YsWJQleYxT77+vbcioOHtWSLJ7sJsTtLMnWXNuHoJFV8aEPRR0OAlmmNEcEI08vXZY5ccqYykTJphTiTp+l0CrESRygt5wRW4n69p3sgJ3zGskI55nyus9bYnnCFaGhkV3upkkbc76eaLfrF8QPuMwIqdL0Hw1uxVwOq+qmJmN64pfUoAGF+WoUPNcS4VbAkS7QiSDnjtCdUZJ7KCQ5bu7TvCjRb16Az9TsIcwWuXLaXcEM6dHlTkURqTe3wh1fTEX0j8d7tedYQHstEJYvB1lkOREs="
-    template:
-      - "%{result}: Build <%{build_url}|#%{build_number}> (<%{compare_url}|`%{commit}`>) on %{branch} in PR <%{pull_request_url}|#%{pull_request_number}> by %{author}"
