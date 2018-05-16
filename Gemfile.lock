@@ -4,12 +4,15 @@ GEM
     rouge (2.0.7)
     xcpretty (0.2.8)
       rouge (~> 2.0.7)
+    xcpretty-travis-formatter (1.0.0)
+      xcpretty (~> 0.2, >= 0.0.7)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   xcpretty
+  xcpretty-travis-formatter
 
 BUNDLED WITH
    1.16.1

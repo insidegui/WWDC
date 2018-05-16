@@ -5,4 +5,4 @@ script:
   - carthage version
   - swiftlint version
   - "./bootstrap.sh"
-  - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty
+  - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty -f `xcpretty-travis-formatter`
