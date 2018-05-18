@@ -49,6 +49,7 @@
 		DD4648451ECA53A4005C57C6 /* CMSSubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4648441ECA53A4005C57C6 /* CMSSubscriptionManager.swift */; };
 		DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4648461ECA5947005C57C6 /* WWDCWindow.swift */; };
 		DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */; };
+		DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */; };
 		DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED601ED6577100624EAF /* Sparkle.framework */; };
 		DD4DED641ED6579900624EAF /* Sparkle.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */; };
 		DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED661ED6604300624EAF /* Fabric.framework */; };
@@ -407,6 +408,7 @@
 		DD4648441ECA53A4005C57C6 /* CMSSubscriptionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSSubscriptionManager.swift; sourceTree = "<group>"; };
 		DD4648461ECA5947005C57C6 /* WWDCWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCWindow.swift; sourceTree = "<group>"; };
 		DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSToolbarItemViewer+Overrides.m"; sourceTree = "<group>"; };
+		DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+RelatedSessions.swift"; sourceTree = "<group>"; };
 		DD4DED601ED6577100624EAF /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Carthage/Build/Mac/Sparkle.framework; sourceTree = "<group>"; };
 		DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Sparkle.framework.dSYM; path = Carthage/Build/Mac/Sparkle.framework.dSYM; sourceTree = "<group>"; };
 		DD4DED661ED6604300624EAF /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -796,6 +798,7 @@
 				DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */,
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
 				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
+				DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */,
 				DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */,
 				DD0159FB1ED23F7700F980F1 /* RemoteEnvironment.swift */,
 				DDB3529D1EC8D8CD00254815 /* main.m */,
@@ -1952,6 +1955,7 @@
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
+				DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */,
 				DD382B7C1EAC345F009760C4 /* NSImage+CGImage.m in Sources */,
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,

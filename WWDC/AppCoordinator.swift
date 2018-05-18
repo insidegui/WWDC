@@ -184,11 +184,13 @@ final class AppCoordinator {
 
         videoDetail.shelfController.delegate = self
         videoDetail.summaryController.actionsViewController.delegate = self
+        videoDetail.summaryController.relatedSessionsViewController.delegate = self
 
         let scheduleDetail = scheduleController.detailViewController
 
         scheduleDetail.shelfController.delegate = self
         scheduleDetail.summaryController.actionsViewController.delegate = self
+        scheduleDetail.summaryController.relatedSessionsViewController.delegate = self
 
         videosController.listViewController.delegate = self
         scheduleController.listViewController.delegate = self
