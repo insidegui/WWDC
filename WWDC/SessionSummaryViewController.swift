@@ -49,6 +49,10 @@ class SessionSummaryViewController: NSViewController {
         return v
     }()
 
+    lazy var relatedSessionsViewController: RelatedSessionsViewController = {
+        return RelatedSessionsViewController()
+    }()
+
     private lazy var summaryLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
         l.font = .systemFont(ofSize: 18)
@@ -108,6 +112,13 @@ class SessionSummaryViewController: NSViewController {
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+
+        addChildViewController(relatedSessionsViewController)
+        relatedSessionsViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(relatedSessionsViewController.view)
+        relatedSessionsViewController.view.heightAnchor.constraint(equalToConstant: RelatedSessionsViewController.Metrics.height).isActive = true
+        relatedSessionsViewController.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
+        relatedSessionsViewController.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
     }
 
     override func viewDidLoad() {
@@ -121,6 +132,9 @@ class SessionSummaryViewController: NSViewController {
         actionsViewController.viewModel = viewModel
 
         guard let viewModel = viewModel else { return }
+
+        let relatedSessions = viewModel.session.related.compactMap({ $0.session })
+        relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
 
         disposeBag = DisposeBag()
 

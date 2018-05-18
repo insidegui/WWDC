@@ -18,7 +18,6 @@ class SessionDetailsViewController: NSViewController {
 
     var viewModel: SessionViewModel? = nil {
         didSet {
-
             view.animator().alphaValue = (viewModel == nil) ? 0 : 1
 
             shelfController.viewModel = viewModel
@@ -30,7 +29,6 @@ class SessionDetailsViewController: NSViewController {
             }
 
             if viewModel.identifier != oldValue?.identifier {
-
                 showOverview()
             }
 
@@ -49,7 +47,6 @@ class SessionDetailsViewController: NSViewController {
             // It's worth noting that this condition will always be true since the view
             // gets loaded when add to the split view controller
             if isViewLoaded {
-
                 // Connect stack view (bottom half of screen), to the top of the view
                 // or to the bottom of the video, if it's present
                 shelfBottomConstraint.isActive = !sessionHasNoVideo

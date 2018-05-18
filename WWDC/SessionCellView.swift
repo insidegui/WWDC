@@ -251,5 +251,5 @@ final class SessionCellView: NSView {
         downloadedImageView.isHidden = true
         favoritedImageView.isHidden = true
     }
-    
+
 }
