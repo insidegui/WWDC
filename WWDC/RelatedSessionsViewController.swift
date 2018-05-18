@@ -40,6 +40,7 @@ final class RelatedSessionsViewController: NSViewController {
     var sessions: [SessionViewModel] = [] {
         didSet {
             collectionView.reloadData()
+            view.isHidden = sessions.count == 0
         }
     }
 
