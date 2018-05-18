@@ -15,7 +15,7 @@ private extension NSUserInterfaceItemIdentifier {
 }
 
 protocol RelatedSessionsViewControllerDelegate: class {
-    func relatedSessionsViewController(_ controller: RelatedSessionsViewController, didSelectSession session: SessionViewModel)
+    func relatedSessionsViewController(_ controller: RelatedSessionsViewController, didSelectSession viewModel: SessionViewModel)
 }
 
 final class RelatedSessionsViewController: NSViewController {

@@ -10,8 +10,18 @@ import Cocoa
 
 extension AppCoordinator: RelatedSessionsViewControllerDelegate {
 
-    func relatedSessionsViewController(_ controller: RelatedSessionsViewController, didSelectSession session: SessionViewModel) {
-        currentListController.selectSession(with: session.identifier)
+    func selectSessionOnAppropriateTab(with viewModel: SessionViewModel) {
+        if ![.video, .session].contains(viewModel.sessionInstance.type) {
+            // If the related session selected is not a video or regular session, we must be
+            // on the schedule tab to show it, since the videos tab only shows videos
+            tabController.activeTab = .schedule
+        }
+
+        currentListController.selectSession(with: viewModel.identifier)
+    }
+
+    func relatedSessionsViewController(_ controller: RelatedSessionsViewController, didSelectSession viewModel: SessionViewModel) {
+        selectSessionOnAppropriateTab(with: viewModel)
     }
 
 }
