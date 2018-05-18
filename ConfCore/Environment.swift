@@ -90,7 +90,7 @@ extension Environment {
                                          newsPath: "/news.json",
                                          liveVideosPath: "/videos_live.json")
 
-    public static let production = Environment(baseURL: "https://api2017.wwdc.io",
+    public static let production = Environment(baseURL: "https://api2018.wwdc.io",
                                                videosPath: "/videos.json",
                                                sessionsPath: "/contents.json",
                                                newsPath: "/news.json",
