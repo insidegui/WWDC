@@ -131,6 +131,14 @@ final class SessionViewModel {
         return Observable.collection(from: progresses)
     }()
 
+    lazy var rxRelatedSessions: Observable<Results<RelatedResource>> = {
+        let predicateFormat = "type == %@ AND (ANY session.instances.sessionType == %d OR ANY session.instances.startTime >= %@)"
+        let relatedPredicate = NSPredicate(format: predicateFormat, RelatedResourceType.session.rawValue, SessionInstanceType.session.rawValue, today() as NSDate)
+        let validRelatedSessions = self.session.related.filter(relatedPredicate)
+
+        return Observable.collection(from: validRelatedSessions)
+    }()
+
     convenience init?(session: Session) {
         self.init(session: session, instance: nil, style: .videos)
     }

@@ -33,7 +33,7 @@ final class SessionCollectionViewItem: NSCollectionViewItem {
     private func setup() {
         cellView.autoresizingMask = [.width, .height]
         view.addSubview(cellView)
-        
+
         cellView.layer?.masksToBounds = true
         cellView.layer?.backgroundColor = NSColor.darkGridColor.cgColor
         cellView.layer?.cornerRadius = 5

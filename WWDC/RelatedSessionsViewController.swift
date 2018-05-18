@@ -46,8 +46,14 @@ final class RelatedSessionsViewController: NSViewController {
 
     weak var delegate: RelatedSessionsViewControllerDelegate?
 
+    override var title: String? {
+        didSet {
+            titleLabel.stringValue = title ?? ""
+        }
+    }
+
     private lazy var titleLabel: WWDCTextField = {
-        let l = WWDCTextField(labelWithString: "Related Videos")
+        let l = WWDCTextField(labelWithString: "")
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byTruncatingTail
         l.maximumNumberOfLines = 1

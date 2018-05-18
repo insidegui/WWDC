@@ -9,6 +9,7 @@
 import Cocoa
 import RxSwift
 import RxCocoa
+import ConfCore
 
 class SessionSummaryViewController: NSViewController {
 
@@ -50,7 +51,11 @@ class SessionSummaryViewController: NSViewController {
     }()
 
     lazy var relatedSessionsViewController: RelatedSessionsViewController = {
-        return RelatedSessionsViewController()
+        let c = RelatedSessionsViewController()
+
+        c.title = "Related Sessions"
+
+        return c
     }()
 
     private lazy var summaryLabel: WWDCTextField = {
@@ -133,9 +138,6 @@ class SessionSummaryViewController: NSViewController {
 
         guard let viewModel = viewModel else { return }
 
-        let relatedSessions = viewModel.session.related.compactMap({ $0.session })
-        relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
-
         disposeBag = DisposeBag()
 
         viewModel.rxTitle.map(NSAttributedString.attributedBoldTitle(with:)).subscribe(onNext: { [weak self] title in
@@ -143,6 +145,11 @@ class SessionSummaryViewController: NSViewController {
         }).disposed(by: disposeBag)
         viewModel.rxSummary.bind(to: summaryLabel.rx.text).disposed(by: disposeBag)
         viewModel.rxFooter.bind(to: contextLabel.rx.text).disposed(by: disposeBag)
+
+        viewModel.rxRelatedSessions.subscribe(onNext: { [weak self] relatedResources in
+            let relatedSessions = relatedResources.compactMap({ $0.session })
+            self?.relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
+        }).disposed(by: disposeBag)
     }
 
 }
