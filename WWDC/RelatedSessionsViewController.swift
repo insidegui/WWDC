@@ -68,7 +68,7 @@ final class RelatedSessionsViewController: NSViewController {
         let v = NSScrollView(frame: view.bounds)
 
         v.hasHorizontalScroller = true
-        v.hasVerticalScroller = false
+        v.horizontalScroller?.alphaValue = 0
 
         return v
     }()
@@ -110,6 +110,11 @@ final class RelatedSessionsViewController: NSViewController {
         super.viewDidLoad()
 
         collectionView.register(SessionCollectionViewItem.self, forItemWithIdentifier: .sessionItem)
+    }
+
+    override func scrollToBeginningOfDocument(_ sender: Any?) {
+        let beginningSet = Set([IndexPath(item: 0, section: 0)])
+        collectionView.scrollToItems(at: beginningSet, scrollPosition: .leadingEdge)
     }
 
 }

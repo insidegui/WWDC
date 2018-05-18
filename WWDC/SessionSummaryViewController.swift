@@ -150,6 +150,8 @@ class SessionSummaryViewController: NSViewController {
             let relatedSessions = relatedResources.compactMap({ $0.session })
             self?.relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
         }).disposed(by: disposeBag)
+
+        relatedSessionsViewController.scrollToBeginningOfDocument(nil)
     }
 
 }
