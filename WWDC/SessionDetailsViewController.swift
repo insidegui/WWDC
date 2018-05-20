@@ -12,6 +12,10 @@ import RxCocoa
 
 class SessionDetailsViewController: NSViewController {
 
+    private struct Metrics {
+        static let padding: CGFloat = 22
+    }
+
     private let disposeBag = DisposeBag()
 
     let listStyle: SessionsListStyle
@@ -175,7 +179,7 @@ class SessionDetailsViewController: NSViewController {
     }()
 
     private lazy var informationStackViewBottomConstraint: NSLayoutConstraint = {
-        return self.informationStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -46)
+        return self.informationStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -Metrics.padding)
     }()
 
     override func loadView() {
@@ -194,12 +198,12 @@ class SessionDetailsViewController: NSViewController {
         view.addSubview(shelfController.view)
         view.addSubview(informationStackView)
 
-        shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
-        shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
+        shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding).isActive = true
+        shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding).isActive = true
         shelfController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 22).isActive = true
 
-        informationStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
-        informationStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
+        informationStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding).isActive = true
+        informationStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding).isActive = true
         informationStackViewBottomConstraint.isActive = true
 
         shelfBottomConstraint.isActive = true
