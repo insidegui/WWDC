@@ -11,7 +11,13 @@ import RealmSwift
 import os.log
 
 /// Defines the user action of adding a session as favorite
-public class SessionProgress: Object {
+public final class SessionProgress: Object, HasCloudKitFields, SoftDeletable {
+
+    /// CloudKit system data
+    @objc public dynamic var ckFields = Data()
+
+    /// Soft delete (for syncing)
+    @objc public dynamic var isDeleted: Bool = false
 
     /// Unique identifier
     @objc public dynamic var identifier = UUID().uuidString

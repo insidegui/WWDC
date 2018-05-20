@@ -11,16 +11,12 @@ import Cocoa
 import Fabric
 import Crashlytics
 
-import CommunitySupport
-
 final class LoggingHelper {
 
     static func install() {
         guard !Preferences.shared.userOptedOutOfCrashReporting else { return }
 
         Fabric.with([Crashlytics.self])
-
-        observeCommunityCenterNotifications()
     }
 
     static func registerCloudKitUserIdentifier(_ identifier: String) {
@@ -39,26 +35,6 @@ final class LoggingHelper {
         guard !Preferences.shared.userOptedOutOfCrashReporting else { return }
 
         Answers.logCustomEvent(withName: name, customAttributes: info)
-    }
-
-    static func observeCommunityCenterNotifications() {
-        _ = NotificationCenter.default.addObserver(forName: .CMSErrorOccurred, object: nil, queue: OperationQueue.main) { note in
-            let error: Error
-
-            if let noteError = note.object as? Error {
-                error = noteError
-            } else {
-                error = NSError(domain: "CMSCommunityCenter", code: -1, userInfo: note.userInfo as? [String: Any])
-            }
-
-            LoggingHelper.registerError(error, info: note.userInfo as? [String: Any])
-        }
-
-        _ = NotificationCenter.default.addObserver(forName: .CMSUserIdentifierDidBecomeAvailable, object: nil, queue: OperationQueue.main) { note in
-            guard let identifier = note.object as? String else { return }
-
-            LoggingHelper.registerCloudKitUserIdentifier(identifier)
-        }
     }
 
 }

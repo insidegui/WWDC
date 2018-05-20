@@ -7,9 +7,9 @@
 //
 
 import Cocoa
-import CommunitySupport
 import RxCocoa
 import RxSwift
+import ConfCore
 
 enum PreferencesTab: Int {
     case general
@@ -25,7 +25,17 @@ final class PreferencesCoordinator {
     private let tabController: WWDCTabViewController<PreferencesTab>
 
     private let generalController: GeneralPreferencesViewController
-    private let accountController: AccountPreferencesViewController
+
+    #if ICLOUD
+    var userDataSyncEngine: UserDataSyncEngine? {
+        get {
+            return generalController.userDataSyncEngine
+        }
+        set {
+            generalController.userDataSyncEngine = newValue
+        }
+    }
+    #endif
 
     init() {
         windowController = PreferencesWindowController()
@@ -38,16 +48,11 @@ final class PreferencesCoordinator {
         generalItem.label = "General"
         tabController.addTabViewItem(generalItem)
 
-        // Account
-        accountController = AccountPreferencesViewController()
-        accountController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Account")
-        let accountItem = NSTabViewItem(viewController: accountController)
-        accountItem.label = "Account"
-        tabController.addTabViewItem(accountItem)
-
         windowController.contentViewController = tabController
+    }
 
-        setupAccountBindings()
+    private func commonInit() {
+
     }
 
     func show(in tab: PreferencesTab = .general) {
@@ -55,18 +60,6 @@ final class PreferencesCoordinator {
         windowController.showWindow(nil)
 
         tabController.activeTab = tab
-    }
-
-    func setupAccountBindings() {
-        #if ICLOUD
-            CMSCommunityCenter.shared.accountStatus.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] status in
-                self?.accountController.cloudAccountIsAvailable = (status == .available)
-            }).disposed(by: disposeBag)
-
-            CMSCommunityCenter.shared.userProfile.observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] profile in
-                self?.accountController.profile = profile
-            }).disposed(by: disposeBag)
-        #endif
     }
 
 }

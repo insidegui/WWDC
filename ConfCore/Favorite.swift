@@ -10,7 +10,10 @@ import Cocoa
 import RealmSwift
 
 /// Defines the user action of adding a session as favorite
-public class Favorite: Object {
+public final class Favorite: Object, HasCloudKitFields, SoftDeletable {
+
+    /// CloudKit system data
+    @objc public dynamic var ckFields = Data()
 
     /// Unique identifier
     @objc public dynamic var identifier = UUID().uuidString

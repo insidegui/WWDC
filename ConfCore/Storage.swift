@@ -249,8 +249,14 @@ public final class Storage {
     /// - Parameters:
     ///   - writeBlock: The block that will modify the database in the background (autoreleasepool is created automatically)
     ///   - disableAutorefresh: Whether to disable autorefresh on the main Realm instance while the write is in progress
+    ///   - createTransaction: Whether the method should create its own write transaction or use the one already in place
+    ///   - notificationTokensToSkip: An array of `NotificationToken` that should not be notified when the write is committed
     ///   - completionBlock: A block to be called when the operation is completed (called on the main queue)
-    private func performSerializedBackgroundWrite(writeBlock: @escaping (Realm) throws -> Void, disableAutorefresh: Bool = false, createTransaction: Bool = true, completionBlock: ((Error?) -> Void)? = nil) {
+    internal func performSerializedBackgroundWrite(writeBlock: @escaping (Realm) throws -> Void,
+                                                   disableAutorefresh: Bool = false,
+                                                   createTransaction: Bool = true,
+                                                   notificationTokensToSkip: [NotificationToken] = [],
+                                                   completionBlock: ((Error?) -> Void)? = nil) {
         if disableAutorefresh { realm.autorefresh = false }
 
         DispatchQueue.global(qos: .userInitiated).async {
@@ -265,7 +271,11 @@ public final class Storage {
 
                         try writeBlock(backgroundRealm)
 
-                        if createTransaction { try backgroundRealm.commitWrite() }
+                        if createTransaction {
+                            try backgroundRealm.commitWrite(withoutNotifying: notificationTokensToSkip)
+                        } else {
+                            assert(notificationTokensToSkip.count == 0, "It doesn't make sense to use createTransaction=false when you need to skip notification tokens")
+                        }
 
                         backgroundRealm.invalidate()
                     } catch {
@@ -376,7 +386,7 @@ public final class Storage {
         guard let favorite = session.favorites.first else { return }
 
         modify(favorite) { bgFavorite in
-            bgFavorite.realm?.delete(bgFavorite)
+            bgFavorite.isDeleted = true
         }
     }
 

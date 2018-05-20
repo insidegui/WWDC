@@ -7,7 +7,6 @@
 //
 
 import Cocoa
-import CommunitySupport
 import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -27,15 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
-        if CMSCommunityCenter.shared.processNotification(userInfo: userInfo) {
-            // Community center handled this notification
-            return
-        } else if coordinator.receiveNotification(with: userInfo) {
-            // Coordinator handled this notification
-            return
-        }
-
-        // handle other types of notification
+        coordinator.receiveNotification(with: userInfo)
     }
 
     @objc func handleURLEvent(_ event: NSAppleEventDescriptor?, replyEvent: NSAppleEventDescriptor?) {
