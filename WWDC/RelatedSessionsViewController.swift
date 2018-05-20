@@ -68,7 +68,7 @@ final class RelatedSessionsViewController: NSViewController {
         let v = NSScrollView(frame: view.bounds)
 
         v.hasHorizontalScroller = true
-        v.horizontalScroller?.alphaValue = 0
+//        v.horizontalScroller?.alphaValue = 0
 
         return v
     }()
@@ -137,7 +137,7 @@ extension RelatedSessionsViewController: NSCollectionViewDelegate, NSCollectionV
         }
 
         item.viewModel = sessions[indexPath.item]
-        item.doubleClicked = { [unowned self] viewModel in
+        item.onClicked = { [unowned self] viewModel in
             self.delegate?.relatedSessionsViewController(self, didSelectSession: viewModel)
         }
 

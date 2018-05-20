@@ -24,7 +24,7 @@ final class SessionCollectionViewItem: NSCollectionViewItem {
         }
     }
 
-    var doubleClicked: ((SessionViewModel) -> Void)?
+    var onClicked: ((SessionViewModel) -> Void)?
 
     private lazy var cellView: SessionCellView = {
         return SessionCellView(frame: view.bounds)
@@ -38,9 +38,8 @@ final class SessionCollectionViewItem: NSCollectionViewItem {
         cellView.layer?.backgroundColor = NSColor.darkGridColor.cgColor
         cellView.layer?.cornerRadius = 5
 
-        let doubleClick = NSClickGestureRecognizer(target: self, action: #selector(doubleClickRecognized))
-        doubleClick.numberOfClicksRequired = 2
-        view.addGestureRecognizer(doubleClick)
+        let click = NSClickGestureRecognizer(target: self, action: #selector(clickRecognized))
+        view.addGestureRecognizer(click)
     }
 
     override func viewDidLoad() {
@@ -49,10 +48,10 @@ final class SessionCollectionViewItem: NSCollectionViewItem {
         setup()
     }
 
-    @objc private func doubleClickRecognized() {
+    @objc private func clickRecognized() {
         guard let viewModel = viewModel else { return }
 
-        doubleClicked?(viewModel)
+        onClicked?(viewModel)
     }
 
 }
