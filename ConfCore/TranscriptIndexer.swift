@@ -117,7 +117,9 @@ public final class TranscriptIndexer {
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-        let task = URLSession.shared.dataTask(with: request) { [unowned self] data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let `self` = self else { return }
+
             defer {
                 self.transcriptIndexingProgress?.completedUnitCount += 1
 
