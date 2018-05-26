@@ -109,7 +109,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "2017-06-06T09:20:00-07:00"
+            argument = "2018-06-04T10:00:00-07:00"
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
