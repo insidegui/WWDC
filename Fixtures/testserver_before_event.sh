@@ -10,4 +10,4 @@ if ! type "http-server" > /dev/null; then
 	npm install http-server -g
 fi
 
-http-server -p 9042 ./json_demo
+http-server -p 9042 ./json_before_event
