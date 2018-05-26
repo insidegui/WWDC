@@ -381,6 +381,14 @@ final class AppCoordinator {
     func showAboutWindow() {
         aboutWindowController.showWindow(nil)
     }
+    
+    func showSchedule() {
+        tabController.activeTab = .schedule
+    }
+    
+    func showVideos() {
+        tabController.activeTab = .videos
+    }
 
     // MARK: - Refresh
 
