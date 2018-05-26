@@ -12,13 +12,16 @@ import RxCocoa
 
 class SessionDetailsViewController: NSViewController {
 
+    private struct Metrics {
+        static let padding: CGFloat = 46
+    }
+
     private let disposeBag = DisposeBag()
 
     let listStyle: SessionsListStyle
 
     var viewModel: SessionViewModel? = nil {
         didSet {
-
             view.animator().alphaValue = (viewModel == nil) ? 0 : 1
 
             shelfController.viewModel = viewModel
@@ -30,7 +33,6 @@ class SessionDetailsViewController: NSViewController {
             }
 
             if viewModel.identifier != oldValue?.identifier {
-
                 showOverview()
             }
 
@@ -49,7 +51,6 @@ class SessionDetailsViewController: NSViewController {
             // It's worth noting that this condition will always be true since the view
             // gets loaded when add to the split view controller
             if isViewLoaded {
-
                 // Connect stack view (bottom half of screen), to the top of the view
                 // or to the bottom of the video, if it's present
                 shelfBottomConstraint.isActive = !sessionHasNoVideo
@@ -178,7 +179,7 @@ class SessionDetailsViewController: NSViewController {
     }()
 
     private lazy var informationStackViewBottomConstraint: NSLayoutConstraint = {
-        return self.informationStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -46)
+        return self.informationStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -Metrics.padding)
     }()
 
     override func loadView() {
@@ -197,12 +198,12 @@ class SessionDetailsViewController: NSViewController {
         view.addSubview(shelfController.view)
         view.addSubview(informationStackView)
 
-        shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
-        shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
+        shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding).isActive = true
+        shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding).isActive = true
         shelfController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 22).isActive = true
 
-        informationStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 46).isActive = true
-        informationStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -46).isActive = true
+        informationStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding).isActive = true
+        informationStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding).isActive = true
         informationStackViewBottomConstraint.isActive = true
 
         shelfBottomConstraint.isActive = true

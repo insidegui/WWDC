@@ -9,6 +9,7 @@
 import Cocoa
 import RxSwift
 import RxCocoa
+import ConfCore
 
 class SessionSummaryViewController: NSViewController {
 
@@ -47,6 +48,14 @@ class SessionSummaryViewController: NSViewController {
         v.view.translatesAutoresizingMaskIntoConstraints = false
 
         return v
+    }()
+
+    lazy var relatedSessionsViewController: RelatedSessionsViewController = {
+        let c = RelatedSessionsViewController()
+
+        c.title = "Related Sessions"
+
+        return c
     }()
 
     private lazy var summaryLabel: WWDCTextField = {
@@ -108,6 +117,13 @@ class SessionSummaryViewController: NSViewController {
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+
+        addChildViewController(relatedSessionsViewController)
+        relatedSessionsViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(relatedSessionsViewController.view)
+        relatedSessionsViewController.view.heightAnchor.constraint(equalToConstant: RelatedSessionsViewController.Metrics.height).isActive = true
+        relatedSessionsViewController.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
+        relatedSessionsViewController.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
     }
 
     override func viewDidLoad() {
@@ -129,6 +145,13 @@ class SessionSummaryViewController: NSViewController {
         }).disposed(by: disposeBag)
         viewModel.rxSummary.bind(to: summaryLabel.rx.text).disposed(by: disposeBag)
         viewModel.rxFooter.bind(to: contextLabel.rx.text).disposed(by: disposeBag)
+
+        viewModel.rxRelatedSessions.subscribe(onNext: { [weak self] relatedResources in
+            let relatedSessions = relatedResources.compactMap({ $0.session })
+            self?.relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
+        }).disposed(by: disposeBag)
+
+        relatedSessionsViewController.scrollToBeginningOfDocument(nil)
     }
 
 }

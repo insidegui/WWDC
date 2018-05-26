@@ -49,6 +49,7 @@
 		DD4648451ECA53A4005C57C6 /* CMSSubscriptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4648441ECA53A4005C57C6 /* CMSSubscriptionManager.swift */; };
 		DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4648461ECA5947005C57C6 /* WWDCWindow.swift */; };
 		DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */; };
+		DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */; };
 		DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED601ED6577100624EAF /* Sparkle.framework */; };
 		DD4DED641ED6579900624EAF /* Sparkle.framework.dSYM in Carthage: Copy DSYMs */ = {isa = PBXBuildFile; fileRef = DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */; };
 		DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED661ED6604300624EAF /* Fabric.framework */; };
@@ -124,6 +125,9 @@
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
+		DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1220A90655002EECF5 /* SessionCellView.swift */; };
+		DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */; };
+		DDA60E1720A9083E002EECF5 /* RelatedSessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1620A9083E002EECF5 /* RelatedSessionsViewController.swift */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDAE7C4D1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */; };
@@ -404,6 +408,7 @@
 		DD4648441ECA53A4005C57C6 /* CMSSubscriptionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMSSubscriptionManager.swift; sourceTree = "<group>"; };
 		DD4648461ECA5947005C57C6 /* WWDCWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCWindow.swift; sourceTree = "<group>"; };
 		DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSToolbarItemViewer+Overrides.m"; sourceTree = "<group>"; };
+		DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+RelatedSessions.swift"; sourceTree = "<group>"; };
 		DD4DED601ED6577100624EAF /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Carthage/Build/Mac/Sparkle.framework; sourceTree = "<group>"; };
 		DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Sparkle.framework.dSYM; path = Carthage/Build/Mac/Sparkle.framework.dSYM; sourceTree = "<group>"; };
 		DD4DED661ED6604300624EAF /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -479,6 +484,9 @@
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMigrator.swift; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
+		DDA60E1220A90655002EECF5 /* SessionCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCellView.swift; sourceTree = "<group>"; };
+		DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCollectionViewItem.swift; sourceTree = "<group>"; };
+		DDA60E1620A9083E002EECF5 /* RelatedSessionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedSessionsViewController.swift; sourceTree = "<group>"; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDAE7C4C1E5BA4D100CEA205 /* TranscriptsJSONAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptsJSONAdapter.swift; sourceTree = "<group>"; };
@@ -790,6 +798,7 @@
 				DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */,
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
 				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
+				DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */,
 				DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */,
 				DD0159FB1ED23F7700F980F1 /* RemoteEnvironment.swift */,
 				DDB3529D1EC8D8CD00254815 /* main.m */,
@@ -831,6 +840,8 @@
 				DDC678181EDB2CD300A4E19C /* ActionLabel.swift */,
 				DD6E06F31EDBC11F000EAEA4 /* WWDCTextButton.swift */,
 				DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */,
+				DDA60E1220A90655002EECF5 /* SessionCellView.swift */,
+				DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1022,6 +1033,7 @@
 			isa = PBXGroup;
 			children = (
 				DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */,
+				DDA60E1620A9083E002EECF5 /* RelatedSessionsViewController.swift */,
 				DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */,
 			);
 			name = Summary;
@@ -1900,6 +1912,8 @@
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */,
 				DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */,
+				DDA60E1720A9083E002EECF5 /* RelatedSessionsViewController.swift in Sources */,
+				DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */,
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DDB352821EC7C55300254815 /* DateProvider.swift in Sources */,
 				DDC678221EDB956700A4E19C /* BookmarkViewController.swift in Sources */,
@@ -1915,6 +1929,7 @@
 				DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */,
 				DD6E06F41EDBC11F000EAEA4 /* WWDCTextButton.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
+				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
@@ -1940,6 +1955,7 @@
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
+				DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */,
 				DD382B7C1EAC345F009760C4 /* NSImage+CGImage.m in Sources */,
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
