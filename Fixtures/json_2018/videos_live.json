@@ -1,0 +1,29 @@
+{
+  "updated": "2018-06-04T09:00:00-07:00",
+  "live_sessions": {
+      "101": {
+        "iosUrl": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+        "tvosUrl": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+        "actualEndDate": "",
+        "images": {
+          "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/201h1g4asm31ti2l9n1/201/images/201_734x413.jpg"
+        }
+      },
+    "402": {
+      "iosUrl": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+      "tvosUrl": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+      "actualEndDate": "",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/201h1g4asm31ti2l9n1/201/images/201_734x413.jpg"
+      }
+    },
+    "502": {
+      "iosUrl": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+      "tvosUrl": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+      "actualEndDate": "",
+      "images": {
+        "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/202w2zhc4l8yomptqnt/202/images/202_734x413.jpg"
+      }
+    }
+  }
+}
