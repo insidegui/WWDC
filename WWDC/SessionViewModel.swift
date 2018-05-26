@@ -48,6 +48,7 @@ final class SessionViewModel {
     }()
 
     lazy var rxActionPrompt: Observable<String?> = {
+        guard sessionInstance.startTime > today() else { return Observable.just(nil) }
         guard actionLinkURL != nil else { return Observable.just(nil) }
 
         return Observable.from(object: self.sessionInstance).map({ $0.actionLinkPrompt })
