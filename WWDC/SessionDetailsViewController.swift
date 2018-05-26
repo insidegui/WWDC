@@ -13,7 +13,7 @@ import RxCocoa
 class SessionDetailsViewController: NSViewController {
 
     private struct Metrics {
-        static let padding: CGFloat = 22
+        static let padding: CGFloat = 46
     }
 
     private let disposeBag = DisposeBag()

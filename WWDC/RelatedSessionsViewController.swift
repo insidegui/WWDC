@@ -68,7 +68,7 @@ final class RelatedSessionsViewController: NSViewController {
         let v = NSScrollView(frame: view.bounds)
 
         v.hasHorizontalScroller = true
-//        v.horizontalScroller?.alphaValue = 0
+        v.horizontalScroller?.alphaValue = 0
 
         return v
     }()
