@@ -305,6 +305,8 @@ class AdapterTests: XCTestCase {
             XCTAssertEqual(instances[0].keywords.count, 0)
             XCTAssertEqual(instances[0].startTime, dateTimeFormatter.date(from: "2017-06-09T09:00:00-07:00"))
             XCTAssertEqual(instances[0].endTime, dateTimeFormatter.date(from: "2017-06-09T15:30:00-07:00"))
+            XCTAssertEqual(instances[0].actionLinkPrompt, "Request appointment")
+            XCTAssertEqual(instances[0].actionLinkURL, "https://developer.apple.com/go/?id=wwdc-consultations")
 
             // Session
             XCTAssertNotNil(instances[2].session)
