@@ -124,14 +124,14 @@ private extension SessionAsset {
     }
 
     convenience init?(record: CKRecord) {
-        guard let number = record["sessionNumber"] as? Int else { return nil }
+        guard let sessionIdentifier = record["sessionIdentifier"] as? String else { return nil }
         guard let hls = record["hls"] as? String else { return nil }
 
         self.init()
 
         assetType = .liveStreamVideo
         year = Calendar.current.component(.year, from: today())
-        sessionId = "\(number)"
+        sessionId = sessionIdentifier
         remoteURL = hls
         identifier = generateIdentifier()
     }
@@ -236,7 +236,7 @@ private final class CloudKitLiveObserver {
         storage.backgroundUpdate { realm in
             records.forEach { record in
                 guard let asset = SessionAsset(record: record) else { return }
-                guard let session = realm.object(ofType: Session.self, forPrimaryKey: "\(asset.year)-\(asset.sessionId)") else { return }
+                guard let session = realm.object(ofType: Session.self, forPrimaryKey: asset.sessionId) else { return }
                 guard let instance = session.instances.first else { return }
 
                 if let existingAsset = realm.object(ofType: SessionAsset.self, forPrimaryKey: asset.identifier) {
