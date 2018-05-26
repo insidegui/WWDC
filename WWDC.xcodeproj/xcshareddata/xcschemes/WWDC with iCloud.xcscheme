@@ -74,7 +74,7 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "--test"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCUseDebugStorage YES"
@@ -106,11 +106,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--delorean"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "2017-06-06T09:20:00-07:00"
-            isEnabled = "NO">
+            argument = "2018-06-04T10:00:00-07:00"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
