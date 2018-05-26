@@ -17,7 +17,7 @@ extension AppCoordinator: RelatedSessionsViewControllerDelegate {
             tabController.activeTab = .schedule
         }
 
-        currentListController.selectSession(with: viewModel.identifier)
+        currentListController?.selectSession(with: viewModel.identifier)
     }
 
     func relatedSessionsViewController(_ controller: RelatedSessionsViewController, didSelectSession viewModel: SessionViewModel) {

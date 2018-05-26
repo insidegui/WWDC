@@ -55,7 +55,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         if isReturningFromPip {
             tabController.activeTab = tab
-            currentListController.selectSession(with: identifier)
+            currentListController?.selectSession(with: identifier)
             currentPlayerController?.view.isHidden = false
         }
 

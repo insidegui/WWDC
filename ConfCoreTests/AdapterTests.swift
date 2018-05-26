@@ -377,4 +377,41 @@ class AdapterTests: XCTestCase {
         }
     }
 
+    func testFeaturedSectionsAdapter() {
+        let json = getJson(from: "layout")
+
+        guard let sectionsArray = json["sections"].array else {
+            XCTFail("Couldn't find an array of sections in layout.json")
+            fatalError()
+        }
+
+        let result = FeaturedSectionsJSONAdapter().adapt(sectionsArray)
+
+        switch result {
+        case .error(let error):
+            XCTFail(error.localizedDescription)
+        case .success(let sections):
+            XCTAssertEqual(sections[0].order, -1)
+            XCTAssertEqual(sections[0].format, FeaturedSectionFormat.curated)
+            XCTAssertEqual(sections[0].title, "Creator's Favorites")
+            XCTAssertEqual(sections[0].summary, "Rambo's favorite sessions")
+            XCTAssertEqual(sections[0].colorA, "#3C5B72")
+            XCTAssertEqual(sections[0].colorB, "#3D5B73")
+            XCTAssertEqual(sections[0].colorC, "#ACBDCB")
+            XCTAssertEqual(sections[0].author?.name, "Guilherme Rambo")
+            XCTAssertEqual(sections[0].author?.bio, "Guilherme Rambo is the creator of the unofficial WWDC app for macOS")
+            XCTAssertEqual(sections[0].author?.avatar, "https://pbs.twimg.com/profile_images/932637040474316801/mhtK0Y2u_400x400.jpg")
+            XCTAssertEqual(sections[0].author?.url, "https://guilhermerambo.me")
+            XCTAssertEqual(sections[0].content.count, 8)
+            XCTAssertEqual(sections[0].content[0].sessionId, "wwdc2017-211")
+            XCTAssertEqual(sections[0].content[1].sessionId, "wwdc2017-222")
+            XCTAssertEqual(sections[0].content[0].essay?.count, 401)
+            XCTAssertEqual(sections[0].content[0].bookmarks.count, 2)
+            XCTAssertEqual(sections[0].content[0].bookmarks[0].body, "My favorite part")
+            XCTAssertEqual(sections[0].content[0].bookmarks[0].timecode, 180.0)
+            XCTAssertEqual(sections[0].content[0].bookmarks[0].isShared, true)
+            XCTAssertEqual(sections[0].content[0].bookmarks[1].duration, 60.0)
+        }
+    }
+
 }

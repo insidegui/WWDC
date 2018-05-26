@@ -35,6 +35,9 @@ public final class Bookmark: Object, HasCloudKitFields, SoftDeletable {
     /// Time in the video this bookmark was created
     @objc public dynamic var timecode = 0.0
 
+    /// Time in the video where the bookmark ends
+    @objc public dynamic var duration: Double = 0.0
+
     /// Snapshot from the video at the time the bookmark was created
     @objc public dynamic var snapshot = Data()
 

@@ -27,6 +27,7 @@ final class AppCoordinator {
     var windowController: MainWindowController
     var tabController: WWDCTabViewController<MainWindowTab>
 
+    var featuredController: FeaturedContentViewController
     var scheduleController: SessionsSplitViewController
     var videosController: SessionsSplitViewController
 
@@ -34,7 +35,7 @@ final class AppCoordinator {
 
     var currentActivity: NSUserActivity?
 
-    var activeTab: MainWindowTab = .schedule
+    var activeTab: MainWindowTab = .featured
 
     /// The tab that "owns" the current player (the one that was active when the "play" button was pressed)
     var playerOwnerTab: MainWindowTab?
@@ -77,6 +78,14 @@ final class AppCoordinator {
 
         tabController = WWDCTabViewController(windowController: windowController)
 
+        // Featured
+        featuredController = FeaturedContentViewController()
+        featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
+        let featuredItem = NSTabViewItem(viewController: featuredController)
+        featuredItem.label = "Featured"
+//        featuredItem.initialFirstResponder = scheduleController.listViewController.tableView
+        tabController.addTabViewItem(featuredItem)
+
         // Schedule
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
@@ -112,12 +121,14 @@ final class AppCoordinator {
     }
 
     /// The list controller for the active tab
-    var currentListController: SessionsTableViewController {
+    var currentListController: SessionsTableViewController? {
         switch activeTab {
         case .schedule:
             return scheduleController.listViewController
         case .videos:
             return videosController.listViewController
+        default:
+            return nil
         }
     }
 
@@ -168,6 +179,10 @@ final class AppCoordinator {
             self?.scheduleController.detailViewController.viewModel = viewModel
             self?.updateSelectedViewModelRegardlessOfTab()
         }).disposed(by: disposeBag)
+
+        storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
+            self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
+        }).disposed(by: disposeBag)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -176,6 +191,8 @@ final class AppCoordinator {
             selectedViewModelRegardlessOfTab = selectedScheduleItemValue
         case .videos:
             selectedViewModelRegardlessOfTab = selectedSessionValue
+        default:
+            selectedViewModelRegardlessOfTab = nil
         }
 
         updateShelfBasedOnSelectionChange()
