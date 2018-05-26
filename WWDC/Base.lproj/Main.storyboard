@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14112" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14112"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
     </dependencies>
@@ -544,6 +544,16 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="View" id="HyV-fh-RgO">
                                     <items>
+                                        <menuItem title="Schedule" keyEquivalent="1" id="yJK-Mj-vbI">
+                                            <connections>
+                                                <action selector="viewSchedule:" target="Ady-hI-5gd" id="KOz-m0-ne8"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Videos" keyEquivalent="2" id="DmZ-h7-bFP">
+                                            <connections>
+                                                <action selector="viewVideos:" target="Ady-hI-5gd" id="xWC-aO-kEM"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Reload" keyEquivalent="r" id="VAB-X3-ZCo">
                                             <connections>
                                                 <action selector="reload:" target="Voe-Tx-rLC" id="cJF-hr-zg5"/>
