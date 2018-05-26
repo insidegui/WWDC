@@ -83,8 +83,29 @@ class SessionSummaryViewController: NSViewController {
         return l
     }()
 
+    private lazy var actionLinkLabel: ActionLabel = {
+        let l = ActionLabel(labelWithString: "")
+
+        l.font = .systemFont(ofSize: 16)
+        l.textColor = .primary
+        l.target = self
+        l.action = #selector(clickedActionLabel)
+
+        return l
+    }()
+
+    private lazy var contextStackView: NSStackView = {
+        let v = NSStackView(views: [self.contextLabel, self.actionLinkLabel])
+
+        v.orientation = .horizontal
+        v.spacing = 16
+        v.translatesAutoresizingMaskIntoConstraints = false
+
+        return v
+    }()
+
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.summaryLabel, self.contextLabel])
+        let v = NSStackView(views: [self.summaryLabel, self.contextStackView])
 
         v.orientation = .vertical
         v.alignment = .leading
@@ -152,6 +173,14 @@ class SessionSummaryViewController: NSViewController {
         }).disposed(by: disposeBag)
 
         relatedSessionsViewController.scrollToBeginningOfDocument(nil)
+
+        viewModel.rxActionPrompt.bind(to: actionLinkLabel.rx.text).disposed(by: disposeBag)
+    }
+
+    @objc private func clickedActionLabel() {
+        guard let url = viewModel?.actionLinkURL else { return }
+
+        NSWorkspace.shared.open(url)
     }
 
 }

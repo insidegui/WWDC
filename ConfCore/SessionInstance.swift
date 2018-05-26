@@ -98,6 +98,10 @@ public class SessionInstance: Object {
     /// See https://developer.apple.com/reference/eventkit/ekevent/1507437-eventidentifier
     @objc public dynamic var calendarEventIdentifier = ""
 
+    // Action link
+    @objc public dynamic var actionLinkPrompt: String?
+    @objc public dynamic var actionLinkURL: String?
+
     public override static func primaryKey() -> String? {
         return "identifier"
     }

@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 enum SessionInstanceKeys: String, JSONSubscriptType {
-    case id, keywords, startTime, endTime, type, eventId
+    case id, keywords, startTime, endTime, type, eventId, actionLinkPrompt, actionLinkURL
     case favId = "fav_id"
     case room = "roomId"
     case track = "trackId"
@@ -84,6 +84,8 @@ final class SessionInstancesJSONAdapter: Adapter {
         instance.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
         instance.startTime = startDate
         instance.endTime = endDate
+        instance.actionLinkPrompt = input[SessionInstanceKeys.actionLinkPrompt].string
+        instance.actionLinkURL = input[SessionInstanceKeys.actionLinkURL].string
 
         return .success(instance)
     }
