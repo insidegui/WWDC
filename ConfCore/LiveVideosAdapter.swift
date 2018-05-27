@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 private enum LiveVideoKeys: String, JSONSubscriptType {
-    case sessionId, tvosUrl
+    case sessionId, tvosUrl, iosUrl
 
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -27,7 +27,7 @@ final class LiveVideosAdapter: Adapter {
             return .error(.missingKey(LiveVideoKeys.sessionId))
         }
 
-        guard let url = input[LiveVideoKeys.tvosUrl].string else {
+        guard let url = input[LiveVideoKeys.tvosUrl].string ?? input[LiveVideoKeys.iosUrl].string else {
             return .error(.missingKey(LiveVideoKeys.tvosUrl))
         }
 
