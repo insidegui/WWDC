@@ -1115,8 +1115,10 @@ public final class PUIPlayerView: NSView {
                 return event
             }
 
-            // ignore keystrokes when editing text
-            guard !(self.window?.firstResponder is NSTextView) else { return event }
+            let allWindows = NSApp.windows
+            let firstResponders = allWindows.compactMap { $0.firstResponder }
+            let fieldEditors = firstResponders.filter { ($0 as? NSText)?.isFieldEditor == true }
+            guard fieldEditors.isEmpty else { return event }
             guard !self.timelineView.isEditingAnnotation else { return event }
 
             switch command {
