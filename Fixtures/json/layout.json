@@ -1,0 +1,326 @@
+{
+    "updated": "2017-09-08T08:15:16-07:00",
+    "validated_snapshot_id": 179,
+    "editorial_layout_id": 6,
+    "sections": [
+        {
+            "ordinal": -1,
+            "format": "curated_wwdc.io",
+            "title": "Creator's Favorites",
+            "description": "Rambo's favorite sessions",
+            "ios_color": "#3C5B72",
+            "tvos_light_style_color": "#3D5B73",
+            "tvos_dark_style_color": "#ACBDCB",
+            "image_type": "square",
+            "content": [
+                {
+                    "identifier": "wwdc2017-211",
+					"essay": "YnBsaXN0MDDUAQIDBAUGICFYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKYHCA8QFhxVJG51bGzTCQoLDA0OWE5TU3RyaW5nViRjbGFzc1xOU0F0dHJpYnV0ZXOAAoAFgANfEBpJIHJlYWxseSBsaWtlIHRoaXMgc2Vzc2lvbtMREgoTFBVXTlMua2V5c1pOUy5vYmplY3RzoKCABNIXGBkaWiRjbGFzc25hbWVYJGNsYXNzZXNcTlNEaWN0aW9uYXJ5ohkbWE5TT2JqZWN00hcYHR5fEBJOU0F0dHJpYnV0ZWRTdHJpbmeiHxtfEBJOU0F0dHJpYnV0ZWRTdHJpbmdfEA9OU0tleWVkQXJjaGl2ZXLRIiNUcm9vdIABAAgAEQAaACMALQAyADcAPgBEAEsAVABbAGgAagBsAG4AiwCSAJoApQCmAKcAqQCuALkAwgDPANIA2wDgAPUA+AENAR8BIgEnAAAAAAAAAgEAAAAAAAAAJAAAAAAAAAAAAAAAAAAAASk=",
+					"bookmarks": [
+						{
+							"body": "My favorite part",
+							"timecode": 180.0,
+							"duration": 0.0
+						},
+						{
+							"body": "My second favorite part, with duration",
+							"timecode": 180.0,
+							"duration": 60.0
+						}
+					]
+                },
+                {
+                    "identifier": "wwdc2017-222"
+                },
+                {
+                    "identifier": "wwdc2017-218"
+                },
+                {
+                    "identifier": "wwdc2016-239"
+                },
+                {
+                    "identifier": "wwdc2016-236"
+                },
+                {
+                    "identifier": "wwdc2016-203"
+                },
+                {
+                    "identifier": "wwdc2014-209"
+                },
+                {
+                    "identifier": "wwdc2014-220"
+                }
+            ],
+			"author": {
+				"name": "Guilherme Rambo",
+				"bio": "Guilherme Rambo is the creator of the unofficial WWDC app for macOS",
+				"avatar": "https://pbs.twimg.com/profile_images/932637040474316801/mhtK0Y2u_400x400.jpg",
+				"url": "https://guilhermerambo.me"
+			}
+        },
+        {
+            "ordinal": 0,
+            "format": "large_grid",
+            "title": "Featured",
+            "description": "Learn about rich links, QR codes, and using the Web Inspector",
+            "ios_color": "#3C5B72",
+            "tvos_light_style_color": "#3D5B73",
+            "tvos_dark_style_color": "#ACBDCB",
+            "image_type": "square",
+            "content": [
+                {
+                    "ordinal": 0,
+                    "identifier": "fall2017-205"
+                },
+                {
+                    "ordinal": 1,
+                    "identifier": "fall2017-401"
+                },
+                {
+                    "ordinal": 2,
+                    "identifier": "fall2017-206"
+                },
+                {
+                    "ordinal": 3,
+                    "identifier": "fall2017-402"
+                }
+            ]
+        },
+        {
+            "ordinal": 1,
+            "format": "small_grid",
+            "title": "Optimizing for iPhone X",
+            "description": "",
+            "ios_color": "#00AA96",
+            "tvos_light_style_color": "#00AA96",
+            "tvos_dark_style_color": "#2DBDAC",
+            "image_type": "wide",
+            "content": [
+                {
+                    "ordinal": 0,
+                    "identifier": "fall2017-801"
+                },
+                {
+                    "ordinal": 1,
+                    "identifier": "fall2017-201"
+                },
+                {
+                    "ordinal": 2,
+                    "identifier": "wwdc2017-412"
+                },
+                {
+                    "ordinal": 3,
+                    "identifier": "wwdc2017-810"
+                },
+                {
+                    "ordinal": 4,
+                    "identifier": "wwdc2017-201"
+                },
+                {
+                    "ordinal": 5,
+                    "identifier": "wwdc2017-204"
+                }
+            ]
+        },
+        {
+            "ordinal": 2,
+            "format": "small_grid",
+            "title": "Machine Learning",
+            "description": "",
+            "ios_color": "#AFC06C",
+            "tvos_light_style_color": "#A4B75B",
+            "tvos_dark_style_color": "#C2D57C",
+            "image_type": "wide",
+            "content": [
+                {
+                    "ordinal": 0,
+                    "identifier": "wwdc2017-703"
+                },
+                {
+                    "ordinal": 1,
+                    "identifier": "wwdc2017-710"
+                },
+                {
+                    "ordinal": 2,
+                    "identifier": "wwdc2017-506"
+                },
+                {
+                    "ordinal": 3,
+                    "identifier": "wwdc2017-208"
+                },
+                {
+                    "ordinal": 4,
+                    "identifier": "wwdc2017-608"
+                },
+                {
+                    "ordinal": 5,
+                    "identifier": "wwdc2017-711"
+                }
+            ]
+        },
+        {
+            "ordinal": 3,
+            "format": "small_grid",
+            "title": "Metal 2 on A11",
+            "description": "",
+            "ios_color": "#E2AE0C",
+            "tvos_light_style_color": "#DCA000",
+            "tvos_dark_style_color": "#FDD046",
+            "image_type": "wide",
+            "content": [
+                {
+                    "ordinal": 0,
+                    "identifier": "fall2017-602"
+                },
+                {
+                    "ordinal": 1,
+                    "identifier": "fall2017-603"
+                },
+                {
+                    "ordinal": 2,
+                    "identifier": "fall2017-604"
+                },
+                {
+                    "ordinal": 3,
+                    "identifier": "fall2017-606"
+                },
+                {
+                    "ordinal": 4,
+                    "identifier": "fall2017-605"
+                },
+                {
+                    "ordinal": 5,
+                    "identifier": "fall2017-607"
+                }
+            ]
+        },
+        {
+            "ordinal": 4,
+            "format": "small_grid",
+            "title": "Accessibility",
+            "description": "",
+            "ios_color": "#3C3C3C",
+            "tvos_light_style_color": "#3C3C3C",
+            "tvos_dark_style_color": "#6B6B6B",
+            "image_type": "wide",
+            "content": [
+                {
+                    "ordinal": 0,
+                    "identifier": "wwdc2017-215"
+                },
+                {
+                    "ordinal": 1,
+                    "identifier": "wwdc2017-806"
+                },
+                {
+                    "ordinal": 2,
+                    "identifier": "wwdc2017-110"
+                },
+                {
+                    "ordinal": 3,
+                    "identifier": "wwdc2017-245"
+                },
+                {
+                    "ordinal": 4,
+                    "identifier": "wwdc2017-217"
+                }
+            ]
+        },
+        {
+            "ordinal": 5,
+            "format": "small_grid",
+            "title": "Media on tvOS",
+            "description": "",
+            "ios_color": "#DB2D45",
+            "tvos_light_style_color": "#DB2D45",
+            "tvos_dark_style_color": "#FF7C8E",
+            "image_type": "wide",
+            "content": [
+                {
+                    "ordinal": 0,
+                    "identifier": "fall2017-503"
+                },
+                {
+                    "ordinal": 1,
+                    "identifier": "fall2017-501"
+                },
+                {
+                    "ordinal": 2,
+                    "identifier": "fall2017-502"
+                },
+                {
+                    "ordinal": 3,
+                    "identifier": "wwdc2017-504"
+                }
+            ]
+        },
+        {
+            "ordinal": 6,
+            "format": "small_grid",
+            "title": "Developing World-Ready Apps",
+            "description": "",
+            "ios_color": "#3C3C3C",
+            "tvos_light_style_color": "#3C3C3C",
+            "tvos_dark_style_color": "#6B6B6B",
+            "image_type": "wide",
+            "content": [
+                {
+                    "ordinal": 0,
+                    "identifier": "wwdc2017-819"
+                },
+                {
+                    "ordinal": 1,
+                    "identifier": "wwdc2017-806"
+                },
+                {
+                    "ordinal": 2,
+                    "identifier": "wwdc2017-401"
+                },
+                {
+                    "ordinal": 3,
+                    "identifier": "wwdc2017-248"
+                },
+                {
+                    "ordinal": 4,
+                    "identifier": "wwdc2017-410"
+                },
+                {
+                    "ordinal": 5,
+                    "identifier": "wwdc2016-201"
+                },
+                {
+                    "ordinal": 6,
+                    "identifier": "wwdc2016-238"
+                },
+                {
+                    "ordinal": 7,
+                    "identifier": "wwdc2016-801"
+                },
+                {
+                    "ordinal": 8,
+                    "identifier": "wwdc2016-222"
+                },
+                {
+                    "ordinal": 9,
+                    "identifier": "wwdc2016-233"
+                },
+                {
+                    "ordinal": 10,
+                    "identifier": "wwdc2016-232"
+                },
+                {
+                    "ordinal": 14,
+                    "identifier": "wwdc2015-222"
+                },
+                {
+                    "ordinal": 15,
+                    "identifier": "wwdc2015-227"
+                },
+                {
+                    "ordinal": 16,
+                    "identifier": "wwdc2014-201"
+                }
+            ]
+        }
+    ]
+}

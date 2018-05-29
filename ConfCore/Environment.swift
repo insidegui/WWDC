@@ -20,17 +20,20 @@ public struct Environment: Equatable {
     public let sessionsPath: String
     public let newsPath: String
     public let liveVideosPath: String
+    public let featuredSectionsPath: String
 
     public init(baseURL: String,
                 videosPath: String,
                 sessionsPath: String,
                 newsPath: String,
-                liveVideosPath: String) {
+                liveVideosPath: String,
+                featuredSectionsPath: String) {
         self.baseURL = baseURL
         self.videosPath = videosPath
         self.sessionsPath = sessionsPath
         self.newsPath = newsPath
         self.liveVideosPath = liveVideosPath
+        self.featuredSectionsPath = featuredSectionsPath
     }
 
     public static func setCurrent(_ environment: Environment) {
@@ -68,7 +71,8 @@ extension Environment {
             videosPath: "/videos.json",
             sessionsPath: "/sessions.json",
             newsPath: "/news.json",
-            liveVideosPath: "/videos_live.json"
+            liveVideosPath: "/videos_live.json",
+            featuredSectionsPath: "/_featured.json"
         )
     }
 
@@ -88,12 +92,14 @@ extension Environment {
                                          videosPath: "/videos.json",
                                          sessionsPath: "/contents.json",
                                          newsPath: "/news.json",
-                                         liveVideosPath: "/videos_live.json")
+                                         liveVideosPath: "/videos_live.json",
+                                         featuredSectionsPath: "/_featured.json")
 
     public static let production = Environment(baseURL: "https://api2018.wwdc.io",
                                                videosPath: "/videos.json",
                                                sessionsPath: "/contents.json",
                                                newsPath: "/news.json",
-                                               liveVideosPath: "/videos_live.json")
+                                               liveVideosPath: "/videos_live.json",
+                                               featuredSectionsPath: "/_featured.json")
 
 }

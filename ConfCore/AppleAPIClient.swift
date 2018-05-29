@@ -51,6 +51,14 @@ public final class AppleAPIClient {
             return try self?.failableAdaptCollection(newsItemsJson, using: NewsItemsJSONAdapter())
         }
 
+        service.configureTransformer(environment.featuredSectionsPath) { [weak self] (entity: Entity<JSON>) throws -> [FeaturedSection]? in
+            guard let sectionsJSON = entity.content["sections"].array else {
+                throw APIError.adapter
+            }
+
+            return try self?.failableAdaptCollection(sectionsJSON, using: FeaturedSectionsJSONAdapter())
+        }
+
         service.configureTransformer(environment.sessionsPath) { [weak self] (entity: Entity<JSON>) throws -> ContentsResponse? in
             return try self?.failableAdapt(entity.content, using: ContentsResponseAdapter())
         }
@@ -83,6 +91,7 @@ public final class AppleAPIClient {
         currentScheduleRequest?.cancel()
         currentSessionsRequest?.cancel()
         currentNewsItemsRequest?.cancel()
+        currentFeaturedSectionsRequest?.cancel()
 
         environment = Environment.current
 
@@ -91,6 +100,7 @@ public final class AppleAPIClient {
         sessions = makeSessionsResource()
         schedule = makeScheduleResource()
         news = makeNewsResource()
+        featuredSections = makeFeaturedSectionsResource()
     }
 
     // MARK: - Resources
@@ -102,6 +112,8 @@ public final class AppleAPIClient {
     fileprivate lazy var schedule: Resource = self.makeScheduleResource()
 
     fileprivate lazy var news: Resource = self.makeNewsResource()
+
+    fileprivate lazy var featuredSections: Resource = self.makeFeaturedSectionsResource()
 
     fileprivate func makeLiveVideosResource() -> Resource {
         return service.resource(environment.liveVideosPath)
@@ -119,17 +131,23 @@ public final class AppleAPIClient {
         return service.resource(environment.newsPath)
     }
 
+    fileprivate func makeFeaturedSectionsResource() -> Resource {
+        return service.resource(environment.featuredSectionsPath)
+    }
+
     // MARK: - Standard API requests
 
     private var liveVideoAssetsResource: Resource!
     private var contentsResource: Resource!
     private var sessionsResource: Resource!
     private var newsItemsResource: Resource!
+    private var featuredSectionsResource: Resource!
 
     private var currentLiveVideosRequest: Request?
     private var currentScheduleRequest: Request?
     private var currentSessionsRequest: Request?
     private var currentNewsItemsRequest: Request?
+    private var currentFeaturedSectionsRequest: Request?
 
     public func fetchLiveVideoAssets(completion: @escaping (Result<[SessionAsset], APIError>) -> Void) {
         if liveVideoAssetsResource == nil {
@@ -163,6 +181,18 @@ public final class AppleAPIClient {
         currentNewsItemsRequest?.cancel()
         currentNewsItemsRequest = newsItemsResource.loadIfNeeded()
     }
+
+    public func fetchFeaturedSections(completion: @escaping (Result<[FeaturedSection], APIError>) -> Void) {
+        if featuredSectionsResource == nil {
+            featuredSectionsResource = featuredSections.addObserver(owner: self) { [weak self] resource, event in
+                self?.process(resource, event: event, with: completion)
+            }
+        }
+
+        currentFeaturedSectionsRequest?.cancel()
+        currentFeaturedSectionsRequest = featuredSectionsResource.loadIfNeeded()
+    }
+
 }
 
 // MARK: - API results processing

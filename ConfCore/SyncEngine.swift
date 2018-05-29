@@ -60,6 +60,10 @@ public final class SyncEngine {
             DispatchQueue.main.async {
                 self.storage.store(contentResult: scheduleResult) { error in
                     NotificationCenter.default.post(name: .SyncEngineDidSyncSessionsAndSchedule, object: error)
+
+                    guard error == nil else { return }
+
+                    self.syncFeaturedSections()
                 }
             }
         }
@@ -69,6 +73,14 @@ public final class SyncEngine {
         client.fetchLiveVideoAssets { [weak self] result in
             DispatchQueue.main.async {
                 self?.storage.store(liveVideosResult: result)
+            }
+        }
+    }
+
+    public func syncFeaturedSections() {
+        client.fetchFeaturedSections { [weak self] result in
+            DispatchQueue.main.async {
+                self?.storage.store(featuredSectionsResult: result)
             }
         }
     }

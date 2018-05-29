@@ -99,6 +99,7 @@
 		DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */; };
 		DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */; };
 		DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */; };
+		DD71CC2A20BD009500BB5F47 /* AppCoordinator+Featured.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
@@ -206,6 +207,21 @@
 		DDDF805B20B9035C007284F8 /* Bookmark+ConflictResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF805A20B9035C007284F8 /* Bookmark+ConflictResolution.swift */; };
 		DDDF805D20B907FA007284F8 /* SessionProgress+ConflictResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF805C20B907FA007284F8 /* SessionProgress+ConflictResolution.swift */; };
 		DDDF805F20B90842007284F8 /* SessionProgressSyncObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF805E20B90842007284F8 /* SessionProgressSyncObject.swift */; };
+		DDDF806120B9EC3A007284F8 /* FeaturedSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF806020B9EC3A007284F8 /* FeaturedSection.swift */; };
+		DDDF806320B9EF32007284F8 /* FeaturedAuthor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF806220B9EF32007284F8 /* FeaturedAuthor.swift */; };
+		DDDF806620B9F5EC007284F8 /* FeaturedContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF806520B9F5EC007284F8 /* FeaturedContent.swift */; };
+		DDDF806920BA06D8007284F8 /* FeaturedSectionsJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF806820BA06D8007284F8 /* FeaturedSectionsJSONAdapter.swift */; };
+		DDDF806B20BA08FF007284F8 /* FeaturedContentJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF806A20BA08FF007284F8 /* FeaturedContentJSONAdapter.swift */; };
+		DDDF806D20BA0B66007284F8 /* BookmarkJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF806C20BA0B66007284F8 /* BookmarkJSONAdapter.swift */; };
+		DDDF806F20BA115A007284F8 /* layout.json in Resources */ = {isa = PBXBuildFile; fileRef = DDDF806E20BA115A007284F8 /* layout.json */; };
+		DDDF807120BA1568007284F8 /* FeaturedAuthorJSONAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF807020BA1568007284F8 /* FeaturedAuthorJSONAdapter.swift */; };
+		DDDF807420BA3124007284F8 /* FeaturedContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF807320BA3124007284F8 /* FeaturedContentViewController.swift */; };
+		DDDF807620BA3719007284F8 /* FeaturedContentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF807520BA3719007284F8 /* FeaturedContentCollectionViewCell.swift */; };
+		DDDF807820BA3DAA007284F8 /* FeaturedSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF807720BA3DAA007284F8 /* FeaturedSectionViewController.swift */; };
+		DDDF807A20BA3F1B007284F8 /* FeaturedContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF807920BA3F1B007284F8 /* FeaturedContentViewModel.swift */; };
+		DDDF807C20BA470B007284F8 /* FeaturedSectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF807B20BA470B007284F8 /* FeaturedSectionViewModel.swift */; };
+		DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF807D20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift */; };
+		DDDF808020BA53A4007284F8 /* FlippedClipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */; };
 		DDEA82FC20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA82FB20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift */; };
 		DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */; };
 		DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */; };
@@ -455,6 +471,7 @@
 		DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCBottomBorderView.swift; sourceTree = "<group>"; };
 		DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableViewController.swift; sourceTree = "<group>"; };
 		DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableCellView.swift; sourceTree = "<group>"; };
+		DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Featured.swift"; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTabViewController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
@@ -562,6 +579,21 @@
 		DDDF805A20B9035C007284F8 /* Bookmark+ConflictResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bookmark+ConflictResolution.swift"; sourceTree = "<group>"; };
 		DDDF805C20B907FA007284F8 /* SessionProgress+ConflictResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionProgress+ConflictResolution.swift"; sourceTree = "<group>"; };
 		DDDF805E20B90842007284F8 /* SessionProgressSyncObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionProgressSyncObject.swift; sourceTree = "<group>"; };
+		DDDF806020B9EC3A007284F8 /* FeaturedSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedSection.swift; sourceTree = "<group>"; };
+		DDDF806220B9EF32007284F8 /* FeaturedAuthor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedAuthor.swift; sourceTree = "<group>"; };
+		DDDF806520B9F5EC007284F8 /* FeaturedContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedContent.swift; sourceTree = "<group>"; };
+		DDDF806820BA06D8007284F8 /* FeaturedSectionsJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedSectionsJSONAdapter.swift; sourceTree = "<group>"; };
+		DDDF806A20BA08FF007284F8 /* FeaturedContentJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedContentJSONAdapter.swift; sourceTree = "<group>"; };
+		DDDF806C20BA0B66007284F8 /* BookmarkJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkJSONAdapter.swift; sourceTree = "<group>"; };
+		DDDF806E20BA115A007284F8 /* layout.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = layout.json; sourceTree = "<group>"; };
+		DDDF807020BA1568007284F8 /* FeaturedAuthorJSONAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedAuthorJSONAdapter.swift; sourceTree = "<group>"; };
+		DDDF807320BA3124007284F8 /* FeaturedContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedContentViewController.swift; sourceTree = "<group>"; };
+		DDDF807520BA3719007284F8 /* FeaturedContentCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedContentCollectionViewCell.swift; sourceTree = "<group>"; };
+		DDDF807720BA3DAA007284F8 /* FeaturedSectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedSectionViewController.swift; sourceTree = "<group>"; };
+		DDDF807920BA3F1B007284F8 /* FeaturedContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedContentViewModel.swift; sourceTree = "<group>"; };
+		DDDF807B20BA470B007284F8 /* FeaturedSectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedSectionViewModel.swift; sourceTree = "<group>"; };
+		DDDF807D20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCHorizontalScrollView.swift; sourceTree = "<group>"; };
+		DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedClipView.swift; sourceTree = "<group>"; };
 		DDEA82FB20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIRemoteCommandCoordinator.swift; sourceTree = "<group>"; };
 		DDEA85F91EB52AB5002AE0EB /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
 		DDEA85FA1EB52AB5002AE0EB /* VideoPlayerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerWindowController.swift; sourceTree = "<group>"; };
@@ -789,6 +821,7 @@
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
 				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
 				DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */,
+				DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */,
 				DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */,
 				DD0159FB1ED23F7700F980F1 /* RemoteEnvironment.swift */,
 				DDB3529D1EC8D8CD00254815 /* main.m */,
@@ -803,6 +836,7 @@
 				DDC678201EDB955600A4E19C /* Bookmarks */,
 				DDC6780D1EDB251E00A4E19C /* About */,
 				DD90CDCE1ED7A5F900CADE86 /* Search */,
+				DDDF807220BA3110007284F8 /* Featured */,
 				DD7F38601EABD66D002D8C00 /* Sessions */,
 				DD0159CD1ED0CD1D00F980F1 /* Preferences */,
 			);
@@ -832,6 +866,9 @@
 				DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */,
 				DDA60E1220A90655002EECF5 /* SessionCellView.swift */,
 				DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */,
+				DDDF807520BA3719007284F8 /* FeaturedContentCollectionViewCell.swift */,
+				DDDF807D20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift */,
+				DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -842,6 +879,8 @@
 				DD90CDC91ED77A4000CADE86 /* Search */,
 				DDB28F921EAD48D70077703F /* UserActivityRepresentable.swift */,
 				DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */,
+				DDDF807B20BA470B007284F8 /* FeaturedSectionViewModel.swift */,
+				DDDF807920BA3F1B007284F8 /* FeaturedContentViewModel.swift */,
 				DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */,
 				DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */,
 			);
@@ -909,6 +948,7 @@
 				DD5DEC271E4AA8C800426FA6 /* videos_live.json */,
 				DD5DEC281E4AA8C800426FA6 /* wwdc.json */,
 				DDAE7C4E1E5BA4E300CEA205 /* transcript.json */,
+				DDDF806E20BA115A007284F8 /* layout.json */,
 			);
 			name = Fixtures;
 			path = Fixtures/json;
@@ -975,6 +1015,7 @@
 			isa = PBXGroup;
 			children = (
 				DDDAA3CB1EC746AE00DF9D02 /* Display */,
+				DDDF806420B9F46C007284F8 /* Featured */,
 				DD65FD561E48A0BD0054DD35 /* Event.swift */,
 				DD65FD5C1E48A11F0054DD35 /* Track.swift */,
 				DD65FD5A1E48A1080054DD35 /* Focus.swift */,
@@ -1135,6 +1176,7 @@
 		DDAE7C681E5CA84B00CEA205 /* Apple */ = {
 			isa = PBXGroup;
 			children = (
+				DDDF806720BA06BA007284F8 /* Featured */,
 				DD5DEC211E4AA7F100426FA6 /* EventsJSONAdapter.swift */,
 				DD6477301E55231A00386D93 /* LiveVideosAdapter.swift */,
 				DD34DA0A1E4AB3E400F25C45 /* RoomsJSONAdapter.swift */,
@@ -1333,6 +1375,36 @@
 				DDDF805C20B907FA007284F8 /* SessionProgress+ConflictResolution.swift */,
 			);
 			name = "Conflict Resolution";
+			sourceTree = "<group>";
+		};
+		DDDF806420B9F46C007284F8 /* Featured */ = {
+			isa = PBXGroup;
+			children = (
+				DDDF806020B9EC3A007284F8 /* FeaturedSection.swift */,
+				DDDF806220B9EF32007284F8 /* FeaturedAuthor.swift */,
+				DDDF806520B9F5EC007284F8 /* FeaturedContent.swift */,
+			);
+			name = Featured;
+			sourceTree = "<group>";
+		};
+		DDDF806720BA06BA007284F8 /* Featured */ = {
+			isa = PBXGroup;
+			children = (
+				DDDF806820BA06D8007284F8 /* FeaturedSectionsJSONAdapter.swift */,
+				DDDF806A20BA08FF007284F8 /* FeaturedContentJSONAdapter.swift */,
+				DDDF806C20BA0B66007284F8 /* BookmarkJSONAdapter.swift */,
+				DDDF807020BA1568007284F8 /* FeaturedAuthorJSONAdapter.swift */,
+			);
+			name = Featured;
+			sourceTree = "<group>";
+		};
+		DDDF807220BA3110007284F8 /* Featured */ = {
+			isa = PBXGroup;
+			children = (
+				DDDF807320BA3124007284F8 /* FeaturedContentViewController.swift */,
+				DDDF807720BA3DAA007284F8 /* FeaturedSectionViewController.swift */,
+			);
+			name = Featured;
 			sourceTree = "<group>";
 		};
 		DDEA85F81EB52AA6002AE0EB /* Playback */ = {
@@ -1736,6 +1808,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD5DEC2A1E4AA8C800426FA6 /* sessions.json in Resources */,
+				DDDF806F20BA115A007284F8 /* layout.json in Resources */,
 				DD5DEC2C1E4AA8C800426FA6 /* videos_live.json in Resources */,
 				DD5DEC2D1E4AA8C800426FA6 /* wwdc.json in Resources */,
 				DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */,
@@ -1846,6 +1919,7 @@
 				DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
 				DDB3529A1EC8AB2800254815 /* WWDCImageView.swift in Sources */,
+				DDDF807620BA3719007284F8 /* FeaturedContentCollectionViewCell.swift in Sources */,
 				DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */,
 				DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */,
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
@@ -1872,6 +1946,7 @@
 				DD4DED6B1ED6605D00624EAF /* LoggingHelper.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* SessionsSplitViewController.swift in Sources */,
 				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
+				DDDF807420BA3124007284F8 /* FeaturedContentViewController.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
@@ -1879,22 +1954,28 @@
 				DDEDFCF31ED92F2A002477C8 /* TextualFilter.swift in Sources */,
 				DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */,
 				DD6E06F41EDBC11F000EAEA4 /* WWDCTextButton.swift in Sources */,
+				DDDF807A20BA3F1B007284F8 /* FeaturedContentViewModel.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
 				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
+				DDDF807820BA3DAA007284F8 /* FeaturedSectionViewController.swift in Sources */,
 				DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
 				DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */,
+				DDDF808020BA53A4007284F8 /* FlippedClipView.swift in Sources */,
 				DDB3529C1EC8AB5D00254815 /* WWDCLayer.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,
 				DD34A79B1EC3CD5900E0B575 /* Constants.swift in Sources */,
 				DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */,
+				DD71CC2A20BD009500BB5F47 /* AppCoordinator+Featured.swift in Sources */,
 				DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
 				DD0159FC1ED23F7700F980F1 /* RemoteEnvironment.swift in Sources */,
+				DDDF807C20BA470B007284F8 /* FeaturedSectionViewModel.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
 				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
+				DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
@@ -1929,6 +2010,7 @@
 				DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */,
 				DDC6780C1EDA77CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */,
 				DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */,
+				DDDF806620B9F5EC007284F8 /* FeaturedContent.swift in Sources */,
 				DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */,
 				DDAE7C651E5CA81C00CEA205 /* SessionsResponse.swift in Sources */,
 				DD65FD591E48A0C90054DD35 /* Photo.swift in Sources */,
@@ -1936,6 +2018,8 @@
 				DDC927F720B79A39004C784D /* CKRecord+SystemFields.swift in Sources */,
 				DD65FD6B1E48BD9F0054DD35 /* Favorite.swift in Sources */,
 				DD65FD511E48A05C0054DD35 /* Session.swift in Sources */,
+				DDDF806D20BA0B66007284F8 /* BookmarkJSONAdapter.swift in Sources */,
+				DDDF806920BA06D8007284F8 /* FeaturedSectionsJSONAdapter.swift in Sources */,
 				DD34DA0B1E4AB3E400F25C45 /* RoomsJSONAdapter.swift in Sources */,
 				DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */,
 				DDD3797D1E4AB655005FE876 /* TracksJSONAdapter.swift in Sources */,
@@ -1946,7 +2030,9 @@
 				DD65FD5D1E48A11F0054DD35 /* Track.swift in Sources */,
 				DDC927F520B799CD004C784D /* UserDataSyncProtocols.swift in Sources */,
 				F74CDA12207AB70A00A16C97 /* SessionAssetsAdapter.swift in Sources */,
+				DDDF807120BA1568007284F8 /* FeaturedAuthorJSONAdapter.swift in Sources */,
 				DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */,
+				DDDF806120B9EC3A007284F8 /* FeaturedSection.swift in Sources */,
 				DDAE7C631E5C7E7800CEA205 /* ScheduleResponse.swift in Sources */,
 				DDDF805420B8FCBC007284F8 /* Session+Children.swift in Sources */,
 				DD5DEC201E4AA6F800426FA6 /* Adapter.swift in Sources */,
@@ -1963,6 +2049,7 @@
 				DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */,
 				DD0353491E5545B300D5E343 /* SessionInstancesJSONAdapter.swift in Sources */,
 				DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */,
+				DDDF806B20BA08FF007284F8 /* FeaturedContentJSONAdapter.swift in Sources */,
 				DD54CD101E4AB8ED000BF5F2 /* KeywordsJSONAdapter.swift in Sources */,
 				DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */,
 				DD65FD551E48A0A70054DD35 /* Room.swift in Sources */,
@@ -1974,6 +2061,7 @@
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,
 				DDD930731ED52B2900D61BE3 /* Download.swift in Sources */,
 				DDDF805F20B90842007284F8 /* SessionProgressSyncObject.swift in Sources */,
+				DDDF806320B9EF32007284F8 /* FeaturedAuthor.swift in Sources */,
 				DD3C4D2B1E564AE80093BBD0 /* NewsItemsJSONAdapter.swift in Sources */,
 				DD65FD5F1E48A3900054DD35 /* SessionInstance.swift in Sources */,
 				DD65FD571E48A0BD0054DD35 /* Event.swift in Sources */,

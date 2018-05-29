@@ -27,6 +27,7 @@ final class AppCoordinator {
     var windowController: MainWindowController
     var tabController: WWDCTabViewController<MainWindowTab>
 
+    var featuredController: FeaturedContentViewController
     var scheduleController: SessionsSplitViewController
     var videosController: SessionsSplitViewController
 
@@ -34,7 +35,7 @@ final class AppCoordinator {
 
     var currentActivity: NSUserActivity?
 
-    var activeTab: MainWindowTab = .schedule
+    var activeTab: MainWindowTab = .featured
 
     /// The tab that "owns" the current player (the one that was active when the "play" button was pressed)
     var playerOwnerTab: MainWindowTab?
@@ -77,6 +78,14 @@ final class AppCoordinator {
 
         tabController = WWDCTabViewController(windowController: windowController)
 
+        // Featured
+        featuredController = FeaturedContentViewController()
+        featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
+        let featuredItem = NSTabViewItem(viewController: featuredController)
+        featuredItem.label = "Featured"
+//        featuredItem.initialFirstResponder = scheduleController.listViewController.tableView
+        tabController.addTabViewItem(featuredItem)
+
         // Schedule
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
@@ -112,12 +121,14 @@ final class AppCoordinator {
     }
 
     /// The list controller for the active tab
-    var currentListController: SessionsTableViewController {
+    var currentListController: SessionsTableViewController? {
         switch activeTab {
         case .schedule:
             return scheduleController.listViewController
         case .videos:
             return videosController.listViewController
+        default:
+            return nil
         }
     }
 
@@ -168,6 +179,10 @@ final class AppCoordinator {
             self?.scheduleController.detailViewController.viewModel = viewModel
             self?.updateSelectedViewModelRegardlessOfTab()
         }).disposed(by: disposeBag)
+
+        storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
+            self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
+        }).disposed(by: disposeBag)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -176,10 +191,28 @@ final class AppCoordinator {
             selectedViewModelRegardlessOfTab = selectedScheduleItemValue
         case .videos:
             selectedViewModelRegardlessOfTab = selectedSessionValue
+        default:
+            selectedViewModelRegardlessOfTab = nil
         }
 
         updateShelfBasedOnSelectionChange()
         updateCurrentActivity(with: selectedViewModelRegardlessOfTab)
+    }
+
+    func switchToAppropriateTab(for instance: SessionInstance) {
+        if ![.video, .session].contains(instance.type) {
+            // If the session instace is not a video or regular session, we must be
+            // on the schedule tab to show it, since the videos tab only shows videos
+            tabController.activeTab = .schedule
+        } else {
+            tabController.activeTab = .videos
+        }
+    }
+
+    func selectSessionOnAppropriateTab(with viewModel: SessionViewModel) {
+        switchToAppropriateTab(for: viewModel.sessionInstance)
+
+        currentListController?.selectSession(with: viewModel.identifier)
     }
 
     private func setupDelegation() {
@@ -197,6 +230,8 @@ final class AppCoordinator {
 
         videosController.listViewController.delegate = self
         scheduleController.listViewController.delegate = self
+
+        featuredController.delegate = self
     }
 
     private func updateListsAfterSync(migrate: Bool = false) {
@@ -397,11 +432,15 @@ final class AppCoordinator {
     func showAboutWindow() {
         aboutWindowController.showWindow(nil)
     }
-    
+
+    func showFeatured() {
+        tabController.activeTab = .featured
+    }
+
     func showSchedule() {
         tabController.activeTab = .schedule
     }
-    
+
     func showVideos() {
         tabController.activeTab = .videos
     }

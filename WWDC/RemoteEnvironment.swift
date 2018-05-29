@@ -118,7 +118,8 @@ extension Environment {
                   videosPath: "/videos.json",
                   sessionsPath: "/sessions.json",
                   newsPath: "/news.json",
-                  liveVideosPath: "/videos_live.json")
+                  liveVideosPath: "/videos_live.json",
+                  featuredSectionsPath: "/_featured.json")
     }
 
 }

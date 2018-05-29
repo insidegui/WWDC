@@ -244,6 +244,22 @@ public final class Storage {
         })
     }
 
+    internal func store(featuredSectionsResult: Result<[FeaturedSection], APIError>) {
+        guard case .success(let sections) = featuredSectionsResult else { return }
+
+        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+            backgroundRealm.delete(backgroundRealm.objects(FeaturedSection.self))
+            backgroundRealm.add(sections, update: true)
+
+            // Associate contents with sessions
+            sections.forEach { section in
+                section.content.forEach { content in
+                    content.session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: content.sessionId)
+                }
+            }
+        })
+    }
+
     /// Performs a write transaction in the background
     ///
     /// - Parameters:
@@ -406,6 +422,13 @@ public final class Storage {
         let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
 
         return Observable.collection(from: tracks)
+    }()
+
+    public lazy var featuredSectionsObservable: Observable<Results<FeaturedSection>> = {
+        let predicate = NSPredicate(format: "isPublished = true AND content.@count > 0")
+        let sections = self.realm.objects(FeaturedSection.self).filter(predicate)
+
+        return Observable.collection(from: sections)
     }()
 
     public lazy var scheduleObservable: Observable<Results<ScheduleSection>> = {

@@ -49,11 +49,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func showAboutWindow(_ sender: Any) {
         coordinator.showAboutWindow()
     }
-    
+
+    @IBAction func viewFeatured(_ sender: Any) {
+        coordinator.showFeatured()
+    }
+
     @IBAction func viewSchedule(_ sender: Any) {
         coordinator.showSchedule()
     }
-    
+
     @IBAction func viewVideos(_ sender: Any) {
         coordinator.showVideos()
     }
