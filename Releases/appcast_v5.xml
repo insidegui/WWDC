@@ -7,6 +7,41 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 6.0</title>
+			<description><![CDATA[
+				<h2>Happy WWDC 2018! 🎉</h2>
+				<h3>This is a major update of the app with some great new features and improvements:</h3>
+				
+				<h4>iCloud Sync (beta)</h4>
+				<p>That's right! You can now sync your favorites, bookmarks and progress in videos between multiple computers. All you need is to be logged in to your iCloud account.</p>
+
+				<h4>Related Sessions</h4>
+				<p>When watching a specific session, we will show related sessions to you so you can binge watch and expand your learning.</p>
+
+				<h4>Session Links</h4>
+				<p>Some special events and labs require you to make an appointment, some special events have links for directions. We now show those important links at the bottom of the session details so you can schedule an appointment or find directions right from the app.</p>
+
+				<h4>"Now Playing" integration and Bluetooth control</h4>
+				<p>Playback in the app will now show in the "Now Playing" Notification Center widget. This also means you can control playback using your AirPods (or any other Bluetooth headphone).</p>
+
+				<h4>Touch Bar support</h4>
+				<p>The player now shows its controls in the Touch Bar so you can easily control playback anywhere in the app without moving your mouse.</p>
+
+				<h4>Calendar integration</h4>
+				<p>If you see a session in the schedule you'd really like to attend, just click the calendar button in the session details and an event will be added to your calendar. Remember you can still ask Siri to remind you about a session when you have it selected in the app!</p>
+
+				<h4>State restoration improvements</h4>
+				<p>You can quit the app without worrying about losing your place. Everything will be back where you left off when you launch it again, including search and filters.</p>
+
+				<h4>Improved ChromeCast support</h4>
+				<p>We have updated ChromeCast support to be even better and more stable, enjoy watching the keynote on your big screen.</p>
+			]]></description>
+            <pubDate>Thu, 31 Sep 2018 15:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0/WWDC_v6.0.zip" sparkle:version="800" sparkle:shortVersionString="6.0" length="17551444" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12.2</sparkle:minimumSystemVersion>
+        </item>
+
+		<item>
             <title>Version 5.3</title>
 			<description><![CDATA[
 				<ul>
