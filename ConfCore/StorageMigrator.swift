@@ -26,7 +26,8 @@ final class StorageMigrator {
         31: migrateContentThumbnails,
         32: migrateSessionModels,
         34: migrateOldTranscriptModels,
-        37: migrateIdentifiersWithoutReplacement
+        37: migrateIdentifiersWithoutReplacement,
+        43: migrateTracks
     ]
 
     init(migration: Migration, oldVersion: UInt64) {
@@ -118,6 +119,7 @@ final class StorageMigrator {
 
     private static func migrateIdentifiersWithoutReplacement(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
         // version 37 changed identifiers to include the event name prefix (i.e. "wwdc" or "fall")
+        os_log("migrateIdentifiersWithoutReplacement", log: log, type: .info)
 
         // add `year` to `Event` based on the event's start date
         migration.enumerateObjects(ofType: "Event") { _, event in
@@ -156,6 +158,12 @@ final class StorageMigrator {
 
             transcript?["identifier"] = "wwdc" + identifier
         }
+    }
+
+    private static func migrateTracks(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+        os_log("migrateTracks", log: log, type: .info)
+
+        migration.deleteData(forType: "Track")
     }
 
 }
