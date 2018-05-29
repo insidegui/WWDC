@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 public enum SessionInstanceType: Int {
-    case session, lab, labByAppointment, video, getTogether, specialEvent
+    case session, lab, video, getTogether, specialEvent, labByAppointment
 
     init?(rawSessionType: String) {
         switch rawSessionType {
