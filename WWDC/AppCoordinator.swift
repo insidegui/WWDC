@@ -432,11 +432,15 @@ final class AppCoordinator {
     func showAboutWindow() {
         aboutWindowController.showWindow(nil)
     }
-    
+
+    func showFeatured() {
+        tabController.activeTab = .featured
+    }
+
     func showSchedule() {
         tabController.activeTab = .schedule
     }
-    
+
     func showVideos() {
         tabController.activeTab = .videos
     }
