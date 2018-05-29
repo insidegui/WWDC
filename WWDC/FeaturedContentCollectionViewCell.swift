@@ -146,7 +146,7 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
         thumbnailImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         thumbnailImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 
-        textStackView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: 12).isActive = true
+        textStackView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: 10).isActive = true
         textStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         textStackView.trailingAnchor.constraint(equalTo: iconsStackView.leadingAnchor).isActive = true
 
