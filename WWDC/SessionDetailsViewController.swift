@@ -44,7 +44,7 @@ class SessionDetailsViewController: NSViewController {
             let instance = viewModel.sessionInstance
             let type = instance.type
 
-            let sessionHasNoVideo = (type == .lab || type == .getTogether) && !(instance.isCurrentlyLive == true)
+            let sessionHasNoVideo = [.lab, .getTogether, .labByAppointment].contains(type) && !(instance.isCurrentlyLive == true)
 
             shelfController.view.isHidden = sessionHasNoVideo
 

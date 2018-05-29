@@ -75,7 +75,7 @@ final class SessionCellView: NSView {
             self?.imageDownloadOperation?.cancel()
 
             self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, _, thumb in
-                guard url == imageUrl else { return }
+                guard url == imageUrl, thumb != nil else { return }
 
                 self?.thumbnailImageView.image = thumb
             }
@@ -100,7 +100,7 @@ final class SessionCellView: NSView {
         }).disposed(by: disposeBag)
 
         viewModel.rxSessionType.distinctUntilChanged().subscribe(onNext: { [weak self] type in
-            guard type != .session && type != .lab else { return }
+            guard ![.lab, .session, .labByAppointment].contains(type) else { return }
 
             switch type {
             case .getTogether:
