@@ -10,7 +10,9 @@ import Cocoa
 import RealmSwift
 
 /// Bookmarks are notes the user can create while watching session videos to reference later, bookmarks can be private or shared with other users
-public class Bookmark: Object {
+public final class Bookmark: Object, HasCloudKitFields, SoftDeletable {
+
+    @objc public dynamic var ckFields = Data()
 
     /// Unique identifier
     @objc public dynamic var identifier = UUID().uuidString

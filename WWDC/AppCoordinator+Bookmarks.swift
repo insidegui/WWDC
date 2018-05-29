@@ -23,7 +23,7 @@ extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate
         storage.modify(session) { bgSession in
             let bookmark = Bookmark()
             bookmark.timecode = timecode
-            bookmark.snapshot = snapshot?.tiffRepresentation ?? Data()
+            bookmark.snapshot = snapshot?.compressedJPEGRepresentation ?? Data()
 
             bgSession.bookmarks.append(bookmark)
         }

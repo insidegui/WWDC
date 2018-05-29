@@ -62,6 +62,9 @@ final class AppCoordinator {
             storage = try Storage(realmConfig)
 
             syncEngine = SyncEngine(storage: storage, client: client)
+            #if ICLOUD
+            syncEngine.userDataSyncEngine.isEnabled = Preferences.shared.syncUserData
+            #endif
         } catch {
             fatalError("Realm initialization error: \(error)")
         }
@@ -291,8 +294,17 @@ final class AppCoordinator {
         showAccountPreferences()
     }
 
-    func receiveNotification(with userInfo: [String: Any]) -> Bool {
-        return liveObserver.processSubscriptionNotification(with: userInfo) ||
+    @discardableResult func receiveNotification(with userInfo: [String: Any]) -> Bool {
+        let userDataSyncEngineHandled: Bool
+
+        #if ICLOUD
+        userDataSyncEngineHandled = syncEngine.userDataSyncEngine.processSubscriptionNotification(with: userInfo)
+        #else
+        userDataSyncEngineHandled = false
+        #endif
+
+        return userDataSyncEngineHandled ||
+            liveObserver.processSubscriptionNotification(with: userInfo) ||
             RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo)
     }
 
@@ -356,13 +368,17 @@ final class AppCoordinator {
 
     // MARK: - Preferences
 
-    private lazy var preferencesCoordinator: PreferencesCoordinator = PreferencesCoordinator()
+    private lazy var preferencesCoordinator = PreferencesCoordinator()
 
     func showAccountPreferences() {
         preferencesCoordinator.show(in: .account)
     }
 
     func showPreferences(_ sender: Any?) {
+        #if ICLOUD
+        preferencesCoordinator.userDataSyncEngine = syncEngine.userDataSyncEngine
+        #endif
+
         preferencesCoordinator.show()
     }
 

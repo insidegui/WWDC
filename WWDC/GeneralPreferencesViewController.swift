@@ -7,8 +7,15 @@
 //
 
 import Cocoa
+import RxSwift
+import RxCocoa
+import ConfCore
 
 class GeneralPreferencesViewController: NSViewController {
+
+    #if ICLOUD
+    weak var userDataSyncEngine: UserDataSyncEngine?
+    #endif
 
     static func loadFromStoryboard() -> GeneralPreferencesViewController {
         let vc = NSStoryboard(name: NSStoryboard.Name(rawValue: "Preferences"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "GeneralPreferencesViewController"))
@@ -21,6 +28,7 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var searchInBookmarksSwitch: ITSwitch!
     @IBOutlet weak var refreshPeriodicallySwitch: ITSwitch!
     @IBOutlet weak var skipBackAndForwardBy30SecondsSwitch: ITSwitch!
+    @IBOutlet weak var enableUserDataSyncSwitch: ITSwitch!
 
     @IBOutlet weak var downloadsFolderLabel: NSTextField!
 
@@ -30,10 +38,13 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var includeTranscriptsLabel: NSTextField!
     @IBOutlet weak var refreshAutomaticallyLabel: NSTextField!
     @IBOutlet weak var skipBackAndForwardBy30SecondsLabel: NSTextField!
+    @IBOutlet weak var enableUserDataSyncLabel: NSTextField!
+    @IBOutlet weak var syncDescriptionLabel: NSTextField!
 
     @IBOutlet weak var dividerA: NSBox!
     @IBOutlet weak var dividerB: NSBox!
     @IBOutlet weak var dividerC: NSBox!
+    @IBOutlet weak var dividerD: NSBox!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,22 +56,47 @@ class GeneralPreferencesViewController: NSViewController {
         refreshAutomaticallyLabel.textColor = .prefsPrimaryText
         skipBackAndForwardBy30SecondsLabel.textColor = .prefsPrimaryText
         downloadsFolderLabel.textColor = .prefsSecondaryText
+        enableUserDataSyncLabel.textColor = .prefsPrimaryText
+        syncDescriptionLabel.textColor = .prefsSecondaryText
 
         dividerA.fillColor = .darkGridColor
         dividerB.fillColor = .darkGridColor
         dividerC.fillColor = .darkGridColor
+        dividerD.fillColor = .darkGridColor
 
         searchInTranscriptsSwitch.tintColor = .primary
         searchInBookmarksSwitch.tintColor = .primary
         refreshPeriodicallySwitch.tintColor = .primary
         skipBackAndForwardBy30SecondsSwitch.tintColor = .primary
+        enableUserDataSyncSwitch.tintColor = .primary
 
         searchInTranscriptsSwitch.checked = Preferences.shared.searchInTranscripts
         searchInBookmarksSwitch.checked = Preferences.shared.searchInBookmarks
         refreshPeriodicallySwitch.checked = Preferences.shared.refreshPeriodically
         skipBackAndForwardBy30SecondsSwitch.checked = Preferences.shared.skipBackAndForwardBy30Seconds
+        enableUserDataSyncSwitch.checked = Preferences.shared.syncUserData
 
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
+
+        bindSyncEngine()
+    }
+
+    private let disposeBag = DisposeBag()
+
+    private func bindSyncEngine() {
+        #if ICLOUD
+        guard let engine = userDataSyncEngine, isViewLoaded else { return }
+
+        // Disable sync switch while there are sync operations running
+        engine.isPerformingSyncOperation.asDriver()
+                                        .map({ !$0 })
+                                        .drive(enableUserDataSyncSwitch.rx.isEnabled)
+                                        .disposed(by: disposeBag)
+        #else
+        dividerD?.isHidden = true
+        enableUserDataSyncSwitch?.isHidden = true
+        syncDescriptionLabel?.isHidden = true
+        #endif
     }
 
     @IBAction func searchInTranscriptsSwitchAction(_ sender: Any) {
@@ -77,6 +113,13 @@ class GeneralPreferencesViewController: NSViewController {
 
     @IBAction func skipBackAndForwardBy30SecondsSwitchAction(_ sender: Any) {
         Preferences.shared.skipBackAndForwardBy30Seconds = skipBackAndForwardBy30SecondsSwitch.checked
+    }
+
+    @IBAction func enableUserDataSyncSwitchAction(_ sender: Any) {
+        #if ICLOUD
+        Preferences.shared.syncUserData = enableUserDataSyncSwitch.checked
+        userDataSyncEngine?.isEnabled = enableUserDataSyncSwitch.checked
+        #endif
     }
 
     @IBAction func revealDownloadsFolderInFinder(_ sender: NSButton) {
