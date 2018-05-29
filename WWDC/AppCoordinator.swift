@@ -199,6 +199,22 @@ final class AppCoordinator {
         updateCurrentActivity(with: selectedViewModelRegardlessOfTab)
     }
 
+    func switchToAppropriateTab(for instance: SessionInstance) {
+        if ![.video, .session].contains(instance.type) {
+            // If the session instace is not a video or regular session, we must be
+            // on the schedule tab to show it, since the videos tab only shows videos
+            tabController.activeTab = .schedule
+        } else {
+            tabController.activeTab = .videos
+        }
+    }
+
+    func selectSessionOnAppropriateTab(with viewModel: SessionViewModel) {
+        switchToAppropriateTab(for: viewModel.sessionInstance)
+
+        currentListController?.selectSession(with: viewModel.identifier)
+    }
+
     private func setupDelegation() {
         let videoDetail = videosController.detailViewController
 
@@ -214,6 +230,8 @@ final class AppCoordinator {
 
         videosController.listViewController.delegate = self
         scheduleController.listViewController.delegate = self
+
+        featuredController.delegate = self
     }
 
     private func updateListsAfterSync(migrate: Bool = false) {

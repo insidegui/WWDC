@@ -11,7 +11,13 @@ import RealmSwift
 import RxSwift
 import RxCocoa
 
+protocol FeaturedContentViewControllerDelegate: class {
+    func featuredContentViewController(_ controller: FeaturedContentViewController, didSelectContent content: FeaturedContentViewModel)
+}
+
 final class FeaturedContentViewController: NSViewController {
+
+    weak var delegate: FeaturedContentViewControllerDelegate?
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -81,11 +87,21 @@ final class FeaturedContentViewController: NSViewController {
         sectionControllers.removeAll()
 
         sections.map({ FeaturedSectionViewController(viewModel: $0) }).forEach { sectionController in
+            sectionController.delegate = self
+
             addChildViewController(sectionController)
             sectionControllers.append(sectionController)
             sectionController.view.heightAnchor.constraint(equalToConstant: FeaturedSectionViewController.Metrics.height).isActive = true
             stackView.addArrangedSubview(sectionController.view)
         }
+    }
+
+}
+
+extension FeaturedContentViewController: FeaturedSectionViewControllerDelegate {
+
+    func featuredSectionViewController(_ controller: FeaturedSectionViewController, didSelectContent viewModel: FeaturedContentViewModel) {
+        delegate?.featuredContentViewController(self, didSelectContent: viewModel)
     }
 
 }

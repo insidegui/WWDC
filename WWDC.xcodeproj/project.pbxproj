@@ -99,6 +99,7 @@
 		DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */; };
 		DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */; };
 		DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */; };
+		DD71CC2A20BD009500BB5F47 /* AppCoordinator+Featured.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
@@ -470,6 +471,7 @@
 		DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCBottomBorderView.swift; sourceTree = "<group>"; };
 		DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableViewController.swift; sourceTree = "<group>"; };
 		DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableCellView.swift; sourceTree = "<group>"; };
+		DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Featured.swift"; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTabViewController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
@@ -819,6 +821,7 @@
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
 				DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */,
 				DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */,
+				DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */,
 				DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */,
 				DD0159FB1ED23F7700F980F1 /* RemoteEnvironment.swift */,
 				DDB3529D1EC8D8CD00254815 /* main.m */,
@@ -1965,6 +1968,7 @@
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,
 				DD34A79B1EC3CD5900E0B575 /* Constants.swift in Sources */,
 				DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */,
+				DD71CC2A20BD009500BB5F47 /* AppCoordinator+Featured.swift in Sources */,
 				DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
 				DD0159FC1ED23F7700F980F1 /* RemoteEnvironment.swift in Sources */,
