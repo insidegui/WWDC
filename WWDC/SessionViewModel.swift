@@ -116,7 +116,7 @@ final class SessionViewModel {
             return Observable.just(false)
         }
 
-        return Observable.from(object: self.sessionInstance).map({ $0.type == .lab })
+        return Observable.from(object: self.sessionInstance).map({ [.lab, .labByAppointment].contains($0.type) })
     }()
 
     lazy var rxPlayableContent: Observable<Results<SessionAsset>> = {
@@ -250,7 +250,7 @@ final class SessionViewModel {
 
     static func imageUrl(for session: Session) -> URL? {
         if let instance = session.instances.first {
-            guard instance.type == .session || instance.type == .lab else {
+            guard [.session, .lab, .labByAppointment].contains(instance.type) else {
                 return nil
             }
         }
