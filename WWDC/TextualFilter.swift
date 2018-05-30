@@ -54,6 +54,10 @@ struct TextualFilter: FilterType {
         return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates)
     }
 
+    mutating func reset() {
+        value = nil
+    }
+
     func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
         var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
 

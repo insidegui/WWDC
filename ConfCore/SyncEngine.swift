@@ -61,9 +61,9 @@ public final class SyncEngine {
                 self.storage.store(contentResult: scheduleResult) { error in
                     NotificationCenter.default.post(name: .SyncEngineDidSyncSessionsAndSchedule, object: error)
 
-//                    guard error == nil else { return }
+                    guard error == nil else { return }
 
-//                    self.syncFeaturedSections()
+                    self.syncFeaturedSections()
                 }
             }
         }

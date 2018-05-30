@@ -96,11 +96,13 @@ final class SearchCoordinator {
         let favoritePredicate = NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == false).@count > 0")
         var scheduleFavoriteFilter = ToggleFilter(identifier: FilterIdentifier.isFavorite.rawValue,
                                                   isOn: false,
+                                                  defaultValue: false,
                                                   customPredicate: favoritePredicate)
 
         let downloadedPredicate = NSPredicate(format: "isDownloaded == true")
         var scheduleDownloadedFilter = ToggleFilter(identifier: FilterIdentifier.isDownloaded.rawValue,
                                                     isOn: false,
+                                                    defaultValue: false,
                                                     customPredicate: downloadedPredicate)
 
         let smallPositionPred = NSPredicate(format: "SUBQUERY(progresses, $progress, $progress.relativePosition < \(Constants.watchedVideoRelativePosition)).@count > 0")
@@ -110,6 +112,7 @@ final class SearchCoordinator {
 
         var scheduleUnwatchedFilter = ToggleFilter(identifier: FilterIdentifier.isUnwatched.rawValue,
                                                    isOn: false,
+                                                   defaultValue: false,
                                                    customPredicate: unwatchedPredicate)
 
         // Schedule Filtering State Restoration
@@ -192,13 +195,9 @@ final class SearchCoordinator {
         updateSearchResults(for: videosController, with: videosSearchController.filters)
     }
 
-    fileprivate lazy var searchQueue: DispatchQueue = DispatchQueue(label: "Search", qos: .userInteractive)
-
-    fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
+    func newFilterResults(for controller: SessionsTableViewController, filters: [FilterType]) -> FilterResults {
         guard filters.contains(where: { !$0.isEmpty }) else {
-            controller.searchResults = nil
-
-            return
+            return FilterResults(storage: storage, query: nil)
         }
 
         var subpredicates = filters.compactMap { $0.predicate }
@@ -221,25 +220,11 @@ final class SearchCoordinator {
 
         os_log("%{public}@", log: log, type: .debug, String(describing: predicate))
 
-        searchQueue.async { [unowned self] in
-            do {
-                let realm = try Realm(configuration: self.storage.realmConfig)
+        return FilterResults(storage: storage, query: predicate)
+    }
 
-                let results = realm.objects(Session.self).filter(predicate)
-                let keys: Set<String> = Set(results.map { $0.identifier })
-
-                DispatchQueue.main.async {
-                    let searchResults = self.storage.realm.objects(Session.self).filter("identifier IN %@", keys)
-                    controller.searchResults = searchResults
-                }
-            } catch {
-                os_log("Failed to initialize Realm for searching: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
-                LoggingHelper.registerError(error, info: ["when": "Searching"])
-            }
-        }
+    fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
+        controller.filterResults = newFilterResults(for: controller, filters: filters)
     }
 
     @objc fileprivate func activateSearchField() {

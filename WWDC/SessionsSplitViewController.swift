@@ -17,9 +17,9 @@ final class SessionsSplitViewController: NSSplitViewController {
 
     var listViewController: SessionsTableViewController
     var detailViewController: SessionDetailsViewController
-    var isResizingSplitView: Bool = false
+    var isResizingSplitView = false
     var windowController: MainWindowController
-    var setupDone: Bool = false
+    var setupDone = false
 
     init(windowController: MainWindowController, listStyle: SessionsListStyle) {
         self.windowController = windowController

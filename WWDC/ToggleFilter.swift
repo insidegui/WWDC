@@ -12,6 +12,7 @@ struct ToggleFilter: FilterType {
 
     var identifier: String
     var isOn: Bool
+    var defaultValue: Bool
 
     var customPredicate: NSPredicate?
 
@@ -23,6 +24,10 @@ struct ToggleFilter: FilterType {
         guard isOn else { return nil }
 
         return customPredicate
+    }
+
+    mutating func reset() {
+        isOn = defaultValue
     }
 
     func dictionaryRepresentation() -> WWDCFilterTypeDictionary {

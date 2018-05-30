@@ -203,27 +203,21 @@ final class AppCoordinator {
         updateCurrentActivity(with: selectedViewModelRegardlessOfTab)
     }
 
-    func switchToAppropriateTab(for instance: SessionInstance) {
-
-        switch instance.type {
-        case .session where instance.session?.asset(of: .streamingVideo) == nil:
-            // We're making the assumption that if a instance exists and doesn't
-            // have a video, it must be on the schedule tab
-            fallthrough
-        case .specialEvent, .getTogether, .lab, .labByAppointment:
-            // If the session instace is not a video or regular session, we must be
-            // on the schedule tab to show it, since the videos tab only shows videos
-            tabController.activeTab = .schedule
-
-        case .session, .video:
-            tabController.activeTab = .videos
-        }
-    }
-
     func selectSessionOnAppropriateTab(with viewModel: SessionViewModel) {
-        switchToAppropriateTab(for: viewModel.sessionInstance)
 
-        currentListController?.selectSession(with: viewModel.identifier)
+        if currentListController?.canDisplay(session: viewModel) == true {
+            currentListController?.select(session: viewModel)
+            return
+        }
+
+        if videosController.listViewController.canDisplay(session: viewModel) {
+            videosController.listViewController.select(session: viewModel)
+            tabController.activeTab = .videos
+
+        } else if scheduleController.listViewController.canDisplay(session: viewModel) {
+            scheduleController.listViewController.select(session: viewModel)
+            tabController.activeTab = .schedule
+        }
     }
 
     private func setupDelegation() {
@@ -385,11 +379,11 @@ final class AppCoordinator {
         tabController.activeTab = activeTab
 
         if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
-            scheduleController.listViewController.selectSession(with: identifier, deferIfNeeded: true)
+            scheduleController.listViewController.select(session: SessionIdentifier(identifier))
         }
 
         if let identifier = Preferences.shared.selectedVideoItemIdentifier {
-            videosController.listViewController.selectSession(with: identifier, deferIfNeeded: true)
+            videosController.listViewController.select(session: SessionIdentifier(identifier))
         }
     }
 
@@ -405,10 +399,10 @@ final class AppCoordinator {
 
         if link.isForCurrentYear {
             tabController.activeTab = .schedule
-            scheduleController.listViewController.selectSession(with: link.sessionIdentifier, deferIfNeeded: true)
+            scheduleController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
         } else {
             tabController.activeTab = .videos
-            videosController.listViewController.selectSession(with: link.sessionIdentifier, deferIfNeeded: true)
+            videosController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
         }
     }
 

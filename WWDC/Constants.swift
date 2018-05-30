@@ -29,6 +29,6 @@ struct Constants {
     static let liveSessionStartTimeTolerance: Int = 3
 
     /// Whether to enable the new "Featured" tab
-    static let isFeaturedTabEnabled = false
+    static let isFeaturedTabEnabled = true
 
 }

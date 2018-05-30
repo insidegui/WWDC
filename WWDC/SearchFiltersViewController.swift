@@ -73,6 +73,16 @@ final class SearchFiltersViewController: NSViewController {
 
     private var effectiveFilters: [FilterType] = []
 
+    func resetFilters() {
+
+        filters = filters.map {
+            var resetFilter = $0
+            resetFilter.reset()
+
+            return resetFilter
+        }
+    }
+
     weak var delegate: SearchFiltersViewControllerDelegate?
 
     @IBAction func eventsPopUpAction(_ sender: Any) {
@@ -209,6 +219,7 @@ final class SearchFiltersViewController: NSViewController {
         }
     }
 
+    /// Updates the UI to match the active filters
     private func updateUI() {
         guard isViewLoaded else { return }
 

@@ -70,13 +70,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillBecomeActive(_ notification: Notification) {
 
-        if coordinator.windowController.window?.isVisible == false {
+        // Switches to app via application switcher
+        if !NSApp.windows.contains(where: { $0.isVisible }) {
             coordinator.windowController.showWindow(self)
         }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
 
+        // User clicks dock item, double clicks app in finder, etc
         if !flag {
             coordinator.windowController.showWindow(sender)
 
