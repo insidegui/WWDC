@@ -36,8 +36,8 @@
 				<h4>Improved ChromeCast support</h4>
 				<p>We have updated ChromeCast support to be even better and more stable, enjoy watching the keynote on your big screen.</p>
 			]]></description>
-            <pubDate>Thu, 31 Sep 2018 15:00:00 -0300</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0/WWDC_v6.0.zip" sparkle:version="800" sparkle:shortVersionString="6.0" length="17551444" type="application/octet-stream" />
+            <pubDate>Wed, 30 May 2018 18:15:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0/WWDC_v6.0.zip" sparkle:version="800" sparkle:shortVersionString="6.0" length="16085946" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.12.2</sparkle:minimumSystemVersion>
         </item>
 
