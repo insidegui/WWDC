@@ -85,7 +85,7 @@ extension AppDelegate: SUUpdaterDelegate {
 
     func updaterMayCheck(forUpdates updater: SUUpdater) -> Bool {
         #if DEBUG
-            return false
+            return ProcessInfo.processInfo.arguments.contains("--enable-updates")
         #else
             return true
         #endif

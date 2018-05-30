@@ -35,7 +35,7 @@ final class AppCoordinator {
 
     var currentActivity: NSUserActivity?
 
-    var activeTab: MainWindowTab = .featured
+    var activeTab: MainWindowTab = .schedule
 
     /// The tab that "owns" the current player (the one that was active when the "play" button was pressed)
     var playerOwnerTab: MainWindowTab?
@@ -83,8 +83,10 @@ final class AppCoordinator {
         featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
         let featuredItem = NSTabViewItem(viewController: featuredController)
         featuredItem.label = "Featured"
-//        featuredItem.initialFirstResponder = scheduleController.listViewController.tableView
-        tabController.addTabViewItem(featuredItem)
+
+        if Constants.isFeaturedTabEnabled {
+            tabController.addTabViewItem(featuredItem)
+        }
 
         // Schedule
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
@@ -180,9 +182,11 @@ final class AppCoordinator {
             self?.updateSelectedViewModelRegardlessOfTab()
         }).disposed(by: disposeBag)
 
-        storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
-            self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
-        }).disposed(by: disposeBag)
+        if Constants.isFeaturedTabEnabled {
+            storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
+                self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
+            }).disposed(by: disposeBag)
+        }
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -434,7 +438,7 @@ final class AppCoordinator {
     }
 
     func showFeatured() {
-        tabController.activeTab = .featured
+//        tabController.activeTab = .featured
     }
 
     func showSchedule() {
