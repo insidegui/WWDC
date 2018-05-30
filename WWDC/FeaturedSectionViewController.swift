@@ -104,6 +104,11 @@ final class FeaturedSectionViewController: NSViewController {
 
         v.hasHorizontalScroller = true
         v.horizontalScroller?.alphaValue = 0
+        v.scrollerStyle = .overlay
+
+        _ = NotificationCenter.default.addObserver(forName: NSScroller.preferredScrollerStyleDidChangeNotification, object: nil, queue: nil) { [weak v] _ in
+            v?.scrollerStyle = .overlay
+        }
 
         return v
     }()
@@ -124,7 +129,7 @@ final class FeaturedSectionViewController: NSViewController {
         v.collectionViewLayout = layout
         v.dataSource = self
         v.delegate = self
-        v.autoresizingMask = [.width, .minYMargin]
+        v.autoresizingMask = [.width, .height]
         v.backgroundColors = [NSColor.listBackground]
 
         return v
@@ -155,6 +160,13 @@ final class FeaturedSectionViewController: NSViewController {
 
         collectionView.register(FeaturedContentCollectionViewItem.self, forItemWithIdentifier: .featuredContentItem)
         bindUI()
+    }
+
+    override func viewDidLayout() {
+        super.viewDidLayout()
+
+        // https://stackoverflow.com/questions/46433652/nscollectionview-does-not-scroll-items-past-initial-visible-rect
+        collectionView.setFrameSize(collectionView.collectionViewLayout!.collectionViewContentSize)
     }
 
     override func scrollToBeginningOfDocument(_ sender: Any?) {
