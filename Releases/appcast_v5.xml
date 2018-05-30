@@ -33,8 +33,8 @@
 				<h4>State restoration improvements</h4>
 				<p>You can quit the app without worrying about losing your place. Everything will be back where you left off when you launch it again, including search and filters.</p>
 
-				<h4>Improved ChromeCast support</h4>
-				<p>We have updated ChromeCast support to be even better and more stable, enjoy watching the keynote on your big screen.</p>
+				<h4>Improved Chromecast support</h4>
+				<p>We have updated Chromecast support to be even better and more stable, enjoy watching the keynote on your big screen.</p>
 			]]></description>
             <pubDate>Wed, 30 May 2018 18:15:00 -0300</pubDate>
             <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0/WWDC_v6.0.zip" sparkle:version="800" sparkle:shortVersionString="6.0" length="16085946" type="application/octet-stream" />
@@ -167,7 +167,7 @@
             <title>Version 5.0.6</title>
 			<description><![CDATA[
 				<ul>
-					<li><strong>ChromeCast support!</strong> You can now stream videos to your ChromeCast.</li>
+					<li><strong>Chromecast support!</strong> You can now stream videos to your Chromecast.</li>
 					<li>You can now see and change the downloads folder in general preferences</li>
 					<li>Added 1.25x speed option to player</li>
 					<li>Improved thumbnails on the schedule</li>
