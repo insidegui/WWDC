@@ -34,11 +34,12 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
         static let width: CGFloat = 340
         static let height: CGFloat = 252
         static let imageHeight: CGFloat = 192
+        static let imageAspectRatio: CGFloat = 9 / 16
         static let imageRadius: CGFloat = 6
     }
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: Metrics.width, height: Metrics.height))
+        view = NSView(frame: .zero)
         view.wantsLayer = true
 
         buildUI()
@@ -50,8 +51,9 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
     private lazy var thumbnailImageView: WWDCImageView = {
         let v = WWDCImageView()
 
-        v.heightAnchor.constraint(equalToConstant: Metrics.imageHeight).isActive = true
-        v.widthAnchor.constraint(equalToConstant: Metrics.width).isActive = true
+        let aspectRatioConstraint = v.heightAnchor.constraint(equalTo: v.widthAnchor, multiplier: Metrics.imageAspectRatio)
+        aspectRatioConstraint.priority = NSLayoutConstraint.Priority(rawValue: 750)
+        aspectRatioConstraint.isActive = true
         v.backgroundColor = .black
 
         return v

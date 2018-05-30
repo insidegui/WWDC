@@ -32,10 +32,15 @@ final class FeaturedContentViewController: NSViewController {
     private lazy var scrollView: NSScrollView = {
         let v = NSScrollView(frame: view.bounds)
 
+        v.autoresizingMask = [.width, .height]
+        v.contentView = FlippedClipView()
         v.hasVerticalScroller = true
-        v.hasHorizontalScroller = false
+        v.backgroundColor = .listBackground
+        v.autohidesScrollers = true
+        v.horizontalScrollElasticity = .none
         v.automaticallyAdjustsContentInsets = false
         v.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: FeaturedSectionViewController.Metrics.padding, right: 0)
+        v.scrollerInsets = NSEdgeInsets(top: 0, left: 0, bottom: -FeaturedSectionViewController.Metrics.padding, right: 0)
 
         return v
     }()
@@ -43,7 +48,6 @@ final class FeaturedContentViewController: NSViewController {
     private lazy var stackView: NSStackView = {
         let v = NSStackView(views: [])
 
-        v.autoresizingMask = [.width, .height]
         v.spacing = 24
         v.orientation = .vertical
         v.alignment = .leading
@@ -53,20 +57,19 @@ final class FeaturedContentViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView()
+        // This is a visual effect view to allow the scrollers to appear correctly
+        view = NSVisualEffectView()
         view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.listBackground.cgColor
 
-        scrollView.frame = view.bounds
-        scrollView.autoresizingMask = [.width, .height]
         view.addSubview(scrollView)
 
-        stackView.frame = scrollView.bounds
-        scrollView.contentView = FlippedClipView()
-        scrollView.backgroundColor = .listBackground
         scrollView.documentView = stackView
 
-        stackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
+        let clipView = scrollView.contentView
+        stackView.topAnchor.constraint(equalTo: clipView.topAnchor).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: clipView.trailingAnchor).isActive = true
+        stackView.widthAnchor.constraint(equalTo: clipView.widthAnchor).isActive = true
+        stackView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     override func viewDidLoad() {
