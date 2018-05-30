@@ -28,4 +28,7 @@ struct Constants {
     /// How many seconds to add to the end time of a live session before considering it finished
     static let liveSessionEndTimeTolerance: TimeInterval = 60 * 15
 
+    /// Whether to enable the new "Featured" tab
+    static let isFeaturedTabEnabled = false
+
 }
