@@ -25,6 +25,15 @@ final class SessionViewModel {
     var imageUrl: URL?
     let trackName: String
 
+    // These properties are temporary. They are for supporting conditionally
+    // showing the weekday while filters are active on the schedule view
+    private var showsShortDayInContextSubject = BehaviorSubject(value: false)
+    var showsWeekdayInContext = false {
+        didSet {
+            showsShortDayInContextSubject.onNext(showsWeekdayInContext)
+        }
+    }
+
     private var disposeBag = DisposeBag()
 
     lazy var rxSession: Observable<Session> = {
@@ -65,9 +74,11 @@ final class SessionViewModel {
             let so = Observable.from(object: self.session)
             let io = Observable.from(object: self.sessionInstance)
 
-            return Observable.zip(so, io).map({ SessionViewModel.context(for: $0.0, instance: $0.1) })
+            return Observable.combineLatest(so, io, showsShortDayInContextSubject).map({
+                SessionViewModel.context(for: $0.0, instance: $0.1, showingWeekday: $0.2)
+            })
         } else {
-            return Observable.from(object: self.session).map({ SessionViewModel.context(for: $0) })
+            return Observable.from(object: self.session).map({ SessionViewModel.context(for: $0, showingWeekday: self.showsWeekdayInContext) })
         }
     }()
 
@@ -202,9 +213,10 @@ final class SessionViewModel {
         return result
     }
 
-    static func context(for session: Session, instance: SessionInstance? = nil) -> String {
+    static func context(for session: Session, instance: SessionInstance? = nil, showingWeekday: Bool) -> String {
         if let instance = instance {
-            var result = timeFormatter.string(from: instance.startTime) + " - " + timeFormatter.string(from: instance.endTime)
+            var result = showingWeekday ? shortDayOfTheWeekFormatter.string(from: instance.startTime) + " · " : ""
+            result += timeFormatter.string(from: instance.startTime) + " - " + timeFormatter.string(from: instance.endTime)
 
             result += " · " + instance.roomName
 
@@ -233,7 +245,7 @@ final class SessionViewModel {
 
         var result = "\(event.name) · Session \(session.number)"
 
-        if (event.startDate...event.endDate).contains(Date()), let date = session.instances.first?.startTime {
+        if (event.startDate...event.endDate).contains(today()), let date = session.instances.first?.startTime {
             result += " · " + standardFormatted(date: date, withTimeZoneName: false)
         }
 
@@ -280,7 +292,17 @@ final class SessionViewModel {
         return NSColor.fromHexString(hexString: code)
     }
 
-    static let dateFormatter: DateFormatter = {
+    static let shortDayOfTheWeekFormatter: DateFormatter = {
+        let df = DateFormatter()
+
+        df.locale = Locale.current
+        df.timeZone = TimeZone.current
+        df.dateFormat = "E"
+
+        return df
+    }()
+
+    static let dayOfTheWeekFormatter: DateFormatter = {
         let df = DateFormatter()
 
         df.locale = Locale.current
@@ -309,7 +331,7 @@ final class SessionViewModel {
     }
 
     static func standardFormatted(date: Date, withTimeZoneName: Bool) -> String {
-        let result = dateFormatter.string(from: date) + ", " + timeFormatter.string(from: date)
+        let result = dayOfTheWeekFormatter.string(from: date) + ", " + timeFormatter.string(from: date)
 
         return withTimeZoneName ? result + timeZoneNameSuffix : result
     }
