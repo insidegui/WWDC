@@ -204,11 +204,18 @@ final class AppCoordinator {
     }
 
     func switchToAppropriateTab(for instance: SessionInstance) {
-        if ![.video, .session].contains(instance.type) {
+
+        switch instance.type {
+        case .session where instance.session?.asset(of: .streamingVideo) == nil:
+            // We're making the assumption that if a instance exists and doesn't
+            // have a video, it must be on the schedule tab
+            fallthrough
+        case .specialEvent, .getTogether, .lab, .labByAppointment:
             // If the session instace is not a video or regular session, we must be
             // on the schedule tab to show it, since the videos tab only shows videos
             tabController.activeTab = .schedule
-        } else {
+
+        case .session, .video:
             tabController.activeTab = .videos
         }
     }
