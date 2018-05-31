@@ -29,8 +29,10 @@ final class RelatedSessionsViewController: NSViewController {
     }
 
     struct Metrics {
-        static let height: CGFloat = 96
+        static let height: CGFloat = 96 + scrollerOffset
         static let itemHeight: CGFloat = 64
+        static let scrollerOffset: CGFloat = 15
+        static let scrollViewHeight: CGFloat = itemHeight + scrollerOffset
         static let itemWidth: CGFloat = 360
         static let padding: CGFloat = 24
     }
@@ -68,14 +70,22 @@ final class RelatedSessionsViewController: NSViewController {
         let v = NSScrollView(frame: view.bounds)
 
         v.hasHorizontalScroller = true
-        v.horizontalScroller?.alphaValue = 0
+        v.automaticallyAdjustsContentInsets = false
+        v.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: Metrics.scrollerOffset, right: 0)
+        v.scrollerInsets = NSEdgeInsets(top: 0, left: 0, bottom: -Metrics.scrollerOffset, right: 0)
+
+        /// Force overlay style
+        v.scrollerStyle = .overlay
+        _ = NotificationCenter.default.addObserver(forName: NSScroller.preferredScrollerStyleDidChangeNotification, object: nil, queue: nil) { [weak v] _ in
+            v?.scrollerStyle = .overlay
+        }
 
         return v
     }()
 
     private lazy var collectionView: NSCollectionView = {
         var rect = view.bounds
-        rect.size.height = Metrics.itemHeight
+        rect.size.height = Metrics.scrollViewHeight
 
         let v = NSCollectionView(frame: rect)
 
@@ -96,7 +106,7 @@ final class RelatedSessionsViewController: NSViewController {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 600, height: Metrics.height))
         view.wantsLayer = true
 
-        scrollView.frame = NSRect(x: 0, y: 0, width: view.bounds.width, height: Metrics.itemHeight)
+        scrollView.frame = NSRect(x: 0, y: 0, width: view.bounds.width, height: Metrics.scrollViewHeight)
         scrollView.autoresizingMask = [.width, .minYMargin]
         view.addSubview(scrollView)
         scrollView.documentView = collectionView
