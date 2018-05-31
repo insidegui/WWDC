@@ -27,7 +27,7 @@ final class SessionsSplitViewController: NSSplitViewController {
         detailViewController = SessionDetailsViewController(listStyle: listStyle)
 
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView(notification:)), name: NSSplitView.didResizeSubviewsNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView(notification:)), name: .sideBarSizeSyncNotification, object: nil)
     }
 
     required init?(coder: NSCoder) {
@@ -58,33 +58,42 @@ final class SessionsSplitViewController: NSSplitViewController {
             if let sidebarInitWidth = windowController.sidebarInitWidth {
                 splitView.setPosition(sidebarInitWidth, ofDividerAt: 0)
             }
+            setupDone = true
         }
     }
 
     @objc private func syncSplitView(notification: Notification) {
-        guard isResizingSplitView == false else {
+        guard let notificationSourceSplitView = notification.object as? NSSplitView else {
             return
         }
-        guard notification.userInfo?["NSSplitViewDividerIndex"] != nil else {
-            return
-        }
-        guard let otherSplitView = notification.object as? NSSplitView else {
-            return
-        }
-        guard otherSplitView != splitView else {
+        guard notificationSourceSplitView !== splitView else {
             // If own split view is altered, change split view initialisation width for other tabs
-            windowController.sidebarInitWidth = otherSplitView.subviews[0].bounds.width
+            windowController.sidebarInitWidth = notificationSourceSplitView.subviews[0].bounds.width
             return
         }
-        guard  splitView.subviews.count > 0, otherSplitView.subviews.count > 0 else {
+        guard splitView.subviews.count > 0, notificationSourceSplitView.subviews.count > 0 else {
             return
         }
-        guard splitView.subviews[0].bounds.width != otherSplitView.subviews[0].bounds.width else {
+        guard splitView.subviews[0].bounds.width != notificationSourceSplitView.subviews[0].bounds.width else {
             return
         }
 
+        // Prevent a split view sync notification from being sent to the other controllers
+        // in response to this programmatic resize
         isResizingSplitView = true
-        splitView.setPosition(otherSplitView.subviews[0].bounds.width, ofDividerAt: 0)
+        splitView.setPosition(notificationSourceSplitView.subviews[0].bounds.width, ofDividerAt: 0)
         isResizingSplitView = false
     }
+
+    override func splitViewDidResizeSubviews(_ notification: Notification) {
+        guard isResizingSplitView == false else { return }
+        guard setupDone else { return }
+
+        // This notification should only be posted in response to user input
+        NotificationCenter.default.post(name: .sideBarSizeSyncNotification, object: splitView, userInfo: nil)
+    }
+}
+
+extension Notification.Name {
+    public static let sideBarSizeSyncNotification = NSNotification.Name("WWDCSplitViewSizeSyncNotification")
 }
