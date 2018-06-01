@@ -99,6 +99,14 @@ class SessionsTableViewController: NSViewController {
 
     func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
 
+        // To support weekday in the context row of the session cell only when filters are active
+        let showWeekday = !(searchResults?.isEmpty ?? true)
+        for row in newValue {
+            if case .session(let viewModel) = row.kind {
+                viewModel.showsWeekdayInContext = showWeekday
+            }
+        }
+
         guard performInitialRowDisplayIfNeeded(displaying: newValue) else { return }
 
         // Dismiss the menu when the displayed rows are about to change otherwise it will crash

@@ -51,8 +51,8 @@ final class SessionsSplitViewController: NSSplitViewController {
         detailViewController.view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
 
-    override func viewDidAppear() {
-        super.viewDidAppear()
+    override func viewWillAppear() {
+        super.viewWillAppear()
 
         if !setupDone {
             if let sidebarInitWidth = windowController.sidebarInitWidth {

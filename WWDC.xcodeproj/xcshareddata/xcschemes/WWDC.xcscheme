@@ -76,6 +76,10 @@
             argument = "-WWDCUseDebugStorage YES"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--delorean 2018-06-07&apos;T&apos;12:00:00-06:00"
+            isEnabled = "NO">
+         </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
