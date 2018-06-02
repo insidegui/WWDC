@@ -298,7 +298,7 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Format" id="jxT-CU-nIS" hidden="YES">
+                            <menuItem title="Format" hidden="YES" id="jxT-CU-nIS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Format" id="GEO-Iw-cKr">
                                     <items>
@@ -613,7 +613,7 @@
                                     <items>
                                         <menuItem title="WWDC Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
-                                                <action selector="showHelp:" target="Ady-hI-5gd" id="y7X-2Q-9no"/>
+                                                <action selector="viewHelp:" target="Voe-Tx-rLC" id="tMg-gi-uFd"/>
                                             </connections>
                                         </menuItem>
                                     </items>
