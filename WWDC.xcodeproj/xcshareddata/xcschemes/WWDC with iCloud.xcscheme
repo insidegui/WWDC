@@ -77,12 +77,16 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-WWDCEnvironmentBaseURL https://wwdc-staging.orangebox.app"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--enable-updates"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCUseDebugStorage YES"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
