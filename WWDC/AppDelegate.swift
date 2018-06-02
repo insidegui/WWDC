@@ -62,6 +62,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator.showVideos()
     }
 
+    @IBAction func viewHelp(_ sender: Any) {
+        if let helpUrl = URL(string: "https://github.com/insidegui/WWDC/issues") {
+            NSWorkspace.shared.open(helpUrl)
+        }
+    }
+
     func applicationWillBecomeActive(_ notification: Notification) {
 
         if coordinator.windowController.window?.isVisible == false {
