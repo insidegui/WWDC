@@ -77,6 +77,16 @@ extension Environment {
     }
 
     public static var current: Environment {
+        #if DEBUG
+        if let baseURL = UserDefaults.standard.string(forKey: "WWDCEnvironmentBaseURL") {
+            return Environment(baseURL: baseURL,
+                               videosPath: "/videos.json",
+                               sessionsPath: "/contents.json",
+                               newsPath: "/news.json",
+                               liveVideosPath: "/videos_live.json",
+                               featuredSectionsPath: "/_featured.json")
+        }
+        #endif
         if ProcessInfo.processInfo.arguments.contains("--test") {
             return .test
         } else {
