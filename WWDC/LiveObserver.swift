@@ -102,11 +102,6 @@ final class LiveObserver {
         setLiveFlag(false, for: notLiveAnymore)
         setLiveFlag(true, for: liveInstances.toArray())
 
-        print("Not live anymore:")
-        print(notLiveAnymore)
-        print("Live instances:")
-        print(liveInstances)
-
         os_log("There are %{public}d live instances. %{public}d instances are not live anymore",
                log: log,
                type: .debug,
