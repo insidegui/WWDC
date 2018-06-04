@@ -27,7 +27,8 @@ final class StorageMigrator {
         32: migrateSessionModels,
         34: migrateOldTranscriptModels,
         37: migrateIdentifiersWithoutReplacement,
-        43: migrateTracks
+        43: migrateTracks,
+        44: removeInvalidLiveAssets
     ]
 
     init(migration: Migration, oldVersion: UInt64) {
@@ -164,6 +165,17 @@ final class StorageMigrator {
         os_log("migrateTracks", log: log, type: .info)
 
         migration.deleteData(forType: "Track")
+    }
+
+    private static func removeInvalidLiveAssets(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+        os_log("removeInvalidLiveAssets", log: log, type: .info)
+
+        // Delete invalid live streaming assets
+        migration.enumerateObjects(ofType: "SessionAsset") { _, asset in
+            guard let asset = asset else { return }
+            guard asset["rawAssetType"] as? String == "WWDCSessionAssetTypeLiveStreamVideo" else { return }
+            migration.delete(asset)
+        }
     }
 
 }

@@ -157,7 +157,7 @@ public final class AppleAPIClient {
         }
 
         currentLiveVideosRequest?.cancel()
-        currentLiveVideosRequest = liveVideoAssetsResource.loadIfNeeded()
+        currentLiveVideosRequest = liveVideoAssetsResource.load()
     }
 
     public func fetchContent(completion: @escaping (Result<ContentsResponse, APIError>) -> Void) {

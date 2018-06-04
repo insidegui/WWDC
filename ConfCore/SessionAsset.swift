@@ -68,6 +68,8 @@ public class SessionAsset: Object {
     /// Relative local URL to save the asset to when downloading
     @objc public dynamic var relativeLocalURL = ""
 
+    @objc public dynamic var actualEndDate: Date?
+
     /// The session this asset belongs to
     public let session = LinkingObjects(fromType: Session.self, property: "assets")
 
