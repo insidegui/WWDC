@@ -72,7 +72,7 @@ final class AppCoordinator {
 
         DownloadManager.shared.start(with: storage)
 
-        liveObserver = LiveObserver(dateProvider: today, storage: storage)
+        liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
 
         // Primary UI Intialization
 
@@ -470,7 +470,6 @@ final class AppCoordinator {
 
         DispatchQueue.main.async {
             self.syncEngine.syncContent()
-            self.syncEngine.syncLiveVideos()
 
             self.liveObserver.refresh()
 

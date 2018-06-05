@@ -17,6 +17,7 @@ final class LiveObserver {
     private let log = OSLog(subsystem: "WWDC", category: "LiveObserver")
     private let dateProvider: DateProvider
     private let storage: Storage
+    private let syncEngine: SyncEngine
 
     private lazy var backgroundActivity: NSBackgroundActivityScheduler = {
         let backgroundActivity = NSBackgroundActivityScheduler(identifier: "io.wwdc.liveobserver.backgroundactivity")
@@ -31,9 +32,10 @@ final class LiveObserver {
 
     private let specialEventsObserver: CloudKitLiveObserver
 
-    init(dateProvider: @escaping DateProvider, storage: Storage) {
+    init(dateProvider: @escaping DateProvider, storage: Storage, syncEngine: SyncEngine) {
         self.dateProvider = dateProvider
         self.storage = storage
+        self.syncEngine = syncEngine
         specialEventsObserver = CloudKitLiveObserver(storage: storage)
     }
 
@@ -78,13 +80,18 @@ final class LiveObserver {
     private func checkForLiveSessions() {
         os_log("checkForLiveSessions()", log: log, type: .debug)
 
-        let startTime = dateProvider()
-        let endTime = dateProvider().addingTimeInterval(Constants.liveSessionEndTimeTolerance)
+        syncEngine.syncLiveVideos { [weak self] in
+            self?.updateLiveFlags()
+        }
+    }
+
+    private func updateLiveFlags() {
+        let startTime = dateProvider().addingTimeInterval(-Constants.liveSessionStartTimeTolerance)
 
         let previouslyLiveInstances = allLiveInstances.toArray()
         var notLiveAnymore: [SessionInstance] = []
 
-        let liveInstances = storage.realm.objects(SessionInstance.self).filter("startTime <= %@ AND endTime > %@ AND SUBQUERY(session.assets, $asset, $asset.rawAssetType == %@).@count > 0", startTime, endTime, SessionAssetType.liveStreamVideo.rawValue)
+        let liveInstances = storage.realm.objects(SessionInstance.self).filter("startTime <= %@ AND SUBQUERY(session.assets, $asset, $asset.rawAssetType == %@ AND $asset.actualEndDate == nil).@count > 0", startTime, SessionAssetType.liveStreamVideo.rawValue)
 
         previouslyLiveInstances.forEach { instance in
             if !liveInstances.contains(instance) {
@@ -94,6 +101,12 @@ final class LiveObserver {
 
         setLiveFlag(false, for: notLiveAnymore)
         setLiveFlag(true, for: liveInstances.toArray())
+
+        os_log("There are %{public}d live instances. %{public}d instances are not live anymore",
+               log: log,
+               type: .debug,
+               liveInstances.count,
+               notLiveAnymore.count)
     }
 
     private func setLiveFlag(_ value: Bool, for instances: [SessionInstance]) {

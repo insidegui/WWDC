@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 private enum LiveVideoKeys: String, JSONSubscriptType {
-    case sessionId, tvosUrl, iosUrl
+    case sessionId, tvosUrl, iosUrl, actualEndDate
 
     var jsonKey: JSONKey {
         return JSONKey.key(rawValue)
@@ -34,9 +34,19 @@ final class LiveVideosAdapter: Adapter {
         let asset = SessionAsset()
         // Live assets are always for the current year
         asset.year = Calendar.current.component(.year, from: Date())
-        asset.sessionId = sessionId
+
+        // There are two assumptions being made here
+        // 1 - Live assets are always for the current year
+        // 2 - Live assets are always for "WWDC" events
+        // FIXME: done in a rush to fix live streaming in 2018
+        asset.sessionId = "wwdc\(asset.year)-"+sessionId
         asset.rawAssetType = SessionAssetType.liveStreamVideo.rawValue
         asset.remoteURL = url
+
+        if let rawEndDate = input[LiveVideoKeys.actualEndDate].string,
+            case .success(let actualEndDate) = DateTimeAdapter().adapt(rawEndDate) {
+            asset.actualEndDate = actualEndDate
+        }
 
         return .success(asset)
     }

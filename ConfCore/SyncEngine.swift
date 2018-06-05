@@ -69,10 +69,11 @@ public final class SyncEngine {
         }
     }
 
-    public func syncLiveVideos() {
+    public func syncLiveVideos(completion: (() -> Void)? = nil) {
         client.fetchLiveVideoAssets { [weak self] result in
             DispatchQueue.main.async {
                 self?.storage.store(liveVideosResult: result)
+                completion?()
             }
         }
     }

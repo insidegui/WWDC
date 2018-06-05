@@ -225,19 +225,23 @@ public final class Storage {
     internal func store(liveVideosResult: Result<[SessionAsset], APIError>) {
         guard case .success(let assets) = liveVideosResult else { return }
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(writeBlock: { [weak self] backgroundRealm in
+            guard let `self` = self else { return }
+
             assets.forEach { asset in
                 asset.identifier = asset.generateIdentifier()
 
-                if let existingAsset = backgroundRealm.objects(SessionAsset.self).filter("identifier == %@", asset.identifier).first {
-                    existingAsset.remoteURL = asset.remoteURL
-                } else {
-                    backgroundRealm.add(asset, update: true)
+                os_log("Registering live asset with year %{public}d and session number %{public}@",
+                       log: self.log,
+                       type: .info,
+                       asset.year,
+                       asset.sessionId)
 
-                    if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", asset.year, asset.sessionId).first {
-                        if !session.assets.contains(asset) {
-                            session.assets.append(asset)
-                        }
+                backgroundRealm.add(asset, update: true)
+
+                if let session = backgroundRealm.objects(Session.self).filter("identifier == %@", asset.sessionId).first {
+                    if !session.assets.contains(asset) {
+                        session.assets.append(asset)
                     }
                 }
             }

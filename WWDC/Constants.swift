@@ -10,7 +10,7 @@ import Foundation
 
 struct Constants {
 
-    static let coreSchemaVersion: UInt64 = 43
+    static let coreSchemaVersion: UInt64 = 44
 
     static let thumbnailHeight: CGFloat = 150
 
@@ -23,10 +23,7 @@ struct Constants {
     static let liveSessionCheckInterval: TimeInterval = 10.0
 
     /// How many seconds to subtract from the start time of a live session to consider it live
-    static let liveSessionStartTimeTolerance: TimeInterval = 30
-
-    /// How many seconds to add to the end time of a live session before considering it finished
-    static let liveSessionEndTimeTolerance: TimeInterval = 60 * 15
+    static let liveSessionStartTimeTolerance: TimeInterval = 300
 
     /// Whether to enable the new "Featured" tab
     static let isFeaturedTabEnabled = false
