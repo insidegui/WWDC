@@ -20,10 +20,13 @@ struct Constants {
     static let watchedVideoRelativePosition: Double = 0.97
 
     /// How many seconds between each live session check
-    static let liveSessionCheckInterval: TimeInterval = 10.0
+    static let liveSessionCheckInterval: TimeInterval = 60.0
 
-    /// How many seconds to subtract from the start time of a live session to consider it live
-    static let liveSessionStartTimeTolerance: TimeInterval = 300
+    /// How many seconds of tolerance to give the live session check timer
+    static let liveSessionCheckTolerance: TimeInterval = 30.0
+
+    /// How many MINUTES to subtract from the start time of a live session to consider it live
+    static let liveSessionStartTimeTolerance: Int = 3
 
     /// Whether to enable the new "Featured" tab
     static let isFeaturedTabEnabled = false
