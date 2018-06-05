@@ -23,7 +23,7 @@ struct Constants {
     static let liveSessionCheckInterval: TimeInterval = 10.0
 
     /// How many MINUTES to subtract from the start time of a live session to consider it live
-    static let liveSessionStartTimeTolerance: Int = -3
+    static let liveSessionStartTimeTolerance: Int = 3
 
     /// Whether to enable the new "Featured" tab
     static let isFeaturedTabEnabled = false
