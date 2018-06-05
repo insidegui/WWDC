@@ -19,14 +19,7 @@ final class LiveObserver: NSObject {
     private let storage: Storage
     private let syncEngine: SyncEngine
 
-    private lazy var backgroundActivity: NSBackgroundActivityScheduler = {
-        let backgroundActivity = NSBackgroundActivityScheduler(identifier: "io.wwdc.liveobserver.backgroundactivity")
-        backgroundActivity.interval = Constants.liveSessionCheckInterval
-        backgroundActivity.repeats = true
-        backgroundActivity.qualityOfService = .utility
-
-        return backgroundActivity
-    }()
+    private var refreshTimer: Timer?
 
     var isRunning = false
 
@@ -48,6 +41,8 @@ final class LiveObserver: NSObject {
 
         os_log("start()", log: log, type: .debug)
 
+        clearLiveSessions()
+
         specialEventsObserver.fetch()
 
         guard isWWDCWeek else {
@@ -61,10 +56,18 @@ final class LiveObserver: NSObject {
 
         isRunning = true
 
-        backgroundActivity.schedule { [weak self] completion in
-            // Because of Realm
-            DispatchQueue.main.async {
-                self?.checkForLiveSessions()
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: Constants.liveSessionCheckInterval, repeats: true, block: { [weak self] _ in
+            self?.checkForLiveSessions()
+        })
+        refreshTimer?.tolerance = Constants.liveSessionCheckTolerance
+    }
+
+    /// Clears the live flag for all live sessions
+    private func clearLiveSessions() {
+        storage.modify(allLiveInstances.toArray()) { instances in
+            instances.forEach { instance in
+                instance.isCurrentlyLive = false
+                instance.isForcedLive = false
             }
         }
     }
