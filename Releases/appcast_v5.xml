@@ -7,6 +7,16 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 6.0.3</title>
+			<description><![CDATA[
+				<p>Fixes live streaming reliability.</p>
+			]]></description>
+            <pubDate>Tue, 5 Jun 2018 15:20:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0.3/WWDC_v6.0.3.zip" sparkle:version="813" sparkle:shortVersionString="6.0.3" length="16096201" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12.2</sparkle:minimumSystemVersion>
+        </item>		
+		
+		<item>
             <title>Version 6.0.2</title>
 			<description><![CDATA[
 				<h3>This update fixes an important issue with live streaming, please update to be able to watch live sessions during the week.</h3>
