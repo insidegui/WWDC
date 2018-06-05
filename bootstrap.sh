@@ -47,7 +47,7 @@ fi
 
 if [[ ${CI} ]]; then
     echo "Bootstrapping in CI mode"
-    set -o pipefail && env "NSUnbufferedIO=YES" carthage bootstrap --verbose --platform macOS | xcpretty -f `xcpretty-travis-formatter`
+    set -o pipefail && env "NSUnbufferedIO=YES" carthage bootstrap --verbose --platform macOS --cache-builds | xcpretty -f `xcpretty-travis-formatter`
     echo 'travis_fold:end:bootstrap\n'
 else
     carthage bootstrap --platform macOS
