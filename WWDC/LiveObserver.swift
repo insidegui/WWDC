@@ -12,7 +12,7 @@ import RealmSwift
 import CloudKit
 import os.log
 
-final class LiveObserver {
+final class LiveObserver: NSObject {
 
     private let log = OSLog(subsystem: "WWDC", category: "LiveObserver")
     private let dateProvider: DateProvider
@@ -70,15 +70,18 @@ final class LiveObserver {
     }
 
     func refresh() {
-        specialEventsObserver.fetch()
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        perform(#selector(checkForLiveSessions), with: nil, afterDelay: 0)
     }
 
     private var allLiveInstances: Results<SessionInstance> {
         return storage.realm.objects(SessionInstance.self).filter("isCurrentlyLive == true")
     }
 
-    private func checkForLiveSessions() {
+    @objc private func checkForLiveSessions() {
         os_log("checkForLiveSessions()", log: log, type: .debug)
+
+        specialEventsObserver.fetch()
 
         syncEngine.syncLiveVideos { [weak self] in
             self?.updateLiveFlags()
@@ -86,10 +89,15 @@ final class LiveObserver {
     }
 
     private func updateLiveFlags() {
-        let startTime = dateProvider().addingTimeInterval(-Constants.liveSessionStartTimeTolerance)
+        guard let startTime = Calendar.current.date(byAdding: DateComponents(minute: Constants.liveSessionStartTimeTolerance), to: dateProvider()) else {
+            os_log("Could not compute a start time to check for live sessions!", log: log, type: .fault)
+            return
+        }
 
         let previouslyLiveInstances = allLiveInstances.toArray()
         var notLiveAnymore: [SessionInstance] = []
+
+        os_log("Looking for live instances with startTime <= %{public}@", log: log, type: .debug, String(describing: startTime))
 
         let liveInstances = storage.realm.objects(SessionInstance.self).filter("startTime <= %@ AND SUBQUERY(session.assets, $asset, $asset.rawAssetType == %@ AND $asset.actualEndDate == nil).@count > 0", startTime, SessionAssetType.liveStreamVideo.rawValue)
 
@@ -107,6 +115,21 @@ final class LiveObserver {
                type: .debug,
                liveInstances.count,
                notLiveAnymore.count)
+
+        let liveIdentifiers: [String] = liveInstances.map({ $0.identifier })
+        let notLiveAnymoreIdentifiers: [String] = notLiveAnymore.map({ $0.identifier })
+
+        if liveIdentifiers.count > 0 {
+            os_log("The following sessions are currently live: %{public}@", log: log, type: .debug, liveIdentifiers.joined(separator: ","))
+        } else {
+            os_log("There are no live sessions at the moment", log: log, type: .debug)
+        }
+
+        if notLiveAnymoreIdentifiers.count > 0 {
+            os_log("The following sessions are NOT live anymore: %{public}@", log: log, type: .debug, notLiveAnymoreIdentifiers.joined(separator: ","))
+        } else {
+            os_log("There are no sessions that were live and are not live anymore", log: log, type: .debug)
+        }
     }
 
     private func setLiveFlag(_ value: Bool, for instances: [SessionInstance]) {
