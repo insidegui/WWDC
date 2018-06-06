@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
     </dependencies>
@@ -239,7 +239,7 @@
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFd-RS-NUX">
                                 <rect key="frame" x="242" y="174" width="211" height="18"/>
                                 <subviews>
-                                    <customView toolTip="Skip back or forward in a video by 30 seconds instead of 15." translatesAutoresizingMaskIntoConstraints="NO" id="8x0-zb-bwj" customClass="ITSwitch">
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="8x0-zb-bwj" customClass="ITSwitch">
                                         <rect key="frame" x="0.0" y="0.0" width="29" height="18"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="29" id="IzE-I3-xC4"/>
@@ -249,7 +249,7 @@
                                             <action selector="enableUserDataSyncSwitchAction:" target="9dt-pe-Bsa" id="1He-8U-MTn"/>
                                         </connections>
                                     </customView>
-                                    <textField toolTip="Skip back or forward in a video by 30 seconds instead of 15." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goO-DA-n9P">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goO-DA-n9P">
                                         <rect key="frame" x="35" y="1" width="178" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enable iCloud syncing (beta)" id="CQw-ur-pVI">
                                             <font key="font" metaFont="system"/>
