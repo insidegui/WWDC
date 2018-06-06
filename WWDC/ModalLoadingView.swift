@@ -10,6 +10,14 @@ import Cocoa
 
 class ModalLoadingView: NSView {
 
+    let loadingMessages = [
+        "Chamfering edges...",
+        "Brushing metal..."
+    ]
+
+    private var timer: Timer?
+    private var messageCount = 0
+
     private lazy var backgroundView: NSVisualEffectView = {
         let v = NSVisualEffectView()
 
@@ -32,6 +40,14 @@ class ModalLoadingView: NSView {
         return p
     }()
 
+    private lazy var text: WWDCTextField = {
+        let l = WWDCTextField(labelWithString: "")
+        l.cell?.backgroundStyle = .dark
+        l.translatesAutoresizingMaskIntoConstraints = false
+
+        return l
+    }()
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
@@ -39,6 +55,7 @@ class ModalLoadingView: NSView {
 
         addSubview(backgroundView)
         backgroundView.addSubview(spinner)
+        backgroundView.addSubview(text)
 
         backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
@@ -47,6 +64,9 @@ class ModalLoadingView: NSView {
 
         spinner.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
         spinner.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
+
+        text.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+        text.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor, constant: 50).isActive = true
     }
 
     required init?(coder: NSCoder) {
@@ -62,6 +82,9 @@ class ModalLoadingView: NSView {
     }
 
     func show(in view: NSView) {
+        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(ModalLoadingView.rotateText), userInfo: nil, repeats: true)
+        timer?.fire()
+
         alphaValue = 0
         autoresizingMask = [.width, .height]
         spinner.startAnimation(nil)
@@ -80,6 +103,17 @@ class ModalLoadingView: NSView {
         }, completionHandler: {
             self.removeFromSuperview()
         })
+
+        timer?.invalidate()
     }
 
+    @objc func rotateText() {
+        if messageCount >= loadingMessages.endIndex - 1 {
+            messageCount = 0
+        } else {
+            messageCount += 1
+        }
+
+        text.stringValue = loadingMessages[messageCount]
+    }
 }
