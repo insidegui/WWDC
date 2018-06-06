@@ -68,6 +68,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        if menuItem.action == #selector(viewFeatured(_:)) {
+            return Constants.isFeaturedTabEnabled
+        } else {
+            return true
+        }
+    }
+
     func applicationWillBecomeActive(_ notification: Notification) {
 
         if coordinator.windowController.window?.isVisible == false {
