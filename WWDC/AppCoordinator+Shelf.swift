@@ -25,13 +25,13 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             return
         }
 
-        playerController.view.isHidden = true
-
         // ignore when not playing or when playing externally
         guard playerController.playerView.isInternalPlayerPlaying else { return }
 
         // ignore when playing in fullscreen
         guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
+
+        playerController.view.isHidden = true
 
         guard !canRestorePlaybackContext else { return }
 
