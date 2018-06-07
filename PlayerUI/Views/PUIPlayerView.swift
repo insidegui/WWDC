@@ -1208,6 +1208,10 @@ public final class PUIPlayerView: NSView {
         guard isPlaying else { return false }
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
+        guard window.isKeyWindow && window.isOnActiveSpace == true && window.isVisible == true else { return false }
+
+        let localMouseLocation = convert(window.mouseLocationOutsideOfEventStream, from: nil)
+        guard bounds.contains(localMouseLocation) else { return false }
 
         guard !timelineView.isEditingAnnotation else { return false }
 
@@ -1320,7 +1324,7 @@ public final class PUIPlayerView: NSView {
         showControls(animated: true)
         resetMouseIdleTimer()
 
-        super.mouseExited(with: event)
+        super.mouseEntered(with: event)
     }
 
     public override func mouseMoved(with event: NSEvent) {
