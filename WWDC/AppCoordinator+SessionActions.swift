@@ -176,7 +176,7 @@ final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
 
     func sharingServicePicker(_ sharingServicePicker: NSSharingServicePicker, sharingServicesForItems items: [Any], proposedSharingServices proposedServices: [NSSharingService]) -> [NSSharingService] {
 
-        let copyService = NSSharingService.init(title: "Copy URL", image: NSImage(), alternateImage: nil) {
+        let copyService = NSSharingService(title: "Copy URL", image: #imageLiteral(resourceName: "copy"), alternateImage: nil) {
 
             if let url = (items.first as? URL) {
 
@@ -194,7 +194,7 @@ final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
         }
 
         var proposedServices = proposedServices
-        proposedServices.append(copyService)
+        proposedServices.insert(copyService, at: 0)
 
         return proposedServices
     }
