@@ -165,6 +165,37 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         guard let url = URL(string: webpageAsset.remoteURL) else { return }
 
         let picker = NSSharingServicePicker(items: [url])
+        picker.delegate = PickerDelegate.shared
         picker.show(relativeTo: .zero, of: sender, preferredEdge: .minY)
+    }
+}
+
+final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
+
+    static let shared = PickerDelegate()
+
+    func sharingServicePicker(_ sharingServicePicker: NSSharingServicePicker, sharingServicesForItems items: [Any], proposedSharingServices proposedServices: [NSSharingService]) -> [NSSharingService] {
+
+        let copyService = NSSharingService.init(title: "Copy URL", image: NSImage(), alternateImage: nil) {
+
+            if let url = (items.first as? URL) {
+
+                NSPasteboard.general.clearContents()
+                if !NSPasteboard.general.writeObjects([url as NSURL]) {
+                    os_log("Failed to copy URL",
+                           log: .default,
+                           type: .error)
+                }
+            } else {
+                os_log("Sharing expects a URL and did not receive one",
+                       log: .default,
+                       type: .error)
+            }
+        }
+
+        var proposedServices = proposedServices
+        proposedServices.append(copyService)
+
+        return proposedServices
     }
 }
