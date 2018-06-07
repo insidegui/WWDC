@@ -178,10 +178,10 @@ final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
 
         let copyService = NSSharingService(title: "Copy URL", image: #imageLiteral(resourceName: "copy"), alternateImage: nil) {
 
-            if let url = (items.first as? URL) {
+            if let urlString = (items.first as? URL)?.absoluteString as NSString? {
 
                 NSPasteboard.general.clearContents()
-                if !NSPasteboard.general.writeObjects([url as NSURL]) {
+                if !NSPasteboard.general.writeObjects([urlString]) {
                     os_log("Failed to copy URL",
                            log: .default,
                            type: .error)
