@@ -67,7 +67,7 @@ class SessionSummaryViewController: NSViewController {
         l.lineBreakMode = .byWordWrapping
         l.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         l.allowsDefaultTighteningForTruncation = true
-        l.maximumNumberOfLines = 5
+        l.maximumNumberOfLines = 20
 
         return l
     }()
