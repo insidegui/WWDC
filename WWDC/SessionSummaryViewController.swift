@@ -98,6 +98,8 @@ class SessionSummaryViewController: NSViewController {
         let v = NSStackView(views: [self.contextLabel, self.actionLinkLabel])
 
         v.orientation = .horizontal
+        v.alignment = .top
+        v.distribution = .fillProportionally
         v.spacing = 16
         v.translatesAutoresizingMaskIntoConstraints = false
 
