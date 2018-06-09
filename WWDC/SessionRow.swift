@@ -41,6 +41,16 @@ final class SessionRow: CustomDebugStringConvertible {
     }
 }
 
+extension SessionRow {
+
+    func represents(session: SessionIdentifiable) -> Bool {
+        if case .session(let viewModel) = kind {
+            return viewModel.identifier == session.sessionIdentifier
+        }
+        return false
+    }
+}
+
 extension SessionRow: Equatable {
 
     var hashValue: Int {

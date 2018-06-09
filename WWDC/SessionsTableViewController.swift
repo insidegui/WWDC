@@ -95,9 +95,7 @@ class SessionsTableViewController: NSViewController {
     private func selectSessionImmediately(with identifier: SessionIdentifiable) {
 
         guard let index = displayedRows.index(where: { row in
-            guard case .session(let viewModel) = row.kind else { return false }
-
-            return viewModel.identifier == identifier.sessionIdentifier
+            row.represents(session: identifier)
         }) else {
             return
         }
@@ -169,7 +167,7 @@ class SessionsTableViewController: NSViewController {
             guard let viewModel = SessionViewModel(session: session) else { return nil }
 
             for row in allRows {
-                if case .session(let sessionViewModel) = row.kind, sessionViewModel.session.identifier == session.identifier {
+                if row.represents(session: SessionIdentifier(session.identifier)) {
                     return row
                 }
             }
@@ -209,6 +207,7 @@ class SessionsTableViewController: NSViewController {
             !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
 
             searchController.resetFilters()
+            _filterResults = .empty
             displayedRows = allRows
         }
 
@@ -335,19 +334,13 @@ class SessionsTableViewController: NSViewController {
         assert(hasPerformedInitialRowDisplay, "Rows must be displayed before checking this value")
 
         return displayedRows.contains { row -> Bool in
-            if case .session(let viewModel) = row.kind {
-                return viewModel.identifier == session.sessionIdentifier
-            }
-            return false
+            row.represents(session: session)
         }
     }
 
     func canDisplay(session: SessionIdentifiable) -> Bool {
         return allRows.contains { row -> Bool in
-            if case .session(let viewModel) = row.kind {
-                return viewModel.identifier == session.sessionIdentifier
-            }
-            return false
+            row.represents(session: session)
         }
     }
 
