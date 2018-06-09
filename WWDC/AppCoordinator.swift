@@ -268,16 +268,10 @@ final class AppCoordinator {
                 self.tabController.hideLoading()
                 self.searchCoordinator.configureFilters()
 
-                // Currently these two things must happen together and in this order for
-                // new information to be displayed. It's not ideal
                 self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(tracks: tracks)
-                self.searchCoordinator.applyVideosFilters()
 
-                // Currently these two things must happen together and in this order for
-                // new information to be displayed. It's not ideal
                 self.scheduleController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
                 self.scrollToTodayIfWWDC()
-                self.searchCoordinator.applyScheduleFilters()
             }).disposed(by: disposeBag)
 
         liveObserver.start()
@@ -364,12 +358,8 @@ final class AppCoordinator {
 
     private func saveApplicationState() {
         Preferences.shared.activeTab = activeTab
-        if let identifier = selectedScheduleItemValue?.identifier {
-            Preferences.shared.selectedScheduleItemIdentifier = identifier
-        }
-        if let identifier = selectedSessionValue?.identifier {
-            Preferences.shared.selectedVideoItemIdentifier = identifier
-        }
+        Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
+        Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
         Preferences.shared.filtersState = searchCoordinator.currentFiltersState()
     }
 

@@ -185,13 +185,8 @@ final class SearchCoordinator {
         // set delegates
         scheduleSearchController.delegate = self
         videosSearchController.delegate = self
-    }
 
-    func applyScheduleFilters() {
         updateSearchResults(for: scheduleController, with: scheduleSearchController.filters)
-    }
-
-    func applyVideosFilters() {
         updateSearchResults(for: videosController, with: videosSearchController.filters)
     }
 
@@ -224,7 +219,7 @@ final class SearchCoordinator {
     }
 
     fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
-        controller.filterResults = newFilterResults(for: controller, filters: filters)
+        controller.setFilterResults(newFilterResults(for: controller, filters: filters), animated: true, selecting: nil)
     }
 
     @objc fileprivate func activateSearchField() {

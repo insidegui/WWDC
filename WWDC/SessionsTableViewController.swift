@@ -108,21 +108,18 @@ class SessionsTableViewController: NSViewController {
 
     func select(session: SessionIdentifiable) {
 
-        let needsToClearSearchToAllowSelection = !isSessionVisible(for: session) && canDisplay(session: session)
-
         // If we haven't yet displayed our rows, likely because we haven't come on screen
         // yet. We defer scrolling to the requested identifier until that time.
         guard hasPerformedInitialRowDisplay else {
-            searchController.resetFilters()
-            filterResults = .empty
             initialSelection = session
             return
         }
 
+        let needsToClearSearchToAllowSelection = !isSessionVisible(for: session) && canDisplay(session: session)
+
         if needsToClearSearchToAllowSelection {
             searchController.resetFilters()
-            filterResults = .empty
-            updateWith(searchResults: nil, animated: view.window != nil, selecting: session)
+            setFilterResults(.empty, animated: view.window != nil, selecting: session)
         } else {
             selectSessionImmediately(with: session)
         }
@@ -207,6 +204,13 @@ class SessionsTableViewController: NSViewController {
         displayedRowsLock.suspend()
 
         displayedRows = rows
+
+        if let initialSelection = self.initialSelection,
+            !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
+
+            searchController.resetFilters()
+            displayedRows = allRows
+        }
 
         NSAnimationContext.runAnimationGroup({ (context) in
             context.duration = 0
@@ -328,6 +332,8 @@ class SessionsTableViewController: NSViewController {
     }
 
     func isSessionVisible(for session: SessionIdentifiable) -> Bool {
+        assert(hasPerformedInitialRowDisplay, "Rows must be displayed before checking this value")
+
         return displayedRows.contains { row -> Bool in
             if case .session(let viewModel) = row.kind {
                 return viewModel.identifier == session.sessionIdentifier
@@ -347,10 +353,24 @@ class SessionsTableViewController: NSViewController {
 
     // MARK: - Search
 
-    var filterResults = FilterResults.empty {
-        didSet {
-            filterResults.results {
-                self.updateWith(searchResults: $0, animated: true, selecting: nil)
+    /// Provide a session identifier if you'd like to override the default selection behavior. Provide
+    /// nil to let the table figure out what selection to apply after the update.
+    func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
+        _filterResults = filterResults
+        filterResults.results {
+            self.updateWith(searchResults: $0, animated: animated, selecting: selecting)
+        }
+    }
+
+    var _filterResults = FilterResults.empty
+    private var filterResults: FilterResults {
+        get {
+            return _filterResults
+        }
+        set {
+            _filterResults = newValue
+            newValue.results {
+                self.updateWith(searchResults: $0, animated: false, selecting: nil)
             }
         }
     }
