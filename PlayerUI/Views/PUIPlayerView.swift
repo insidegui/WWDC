@@ -1129,11 +1129,11 @@ public final class PUIPlayerView: NSView {
                 return nil
 
             case .leftArrow:
-                self.goBackInTime15(nil)
+                self.goBackInTime(nil)
                 return nil
 
             case .rightArrow:
-                self.goForwardInTime15(nil)
+                self.goForwardInTime(nil)
                 return nil
             }
         }
