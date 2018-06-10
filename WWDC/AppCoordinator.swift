@@ -83,10 +83,7 @@ final class AppCoordinator {
         featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
         let featuredItem = NSTabViewItem(viewController: featuredController)
         featuredItem.label = "Featured"
-
-        if Constants.isFeaturedTabEnabled {
-            tabController.addTabViewItem(featuredItem)
-        }
+        tabController.addTabViewItem(featuredItem)
 
         // Schedule
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
@@ -182,11 +179,9 @@ final class AppCoordinator {
             self?.updateSelectedViewModelRegardlessOfTab()
         }).disposed(by: disposeBag)
 
-        if Constants.isFeaturedTabEnabled {
-            storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
-                self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
-            }).disposed(by: disposeBag)
-        }
+        storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
+            self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
+        }).disposed(by: disposeBag)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
