@@ -1103,6 +1103,8 @@ public final class PUIPlayerView: NSView {
 
     private enum KeyCommands: UInt16 {
         case spaceBar = 49
+        case leftArrow = 123
+        case rightArrow = 124
     }
 
     private func startMonitoringKeyEvents() {
@@ -1124,6 +1126,14 @@ public final class PUIPlayerView: NSView {
             switch command {
             case .spaceBar:
                 self.togglePlaying(nil)
+                return nil
+
+            case .leftArrow:
+                self.goBackInTime15(nil)
+                return nil
+
+            case .rightArrow:
+                self.goForwardInTime15(nil)
                 return nil
             }
         }
