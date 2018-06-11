@@ -219,7 +219,7 @@ final class VideoPlayerViewController: NSViewController {
         let timecodes = transcript.timecodesWithTimescale(9000)
         guard timecodes.count > 0 else { return }
 
-        boundaryObserver = player.addBoundaryTimeObserver(forTimes: timecodes, queue: DispatchQueue.main) { [unowned self] in
+        boundaryObserver = player.addBoundaryTimeObserver(forTimes: timecodes, queue: .main) { [unowned self] in
             guard !transcript.isInvalidated, self.player != nil else { return }
 
             let ct = CMTimeGetSeconds(self.player.currentTime())

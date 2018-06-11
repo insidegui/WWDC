@@ -172,7 +172,7 @@ extension TranscriptTableViewController: NSTableViewDataSource, NSTableViewDeleg
 
         let notificationObject = (transcript, transcript.annotations[row])
 
-        NotificationCenter.default.post(name: NSNotification.Name.TranscriptControllerDidSelectAnnotation, object: notificationObject)
+        NotificationCenter.default.post(name: .TranscriptControllerDidSelectAnnotation, object: notificationObject)
     }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {

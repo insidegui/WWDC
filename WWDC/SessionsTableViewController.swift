@@ -172,9 +172,9 @@ class SessionsTableViewController: NSViewController {
 
                 self.tableView.beginUpdates()
 
-                self.tableView.removeRows(at: removedIndexes, withAnimation: [NSTableView.AnimationOptions.slideLeft])
+                self.tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
 
-                self.tableView.insertRows(at: addedIndexes, withAnimation: [NSTableView.AnimationOptions.slideDown])
+                self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
 
                 // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
                 // so we delay updating the data model until after those methods have done their thing
