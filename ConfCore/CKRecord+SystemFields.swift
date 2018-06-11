@@ -13,7 +13,7 @@ extension CKRecord {
 
     var encodedSystemFields: Data {
         let data = NSMutableData()
-        let coder = NSKeyedArchiver.init(forWritingWith: data)
+        let coder = NSKeyedArchiver(forWritingWith: data)
         coder.requiresSecureCoding = true
         encodeSystemFields(with: coder)
         coder.finishEncoding()

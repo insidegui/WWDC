@@ -229,7 +229,7 @@ class AdapterTests: XCTestCase {
 
         let sessionsArray = sessionsDict.map { key, value -> JSON in
             var v = value
-            v["sessionId"] = JSON.init(rawValue: key)!
+            v["sessionId"] = JSON(rawValue: key)!
             return v
         }
 
