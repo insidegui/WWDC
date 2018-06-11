@@ -59,10 +59,6 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
         scanner.startScanning()
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     /// Whether this provider only works with a remote URL or can be used with only the `AVPlayer` instance
     var requiresRemoteMediaUrl: Bool {
         return true

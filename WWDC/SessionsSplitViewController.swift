@@ -34,10 +34,6 @@ final class SessionsSplitViewController: NSSplitViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
