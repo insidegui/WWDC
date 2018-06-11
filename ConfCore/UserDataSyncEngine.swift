@@ -442,13 +442,13 @@ public final class UserDataSyncEngine {
         os_log("Will commit %{public}d changed record(s) to the database", log: log, type: .info, records.count)
 
         performRealmOperations { realm in
-            records.forEach { record in
-                switch record.recordType {
-                case RecordTypes.favorite:
+            records.forEach {
+                switch $0.recordType {
+                case .favorite:
                     self.commit(objectType: Favorite.self, with: record, in: realm)
-                case RecordTypes.bookmark:
+                case .bookmark:
                     self.commit(objectType: Bookmark.self, with: record, in: realm)
-                case RecordTypes.sessionProgress:
+                case .sessionProgress:
                     self.commit(objectType: SessionProgress.self, with: record, in: realm)
                 default:
                     os_log("Unknown record type %{public}@", log: self.log, type: .fault, record.recordType)
@@ -500,7 +500,7 @@ public final class UserDataSyncEngine {
                        log: self.log,
                        type: .error,
                        String(describing: error))
-            case .update(let objects, _, let inserted, let modified):
+            case let .update(objects, _, inserted, modified):
                 let objectsToUpload = inserted.map { objects[$0] } + modified.map { objects[$0] }
                 self.upload(models: objectsToUpload)
             default:

@@ -86,7 +86,7 @@ class SessionsTableViewController: NSViewController {
             if self.tableView.selectedRow == -1,
                 let defaultIndex = rows.firstSessionRowIndex() {
 
-                self.tableView.selectRowIndexes(IndexSet(integer: defaultIndex), byExtendingSelection: false)
+                self.tableView.selectRowIndexes([defaultIndex], byExtendingSelection: false)
             }
 
             self.scrollView.animator().alphaValue = 1
@@ -130,7 +130,7 @@ class SessionsTableViewController: NSViewController {
 
             // Only reload rows if their relative positioning changes. This prevents
             // cell contents from flashing when cells are unnecessarily reloaded
-            var needReloadedIndexes = IndexSet()
+            var needReloadedIndexes: IndexSet = []
 
             let sortedOldRows = oldRowsSet.intersection(newRowsSet).sorted(by: { (row1, row2) -> Bool in
                 return row1.index < row2.index
@@ -224,7 +224,7 @@ class SessionsTableViewController: NSViewController {
         tableView.scrollRowToCenter(index)
 
         if !scrollOnly {
-            tableView.selectRowIndexes(IndexSet([index]), byExtendingSelection: false)
+            tableView.selectRowIndexes([index], byExtendingSelection: false)
         }
     }
 
@@ -429,10 +429,10 @@ class SessionsTableViewController: NSViewController {
         let clickedRow = tableView.clickedRow
         let selectedRowIndexes = tableView.selectedRowIndexes
 
-        if clickedRow < 0 || selectedRowIndexes.contains(clickedRow) {
+        if tableView.selectedRowIndexes.contains(clickedRow) {
             return selectedRowIndexes
         } else {
-            return IndexSet(integer: clickedRow)
+            return [clickedRow]
         }
     }
 

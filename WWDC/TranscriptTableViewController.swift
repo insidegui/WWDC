@@ -129,7 +129,7 @@ class TranscriptTableViewController: NSViewController {
 
             guard let row = transcript.annotations.index(of: annotation) else { return }
 
-            tableView.selectRowIndexes(IndexSet([row]), byExtendingSelection: false)
+            tableView.selectRowIndexes([row], byExtendingSelection: false)
             tableView.scrollRowToVisible(row)
         }
     }

@@ -62,7 +62,7 @@ extension Reactive where Base: NSTableView {
 
         let observer = Binder(base) { (control, value: Int?) in
             if let row = value {
-                control.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
+                control.selectRowIndexes([row], byExtendingSelection: false)
             } else {
                 control.deselectAll(nil)
             }
