@@ -56,7 +56,7 @@ final class LiveObserver: NSObject {
 
         isRunning = true
 
-        refreshTimer = Timer.scheduledTimer(withTimeInterval: Constants.liveSessionCheckInterval, repeats: true, block: { [weak self] _ in
+        refreshTimer = .scheduledTimer(withTimeInterval: Constants.liveSessionCheckInterval, repeats: true, block: { [weak self] _ in
             self?.checkForLiveSessions()
         })
         refreshTimer?.tolerance = Constants.liveSessionCheckTolerance

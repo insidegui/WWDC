@@ -268,7 +268,7 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
     }
 
     fileprivate func startFetchingMediaStatusPeriodically() {
-        mediaStatusRefreshTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(requestMediaStatus), userInfo: nil, repeats: true)
+        mediaStatusRefreshTimer = .scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(requestMediaStatus), userInfo: nil, repeats: true)
     }
 
     @objc private func requestMediaStatus(_ sender: Any?) {

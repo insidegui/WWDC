@@ -288,9 +288,7 @@ public final class PUIPlayerView: NSView {
             case #keyPath(AVPlayer.currentItem.currentMediaSelection):
                 self.updateMediaSelection()
             case #keyPath(AVPlayer.currentItem):
-                if let playerItem = self.player?.currentItem {
-                    playerItem.audioTimePitchAlgorithm = .timeDomain
-                }
+                self.player?.currentItem?.audioTimePitchAlgorithm = .timeDomain
             default:
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
@@ -1218,7 +1216,7 @@ public final class PUIPlayerView: NSView {
         guard isPlaying else { return false }
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
-        guard window.isKeyWindow && window.isOnActiveSpace == true && window.isVisible == true else { return false }
+        guard window.isKeyWindow && window.isOnActiveSpace && window.isVisible else { return false }
 
         let localMouseLocation = convert(window.mouseLocationOutsideOfEventStream, from: nil)
         guard bounds.contains(localMouseLocation) else { return false }
