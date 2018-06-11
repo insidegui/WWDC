@@ -202,7 +202,7 @@ open class PUIPlayerWindow: NSWindow {
 
     open override var contentView: NSView? {
         set {
-            let darkContentView = PUIPlayerWindowContentView(frame: newValue?.frame ?? NSRect.zero)
+            let darkContentView = PUIPlayerWindowContentView(frame: newValue?.frame ?? .zero)
             if let newContentView = newValue {
                 newContentView.autoresizingMask = [.width, .height]
                 darkContentView.addSubview(newContentView)

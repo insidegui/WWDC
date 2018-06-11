@@ -93,7 +93,7 @@ public class Session: Object {
     //        return realm.objects(Transcript.self).filter("identifier == %@", self.transcriptIdentifier).first
     //    }
 
-    public static let videoPredicate: NSPredicate = NSPredicate(format: "ANY assets.rawAssetType == %@", SessionAssetType.streamingVideo.rawValue)
+    public static let videoPredicate = NSPredicate(format: "ANY assets.rawAssetType == %@", SessionAssetType.streamingVideo.rawValue)
 
     public static func standardSort(sessionA: Session, sessionB: Session) -> Bool {
         guard let eventA = sessionA.event.first, let eventB = sessionB.event.first else { return false }

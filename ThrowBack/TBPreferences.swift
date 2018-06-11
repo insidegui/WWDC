@@ -88,7 +88,7 @@ public final class TBPreferences {
             if let rectString = defaults.object(forKey: Keys.mainWindowFrame) as? String {
                 return NSRectFromString(rectString)
             } else {
-                return NSRect.zero
+                return .zero
             }
         }
     }

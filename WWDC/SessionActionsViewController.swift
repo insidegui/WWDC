@@ -210,7 +210,7 @@ class SessionActionsViewController: NSViewController {
     private func resetDownloadButton() {
         downloadButton.toolTip = "Download video for offline watching"
         downloadButton.image = #imageLiteral(resourceName: "download")
-        downloadButton.action = #selector(SessionActionsViewController.download)
+        downloadButton.action = #selector(download)
     }
 
     @IBAction func toggleFavorite(_ sender: NSView?) {

@@ -57,6 +57,10 @@ final class SearchCoordinator {
                                                object: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     func configureFilters() {
 
         // Schedule Filters Configuration

@@ -295,8 +295,8 @@ final class SessionViewModel {
     static let shortDayOfTheWeekFormatter: DateFormatter = {
         let df = DateFormatter()
 
-        df.locale = Locale.current
-        df.timeZone = TimeZone.current
+        df.locale = .current
+        df.timeZone = .current
         df.dateFormat = "E"
 
         return df
@@ -304,26 +304,22 @@ final class SessionViewModel {
 
     static let dayOfTheWeekFormatter: DateFormatter = {
         let df = DateFormatter()
-
-        df.locale = Locale.current
-        df.timeZone = TimeZone.current
+        df.locale = .current
+        df.timeZone = .current
         df.dateFormat = "EEEE"
-
         return df
     }()
 
     static let timeFormatter: DateFormatter = {
         let tf = DateFormatter()
-
-        tf.locale = Locale.current
-        tf.timeZone = TimeZone.current
+        tf.locale = .current
+        tf.timeZone = .current
         tf.timeStyle = .short
-
         return tf
     }()
 
     static var timeZoneNameSuffix: String {
-        if let name = TimeZone.current.localizedName(for: .shortGeneric, locale: Locale.current) {
+        if let name = TimeZone.current.localizedName(for: .shortGeneric, locale: .current) {
             return " " + name
         } else {
             return ""

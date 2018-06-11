@@ -122,10 +122,6 @@ final class AppCoordinator {
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     /// The list controller for the active tab
     var currentListController: SessionsTableViewController? {
         switch activeTab {
