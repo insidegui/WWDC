@@ -966,7 +966,11 @@ public final class PUIPlayerView: NSView {
     }
 
     @IBAction public func toggleSpeed(_ sender: Any?) {
-        playbackSpeed = playbackSpeed.next
+        if NSEvent.modifierFlags.contains(.option) {
+            playbackSpeed = playbackSpeed.previous
+        } else {
+            playbackSpeed = playbackSpeed.next
+        }
     }
 
     @IBAction public func addAnnotation(_ sender: NSView?) {
