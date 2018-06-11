@@ -191,26 +191,12 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
 
         os_log("ChromeCast media URL is %{public}@", log: log, type: .info, mediaURL.absoluteString)
 
-        let posterURL: URL
-
-        if let poster = consumer?.mediaPosterUrl {
-            posterURL = poster
-        } else {
-            posterURL = ChromeCastConstants.placeholderImageURL
-        }
-
-        let title: String
-
-        if let playerTitle = consumer?.mediaTitle {
-            title = playerTitle
-        } else {
-            title = "WWDC Video"
-        }
+        let posterURL = consumer?.mediaPosterUrl ?? ChromeCastConstants.placeholderImageURL
+        let title = consumer?.mediaTitle ?? "WWDC Video"
 
         let streamType: CastMediaStreamType
-
-        if let isLive = consumer?.mediaIsLiveStream {
-            streamType = isLive ? .live : .buffered
+        if let isLive = consumer?.mediaIsLiveStream, isLive {
+            streamType = .live
         } else {
             streamType = .buffered
         }
