@@ -23,7 +23,6 @@ final class WWDCSegmentedControl: NSSegmentedControl {
 
     override func viewDidMoveToSuperview() {
         super.viewDidMoveToSuperview()
-
         setupForSuperview()
     }
 

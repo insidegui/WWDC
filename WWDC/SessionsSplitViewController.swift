@@ -27,11 +27,15 @@ final class SessionsSplitViewController: NSSplitViewController {
         detailViewController = SessionDetailsViewController(listStyle: listStyle)
 
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView(notification:)), name: .sideBarSizeSyncNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView), name: .SideBarSizeSync, object: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLoad() {
@@ -86,14 +90,13 @@ final class SessionsSplitViewController: NSSplitViewController {
     }
 
     override func splitViewDidResizeSubviews(_ notification: Notification) {
-        guard isResizingSplitView == false else { return }
-        guard setupDone else { return }
+        guard !isResizingSplitView, setupDone else { return }
 
         // This notification should only be posted in response to user input
-        NotificationCenter.default.post(name: .sideBarSizeSyncNotification, object: splitView, userInfo: nil)
+        NotificationCenter.default.post(name: .SideBarSizeSync, object: splitView, userInfo: nil)
     }
 }
 
 extension Notification.Name {
-    public static let sideBarSizeSyncNotification = NSNotification.Name("WWDCSplitViewSizeSyncNotification")
+    public static let SideBarSizeSync = Notification.Name("WWDCSplitViewSizeSyncNotification")
 }
