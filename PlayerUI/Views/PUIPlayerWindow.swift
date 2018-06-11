@@ -314,7 +314,6 @@ private class PUIPlayerWindowOverlayView: NSView {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
         mouseIdleTimer.invalidate()
         mouseIdleTimer = nil
     }
