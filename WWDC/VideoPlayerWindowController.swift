@@ -151,7 +151,12 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         let level = enable ? Int(CGWindowLevelForKey(.floatingWindow)) : Int(CGWindowLevelForKey(.normalWindow))
         window?.level = NSWindow.Level(rawValue: level)
     }
+}
 
+extension NSSize {
+    static func * (lhs: NSSize, rhs: CGFloat) -> NSSize {
+        return NSSize(width: lhs.width * rhs, height: lhs.height * rhs)
+    }
 }
 
 private extension PUIPlayerWindow {
@@ -174,7 +179,7 @@ private extension PUIPlayerWindow {
         let proportion = frame.size.width / screen.visibleFrame.size.width
         let idealSize: NSSize
         if proportion != preset.rawValue {
-            let rect = NSRect(origin: .zero, size: NSSize(width: screen.frame.size.width * preset.rawValue, height: screen.frame.size.height * preset.rawValue))
+            let rect = NSRect(size: screen.frame.size * preset.rawValue)
             idealSize = constrainFrameRect(rect, to: screen).size
         } else {
             idealSize = constrainFrameRect(frame, to: screen).size

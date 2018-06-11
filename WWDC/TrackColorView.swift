@@ -73,7 +73,7 @@ final class TrackColorView: NSView {
 
         guard !progressHeight.isNaN && !progressHeight.isInfinite else { return }
 
-        let progressFrame = NSRect(x: 0, y: 0, width: bounds.width, height: progressHeight)
+        let progressFrame = NSRect(width: bounds.width, height: progressHeight)
         progressLayer.frame = progressFrame
     }
 

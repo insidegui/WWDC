@@ -119,7 +119,7 @@ class SessionSummaryViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
+        view = NSView(frame: NSRect(width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
         view.wantsLayer = true
 
         view.addSubview(titleLabel)

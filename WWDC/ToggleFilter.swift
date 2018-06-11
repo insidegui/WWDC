@@ -21,15 +21,10 @@ struct ToggleFilter: FilterType {
 
     var predicate: NSPredicate? {
         guard isOn else { return nil }
-
         return customPredicate
     }
 
     func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
-        var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
-
-        dictionary["isOn"] = isOn
-
-        return dictionary
+        return ["isOn": isOn]
     }
 }

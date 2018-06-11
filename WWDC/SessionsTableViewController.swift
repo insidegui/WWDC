@@ -333,7 +333,7 @@ class SessionsTableViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
+        view = NSView(frame: NSRect(width: 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.darkWindowBackground.cgColor
         view.widthAnchor.constraint(lessThanOrEqualToConstant: 675).isActive = true

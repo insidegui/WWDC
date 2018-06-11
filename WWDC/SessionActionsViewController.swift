@@ -85,7 +85,7 @@ class SessionActionsViewController: NSViewController {
 
         b.image = #imageLiteral(resourceName: "calendar")
         b.target = self
-        b.action = #selector(addCalendar(_:))
+        b.action = #selector(addCalendar)
         b.shouldAlwaysDrawHighlighted = true
         b.toolTip = "Add to Calendar"
 
@@ -93,7 +93,7 @@ class SessionActionsViewController: NSViewController {
     }()
 
     private lazy var downloadIndicator: NSProgressIndicator = {
-        let pi = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: 24, height: 24))
+        let pi = NSProgressIndicator(frame: NSRect(width: 24, height: 24))
 
         pi.style = .spinning
         pi.isIndeterminate = false

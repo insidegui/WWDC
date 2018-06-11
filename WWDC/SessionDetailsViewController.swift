@@ -183,7 +183,7 @@ class SessionDetailsViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height))
+        view = NSView(frame: NSRect(width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
 
         shelfController.view.translatesAutoresizingMaskIntoConstraints = false

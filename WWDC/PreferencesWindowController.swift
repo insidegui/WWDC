@@ -10,9 +10,7 @@ import Cocoa
 
 class PreferencesWindowController: NSWindowController {
 
-    static var defaultRect: NSRect {
-        return NSRect(x: 0, y: 0, width: 650, height: 500)
-    }
+    static let defaultRect = NSRect(width: 650, height: 500)
 
     init() {
         let mask: NSWindow.StyleMask = [.titled, .closable]
