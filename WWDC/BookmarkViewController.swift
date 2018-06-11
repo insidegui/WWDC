@@ -20,7 +20,7 @@ private final class WWDCTextView: NSTextView {
 
     lazy var rxText: Observable<String> = {
         return Observable<String>.create { [weak self] observer -> Disposable in
-            let token = NotificationCenter.default.addObserver(forName: .WWDCTextViewTextChanged, object: self, queue: OperationQueue.main) { _ in
+            let token = NotificationCenter.default.addObserver(forName: .WWDCTextViewTextChanged, object: self, queue: .main) { _ in
                 observer.onNext(self?.string ?? "")
             }
 

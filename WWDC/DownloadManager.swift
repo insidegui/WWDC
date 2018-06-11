@@ -65,7 +65,7 @@ final class DownloadManager: NSObject {
     override init() {
         super.init()
 
-        backgroundSession = URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
+        backgroundSession = URLSession(configuration: configuration, delegate: self, delegateQueue: .main)
     }
 
     func start(with storage: Storage) {

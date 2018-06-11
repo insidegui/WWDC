@@ -97,6 +97,10 @@ class TranscriptTableViewController: NSViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(highlightTranscriptLine), name: .HighlightTranscriptAtCurrentTimecode, object: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     private func updateUI() {
         guard let transcript = viewModel?.session.transcript() else { return }
 
