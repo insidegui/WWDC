@@ -15,6 +15,7 @@ public enum RelatedResourceType: String {
     case documentation = "WWDCSessionResourceTypeDocumentation"
     case sampleCode = "WWDCSessionResourceTypeSampleCode"
     case session = "WWDCSessionResourceTypeSession"
+    case download = "WWDCSessionResourceTypeDownload"
 
     init?(rawResourceType: String) {
         switch rawResourceType {
@@ -26,6 +27,8 @@ public enum RelatedResourceType: String {
             self = .sampleCode
         case "unknown":
             self = .unknown
+        case "download":
+            self = .download
         default:
             return nil
         }
