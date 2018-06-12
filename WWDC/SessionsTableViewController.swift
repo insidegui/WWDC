@@ -86,7 +86,7 @@ class SessionsTableViewController: NSViewController {
             if self.tableView.selectedRow == -1,
                 let defaultIndex = rows.firstSessionRowIndex() {
 
-                self.tableView.selectRowIndexes(IndexSet(integer: defaultIndex), byExtendingSelection: false)
+                self.tableView.selectRowIndexes([defaultIndex], byExtendingSelection: false)
             }
 
             self.scrollView.animator().alphaValue = 1
@@ -130,7 +130,7 @@ class SessionsTableViewController: NSViewController {
 
             // Only reload rows if their relative positioning changes. This prevents
             // cell contents from flashing when cells are unnecessarily reloaded
-            var needReloadedIndexes = IndexSet()
+            var needReloadedIndexes: IndexSet = []
 
             let sortedOldRows = oldRowsSet.intersection(newRowsSet).sorted(by: { (row1, row2) -> Bool in
                 return row1.index < row2.index
@@ -172,9 +172,9 @@ class SessionsTableViewController: NSViewController {
 
                 self.tableView.beginUpdates()
 
-                self.tableView.removeRows(at: removedIndexes, withAnimation: [NSTableView.AnimationOptions.slideLeft])
+                self.tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
 
-                self.tableView.insertRows(at: addedIndexes, withAnimation: [NSTableView.AnimationOptions.slideDown])
+                self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
 
                 // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
                 // so we delay updating the data model until after those methods have done their thing
@@ -224,7 +224,7 @@ class SessionsTableViewController: NSViewController {
         tableView.scrollRowToCenter(index)
 
         if !scrollOnly {
-            tableView.selectRowIndexes(IndexSet([index]), byExtendingSelection: false)
+            tableView.selectRowIndexes([index], byExtendingSelection: false)
         }
     }
 
@@ -333,7 +333,7 @@ class SessionsTableViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
+        view = NSView(frame: NSRect(width: 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.darkWindowBackground.cgColor
         view.widthAnchor.constraint(lessThanOrEqualToConstant: 675).isActive = true
@@ -429,10 +429,10 @@ class SessionsTableViewController: NSViewController {
         let clickedRow = tableView.clickedRow
         let selectedRowIndexes = tableView.selectedRowIndexes
 
-        if clickedRow < 0 || selectedRowIndexes.contains(clickedRow) {
+        if tableView.selectedRowIndexes.contains(clickedRow) {
             return selectedRowIndexes
         } else {
-            return IndexSet(integer: clickedRow)
+            return [clickedRow]
         }
     }
 

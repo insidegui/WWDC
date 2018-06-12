@@ -37,7 +37,7 @@ final class MainWindowController: NSWindowController {
 
     static var defaultRect: NSRect {
         return NSScreen.main?.visibleFrame.insetBy(dx: 50, dy: 120) ??
-               NSRect(x: 0, y: 0, width: 1200, height: 600)
+               NSRect(width: 1200, height: 600)
     }
     public var sidebarInitWidth: CGFloat?
 

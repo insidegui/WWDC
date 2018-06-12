@@ -138,7 +138,7 @@ final class PlaybackViewModel {
             let p = session.currentPosition()
             player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
 
-            timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+            timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: .main) { [weak self] currentTime in
                 guard let duration = self?.player.currentItem?.asset.duration else { return }
                 guard CMTIME_IS_VALID(duration) else { return }
 

@@ -17,9 +17,7 @@ let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 #endif
 
 protocol WWDCImageViewDelegate: class {
-
     func wwdcImageView(_ imageView: WWDCImageView, didReceiveNewImageWithFileURL url: URL)
-
 }
 
 class WWDCImageView: NSView {

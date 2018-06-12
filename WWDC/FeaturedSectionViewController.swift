@@ -136,10 +136,10 @@ final class FeaturedSectionViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 600, height: Metrics.height))
+        view = NSView(frame: NSRect(width: 600, height: Metrics.height))
         view.wantsLayer = true
 
-        scrollView.frame = NSRect(x: 0, y: 0, width: view.bounds.width, height: FeaturedContentCollectionViewItem.Metrics.height)
+        scrollView.frame = NSRect(width: view.bounds.width, height: FeaturedContentCollectionViewItem.Metrics.height)
         scrollView.autoresizingMask = [.width, .minYMargin]
         view.addSubview(scrollView)
         scrollView.documentView = collectionView

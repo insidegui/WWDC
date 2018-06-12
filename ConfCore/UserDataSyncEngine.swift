@@ -208,12 +208,7 @@ public final class UserDataSyncEngine {
 
             os_log("iCloud availability status is %{public}d", log: self.log, type: .debug, status.rawValue)
 
-            switch status {
-            case .available:
-                self.isAccountAvailable.value = true
-            default:
-                self.isAccountAvailable.value = false
-            }
+            self.isAccountAvailable.value = status == .available
         }
     }
 
@@ -500,7 +495,7 @@ public final class UserDataSyncEngine {
                        log: self.log,
                        type: .error,
                        String(describing: error))
-            case .update(let objects, _, let inserted, let modified):
+            case let .update(objects, _, inserted, modified):
                 let objectsToUpload = inserted.map { objects[$0] } + modified.map { objects[$0] }
                 self.upload(models: objectsToUpload)
             default:

@@ -73,7 +73,7 @@ public final class AppleAPIClient {
             }
 
             let sessionsArray = sessionsDict.compactMap { key, value -> JSON? in
-                guard let id = JSON.init(rawValue: key) else { return nil }
+                guard let id = JSON(rawValue: key) else { return nil }
 
                 var v = value
 

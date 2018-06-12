@@ -68,7 +68,7 @@ class TranscriptTableViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
+        view = NSView(frame: NSRect(width: 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.darkWindowBackground.cgColor
 
@@ -129,7 +129,7 @@ class TranscriptTableViewController: NSViewController {
 
             guard let row = transcript.annotations.index(of: annotation) else { return }
 
-            tableView.selectRowIndexes(IndexSet([row]), byExtendingSelection: false)
+            tableView.selectRowIndexes([row], byExtendingSelection: false)
             tableView.scrollRowToVisible(row)
         }
     }
@@ -172,7 +172,7 @@ extension TranscriptTableViewController: NSTableViewDataSource, NSTableViewDeleg
 
         let notificationObject = (transcript, transcript.annotations[row])
 
-        NotificationCenter.default.post(name: NSNotification.Name.TranscriptControllerDidSelectAnnotation, object: notificationObject)
+        NotificationCenter.default.post(name: .TranscriptControllerDidSelectAnnotation, object: notificationObject)
     }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {

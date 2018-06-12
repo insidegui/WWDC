@@ -192,7 +192,7 @@ final class SearchCoordinator {
         updateSearchResults(for: videosController, with: videosSearchController.filters)
     }
 
-    fileprivate lazy var searchQueue: DispatchQueue = DispatchQueue(label: "Search", qos: .userInteractive)
+    fileprivate lazy var searchQueue = DispatchQueue(label: "Search", qos: .userInteractive)
 
     fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
         guard filters.contains(where: { !$0.isEmpty }) else {

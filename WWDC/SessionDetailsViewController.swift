@@ -44,7 +44,7 @@ class SessionDetailsViewController: NSViewController {
             let instance = viewModel.sessionInstance
             let type = instance.type
 
-            let sessionHasNoVideo = [.lab, .getTogether, .labByAppointment].contains(type) && !(instance.isCurrentlyLive == true)
+            let sessionHasNoVideo = [.lab, .getTogether, .labByAppointment].contains(type) && !instance.isCurrentlyLive
 
             shelfController.view.isHidden = sessionHasNoVideo
 
@@ -183,7 +183,7 @@ class SessionDetailsViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height))
+        view = NSView(frame: NSRect(width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
 
         shelfController.view.translatesAutoresizingMaskIntoConstraints = false

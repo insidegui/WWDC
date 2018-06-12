@@ -14,7 +14,6 @@ final class SessionTableCellView: NSTableCellView {
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-
         setup()
     }
 
@@ -39,5 +38,4 @@ final class SessionTableCellView: NSTableCellView {
         cellView.autoresizingMask = [.width, .height]
         addSubview(cellView)
     }
-
 }

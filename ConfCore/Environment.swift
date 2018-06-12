@@ -40,13 +40,11 @@ public struct Environment: Equatable {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
 
-        let shouldNotify = (environment != Environment.current)
-
         _storedEnvironment = environment
 
         UserDefaults.standard.set(environment.baseURL, forKey: _storedEnvDefaultsKey)
 
-        if shouldNotify {
+        if environment != .current {
             DispatchQueue.main.async {
                 os_log("Environment base URL: %@", log: .default, type: .info, environment.baseURL)
 

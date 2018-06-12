@@ -44,14 +44,10 @@ final class SessionCollectionViewItem: NSCollectionViewItem {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setup()
     }
 
     @objc private func clickRecognized() {
-        guard let viewModel = viewModel else { return }
-
-        onClicked?(viewModel)
+        viewModel.map { self.onClicked?($0) }
     }
-
 }

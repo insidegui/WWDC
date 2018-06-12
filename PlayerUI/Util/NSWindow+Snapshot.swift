@@ -18,7 +18,6 @@ extension NSWindow {
         }
 
         let image = NSImage(cgImage: cgImage, size: frame.size)
-
         image.cacheMode = .never
 
         return image

@@ -9,17 +9,13 @@
 import QuartzCore
 
 final class WWDCLayer: CALayer {
-
     override func action(forKey event: String) -> CAAction? {
         return nil
     }
-
 }
 
 final class WWDCShapeLayer: CAShapeLayer {
-
     override func action(forKey event: String) -> CAAction? {
         return nil
     }
-
 }

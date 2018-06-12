@@ -12,7 +12,6 @@ class WWDCTextField: NSTextField {
 
     override func viewWillMove(toSuperview newSuperview: NSView?) {
         NotificationCenter.default.removeObserver(self, name: NSView.frameDidChangeNotification, object: superview)
-
         super.viewWillMove(toSuperview: newSuperview)
     }
 
@@ -50,8 +49,6 @@ class WWDCTextField: NSTextField {
 
     override func textDidChange(_ notification: Notification) {
         super.textDidChange(notification)
-
         invalidateIntrinsicContentSize()
     }
-
 }

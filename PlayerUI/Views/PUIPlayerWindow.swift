@@ -202,7 +202,7 @@ open class PUIPlayerWindow: NSWindow {
 
     open override var contentView: NSView? {
         set {
-            let darkContentView = PUIPlayerWindowContentView(frame: newValue?.frame ?? NSRect.zero)
+            let darkContentView = PUIPlayerWindowContentView(frame: newValue?.frame ?? .zero)
             if let newContentView = newValue {
                 newContentView.autoresizingMask = [.width, .height]
                 darkContentView.addSubview(newContentView)
@@ -277,7 +277,7 @@ private class PUIPlayerWindowOverlayView: NSView {
             mouseIdleTimer = nil
         }
 
-        mouseIdleTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction), userInfo: nil, repeats: false)
+        mouseIdleTimer = .scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction), userInfo: nil, repeats: false)
     }
 
     @objc fileprivate func mouseIdleTimerAction(_ sender: Timer) {
@@ -314,7 +314,6 @@ private class PUIPlayerWindowOverlayView: NSView {
     }
 
     deinit {
-        NotificationCenter.default.removeObserver(self)
         mouseIdleTimer.invalidate()
         mouseIdleTimer = nil
     }

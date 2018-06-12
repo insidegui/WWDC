@@ -69,7 +69,7 @@ final class VideoPlayerViewController: NSViewController {
     }()
 
     fileprivate lazy var progressIndicator: NSProgressIndicator = {
-        let p = NSProgressIndicator(frame: NSRect.zero)
+        let p = NSProgressIndicator(frame: .zero)
 
         p.controlSize = .regular
         p.style = .spinning
@@ -83,7 +83,7 @@ final class VideoPlayerViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect.zero)
+        view = NSView(frame: .zero)
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.black.cgColor
 
@@ -194,7 +194,7 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     private func playerItemPresentationSizeDidChange() {
-        guard let size = player.currentItem?.presentationSize, size != NSSize.zero else { return }
+        guard let size = player.currentItem?.presentationSize, size != .zero else { return }
 
         (view.window as? PUIPlayerWindow)?.aspectRatio = size
     }
@@ -219,7 +219,7 @@ final class VideoPlayerViewController: NSViewController {
         let timecodes = transcript.timecodesWithTimescale(9000)
         guard timecodes.count > 0 else { return }
 
-        boundaryObserver = player.addBoundaryTimeObserver(forTimes: timecodes, queue: DispatchQueue.main) { [unowned self] in
+        boundaryObserver = player.addBoundaryTimeObserver(forTimes: timecodes, queue: .main) { [unowned self] in
             guard !transcript.isInvalidated, self.player != nil else { return }
 
             let ct = CMTimeGetSeconds(self.player.currentTime())

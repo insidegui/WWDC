@@ -8,11 +8,13 @@
 
 import Cocoa
 
+extension  NSToolbar.Identifier {
+    static let WWDCPreferences = NSToolbar.Identifier(rawValue: "WWDCPreferences")
+}
+
 class PreferencesWindowController: NSWindowController {
 
-    static var defaultRect: NSRect {
-        return NSRect(x: 0, y: 0, width: 650, height: 500)
-    }
+    static let defaultRect = NSRect(width: 650, height: 500)
 
     init() {
         let mask: NSWindow.StyleMask = [.titled, .closable]
@@ -27,7 +29,7 @@ class PreferencesWindowController: NSWindowController {
 
         window.titleVisibility = .hidden
 
-        window.toolbar = NSToolbar(identifier: NSToolbar.Identifier(rawValue: "WWDCPreferences"))
+        window.toolbar = NSToolbar(identifier: .WWDCPreferences)
 
         window.identifier = NSUserInterfaceItemIdentifier(rawValue: "preferences")
         window.minSize = PreferencesWindowController.defaultRect.size

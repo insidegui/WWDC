@@ -13,7 +13,7 @@ class WWDCBottomBorderView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
-        let borderRect = NSRect(x: 0, y: 0, width: bounds.width, height: 0.5)
+        let borderRect = NSRect(width: bounds.width, height: 0.5)
         NSColor.tertiaryText.withAlphaComponent(0.7).setFill()
         borderRect.fill()
     }

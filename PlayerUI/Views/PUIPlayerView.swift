@@ -222,7 +222,7 @@ public final class PUIPlayerView: NSView {
         guard let player = player else { return }
 
         playerLayer.player = player
-        playerLayer.videoGravity = AVLayerVideoGravity.resizeAspect
+        playerLayer.videoGravity = .resizeAspect
 
         if pictureContainer == nil {
             pictureContainer = PUIPictureContainerViewController(playerLayer: playerLayer)
@@ -243,7 +243,7 @@ public final class PUIPlayerView: NSView {
 
         asset?.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: metadataBecameAvailable)
 
-        playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+        playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: .main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
         }
 
@@ -288,9 +288,7 @@ public final class PUIPlayerView: NSView {
             case #keyPath(AVPlayer.currentItem.currentMediaSelection):
                 self.updateMediaSelection()
             case #keyPath(AVPlayer.currentItem):
-                if let playerItem = self.player?.currentItem {
-                    playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithm.timeDomain
-                }
+                self.player?.currentItem?.audioTimePitchAlgorithm = .timeDomain
             default:
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             }
@@ -366,7 +364,7 @@ public final class PUIPlayerView: NSView {
     }
 
     fileprivate var currentPresentationSize: NSSize? {
-        guard let size = player?.currentItem?.presentationSize, size != NSSize.zero else { return nil }
+        guard let size = player?.currentItem?.presentationSize, size != .zero else { return nil }
 
         return size
     }
@@ -1222,7 +1220,7 @@ public final class PUIPlayerView: NSView {
         guard isPlaying else { return false }
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
-        guard window.isKeyWindow && window.isOnActiveSpace == true && window.isVisible == true else { return false }
+        guard window.isKeyWindow && window.isOnActiveSpace && window.isVisible else { return false }
 
         let localMouseLocation = convert(window.mouseLocationOutsideOfEventStream, from: nil)
         guard bounds.contains(localMouseLocation) else { return false }
@@ -1245,7 +1243,7 @@ public final class PUIPlayerView: NSView {
         }
 
         if start {
-            mouseIdleTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction), userInfo: nil, repeats: false)
+            mouseIdleTimer = .scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction), userInfo: nil, repeats: false)
         }
     }
 

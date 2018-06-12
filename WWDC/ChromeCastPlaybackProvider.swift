@@ -59,10 +59,6 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
         scanner.startScanning()
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     /// Whether this provider only works with a remote URL or can be used with only the `AVPlayer` instance
     var requiresRemoteMediaUrl: Bool {
         return true
@@ -195,26 +191,12 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
 
         os_log("ChromeCast media URL is %{public}@", log: log, type: .info, mediaURL.absoluteString)
 
-        let posterURL: URL
-
-        if let poster = consumer?.mediaPosterUrl {
-            posterURL = poster
-        } else {
-            posterURL = ChromeCastConstants.placeholderImageURL
-        }
-
-        let title: String
-
-        if let playerTitle = consumer?.mediaTitle {
-            title = playerTitle
-        } else {
-            title = "WWDC Video"
-        }
+        let posterURL = consumer?.mediaPosterUrl ?? ChromeCastConstants.placeholderImageURL
+        let title = consumer?.mediaTitle ?? "WWDC Video"
 
         let streamType: CastMediaStreamType
-
-        if let isLive = consumer?.mediaIsLiveStream {
-            streamType = isLive ? .live : .buffered
+        if let isLive = consumer?.mediaIsLiveStream, isLive {
+            streamType = .live
         } else {
             streamType = .buffered
         }
@@ -272,7 +254,7 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
     }
 
     fileprivate func startFetchingMediaStatusPeriodically() {
-        mediaStatusRefreshTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(requestMediaStatus), userInfo: nil, repeats: true)
+        mediaStatusRefreshTimer = .scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(requestMediaStatus), userInfo: nil, repeats: true)
     }
 
     @objc private func requestMediaStatus(_ sender: Any?) {

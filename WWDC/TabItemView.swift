@@ -135,7 +135,7 @@ final class TabItemView: NSView {
     }
 
     func sizeToFit() {
-        frame = NSRect(x: frame.origin.x, y: frame.origin.y, width: intrinsicContentSize.width, height: intrinsicContentSize.height)
+        frame = NSRect(origin: frame.origin, size: intrinsicContentSize)
     }
 
     override func mouseDown(with event: NSEvent) {

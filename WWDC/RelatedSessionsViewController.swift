@@ -103,10 +103,10 @@ final class RelatedSessionsViewController: NSViewController {
     }()
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 600, height: Metrics.height))
+        view = NSView(frame: NSRect(width: 600, height: Metrics.height))
         view.wantsLayer = true
 
-        scrollView.frame = NSRect(x: 0, y: 0, width: view.bounds.width, height: Metrics.scrollViewHeight)
+        scrollView.frame = NSRect(width: view.bounds.width, height: Metrics.scrollViewHeight)
         scrollView.autoresizingMask = [.width, .minYMargin]
         view.addSubview(scrollView)
         scrollView.documentView = collectionView
@@ -155,7 +155,7 @@ extension RelatedSessionsViewController: NSCollectionViewDelegate, NSCollectionV
     }
 
     func collectionView(_ collectionView: NSCollectionView, shouldChangeItemsAt indexPaths: Set<IndexPath>, to highlightState: NSCollectionViewItem.HighlightState) -> Set<IndexPath> {
-        return Set<IndexPath>()
+        return []
     }
 
 }

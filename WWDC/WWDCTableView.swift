@@ -10,7 +10,7 @@ import Cocoa
 
 class WWDCTableView: NSTableView {
 
-    private var selectedRowIndexesBeforeReload: IndexSet = IndexSet([])
+    private var selectedRowIndexesBeforeReload: IndexSet = []
 
     func reloadPreservingSelection() {
         selectedRowIndexesBeforeReload = selectedRowIndexes
