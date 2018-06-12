@@ -130,6 +130,10 @@ struct MultipleChoiceFilter: FilterType {
         self.selectedOptions = selectedOptions
     }
 
+    mutating func reset() {
+        selectedOptions = []
+    }
+
     func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
         var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
 

@@ -83,10 +83,7 @@ final class AppCoordinator {
         featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
         let featuredItem = NSTabViewItem(viewController: featuredController)
         featuredItem.label = "Featured"
-
-        if Constants.isFeaturedTabEnabled {
-            tabController.addTabViewItem(featuredItem)
-        }
+        tabController.addTabViewItem(featuredItem)
 
         // Schedule
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
@@ -182,11 +179,9 @@ final class AppCoordinator {
             self?.updateSelectedViewModelRegardlessOfTab()
         }).disposed(by: disposeBag)
 
-        if Constants.isFeaturedTabEnabled {
-            storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
-                self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
-            }).disposed(by: disposeBag)
-        }
+        storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
+            self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
+        }).disposed(by: disposeBag)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -203,27 +198,21 @@ final class AppCoordinator {
         updateCurrentActivity(with: selectedViewModelRegardlessOfTab)
     }
 
-    func switchToAppropriateTab(for instance: SessionInstance) {
-
-        switch instance.type {
-        case .session where instance.session?.asset(of: .streamingVideo) == nil:
-            // We're making the assumption that if a instance exists and doesn't
-            // have a video, it must be on the schedule tab
-            fallthrough
-        case .specialEvent, .getTogether, .lab, .labByAppointment:
-            // If the session instace is not a video or regular session, we must be
-            // on the schedule tab to show it, since the videos tab only shows videos
-            tabController.activeTab = .schedule
-
-        case .session, .video:
-            tabController.activeTab = .videos
-        }
-    }
-
     func selectSessionOnAppropriateTab(with viewModel: SessionViewModel) {
-        switchToAppropriateTab(for: viewModel.sessionInstance)
 
-        currentListController?.selectSession(with: viewModel.identifier)
+        if currentListController?.canDisplay(session: viewModel) == true {
+            currentListController?.select(session: viewModel)
+            return
+        }
+
+        if videosController.listViewController.canDisplay(session: viewModel) {
+            videosController.listViewController.select(session: viewModel)
+            tabController.activeTab = .videos
+
+        } else if scheduleController.listViewController.canDisplay(session: viewModel) {
+            scheduleController.listViewController.select(session: viewModel)
+            tabController.activeTab = .schedule
+        }
     }
 
     private func setupDelegation() {
@@ -274,16 +263,10 @@ final class AppCoordinator {
                 self.tabController.hideLoading()
                 self.searchCoordinator.configureFilters()
 
-                // Currently these two things must happen together and in this order for
-                // new information to be displayed. It's not ideal
                 self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(tracks: tracks)
-                self.searchCoordinator.applyVideosFilters()
 
-                // Currently these two things must happen together and in this order for
-                // new information to be displayed. It's not ideal
                 self.scheduleController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
                 self.scrollToTodayIfWWDC()
-                self.searchCoordinator.applyScheduleFilters()
             }).disposed(by: disposeBag)
 
         liveObserver.start()
@@ -370,12 +353,8 @@ final class AppCoordinator {
 
     private func saveApplicationState() {
         Preferences.shared.activeTab = activeTab
-        if let identifier = selectedScheduleItemValue?.identifier {
-            Preferences.shared.selectedScheduleItemIdentifier = identifier
-        }
-        if let identifier = selectedSessionValue?.identifier {
-            Preferences.shared.selectedVideoItemIdentifier = identifier
-        }
+        Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
+        Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
         Preferences.shared.filtersState = searchCoordinator.currentFiltersState()
     }
 
@@ -385,11 +364,11 @@ final class AppCoordinator {
         tabController.activeTab = activeTab
 
         if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
-            scheduleController.listViewController.selectSession(with: identifier, deferIfNeeded: true)
+            scheduleController.listViewController.select(session: SessionIdentifier(identifier))
         }
 
         if let identifier = Preferences.shared.selectedVideoItemIdentifier {
-            videosController.listViewController.selectSession(with: identifier, deferIfNeeded: true)
+            videosController.listViewController.select(session: SessionIdentifier(identifier))
         }
     }
 
@@ -405,10 +384,10 @@ final class AppCoordinator {
 
         if link.isForCurrentYear {
             tabController.activeTab = .schedule
-            scheduleController.listViewController.selectSession(with: link.sessionIdentifier, deferIfNeeded: true)
+            scheduleController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
         } else {
             tabController.activeTab = .videos
-            videosController.listViewController.selectSession(with: link.sessionIdentifier, deferIfNeeded: true)
+            videosController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
         }
     }
 

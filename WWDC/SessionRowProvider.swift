@@ -10,7 +10,7 @@ import ConfCore
 import RealmSwift
 
 protocol SessionRowProvider {
-    func sessionRowIdentifierForToday() -> String?
+    func sessionRowIdentifierForToday() -> SessionIdentifiable?
     func sessionRows() -> [SessionRow]
 
     var sessionSortingFunction: (Session, Session) -> Bool { get }
@@ -41,7 +41,7 @@ struct VideosSessionRowProvider: SessionRowProvider {
         return rows
     }
 
-    func sessionRowIdentifierForToday() -> String? {
+    func sessionRowIdentifierForToday() -> SessionIdentifiable? {
         return nil
     }
 }
@@ -78,12 +78,12 @@ struct ScheduleSessionRowProvider: SessionRowProvider {
         return rows
     }
 
-    func sessionRowIdentifierForToday() -> String? {
+    func sessionRowIdentifierForToday() -> SessionIdentifiable? {
 
         guard let section = scheduleSections.filter("representedDate >= %@", today()).first else { return nil }
 
         guard let identifier = section.instances.first?.session?.identifier else { return nil }
 
-        return identifier
+        return SessionIdentifier(identifier)
     }
 }
