@@ -208,12 +208,7 @@ public final class UserDataSyncEngine {
 
             os_log("iCloud availability status is %{public}d", log: self.log, type: .debug, status.rawValue)
 
-            switch status {
-            case .available:
-                self.isAccountAvailable.value = true
-            default:
-                self.isAccountAvailable.value = false
-            }
+            self.isAccountAvailable.value = status == .available
         }
     }
 

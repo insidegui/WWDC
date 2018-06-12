@@ -22,10 +22,6 @@ extension NSRect {
     init(size: NSSize) {
         self.init(origin: .zero, size: size)
     }
-
-    var aspectRation: CGFloat {
-        return size.aspectRatio
-    }
 }
 
 extension NSImage {
