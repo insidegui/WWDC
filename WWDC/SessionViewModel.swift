@@ -78,7 +78,9 @@ final class SessionViewModel {
                 SessionViewModel.context(for: $0.0, instance: $0.1, showingWeekday: $0.2)
             })
         } else {
-            return Observable.from(object: self.session).map({ SessionViewModel.context(for: $0, showingWeekday: self.showsWeekdayInContext) })
+            return Observable.from(object: self.session).map({ [weak self] in
+                SessionViewModel.context(for: $0, showingWeekday: self?.showsWeekdayInContext == true)
+            })
         }
     }()
 
