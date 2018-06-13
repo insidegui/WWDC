@@ -491,7 +491,7 @@ public final class PUIPlayerView: NSView {
         let l = NSTextField(labelWithString: "00:00:00")
 
         l.alignment = .left
-        l.font = .systemFont(ofSize: 14, weight: .medium)
+        l.font = .monospacedDigitSystemFont(ofSize: 14, weight: .medium)
         l.textColor = .timeLabel
 
         return l
@@ -501,7 +501,7 @@ public final class PUIPlayerView: NSView {
         let l = NSTextField(labelWithString: "-00:00:00")
 
         l.alignment = .right
-        l.font = .systemFont(ofSize: 14, weight: .medium)
+        l.font = .monospacedDigitSystemFont(ofSize: 14, weight: .medium)
         l.textColor = .timeLabel
 
         return l
