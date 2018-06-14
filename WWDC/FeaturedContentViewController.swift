@@ -80,8 +80,15 @@ final class FeaturedContentViewController: NSViewController {
 
     private var sectionControllers: [FeaturedSectionViewController] = []
 
+    var stillNeedsData = true
+
     private func reload() {
         guard isViewLoaded else { return }
+
+        guard stillNeedsData else { return }
+        if !sections.isEmpty {
+            stillNeedsData = false
+        }
 
         sectionControllers.forEach { child in
             child.view.removeFromSuperview()

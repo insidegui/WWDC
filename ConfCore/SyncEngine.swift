@@ -79,9 +79,11 @@ public final class SyncEngine {
     }
 
     public func syncFeaturedSections() {
-        client.fetchFeaturedSections { [weak self] result in
-            DispatchQueue.main.async {
-                self?.storage.store(featuredSectionsResult: result)
+        if storage.realm.objects(FeaturedSection.self).isEmpty {
+            client.fetchFeaturedSections { [weak self] result in
+                DispatchQueue.main.async {
+                    self?.storage.store(featuredSectionsResult: result)
+                }
             }
         }
     }
