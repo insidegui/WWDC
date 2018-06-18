@@ -12,6 +12,7 @@ import RxSwift
 
 extension Notification.Name {
     public static let SyncEngineDidSyncSessionsAndSchedule = Notification.Name("SyncEngineDidSyncSessionsAndSchedule")
+    public static let SyncEngineDidSyncFeaturedSections = Notification.Name("SyncEngineDidSyncFeaturedSections")
 }
 
 public final class SyncEngine {
@@ -81,7 +82,9 @@ public final class SyncEngine {
     public func syncFeaturedSections() {
         client.fetchFeaturedSections { [weak self] result in
             DispatchQueue.main.async {
-                self?.storage.store(featuredSectionsResult: result)
+                self?.storage.store(featuredSectionsResult: result) { error in
+                    NotificationCenter.default.post(name: .SyncEngineDidSyncFeaturedSections, object: error)
+                }
             }
         }
     }
