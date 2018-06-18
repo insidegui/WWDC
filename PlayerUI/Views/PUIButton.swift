@@ -185,4 +185,8 @@ public final class PUIButton: NSControl {
         return true
     }
 
+    public override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+        return true
+    }
+
 }
