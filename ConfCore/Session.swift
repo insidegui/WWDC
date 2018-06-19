@@ -70,7 +70,7 @@ public class Session: Object {
         guard let realm = realm else { return nil }
         guard !transcriptIdentifier.isEmpty else { return nil }
 
-        return realm.objects(Transcript.self).filter("identifier == %@", transcriptIdentifier).first
+        return realm.objects(Transcript.self).filter("identifier == %@ AND annotations.@count > 0", transcriptIdentifier).first
     }
 
     /// The session's track
