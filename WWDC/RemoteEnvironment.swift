@@ -15,7 +15,6 @@ final class RemoteEnvironment {
 
     private struct Constants {
         static let environmentRecordType = "Environment"
-        static let subscriptionDefaultsName = "remoteEnvironmentSubscriptionID"
     }
 
     private lazy var container: CKContainer = CKContainer.default()

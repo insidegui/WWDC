@@ -45,10 +45,6 @@ final class RxTableViewDelegateProxy: DelegateProxy<NSTableView, NSTableViewDele
 
 extension Reactive where Base: NSTableView {
 
-    public var delegate: DelegateProxy<NSTableView, NSTableViewDelegate> {
-        return RxTableViewDelegateProxy.proxy(for: base)
-    }
-
     public var selectedRow: ControlProperty<Int?> {
         let delegate = RxTableViewDelegateProxy.proxy(for: base)
 

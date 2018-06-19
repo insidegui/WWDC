@@ -12,7 +12,6 @@ import Cocoa
 //  https://forums.developer.apple.com/thread/79144
 //  https://stackoverflow.com/q/44537356/3927536
 #if swift(>=4.0)
-let NSURLPboardType = NSPasteboard.PasteboardType(kUTTypeURL as String)
 let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 #endif
 
@@ -45,16 +44,6 @@ class WWDCImageView: NSView {
     var backgroundColor: NSColor = .clear {
         didSet {
             backgroundLayer.backgroundColor = backgroundColor.cgColor
-        }
-    }
-
-    @objc var isEditable: Bool = false {
-        didSet {
-            if isEditable {
-                registerForDraggedTypes([NSURLPboardType, NSFilenamesPboardType])
-            } else {
-                unregisterDraggedTypes()
-            }
         }
     }
 

@@ -14,10 +14,6 @@ struct Arguments {
         return ProcessInfo.processInfo.arguments
     }
 
-    static var skipMigration: Bool {
-        return args.contains("--skip-migration")
-    }
-
     static var useTestVideo: Bool {
         return args.contains("--use-test-video")
     }

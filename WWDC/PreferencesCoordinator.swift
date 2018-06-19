@@ -18,8 +18,6 @@ enum PreferencesTab: Int {
 
 final class PreferencesCoordinator {
 
-    private let disposeBag = DisposeBag()
-
     private let windowController: PreferencesWindowController
 
     private let tabController: WWDCTabViewController<PreferencesTab>
@@ -49,10 +47,6 @@ final class PreferencesCoordinator {
         tabController.addTabViewItem(generalItem)
 
         windowController.contentViewController = tabController
-    }
-
-    private func commonInit() {
-
     }
 
     func show(in tab: PreferencesTab = .general) {

@@ -56,7 +56,6 @@ final class DownloadManager: NSObject {
     private let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
     private var backgroundSession: Foundation.URLSession!
     private var downloadTasks: [String: URLSessionDownloadTask] = [:]
-    private let defaults = UserDefaults.standard
 
     private var storage: Storage!
 
@@ -91,10 +90,6 @@ final class DownloadManager: NSObject {
         return Preferences.shared.localVideoStorageURL.appendingPathComponent(asset.relativeLocalURL).path
     }
 
-    func allTasks() -> [URLSessionDownloadTask] {
-        return Array(downloadTasks.values)
-    }
-
     func download(_ asset: SessionAsset) {
         downloadRemoteUrl(asset.remoteURL)
     }
@@ -111,36 +106,6 @@ final class DownloadManager: NSObject {
         task.resume()
 
         NotificationCenter.default.post(name: .DownloadManagerDownloadStarted, object: url)
-    }
-
-    func pauseDownload(_ url: String) -> Bool {
-        if let task = downloadTasks[url] {
-            task.suspend()
-            NotificationCenter.default.post(name: .DownloadManagerDownloadPaused, object: url)
-            return true
-        }
-
-        os_log("Unable to pause download of %{public}@ because there's no task for that URL",
-               log: log,
-               type: .error,
-               url)
-
-        return false
-    }
-
-    func resumeDownload(_ url: String) -> Bool {
-        if let task = downloadTasks[url] {
-            task.resume()
-            NotificationCenter.default.post(name: .DownloadManagerDownloadResumed, object: url)
-            return true
-        }
-
-        os_log("Unable to resume download of %{public}@ because there's no task for that URL",
-               log: log,
-               type: .error,
-               url)
-
-        return false
     }
 
     func cancelDownload(_ url: String) -> Bool {
@@ -185,12 +150,6 @@ final class DownloadManager: NSObject {
         return URL(fileURLWithPath: path)
     }
 
-    func localVideoAbsoluteURLString(_ remoteURL: String) -> String? {
-        guard let localPath = localVideoPath(remoteURL) else { return nil }
-
-        return URL(fileURLWithPath: localPath).absoluteString
-    }
-
     func hasVideo(_ url: String) -> Bool {
         guard let path = localVideoPath(url) else { return false }
 
@@ -230,18 +189,6 @@ final class DownloadManager: NSObject {
         } catch {
             WWDCAlert.show(with: error)
         }
-    }
-
-    func downloadedFileURL(for session: Session) -> URL? {
-        guard let asset = session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else {
-            return nil
-        }
-
-        let path = localStoragePath(for: asset)
-
-        guard FileManager.default.fileExists(atPath: path) else { return nil }
-
-        return URL(fileURLWithPath: path)
     }
 
     func downloadStatusObservable(for session: Session) -> Observable<DownloadStatus>? {
