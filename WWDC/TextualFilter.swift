@@ -20,7 +20,6 @@ struct TextualFilter: FilterType {
     }
 
     private var modelKeys: [String] = ["title"]
-    private var subqueryKeys: [String: String] = [:]
 
     var isEmpty: Bool {
         return predicate == nil

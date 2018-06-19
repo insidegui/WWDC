@@ -16,8 +16,6 @@ class SessionDetailsViewController: NSViewController {
         static let padding: CGFloat = 46
     }
 
-    private let disposeBag = DisposeBag()
-
     let listStyle: SessionsListStyle
 
     var viewModel: SessionViewModel? = nil {

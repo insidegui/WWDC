@@ -23,7 +23,6 @@ final class SessionViewModel {
     let identifier: String
     var webUrl: URL?
     var imageUrl: URL?
-    let trackName: String
 
     // These properties are temporary. They are for supporting conditionally
     // showing the weekday while filters are active on the schedule view
@@ -34,22 +33,12 @@ final class SessionViewModel {
         }
     }
 
-    private var disposeBag = DisposeBag()
-
-    lazy var rxSession: Observable<Session> = {
-        return Observable.from(object: self.session)
-    }()
-
     lazy var rxTitle: Observable<String> = {
         return Observable.from(object: self.session).map({ $0.title })
     }()
 
     lazy var rxSubtitle: Observable<String> = {
         return Observable.from(object: self.session).map({ SessionViewModel.subtitle(from: $0, at: $0.event.first) })
-    }()
-
-    lazy var rxTrackName: Observable<String> = {
-        return Observable.from(object: self.session).map({ $0.track.first?.name }).ignoreNil()
     }()
 
     lazy var rxSummary: Observable<String> = {
@@ -104,10 +93,6 @@ final class SessionViewModel {
         return Observable.from(object: self.session).map({ SessionViewModel.imageUrl(for: $0) })
     }()
 
-    lazy var rxWebUrl: Observable<URL?> = {
-        return Observable.from(object: self.session).map({ SessionViewModel.webUrl(for: $0) })
-    }()
-
     lazy var rxIsDownloaded: Observable<Bool> = {
         return Observable.from(object: self.session).map({ $0.isDownloaded })
     }()
@@ -132,23 +117,11 @@ final class SessionViewModel {
         return Observable.from(object: self.sessionInstance).map({ [.lab, .labByAppointment].contains($0.type) })
     }()
 
-    lazy var rxPlayableContent: Observable<Results<SessionAsset>> = {
-        let playableAssets = self.session.assets.filter("rawAssetType == %@ OR rawAssetType == %@", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
-
-        return Observable.collection(from: playableAssets)
-    }()
-
     lazy var rxCanBePlayed: Observable<Bool> = {
         let validAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '') OR (rawAssetType == %@ AND SUBQUERY(session.instances, $instance, $instance.isCurrentlyLive == true).@count > 0)", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
         let validAssetsObservable = Observable.collection(from: validAssets)
 
         return validAssetsObservable.map({ $0.count > 0 })
-    }()
-
-    lazy var rxDownloadableContent: Observable<Results<SessionAsset>> = {
-        let downloadableAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '')", SessionAssetType.hdVideo.rawValue)
-
-        return Observable.collection(from: downloadableAssets)
     }()
 
     lazy var rxProgresses: Observable<Results<SessionProgress>> = {
@@ -175,7 +148,6 @@ final class SessionViewModel {
         guard let session = session ?? instance?.session else { return nil }
         guard let track = session.track.first ?? instance?.track.first else { return nil }
 
-        trackName = track.name
         self.session = session
         sessionInstance = instance ?? session.instances.first ?? SessionInstance()
         title = session.title
@@ -274,12 +246,6 @@ final class SessionViewModel {
         guard let thumbnail = imageAsset?.remoteURL, let thumbnailUrl = URL(string: thumbnail) else { return nil }
 
         return thumbnailUrl
-    }
-
-    static func webUrl(for session: Session) -> URL? {
-        guard let url = session.asset(of: .webpage)?.remoteURL else { return nil }
-
-        return URL(string: url)
     }
 
     static func trackColor(for session: Session) -> NSColor? {

@@ -11,9 +11,7 @@ import PlayerUI
 
 public enum PUIPlayerWindowSizePreset: CGFloat {
 
-    case quarter = 0.25
     case half = 0.50
-    case max = 1.0
 
 }
 
@@ -123,33 +121,6 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
             let frame = PUIPlayerWindow.bestScreenRectFromDetachingContainer(originalContainer)
             window.animator().setFrame(frame, display: false)
         }, completionHandler: nil)
-    }
-
-    @IBAction func sizeWindowToHalfSize(_ sender: AnyObject?) {
-        playerWindow?.applySizePreset(.half)
-    }
-
-    @IBAction func sizeWindowToQuarterSize(_ sender: AnyObject?) {
-        playerWindow?.applySizePreset(.quarter)
-    }
-
-    @IBAction func sizeWindowToFill(_ sender: AnyObject?) {
-        playerWindow?.applySizePreset(.max)
-    }
-
-    @IBAction func floatOnTop(_ sender: NSMenuItem) {
-        if sender.state == .on {
-            toggleFloatOnTop(false)
-            sender.state = .off
-        } else {
-            toggleFloatOnTop(true)
-            sender.state = .on
-        }
-    }
-
-    fileprivate func toggleFloatOnTop(_ enable: Bool) {
-        let level = enable ? Int(CGWindowLevelForKey(CGWindowLevelKey.floatingWindow)) : Int(CGWindowLevelForKey(CGWindowLevelKey.normalWindow))
-        window?.level = NSWindow.Level(rawValue: level)
     }
 
 }

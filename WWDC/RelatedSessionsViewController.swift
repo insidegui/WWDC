@@ -37,8 +37,6 @@ final class RelatedSessionsViewController: NSViewController {
         static let padding: CGFloat = 24
     }
 
-    private let disposeBag = DisposeBag()
-
     var sessions: [SessionViewModel] = [] {
         didSet {
             collectionView.reloadData()

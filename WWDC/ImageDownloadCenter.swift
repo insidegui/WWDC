@@ -80,9 +80,6 @@ final class ImageCacheEntity: Object {
 
 private final class ImageCacheProvider {
 
-    private var originalCaches: [URL: URL] = [:]
-    private var thumbCaches: [URL: URL] = [:]
-
     private let upperLimit = 16 * 1024 * 1024
     private let log = OSLog(subsystem: "WWDC", category: "ImageCacheProvider")
 

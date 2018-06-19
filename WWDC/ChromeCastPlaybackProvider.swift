@@ -118,7 +118,6 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
 
     fileprivate var client: CastClient?
     fileprivate var mediaPlayerApp: CastApp?
-    fileprivate var currentSessionId: Int?
     fileprivate var mediaStatusRefreshTimer: Timer?
 
     @objc private func deviceListDidChange() {
@@ -261,8 +260,6 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
                 }
                 return
             }
-
-            self.currentSessionId = mediaStatus.mediaSessionId
 
             os_log("The media is now loaded with session ID %{public}d", log: self.log, type: .info, mediaStatus.mediaSessionId)
             os_log("Current media status is %{public}@", log: self.log, type: .info, String(describing: mediaStatus))
