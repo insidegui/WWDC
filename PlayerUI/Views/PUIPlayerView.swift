@@ -1222,10 +1222,7 @@ public final class PUIPlayerView: NSView {
         guard isPlaying else { return false }
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
-        guard window.isKeyWindow && window.isOnActiveSpace == true && window.isVisible == true else { return false }
-
-        let localMouseLocation = convert(window.mouseLocationOutsideOfEventStream, from: nil)
-        guard bounds.contains(localMouseLocation) else { return false }
+        guard NSApp.isActive && window.isOnActiveSpace && window.isVisible else { return false }
 
         guard !timelineView.isEditingAnnotation else { return false }
 
@@ -1283,9 +1280,13 @@ public final class PUIPlayerView: NSView {
     public override func viewWillMove(toWindow newWindow: NSWindow?) {
         NotificationCenter.default.removeObserver(self, name: NSWindow.willEnterFullScreenNotification, object: window)
         NotificationCenter.default.removeObserver(self, name: NSWindow.willExitFullScreenNotification, object: window)
+        NotificationCenter.default.removeObserver(self, name: NSWindow.didResignMainNotification, object: window)
+        NotificationCenter.default.removeObserver(self, name: NSWindow.didBecomeMainNotification, object: window)
 
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillEnterFullScreen), name: NSWindow.willEnterFullScreenNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullScreen), name: NSWindow.willExitFullScreenNotification, object: newWindow)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowDidResignMain), name: NSWindow.didResignMainNotification, object: newWindow)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeMain), name: NSWindow.didBecomeMainNotification, object: newWindow)
     }
 
     public override func viewDidMoveToWindow() {
@@ -1315,6 +1316,23 @@ public final class PUIPlayerView: NSView {
     @objc private func windowWillExitFullScreen() {
         fullScreenButton.isHidden = false
         updateExtrasMenuPosition()
+    }
+
+    @objc private func windowDidBecomeMain() {
+
+        // becoming main in full screen means we're entering the space
+        if windowIsInFullScreen {
+            resetMouseIdleTimer(start: true)
+        }
+    }
+
+    @objc private func windowDidResignMain() {
+
+        // resigning main in full screen means we're leaving the space
+        if windowIsInFullScreen {
+            resetMouseIdleTimer(start: false)
+            showControls(animated: false)
+        }
     }
 
     // MARK: - Events
