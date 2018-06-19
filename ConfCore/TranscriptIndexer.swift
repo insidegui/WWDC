@@ -28,7 +28,7 @@ public final class TranscriptIndexer {
     /// The progress when the transcripts are being downloaded/indexed
     public var transcriptIndexingProgress: Progress?
 
-    private let asciiWWDCURL = "http://asciiwwdc.com/"
+    private let asciiWWDCURL = "https://asciiwwdc.com/"
 
     fileprivate let bgThread = DispatchQueue.global(qos: .utility)
 
