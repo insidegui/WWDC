@@ -178,10 +178,6 @@ final class AppCoordinator {
             self?.scheduleController.detailViewController.viewModel = viewModel
             self?.updateSelectedViewModelRegardlessOfTab()
         }).disposed(by: disposeBag)
-
-        storage.featuredSectionsObservable.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] sections in
-            self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
-        }).disposed(by: disposeBag)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -249,15 +245,19 @@ final class AppCoordinator {
 
     private func doUpdateLists() {
 
+        // Initial app launch waits for all of these things to be loaded before dismissing the primary loading spinner
+        // It may, however, delay the presentation of content on tabs that already have everything they need
+
         let starupDependencies = Observable.combineLatest(storage.tracksObservable,
                                                           storage.eventsObservable,
                                                           storage.focusesObservable,
-                                                          storage.scheduleObservable)
+                                                          storage.scheduleObservable,
+                                                          storage.featuredSectionsObservable)
 
         starupDependencies
-            .filter { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty }
+            .filter { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty && !$0.4.isEmpty }
             .take(1)
-            .subscribe(onNext: { [weak self] tracks, _, _, sections in
+            .subscribe(onNext: { [weak self] tracks, _, _, sections, _ in
                 guard let `self` = self else { return }
 
                 self.tabController.hideLoading()
@@ -270,6 +270,18 @@ final class AppCoordinator {
             }).disposed(by: disposeBag)
 
         liveObserver.start()
+    }
+
+    private func updateFeaturedSectionsAfterSync() {
+
+        storage
+            .featuredSectionsObservable
+            .filter { !$0.isEmpty }
+            .subscribeOn(MainScheduler.instance)
+            .take(1)
+            .subscribe(onNext: { [weak self] sections in
+                self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
+            }).disposed(by: disposeBag)
     }
 
     private lazy var searchCoordinator: SearchCoordinator = {
@@ -299,12 +311,21 @@ final class AppCoordinator {
             }
         }
 
+        _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncFeaturedSections, object: nil, queue: .main) { note in
+            if let error = note.object as? Error {
+                NSApp.presentError(error)
+            } else {
+                self.updateFeaturedSectionsAfterSync()
+            }
+        }
+
         _ = NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: .main) { _ in
             self.refresh(nil)
         }
 
         refresh(nil)
         updateListsAfterSync()
+        updateFeaturedSectionsAfterSync()
 
         if Arguments.showPreferences {
             showPreferences(nil)

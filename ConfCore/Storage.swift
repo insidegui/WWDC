@@ -248,11 +248,28 @@ public final class Storage {
         })
     }
 
-    internal func store(featuredSectionsResult: Result<[FeaturedSection], APIError>) {
+    internal func store(featuredSectionsResult: Result<[FeaturedSection], APIError>, completion: @escaping (Error?) -> Void) {
+        if case let .error(error) = featuredSectionsResult {
+            os_log("Error downloading featured sections: %{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
+
+            completion(error)
+
+            return
+        }
+
         guard case .success(let sections) = featuredSectionsResult else { return }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
-            backgroundRealm.delete(backgroundRealm.objects(FeaturedSection.self))
+            let existingSections = backgroundRealm.objects(FeaturedSection.self)
+            for section in existingSections {
+                section.content.forEach { backgroundRealm.delete($0) }
+                section.author.map { backgroundRealm.delete($0) }
+                backgroundRealm.delete(section)
+            }
+
             backgroundRealm.add(sections, update: true)
 
             // Associate contents with sessions
@@ -261,7 +278,7 @@ public final class Storage {
                     content.session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: content.sessionId)
                 }
             }
-        })
+        }, disableAutorefresh: true, completionBlock: completion)
     }
 
     /// Performs a write transaction in the background

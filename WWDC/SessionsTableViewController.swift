@@ -134,7 +134,7 @@ class SessionsTableViewController: NSViewController {
     /// even if its data model gets added while it is offscreen. Specifically,
     /// when this table view is not the initial active tab.
     private func performFirstUpdateIfNeeded() {
-        guard !hasPerformedFirstUpdate else { return }
+        guard !hasPerformedFirstUpdate && sessionRowProvider != nil else { return }
         hasPerformedFirstUpdate = true
 
         filterResults.results { [weak self] in
@@ -183,6 +183,7 @@ class SessionsTableViewController: NSViewController {
     var sessionRowProvider: SessionRowProvider? {
         didSet {
             allRows = sessionRowProvider?.sessionRows() ?? []
+            performFirstUpdateIfNeeded()
         }
     }
 
