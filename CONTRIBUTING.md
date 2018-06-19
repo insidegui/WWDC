@@ -14,37 +14,33 @@ Remember to include the version of the operating system you're running and the t
 
 ####II. Crashes
 
-I use [Fabric](https://fabric.io) to track crashes, so every time the app crashes they get the crash log, symbolicate it and send me an e-mail which looks like this:
-
-![fabric](screenshots/fabric.png)
-
-This is really helpful, but sometimes the crash logs are not enough to find the source of the problem, so if you get a crash please do open an issue and explain what you were trying to do when the crash happened. 
+If you get a crash please open an issue and explain what you were trying to do when the crash happened, include a video or screenshots of the problem if possible.
 
 Remember to include the version of the operating system you're running and the type/model of the machine (MacBook Mid 2009, iMac Late 2012, etc).
 
 ####III. Feature Requests
 
-If you want a new feature to be implemented, you can open an issue explaining why the feature would be useful to you and to other people and if you can convince me (or other contributors), it can be implemented.
+If you want a new feature to be implemented, you can open an issue explaining why the feature would be useful to you and to other people.
 
-Please keep in mind that I try to keep the app focused and exotic features or features which would add too much complexity to the code may be rejected.
+Keep in mind that we try to keep the app focused and exotic features or features which would add too much complexity to the code may be rejected.
+
+#### Issue template
+
+Please follow the issue template provided when opening your issue, especially if it's a bug report.
 
 ##2. Code (Pull Requests)
 
-Please note that some of these suggestions are not followed throughout the code because the project has been in development since the first version of Swift and some of the constructs where not even available then, these guidelines did not exist and the author was lazy. Just because you see a rule being broken doesn't mean you get to break it as well 😆
+**Important: pull requests that only contain refactoring of existing code without fixing any bugs, improving performance or implementing a new feature will not be accepted.**
 
-In fact, if you see some code not following these guidelines, fix it and send a pull request 🤓
+####I. Tip: Ask before you code
 
-####I. Tip: Check the roadmap and ask before you code
+It has happened a couple of times that we were working on a feature and someone opened a pull request implementing that same feature. This wastes time and effort because only one of the solutions will actually be used, so before you start coding I suggest you take a look at the open issues to see what's being worked on at the moment. If an issue already has someone assigned to it, don't start working on an implementation. It's also important to open an issue before working on a new feature if it's not already listed, because not every feature fits our vision of the app and we like to review feature ideas before implementing them.
 
-It's happened a couple of times that I was working on a feature and someone opened a pull request implementing the same feature I was working on. This wastes time and effort because only one of the solutions will actually be used, so before you start coding I suggest you take a look at the [roadmap](ROADMAP.md) to see what I'm working on currently.
+If you see an open issue and you want to fix it, reply to the issue announcing that you're going to work on it so other people know there's someone already working on that.
 
-If you see an open issue and you want to fix it, reply on the issue announcing that you're going to work on it so other people know there's someone already working on that.
+####II. Use Swift
 
-####II. Use Swift, if you can
-
-The app is written mainly in Swift but there are some components written in Objective-C because some of the features were hard to implement back when Swift was just getting started.
-
-If you want to contribute and you don't want to write Swift code or don't know Swift, you can use Objective-C. But you really should be learning Swift 😬
+All new code in the app should be written in Swift using the latest stable version of Xcode.
 
 ####III. Use spaces instead of tabs
 
@@ -145,24 +141,25 @@ class ImagesViewController: NSViewController {
 }
 ```
 
-####VI. Test your code thoroughly
+####VI. Test your code thoroughly and follow linting rules
 
 When you think you're done with your contribution, try to break your code in as many different ways as possible to make sure your implementation is solid:
 
 - If you change something related to the handling of user or application data (model layer) make sure to test the migration of data from a previous version of the app to your modified version.
 - If you change a component related to networking, use the network link conditioner and test with a slow/bad connection to see how the app behaves
-- If you change something related to UI, test It on both retina and non-retina screens
+- If you change something related to UI, try resizing the window and looking at different content to make sure it can adapt well to different environments.
+
+
+Make sure your code is not introducing any new warnings, including those produced by Swiftlint.
 
 ####VII. Dependencies
 
-Do not add dependencies to the project unless they are absolutely essential to implement the functionality you're implementing. If you do add a dependency, use a well known and established library which is already in use by other major open source projects.
-
-Please note that if you add a dependency on a pull request I will triple and quadruple check it before merging so it increases the risk of your contribution being rejected.
+Do not add dependencies to the project.
 
 Do not bring in assets (icons, images) for which you don't have an appropriate license. Icons and images must have a Creative Commons or similar license to be used in this project. A good place to find free icons is [Icon Finder](https://iconfinder.com).
 
 ##3. Conclusion
 
-These are just some suggestions for common scenarios, if you need help with your contribution you can always [tweet to me](https://twitter.com/_inside).
+These are just some suggestions for common scenarios, if you need help with your contribution you can always open an issue to discuss it before doing the pull request.
 
 Have fun 🎉
