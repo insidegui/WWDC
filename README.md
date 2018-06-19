@@ -49,6 +49,10 @@ You can easily share links to sessions or videos by using the share button. The 
 ### Code of Conduct
 We expect all of our contributors to help uphold the values set out in our [code of conduct](./CODE_OF_CONDUCT.md). We fundamentally believe this will help us build a better community, and with it a better app.
 
+### Contributing
+
+Please read the [contribution guidelines](CONTRIBUTING.md) before opening an issue or pull request.
+
 ### External libraries
 
 A number of third-party libraries are used by the app:
