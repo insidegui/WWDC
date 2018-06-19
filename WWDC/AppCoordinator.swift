@@ -445,7 +445,7 @@ final class AppCoordinator {
     }
 
     func showFeatured() {
-//        tabController.activeTab = .featured
+        tabController.activeTab = .featured
     }
 
     func showSchedule() {
