@@ -1123,7 +1123,7 @@ public final class PUIPlayerView: NSView {
 
             let allWindows = NSApp.windows
             let firstResponders = allWindows.compactMap { $0.firstResponder }
-            let fieldEditors = firstResponders.filter { ($0 as? NSText)?.isFieldEditor == true }
+            let fieldEditors = firstResponders.filter { ($0 as? NSText)?.isEditable == true }
             guard fieldEditors.isEmpty else { return event }
             guard !self.timelineView.isEditingAnnotation else { return event }
 
