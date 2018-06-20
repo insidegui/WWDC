@@ -20,10 +20,9 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard currentPlaybackViewModel != nil else { return }
         guard let playerController = currentPlayerController else { return }
 
-        guard playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else {
-            playerController.view.isHidden = false
-            return
-        }
+        playerController.view.animator().isHidden = playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier
+
+        // Everything after this point is for automatically entering PiP
 
         // ignore when not playing or when playing externally
         guard playerController.playerView.isInternalPlayerPlaying else { return }
@@ -31,24 +30,17 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         // ignore when playing in fullscreen
         guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
 
-        playerController.view.isHidden = true
-
-        guard !canRestorePlaybackContext else { return }
-
         // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
 
         if !playerController.playerView.isInPictureInPictureMode {
             playerController.playerView.togglePip(nil)
         }
-
-        canRestorePlaybackContext = true
     }
 
     func goBackToContextBeforePiP(_ isReturningFromPip: Bool) {
         isTransitioningPlayerContext = true
         defer { isTransitioningPlayerContext = false }
 
-        guard canRestorePlaybackContext else { return }
         guard playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else { return }
         guard let identifier = playerOwnerSessionIdentifier else { return }
         guard let tab = playerOwnerTab else { return }
@@ -58,8 +50,6 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             currentListController?.select(session: SessionIdentifier(identifier))
             currentPlayerController?.view.isHidden = false
         }
-
-        canRestorePlaybackContext = false
     }
 
     func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
@@ -81,7 +71,6 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
             playbackViewModel.image = shelfController.shelfView.image
 
-            canRestorePlaybackContext = false
             isTransitioningPlayerContext = false
 
             currentPlaybackViewModel = playbackViewModel

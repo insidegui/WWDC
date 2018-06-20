@@ -43,9 +43,6 @@ final class AppCoordinator {
     /// The session that "owns" the current player (the one that was selected on the active tab when "play" was pressed)
     var playerOwnerSessionIdentifier: String?
 
-    /// Whether playback can be restored to the previous context when exiting PiP mode (go back to tab/session)
-    var canRestorePlaybackContext = false
-
     /// Whether we're currently in the middle of a player context transition
     var isTransitioningPlayerContext = false
 
@@ -170,8 +167,13 @@ final class AppCoordinator {
         }).disposed(by: disposeBag)
 
         selectedSession.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
-            self?.videosController.detailViewController.viewModel = viewModel
-            self?.updateSelectedViewModelRegardlessOfTab()
+            NSAnimationContext.runAnimationGroup({ context in
+                context.duration = 0.35
+
+                self?.videosController.detailViewController.viewModel = viewModel
+                self?.updateSelectedViewModelRegardlessOfTab()
+            }, completionHandler: nil)
+
         }).disposed(by: disposeBag)
 
         selectedScheduleItem.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
