@@ -221,6 +221,9 @@ public final class PUIPlayerView: NSView {
     private func setupPlayer() {
         elapsedTimeLabel.stringValue = elapsedTimeInitialValue
         remainingTimeLabel.stringValue = remainingTimeInitialValue
+        timelineView.playbackProgress = 0
+        timelineView.annotations = []
+        timelineView.loadedSegments = []
 
         guard let player = player else { return }
 
@@ -402,7 +405,7 @@ public final class PUIPlayerView: NSView {
     fileprivate func playerTimeDidChange(time: CMTime) {
         guard let player = player else { return }
         guard player.hasValidMediaDuration else { return }
-        guard let duration = asset?.duration else { return }
+        guard let duration = asset?.durationIfLoaded else { return }
 
         DispatchQueue.main.async {
             let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
@@ -417,7 +420,7 @@ public final class PUIPlayerView: NSView {
         guard let player = player else { return }
 
         guard player.hasValidMediaDuration else { return }
-        guard let duration = asset?.duration else { return }
+        guard let duration = asset?.durationIfLoaded else { return }
 
         let time = player.currentTime()
 
@@ -495,7 +498,13 @@ public final class PUIPlayerView: NSView {
     private var volumeControlsContainerView: NSStackView!
     private var centerButtonsContainerView: NSStackView!
 
-    fileprivate var timelineView: PUITimelineView!
+    fileprivate lazy var timelineView: PUITimelineView = {
+        let v = PUITimelineView(frame: .zero)
+
+        v.viewDelegate = self
+
+        return v
+    }()
 
     private var elapsedTimeInitialValue = "00:00:00"
     private lazy var elapsedTimeLabel: NSTextField = {
@@ -677,10 +686,6 @@ public final class PUIPlayerView: NSView {
         timeLabelsContainerView.distribution = .fillEqually
         timeLabelsContainerView.orientation = .horizontal
         timeLabelsContainerView.alignment = .centerY
-
-        // Timeline view
-        timelineView = PUITimelineView(frame: .zero)
-        timelineView.viewDelegate = self
 
         // Volume controls
         volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
@@ -926,6 +931,14 @@ public final class PUIPlayerView: NSView {
     }
 
     @IBAction public func play(_ sender: Any?) {
+        if player?.error != nil
+            || player?.currentItem?.error != nil,
+            let asset = player?.currentItem?.asset as? AVURLAsset {
+
+            // reset the player on error
+            player?.replaceCurrentItem(with: AVPlayerItem(asset: AVURLAsset(url: asset.url)))
+        }
+
         if isPlayingExternally {
             currentExternalPlaybackProvider?.play()
         } else {

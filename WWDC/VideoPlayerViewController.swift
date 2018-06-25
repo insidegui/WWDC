@@ -145,9 +145,6 @@ final class VideoPlayerViewController: NSViewController {
 
         player.play()
 
-        progressIndicator.isHidden = false
-        progressIndicator.startAnimation(nil)
-
         playerView.player = player
 
         if let playbackViewModel = playbackViewModel {
@@ -178,23 +175,25 @@ final class VideoPlayerViewController: NSViewController {
     // MARK: - Player Observation
 
     private var playerStatusObserver: NSKeyValueObservation?
+    private var currentItemStatusObserver: NSKeyValueObservation?
     private var presentationSizeObserver: NSKeyValueObservation?
     private var currentItemObserver: NSKeyValueObservation?
     private var loadedTimeRangesObserver: NSKeyValueObservation?
 
     private func setupPlayerObservers() {
 
-        playerStatusObserver = player.observe(\.rate, options: [.initial, .new], changeHandler: { [weak self] (player, change) in
+        playerStatusObserver = player.observe(\.status, options: [.initial, .new], changeHandler: { [weak self] (player, change) in
             guard let `self` = self else { return }
-            print(self.player.rate)
-            DispatchQueue.main.async(execute: self.playerStatusDidChange)
+            DispatchQueue.main.async(execute: self.showPlaybackErrorIfNeeded)
         })
 
-        loadedTimeRangesObserver = player.observe(\AVPlayer.currentItem?.loadedTimeRanges) { [weak self] (player, change) in
-            //
+        loadedTimeRangesObserver = player.observe(\AVPlayer.timeControlStatus) { [weak self] (player, change) in
 
-            if let timeRange = player.currentItem?.loadedTimeRanges.first.map({ $0.timeRangeValue }) {
-                print(timeRange)
+            switch player.timeControlStatus {
+            case .waitingToPlayAtSpecifiedRate:
+                self?.progressIndicator.startAnimation(nil)
+                self?.progressIndicator.isHidden = false
+            case .playing, .paused:
                 self?.progressIndicator.stopAnimation(nil)
                 self?.progressIndicator.isHidden = true
             }
@@ -205,6 +204,11 @@ final class VideoPlayerViewController: NSViewController {
                 guard let `self` = self else { return }
                 DispatchQueue.main.async(execute: self.playerItemPresentationSizeDidChange)
             }
+
+            self?.currentItemStatusObserver = player.currentItem?.observe(\.status) { item, _ in
+                guard let `self` = self else { return }
+                self.showPlaybackErrorIfNeeded()
+            }
         }
     }
 
@@ -214,12 +218,14 @@ final class VideoPlayerViewController: NSViewController {
         (view.window as? PUIPlayerWindow)?.aspectRatio = size
     }
 
-    private func playerStatusDidChange() {
-//        switch player.status {
-//        case .readyToPlay, .failed:
-//
-//        default: break
-//        }
+    private func showPlaybackErrorIfNeeded() {
+
+        if let error = player.error ?? player.currentItem?.error {
+            WWDCAlert.show(with: error)
+        } else {
+            let alert = WWDCAlert.create()
+            alert.messageText = "A playback error occurred"
+        }
     }
 
     // MARK: - Transcript sync

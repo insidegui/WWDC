@@ -139,22 +139,18 @@ final class PlaybackViewModel {
             player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
 
             timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
-                guard let asset = self?.player.currentItem?.asset else { return }
-                let error: NSErrorPointer = nil
-                let durationStatus = asset.statusOfValue(forKey: "duration", error: error)
+                guard let `self` = self else { return }
 
-                guard durationStatus == AVKeyValueStatus.loaded else { return }
-
-                let duration = asset.duration
+                guard let duration = self.player.currentItem?.asset.durationIfLoaded else { return }
 
                 guard CMTIME_IS_VALID(duration) else { return }
 
                 let p = Double(CMTimeGetSeconds(currentTime))
                 let d = Double(CMTimeGetSeconds(duration))
 
-                self?.sessionViewModel.session.setCurrentPosition(p, d)
+                self.sessionViewModel.session.setCurrentPosition(p, d)
 
-                if !d.isZero { self?.nowPlayingInfo.value?.progress = p / d }
+                if !d.isZero { self.nowPlayingInfo.value?.progress = p / d }
             }
         }
     }

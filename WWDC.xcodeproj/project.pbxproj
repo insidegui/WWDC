@@ -12,6 +12,7 @@
 		3A0840B41F924665002BC828 /* Realm+InMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0840B31F924665002BC828 /* Realm+InMemory.swift */; };
 		3A6227031F9272A300D5F687 /* contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A6227021F9272A300D5F687 /* contents.json */; };
 		4D5EB0F820598E6000D4BC52 /* SessionRowProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5EB0F720598E6000D4BC52 /* SessionRowProvider.swift */; };
+		4DBFA4DA20E160CB00BDF34B /* AVAsset+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */; };
 		4DEEC3A32051C8D400376595 /* TestUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEC3A22051C8D400376595 /* TestUtilities.swift */; };
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
@@ -353,6 +354,7 @@
 		3A0840B31F924665002BC828 /* Realm+InMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+InMemory.swift"; sourceTree = "<group>"; };
 		3A6227021F9272A300D5F687 /* contents.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = contents.json; sourceTree = "<group>"; };
 		4D5EB0F720598E6000D4BC52 /* SessionRowProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRowProvider.swift; sourceTree = "<group>"; };
+		4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+AsyncHelpers.swift"; sourceTree = "<group>"; };
 		4DEEC3A22051C8D400376595 /* TestUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtilities.swift; sourceTree = "<group>"; };
 		4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionsTableViewController+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
@@ -1494,6 +1496,7 @@
 			isa = PBXGroup;
 			children = (
 				DDF721B91ECA12A40054C503 /* AVPlayer+Validation.swift */,
+				4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */,
 				DDF721BB1ECA12A40054C503 /* NSEvent+ForceTouch.swift */,
 				DDF721BC1ECA12A40054C503 /* NSWindow+Snapshot.swift */,
 				DDF721BD1ECA12A40054C503 /* String+CMTime.swift */,
@@ -1853,7 +1856,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
 		F72964482015787100A7A571 /* SwiftLint Warnings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2092,6 +2095,7 @@
 				DDC970BF209291630072B822 /* PUITouchBarController.swift in Sources */,
 				DDF721E01ECA12A40054C503 /* PUISlider.swift in Sources */,
 				DDF721DA1ECA12A40054C503 /* PUIAnnotationLayer.swift in Sources */,
+				4DBFA4DA20E160CB00BDF34B /* AVAsset+AsyncHelpers.swift in Sources */,
 				DDF721CC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift in Sources */,
 				DDF721C91ECA12A40054C503 /* Colors.swift in Sources */,
 				DDED75571ED3C1BF000BA817 /* PUIScrimContainerView.swift in Sources */,
