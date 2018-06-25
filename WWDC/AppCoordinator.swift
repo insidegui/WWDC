@@ -166,20 +166,22 @@ final class AppCoordinator {
             self?.updateSelectedViewModelRegardlessOfTab()
         }).disposed(by: disposeBag)
 
-        selectedSession.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
-            NSAnimationContext.runAnimationGroup({ context in
-                context.duration = 0.35
+        func bind(session: Observable<SessionViewModel?>, to detailsController: SessionDetailsViewController) {
 
-                self?.videosController.detailViewController.viewModel = viewModel
-                self?.updateSelectedViewModelRegardlessOfTab()
-            }, completionHandler: nil)
+            session.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
+                NSAnimationContext.runAnimationGroup({ context in
+                    context.duration = 0.35
 
-        }).disposed(by: disposeBag)
+                    detailsController.viewModel = viewModel
+                    self?.updateSelectedViewModelRegardlessOfTab()
+                })
 
-        selectedScheduleItem.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
-            self?.scheduleController.detailViewController.viewModel = viewModel
-            self?.updateSelectedViewModelRegardlessOfTab()
-        }).disposed(by: disposeBag)
+            }).disposed(by: disposeBag)
+        }
+
+        bind(session: selectedSession, to: videosController.detailViewController)
+
+        bind(session: selectedScheduleItem, to: scheduleController.detailViewController)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {

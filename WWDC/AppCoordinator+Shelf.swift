@@ -20,7 +20,10 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard currentPlaybackViewModel != nil else { return }
         guard let playerController = currentPlayerController else { return }
 
-        playerController.view.animator().isHidden = playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier
+        let playerIsInFullScreenWindow = playerController.playerView.isInFullScreenPlayerWindow
+        let sessionIsPlayingInPrimaryWindow = (!playerIsInFullScreenWindow && playerOwnerSessionIdentifier == selectedViewModelRegardlessOfTab?.identifier)
+
+        playerController.view.animator().isHidden = !(sessionIsPlayingInPrimaryWindow || playerIsInFullScreenWindow)
 
         // Everything after this point is for automatically entering PiP
 
@@ -28,7 +31,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard playerController.playerView.isInternalPlayerPlaying else { return }
 
         // ignore when playing in fullscreen
-        guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
+        guard !playerIsInFullScreenWindow else { return }
 
         // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
 
