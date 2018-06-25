@@ -139,7 +139,14 @@ final class PlaybackViewModel {
             player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
 
             timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
-                guard let duration = self?.player.currentItem?.asset.duration else { return }
+                guard let asset = self?.player.currentItem?.asset else { return }
+                let error: NSErrorPointer = nil
+                let durationStatus = asset.statusOfValue(forKey: "duration", error: error)
+
+                guard durationStatus == AVKeyValueStatus.loaded else { return }
+
+                let duration = asset.duration
+
                 guard CMTIME_IS_VALID(duration) else { return }
 
                 let p = Double(CMTimeGetSeconds(currentTime))

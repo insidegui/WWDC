@@ -219,10 +219,13 @@ public final class PUIPlayerView: NSView {
     private var playerLayer = PUIBoringPlayerLayer()
 
     private func setupPlayer() {
+        elapsedTimeLabel.stringValue = elapsedTimeInitialValue
+        remainingTimeLabel.stringValue = remainingTimeInitialValue
+
         guard let player = player else { return }
 
         playerLayer.player = player
-        playerLayer.videoGravity = AVLayerVideoGravity.resizeAspect
+        playerLayer.videoGravity = .resizeAspect
 
         if pictureContainer == nil {
             pictureContainer = PUIPictureContainerViewController(playerLayer: playerLayer)
@@ -238,10 +241,17 @@ public final class PUIPlayerView: NSView {
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration), options: [.initial, .new], context: nil)
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection), options: [.initial, .new], context: nil)
+//        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration), options: [.initial, .new], context: nil)
+//        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection), options: [.new], context: nil)
 
-        asset?.loadValuesAsynchronously(forKeys: ["tracks"], completionHandler: metadataBecameAvailable)
+        asset?.loadValuesAsynchronously(forKeys: ["duration"], completionHandler: durationBecameAvailable)
+
+        asset?.loadValuesAsynchronously(forKeys: ["allMediaSelections"], completionHandler: { [weak self] in
+            let error: NSErrorPointer = nil
+
+            let status = self?.asset?.statusOfValue(forKey: "allMediaSelections", error: error)
+            self?.updateSubtitleSelection()
+        })
 
         playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
@@ -264,8 +274,8 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.volume))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
-        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration))
-        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection))
+//        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration))
+//        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem))
     }
 
@@ -283,10 +293,10 @@ public final class PUIPlayerView: NSView {
             case #keyPath(AVPlayer.rate):
                 self.updatePlayingState()
                 self.updatePowerAssertion()
-            case #keyPath(AVPlayer.currentItem.duration):
-                self.metadataBecameAvailable()
+//            case #keyPath(AVPlayer.currentItem.duration):
+//                self.durationBecameAvailable()
             case #keyPath(AVPlayer.currentItem.currentMediaSelection):
-                self.updateMediaSelection()
+                self.updateSubtitleSelection()
             case #keyPath(AVPlayer.currentItem):
                 if let playerItem = self.player?.currentItem {
                     playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithm.timeDomain
@@ -381,7 +391,7 @@ public final class PUIPlayerView: NSView {
         }
     }
 
-    private func metadataBecameAvailable() {
+    private func durationBecameAvailable() {
         guard let duration = asset?.duration else { return }
 
         DispatchQueue.main.async {
@@ -487,8 +497,9 @@ public final class PUIPlayerView: NSView {
 
     fileprivate var timelineView: PUITimelineView!
 
+    private var elapsedTimeInitialValue = "00:00:00"
     private lazy var elapsedTimeLabel: NSTextField = {
-        let l = NSTextField(labelWithString: "00:00:00")
+        let l = NSTextField(labelWithString: elapsedTimeInitialValue)
 
         l.alignment = .left
         l.font = .monospacedDigitSystemFont(ofSize: 14, weight: .medium)
@@ -497,8 +508,9 @@ public final class PUIPlayerView: NSView {
         return l
     }()
 
+    private var remainingTimeInitialValue = "-00:00:00"
     private lazy var remainingTimeLabel: NSTextField = {
-        let l = NSTextField(labelWithString: "-00:00:00")
+        let l = NSTextField(labelWithString: remainingTimeInitialValue)
 
         l.alignment = .right
         l.font = .monospacedDigitSystemFont(ofSize: 14, weight: .medium)
@@ -1027,7 +1039,7 @@ public final class PUIPlayerView: NSView {
     private var subtitlesMenu: NSMenu?
     private var subtitlesGroup: AVMediaSelectionGroup?
 
-    private func updateMediaSelection() {
+    private func updateSubtitleSelection() {
         guard let playerItem = player?.currentItem else { return }
 
         guard let subtitlesGroup = playerItem.asset.mediaSelectionGroup(forMediaCharacteristic: .legible) else {

@@ -137,12 +137,15 @@ final class VideoPlayerViewController: NSViewController {
 
             oldPlayer.pause()
             oldPlayer.cancelPendingPrerolls()
+            oldPlayer.currentItem?.cancelPendingSeeks()
+            oldPlayer.currentItem?.asset.cancelLoading()
         }
 
         setupPlayerObservers()
 
         player.play()
 
+        progressIndicator.isHidden = false
         progressIndicator.startAnimation(nil)
 
         playerView.player = player
@@ -177,13 +180,25 @@ final class VideoPlayerViewController: NSViewController {
     private var playerStatusObserver: NSKeyValueObservation?
     private var presentationSizeObserver: NSKeyValueObservation?
     private var currentItemObserver: NSKeyValueObservation?
+    private var loadedTimeRangesObserver: NSKeyValueObservation?
 
     private func setupPlayerObservers() {
 
-        playerStatusObserver = player.observe(\.status, options: [.initial, .new], changeHandler: { [weak self] (player, change) in
+        playerStatusObserver = player.observe(\.rate, options: [.initial, .new], changeHandler: { [weak self] (player, change) in
             guard let `self` = self else { return }
+            print(self.player.rate)
             DispatchQueue.main.async(execute: self.playerStatusDidChange)
         })
+
+        loadedTimeRangesObserver = player.observe(\AVPlayer.currentItem?.loadedTimeRanges) { [weak self] (player, change) in
+            //
+
+            if let timeRange = player.currentItem?.loadedTimeRanges.first.map({ $0.timeRangeValue }) {
+                print(timeRange)
+                self?.progressIndicator.stopAnimation(nil)
+                self?.progressIndicator.isHidden = true
+            }
+        }
 
         currentItemObserver = player.observe(\.currentItem, options: [.initial, .new]) { [weak self] (player, change) in
             self?.presentationSizeObserver = player.currentItem?.observe(\.presentationSize, options: [.initial, .new]) { [weak self] (player, change) in
@@ -200,12 +215,11 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     private func playerStatusDidChange() {
-        switch player.status {
-        case .readyToPlay, .failed:
-            progressIndicator.stopAnimation(nil)
-            progressIndicator.isHidden = true
-        default: break
-        }
+//        switch player.status {
+//        case .readyToPlay, .failed:
+//
+//        default: break
+//        }
     }
 
     // MARK: - Transcript sync
