@@ -76,6 +76,7 @@ final class VideoPlayerViewController: NSViewController {
         p.isIndeterminate = true
         p.translatesAutoresizingMaskIntoConstraints = false
         p.appearance = NSAppearance(named: NSAppearance.Name(rawValue: "WhiteSpinner"))
+        p.isHidden = true
 
         p.sizeToFit()
 
@@ -178,7 +179,7 @@ final class VideoPlayerViewController: NSViewController {
     private var currentItemStatusObserver: NSKeyValueObservation?
     private var presentationSizeObserver: NSKeyValueObservation?
     private var currentItemObserver: NSKeyValueObservation?
-    private var loadedTimeRangesObserver: NSKeyValueObservation?
+    private var timeControlStatusObserver: NSKeyValueObservation?
 
     private func setupPlayerObservers() {
 
@@ -187,16 +188,9 @@ final class VideoPlayerViewController: NSViewController {
             DispatchQueue.main.async(execute: self.showPlaybackErrorIfNeeded)
         })
 
-        loadedTimeRangesObserver = player.observe(\AVPlayer.timeControlStatus) { [weak self] (player, change) in
-
-            switch player.timeControlStatus {
-            case .waitingToPlayAtSpecifiedRate:
-                self?.progressIndicator.startAnimation(nil)
-                self?.progressIndicator.isHidden = false
-            case .playing, .paused:
-                self?.progressIndicator.stopAnimation(nil)
-                self?.progressIndicator.isHidden = true
-            }
+        timeControlStatusObserver = player.observe(\AVPlayer.timeControlStatus) { [weak self] (player, change) in
+            guard let `self` = self else { return }
+            DispatchQueue.main.async(execute: self.timeControlStatusDidChange)
         }
 
         currentItemObserver = player.observe(\.currentItem, options: [.initial, .new]) { [weak self] (player, change) in
@@ -225,6 +219,30 @@ final class VideoPlayerViewController: NSViewController {
         } else {
             let alert = WWDCAlert.create()
             alert.messageText = "A playback error occurred"
+        }
+    }
+
+    private func timeControlStatusDidChange() {
+        func showLoading() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                guard self?.player.timeControlStatus == .waitingToPlayAtSpecifiedRate else { return }
+                self?.progressIndicator.startAnimation(nil)
+                self?.progressIndicator.isHidden = false
+            }
+        }
+
+        func hideLoading() {
+            if !progressIndicator.isHidden {
+                progressIndicator.stopAnimation(nil)
+                progressIndicator.isHidden = true
+            }
+        }
+
+        switch player.timeControlStatus {
+        case .waitingToPlayAtSpecifiedRate:
+            showLoading()
+        case .playing, .paused:
+            hideLoading()
         }
     }
 

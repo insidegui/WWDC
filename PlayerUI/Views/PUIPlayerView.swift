@@ -244,16 +244,16 @@ public final class PUIPlayerView: NSView {
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem), options: [.initial, .new], context: nil)
         player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
-//        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration), options: [.initial, .new], context: nil)
-//        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection), options: [.new], context: nil)
 
         asset?.loadValuesAsynchronously(forKeys: ["duration"], completionHandler: durationBecameAvailable)
 
+        // This produces a log message: `-[AVAsset statusOfValueForKey:error:] invoked with unrecognized key allMediaSelections.`
+        // But it works correctly
         asset?.loadValuesAsynchronously(forKeys: ["allMediaSelections"], completionHandler: { [weak self] in
-            let error: NSErrorPointer = nil
 
-            let status = self?.asset?.statusOfValue(forKey: "allMediaSelections", error: error)
-            self?.updateSubtitleSelection()
+            if self?.asset?.statusOfValue(forKey: "allMediaSelections", error: nil) == .loaded {
+                self?.updateSubtitleSelectionMenu()
+            }
         })
 
         playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
@@ -277,8 +277,6 @@ public final class PUIPlayerView: NSView {
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.volume))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
-//        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.duration))
-//        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.currentMediaSelection))
         oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem))
     }
 
@@ -296,13 +294,9 @@ public final class PUIPlayerView: NSView {
             case #keyPath(AVPlayer.rate):
                 self.updatePlayingState()
                 self.updatePowerAssertion()
-//            case #keyPath(AVPlayer.currentItem.duration):
-//                self.durationBecameAvailable()
-            case #keyPath(AVPlayer.currentItem.currentMediaSelection):
-                self.updateSubtitleSelection()
             case #keyPath(AVPlayer.currentItem):
                 if let playerItem = self.player?.currentItem {
-                    playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithm.timeDomain
+                    playerItem.audioTimePitchAlgorithm = .timeDomain
                 }
             default:
                 super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
@@ -1052,7 +1046,7 @@ public final class PUIPlayerView: NSView {
     private var subtitlesMenu: NSMenu?
     private var subtitlesGroup: AVMediaSelectionGroup?
 
-    private func updateSubtitleSelection() {
+    private func updateSubtitleSelectionMenu() {
         guard let playerItem = player?.currentItem else { return }
 
         guard let subtitlesGroup = playerItem.asset.mediaSelectionGroup(forMediaCharacteristic: .legible) else {
