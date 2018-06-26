@@ -41,7 +41,10 @@ final class AppCoordinator {
     var playerOwnerTab: MainWindowTab?
 
     /// The session that "owns" the current player (the one that was selected on the active tab when "play" was pressed)
-    var playerOwnerSessionIdentifier: String?
+    var playerOwnerSessionIdentifier: String? {
+        didSet { rxPlayerOwnerSessionIdentifier.onNext(playerOwnerSessionIdentifier) }
+    }
+    var rxPlayerOwnerSessionIdentifier = BehaviorSubject<String?>(value: nil)
 
     /// Whether we're currently in the middle of a player context transition
     var isTransitioningPlayerContext = false

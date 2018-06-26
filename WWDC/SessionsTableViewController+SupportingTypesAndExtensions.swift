@@ -8,6 +8,8 @@
 
 import ConfCore
 import RealmSwift
+import RxRealm
+import RxSwift
 import os.log
 
 /// Conforming to this protocol means the type is capable
@@ -82,59 +84,137 @@ extension Array where Element == SessionRow {
     }
 }
 
-struct FilterResults {
+final class FilterResults {
 
     static var empty: FilterResults {
         return FilterResults(storage: nil, query: nil)
     }
 
-    /// This becomes an OperationQueue for aborting, tada
-    private static let searchQueue = DispatchQueue(label: "Search", qos: .userInteractive)
+    private let query: NSPredicate?
 
-    var query: NSPredicate? {
-        didSet {
-            searchResults = nil
-        }
-    }
+    private let storage: Storage?
 
-    let storage: Storage?
+    private(set) var latestSearchResults: Results<Session>?
 
-    private var searchResults: Results<Session>?
+    private var disposeBag = DisposeBag()
+    private let nowPlayingBag = DisposeBag()
+
+    private var observerClosure: ((Results<Session>?) -> Void)?
+    private var observerToken: NotificationToken?
 
     init(storage: Storage?, query: NSPredicate?) {
         self.storage = storage
         self.query = query
+
+        if let appDelegate = NSApplication.shared.delegate as? AppDelegate {
+
+            appDelegate
+                .coordinator
+                .rxPlayerOwnerSessionIdentifier
+                .subscribe(onNext: { [weak self] _ in
+                    self?.bindResults()
+                }).disposed(by: nowPlayingBag)
+        }
     }
 
-    func results(with closure: @escaping (Results<Session>?) -> Void) {
+    func observe(with closure: @escaping (Results<Session>?) -> Void) {
+        assert(observerClosure == nil)
 
-        if let searchResults = searchResults {
-            closure(searchResults)
-            return
-        }
-
-        guard let query = query, let storage = storage else {
+        guard query != nil, storage != nil else {
             closure(nil)
             return
         }
 
-        // I'm pretty sure doing this on the background isn't saving any time
-        FilterResults.searchQueue.async {
-            do {
-                let realm = try Realm(configuration: storage.realmConfig)
+        observerClosure = closure
 
-                let objects = realm.objects(Session.self).filter(query)
-                let reference = ThreadSafeReference(to: objects)
-                DispatchQueue.main.async {
-                    closure(storage.realm.resolve(reference))
-                }
-            } catch {
-                os_log("Failed to initialize Realm for searching: %{public}@",
-                       log: .default,
-                       type: .error,
-                       String(describing: error))
-                LoggingHelper.registerError(error, info: ["when": "Searching"])
-            }
+        bindResults()
+    }
+
+    private func bindResults() {
+        guard let observerClosure = observerClosure else { return }
+        guard let storage = storage, let query = query?.orCurrentlyPlayingSession() else { return }
+
+        disposeBag = DisposeBag()
+
+        do {
+            let realm = try Realm(configuration: storage.realmConfig)
+
+            let objects = realm.objects(Session.self).filter(query)
+
+            Observable
+                .shallowCollection(from: objects, synchronousStart: true)
+                .subscribe(onNext: { [weak self] in
+                    self?.latestSearchResults = $0
+                    observerClosure($0)
+                }).disposed(by: disposeBag)
+        } catch {
+            observerClosure(nil)
+            os_log("Failed to initialize Realm for searching: %{public}@",
+                   log: .default,
+                   type: .error,
+                   String(describing: error))
+            LoggingHelper.registerError(error, info: ["when": "Searching"])
         }
+    }
+}
+
+fileprivate extension NSPredicate {
+
+    fileprivate func orCurrentlyPlayingSession() -> NSPredicate {
+
+        guard let playingSession = (NSApplication.shared.delegate as? AppDelegate)?.coordinator.playerOwnerSessionIdentifier else {
+            return self
+        }
+
+        return NSCompoundPredicate(orPredicateWithSubpredicates: [self, NSPredicate(format: "identifier == %@", playingSession)])
+    }
+}
+
+public extension ObservableType where E: NotificationEmitter {
+
+    /**
+     Returns an `Observable<E>` that emits each time elements are added or removed from the collection.
+     The observable emits an initial value upon subscription. Similar to `collection(from:synchronousStart)` but
+     is limited to emitting when elements are added or removed from the collection. Useful for less brute-forcey UI
+     updates.
+
+     - parameter from: A Realm collection of type `E`: either `Results`, `List`, `LinkingObjects` or `AnyRealmCollection`.
+     - parameter synchronousStart: whether the resulting `Observable` should emit its first element synchronously (e.g. better for UI bindings)
+
+     - returns: `Observable<E>`, e.g. when called on `Results<Model>` it will return `Observable<Results<Model>>`, on a `List<User>` it will return `Observable<List<User>>`, etc.
+     */
+    public static func shallowCollection(from collection: E, synchronousStart: Bool = true)
+        -> Observable<E> {
+
+            return Observable.create { observer in
+                if synchronousStart {
+                    observer.onNext(collection)
+                }
+
+                let token = collection.observe { changeset in
+
+                    var value: E? = nil
+
+                    switch changeset {
+                    case .initial(let latestValue):
+                        guard !synchronousStart else { return }
+                        value = latestValue
+
+                    case .update(let latestValue, let deletions, let insertions, _) where !deletions.isEmpty || !insertions.isEmpty:
+                        value = latestValue
+
+                    case .error(let error):
+                        observer.onError(error)
+                        return
+                    default: ()
+                    }
+
+                    value.map(observer.onNext)
+                }
+
+                return Disposables.create {
+                    token.invalidate()
+                }
+            }
     }
 }

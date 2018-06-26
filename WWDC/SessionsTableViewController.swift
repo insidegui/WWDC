@@ -134,12 +134,10 @@ class SessionsTableViewController: NSViewController {
     /// even if its data model gets added while it is offscreen. Specifically,
     /// when this table view is not the initial active tab.
     private func performFirstUpdateIfNeeded() {
-        guard !hasPerformedFirstUpdate && sessionRowProvider != nil else { return }
+        guard !hasPerformedFirstUpdate && sessionRowProvider != nil && view.window != nil else { return }
         hasPerformedFirstUpdate = true
 
-        filterResults.results { [weak self] in
-            self?.updateWith(searchResults: $0, animated: true, selecting: nil)
-        }
+        updateWith(searchResults: filterResults.latestSearchResults, animated: false, selecting: nil)
     }
 
     private func updateWith(searchResults: Results<Session>?, animated: Bool, selecting session: SessionIdentifiable?) {
@@ -212,10 +210,10 @@ class SessionsTableViewController: NSViewController {
             displayedRows = allRows
         }
 
-        NSAnimationContext.runAnimationGroup({ (context) in
+        tableView.reloadData()
+
+        NSAnimationContext.runAnimationGroup({ context in
             context.duration = 0
-            tableView.reloadData()
-        }, completionHandler: {
 
             if let deferredSelection = self.initialSelection {
                 self.initialSelection = nil
@@ -229,8 +227,9 @@ class SessionsTableViewController: NSViewController {
                 self.tableView.selectRowIndexes(IndexSet(integer: defaultIndex), byExtendingSelection: false)
             }
 
-            self.scrollView.animator().alphaValue = 1
+            self.scrollView.alphaValue = 1
             self.tableView.allowsEmptySelection = false
+        }, completionHandler: {
             self.displayedRowsLock.resume()
         })
 
@@ -299,9 +298,7 @@ class SessionsTableViewController: NSViewController {
 
                 NSAnimationContext.beginGrouping()
                 let context = NSAnimationContext.current
-                if !animated {
-                    context.duration = 0
-                }
+                context.duration = animated ? 0.35 : 0
 
                 context.completionHandler = {
                     NSAnimationContext.runAnimationGroup({ (context) in
@@ -312,9 +309,9 @@ class SessionsTableViewController: NSViewController {
 
                 self.tableView.beginUpdates()
 
-                self.tableView.removeRows(at: removedIndexes, withAnimation: [NSTableView.AnimationOptions.slideLeft])
+                self.tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
 
-                self.tableView.insertRows(at: addedIndexes, withAnimation: [NSTableView.AnimationOptions.slideDown])
+                self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
 
                 // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
                 // so we delay updating the data model until after those methods have done their thing
@@ -351,8 +348,8 @@ class SessionsTableViewController: NSViewController {
     /// nil to let the table figure out what selection to apply after the update.
     func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
         _filterResults = filterResults
-        filterResults.results {
-            self.updateWith(searchResults: $0, animated: animated, selecting: selecting)
+        filterResults.observe { [weak self] in
+            self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
         }
     }
 
@@ -363,8 +360,8 @@ class SessionsTableViewController: NSViewController {
         }
         set {
             _filterResults = newValue
-            newValue.results {
-                self.updateWith(searchResults: $0, animated: false, selecting: nil)
+            filterResults.observe { [weak self] in
+                self?.updateWith(searchResults: $0, animated: false, selecting: nil)
             }
         }
     }
