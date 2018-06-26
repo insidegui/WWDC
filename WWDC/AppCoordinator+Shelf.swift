@@ -14,8 +14,7 @@ import PlayerUI
 
 extension AppCoordinator: ShelfViewControllerDelegate {
 
-    private func shelf(for tab: MainWindowTab?) -> ShelfViewController? {
-        guard let tab = tab else { return nil }
+    private func shelf(for tab: MainWindowTab) -> ShelfViewController? {
 
         var shelfViewController: ShelfViewController?
         switch tab {
@@ -35,7 +34,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard currentPlaybackViewModel != nil else { return }
         guard let playerController = currentPlayerController else { return }
 
-        shelf(for: playerOwnerTab)?.playerContainer.animator().isHidden = playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier
+        playerOwnerTab.flatMap(shelf(for:))?.playerContainer.animator().isHidden = playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier
 
         // Everything after this point is for automatically entering PiP
 
@@ -63,7 +62,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         tabController.activeTab = tab
         currentListController?.select(session: SessionIdentifier(identifier))
 
-        shelf(for: playerOwnerTab)?.playerContainer.animator().isHidden = false
+        playerOwnerTab.flatMap(shelf(for:))?.playerContainer.animator().isHidden = false
     }
 
     func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
