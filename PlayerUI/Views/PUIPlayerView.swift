@@ -247,11 +247,9 @@ public final class PUIPlayerView: NSView {
 
         asset?.loadValuesAsynchronously(forKeys: ["duration"], completionHandler: durationBecameAvailable)
 
-        // This produces a log message: `-[AVAsset statusOfValueForKey:error:] invoked with unrecognized key allMediaSelections.`
-        // But it works correctly
-        asset?.loadValuesAsynchronously(forKeys: ["allMediaSelections"], completionHandler: { [weak self] in
+        asset?.loadValuesAsynchronously(forKeys: ["availableMediaCharacteristicsWithMediaSelectionOptions"], completionHandler: { [weak self] in
 
-            if self?.asset?.statusOfValue(forKey: "allMediaSelections", error: nil) == .loaded {
+            if self?.asset?.statusOfValue(forKey: "availableMediaCharacteristicsWithMediaSelectionOptions", error: nil) == .loaded {
                 self?.updateSubtitleSelectionMenu()
             }
         })
