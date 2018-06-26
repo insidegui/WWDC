@@ -67,12 +67,6 @@ extension AppCoordinator: ShelfViewControllerDelegate {
     }
 
     func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
-        if let playerController = currentPlayerController {
-            if playerController.playerView.isInFullScreenPlayerWindow {
-                // close video playing in fullscreen
-                playerController.detachedWindowController.close()
-            }
-        }
 
         currentPlaybackViewModel = nil
 
@@ -97,11 +91,13 @@ extension AppCoordinator: ShelfViewControllerDelegate {
                 }
 
                 currentPlayerController?.playerWillExitFullScreen = { [weak self] in
-//                    self?.returnToPlayingSessionContext()
+                    self?.returnToPlayingSessionContext()
                 }
 
                 currentPlayerController?.delegate = self
                 currentPlayerController?.playerView.timelineDelegate = self
+
+                attachPlayerToShelf(shelfController)
             } else {
                 currentPlayerController?.player = playbackViewModel.player
                 currentPlayerController?.sessionViewModel = viewModel
@@ -109,7 +105,6 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
             currentPlayerController?.playbackViewModel = playbackViewModel
 
-            attachPlayerToShelf(shelfController)
         } catch {
             WWDCAlert.show(with: error)
         }
