@@ -34,6 +34,14 @@ class ShelfViewController: NSViewController {
         return v
     }()
 
+    lazy var playerContainer: NSView = {
+        let v = NSView()
+
+        v.translatesAutoresizingMaskIntoConstraints = false
+
+        return v
+    }()
+
     lazy var playButton: VibrantButton = {
         let b = VibrantButton(frame: .zero)
 
@@ -67,6 +75,12 @@ class ShelfViewController: NSViewController {
         view.addSubview(playButton)
         playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         playButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+
+        view.addSubview(playerContainer)
+        playerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        playerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        playerContainer.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        playerContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     override func viewDidLoad() {

@@ -51,7 +51,8 @@ final class VideoPlayerViewController: NSViewController {
 
     var detached = false
 
-    var playerWillExitPictureInPicture: ((Bool) -> Void)?
+    var playerWillExitPictureInPicture: ((PUIPiPExitReason) -> Void)?
+    var playerWillExitFullScreen: (() -> Void)?
 
     init(player: AVPlayer, session: SessionViewModel) {
         sessionViewModel = session
@@ -243,6 +244,10 @@ final class VideoPlayerViewController: NSViewController {
             self?.detachedWindowController = nil
         }
 
+        detachedWindowController.actionOnWindowWillExitFullScreen = { [weak self] in
+            self?.playerWillExitFullScreen?()
+        }
+
         detachedWindowController.showWindow(self)
 
         detached = true
@@ -275,8 +280,8 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
         playerView.snapshotPlayer(completion: completion)
     }
 
-    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, isReturningFromPiP: Bool) {
-        playerWillExitPictureInPicture?(isReturningFromPiP)
+    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, reason: PUIPiPExitReason) {
+        playerWillExitPictureInPicture?(reason)
     }
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {

@@ -14,16 +14,28 @@ import PlayerUI
 
 extension AppCoordinator: ShelfViewControllerDelegate {
 
+    private func shelf(for tab: MainWindowTab?) -> ShelfViewController? {
+        guard let tab = tab else { return nil }
+
+        var shelfViewController: ShelfViewController?
+        switch tab {
+        case .schedule:
+            shelfViewController = scheduleController.detailViewController.shelfController
+        case .videos:
+            shelfViewController = videosController.detailViewController.shelfController
+        default: ()
+        }
+
+        return shelfViewController
+    }
+
     func updateShelfBasedOnSelectionChange() {
         guard !isTransitioningPlayerContext else { return }
 
         guard currentPlaybackViewModel != nil else { return }
         guard let playerController = currentPlayerController else { return }
 
-        let playerIsInFullScreenWindow = playerController.playerView.isInFullScreenPlayerWindow
-        let sessionIsPlayingInPrimaryWindow = (!playerIsInFullScreenWindow && playerOwnerSessionIdentifier == selectedViewModelRegardlessOfTab?.identifier)
-
-        playerController.view.animator().isHidden = !(sessionIsPlayingInPrimaryWindow || playerIsInFullScreenWindow)
+        shelf(for: playerOwnerTab)?.playerContainer.animator().isHidden = playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier
 
         // Everything after this point is for automatically entering PiP
 
@@ -31,7 +43,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard playerController.playerView.isInternalPlayerPlaying else { return }
 
         // ignore when playing in fullscreen
-        guard !playerIsInFullScreenWindow else { return }
+        guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
 
         // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
 
@@ -40,7 +52,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         }
     }
 
-    func goBackToContextBeforePiP(_ isReturningFromPip: Bool) {
+    func returnToPlayingSessionContext() {
         isTransitioningPlayerContext = true
         defer { isTransitioningPlayerContext = false }
 
@@ -48,11 +60,10 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard let identifier = playerOwnerSessionIdentifier else { return }
         guard let tab = playerOwnerTab else { return }
 
-        if isReturningFromPip {
-            tabController.activeTab = tab
-            currentListController?.select(session: SessionIdentifier(identifier))
-            currentPlayerController?.view.isHidden = false
-        }
+        tabController.activeTab = tab
+        currentListController?.select(session: SessionIdentifier(identifier))
+
+        shelf(for: playerOwnerTab)?.playerContainer.animator().isHidden = false
     }
 
     func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
@@ -80,8 +91,13 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
             if currentPlayerController == nil {
                 currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel)
-                currentPlayerController?.playerWillExitPictureInPicture = { [weak self] isReturningFromPip in
-                    self?.goBackToContextBeforePiP(isReturningFromPip)
+                currentPlayerController?.playerWillExitPictureInPicture = { [weak self] reason in
+                    guard reason == .returnButton else { return }
+                    self?.returnToPlayingSessionContext()
+                }
+
+                currentPlayerController?.playerWillExitFullScreen = { [weak self] in
+//                    self?.returnToPlayingSessionContext()
                 }
 
                 currentPlayerController?.delegate = self
@@ -108,16 +124,22 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         shelf.playButton.isHidden = true
 
-        playerController.view.frame = shelf.view.bounds
+        let playerContainer = shelf.playerContainer
+        playerContainer.isHidden = false
+
+        // Already attached
+        guard playerController.view.superview != playerContainer else { return }
+
+        playerController.view.frame = playerContainer.bounds
         playerController.view.alphaValue = 0
         playerController.view.isHidden = false
 
         playerController.view.translatesAutoresizingMaskIntoConstraints = false
 
-        shelf.view.addSubview(playerController.view)
-        shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+        playerContainer.addSubview(playerController.view)
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
 
-        shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
 
         playerController.view.alphaValue = 1
 

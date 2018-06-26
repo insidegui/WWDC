@@ -23,6 +23,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     fileprivate let originalContainer: NSView!
 
     var actionOnWindowClosed = {}
+    var actionOnWindowWillExitFullScreen = {}
 
     var playerWindow: PUIPlayerWindow? {
         let playerWindow = window as? PUIPlayerWindow
@@ -91,6 +92,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     func windowWillExitFullScreen(_ notification: Notification) {
         guard fullscreenOnly && contentViewController is VideoPlayerViewController else { return }
 
+        actionOnWindowWillExitFullScreen()
         window?.resizeIncrements = NSSize(width: 1.0, height: 1.0)
     }
 
