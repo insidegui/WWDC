@@ -104,6 +104,9 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
             currentPlayerController?.playbackViewModel = playbackViewModel
 
+            shelfController.playButton.isHidden = true
+            shelfController.playerContainer.isHidden = false
+
         } catch {
             WWDCAlert.show(with: error)
         }
@@ -116,10 +119,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
         guard let playerController = currentPlayerController else { return }
 
-        shelf.playButton.isHidden = true
-
         let playerContainer = shelf.playerContainer
-        playerContainer.isHidden = false
 
         // Already attached
         guard playerController.view.superview != playerContainer else { return }
