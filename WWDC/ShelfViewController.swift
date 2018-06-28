@@ -105,7 +105,11 @@ class ShelfViewController: NSViewController {
     }
 
     @objc private func play(_ sender: Any?) {
-        delegate?.shelfViewControllerDidSelectPlay(self)
+
+        // Dispatch to let the button continue
+        DispatchQueue.main.async {
+            self.delegate?.shelfViewControllerDidSelectPlay(self)
+        }
     }
 
 }
