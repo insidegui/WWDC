@@ -44,8 +44,10 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         // ignore when playing in fullscreen
         guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
 
-        // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
+        // autopip only activates if the user is leaving the currently playing session
+        guard playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else { return }
 
+        // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
         if !playerController.playerView.isInPictureInPictureMode {
             playerController.playerView.togglePip(nil)
         }
@@ -55,14 +57,17 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         isTransitioningPlayerContext = true
         defer { isTransitioningPlayerContext = false }
 
-        guard playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else { return }
         guard let identifier = playerOwnerSessionIdentifier else { return }
-        guard let tab = playerOwnerTab else { return }
+        guard let playerOwnerTab = playerOwnerTab else { return }
 
-        tabController.activeTab = tab
-        currentListController?.select(session: SessionIdentifier(identifier))
+        // Reveal the session
+        if playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier {
+            tabController.activeTab = playerOwnerTab
+            currentListController?.select(session: SessionIdentifier(identifier))
+        }
 
-        playerOwnerTab.flatMap(shelf(for:))?.playerContainer.animator().isHidden = false
+        // Show the container
+        shelf(for: playerOwnerTab)?.playerContainer.animator().isHidden = false
     }
 
     func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
@@ -96,10 +101,13 @@ extension AppCoordinator: ShelfViewControllerDelegate {
                 currentPlayerController?.delegate = self
                 currentPlayerController?.playerView.timelineDelegate = self
 
-                attachPlayerToShelf(shelfController)
             } else {
                 currentPlayerController?.player = playbackViewModel.player
                 currentPlayerController?.sessionViewModel = viewModel
+            }
+
+            if currentPlayerController?.view.window == nil {
+                attachPlayerToShelf(shelfController)
             }
 
             currentPlayerController?.playbackViewModel = playbackViewModel

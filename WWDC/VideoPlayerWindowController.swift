@@ -78,21 +78,45 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 
     // MARK: - Reattachment and fullscreen support
 
-    func windowWillClose(_ notification: Notification) {
+    var windowWasAskedToClose = false
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+
+        windowWasAskedToClose = true
+
+        if fullscreenOnly {
+            defer { window?.toggleFullScreen(nil) }
+            return false
+        } else {
+            defer { reallyCloseWindow() }
+            return true
+        }
+    }
+
+    private func windowWasAskedToCloseCleanup() {
+        actionOnWindowClosed()
         (contentViewController as? VideoPlayerViewController)?.player.cancelPendingPrerolls()
         (contentViewController as? VideoPlayerViewController)?.player.pause()
+    }
 
-        actionOnWindowClosed()
+    /// When not in `fullscreenOnly` mode, call this to clean up the window
+    private func reallyCloseWindow() {
+        windowWasAskedToCloseCleanup()
 
-        guard fullscreenOnly && contentViewController is VideoPlayerViewController else { return }
+        if fullscreenOnly && contentViewController is VideoPlayerViewController {
+            reattachContentViewController()
+        }
 
-        reattachContentViewController()
+        contentViewController?.view.removeFromSuperview()
+        window = nil
     }
 
     func windowWillExitFullScreen(_ notification: Notification) {
-        guard fullscreenOnly && contentViewController is VideoPlayerViewController else { return }
+        if windowWasAskedToClose {
+            windowWasAskedToCloseCleanup()
+        } else {
+            actionOnWindowWillExitFullScreen()
+        }
 
-        actionOnWindowWillExitFullScreen()
         window?.resizeIncrements = NSSize(width: 1.0, height: 1.0)
     }
 
@@ -103,14 +127,14 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     }
 
     fileprivate func reattachContentViewController() {
-        contentViewController!.view.frame = originalContainer.bounds
-        originalContainer.addSubview(contentViewController!.view)
-
-        originalContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": contentViewController!.view]))
-        originalContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": contentViewController!.view]))
-
-        contentViewController = nil
         close()
+        contentViewController!.view.frame = originalContainer.bounds
+        let view = contentViewController!.view
+
+        originalContainer.addSubview(view)
+
+        originalContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": view]))
+        originalContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": view]))
     }
 
     func customWindowsToExitFullScreen(for window: NSWindow) -> [NSWindow]? {

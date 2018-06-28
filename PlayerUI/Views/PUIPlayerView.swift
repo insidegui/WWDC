@@ -202,7 +202,7 @@ public final class PUIPlayerView: NSView {
 
     // MARK: - Private API
 
-    fileprivate var lastKnownWindow: NSWindow?
+    fileprivate weak var lastKnownWindow: NSWindow?
 
     private var sortedAnnotations: [PUITimelineAnnotation] = [] {
         didSet {
@@ -1295,9 +1295,6 @@ public final class PUIPlayerView: NSView {
     }
 
     public override func viewWillMove(toWindow newWindow: NSWindow?) {
-        if newWindow?.styleMask.contains(.fullScreen) == false, let d = appearanceDelegate {
-            fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
-        }
 
         NotificationCenter.default.removeObserver(self, name: NSWindow.willEnterFullScreenNotification, object: window)
         NotificationCenter.default.removeObserver(self, name: NSWindow.willExitFullScreenNotification, object: window)

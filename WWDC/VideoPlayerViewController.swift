@@ -49,8 +49,6 @@ final class VideoPlayerViewController: NSViewController {
         }
     }
 
-    var detached = false
-
     var playerWillExitPictureInPicture: ((PUIPiPExitReason) -> Void)?
     var playerWillExitFullScreen: (() -> Void)?
 
@@ -287,8 +285,6 @@ final class VideoPlayerViewController: NSViewController {
         }
 
         detachedWindowController.showWindow(self)
-
-        detached = true
     }
 
     deinit {

@@ -12,6 +12,7 @@ class WWDCTableRowView: NSTableRowView {
 
     override var isGroupRowStyle: Bool {
         didSet {
+            guard isGroupRowStyle != oldValue else { return }
             setNeedsDisplay(bounds)
         }
     }
