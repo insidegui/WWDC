@@ -46,8 +46,12 @@ class WWDCTableRowView: NSTableRowView {
     }
 
     override func updateLayer() {
-        // Not sure why, but the section headers don't draw correctly if super is allowed
-        // to be called
+        // From `wantsUpdateLayer`:
+        // >> If you override this property to be true,
+        // >> you must also override the updateLayer() method of your view and
+        // >> use it to make the changes to your layer.
+        // From `updateLayer`:
+        // >> Your implementation of this method should not call super.
     }
 
     private func updateBackgroundColorToMatchState(for layer: CALayer) {
