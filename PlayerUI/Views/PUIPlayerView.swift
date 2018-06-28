@@ -914,11 +914,19 @@ public final class PUIPlayerView: NSView {
     }
 
     @IBAction public func play(_ sender: Any?) {
-        if isPlayingExternally {
+        guard !isPlayingExternally else {
             currentExternalPlaybackProvider?.play()
-        } else {
-            player?.rate = playbackSpeed.rawValue
+            return
         }
+
+        guard let currentTimeInSeconds = player?.currentTime().seconds else { return }
+        guard let durationInSeconds = player?.currentItem?.duration.seconds else { return }
+
+        if currentTimeInSeconds / durationInSeconds >= PlayerConstants.watchedVideoRelativePosition {
+            seek(to: 0)
+        }
+
+        player?.rate = playbackSpeed.rawValue
     }
 
     @IBAction public func previousAnnotation(_ sender: Any?) {

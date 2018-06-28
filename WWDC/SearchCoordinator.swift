@@ -105,7 +105,7 @@ final class SearchCoordinator {
                                                     defaultValue: false,
                                                     customPredicate: downloadedPredicate)
 
-        let smallPositionPred = NSPredicate(format: "SUBQUERY(progresses, $progress, $progress.relativePosition < \(Constants.watchedVideoRelativePosition)).@count > 0")
+        let smallPositionPred = NSPredicate(format: "SUBQUERY(progresses, $progress, $progress.relativePosition < \(PlayerConstants.watchedVideoRelativePosition)).@count > 0")
         let noPositionPred = NSPredicate(format: "progresses.@count == 0")
 
         let unwatchedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [smallPositionPred, noPositionPred])
