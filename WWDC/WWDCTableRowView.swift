@@ -10,24 +10,53 @@ import Cocoa
 
 class WWDCTableRowView: NSTableRowView {
 
+    override var wantsUpdateLayer: Bool {
+        return true
+    }
+
+    override var layerContentsRedrawPolicy: NSView.LayerContentsRedrawPolicy {
+        get { return .onSetNeedsDisplay }
+        set { }
+    }
+
+    override func makeBackingLayer() -> CALayer {
+        let layer = super.makeBackingLayer()
+
+        updateBackgroundColorToMatchState(for: layer)
+
+        return layer
+    }
+
     override var isGroupRowStyle: Bool {
         didSet {
-            setNeedsDisplay(bounds)
+            layer.map { updateBackgroundColorToMatchState(for: $0) }
         }
     }
 
-    override func drawSelection(in dirtyRect: NSRect) {
-        NSColor.selection.set()
-        dirtyRect.fill()
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.layer?.backgroundColor = nil
     }
 
-    override func drawBackground(in dirtyRect: NSRect) {
+    override var isSelected: Bool {
+        didSet {
+            layer.map { updateBackgroundColorToMatchState(for: $0) }
+        }
+    }
+
+    override func updateLayer() {
+        // Not sure why, but the section headers don't draw correctly if super is allowed
+        // to be called
+    }
+
+    private func updateBackgroundColorToMatchState(for layer: CALayer) {
         if isGroupRowStyle {
-            NSColor.sectionHeaderBackground.set()
-            dirtyRect.fill()
+            layer.backgroundColor = NSColor.sectionHeaderBackground.cgColor
+        } else if isSelected {
+            layer.backgroundColor = NSColor.selection.cgColor
         } else {
-            super.drawBackground(in: dirtyRect)
+            layer.backgroundColor = nil
         }
     }
-
 }

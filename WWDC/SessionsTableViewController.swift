@@ -389,6 +389,7 @@ class SessionsTableViewController: NSViewController {
         v.floatsGroupRows = true
         v.gridStyleMask = .solidHorizontalGridLineMask
         v.gridColor = .darkGridColor
+        v.selectionHighlightStyle = .none // see WWDCTableRowView
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
         v.addTableColumn(column)
