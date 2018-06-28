@@ -43,12 +43,6 @@ public final class PUITimelineView: NSView {
 
     public weak var delegate: PUITimelineDelegate?
 
-    public var bufferingProgress: Double = 0 {
-        didSet {
-            layoutBufferingLayer()
-        }
-    }
-
     public var playbackProgress: Double = 0 {
         didSet {
             layoutPlaybackLayer()

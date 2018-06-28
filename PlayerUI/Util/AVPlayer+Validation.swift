@@ -20,9 +20,9 @@ extension AVPlayer {
     }
 
     var hasValidMediaDuration: Bool {
-        guard let item = currentItem else { return false }
+        guard let duration = currentItem?.asset.durationIfLoaded else { return false }
 
-        return AVPlayer.validateMediaDuration(item.duration)
+        return AVPlayer.validateMediaDuration(duration)
     }
 
 }
