@@ -37,30 +37,34 @@ final class SessionViewModel {
     private var disposeBag = DisposeBag()
 
     lazy var rxSession: Observable<Session> = {
-        return Observable.from(object: self.session)
+        return Observable.from(object: session)
+    }()
+
+    lazy var rxSessionInstance: Observable<SessionInstance> = {
+        return Observable.from(object: sessionInstance)
     }()
 
     lazy var rxTitle: Observable<String> = {
-        return Observable.from(object: self.session).map({ $0.title })
+        return rxSession.map { $0.title }
     }()
 
     lazy var rxSubtitle: Observable<String> = {
-        return Observable.from(object: self.session).map({ SessionViewModel.subtitle(from: $0, at: $0.event.first) })
+        return rxSession.map { SessionViewModel.subtitle(from: $0, at: $0.event.first) }
     }()
 
     lazy var rxTrackName: Observable<String> = {
-        return Observable.from(object: self.session).map({ $0.track.first?.name }).ignoreNil()
+        return rxSession.map { $0.track.first?.name }.ignoreNil()
     }()
 
     lazy var rxSummary: Observable<String> = {
-        return Observable.from(object: self.session).map({ $0.summary })
+        return rxSession.map { $0.summary }
     }()
 
     lazy var rxActionPrompt: Observable<String?> = {
         guard sessionInstance.startTime > today() else { return Observable.just(nil) }
         guard actionLinkURL != nil else { return Observable.just(nil) }
 
-        return Observable.from(object: self.sessionInstance).map({ $0.actionLinkPrompt })
+        return rxSessionInstance.map { $0.actionLinkPrompt }
     }()
 
     var actionLinkURL: URL? {
@@ -71,49 +75,47 @@ final class SessionViewModel {
 
     lazy var rxContext: Observable<String> = {
         if self.style == .schedule {
-            let so = Observable.from(object: self.session)
-            let io = Observable.from(object: self.sessionInstance)
 
-            return Observable.combineLatest(so, io, showsShortDayInContextSubject).map({
+            return Observable.combineLatest(rxSession, rxSessionInstance, showsShortDayInContextSubject).map {
                 SessionViewModel.context(for: $0.0, instance: $0.1, showingWeekday: $0.2)
-            })
+            }
         } else {
-            return Observable.from(object: self.session).map({ [weak self] in
+            return rxSession.map { [weak self] in
                 SessionViewModel.context(for: $0, showingWeekday: self?.showsWeekdayInContext == true)
-            })
+            }
         }
     }()
 
     lazy var rxFooter: Observable<String> = {
-        return Observable.from(object: self.session).map({ SessionViewModel.footer(for: $0, at: $0.event.first) })
+        return rxSession.map { SessionViewModel.footer(for: $0, at: $0.event.first) }
     }()
 
     lazy var rxSessionType: Observable<SessionInstanceType> = {
-        return Observable.from(object: self.session).map({ $0.instances.first?.type }).ignoreNil()
+        return rxSession.map { $0.instances.first?.type }.ignoreNil()
     }()
 
     lazy var rxColor: Observable<NSColor> = {
-        return Observable.from(object: self.session).map({ SessionViewModel.trackColor(for: $0) }).ignoreNil()
+        return rxSession.map { SessionViewModel.trackColor(for: $0) }.ignoreNil()
     }()
 
     lazy var rxDarkColor: Observable<NSColor> = {
-        return Observable.from(object: self.session).map({ SessionViewModel.darkTrackColor(for: $0) }).ignoreNil()
+        return rxSession.map { SessionViewModel.darkTrackColor(for: $0) }.ignoreNil()
     }()
 
     lazy var rxImageUrl: Observable<URL?> = {
-        return Observable.from(object: self.session).map({ SessionViewModel.imageUrl(for: $0) })
+        return rxSession.map { SessionViewModel.imageUrl(for: $0) }
     }()
 
     lazy var rxWebUrl: Observable<URL?> = {
-        return Observable.from(object: self.session).map({ SessionViewModel.webUrl(for: $0) })
+        return rxSession.map { SessionViewModel.webUrl(for: $0) }
     }()
 
     lazy var rxIsDownloaded: Observable<Bool> = {
-        return Observable.from(object: self.session).map({ $0.isDownloaded })
+        return rxSession.map { $0.isDownloaded }
     }()
 
     lazy var rxIsFavorite: Observable<Bool> = {
-        return Observable.collection(from: self.session.favorites.filter("isDeleted == false")).map({ $0.count > 0 })
+        return Observable.collection(from: self.session.favorites.filter("isDeleted == false")).map { $0.count > 0 }
     }()
 
     lazy var rxIsCurrentlyLive: Observable<Bool> = {
@@ -121,7 +123,7 @@ final class SessionViewModel {
             return Observable.just(false)
         }
 
-        return Observable.from(object: self.sessionInstance).map({ $0.isCurrentlyLive })
+        return rxSessionInstance.map { $0.isCurrentlyLive }
     }()
 
     lazy var rxIsLab: Observable<Bool> = {
@@ -129,7 +131,7 @@ final class SessionViewModel {
             return Observable.just(false)
         }
 
-        return Observable.from(object: self.sessionInstance).map({ [.lab, .labByAppointment].contains($0.type) })
+        return rxSessionInstance.map { [.lab, .labByAppointment].contains($0.type) }
     }()
 
     lazy var rxPlayableContent: Observable<Results<SessionAsset>> = {
@@ -142,7 +144,7 @@ final class SessionViewModel {
         let validAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '') OR (rawAssetType == %@ AND SUBQUERY(session.instances, $instance, $instance.isCurrentlyLive == true).@count > 0)", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
         let validAssetsObservable = Observable.collection(from: validAssets)
 
-        return validAssetsObservable.map({ $0.count > 0 })
+        return validAssetsObservable.map { $0.count > 0 }
     }()
 
     lazy var rxDownloadableContent: Observable<Results<SessionAsset>> = {
