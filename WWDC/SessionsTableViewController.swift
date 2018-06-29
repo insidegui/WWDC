@@ -389,6 +389,7 @@ class SessionsTableViewController: NSViewController {
         v.floatsGroupRows = true
         v.gridStyleMask = .solidHorizontalGridLineMask
         v.gridColor = .darkGridColor
+        v.selectionHighlightStyle = .none // see WWDCTableRowView
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
         v.addTableColumn(column)
@@ -523,7 +524,7 @@ class SessionsTableViewController: NSViewController {
 
             return canMarkAsWatched
         case .unwatched:
-            return viewModel.session.isWatched
+            return viewModel.session.isWatched || viewModel.session.progresses.count > 0
         case .favorite:
             return !viewModel.isFavorite
         case .removeFavorite:
