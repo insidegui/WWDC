@@ -16,6 +16,9 @@ struct Constants {
 
     static let autorefreshInterval: TimeInterval = 5 * 60
 
+    /// The relative position within the video the user must be before it is considered fully watched
+    static let watchedVideoRelativePosition: Double = 0.97
+
     /// How many seconds between each live session check
     static let liveSessionCheckInterval: TimeInterval = 60.0
 

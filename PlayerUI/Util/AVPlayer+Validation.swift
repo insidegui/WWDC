@@ -11,6 +11,8 @@ import AVFoundation
 
 extension AVPlayer {
 
+    // MARK: - Static Functions
+
     static func validateMediaDurationWithSeconds(_ duration: Double) -> Bool {
         return !duration.isNaN && !duration.isInfinite && !duration.isZero
     }
@@ -19,10 +21,18 @@ extension AVPlayer {
         return validateMediaDurationWithSeconds(Double(CMTimeGetSeconds(duration)))
     }
 
+    // MARK: - Public Properties
+
     var hasValidMediaDuration: Bool {
         guard let duration = currentItem?.asset.durationIfLoaded else { return false }
 
         return AVPlayer.validateMediaDuration(duration)
     }
 
+    var hasFinishedPlaying: Bool {
+        let currentTimeSeconds = currentTime().seconds
+        guard let durationSeconds = currentItem?.duration.seconds else { return false }
+
+        return abs(currentTimeSeconds - durationSeconds) < 1
+    }
 }

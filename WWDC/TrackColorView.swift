@@ -43,7 +43,7 @@ final class TrackColorView: NSView {
     var progress: Double = 0.5 {
         didSet {
             // hide when fully watched
-            alphaValue = progress >= PlayerConstants.watchedVideoRelativePosition ? 0 : 1
+            alphaValue = progress >= Constants.watchedVideoRelativePosition ? 0 : 1
 
             if hasValidProgress && progress < 1 {
                 layer?.borderWidth = 1

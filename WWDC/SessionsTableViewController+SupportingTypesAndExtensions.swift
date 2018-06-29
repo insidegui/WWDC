@@ -47,7 +47,7 @@ extension Session {
 
     var isWatched: Bool {
         if let progress = progresses.first {
-            return progress.relativePosition > PlayerConstants.watchedVideoRelativePosition
+            return progress.relativePosition > Constants.watchedVideoRelativePosition
         }
 
         return false

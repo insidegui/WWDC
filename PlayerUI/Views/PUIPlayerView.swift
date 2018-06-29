@@ -931,19 +931,16 @@ public final class PUIPlayerView: NSView {
             player?.replaceCurrentItem(with: AVPlayerItem(asset: AVURLAsset(url: asset.url)))
         }
 
-        guard !isPlayingExternally else {
+        if isPlayingExternally {
             currentExternalPlaybackProvider?.play()
-            return
+        } else {
+            guard player != nil else { return }
+            if player!.hasFinishedPlaying {
+                seek(to: 0)
+            }
+
+            player!.rate = playbackSpeed.rawValue
         }
-
-        guard let currentTimeInSeconds = player?.currentTime().seconds else { return }
-        guard let durationInSeconds = player?.currentItem?.duration.seconds else { return }
-
-        if currentTimeInSeconds / durationInSeconds >= PlayerConstants.watchedVideoRelativePosition {
-            seek(to: 0)
-        }
-
-        player?.rate = playbackSpeed.rawValue
     }
 
     @IBAction public func previousAnnotation(_ sender: Any?) {

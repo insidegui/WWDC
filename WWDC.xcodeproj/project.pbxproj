@@ -15,8 +15,7 @@
 		4DBFA4DA20E160CB00BDF34B /* AVAsset+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */; };
 		4DEEC3A32051C8D400376595 /* TestUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEC3A22051C8D400376595 /* TestUtilities.swift */; };
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
-		AA24E49120E5474E00C5CC0D /* PlayerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24E49020E5474E00C5CC0D /* PlayerConstants.swift */; };
-		AA3F056620E548E200134433 /* PlayerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA24E49020E5474E00C5CC0D /* PlayerConstants.swift */; };
+		AA283F6C20E6596F00A0E9B4 /* AVPlayer+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B91ECA12A40054C503 /* AVPlayer+Validation.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */; };
@@ -359,7 +358,6 @@
 		4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+AsyncHelpers.swift"; sourceTree = "<group>"; };
 		4DEEC3A22051C8D400376595 /* TestUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtilities.swift; sourceTree = "<group>"; };
 		4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionsTableViewController+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
-		AA24E49020E5474E00C5CC0D /* PlayerConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerConstants.swift; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -1454,7 +1452,6 @@
 				DDF721A81ECA12A40054C503 /* Colors.swift */,
 				DDF721A91ECA12A40054C503 /* Images.swift */,
 				DDF721AA1ECA12A40054C503 /* Speeds.swift */,
-				AA24E49020E5474E00C5CC0D /* PlayerConstants.swift */,
 			);
 			path = Definitions;
 			sourceTree = "<group>";
@@ -1897,6 +1894,7 @@
 				DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */,
 				DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
+				AA283F6C20E6596F00A0E9B4 /* AVPlayer+Validation.swift in Sources */,
 				DDB3529A1EC8AB2800254815 /* WWDCImageView.swift in Sources */,
 				DDDF807620BA3719007284F8 /* FeaturedContentCollectionViewCell.swift in Sources */,
 				DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */,
@@ -1923,7 +1921,6 @@
 				DDC678221EDB956700A4E19C /* BookmarkViewController.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */,
-				AA24E49120E5474E00C5CC0D /* PlayerConstants.swift in Sources */,
 				DD4DED6B1ED6605D00624EAF /* LoggingHelper.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* SessionsSplitViewController.swift in Sources */,
 				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
@@ -2119,7 +2116,6 @@
 				DDF721DB1ECA12A40054C503 /* PUIBoringLayer.swift in Sources */,
 				DDD3F3A02094D26C00FCF7D9 /* PUITouchBarItems.swift in Sources */,
 				DDF721DD1ECA12A40054C503 /* PUIButton.swift in Sources */,
-				AA3F056620E548E200134433 /* PlayerConstants.swift in Sources */,
 				DDF721D71ECA12A40054C503 /* NSEvent+ForceTouch.swift in Sources */,
 				DDC6781F1EDB8EDA00A4E19C /* PUIAnnotationWindowController.swift in Sources */,
 				DDEA82FC20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift in Sources */,
