@@ -29,6 +29,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
     override var selectedTabViewItemIndex: Int {
         didSet {
+            guard selectedTabViewItemIndex != oldValue else { return }
             guard selectedTabViewItemIndex >= 0 && selectedTabViewItemIndex < tabViewItems.count else { return }
 
             tabViewItems.forEach { item in

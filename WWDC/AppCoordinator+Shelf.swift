@@ -45,7 +45,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
 
         // autopip only activates if the user is leaving the currently playing session
-        guard playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else { return }
+        guard activeTab != playerOwnerTab || playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else { return }
 
         // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
         if !playerController.playerView.isInPictureInPictureMode {
@@ -60,9 +60,12 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard let identifier = playerOwnerSessionIdentifier else { return }
         guard let playerOwnerTab = playerOwnerTab else { return }
 
+        // Always reveal the tab to avoid the case of the session selected
+        // on tab that isn't the player owner tab
+        tabController.activeTab = playerOwnerTab
+
         // Reveal the session
         if playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier {
-            tabController.activeTab = playerOwnerTab
             currentListController?.select(session: SessionIdentifier(identifier))
         }
 
