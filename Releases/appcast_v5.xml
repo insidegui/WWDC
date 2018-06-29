@@ -13,7 +13,7 @@
 				<p>WWDC came and went and a huge topic, especially for iOS 12, was performance and stability. Inspired by that, we're releasing WWDC for macOS 6.0.4, with the following fixes:</p>
 				<ul>
 					<li>Player timestamps now use the correct monospace system font</li>
-					<li>Optimized the UI for faster iteractions</li>
+					<li>Optimized the UI for faster interactions</li>
 					<li>Fixed related sessions navigation so that it can expose the destination session</li>
 					<li>Fixed a hang that would occur sometimes when the app was loading its data</li>
 					<li>Fixed fullscreen player hiding incorrectly when browsing sessions</li>
