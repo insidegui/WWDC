@@ -10,7 +10,9 @@ import Cocoa
 import PlayerUI
 
 enum MainWindowTab: Int {
+    #if FEATURED_TAB_ENABLED
     case featured
+    #endif
     case schedule
     case videos
 

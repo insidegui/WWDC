@@ -27,7 +27,9 @@ final class AppCoordinator {
     var windowController: MainWindowController
     var tabController: WWDCTabViewController<MainWindowTab>
 
+    #if FEATURED_TAB_ENABLED
     var featuredController: FeaturedContentViewController
+    #endif
     var scheduleController: SessionsSplitViewController
     var videosController: SessionsSplitViewController
 
@@ -75,12 +77,14 @@ final class AppCoordinator {
 
         tabController = WWDCTabViewController(windowController: windowController)
 
+        #if FEATURED_TAB_ENABLED
         // Featured
         featuredController = FeaturedContentViewController()
         featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
         let featuredItem = NSTabViewItem(viewController: featuredController)
         featuredItem.label = "Featured"
         tabController.addTabViewItem(featuredItem)
+        #endif
 
         // Schedule
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
@@ -231,7 +235,9 @@ final class AppCoordinator {
         videosController.listViewController.delegate = self
         scheduleController.listViewController.delegate = self
 
+        #if FEATURED_TAB_ENABLED
         featuredController.delegate = self
+        #endif
     }
 
     private func updateListsAfterSync(migrate: Bool = false) {
@@ -278,6 +284,7 @@ final class AppCoordinator {
 
     private func updateFeaturedSectionsAfterSync() {
 
+        #if FEATURED_TAB_ENABLED
         storage
             .featuredSectionsObservable
             .filter { !$0.isEmpty }
@@ -286,6 +293,7 @@ final class AppCoordinator {
             .subscribe(onNext: { [weak self] sections in
                 self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
             }).disposed(by: disposeBag)
+        #endif
     }
 
     private lazy var searchCoordinator: SearchCoordinator = {
@@ -449,7 +457,9 @@ final class AppCoordinator {
     }
 
     func showFeatured() {
-//        tabController.activeTab = .featured
+        #if FEATURED_TAB_ENABLED
+        tabController.activeTab = .featured
+        #endif
     }
 
     func showSchedule() {

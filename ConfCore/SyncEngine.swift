@@ -62,9 +62,11 @@ public final class SyncEngine {
                 self.storage.store(contentResult: scheduleResult) { error in
                     NotificationCenter.default.post(name: .SyncEngineDidSyncSessionsAndSchedule, object: error)
 
+                    #if FEATURED_TAB_ENABLED
                     guard error == nil else { return }
 
                     self.syncFeaturedSections()
+                    #endif
                 }
             }
         }
