@@ -215,9 +215,6 @@ final class VideoPlayerViewController: NSViewController {
 
         if let error = player.error ?? player.currentItem?.error {
             WWDCAlert.show(with: error)
-        } else {
-            let alert = WWDCAlert.create()
-            alert.messageText = "A playback error occurred"
         }
     }
 
