@@ -266,9 +266,9 @@ final class AppCoordinator {
 
         starupDependencies
             .filter {
-                let result = !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty
+                var result = !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty
                 #if FEATURED_TAB_ENABLED
-                result &= !$0.4.isEmpty
+                result = result && !$0.4.isEmpty
                 #endif
                 return result
             }
