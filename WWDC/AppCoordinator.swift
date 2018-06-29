@@ -265,7 +265,13 @@ final class AppCoordinator {
                                                           storage.featuredSectionsObservable)
 
         starupDependencies
-            .filter { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty && !$0.4.isEmpty }
+            .filter {
+                let result = !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty
+                #if FEATURED_TAB_ENABLED
+                result &= !$0.4.isEmpty
+                #endif
+                return result
+            }
             .take(1)
             .subscribe(onNext: { [weak self] tracks, _, _, sections, _ in
                 guard let `self` = self else { return }
