@@ -14,16 +14,29 @@ import PlayerUI
 
 extension AppCoordinator: ShelfViewControllerDelegate {
 
+    private func shelf(for tab: MainWindowTab) -> ShelfViewController? {
+
+        var shelfViewController: ShelfViewController?
+        switch tab {
+        case .schedule:
+            shelfViewController = scheduleController.detailViewController.shelfController
+        case .videos:
+            shelfViewController = videosController.detailViewController.shelfController
+        default: ()
+        }
+
+        return shelfViewController
+    }
+
     func updateShelfBasedOnSelectionChange() {
         guard !isTransitioningPlayerContext else { return }
 
         guard currentPlaybackViewModel != nil else { return }
         guard let playerController = currentPlayerController else { return }
 
-        guard playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else {
-            playerController.view.isHidden = false
-            return
-        }
+        playerOwnerTab.flatMap(shelf(for:))?.playerContainer.animator().isHidden = playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier
+
+        // Everything after this point is for automatically entering PiP
 
         // ignore when not playing or when playing externally
         guard playerController.playerView.isInternalPlayerPlaying else { return }
@@ -31,44 +44,36 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         // ignore when playing in fullscreen
         guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
 
-        playerController.view.isHidden = true
-
-        guard !canRestorePlaybackContext else { return }
+        // autopip only activates if the user is leaving the currently playing session
+        guard activeTab != playerOwnerTab || playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else { return }
 
         // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
-
         if !playerController.playerView.isInPictureInPictureMode {
             playerController.playerView.togglePip(nil)
         }
-
-        canRestorePlaybackContext = true
     }
 
-    func goBackToContextBeforePiP(_ isReturningFromPip: Bool) {
+    func returnToPlayingSessionContext() {
         isTransitioningPlayerContext = true
         defer { isTransitioningPlayerContext = false }
 
-        guard canRestorePlaybackContext else { return }
-        guard playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else { return }
         guard let identifier = playerOwnerSessionIdentifier else { return }
-        guard let tab = playerOwnerTab else { return }
+        guard let playerOwnerTab = playerOwnerTab else { return }
 
-        if isReturningFromPip {
-            tabController.activeTab = tab
+        // Always reveal the tab to avoid the case of the session selected
+        // on tab that isn't the player owner tab
+        tabController.activeTab = playerOwnerTab
+
+        // Reveal the session
+        if playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier {
             currentListController?.select(session: SessionIdentifier(identifier))
-            currentPlayerController?.view.isHidden = false
         }
 
-        canRestorePlaybackContext = false
+        // Show the container
+        shelf(for: playerOwnerTab)?.playerContainer.animator().isHidden = false
     }
 
     func shelfViewControllerDidSelectPlay(_ shelfController: ShelfViewController) {
-        if let playerController = currentPlayerController {
-            if playerController.playerView.isInFullScreenPlayerWindow {
-                // close video playing in fullscreen
-                playerController.detachedWindowController.close()
-            }
-        }
 
         currentPlaybackViewModel = nil
 
@@ -81,27 +86,38 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)
             playbackViewModel.image = shelfController.shelfView.image
 
-            canRestorePlaybackContext = false
             isTransitioningPlayerContext = false
 
             currentPlaybackViewModel = playbackViewModel
 
             if currentPlayerController == nil {
                 currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel)
-                currentPlayerController?.playerWillExitPictureInPicture = { [weak self] isReturningFromPip in
-                    self?.goBackToContextBeforePiP(isReturningFromPip)
+                currentPlayerController?.playerWillExitPictureInPicture = { [weak self] reason in
+                    guard reason == .returnButton else { return }
+                    self?.returnToPlayingSessionContext()
+                }
+
+                currentPlayerController?.playerWillExitFullScreen = { [weak self] in
+                    self?.returnToPlayingSessionContext()
                 }
 
                 currentPlayerController?.delegate = self
                 currentPlayerController?.playerView.timelineDelegate = self
+
             } else {
                 currentPlayerController?.player = playbackViewModel.player
                 currentPlayerController?.sessionViewModel = viewModel
             }
 
+            if currentPlayerController?.view.window == nil {
+                attachPlayerToShelf(shelfController)
+            }
+
             currentPlayerController?.playbackViewModel = playbackViewModel
 
-            attachPlayerToShelf(shelfController)
+            shelfController.playButton.isHidden = true
+            shelfController.playerContainer.isHidden = false
+
         } catch {
             WWDCAlert.show(with: error)
         }
@@ -114,18 +130,21 @@ extension AppCoordinator: ShelfViewControllerDelegate {
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
         guard let playerController = currentPlayerController else { return }
 
-        shelf.playButton.isHidden = true
+        let playerContainer = shelf.playerContainer
 
-        playerController.view.frame = shelf.view.bounds
+        // Already attached
+        guard playerController.view.superview != playerContainer else { return }
+
+        playerController.view.frame = playerContainer.bounds
         playerController.view.alphaValue = 0
         playerController.view.isHidden = false
 
         playerController.view.translatesAutoresizingMaskIntoConstraints = false
 
-        shelf.view.addSubview(playerController.view)
-        shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+        playerContainer.addSubview(playerController.view)
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
 
-        shelf.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
 
         playerController.view.alphaValue = 1
 

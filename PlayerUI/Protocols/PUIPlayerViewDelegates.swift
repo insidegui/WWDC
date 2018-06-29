@@ -8,10 +8,14 @@
 
 import Cocoa
 
+public enum PUIPiPExitReason {
+    case returnButton, exitButton
+}
+
 public protocol PUIPlayerViewDelegate: class {
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView)
-    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, isReturningFromPiP: Bool)
+    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, reason: PUIPiPExitReason)
     func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, at timestamp: Double)
     func playerViewDidSelectToggleFullScreen(_ playerView: PUIPlayerView)
     func playerViewDidSelectLike(_ playerView: PUIPlayerView)
