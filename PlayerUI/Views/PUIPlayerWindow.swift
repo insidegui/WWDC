@@ -137,8 +137,8 @@ open class PUIPlayerWindow: NSWindow {
         let nc = NotificationCenter.default
 
         // the customizations (especially the title text field ones) have to be reapplied when entering and exiting fullscreen
-        didEnterFullscreenObserver = nc.addObserver(forName: NSWindow.didEnterFullScreenNotification, object: self, queue: nil, using: applyCustomizations)
-        didExitFullscreenObserver = nc.addObserver(forName: NSWindow.didExitFullScreenNotification, object: self, queue: nil, using: applyCustomizations)
+        didEnterFullscreenObserver = nc.addObserver(forName: NSWindow.didEnterFullScreenNotification, object: self, queue: nil, using: { [weak self] _ in self?.applyCustomizations() })
+        didExitFullscreenObserver = nc.addObserver(forName: NSWindow.didExitFullScreenNotification, object: self, queue: nil, using: { [weak self] _ in self?.applyCustomizations() })
     }
 
     open override func makeKeyAndOrderFront(_ sender: Any?) {
@@ -277,7 +277,9 @@ private class PUIPlayerWindowOverlayView: NSView {
             mouseIdleTimer = nil
         }
 
-        mouseIdleTimer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(mouseIdleTimerAction), userInfo: nil, repeats: false)
+        mouseIdleTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] in
+            self?.mouseIdleTimerAction($0)
+        }
     }
 
     @objc fileprivate func mouseIdleTimerAction(_ sender: Timer) {

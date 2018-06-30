@@ -43,9 +43,6 @@ final class AppCoordinator {
     /// The session that "owns" the current player (the one that was selected on the active tab when "play" was pressed)
     var playerOwnerSessionIdentifier: String?
 
-    /// Whether playback can be restored to the previous context when exiting PiP mode (go back to tab/session)
-    var canRestorePlaybackContext = false
-
     /// Whether we're currently in the middle of a player context transition
     var isTransitioningPlayerContext = false
 
@@ -169,15 +166,22 @@ final class AppCoordinator {
             self?.updateSelectedViewModelRegardlessOfTab()
         }).disposed(by: disposeBag)
 
-        selectedSession.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
-            self?.videosController.detailViewController.viewModel = viewModel
-            self?.updateSelectedViewModelRegardlessOfTab()
-        }).disposed(by: disposeBag)
+        func bind(session: Observable<SessionViewModel?>, to detailsController: SessionDetailsViewController) {
 
-        selectedScheduleItem.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
-            self?.scheduleController.detailViewController.viewModel = viewModel
-            self?.updateSelectedViewModelRegardlessOfTab()
-        }).disposed(by: disposeBag)
+            session.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
+                NSAnimationContext.runAnimationGroup({ context in
+                    context.duration = 0.35
+
+                    detailsController.viewModel = viewModel
+                    self?.updateSelectedViewModelRegardlessOfTab()
+                })
+
+            }).disposed(by: disposeBag)
+        }
+
+        bind(session: selectedSession, to: videosController.detailViewController)
+
+        bind(session: selectedScheduleItem, to: scheduleController.detailViewController)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {

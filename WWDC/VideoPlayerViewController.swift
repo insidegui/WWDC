@@ -49,9 +49,8 @@ final class VideoPlayerViewController: NSViewController {
         }
     }
 
-    var detached = false
-
-    var playerWillExitPictureInPicture: ((Bool) -> Void)?
+    var playerWillExitPictureInPicture: ((PUIPiPExitReason) -> Void)?
+    var playerWillExitFullScreen: (() -> Void)?
 
     init(player: AVPlayer, session: SessionViewModel) {
         sessionViewModel = session
@@ -216,9 +215,6 @@ final class VideoPlayerViewController: NSViewController {
 
         if let error = player.error ?? player.currentItem?.error {
             WWDCAlert.show(with: error)
-        } else {
-            let alert = WWDCAlert.create()
-            alert.messageText = "A playback error occurred"
         }
     }
 
@@ -281,9 +277,11 @@ final class VideoPlayerViewController: NSViewController {
             self?.detachedWindowController = nil
         }
 
-        detachedWindowController.showWindow(self)
+        detachedWindowController.actionOnWindowWillExitFullScreen = { [weak self] in
+            self?.playerWillExitFullScreen?()
+        }
 
-        detached = true
+        detachedWindowController.showWindow(self)
     }
 
     deinit {
@@ -313,8 +311,8 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
         playerView.snapshotPlayer(completion: completion)
     }
 
-    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, isReturningFromPiP: Bool) {
-        playerWillExitPictureInPicture?(isReturningFromPiP)
+    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, reason: PUIPiPExitReason) {
+        playerWillExitPictureInPicture?(reason)
     }
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {

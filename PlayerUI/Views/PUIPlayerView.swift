@@ -97,7 +97,9 @@ public final class PUIPlayerView: NSView {
         layer = PUIBoringLayer()
         layer?.backgroundColor = NSColor.black.cgColor
 
-        setupPlayer()
+        DispatchQueue.main.async {
+            self.setupPlayer()
+        }
         setupControls()
     }
 
@@ -202,7 +204,7 @@ public final class PUIPlayerView: NSView {
 
     // MARK: - Private API
 
-    fileprivate var lastKnownWindow: NSWindow?
+    fileprivate weak var lastKnownWindow: NSWindow?
 
     private var sortedAnnotations: [PUITimelineAnnotation] = [] {
         didSet {
@@ -1300,6 +1302,7 @@ public final class PUIPlayerView: NSView {
     }
 
     public override func viewWillMove(toWindow newWindow: NSWindow?) {
+
         NotificationCenter.default.removeObserver(self, name: NSWindow.willEnterFullScreenNotification, object: window)
         NotificationCenter.default.removeObserver(self, name: NSWindow.willExitFullScreenNotification, object: window)
         NotificationCenter.default.removeObserver(self, name: NSWindow.didResignMainNotification, object: window)
@@ -1336,7 +1339,10 @@ public final class PUIPlayerView: NSView {
     }
 
     @objc private func windowWillExitFullScreen() {
-        fullScreenButton.isHidden = false
+        if let d = appearanceDelegate {
+            fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
+        }
+
         updateExtrasMenuPosition()
     }
 
@@ -1586,11 +1592,11 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
 
     public func pipActionStop(_ pip: PIPViewController) {
         pause(pip)
-        delegate?.playerViewWillExitPictureInPictureMode(self, isReturningFromPiP: false)
+        delegate?.playerViewWillExitPictureInPictureMode(self, reason: .exitButton)
     }
 
     public func pipActionReturn(_ pip: PIPViewController) {
-        delegate?.playerViewWillExitPictureInPictureMode(self, isReturningFromPiP: true)
+        delegate?.playerViewWillExitPictureInPictureMode(self, reason: .returnButton)
 
         if !NSApp.isActive {
             NSApp.activate(ignoringOtherApps: true)
