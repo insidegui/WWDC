@@ -55,10 +55,6 @@ extension Session {
 
         return asset
     }
-
-    func isVideoWatched() -> Bool {
-        return currentPosition() / mediaDuration >= Constants.watchedVideoRelativePosition
-    }
 }
 
 final class PlaybackViewModel {
@@ -138,7 +134,7 @@ final class PlaybackViewModel {
         nowPlayingInfo.value = PUINowPlayingInfo(playbackViewModel: self)
 
         if !isLiveStream {
-            if session.isVideoWatched() {
+            if session.isWatched {
                 player.seek(to: CMTimeMakeWithSeconds(0, 9000))
             } else {
                 player.seek(to: CMTimeMakeWithSeconds(Float64(session.currentPosition()), 9000))

@@ -31,7 +31,7 @@ extension AVPlayer {
 
     var hasFinishedPlaying: Bool {
         let currentTimeSeconds = currentTime().seconds
-        guard let durationSeconds = currentItem?.duration.seconds else { return false }
+        guard let durationSeconds =  currentItem?.asset.durationIfLoaded?.seconds else { return false }
 
         return abs(currentTimeSeconds - durationSeconds) < 1
     }
