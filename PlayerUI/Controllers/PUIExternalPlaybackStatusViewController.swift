@@ -27,21 +27,18 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
 
     var snapshot: CGImage? {
         didSet {
-            guard let cgImage = snapshot else {
-                snapshotLayer.contents = nil
-                return
-            }
+            snapshotLayer.contents = snapshot.flatMap { cgImage in
 
-            let targetSize = snapshotLayer.bounds
-            let transform = CGAffineTransform(scaleX: targetSize.width / CGFloat(cgImage.width),
-                                              y: targetSize.height / CGFloat(cgImage.height))
+                let targetSize = snapshotLayer.bounds
+                let transform = CGAffineTransform(scaleX: targetSize.width / CGFloat(cgImage.width),
+                                                  y: targetSize.height / CGFloat(cgImage.height))
 
-            let ciImage = CIImage(cgImage: cgImage).transformed(by: transform)
+                let ciImage = CIImage(cgImage: cgImage).transformed(by: transform)
+                let filters = [saturationFilter, blurFilter]
 
-            if let filteredImage = ciImage.filtered(with: [saturationFilter, blurFilter]),
-                let cgImage = context.createCGImage(filteredImage, from: ciImage.extent) {
+                guard let filteredImage = ciImage.filtered(with: filters) else { return nil }
 
-                snapshotLayer.contents = cgImage
+                return context.createCGImage(filteredImage, from: ciImage.extent)
             }
         }
     }
