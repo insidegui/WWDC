@@ -97,9 +97,7 @@ public final class PUIPlayerView: NSView {
         layer = PUIBoringLayer()
         layer?.backgroundColor = NSColor.black.cgColor
 
-        DispatchQueue.main.async {
-            self.setupPlayer()
-        }
+        setupPlayer()
         setupControls()
     }
 
