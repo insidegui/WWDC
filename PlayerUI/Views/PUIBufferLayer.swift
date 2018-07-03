@@ -21,7 +21,7 @@ struct PUIBufferSegment: Hashable {
     }
 }
 
-final class PUIBufferLayer: CALayer {
+final class PUIBufferLayer: PUIBoringLayer {
 
     var segments = Set<PUIBufferSegment>() {
         didSet {
