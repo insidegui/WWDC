@@ -2,7 +2,7 @@
 //  AVAsset+AsyncHelpers.swift
 //  PlayerUI
 //
-//  Created by Allen Humphreys on 6/25/18.
+//  Created by Allen Humphreys on 25/6/18.
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 

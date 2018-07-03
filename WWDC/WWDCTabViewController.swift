@@ -34,7 +34,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
             tabViewItems.forEach { item in
                 guard let identifier = item.viewController?.identifier else { return }
-                guard let view = tabItemViews.first(where: { $0.controllerIdentifier == identifier.rawValue }) else { return }
+                guard let view = tabBar.items.first(where: { $0.controllerIdentifier == identifier.rawValue }) else { return }
 
                 if indexForChild(with: identifier.rawValue) == selectedTabViewItemIndex {
                     view.state = .on
@@ -47,8 +47,12 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         }
     }
 
-    init(windowController: NSWindowController) {
+    private(set) lazy var tabBar = WWDCTabViewControllerTabBar()
+
+    init(windowController: WWDCWindowController) {
         super.init(nibName: nil, bundle: nil)
+
+        windowController.titleBarViewController.tabBar = tabBar
 
         // Preserve the window's size, essentially passing in saved window frame sizes
         let superFrame = view.frame
@@ -56,6 +60,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
             view.frame = NSRect(origin: superFrame.origin, size: windowFrame.size)
         }
 
+        tabStyle = .unspecified
         identifier = NSUserInterfaceItemIdentifier(rawValue: "tabs")
     }
 
@@ -63,15 +68,42 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func addTabViewItem(_ tabViewItem: NSTabViewItem) {
+        super.addTabViewItem(tabViewItem)
 
-        tabStyle = .toolbar
-        view.wantsLayer = true
+        let itemView = TabItemView(frame: .zero)
+
+        itemView.title = tabViewItem.label
+        itemView.controllerIdentifier = (tabViewItem.viewController?.identifier).map { $0.rawValue } ?? ""
+        itemView.image = NSImage(named: NSImage.Name(rawValue: itemView.controllerIdentifier.lowercased()))
+        itemView.alternateImage = NSImage(named: NSImage.Name(rawValue: itemView.controllerIdentifier.lowercased() + "-filled"))
+        itemView.sizeToFit()
+
+        itemView.target = self
+        itemView.action = #selector(changeTab)
+
+        itemView.state = (tabViewItems.index(of: tabViewItem) == selectedTabViewItemIndex) ? .on : .off
+
+        tabBar.addItem(itemView)
     }
 
-    private func tabItem(with identifier: String) -> NSTabViewItem? {
-        return tabViewItems.first { $0.identifier as? String == identifier }
+    var isTopConstraintAdded = false
+
+    override func  updateViewConstraints() {
+        super.updateViewConstraints()
+
+        // The top constraint keeps the tabView from extending
+        // under the title bar
+        if !isTopConstraintAdded, let window = view.window {
+            isTopConstraintAdded = true
+            NSLayoutConstraint(item: tabView,
+                               attribute: .top,
+                               relatedBy: .equal,
+                               toItem: window.contentLayoutGuide,
+                               attribute: .top,
+                               multiplier: 1,
+                               constant: 0).isActive = true
+        }
     }
 
     override func transition(from fromViewController: NSViewController, to toViewController: NSViewController, options: NSViewController.TransitionOptions = [], completionHandler completion: (() -> Void)? = nil) {
@@ -87,42 +119,8 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         })
     }
 
-    override func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-
-        // Center the tab bar's NSToolbarItem's be putting flexible space at the beginning and end of
-        // the array. Super's implementation returns the NSToolbarItems that represent the NSTabViewItems
-        var defaultItemIdentifiers = super.toolbarDefaultItemIdentifiers(toolbar)
-        defaultItemIdentifiers.insert(.flexibleSpace, at: 0)
-        defaultItemIdentifiers.append(.flexibleSpace)
-
-        return defaultItemIdentifiers
-    }
-
-    override func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
-        guard let tabItem = tabItem(with: itemIdentifier.rawValue) else { return nil }
-
-        let itemView = TabItemView(frame: .zero)
-
-        itemView.title = tabItem.label
-        itemView.controllerIdentifier = (tabItem.viewController?.identifier).map { $0.rawValue } ?? ""
-        itemView.image = NSImage(named: NSImage.Name(rawValue: itemView.controllerIdentifier.lowercased()))
-        itemView.alternateImage = NSImage(named: NSImage.Name(rawValue: itemView.controllerIdentifier.lowercased() + "-filled"))
-
-        let item = NSToolbarItem(itemIdentifier: itemIdentifier)
-
-        item.minSize = itemView.bounds.size
-        item.maxSize = itemView.bounds.size
-        item.view = itemView
-
-        item.target = self
-        item.action = #selector(changeTab)
-
-        itemView.state = (tabViewItems.index(of: tabItem) == selectedTabViewItemIndex) ? .on : .off
-
-        return item
-    }
-
-    @objc private func changeTab(_ sender: TabItemView) {
+    @objc
+    private func changeTab(_ sender: TabItemView) {
         guard let index = indexForChild(with: sender.controllerIdentifier) else { return }
 
         selectedTabViewItemIndex = index
@@ -130,10 +128,6 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
     private func indexForChild(with identifier: String) -> Int? {
         return tabViewItems.index { $0.viewController?.identifier?.rawValue == identifier }
-    }
-
-    private var tabItemViews: [TabItemView] {
-        return view.window?.toolbar?.items.compactMap { $0.view as? TabItemView } ?? []
     }
 
     private var loadingView: ModalLoadingView?

@@ -247,7 +247,7 @@ private final class ImageDownloadOperation: Operation {
 
 }
 
-private extension NSImage {
+extension NSImage {
 
     func resized(to maxHeight: CGFloat) -> NSImage {
         let scaleFactor = maxHeight / size.height

@@ -2,7 +2,7 @@
 //  SessionRowProvider.swift
 //  WWDC
 //
-//  Created by Allen Humphreys on 3/14/18.
+//  Created by Allen Humphreys on 14/3/18.
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 
