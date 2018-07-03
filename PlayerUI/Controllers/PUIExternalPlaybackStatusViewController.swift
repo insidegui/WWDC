@@ -10,9 +10,36 @@ import Cocoa
 
 class PUIExternalPlaybackStatusViewController: NSViewController {
 
-    var snapshot: NSImage? {
+    private let blurFilter: CIFilter = {
+        let f = CIFilter(name: "CIGaussianBlur")!
+        f.setValue(100, forKey: kCIInputRadiusKey)
+        return f
+    }()
+
+    private let saturationFilter: CIFilter = {
+        let f = CIFilter(name: "CIColorControls")!
+        f.setDefaults()
+        f.setValue(2, forKey: kCIInputSaturationKey)
+        return f
+    }()
+
+    private let context = CIContext()
+
+    var snapshot: CGImage? {
         didSet {
-            snapshotLayer.contents = snapshot
+            snapshotLayer.contents = snapshot.flatMap { cgImage in
+
+                let targetSize = snapshotLayer.bounds
+                let transform = CGAffineTransform(scaleX: targetSize.width / CGFloat(cgImage.width),
+                                                  y: targetSize.height / CGFloat(cgImage.height))
+
+                let ciImage = CIImage(cgImage: cgImage).transformed(by: transform)
+                let filters = [saturationFilter, blurFilter]
+
+                guard let filteredImage = ciImage.filtered(with: filters) else { return nil }
+
+                return context.createCGImage(filteredImage, from: ciImage.extent)
+            }
         }
     }
     var providerIcon: NSImage? {
@@ -94,26 +121,32 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
         view.layer?.masksToBounds = true
         view.layer?.backgroundColor = NSColor.black.cgColor
 
-        view.layerUsesCoreImageFilters = true
-
         snapshotLayer.frame = view.bounds
         view.layer?.addSublayer(snapshotLayer)
-
-        if let blur = CIFilter(name: "CIGaussianBlur"), let sat = CIFilter(name: "CIColorControls") {
-            sat.setDefaults()
-            sat.setValue(2, forKey: "inputSaturation")
-            blur.setValue(100, forKey: "inputRadius")
-            snapshotLayer.filters = [sat, blur]
-        }
 
         view.addSubview(stackView)
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do view setup here.
+extension CIImage {
+
+    func filtered(with ciFilters: [CIFilter]) -> CIImage? {
+
+        var inputImage = self.clampedToExtent()
+
+        var finalFilter: CIFilter?
+        for filter in ciFilters {
+            finalFilter = filter
+
+            filter.setValue(inputImage, forKey: kCIInputImageKey)
+
+            if let output = filter.outputImage {
+                inputImage = output
+            }
+        }
+
+        return finalFilter?.outputImage
     }
-
 }
