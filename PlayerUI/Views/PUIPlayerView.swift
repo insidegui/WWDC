@@ -1180,7 +1180,7 @@ public final class PUIPlayerView: NSView {
 
     // MARK: - PiP Support
 
-    public func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
+    public func snapshotPlayer(completion: @escaping (CGImage?) -> Void) {
         guard let currentTime = player?.currentTime() else {
             completion(nil)
             return
@@ -1200,8 +1200,7 @@ public final class PUIPlayerView: NSView {
                 return
             }
 
-            let image = NSImage(cgImage: rawImage, size: NSSize(width: rawImage.width, height: rawImage.height))
-            DispatchQueue.main.async { completion(image) }
+            DispatchQueue.main.async { completion(rawImage) }
         }
     }
 

@@ -303,11 +303,12 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
 
     func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, at timestamp: Double) {
         snapshotPlayer { snapshot in
-            self.delegate?.createBookmark(at: timestamp, with: snapshot)
+            self.delegate?.createBookmark(at: timestamp,
+                                          with: snapshot.map { NSImage(cgImage: $0, size: NSSize(width: $0.width, height: $0.height)) })
         }
     }
 
-    private func snapshotPlayer(completion: @escaping (NSImage?) -> Void) {
+    private func snapshotPlayer(completion: @escaping (CGImage?) -> Void) {
         playerView.snapshotPlayer(completion: completion)
     }
 
