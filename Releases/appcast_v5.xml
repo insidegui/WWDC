@@ -31,8 +31,8 @@
 					<li>In the share menu, there's now an option to copy the link for a session to the clipboard</li>
 				</ul>
 			]]></description>
-            <pubDate>Sat, 30 Jun 2018 15:00:00 -0300</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0.4/WWDC_v6.0.4.zip" sparkle:version="821" sparkle:shortVersionString="6.0.4" length="16090272" type="application/octet-stream" />
+            <pubDate>Wed, 4 Jul 2018 14:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0.4/WWDC_v6.0.4.zip" sparkle:version="822" sparkle:shortVersionString="6.0.4" length="16091220" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.12.2</sparkle:minimumSystemVersion>
         </item>		
 		
