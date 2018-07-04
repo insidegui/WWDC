@@ -7,6 +7,46 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 6.0.4</title>
+			<description><![CDATA[
+				<h3>Our "iOS 12" release</h3>
+				<p>WWDC came and went and a huge topic, especially for iOS 12, was performance and stability. Inspired by that, we're releasing WWDC for macOS 6.0.4, with the following fixes:</p>
+				<ul>
+					<li>Player timestamps now use the correct monospace system font</li>
+					<li>Optimized the UI for faster interactions</li>
+					<li>Fixed related sessions navigation so that it can expose the destination session</li>
+					<li>Fixed a hang that would occur sometimes when the app was loading its data</li>
+					<li>Fixed fullscreen player hiding incorrectly when browsing sessions</li>
+					<li>Fixed a hang that could occur when starting playback of a streaming video</li>
+					<li>Fixed an issue that would prevent the space bar from playing/pausing the video</li>
+					<li>Fixed an issue where the cursor would be hidden when switching spaces while playing in fullscreen</li>
+					<li>Transcripts from ASCIIWWDC are now downloaded over HTTPS</li>
+				</ul>
+				<h4>We also made some enhancements:</h4>
+				<ul>
+					<li>Enabled subtitles for 2017 and 2018 (thanks Mattt)</li>
+					<li>The player now allows play/pause while the app is not the frontmost app</li>
+					<li>It's now possible to seek using the keyboard arrow keys</li>
+					<li>Option-clicking the speed button on the player will go to the previous playback speed</li>
+					<li>In the share menu, there's now an option to copy the link for a session to the clipboard</li>
+				</ul>
+			]]></description>
+            <pubDate>Wed, 4 Jul 2018 14:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0.4/WWDC_v6.0.4.zip" sparkle:version="822" sparkle:shortVersionString="6.0.4" length="16091220" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12.2</sparkle:minimumSystemVersion>
+        </item>		
+		
+		<item>
+            <title>Version 6.0.3</title>
+			<description><![CDATA[
+				<h3>This update fixes an important issue with live streaming, please update to be able to watch live sessions during the week.</h3>
+			]]></description>
+            <pubDate>Mon, 4 Jun 2018 22:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.0.2/WWDC_v6.0.2.zip" sparkle:version="812" sparkle:shortVersionString="6.0.2" length="16092321" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12.2</sparkle:minimumSystemVersion>
+        </item>
+		
+		<item>
             <title>Version 6.0.3</title>
 			<description><![CDATA[
 				<p>Improves live streaming reliability.</p>

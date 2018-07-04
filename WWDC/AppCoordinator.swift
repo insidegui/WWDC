@@ -27,7 +27,9 @@ final class AppCoordinator {
     var windowController: MainWindowController
     var tabController: WWDCTabViewController<MainWindowTab>
 
+    #if FEATURED_TAB_ENABLED
     var featuredController: FeaturedContentViewController
+    #endif
     var scheduleController: SessionsSplitViewController
     var videosController: SessionsSplitViewController
 
@@ -75,12 +77,14 @@ final class AppCoordinator {
 
         tabController = WWDCTabViewController(windowController: windowController)
 
+        #if FEATURED_TAB_ENABLED
         // Featured
         featuredController = FeaturedContentViewController()
         featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
         let featuredItem = NSTabViewItem(viewController: featuredController)
         featuredItem.label = "Featured"
         tabController.addTabViewItem(featuredItem)
+        #endif
 
         // Schedule
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
@@ -231,7 +235,9 @@ final class AppCoordinator {
         videosController.listViewController.delegate = self
         scheduleController.listViewController.delegate = self
 
+        #if FEATURED_TAB_ENABLED
         featuredController.delegate = self
+        #endif
     }
 
     private func updateListsAfterSync(migrate: Bool = false) {
@@ -259,7 +265,13 @@ final class AppCoordinator {
                                                           storage.featuredSectionsObservable)
 
         starupDependencies
-            .filter { !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty && !$0.4.isEmpty }
+            .filter {
+                var result = !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty
+                #if FEATURED_TAB_ENABLED
+                result = result && !$0.4.isEmpty
+                #endif
+                return result
+            }
             .take(1)
             .subscribe(onNext: { [weak self] tracks, _, _, sections, _ in
                 guard let `self` = self else { return }
@@ -278,6 +290,7 @@ final class AppCoordinator {
 
     private func updateFeaturedSectionsAfterSync() {
 
+        #if FEATURED_TAB_ENABLED
         storage
             .featuredSectionsObservable
             .filter { !$0.isEmpty }
@@ -286,6 +299,7 @@ final class AppCoordinator {
             .subscribe(onNext: { [weak self] sections in
                 self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
             }).disposed(by: disposeBag)
+        #endif
     }
 
     private lazy var searchCoordinator: SearchCoordinator = {
@@ -449,7 +463,9 @@ final class AppCoordinator {
     }
 
     func showFeatured() {
-//        tabController.activeTab = .featured
+        #if FEATURED_TAB_ENABLED
+        tabController.activeTab = .featured
+        #endif
     }
 
     func showSchedule() {

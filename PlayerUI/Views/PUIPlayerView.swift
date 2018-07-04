@@ -97,9 +97,7 @@ public final class PUIPlayerView: NSView {
         layer = PUIBoringLayer()
         layer?.backgroundColor = NSColor.black.cgColor
 
-        DispatchQueue.main.async {
-            self.setupPlayer()
-        }
+        setupPlayer()
         setupControls()
     }
 
@@ -252,11 +250,11 @@ public final class PUIPlayerView: NSView {
         asset?.loadValuesAsynchronously(forKeys: ["availableMediaCharacteristicsWithMediaSelectionOptions"], completionHandler: { [weak self] in
 
             if self?.asset?.statusOfValue(forKey: "availableMediaCharacteristicsWithMediaSelectionOptions", error: nil) == .loaded {
-                self?.updateSubtitleSelectionMenu()
+                DispatchQueue.main.async { self?.updateSubtitleSelectionMenu() }
             }
         })
 
-        playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+        playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: .main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
         }
 
