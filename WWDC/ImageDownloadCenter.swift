@@ -153,7 +153,7 @@ private final class ImageDownloadOperation: Operation {
         self.thumbnailHeight = thumbnailHeight
     }
 
-    open override var isAsynchronous: Bool {
+    public override var isAsynchronous: Bool {
         return true
     }
 
@@ -166,7 +166,7 @@ private final class ImageDownloadOperation: Operation {
         }
     }
 
-    open override var isExecuting: Bool {
+    public override var isExecuting: Bool {
         return _executing
     }
 
@@ -179,7 +179,7 @@ private final class ImageDownloadOperation: Operation {
         }
     }
 
-    open override var isFinished: Bool {
+    public override var isFinished: Bool {
         return _finished
     }
 
