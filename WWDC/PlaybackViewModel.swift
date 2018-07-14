@@ -55,7 +55,6 @@ extension Session {
 
         return asset
     }
-
 }
 
 final class PlaybackViewModel {
@@ -135,8 +134,11 @@ final class PlaybackViewModel {
         nowPlayingInfo.value = PUINowPlayingInfo(playbackViewModel: self)
 
         if !isLiveStream {
-            let p = session.currentPosition()
-            player.seek(to: CMTimeMakeWithSeconds(Float64(p), 9000))
+            if session.isWatched {
+                player.seek(to: CMTimeMakeWithSeconds(0, 9000))
+            } else {
+                player.seek(to: CMTimeMakeWithSeconds(Float64(session.currentPosition()), 9000))
+            }
 
             timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
                 guard let `self` = self else { return }

@@ -934,7 +934,12 @@ public final class PUIPlayerView: NSView {
         if isPlayingExternally {
             currentExternalPlaybackProvider?.play()
         } else {
-            player?.rate = playbackSpeed.rawValue
+            guard let player = player else { return }
+            if player.hasFinishedPlaying {
+                seek(to: 0)
+            }
+
+            player.rate = playbackSpeed.rawValue
         }
     }
 
