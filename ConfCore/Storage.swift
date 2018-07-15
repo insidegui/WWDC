@@ -49,12 +49,14 @@ public final class Storage {
         return try Realm(configuration: realmConfig)
     }
 
+    private lazy var dispatchQueue = DispatchQueue(label: "WWDC Storage", qos: .background)
+
     public lazy var storageQueue: OperationQueue = {
         let q = OperationQueue()
 
         q.name = "WWDC Storage"
         q.maxConcurrentOperationCount = 1
-        q.underlyingQueue = DispatchQueue(label: "WWDC Storage", qos: .background)
+        q.underlyingQueue = dispatchQueue
 
         return q
     }()
