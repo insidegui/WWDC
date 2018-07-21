@@ -143,9 +143,8 @@ final class VideoPlayerViewController: NSViewController {
 
         setupPlayerObservers()
 
-        player.play()
-
         playerView.player = player
+        playerView.play(self)
 
         if let playbackViewModel = playbackViewModel {
             playerView.remoteMediaUrl = playbackViewModel.remoteMediaURL
