@@ -12,6 +12,13 @@
 		3A0840B41F924665002BC828 /* Realm+InMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0840B31F924665002BC828 /* Realm+InMemory.swift */; };
 		3A6227031F9272A300D5F687 /* contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A6227021F9272A300D5F687 /* contents.json */; };
 		4D5EB0F820598E6000D4BC52 /* SessionRowProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5EB0F720598E6000D4BC52 /* SessionRowProvider.swift */; };
+		4D7482CA20FF735D008D156C /* WWDCWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7482C920FF735D008D156C /* WWDCWindowController.swift */; };
+		4D7482CC20FFAA09008D156C /* DownloadsStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */; };
+		4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DC721063CD500762BBD /* TitleBarViewController.swift */; };
+		4DA25DCA21063F4100762BBD /* VibrantTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DC921063F4100762BBD /* VibrantTextField.swift */; };
+		4DA25DCC21064B4800762BBD /* WWDCTabViewControllerTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */; };
+		4DA9C4D120EC098800710354 /* DownloadsManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA9C4D020EC098800710354 /* DownloadsManagementViewController.swift */; };
+		4DBA2F7620FE71BF00ED0253 /* DownloadsStatusButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA2F7520FE71BF00ED0253 /* DownloadsStatusButton.swift */; };
 		4DBFA4DA20E160CB00BDF34B /* AVAsset+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */; };
 		4DEEC3A32051C8D400376595 /* TestUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEEC3A22051C8D400376595 /* TestUtilities.swift */; };
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
@@ -354,6 +361,13 @@
 		3A0840B31F924665002BC828 /* Realm+InMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+InMemory.swift"; sourceTree = "<group>"; };
 		3A6227021F9272A300D5F687 /* contents.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = contents.json; sourceTree = "<group>"; };
 		4D5EB0F720598E6000D4BC52 /* SessionRowProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRowProvider.swift; sourceTree = "<group>"; };
+		4D7482C920FF735D008D156C /* WWDCWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCWindowController.swift; sourceTree = "<group>"; };
+		4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsStatusViewController.swift; sourceTree = "<group>"; };
+		4DA25DC721063CD500762BBD /* TitleBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarViewController.swift; sourceTree = "<group>"; };
+		4DA25DC921063F4100762BBD /* VibrantTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrantTextField.swift; sourceTree = "<group>"; };
+		4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCTabViewControllerTabBar.swift; sourceTree = "<group>"; };
+		4DA9C4D020EC098800710354 /* DownloadsManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsManagementViewController.swift; sourceTree = "<group>"; };
+		4DBA2F7520FE71BF00ED0253 /* DownloadsStatusButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsStatusButton.swift; sourceTree = "<group>"; };
 		4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+AsyncHelpers.swift"; sourceTree = "<group>"; };
 		4DEEC3A22051C8D400376595 /* TestUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtilities.swift; sourceTree = "<group>"; };
 		4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionsTableViewController+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
@@ -708,6 +722,16 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		4DA9C4CF20EC096800710354 /* Downloads */ = {
+			isa = PBXGroup;
+			children = (
+				4DA9C4D020EC098800710354 /* DownloadsManagementViewController.swift */,
+				4DBA2F7520FE71BF00ED0253 /* DownloadsStatusButton.swift */,
+				4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */,
+			);
+			name = Downloads;
+			sourceTree = "<group>";
+		};
 		DD0159CD1ED0CD1D00F980F1 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
@@ -806,6 +830,7 @@
 		DD36A4BF1E478CF100B2EA88 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4DA9C4CF20EC096800710354 /* Downloads */,
 				DDCE7ECB1EA7A0E400C7A3CA /* Base */,
 				DDC678201EDB955600A4E19C /* Bookmarks */,
 				DDC6780D1EDB251E00A4E19C /* About */,
@@ -826,6 +851,7 @@
 				DDF32EB01EBE34CE0028E39D /* TableView */,
 				DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */,
 				DD382B7D1EAC3565009760C4 /* TabItemView.swift */,
+				4DA25DC921063F4100762BBD /* VibrantTextField.swift */,
 				DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */,
 				DDB3529B1EC8AB5D00254815 /* WWDCLayer.swift */,
 				DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */,
@@ -1273,7 +1299,10 @@
 			isa = PBXGroup;
 			children = (
 				DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */,
+				4D7482C920FF735D008D156C /* WWDCWindowController.swift */,
 				DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */,
+				4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */,
+				4DA25DC721063CD500762BBD /* TitleBarViewController.swift */,
 			);
 			name = Base;
 			sourceTree = "<group>";
@@ -1906,6 +1935,7 @@
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
+				4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */,
 				4D5EB0F820598E6000D4BC52 /* SessionRowProvider.swift in Sources */,
 				DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
@@ -1935,6 +1965,7 @@
 				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				DDDF807820BA3DAA007284F8 /* FeaturedSectionViewController.swift in Sources */,
+				4DBA2F7620FE71BF00ED0253 /* DownloadsStatusButton.swift in Sources */,
 				DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
@@ -1943,11 +1974,15 @@
 				DDB3529C1EC8AB5D00254815 /* WWDCLayer.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,
 				DD34A79B1EC3CD5900E0B575 /* Constants.swift in Sources */,
+				4DA9C4D120EC098800710354 /* DownloadsManagementViewController.swift in Sources */,
 				DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */,
 				DD71CC2A20BD009500BB5F47 /* AppCoordinator+Featured.swift in Sources */,
 				DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
+				4D7482CA20FF735D008D156C /* WWDCWindowController.swift in Sources */,
 				DD0159FC1ED23F7700F980F1 /* RemoteEnvironment.swift in Sources */,
+				4DA25DCC21064B4800762BBD /* WWDCTabViewControllerTabBar.swift in Sources */,
+				4D7482CC20FFAA09008D156C /* DownloadsStatusViewController.swift in Sources */,
 				DDDF807C20BA470B007284F8 /* FeaturedSectionViewModel.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
 				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
@@ -1971,6 +2006,7 @@
 				DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */,
 				DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */,
 				DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */,
+				4DA25DCA21063F4100762BBD /* VibrantTextField.swift in Sources */,
 				DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -2,7 +2,7 @@
 //  TestUtilities.swift
 //  ConfCoreTests
 //
-//  Created by Allen Humphreys on 3/8/18.
+//  Created by Allen Humphreys on 8/3/18.
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 
