@@ -83,12 +83,16 @@ public final class PUITimelineView: NSView {
         static let annotationBubbleDiameterHoverScale: CGFloat = 1.3
         static let annotationDragThresholdVertical: CGFloat = 15
         static let annotationDragThresholdHorizontal: CGFloat = 6
+        static let textSize: CGFloat = 14.0
+        static let timePreviewTextSize: CGFloat = 18.0
+        static let timePreviewYOffset: CGFloat = -31.0
     }
 
     private var borderLayer: PUIBoringLayer!
     private var bufferingProgressLayer: PUIBufferLayer!
     private var playbackProgressLayer: PUIBoringLayer!
     private var ghostProgressLayer: PUIBoringLayer!
+    private var timePreviewLayer: PUIBoringTextLayer!
 
     private func buildUI() {
         wantsLayer = true
@@ -133,6 +137,14 @@ public final class PUITimelineView: NSView {
         ghostProgressLayer.masksToBounds = true
 
         layer?.addSublayer(ghostProgressLayer)
+
+        // Time Preview
+
+        timePreviewLayer = PUIBoringTextLayer()
+        timePreviewLayer.contentsScale = window?.screen?.backingScaleFactor ?? 1
+        timePreviewLayer.masksToBounds = true
+
+        layer?.addSublayer(timePreviewLayer)
     }
 
     public override func layout() {
@@ -200,12 +212,12 @@ public final class PUITimelineView: NSView {
         guard hasMouseInside else { return }
 
         updateGhostProgress(with: event)
+        updateTimePreview(with: event)
         trackMouseAgainstAnnotations(with: event)
     }
 
     private func updateGhostProgress(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
-
         guard point.x > 0 && point.x < bounds.width else {
             return
         }
@@ -214,6 +226,25 @@ public final class PUITimelineView: NSView {
         var ghostRect = bounds
         ghostRect.size.width = ghostWidth
         ghostProgressLayer.frame = ghostRect
+    }
+
+    private func updateTimePreview(with event: NSEvent) {
+        let point = convert(event.locationInWindow, from: nil)
+        guard point.x > 0 && point.x < bounds.width else {
+            return
+        }
+
+        let timestamp = makeTimestamp(for: point)
+        timePreviewLayer.string = attributedString(for: timestamp, ofSize: Metrics.timePreviewTextSize)
+
+        var previewRect = timePreviewLayer.frame
+        if let textLayerContents = timePreviewLayer.string as? NSAttributedString {
+            let s = textLayerContents.size()
+            previewRect.size = CGSize(width: ceil(s.width), height: ceil(s.height))
+        }
+        previewRect.origin = CGPoint(x: point.x - previewRect.width / 2, y: Metrics.timePreviewYOffset)
+
+        timePreviewLayer.frame = previewRect
     }
 
     public override var mouseDownCanMoveWindow: Bool {
@@ -282,22 +313,26 @@ public final class PUITimelineView: NSView {
 
     private func reactToMouse() {
         if hasMouseInside {
-            borderLayer.animate {
-                borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor
-            }
-
-            ghostProgressLayer.animate {
-                ghostProgressLayer.opacity = 1
-            }
+            borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor }
+            ghostProgressLayer.animate { ghostProgressLayer.opacity = 1 }
+            timePreviewLayer.animate { timePreviewLayer.opacity = 1 }
         } else {
-            borderLayer.animate {
-                borderLayer.borderColor = NSColor.playerBorder.cgColor
-            }
-
-            ghostProgressLayer.animate {
-                ghostProgressLayer.opacity = 0
-            }
+            borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.cgColor }
+            ghostProgressLayer.animate { ghostProgressLayer.opacity = 0 }
+            timePreviewLayer.animate { timePreviewLayer.opacity = 0 }
         }
+    }
+
+    func makeTimestamp(for point: CGPoint) -> Double {
+        var timestamp = Double(point.x / bounds.width) * mediaDuration
+
+        if timestamp < 0 {
+            timestamp = 0
+        } else if timestamp > mediaDuration {
+            timestamp = mediaDuration
+        }
+
+        return timestamp
     }
 
     public override var allowsVibrancy: Bool {
@@ -350,12 +385,12 @@ public final class PUITimelineView: NSView {
         annotationLayers.forEach({ layer?.addSublayer($0) })
     }
 
-    private func attributedString(for timestamp: Double) -> NSAttributedString {
+    private func attributedString(for timestamp: Double, ofSize size: CGFloat = Metrics.textSize) -> NSAttributedString {
         let pStyle = NSMutableParagraphStyle()
         pStyle.alignment = .center
 
         let timeTextAttributes: [NSAttributedStringKey: Any] = [
-            .font: NSFont.systemFont(ofSize: 14, weight: .medium),
+            .font: NSFont.systemFont(ofSize: size, weight: .medium),
             .foregroundColor: NSColor.playerHighlight,
             .paragraphStyle: pStyle
         ]
@@ -469,6 +504,8 @@ public final class PUITimelineView: NSView {
         layer.transform = CATransform3DMakeScale(s, s, s)
         layer.borderWidth = 1
         layer.attachedLayer.animate { layer.attachedLayer.opacity = 1 }
+
+        timePreviewLayer.animate { timePreviewLayer.opacity = 0 }
     }
 
     private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -481,6 +518,7 @@ public final class PUITimelineView: NSView {
             layer.attachedLayer.animate { layer.attachedLayer.opacity = 0 }
         }
 
+        timePreviewLayer.animate { timePreviewLayer.opacity = 1 }
         delegate?.timelineDidHighlightAnnotation(nil)
     }
 
@@ -523,18 +561,6 @@ public final class PUITimelineView: NSView {
                     NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .default)
                 }
             }
-        }
-
-        func makeTimestamp(for point: CGPoint) -> Double {
-            var timestamp = Double(point.x / bounds.width) * mediaDuration
-
-            if timestamp < 0 {
-                timestamp = 0
-            } else if timestamp > mediaDuration {
-                timestamp = mediaDuration
-            }
-
-            return timestamp
         }
 
         func updateAnnotationTextLayer(at point: CGPoint) {
