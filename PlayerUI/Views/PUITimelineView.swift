@@ -58,6 +58,9 @@ public final class PUITimelineView: NSView {
     public var mediaDuration: Double = 0 {
         didSet {
             needsLayout = true
+
+            let widestTimestampString = attributedString(for: mediaDuration, ofSize: Metrics.timePreviewTextSize)
+            maxTimestampWidth = widestTimestampString.size().width + Metrics.timePreviewXOffset
         }
     }
 
@@ -68,6 +71,8 @@ public final class PUITimelineView: NSView {
     // MARK: - Private API
 
     private var annotationWindowController: PUIAnnotationWindowController?
+
+    private var maxTimestampWidth: CGFloat = Metrics.timePreviewXOffset
 
     weak var viewDelegate: PUITimelineViewDelegate?
 
@@ -85,7 +90,7 @@ public final class PUITimelineView: NSView {
         static let annotationDragThresholdHorizontal: CGFloat = 6
         static let textSize: CGFloat = 14.0
         static let timePreviewTextSize: CGFloat = 18.0
-        static let timePreviewXOffset: CGFloat = 65.0
+        static let timePreviewXOffset: CGFloat = 15.0
         static let timePreviewYOffset: CGFloat = -31.0
     }
 
@@ -231,7 +236,7 @@ public final class PUITimelineView: NSView {
 
     private func updateTimePreview(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
-        guard point.x > Metrics.timePreviewXOffset, point.x < (bounds.width - Metrics.timePreviewXOffset) else {
+        guard point.x > maxTimestampWidth, point.x < (bounds.width - maxTimestampWidth) else {
             timePreviewLayer.animateInvisible()
             return
         }
