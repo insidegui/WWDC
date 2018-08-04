@@ -85,6 +85,7 @@ public final class PUITimelineView: NSView {
         static let annotationDragThresholdHorizontal: CGFloat = 6
         static let textSize: CGFloat = 14.0
         static let timePreviewTextSize: CGFloat = 18.0
+        static let timePreviewXOffset: CGFloat = 65.0
         static let timePreviewYOffset: CGFloat = -31.0
     }
 
@@ -230,11 +231,13 @@ public final class PUITimelineView: NSView {
 
     private func updateTimePreview(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
-        guard point.x > 0 && point.x < bounds.width else {
+        guard point.x > Metrics.timePreviewXOffset, point.x < (bounds.width - Metrics.timePreviewXOffset) else {
+            timePreviewLayer.animateInvisible()
             return
         }
 
         let timestamp = makeTimestamp(for: point)
+        timePreviewLayer.animateVisible()
         timePreviewLayer.string = attributedString(for: timestamp, ofSize: Metrics.timePreviewTextSize)
 
         var previewRect = timePreviewLayer.frame
@@ -315,11 +318,11 @@ public final class PUITimelineView: NSView {
         if hasMouseInside {
             borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor }
             ghostProgressLayer.animate { ghostProgressLayer.opacity = 1 }
-            timePreviewLayer.animate { timePreviewLayer.opacity = 1 }
+            timePreviewLayer.animateVisible()
         } else {
             borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.cgColor }
             ghostProgressLayer.animate { ghostProgressLayer.opacity = 0 }
-            timePreviewLayer.animate { timePreviewLayer.opacity = 0 }
+            timePreviewLayer.animateInvisible()
         }
     }
 
@@ -503,9 +506,9 @@ public final class PUITimelineView: NSView {
         let s = Metrics.annotationBubbleDiameterHoverScale
         layer.transform = CATransform3DMakeScale(s, s, s)
         layer.borderWidth = 1
-        layer.attachedLayer.animate { layer.attachedLayer.opacity = 1 }
+        layer.attachedLayer.animateVisible()
 
-        timePreviewLayer.animate { timePreviewLayer.opacity = 0 }
+        timePreviewLayer.animateInvisible()
     }
 
     private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -515,10 +518,10 @@ public final class PUITimelineView: NSView {
         layer.animate {
             layer.transform = CATransform3DIdentity
             layer.borderWidth = 0
-            layer.attachedLayer.animate { layer.attachedLayer.opacity = 0 }
+            layer.attachedLayer.animateInvisible()
         }
 
-        timePreviewLayer.animate { timePreviewLayer.opacity = 1 }
+        timePreviewLayer.animateVisible()
         delegate?.timelineDidHighlightAnnotation(nil)
     }
 
@@ -543,10 +546,10 @@ public final class PUITimelineView: NSView {
             didSet {
                 if oldValue != .delete && mode == .delete {
                     NSCursor.disappearingItem.push()
-                    layer.attachedLayer.animate { layer.attachedLayer.opacity = 0 }
+                    layer.attachedLayer.animateInvisible()
                 } else if oldValue == .delete && mode != .delete {
                     NSCursor.pop()
-                    layer.attachedLayer.animate { layer.attachedLayer.opacity = 1 }
+                    layer.attachedLayer.animateVisible()
                 } else if mode == .none && cancelled {
                     layer.animate { layer.position = originalPosition }
                     updateAnnotationTextLayer(with: originalTimestampString)

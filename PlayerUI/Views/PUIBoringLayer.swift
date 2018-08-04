@@ -47,12 +47,13 @@ final class PUIBoringPlayerLayer: AVPlayerLayer {
         block()
         shouldAnimate = false
     }
-
 }
 
 final class PUIBoringTextLayer: CATextLayer {
 
     private var shouldAnimate: Bool = false
+
+    private var isVisible: Bool { return opacity > 0 }
 
     override func action(forKey event: String) -> CAAction? {
         if shouldAnimate {
@@ -62,12 +63,21 @@ final class PUIBoringTextLayer: CATextLayer {
         }
     }
 
-    func animate(with block: () -> Void) {
+    func animateVisible() {
+        guard !isVisible else { return }
+        animate { opacity = 1 }
+    }
+
+    func animateInvisible() {
+        guard isVisible else { return }
+        animate { opacity = 0 }
+    }
+
+    private func animate(with block: () -> Void) {
         shouldAnimate = true
         block()
         shouldAnimate = false
     }
-
 }
 
 class PUIBoringGradientLayer: CAGradientLayer {
