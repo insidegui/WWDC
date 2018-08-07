@@ -91,7 +91,7 @@ public final class PUITimelineView: NSView {
         static let textSize: CGFloat = 14.0
         static let timePreviewTextSize: CGFloat = 18.0
         static let timePreviewXOffset: CGFloat = 15.0
-        static let timePreviewYOffset: CGFloat = -31.0
+        static let timePreviewYOffset: CGFloat = -32.0
     }
 
     private var borderLayer: PUIBoringLayer!
@@ -147,7 +147,6 @@ public final class PUITimelineView: NSView {
         // Time Preview
 
         timePreviewLayer = PUIBoringTextLayer()
-        timePreviewLayer.contentsScale = window?.screen?.backingScaleFactor ?? 1
         timePreviewLayer.masksToBounds = true
 
         layer?.addSublayer(timePreviewLayer)
@@ -244,6 +243,7 @@ public final class PUITimelineView: NSView {
         let timestamp = makeTimestamp(for: point)
         timePreviewLayer.animateVisible()
         timePreviewLayer.string = attributedString(for: timestamp, ofSize: Metrics.timePreviewTextSize)
+        timePreviewLayer.contentsScale = window?.screen?.backingScaleFactor ?? 1
 
         var previewRect = timePreviewLayer.frame
         if let textLayerContents = timePreviewLayer.string as? NSAttributedString {
