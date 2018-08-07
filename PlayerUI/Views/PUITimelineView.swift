@@ -235,7 +235,7 @@ public final class PUITimelineView: NSView {
 
     private func updateTimePreview(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
-        guard point.x > maxTimestampWidth, point.x < (bounds.width - maxTimestampWidth) else {
+        guard (maxTimestampWidth...(bounds.width - maxTimestampWidth)).contains(point.x) else {
             timePreviewLayer.animateInvisible()
             return
         }
@@ -526,7 +526,6 @@ public final class PUITimelineView: NSView {
             layer.attachedLayer.animateInvisible()
         }
 
-        timePreviewLayer.animateVisible()
         delegate?.timelineDidHighlightAnnotation(nil)
     }
 
