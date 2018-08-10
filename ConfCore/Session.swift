@@ -193,7 +193,7 @@ extension Session {
     public func assets(matching types: [SessionAssetType]) -> Results<SessionAsset> {
         assert(!types.contains(.image), "This method does not support finding image assets")
 
-        let predicate = types.map { "rawAssetType == \($0.rawValue)" }.joined(separator: " OR ")
+        let predicate = NSPredicate(format: "rawAssetType IN %@", types.map { $0.rawValue })
         return assets.filter(predicate)
     }
 }
