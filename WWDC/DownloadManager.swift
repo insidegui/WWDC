@@ -389,7 +389,7 @@ final class DownloadManager: NSObject {
         var notPresent = [String]()
 
         for session in expectedOnDisk {
-            if let asset = session.asset(ofType: SessionAssetType.hdVideo) {
+            if let asset = session.asset(ofType: .hdVideo) {
                 if !hasVideo(asset.remoteURL) {
                     notPresent.append(asset.relativeLocalURL)
                 }
