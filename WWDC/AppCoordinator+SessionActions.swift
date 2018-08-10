@@ -19,7 +19,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let url = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first?.remoteURL else { return }
+        guard let url = viewModel.session.asset(ofType: .hdVideo)?.remoteURL else { return }
 
         _ = DownloadManager.shared.cancelDownload(url)
     }
@@ -37,7 +37,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     func sessionActionsDidSelectSlides(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let slidesAsset = viewModel.session.asset(of: .slides) else { return }
+        guard let slidesAsset = viewModel.session.asset(ofType: .slides) else { return }
 
         guard let url = URL(string: slidesAsset.remoteURL) else { return }
 
@@ -47,7 +47,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
+        guard let videoAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
 
         DownloadManager.shared.download(videoAsset)
     }
@@ -55,7 +55,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
+        guard let videoAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
 
         let alert = WWDCAlert.create()
 
@@ -160,7 +160,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         guard let sender = sender else { return }
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let webpageAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.webpage.rawValue).first else { return }
+        guard let webpageAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
 
         guard let url = URL(string: webpageAsset.remoteURL) else { return }
 

@@ -21,7 +21,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
                 if let instance = session.instances.first {
                     guard !instance.isCurrentlyLive else { return }
 
-                    guard session.asset(of: .streamingVideo) != nil else {
+                    guard session.asset(ofType: .streamingVideo) != nil else {
                         return
                     }
                 }
@@ -71,7 +71,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
         }
 
         viewModels.forEach { viewModel in
-            guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
+            guard let videoAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
 
             DownloadManager.shared.download(videoAsset)
         }
@@ -79,7 +79,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
 
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel]) {
         viewModels.forEach { viewModel in
-            guard let videoAsset = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else { return }
+            guard let videoAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
 
             guard DownloadManager.shared.isDownloading(videoAsset.remoteURL) else { return }
 

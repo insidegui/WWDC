@@ -176,7 +176,7 @@ final class DownloadManager: NSObject {
     }
 
     func localFileURL(for session: Session) -> URL? {
-        guard let asset = session.asset(of: .hdVideo) else { return nil }
+        guard let asset = session.asset(ofType: .hdVideo) else { return nil }
 
         let path = localStoragePath(for: asset)
 
@@ -233,7 +233,7 @@ final class DownloadManager: NSObject {
     }
 
     func downloadedFileURL(for session: Session) -> URL? {
-        guard let asset = session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first else {
+        guard let asset = session.asset(ofType: .hdVideo) else {
             return nil
         }
 
@@ -245,7 +245,7 @@ final class DownloadManager: NSObject {
     }
 
     func downloadStatusObservable(for session: Session) -> Observable<DownloadStatus>? {
-        guard let asset = session.asset(of: .hdVideo) else { return nil }
+        guard let asset = session.asset(ofType: .hdVideo) else { return nil }
 
         return Observable<DownloadStatus>.create { observer -> Disposable in
             let nc = NotificationCenter.default
@@ -389,7 +389,7 @@ final class DownloadManager: NSObject {
         var notPresent = [String]()
 
         for session in expectedOnDisk {
-            if let asset = session.asset(of: SessionAssetType.hdVideo) {
+            if let asset = session.asset(ofType: SessionAssetType.hdVideo) {
                 if !hasVideo(asset.remoteURL) {
                     notPresent.append(asset.relativeLocalURL)
                 }

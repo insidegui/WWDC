@@ -29,34 +29,6 @@ enum PlaybackError: Error {
     }
 }
 
-extension Session {
-
-    func asset(of type: SessionAssetType) -> SessionAsset? {
-        if type == .image {
-            return imageAsset()
-        } else {
-            let filtered = assets.filter("rawAssetType == %@", type.rawValue)
-            return filtered.first
-        }
-    }
-
-    func imageAsset() -> SessionAsset? {
-        guard let path = event.first?.imagesPath else { return nil }
-        guard let baseURL = URL(string: path) else { return nil }
-
-        let filename = "\(staticContentId)_wide_900x506_1x.jpg"
-
-        let url = baseURL.appendingPathComponent("\(staticContentId)/\(filename)")
-
-        let asset = SessionAsset()
-
-        asset.assetType = .image
-        asset.remoteURL = url.absoluteString
-
-        return asset
-    }
-}
-
 final class PlaybackViewModel {
 
     let sessionViewModel: SessionViewModel
@@ -87,7 +59,7 @@ final class PlaybackViewModel {
 
         // first, check if the session is being live streamed now
         if session.instances.filter("isCurrentlyLive == true").count > 0 {
-            if let liveAsset = session.assets.filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).first, let liveURL = URL(string: liveAsset.remoteURL) {
+            if let liveURL = session.asset(ofType: .liveStreamVideo).map({ URL(string: $0.remoteURL) }) {
                 streamUrl = liveURL
                 remoteMediaURL = liveURL
                 isLiveStream = true
@@ -101,7 +73,7 @@ final class PlaybackViewModel {
         // not live
         if !isLiveStream {
             // must have at least streaming video asset
-            guard let asset = session.asset(of: .streamingVideo) else {
+            guard let asset = session.asset(ofType: .streamingVideo) else {
                 throw PlaybackError.assetNotFound(session.identifier)
             }
 
