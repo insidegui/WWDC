@@ -6,9 +6,11 @@ disabled_rules:
   - identifier_name
   - todo
   - function_parameter_count
-  - fallthrough
   - unused_closure_parameter
   - nesting
+
+opt_in_rules:
+  - redundant_nil_coalescing
 
 excluded:
   - Carthage
