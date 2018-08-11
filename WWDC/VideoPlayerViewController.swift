@@ -32,7 +32,11 @@ final class VideoPlayerViewController: NSViewController {
 
     weak var delegate: VideoPlayerViewControllerDelegate?
 
-    var playbackViewModel: PlaybackViewModel?
+    var playbackViewModel: PlaybackViewModel? {
+        didSet {
+            updateExternalPlaybackData()
+        }
+    }
 
     var sessionViewModel: SessionViewModel {
         didSet {
@@ -146,14 +150,18 @@ final class VideoPlayerViewController: NSViewController {
         playerView.player = player
         playerView.play(self)
 
-        if let playbackViewModel = playbackViewModel {
-            playerView.remoteMediaUrl = playbackViewModel.remoteMediaURL
-            playerView.mediaTitle = playbackViewModel.title
-            playerView.mediaPosterUrl = playbackViewModel.imageURL
-            playerView.mediaIsLiveStream = playbackViewModel.isLiveStream
-        }
+        updateExternalPlaybackData()
 
         setupTranscriptSync()
+    }
+
+    private func updateExternalPlaybackData() {
+        guard let playbackViewModel = playbackViewModel else { return }
+
+        playerView.remoteMediaUrl = playbackViewModel.remoteMediaURL
+        playerView.mediaTitle = playbackViewModel.title
+        playerView.mediaPosterUrl = playbackViewModel.imageURL
+        playerView.mediaIsLiveStream = playbackViewModel.isLiveStream
     }
 
     func updateUI() {
