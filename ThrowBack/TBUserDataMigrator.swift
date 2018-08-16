@@ -109,7 +109,7 @@ public final class TBUserDataMigrator {
                 newSession.progresses.append(progress)
             }
 
-            if let asset = newSession.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first {
+            if let asset = newSession.asset(ofType: .hdVideo) {
                 let basePath = TBPreferences.shared.localVideoStoragePath
                 let newLocalFileURL = URL(fileURLWithPath: basePath + "/" + asset.relativeLocalURL)
                 let localDirectoryURL = newLocalFileURL.deletingLastPathComponent()

@@ -163,3 +163,37 @@ public class Session: Object {
     }
 
 }
+
+extension Session {
+
+    /// Returns the first asset matching the requested type
+    public func asset(ofType type: SessionAssetType) -> SessionAsset? {
+        if type == .image {
+            return imageAsset()
+        } else {
+            return assets(matching: [type]).first
+        }
+    }
+
+    private func imageAsset() -> SessionAsset? {
+        guard let baseURL = event.first.flatMap({ URL(string: $0.imagesPath) }) else { return nil }
+
+        let filename = "\(staticContentId)_wide_900x506_1x.jpg"
+
+        let url = baseURL.appendingPathComponent("\(staticContentId)/\(filename)")
+
+        let asset = SessionAsset()
+
+        asset.assetType = .image
+        asset.remoteURL = url.absoluteString
+
+        return asset
+    }
+
+    public func assets(matching types: [SessionAssetType]) -> Results<SessionAsset> {
+        assert(!types.contains(.image), "This method does not support finding image assets")
+
+        let predicate = NSPredicate(format: "rawAssetType IN %@", types.map { $0.rawValue })
+        return assets.filter(predicate)
+    }
+}

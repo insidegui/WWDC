@@ -11,7 +11,7 @@ lessThan() {
     [ "$1" = "$2" ] && return 1 || lessThanOrEqual $1 $2
 }
 
-SWIFTLINT_MIN="0.24"
+SWIFTLINT_MIN="0.27"
 SWIFTLINT_INSTALLED=$([ `command -v swiftlint` ] && echo true || echo false )
 BREW_INSTALLED=$([ `command -v brew` ] && echo true || echo false )
 

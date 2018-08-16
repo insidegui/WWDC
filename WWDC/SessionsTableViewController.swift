@@ -517,7 +517,7 @@ class SessionsTableViewController: NSViewController {
         case .watched:
             let canMarkAsWatched = !viewModel.session.isWatched
                 && viewModel.session.instances.first?.isCurrentlyLive != true
-                && viewModel.session.asset(of: .streamingVideo) != nil
+                && viewModel.session.asset(ofType: .streamingVideo) != nil
 
             return canMarkAsWatched
         case .unwatched:
@@ -529,7 +529,7 @@ class SessionsTableViewController: NSViewController {
         default: ()
         }
 
-        let remoteURL = viewModel.session.assets.filter("rawAssetType == %@", SessionAssetType.hdVideo.rawValue).first?.remoteURL
+        let remoteURL = viewModel.session.asset(ofType: .hdVideo)?.remoteURL
 
         switch (menuItem.option, remoteURL) {
         case let (.download, remoteURL?):

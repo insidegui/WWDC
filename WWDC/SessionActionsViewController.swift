@@ -160,7 +160,7 @@ class SessionActionsViewController: NSViewController {
 
         guard let viewModel = viewModel else { return }
 
-        slidesButton.isHidden = (viewModel.session.asset(of: .slides) == nil)
+        slidesButton.isHidden = (viewModel.session.asset(ofType: .slides) == nil)
         calendarButton.isHidden = (viewModel.sessionInstance.startTime < today())
 
         viewModel.rxIsFavorite.subscribe(onNext: { [weak self] isFavorite in

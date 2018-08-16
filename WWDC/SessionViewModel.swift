@@ -135,7 +135,7 @@ final class SessionViewModel {
     }()
 
     lazy var rxPlayableContent: Observable<Results<SessionAsset>> = {
-        let playableAssets = self.session.assets.filter("rawAssetType == %@ OR rawAssetType == %@", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
+        let playableAssets = self.session.assets(matching: [.streamingVideo, .liveStreamVideo])
 
         return Observable.collection(from: playableAssets)
     }()
@@ -184,7 +184,7 @@ final class SessionViewModel {
         identifier = session.identifier
         imageUrl = SessionViewModel.imageUrl(for: session)
 
-        if let webUrlStr = session.asset(of: .webpage)?.remoteURL {
+        if let webUrlStr = session.asset(ofType: .webpage)?.remoteURL {
             webUrl = URL(string: webUrlStr)
         }
     }
@@ -271,7 +271,7 @@ final class SessionViewModel {
             }
         }
 
-        let imageAsset = session.asset(of: .image)
+        let imageAsset = session.asset(ofType: .image)
 
         guard let thumbnail = imageAsset?.remoteURL, let thumbnailUrl = URL(string: thumbnail) else { return nil }
 
@@ -279,7 +279,7 @@ final class SessionViewModel {
     }
 
     static func webUrl(for session: Session) -> URL? {
-        guard let url = session.asset(of: .webpage)?.remoteURL else { return nil }
+        guard let url = session.asset(ofType: .webpage)?.remoteURL else { return nil }
 
         return URL(string: url)
     }
