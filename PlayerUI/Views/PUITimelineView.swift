@@ -58,9 +58,6 @@ public final class PUITimelineView: NSView {
     public var mediaDuration: Double = 0 {
         didSet {
             needsLayout = true
-
-            let widestTimestampString = attributedString(for: mediaDuration, ofSize: Metrics.timePreviewTextSize)
-            maxTimestampWidth = widestTimestampString.size().width + Metrics.timePreviewXOffset
         }
     }
 
@@ -71,8 +68,6 @@ public final class PUITimelineView: NSView {
     // MARK: - Private API
 
     private var annotationWindowController: PUIAnnotationWindowController?
-
-    private var maxTimestampWidth: CGFloat = Metrics.timePreviewXOffset
 
     weak var viewDelegate: PUITimelineViewDelegate?
 
@@ -90,8 +85,9 @@ public final class PUITimelineView: NSView {
         static let annotationDragThresholdHorizontal: CGFloat = 6
         static let textSize: CGFloat = 14.0
         static let timePreviewTextSize: CGFloat = 18.0
-        static let timePreviewXOffset: CGFloat = 15.0
         static let timePreviewYOffset: CGFloat = -32.0
+        static let timePreviewLeftOfMouseWidthMultiplier: CGFloat = 0.5
+        static let timePreviewRightOfMouseWidthMultiplier: CGFloat = 0.7
     }
 
     private var borderLayer: PUIBoringLayer!
@@ -235,14 +231,27 @@ public final class PUITimelineView: NSView {
 
     private func updateTimePreview(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
-        guard (maxTimestampWidth...(bounds.width - maxTimestampWidth)).contains(point.x) else {
+
+        let currentTimestamp = makeTimestamp(for: CGPoint(x: playbackProgressLayer.frame.size.width, y: point.y))
+        let currentTimestampString = attributedString(for: currentTimestamp, ofSize: Metrics.timePreviewTextSize)
+        let currentTimestampWidth = currentTimestampString.size().width
+
+        let remainingTimestamp = makeTimestamp(for: CGPoint(x: bounds.width - point.x, y: point.y))
+        let remainingTimestampString = attributedString(for: remainingTimestamp, ofSize: Metrics.timePreviewTextSize)
+        let remainingTimestampWidth = remainingTimestampString.size().width
+
+        let previewTimestampString = attributedString(for: makeTimestamp(for: point), ofSize: Metrics.timePreviewTextSize)
+        let previewTimestampWidth = previewTimestampString.size().width
+
+        let leftMargin = currentTimestampWidth + (previewTimestampWidth * Metrics.timePreviewLeftOfMouseWidthMultiplier)
+        let rightMargin = bounds.width - remainingTimestampWidth - (previewTimestampWidth * Metrics.timePreviewRightOfMouseWidthMultiplier)
+        guard (leftMargin...rightMargin).contains(point.x) else {
             timePreviewLayer.animateInvisible()
             return
         }
 
-        let timestamp = makeTimestamp(for: point)
         timePreviewLayer.animateVisible()
-        timePreviewLayer.string = attributedString(for: timestamp, ofSize: Metrics.timePreviewTextSize)
+        timePreviewLayer.string = previewTimestampString
         timePreviewLayer.contentsScale = window?.screen?.backingScaleFactor ?? 1
 
         var previewRect = timePreviewLayer.frame
