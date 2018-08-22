@@ -250,7 +250,7 @@ public final class PUITimelineView: NSView {
             return
         }
 
-        timePreviewLayer.animateVisible()
+        timePreviewLayer.opacity = 1
         timePreviewLayer.string = previewTimestampString
         timePreviewLayer.contentsScale = window?.screen?.backingScaleFactor ?? 1
 
@@ -522,7 +522,7 @@ public final class PUITimelineView: NSView {
         layer.borderWidth = 1
         layer.attachedLayer.animateVisible()
 
-        timePreviewLayer.animateInvisible()
+        timePreviewLayer.opacity = 0
     }
 
     private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -532,7 +532,7 @@ public final class PUITimelineView: NSView {
         layer.animate {
             layer.transform = CATransform3DIdentity
             layer.borderWidth = 0
-            layer.attachedLayer.animateInvisible()
+            layer.attachedLayer.opacity = 0
         }
 
         delegate?.timelineDidHighlightAnnotation(nil)
