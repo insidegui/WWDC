@@ -20,6 +20,7 @@ enum FilterIdentifier: String {
     case isFavorite
     case isDownloaded
     case isUnwatched
+    case hasBookmarks
 }
 
 final class SearchCoordinator {
@@ -115,6 +116,13 @@ final class SearchCoordinator {
                                                    defaultValue: false,
                                                    customPredicate: unwatchedPredicate)
 
+        let bookmarksPredicate = NSPredicate(format: "SUBQUERY(bookmarks, $bookmark, $bookmark.isDeleted == false).@count > 0")
+
+        var scheduleBookmarksFilter = ToggleFilter(identifier: FilterIdentifier.hasBookmarks.rawValue,
+                                                     isOn: false,
+                                                     defaultValue: false,
+                                                     customPredicate: bookmarksPredicate)
+
         // Schedule Filtering State Restoration
 
         let savedScheduleFiltersState = restorationFiltersState?[MainWindowTab.schedule.stringValue()]
@@ -126,6 +134,7 @@ final class SearchCoordinator {
         scheduleFavoriteFilter.isOn = savedScheduleFiltersState?[FilterIdentifier.isFavorite.rawValue]["isOn"].bool ?? false
         scheduleDownloadedFilter.isOn = savedScheduleFiltersState?[FilterIdentifier.isDownloaded.rawValue]["isOn"].bool ?? false
         scheduleUnwatchedFilter.isOn = savedScheduleFiltersState?[FilterIdentifier.isUnwatched.rawValue]["isOn"].bool ?? false
+        scheduleBookmarksFilter.isOn = savedScheduleFiltersState?[FilterIdentifier.hasBookmarks.rawValue]["isOn"].bool ?? false
 
         let scheduleSearchFilters: [FilterType] = [scheduleTextualFilter,
                                                    scheduleEventFilter,
@@ -133,7 +142,8 @@ final class SearchCoordinator {
                                                    scheduleTrackFilter,
                                                    scheduleFavoriteFilter,
                                                    scheduleDownloadedFilter,
-                                                   scheduleUnwatchedFilter]
+                                                   scheduleUnwatchedFilter,
+                                                   scheduleBookmarksFilter]
 
         if !scheduleSearchController.filters.isIdentical(to: scheduleSearchFilters) {
             scheduleSearchController.filters = scheduleSearchFilters
@@ -159,6 +169,7 @@ final class SearchCoordinator {
         var videosFavoriteFilter = scheduleFavoriteFilter
         var videosDownloadedFilter = scheduleDownloadedFilter
         var videosUnwatchedFilter = scheduleUnwatchedFilter
+        var videosBookmarksFilter = scheduleBookmarksFilter
 
         // Videos Filtering State Restoration
 
@@ -169,6 +180,7 @@ final class SearchCoordinator {
         videosFavoriteFilter.isOn = savedVideosFiltersState?[FilterIdentifier.isFavorite.rawValue]["isOn"].bool ?? false
         videosDownloadedFilter.isOn = savedVideosFiltersState?[FilterIdentifier.isDownloaded.rawValue]["isOn"].bool ?? false
         videosUnwatchedFilter.isOn = savedVideosFiltersState?[FilterIdentifier.isUnwatched.rawValue]["isOn"].bool ?? false
+        videosBookmarksFilter.isOn = savedVideosFiltersState?[FilterIdentifier.hasBookmarks.rawValue]["isOn"].bool ?? false
 
         let videosSearchFilters: [FilterType] = [videosTextualFilter,
                                                  videosEventFilter,
@@ -176,7 +188,8 @@ final class SearchCoordinator {
                                                  videosTrackFilter,
                                                  videosFavoriteFilter,
                                                  videosDownloadedFilter,
-                                                 videosUnwatchedFilter]
+                                                 videosUnwatchedFilter,
+                                                 videosBookmarksFilter]
 
         if !videosSearchController.filters.isIdentical(to: videosSearchFilters) {
             videosSearchController.filters = videosSearchFilters

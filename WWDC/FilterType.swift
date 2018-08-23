@@ -43,7 +43,7 @@ extension Dictionary where Key == String, Value == [ String: Any ] {
                 //MultipleChoiceFilter
                 self[filterID.rawValue] = filter.dictionaryRepresentation()
 
-            case .isFavorite, .isDownloaded, .isUnwatched:
+            case .isFavorite, .isDownloaded, .isUnwatched, .hasBookmarks:
                 //ToggleFilters
                 self[filterID.rawValue] = filter.dictionaryRepresentation()
             }

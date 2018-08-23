@@ -46,7 +46,7 @@ class SessionsTableViewController: NSViewController {
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
 
-        scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
+        scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 320).isActive = true
 
         view.addSubview(scrollView)
         view.addSubview(searchController.view)

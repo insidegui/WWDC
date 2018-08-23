@@ -20,6 +20,8 @@ class PUIAnnotationWindowController: NSWindowController {
 
         super.init(window: window)
 
+        window.isOpaque = false
+        window.backgroundColor = .clear
         window.contentView = vfxView
     }
 
