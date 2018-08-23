@@ -633,8 +633,10 @@ public final class PUITimelineView: NSView {
 
                     self.delegate?.timelineDidMoveAnnotation(annotation, to: timestamp)
                 case .none:
-                    self.selectedAnnotation = (annotation, layer)
-                    self.delegate?.timelineDidSelectAnnotation(annotation)
+                    if !isSnappingBack {
+                        self.selectedAnnotation = (annotation, layer)
+                        self.delegate?.timelineDidSelectAnnotation(annotation)
+                    }
                 }
 
                 mode = .none
@@ -728,12 +730,7 @@ public final class PUITimelineView: NSView {
 
         window?.addChildWindow(annotationWindow, ordered: .above)
         annotationWindow.setFrameOrigin(screenRect.origin)
-
-        if annotation.isEmpty {
-            annotationWindow.makeKeyAndOrderFront(nil)
-        } else {
-            annotationWindow.orderFront(nil)
-        }
+        annotationWindow.makeKeyAndOrderFront(nil)
 
         annotationWindow.animator().alphaValue = 1
 
