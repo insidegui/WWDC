@@ -154,6 +154,13 @@ public final class PUITimelineView: NSView {
         layer?.addSublayer(timePreviewLayer)
     }
 
+    public func resetUI() {
+        playbackProgress = 0
+        annotations = []
+        loadedSegments = []
+        mediaDuration = 0 // Must be last
+    }
+
     public override func layout() {
         super.layout()
 
@@ -276,6 +283,7 @@ public final class PUITimelineView: NSView {
     }
 
     public override func mouseDown(with event: NSEvent) {
+        guard hasValidMediaDuration else { return }
         if let targetAnnotation = hoveredAnnotation {
             mouseDown(targetAnnotation.annotation, layer: targetAnnotation.layer, originalEvent: event)
             return
