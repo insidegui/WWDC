@@ -92,7 +92,7 @@ public final class TranscriptIndexer {
 
     fileprivate func store(_ transcripts: [Transcript]) {
         storage.backgroundUpdate { [weak self] backgroundRealm in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
 
             transcripts.forEach { transcript in
                 guard let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: transcript.identifier) else {
@@ -119,7 +119,7 @@ public final class TranscriptIndexer {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
 
             defer {
                 self.transcriptIndexingProgress?.completedUnitCount += 1

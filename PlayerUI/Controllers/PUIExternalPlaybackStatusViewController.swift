@@ -23,7 +23,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
         return f
     }()
 
-    private lazy var context = CIContext(options: [kCIContextUseSoftwareRenderer: true])
+    private lazy var context = CIContext(options: [.useSoftwareRenderer: true])
 
     var snapshot: CGImage? {
         didSet {

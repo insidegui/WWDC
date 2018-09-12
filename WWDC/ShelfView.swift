@@ -25,7 +25,7 @@ final class ShelfView: NSView {
         layer = CALayer()
 
         imageLayer = CALayer()
-        imageLayer.contentsGravity = kCAGravityResizeAspectFill
+        imageLayer.contentsGravity = .resizeAspectFill
         imageLayer.autoresizingMask = [.layerHeightSizable, .layerWidthSizable]
         imageLayer.frame = bounds
 

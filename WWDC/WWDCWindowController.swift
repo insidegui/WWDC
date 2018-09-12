@@ -35,6 +35,10 @@ class WWDCWindowController: NSWindowController {
         window?.appearance = WWDCAppearance.appearance()
         window?.titleVisibility = .hidden
         window?.addTitlebarAccessoryViewController(titleBarViewController)
-        window?.toolbar = NSToolbar(identifier: NSToolbar.Identifier(rawValue: "DummyToolbar"))
+        window?.toolbar = NSToolbar(identifier: .dummyToolbar)
     }
+}
+
+extension NSToolbar.Identifier {
+    static let dummyToolbar = NSToolbar.Identifier("DummyToolbar")
 }

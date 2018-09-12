@@ -228,7 +228,7 @@ public final class Storage {
         guard case .success(let assets) = liveVideosResult else { return }
 
         performSerializedBackgroundWrite(writeBlock: { [weak self] backgroundRealm in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
 
             assets.forEach { asset in
                 asset.identifier = asset.generateIdentifier()
@@ -378,7 +378,7 @@ public final class Storage {
         let safeObjects = objects.map { ThreadSafeReference(to: $0) }
 
         performSerializedBackgroundWrite(writeBlock: { [weak self] backgroundRealm in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
 
             let resolvedObjects = safeObjects.compactMap { backgroundRealm.resolve($0) }
 

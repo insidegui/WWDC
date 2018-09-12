@@ -281,7 +281,7 @@ public final class PUITimelineView: NSView {
 
         var startedInteractiveSeek = false
 
-        window?.trackEvents(matching: [.pressure, .leftMouseUp, .leftMouseDragged, .tabletPoint], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { event, stop in
+        window?.trackEvents(matching: [.pressure, .leftMouseUp, .leftMouseDragged, .tabletPoint], timeout: NSEvent.foreverDuration, mode: .eventTracking) { event, stop in
             let point = self.convert((event?.locationInWindow)!, from: nil)
             let progress = Double(point.x / self.bounds.width)
 
@@ -406,7 +406,7 @@ public final class PUITimelineView: NSView {
         let pStyle = NSMutableParagraphStyle()
         pStyle.alignment = .center
 
-        let timeTextAttributes: [NSAttributedStringKey: Any] = [
+        let timeTextAttributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: size, weight: .medium),
             .foregroundColor: NSColor.playerHighlight,
             .paragraphStyle: pStyle
@@ -591,7 +591,7 @@ public final class PUITimelineView: NSView {
             layer.attachedLayer.string = str
         }
 
-        window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged, .keyUp], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { event, stop in
+        window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged, .keyUp], timeout: NSEvent.foreverDuration, mode: .eventTracking) { event, stop in
             let point = self.convert((event?.locationInWindow)!, from: nil)
 
             switch event?.type {

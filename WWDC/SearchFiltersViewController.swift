@@ -43,13 +43,21 @@ extension NSSegmentedControl {
 
 }
 
+extension NSStoryboard.Name {
+    static let main = NSStoryboard.Name("Main")
+}
+
+extension NSStoryboard.SceneIdentifier {
+    static let searchFiltersViewController = NSStoryboard.SceneIdentifier("SearchFiltersViewController")
+}
+
 final class SearchFiltersViewController: NSViewController {
 
     static func loadFromStoryboard() -> SearchFiltersViewController {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
+        let storyboard = NSStoryboard(name: .main, bundle: nil)
 
         // swiftlint:disable:next force_cast
-        return storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "SearchFiltersViewController")) as! SearchFiltersViewController
+        return storyboard.instantiateController(withIdentifier: .searchFiltersViewController) as! SearchFiltersViewController
     }
 
     @IBOutlet weak var eventsPopUp: NSPopUpButton!

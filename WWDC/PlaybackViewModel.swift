@@ -107,13 +107,13 @@ final class PlaybackViewModel {
 
         if !isLiveStream {
             if session.isWatched {
-                player.seek(to: CMTimeMakeWithSeconds(0, 9000))
+                player.seek(to: CMTimeMakeWithSeconds(0, preferredTimescale: 9000))
             } else {
-                player.seek(to: CMTimeMakeWithSeconds(Float64(session.currentPosition()), 9000))
+                player.seek(to: CMTimeMakeWithSeconds(Float64(session.currentPosition()), preferredTimescale: 9000))
             }
 
-            timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, 9000), queue: DispatchQueue.main) { [weak self] currentTime in
-                guard let `self` = self else { return }
+            timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, preferredTimescale: 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+                guard let self = self else { return }
 
                 guard let duration = self.player.currentItem?.asset.durationIfLoaded else { return }
 

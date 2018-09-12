@@ -11,6 +11,14 @@ import RxSwift
 import RxCocoa
 import ConfCore
 
+extension NSStoryboard.Name {
+    static let preferences = NSStoryboard.Name("Preferences")
+}
+
+extension NSStoryboard.SceneIdentifier {
+    static let generalPreferencesViewController = NSStoryboard.SceneIdentifier("GeneralPreferencesViewController")
+}
+
 class GeneralPreferencesViewController: NSViewController {
 
     #if ICLOUD
@@ -18,7 +26,7 @@ class GeneralPreferencesViewController: NSViewController {
     #endif
 
     static func loadFromStoryboard() -> GeneralPreferencesViewController {
-        let vc = NSStoryboard(name: NSStoryboard.Name(rawValue: "Preferences"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "GeneralPreferencesViewController"))
+        let vc = NSStoryboard(name: .preferences, bundle: nil).instantiateController(withIdentifier: .generalPreferencesViewController)
 
         // swiftlint:disable:next force_cast
         return vc as! GeneralPreferencesViewController
