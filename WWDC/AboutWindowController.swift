@@ -8,10 +8,6 @@
 
 import Cocoa
 
-extension NSNib.Name {
-    static let aboutWindowController = NSNib.Name("AboutWindowController")
-}
-
 final class AboutWindowController: NSWindowController {
 
     @IBOutlet weak var backgroundView: NSVisualEffectView!
@@ -33,7 +29,7 @@ final class AboutWindowController: NSWindowController {
     }
 
     convenience init(infoText: String?) {
-        self.init(windowNibName: .aboutWindowController)
+        self.init(windowNibName: "AboutWindowController")
         self.infoText = infoText
     }
 

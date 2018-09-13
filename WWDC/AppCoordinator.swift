@@ -14,11 +14,6 @@ import PlayerUI
 import ThrowBack
 import os.log
 
-extension NSSplitView.AutosaveName {
-    static let scheduleSplitView = NSSplitView.AutosaveName("ScheduleSplitView")
-    static let videosSplitView = NSSplitView.AutosaveName("VideosSplitView")
-}
-
 final class AppCoordinator {
 
     let log = OSLog(subsystem: "WWDC", category: "AppCoordinator")
@@ -100,7 +95,7 @@ final class AppCoordinator {
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
         scheduleController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
-        scheduleController.splitView.autosaveName = .scheduleSplitView
+        scheduleController.splitView.autosaveName = "ScheduleSplitView"
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
         scheduleItem.initialFirstResponder = scheduleController.listViewController.tableView
@@ -110,7 +105,7 @@ final class AppCoordinator {
         videosController = SessionsSplitViewController(windowController: windowController, listStyle: .videos)
         videosController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Videos")
         videosController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "VideosSplitView")
-        videosController.splitView.autosaveName = .videosSplitView
+        videosController.splitView.autosaveName = "VideosSplitView"
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
         videosItem.initialFirstResponder = videosController.listViewController.tableView
