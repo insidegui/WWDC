@@ -3,9 +3,10 @@ osx_image: xcode10
 before_install:
   - brew update
   - brew outdated swiftlint || brew upgrade swiftlint
-script:
+before_script:
   - xcodebuild -version
   - carthage version
   - swiftlint version
   - "./bootstrap.sh"
+script:
   - set -o pipefail && env "NSUnbufferedIO=YES" xcodebuild test -scheme WWDC -project WWDC.xcodeproj | xcpretty -f `xcpretty-travis-formatter`
