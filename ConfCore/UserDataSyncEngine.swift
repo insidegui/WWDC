@@ -69,8 +69,8 @@ public final class UserDataSyncEngine {
         }
     }
 
-    private lazy var customZoneID: CKRecordZoneID = {
-        return CKRecordZoneID(zoneName: Constants.zoneName, ownerName: CKCurrentUserDefaultName)
+    private lazy var customZoneID: CKRecordZone.ID = {
+        return CKRecordZone.ID(zoneName: Constants.zoneName, ownerName: CKCurrentUserDefaultName)
     }()
 
     // MARK: - State management
@@ -272,7 +272,7 @@ public final class UserDataSyncEngine {
 
         let subscription = CKDatabaseSubscription(subscriptionID: Constants.privateSubscriptionId)
 
-        let notificationInfo = CKNotificationInfo()
+        let notificationInfo = CKSubscription.NotificationInfo()
         notificationInfo.shouldSendContentAvailable = true
         subscription.notificationInfo = notificationInfo
 
@@ -360,7 +360,7 @@ public final class UserDataSyncEngine {
     private func fetchChanges() {
         var changedRecords: [CKRecord] = []
 
-        let options = CKFetchRecordZoneChangesOptions()
+        let options = CKFetchRecordZoneChangesOperation.ZoneOptions()
         options.previousServerChangeToken = privateChangeToken
 
         let operation = CKFetchRecordZoneChangesOperation(recordZoneIDs: [customZoneID], optionsByRecordZoneID: [customZoneID: options])
@@ -652,8 +652,8 @@ public final class UserDataSyncEngine {
 
         os_log("Will incinerate %{public}d deleted object(s)", log: log, type: .info, deletedFavorites.count + deletedBookmarks.count)
 
-        let favoriteIDs: [CKRecordID] = deletedFavorites.compactMap { $0.ckRecordID }
-        let bookmarkIDs: [CKRecordID] = deletedBookmarks.compactMap { $0.ckRecordID }
+        let favoriteIDs: [CKRecord.ID] = deletedFavorites.compactMap { $0.ckRecordID }
+        let bookmarkIDs: [CKRecord.ID] = deletedBookmarks.compactMap { $0.ckRecordID }
         let recordsToIncinerate = favoriteIDs + bookmarkIDs
 
         let operation = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: recordsToIncinerate)
