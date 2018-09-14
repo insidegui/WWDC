@@ -197,9 +197,14 @@ final class SessionViewModel {
         // Currently, there's only one event which is not a WWDC (the "Fall 2017" event),
         // for some reason it includes the year on its name, while WWDC editions do not,
         // so we have to use this workaround to avoid displaying the year twice
-        let name = event.name.replacingOccurrences(of: " \(year)", with: "")
+        var name = event.name.replacingOccurrences(of: " \(year)", with: "")
 
-        return "\(name) \(year) · Session \(session.number)"
+        //We only want to add the year to WWDC event names.
+        if name == "WWDC" {
+            name.append(" \(year)")
+        }
+
+        return "\(name) · Session \(session.number)"
     }
 
     static func focusesDescription(from focuses: [Focus], collapse: Bool) -> String {
