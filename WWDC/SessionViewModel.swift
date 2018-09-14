@@ -199,7 +199,11 @@ final class SessionViewModel {
         // so we have to use this workaround to avoid displaying the year twice
         let name = event.name.replacingOccurrences(of: " \(year)", with: "")
 
-        return "\(name) \(year) · Session \(session.number)"
+        if event.name == "WWDC" {
+            return "\(name) \(year) · Session \(session.number)"
+        } else {
+            return "\(name) · Session \(session.number)"
+        }
     }
 
     static func focusesDescription(from focuses: [Focus], collapse: Bool) -> String {
