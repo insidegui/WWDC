@@ -221,9 +221,7 @@ public final class PUIPlayerView: NSView {
     private func setupPlayer() {
         elapsedTimeLabel.stringValue = elapsedTimeInitialValue
         remainingTimeLabel.stringValue = remainingTimeInitialValue
-        timelineView.playbackProgress = 0
-        timelineView.annotations = []
-        timelineView.loadedSegments = []
+        timelineView.resetUI()
 
         guard let player = player else { return }
 

@@ -21,6 +21,8 @@ protocol PUITimelineViewDelegate: class {
 
 public final class PUITimelineView: NSView {
 
+    typealias AnnotationTuple = (annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer)
+
     private let log = OSLog(subsystem: "PlayerUI", category: "PUITimelineView")
 
     // MARK: - Public API
@@ -51,6 +53,10 @@ public final class PUITimelineView: NSView {
 
     public var annotations: [PUITimelineAnnotation] = [] {
         didSet {
+            if isEditingAnnotation {
+                // This isn't supported because the entire annotation UI gets rebuilt
+                os_log("Changing the annotations during an edit is unsupported", log: log, type: .error)
+            }
             layoutAnnotations()
         }
     }
@@ -146,6 +152,13 @@ public final class PUITimelineView: NSView {
         timePreviewLayer.masksToBounds = true
 
         layer?.addSublayer(timePreviewLayer)
+    }
+
+    public func resetUI() {
+        playbackProgress = 0
+        annotations = []
+        loadedSegments = []
+        mediaDuration = 0 // Must be last
     }
 
     public override func layout() {
@@ -270,8 +283,9 @@ public final class PUITimelineView: NSView {
     }
 
     public override func mouseDown(with event: NSEvent) {
+        guard hasValidMediaDuration else { return }
         if let targetAnnotation = hoveredAnnotation {
-            mouseDown(targetAnnotation.0, layer: targetAnnotation.1, originalEvent: event)
+            mouseDown(targetAnnotation.annotation, layer: targetAnnotation.layer, originalEvent: event)
             return
         }
 
@@ -442,8 +456,8 @@ public final class PUITimelineView: NSView {
         }
     }
 
-    private var hoveredAnnotation: (PUITimelineAnnotation, PUIAnnotationLayer)?
-    private var selectedAnnotation: (PUITimelineAnnotation, PUIAnnotationLayer)? {
+    private var hoveredAnnotation: AnnotationTuple?
+    private var selectedAnnotation: AnnotationTuple? {
         didSet {
             unhighlight(annotationTuple: oldValue)
 
@@ -457,7 +471,7 @@ public final class PUITimelineView: NSView {
         }
     }
 
-    private func annotationUnderMouse(with event: NSEvent, diameter: CGFloat = Metrics.annotationBubbleDiameter) -> (annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer)? {
+    private func annotationUnderMouse(with event: NSEvent, diameter: CGFloat = Metrics.annotationBubbleDiameter) -> AnnotationTuple? {
         var point = convert(event.locationInWindow, from: nil)
         point.x -= diameter / 2
 
@@ -474,15 +488,15 @@ public final class PUITimelineView: NSView {
     }
 
     private func trackMouseAgainstAnnotations(with event: NSEvent) {
-        guard let (annotation, annotationLayer) = annotationUnderMouse(with: event) else {
+        guard let annotationUnderMouse = annotationUnderMouse(with: event) else {
             unhighlightCurrentHoveredAnnotationIfNeeded()
 
             return
         }
 
-        hoveredAnnotation = (annotation, annotationLayer)
+        hoveredAnnotation = annotationUnderMouse
 
-        mouseOver(annotation, layer: annotationLayer)
+        mouseOver(annotationUnderMouse.annotation, layer: annotationUnderMouse.layer)
     }
 
     private func unhighlightCurrentHoveredAnnotationIfNeeded() {
@@ -497,7 +511,7 @@ public final class PUITimelineView: NSView {
         hoveredAnnotation = nil
     }
 
-    private func unhighlight(annotationTuple: (PUITimelineAnnotation, PUIAnnotationLayer)?) {
+    private func unhighlight(annotationTuple: AnnotationTuple?) {
         guard let (sa, sal) = annotationTuple else { return }
 
         mouseOut(sa, layer: sal)
@@ -619,8 +633,10 @@ public final class PUITimelineView: NSView {
 
                     self.delegate?.timelineDidMoveAnnotation(annotation, to: timestamp)
                 case .none:
-                    self.selectedAnnotation = (annotation, layer)
-                    self.delegate?.timelineDidSelectAnnotation(annotation)
+                    if !isSnappingBack {
+                        self.selectedAnnotation = (annotation, layer)
+                        self.delegate?.timelineDidSelectAnnotation(annotation)
+                    }
                 }
 
                 mode = .none
@@ -714,12 +730,7 @@ public final class PUITimelineView: NSView {
 
         window?.addChildWindow(annotationWindow, ordered: .above)
         annotationWindow.setFrameOrigin(screenRect.origin)
-
-        if annotation.isEmpty {
-            annotationWindow.makeKeyAndOrderFront(nil)
-        } else {
-            annotationWindow.orderFront(nil)
-        }
+        annotationWindow.makeKeyAndOrderFront(nil)
 
         annotationWindow.animator().alphaValue = 1
 
@@ -728,17 +739,34 @@ public final class PUITimelineView: NSView {
             case enter = 36
         }
 
-        annotationCommandsMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyUp) { event in
-            guard let command = AnnotationKeyCommand(rawValue: event.keyCode) else { return event }
+        annotationCommandsMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyUp, .keyDown, .leftMouseDown, .rightMouseDown, .otherMouseDown]) { event in
 
-            switch command {
-            case .enter:
-                if event.modifierFlags.contains(.command) {
-                    fallthrough
+            func handleKeyUp(command: AnnotationKeyCommand) {
+                switch command {
+                case .enter:
+                    if event.modifierFlags.contains(.command) {
+                        fallthrough
+                    }
+                case .escape:
+                    self.selectedAnnotation = nil
                 }
-            case .escape:
+            }
+
+            if [.keyDown, .keyUp].contains(event.type),
+                let command = AnnotationKeyCommand(rawValue: event.keyCode) {
+
+                switch event.type {
+                case .keyDown where command == .escape:
+                    // Prevent the bell
+                    return nil
+                case .keyDown where command == .enter && event.modifierFlags.contains(.command):
+                    return nil
+                case .keyUp:
+                    handleKeyUp(command: command)
+                default: ()
+                }
+            } else if let window = event.window, window != annotationWindow {
                 self.selectedAnnotation = nil
-                self.unhighlightCurrentHoveredAnnotationIfNeeded()
             }
 
             return event

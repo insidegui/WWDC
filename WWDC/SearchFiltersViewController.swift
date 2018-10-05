@@ -18,6 +18,7 @@ enum FilterSegment: Int {
     case favorite
     case downloaded
     case unwatched
+    case bookmarks
 
     init?(_ id: FilterIdentifier) {
 
@@ -28,6 +29,8 @@ enum FilterSegment: Int {
             self = .downloaded
         case .isUnwatched:
             self = .unwatched
+        case .hasBookmarks:
+            self = .bookmarks
 
         default:
             return nil
@@ -106,6 +109,7 @@ final class SearchFiltersViewController: NSViewController {
     private var favoriteSegmentSelected = false
     private var downloadedSegmentSelected = false
     private var unwatchedSegmentSelected = false
+    private var bookmarksSegmentSelected = false
 
     @IBAction func bottomSegmentedControlAction(_ sender: Any) {
         if favoriteSegmentSelected != bottomSegmentedControl.isSelected(for: .favorite) {
@@ -126,9 +130,16 @@ final class SearchFiltersViewController: NSViewController {
             }
         }
 
+        if bookmarksSegmentSelected != bottomSegmentedControl.isSelected(for: .bookmarks) {
+            if let annotatedIndex = effectiveFilters.index(where: { $0.identifier == FilterIdentifier.hasBookmarks.rawValue }) {
+                updateToggleFilter(at: annotatedIndex, with: bottomSegmentedControl.isSelected(for: .bookmarks))
+            }
+        }
+
         favoriteSegmentSelected = bottomSegmentedControl.isSelected(for: .favorite)
         downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
         unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
+        bookmarksSegmentSelected = bottomSegmentedControl.isSelected(for: .bookmarks)
     }
 
     @IBAction func searchFieldAction(_ sender: Any) {
@@ -269,5 +280,6 @@ final class SearchFiltersViewController: NSViewController {
         favoriteSegmentSelected = bottomSegmentedControl.isSelected(for: .favorite)
         downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
         unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
+        bookmarksSegmentSelected = bottomSegmentedControl.isSelected(for: .bookmarks)
     }
 }

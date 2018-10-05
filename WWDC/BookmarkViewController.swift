@@ -82,6 +82,7 @@ final class BookmarkViewController: NSViewController {
         v.backgroundColor = .clear
         v.borderType = .noBorder
         v.documentView = self.textView
+        v.autohidesScrollers = true
 
         return v
     }()

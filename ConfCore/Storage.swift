@@ -201,7 +201,7 @@ public final class Storage {
 
             let instances = backgroundRealm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
 
-            var previousStartTime: Date? = nil
+            var previousStartTime: Date?
             for instance in instances {
                 guard instance.startTime != previousStartTime else { continue }
 
