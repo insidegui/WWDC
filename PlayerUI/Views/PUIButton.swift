@@ -148,7 +148,7 @@ public final class PUIButton: NSControl {
         shouldDrawHighlighted = true
 
         if !sendsActionOnMouseDown {
-            window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged], timeout: NSEvent.foreverDuration, mode: .eventTrackingRunLoopMode) { event, stop in
+            window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged], timeout: NSEvent.foreverDuration, mode: .eventTracking) { event, stop in
                 if event?.type == .leftMouseUp {
                     self.shouldDrawHighlighted = false
                     stop.pointee = true

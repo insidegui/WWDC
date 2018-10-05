@@ -89,11 +89,11 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
 
     func replace(child: NSViewController?, with newChild: NSViewController?, inContainer container: NSView) {
         child?.view.removeFromSuperview()
-        child?.removeFromParentViewController()
+        child?.removeFromParent()
 
         guard let newChild = newChild else { return }
 
-        addChildViewController(newChild)
+        addChild(newChild)
         newChild.view.frame = container.bounds
         newChild.view.autoresizingMask = [.width, .height]
         container.addSubview(newChild.view)

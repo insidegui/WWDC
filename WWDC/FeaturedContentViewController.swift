@@ -85,14 +85,14 @@ final class FeaturedContentViewController: NSViewController {
 
         sectionControllers.forEach { child in
             child.view.removeFromSuperview()
-            child.removeFromParentViewController()
+            child.removeFromParent()
         }
         sectionControllers.removeAll()
 
         sections.map({ FeaturedSectionViewController(viewModel: $0) }).forEach { sectionController in
             sectionController.delegate = self
 
-            addChildViewController(sectionController)
+            addChild(sectionController)
             sectionControllers.append(sectionController)
             sectionController.view.heightAnchor.constraint(equalToConstant: FeaturedSectionViewController.Metrics.height).isActive = true
             stackView.addArrangedSubview(sectionController.view)

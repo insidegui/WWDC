@@ -141,7 +141,7 @@ class SessionSummaryViewController: NSViewController {
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        addChildViewController(relatedSessionsViewController)
+        addChild(relatedSessionsViewController)
         relatedSessionsViewController.view.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(relatedSessionsViewController.view)
         relatedSessionsViewController.view.heightAnchor.constraint(equalToConstant: RelatedSessionsViewController.Metrics.height).isActive = true

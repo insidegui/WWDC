@@ -72,7 +72,7 @@ final class PUINowPlayingInfoCoordinator {
             DispatchQueue.main.async { self?.updateNowPlayingInfo() }
         }
 
-        timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1, 30000), queue: .main) { [weak self] _ in
+        timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1, preferredTimescale: 30000), queue: .main) { [weak self] _ in
             DispatchQueue.main.async { self?.updateNowPlayingInfo() }
         }
     }

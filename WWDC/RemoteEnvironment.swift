@@ -77,7 +77,7 @@ final class RemoteEnvironment {
     }
 
     private func doCreateSubscription() {
-        let options: CKQuerySubscriptionOptions = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
+        let options: CKQuerySubscription.Options = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
         let subscription = CKQuerySubscription(recordType: Constants.environmentRecordType,
                                                predicate: NSPredicate(value: true),
                                                subscriptionID: environmentSubscriptionID,

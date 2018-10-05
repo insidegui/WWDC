@@ -232,7 +232,7 @@ private final class CloudKitLiveObserver {
 
     private func doCreateSubscription() {
         #if ICLOUD
-            let options: CKQuerySubscriptionOptions = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
+            let options: CKQuerySubscription.Options = [.firesOnRecordCreation, .firesOnRecordUpdate, .firesOnRecordDeletion]
             let subscription = CKQuerySubscription(recordType: SessionAsset.recordType,
                                                    predicate: NSPredicate(value: true),
                                                    subscriptionID: specialLiveEventsSubscriptionID,

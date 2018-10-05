@@ -20,7 +20,7 @@ class WWDCHorizontalScrollView: NSScrollView {
         }
 
         if event.phase == .began || (event.phase == .none && event.momentumPhase == .none) {
-            isScrollingHorizontally = fabs(event.scrollingDeltaX) > fabs(event.scrollingDeltaY)
+            isScrollingHorizontally = abs(event.scrollingDeltaX) > abs(event.scrollingDeltaY)
         }
 
         if isScrollingHorizontally {

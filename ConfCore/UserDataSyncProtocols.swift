@@ -17,7 +17,7 @@ typealias SoftDeletableRealmObjectWithCloudKitFields = Object & HasCloudKitField
 public protocol HasCloudKitFields {
     var ckFields: Data { get set }
 
-    var ckRecordID: CKRecordID? { get }
+    var ckRecordID: CKRecord.ID? { get }
 
     static func resolveConflict(clientRecord: CKRecord, serverRecord: CKRecord) -> CKRecord?
 
@@ -41,7 +41,7 @@ public protocol SoftDeletable {
 
 extension HasCloudKitFields {
 
-    public var ckRecordID: CKRecordID? {
+    public var ckRecordID: CKRecord.ID? {
         guard !ckFields.isEmpty else { return nil }
 
         let coder = NSKeyedUnarchiver(forReadingWith: ckFields)

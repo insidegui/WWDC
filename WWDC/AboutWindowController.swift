@@ -29,7 +29,7 @@ final class AboutWindowController: NSWindowController {
     }
 
     convenience init(infoText: String?) {
-        self.init(windowNibName: NSNib.Name(rawValue: "AboutWindowController"))
+        self.init(windowNibName: "AboutWindowController")
         self.infoText = infoText
     }
 

@@ -46,9 +46,9 @@ class DownloadsStatusViewController: NSViewController {
     @objc
     func test(sender: NSButton) {
         if presentedViewControllers?.isEmpty == true {
-            presentViewController(DownloadsManagementViewController(nibName: nil, bundle: nil), asPopoverRelativeTo: sender.bounds, of: sender, preferredEdge: .maxY, behavior: .semitransient)
+            present(DownloadsManagementViewController(nibName: nil, bundle: nil), asPopoverRelativeTo: sender.bounds, of: sender, preferredEdge: .maxY, behavior: .semitransient)
         } else {
-            presentedViewControllers?.forEach(dismissViewController)
+            presentedViewControllers?.forEach(dismiss)
         }
     }
 }

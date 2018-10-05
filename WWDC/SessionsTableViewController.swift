@@ -15,7 +15,7 @@ import os.log
 
 // MARK: - Sessions Table View Controller
 
-class SessionsTableViewController: NSViewController {
+class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
     private let disposeBag = DisposeBag()
 
@@ -499,7 +499,7 @@ class SessionsTableViewController: NSViewController {
         }
     }
 
-    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         for row in selectedAndClickedRowIndexes() {
             let sessionRow = displayedRows[row]
 

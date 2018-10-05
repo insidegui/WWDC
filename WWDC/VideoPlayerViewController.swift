@@ -167,7 +167,7 @@ final class VideoPlayerViewController: NSViewController {
         guard let (transcript, annotation) = notification.object as? (Transcript, TranscriptAnnotation) else { return }
         guard transcript.identifier == sessionViewModel.session.transcriptIdentifier else { return }
 
-        let time = CMTimeMakeWithSeconds(annotation.timecode, 90000)
+        let time = CMTimeMakeWithSeconds(annotation.timecode, preferredTimescale: 90000)
         player.seek(to: time)
     }
 
@@ -182,23 +182,23 @@ final class VideoPlayerViewController: NSViewController {
     private func setupPlayerObservers() {
 
         playerStatusObserver = player.observe(\.status, options: [.initial, .new], changeHandler: { [weak self] (player, change) in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             DispatchQueue.main.async(execute: self.showPlaybackErrorIfNeeded)
         })
 
         timeControlStatusObserver = player.observe(\AVPlayer.timeControlStatus) { [weak self] (player, change) in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
             DispatchQueue.main.async(execute: self.timeControlStatusDidChange)
         }
 
         currentItemObserver = player.observe(\.currentItem, options: [.initial, .new]) { [weak self] (player, change) in
             self?.presentationSizeObserver = player.currentItem?.observe(\.presentationSize, options: [.initial, .new]) { [weak self] (player, change) in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 DispatchQueue.main.async(execute: self.playerItemPresentationSizeDidChange)
             }
 
             self?.currentItemStatusObserver = player.currentItem?.observe(\.status) { item, _ in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.showPlaybackErrorIfNeeded()
             }
         }
@@ -372,7 +372,7 @@ extension Transcript {
 
     func timecodesWithTimescale(_ timescale: Int32) -> [NSValue] {
         return annotations.map { annotation -> NSValue in
-            let time = CMTimeMakeWithSeconds(annotation.timecode, timescale)
+            let time = CMTimeMakeWithSeconds(annotation.timecode, preferredTimescale: timescale)
 
             return NSValue(time: time)
         }

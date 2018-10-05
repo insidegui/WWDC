@@ -254,7 +254,7 @@ public final class PUIPlayerView: NSView {
             }
         })
 
-        playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 9000), queue: .main) { [weak self] currentTime in
+        playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, preferredTimescale: 9000), queue: .main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
         }
 
@@ -465,7 +465,7 @@ public final class PUIPlayerView: NSView {
             self?.goBackInTime(nil)
         }
         remoteCommandCoordinator?.likeHandler = { [weak self] in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
 
             self.delegate?.playerViewDidSelectLike(self)
         }
@@ -1020,14 +1020,14 @@ public final class PUIPlayerView: NSView {
 
         guard let durationTime = player.currentItem?.duration else { return }
 
-        let modifier = CMTimeMakeWithSeconds(seconds, durationTime.timescale)
+        let modifier = CMTimeMakeWithSeconds(seconds, preferredTimescale: durationTime.timescale)
         let targetTime = function(player.currentTime(), modifier)
 
         seek(to: targetTime)
     }
 
     private func seek(to timestamp: TimeInterval) {
-        seek(to: CMTimeMakeWithSeconds(timestamp, 90000))
+        seek(to: CMTimeMakeWithSeconds(timestamp, preferredTimescale: 90000))
     }
 
     private func seek(to time: CMTime) {
@@ -1230,8 +1230,8 @@ public final class PUIPlayerView: NSView {
     }
 
     fileprivate func exitPictureInPictureMode() {
-        if pictureContainer.presenting == pipController {
-            pipController?.dismissViewController(pictureContainer)
+        if pictureContainer.presentingViewController == pipController {
+            pipController?.dismiss(pictureContainer)
         }
     }
 
@@ -1503,7 +1503,7 @@ extension PUIPlayerView: PUITimelineViewDelegate {
         guard let duration = asset?.duration else { return }
 
         let targetTime = progress * Double(CMTimeGetSeconds(duration))
-        let time = CMTimeMakeWithSeconds(targetTime, duration.timescale)
+        let time = CMTimeMakeWithSeconds(targetTime, preferredTimescale: duration.timescale)
 
         if isPlayingExternally {
             currentExternalPlaybackProvider?.seek(to: targetTime)
@@ -1537,7 +1537,7 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
             playbackSpeed = speed
         }
 
-        let time = CMTimeMakeWithSeconds(Float64(provider.status.currentTime), 9000)
+        let time = CMTimeMakeWithSeconds(Float64(provider.status.currentTime), preferredTimescale: 9000)
         playerTimeDidChange(time: time)
 
         updatePlayingState()
@@ -1637,8 +1637,8 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
         pictureContainer.view.frame = superview.bounds
 
         if superview == self, pipController != nil {
-            if pictureContainer.presenting == pipController {
-                pipController?.dismissViewController(pictureContainer)
+            if pictureContainer.presentingViewController == pipController {
+                pipController?.dismiss(pictureContainer)
             }
 
             pipController = nil

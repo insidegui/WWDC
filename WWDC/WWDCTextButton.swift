@@ -30,14 +30,14 @@ class WWDCTextButton: NSButton {
         isBordered = false
 
         if state == .on {
-            let attrs: [NSAttributedStringKey: Any] = [
+            let attrs: [NSAttributedString.Key: Any] = [
                 .font: NSFont.systemFont(ofSize: 16, weight: .medium),
                 .foregroundColor: NSColor.primary
             ]
 
             attributedTitle = NSAttributedString(string: title, attributes: attrs)
         } else {
-            let attrs: [NSAttributedStringKey: Any] = [
+            let attrs: [NSAttributedString.Key: Any] = [
                 .font: NSFont.systemFont(ofSize: 16),
                 .foregroundColor: NSColor.tertiaryText
             ]

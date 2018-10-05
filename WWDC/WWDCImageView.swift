@@ -85,7 +85,7 @@ class WWDCImageView: NSView {
     private lazy var imageLayer: WWDCLayer = {
         let l = WWDCLayer()
 
-        l.contentsGravity = kCAGravityResizeAspect
+        l.contentsGravity = .resizeAspect
         l.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
         l.zPosition = 1
 
@@ -121,7 +121,7 @@ class WWDCImageView: NSView {
     }
 
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-        guard let file = (sender.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? [String])?.first else { return false }
+        guard let file = (sender.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? [String])?.first else { return false }
 
         let fileURL = URL(fileURLWithPath: file)
 

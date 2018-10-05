@@ -252,7 +252,7 @@ final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
         os_log("Will start media on ChromeCast at %{public}fs", log: log, type: .info, currentTime)
 
         client?.load(media: media, with: app) { [weak self] error, mediaStatus in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
 
             guard let mediaStatus = mediaStatus, error == nil else {
                 if let error = error {
@@ -295,7 +295,7 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
         os_log("Connected to device %{public}@. Launching media player app.", log: log, type: .debug, device.name)
 
         client.launch(appId: .defaultMediaPlayer) { [weak self] error, app in
-            guard let `self` = self else { return }
+            guard let self = self else { return }
 
             guard let app = app, error == nil else {
                 if let error = error {

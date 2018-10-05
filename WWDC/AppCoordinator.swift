@@ -95,7 +95,7 @@ final class AppCoordinator {
         scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
         scheduleController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
-        scheduleController.splitView.autosaveName = NSSplitView.AutosaveName(rawValue: "ScheduleSplitView")
+        scheduleController.splitView.autosaveName = "ScheduleSplitView"
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
         scheduleItem.initialFirstResponder = scheduleController.listViewController.tableView
@@ -105,7 +105,7 @@ final class AppCoordinator {
         videosController = SessionsSplitViewController(windowController: windowController, listStyle: .videos)
         videosController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Videos")
         videosController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "VideosSplitView")
-        videosController.splitView.autosaveName = NSSplitView.AutosaveName(rawValue: "VideosSplitView")
+        videosController.splitView.autosaveName = "VideosSplitView"
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
         videosItem.initialFirstResponder = videosController.listViewController.tableView
@@ -279,7 +279,7 @@ final class AppCoordinator {
             }
             .take(1)
             .subscribe(onNext: { [weak self] tracks, _, _, sections, _ in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
 
                 self.tabController.hideLoading()
                 self.searchCoordinator.configureFilters()

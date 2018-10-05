@@ -75,8 +75,8 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
         itemView.title = tabViewItem.label
         itemView.controllerIdentifier = (tabViewItem.viewController?.identifier).map { $0.rawValue } ?? ""
-        itemView.image = NSImage(named: NSImage.Name(rawValue: itemView.controllerIdentifier.lowercased()))
-        itemView.alternateImage = NSImage(named: NSImage.Name(rawValue: itemView.controllerIdentifier.lowercased() + "-filled"))
+        itemView.image = NSImage(named: itemView.controllerIdentifier.lowercased())
+        itemView.alternateImage = NSImage(named: itemView.controllerIdentifier.lowercased() + "-filled")
         itemView.sizeToFit()
 
         itemView.target = self

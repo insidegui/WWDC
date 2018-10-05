@@ -193,7 +193,7 @@ public extension ObservableType where E: NotificationEmitter {
 
                 let token = collection.observe { changeset in
 
-                    var value: E? = nil
+                    var value: E?
 
                     switch changeset {
                     case .initial(let latestValue):
