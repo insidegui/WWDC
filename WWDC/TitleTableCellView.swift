@@ -31,7 +31,7 @@ class TitleTableCellView: NSTableCellView {
         l.font = .systemFont(ofSize: 12, weight: .medium)
         l.lineBreakMode = .byTruncatingTail
         l.translatesAutoresizingMaskIntoConstraints = false
-       
+
         if #available(macOS 10.14, *) {
             l.textColor = .primaryText
         } else {

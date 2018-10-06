@@ -178,7 +178,11 @@ public final class PUIButton: NSControl {
     }
 
     public override var effectiveAppearance: NSAppearance {
-        return NSAppearance(named: .vibrantDark)!
+        if #available(OSX 10.14, *) {
+            return super.effectiveAppearance
+        } else {
+            return NSAppearance(named: .vibrantDark)!
+        }
     }
 
     public override var allowsVibrancy: Bool {
