@@ -80,6 +80,8 @@ final class RelatedSessionsViewController: NSViewController {
             v?.scrollerStyle = .overlay
         }
 
+        v.backgroundColor = .darkWindowBackground
+
         return v
     }()
 
@@ -98,6 +100,8 @@ final class RelatedSessionsViewController: NSViewController {
         v.dataSource = self
         v.delegate = self
         v.autoresizingMask = [.width, .minYMargin]
+        
+        v.backgroundColors = [.darkWindowBackground]
 
         return v
     }()

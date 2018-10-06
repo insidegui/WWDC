@@ -29,10 +29,14 @@ class TitleTableCellView: NSTableCellView {
     private lazy var titleLabel: NSTextField = {
         let l = NSTextField(labelWithString: "")
         l.font = .systemFont(ofSize: 12, weight: .medium)
-        l.textColor = .darkText
-        // l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byTruncatingTail
         l.translatesAutoresizingMaskIntoConstraints = false
+       
+        if #available(macOS 10.14, *) {
+            l.textColor = .primaryText
+        } else {
+            l.textColor = .darkText
+        }
 
         return l
     }()

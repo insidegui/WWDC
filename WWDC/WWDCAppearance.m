@@ -22,10 +22,14 @@ NSString *const WWDCAppearanceName = @"WWDC";
 
 + (NSAppearance *)appearance
 {
-    NSAppearance *dark = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
-    NSAppearance *wwdc = [NSAppearance appearanceNamed:WWDCAppearanceName];
-    
-    return [[NSClassFromString(@"NSCompositeAppearance") alloc] initWithAppearances:@[wwdc, dark]];
+    if (@available(macOS 10.14, *)) {
+        return [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+    } else {
+        NSAppearance *dark = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+        NSAppearance *wwdc = [NSAppearance appearanceNamed:WWDCAppearanceName];
+        
+        return [[NSClassFromString(@"NSCompositeAppearance") alloc] initWithAppearances:@[wwdc, dark]];
+    }
 }
 
 + (NSShadow *)toolTipTextShadow

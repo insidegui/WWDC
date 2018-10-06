@@ -31,7 +31,11 @@ extension NSColor {
     }
 
     static var playerHighlight: NSColor {
-        return NSColor(calibratedRed: 0.00, green: 0.80, blue: 0.92, alpha: 1.00)
+        if #available(macOS 10.14, *) {
+            return .controlAccentColor
+        } else {
+            return NSColor(calibratedRed: 0.00, green: 0.80, blue: 0.92, alpha: 1.00)
+        }
     }
 
     static var buttonColor: NSColor {
