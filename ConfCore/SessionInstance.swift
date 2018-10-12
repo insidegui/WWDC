@@ -96,7 +96,7 @@ public class SessionInstance: Object {
     /// Whether the live flag is being forced by an external source
     @objc public dynamic var isForcedLive = false
 
-    /// The EKEvent's eventIdentifier 
+    /// The EKEvent's eventIdentifier
     /// See https://developer.apple.com/reference/eventkit/ekevent/1507437-eventidentifier
     @objc public dynamic var calendarEventIdentifier = ""
 

@@ -6,7 +6,7 @@
 //  Copyright © 2016 Guilherme Rambo. All rights reserved.
 //
 
-#import "UIDebugger.h"
+#import "UIDebugger.h"`
 
 @interface UIDebuggerMenuItem: NSMenuItem
 + (void)insertInMainMenu;
@@ -20,10 +20,10 @@
 {
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [UIDebuggerMenuItem insertInMainMenu];
-        
+
         if ([[NSBundle bundleWithPath:@"/Library/Frameworks/FScript.framework"] load]) {
             NSLog(@"[UIDebugger] Successfully added FScript menu");
-            
+
             [NSApp sendAction:NSSelectorFromString(@"insertInMainMenu") to:NSClassFromString(@"FScriptMenuItem") from:nil];
         } else {
             NSLog(@"[UIDebugger] FScript.framework could not be loaded");
@@ -55,13 +55,13 @@
     if (self = [super initWithTitle:itemName action:anAction keyEquivalent:charCode])
     {
         NSMenu *submenu = [[NSMenu alloc] initWithTitle:@"Debug UI"];
-        
+
         NSMenuItem *item1 = [[NSMenuItem alloc] initWithTitle:@"Visualize Constraints" action:@selector(visualizeConstraints:) keyEquivalent:@""];
         [item1 setTarget:self];
         [submenu addItem:item1];
-        
+
         [self setSubmenu:submenu];
-        
+
         return self;
     }
     return nil;
@@ -71,7 +71,7 @@
 {
     NSWindow *window = [NSApp mainWindow];
     NSView *firstResponderView = (NSView *)window.firstResponder;
-    
+
     if ([firstResponderView respondsToSelector:@selector(constraints)]) {
         [window visualizeConstraints:firstResponderView.constraints];
     } else {
