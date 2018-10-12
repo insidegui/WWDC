@@ -57,7 +57,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         contentViewController = playerViewController
         window.title = playerViewController.title ?? ""
 
-        if let aspect = playerViewController.player.currentItem?.presentationSize, aspect != NSSize.zero {
+        if let aspect = playerViewController.player.currentItem?.presentationSize, aspect != .zero {
             window.aspectRatio = aspect
         }
     }
@@ -183,15 +183,15 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 private extension PUIPlayerWindow {
 
     class func centerRectForProposedContentRect(_ rect: NSRect) -> NSRect {
-        guard let screen = NSScreen.main else { return NSRect.zero }
+        guard let screen = NSScreen.main else { return .zero }
 
         return NSRect(x: screen.frame.width / 2.0 - rect.width / 2.0, y: screen.frame.height / 2.0 - rect.height / 2.0, width: rect.width, height: rect.height)
     }
 
     class func bestScreenRectFromDetachingContainer(_ containerView: NSView?) -> NSRect {
-        guard let view = containerView, let superview = view.superview else { return NSRect.zero }
+        guard let view = containerView, let superview = view.superview else { return .zero }
 
-        return view.window?.convertToScreen(superview.convert(view.frame, to: nil)) ?? NSRect.zero
+        return view.window?.convertToScreen(superview.convert(view.frame, to: nil)) ?? .zero
     }
 
     func applySizePreset(_ preset: PUIPlayerWindowSizePreset, center: Bool = true, animated: Bool = true) {
@@ -200,7 +200,7 @@ private extension PUIPlayerWindow {
         let proportion = frame.size.width / screen.visibleFrame.size.width
         let idealSize: NSSize
         if proportion != preset.rawValue {
-            let rect = NSRect(origin: CGPoint.zero, size: NSSize(width: screen.frame.size.width * preset.rawValue, height: screen.frame.size.height * preset.rawValue))
+            let rect = NSRect(size: screen.frame.size * preset.rawValue)
             idealSize = constrainFrameRect(rect, to: screen).size
         } else {
             idealSize = constrainFrameRect(frame, to: screen).size
