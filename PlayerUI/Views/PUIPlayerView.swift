@@ -369,7 +369,7 @@ public final class PUIPlayerView: NSView {
     }
 
     fileprivate var currentPresentationSize: NSSize? {
-        guard let size = player?.currentItem?.presentationSize, size != NSSize.zero else { return nil }
+        guard let size = player?.currentItem?.presentationSize, size != .zero else { return nil }
 
         return size
     }
@@ -416,7 +416,7 @@ public final class PUIPlayerView: NSView {
 
         elapsedTimeLabel.stringValue = String(time: time) ?? ""
 
-        let remainingTime = CMTimeSubtract(duration, time)
+        let remainingTime = duration - time
         remainingTimeLabel.stringValue = String(time: remainingTime) ?? ""
     }
 

@@ -14,8 +14,8 @@ import os.log
 
 extension Notification.Name {
 
-    static let DownloadManagerFileAddedNotification = Notification.Name("DownloadManagerFileAddedNotification")
-    static let DownloadManagerFileDeletedNotification = Notification.Name("DownloadManagerFileDeletedNotification")
+    static let DownloadManagerFileAdded = Notification.Name("DownloadManagerFileAdded")
+    static let DownloadManagerFileDeleted = Notification.Name("DownloadManagerFileDeleted")
     static let DownloadManagerDownloadStarted = Notification.Name("DownloadManagerDownloadStarted")
     static let DownloadManagerDownloadCancelled = Notification.Name("DownloadManagerDownloadCancelled")
     static let DownloadManagerDownloadPaused = Notification.Name("DownloadManagerDownloadPaused")
@@ -65,7 +65,7 @@ final class DownloadManager: NSObject {
     override init() {
         super.init()
 
-        backgroundSession = URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue.main)
+        backgroundSession = URLSession(configuration: configuration, delegate: self, delegateQueue: .main)
     }
 
     func start(with storage: Storage) {
@@ -147,7 +147,7 @@ final class DownloadManager: NSObject {
         if let task = downloadTasks[url] {
             task.cancel()
             downloadTasks.removeValue(forKey: url)
-            NotificationCenter.default.post(name: Notification.Name.DownloadManagerDownloadCancelled, object: url)
+            NotificationCenter.default.post(name: .DownloadManagerDownloadCancelled, object: url)
             return true
         }
 
@@ -263,13 +263,13 @@ final class DownloadManager: NSObject {
 
             checkDownloadedState()
 
-            let fileDeleted = nc.addObserver(forName: .DownloadManagerFileDeletedNotification, object: nil, queue: q) { note in
+            let fileDeleted = nc.addObserver(forName: .DownloadManagerFileDeleted, object: nil, queue: q) { note in
                 guard asset.relativeLocalURL == note.object as? String else { return }
 
                 observer.onNext(.none)
             }
 
-            let fileAdded = nc.addObserver(forName: .DownloadManagerFileAddedNotification, object: nil, queue: q) { note in
+            let fileAdded = nc.addObserver(forName: .DownloadManagerFileAdded, object: nil, queue: q) { note in
                 guard asset.relativeLocalURL == note.object as? String else { return }
 
                 observer.onNext(.finished)
@@ -397,7 +397,7 @@ final class DownloadManager: NSObject {
         }
 
         storage.updateDownloadedFlag(false, forAssetsAtPaths: notPresent)
-        notPresent.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
+        notPresent.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeleted, object: $0) }
     }
 
     /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
@@ -407,7 +407,7 @@ final class DownloadManager: NSObject {
 
         storage.updateDownloadedFlag(true, forAssetsAtPaths: files)
 
-        files.forEach { NotificationCenter.default.post(name: .DownloadManagerFileAddedNotification, object: $0) }
+        files.forEach { NotificationCenter.default.post(name: .DownloadManagerFileAdded, object: $0) }
 
         if existingVideoFiles.count == 0 {
             existingVideoFiles = files
@@ -418,7 +418,7 @@ final class DownloadManager: NSObject {
 
         storage.updateDownloadedFlag(false, forAssetsAtPaths: removedFiles)
 
-        removedFiles.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
+        removedFiles.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeleted, object: $0) }
     }
 
     // MARK: Teardown

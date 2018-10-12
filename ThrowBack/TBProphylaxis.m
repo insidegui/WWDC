@@ -15,23 +15,23 @@
 + (void)load
 {
 #pragma mark Prevent simulatenously running old version
-    
+
     NSArray <NSRunningApplication *> *apps = [NSRunningApplication runningApplicationsWithBundleIdentifier:@"br.com.guilhermerambo.WWDC"];
-    
+
     BOOL shouldQuit = NO;
-    
+
     for (NSRunningApplication *app in apps) {
         NSBundle *bundle = [NSBundle bundleWithURL:app.bundleURL];
         NSString *shortVersion = bundle.infoDictionary[@"CFBundleShortVersionString"];
         double shortVersionNumber = [shortVersion doubleValue];
-        
+
         if (shortVersionNumber < 5) {
             if (![app forceTerminate]) {
                 shouldQuit = YES;
             }
         }
     }
-    
+
     if (shouldQuit) {
         NSAlert *alert = [NSAlert new];
         alert.messageText = @"Older version running";
@@ -42,10 +42,10 @@
     }
 
 #pragma mark Restore old preferences
-    
+
     NSString *libraryDirPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject;
     NSString *oldPrefsPath = [libraryDirPath stringByAppendingPathComponent:@"Preferences/br.com.guilhermerambo.WWDC.plist"];
-    
+
     if ([[NSFileManager defaultManager] fileExistsAtPath:oldPrefsPath]) {
         NSString *newPrefsPath = [libraryDirPath stringByAppendingPathComponent:@"Preferences/io.wwdc.app.plist"];
         if (![[NSFileManager defaultManager] fileExistsAtPath:newPrefsPath]) {
@@ -60,20 +60,20 @@
             }
         }
     }
-    
+
 #pragma mark Restore old app support files
-    
+
     NSString *appSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
     NSString *oldAppSupportPath = [appSupportPath stringByAppendingPathComponent:@"br.com.guilhermerambo.WWDC"];
-    
+
     // no old version's files exist
     if (![[NSFileManager defaultManager] fileExistsAtPath:oldAppSupportPath]) return;
-    
+
     NSString *newAppSupportPath = [appSupportPath stringByAppendingPathComponent:@"io.wwdc.app"];
-    
+
     // new folder already exists
     if ([[NSFileManager defaultManager] fileExistsAtPath:newAppSupportPath]) return;
-    
+
     NSError *supportMoveError;
     if (![[NSFileManager defaultManager] moveItemAtPath:oldAppSupportPath toPath:newAppSupportPath error:&supportMoveError]) {
         NSAlert *alert = [NSAlert new];

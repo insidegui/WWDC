@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, nullable) id <CrashlyticsDelegate> delegate;
 
 /**
- *  The recommended way to install Crashlytics into your application is to place a call to +startWithAPIKey: 
+ *  The recommended way to install Crashlytics into your application is to place a call to +startWithAPIKey:
  *  in your -application:didFinishLaunchingWithOptions: or -applicationDidFinishLaunching:
  *  method.
  *
@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  If you need the functionality provided by the CrashlyticsDelegate protocol, you can use
  *  these convenience methods to activate the framework and set the delegate in one call.
- *  
+ *
  *  @param apiKey   The Crashlytics API Key for this app
  *  @param delegate A delegate object which conforms to CrashlyticsDelegate.
  *
@@ -121,7 +121,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Specify a user email which will be visible in the Crashlytics UI.
  *  Please be mindful of your end-user's privacy and see if setUserIdentifier: can fulfil your needs.
- *  
+ *
  *  @see setUserIdentifier:
  *
  *  @param email An end user's email address.
@@ -134,7 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Set a value for a for a key to be associated with your crash data which will be visible in the Crashlytics UI.
- *  When setting an object value, the object is converted to a string. This is typically done by calling 
+ *  When setting an object value, the object is converted to a string. This is typically done by calling
  *  -[NSObject description].
  *
  *  @param value The object to be associated with the key
@@ -230,7 +230,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  detected report to be deleted and not submitted to Crashlytics. This is useful for
  *  implementing permission prompts, or other more-complex forms of logic around submitting crashes.
  *
- *  Instead of using this method, you should try to make use of -crashlyticsDidDetectReportForLastExecution: 
+ *  Instead of using this method, you should try to make use of -crashlyticsDidDetectReportForLastExecution:
  *  if you can.
  *
  *  @warning Failure to invoke the completionHandler will prevent submissions from being reported. Watch out.
@@ -254,7 +254,7 @@ NS_ASSUME_NONNULL_BEGIN
  *    - it does not give you the ability to prevent the report from being submitted
  *    - the report object itself is immutable
  *
- *  Thanks to these limitations, making use of this method does not impact reporting 
+ *  Thanks to these limitations, making use of this method does not impact reporting
  *  reliabilty in any way.
  *
  *  @param report The read-only CLSReport object representing the last detected report

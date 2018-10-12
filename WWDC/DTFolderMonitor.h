@@ -23,9 +23,9 @@ typedef void (^DTFolderMonitorBlock) (void);
 
 /**
  Creates a new DTFolderMonitor to watch the folder at the given URL. Whenever there is a change on this folder the block is executed.
- 
+
  The URL must be a file URL. Both the URL and the block parameter are mandatory. The block is being dispatched on a background queue.
- 
+
  @param URL The monitored folder URL
  @param block The block to execute if the folder is being modified
  @returns The instantiated monitor in suspended mode. Call -startMonitoring to start monitoring.

@@ -31,7 +31,7 @@ static void *MaskImageImageKey = &MaskImageImageKey;
 - (NSColor *)tintColor
 {
     if (!_tintColor) return [NSColor blackColor];
-    
+
     return _tintColor;
 }
 
@@ -66,12 +66,12 @@ static void *MaskImageImageKey = &MaskImageImageKey;
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-    
+
     if (!self.maskImage) return;
-    
+
     CGContextRef ctx = [NSGraphicsContext currentContext].CGContext;
     CGContextSaveGState(ctx);
-    
+
     if (self.backgroundColor) {
         CGContextSetFillColorWithColor(ctx, self.backgroundColor.CGColor);
         CGContextFillRect(ctx, self.bounds);
@@ -81,7 +81,7 @@ static void *MaskImageImageKey = &MaskImageImageKey;
     int newWidth, newHeight = 0;
     double rw = imageSize.width / NSWidth(self.bounds);
     double rh = imageSize.height / NSHeight(self.bounds);
-    
+
     if (rw > rh)
     {
         newHeight = round(imageSize.height / rw);
@@ -92,13 +92,13 @@ static void *MaskImageImageKey = &MaskImageImageKey;
         newWidth = round(imageSize.width / rh);
         newHeight = NSHeight(self.bounds);
     }
-    
+
     NSRect maskRect = NSMakeRect(round(NSWidth(self.bounds)/2.0 - newWidth/2.0), round(NSHeight(self.bounds)/2.0 - newHeight/2.0), newWidth, newHeight);
-    
+
     CGContextClipToMask(ctx, maskRect, self.maskImage.CGImage);
     CGContextSetFillColorWithColor(ctx, self.tintColor.CGColor);
     CGContextFillRect(ctx, self.bounds);
-    
+
     CGContextRestoreGState(ctx);
 }
 

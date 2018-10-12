@@ -205,7 +205,7 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     private func playerItemPresentationSizeDidChange() {
-        guard let size = player.currentItem?.presentationSize, size != NSSize.zero else { return }
+        guard let size = player.currentItem?.presentationSize, size != .zero else { return }
 
         (view.window as? PUIPlayerWindow)?.aspectRatio = size
     }
@@ -252,7 +252,7 @@ final class VideoPlayerViewController: NSViewController {
         let timecodes = transcript.timecodesWithTimescale(9000)
         guard timecodes.count > 0 else { return }
 
-        boundaryObserver = player.addBoundaryTimeObserver(forTimes: timecodes, queue: DispatchQueue.main) { [unowned self] in
+        boundaryObserver = player.addBoundaryTimeObserver(forTimes: timecodes, queue: .main) { [unowned self] in
             guard !transcript.isInvalidated, self.player != nil else { return }
 
             let ct = CMTimeGetSeconds(self.player.currentTime())
@@ -303,7 +303,7 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
     func playerViewDidSelectAddAnnotation(_ playerView: PUIPlayerView, at timestamp: Double) {
         snapshotPlayer { snapshot in
             self.delegate?.createBookmark(at: timestamp,
-                                          with: snapshot.map { NSImage(cgImage: $0, size: NSSize(width: $0.width, height: $0.height)) })
+                                          with: snapshot.map { NSImage(cgImage: $0, size: $0.size) })
         }
     }
 

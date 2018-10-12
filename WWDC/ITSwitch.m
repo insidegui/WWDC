@@ -76,25 +76,25 @@ static CGFloat const kDisabledOpacity = 0.5f;
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (!self) return nil;
-    
+
     [self setUp];
-    
+
     return self;
 }
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (!self) return nil;
-    
+
     [self setUp];
-    
+
     return self;
 }
 
 - (void)setUp {
     // The Switch is enabled per default
     self.enabled = YES;
-    
+
     // Set up the layer hierarchy
     [self setUpLayers];
 }
@@ -105,7 +105,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
     //_rootLayer.delegate = self;
     self.layer = _rootLayer;
     self.wantsLayer = YES;
-    
+
     // Background layer
     _backgroundLayer = [CALayer layer];
     _backgroundLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
@@ -114,7 +114,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
     _backgroundLayer.borderWidth = kBorderLineWidth;
     _backgroundLayer.borderColor = [NSColor darkGrayColor].CGColor;
     [_rootLayer addSublayer:_backgroundLayer];
-    
+
     // Knob layer
     _knobLayer = [CALayer layer];
     _knobLayer.frame = [self rectForKnob];
@@ -125,7 +125,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
     _knobLayer.shadowRadius = 1.f;
     _knobLayer.shadowOpacity = 0.3f;
     [_rootLayer addSublayer:_knobLayer];
-    
+
     _knobInsideLayer = [CALayer layer];
     _knobInsideLayer.frame = _knobLayer.bounds;
     _knobInsideLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
@@ -135,7 +135,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
     _knobInsideLayer.shadowRadius = 1.f;
     _knobInsideLayer.shadowOpacity = 0.35f;
     [_knobLayer addSublayer:_knobInsideLayer];
-    
+
     // Initial
     [self reloadLayerSize];
     [self reloadLayer];
@@ -153,7 +153,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
 
 - (void)setFrame:(NSRect)frameRect {
     [super setFrame:frameRect];
-    
+
     [self reloadLayerSize];
 }
 
@@ -185,7 +185,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
         // The green part also animates, which looks kinda weird
         // We'll use the background-color for now
         //        _backgroundLayer.borderWidth = (YES || self.isActive || self.isOn) ? NSHeight(_backgroundLayer.bounds) / 2 : kBorderLineWidth;
-        
+
         // ------------------------------- Animate Colors
         if (([self hasDragged] && [self isDraggingTowardsOn]) || (![self hasDragged] && [self checked])) {
             _backgroundLayer.borderColor = [self.tintColor CGColor];
@@ -194,7 +194,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
             _backgroundLayer.borderColor = [self.disabledBorderColor CGColor];
             _backgroundLayer.backgroundColor = [kDisabledBackgroundColor CGColor];
         }
-        
+
         // ------------------------------- Animate Enabled-Disabled state
         _rootLayer.opacity = (self.isEnabled) ? kEnabledOpacity : kDisabledOpacity;
 
@@ -203,10 +203,10 @@ static CGFloat const kDisabledOpacity = 0.5f;
             CAMediaTimingFunction *function = [CAMediaTimingFunction functionWithControlPoints:0.25f :1.5f :0.5f :1.f];
             [CATransaction setAnimationTimingFunction:function];
         }
-        
+
         self.knobLayer.frame = [self rectForKnob];
         self.knobInsideLayer.frame = self.knobLayer.bounds;
-        
+
         if (![self checked]) {
             _backgroundLayer.borderColor = [NSColor darkGrayColor].CGColor;
         }
@@ -220,7 +220,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
     {
         self.knobLayer.frame = [self rectForKnob];
         self.knobInsideLayer.frame = self.knobLayer.bounds;
-        
+
         [_backgroundLayer setCornerRadius:_backgroundLayer.bounds.size.height / 2.f];
         [_knobLayer setCornerRadius:_knobLayer.bounds.size.height / 2.f];
         [_knobInsideLayer setCornerRadius:_knobLayer.bounds.size.height / 2.f];
@@ -240,7 +240,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
     CGFloat x = ((![self hasDragged] && ![self checked]) || (self.hasDragged && ![self isDraggingTowardsOn])) ?
     kBorderLineWidth :
     NSWidth(_backgroundLayer.bounds) - width - kBorderLineWidth;
-    
+
     return (CGRect) {
         .size.width = width,
         .size.height = height,
@@ -263,7 +263,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
     if (!self.isEnabled) return;
 
     self.active = YES;
-    
+
     [self reloadLayer];
 }
 
@@ -271,10 +271,10 @@ static CGFloat const kDisabledOpacity = 0.5f;
     if (!self.isEnabled) return;
 
     self.dragged = YES;
-    
+
     NSPoint draggingPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
     self.draggingTowardsOn = draggingPoint.x >= NSWidth(self.bounds) / 2.f;
-    
+
     [self reloadLayer];
 }
 
@@ -282,17 +282,17 @@ static CGFloat const kDisabledOpacity = 0.5f;
     if (!self.isEnabled) return;
 
     self.active = NO;
-    
+
     BOOL checked = (![self hasDragged]) ? ![self checked] : [self isDraggingTowardsOn];
     BOOL invokeTargetAction = (checked != [self checked]);
-    
+
     self.checked = checked;
     if (invokeTargetAction) [self _invokeTargetAction];
-    
+
     // Reset
     self.dragged = NO;
     self.draggingTowardsOn = NO;
-    
+
     [self reloadLayer];
 }
 
@@ -314,7 +314,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
 	BOOL handledKeyEquivalent = NO;
 	if ([[self window] firstResponder] == self) {
 		NSInteger ch = [theEvent keyCode];
-		
+
 		if (ch == 49) //Space
 		{
 			self.checked = ![self checked];
@@ -353,31 +353,31 @@ static CGFloat const kDisabledOpacity = 0.5f;
 
         NSAccessibilityPostNotification(self, NSAccessibilityValueChangedNotification);
     }
-    
+
     [self reloadLayer];
 }
 
 - (NSColor *)tintColor {
     if (!_tintColor) return kDefaultTintColor;
-    
+
     return _tintColor;
 }
 
 - (void)setTintColor:(NSColor *)tintColor {
     _tintColor = tintColor;
-    
+
     [self reloadLayer];
 }
 
 - (NSColor *)disabledBorderColor {
     if (!_disabledBorderColor) return kDisabledBorderColor;
-    
+
     return _disabledBorderColor;
 }
 
 - (void)setDisabledBorderColor:(NSColor *)disabledBorderColor {
     _disabledBorderColor = disabledBorderColor;
-    
+
     [self reloadLayer];
 }
 
@@ -413,12 +413,12 @@ static CGFloat const kDisabledOpacity = 0.5f;
 - (void)propagateValue:(id)value forBinding:(NSString*)binding
 {
     NSParameterAssert(binding != nil);
-    
+
     // WARNING: bindingInfo contains NSNull, so it must be accounted for
     NSDictionary* bindingInfo = [self infoForBinding:binding];
     if(!bindingInfo)
         return; //there is no binding
-    
+
     // apply the value transformer, if one has been set
     NSDictionary* bindingOptions = [bindingInfo objectForKey:NSOptionsKey];
     if(bindingOptions){
@@ -429,7 +429,7 @@ static CGFloat const kDisabledOpacity = 0.5f;
                 transformer = [NSValueTransformer valueTransformerForName:transformerName];
             }
         }
-        
+
         if(transformer && (id)transformer != [NSNull null]){
             if([[transformer class] allowsReverseTransformation]){
                 value = [transformer reverseTransformedValue:value];
@@ -438,19 +438,19 @@ static CGFloat const kDisabledOpacity = 0.5f;
             }
         }
     }
-    
+
     id boundObject = [bindingInfo objectForKey:NSObservedObjectKey];
     if(!boundObject || boundObject == [NSNull null]){
         NSLog(@"ERROR: NSObservedObjectKey was nil for binding \"%@\" in %s", binding, __PRETTY_FUNCTION__);
         return;
     }
-    
+
     NSString* boundKeyPath = [bindingInfo objectForKey:NSObservedKeyPathKey];
     if(!boundKeyPath || (id)boundKeyPath == [NSNull null]){
         NSLog(@"ERROR: NSObservedKeyPathKey was nil for binding \"%@\" in %s", binding, __PRETTY_FUNCTION__);
         return;
     }
-    
+
     [boundObject setValue:value forKeyPath:boundKeyPath];
 }
 

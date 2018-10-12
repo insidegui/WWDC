@@ -8,12 +8,29 @@
 
 import Cocoa
 
+extension NSSize {
+    var aspectRatio: CGFloat {
+        return width / height
+    }
+
+    static func *(lhs: NSSize, rhs: CGFloat) -> NSSize {
+        return NSSize(width: lhs.width * rhs, height: lhs.height * rhs)
+    }
+}
+
+extension NSRect {
+    init(size: NSSize) {
+        self.init(origin: .zero, size: size)
+    }
+
+}
+
 extension NSImage {
 
     static func thumbnailImage(with url: URL, maxWidth: CGFloat) -> NSImage? {
         guard let inputImage = NSImage(contentsOf: url) else { return nil }
 
-        let aspectRatio = inputImage.size.width / inputImage.size.height
+        let aspectRatio = inputImage.size.aspectRatio
 
         let thumbSize = NSSize(width: maxWidth, height: maxWidth * aspectRatio)
 
@@ -21,7 +38,7 @@ extension NSImage {
 
         outputImage.lockFocus()
 
-        inputImage.draw(in: NSRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height), from: .zero, operation: .sourceOver, fraction: 1)
+        inputImage.draw(in: NSRect(size: thumbSize), from: .zero, operation: .sourceOver, fraction: 1)
 
         outputImage.unlockFocus()
 
