@@ -74,7 +74,7 @@ final class AppCoordinator {
 
         DownloadManager.shared.start(with: storage)
 
-        windowController.titleBarViewController.statusViewController = DownloadsStatusViewController(downloadManager: DownloadManager.shared)
+        windowController.titleBarViewController.statusViewController = DownloadsStatusViewController(downloadManager: DownloadManager.shared, storage: storage)
 
         liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
 

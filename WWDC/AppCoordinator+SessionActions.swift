@@ -19,9 +19,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let url = viewModel.session.asset(ofType: .hdVideo)?.remoteURL else { return }
-
-        _ = DownloadManager.shared.cancelDownload(url)
+        DownloadManager.shared.cancelDownloads([viewModel.session])
     }
 
     func sessionActionsDidSelectFavorite(_ sender: NSView?) {
@@ -47,15 +45,11 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let videoAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
-
-        DownloadManager.shared.download(videoAsset)
+        DownloadManager.shared.download([viewModel.session])
     }
 
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
-
-        guard let videoAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
 
         let alert = WWDCAlert.create()
 
@@ -74,7 +68,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
 
         switch choice {
         case .yes:
-            DownloadManager.shared.deleteDownload(for: videoAsset)
+            DownloadManager.shared.deleteDownloadedFile(for: viewModel.session)
         case .no:
             break
         }

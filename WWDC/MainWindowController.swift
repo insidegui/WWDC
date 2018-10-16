@@ -51,7 +51,7 @@ final class MainWindowController: WWDCWindowController {
 
         window.center()
 
-        window.identifier = NSUserInterfaceItemIdentifier(rawValue: "main")
+        window.identifier = .mainWindow
         window.setFrameAutosaveName("main")
         window.minSize = NSSize(width: 1060, height: 700)
 
@@ -66,4 +66,9 @@ final class MainWindowController: WWDCWindowController {
         return activePlayerView?.makeTouchBar()
     }
 
+}
+
+extension NSUserInterfaceItemIdentifier {
+
+    static let mainWindow = NSUserInterfaceItemIdentifier(rawValue: "main")
 }

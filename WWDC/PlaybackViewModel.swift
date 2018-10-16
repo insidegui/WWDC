@@ -85,7 +85,7 @@ final class PlaybackViewModel {
             remoteMediaURL = remoteUrl
 
             // check if we have a downloaded file and use it instead
-            if let localUrl = DownloadManager.shared.localFileURL(for: session) {
+            if let localUrl = DownloadManager.shared.downloadedFileURL(for: session) {
                 streamUrl = localUrl
             } else {
                 streamUrl = remoteUrl

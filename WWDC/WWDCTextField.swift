@@ -10,6 +10,17 @@ import Cocoa
 
 class WWDCTextField: NSTextField {
 
+    private var _allowsVibrancy: Bool = false
+    override var allowsVibrancy: Bool {
+        get {
+            return _allowsVibrancy
+        }
+        set {
+            assert(window == nil, "You can't change this property when it's in a view hiearchy")
+            _allowsVibrancy = newValue
+        }
+    }
+
     override func viewWillMove(toSuperview newSuperview: NSView?) {
         NotificationCenter.default.removeObserver(self, name: NSView.frameDidChangeNotification, object: superview)
 

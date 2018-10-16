@@ -176,18 +176,25 @@ class SessionActionsViewController: NSViewController {
         if let rxDownloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
             rxDownloadState.throttle(0.8, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] status in
                 switch status {
-                case .downloading(let progress):
+                case .downloading(let info):
                     self?.downloadIndicator.isHidden = false
                     self?.downloadButton.isHidden = true
 
-                    if progress < 0 {
+                    if info.progress < 0 {
                         self?.downloadIndicator.isIndeterminate = true
                         self?.downloadIndicator.startAnimation(nil)
                     } else {
                         self?.downloadIndicator.isIndeterminate = false
-                        self?.downloadIndicator.doubleValue = progress
+                        self?.downloadIndicator.doubleValue = info.progress
                     }
-                case .paused, .cancelled, .none, .failed:
+
+                case .failed:
+                    let alert = WWDCAlert.create()
+                    alert.messageText = "Download Failed!"
+                    alert.informativeText = "An error occurred while attempting to download \"\(viewModel.title)\"."
+                    alert.runModal()
+                    fallthrough
+                case .paused, .cancelled, .none:
                     self?.resetDownloadButton()
                     self?.downloadIndicator.isHidden = true
                     self?.downloadButton.isHidden = false

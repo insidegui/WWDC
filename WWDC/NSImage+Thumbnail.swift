@@ -29,3 +29,36 @@ extension NSImage {
     }
 
 }
+
+extension NSImage {
+
+    func makeFreestandingTemplate(outputSize: NSSize) -> NSImage {
+        let insetPercentage: CGFloat = 0.25
+        var insetSize = outputSize
+        let widthInset = outputSize.width * insetPercentage
+        let heightInset = outputSize.height * insetPercentage
+        insetSize.width -= 2 * widthInset
+        insetSize.height -= 2 * heightInset
+
+        let destinationRect = NSRect(origin: CGPoint(x: widthInset, y: heightInset), size: insetSize)
+
+        // Circle Template
+        let circle = CAShapeLayer()
+        circle.path = CGPath(ellipseIn: CGRect(origin: .zero, size: outputSize), transform: nil)
+
+        // New image
+        let newImage = NSImage(size: outputSize)
+        newImage.lockFocus()
+
+        // Render both into new image
+        let ctx = NSGraphicsContext.current!.cgContext
+        circle.render(in: ctx)
+        draw(in: destinationRect, from: .zero, operation: .xor, fraction: 1)
+
+        newImage.unlockFocus()
+
+        newImage.isTemplate = true
+
+        return newImage
+    }
+}
