@@ -170,7 +170,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         // Horizontal layout
         let gap: CGFloat = -5
         progressIndicator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        progressIndicator.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        progressIndicator.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 3).isActive = true
         progressIndicator.trailingAnchor.constraint(equalTo: suspendResumeButton.leadingAnchor, constant: gap).isActive = true
 
         suspendResumeButton.trailingAnchor.constraint(equalTo: cancelButton.leadingAnchor, constant: gap/2).isActive = true

@@ -6,36 +6,33 @@
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 
-import Foundation
-import RxSwift
 import ConfCore
+import RxSwift
 
 class DownloadsManagementViewController: NSViewController {
 
     fileprivate struct Metrics {
-        static let topPadding: CGFloat = 20
+        static let topPadding: CGFloat = 0
         static let tableGridLineHeight: CGFloat = 2
         static let rowHeight: CGFloat = 64
-        static let popOverDesiredWidth: CGFloat = 500
+        static let popOverDesiredWidth: CGFloat = 400
         static let popOverDesiredHeight: CGFloat = 500
     }
 
-    lazy var tableView: WWDCTableView = {
-        let v = WWDCTableView()
-
-        v.allowsEmptySelection = true
+    lazy var tableView: DownloadsManagementTableView = {
+        let v = DownloadsManagementTableView()
 
         v.wantsLayer = true
         v.focusRingType = .none
-        v.allowsMultipleSelection = true
+        v.allowsEmptySelection = true
+        v.allowsMultipleSelection = false
         v.backgroundColor = .clear
         v.headerView = nil
         v.rowHeight = Metrics.rowHeight
         v.autoresizingMask = [.width, .height]
         v.floatsGroupRows = true
         v.gridStyleMask = .solidHorizontalGridLineMask
-        v.gridColor = .darkGridColor
-        v.selectionHighlightStyle = .none // see WWDCTableRowView
+        v.gridColor = NSColor.gridColor
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "download"))
         v.addTableColumn(column)
@@ -65,10 +62,16 @@ class DownloadsManagementViewController: NSViewController {
         view = NSView(frame: NSRect(x: 0, y: 0, width: Metrics.popOverDesiredWidth, height: Metrics.popOverDesiredHeight))
 
         view.addSubview(scrollView)
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: Metrics.topPadding).isActive = true
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Metrics.topPadding).isActive = true
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+
+        view.window?.title = "Downloads"
     }
 
     let downloadManager: DownloadManager
@@ -81,8 +84,8 @@ class DownloadsManagementViewController: NSViewController {
                 view.window?.close()
             } else if downloads != oldValue {
                 tableView.reloadData()
-                let height = min((Metrics.rowHeight + Metrics.tableGridLineHeight) * CGFloat(downloads.count) + Metrics.topPadding, preferredMaximumSize.height)
-                self.preferredContentSize = NSSize(width: 500, height: height)
+                let height = min((Metrics.rowHeight + Metrics.tableGridLineHeight) * CGFloat(downloads.count) + Metrics.topPadding * 2, preferredMaximumSize.height)
+                self.preferredContentSize = NSSize(width: Metrics.popOverDesiredWidth, height: height)
             }
         }
     }
@@ -91,7 +94,7 @@ class DownloadsManagementViewController: NSViewController {
         var mainSize = NSApp.windows.filter { $0.identifier == .mainWindow }.compactMap { $0 as? WWDCWindow }.first?.frame.size
         mainSize?.height -= 50
 
-        return mainSize ?? NSSize(width: 500, height: 500)
+        return mainSize ?? NSSize(width: Metrics.popOverDesiredWidth, height: Metrics.popOverDesiredHeight)
     }
 
     init(downloadManager: DownloadManager, storage: Storage) {
@@ -100,32 +103,11 @@ class DownloadsManagementViewController: NSViewController {
 
         super.init(nibName: nil, bundle: nil)
 
-        let disposeBag = self.disposeBag
         downloadManager
             .downloadsObservable
-            .subscribe(onNext: { [weak disposeBag, weak self] in
-                guard let disposeBag = disposeBag else { return }
-                guard let self = self else { return }
+            .subscribe(onNext: { [weak self] in
 
-                self.downloads = $0.sorted(by: DownloadManager.Download.sortingFunction)
-
-                let statusObserverables = $0.compactMap { downloadManager.downloadStatusObservable(for: $0) }
-
-                let allStatuses = Observable.combineLatest(statusObserverables)
-
-                // Occassionally reorder the list to keep running downloads at the top, etc
-                allStatuses
-                    .throttle(0.5, scheduler: ConcurrentDispatchQueueScheduler(qos: .background))
-                    .map { [weak self] _ -> [DownloadManager.Download]? in
-
-                        self?.downloads.sorted(by: DownloadManager.Download.sortingFunction)
-                    }
-                    .observeOn(MainScheduler.instance)
-                    .ignoreNil()
-                    .distinctUntilChanged(==)
-                    .subscribe(onNext: { [weak self] in
-                        self?.downloads = $0
-                    }).disposed(by: disposeBag)
+                self?.downloads = $0.sorted(by: DownloadManager.Download.sortingFunction)
             }).disposed(by: disposeBag)
     }
 
@@ -164,12 +146,14 @@ extension DownloadsManagementViewController: NSTableViewDataSource, NSTableViewD
     }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier), owner: tableView) as? WWDCTableRowView
+        var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier), owner: tableView) as? DownloadsManagementTableRowView
 
         if rowView == nil {
-            rowView = WWDCTableRowView(frame: .zero)
+            rowView = DownloadsManagementTableRowView(frame: .zero)
             rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier)
         }
+
+        rowView?.isLastRow = row == downloads.index(before: downloads.endIndex)
 
         return rowView
     }

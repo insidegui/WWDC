@@ -58,7 +58,7 @@ final class DownloadManager: NSObject {
 
         backgroundSession.getTasksWithCompletionHandler { _, _, pendingTasks in
             for task in pendingTasks {
-                if let key = task.originalRequest?.url!.absoluteString,
+                if let key = task.originalRequest?.url?.absoluteString,
                     let remoteURL = URL(string: key),
                     let asset = storage.asset(with: remoteURL),
                     let session = asset.session.first {
@@ -80,6 +80,9 @@ final class DownloadManager: NSObject {
     }
 
     func download(_ sessions: [Session]) {
+        // This function is optimized so that many downloads can be started simultaneously and efficiently
+
+        // Step 1: Collect all the remote URLs on the main thread for Realm reasons
         var sessionURLMap = [SessionIdentifier: String]()
         for session in sessions {
             guard let asset = session.asset(ofType: DownloadManager.downloadQuality) else { continue }
@@ -93,17 +96,22 @@ final class DownloadManager: NSObject {
             sessionURLMap[SessionIdentifier(session.identifier)] = url
         }
 
+        // Step 2. Move to the background and start the downloads
         DispatchQueue.global(qos: .background).async {
             var successfullyStartedTasks = [String: Download]()
-            for (sessionID, url) in sessionURLMap {
-                let task = self.backgroundSession.downloadTask(with: URL(string: url)!)
-                if let key = task.originalRequest?.url!.absoluteString {
+            for (sessionID, urlString) in sessionURLMap {
+                if let task = URL(string: urlString).map({ self.backgroundSession.downloadTask(with: $0) }),
+                    let key = task.originalRequest?.url?.absoluteString {
+
                     successfullyStartedTasks[key] = Download(session: sessionID, remoteURL: key, task: task)
                 } else {
-                    NotificationCenter.default.post(name: .DownloadManagerDownloadFailed, object: url)
+                    NotificationCenter.default.post(name: .DownloadManagerDownloadFailed, object: urlString)
                 }
             }
 
+            // Step 3. Update the downloadTasks in 1 shot on the main thread
+            // This prevents observers from being thrashed by adding tasks individually in a loop
+            // which leads to application spins.
             DispatchQueue.main.async {
                 self.downloadTasks.merge(successfullyStartedTasks, uniquingKeysWith: { a, b in b })
 
@@ -162,7 +170,8 @@ final class DownloadManager: NSObject {
     }
 
     func downloadStatusObservable(for download: Download) -> Observable<DownloadStatus>? {
-        guard let downloadingAsset = storage.asset(with: URL(string: download.remoteURL)!) else { return nil }
+        guard let remoteURL = URL(string: download.remoteURL) else { return nil }
+        guard let downloadingAsset = storage.asset(with: remoteURL) else { return nil }
 
         return downloadStatusObservable(for: downloadingAsset)
     }
