@@ -89,7 +89,12 @@ final class DownloadManager: NSObject {
 
             let url = asset.remoteURL
 
-            if isDownloading(url) || hasDownloadedVideo(asset: asset) {
+            if isDownloading(url) {
+                _ = resumeDownload(url)
+                continue
+            }
+
+            if hasDownloadedVideo(asset: asset) {
                 continue
             }
 

@@ -101,6 +101,8 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         l.textColor = .labelColor
         l.isSelectable = true
         l.translatesAutoresizingMaskIntoConstraints = false
+        l.allowsDefaultTighteningForTruncation = true
+        l.lineBreakMode = .byTruncatingTail
 
         return l
     }()
@@ -111,6 +113,8 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         l.textColor = .labelColor
         l.isSelectable = true
         l.translatesAutoresizingMaskIntoConstraints = false
+        l.allowsDefaultTighteningForTruncation = true
+        l.lineBreakMode = .byTruncatingTail
 
         return l
     }()
@@ -142,6 +146,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         v.minValue = 0
         v.maxValue = 1
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.heightAnchor.constraint(equalToConstant: 12).isActive = true
         return v
     }()
 
@@ -182,9 +187,11 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         cancelButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: gap).isActive = true
 
         // Vertical layout
-        sessionTitleLabel.bottomAnchor.constraint(equalTo: progressIndicator.topAnchor).isActive = true
+        sessionTitleLabel.bottomAnchor.constraint(equalTo: progressIndicator.topAnchor, constant: -4).isActive = true
         sessionTitleLabel.leadingAnchor.constraint(equalTo: progressIndicator.leadingAnchor).isActive = true
+        sessionTitleLabel.trailingAnchor.constraint(equalTo: cancelButton.leadingAnchor).isActive = true
         downloadStatusLabel.topAnchor.constraint(equalTo: progressIndicator.bottomAnchor).isActive = true
         downloadStatusLabel.leadingAnchor.constraint(equalTo: progressIndicator.leadingAnchor).isActive = true
+        downloadStatusLabel.trailingAnchor.constraint(equalTo: suspendResumeButton.leadingAnchor).isActive = true
     }
 }
