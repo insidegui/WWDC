@@ -33,6 +33,7 @@ class DownloadsManagementViewController: NSViewController {
         v.floatsGroupRows = true
         v.gridStyleMask = .solidHorizontalGridLineMask
         v.gridColor = NSColor.gridColor
+        v.selectionHighlightStyle = .none
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "download"))
         v.addTableColumn(column)
@@ -81,7 +82,7 @@ class DownloadsManagementViewController: NSViewController {
     var downloads = [DownloadManager.Download]() {
         didSet {
             if downloads.count == 0 {
-                view.window?.close()
+                dismiss(nil)
             } else if downloads != oldValue {
                 tableView.reloadData()
                 let height = min((Metrics.rowHeight + Metrics.tableGridLineHeight) * CGFloat(downloads.count) + Metrics.topPadding * 2, preferredMaximumSize.height)
@@ -160,10 +161,6 @@ extension DownloadsManagementViewController: NSTableViewDataSource, NSTableViewD
 
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         return Metrics.rowHeight
-    }
-
-    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        return false
     }
 }
 

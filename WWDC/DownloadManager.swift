@@ -79,7 +79,7 @@ final class DownloadManager: NSObject {
         monitorDownloadsFolder()
     }
 
-    func download(_ sessions: [Session]) {
+    func download(_ sessions: [Session], resumeIfPaused: Bool = true) {
         // This function is optimized so that many downloads can be started simultaneously and efficiently
 
         // Step 1: Collect all the remote URLs on the main thread for Realm reasons
@@ -89,7 +89,7 @@ final class DownloadManager: NSObject {
 
             let url = asset.remoteURL
 
-            if isDownloading(url) {
+            if resumeIfPaused && isDownloading(url) {
                 _ = resumeDownload(url)
                 continue
             }
@@ -297,7 +297,7 @@ final class DownloadManager: NSObject {
     }
 
     private func resumeDownload(_ url: String) -> Bool {
-        if let download = downloadTasks[url] {
+        if let download = downloadTasks[url], download.state == .suspended {
             download.resume()
             return true
         }
@@ -325,7 +325,7 @@ final class DownloadManager: NSObject {
     }
 
     private func isDownloading(_ url: String) -> Bool {
-        return downloadTasks.keys.contains { $0 == url }
+        return downloadTasks[url] != nil
     }
 
     /// Given a remote URL, determines the asset that references the remote URL
@@ -441,6 +441,10 @@ final class DownloadManager: NSObject {
     }
 
     /// Updates the downloaded status for the sessions on the database based on the existence of the downloaded video file
+    ///
+    /// This function is only ever called with the main destination directory, despite what the rest
+    /// of the architecture might suggest. The subfolder monitors just force the entire hierarchy to be
+    /// re-enumerated. This function has signifcant side effects.
     fileprivate func updateDownloadedFlagsByEnumeratingFilesAtPath(_ path: String) {
         guard let enumerator = FileManager.default.enumerator(atPath: path) else { return }
         guard let files = enumerator.allObjects as? [String] else { return }
@@ -456,9 +460,12 @@ final class DownloadManager: NSObject {
 
         let removedFiles = existingVideoFiles.filter { !files.contains($0) }
 
-        storage.updateDownloadedFlag(false, forAssetsAtPaths: removedFiles)
+        storage.updateDownloadedFlag(false, forAssetsAtPaths: Array(removedFiles))
 
         removedFiles.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
+
+        // This is now the list of files
+        existingVideoFiles = files
     }
 
     // MARK: Teardown

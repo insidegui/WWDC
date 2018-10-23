@@ -96,7 +96,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
     }
 
     private lazy var sessionTitleLabel: NSTextField = {
-        let l = WWDCTextField(labelWithString: "")
+        let l = NSTextField(labelWithString: "")
         l.font = .systemFont(ofSize: 13)
         l.textColor = .labelColor
         l.isSelectable = true
@@ -108,7 +108,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
     }()
 
     private lazy var downloadStatusLabel: NSTextField = {
-        let l = WWDCTextField(labelWithString: "")
+        let l = NSTextField(labelWithString: "")
         l.font = NSFont.monospacedDigitSystemFont(ofSize: 11, weight: .regular)
         l.textColor = .labelColor
         l.isSelectable = true
@@ -120,7 +120,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
     }()
 
     static let pauseImage = NSImage(named: "NSPauseTemplate")!.makeFreestandingTemplate(outputSize: NSSize(width: 14, height: 14))
-    static let resumeImage = NSImage(named: "NSPlayTemplate")!.resized(to: 14)
+    static let resumeImage = NSImage(named: "NSPlayTemplate")!.resized(to: 13)
 
     private lazy var suspendResumeButton: NSButton = {
         let v = NSButton(image: DownloadsManagementTableCellView.pauseImage, target: self, action: #selector(togglePause))
@@ -176,9 +176,9 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         let gap: CGFloat = -5
         progressIndicator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         progressIndicator.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 3).isActive = true
-        progressIndicator.trailingAnchor.constraint(equalTo: suspendResumeButton.leadingAnchor, constant: gap).isActive = true
+        progressIndicator.trailingAnchor.constraint(equalTo: suspendResumeButton.leadingAnchor, constant: gap - 2).isActive = true
 
-        suspendResumeButton.trailingAnchor.constraint(equalTo: cancelButton.leadingAnchor, constant: gap/2).isActive = true
+        suspendResumeButton.trailingAnchor.constraint(equalTo: cancelButton.leadingAnchor, constant: gap/2 + 2).isActive = true
         suspendResumeButton.widthAnchor.constraint(equalToConstant: 25).isActive = true
         suspendResumeButton.centerYAnchor.constraint(equalTo: progressIndicator.centerYAnchor).isActive = true
 
@@ -189,9 +189,9 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         // Vertical layout
         sessionTitleLabel.bottomAnchor.constraint(equalTo: progressIndicator.topAnchor, constant: -4).isActive = true
         sessionTitleLabel.leadingAnchor.constraint(equalTo: progressIndicator.leadingAnchor).isActive = true
-        sessionTitleLabel.trailingAnchor.constraint(equalTo: cancelButton.leadingAnchor).isActive = true
+        sessionTitleLabel.trailingAnchor.constraint(lessThanOrEqualTo: cancelButton.leadingAnchor).isActive = true
         downloadStatusLabel.topAnchor.constraint(equalTo: progressIndicator.bottomAnchor).isActive = true
         downloadStatusLabel.leadingAnchor.constraint(equalTo: progressIndicator.leadingAnchor).isActive = true
-        downloadStatusLabel.trailingAnchor.constraint(equalTo: suspendResumeButton.leadingAnchor).isActive = true
+        downloadStatusLabel.trailingAnchor.constraint(lessThanOrEqualTo: cancelButton.leadingAnchor).isActive = true
     }
 }
