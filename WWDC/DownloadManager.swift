@@ -460,7 +460,7 @@ final class DownloadManager: NSObject {
 
         let removedFiles = existingVideoFiles.filter { !files.contains($0) }
 
-        storage.updateDownloadedFlag(false, forAssetsAtPaths: Array(removedFiles))
+        storage.updateDownloadedFlag(false, forAssetsAtPaths: removedFiles)
 
         removedFiles.forEach { NotificationCenter.default.post(name: .DownloadManagerFileDeletedNotification, object: $0) }
 
