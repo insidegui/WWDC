@@ -14,9 +14,9 @@ class DownloadsStatusButton: NSButton {
         super.init(frame: .zero)
         setButtonType(.momentaryLight)
 
-        bezelStyle = .rounded
+        bezelStyle = .texturedRounded
         imageScaling = .scaleProportionallyDown
-        image = #imageLiteral(resourceName: "downloads").resized(to: 17)
+        image = NSImage(named: "NSTransferDownload")
         self.target = target
         self.action = action
     }

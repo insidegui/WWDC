@@ -20,7 +20,7 @@ protocol SessionIdentifiable {
     var sessionIdentifier: String { get }
 }
 
-struct SessionIdentifier: SessionIdentifiable {
+struct SessionIdentifier: SessionIdentifiable, Hashable {
     let sessionIdentifier: String
 
     init(_ string: String) {

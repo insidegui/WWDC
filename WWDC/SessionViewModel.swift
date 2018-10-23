@@ -148,7 +148,7 @@ final class SessionViewModel {
     }()
 
     lazy var rxDownloadableContent: Observable<Results<SessionAsset>> = {
-        let downloadableAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '')", SessionAssetType.hdVideo.rawValue)
+        let downloadableAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '')", DownloadManager.downloadQuality.rawValue)
 
         return Observable.collection(from: downloadableAssets)
     }()

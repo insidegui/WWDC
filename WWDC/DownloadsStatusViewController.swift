@@ -6,16 +6,28 @@
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 
-import Foundation
+import ConfCore
+import RxSwift
 
 class DownloadsStatusViewController: NSViewController {
 
-    let downloadManager: DownloadManager
+    private let downloadManager: DownloadManager
+    private let storage: Storage
+    private let disposeBag = DisposeBag()
+    private weak var managementViewController: DownloadsManagementViewController?
 
-    init(downloadManager: DownloadManager) {
+    init(downloadManager: DownloadManager, storage: Storage) {
         self.downloadManager = downloadManager
+        self.storage = storage
 
         super.init(nibName: nil, bundle: nil)
+
+        downloadManager
+            .downloadsObservable
+            .throttle(0.2, scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
+                self?.statusButton.isHidden = $0.isEmpty
+            }).disposed(by: disposeBag)
     }
 
     required init?(coder: NSCoder) {
@@ -23,9 +35,8 @@ class DownloadsStatusViewController: NSViewController {
     }
 
     lazy var statusButton: DownloadsStatusButton = {
-        let v = DownloadsStatusButton(target: self, action: #selector(test))
+        let v = DownloadsStatusButton(target: self, action: #selector(toggleDownloadsManagementPopover))
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.sizeToFit()
 
         return v
     }()
@@ -33,22 +44,23 @@ class DownloadsStatusViewController: NSViewController {
     override func loadView() {
         let view = NSView()
 
-        #if DEBUG
         view.addSubview(statusButton)
         statusButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
-        statusButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.65, constant: 0).isActive = true
+        statusButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1, constant: 0).isActive = true
+        statusButton.widthAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1, constant: 0).isActive = true
         statusButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        #endif
 
         self.view = view
     }
 
     @objc
-    func test(sender: NSButton) {
-        if presentedViewControllers?.isEmpty == true {
-            present(DownloadsManagementViewController(nibName: nil, bundle: nil), asPopoverRelativeTo: sender.bounds, of: sender, preferredEdge: .maxY, behavior: .semitransient)
+    func toggleDownloadsManagementPopover(sender: NSButton) {
+        if managementViewController == nil {
+            let managementViewController = DownloadsManagementViewController(downloadManager: downloadManager, storage: storage)
+            self.managementViewController = managementViewController
+            present(managementViewController, asPopoverRelativeTo: sender.bounds, of: sender, preferredEdge: .maxY, behavior: .semitransient)
         } else {
-            presentedViewControllers?.forEach(dismiss)
+            managementViewController?.dismiss(nil)
         }
     }
 }
