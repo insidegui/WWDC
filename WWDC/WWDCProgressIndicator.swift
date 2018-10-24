@@ -153,7 +153,7 @@ final class WWDCProgressIndicator: NSView {
 
     @objc private func updateColor() {
         progressLayer.strokeColor = fillColor.cgColor
-        progressBackgroundLayer.strokeColor = fillColor.withAlphaComponent(0.15).cgColor
+        progressBackgroundLayer.strokeColor = fillColor.withAlphaComponent(0.35).cgColor
     }
 
     private func updateProgress() {
