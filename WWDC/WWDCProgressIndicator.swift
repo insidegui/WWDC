@@ -84,10 +84,6 @@ final class WWDCProgressIndicator: NSView {
         layoutProgressLayer()
     }
 
-    override func updateLayer() {
-        updateColor()
-    }
-
     func startAnimating() {
         isAnimating = true
     }
@@ -119,10 +115,6 @@ final class WWDCProgressIndicator: NSView {
         return l
     }()
 
-    override var wantsUpdateLayer: Bool {
-        return true
-    }
-
     private func setup() {
         wantsLayer = true
         layer = CALayer()
@@ -134,6 +126,11 @@ final class WWDCProgressIndicator: NSView {
 
         layoutProgressLayer()
         updateColor()
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(updateColor),
+                                               name: NSColor.systemColorsDidChangeNotification,
+                                               object: nil)
     }
 
     private func makeProgressCircle() -> CGPath {
@@ -154,7 +151,7 @@ final class WWDCProgressIndicator: NSView {
         CATransaction.commit()
     }
 
-    private func updateColor() {
+    @objc private func updateColor() {
         progressLayer.strokeColor = fillColor.cgColor
         progressBackgroundLayer.strokeColor = fillColor.withAlphaComponent(0.15).cgColor
     }
