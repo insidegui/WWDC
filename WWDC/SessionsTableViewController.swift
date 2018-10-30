@@ -529,15 +529,13 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         default: ()
         }
 
-        let remoteURL = viewModel.session.asset(ofType: .hdVideo)?.remoteURL
-
-        switch (menuItem.option, remoteURL) {
-        case let (.download, remoteURL?):
-            return !DownloadManager.shared.isDownloading(remoteURL) && DownloadManager.shared.localFileURL(for: viewModel.session) == nil
-        case let (.cancelDownload, remoteURL?):
-            return DownloadManager.shared.isDownloading(remoteURL)
-        case let (.revealInFinder, remoteURL?):
-            return DownloadManager.shared.hasVideo(remoteURL)
+        switch menuItem.option {
+        case .download:
+            return !DownloadManager.shared.isDownloading(viewModel.session) && !DownloadManager.shared.hasDownloadedVideo(session: viewModel.session)
+        case .cancelDownload:
+            return DownloadManager.shared.isDownloading(viewModel.session)
+        case .revealInFinder:
+            return DownloadManager.shared.hasDownloadedVideo(session: viewModel.session)
         default: ()
         }
 

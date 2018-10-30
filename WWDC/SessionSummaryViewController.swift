@@ -37,6 +37,10 @@ class SessionSummaryViewController: NSViewController {
         l.allowsDefaultTighteningForTruncation = true
         l.maximumNumberOfLines = 2
         l.translatesAutoresizingMaskIntoConstraints = false
+        l.isSelectable = true
+        // This prevents the text field from stripping attributes
+        // during selection. 
+        l.allowsEditingTextAttributes = true
 
         return l
     }()

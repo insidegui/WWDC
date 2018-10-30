@@ -70,26 +70,21 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
             guard case .yes = choice else { return }
         }
 
-        viewModels.forEach { viewModel in
-            guard let videoAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
-
-            DownloadManager.shared.download(videoAsset)
-        }
+        DownloadManager.shared.download(viewModels.map { $0.session })
     }
 
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel]) {
         viewModels.forEach { viewModel in
-            guard let videoAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
 
-            guard DownloadManager.shared.isDownloading(videoAsset.remoteURL) else { return }
+            guard DownloadManager.shared.isDownloading(viewModel.session) else { return }
 
-            DownloadManager.shared.deleteDownload(for: videoAsset)
+            DownloadManager.shared.deleteDownloadedFile(for: viewModel.session)
         }
     }
 
     func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel]) {
         guard let firstSession = viewModels.first?.session else { return }
-        guard let localURL = DownloadManager.shared.localFileURL(for: firstSession) else { return }
+        guard let localURL = DownloadManager.shared.downloadedFileURL(for: firstSession) else { return }
 
         NSWorkspace.shared.selectFile(localURL.path, inFileViewerRootedAtPath: localURL.deletingLastPathComponent().path)
     }
