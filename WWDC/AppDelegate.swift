@@ -15,6 +15,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
+
+        if #available(macOS 10.14, *) {
+            NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+        }
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {

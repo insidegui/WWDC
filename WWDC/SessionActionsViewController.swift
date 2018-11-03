@@ -92,14 +92,10 @@ class SessionActionsViewController: NSViewController {
         return b
     }()
 
-    private lazy var downloadIndicator: NSProgressIndicator = {
-        let pi = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: 24, height: 24))
+    private lazy var downloadIndicator: WWDCProgressIndicator = {
+        let pi = WWDCProgressIndicator(frame: NSRect(x: 0, y: 0, width: 24, height: 24))
 
-        pi.style = .spinning
         pi.isIndeterminate = false
-        pi.minValue = 0
-        pi.maxValue = 1
-        pi.doubleValue = 0
         pi.translatesAutoresizingMaskIntoConstraints = false
         pi.widthAnchor.constraint(equalToConstant: 24).isActive = true
         pi.heightAnchor.constraint(equalToConstant: 24).isActive = true
@@ -182,10 +178,10 @@ class SessionActionsViewController: NSViewController {
 
                     if info.progress < 0 {
                         self?.downloadIndicator.isIndeterminate = true
-                        self?.downloadIndicator.startAnimation(nil)
+                        self?.downloadIndicator.startAnimating()
                     } else {
                         self?.downloadIndicator.isIndeterminate = false
-                        self?.downloadIndicator.doubleValue = info.progress
+                        self?.downloadIndicator.progress = Float(info.progress)
                     }
 
                 case .failed:
@@ -231,7 +227,7 @@ class SessionActionsViewController: NSViewController {
     @IBAction func download(_ sender: NSView?) {
         downloadButton.isHidden = true
         downloadIndicator.isIndeterminate = true
-        downloadIndicator.startAnimation(nil)
+        downloadIndicator.startAnimating()
         downloadIndicator.isHidden = false
 
         delegate?.sessionActionsDidSelectDownload(sender)
