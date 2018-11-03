@@ -33,9 +33,7 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
     struct Metrics {
         static let width: CGFloat = 340
         static let height: CGFloat = 252
-        static let imageHeight: CGFloat = 192
         static let imageAspectRatio: CGFloat = 9 / 16
-        static let imageRadius: CGFloat = 6
     }
 
     override func loadView() {

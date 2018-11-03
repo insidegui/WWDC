@@ -54,18 +54,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator.showAboutWindow()
     }
 
-    #if !FEATURED_TAB_ENABLED
-    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-        if menuItem.action == #selector(viewFeatured) {
-            let postFix = " (Coming Soon)"
-            !menuItem.title.contains(postFix) ? menuItem.title.append(postFix) : ()
-            return false
-        } else {
-            return true
-        }
-    }
-    #endif
-
     @IBAction func viewFeatured(_ sender: Any) {
         coordinator.showFeatured()
     }
