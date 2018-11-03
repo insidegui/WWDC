@@ -181,8 +181,7 @@ class SessionActionsViewController: NSViewController {
                         self?.downloadIndicator.startAnimating()
                     } else {
                         self?.downloadIndicator.isIndeterminate = false
-
-                        self?.downloadIndicator.progress = Float(progress)
+                        self?.downloadIndicator.progress = Float(info.progress)
                     }
 
                 case .failed:
