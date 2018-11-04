@@ -105,6 +105,7 @@ final class FeaturedSectionViewController: NSViewController {
         v.hasHorizontalScroller = true
         v.horizontalScroller?.alphaValue = 0
         v.scrollerStyle = .overlay
+        v.backgroundColor = .listBackground
 
         _ = NotificationCenter.default.addObserver(forName: NSScroller.preferredScrollerStyleDidChangeNotification, object: nil, queue: nil) { [weak v] _ in
             v?.scrollerStyle = .overlay
@@ -130,7 +131,7 @@ final class FeaturedSectionViewController: NSViewController {
         v.dataSource = self
         v.delegate = self
         v.autoresizingMask = [.width, .height]
-        v.backgroundColors = [NSColor.listBackground]
+        v.backgroundColors = [.listBackground]
 
         return v
     }()
