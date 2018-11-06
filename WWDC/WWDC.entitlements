@@ -14,7 +14,5 @@
 	</array>
 	<key>com.apple.developer.ubiquity-kvstore-identifier</key>
 	<string>$(TeamIdentifierPrefix)$(CFBundleIdentifier)</string>
-	<key>com.apple.security.personal-information.calendars</key>
-	<true/>
 </dict>
 </plist>
