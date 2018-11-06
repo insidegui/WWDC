@@ -7,6 +7,21 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 6.1</title>
+			<description><![CDATA[
+				<ul>
+					<li>New "Featured" tab shows important new videos highlighted by Apple</li>
+					<li>The app is now optimized for macOS Mojave and will adopt the user's preferred accent color</li>
+					<li>New download manager: you can now see the progress and manage all downloads from a single location</li>
+					<li>Many other smaller fixes and improvements</li>
+				</ul>
+			]]></description>
+            <pubDate>Tue, 6 Nov 2018 11:30:00 -0200</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.1/WWDC_v6.1.zip" sparkle:version="900" sparkle:shortVersionString="6.1" length="22131729" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.12.2</sparkle:minimumSystemVersion>
+        </item>	
+		
+		<item>
             <title>Version 6.0.4</title>
 			<description><![CDATA[
 				<h3>Our "iOS 12" release</h3>

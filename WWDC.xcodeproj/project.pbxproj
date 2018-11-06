@@ -527,6 +527,7 @@
 		DDBA0D74208CD5430075670F /* SwiftProtobuf.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftProtobuf.framework.dSYM; path = Carthage/Build/Mac/SwiftProtobuf.framework.dSYM; sourceTree = "<group>"; };
 		DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfoCoordinator.swift; sourceTree = "<group>"; };
 		DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfo.swift; sourceTree = "<group>"; };
+		DDBFC18F2190C4680030E803 /* TranscriptIndexingService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TranscriptIndexingService.entitlements; sourceTree = "<group>"; };
 		DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKitCodable.framework; path = Carthage/Build/Mac/CloudKitCodable.framework; sourceTree = "<group>"; };
 		DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexer.swift; sourceTree = "<group>"; };
 		DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = TranscriptIndexingService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1255,6 +1256,7 @@
 		DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */ = {
 			isa = PBXGroup;
 			children = (
+				DDBFC18F2190C4680030E803 /* TranscriptIndexingService.entitlements */,
 				DDC677F81EDA76A100A4E19C /* main.m */,
 				DDC677FA1EDA76A100A4E19C /* Info.plist */,
 				DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */,
@@ -1740,6 +1742,9 @@
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
+							com.apple.HardenedRuntime = {
+								enabled = 0;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -1762,9 +1767,13 @@
 					};
 					DDC677F11EDA76A100A4E19C = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = 8C7439RJLG;
 						LastSwiftMigration = "";
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.HardenedRuntime = {
+								enabled = 0;
+							};
+						};
 					};
 					DDDAA3ED1EC7653200DF9D02 = {
 						CreatedOnToolsVersion = 8.3.2;
@@ -1900,7 +1909,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 		F72964482015787100A7A571 /* SwiftLint Warnings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2354,7 +2363,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
@@ -2382,7 +2391,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
@@ -2503,7 +2512,7 @@
 			};
 			name = Release;
 		};
-		DD5910641ECA0C17003C32A4 /* Debug with iCloud */ = {
+		DD5910641ECA0C17003C32A4 /* Debug_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2560,9 +2569,9 @@
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 			};
-			name = "Debug with iCloud";
+			name = Debug_iCloud;
 		};
-		DD5910651ECA0C17003C32A4 /* Debug with iCloud */ = {
+		DD5910651ECA0C17003C32A4 /* Debug_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -2586,13 +2595,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "605da31a-abf0-4ee3-84f3-c1169196f3d1";
-				PROVISIONING_PROFILE_SPECIFIER = "WWDC Debug 2018 B";
+				PROVISIONING_PROFILE_SPECIFIER = "WWDC Debug 2018 C";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug with iCloud";
+			name = Debug_iCloud;
 		};
-		DD5910661ECA0C17003C32A4 /* Debug with iCloud */ = {
+		DD5910661ECA0C17003C32A4 /* Debug_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -2622,9 +2631,9 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = "Debug with iCloud";
+			name = Debug_iCloud;
 		};
-		DD5910671ECA0C17003C32A4 /* Debug with iCloud */ = {
+		DD5910671ECA0C17003C32A4 /* Debug_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -2641,9 +2650,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
 			};
-			name = "Debug with iCloud";
+			name = Debug_iCloud;
 		};
-		DD5910681ECA0C17003C32A4 /* Debug with iCloud */ = {
+		DD5910681ECA0C17003C32A4 /* Debug_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2673,9 +2682,9 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = "Debug with iCloud";
+			name = Debug_iCloud;
 		};
-		DD5910691ECA0C20003C32A4 /* Release with iCloud */ = {
+		DD5910691ECA0C20003C32A4 /* Release_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -2724,9 +2733,9 @@
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.2;
 			};
-			name = "Release with iCloud";
+			name = Release_iCloud;
 		};
-		DD59106A1ECA0C20003C32A4 /* Release with iCloud */ = {
+		DD59106A1ECA0C20003C32A4 /* Release_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -2751,12 +2760,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "2adae370-6e55-4123-9dcf-25406dfab9ca";
-				PROVISIONING_PROFILE_SPECIFIER = "WWDC Release ID 2018";
+				PROVISIONING_PROFILE_SPECIFIER = "WWDC 2019";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
 			};
-			name = "Release with iCloud";
+			name = Release_iCloud;
 		};
-		DD59106B1ECA0C20003C32A4 /* Release with iCloud */ = {
+		DD59106B1ECA0C20003C32A4 /* Release_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -2785,9 +2794,9 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = "Release with iCloud";
+			name = Release_iCloud;
 		};
-		DD59106C1ECA0C20003C32A4 /* Release with iCloud */ = {
+		DD59106C1ECA0C20003C32A4 /* Release_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -2804,9 +2813,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
 			};
-			name = "Release with iCloud";
+			name = Release_iCloud;
 		};
-		DD59106D1ECA0C20003C32A4 /* Release with iCloud */ = {
+		DD59106D1ECA0C20003C32A4 /* Release_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -2835,14 +2844,15 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = "Release with iCloud";
+			name = Release_iCloud;
 		};
 		DDC677FF1EDA76A100A4E19C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2861,12 +2871,13 @@
 			};
 			name = Debug;
 		};
-		DDC678001EDA76A100A4E19C /* Debug with iCloud */ = {
+		DDC678001EDA76A100A4E19C /* Debug_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2883,14 +2894,15 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = "Debug with iCloud";
+			name = Debug_iCloud;
 		};
 		DDC678011EDA76A100A4E19C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2908,12 +2920,13 @@
 			};
 			name = Release;
 		};
-		DDC678021EDA76A100A4E19C /* Release with iCloud */ = {
+		DDC678021EDA76A100A4E19C /* Release_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2929,7 +2942,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
 			};
-			name = "Release with iCloud";
+			name = Release_iCloud;
 		};
 		DDDAA3F81EC7653300DF9D02 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3024,7 +3037,7 @@
 			};
 			name = Debug;
 		};
-		DDF721A11ECA12780054C503 /* Debug with iCloud */ = {
+		DDF721A11ECA12780054C503 /* Debug_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3052,7 +3065,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = "Debug with iCloud";
+			name = Debug_iCloud;
 		};
 		DDF721A21ECA12780054C503 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -3084,7 +3097,7 @@
 			};
 			name = Release;
 		};
-		DDF721A31ECA12780054C503 /* Release with iCloud */ = {
+		DDF721A31ECA12780054C503 /* Release_iCloud */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -3112,7 +3125,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = "Release with iCloud";
+			name = Release_iCloud;
 		};
 /* End XCBuildConfiguration section */
 
@@ -3121,9 +3134,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD36A4B91E478C6A00B2EA88 /* Debug */,
-				DD5910641ECA0C17003C32A4 /* Debug with iCloud */,
+				DD5910641ECA0C17003C32A4 /* Debug_iCloud */,
 				DD36A4BA1E478C6A00B2EA88 /* Release */,
-				DD5910691ECA0C20003C32A4 /* Release with iCloud */,
+				DD5910691ECA0C20003C32A4 /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3132,9 +3145,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD36A4BC1E478C6A00B2EA88 /* Debug */,
-				DD5910651ECA0C17003C32A4 /* Debug with iCloud */,
+				DD5910651ECA0C17003C32A4 /* Debug_iCloud */,
 				DD36A4BD1E478C6A00B2EA88 /* Release */,
-				DD59106A1ECA0C20003C32A4 /* Release with iCloud */,
+				DD59106A1ECA0C20003C32A4 /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3143,9 +3156,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD36A4DF1E478D7E00B2EA88 /* Debug */,
-				DD5910661ECA0C17003C32A4 /* Debug with iCloud */,
+				DD5910661ECA0C17003C32A4 /* Debug_iCloud */,
 				DD36A4E01E478D7E00B2EA88 /* Release */,
-				DD59106B1ECA0C20003C32A4 /* Release with iCloud */,
+				DD59106B1ECA0C20003C32A4 /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3154,9 +3167,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD36A4E11E478D7E00B2EA88 /* Debug */,
-				DD5910671ECA0C17003C32A4 /* Debug with iCloud */,
+				DD5910671ECA0C17003C32A4 /* Debug_iCloud */,
 				DD36A4E21E478D7E00B2EA88 /* Release */,
-				DD59106C1ECA0C20003C32A4 /* Release with iCloud */,
+				DD59106C1ECA0C20003C32A4 /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3165,9 +3178,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDC677FF1EDA76A100A4E19C /* Debug */,
-				DDC678001EDA76A100A4E19C /* Debug with iCloud */,
+				DDC678001EDA76A100A4E19C /* Debug_iCloud */,
 				DDC678011EDA76A100A4E19C /* Release */,
-				DDC678021EDA76A100A4E19C /* Release with iCloud */,
+				DDC678021EDA76A100A4E19C /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3176,9 +3189,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDDAA3F81EC7653300DF9D02 /* Debug */,
-				DD5910681ECA0C17003C32A4 /* Debug with iCloud */,
+				DD5910681ECA0C17003C32A4 /* Debug_iCloud */,
 				DDDAA3F91EC7653300DF9D02 /* Release */,
-				DD59106D1ECA0C20003C32A4 /* Release with iCloud */,
+				DD59106D1ECA0C20003C32A4 /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3187,9 +3200,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDF721A01ECA12780054C503 /* Debug */,
-				DDF721A11ECA12780054C503 /* Debug with iCloud */,
+				DDF721A11ECA12780054C503 /* Debug_iCloud */,
 				DDF721A21ECA12780054C503 /* Release */,
-				DDF721A31ECA12780054C503 /* Release with iCloud */,
+				DDF721A31ECA12780054C503 /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
