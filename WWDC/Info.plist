@@ -76,6 +76,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Calendar access allows you to add events directly from the app to help you plan your WWDC week.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Guilherme Rambo. All rights reserved.</string>
 	<key>NSMainStoryboardFile</key>
