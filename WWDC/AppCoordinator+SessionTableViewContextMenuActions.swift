@@ -11,7 +11,6 @@ import RealmSwift
 import RxSwift
 import ConfCore
 import PlayerUI
-import EventKit
 
 extension AppCoordinator: SessionsTableViewControllerDelegate {
 
