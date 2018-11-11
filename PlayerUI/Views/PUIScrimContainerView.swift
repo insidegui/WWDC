@@ -14,28 +14,28 @@ final class PUIScrimContainerView: NSView {
         super.init(frame: frameRect)
 
         wantsLayer = true
-        layer?.backgroundColor = NSColor(calibratedWhite: 0, alpha: 0.2).cgColor
 
         layer?.addSublayer(bottomScrimLayer)
-        layer?.addSublayer(topScrimLayer)
     }
 
     required init?(coder: NSCoder) {
         fatalError()
     }
 
-    private let scrimRatio: CGFloat = 0.138
+    private let scrimRatio: CGFloat = 0.18
 
-    private let scrimOpacity: Float = 0.4
+    private let scrimOpacity: Float = 0.5
 
-    private let scrimColors: [CGColor] = [
-        NSColor(calibratedWhite: 0, alpha: 1).cgColor,
-        NSColor(calibratedWhite: 0, alpha: 0.88).cgColor,
-        NSColor(calibratedWhite: 0, alpha: 0.75).cgColor,
-        NSColor(calibratedWhite: 0, alpha: 0.5).cgColor,
-        NSColor(calibratedWhite: 0, alpha: 0.25).cgColor,
-        NSColor(calibratedWhite: 0, alpha: 0.12).cgColor,
-        NSColor(calibratedWhite: 0, alpha: 0).cgColor
+    private let scrimColor = NSColor.black
+
+    private lazy var scrimColors: [CGColor] = [
+        scrimColor.withAlphaComponent(1).cgColor,
+        scrimColor.withAlphaComponent(0.95).cgColor,
+        scrimColor.withAlphaComponent(0.8).cgColor,
+        scrimColor.withAlphaComponent(0.5).cgColor,
+        scrimColor.withAlphaComponent(0.2).cgColor,
+        scrimColor.withAlphaComponent(0.05).cgColor,
+        scrimColor.withAlphaComponent(0).cgColor
     ]
 
     private let scrimLocations: [NSNumber] = [
@@ -60,27 +60,10 @@ final class PUIScrimContainerView: NSView {
         return l
     }()
 
-    private lazy var topScrimLayer: PUIBoringGradientLayer = {
-        let l = PUIBoringGradientLayer()
-
-        l.colors = self.scrimColors
-        l.locations = self.scrimLocations
-        l.startPoint = CGPoint(x: 0, y: 1)
-        l.endPoint = CGPoint(x: 0, y: 0)
-        l.opacity = self.scrimOpacity
-
-        return l
-    }()
-
     override func layout() {
         var topRect = bounds
-        topRect.size.height = bounds.height * scrimRatio
+        topRect.size.height = bounds.height * 0.3
         bottomScrimLayer.frame = topRect
-
-        var bottomRect = bounds
-        bottomRect.size.height = bounds.height * scrimRatio
-        bottomRect.origin.y = bounds.height - bottomRect.height
-        topScrimLayer.frame = bottomRect
     }
 
 }
