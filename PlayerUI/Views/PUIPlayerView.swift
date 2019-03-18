@@ -1566,7 +1566,7 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
     }
 
     public func externalPlaybackProvider(_ provider: PUIExternalPlaybackProvider, deviceSelectionMenuDidChangeWith menu: NSMenu) {
-        guard let registrationIndex = externalPlaybackProviders.index(where: { type(of: $0.provider).name == type(of: provider).name }) else { return }
+        guard let registrationIndex = externalPlaybackProviders.firstIndex(where: { type(of: $0.provider).name == type(of: provider).name }) else { return }
 
         externalPlaybackProviders[registrationIndex].menu = menu
     }

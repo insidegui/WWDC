@@ -10,7 +10,7 @@ import Foundation
 import os.log
 
 public extension Notification.Name {
-    public static let WWDCEnvironmentDidChange = Notification.Name("WWDCEnvironmentDidChange")
+    static let WWDCEnvironmentDidChange = Notification.Name("WWDCEnvironmentDidChange")
 }
 
 public struct Environment: Equatable {

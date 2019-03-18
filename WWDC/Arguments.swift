@@ -31,7 +31,7 @@ struct Arguments {
     }
 
     static var deloreanDate: String? {
-        guard let deloreanIndex = args.index(of: "--delorean") else { return nil }
+        guard let deloreanIndex = args.firstIndex(of: "--delorean") else { return nil }
         // An example value: 2017-06-07'T'12:00:00-06:00
         // - see: `DateProvider`
 

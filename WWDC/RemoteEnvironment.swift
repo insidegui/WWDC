@@ -99,7 +99,7 @@ final class RemoteEnvironment {
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
 
         // check if the remote notification is for us, if not, tell the caller that we haven't handled it
-        guard notification.subscriptionID == environmentSubscriptionID else { return false }
+        guard notification?.subscriptionID == environmentSubscriptionID else { return false }
 
         // notification for environment change
         fetch()

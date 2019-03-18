@@ -82,7 +82,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         itemView.target = self
         itemView.action = #selector(changeTab)
 
-        itemView.state = (tabViewItems.index(of: tabViewItem) == selectedTabViewItemIndex) ? .on : .off
+        itemView.state = (tabViewItems.firstIndex(of: tabViewItem) == selectedTabViewItemIndex) ? .on : .off
 
         tabBar.addItem(itemView)
     }
@@ -127,7 +127,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     }
 
     private func indexForChild(with identifier: String) -> Int? {
-        return tabViewItems.index { $0.viewController?.identifier?.rawValue == identifier }
+        return tabViewItems.firstIndex { $0.viewController?.identifier?.rawValue == identifier }
     }
 
     private var loadingView: ModalLoadingView?

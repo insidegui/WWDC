@@ -59,7 +59,7 @@ extension Session {
 extension Array where Element == SessionRow {
 
     func index(of session: SessionIdentifiable) -> Int? {
-        return index { row in
+        return firstIndex { row in
             guard case .session(let viewModel) = row.kind else { return false }
 
             return viewModel.identifier == session.sessionIdentifier
@@ -67,7 +67,7 @@ extension Array where Element == SessionRow {
     }
 
     func firstSessionRowIndex() -> Int? {
-        return index { row in
+        return firstIndex { row in
             if case .session = row.kind {
                 return true
             }
@@ -160,7 +160,7 @@ final class FilterResults {
 
 fileprivate extension NSPredicate {
 
-    fileprivate func orCurrentlyPlayingSession() -> NSPredicate {
+    func orCurrentlyPlayingSession() -> NSPredicate {
 
         guard let playingSession = (NSApplication.shared.delegate as? AppDelegate)?.coordinator.playerOwnerSessionIdentifier else {
             return self
@@ -183,7 +183,7 @@ public extension ObservableType where E: NotificationEmitter {
 
      - returns: `Observable<E>`, e.g. when called on `Results<Model>` it will return `Observable<Results<Model>>`, on a `List<User>` it will return `Observable<List<User>>`, etc.
      */
-    public static func shallowCollection(from collection: E, synchronousStart: Bool = true)
+    static func shallowCollection(from collection: E, synchronousStart: Bool = true)
         -> Observable<E> {
 
             return Observable.create { observer in
