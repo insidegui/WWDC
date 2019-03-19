@@ -84,7 +84,7 @@ public final class Storage {
     }
 
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping (Error?) -> Void) {
-        if case let .error(error) = contentResult {
+        if case let .failure(error) = contentResult {
             os_log("Error downloading contents: %{public}@",
                    log: log,
                    type: .error,
@@ -251,7 +251,7 @@ public final class Storage {
     }
 
     internal func store(featuredSectionsResult: Result<[FeaturedSection], APIError>, completion: @escaping (Error?) -> Void) {
-        if case let .error(error) = featuredSectionsResult {
+        if case let .failure(error) = featuredSectionsResult {
             os_log("Error downloading featured sections: %{public}@",
                    log: log,
                    type: .error,
