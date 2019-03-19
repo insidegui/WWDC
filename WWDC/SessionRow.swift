@@ -51,15 +51,15 @@ extension SessionRow {
     }
 }
 
-extension SessionRow: Equatable {
+extension SessionRow: Hashable {
 
-    var hashValue: Int {
-        let caseNameStringHash = String(reflecting: kind).hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(String(reflecting: kind))
         switch kind {
         case let .sectionHeader(title):
-            return caseNameStringHash ^ title.hashValue
+            hasher.combine(title)
         case let .session(viewModel):
-            return caseNameStringHash ^ viewModel.identifier.hashValue
+            hasher.combine(viewModel.identifier)
         }
     }
 
@@ -82,8 +82,8 @@ struct IndexedSessionRow: Hashable {
     let sessionRow: SessionRow
     let index: Int
 
-    var hashValue: Int {
-        return sessionRow.hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(sessionRow)
     }
 
     static func == (lhs: IndexedSessionRow, rhs: IndexedSessionRow) -> Bool {

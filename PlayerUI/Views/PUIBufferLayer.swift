@@ -11,14 +11,6 @@ import Cocoa
 struct PUIBufferSegment: Hashable {
     let start: Double
     let duration: Double
-
-    var hashValue: Int {
-        return "\(start)->\(duration)".hashValue
-    }
-
-    static func == (lhs: PUIBufferSegment, rhs: PUIBufferSegment) -> Bool {
-        return lhs.start == rhs.start && lhs.duration == rhs.duration
-    }
 }
 
 final class PUIBufferLayer: PUIBoringLayer {

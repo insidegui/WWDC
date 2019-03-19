@@ -11,17 +11,24 @@ import Cocoa
 extension NSStackView {
 
     var computedContentSize: CGSize {
-        switch orientation {
-        case .horizontal:
+        func horizontal() -> CGSize {
             let height = arrangedSubviews.map({ $0.bounds.height }).max() ?? CGFloat(0)
             let width = arrangedSubviews.reduce(CGFloat(0), { $0 + $1.intrinsicContentSize.width + spacing })
 
             return CGSize(width: width - spacing, height: height)
+        }
+
+        switch orientation {
+        case .horizontal:
+            return horizontal()
         case .vertical:
             let width = arrangedSubviews.map({ $0.bounds.width }).max() ?? CGFloat(0)
             let height = arrangedSubviews.reduce(CGFloat(0), { $0 + $1.intrinsicContentSize.height + spacing })
 
             return CGSize(width: width, height: height - spacing)
+        @unknown default:
+            assertionFailure("An unexpected case was discovered on an non-frozen obj-c enum")
+            return horizontal()
         }
     }
 

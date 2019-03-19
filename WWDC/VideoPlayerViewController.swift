@@ -238,6 +238,9 @@ final class VideoPlayerViewController: NSViewController {
             showLoading()
         case .playing, .paused:
             hideLoading()
+        @unknown default:
+            assertionFailure("An unexpected case was discovered on an non-frozen obj-c enum")
+            hideLoading()
         }
     }
 

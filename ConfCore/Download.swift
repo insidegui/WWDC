@@ -9,7 +9,7 @@
 import Cocoa
 import RealmSwift
 
-@available(*, deprecated: 1.0.0, message: "Provided for legacy support only, do not use this!")
+@available(*, deprecated, message: "Provided for legacy support only, do not use this!")
 enum DownloadStatus: String {
     case none
     case downloading
@@ -18,7 +18,7 @@ enum DownloadStatus: String {
     case completed
 }
 
-@available(*, deprecated: 1.0.0, message: "Provided for legacy support only, do not use this!")
+@available(*, deprecated, message: "Provided for legacy support only, do not use this!")
 public class Download: Object {
 
     /// Unique identifier

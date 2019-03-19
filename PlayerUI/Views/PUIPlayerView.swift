@@ -1079,7 +1079,7 @@ public final class PUIPlayerView: NSView {
         // reset all item's states
         sender.menu?.items.forEach({ $0.state = .on })
 
-        if option.extendedLanguageTag == player?.currentItem?.selectedMediaOption(in: subtitlesGroup)?.extendedLanguageTag {
+        if option.extendedLanguageTag == player?.currentItem?.currentMediaSelection.selectedMediaOption(in: subtitlesGroup)?.extendedLanguageTag {
             player?.currentItem?.select(nil, in: subtitlesGroup)
             sender.state = .off
             return
