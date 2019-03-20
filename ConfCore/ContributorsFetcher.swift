@@ -56,7 +56,11 @@ public final class ContributorsFetcher {
             }
 
             self.syncQueue.async {
-                self.names += self.parseResponse(data)
+                do {
+                    self.names += try self.parseResponse(data)
+                } catch {
+                    os_log("Failed to decode contributors names", log: self.log, type: .error)
+                }
 
                 if let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String,
                     let nextPage = GitHubPagination(linkHeader: linkHeader)?.next {
@@ -70,12 +74,9 @@ public final class ContributorsFetcher {
         task.resume()
     }
 
-    fileprivate func parseResponse(_ data: Data) -> [String] {
-        guard let contributors = try? JSONDecoder().decode(Array<GitHubUser>.self, from: data) else {
-            return [String]()
-        }
+    fileprivate func parseResponse(_ data: Data) throws -> [String] {
 
-        return contributors.map { $0.login }
+        return try JSONDecoder().decode([GitHubUser].self, from: data).map { $0.login }
     }
 
     fileprivate func buildInfoText(_ names: [String]) {

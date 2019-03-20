@@ -48,19 +48,19 @@ public final class AppleAPIClient {
 
         service.configureTransformer(environment.newsPath) { (entity: Entity<Data>) throws -> [NewsItem]? in
             struct NewsItemWrapper: Decodable {
-                let items: FailableItemArrayWrapper<NewsItem>
+                let items: [NewsItem]
             }
 
-            let result = try decoder.decode(NewsItemWrapper.self, from: entity.content).items.items
+            let result = try decoder.decode(NewsItemWrapper.self, from: entity.content).items
             return result
         }
 
         service.configureTransformer(environment.featuredSectionsPath) { (entity: Entity<Data>) throws -> [FeaturedSection]? in
             struct FeaturedContentWrapper: Decodable {
-                let sections: FailableItemArrayWrapper<FeaturedSection>
+                let sections: [FeaturedSection]
             }
 
-            let result = try decoder.decode(FeaturedContentWrapper.self, from: entity.content).sections.items
+            let result = try decoder.decode(FeaturedContentWrapper.self, from: entity.content).sections
             return result
         }
 

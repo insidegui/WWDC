@@ -20,7 +20,6 @@ class AdapterTests: XCTestCase {
         return formatter
     }()
 
-    // CodableFixMe: Remove this function and replace by the below one
     private func getJson(from filename: String) -> JSON {
         guard let fileURL = Bundle(for: AdapterTests.self).url(forResource: filename, withExtension: "json") else {
             XCTFail("Unable to find URL for fixture named \(filename)")
@@ -289,7 +288,7 @@ class AdapterTests: XCTestCase {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .formatted(.confCoreFormatter)
 
-            instances = try decoder.decode(FailableItemArrayWrapper<SessionInstance>.self, from: instancesArray).items
+            instances = Array(try decoder.decode(ConditionallyDecodableCollection<SessionInstance>.self, from: instancesArray))
         } catch {
             XCTFail(error.localizedDescription)
 
@@ -347,7 +346,7 @@ class AdapterTests: XCTestCase {
         let items: [NewsItem]
 
         do {
-            items = try JSONDecoder().decode(FailableItemArrayWrapper<NewsItem>.self, from: newsArray).items
+            items = Array(try JSONDecoder().decode(ConditionallyDecodableCollection<NewsItem>.self, from: newsArray))
         } catch {
             XCTFail(error.localizedDescription)
             fatalError()
@@ -398,7 +397,7 @@ class AdapterTests: XCTestCase {
         let sections: [FeaturedSection]
 
         do {
-            sections = try JSONDecoder().decode(FailableItemArrayWrapper<FeaturedSection>.self, from: sectionsArray).items
+            sections = try JSONDecoder().decode([FeaturedSection].self, from: sectionsArray)
         } catch {
             XCTFail(error.localizedDescription)
             fatalError()

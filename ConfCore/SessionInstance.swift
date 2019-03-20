@@ -9,7 +9,7 @@
 import Cocoa
 import RealmSwift
 
-public enum SessionInstanceType: Int {
+public enum SessionInstanceType: Int, Decodable {
     case session, lab, video, getTogether, specialEvent, labByAppointment
 
     init?(rawSessionType: String) {
@@ -32,7 +32,7 @@ public enum SessionInstanceType: Int {
 }
 
 /// A session instance represents a specific occurence of a session with a location and start/end times
-public class SessionInstance: Object, Decodable {
+public class SessionInstance: Object, ConditionallyDecodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -175,36 +175,44 @@ public class SessionInstance: Object, Decodable {
     }
 
     public convenience required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let session = try Session(from: decoder)
-        let startDate = try container.decode(Date.self, forKey: .startTime)
-        let endDate = try container.decode(Date.self, forKey: .endTime)
-        let rawType = try container.decode(String.self, forKey: .type)
-        let id = try container.decode(String.self, forKey: .id)
-        let eventId = try container.decode(String.self, forKey: .eventId)
-        let roomIdentifier = try container.decode(Int.self, forKey: .room)
-        let trackIdentifier = try container.decode(Int.self, forKey: .track)
-
         self.init()
 
-        if let keywords = try container.decodeIfPresent([Keyword].self, forKey: .keywords) {
-            self.keywords.append(objectsIn: keywords)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        func isKeyNotFound(_ error: DecodingError) -> Bool {
+            switch error {
+            case .keyNotFound:
+                return true
+            default:
+                return false
+            }
         }
 
-        self.identifier = session.identifier
-        self.eventIdentifier = eventId
-        self.number = id
-        self.session = session
-        self.trackIdentifier = "\(trackIdentifier)"
-        self.roomIdentifier = "\(roomIdentifier)"
-        self.rawSessionType = rawType
-        self.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
-        self.startTime = startDate
-        self.endTime = endDate
-        self.actionLinkPrompt = try container.decodeIfPresent(String.self, forKey: .actionLinkPrompt)
-        self.actionLinkURL = try container.decodeIfPresent(String.self, forKey: .actionLinkURL)
+        do {
+            let session = try Session(from: decoder)
 
+            self.number = try container.decode(forKey: .id)
+            self.session = session
+            self.identifier = session.identifier
+            self.eventIdentifier = try container.decode(forKey: .eventId)
+
+            let rawType = try container.decode(String.self, forKey: .type)
+            self.rawSessionType = rawType
+            self.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
+
+            self.startTime = try container.decode(Date.self, forKey: .startTime)
+            self.endTime = try container.decode(Date.self, forKey: .endTime)
+
+            self.roomIdentifier = "\(try container.decode(Int.self, forKey: .room))"
+            self.trackIdentifier = "\(try container.decode(Int.self, forKey: .track))"
+        } catch let error as DecodingError where isKeyNotFound(error) {
+            throw ConditionallyDecodableError.missingKey(error)
+        }
+
+        self.actionLinkPrompt = try container.decodeIfPresent(forKey: .actionLinkPrompt)
+        self.actionLinkURL = try container.decodeIfPresent(forKey: .actionLinkURL)
+
+        try container.decodeIfPresent([Keyword].self, forKey: .keywords).map { keywords.append(objectsIn: $0) }
     }
 
 }

@@ -70,23 +70,17 @@ public class RelatedResource: Object, Decodable {
     }
 
     public required convenience init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let id = try container.decode(Int.self, forKey: .id)
-        let title = try container.decode(String.self, forKey: .title)
-        let url = try container.decode(String.self, forKey: .url)
-        let rawType = try container.decode(String.self, forKey: .type)
-
         self.init()
 
-        self.identifier = String(id)
-        self.title = title
-        self.url = url
-        self.type = RelatedResourceType(rawResourceType: rawType)?.rawValue ?? ""
+        let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        if let description = try? container.decode(String.self, forKey: .description) {
-            self.descriptor = description
-        }
+        identifier = String(try container.decode(Int.self, forKey: .id))
+        title = try container.decode(forKey: .title)
+        url = try container.decode(forKey: .url)
+        let rawType = try container.decode(String.self, forKey: .type)
+        type = RelatedResourceType(rawResourceType: rawType)?.rawValue ?? ""
+
+        descriptor = try container.decodeIfPresent(forKey: .description) ?? ""
     }
 
 }

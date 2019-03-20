@@ -8,27 +8,67 @@
 
 import Foundation
 
-// This is needed to keep the same behavior that adapters had before
-// Where it could adapt array of items even if some of the individual items failed to adapt
-struct FailableItemArrayWrapper<T: Decodable>: Decodable {
+extension KeyedDecodingContainer {
+
+    func decode<T: Decodable>(forKey key: KeyedDecodingContainer.Key) throws -> T {
+        return try decode(T.self, forKey: key)
+    }
+
+    func decodeIfPresent<T: Decodable>(forKey key: KeyedDecodingContainer.Key) throws -> T? {
+        return try decodeIfPresent(T.self, forKey: key)
+    }
+}
+
+enum ConditionallyDecodableError: Error {
+    case unsupported
+    case missingKey(DecodingError)
+}
+
+protocol ConditionallyDecodable: Decodable {}
+
+// A wrapper that allows items within the collection to fail to decode for specific reasons
+struct ConditionallyDecodableCollection<T: ConditionallyDecodable>: Decodable {
 
     private struct Empty: Codable {}
 
-    let items: [T]
+    fileprivate let items: [T]
 
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         var items = [T]()
 
         while !container.isAtEnd {
-            if let item = try? container.decode(T.self) {
-                items.append(item)
-            } else {
-                // container.currentIndex is not incremented unless something is decoded
-                _ = try? container.decode(Empty.self)
+            do {
+                items.append(try container.decode(T.self))
+            } catch is ConditionallyDecodableError {
+                // Advance the container
+                _ = try container.decode(Empty.self)
             }
         }
 
         self.items = items
+    }
+}
+
+extension ConditionallyDecodableCollection: Collection {
+    typealias Element = T
+    typealias Index = Int
+
+    var startIndex: Int { return items.startIndex }
+
+    var endIndex: Int { return items.endIndex }
+
+    func index(after i: Int) -> Int {
+        return items.index(after: i)
+    }
+
+    subscript(position: Int) -> T {
+        return items[position]
+    }
+}
+
+extension Array where Element: ConditionallyDecodable {
+    init(_ conditionallyDecodableCollection: ConditionallyDecodableCollection<Element>) {
+        self.init(conditionallyDecodableCollection.items)
     }
 }

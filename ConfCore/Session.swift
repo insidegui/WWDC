@@ -213,7 +213,15 @@ public class Session: Object, Decodable {
 
         var mediaDuration: Double?
 
-        if let assetContainer = try? sessionContainer.nestedContainer(keyedBy: AssetCodingKeys.self, forKey: .media) {
+        func decodeAssetIfPresent() throws {
+
+            let assetContainer: KeyedDecodingContainer<Session.AssetCodingKeys>
+            do {
+                assetContainer = try sessionContainer.nestedContainer(keyedBy: AssetCodingKeys.self, forKey: .media)
+            } catch DecodingError.keyNotFound {
+                return
+            }
+
             mediaDuration = try assetContainer.decodeIfPresent(Double.self, forKey: .duration) ?? 0.0
 
             if let url = try assetContainer.decodeIfPresent(String.self, forKey: .hls) {
@@ -262,26 +270,37 @@ public class Session: Object, Decodable {
 
                 self.assets.append(slidesAsset)
             }
+        }
 
-            if let permalink = try sessionContainer.decodeIfPresent(String.self, forKey: .webPermalink) {
-                let webPageAsset = SessionAsset()
-                webPageAsset.rawAssetType = SessionAssetType.webpage.rawValue
-                webPageAsset.remoteURL = permalink
-                webPageAsset.year = Int(eventYear) ?? -1
-                webPageAsset.sessionId = id
+        func decodeRelatedIfPresent() throws {
 
-                self.assets.append(webPageAsset)
+            let relatedContainer: KeyedDecodingContainer<Session.RelatedCodingKeys>
+            do {
+                relatedContainer = try sessionContainer.nestedContainer(keyedBy: RelatedCodingKeys.self, forKey: .related)
+            } catch DecodingError.keyNotFound {
+                return
+            }
+
+            if let resources = try relatedContainer.decodeIfPresent([UnknownRelatedResource].self, forKey: .resources)?.map({ $0.resource }) {
+                self.related.append(objectsIn: resources)
+            }
+
+            if let resources = try relatedContainer.decodeIfPresent([ActivityRelatedResource].self, forKey: .activities)?.map({ $0.resource }) {
+                self.related.append(objectsIn: resources)
             }
         }
 
-        if let relatedContainer = try? sessionContainer.nestedContainer(keyedBy: RelatedCodingKeys.self, forKey: .related) {
-            if let resources = try relatedContainer.decodeIfPresent(FailableItemArrayWrapper<UnknownRelatedResource>.self, forKey: .resources)?.items.map({ $0.resource }) {
-                self.related.append(contentsOf: resources)
-            }
-            
-            if let resources = try relatedContainer.decodeIfPresent(FailableItemArrayWrapper<ActivityRelatedResource>.self, forKey: .activities)?.items.map({ $0.resource }) {
-                self.related.append(contentsOf: resources)
-            }
+        try decodeAssetIfPresent()
+        try decodeRelatedIfPresent()
+
+        if let permalink = try sessionContainer.decodeIfPresent(String.self, forKey: .webPermalink) {
+            let webPageAsset = SessionAsset()
+            webPageAsset.rawAssetType = SessionAssetType.webpage.rawValue
+            webPageAsset.remoteURL = permalink
+            webPageAsset.year = Int(eventYear) ?? -1
+            webPageAsset.sessionId = id
+
+            self.assets.append(webPageAsset)
         }
 
         if let focuses = try sessionContainer.decodeIfPresent([Focus].self, forKey: .platforms) {
@@ -297,7 +316,6 @@ public class Session: Object, Decodable {
         self.mediaDuration = mediaDuration ?? 0
         self.eventIdentifier = eventIdentifier
     }
-
 }
 
 extension Session {

@@ -17,7 +17,7 @@ public enum NewsType: Int {
 }
 
 /// NewsItem can be a simple news text or a photo gallery
-public class NewsItem: Object, Decodable {
+public class NewsItem: Object, ConditionallyDecodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -51,35 +51,21 @@ public class NewsItem: Object, Decodable {
     }
 
     public convenience required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        if let type = try container.decodeIfPresent(String.self, forKey: .type) {
-            guard type != "pass" else {
-                let context = DecodingError.Context(
-                    codingPath: decoder.codingPath,
-                    debugDescription: "'Pass' is not a supported NewsItem type",
-                    underlyingError: nil)
-                throw DecodingError.dataCorrupted(context)
-            }
-        }
-
-        let id = try container.decode(String.self, forKey: .id)
-        let title = try container.decode(String.self, forKey: .title)
-        let timestamp = try container.decode(Double.self, forKey: .timestamp)
-        let visibility = try container.decodeIfPresent(String.self, forKey: .visibility) ?? ""
-        let body = try container.decodeIfPresent(String.self, forKey: .body) ?? ""
-
         self.init()
 
-        if let photos = try container.decodeIfPresent([Photo].self, forKey: .photos) {
-            self.photos.append(objectsIn: photos)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        if let type = try container.decodeIfPresent(String.self, forKey: .type), type == "pass" {
+            throw ConditionallyDecodableError.unsupported
         }
 
-        self.identifier = id
-        self.title = title
-        self.body = body
-        self.visibility = visibility
-        self.date = Date(timeIntervalSince1970: timestamp)
+        self.identifier = try container.decode(forKey: .id)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.body = try container.decodeIfPresent(forKey: .body) ?? ""
+        self.visibility = try container.decodeIfPresent(forKey: .visibility) ?? ""
+        self.date = Date(timeIntervalSince1970: try container.decode(forKey: .timestamp))
+
+        try container.decodeIfPresent([Photo].self, forKey: .photos).map { photos.append(objectsIn: $0) }
         self.newsType = self.photos.count > 0 ? NewsType.gallery.rawValue : NewsType.news.rawValue
     }
 

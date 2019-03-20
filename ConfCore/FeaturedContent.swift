@@ -33,21 +33,13 @@ public class FeaturedContent: Object, Decodable {
     }
 
     public required convenience init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let sessionId = try container.decode(String.self, forKey: .sessionId)
-
         self.init()
 
-        self.sessionId = sessionId
+        let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        if let encodedEssay = try? container.decode(String.self, forKey: .essay) {
-            self.essay = Data(base64Encoded: encodedEssay)
-        }
-
-        if let bookmarks = try container.decodeIfPresent(FailableItemArrayWrapper<Bookmark>.self, forKey: .bookmarks)?.items {
-            self.bookmarks.append(objectsIn: bookmarks)
-        }
+        sessionId = try container.decode(String.self, forKey: .sessionId)
+        essay = try container.decodeIfPresent(String.self, forKey: .essay).flatMap { Data(base64Encoded: $0) }
+        try container.decodeIfPresent([Bookmark].self, forKey: .bookmarks).map { bookmarks.append(objectsIn: $0) }
     }
 
 }

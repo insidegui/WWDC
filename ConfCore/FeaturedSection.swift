@@ -84,7 +84,7 @@ public class FeaturedSection: Object, Decodable {
     public required convenience init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        let contents = try container.decode(FailableItemArrayWrapper<FeaturedContent>.self, forKey: .content).items
+        let contents = try container.decode([FeaturedContent].self, forKey: .content)
         let ordinal = try container.decode(Int.self, forKey: .ordinal)
         let title = try container.decode(String.self, forKey: .title)
         let summary = try container.decode(String.self, forKey: .description)

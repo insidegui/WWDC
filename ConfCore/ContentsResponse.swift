@@ -1,5 +1,5 @@
 //
-//  ScheduleResponse.swift
+//  ContentsResponse.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 21/02/17.
@@ -40,12 +40,8 @@ public struct ContentsResponse: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        let events = try container.decode(FailableItemArrayWrapper<Event>.self, forKey: .events).items
-        let rooms = try container.decode(FailableItemArrayWrapper<Room>.self, forKey: .rooms).items
-        let resources = try container.decode(FailableItemArrayWrapper<RelatedResource>.self, forKey: .resources).items
-        let tracks = try container.decode(FailableItemArrayWrapper<Track>.self, forKey: .tracks).items
-        var sessions = try container.decode(FailableItemArrayWrapper<Session>.self, forKey: .contents).items
-        let instances = try container.decode(FailableItemArrayWrapper<SessionInstance>.self, forKey: .contents).items
+        var sessions = try container.decodeIfPresent([Session].self, forKey: .contents) ?? []
+        let instances = try container.decodeIfPresent(ConditionallyDecodableCollection<SessionInstance>.self, forKey: .contents).map { Array($0) } ?? []
 
         // remove duplicated sessions
         instances.forEach { instance in
@@ -54,10 +50,10 @@ public struct ContentsResponse: Decodable {
             sessions.remove(at: index)
         }
 
-        self.events = events
-        self.rooms = rooms
-        self.resources = resources
-        self.tracks = tracks
+        self.events = try container.decodeIfPresent(forKey: .events) ?? []
+        self.rooms = try container.decodeIfPresent(forKey: .rooms) ?? []
+        self.resources = try container.decodeIfPresent(forKey: .resources) ?? []
+        self.tracks = try container.decodeIfPresent(forKey: .tracks) ?? []
         self.instances = instances
         self.sessions = sessions
     }
