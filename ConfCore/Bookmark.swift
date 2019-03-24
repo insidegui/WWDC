@@ -60,25 +60,18 @@ public final class Bookmark: Object, HasCloudKitFields, SoftDeletable, Decodable
     // MARK: - Codable
 
     private enum CodingKeys: String, CodingKey {
-        case body
-        case attributedBody
-        case timecode
-        case duration
+        case body, attributedBody, timecode, duration
     }
 
     public required convenience init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let body = try container.decode(String.self, forKey: .body)
-        let timecode = try container.decode(Double.self, forKey: .timecode)
-        let duration = try container.decode(Double.self, forKey: .duration)
-
         self.init()
 
-        self.body = body
-        self.timecode = timecode
-        self.duration = duration
-        self.isShared = true
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        body = try container.decode(key: .body)
+        timecode = try container.decode(key: .timecode)
+        duration = try container.decode(key: .duration)
+        isShared = true
 
         if let attributedBody = try container.decodeIfPresent(String.self, forKey: .attributedBody),
             let attributedBodyData = Data(base64Encoded: attributedBody) {

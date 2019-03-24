@@ -24,25 +24,17 @@ public class FeaturedAuthor: Object, Decodable {
     // MARK: - Codable
 
     enum CodingKeys: String, CodingKey {
-        case name
-        case bio
-        case avatar
-        case url
+        case name, bio, avatar, url
     }
 
     public required convenience init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let name = try container.decode(String.self, forKey: .name)
-        let bio = try container.decode(String.self, forKey: .bio)
-        let avatar = try container.decode(String.self, forKey: .avatar)
-        let url = try container.decode(String.self, forKey: .url)
-
         self.init()
 
-        self.name = name
-        self.bio = bio
-        self.avatar = avatar
-        self.url = url
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        name = try container.decode(key: .name)
+        bio = try container.decode(key: .bio)
+        avatar = try container.decode(key: .avatar)
+        url = try container.decode(key: .url)
     }
 }

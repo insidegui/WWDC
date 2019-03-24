@@ -189,7 +189,7 @@ class AdapterTests: XCTestCase {
         let sortedAssets = assets.liveAssets.sorted(by: { $0.sessionId < $1.sessionId })
         XCTAssertEqual(sortedAssets[0].assetType, SessionAssetType(rawValue: SessionAssetType.liveStreamVideo.rawValue))
         XCTAssertGreaterThan(sortedAssets[0].year, 2016)
-        XCTAssertEqual(sortedAssets[0].sessionId, "wwdc2018-201")
+        XCTAssertEqual(sortedAssets[0].sessionId, "wwdc2019-201")
         XCTAssertEqual(sortedAssets[0].remoteURL, "http://devstreaming.apple.com/videos/wwdc/2016/live/mission_ghub2yon5yewl2i/atv_mvp.m3u8")
     }
 

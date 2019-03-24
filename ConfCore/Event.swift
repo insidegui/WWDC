@@ -54,32 +54,23 @@ public class Event: Object, Decodable {
     // MARK: - Codable
 
     private enum CodingKeys: String, CodingKey {
-        case name
-        case current
+        case name, current, imagesPath
         case start = "startTime"
         case end = "endTime"
         case identifier = "id"
-        case imagesPath
     }
 
     public required convenience init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let identifier = try container.decode(String.self, forKey: .identifier)
-        let name = try container.decode(String.self, forKey: .name)
-        let current = try container.decode(Bool.self, forKey: .current)
-        let imagesPath = try container.decode(String.self, forKey: .imagesPath)
-        let startDate = try container.decode(Date.self, forKey: .start)
-        let endDate = try container.decode(Date.self, forKey: .end)
-
         self.init()
 
-        self.identifier = identifier
-        self.name = name
-        self.startDate = startDate
-        self.endDate = endDate
-        self.isCurrent = current
-        self.imagesPath = imagesPath
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        identifier = try container.decode(key: .identifier)
+        name = try container.decode(key: .name)
+        startDate = try container.decode(key: .start)
+        endDate = try container.decode(key: .end)
+        isCurrent = try container.decode(key: .current)
+        imagesPath = try container.decode(key: .imagesPath)
     }
 
 }

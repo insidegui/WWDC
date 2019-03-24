@@ -37,7 +37,7 @@ public class FeaturedContent: Object, Decodable {
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        sessionId = try container.decode(String.self, forKey: .sessionId)
+        sessionId = try container.decode(key: .sessionId)
         essay = try container.decodeIfPresent(String.self, forKey: .essay).flatMap { Data(base64Encoded: $0) }
         try container.decodeIfPresent([Bookmark].self, forKey: .bookmarks).map { bookmarks.append(objectsIn: $0) }
     }
