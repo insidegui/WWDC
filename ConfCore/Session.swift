@@ -165,37 +165,16 @@ public class Session: Object, Decodable {
     // MARK: - Decodable
 
     private enum AssetCodingKeys: String, CodingKey {
-        case id
-        case year
-        case title
-        case downloadHD
-        case downloadSD
-        case slides
-        case hls
-        case images
-        case shelf
-        case duration
+        case id, year, title, downloadHD, downloadSD, slides, hls, images, shelf, duration
     }
 
     private enum SessionCodingKeys: String, CodingKey {
-        case id
-        case year
-        case title
-        case platforms
-        case description
-        case startTime
-        case eventContentId
-        case eventId
-        case media
-        case webPermalink
-        case staticContentId
-        case related
+        case id, year, title, platforms, description, startTime, eventContentId, eventId, media, webPermalink, staticContentId, related
         case track = "trackId"
     }
 
     private enum RelatedCodingKeys: String, CodingKey {
-        case activities
-        case resources
+        case activities, resources
     }
 
     public convenience required init(from decoder: Decoder) throws {

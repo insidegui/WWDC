@@ -28,11 +28,7 @@ public class Transcript: Object, Decodable {
     // MARK: - Codable
 
     private enum CodingKeys: String, CodingKey {
-        case year
-        case number
-        case timecodes
-        case annotations
-        case transcript
+        case year, number, timecodes, annotations, transcript
     }
 
     public required convenience init(from decoder: Decoder) throws {

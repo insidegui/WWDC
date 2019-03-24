@@ -12,7 +12,7 @@
 		3A0840B41F924665002BC828 /* Realm+InMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0840B31F924665002BC828 /* Realm+InMemory.swift */; };
 		3A6227031F9272A300D5F687 /* contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A6227021F9272A300D5F687 /* contents.json */; };
 		4D0E806F217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0E806E217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift */; };
-		4D174E322247F9D700FE5E87 /* KeyedDecodingContainer+ReturnTypeInference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D174E312247F9D700FE5E87 /* KeyedDecodingContainer+ReturnTypeInference.swift */; };
+		4D174E322247F9D700FE5E87 /* DecodingContainer+ReturnTypeInference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D174E312247F9D700FE5E87 /* DecodingContainer+ReturnTypeInference.swift */; };
 		4D174E342248054F00FE5E87 /* ConditionallyDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D174E332248054F00FE5E87 /* ConditionallyDecodable.swift */; };
 		4D4D80C4217D281D00D1C233 /* DownloadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4D80C3217D281D00D1C233 /* DownloadViewModel.swift */; };
 		4D5EB0F820598E6000D4BC52 /* SessionRowProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D5EB0F720598E6000D4BC52 /* SessionRowProvider.swift */; };
@@ -348,7 +348,7 @@
 		3A0840B31F924665002BC828 /* Realm+InMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+InMemory.swift"; sourceTree = "<group>"; };
 		3A6227021F9272A300D5F687 /* contents.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = contents.json; sourceTree = "<group>"; };
 		4D0E806E217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadManager+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
-		4D174E312247F9D700FE5E87 /* KeyedDecodingContainer+ReturnTypeInference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeyedDecodingContainer+ReturnTypeInference.swift"; sourceTree = "<group>"; };
+		4D174E312247F9D700FE5E87 /* DecodingContainer+ReturnTypeInference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DecodingContainer+ReturnTypeInference.swift"; sourceTree = "<group>"; };
 		4D174E332248054F00FE5E87 /* ConditionallyDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionallyDecodable.swift; sourceTree = "<group>"; };
 		4D4D80C3217D281D00D1C233 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
 		4D5EB0F720598E6000D4BC52 /* SessionRowProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRowProvider.swift; sourceTree = "<group>"; };
@@ -910,7 +910,7 @@
 		DD5DEC1C1E4AA68F00426FA6 /* Decoding */ = {
 			isa = PBXGroup;
 			children = (
-				4D174E312247F9D700FE5E87 /* KeyedDecodingContainer+ReturnTypeInference.swift */,
+				4D174E312247F9D700FE5E87 /* DecodingContainer+ReturnTypeInference.swift */,
 				DD5DEC1F1E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift */,
 				4D174E332248054F00FE5E87 /* ConditionallyDecodable.swift */,
 				DD5DEC2E1E4AAC9300426FA6 /* DateFormatter+ConfCoreFormat.swift */,
@@ -1973,7 +1973,7 @@
 				DDDF805920B90306007284F8 /* Favorite+ConflictResolution.swift in Sources */,
 				DDC927FC20B7A059004C784D /* Data+CloudKit.swift in Sources */,
 				DD65FD5D1E48A11F0054DD35 /* Track.swift in Sources */,
-				4D174E322247F9D700FE5E87 /* KeyedDecodingContainer+ReturnTypeInference.swift in Sources */,
+				4D174E322247F9D700FE5E87 /* DecodingContainer+ReturnTypeInference.swift in Sources */,
 				DDC927F520B799CD004C784D /* UserDataSyncProtocols.swift in Sources */,
 				DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */,
 				DDDF806120B9EC3A007284F8 /* FeaturedSection.swift in Sources */,

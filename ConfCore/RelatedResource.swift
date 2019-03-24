@@ -62,10 +62,7 @@ public class RelatedResource: Object, Decodable {
 
     // MARK: - Codable
     enum CodingKeys: String, CodingKey {
-        case title
-        case id
-        case url
-        case description
+        case title, id, url, description
         case type = "resource_type"
     }
 
@@ -75,12 +72,12 @@ public class RelatedResource: Object, Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         identifier = String(try container.decode(Int.self, forKey: .id))
-        title = try container.decode(forKey: .title)
-        url = try container.decode(forKey: .url)
+        title = try container.decode(key: .title)
+        url = try container.decode(key: .url)
         let rawType = try container.decode(String.self, forKey: .type)
         type = RelatedResourceType(rawResourceType: rawType)?.rawValue ?? ""
 
-        descriptor = try container.decodeIfPresent(forKey: .description) ?? ""
+        descriptor = try container.decodeIfPresent(key: .description) ?? ""
     }
 
 }

@@ -50,10 +50,10 @@ public struct ContentsResponse: Decodable {
             sessions.remove(at: index)
         }
 
-        self.events = try container.decodeIfPresent(forKey: .events) ?? []
-        self.rooms = try container.decodeIfPresent(forKey: .rooms) ?? []
-        self.resources = try container.decodeIfPresent(forKey: .resources) ?? []
-        self.tracks = try container.decodeIfPresent(forKey: .tracks) ?? []
+        events = try container.decodeIfPresent(key: .events) ?? []
+        rooms = try container.decodeIfPresent(key: .rooms) ?? []
+        resources = try container.decodeIfPresent(key: .resources) ?? []
+        tracks = try container.decodeIfPresent(key: .tracks) ?? []
         self.instances = instances
         self.sessions = sessions
     }

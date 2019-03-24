@@ -101,10 +101,7 @@ struct LiveAssetWrapper: Decodable {
     let liveSession: SessionAsset
 
     private enum CodingKeys: String, CodingKey {
-        case sessionId
-        case tvosUrl
-        case iosUrl
-        case actualEndDate
+        case sessionId, tvosUrl, iosUrl, actualEndDate
     }
 
     public init(from decoder: Decoder) throws {

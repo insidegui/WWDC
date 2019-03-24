@@ -59,11 +59,11 @@ public class NewsItem: Object, ConditionallyDecodable {
             throw ConditionallyDecodableError.unsupported
         }
 
-        self.identifier = try container.decode(forKey: .id)
-        self.title = try container.decode(String.self, forKey: .title)
-        self.body = try container.decodeIfPresent(forKey: .body) ?? ""
-        self.visibility = try container.decodeIfPresent(forKey: .visibility) ?? ""
-        self.date = Date(timeIntervalSince1970: try container.decode(forKey: .timestamp))
+        identifier = try container.decode(key: .id)
+        title = try container.decode(key: .title)
+        body = try container.decodeIfPresent(key: .body) ?? ""
+        visibility = try container.decodeIfPresent(key: .visibility) ?? ""
+        date = Date(timeIntervalSince1970: try container.decode(key: .timestamp))
 
         try container.decodeIfPresent([Photo].self, forKey: .photos).map { photos.append(objectsIn: $0) }
         self.newsType = self.photos.count > 0 ? NewsType.gallery.rawValue : NewsType.news.rawValue

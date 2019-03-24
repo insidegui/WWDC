@@ -38,14 +38,11 @@ public class Room: Object, Decodable {
     }
 
     public convenience required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let identifier = try container.decode(Int.self, forKey: .identifier)
-        let name = try container.decode(String.self, forKey: .name)
-
         self.init()
 
-        self.identifier = "\(identifier)"
-        self.name = name
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        identifier = String(try container.decode(Int.self, forKey: .identifier))
+        name = try container.decode(key: .name)
     }
 }

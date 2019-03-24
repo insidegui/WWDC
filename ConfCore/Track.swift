@@ -51,24 +51,16 @@ public class Track: Object, Decodable {
     }
 
     public convenience required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        let identifier = try container.decode(Int.self, forKey: .identifier)
-        let name = try container.decode(String.self, forKey: .name)
-        let color = try container.decode(String.self, forKey: .color)
-        let darkColor = try container.decode(String.self, forKey: .darkColor)
-        let titleColor = try container.decode(String.self, forKey: .titleColor)
-        let lightBGColor = try container.decode(String.self, forKey: .lightBGColor)
-        let ordinal = try container.decodeIfPresent(Int.self, forKey: .ordinal) ?? 0
-
         self.init()
 
-        self.identifier = "\(identifier)"
-        self.name = name
-        self.darkColor = darkColor
-        self.lightBackgroundColor = lightBGColor
-        self.lightColor = color
-        self.titleColor = titleColor
-        self.order = ordinal
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        identifier = String(try container.decode(Int.self, forKey: .identifier))
+        name = try container.decode(key: .name)
+        darkColor = try container.decode(key: .darkColor)
+        lightBackgroundColor = try container.decode(key: .lightBGColor)
+        lightColor = try container.decode(key: .color)
+        titleColor = try container.decode(key: .titleColor)
+        order = try container.decodeIfPresent(key: .ordinal) ?? 0
     }
 }

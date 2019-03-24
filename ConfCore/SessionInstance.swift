@@ -191,10 +191,10 @@ public class SessionInstance: Object, ConditionallyDecodable {
         do {
             let session = try Session(from: decoder)
 
-            self.number = try container.decode(forKey: .id)
+            self.number = try container.decode(key: .id)
             self.session = session
             self.identifier = session.identifier
-            self.eventIdentifier = try container.decode(forKey: .eventId)
+            self.eventIdentifier = try container.decode(key: .eventId)
 
             let rawType = try container.decode(String.self, forKey: .type)
             self.rawSessionType = rawType
@@ -209,8 +209,8 @@ public class SessionInstance: Object, ConditionallyDecodable {
             throw ConditionallyDecodableError.missingKey(error)
         }
 
-        self.actionLinkPrompt = try container.decodeIfPresent(forKey: .actionLinkPrompt)
-        self.actionLinkURL = try container.decodeIfPresent(forKey: .actionLinkURL)
+        actionLinkPrompt = try container.decodeIfPresent(key: .actionLinkPrompt)
+        actionLinkURL = try container.decodeIfPresent(key: .actionLinkURL)
 
         try container.decodeIfPresent([Keyword].self, forKey: .keywords).map { keywords.append(objectsIn: $0) }
     }
