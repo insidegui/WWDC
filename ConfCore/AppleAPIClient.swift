@@ -35,8 +35,6 @@ public final class AppleAPIClient {
         }
     }
 
-
-
     private func configureService() {
         service.configure("**") { config in
             // Parsing & Transformation is done using Codable, no need to let Siesta do the parsing

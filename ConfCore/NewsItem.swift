@@ -68,5 +68,4 @@ public class NewsItem: Object, ConditionallyDecodable {
         try container.decodeIfPresent([Photo].self, forKey: .photos).map { photos.append(objectsIn: $0) }
         self.newsType = self.photos.count > 0 ? NewsType.gallery.rawValue : NewsType.news.rawValue
     }
-
 }

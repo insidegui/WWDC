@@ -90,12 +90,9 @@ struct UnknownRelatedResource: Decodable {
     let resource: RelatedResource
 
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-
-        let id = try container.decode(Int.self)
+        let id: Int = try decoder.singleValueContainer().decode()
 
         let resource = RelatedResource()
-
         resource.identifier = String(id)
         resource.type = RelatedResourceType.unknown.rawValue
 
@@ -108,9 +105,7 @@ struct ActivityRelatedResource: Decodable {
     let resource: RelatedResource
 
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-
-        let id = try container.decode(String.self)
+        let id: String = try decoder.singleValueContainer().decode()
 
         let resource = RelatedResource()
 

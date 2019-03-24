@@ -8,24 +8,6 @@
 
 import Foundation
 
-extension KeyedDecodingContainer {
-
-    func decode<T: Decodable>(forKey key: KeyedDecodingContainer.Key) throws -> T {
-        return try decode(T.self, forKey: key)
-    }
-
-    func decodeIfPresent<T: Decodable>(forKey key: KeyedDecodingContainer.Key) throws -> T? {
-        return try decodeIfPresent(T.self, forKey: key)
-    }
-}
-
-enum ConditionallyDecodableError: Error {
-    case unsupported
-    case missingKey(DecodingError)
-}
-
-protocol ConditionallyDecodable: Decodable {}
-
 // A wrapper that allows items within the collection to fail to decode for specific reasons
 struct ConditionallyDecodableCollection<T: ConditionallyDecodable>: Decodable {
 
@@ -38,12 +20,7 @@ struct ConditionallyDecodableCollection<T: ConditionallyDecodable>: Decodable {
         var items = [T]()
 
         while !container.isAtEnd {
-            do {
-                items.append(try container.decode(T.self))
-            } catch is ConditionallyDecodableError {
-                // Advance the container
-                _ = try container.decode(Empty.self)
-            }
+            try T.init(conditionallyFrom: try container.superDecoder()).map { items.append($0) }
         }
 
         self.items = items

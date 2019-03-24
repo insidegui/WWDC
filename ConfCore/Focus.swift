@@ -25,12 +25,8 @@ public class Focus: Object, Decodable {
     // MARK: - Decodable
 
     public convenience required init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-
-        let name = try container.decode(String.self)
-
         self.init()
 
-        self.name = name
+        self.name = try decoder.singleValueContainer().decode()
     }
 }
