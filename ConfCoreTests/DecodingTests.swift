@@ -1,5 +1,5 @@
 //
-//  AdapterTests.swift
+//  DecodingTests.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 07/02/17.

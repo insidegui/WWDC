@@ -135,17 +135,17 @@ public final class TranscriptIndexer {
                 return
             }
 
-            guard let transcript = try? JSONDecoder().decode(Transcript.self, from: jsonData) else {
-                os_log("Error unserializing transcript with identifier %{public}@",
+            do {
+                let transcript = try JSONDecoder().decode(Transcript.self, from: jsonData)
+                self.storage.storageQueue.waitUntilAllOperationsAreFinished()
+                self.batch.append(transcript)
+            } catch {
+                os_log("Error unserializing transcript with identifier %{public}@\n Error: %{public}@",
                        log: self.log,
                        type: .error,
-                       primaryKey)
-                return
+                       primaryKey,
+                       error.localizedDescription)
             }
-
-            self.storage.storageQueue.waitUntilAllOperationsAreFinished()
-
-            self.batch.append(transcript)
         }
 
         task.resume()
