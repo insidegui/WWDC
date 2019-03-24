@@ -7,34 +7,13 @@
 //
 
 import XCTest
-import SwiftyJSON
 @testable import ConfCore
 
 class AdapterTests: XCTestCase {
 
-    private let dateTimeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = confCoreDateFormat
-        formatter.locale = Locale(identifier: "en-US")
-        formatter.timeZone = TimeZone.current
-        return formatter
-    }()
+    private let dateTimeFormatter: DateFormatter = DateFormatter.confCoreFormatter
 
-    private func getJson(from filename: String) -> JSON {
-        guard let fileURL = Bundle(for: AdapterTests.self).url(forResource: filename, withExtension: "json") else {
-            XCTFail("Unable to find URL for fixture named \(filename)")
-            fatalError()
-        }
-
-        guard let data = try? Data(contentsOf: fileURL), let json = try? JSON(data: data) else {
-            XCTFail("Unable to load fixture named \(filename)")
-            fatalError()
-        }
-
-        return json
-    }
-
-    private func getJSONData(from filename: String) -> Data {
+    private func loadFixture<T: Decodable>(from filename: String, type: T.Type = T.self) -> T {
         guard let fileURL = Bundle(for: AdapterTests.self).url(forResource: filename, withExtension: "json") else {
             XCTFail("Unable to find URL for fixture named \(filename)")
             fatalError()
@@ -45,24 +24,22 @@ class AdapterTests: XCTestCase {
             fatalError()
         }
 
-        return data
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .formatted(.confCoreFormatter)
+            return try decoder.decode(type, from: data)
+        } catch {
+            XCTFail("Failed to load test fixture with error: \(error)")
+            fatalError()
+        }
     }
 
     func testEventsAdapter() {
-        let json = getJson(from: "contents")
-
-        guard let eventsArray = try? json["events"].rawData() else {
-            XCTFail("Sessions.json fixture doesn't have an \"events\" array")
-            fatalError()
+        struct TestFixture: Decodable {
+            let events: [Event]
         }
 
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(.confCoreFormatter)
-
-        guard let events = try? decoder.decode([Event].self, from: eventsArray) else {
-            XCTFail("Sessions.json fixture doesn't have an \"events\" array")
-            return
-        }
+        let events = loadFixture(from: "contents", type: TestFixture.self).events
 
         XCTAssertEqual(events.count, 5)
 
@@ -76,17 +53,11 @@ class AdapterTests: XCTestCase {
     }
 
     func testRoomsAdapter() {
-        let json = getJson(from: "contents")
-
-        guard let roomsArray = try? json["rooms"].rawData() else {
-            XCTFail("Sessions.json fixture doesn't have a \"rooms\" array")
-            fatalError()
+        struct TestFixture: Decodable {
+            let rooms: [Room]
         }
 
-        guard let rooms = try? JSONDecoder().decode([Room].self, from: roomsArray) else {
-            XCTFail("Sessions.json fixture doesn't have a \"rooms\" array")
-            fatalError()
-        }
+        let rooms = loadFixture(from: "contents", type: TestFixture.self).rooms
 
         XCTAssertEqual(rooms.count, 35)
 
@@ -98,17 +69,11 @@ class AdapterTests: XCTestCase {
     }
 
     func testTracksAdapter() {
-        let json = getJson(from: "contents")
-
-        guard let tracksArray = try? json["tracks"].rawData() else {
-            XCTFail("Sessions.json fixture doesn't have a \"tracks\" array")
-            fatalError()
+        struct TestFixture: Decodable {
+            let tracks: [Track]
         }
 
-        guard let tracks = try? JSONDecoder().decode([Track].self, from: tracksArray) else {
-            XCTFail("Sessions.json fixture doesn't have a \"tracks\" array")
-            fatalError()
-        }
+        let tracks = loadFixture(from: "contents", type: TestFixture.self).tracks
 
         XCTAssertEqual(tracks.count, 8)
 
@@ -126,17 +91,17 @@ class AdapterTests: XCTestCase {
     }
 
     func testKeywordsAdapter() {
-        let json = getJson(from: "sessions")
-
-        guard let keywordsArray = try? json["response"]["sessions"][0]["keywords"].rawData() else {
-            XCTFail("Couldn't find a session in sessions.json with an array of keywords")
-            fatalError()
+        struct TestFixture: Decodable {
+            struct TestSession: Decodable {
+                let keywords: [Keyword]
+            }
+            struct Response: Decodable {
+                let sessions: [TestSession]
+            }
+            let response: Response
         }
 
-        guard let keywords = try? JSONDecoder().decode([Keyword].self, from: keywordsArray) else {
-            XCTFail("Couldn't find a session in sessions.json with an array of keywords")
-            fatalError()
-        }
+        let keywords = loadFixture(from: "sessions", type: TestFixture.self).response.sessions[0].keywords
 
         XCTAssertEqual(keywords.count, 10)
         XCTAssertEqual(keywords.map({ $0.name }), [
@@ -154,17 +119,17 @@ class AdapterTests: XCTestCase {
     }
 
     func testFocusesAdapter() {
-        let json = getJson(from: "sessions")
-
-        guard let focusesArray = try? json["response"]["sessions"][0]["focus"].rawData() else {
-            XCTFail("Couldn't find a session in sessions.json with an array of focuses")
-            fatalError()
+        struct TestFixture: Decodable {
+            struct TestSession: Decodable {
+                let focus: [Focus]
+            }
+            struct Response: Decodable {
+                let sessions: [TestSession]
+            }
+            let response: Response
         }
 
-        guard let focuses = try? JSONDecoder().decode([Focus].self, from: focusesArray) else {
-            XCTFail("Couldn't find a session in sessions.json with an array of focuses")
-            fatalError()
-        }
+        let focuses = loadFixture(from: "sessions", type: TestFixture.self).response.sessions[0].focus
 
         XCTAssertEqual(focuses.count, 3)
         XCTAssertEqual(focuses.map({ $0.name }), [
@@ -176,17 +141,11 @@ class AdapterTests: XCTestCase {
 
     // TODO: disabled test, SessionAssetsJSONAdapter is not working
     func _testAssetsAdapter() {
-        let json = getJson(from: "videos")
-
-        guard let sessionsArray = try? json["sessions"].rawData() else {
-            XCTFail("Couldn't find an array of sessions in videos.json")
-            fatalError()
+        struct TestFixture: Decodable {
+            let sessions: [SessionAsset]
         }
 
-        guard let assets = try? JSONDecoder().decode([SessionAsset].self, from: sessionsArray) else {
-            XCTFail("Couldn't find an array of sessions in videos.json")
-            fatalError()
-        }
+        let assets = loadFixture(from: "videos", type: TestFixture.self).sessions
 
         let flattenedAssets = assets.compactMap({ $0 })
         XCTAssertEqual(flattenedAssets.count, 2947)
@@ -224,21 +183,8 @@ class AdapterTests: XCTestCase {
         XCTAssertEqual(flattenedAssets[5].sessionId, "210")
     }
 
-    func testLiveAssetsAdapter() {
-        let json = getJSONData(from: "videos_live")
-
-        let assets: LiveVideosWrapper
-
-        do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(.confCoreFormatter)
-
-            assets = try decoder.decode(LiveVideosWrapper.self, from: json)
-        } catch {
-            XCTFail("Couldn't find a dictionary of live sessions in videos_live.json \(error)")
-
-            return
-        }
+    func testLiveAssetsAdapter() throws {
+        let assets: LiveVideosWrapper = loadFixture(from: "videos_live")
 
         let sortedAssets = assets.liveAssets.sorted(by: { $0.sessionId < $1.sessionId })
         XCTAssertEqual(sortedAssets[0].assetType, SessionAssetType(rawValue: SessionAssetType.liveStreamVideo.rawValue))
@@ -248,19 +194,11 @@ class AdapterTests: XCTestCase {
     }
 
     func testSessionsAdapter() {
-        let json = getJson(from: "contents")
-
-        guard let sessionsArray = try? json["contents"].rawData() else {
-            XCTFail("Couldn't find an array of sessions in videos.json")
-
-            return
+        struct TestFixture: Decodable {
+            let contents: [Session]
         }
 
-        guard let sessions = try? JSONDecoder().decode([Session].self, from: sessionsArray) else {
-            XCTFail("Couldn't find an array of sessions in videos.json")
-
-            return
-        }
+        let sessions = loadFixture(from: "contents", type: TestFixture.self).contents
 
         XCTAssertEqual(sessions.count, 771)
         XCTAssertEqual(sessions[0].title, "Express Yourself!")
@@ -274,26 +212,11 @@ class AdapterTests: XCTestCase {
     }
 
     func testSessionInstancesAdapter() {
-        let json = getJson(from: "contents")
-
-        guard let instancesArray = try? json["contents"].rawData() else {
-            XCTFail("Couldn't find an array of sessions in sessions.json")
-
-            return
+        struct TestFixture: Decodable {
+            let contents: ConditionallyDecodableCollection<SessionInstance>
         }
 
-        let instances: [SessionInstance]
-
-        do {
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .formatted(.confCoreFormatter)
-
-            instances = Array(try decoder.decode(ConditionallyDecodableCollection<SessionInstance>.self, from: instancesArray))
-        } catch {
-            XCTFail(error.localizedDescription)
-
-            return
-        }
+        let instances = loadFixture(from: "contents", type: TestFixture.self).contents
 
         XCTAssertEqual(instances.count, 307)
 
@@ -335,22 +258,12 @@ class AdapterTests: XCTestCase {
         XCTAssertEqual(instances[2].endTime, dateTimeFormatter.date(from: "2017-06-08T18:00:00-07:00"))
     }
 
-    func testNewsAndPhotoAdapters() {
-        let json = getJson(from: "news")
-
-        guard let newsArray = try? json["items"].rawData() else {
-            XCTFail("Couldn't find an array of items in news.json")
-            fatalError()
+    func testNewsAndPhotoAdapters() throws {
+        struct TestFixture: Decodable {
+            let items: ConditionallyDecodableCollection<NewsItem>
         }
 
-        let items: [NewsItem]
-
-        do {
-            items = Array(try JSONDecoder().decode(ConditionallyDecodableCollection<NewsItem>.self, from: newsArray))
-        } catch {
-            XCTFail(error.localizedDescription)
-            fatalError()
-        }
+        let items = Array(loadFixture(from: "news", type: TestFixture.self).items)
 
         XCTAssertEqual(items.count, 16)
 
@@ -371,13 +284,7 @@ class AdapterTests: XCTestCase {
     }
 
     func testTranscriptsAdapter() {
-        let jsonData = getJSONData(from: "transcript")
-
-        guard let transcript = try? JSONDecoder().decode(Transcript.self, from: jsonData) else {
-            XCTFail("Could not decode transcript JSON")
-
-            return
-        }
+        let transcript = loadFixture(from: "transcript", type: Transcript.self)
 
         XCTAssertEqual(transcript.identifier, "wwdc2014-101")
         XCTAssertEqual(transcript.fullText.count, 92023)
@@ -387,21 +294,11 @@ class AdapterTests: XCTestCase {
     }
 
     func testFeaturedSectionsAdapter() {
-        let json = getJson(from: "layout")
-
-        guard let sectionsArray = try? json["sections"].rawData() else {
-            XCTFail("Couldn't find an array of sections in layout.json")
-            fatalError()
+        struct TestFixture: Decodable {
+            let sections: [FeaturedSection]
         }
 
-        let sections: [FeaturedSection]
-
-        do {
-            sections = try JSONDecoder().decode([FeaturedSection].self, from: sectionsArray)
-        } catch {
-            XCTFail(error.localizedDescription)
-            fatalError()
-        }
+        let sections = loadFixture(from: "layout", type: TestFixture.self).sections
 
         XCTAssertEqual(sections[0].order, -1)
         XCTAssertEqual(sections[0].format, FeaturedSectionFormat.curated)
