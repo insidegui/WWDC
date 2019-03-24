@@ -179,15 +179,6 @@ public class SessionInstance: Object, ConditionallyDecodable {
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        func isKeyNotFound(_ error: DecodingError) -> Bool {
-            switch error {
-            case .keyNotFound:
-                return true
-            default:
-                return false
-            }
-        }
-
         do {
             let session = try Session(from: decoder)
 
@@ -203,9 +194,9 @@ public class SessionInstance: Object, ConditionallyDecodable {
             self.startTime = try container.decode(Date.self, forKey: .startTime)
             self.endTime = try container.decode(Date.self, forKey: .endTime)
 
-            self.roomIdentifier = "\(try container.decode(Int.self, forKey: .room))"
-            self.trackIdentifier = "\(try container.decode(Int.self, forKey: .track))"
-        } catch let error as DecodingError where isKeyNotFound(error) {
+            self.roomIdentifier = String(try container.decode(Int.self, forKey: .room))
+            self.trackIdentifier = String(try container.decode(Int.self, forKey: .track))
+        } catch let error as DecodingError where error.isKeyNotFound {
             throw ConditionallyDecodableError.missingKey(error)
         }
 
@@ -215,4 +206,16 @@ public class SessionInstance: Object, ConditionallyDecodable {
         try container.decodeIfPresent([Keyword].self, forKey: .keywords).map { keywords.append(objectsIn: $0) }
     }
 
+}
+
+fileprivate extension DecodingError {
+
+    var isKeyNotFound: Bool {
+        switch self {
+        case .keyNotFound:
+            return true
+        default:
+            return false
+        }
+    }
 }

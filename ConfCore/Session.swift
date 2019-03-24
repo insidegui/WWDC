@@ -286,12 +286,12 @@ public class Session: Object, Decodable {
             self.focuses.append(objectsIn: focuses)
         }
 
-        self.staticContentId = "\(try sessionContainer.decodeIfPresent(Int.self, forKey: .staticContentId) ?? 0)"
+        self.staticContentId = String(try sessionContainer.decodeIfPresent(Int.self, forKey: .staticContentId) ?? 0)
         self.identifier = id
-        self.number = "\(eventContentId)"
+        self.number = String(eventContentId)
         self.title = title
         self.summary = summary
-        self.trackIdentifier = "\(trackIdentifier)"
+        self.trackIdentifier = String(trackIdentifier)
         self.mediaDuration = mediaDuration ?? 0
         self.eventIdentifier = eventIdentifier
     }

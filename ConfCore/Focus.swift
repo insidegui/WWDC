@@ -27,6 +27,6 @@ public class Focus: Object, Decodable {
     public convenience required init(from decoder: Decoder) throws {
         self.init()
 
-        self.name = try decoder.singleValueContainer().decode()
+        name = try decoder.singleValueContainer().decode()
     }
 }
