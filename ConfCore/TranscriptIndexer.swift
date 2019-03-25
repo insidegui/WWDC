@@ -8,7 +8,6 @@
 
 import Cocoa
 import RealmSwift
-import SwiftyJSON
 import os.log
 
 extension Notification.Name {
@@ -136,34 +135,17 @@ public final class TranscriptIndexer {
                 return
             }
 
-            var json: JSON
-
             do {
-                json = try JSON(data: jsonData)
+                let transcript = try JSONDecoder().decode(Transcript.self, from: jsonData)
+                self.storage.storageQueue.waitUntilAllOperationsAreFinished()
+                self.batch.append(transcript)
             } catch {
-                os_log("Error parsing JSON for transcript with identifier %{public}@: %{public}@",
+                os_log("Error unserializing transcript with identifier %{public}@\n Error: %{public}@",
                        log: self.log,
                        type: .error,
                        primaryKey,
-                       String(describing: error))
-
-                return
+                       error.localizedDescription)
             }
-
-            let result = TranscriptsJSONAdapter().adapt(json)
-
-            guard case .success(let transcript) = result else {
-                os_log("Error unserializing transcript with identifier %{public}@",
-                       log: self.log,
-                       type: .error,
-                       primaryKey)
-
-                return
-            }
-
-            self.storage.storageQueue.waitUntilAllOperationsAreFinished()
-
-            self.batch.append(transcript)
         }
 
         task.resume()

@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 /// Specifies an author for a curated playlist
-public class FeaturedAuthor: Object {
+public class FeaturedAuthor: Object, Decodable {
 
     @objc public dynamic var name: String = ""
     @objc public dynamic var bio: String = ""
@@ -21,4 +21,20 @@ public class FeaturedAuthor: Object {
         return "name"
     }
 
+    // MARK: - Codable
+
+    enum CodingKeys: String, CodingKey {
+        case name, bio, avatar, url
+    }
+
+    public required convenience init(from decoder: Decoder) throws {
+        self.init()
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        name = try container.decode(key: .name)
+        bio = try container.decode(key: .bio)
+        avatar = try container.decode(key: .avatar)
+        url = try container.decode(key: .url)
+    }
 }

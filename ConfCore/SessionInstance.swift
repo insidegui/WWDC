@@ -9,7 +9,7 @@
 import Cocoa
 import RealmSwift
 
-public enum SessionInstanceType: Int {
+public enum SessionInstanceType: Int, Decodable {
     case session, lab, video, getTogether, specialEvent, labByAppointment
 
     init?(rawSessionType: String) {
@@ -32,7 +32,7 @@ public enum SessionInstanceType: Int {
 }
 
 /// A session instance represents a specific occurence of a session with a location and start/end times
-public class SessionInstance: Object {
+public class SessionInstance: Object, ConditionallyDecodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -164,4 +164,58 @@ public class SessionInstance: Object {
         keywords.append(objectsIn: otherKeywords)
     }
 
+    // MARK: - Decodable
+
+    private enum CodingKeys: String, CodingKey {
+        case id, keywords, startTime, endTime, type
+        case eventId, actionLinkPrompt, actionLinkURL
+        case favId = "fav_id"
+        case room = "roomId"
+        case track = "trackId"
+    }
+
+    public convenience required init(from decoder: Decoder) throws {
+        self.init()
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        do {
+            let session = try Session(from: decoder)
+
+            self.number = try container.decode(key: .id)
+            self.session = session
+            self.identifier = session.identifier
+            self.eventIdentifier = try container.decode(key: .eventId)
+
+            let rawType = try container.decode(String.self, forKey: .type)
+            self.rawSessionType = rawType
+            self.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
+
+            self.startTime = try container.decode(Date.self, forKey: .startTime)
+            self.endTime = try container.decode(Date.self, forKey: .endTime)
+
+            self.roomIdentifier = String(try container.decode(Int.self, forKey: .room))
+            self.trackIdentifier = String(try container.decode(Int.self, forKey: .track))
+        } catch let error as DecodingError where error.isKeyNotFound {
+            throw ConditionallyDecodableError.missingKey(error)
+        }
+
+        actionLinkPrompt = try container.decodeIfPresent(key: .actionLinkPrompt)
+        actionLinkURL = try container.decodeIfPresent(key: .actionLinkURL)
+
+        try container.decodeIfPresent([Keyword].self, forKey: .keywords).map { keywords.append(objectsIn: $0) }
+    }
+
+}
+
+fileprivate extension DecodingError {
+
+    var isKeyNotFound: Bool {
+        switch self {
+        case .keyNotFound:
+            return true
+        default:
+            return false
+        }
+    }
 }

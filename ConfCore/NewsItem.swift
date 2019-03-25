@@ -17,7 +17,7 @@ public enum NewsType: Int {
 }
 
 /// NewsItem can be a simple news text or a photo gallery
-public class NewsItem: Object {
+public class NewsItem: Object, ConditionallyDecodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -44,4 +44,28 @@ public class NewsItem: Object {
         return "identifier"
     }
 
+    // MARK: - Decodable
+
+    private enum CodingKeys: String, CodingKey {
+        case id, title, body, timestamp, visibility, photos, type
+    }
+
+    public convenience required init(from decoder: Decoder) throws {
+        self.init()
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        if let type = try container.decodeIfPresent(String.self, forKey: .type), type == "pass" {
+            throw ConditionallyDecodableError.unsupported
+        }
+
+        identifier = try container.decode(key: .id)
+        title = try container.decode(key: .title)
+        body = try container.decodeIfPresent(key: .body) ?? ""
+        visibility = try container.decodeIfPresent(key: .visibility) ?? ""
+        date = Date(timeIntervalSince1970: try container.decode(key: .timestamp))
+
+        try container.decodeIfPresent([Photo].self, forKey: .photos).map { photos.append(objectsIn: $0) }
+        self.newsType = self.photos.count > 0 ? NewsType.gallery.rawValue : NewsType.news.rawValue
+    }
 }

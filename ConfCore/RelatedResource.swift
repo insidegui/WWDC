@@ -35,7 +35,7 @@ public enum RelatedResourceType: String {
     }
 }
 
-public class RelatedResource: Object {
+public class RelatedResource: Object, Decodable {
     @objc public dynamic var identifier = ""
     @objc public dynamic var title = ""
     @objc public dynamic var url = ""
@@ -58,5 +58,57 @@ public class RelatedResource: Object {
         if let otherSession = other.session, let session = session {
             session.merge(with: otherSession, in: realm)
         }
+    }
+
+    // MARK: - Codable
+    enum CodingKeys: String, CodingKey {
+        case title, id, url, description
+        case type = "resource_type"
+    }
+
+    public required convenience init(from decoder: Decoder) throws {
+        self.init()
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        identifier = String(try container.decode(Int.self, forKey: .id))
+        title = try container.decode(key: .title)
+        url = try container.decode(key: .url)
+        let rawType = try container.decode(String.self, forKey: .type)
+        type = RelatedResourceType(rawResourceType: rawType)?.rawValue ?? ""
+
+        descriptor = try container.decodeIfPresent(key: .description) ?? ""
+    }
+
+}
+
+struct UnknownRelatedResource: Decodable {
+
+    let resource: RelatedResource
+
+    public init(from decoder: Decoder) throws {
+        let id: Int = try decoder.singleValueContainer().decode()
+
+        let resource = RelatedResource()
+        resource.identifier = String(id)
+        resource.type = RelatedResourceType.unknown.rawValue
+
+        self.resource = resource
+    }
+}
+
+struct ActivityRelatedResource: Decodable {
+
+    let resource: RelatedResource
+
+    public init(from decoder: Decoder) throws {
+        let id: String = try decoder.singleValueContainer().decode()
+
+        let resource = RelatedResource()
+
+        resource.identifier = id
+        resource.type = RelatedResourceType.session.rawValue
+
+        self.resource = resource
     }
 }

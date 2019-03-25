@@ -7,7 +7,6 @@
 //
 
 import Cocoa
-import SwiftyJSON
 import os.log
 
 public final class ContributorsFetcher {
@@ -57,7 +56,11 @@ public final class ContributorsFetcher {
             }
 
             self.syncQueue.async {
-                self.names += self.parseResponse(data)
+                do {
+                    self.names += try self.parseResponse(data)
+                } catch {
+                    os_log("Failed to decode contributors names", log: self.log, type: .error)
+                }
 
                 if let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String,
                     let nextPage = GitHubPagination(linkHeader: linkHeader)?.next {
@@ -71,18 +74,9 @@ public final class ContributorsFetcher {
         task.resume()
     }
 
-    fileprivate func parseResponse(_ data: Data) -> [String] {
+    fileprivate func parseResponse(_ data: Data) throws -> [String] {
 
-        guard let jsonData = try? JSON(data: data), let contributors = jsonData.array else { return [String]() }
-
-        var contributorNames = [String]()
-        for contributor in contributors {
-            if let name = contributor["login"].string {
-                contributorNames.append(name)
-            }
-        }
-
-        return contributorNames
+        return try JSONDecoder().decode([GitHubUser].self, from: data).map { $0.login }
     }
 
     fileprivate func buildInfoText(_ names: [String]) {
@@ -96,6 +90,10 @@ public final class ContributorsFetcher {
 
         infoText = text
     }
+}
+
+private struct GitHubUser: Codable {
+    var login: String
 }
 
 private struct GitHubPagination {

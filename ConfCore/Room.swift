@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 /// Represents a room or venue where sessions are held
-public class Room: Object {
+public class Room: Object, Decodable {
 
     @objc public dynamic var identifier = ""
 
@@ -30,15 +30,19 @@ public class Room: Object {
         return "name"
     }
 
-    public static func make(identifier: String, name: String, mapName: String, floor: String) -> Room {
-        let room = Room()
+    // MARK: - Codable
 
-        room.identifier = identifier
-        room.name = name
-        room.mapName = mapName
-        room.floor = floor
-
-        return room
+    private enum CodingKeys: String, CodingKey {
+        case name, mapName, floor
+        case identifier = "id"
     }
 
+    public convenience required init(from decoder: Decoder) throws {
+        self.init()
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        identifier = String(try container.decode(Int.self, forKey: .identifier))
+        name = try container.decode(key: .name)
+    }
 }

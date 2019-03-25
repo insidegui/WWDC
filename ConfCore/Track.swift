@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 /// Tracks represent a specific are of interest (ex: "System Frameworks", "Graphics and Games")
-public class Track: Object {
+public class Track: Object, Decodable {
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -43,22 +43,24 @@ public class Track: Object {
         return "name"
     }
 
-    public static func make(identifier: String,
-                            name: String,
-                            darkColor: String,
-                            lightBackgroundColor: String,
-                            lightColor: String,
-                            titleColor: String) -> Track {
-        let track = Track()
+    // MARK: - Decodable
 
-        track.identifier = identifier
-        track.name = name
-        track.darkColor = darkColor
-        track.lightBackgroundColor = lightBackgroundColor
-        track.lightColor = lightColor
-        track.titleColor = titleColor
-
-        return track
+    private enum CodingKeys: String, CodingKey {
+        case name, color, darkColor, titleColor, lightBGColor, ordinal
+        case identifier = "id"
     }
 
+    public convenience required init(from decoder: Decoder) throws {
+        self.init()
+
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        identifier = String(try container.decode(Int.self, forKey: .identifier))
+        name = try container.decode(key: .name)
+        darkColor = try container.decode(key: .darkColor)
+        lightBackgroundColor = try container.decode(key: .lightBGColor)
+        lightColor = try container.decode(key: .color)
+        titleColor = try container.decode(key: .titleColor)
+        order = try container.decodeIfPresent(key: .ordinal) ?? 0
+    }
 }

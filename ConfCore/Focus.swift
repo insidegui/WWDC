@@ -10,7 +10,7 @@ import Cocoa
 import RealmSwift
 
 /// Focuses are basically platform names (ex: "macOS", "iOS")
-public class Focus: Object {
+public class Focus: Object, Decodable {
 
     /// The name of the focus area
     @objc public dynamic var name = ""
@@ -20,5 +20,13 @@ public class Focus: Object {
 
     public override class func primaryKey() -> String? {
         return "name"
+    }
+
+    // MARK: - Decodable
+
+    public convenience required init(from decoder: Decoder) throws {
+        self.init()
+
+        name = try decoder.singleValueContainer().decode()
     }
 }
