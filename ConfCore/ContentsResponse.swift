@@ -17,20 +17,6 @@ public struct ContentsResponse: Decodable {
     public let instances: [SessionInstance]
     public let sessions: [Session]
 
-    init (events: [Event],
-          rooms: [Room],
-          tracks: [Track],
-          resources: [RelatedResource],
-          instances: [SessionInstance],
-          sessions: [Session]) {
-        self.events = events
-        self.rooms = rooms
-        self.resources = resources
-        self.tracks = tracks
-        self.instances = instances
-        self.sessions = sessions
-    }
-
     // MARK: - Decodable
 
     private enum CodingKeys: String, CodingKey {
