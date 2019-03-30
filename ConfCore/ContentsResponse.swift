@@ -18,11 +18,11 @@ public struct ContentsResponse: Decodable {
     public let sessions: [Session]
 
     init(events: [Event],
-          rooms: [Room],
-          tracks: [Track],
-          resources: [RelatedResource],
-          instances: [SessionInstance],
-          sessions: [Session]) {
+         rooms: [Room],
+         tracks: [Track],
+         resources: [RelatedResource],
+         instances: [SessionInstance],
+         sessions: [Session]) {
         self.events = events
         self.rooms = rooms
         self.resources = resources
