@@ -159,7 +159,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         guard let sender = sender else { return }
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let webpageAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
+        guard let webpageAsset = viewModel.session.asset(ofType: .webpage) else { return }
 
         guard let url = URL(string: webpageAsset.remoteURL) else { return }
 
