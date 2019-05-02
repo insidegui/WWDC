@@ -258,7 +258,7 @@ private final class CloudKitLiveObserver {
             let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
 
             // check if the remote notification is for us, if not, tell the caller that we haven't handled it
-            guard notification.subscriptionID == specialLiveEventsSubscriptionID else { return false }
+            guard notification?.subscriptionID == specialLiveEventsSubscriptionID else { return false }
 
             // notification for special live events, just fetch everything again
             fetch()

@@ -324,7 +324,7 @@ public final class UserDataSyncEngine {
 
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
 
-        guard notification.subscriptionID == Constants.privateSubscriptionId else { return false }
+        guard notification?.subscriptionID == Constants.privateSubscriptionId else { return false }
 
         os_log("Received remote CloudKit notification for user data", log: log, type: .debug)
 
