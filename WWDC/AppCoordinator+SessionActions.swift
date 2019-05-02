@@ -91,6 +91,11 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
             }
         case .authorized:
             self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
+        @unknown default:
+            assertionFailure("An unexpected case was discovered on an non-frozen obj-c enum")
+            os_log("Cannot determine EKEventStore authorization status due to an unknown enum case. Doing nothing instead",
+                   log: self.log,
+                   type: .error)
         }
     }
 
@@ -154,7 +159,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         guard let sender = sender else { return }
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
 
-        guard let webpageAsset = viewModel.session.asset(ofType: .hdVideo) else { return }
+        guard let webpageAsset = viewModel.session.asset(ofType: .webpage) else { return }
 
         guard let url = URL(string: webpageAsset.remoteURL) else { return }
 

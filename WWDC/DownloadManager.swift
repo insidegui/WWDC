@@ -208,6 +208,9 @@ final class DownloadManager: NSObject {
                         observer.onNext(.cancelled)
                     case .completed:
                         observer.onNext(.finished)
+                    @unknown default:
+                        assertionFailure("An unexpected case was discovered on an non-frozen obj-c enum")
+                        observer.onNext(.downloading(latestInfo))
                     }
                 } else if self.hasDownloadedVideo(remoteURL: asset.remoteURL) {
                     observer.onNext(.finished)
@@ -551,6 +554,7 @@ extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
 extension DownloadManager {
 
     struct Download: Equatable {
+        // Equatable can't be synthesized with a `weak` property for some reason
         static func == (lhs: DownloadManager.Download, rhs: DownloadManager.Download) -> Bool {
             return lhs.session == rhs.session && lhs.remoteURL == rhs.remoteURL && lhs.task == rhs.task
         }

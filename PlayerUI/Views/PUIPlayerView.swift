@@ -1079,7 +1079,7 @@ public final class PUIPlayerView: NSView {
         // reset all item's states
         sender.menu?.items.forEach({ $0.state = .on })
 
-        if option.extendedLanguageTag == player?.currentItem?.selectedMediaOption(in: subtitlesGroup)?.extendedLanguageTag {
+        if option.extendedLanguageTag == player?.currentItem?.currentMediaSelection.selectedMediaOption(in: subtitlesGroup)?.extendedLanguageTag {
             player?.currentItem?.select(nil, in: subtitlesGroup)
             sender.state = .off
             return
@@ -1566,7 +1566,7 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
     }
 
     public func externalPlaybackProvider(_ provider: PUIExternalPlaybackProvider, deviceSelectionMenuDidChangeWith menu: NSMenu) {
-        guard let registrationIndex = externalPlaybackProviders.index(where: { type(of: $0.provider).name == type(of: provider).name }) else { return }
+        guard let registrationIndex = externalPlaybackProviders.firstIndex(where: { type(of: $0.provider).name == type(of: provider).name }) else { return }
 
         externalPlaybackProviders[registrationIndex].menu = menu
     }

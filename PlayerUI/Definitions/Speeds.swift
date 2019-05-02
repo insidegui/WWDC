@@ -39,7 +39,7 @@ public enum PUIPlaybackSpeed: Float {
     }
 
     public var previous: PUIPlaybackSpeed {
-        guard let index = PUIPlaybackSpeed.all.index(of: self) else {
+        guard let index = PUIPlaybackSpeed.all.firstIndex(of: self) else {
             fatalError("Tried to get next speed from nonsensical playback speed \(self). Probably missing in collection.")
         }
 
@@ -49,7 +49,7 @@ public enum PUIPlaybackSpeed: Float {
     }
 
     public var next: PUIPlaybackSpeed {
-        guard let index = PUIPlaybackSpeed.all.index(of: self) else {
+        guard let index = PUIPlaybackSpeed.all.firstIndex(of: self) else {
             fatalError("Tried to get next speed from nonsensical playback speed \(self). Probably missing in collection.")
         }
 

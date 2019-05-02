@@ -94,7 +94,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
     private func selectSessionImmediately(with identifier: SessionIdentifiable) {
 
-        guard let index = displayedRows.index(where: { row in
+        guard let index = displayedRows.firstIndex(where: { row in
             row.represents(session: identifier)
         }) else {
             return
