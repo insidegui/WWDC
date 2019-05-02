@@ -62,7 +62,6 @@ A number of third-party libraries are used by the app:
 - [CloudKitCodable](https://github.com/insidegui/CloudKitCodable): sync support
 - [Fabric](https://fabric.io): crash reporting and error logging
 - [Siesta](http://bustoutsolutions.github.io/siesta/): networking
-- [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON): JSON parsing (going away soon in favor of Codable)
 - [RxSwift](https://github.com/ReactiveX/RxSwift): reactive extensions
 - [RxRealm](https://github.com/RxSwiftCommunity/RxRealm): reactive extensions for Realm
 
@@ -74,7 +73,7 @@ A number of third-party libraries are used by the app:
 
 ## Building the app
 
-**Building requires Xcode 9.3 or later.**
+**Building requires Xcode 10.2 or later.**
 
 Building the app requires [Carthage](https://github.com/Carthage/Carthage) to be installed.
 
