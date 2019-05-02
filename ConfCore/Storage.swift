@@ -84,26 +84,23 @@ public final class Storage {
     }
 
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping (Error?) -> Void) {
-        if case let .failure(error) = contentResult {
-            os_log("Error downloading contents: %{public}@",
+        let contentsResponse: ContentsResponse
+        do {
+            contentsResponse = try contentResult.get()
+        } catch {
+            os_log("Error downloading contents:\n%{public}@",
                    log: log,
                    type: .error,
                    String(describing: error))
-
             completion(error)
-
-            return
-        }
-
-        guard case let .success(sessionsResponse) = contentResult else {
             return
         }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
-            sessionsResponse.sessions.forEach { newSession in
+            contentsResponse.sessions.forEach { newSession in
                 // Replace any "unknown" resources with their full data
                 newSession.related.filter({$0.type == RelatedResourceType.unknown.rawValue}).forEach { unknownResource in
-                    if let fullResource = sessionsResponse.resources.filter({$0.identifier == unknownResource.identifier}).first {
+                    if let fullResource = contentsResponse.resources.filter({$0.identifier == unknownResource.identifier}).first {
                         newSession.related.replace(index: newSession.related.index(of: unknownResource)!, object: fullResource)
                     }
                 }
@@ -117,7 +114,7 @@ public final class Storage {
             }
 
             // Merge existing instance data, preserving user-defined data
-            sessionsResponse.instances.forEach { newInstance in
+            contentsResponse.instances.forEach { newInstance in
                 if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
                     existingInstance.merge(with: newInstance, in: backgroundRealm)
                 } else {
@@ -134,9 +131,9 @@ public final class Storage {
             }
 
             // Save everything
-            backgroundRealm.add(sessionsResponse.rooms, update: true)
-            backgroundRealm.add(sessionsResponse.tracks, update: true)
-            backgroundRealm.add(sessionsResponse.events, update: true)
+            backgroundRealm.add(contentsResponse.rooms, update: true)
+            backgroundRealm.add(contentsResponse.tracks, update: true)
+            backgroundRealm.add(contentsResponse.events, update: true)
 
             // add instances to rooms
             backgroundRealm.objects(Room.self).forEach { room in
@@ -225,7 +222,16 @@ public final class Storage {
     }
 
     internal func store(liveVideosResult: Result<[SessionAsset], APIError>) {
-        guard case .success(let assets) = liveVideosResult else { return }
+        let assets: [SessionAsset]
+        do {
+            assets = try liveVideosResult.get()
+        } catch {
+            os_log("Error downloading live videos:\n%{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
+            return
+        }
 
         performSerializedBackgroundWrite(writeBlock: { [weak self] backgroundRealm in
             guard let self = self else { return }
@@ -251,18 +257,17 @@ public final class Storage {
     }
 
     internal func store(featuredSectionsResult: Result<[FeaturedSection], APIError>, completion: @escaping (Error?) -> Void) {
-        if case let .failure(error) = featuredSectionsResult {
-            os_log("Error downloading featured sections: %{public}@",
+        let sections: [FeaturedSection]
+        do {
+            sections = try featuredSectionsResult.get()
+        } catch {
+            os_log("Error downloading featured sections:\n%{public}@",
                    log: log,
                    type: .error,
                    String(describing: error))
-
             completion(error)
-
             return
         }
-
-        guard case .success(let sections) = featuredSectionsResult else { return }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
             let existingSections = backgroundRealm.objects(FeaturedSection.self)
