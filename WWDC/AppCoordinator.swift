@@ -316,7 +316,7 @@ final class AppCoordinator {
 
         _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: .main) { note in
             if let error = note.object as? Error {
-                NSApp.presentError(error)
+                WWDCAlert.show(with: error)
             } else {
                 self.updateListsAfterSync(migrate: true)
             }
@@ -324,7 +324,7 @@ final class AppCoordinator {
 
         _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncFeaturedSections, object: nil, queue: .main) { note in
             if let error = note.object as? Error {
-                NSApp.presentError(error)
+                WWDCAlert.show(with: error)
             } else {
                 self.updateFeaturedSectionsAfterSync()
             }
