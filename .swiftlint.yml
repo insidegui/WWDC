@@ -8,6 +8,7 @@ disabled_rules:
   - function_parameter_count
   - unused_closure_parameter
   - nesting
+  - trailing_whitespace
 
 opt_in_rules:
   - redundant_nil_coalescing
