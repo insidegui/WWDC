@@ -514,10 +514,10 @@ extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
         downloadTasks.removeValue(forKey: originalAbsoluteURLString)
 
         if let error = error {
-            let nsError = error as NSError
-            if nsError.domain == NSURLErrorDomain && nsError.code == NSURLErrorCancelled {
+            switch error {
+            case let error as URLError where error.code == URLError.cancelled:
                 NotificationCenter.default.post(name: .DownloadManagerDownloadCancelled, object: originalAbsoluteURLString)
-            } else {
+            default:
                 NotificationCenter.default.post(name: .DownloadManagerDownloadFailed, object: originalAbsoluteURLString, userInfo: ["error": error])
             }
         }
