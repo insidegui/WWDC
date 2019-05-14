@@ -157,6 +157,8 @@
 		DDBCEC89228AC9C5009300CF /* RxRealm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDBCEC8A228AC9C5009300CF /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDBCEC8B228AC9C5009300CF /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC9A228AD2D0009300CF /* CloudKitCodable.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDBCEC99228AD2CC009300CF /* CloudKitCodable.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC9C228AD30C009300CF /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDC347C220B1E6B700CFF11C /* CloudKitCodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */; };
 		DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */; };
 		DDC677F91EDA76A100A4E19C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC677F81EDA76A100A4E19C /* main.m */; };
@@ -330,6 +332,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				DDBCEC9C228AD30C009300CF /* SwiftProtobuf.framework in Embed Frameworks */,
+				DDBCEC9A228AD2D0009300CF /* CloudKitCodable.framework in Embed Frameworks */,
 				DDBCEC83228AC9C5009300CF /* ChromeCastCore.framework in Embed Frameworks */,
 				DDBCEC84228AC9C5009300CF /* Sparkle.framework in Embed Frameworks */,
 				DDBCEC85228AC9C5009300CF /* Siesta.framework in Embed Frameworks */,
@@ -515,6 +519,8 @@
 		DDBA0D74208CD5430075670F /* SwiftProtobuf.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftProtobuf.framework.dSYM; path = Carthage/Build/Mac/SwiftProtobuf.framework.dSYM; sourceTree = "<group>"; };
 		DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfoCoordinator.swift; sourceTree = "<group>"; };
 		DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfo.swift; sourceTree = "<group>"; };
+		DDBCEC99228AD2CC009300CF /* CloudKitCodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKitCodable.framework; path = Carthage/Build/Mac/CloudKitCodable.framework; sourceTree = "<group>"; };
+		DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/Mac/SwiftProtobuf.framework; sourceTree = "<group>"; };
 		DDBFC18F2190C4680030E803 /* TranscriptIndexingService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TranscriptIndexingService.entitlements; sourceTree = "<group>"; };
 		DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKitCodable.framework; path = Carthage/Build/Mac/CloudKitCodable.framework; sourceTree = "<group>"; };
 		DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexer.swift; sourceTree = "<group>"; };
@@ -980,6 +986,8 @@
 		DD5F517E1E47DE7D0017F9EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */,
+				DDBCEC99228AD2CC009300CF /* CloudKitCodable.framework */,
 				DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */,
 				DD4DED661ED6604300624EAF /* Fabric.framework */,
 				DD4DED671ED6604300624EAF /* Crashlytics.framework */,
