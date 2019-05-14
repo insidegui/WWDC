@@ -148,6 +148,15 @@
 		DDB352A61EC90ACA00254815 /* TBProphylaxis.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB352A41EC90ACA00254815 /* TBProphylaxis.m */; };
 		DDBA0D79208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */; };
 		DDBA0D7B208D3DE70075670F /* PUINowPlayingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */; };
+		DDBCEC83228AC9C5009300CF /* ChromeCastCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC84228AC9C5009300CF /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED601ED6577100624EAF /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC85228AC9C5009300CF /* Siesta.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC86228AC9C5009300CF /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC87228AC9C5009300CF /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC88228AC9C5009300CF /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC89228AC9C5009300CF /* RxRealm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC8A228AC9C5009300CF /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDBCEC8B228AC9C5009300CF /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDC347C220B1E6B700CFF11C /* CloudKitCodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */; };
 		DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */; };
 		DDC677F91EDA76A100A4E19C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC677F81EDA76A100A4E19C /* main.m */; };
@@ -321,6 +330,15 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				DDBCEC83228AC9C5009300CF /* ChromeCastCore.framework in Embed Frameworks */,
+				DDBCEC84228AC9C5009300CF /* Sparkle.framework in Embed Frameworks */,
+				DDBCEC85228AC9C5009300CF /* Siesta.framework in Embed Frameworks */,
+				DDBCEC86228AC9C5009300CF /* Realm.framework in Embed Frameworks */,
+				DDBCEC87228AC9C5009300CF /* RealmSwift.framework in Embed Frameworks */,
+				DDBCEC88228AC9C5009300CF /* RxCocoa.framework in Embed Frameworks */,
+				DDBCEC89228AC9C5009300CF /* RxRealm.framework in Embed Frameworks */,
+				DDBCEC8A228AC9C5009300CF /* RxSwift.framework in Embed Frameworks */,
+				DDBCEC8B228AC9C5009300CF /* SwiftyJSON.framework in Embed Frameworks */,
 				DDDAA3F61EC7653300DF9D02 /* ThrowBack.framework in Embed Frameworks */,
 				DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */,
 				DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */,
@@ -1520,7 +1538,6 @@
 				DD36A4A91E478C6900B2EA88 /* Frameworks */,
 				DD36A4AA1E478C6900B2EA88 /* Resources */,
 				DD36A4E41E478D7E00B2EA88 /* Embed Frameworks */,
-				DD5F516B1E47DCC40017F9EC /* Carthage: Copy Frameworks */,
 				DD4DED651ED6602700624EAF /* Fabric */,
 				DDC678031EDA76A100A4E19C /* Embed XPC Services */,
 				F72964482015787100A7A571 /* SwiftLint Warnings */,
@@ -1788,31 +1805,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if [ -f \"./Crashlytics.sh\" ]; then\n./Crashlytics.sh\nfi";
-		};
-		DD5F516B1E47DCC40017F9EC /* Carthage: Copy Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/Mac/Realm.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/RealmSwift.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/RxCocoa.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/RxRealm.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/SwiftyJSON.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/RxSwift.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/Siesta.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/Sparkle.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/ChromeCastCore.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/SwiftProtobuf.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/CloudKitCodable.framework",
-			);
-			name = "Carthage: Copy Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 		F72964482015787100A7A571 /* SwiftLint Warnings */ = {
 			isa = PBXShellScriptBuildPhase;
