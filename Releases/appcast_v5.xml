@@ -7,6 +7,22 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 6.1.2</title>
+			<description><![CDATA[
+				<p>This is a nerdy release 🤓</p>
+				<ul>
+					<li>The app is now Swift 5</li>
+					<li>Improved error reporting</li>
+					<li>Converted our networking stack to use Codable instead of SwiftyJSON</li>
+					<li>Other smaller fixes and improvements</li>
+				</ul>
+			]]></description>
+            <pubDate>Tue, 14 May 2019 08:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.1.2/WWDC_v6.1.2.zip" sparkle:version="911" sparkle:shortVersionString="6.1.2" length="13807797" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
+        </item>	
+		
+		<item>
             <title>Version 6.1</title>
 			<description><![CDATA[
 				<p><strong>Note: starting with this version, WWDC requires macOS 10.13 or later.</strong></p>
