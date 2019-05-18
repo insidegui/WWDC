@@ -43,15 +43,12 @@ public enum APIError: Error, CustomNSError {
     public var errorUserInfo: [String: Any] {
         var userInfo = [NSLocalizedDescriptionKey: localizedDescription]
 
-        switch self {
-        case let .http(underlying as RequestError) where underlying.cause != nil && (underlying.cause! as NSError).domain == NSURLErrorDomain:
-            let underlyingUserInfo = (underlying.cause! as NSError).userInfo.compactMapValues { $0 as? String }
+        if case let .http(underlying as RequestError) = self, let urlError = underlying.cause as? URLError {
+            let underlyingUserInfo = urlError.errorUserInfo.compactMapValues { $0 as? String }
             userInfo.merge(underlyingUserInfo, uniquingKeysWith: { $1 })
             userInfo[NSLocalizedRecoverySuggestionErrorKey] = "Please try again"
-        case let .http(underlying as RequestError) where underlying.cause != nil && underlying.cause! is DecodingError:
+        } else if case let .http(underlying as RequestError) = self, let _ = underlying.cause as? DecodingError {
             userInfo[NSLocalizedRecoverySuggestionErrorKey] = "Please report this error"
-        case .adapter, .unknown, .http:
-            ()
         }
 
         return userInfo
