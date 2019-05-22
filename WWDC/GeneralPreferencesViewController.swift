@@ -143,7 +143,7 @@ class GeneralPreferencesViewController: NSViewController {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
 
-        panel.runModal()
+        guard panel.runModal() == .OK else { return }
 
         guard let url = panel.url else { return }
 
