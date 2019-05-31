@@ -11,25 +11,40 @@ import RealmSwift
 
 protocol SessionRowProvider {
     func sessionRowIdentifierForToday() -> SessionIdentifiable?
-    func sessionRows() -> [SessionRow]
+    func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow]
 
-    var sessionSortingFunction: (Session, Session) -> Bool { get }
+    var allRows: [SessionRow] { get }
 }
 
 struct VideosSessionRowProvider: SessionRowProvider {
+    private(set) var allRows = [SessionRow]()
+    let tracks: Results<Track>
 
-    var tracks: Results<Track>
+    init(tracks: Results<Track>) {
+        self.tracks = tracks
 
-    var sessionSortingFunction: (Session, Session) -> Bool {
-        return Session.standardSort
+        allRows = filteredRows(onlyIncludingRowsFor: nil)
     }
 
-    func sessionRows() -> [SessionRow] {
+    func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow] {
+        return filteredRows(onlyIncludingRowsFor: Optional.some(onlyIncludingRowsFor))
+    }
+
+    private func filteredRows(onlyIncludingRowsFor included: Results<Session>?) -> [SessionRow] {
 
         let rows: [SessionRow] = tracks.flatMap { track -> [SessionRow] in
+
+            var thing = track.sessions.filter(Session.videoPredicate)
+
+            if let included = included {
+                let sessionIdentifiers = Array(included.map { $0.identifier })
+                thing = thing.filter(NSPredicate(format: "identifier IN %@", sessionIdentifiers))
+                guard !thing.isEmpty else { return [] }
+            }
+
             let titleRow = SessionRow(title: track.name)
 
-            let sessionRows: [SessionRow] = track.sessions.filter(Session.videoPredicate).sorted(by: Session.standardSort).compactMap { session in
+            let sessionRows: [SessionRow] = thing.sorted(by: Session.standardSort).compactMap { session in
                 guard let viewModel = SessionViewModel(session: session) else { return nil }
 
                 return SessionRow(viewModel: viewModel)
@@ -47,26 +62,40 @@ struct VideosSessionRowProvider: SessionRowProvider {
 }
 
 struct ScheduleSessionRowProvider: SessionRowProvider {
+    private(set) var allRows = [SessionRow]()
+    let scheduleSections: Results<ScheduleSection>
 
-    var scheduleSections: Results<ScheduleSection>
+    init(scheduleSections: Results<ScheduleSection>) {
+        self.scheduleSections = scheduleSections
 
-    var sessionSortingFunction: (Session, Session) -> Bool {
-        return Session.standardSortForSchedule
+        allRows = filteredRows(onlyIncludingRowsFor: nil)
     }
 
-    func sessionRows() -> [SessionRow] {
+    func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow] {
+        return filteredRows(onlyIncludingRowsFor: Optional.some(onlyIncludingRowsFor))
+    }
 
+    private func filteredRows(onlyIncludingRowsFor included: Results<Session>?) -> [SessionRow] {
         // Only show the timezone on the first section header
         var shownTimeZone = false
 
         let rows: [SessionRow] = scheduleSections.flatMap { section -> [SessionRow] in
+            var instances: [SessionInstance]
+
+            if let included = included {
+                let sessionIdentifiers = Array(included.map { $0.identifier })
+                instances = Array(section.instances.filter(NSPredicate(format: "session.identifier IN %@", sessionIdentifiers)))
+                guard !instances.isEmpty else { return [] }
+            } else {
+                instances = Array(section.instances)
+            }
 
             // Section header
             let titleRow = SessionRow(date: section.representedDate, showTimeZone: !shownTimeZone)
 
             shownTimeZone = true
 
-            let instanceRows: [SessionRow] = section.instances.sorted(by: SessionInstance.standardSort).compactMap { instance in
+            let instanceRows: [SessionRow] = instances.sorted(by: SessionInstance.standardSort).compactMap { instance in
                 guard let viewModel = SessionViewModel(session: instance.session, instance: instance, style: .schedule) else { return nil }
 
                 return SessionRow(viewModel: viewModel)
