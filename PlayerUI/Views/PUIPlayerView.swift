@@ -1354,7 +1354,6 @@ public final class PUIPlayerView: NSView {
         // resigning main in full screen means we're leaving the space
         if windowIsInFullScreen {
             resetMouseIdleTimer(start: false)
-            showControls(animated: false)
         }
     }
 
