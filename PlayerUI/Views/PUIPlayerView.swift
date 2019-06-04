@@ -1241,7 +1241,7 @@ public final class PUIPlayerView: NSView {
         guard isPlaying else { return false }
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
-        guard NSApp.isActive && window.isOnActiveSpace && window.isVisible else { return false }
+        guard window.isOnActiveSpace && window.isVisible else { return false }
 
         guard !timelineView.isEditingAnnotation else { return false }
 
