@@ -992,6 +992,17 @@ public final class PUIPlayerView: NSView {
             playbackSpeed = playbackSpeed.next
         }
     }
+    
+    public func reduceSpeed() {
+        for speed in PUIPlaybackSpeed.all {
+            
+        }
+    }
+    
+    public func increaseSpeed() {
+        for speed in PUIPlaybackSpeed.all {
+        }
+    }
 
     @IBAction public func addAnnotation(_ sender: NSView?) {
         guard let player = player else { return }
@@ -1129,6 +1140,8 @@ public final class PUIPlayerView: NSView {
         case spaceBar = 49
         case leftArrow = 123
         case rightArrow = 124
+        case minus = 27
+        case plus = 24
     }
 
     private func startMonitoringKeyEvents() {
@@ -1158,6 +1171,14 @@ public final class PUIPlayerView: NSView {
 
             case .rightArrow:
                 self.goForwardInTime(nil)
+                return nil
+ 
+            case .minus:
+                self.reduceSpeed()
+                return nil
+ 
+            case .plus:
+                self.increaseSpeed()
                 return nil
             }
         }
