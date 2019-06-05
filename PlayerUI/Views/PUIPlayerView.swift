@@ -994,13 +994,20 @@ public final class PUIPlayerView: NSView {
     }
     
     public func reduceSpeed() {
-        for speed in PUIPlaybackSpeed.all {
-            
+        guard let speedIndex = PUIPlaybackSpeed.all.firstIndex(of: playbackSpeed) else { return }
+        if speedIndex > 0 {
+            playbackSpeed = PUIPlaybackSpeed.all[speedIndex - 1]
+            showControls(animated: true)
+            resetMouseIdleTimer()
         }
     }
     
     public func increaseSpeed() {
-        for speed in PUIPlaybackSpeed.all {
+        guard let speedIndex = PUIPlaybackSpeed.all.firstIndex(of: playbackSpeed) else { return }
+        if speedIndex < PUIPlaybackSpeed.all.count - 1 {
+            playbackSpeed = PUIPlaybackSpeed.all[speedIndex + 1]
+            showControls(animated: true)
+            resetMouseIdleTimer()
         }
     }
 
