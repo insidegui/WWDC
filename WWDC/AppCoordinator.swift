@@ -314,20 +314,30 @@ final class AppCoordinator {
             tabController.showLoading()
         }
 
-        _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: .main) { note in
-            if let error = note.object as? Error {
+        func checkSyncEngineOperationSucceededAndShowError(note: Notification) -> Bool {
+            if let error = note.object as? APIError {
+                switch error {
+                case .adapter, .unknown:
+                    WWDCAlert.show(with: error)
+                case .http:()
+                }
+            } else if let error = note.object as? Error {
                 WWDCAlert.show(with: error)
             } else {
-                self.updateListsAfterSync(migrate: true)
+                return true
             }
+
+            return false
+        }
+
+        _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: .main) { note in
+            guard checkSyncEngineOperationSucceededAndShowError(note: note) else { return }
+            self.updateListsAfterSync(migrate: true)
         }
 
         _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncFeaturedSections, object: nil, queue: .main) { note in
-            if let error = note.object as? Error {
-                WWDCAlert.show(with: error)
-            } else {
-                self.updateFeaturedSectionsAfterSync()
-            }
+            guard checkSyncEngineOperationSucceededAndShowError(note: note) else { return }
+            self.updateFeaturedSectionsAfterSync()
         }
 
         _ = NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: .main) { _ in
