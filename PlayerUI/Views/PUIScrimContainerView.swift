@@ -10,14 +10,22 @@ import Cocoa
 
 final class PUIScrimContainerView: NSView {
 
+    var isScrimEnabled: Bool {
+        return UserDefaults.standard.bool(forKey: "PUIScrimEnabled")
+    }
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
         wantsLayer = true
-        layer?.backgroundColor = NSColor(calibratedWhite: 0, alpha: 0.2).cgColor
+
+        if isScrimEnabled {
+            layer?.backgroundColor = NSColor(calibratedWhite: 0, alpha: 0.2).cgColor
+
+            layer?.addSublayer(topScrimLayer)
+        }
 
         layer?.addSublayer(bottomScrimLayer)
-        layer?.addSublayer(topScrimLayer)
     }
 
     required init?(coder: NSCoder) {
