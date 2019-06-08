@@ -143,35 +143,14 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
     private func updateWith(searchResults: Results<Session>?, animated: Bool, selecting session: SessionIdentifiable?) {
         guard hasPerformedFirstUpdate else { return }
 
-        let showWeekday = !(searchResults?.isEmpty ?? true)
-        allRows.forEachSessionViewModel {
-            $0.showsWeekdayInContext = showWeekday
-        }
-
         guard let results = searchResults else {
-
-            if !allRows.isEmpty {
-                setDisplayedRows(allRows, animated: animated, overridingSelectionWith: session)
-            }
-
+            setDisplayedRows(sessionRowProvider?.allRows ?? [], animated: animated, overridingSelectionWith: session)
             return
         }
 
         guard let sessionRowProvider = sessionRowProvider else { return }
 
-        let sortingFunction = sessionRowProvider.sessionSortingFunction
-
-        let sessionRows: [SessionRow] = results.sorted(by: sortingFunction).compactMap { session in
-            guard let viewModel = SessionViewModel(session: session) else { return nil }
-
-            for row in allRows {
-                if row.represents(session: SessionIdentifier(session.identifier)) {
-                    return row
-                }
-            }
-
-            return SessionRow(viewModel: viewModel)
-        }
+        let sessionRows = sessionRowProvider.filteredRows(onlyIncludingRowsFor: results)
 
         setDisplayedRows(sessionRows, animated: animated, overridingSelectionWith: session)
     }
@@ -180,12 +159,9 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
     var sessionRowProvider: SessionRowProvider? {
         didSet {
-            allRows = sessionRowProvider?.sessionRows() ?? []
             performFirstUpdateIfNeeded()
         }
     }
-
-    private var allRows: [SessionRow] = []
 
     private(set) var displayedRows: [SessionRow] = []
 
@@ -202,12 +178,13 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
         displayedRows = rows
 
+        // Clear filters if there is an initial selection that we can display that isn't gonna be visible
         if let initialSelection = self.initialSelection,
             !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
 
             searchController.resetFilters()
             _filterResults = .empty
-            displayedRows = allRows
+            displayedRows = sessionRowProvider?.allRows ?? []
         }
 
         tableView.reloadData()
@@ -337,9 +314,9 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
     }
 
     func canDisplay(session: SessionIdentifiable) -> Bool {
-        return allRows.contains { row -> Bool in
+        return sessionRowProvider?.allRows.contains { row -> Bool in
             row.represents(session: session)
-        }
+        } ?? false
     }
 
     // MARK: - Search

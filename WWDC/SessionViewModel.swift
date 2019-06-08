@@ -25,15 +25,6 @@ final class SessionViewModel {
     var imageUrl: URL?
     let trackName: String
 
-    // These properties are temporary. They are for supporting conditionally
-    // showing the weekday while filters are active on the schedule view
-    private var showsShortDayInContextSubject = BehaviorSubject(value: false)
-    var showsWeekdayInContext = false {
-        didSet {
-            showsShortDayInContextSubject.onNext(showsWeekdayInContext)
-        }
-    }
-
     private var disposeBag = DisposeBag()
 
     lazy var rxSession: Observable<Session> = {
@@ -76,13 +67,11 @@ final class SessionViewModel {
     lazy var rxContext: Observable<String> = {
         if self.style == .schedule {
 
-            return Observable.combineLatest(rxSession, rxSessionInstance, showsShortDayInContextSubject).map {
-                SessionViewModel.context(for: $0.0, instance: $0.1, showingWeekday: $0.2)
+            return Observable.combineLatest(rxSession, rxSessionInstance).map {
+                SessionViewModel.context(for: $0.0, instance: $0.1)
             }
         } else {
-            return rxSession.map { [weak self] in
-                SessionViewModel.context(for: $0, showingWeekday: self?.showsWeekdayInContext == true)
-            }
+            return rxSession.map { SessionViewModel.context(for: $0) }
         }
     }()
 
@@ -221,10 +210,9 @@ final class SessionViewModel {
         return result
     }
 
-    static func context(for session: Session, instance: SessionInstance? = nil, showingWeekday: Bool) -> String {
+    static func context(for session: Session, instance: SessionInstance? = nil) -> String {
         if let instance = instance {
-            var result = showingWeekday ? shortDayOfTheWeekFormatter.string(from: instance.startTime) + " · " : ""
-            result += timeFormatter.string(from: instance.startTime) + " - " + timeFormatter.string(from: instance.endTime)
+            var result = timeFormatter.string(from: instance.startTime) + " - " + timeFormatter.string(from: instance.endTime)
 
             result += " · " + instance.roomName
 
