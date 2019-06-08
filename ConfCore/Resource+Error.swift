@@ -47,7 +47,7 @@ public enum APIError: Error, CustomNSError {
             let underlyingUserInfo = urlError.errorUserInfo.compactMapValues { $0 as? String }
             userInfo.merge(underlyingUserInfo, uniquingKeysWith: { $1 })
             userInfo[NSLocalizedRecoverySuggestionErrorKey] = "Please try again"
-        } else if case let .http(underlying as RequestError) = self, let _ = underlying.cause as? DecodingError {
+        } else if case let .http(underlying as RequestError) = self, underlying.cause is DecodingError {
             userInfo[NSLocalizedRecoverySuggestionErrorKey] = "Please report this error"
         }
 
