@@ -22,6 +22,7 @@
 		4D7482CC20FFAA09008D156C /* DownloadsStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */; };
 		4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DC721063CD500762BBD /* TitleBarViewController.swift */; };
 		4DA25DCC21064B4800762BBD /* WWDCTabViewControllerTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */; };
+		4DA83FE222AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */; };
 		4DA9C4D120EC098800710354 /* DownloadsManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA9C4D020EC098800710354 /* DownloadsManagementViewController.swift */; };
 		4DBA2F7620FE71BF00ED0253 /* DownloadsStatusButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBA2F7520FE71BF00ED0253 /* DownloadsStatusButton.swift */; };
 		4DBFA4DA20E160CB00BDF34B /* AVAsset+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */; };
@@ -379,6 +380,7 @@
 		4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsStatusViewController.swift; sourceTree = "<group>"; };
 		4DA25DC721063CD500762BBD /* TitleBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarViewController.swift; sourceTree = "<group>"; };
 		4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCTabViewControllerTabBar.swift; sourceTree = "<group>"; };
+		4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIVibrantBackgroundButton.swift; sourceTree = "<group>"; };
 		4DA9C4D020EC098800710354 /* DownloadsManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsManagementViewController.swift; sourceTree = "<group>"; };
 		4DBA2F7520FE71BF00ED0253 /* DownloadsStatusButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsStatusButton.swift; sourceTree = "<group>"; };
 		4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+AsyncHelpers.swift"; sourceTree = "<group>"; };
@@ -1487,6 +1489,7 @@
 				DDF721C11ECA12A40054C503 /* PUIBufferLayer.swift */,
 				DDED75561ED3C1BF000BA817 /* PUIScrimContainerView.swift */,
 				DDF721C21ECA12A40054C503 /* PUIButton.swift */,
+				4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */,
 				DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */,
 				DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */,
 				DDF721C51ECA12A40054C503 /* PUISlider.swift */,
@@ -2040,6 +2043,7 @@
 				DDF721C81ECA12A40054C503 /* PUIPictureContainerViewController.swift in Sources */,
 				DDF721D51ECA12A40054C503 /* AVPlayer+Validation.swift in Sources */,
 				DDF721CA1ECA12A40054C503 /* Images.swift in Sources */,
+				4DA83FE222AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift in Sources */,
 				DDF721CE1ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift in Sources */,
 				DDC970BF209291630072B822 /* PUITouchBarController.swift in Sources */,
 				DDF721E01ECA12A40054C503 /* PUISlider.swift in Sources */,

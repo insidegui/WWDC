@@ -518,13 +518,13 @@ public final class PUIPlayerView: NSView {
         return l
     }()
 
-    private lazy var fullScreenButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
+    private lazy var fullScreenButton: PUIVibrantButton = {
+        let b = PUIVibrantButton(frame: .zero)
 
-        b.image = .PUIFullScreen
-        b.target = self
-        b.action = #selector(toggleFullscreen)
-        b.toolTip = "Toggle full screen"
+        b.button.image = .PUIFullScreen
+        b.button.target = self
+        b.button.action = #selector(toggleFullscreen)
+        b.button.toolTip = "Toggle full screen"
 
         return b
     }()
