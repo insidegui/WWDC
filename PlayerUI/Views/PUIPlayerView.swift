@@ -1269,7 +1269,7 @@ public final class PUIPlayerView: NSView {
         guard isPlaying else { return false }
         guard player.status == .readyToPlay else { return false }
         guard let window = window else { return false }
-        guard NSApp.isActive && window.isOnActiveSpace && window.isVisible else { return false }
+        guard window.isOnActiveSpace && window.isVisible else { return false }
 
         guard !timelineView.isEditingAnnotation else { return false }
 
@@ -1382,7 +1382,6 @@ public final class PUIPlayerView: NSView {
         // resigning main in full screen means we're leaving the space
         if windowIsInFullScreen {
             resetMouseIdleTimer(start: false)
-            showControls(animated: false)
         }
     }
 
