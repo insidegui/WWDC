@@ -15,6 +15,7 @@ extension Notification.Name {
     static let RefreshPeriodicallyPreferenceDidChange = Notification.Name("RefreshPeriodicallyPreferenceDidChange")
     static let SkipBackAndForwardBy30SecondsPreferenceDidChange = Notification.Name("SkipBackAndForwardBy30SecondsPreferenceDidChange")
     static let SyncUserDataPreferencesDidChange = Notification.Name("SyncUserDataPreferencesDidChange")
+    static let AutoDeletePreferenceDidChange = Notification.Name("AutoDeletePreferenceDidChange")
 }
 
 final class Preferences {
@@ -138,6 +139,17 @@ final class Preferences {
             defaults.set(newValue, forKey: #function)
 
             NotificationCenter.default.post(name: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil)
+        }
+    }
+
+    var autoDeleteVideosWhenWatched: Bool {
+        get {
+            return defaults.bool(forKey: #function)
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
+
+            NotificationCenter.default.post(name: .AutoDeletePreferenceDidChange, object: nil)
         }
     }
 

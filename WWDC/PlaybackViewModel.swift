@@ -126,6 +126,17 @@ final class PlaybackViewModel {
 
                 if !d.isZero { self.nowPlayingInfo.value?.progress = p / d }
             }
+
+            NotificationCenter.default.addObserver(self, selector: #selector(self.playerDidReachEndOfVideo(note:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+        }
+    }
+
+    @objc func playerDidReachEndOfVideo(note: NSNotification) {
+
+        let shouldDeleteVideo = UserDefaults.standard.bool(forKey: "autoDeleteVideosWhenWatched")
+
+        if shouldDeleteVideo {
+            DownloadManager.shared.deleteDownloadedFile(for: sessionViewModel.session)
         }
     }
 
@@ -134,6 +145,8 @@ final class PlaybackViewModel {
             player.removeTimeObserver(timeObserver)
             self.timeObserver = nil
         }
+
+        NotificationCenter.default.removeObserver(self)
     }
 
 }
