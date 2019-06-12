@@ -15,7 +15,6 @@ extension Notification.Name {
     static let RefreshPeriodicallyPreferenceDidChange = Notification.Name("RefreshPeriodicallyPreferenceDidChange")
     static let SkipBackAndForwardBy30SecondsPreferenceDidChange = Notification.Name("SkipBackAndForwardBy30SecondsPreferenceDidChange")
     static let SyncUserDataPreferencesDidChange = Notification.Name("SyncUserDataPreferencesDidChange")
-    static let AutoDeletePreferenceDidChange = Notification.Name("AutoDeletePreferenceDidChange")
 }
 
 final class Preferences {
@@ -148,8 +147,6 @@ final class Preferences {
         }
         set {
             defaults.set(newValue, forKey: #function)
-
-            NotificationCenter.default.post(name: .AutoDeletePreferenceDidChange, object: nil)
         }
     }
 
