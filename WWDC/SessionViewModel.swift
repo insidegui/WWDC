@@ -149,9 +149,9 @@ final class SessionViewModel {
     }()
 
     lazy var rxRelatedSessions: Observable<Results<RelatedResource>> = {
-        // Related must either have a video or occur in the future
+        // Return sessions with videos, or any session that hasn't yet occurred
         let predicateFormat = "type == %@ AND (ANY session.assets.rawAssetType == %@ OR ANY session.instances.startTime >= %@)"
-        let relatedPredicate = NSPredicate(format: predicateFormat, RelatedResourceType.session.rawValue, SessionAssetType.sdVideo.rawValue, today() as NSDate)
+        let relatedPredicate = NSPredicate(format: predicateFormat, RelatedResourceType.session.rawValue, SessionAssetType.streamingVideo.rawValue, today() as NSDate)
         let validRelatedSessions = self.session.related.filter(relatedPredicate)
 
         return Observable.collection(from: validRelatedSessions)
