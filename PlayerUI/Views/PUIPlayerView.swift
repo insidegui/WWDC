@@ -1149,6 +1149,9 @@ public final class PUIPlayerView: NSView {
         case rightArrow = 124
         case minus = 27
         case plus = 24
+        case j = 38
+        case k = 40
+        case l = 37
     }
 
     private func startMonitoringKeyEvents() {
