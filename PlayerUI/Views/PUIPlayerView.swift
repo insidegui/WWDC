@@ -1171,15 +1171,15 @@ public final class PUIPlayerView: NSView {
             guard !self.timelineView.isEditingAnnotation else { return event }
 
             switch command {
-            case .spaceBar:
+            case .spaceBar, .k:
                 self.togglePlaying(nil)
                 return nil
 
-            case .leftArrow:
+            case .leftArrow, .j:
                 self.goBackInTime(nil)
                 return nil
 
-            case .rightArrow:
+            case .rightArrow, .l:
                 self.goForwardInTime(nil)
                 return nil
  
