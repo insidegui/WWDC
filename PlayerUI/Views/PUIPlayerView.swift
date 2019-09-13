@@ -1149,6 +1149,9 @@ public final class PUIPlayerView: NSView {
         case rightArrow = 124
         case minus = 27
         case plus = 24
+        case j = 38
+        case k = 40
+        case l = 37
     }
 
     private func startMonitoringKeyEvents() {
@@ -1168,15 +1171,15 @@ public final class PUIPlayerView: NSView {
             guard !self.timelineView.isEditingAnnotation else { return event }
 
             switch command {
-            case .spaceBar:
+            case .spaceBar, .k:
                 self.togglePlaying(nil)
                 return nil
 
-            case .leftArrow:
+            case .leftArrow, .j:
                 self.goBackInTime(nil)
                 return nil
 
-            case .rightArrow:
+            case .rightArrow, .l:
                 self.goForwardInTime(nil)
                 return nil
  
