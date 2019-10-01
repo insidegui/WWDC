@@ -21,7 +21,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         }
     }
 
-    private var activeTabVar = Variable<Tab>(Tab(rawValue: 0)!)
+    private var activeTabVar = BehaviorRelay<Tab>(value: Tab(rawValue: 0)!)
 
     var rxActiveTab: Observable<Tab> {
         return activeTabVar.asObservable()
@@ -43,7 +43,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
                 }
             }
 
-            activeTabVar.value = Tab(rawValue: selectedTabViewItemIndex)!
+            activeTabVar.accept(Tab(rawValue: selectedTabViewItemIndex)!)
         }
     }
 

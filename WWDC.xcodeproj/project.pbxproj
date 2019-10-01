@@ -20,6 +20,7 @@
 		4D66CA52217E2C9B0006A8C9 /* DownloadsManagementTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D66CA51217E2C9B0006A8C9 /* DownloadsManagementTableView.swift */; };
 		4D7482CA20FF735D008D156C /* WWDCWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7482C920FF735D008D156C /* WWDCWindowController.swift */; };
 		4D7482CC20FFAA09008D156C /* DownloadsStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */; };
+		4D82B5F82343DABF005AC3EC /* RxRelay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D82B5F72343DABE005AC3EC /* RxRelay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DC721063CD500762BBD /* TitleBarViewController.swift */; };
 		4DA25DCC21064B4800762BBD /* WWDCTabViewControllerTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */; };
 		4DA83FE222AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */; };
@@ -333,6 +334,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				4D82B5F82343DABF005AC3EC /* RxRelay.framework in Embed Frameworks */,
 				DDBCEC9C228AD30C009300CF /* SwiftProtobuf.framework in Embed Frameworks */,
 				DDBCEC9A228AD2D0009300CF /* CloudKitCodable.framework in Embed Frameworks */,
 				DDBCEC83228AC9C5009300CF /* ChromeCastCore.framework in Embed Frameworks */,
@@ -378,6 +380,7 @@
 		4D66CA51217E2C9B0006A8C9 /* DownloadsManagementTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsManagementTableView.swift; sourceTree = "<group>"; };
 		4D7482C920FF735D008D156C /* WWDCWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCWindowController.swift; sourceTree = "<group>"; };
 		4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsStatusViewController.swift; sourceTree = "<group>"; };
+		4D82B5F72343DABE005AC3EC /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/Mac/RxRelay.framework; sourceTree = "<group>"; };
 		4DA25DC721063CD500762BBD /* TitleBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarViewController.swift; sourceTree = "<group>"; };
 		4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCTabViewControllerTabBar.swift; sourceTree = "<group>"; };
 		4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIVibrantBackgroundButton.swift; sourceTree = "<group>"; };
@@ -765,6 +768,7 @@
 		DD36A4A31E478C6900B2EA88 = {
 			isa = PBXGroup;
 			children = (
+				4D82B5F72343DABE005AC3EC /* RxRelay.framework */,
 				DD5F517C1E47DE150017F9EC /* Vendor */,
 				DD36A4AE1E478C6A00B2EA88 /* WWDC */,
 				DD36A4C91E478D7E00B2EA88 /* ConfCore */,

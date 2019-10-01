@@ -31,3 +31,7 @@ class WWDCHorizontalScrollView: NSScrollView {
     }
 
 }
+
+extension NSEvent.Phase {
+    static let none: NSEvent.Phase = []
+}

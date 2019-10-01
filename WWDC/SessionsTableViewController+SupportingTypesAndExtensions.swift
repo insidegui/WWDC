@@ -170,7 +170,7 @@ fileprivate extension NSPredicate {
     }
 }
 
-public extension ObservableType where E: NotificationEmitter {
+public extension ObservableType where Element: NotificationEmitter {
 
     /**
      Returns an `Observable<E>` that emits each time elements are added or removed from the collection.
@@ -183,8 +183,8 @@ public extension ObservableType where E: NotificationEmitter {
 
      - returns: `Observable<E>`, e.g. when called on `Results<Model>` it will return `Observable<Results<Model>>`, on a `List<User>` it will return `Observable<List<User>>`, etc.
      */
-    static func shallowCollection(from collection: E, synchronousStart: Bool = true)
-        -> Observable<E> {
+    static func shallowCollection(from collection: Element, synchronousStart: Bool = true)
+        -> Observable<Element> {
 
             return Observable.create { observer in
                 if synchronousStart {
@@ -193,7 +193,7 @@ public extension ObservableType where E: NotificationEmitter {
 
                 let token = collection.observe { changeset in
 
-                    var value: E?
+                    var value: Element?
 
                     switch changeset {
                     case .initial(let latestValue):

@@ -16,6 +16,7 @@ class WWDCTableRowView: NSTableRowView {
 
     override var layerContentsRedrawPolicy: NSView.LayerContentsRedrawPolicy {
         get { return .onSetNeedsDisplay }
+        // swiftlint:disable:next unused_setter_value
         set { }
     }
 

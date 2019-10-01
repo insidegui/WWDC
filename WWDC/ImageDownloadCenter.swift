@@ -122,7 +122,7 @@ private final class ImageCacheProvider {
 
                 do {
                     try bgRealm.write {
-                        bgRealm.add(entity, update: true)
+                        bgRealm.add(entity, update: .all)
                     }
 
                     bgRealm.invalidate()
