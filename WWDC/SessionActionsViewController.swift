@@ -170,7 +170,7 @@ class SessionActionsViewController: NSViewController {
         }).disposed(by: disposeBag)
 
         if let rxDownloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
-            rxDownloadState.throttle(0.8, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] status in
+            rxDownloadState.throttle(.milliseconds(800), scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] status in
                 switch status {
                 case .downloading(let info):
                     self?.downloadIndicator.isHidden = false

@@ -63,7 +63,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         let status = viewModel.status
         let download = viewModel.download
 
-        let throttledStatus = status.throttle(0.1, latest: true, scheduler: MainScheduler.instance)
+        let throttledStatus = status.throttle(.milliseconds(100), latest: true, scheduler: MainScheduler.instance)
 
         throttledStatus
             .subscribe(onNext: { [weak self] status in

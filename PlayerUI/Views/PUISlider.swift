@@ -11,8 +11,9 @@ import Cocoa
 class PUISlider: NSSlider {
 
     override class var cellClass: AnyClass? {
+        // swiftlint:disable:next unused_setter_value
         set {
-            super.cellClass = cellClass
+            super.cellClass = PUISliderCell.self
         }
 
         get {

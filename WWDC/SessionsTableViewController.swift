@@ -21,7 +21,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    var selectedSession = Variable<SessionViewModel?>(nil)
+    var selectedSession = BehaviorRelay<SessionViewModel?>(value: nil)
 
     let style: SessionsListStyle
 

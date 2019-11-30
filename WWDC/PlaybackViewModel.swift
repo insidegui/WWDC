@@ -10,6 +10,7 @@ import Foundation
 import ConfCore
 import AVFoundation
 import PlayerUI
+import RxCocoa
 import RxSwift
 
 enum PlaybackError: Error {
@@ -42,7 +43,7 @@ final class PlaybackViewModel {
 
     private var timeObserver: Any?
 
-    var nowPlayingInfo: Variable<PUINowPlayingInfo?> = Variable(nil)
+    var nowPlayingInfo: BehaviorRelay<PUINowPlayingInfo?> = BehaviorRelay(value: nil)
 
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
         title = sessionViewModel.title
@@ -103,7 +104,7 @@ final class PlaybackViewModel {
         #endif
 
         player = AVPlayer(url: finalUrl)
-        nowPlayingInfo.value = PUINowPlayingInfo(playbackViewModel: self)
+        nowPlayingInfo.accept(PUINowPlayingInfo(playbackViewModel: self))
 
         if !isLiveStream {
             if session.isWatched {
@@ -124,7 +125,12 @@ final class PlaybackViewModel {
 
                 self.sessionViewModel.session.setCurrentPosition(p, d)
 
-                if !d.isZero { self.nowPlayingInfo.value?.progress = p / d }
+                if !d.isZero {
+                    if var nowPlayingInfo = self.nowPlayingInfo.value {
+                        nowPlayingInfo.progress = p / d
+                        self.nowPlayingInfo.accept(nowPlayingInfo)
+                    }
+                }
             }
         }
     }

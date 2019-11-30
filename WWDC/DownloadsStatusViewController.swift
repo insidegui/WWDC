@@ -24,7 +24,7 @@ class DownloadsStatusViewController: NSViewController {
 
         downloadManager
             .downloadsObservable
-            .throttle(0.2, scheduler: MainScheduler.instance)
+            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
                 self?.statusButton.isHidden = $0.isEmpty
             }).disposed(by: disposeBag)

@@ -122,7 +122,7 @@ final class BookmarkViewController: NSViewController {
         imageView.image = NSImage(data: bookmark.snapshot)
         textView.string = bookmark.body
 
-        textView.rxText.throttle(1, scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] text in
+        textView.rxText.throttle(.seconds(1), scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] text in
             guard let bookmark = self?.bookmark else { return }
 
             self?.storage.modify(bookmark) { $0.body = text }

@@ -1,9 +1,9 @@
 github "SwiftyJSON/SwiftyJSON" ~> 4.0
 
-github "ReactiveX/RxSwift" ~> 4.0
+github "ReactiveX/RxSwift" ~> 5.0
 
 github "realm/realm-cocoa" ~> 3.14.0
-github "RxSwiftCommunity/RxRealm" ~> 0.7
+github "RxSwiftCommunity/RxRealm" ~> 1.0
 
 github "bustoutsolutions/siesta" ~> 1.0
 

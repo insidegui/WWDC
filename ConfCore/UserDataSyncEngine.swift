@@ -10,6 +10,7 @@ import Foundation
 import CloudKit
 import CloudKitCodable
 import RealmSwift
+import RxCocoa
 import RxSwift
 import os.log
 
@@ -139,20 +140,20 @@ public final class UserDataSyncEngine {
         #endif
     }
 
-    public private(set) var isStopping = Variable<Bool>(false)
+    public private(set) var isStopping = BehaviorRelay<Bool>(value: false)
 
-    public private(set) var isPerformingSyncOperation = Variable<Bool>(false)
+    public private(set) var isPerformingSyncOperation = BehaviorRelay<Bool>(value: false)
 
-    public private(set) var isAccountAvailable = Variable<Bool>(false)
+    public private(set) var isAccountAvailable = BehaviorRelay<Bool>(value: false)
 
     public func stop(harsh: Bool = false) {
         guard isRunning, !isStopping.value else { return }
-        isStopping.value = true
+        isStopping.accept(true)
 
         workQueue.async { [unowned self] in
             defer {
                 DispatchQueue.main.async {
-                    self.isStopping.value = false
+                    self.isStopping.accept(false)
                     self.isRunning = false
                 }
             }
@@ -176,7 +177,7 @@ public final class UserDataSyncEngine {
 
     private func startObservingSyncOperations() {
         cloudQueueObservation = cloudOperationQueue.observe(\.operationCount) { [unowned self] queue, _ in
-            self.isPerformingSyncOperation.value = queue.operationCount > 0
+            self.isPerformingSyncOperation.accept(queue.operationCount > 0)
         }
     }
 
@@ -210,9 +211,9 @@ public final class UserDataSyncEngine {
 
             switch status {
             case .available:
-                self.isAccountAvailable.value = true
+                self.isAccountAvailable.accept(true)
             default:
-                self.isAccountAvailable.value = false
+                self.isAccountAvailable.accept(false)
             }
         }
     }
@@ -462,7 +463,7 @@ public final class UserDataSyncEngine {
             let obj = try CloudKitRecordDecoder().decode(objectType.SyncObject.self, from: record)
             let model = objectType.from(syncObject: obj)
 
-            realm.add(model, update: true)
+            realm.add(model, update: .all)
 
             guard let sessionId = obj.sessionId else {
                 os_log("Sync object didn't have a sessionId!", log: self.log, type: .fault)

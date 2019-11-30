@@ -11,7 +11,7 @@ import AVFoundation
 
 open class PUIPlayerWindow: NSWindow {
 
-    @IBInspectable @objc open var hidesTitlebar: Bool = true
+    @IBInspectable open var hidesTitlebar: Bool = true
 
     // MARK: - Initialization
 

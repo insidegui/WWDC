@@ -19,11 +19,7 @@ public class Event: Object, Decodable {
     @objc public dynamic var name = ""
 
     /// When the event starts
-    @objc public dynamic var startDate = Date.distantPast {
-        didSet {
-            year = Calendar.current.component(.year, from: startDate)
-        }
-    }
+    @objc public dynamic var startDate = Date.distantPast
 
     @objc public dynamic var year = -1
 
@@ -68,6 +64,7 @@ public class Event: Object, Decodable {
         identifier = try container.decode(key: .identifier)
         name = try container.decode(key: .name)
         startDate = try container.decode(key: .start)
+        year = Calendar.current.component(.year, from: startDate)
         endDate = try container.decode(key: .end)
         isCurrent = try container.decode(key: .current)
         imagesPath = try container.decode(key: .imagesPath)

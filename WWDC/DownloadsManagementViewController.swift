@@ -106,7 +106,7 @@ class DownloadsManagementViewController: NSViewController {
 
         downloadManager
             .downloadsObservable
-            .throttle(0.2, scheduler: MainScheduler.instance)
+            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
 
                 self?.downloads = $0.sorted(by: DownloadManager.Download.sortingFunction)

@@ -109,7 +109,7 @@ public final class Storage {
                 if let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
                     existingSession.merge(with: newSession, in: backgroundRealm)
                 } else {
-                    backgroundRealm.add(newSession, update: true)
+                    backgroundRealm.add(newSession, update: .all)
                 }
             }
 
@@ -126,14 +126,14 @@ public final class Storage {
                         newInstance.session = existingSession
                     }
 
-                    backgroundRealm.add(newInstance, update: true)
+                    backgroundRealm.add(newInstance, update: .all)
                 }
             }
 
             // Save everything
-            backgroundRealm.add(contentsResponse.rooms, update: true)
-            backgroundRealm.add(contentsResponse.tracks, update: true)
-            backgroundRealm.add(contentsResponse.events, update: true)
+            backgroundRealm.add(contentsResponse.rooms, update: .all)
+            backgroundRealm.add(contentsResponse.tracks, update: .all)
+            backgroundRealm.add(contentsResponse.events, update: .all)
 
             // add instances to rooms
             backgroundRealm.objects(Room.self).forEach { room in
@@ -213,7 +213,7 @@ public final class Storage {
                     section.instances.append(objectsIn: instancesForSection)
                     section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
 
-                    backgroundRealm.add(section, update: true)
+                    backgroundRealm.add(section, update: .all)
 
                     previousStartTime = instance.startTime
                 }
@@ -245,7 +245,7 @@ public final class Storage {
                        asset.year,
                        asset.sessionId)
 
-                backgroundRealm.add(asset, update: true)
+                backgroundRealm.add(asset, update: .all)
 
                 if let session = backgroundRealm.objects(Session.self).filter("identifier == %@", asset.sessionId).first {
                     if !session.assets.contains(asset) {
@@ -277,7 +277,7 @@ public final class Storage {
                 backgroundRealm.delete(section)
             }
 
-            backgroundRealm.add(sections, update: true)
+            backgroundRealm.add(sections, update: .all)
 
             // Associate contents with sessions
             sections.forEach { section in
