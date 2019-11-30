@@ -1549,7 +1549,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DD36A4BB1E478C6A00B2EA88 /* Build configuration list for PBXNativeTarget "WWDC" */;
 			buildPhases = (
-				DD55E73522AC2958004BBA7A /* ShellScript */,
+				DD55E73522AC2958004BBA7A /* Fix Sparkle for notarization */,
 				DD36A4A81E478C6900B2EA88 /* Sources */,
 				DD36A4A91E478C6900B2EA88 /* Frameworks */,
 				DD36A4AA1E478C6900B2EA88 /* Resources */,
@@ -1822,7 +1822,7 @@
 			shellPath = /bin/sh;
 			shellScript = "if [ -f \"./Crashlytics.sh\" ]; then\n./Crashlytics.sh\nfi";
 		};
-		DD55E73522AC2958004BBA7A /* ShellScript */ = {
+		DD55E73522AC2958004BBA7A /* Fix Sparkle for notarization */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1831,13 +1831,14 @@
 			);
 			inputPaths = (
 			);
+			name = "Fix Sparkle for notarization";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\nexit 0\nfi\n\nCARTHAGE_BUILD_MAC_DIR=\"${PROJECT_DIR}/Carthage/Build/Mac\"\nSPARKLE_AUTOUPDATE_PATH=\"${CARTHAGE_BUILD_MAC_DIR}/Sparkle.framework/Resources/Autoupdate.app\"\ncodesign --force --deep -o runtime --sign \"$CODE_SIGN_IDENTITY\" \"$SPARKLE_AUTOUPDATE_PATH\"\n";
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ] || [ \"${CODE_SIGN_IDENTITY}\" = \"\" ] ; then\necho \"Skipping because we're in a debug build or couldn't find code signing ID.\"\nexit 0\nfi\n\nCARTHAGE_BUILD_MAC_DIR=\"${PROJECT_DIR}/Carthage/Build/Mac\"\nSPARKLE_AUTOUPDATE_PATH=\"${CARTHAGE_BUILD_MAC_DIR}/Sparkle.framework/Resources/Autoupdate.app\"\ncodesign --force --deep -o runtime --sign \"$CODE_SIGN_IDENTITY\" \"$SPARKLE_AUTOUPDATE_PATH\"\n";
 		};
 		F72964482015787100A7A571 /* SwiftLint Warnings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2490,7 +2491,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application: GUILHERME RAMBO (8C7439RJLG)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -2508,7 +2509,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "605da31a-abf0-4ee3-84f3-c1169196f3d1";
-				PROVISIONING_PROFILE_SPECIFIER = "WWDC Debug 2019";
+				PROVISIONING_PROFILE_SPECIFIER = "WWDC Dev 2020";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -2655,7 +2656,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Developer ID Application: GUILHERME RAMBO (8C7439RJLG)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
@@ -2674,7 +2675,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "2adae370-6e55-4123-9dcf-25406dfab9ca";
-				PROVISIONING_PROFILE_SPECIFIER = "WWDC Release 2019 B";
+				PROVISIONING_PROFILE_SPECIFIER = "WWDC Prod 2020";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
 			};
 			name = Release_iCloud;
