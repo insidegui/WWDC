@@ -7,6 +7,7 @@
 //
 
 import CloudKitCodable
+import Foundation
 import os.log
 
 public struct BookmarkSyncObject: CustomCloudKitCodable, BelongsToSession {

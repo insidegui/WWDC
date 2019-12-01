@@ -36,7 +36,7 @@ public final class TBUserDataMigrator {
 
     private let fileURL: URL
     private var realm: Realm!
-    private weak var newRealm: Realm!
+    private var newRealm: Realm!
 
     private let log = OSLog(subsystem: "ThrowBack", category: "TBUserDataMigrator")
 
