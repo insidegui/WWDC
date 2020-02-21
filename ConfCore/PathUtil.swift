@@ -1,14 +1,14 @@
 //
 //  PathUtil.swift
-//  WWDC
+//  ConfCore
 //
-//  Created by Guilherme Rambo on 22/04/17.
-//  Copyright © 2017 Guilherme Rambo. All rights reserved.
+//  Created by Guilherme Rambo on 21/02/20.
+//  Copyright © 2020 Guilherme Rambo. All rights reserved.
 //
 
 import Cocoa
 
-final class PathUtil {
+public final class PathUtil {
 
     /// The WWDCUseDebugStorage flag can be used to force debug builds to use
     /// a separate storage from release builds
@@ -16,10 +16,10 @@ final class PathUtil {
         return UserDefaults.standard.bool(forKey: "WWDCUseDebugStorage")
     }
 
-    enum AppSupportCreationError: Error {
+    public enum AppSupportCreationError: Error {
         case fileExists
 
-        var localizedDescription: String {
+        public var localizedDescription: String {
             switch self {
             case .fileExists:
                 return "A file exists with the same name as the app support directory"
@@ -28,10 +28,8 @@ final class PathUtil {
     }
 
     /// The application support directory path for the app, use this if you can assume it to be already created
-    static var appSupportPathAssumingExisting: String {
-        guard let identifier = Bundle.main.bundleIdentifier else {
-            fatalError("Bundle identifier is nil, this should never happen")
-        }
+    public static var appSupportPathAssumingExisting: String {
+        let identifier = "io.wwdc.app"
 
         let dir = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first!
 
@@ -52,7 +50,7 @@ final class PathUtil {
     ///
     /// - Returns: The path to the app support directory
     /// - Throws: If the directory doesn't exist and can't be created
-    static func appSupportPathCreatingIfNeeded() throws -> String {
+    public static func appSupportPathCreatingIfNeeded() throws -> String {
         let path = appSupportPathAssumingExisting
 
         var isDirectory: ObjCBool = false

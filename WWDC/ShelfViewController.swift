@@ -9,6 +9,7 @@
 import Cocoa
 import RxSwift
 import RxCocoa
+import ConfCore
 
 protocol ShelfViewControllerDelegate: class {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)

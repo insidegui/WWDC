@@ -8,6 +8,7 @@
 
 import Cocoa
 import RealmSwift
+import ConfCore
 import os.log
 
 typealias ImageDownloadCompletionBlock = (_ sourceURL: URL, _ original: NSImage?, _ thumbnail: NSImage?) -> Void

@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import ConfCore
 
 final class TrackColorView: NSView {
 

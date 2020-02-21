@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>codes.rambo.WWDCSearchAgent</string>
+	<key>MachServices</key>
+	<dict>
+		<key>codes.rambo.WWDCSearchAgent</key>
+		<true/>
+	</dict>
+	<key>ProcessType</key>
+	<string>Interactive</string>
+	<key>Program</key>
+	<string>/Applications/WWDC.app/Contents/SharedSupport/WWDCSearchAgent.app/Contents/MacOS/WWDCSearchAgent</string>
+</dict>
+</plist>
