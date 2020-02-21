@@ -46,7 +46,6 @@ class DownloadsStatusViewController: NSViewController {
 
         view.addSubview(statusButton)
         statusButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40).isActive = true
-        statusButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1, constant: 0).isActive = true
         statusButton.widthAnchor.constraint(equalTo: view.heightAnchor, multiplier: 1, constant: 0).isActive = true
         statusButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
 
