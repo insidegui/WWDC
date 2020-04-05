@@ -105,7 +105,7 @@ extension Environment {
                                          liveVideosPath: "/videos_live.json",
                                          featuredSectionsPath: "/_featured.json")
 
-    public static let production = Environment(baseURL: "https://api2018.wwdc.io",
+    public static let production = Environment(baseURL: "https://api2020.wwdc.io",
                                                videosPath: "/videos.json",
                                                sessionsPath: "/contents.json",
                                                newsPath: "/news.json",
