@@ -191,10 +191,15 @@ public class SessionInstance: Object, ConditionallyDecodable {
             self.rawSessionType = rawType
             self.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
 
-            self.startTime = try container.decode(Date.self, forKey: .startTime)
-            self.endTime = try container.decode(Date.self, forKey: .endTime)
+            if let startTime = try container.decodeIfPresent(Date.self, forKey: .startTime),
+                let endTime = try container.decodeIfPresent(Date.self, forKey: .endTime) {
+                self.startTime = startTime
+                self.endTime = endTime
+            }
 
-            self.roomIdentifier = String(try container.decode(Int.self, forKey: .room))
+            if let room = try container.decodeIfPresent(Int.self, forKey: .room) {
+                self.roomIdentifier = String(room)
+            }
             self.trackIdentifier = String(try container.decode(Int.self, forKey: .track))
         } catch let error as DecodingError where error.isKeyNotFound {
             throw ConditionallyDecodableError.missingKey(error)
