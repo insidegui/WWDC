@@ -98,14 +98,14 @@ extension Environment {
         }
     }
 
-    public static let test = Environment(baseURL: "http://localhost:9042",
+    public static let test = Environment(baseURL: "https://red-fire-a9a4.rambo.workers.dev/",
                                          videosPath: "/videos.json",
                                          sessionsPath: "/contents.json",
                                          newsPath: "/news.json",
                                          liveVideosPath: "/videos_live.json",
                                          featuredSectionsPath: "/_featured.json")
 
-    public static let production = Environment(baseURL: "https://api2018.wwdc.io",
+    public static let production = Environment(baseURL: "https://red-fire-a9a4.rambo.workers.dev",
                                                videosPath: "/videos.json",
                                                sessionsPath: "/contents.json",
                                                newsPath: "/news.json",

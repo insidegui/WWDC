@@ -265,7 +265,7 @@ final class AppCoordinator {
 
         starupDependencies
             .filter {
-                !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.3.isEmpty && !$0.4.isEmpty
+                !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.4.isEmpty
             }
             .take(1)
             .subscribe(onNext: { [weak self] tracks, _, _, sections, _ in
