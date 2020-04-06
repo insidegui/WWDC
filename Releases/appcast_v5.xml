@@ -7,6 +7,33 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 6.2</title>
+			<description><![CDATA[
+				<ul>
+					<li>The app is now notarized</li>
+					<li>Adds a number of keyboard shortcuts:</li>
+					<ul>
+					    <li>Increase/reduce playback speed with plus or minus keys respectively</li>
+					    <li>Increase reverse speed/pause/increase forward speed with J/K/L respectively</li>
+					</ul>
+					<li>Section headers categorising sessions into Tracks now show when filters and searches are active</li>
+					<li>Improvements to the control overlay when viewing videos:</li>
+					<ul>
+					    <li>Increased contrast</li>
+					    <li>Fixes two issues which saw the control overlay stay on-screen when the mouse was not focused on the video</li>
+					</ul>
+					<li>Fixes an issue in which some related sessions were not shown</li>
+					<li>Fixes an issue with transcripts</li>
+					<li>Fixes a networking alert which was shown too readily</li>
+					<li>Fixes an issue which affected users who cancelled when changing their download directory</li>
+				</ul>
+			]]></description>
+            <pubDate>Mon, 06 Apr 2020 14:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/6.2/WWDC_v6.2.zip" sparkle:version="922" sparkle:shortVersionString="6.2" length="14221167" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.13</sparkle:minimumSystemVersion>
+        </item>	
+		
+		<item>
             <title>Version 6.1.2</title>
 			<description><![CDATA[
 				<p>This is a nerdy release 🤓</p>
