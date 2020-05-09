@@ -102,6 +102,10 @@ extension NSImage {
         return playerBundle.image(forResource: "speed-15")!
     }
 
+    static var PUISpeedOneAndThreeFourths: NSImage {
+        return playerBundle.image(forResource: "speed-175")!
+    }
+
     static var PUISpeedTwo: NSImage {
         return playerBundle.image(forResource: "speed-2")!
     }

@@ -13,10 +13,11 @@ public enum PUIPlaybackSpeed: Float {
     case normal = 1
     case midFast = 1.25
     case fast = 1.5
+    case faster = 1.75
     case fastest = 2
 
     public static var all: [PUIPlaybackSpeed] {
-        return [.slow, .normal, .midFast, .fast, .fastest]
+        return [.slow, .normal, .midFast, .fast, .faster, .fastest]
     }
 
     static var supportedPlaybackRates: [NSNumber] {
@@ -33,6 +34,8 @@ public enum PUIPlaybackSpeed: Float {
             return .PUISpeedOneAndFourth
         case .fast:
             return .PUISpeedOneAndHalf
+        case .faster:
+            return .PUISpeedOneAndThreeFourths
         case .fastest:
             return .PUISpeedTwo
         }

@@ -18,7 +18,7 @@ Watch this year's videos as they're released and access videos from previous yea
 
 ### Video features
 
-- Watch videos in 0.5x, 1x, 1.5x or 2x speeds
+- Watch videos in 0.5x, 1x, 1.25x, 1.5x, 1.75x or 2x speeds
 - Fullscreen and native picture-in-picture support
 - Navigate video contents easily with the help of transcripts
 
