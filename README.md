@@ -42,7 +42,7 @@ With version 6.0, you can try out our new iCloud sync feature. Enable the featur
 
 ## Sharing
 
-You can easily share links to sessions or videos by using the share button. The links shared are for Apple's developer website, but the app can open these links if you drag them into the icon (or if you use [BrowserFreedom](https://getbrowserfreedom.com)).
+You can easily share links to sessions or videos by using the share button. The links shared are for Apple's developer website, but the app can open these links if you drag them into the icon. You can also handoff content from your Mac to the Apple Developer app on iOS.
 
 ## Nerdy bits 🤓
 
