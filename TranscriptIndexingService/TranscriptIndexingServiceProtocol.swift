@@ -10,6 +10,6 @@ import Foundation
 
 @objc protocol TranscriptIndexingServiceProtocol: NSObjectProtocol {
 
-    func indexTranscriptsIfNeeded(storageURL: URL, schemaVersion: UInt64)
+    func indexTranscriptsIfNeeded(manifestURL: URL, storageURL: URL, schemaVersion: UInt64)
 
 }

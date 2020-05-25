@@ -42,8 +42,7 @@ public final class TranscriptIndexer {
 
     public static let minTranscriptableSessionLimit: Int = 20
 
-    // We specify the latest year known to have transcripts in the predicate to avoid firing lots of requests to ASCIIWWDC which would result in a 404
-    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "ANY event.year > 2012 AND ANY event.year <= 2019 AND transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
+    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "ANY event.year > 2012 AND ANY event.year <= 2020 AND transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
 
     public static func needsUpdate(in storage: Storage) -> Bool {
         let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)

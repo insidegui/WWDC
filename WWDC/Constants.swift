@@ -10,7 +10,7 @@ import Foundation
 
 struct Constants {
 
-    static let coreSchemaVersion: UInt64 = 44
+    static let coreSchemaVersion: UInt64 = 45
 
     static let thumbnailHeight: CGFloat = 150
 

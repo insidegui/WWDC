@@ -121,6 +121,7 @@
 		DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */; };
+		DD9D3F39247BF8570049CB68 /* RootConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9D3F38247BF8570049CB68 /* RootConfig.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
 		DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1220A90655002EECF5 /* SessionCellView.swift */; };
 		DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */; };
@@ -192,6 +193,7 @@
 		DDD1C9CB20B1EA2400902B1C /* FavoriteSyncObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1C9CA20B1EA2400902B1C /* FavoriteSyncObject.swift */; };
 		DDD1C9CE20B1EC9B00902B1C /* UserDataSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1C9CD20B1EC9B00902B1C /* UserDataSyncEngine.swift */; };
 		DDD3F3A02094D26C00FCF7D9 /* PUITouchBarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3F39F2094D26C00FCF7D9 /* PUITouchBarItems.swift */; };
+		DDD684AE247BFBAA001BB700 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD684AD247BFBAA001BB700 /* config.json */; };
 		DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930701ED4EF1F00D61BE3 /* Fonts.swift */; };
 		DDD930731ED52B2900D61BE3 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930721ED52B2900D61BE3 /* Download.swift */; };
 		DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */; };
@@ -492,6 +494,7 @@
 		DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromeCastPlaybackProvider.swift; sourceTree = "<group>"; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMigrator.swift; sourceTree = "<group>"; };
+		DD9D3F38247BF8570049CB68 /* RootConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootConfig.swift; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDA60E1220A90655002EECF5 /* SessionCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCellView.swift; sourceTree = "<group>"; };
 		DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCollectionViewItem.swift; sourceTree = "<group>"; };
@@ -558,6 +561,7 @@
 		DDD1C9CA20B1EA2400902B1C /* FavoriteSyncObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSyncObject.swift; sourceTree = "<group>"; };
 		DDD1C9CD20B1EC9B00902B1C /* UserDataSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSyncEngine.swift; sourceTree = "<group>"; };
 		DDD3F39F2094D26C00FCF7D9 /* PUITouchBarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUITouchBarItems.swift; sourceTree = "<group>"; };
+		DDD684AD247BFBAA001BB700 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
 		DDD930701ED4EF1F00D61BE3 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		DDD930721ED52B2900D61BE3 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		DDD930741ED52BD800D61BE3 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
@@ -949,6 +953,7 @@
 		DD5DEC231E4AA8C800426FA6 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				DDD684AD247BFBAA001BB700 /* config.json */,
 				3A6227021F9272A300D5F687 /* contents.json */,
 				DD5DEC241E4AA8C800426FA6 /* news.json */,
 				DD5DEC251E4AA8C800426FA6 /* sessions.json */,
@@ -1025,6 +1030,7 @@
 			children = (
 				DDDAA3CB1EC746AE00DF9D02 /* Display */,
 				DDDF806420B9F46C007284F8 /* Featured */,
+				DD9D3F38247BF8570049CB68 /* RootConfig.swift */,
 				DD65FD561E48A0BD0054DD35 /* Event.swift */,
 				DD65FD5C1E48A11F0054DD35 /* Track.swift */,
 				DD65FD5A1E48A1080054DD35 /* Focus.swift */,
@@ -1772,6 +1778,7 @@
 			files = (
 				DD5DEC2A1E4AA8C800426FA6 /* sessions.json in Resources */,
 				DDDF806F20BA115A007284F8 /* layout.json in Resources */,
+				DDD684AE247BFBAA001BB700 /* config.json in Resources */,
 				DD5DEC2C1E4AA8C800426FA6 /* videos_live.json in Resources */,
 				DD5DEC2D1E4AA8C800426FA6 /* wwdc.json in Resources */,
 				DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */,
@@ -1990,6 +1997,7 @@
 				4D174E342248054F00FE5E87 /* ConditionallyDecodable.swift in Sources */,
 				DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */,
 				DDC927F920B79CB3004C784D /* BookmarkSyncObject.swift in Sources */,
+				DD9D3F39247BF8570049CB68 /* RootConfig.swift in Sources */,
 				DDEDFCF81EDA33C3002477C8 /* CloudKitHelper.swift in Sources */,
 				DDDF805920B90306007284F8 /* Favorite+ConflictResolution.swift in Sources */,
 				DDC927FC20B7A059004C784D /* Data+CloudKit.swift in Sources */,

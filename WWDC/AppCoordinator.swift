@@ -62,7 +62,12 @@ final class AppCoordinator {
 
             storage = try Storage(realmConfig)
 
-            syncEngine = SyncEngine(storage: storage, client: client)
+            syncEngine = SyncEngine(
+                storage: storage,
+                client: client,
+                transcriptLanguage: Preferences.shared.transcriptLanguageCode
+            )
+
             #if ICLOUD
             syncEngine.userDataSyncEngine.isEnabled = Preferences.shared.syncUserData
             #endif
@@ -117,6 +122,7 @@ final class AppCoordinator {
         _ = NotificationCenter.default.addObserver(forName: NSApplication.didFinishLaunchingNotification, object: nil, queue: nil) { _ in self.startup() }
         _ = NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: nil) { _ in self.saveApplicationState() }
         _ = NotificationCenter.default.addObserver(forName: .RefreshPeriodicallyPreferenceDidChange, object: nil, queue: nil, using: { _  in self.resetAutorefreshTimer() })
+        _ = NotificationCenter.default.addObserver(forName: .PreferredTranscriptLanguageDidChange, object: nil, queue: .main, using: { self.preferredTranscriptLanguageDidChange($0) })
 
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
     }
@@ -519,6 +525,14 @@ final class AppCoordinator {
     private func resetAutorefreshTimer() {
         autorefreshActivity?.invalidate()
         autorefreshActivity = Preferences.shared.refreshPeriodically ? makeAutorefreshActivity() : nil
+    }
+
+    // MARK: - Language preference
+
+    private func preferredTranscriptLanguageDidChange(_ note: Notification) {
+        guard let code = note.object as? String else { return }
+
+        syncEngine.transcriptLanguage = code
     }
 
     // MARK: - Data migration

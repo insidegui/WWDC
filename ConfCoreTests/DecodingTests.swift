@@ -322,4 +322,16 @@ class AdapterTests: XCTestCase {
         XCTAssertEqual(sections[0].content[0].bookmarks[1].duration, 60.0)
     }
 
+    func testConfigAdapter() {
+        let config = loadFixture(from: "config", type: RootConfig.self)
+
+        XCTAssertEqual(config.feeds.count, 4)
+
+        XCTAssertEqual(config.feeds["en"]!.contents.url.absoluteString, "http://localhost:9042/contents.json")
+        XCTAssertEqual(config.feeds["en"]!.contents.etag, "\"3e9d59abf767fca51c271a1a651b265d\"")
+
+        XCTAssertEqual(config.feeds["kor"]!.transcripts.url.absoluteString, "https://devimages-cdn.apple.com/wwdc-services/transcripts/manifests/transcript-manifest-kor.json")
+        XCTAssertEqual(config.feeds["kor"]!.transcripts.etag, "\"425bb736d77b93d231be18e58ea498a8\"")
+    }
+
 }

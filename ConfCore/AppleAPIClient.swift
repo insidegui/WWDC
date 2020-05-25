@@ -62,6 +62,10 @@ public final class AppleAPIClient {
             return result
         }
 
+        service.configureTransformer(environment.configPath) { (entity: Entity<Data>) throws -> RootConfig? in
+            return try decoder.decode(RootConfig.self, from: entity.content)
+        }
+
         service.configureTransformer(environment.sessionsPath) { (entity: Entity<Data>) throws -> ContentsResponse? in
             return try decoder.decode(ContentsResponse.self, from: entity.content)
         }
@@ -77,6 +81,7 @@ public final class AppleAPIClient {
         currentSessionsRequest?.cancel()
         currentNewsItemsRequest?.cancel()
         currentFeaturedSectionsRequest?.cancel()
+        currentConfigRequest?.cancel()
 
         environment = Environment.current
 
@@ -97,6 +102,8 @@ public final class AppleAPIClient {
 
     fileprivate lazy var featuredSections: Resource = self.makeFeaturedSectionsResource()
 
+    fileprivate lazy var config: Resource = self.makeConfigResource()
+
     fileprivate func makeLiveVideosResource() -> Resource {
         return service.resource(environment.liveVideosPath)
     }
@@ -113,6 +120,10 @@ public final class AppleAPIClient {
         return service.resource(environment.featuredSectionsPath)
     }
 
+    fileprivate func makeConfigResource() -> Resource {
+        return service.resource(environment.configPath)
+    }
+
     // MARK: - Standard API requests
 
     private var liveVideoAssetsResource: Resource!
@@ -120,12 +131,14 @@ public final class AppleAPIClient {
     private var sessionsResource: Resource!
     private var newsItemsResource: Resource!
     private var featuredSectionsResource: Resource!
+    private var configResource: Resource!
 
     private var currentLiveVideosRequest: Request?
     private var currentScheduleRequest: Request?
     private var currentSessionsRequest: Request?
     private var currentNewsItemsRequest: Request?
     private var currentFeaturedSectionsRequest: Request?
+    private var currentConfigRequest: Request?
 
     public func fetchLiveVideoAssets(completion: @escaping (Result<[SessionAsset], APIError>) -> Void) {
         if liveVideoAssetsResource == nil {
@@ -169,6 +182,17 @@ public final class AppleAPIClient {
 
         currentFeaturedSectionsRequest?.cancel()
         currentFeaturedSectionsRequest = featuredSectionsResource.loadIfNeeded()
+    }
+
+    public func fetchConfig(completion: @escaping (Result<RootConfig, APIError>) -> Void) {
+        if configResource == nil {
+            configResource = config.addObserver(owner: self) { [weak self] resource, event in
+                self?.process(resource, event: event, with: completion)
+            }
+        }
+
+        currentConfigRequest?.cancel()
+        currentConfigRequest = configResource.loadIfNeeded()
     }
 
 }

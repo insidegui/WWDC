@@ -21,6 +21,8 @@ public class Transcript: Object, Decodable {
     /// The text of the transcript
     @objc public dynamic var fullText = ""
 
+    @objc public dynamic var etag: String? = nil
+
     public override class func primaryKey() -> String? {
         return "identifier"
     }
