@@ -48,6 +48,16 @@
                ReferencedContainer = "container:WWDC.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DDD68505247C3B00001BB700"
+               BuildableName = "TranscriptsTests.xctest"
+               BlueprintName = "TranscriptsTests"
+               ReferencedContainer = "container:WWDC.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

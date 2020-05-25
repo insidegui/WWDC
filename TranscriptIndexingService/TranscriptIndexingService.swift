@@ -21,7 +21,7 @@ final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtoc
             do {
                 let config = Realm.Configuration(fileURL: storageURL, schemaVersion: schemaVersion)
                 let storage = try Storage(config)
-                transcriptIndexer = TranscriptIndexer(storage)
+                transcriptIndexer = TranscriptIndexer(storage, manifestURL: manifestURL)
             } catch {
                 os_log("Error initializing indexing service: %{public}@", log: self.log, type: .fault, String(describing: error))
                 return

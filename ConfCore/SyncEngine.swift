@@ -112,7 +112,7 @@ public final class SyncEngine {
     private func startTranscriptIndexing(ignoringCache ignoreCache: Bool) {
         guard !ProcessInfo.processInfo.arguments.contains("--disable-transcripts") else { return }
 
-        if migratedTranscriptsToNativeVersion {
+        if !migratedTranscriptsToNativeVersion {
             os_log("Transcripts need migration", log: self.log, type: .debug)
         }
 
@@ -146,6 +146,7 @@ public final class SyncEngine {
 
         guard let storageURL = storage.realmConfig.fileURL else { return }
 
+        TranscriptIndexer.lastManifestBasedUpdateDate = Date()
         migratedTranscriptsToNativeVersion = true
 
         transcriptIndexingConnection.resume()
