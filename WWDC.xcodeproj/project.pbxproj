@@ -216,6 +216,7 @@
 		DDD68548247C3B4C001BB700 /* wwdc2019-104-transcript-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD6853F247C3B4C001BB700 /* wwdc2019-104-transcript-eng.json */; };
 		DDD68549247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD68540247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json */; };
 		DDD6854A247C3B4C001BB700 /* transcript-manifest-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD68541247C3B4C001BB700 /* transcript-manifest-eng.json */; };
+		DDD6854C247C517A001BB700 /* TranscriptLanguagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */; };
 		DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930701ED4EF1F00D61BE3 /* Fonts.swift */; };
 		DDD930731ED52B2900D61BE3 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930721ED52B2900D61BE3 /* Download.swift */; };
 		DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */; };
@@ -635,6 +636,7 @@
 		DDD6853F247C3B4C001BB700 /* wwdc2019-104-transcript-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "wwdc2019-104-transcript-eng.json"; sourceTree = "<group>"; };
 		DDD68540247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "wwdc2019-103-transcript-eng.json"; sourceTree = "<group>"; };
 		DDD68541247C3B4C001BB700 /* transcript-manifest-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "transcript-manifest-eng.json"; sourceTree = "<group>"; };
+		DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptLanguagesProvider.swift; sourceTree = "<group>"; };
 		DDD930701ED4EF1F00D61BE3 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		DDD930721ED52B2900D61BE3 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		DDD930741ED52BD800D61BE3 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
@@ -1325,6 +1327,7 @@
 			children = (
 				DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */,
 				DDEDFCF71EDA33C3002477C8 /* CloudKitHelper.swift */,
+				DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -2269,6 +2272,7 @@
 				DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */,
 				DDDF806120B9EC3A007284F8 /* FeaturedSection.swift in Sources */,
 				DDAE7C631E5C7E7800CEA205 /* ContentsResponse.swift in Sources */,
+				DDD6854C247C517A001BB700 /* TranscriptLanguagesProvider.swift in Sources */,
 				DDDF805420B8FCBC007284F8 /* Session+Children.swift in Sources */,
 				DD5DEC201E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift in Sources */,
 				DD65FD6D1E48BE270054DD35 /* Bookmark.swift in Sources */,

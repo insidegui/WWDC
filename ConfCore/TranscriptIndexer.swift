@@ -21,7 +21,8 @@ public final class TranscriptIndexer {
     private let storage: Storage
     private static let log = OSLog(subsystem: "ConfCore", category: "TranscriptIndexer")
     private let log = TranscriptIndexer.log
-    private let manifestURL: URL
+    public var manifestURL: URL
+    public var ignoreExistingEtags = false
 
     public init(_ storage: Storage, manifestURL: URL) {
         self.storage = storage
@@ -76,11 +77,17 @@ public final class TranscriptIndexer {
         return transcriptedSessions.count > minTranscriptableSessionLimit
     }
 
-    private lazy var downloader: TranscriptDownloader = {
+    private func makeDownloader() -> TranscriptDownloader {
         TranscriptDownloader(manifestURL: manifestURL, storage: self)
+    }
+
+    private lazy var downloader: TranscriptDownloader = {
+        makeDownloader()
     }()
 
     public func downloadTranscriptsIfNeeded() {
+        downloader = makeDownloader()
+
         DistributedNotificationCenter.default().postNotificationName(
             .TranscriptIndexingDidStart,
             object: nil,
@@ -143,7 +150,9 @@ public final class TranscriptIndexer {
 extension TranscriptIndexer: TranscriptStorage {
 
     public func previousEtag(for identifier: String) -> String? {
-        onQueueRealm.object(ofType: Transcript.self, forPrimaryKey: identifier)?.etag
+        guard !ignoreExistingEtags else { return nil }
+
+        return onQueueRealm.object(ofType: Transcript.self, forPrimaryKey: identifier)?.etag
     }
 
     public func store(_ transcripts: [TranscriptContent], manifest: TranscriptManifest) {

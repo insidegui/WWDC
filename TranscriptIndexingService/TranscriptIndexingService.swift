@@ -16,7 +16,7 @@ final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtoc
     private var transcriptIndexer: TranscriptIndexer!
     private let log = OSLog(subsystem: "TranscriptIndexingService", category: "TranscriptIndexingService")
 
-    func indexTranscriptsIfNeeded(manifestURL: URL, storageURL: URL, schemaVersion: UInt64) {
+    func indexTranscriptsIfNeeded(manifestURL: URL, ignoringCache: Bool, storageURL: URL, schemaVersion: UInt64) {
         if transcriptIndexer == nil {
             do {
                 let config = Realm.Configuration(fileURL: storageURL, schemaVersion: schemaVersion)
@@ -27,6 +27,9 @@ final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtoc
                 return
             }
         }
+
+        transcriptIndexer.manifestURL = manifestURL
+        transcriptIndexer.ignoreExistingEtags = ignoringCache
 
         transcriptIndexer.downloadTranscriptsIfNeeded()
     }

@@ -86,6 +86,7 @@ public final class SyncEngine {
         didSet {
             guard transcriptLanguage != oldValue else { return }
 
+            didRunIndexingService = false
             startTranscriptIndexing(ignoringCache: true)
         }
     }
@@ -128,7 +129,7 @@ public final class SyncEngine {
 
             switch result {
             case .success(let config):
-                self.doStartTranscriptIndexing(with: config)
+                self.doStartTranscriptIndexing(with: config, ignoringCache: ignoreCache)
             case .failure(let error):
                 os_log("Config fetch failed: %{public}@", log: self.log, type: .error, String(describing: error))
             }
@@ -136,7 +137,7 @@ public final class SyncEngine {
 
     }
 
-    private func doStartTranscriptIndexing(with config: RootConfig) {
+    private func doStartTranscriptIndexing(with config: RootConfig, ignoringCache ignoreCache: Bool) {
         os_log("%{public}@", log: log, type: .debug, #function)
 
         guard let feeds = config.feeds[transcriptLanguage] ?? config.feeds[RootConfig.fallbackFeedLanguage] else {
@@ -153,6 +154,7 @@ public final class SyncEngine {
 
         transcriptIndexingService?.indexTranscriptsIfNeeded(
             manifestURL: feeds.transcripts.url,
+            ignoringCache: ignoreCache,
             storageURL: storageURL,
             schemaVersion: storage.realmConfig.schemaVersion
         )

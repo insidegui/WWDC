@@ -123,7 +123,7 @@ public final class TranscriptDownloader {
         guard let validIdentifiers = validSessionIdentifiers else { return true }
 
         if !validIdentifiers.contains(identifier) {
-            os_log("Ignoring %@ on manifest: not a session we know about. Maybe next time...", log: self.log, type: .debug)
+            os_log("Ignoring %@ on manifest: not a session we know about. Maybe next time...", log: self.log, type: .debug, identifier)
 
             return false
         } else {
