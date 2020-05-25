@@ -115,7 +115,6 @@ extension Environment {
         guard let baseURLStr = record["baseURL"] as? String, URL(string: baseURLStr) != nil else { return nil }
 
         self.init(baseURL: baseURLStr,
-                  videosPath: "/videos.json",
                   sessionsPath: "/sessions.json",
                   newsPath: "/news.json",
                   liveVideosPath: "/videos_live.json",

@@ -16,20 +16,17 @@ public extension Notification.Name {
 public struct Environment: Equatable {
 
     public let baseURL: String
-    public let videosPath: String
     public let sessionsPath: String
     public let newsPath: String
     public let liveVideosPath: String
     public let featuredSectionsPath: String
 
     public init(baseURL: String,
-                videosPath: String,
                 sessionsPath: String,
                 newsPath: String,
                 liveVideosPath: String,
                 featuredSectionsPath: String) {
         self.baseURL = baseURL
-        self.videosPath = videosPath
         self.sessionsPath = sessionsPath
         self.newsPath = newsPath
         self.liveVideosPath = liveVideosPath
@@ -68,7 +65,6 @@ extension Environment {
 
         return Environment(
             baseURL: baseURL,
-            videosPath: "/videos.json",
             sessionsPath: "/sessions.json",
             newsPath: "/news.json",
             liveVideosPath: "/videos_live.json",
@@ -80,7 +76,6 @@ extension Environment {
         #if DEBUG
         if let baseURL = UserDefaults.standard.string(forKey: "WWDCEnvironmentBaseURL") {
             return Environment(baseURL: baseURL,
-                               videosPath: "/videos.json",
                                sessionsPath: "/contents.json",
                                newsPath: "/news.json",
                                liveVideosPath: "/videos_live.json",
@@ -99,14 +94,12 @@ extension Environment {
     }
 
     public static let test = Environment(baseURL: "http://localhost:9042",
-                                         videosPath: "/videos.json",
                                          sessionsPath: "/contents.json",
                                          newsPath: "/news.json",
                                          liveVideosPath: "/videos_live.json",
                                          featuredSectionsPath: "/_featured.json")
 
     public static let production = Environment(baseURL: "https://api2020.wwdc.io",
-                                               videosPath: "/videos.json",
                                                sessionsPath: "/contents.json",
                                                newsPath: "/news.json",
                                                liveVideosPath: "/videos_live.json",

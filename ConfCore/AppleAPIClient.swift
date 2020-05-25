@@ -66,10 +66,6 @@ public final class AppleAPIClient {
             return try decoder.decode(ContentsResponse.self, from: entity.content)
         }
 
-        service.configureTransformer(environment.videosPath) { (entity: Entity<Data>) throws -> SessionsResponse? in
-            return try decoder.decode(SessionsResponse.self, from: entity.content)
-        }
-
         service.configureTransformer(environment.liveVideosPath) { (entity: Entity<Data>) throws -> [SessionAsset]? in
             return try decoder.decode(LiveVideosWrapper.self, from: entity.content).liveAssets
         }
@@ -86,7 +82,6 @@ public final class AppleAPIClient {
 
         service = Service(baseURL: environment.baseURL)
         liveVideoAssets = makeLiveVideosResource()
-        sessions = makeSessionsResource()
         schedule = makeScheduleResource()
         news = makeNewsResource()
         featuredSections = makeFeaturedSectionsResource()
@@ -96,8 +91,6 @@ public final class AppleAPIClient {
 
     fileprivate lazy var liveVideoAssets: Resource = self.makeLiveVideosResource()
 
-    fileprivate lazy var sessions: Resource = self.makeSessionsResource()
-
     fileprivate lazy var schedule: Resource = self.makeScheduleResource()
 
     fileprivate lazy var news: Resource = self.makeNewsResource()
@@ -106,10 +99,6 @@ public final class AppleAPIClient {
 
     fileprivate func makeLiveVideosResource() -> Resource {
         return service.resource(environment.liveVideosPath)
-    }
-
-    fileprivate func makeSessionsResource() -> Resource {
-        return service.resource(environment.videosPath)
     }
 
     fileprivate func makeScheduleResource() -> Resource {
