@@ -19,11 +19,27 @@ public final class Storage {
     public let realm: Realm
 
     let disposeBag = DisposeBag()
-    private let log = OSLog(subsystem: "ConfCore", category: "Storage")
+    private static let log = OSLog(subsystem: "ConfCore", category: "Storage")
+    private let log = Storage.log
 
     public init(_ configuration: Realm.Configuration) throws {
         var config = configuration
 
+        config.shouldCompactOnLaunch = { totalBytes, usedBytes in
+            guard Self.isCompactOnLaunchEnabled else {
+                os_log("Database compression disabled by flag", log: Self.log, type: .default)
+                return false
+            }
+
+            let oneHundredMB = 100 * 1024 * 1024
+
+            if (totalBytes > oneHundredMB) && (Double(usedBytes) / Double(totalBytes)) < 0.8 {
+                os_log("Database will be compacted. Total bytes: %d, used bytes: %d", log: Self.log, type: .default, totalBytes, usedBytes)
+                return true
+            } else {
+                return false
+            }
+        }
         config.migrationBlock = Storage.migrate(migration:oldVersion:)
 
         realmConfig = config
@@ -44,6 +60,8 @@ public final class Storage {
 
         deleteOldEventsIfNeeded()
     }
+
+    private static var isCompactOnLaunchEnabled: Bool { !UserDefaults.standard.bool(forKey: "WWDCDisableDatabaseCompression") }
 
     private func makeRealm() throws -> Realm {
         return try Realm(configuration: realmConfig)
