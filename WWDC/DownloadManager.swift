@@ -450,7 +450,15 @@ final class DownloadManager: NSObject {
     /// re-enumerated. This function has signifcant side effects.
     fileprivate func updateDownloadedFlagsByEnumeratingFilesAtPath(_ path: String) {
         guard let enumerator = FileManager.default.enumerator(atPath: path) else { return }
-        guard let files = enumerator.allObjects as? [String] else { return }
+
+        var files: [String] = []
+
+        while let path = enumerator.nextObject() as? String {
+            if enumerator.level > 2 { enumerator.skipDescendants() }
+            files.append(path)
+        }
+
+        guard !files.isEmpty else { return }
 
         storage.updateDownloadedFlag(true, forAssetsAtPaths: files)
 

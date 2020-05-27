@@ -143,12 +143,71 @@ class GeneralPreferencesViewController: NSViewController {
         panel.canChooseDirectories = true
         panel.canChooseFiles = false
 
-        guard panel.runModal() == .OK else { return }
+        guard let window = view.window else { return }
 
-        guard let url = panel.url else { return }
+        panel.beginSheetModal(for: window) { [weak self] response in
+            guard response == .OK else { return }
+            guard let url = panel.url else { return }
+
+            self?.handleNewDownloadsFolder(url)
+        }
+    }
+
+    private func handleNewDownloadsFolder(_ url: URL) {
+        guard url != Preferences.shared.localVideoStorageURL else { return }
+
+        guard validateDownloadsFolder(url) else { return }
 
         Preferences.shared.localVideoStorageURL = url
         downloadsFolderLabel.stringValue = url.path
+    }
+
+    private lazy var dangeoursLocalStoragePaths: [String] = {
+        [
+            NSHomeDirectory(),
+            "/"
+        ]
+    }()
+
+    private func showStoragePathError(with message: String) {
+        let alert = NSAlert()
+        alert.messageText = "Folder can't be used"
+        alert.informativeText = message
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    private func validateDownloadsFolder(_ url: URL) -> Bool {
+        guard !dangeoursLocalStoragePaths.contains(url.path) else {
+            showStoragePathError(with: "This folder can't be used to store downloaded videos, please choose another one. Downloaded videos can't be stored in the root of your home directory or in the root of the filesystem.")
+            return false
+        }
+        guard let enumerator = FileManager.default.enumerator(atPath: url.path) else {
+            showStoragePathError(with: "The app was unable to access the folder you selected.")
+            return false
+        }
+
+        var rootFileCount = 0
+
+        while let _ = enumerator.nextObject() as? String {
+            rootFileCount += 1
+        }
+
+        // Let it go through if there are very few files in the folder.
+        guard rootFileCount > 3 else {
+            return true
+        }
+
+        let alert = NSAlert()
+        alert.messageText = "Folder not empty"
+        alert.informativeText = "The folder you selected is not empty. We strongly suggest starting out with an empty folder to use for your WWDC downloads. Are you sure you'd like to use this folder?"
+        alert.addButton(withTitle: "Choose Another One")
+        alert.addButton(withTitle: "Use \(url.lastPathComponent)")
+
+        let response = alert.runModal()
+
+        return response == .alertSecondButtonReturn
     }
 
 }
