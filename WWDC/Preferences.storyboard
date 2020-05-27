@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
-        <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
     </dependencies>
     <scenes>
         <!--General Preferences View Controller-->
@@ -42,7 +41,7 @@
                                                 </connections>
                                             </customView>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gpY-Ee-hHn">
-                                                <rect key="frame" x="35" y="1" width="119" height="17"/>
+                                                <rect key="frame" x="35" y="2" width="119" height="16"/>
                                                 <string key="toolTip">When searching in the schedule or videos tab, the search results will include any session where any of its bookmarks contains the searched phrase</string>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include bookmarks" id="KyF-jf-5DT">
                                                     <font key="font" metaFont="system"/>
@@ -74,7 +73,7 @@
                                                 </connections>
                                             </customView>
                                             <textField toolTip="When searching in the videos tab, the search results will include any session where the transcript contains the searched phrase" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X7h-FH-GQx">
-                                                <rect key="frame" x="35" y="1" width="117" height="17"/>
+                                                <rect key="frame" x="35" y="2" width="117" height="16"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include transcripts" id="ZmW-Hz-3Wv">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -102,7 +101,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yew-yF-ZWD">
-                                <rect key="frame" x="186" y="373" width="50" height="17"/>
+                                <rect key="frame" x="186" y="374" width="50" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Search:" id="fto-X6-Q8v">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -123,7 +122,7 @@
                                         </connections>
                                     </customView>
                                     <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TGp-6Z-M3P">
-                                        <rect key="frame" x="35" y="1" width="255" height="17"/>
+                                        <rect key="frame" x="35" y="2" width="255" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Refresh Schedule and Videos periodically" id="IAy-ez-t4U">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -141,7 +140,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YmL-o7-wzA">
-                                <rect key="frame" x="119" y="456" width="117" height="17"/>
+                                <rect key="frame" x="119" y="457" width="117" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Downloads Folder:" id="wBE-cT-TAg">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -154,7 +153,7 @@
                                     <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eKi-p7-aRV">
                                         <rect key="frame" x="-2" y="29" width="155" height="14"/>
                                         <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" alignment="left" title="/Users/inside/Movies/WWDC" id="IRs-Ob-UjV">
-                                            <font key="font" metaFont="smallSystem"/>
+                                            <font key="font" metaFont="system" size="11"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -216,7 +215,7 @@
                                         </connections>
                                     </customView>
                                     <textField toolTip="Skip back or forward in a video by 30 seconds instead of 15." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PkE-hK-8Ug">
-                                        <rect key="frame" x="35" y="1" width="237" height="17"/>
+                                        <rect key="frame" x="35" y="2" width="237" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Skip Back and Forward by 30 Seconds" id="YAz-p4-H1t">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -234,10 +233,10 @@
                                 </customSpacing>
                             </stackView>
                             <box horizontalHuggingPriority="248" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Nrn-3F-eOK">
-                                <rect key="frame" x="39" y="209" width="611" height="5"/>
+                                <rect key="frame" x="39" y="210" width="611" height="5"/>
                             </box>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFd-RS-NUX">
-                                <rect key="frame" x="242" y="174" width="211" height="18"/>
+                                <rect key="frame" x="242" y="175" width="211" height="18"/>
                                 <subviews>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="8x0-zb-bwj" customClass="ITSwitch">
                                         <rect key="frame" x="0.0" y="0.0" width="29" height="18"/>
@@ -250,7 +249,7 @@
                                         </connections>
                                     </customView>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goO-DA-n9P">
-                                        <rect key="frame" x="35" y="1" width="178" height="17"/>
+                                        <rect key="frame" x="35" y="2" width="178" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enable iCloud syncing (beta)" id="CQw-ur-pVI">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -268,13 +267,76 @@
                                 </customSpacing>
                             </stackView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T2X-gb-6tZ">
-                                <rect key="frame" x="277" y="114" width="344" height="52"/>
+                                <rect key="frame" x="277" y="139" width="344" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="0Xp-88-sJv"/>
-                                    <constraint firstAttribute="height" constant="52" id="9Lq-s9-cMO"/>
                                 </constraints>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Your favorites, bookmarks and session progress will be synced between all of your Macs logged in to the same iCloud account." id="Mu7-TB-FID">
-                                    <font key="font" metaFont="smallSystem"/>
+                                    <font key="font" metaFont="system" size="11"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <box horizontalHuggingPriority="248" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="CVJ-g8-K90">
+                                <rect key="frame" x="39" y="117" width="611" height="5"/>
+                            </box>
+                            <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5e8-zi-7Hw">
+                                <rect key="frame" x="411" y="84" width="103" height="21"/>
+                                <subviews>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mw6-7C-nEg">
+                                        <rect key="frame" x="-2" y="-3" width="38" height="25"/>
+                                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="3TL-Q0-crQ">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <menu key="menu" id="qLZ-Pj-guD"/>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="transcriptLanguagesPopUpAction:" target="9dt-pe-Bsa" id="HUE-Aa-T2M"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <progressIndicator hidden="YES" wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="RNs-XG-tCh">
+                                        <rect key="frame" x="0.0" y="5" width="16" height="16"/>
+                                    </progressIndicator>
+                                    <progressIndicator wantsLayer="YES" maxValue="1" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Ume-78-MMk">
+                                        <rect key="frame" x="37" y="2" width="16" height="16"/>
+                                    </progressIndicator>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WMk-16-lJl">
+                                        <rect key="frame" x="55" y="5" width="50" height="11"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Indexing..." id="eTm-sb-EiG">
+                                            <font key="font" metaFont="system" size="9"/>
+                                            <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hK9-wv-pXK">
+                                <rect key="frame" x="277" y="86" width="128" height="16"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Transcript language:" id="sYf-Uq-UWl">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gny-ev-Via">
+                                <rect key="frame" x="277" y="48" width="344" height="28"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="340" id="7tV-eK-eZz"/>
+                                </constraints>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Note: many sessions are not available in all languages. English transcripts will be used as a fallback for those sessions." id="HNt-cP-Zvn">
+                                    <font key="font" metaFont="system" size="11"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -287,12 +349,21 @@
                             <constraint firstItem="OZk-0e-tyQ" firstAttribute="top" secondItem="N9Z-iX-jvK" secondAttribute="bottom" constant="19" id="AhL-at-kXx"/>
                             <constraint firstItem="k0r-jU-jAt" firstAttribute="leading" secondItem="GJT-d9-qvO" secondAttribute="leading" id="BFs-md-TVF"/>
                             <constraint firstItem="qFd-RS-NUX" firstAttribute="leading" secondItem="k0r-jU-jAt" secondAttribute="leading" id="C7l-eZ-4pP"/>
+                            <constraint firstItem="hK9-wv-pXK" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="scn-7e-mlv" secondAttribute="leading" constant="20" symbolic="YES" id="DJL-Fq-lsn"/>
                             <constraint firstItem="oXs-gK-eLO" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="EjV-FM-lh2"/>
                             <constraint firstItem="gSp-wk-rap" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="F8V-gE-mGP"/>
                             <constraint firstItem="qFd-RS-NUX" firstAttribute="top" secondItem="Nrn-3F-eOK" secondAttribute="bottom" constant="19" id="FO3-a5-KlE"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5e8-zi-7Hw" secondAttribute="trailing" constant="20" symbolic="YES" id="FWl-xd-1Nz"/>
+                            <constraint firstAttribute="trailing" secondItem="CVJ-g8-K90" secondAttribute="trailing" id="FwU-SE-O4x"/>
+                            <constraint firstItem="hK9-wv-pXK" firstAttribute="leading" secondItem="goO-DA-n9P" secondAttribute="leading" id="Hk3-t3-HrJ"/>
                             <constraint firstItem="jme-OU-7GG" firstAttribute="leading" secondItem="YmL-o7-wzA" secondAttribute="trailing" constant="8" id="I77-eJ-dPD"/>
+                            <constraint firstItem="hK9-wv-pXK" firstAttribute="top" secondItem="CVJ-g8-K90" secondAttribute="bottom" constant="17" id="JzM-qu-6iK"/>
+                            <constraint firstItem="Gny-ev-Via" firstAttribute="top" secondItem="hK9-wv-pXK" secondAttribute="bottom" constant="10" id="KGt-tt-HA3"/>
                             <constraint firstItem="OZk-0e-tyQ" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="KTG-p7-qfO"/>
+                            <constraint firstItem="5e8-zi-7Hw" firstAttribute="centerY" secondItem="hK9-wv-pXK" secondAttribute="centerY" id="NqN-ga-JNh"/>
                             <constraint firstAttribute="trailing" secondItem="gSp-wk-rap" secondAttribute="trailing" id="P0a-0m-Exf"/>
+                            <constraint firstItem="CVJ-g8-K90" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="RDm-xF-21P"/>
+                            <constraint firstItem="5e8-zi-7Hw" firstAttribute="leading" secondItem="hK9-wv-pXK" secondAttribute="trailing" constant="8" id="RE6-jW-3pf"/>
                             <constraint firstAttribute="trailing" secondItem="oXs-gK-eLO" secondAttribute="trailing" id="Rdl-QD-D5J"/>
                             <constraint firstItem="N9Z-iX-jvK" firstAttribute="top" secondItem="oXs-gK-eLO" secondAttribute="bottom" constant="19" id="TXJ-us-Fqg"/>
                             <constraint firstItem="T2X-gb-6tZ" firstAttribute="top" secondItem="qFd-RS-NUX" secondAttribute="bottom" constant="8" id="We3-Jx-DKs"/>
@@ -301,13 +372,17 @@
                             <constraint firstItem="gSp-wk-rap" firstAttribute="top" secondItem="GJT-d9-qvO" secondAttribute="bottom" constant="19" id="YEj-fP-BPe"/>
                             <constraint firstItem="jme-OU-7GG" firstAttribute="top" secondItem="scn-7e-mlv" secondAttribute="top" constant="29" id="YsL-oL-7FX"/>
                             <constraint firstItem="YmL-o7-wzA" firstAttribute="top" secondItem="jme-OU-7GG" secondAttribute="top" constant="-2" id="cfW-zf-bJk"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Gny-ev-Via" secondAttribute="bottom" constant="20" symbolic="YES" id="ekP-Wn-wjY"/>
                             <constraint firstItem="Yew-yF-ZWD" firstAttribute="top" secondItem="N9Z-iX-jvK" secondAttribute="top" constant="-2" id="fxi-jB-18m"/>
                             <constraint firstItem="k0r-jU-jAt" firstAttribute="top" secondItem="gSp-wk-rap" secondAttribute="bottom" constant="19" id="ggj-tU-zKH"/>
                             <constraint firstItem="Nrn-3F-eOK" firstAttribute="top" secondItem="PkE-hK-8Ug" secondAttribute="bottom" constant="19" id="hWS-YG-oqo"/>
+                            <constraint firstItem="Gny-ev-Via" firstAttribute="leading" secondItem="hK9-wv-pXK" secondAttribute="leading" id="iYw-09-ycg"/>
                             <constraint firstItem="GJT-d9-qvO" firstAttribute="leading" secondItem="N9Z-iX-jvK" secondAttribute="leading" id="nXM-1D-bSD"/>
                             <constraint firstItem="N9Z-iX-jvK" firstAttribute="leading" secondItem="jme-OU-7GG" secondAttribute="leading" id="pGf-PU-WzS"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Gny-ev-Via" secondAttribute="trailing" constant="20" symbolic="YES" id="q46-sR-DbM"/>
                             <constraint firstAttribute="trailing" secondItem="jme-OU-7GG" secondAttribute="trailing" constant="190" id="tyN-cS-DJP"/>
                             <constraint firstItem="Nrn-3F-eOK" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="uyb-Q9-5AN"/>
+                            <constraint firstItem="CVJ-g8-K90" firstAttribute="top" secondItem="T2X-gb-6tZ" secondAttribute="bottom" constant="19" id="vsv-9y-kDh"/>
                             <constraint firstAttribute="trailing" secondItem="Nrn-3F-eOK" secondAttribute="trailing" id="zl6-lN-utm"/>
                         </constraints>
                     </view>
@@ -316,12 +391,17 @@
                         <outlet property="dividerB" destination="OZk-0e-tyQ" id="bqR-GF-4P2"/>
                         <outlet property="dividerC" destination="gSp-wk-rap" id="Ywu-do-H09"/>
                         <outlet property="dividerD" destination="Nrn-3F-eOK" id="hHM-rd-cyQ"/>
+                        <outlet property="dividerE" destination="CVJ-g8-K90" id="8h3-59-qZK"/>
                         <outlet property="downloadsFolderIntroLabel" destination="YmL-o7-wzA" id="qdP-fS-wMy"/>
                         <outlet property="downloadsFolderLabel" destination="eKi-p7-aRV" id="9xi-lk-ZjI"/>
                         <outlet property="enableUserDataSyncLabel" destination="goO-DA-n9P" id="juP-k6-qjZ"/>
                         <outlet property="enableUserDataSyncSwitch" destination="8x0-zb-bwj" id="aae-4V-bAJ"/>
                         <outlet property="includeBookmarksLabel" destination="gpY-Ee-hHn" id="Zik-id-1dy"/>
                         <outlet property="includeTranscriptsLabel" destination="X7h-FH-GQx" id="rkK-EW-ECi"/>
+                        <outlet property="indexingLabel" destination="WMk-16-lJl" id="waO-NK-prs"/>
+                        <outlet property="indexingProgressIndicator" destination="Ume-78-MMk" id="EEh-uS-gzE"/>
+                        <outlet property="languagesDescriptionLabel" destination="Gny-ev-Via" id="IxK-qS-Zfi"/>
+                        <outlet property="loadingLanguagesSpinner" destination="RNs-XG-tCh" id="ZRc-UD-eQe"/>
                         <outlet property="refreshAutomaticallyLabel" destination="TGp-6Z-M3P" id="l1E-Qe-TR7"/>
                         <outlet property="refreshPeriodicallySwitch" destination="RNy-Rf-Ks0" id="Ike-2d-2am"/>
                         <outlet property="searchInBookmarksSwitch" destination="gnP-EQ-XJc" id="VxL-3g-oxA"/>
@@ -330,6 +410,7 @@
                         <outlet property="skipBackAndForwardBy30SecondsLabel" destination="PkE-hK-8Ug" id="wRy-Yt-UFp"/>
                         <outlet property="skipBackAndForwardBy30SecondsSwitch" destination="aYA-e5-Nah" id="DBd-SU-4rg"/>
                         <outlet property="syncDescriptionLabel" destination="T2X-gb-6tZ" id="wY7-Jg-NoM"/>
+                        <outlet property="transcriptLanguagesPopUp" destination="Mw6-7C-nEg" id="Wdc-aX-9ho"/>
                     </connections>
                 </viewController>
                 <customObject id="Cjz-NA-wrV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

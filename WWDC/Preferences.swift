@@ -8,6 +8,7 @@
 
 import Foundation
 import ThrowBack
+import ConfCore
 import SwiftyJSON
 
 extension Notification.Name {
@@ -15,6 +16,7 @@ extension Notification.Name {
     static let RefreshPeriodicallyPreferenceDidChange = Notification.Name("RefreshPeriodicallyPreferenceDidChange")
     static let SkipBackAndForwardBy30SecondsPreferenceDidChange = Notification.Name("SkipBackAndForwardBy30SecondsPreferenceDidChange")
     static let SyncUserDataPreferencesDidChange = Notification.Name("SyncUserDataPreferencesDidChange")
+    static let PreferredTranscriptLanguageDidChange = Notification.Name("PreferredTranscriptLanguageDidChange")
 }
 
 final class Preferences {
@@ -149,6 +151,21 @@ final class Preferences {
             defaults.set(newValue, forKey: #function)
 
             NotificationCenter.default.post(name: .SyncUserDataPreferencesDidChange, object: nil)
+        }
+    }
+
+    public static let fallbackTranscriptLanguageCode = "en"
+
+    var transcriptLanguageCode: String {
+        get { defaults.string(forKey: #function) ?? RootConfig.fallbackFeedLanguage }
+        set {
+            let notify = newValue != transcriptLanguageCode
+
+            defaults.set(newValue, forKey: #function)
+
+            guard notify else { return }
+
+            NotificationCenter.default.post(name: .PreferredTranscriptLanguageDidChange, object: newValue)
         }
     }
 

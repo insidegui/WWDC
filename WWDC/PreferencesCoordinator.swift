@@ -37,12 +37,12 @@ final class PreferencesCoordinator {
     }
     #endif
 
-    init() {
+    init(syncEngine: SyncEngine) {
         windowController = PreferencesWindowController()
         tabController = WWDCTabViewController(windowController: windowController)
 
         // General
-        generalController = GeneralPreferencesViewController.loadFromStoryboard()
+        generalController = GeneralPreferencesViewController.loadFromStoryboard(syncEngine: syncEngine)
         generalController.identifier = NSUserInterfaceItemIdentifier(rawValue: "General")
         let generalItem = NSTabViewItem(viewController: generalController)
         generalItem.label = "General"

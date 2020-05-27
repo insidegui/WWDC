@@ -1,0 +1,4479 @@
+{
+    "wwdc2019-202": {
+        "language": "eng",
+        "transcript": [
+            [
+                7,
+                "Good morning.\n\n"
+            ],
+            [
+                11,
+                "My name's Nick Gillett. "
+            ],
+            [
+                12,
+                "I'm an engineer here at Apple on "
+            ],
+            [
+                13,
+                "the Core Data team, and it is my "
+            ],
+            [
+                15,
+                "pleasure to welcome you to Using "
+            ],
+            [
+                17,
+                "Core Data with CloudKit. "
+            ],
+            [
+                19,
+                "Today, we're here to talk about "
+            ],
+            [
+                20,
+                "a belief that I have that all of "
+            ],
+            [
+                22,
+                "my data should be available to "
+            ],
+            [
+                24,
+                "me on whatever device I have, "
+            ],
+            [
+                26,
+                "wherever I am in the world. "
+            ],
+            [
+                28,
+                "And to make this a reality, we "
+            ],
+            [
+                30,
+                "have to make it a lot easier for "
+            ],
+            [
+                32,
+                "you to add this functionality to "
+            ],
+            [
+                34,
+                "your applications. "
+            ],
+            [
+                36,
+                "I'm sure many of you came in "
+            ],
+            [
+                37,
+                "today with an iPhone, and you "
+            ],
+            [
+                39,
+                "may also have a Mac at home. "
+            ],
+            [
+                41,
+                "You may even be toting around a "
+            ],
+            [
+                42,
+                "MacBook or a MacBook Pro in your "
+            ],
+            [
+                44,
+                "backpack while you're here at "
+            ],
+            [
+                45,
+                "the conference. "
+            ],
+            [
+                46,
+                "And the data that we create on "
+            ],
+            [
+                48,
+                "all of these devices is "
+            ],
+            [
+                50,
+                "naturally trapped. "
+            ],
+            [
+                52,
+                "Right? There's no easy way for us to "
+            ],
+            [
+                54,
+                "move it from one device to "
+            ],
+            [
+                55,
+                "another without some type of "
+            ],
+            [
+                57,
+                "user interaction. "
+            ],
+            [
+                59,
+                "Now, to solve this, we typically "
+            ],
+            [
+                61,
+                "want to turn to cloud storage. "
+            ],
+            [
+                63,
+                "Because it offers us the promise "
+            ],
+            [
+                65,
+                "of moving data that's on one "
+            ],
+            [
+                66,
+                "device seamlessly and "
+            ],
+            [
+                68,
+                "transparently to all of the "
+            ],
+            [
+                70,
+                "other devices we own. "
+            ],
+            [
+                72,
+                "And cloud storage has benefits "
+            ],
+            [
+                73,
+                "even if we only happen to have a "
+            ],
+            [
+                75,
+                "single device. "
+            ],
+            [
+                77,
+                "Right? As our applications create data "
+            ],
+            [
+                78,
+                "on this device, it can be backed "
+            ],
+            [
+                80,
+                "up in the cloud and stored. "
+            ],
+            [
+                82,
+                "So that when we get a new "
+            ],
+            [
+                84,
+                "device, whether by choice or by "
+            ],
+            [
+                86,
+                "accident -- ask me how I know -- "
+            ],
+            [
+                88,
+                "on the way out of the store, "
+            ],
+            [
+                90,
+                "that device can be restored to "
+            ],
+            [
+                92,
+                "the one that we always knew and "
+            ],
+            [
+                93,
+                "loved. "
+            ],
+            [
+                94,
+                "And it may surprise you to learn "
+            ],
+            [
+                96,
+                "that there are some existing "
+            ],
+            [
+                97,
+                "technologies on our platforms "
+            ],
+            [
+                99,
+                "that can help us with this "
+            ],
+            [
+                100,
+                "problem. For example, Core Data provides "
+            ],
+            [
+                103,
+                "a robust set of APIs for "
+            ],
+            [
+                104,
+                "managing data locally in your "
+            ],
+            [
+                106,
+                "applications and on disc. "
+            ],
+            [
+                108,
+                "And the CloudKit framework "
+            ],
+            [
+                110,
+                "provides access to one of the "
+            ],
+            [
+                111,
+                "world's largest distributed "
+            ],
+            [
+                113,
+                "databases. "
+            ],
+            [
+                114,
+                "Both of these frameworks are "
+            ],
+            [
+                115,
+                "available on all of our Apple "
+            ],
+            [
+                117,
+                "platforms. "
+            ],
+            [
+                118,
+                "And because of that, enable us "
+            ],
+            [
+                120,
+                "to build a wide variety of "
+            ],
+            [
+                121,
+                "applications. "
+            ],
+            [
+                123,
+                "In fact, these frameworks are "
+            ],
+            [
+                124,
+                "actually quite similar. "
+            ],
+            [
+                126,
+                "They even express themselves "
+            ],
+            [
+                128,
+                "using a common set of patterns "
+            ],
+            [
+                129,
+                "and paradigms. "
+            ],
+            [
+                131,
+                "Modeling their APIs in terms of "
+            ],
+            [
+                133,
+                "objects, models, and stores. "
+            ],
+            [
+                136,
+                "Now, in Core Data, we call these "
+            ],
+            [
+                138,
+                "objects instances of "
+            ],
+            [
+                140,
+                "NSManagedObject, and they're "
+            ],
+            [
+                141,
+                "what gives our application "
+            ],
+            [
+                143,
+                "access to values that we store "
+            ],
+            [
+                145,
+                "on disc. "
+            ],
+            [
+                146,
+                "CloudKit similarly exposes a "
+            ],
+            [
+                149,
+                "CKRecord, which is a key value "
+            ],
+            [
+                151,
+                "like store for accessing data "
+            ],
+            [
+                152,
+                "that you've stored in the cloud. "
+            ],
+            [
+                155,
+                "These objects are described by "
+            ],
+            [
+                157,
+                "what we like to call a model. "
+            ],
+            [
+                158,
+                "And in Core Data we call that an "
+            ],
+            [
+                160,
+                "NSManagedObjectModel, which you "
+            ],
+            [
+                162,
+                "can create in code or using the "
+            ],
+            [
+                164,
+                "model editor in Xcode. "
+            ],
+            [
+                166,
+                "Quite similarly, CloudKit uses a "
+            ],
+            [
+                169,
+                "Schema. "
+            ],
+            [
+                170,
+                "And the CloudKit schema can be "
+            ],
+            [
+                171,
+                "defined either by CloudKit "
+            ],
+            [
+                173,
+                "dynamically as you use CKRecords "
+            ],
+            [
+                175,
+                "in the development environment "
+            ],
+            [
+                177,
+                "or using the CloudKit dashboard. "
+            ],
+            [
+                179,
+                "Finally, objects are persisted "
+            ],
+            [
+                181,
+                "to use the Core Data vernacular, "
+            ],
+            [
+                184,
+                "in what we like to call a store. "
+            ],
+            [
+                186,
+                "In Core Data those are instances "
+            ],
+            [
+                187,
+                "of NSPersistentStore. "
+            ],
+            [
+                189,
+                "But in CloudKit, CKRecord's are "
+            ],
+            [
+                192,
+                "stored in a CKRecordZone or in a "
+            ],
+            [
+                195,
+                "CKDatabase. "
+            ],
+            [
+                196,
+                "And so, as you can see and "
+            ],
+            [
+                198,
+                "indeed as many of you have "
+            ],
+            [
+                200,
+                "pointed out to me over the years, it would be great if we "
+            ],
+            [
+                202,
+                "could make it easier to combine "
+            ],
+            [
+                204,
+                "these two conceptually similar "
+            ],
+            [
+                206,
+                "frameworks. "
+            ],
+            [
+                207,
+                "And so to show you just how much "
+            ],
+            [
+                209,
+                "easier we've made that this "
+            ],
+            [
+                210,
+                "year, I'd like to take you "
+            ],
+            [
+                211,
+                "through what it's like to create "
+            ],
+            [
+                212,
+                "a brand new application in "
+            ],
+            [
+                214,
+                "Xcode. "
+            ],
+            [
+                215,
+                "Here you can see, I have Xcode "
+            ],
+            [
+                217,
+                "open. "
+            ],
+            [
+                218,
+                "And I'm going to create a new "
+            ],
+            [
+                219,
+                "iOS project as a Master Detail "
+            ],
+            [
+                222,
+                "application. "
+            ],
+            [
+                223,
+                "I like Master Detail "
+            ],
+            [
+                224,
+                "applications because they give "
+            ],
+            [
+                225,
+                "us a great UI to build on top of "
+            ],
+            [
+                227,
+                "when exploring features of Core "
+            ],
+            [
+                229,
+                "Data. "
+            ],
+            [
+                230,
+                "So, I'll select it and click "
+            ],
+            [
+                231,
+                "Next. "
+            ],
+            [
+                233,
+                "And then give my application a "
+            ],
+            [
+                234,
+                "name. "
+            ],
+            [
+                235,
+                "In this case, just WWDC Demo. "
+            ],
+            [
+                238,
+                "And, because we're here to hear "
+            ],
+            [
+                239,
+                "about Core Data, we'll check the "
+            ],
+            [
+                241,
+                "Core Data checkbox. "
+            ],
+            [
+                243,
+                "New in Xcode 11 is this checkbox "
+            ],
+            [
+                245,
+                "called Use CloudKit. "
+            ],
+            [
+                246,
+                "And this tells Xcode that we "
+            ],
+            [
+                248,
+                "want to generate an application "
+            ],
+            [
+                249,
+                "that's designed to use both Core "
+            ],
+            [
+                251,
+                "Data and CloudKit. "
+            ],
+            [
+                252,
+                "So, let's check that, and then "
+            ],
+            [
+                254,
+                "we'll click Next and find our "
+            ],
+            [
+                256,
+                "application somewhere to live on "
+            ],
+            [
+                257,
+                "the file system. "
+            ],
+            [
+                259,
+                "After we tap Create, Xcode "
+            ],
+            [
+                261,
+                "generates the application for "
+            ],
+            [
+                262,
+                "us. "
+            ],
+            [
+                263,
+                "And if you've ever built a "
+            ],
+            [
+                264,
+                "CloudKit application before, "
+            ],
+            [
+                266,
+                "you'll know that there are a "
+            ],
+            [
+                267,
+                "couple additional things we need "
+            ],
+            [
+                269,
+                "to add to this before it's ready "
+            ],
+            [
+                270,
+                "to build and run. "
+            ],
+            [
+                272,
+                "These come in the form of "
+            ],
+            [
+                273,
+                "Capabilities, which we add using "
+            ],
+            [
+                275,
+                "the Signing \u0026 Capabilities tab. "
+            ],
+            [
+                277,
+                "We need to add two. "
+            ],
+            [
+                279,
+                "The first is the iCloud "
+            ],
+            [
+                280,
+                "capability. "
+            ],
+            [
+                281,
+                "So, I'll add that by clicking "
+            ],
+            [
+                282,
+                "this plus (+) next to "
+            ],
+            [
+                283,
+                "Capability, type iCloud, and hit "
+            ],
+            [
+                286,
+                "Enter. "
+            ],
+            [
+                287,
+                "When I do that, I can hit the "
+            ],
+            [
+                289,
+                "CloudKit checkbox and you'll see "
+            ],
+            [
+                291,
+                "that that adds push "
+            ],
+            [
+                292,
+                "notifications for me as well. "
+            ],
+            [
+                294,
+                "Xcode has also automatically "
+            ],
+            [
+                296,
+                "created an iCloud container "
+            ],
+            [
+                298,
+                "identifier for my application to "
+            ],
+            [
+                300,
+                "use. "
+            ],
+            [
+                301,
+                "Next, we want to add a "
+            ],
+            [
+                302,
+                "background mode capability. "
+            ],
+            [
+                304,
+                "And to do that, I'll hit the "
+            ],
+            [
+                305,
+                "plus (+) again, and type "
+            ],
+            [
+                306,
+                "Background, and hit Enter. "
+            ],
+            [
+                308,
+                "And the reason we do this is to "
+            ],
+            [
+                309,
+                "enable remote notifications, "
+            ],
+            [
+                311,
+                "which allow our application to "
+            ],
+            [
+                312,
+                "receive push notifications when "
+            ],
+            [
+                314,
+                "it's not running. "
+            ],
+            [
+                316,
+                "So, let's run this application "
+            ],
+            [
+                318,
+                "and see what Xcode has created "
+            ],
+            [
+                319,
+                "for us.\n\n"
+            ],
+            [
+                321,
+                "Here you can see that we have a "
+            ],
+            [
+                322,
+                "very simple application with two "
+            ],
+            [
+                324,
+                "view controllers. "
+            ],
+            [
+                325,
+                "A table view on the left and a "
+            ],
+            [
+                327,
+                "detail view controller on the "
+            ],
+            [
+                328,
+                "right. "
+            ],
+            [
+                329,
+                "And I can add some data to this "
+            ],
+            [
+                330,
+                "application using the plus (+) "
+            ],
+            [
+                332,
+                "button in the upper right-hand "
+            ],
+            [
+                333,
+                "corner. "
+            ],
+            [
+                334,
+                "By default, Xcode generates a "
+            ],
+            [
+                335,
+                "very simple Core Data data model "
+            ],
+            [
+                337,
+                "for us that's just a simple "
+            ],
+            [
+                339,
+                "timestamp. "
+            ],
+            [
+                340,
+                "But, we're here to see what it's "
+            ],
+            [
+                342,
+                "like to add sync functionality. "
+            ],
+            [
+                344,
+                "And to do that, we need another "
+            ],
+            [
+                345,
+                "device. "
+            ],
+            [
+                346,
+                "So, let's run the application on "
+            ],
+            [
+                348,
+                "our iPhone. "
+            ],
+            [
+                349,
+                "And you can see that we have the "
+            ],
+            [
+                350,
+                "master view controller and all "
+            ],
+            [
+                352,
+                "of the data that we added on our "
+            ],
+            [
+                354,
+                "iPad. "
+            ],
+            [
+                355,
+                "Now let's add some data using "
+            ],
+            [
+                357,
+                "our phone. "
+            ],
+            [
+                358,
+                "And of course, watch that sync "
+            ],
+            [
+                360,
+                "back to the iPad. "
+            ],
+            [
+                362,
+                "Now, because I have a magic push "
+            ],
+            [
+                364,
+                "notification in this controller, "
+            ],
+            [
+                365,
+                "I can make this happen whenever "
+            ],
+            [
+                366,
+                "I want. "
+            ],
+            [
+                368,
+                "But let's see something that's a "
+            ],
+            [
+                369,
+                "little bit more realistic. "
+            ],
+            [
+                371,
+                "I'm going to delete all the data "
+            ],
+            [
+                373,
+                "from this application that was "
+            ],
+            [
+                374,
+                "added on my iPhone from the "
+            ],
+            [
+                376,
+                "iPad. "
+            ],
+            [
+                377,
+                "These top four rows. "
+            ],
+            [
+                378,
+                "And then, I'll do the same thing "
+            ],
+            [
+                380,
+                "from the iPhone, deleting all "
+            ],
+            [
+                382,
+                "the data that was added from the "
+            ],
+            [
+                383,
+                "iPad. "
+            ],
+            [
+                385,
+                "Now, previously I used a magic "
+            ],
+            [
+                387,
+                "push notification. "
+            ],
+            [
+                388,
+                "But I'm not going to touch the "
+            ],
+            [
+                389,
+                "controller anymore. "
+            ],
+            [
+                391,
+                "I'll just let this video play so "
+            ],
+            [
+                392,
+                "that you can see what it was "
+            ],
+            [
+                394,
+                "like to actually watch these two "
+            ],
+            [
+                395,
+                "devices converge when I filmed "
+            ],
+            [
+                397,
+                "this.\n\n"
+            ],
+            [
+                400,
+                "Right? "
+            ],
+            [
+                401,
+                "Now, as contrived as that might "
+            ],
+            [
+                403,
+                "be, it's pretty awesome that in "
+            ],
+            [
+                404,
+                "a few simple clicks we've built "
+            ],
+            [
+                406,
+                "an application that syncs end to "
+            ],
+            [
+                407,
+                "end using both Core Data and "
+            ],
+            [
+                409,
+                "CloudKit. "
+            ],
+            [
+                410,
+                "And I'd be doing you a "
+            ],
+            [
+                411,
+                "disservice if somewhere in the "
+            ],
+            [
+                412,
+                "application delegate I'd hidden "
+            ],
+            [
+                414,
+                "15,000 lines of code. "
+            ],
+            [
+                416,
+                "So, let's see what that looks "
+            ],
+            [
+                417,
+                "like.\n\n"
+            ],
+            [
+                419,
+                "Now, this is a pretty standard "
+            ],
+            [
+                421,
+                "application delegate. "
+            ],
+            [
+                422,
+                "In fact, if you've ever built a "
+            ],
+            [
+                424,
+                "Core Data application before "
+            ],
+            [
+                425,
+                "using Xcode, it'll look very "
+            ],
+            [
+                427,
+                "familiar to you, including this "
+            ],
+            [
+                429,
+                "area where we set up the Core "
+            ],
+            [
+                430,
+                "Data stack. "
+            ],
+            [
+                432,
+                "The only thing that's different "
+            ],
+            [
+                433,
+                "about this application is some "
+            ],
+            [
+                434,
+                "new API in Core Data this year "
+            ],
+            [
+                437,
+                "called NSPersistentCloudKitContainer, "
+            ],
+            [
+                439,
+                "which is designed to help you "
+            ],
+            [
+                440,
+                "manage Core Data stores that are "
+            ],
+            [
+                442,
+                "backed by a CloudKit database.\n\n"
+            ],
+            [
+                446,
+                "Now, if you've ever built a Core "
+            ],
+            [
+                448,
+                "Data application before using "
+            ],
+            [
+                449,
+                "Xcode you will have seen "
+            ],
+            [
+                451,
+                "NSPersistentContainer here "
+            ],
+            [
+                453,
+                "instead, which is "
+            ],
+            [
+                454,
+                "NSPersistentCloudKitContainer's "
+            ],
+            [
+                456,
+                "superclass. "
+            ],
+            [
+                457,
+                "Because of that, you can add "
+            ],
+            [
+                459,
+                "CloudKit functionality to your "
+            ],
+            [
+                461,
+                "existing Core Data applications "
+            ],
+            [
+                462,
+                "by changing as little as one "
+            ],
+            [
+                464,
+                "line of code. "
+            ],
+            [
+                465,
+                "What exactly is "
+            ],
+            [
+                466,
+                "NSPersistentCloudKitContainer? "
+            ],
+            [
+                469,
+                "Well, it's an encapsulation of a "
+            ],
+            [
+                471,
+                "set of really common patterns "
+            ],
+            [
+                473,
+                "that we saw everyone have to "
+            ],
+            [
+                474,
+                "build when they wanted to "
+            ],
+            [
+                476,
+                "implement end-to-end sync using "
+            ],
+            [
+                477,
+                "CloudKit. "
+            ],
+            [
+                478,
+                "And it's designed to save you "
+            ],
+            [
+                480,
+                "thousands of lines of code.\n\n"
+            ],
+            [
+                483,
+                "It's also a foundation that we "
+            ],
+            [
+                485,
+                "hope to be able to build on with "
+            ],
+            [
+                486,
+                "you iteratively in the years to "
+            ],
+            [
+                488,
+                "come. "
+            ],
+            [
+                489,
+                "And of course, to do that -- get "
+            ],
+            [
+                491,
+                "ready, here it comes -- we need "
+            ],
+            [
+                493,
+                "your help.\n\n"
+            ],
+            [
+                495,
+                "We're going to need feedback "
+            ],
+            [
+                496,
+                "about how "
+            ],
+            [
+                497,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                498,
+                "works for you and what features "
+            ],
+            [
+                500,
+                "it's missing, or whether or not "
+            ],
+            [
+                502,
+                "its existing features are enough "
+            ],
+            [
+                503,
+                "to meet the needs of your "
+            ],
+            [
+                504,
+                "applications. "
+            ],
+            [
+                505,
+                "So, let's look at a little bit "
+            ],
+            [
+                507,
+                "-- a few of those features in "
+            ],
+            [
+                508,
+                "detail. "
+            ],
+            [
+                510,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                511,
+                "provides your application with a "
+            ],
+            [
+                513,
+                "local replica. "
+            ],
+            [
+                514,
+                "A complete mirror if you will of "
+            ],
+            [
+                516,
+                "the Core Data -- or the CloudKit "
+            ],
+            [
+                518,
+                "database that backs it. "
+            ],
+            [
+                520,
+                "And, it also implements a robust "
+            ],
+            [
+                522,
+                "scheduling and error recovery "
+            ],
+            [
+                524,
+                "event loop so that your "
+            ],
+            [
+                525,
+                "application doesn't have to "
+            ],
+            [
+                526,
+                "worry about any operations. "
+            ],
+            [
+                527,
+                "Finally, it handles the "
+            ],
+            [
+                529,
+                "transformation between instances "
+            ],
+            [
+                531,
+                "of NSManagedObject, that I "
+            ],
+            [
+                533,
+                "mentioned earlier, and CKRecord.\n\n"
+            ],
+            [
+                537,
+                "Now, a local replica is "
+            ],
+            [
+                538,
+                "important for a number of "
+            ],
+            [
+                539,
+                "reasons. "
+            ],
+            [
+                541,
+                "But it means that as your "
+            ],
+            [
+                542,
+                "application works with objects, "
+            ],
+            [
+                543,
+                "it will be writing them to a "
+            ],
+            [
+                545,
+                "local store file managed by Core "
+            ],
+            [
+                547,
+                "Data. "
+            ],
+            [
+                548,
+                "And, it will be reading them "
+            ],
+            [
+                549,
+                "from that file as well. "
+            ],
+            [
+                551,
+                "And this is because of the "
+            ],
+            [
+                553,
+                "difference between the "
+            ],
+            [
+                554,
+                "performance profile of the local "
+            ],
+            [
+                555,
+                "database versus cloud storage. "
+            ],
+            [
+                558,
+                "Right? When we think in terms of "
+            ],
+            [
+                559,
+                "latency of accessing a local "
+            ],
+            [
+                561,
+                "file, we can read from a file on "
+            ],
+            [
+                563,
+                "disc in milliseconds at the "
+            ],
+            [
+                564,
+                "worst case. "
+            ],
+            [
+                566,
+                "Whereas, over the network, it "
+            ],
+            [
+                567,
+                "might take us seconds or minutes "
+            ],
+            [
+                568,
+                "to fetch the data that our "
+            ],
+            [
+                569,
+                "application needs. "
+            ],
+            [
+                571,
+                "Likewise, the local store file "
+            ],
+            [
+                573,
+                "can provide your application "
+            ],
+            [
+                574,
+                "with much higher bandwidth, "
+            ],
+            [
+                576,
+                "measured even on our iPhone "
+            ],
+            [
+                577,
+                "devices in gigabytes per second, "
+            ],
+            [
+                580,
+                "whereas the cloud is sometimes "
+            ],
+            [
+                581,
+                "limited to megabytes or "
+            ],
+            [
+                582,
+                "kilobytes per second of "
+            ],
+            [
+                584,
+                "available bandwidth.\n\n"
+            ],
+            [
+                586,
+                "Now, this local replica "
+            ],
+            [
+                587,
+                "necessarily adds a significant "
+            ],
+            [
+                589,
+                "amount of complexity, and that's "
+            ],
+            [
+                591,
+                "why "
+            ],
+            [
+                592,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                593,
+                "implements a robust scheduling "
+            ],
+            [
+                595,
+                "and error recovery event loop "
+            ],
+            [
+                596,
+                "for you. "
+            ],
+            [
+                597,
+                "So that as your application "
+            ],
+            [
+                599,
+                "writes data to the local store, "
+            ],
+            [
+                601,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                602,
+                "automatically moves those "
+            ],
+            [
+                604,
+                "objects up to the cloud.\n\n"
+            ],
+            [
+                606,
+                "And, when something changes in "
+            ],
+            [
+                608,
+                "CloudKit, NSPersistentCloudKitContainer "
+            ],
+            [
+                610,
+                "will schedule work on the system "
+            ],
+            [
+                612,
+                "to bring those objects down and "
+            ],
+            [
+                614,
+                "import them into your local "
+            ],
+            [
+                615,
+                "database, making them available "
+            ],
+            [
+                616,
+                "to your application. "
+            ],
+            [
+                618,
+                "Of course, during this process, "
+            ],
+            [
+                620,
+                "your objects are necessarily "
+            ],
+            [
+                622,
+                "transformed from instances of "
+            ],
+            [
+                624,
+                "NSManagedObject into instances "
+            ],
+            [
+                626,
+                "of CKRecord by "
+            ],
+            [
+                628,
+                "NSPersistentCloudKitContainer.\n\n"
+            ],
+            [
+                630,
+                "And likewise, when something "
+            ],
+            [
+                632,
+                "changes in the cloud, those "
+            ],
+            [
+                634,
+                "CKRecord's will be made "
+            ],
+            [
+                635,
+                "available to you as instances of "
+            ],
+            [
+                637,
+                "NSManagedObject in your local "
+            ],
+            [
+                638,
+                "store file.\n\n"
+            ],
+            [
+                641,
+                "And that's what NSPersistentCloudKitContainer "
+            ],
+            [
+                643,
+                "brings to your application. "
+            ],
+            [
+                644,
+                "It's a complete local replica of "
+            ],
+            [
+                646,
+                "everything in the private "
+            ],
+            [
+                647,
+                "database in CloudKit. "
+            ],
+            [
+                649,
+                "You should know, though, that we "
+            ],
+            [
+                650,
+                "do manage a specific custom zone "
+            ],
+            [
+                653,
+                "for Core Data syncing. "
+            ],
+            [
+                655,
+                "We implement automatic "
+            ],
+            [
+                657,
+                "scheduling so that you don't "
+            ],
+            [
+                658,
+                "have to worry about optimizing "
+            ],
+            [
+                660,
+                "any operations or scheduling "
+            ],
+            [
+                662,
+                "them in the system. "
+            ],
+            [
+                663,
+                "And, I think more importantly, "
+            ],
+            [
+                664,
+                "you don't have to worry about "
+            ],
+            [
+                665,
+                "implementing any error recovery "
+            ],
+            [
+                667,
+                "logic in your application.\n\n"
+            ],
+            [
+                670,
+                "Finally, we implement automatic "
+            ],
+            [
+                671,
+                "serialization from "
+            ],
+            [
+                672,
+                "NSManagedObject to CKRecord. "
+            ],
+            [
+                675,
+                "And we use your NSManagedObject "
+            ],
+            [
+                677,
+                "model to figure out how to do "
+            ],
+            [
+                678,
+                "this.\n\n"
+            ],
+            [
+                680,
+                "But it'd be obtuse of me to "
+            ],
+            [
+                682,
+                "stand up here and tell you that "
+            ],
+            [
+                684,
+                "once you've adopted "
+            ],
+            [
+                685,
+                "NSPersistentCloudKitContainer, "
+            ],
+            [
+                686,
+                "you're done, and you have a "
+            ],
+            [
+                688,
+                "fully functioning application. "
+            ],
+            [
+                689,
+                "So, I'd like to spend the rest "
+            ],
+            [
+                691,
+                "of the talk thinking about what "
+            ],
+            [
+                693,
+                "it means for you to build on top "
+            ],
+            [
+                694,
+                "of NSPersistentCloudKitContainer. "
+            ],
+            [
+                696,
+                "And I think that starts with "
+            ],
+            [
+                698,
+                "building great applications that "
+            ],
+            [
+                699,
+                "are powered by Core Data. "
+            ],
+            [
+                701,
+                "Later, we'll also look at how "
+            ],
+            [
+                703,
+                "you can extend the foundation "
+            ],
+            [
+                704,
+                "that we've built into "
+            ],
+            [
+                706,
+                "NSPersistentCloudKitContainer to "
+            ],
+            [
+                708,
+                "customize it to your needs.\n\n"
+            ],
+            [
+                710,
+                "Now, for me, building great "
+            ],
+            [
+                712,
+                "applications with Core Data "
+            ],
+            [
+                714,
+                "starts by absorbing a lot of "
+            ],
+            [
+                715,
+                "knowledge. "
+            ],
+            [
+                716,
+                "And, to that end, we've written "
+            ],
+            [
+                718,
+                "a ton of documentation this year "
+            ],
+            [
+                720,
+                "about how "
+            ],
+            [
+                721,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                722,
+                "works and how you can integrate "
+            ],
+            [
+                724,
+                "it into your applications.\n\n"
+            ],
+            [
+                727,
+                "There are some features of Core "
+            ],
+            [
+                728,
+                "Data that I feel go really well "
+            ],
+            [
+                730,
+                "with NSPersistentCloudKitContainer. "
+            ],
+            [
+                732,
+                "Things like the "
+            ],
+            [
+                733,
+                "FetchResultsController, which "
+            ],
+            [
+                734,
+                "helps you build scalable user "
+            ],
+            [
+                736,
+                "interfaces backed by a "
+            ],
+            [
+                737,
+                "significant amount of data. "
+            ],
+            [
+                739,
+                "And query generations which help "
+            ],
+            [
+                741,
+                "you stabilize those user "
+            ],
+            [
+                743,
+                "interfaces against changes that "
+            ],
+            [
+                744,
+                "might be happening in the "
+            ],
+            [
+                745,
+                "background. "
+            ],
+            [
+                747,
+                "Like say from "
+            ],
+            [
+                748,
+                "NSPersistentCloudKitContainer.\n\n"
+            ],
+            [
+                750,
+                "And finally, there's history "
+            ],
+            [
+                752,
+                "tracking, which we introduced a "
+            ],
+            [
+                754,
+                "few years ago to help you "
+            ],
+            [
+                755,
+                "understand what's changed in the "
+            ],
+            [
+                756,
+                "database. "
+            ],
+            [
+                757,
+                "And with "
+            ],
+            [
+                758,
+                "NSPersistentCloudKitContainer, "
+            ],
+            [
+                759,
+                "you can use it to decide whether "
+            ],
+            [
+                761,
+                "or not any of those background "
+            ],
+            [
+                762,
+                "updates are relevant to what "
+            ],
+            [
+                764,
+                "your user's currently doing. "
+            ],
+            [
+                767,
+                "We'll be covering these and a "
+            ],
+            [
+                768,
+                "whole lot more in our session on "
+            ],
+            [
+                769,
+                "Thursday at 3 pm. "
+            ],
+            [
+                771,
+                "And, to go along with that, "
+            ],
+            [
+                773,
+                "we're also introducing a new "
+            ],
+            [
+                775,
+                "sample application this year "
+            ],
+            [
+                777,
+                "that's designed to give you "
+            ],
+            [
+                778,
+                "something to hold in your hands, "
+            ],
+            [
+                779,
+                "to feel how "
+            ],
+            [
+                780,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                781,
+                "works along with all these other "
+            ],
+            [
+                783,
+                "features of Core Data. "
+            ],
+            [
+                785,
+                "It's designed to manage a set of "
+            ],
+            [
+                787,
+                "posts. And posts are a theme that we've "
+            ],
+            [
+                789,
+                "been building on over the last "
+            ],
+            [
+                790,
+                "few years in Core Data. "
+            ],
+            [
+                792,
+                "Right? "
+            ],
+            [
+                793,
+                "They're a great object for "
+            ],
+            [
+                794,
+                "helping us understand how "
+            ],
+            [
+                795,
+                "different pieces of your object "
+            ],
+            [
+                797,
+                "graph will be affected by "
+            ],
+            [
+                798,
+                "CloudKit. "
+            ],
+            [
+                799,
+                "Here you can see that our data "
+            ],
+            [
+                801,
+                "model is pretty simple. "
+            ],
+            [
+                802,
+                "Right? We have a title and some "
+            ],
+            [
+                804,
+                "content. And then, we have a set of tags "
+            ],
+            [
+                806,
+                "that we can associate to each "
+            ],
+            [
+                807,
+                "post. "
+            ],
+            [
+                808,
+                "The application will even let "
+            ],
+            [
+                809,
+                "you see what it's like to manage "
+            ],
+            [
+                811,
+                "photos with CloudKit. "
+            ],
+            [
+                812,
+                "Allowing you to attach files "
+            ],
+            [
+                814,
+                "from the device's Photo Library "
+            ],
+            [
+                815,
+                "to a post. "
+            ],
+            [
+                819,
+                "Now, let's talk about what it's "
+            ],
+            [
+                822,
+                "like to build on top of "
+            ],
+            [
+                823,
+                "NSPersistentCloudKitContainer. "
+            ],
+            [
+                825,
+                "And, as you might expect, this "
+            ],
+            [
+                827,
+                "is a fairly dense section of the "
+            ],
+            [
+                829,
+                "talk. "
+            ],
+            [
+                830,
+                "But you should know that our "
+            ],
+            [
+                831,
+                "documentation covers in more "
+            ],
+            [
+                832,
+                "detail a lot of things that "
+            ],
+            [
+                834,
+                "we're going to talk about today. "
+            ],
+            [
+                836,
+                "So, don't worry if some of this "
+            ],
+            [
+                837,
+                "goes right out the window. "
+            ],
+            [
+                838,
+                "There are a number of ways that "
+            ],
+            [
+                842,
+                "we see clients internally extend "
+            ],
+            [
+                844,
+                "NSPersistentCloudKitContainer, "
+            ],
+            [
+                846,
+                "beginning with working with "
+            ],
+            [
+                848,
+                "multiple stores. "
+            ],
+            [
+                850,
+                "And, we also see that clients "
+            ],
+            [
+                851,
+                "like to customize the schema "
+            ],
+            [
+                853,
+                "that they've been using with "
+            ],
+            [
+                854,
+                "CloudKit, and indeed, the one "
+            ],
+            [
+                855,
+                "that we use with "
+            ],
+            [
+                856,
+                "NSPersistentCloudKitContainer. "
+            ],
+            [
+                858,
+                "This of course, as you may know, "
+            ],
+            [
+                860,
+                "is because CloudKit is available "
+            ],
+            [
+                861,
+                "on a number of different "
+            ],
+            [
+                863,
+                "platforms, not only at Apple but "
+            ],
+            [
+                865,
+                "also using Web Services or "
+            ],
+            [
+                867,
+                "JavaScript. "
+            ],
+            [
+                868,
+                "And so, you should be able to "
+            ],
+            [
+                869,
+                "work with "
+            ],
+            [
+                870,
+                "NSPersistentCloudKitContainer's "
+            ],
+            [
+                871,
+                "objects even if you're not doing "
+            ],
+            [
+                873,
+                "so on one of our platforms. "
+            ],
+            [
+                875,
+                "Finally, we'll take a look at "
+            ],
+            [
+                877,
+                "Data Modeling for collaboration.\n\n"
+            ],
+            [
+                880,
+                "Now, there are a number of great "
+            ],
+            [
+                882,
+                "reasons why we might want to use "
+            ],
+            [
+                883,
+                "multiple stores in our "
+            ],
+            [
+                884,
+                "application. "
+            ],
+            [
+                885,
+                "Especially when working with "
+            ],
+            [
+                886,
+                "network backed stores. "
+            ],
+            [
+                888,
+                "Multiple stores can help us "
+            ],
+            [
+                890,
+                "segregate our data between "
+            ],
+            [
+                891,
+                "distinct use cases in our "
+            ],
+            [
+                893,
+                "application. "
+            ],
+            [
+                894,
+                "And, they can help us provide "
+            ],
+            [
+                897,
+                "different types of constraints. "
+            ],
+            [
+                899,
+                "Right? So, if we wanted to have one "
+            ],
+            [
+                901,
+                "store file that manages a very "
+            ],
+            [
+                902,
+                "specific set of validation "
+            ],
+            [
+                904,
+                "constraints, maybe to validate "
+            ],
+            [
+                905,
+                "user input, we can use a "
+            ],
+            [
+                907,
+                "separate store for that.\n\n"
+            ],
+            [
+                910,
+                "Multiple stores are also a great "
+            ],
+            [
+                912,
+                "way to throttle or coalesce data "
+            ],
+            [
+                914,
+                "that's written very frequently "
+            ],
+            [
+                915,
+                "on device. "
+            ],
+            [
+                917,
+                "And this can happen when you're "
+            ],
+            [
+                918,
+                "reading something from the "
+            ],
+            [
+                919,
+                "device that's generated maybe by "
+            ],
+            [
+                921,
+                "the device itself or by an "
+            ],
+            [
+                922,
+                "algorithm that you have which "
+            ],
+            [
+                923,
+                "creates data. "
+            ],
+            [
+                925,
+                "If this algorithm generates data "
+            ],
+            [
+                926,
+                "at a very high rate, it can be "
+            ],
+            [
+                928,
+                "very expensive to constantly "
+            ],
+            [
+                929,
+                "sync all of that data up to "
+            ],
+            [
+                931,
+                "CloudKit. "
+            ],
+            [
+                932,
+                "And so, we see clients inject "
+            ],
+            [
+                934,
+                "another store file into the mix "
+            ],
+            [
+                936,
+                "and use that to coalesce this "
+            ],
+            [
+                937,
+                "data until its ready to be "
+            ],
+            [
+                939,
+                "analyzed and then uploaded to "
+            ],
+            [
+                941,
+                "CloudKit later. "
+            ],
+            [
+                942,
+                "To show you how this works and "
+            ],
+            [
+                946,
+                "how Core Data can make this easy "
+            ],
+            [
+                947,
+                "for you, we're going to leverage "
+            ],
+            [
+                949,
+                "a feature of "
+            ],
+            [
+                950,
+                "NSManagedObjectModel called "
+            ],
+            [
+                951,
+                "Configurations. "
+            ],
+            [
+                953,
+                "And here you can see we have our "
+            ],
+            [
+                955,
+                "sample apps, "
+            ],
+            [
+                956,
+                "NSManagedObjectModel in the "
+            ],
+            [
+                958,
+                "model editor in Xcode. "
+            ],
+            [
+                960,
+                "Now, let's say that I want to "
+            ],
+            [
+                962,
+                "add locations to the post. "
+            ],
+            [
+                964,
+                "Right? I want to record the location "
+            ],
+            [
+                965,
+                "where a post was created "
+            ],
+            [
+                967,
+                "whenever that happens. "
+            ],
+            [
+                968,
+                "But locations can be generated "
+            ],
+            [
+                970,
+                "at a high rate by the system and "
+            ],
+            [
+                972,
+                "I don't need them unless a post "
+            ],
+            [
+                974,
+                "is actually being created at "
+            ],
+            [
+                976,
+                "that location. So, let's separate them from the "
+            ],
+            [
+                979,
+                "rest of the data model.\n\n"
+            ],
+            [
+                981,
+                "I'll start off by adding a new "
+            ],
+            [
+                982,
+                "entity by clicking this plus (+) "
+            ],
+            [
+                984,
+                "in the lower left-hand corner to "
+            ],
+            [
+                986,
+                "store my location information. "
+            ],
+            [
+                988,
+                "Now, my location's going to be "
+            ],
+            [
+                990,
+                "pretty simple. It's just going to include a "
+            ],
+            [
+                991,
+                "latitude and longitude that are "
+            ],
+            [
+                994,
+                "both doubles that are exposed to "
+            ],
+            [
+                995,
+                "me by the Core Location "
+            ],
+            [
+                996,
+                "framework. "
+            ],
+            [
+                997,
+                "Of course, yours may include "
+            ],
+            [
+                998,
+                "other things like altitude or "
+            ],
+            [
+                999,
+                "accuracy.\n\n"
+            ],
+            [
+                1005,
+                "Now we want to segregate these "
+            ],
+            [
+                1006,
+                "locations from the rest of our "
+            ],
+            [
+                1007,
+                "data. "
+            ],
+            [
+                1008,
+                "And to do that I'll create a new "
+            ],
+            [
+                1010,
+                "configuration, again, by hitting "
+            ],
+            [
+                1012,
+                "this plus (+) button, but this "
+            ],
+            [
+                1013,
+                "time holding down my click to "
+            ],
+            [
+                1015,
+                "expose a menu that allows me to "
+            ],
+            [
+                1016,
+                "add a configuration. "
+            ],
+            [
+                1018,
+                "I'll call this configuration "
+            ],
+            [
+                1020,
+                "Cloud and add all four of the "
+            ],
+            [
+                1021,
+                "entities that I actually want to "
+            ],
+            [
+                1023,
+                "sync to it. "
+            ],
+            [
+                1026,
+                "Here you can see that now the "
+            ],
+            [
+                1027,
+                "Cloud configuration has just the "
+            ],
+            [
+                1029,
+                "entities that I want to be "
+            ],
+            [
+                1030,
+                "synced with CloudKit. "
+            ],
+            [
+                1032,
+                "Let's create a new one called "
+            ],
+            [
+                1033,
+                "Local that will store our "
+            ],
+            [
+                1034,
+                "location objects.\n\n"
+            ],
+            [
+                1042,
+                "And, in just a few lines of "
+            ],
+            [
+                1044,
+                "code, we can put this to work "
+            ],
+            [
+                1045,
+                "for us, empowering Core Data to "
+            ],
+            [
+                1047,
+                "tell our stores automatically "
+            ],
+            [
+                1048,
+                "what types of objects they "
+            ],
+            [
+                1050,
+                "stored. At the top you can see we create "
+            ],
+            [
+                1052,
+                "an instance of "
+            ],
+            [
+                1053,
+                "NSPersistentCloudKitContainer, "
+            ],
+            [
+                1055,
+                "and then, we leverage something "
+            ],
+            [
+                1056,
+                "called NSPersistentStoreDescription, "
+            ],
+            [
+                1058,
+                "which tells "
+            ],
+            [
+                1059,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                1061,
+                "about the types of stores that "
+            ],
+            [
+                1062,
+                "it's managing. "
+            ],
+            [
+                1063,
+                "We create an instance of "
+            ],
+            [
+                1065,
+                "NSPersistentStoreDescription "
+            ],
+            [
+                1066,
+                "that points at the file called "
+            ],
+            [
+                1068,
+                "local.sqlite to hold our "
+            ],
+            [
+                1069,
+                "location information. "
+            ],
+            [
+                1071,
+                "And, we assign it the "
+            ],
+            [
+                1072,
+                "configuration of local that we "
+            ],
+            [
+                1074,
+                "just created. "
+            ],
+            [
+                1076,
+                "Then we set up our cloud store. "
+            ],
+            [
+                1078,
+                "Similarly, we create an instance "
+            ],
+            [
+                1080,
+                "of NSPersistentStoreDescription "
+            ],
+            [
+                1082,
+                "and we point it to a different "
+            ],
+            [
+                1083,
+                "file; cloud.sqlite. "
+            ],
+            [
+                1086,
+                "Then we give it the configuration Cloud, which tells "
+            ],
+            [
+                1088,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                1090,
+                "that only the entities like "
+            ],
+            [
+                1092,
+                "post, and tags, and attachments, "
+            ],
+            [
+                1094,
+                "and image data should be stored "
+            ],
+            [
+                1096,
+                "in the store.\n\n"
+            ],
+            [
+                1097,
+                "Finally, we assign it an "
+            ],
+            [
+                1099,
+                "instance of NSPersistent "
+            ],
+            [
+                1101,
+                "CloudKitContainerOptions, which "
+            ],
+            [
+                1103,
+                "tells "
+            ],
+            [
+                1104,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                1105,
+                "what iCloud container identifier "
+            ],
+            [
+                1108,
+                "this store should be synced "
+            ],
+            [
+                1109,
+                "with. "
+            ],
+            [
+                1110,
+                "Last but not least, we assign "
+            ],
+            [
+                1112,
+                "these two store descriptions to "
+            ],
+            [
+                1113,
+                "the PersistentStoreDescription's "
+            ],
+            [
+                1115,
+                "property of "
+            ],
+            [
+                1116,
+                "NSPersistentCloudKitContainer.\n\n"
+            ],
+            [
+                1118,
+                "And with "
+            ],
+            [
+                1119,
+                "NSPersistentCloudKitContainer we "
+            ],
+            [
+                1120,
+                "can take this even further. "
+            ],
+            [
+                1122,
+                "We already have local store and "
+            ],
+            [
+                1124,
+                "a cloud store. "
+            ],
+            [
+                1125,
+                "But what if we want to share "
+            ],
+            [
+                1127,
+                "some data in CloudKit across "
+            ],
+            [
+                1128,
+                "multiple applications we happen "
+            ],
+            [
+                1130,
+                "to work on? "
+            ],
+            [
+                1131,
+                "Well, NSPersistentCloudKitContainer "
+            ],
+            [
+                1133,
+                "supports that as well. "
+            ],
+            [
+                1134,
+                "In fact, because you're using "
+            ],
+            [
+                1136,
+                "Core Data, your application will "
+            ],
+            [
+                1137,
+                "easily be able to handle all the "
+            ],
+            [
+                1139,
+                "data from these stores at the "
+            ],
+            [
+                1141,
+                "same time. "
+            ],
+            [
+                1142,
+                "And, Core Data will "
+            ],
+            [
+                1144,
+                "automatically help you write "
+            ],
+            [
+                1145,
+                "data that you insert into the "
+            ],
+            [
+                1147,
+                "correct store file "
+            ],
+            [
+                1148,
+                "automatically.\n\n"
+            ],
+            [
+                1150,
+                "We can do this by just adding "
+            ],
+            [
+                1151,
+                "three lines of code. "
+            ],
+            [
+                1153,
+                "Right? We create a new StoreDescription "
+            ],
+            [
+                1155,
+                "that points to our shared store "
+            ],
+            [
+                1156,
+                "file and give it a new "
+            ],
+            [
+                1157,
+                "configuration that we might "
+            ],
+            [
+                1158,
+                "create called shared. "
+            ],
+            [
+                1160,
+                "Finally, we assign it a new "
+            ],
+            [
+                1162,
+                "instance of NSPersistent "
+            ],
+            [
+                1163,
+                "CloudKitContainer Options that "
+            ],
+            [
+                1165,
+                "identifies the container we want "
+            ],
+            [
+                1167,
+                "our shared data to be stored in; "
+            ],
+            [
+                1169,
+                "in this case, iCloud.com.wwdc.shared. "
+            ],
+            [
+                1173,
+                "And of course, last but not "
+            ],
+            [
+                1174,
+                "least, we assign it to "
+            ],
+            [
+                1176,
+                "PersistentStoreDescriptions. "
+            ],
+            [
+                1178,
+                "Now let's talk about the schema. "
+            ],
+            [
+                1181,
+                "And, I want to cover a few "
+            ],
+            [
+                1183,
+                "points about the schema that I "
+            ],
+            [
+                1184,
+                "think are sort of the "
+            ],
+            [
+                1185,
+                "highlights. "
+            ],
+            [
+                1186,
+                "The most important things that "
+            ],
+            [
+                1187,
+                "you need to know when you're "
+            ],
+            [
+                1188,
+                "looking at the records that we "
+            ],
+            [
+                1189,
+                "create in CloudKit. "
+            ],
+            [
+                1191,
+                "I'll start off by talking about "
+            ],
+            [
+                1192,
+                "how we manage record types and "
+            ],
+            [
+                1194,
+                "how we manage entities, which "
+            ],
+            [
+                1196,
+                "are what you create in your "
+            ],
+            [
+                1197,
+                "NSManagedObjectModel. "
+            ],
+            [
+                1199,
+                "Then, we'll look at how we "
+            ],
+            [
+                1201,
+                "implement a feature called Asset "
+            ],
+            [
+                1202,
+                "Externalization, which allows "
+            ],
+            [
+                1204,
+                "you to seamlessly store "
+            ],
+            [
+                1205,
+                "arbitrarily large values in "
+            ],
+            [
+                1207,
+                "CloudKit using "
+            ],
+            [
+                1208,
+                "NSPersistentCloudKitContainer. "
+            ],
+            [
+                1210,
+                "Finally, we'll talk about how we "
+            ],
+            [
+                1212,
+                "manage relationships and how "
+            ],
+            [
+                1214,
+                "that might be different from the "
+            ],
+            [
+                1216,
+                "CloudKit experience you're used "
+            ],
+            [
+                1217,
+                "to. "
+            ],
+            [
+                1218,
+                "To do that, we're going to use "
+            ],
+            [
+                1220,
+                "the ManageObjectModel for our "
+            ],
+            [
+                1222,
+                "sample application. "
+            ],
+            [
+                1223,
+                "And I'm going to start off by "
+            ],
+            [
+                1225,
+                "focusing on the post entity. "
+            ],
+            [
+                1227,
+                "You can see that it has two "
+            ],
+            [
+                1228,
+                "attributes; a title string and a "
+            ],
+            [
+                1230,
+                "content string. "
+            ],
+            [
+                1231,
+                "And it also has two "
+            ],
+            [
+                1233,
+                "relationships to the attachment "
+            ],
+            [
+                1235,
+                "and tag entities. "
+            ],
+            [
+                1237,
+                "Core Data generates an actual "
+            ],
+            [
+                1239,
+                "class for you to use in code as "
+            ],
+            [
+                1240,
+                "a subclass of NSManagedObject "
+            ],
+            [
+                1242,
+                "that looks like this. "
+            ],
+            [
+                1244,
+                "And you can see that all of the "
+            ],
+            [
+                1245,
+                "attributes and relationships are "
+            ],
+            [
+                1247,
+                "represented on that class. "
+            ],
+            [
+                1249,
+                "Now, this is the record that we "
+            ],
+            [
+                1251,
+                "will generate in CloudKit that "
+            ],
+            [
+                1253,
+                "goes along with this post. "
+            ],
+            [
+                1255,
+                "And these are some example "
+            ],
+            [
+                1257,
+                "values that I've used to "
+            ],
+            [
+                1258,
+                "populate this record and make it "
+            ],
+            [
+                1260,
+                "what we call fully materialized. "
+            ],
+            [
+                1263,
+                "Now, there are some things that "
+            ],
+            [
+                1264,
+                "I want to highlight to you "
+            ],
+            [
+                1265,
+                "first. "
+            ],
+            [
+                1266,
+                "The record ID. "
+            ],
+            [
+                1267,
+                "Core Data owns the record ID for "
+            ],
+            [
+                1269,
+                "all of the objects that it "
+            ],
+            [
+                1271,
+                "creates in CloudKit. "
+            ],
+            [
+                1272,
+                "And, for each one, we will "
+            ],
+            [
+                1274,
+                "generate a simple UUID to use as "
+            ],
+            [
+                1276,
+                "its record name. "
+            ],
+            [
+                1278,
+                "When the Record Name is combined "
+            ],
+            [
+                1279,
+                "with a zone identifier you get a "
+            ],
+            [
+                1281,
+                "CKRecord ID. "
+            ],
+            [
+                1283,
+                "At the bottom, you'll see how "
+            ],
+            [
+                1286,
+                "Core Data manages type "
+            ],
+            [
+                1287,
+                "information. "
+            ],
+            [
+                1288,
+                "And, there are two interesting "
+            ],
+            [
+                1290,
+                "things here. "
+            ],
+            [
+                1291,
+                "The first is, what the heck are "
+            ],
+            [
+                1293,
+                "all these CD under bars? "
+            ],
+            [
+                1295,
+                "This is Core Data's way of "
+            ],
+            [
+                1297,
+                "segregating the things that it "
+            ],
+            [
+                1298,
+                "manages to be separate from ones "
+            ],
+            [
+                1301,
+                "that either CloudKit implements "
+            ],
+            [
+                1302,
+                "for you -- you wouldn't believe "
+            ],
+            [
+                1304,
+                "how many people add modify date "
+            ],
+            [
+                1306,
+                "to their CKRecord. "
+            ],
+            [
+                1308,
+                "Or, ones that you might add "
+            ],
+            [
+                1309,
+                "yourself. "
+            ],
+            [
+                1310,
+                "And so, we prefix everything; "
+            ],
+            [
+                1311,
+                "the record type and all of our "
+            ],
+            [
+                1313,
+                "field names with CD under bar. "
+            ],
+            [
+                1316,
+                "But, in the CD entityName field, "
+            ],
+            [
+                1319,
+                "we keep the real entity name of "
+            ],
+            [
+                1321,
+                "the object that this record goes "
+            ],
+            [
+                1323,
+                "with. "
+            ],
+            [
+                1324,
+                "And we do this so that we can "
+            ],
+            [
+                1326,
+                "implement a feature called "
+            ],
+            [
+                1327,
+                "entityInheritance, wherein you "
+            ],
+            [
+                1329,
+                "could have subclasses of a post, "
+            ],
+            [
+                1331,
+                "let's say. "
+            ],
+            [
+                1332,
+                "Perhaps an image post, or a "
+            ],
+            [
+                1335,
+                "video post. "
+            ],
+            [
+                1336,
+                "The actual entities will always "
+            ],
+            [
+                1338,
+                "be identified by the CD under "
+            ],
+            [
+                1339,
+                "bar entityName field. "
+            ],
+            [
+                1342,
+                "And we do this so that you can "
+            ],
+            [
+                1343,
+                "implement CK queries that get at "
+            ],
+            [
+                1346,
+                "all of the entity hierarchies "
+            ],
+            [
+                1348,
+                "you're interested in by querying "
+            ],
+            [
+                1350,
+                "a single record type.\n\n"
+            ],
+            [
+                1352,
+                "Now let's look at how we "
+            ],
+            [
+                1353,
+                "implement these two strings. "
+            ],
+            [
+                1355,
+                "Because these are variable "
+            ],
+            [
+                1356,
+                "length fields and our "
+            ],
+            [
+                1358,
+                "translation of them to CloudKit "
+            ],
+            [
+                1359,
+                "has some interesting quirks.\n\n"
+            ],
+            [
+                1363,
+                "You'll see that we've inflated "
+            ],
+            [
+                1364,
+                "them to four total fields. "
+            ],
+            [
+                1366,
+                "And the reason for this, is that "
+            ],
+            [
+                1368,
+                "this is how we implement asset "
+            ],
+            [
+                1369,
+                "externalization. "
+            ],
+            [
+                1371,
+                "Here you can see that we have "
+            ],
+            [
+                1372,
+                "both a CD under bar content "
+            ],
+            [
+                1374,
+                "field and a CD under bar content "
+            ],
+            [
+                1376,
+                "under bar CKAsset. "
+            ],
+            [
+                1378,
+                "This allows us to store strings "
+            ],
+            [
+                1380,
+                "that are arbitrarily large. "
+            ],
+            [
+                1382,
+                "Anywhere from simple kilobytes "
+            ],
+            [
+                1384,
+                "all the way up to hundreds of "
+            ],
+            [
+                1386,
+                "megabytes or even gigabytes in "
+            ],
+            [
+                1388,
+                "length.\n\n"
+            ],
+            [
+                1389,
+                "And when I said that this record "
+            ],
+            [
+                1391,
+                "is what we call fully materialized, what I mean is "
+            ],
+            [
+                1393,
+                "that you won't ever actually see "
+            ],
+            [
+                1395,
+                "all four of these fields at the "
+            ],
+            [
+                1396,
+                "same time. "
+            ],
+            [
+                1398,
+                "If the strings are all very "
+            ],
+            [
+                1399,
+                "short, then you'll just see CD "
+            ],
+            [
+                1400,
+                "under bar content and CD under "
+            ],
+            [
+                1402,
+                "bar title in the record. "
+            ],
+            [
+                1404,
+                "But, if one of them grows to be "
+            ],
+            [
+                1405,
+                "very large, approximately larger "
+            ],
+            [
+                1407,
+                "than 750 kilobytes, or if the "
+            ],
+            [
+                1410,
+                "total size of the record exceeds "
+            ],
+            [
+                1412,
+                "CloudKit's maximum 1 megabyte "
+            ],
+            [
+                1414,
+                "limit, you'll begin to see asset "
+            ],
+            [
+                1416,
+                "fields, or in this case, CD "
+            ],
+            [
+                1418,
+                "under bar content under bar "
+            ],
+            [
+                1420,
+                "CKAsset in the record instead. "
+            ],
+            [
+                1423,
+                "If you're consuming our records "
+            ],
+            [
+                1424,
+                "on your own, then you'll need to "
+            ],
+            [
+                1425,
+                "check both places to see whether "
+            ],
+            [
+                1427,
+                "or not a value has been set for "
+            ],
+            [
+                1428,
+                "a specific attribute.\n\n"
+            ],
+            [
+                1434,
+                "Now let's take a look at the "
+            ],
+            [
+                1435,
+                "relationships on a post. "
+            ],
+            [
+                1437,
+                "You can see here that they're "
+            ],
+            [
+                1438,
+                "both instances of NSSet in the "
+            ],
+            [
+                1440,
+                "object that Core Data generates "
+            ],
+            [
+                1442,
+                "for you to use in your code. "
+            ],
+            [
+                1444,
+                "And this is because a post has "
+            ],
+            [
+                1446,
+                "to-- what we call too many "
+            ],
+            [
+                1447,
+                "relationships. "
+            ],
+            [
+                1448,
+                "That means that a post can be "
+            ],
+            [
+                1450,
+                "assigned too many attachments or "
+            ],
+            [
+                1452,
+                "it can have many tags associated "
+            ],
+            [
+                1454,
+                "with it. "
+            ],
+            [
+                1455,
+                "The attachments relationship is "
+            ],
+            [
+                1456,
+                "what we like to call a "
+            ],
+            [
+                1457,
+                "Many-To-One, because an "
+            ],
+            [
+                1459,
+                "attachment can only be assigned "
+            ],
+            [
+                1460,
+                "to one post.\n\n"
+            ],
+            [
+                1463,
+                "When we generate code for this, "
+            ],
+            [
+                1464,
+                "you'll see that there's an NSSet "
+            ],
+            [
+                1466,
+                "on the post, but there's only a "
+            ],
+            [
+                1467,
+                "single post object declared on "
+            ],
+            [
+                1470,
+                "the attachment ManageObject.\n\n"
+            ],
+            [
+                1473,
+                "And this is the record they will "
+            ],
+            [
+                1475,
+                "generate for an attachment. "
+            ],
+            [
+                1477,
+                "You can see that it has a UUID, "
+            ],
+            [
+                1479,
+                "an entity name, and a record "
+            ],
+            [
+                1480,
+                "type just like a post does, but "
+            ],
+            [
+                1482,
+                "you'll also see an additional "
+            ],
+            [
+                1483,
+                "field called CD under bar post. "
+            ],
+            [
+                1486,
+                "This is how we store the "
+            ],
+            [
+                1487,
+                "relationship for a Two-One "
+            ],
+            [
+                1489,
+                "relationship. "
+            ],
+            [
+                1491,
+                "The UUID of the related record "
+            ],
+            [
+                1493,
+                "in CloudKit will always be "
+            ],
+            [
+                1495,
+                "stored on the object it's linked "
+            ],
+            [
+                1496,
+                "to. "
+            ],
+            [
+                1497,
+                "And, you might be wondering why "
+            ],
+            [
+                1499,
+                "we don't do this with "
+            ],
+            [
+                1500,
+                "CKReference instead. "
+            ],
+            [
+                1502,
+                "And that's because CKReference "
+            ],
+            [
+                1504,
+                "has some limitations that we "
+            ],
+            [
+                1505,
+                "don't think work well for Core "
+            ],
+            [
+                1507,
+                "Data clients. "
+            ],
+            [
+                1508,
+                "Namely that it's limited to 750 "
+            ],
+            [
+                1511,
+                "total objects. "
+            ],
+            [
+                1512,
+                "But by storing a relationship "
+            ],
+            [
+                1513,
+                "this way, you can hold as many "
+            ],
+            [
+                1515,
+                "will fit in your CloudKit "
+            ],
+            [
+                1516,
+                "container. "
+            ],
+            [
+                1517,
+                "Now let's look at a Many-To-Many "
+            ],
+            [
+                1520,
+                "relationship. "
+            ],
+            [
+                1521,
+                "In this case, the one between a "
+            ],
+            [
+                1522,
+                "post and its tags.\n\n"
+            ],
+            [
+                1524,
+                "You can see that there are two "
+            ],
+            [
+                1526,
+                "NSSet's on this object and this "
+            ],
+            [
+                1529,
+                "is because both objects can be "
+            ],
+            [
+                1531,
+                "related to many of the other "
+            ],
+            [
+                1533,
+                "type. But when we generate the records "
+            ],
+            [
+                1535,
+                "for these objects, there aren't "
+            ],
+            [
+                1537,
+                "any fields that we materialized "
+            ],
+            [
+                1539,
+                "to hold this relationship. "
+            ],
+            [
+                1541,
+                "Instead, Core Data materializes "
+            ],
+            [
+                1543,
+                "a custom join record. "
+            ],
+            [
+                1545,
+                "Now, if you're familiar with "
+            ],
+            [
+                1546,
+                "relational databases, you'll "
+            ],
+            [
+                1548,
+                "recognize this concept. "
+            ],
+            [
+                1550,
+                "It's basically an extrapolation "
+            ],
+            [
+                1551,
+                "of a row in a join table. "
+            ],
+            [
+                1554,
+                "And it's called a CDMR or Core "
+            ],
+            [
+                1557,
+                "Data Mirrored Relationship. "
+            ],
+            [
+                1559,
+                "A CDMR contains a set of twoples "
+            ],
+            [
+                1561,
+                "that are designed to describe "
+            ],
+            [
+                1562,
+                "the two objects that are linked, "
+            ],
+            [
+                1564,
+                "beginning with the entity names "
+            ],
+            [
+                1566,
+                "of the two objects that are "
+            ],
+            [
+                1567,
+                "linked, and their record names. "
+            ],
+            [
+                1569,
+                "Now, as I said before, this is "
+            ],
+            [
+                1571,
+                "not the record ID. "
+            ],
+            [
+                1573,
+                "This is the record name that you "
+            ],
+            [
+                1575,
+                "have to combine with a zone "
+            ],
+            [
+                1576,
+                "identifier to get the identity "
+            ],
+            [
+                1578,
+                "of the records that have been "
+            ],
+            [
+                1580,
+                "linked by the CDMR. "
+            ],
+            [
+                1582,
+                "Finally, we also encapsulate the "
+            ],
+            [
+                1585,
+                "exact relationships that were "
+            ],
+            [
+                1587,
+                "used to make this link.\n\n"
+            ],
+            [
+                1590,
+                "So why am I spending so much "
+            ],
+            [
+                1592,
+                "time talking about "
+            ],
+            [
+                1593,
+                "relationships? "
+            ],
+            [
+                1595,
+                "Well, they have a huge impact on "
+            ],
+            [
+                1598,
+                "how we model our data for "
+            ],
+            [
+                1599,
+                "collaboration. "
+            ],
+            [
+                1601,
+                "And I need to be very clear "
+            ],
+            [
+                1602,
+                "here, collaboration is not "
+            ],
+            [
+                1605,
+                "conflict resolution. "
+            ],
+            [
+                1607,
+                "Conflict resolution is "
+            ],
+            [
+                1609,
+                "implemented automatically by "
+            ],
+            [
+                1610,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                1612,
+                "using a last writer wins merge "
+            ],
+            [
+                1613,
+                "policy. "
+            ],
+            [
+                1615,
+                "And the reason we do this, is "
+            ],
+            [
+                1616,
+                "that the job of conflict "
+            ],
+            [
+                1617,
+                "resolution is to keep the object "
+            ],
+            [
+                1620,
+                "graph and the data in CloudKit "
+            ],
+            [
+                1622,
+                "consistent with how you've "
+            ],
+            [
+                1623,
+                "modeled your data. "
+            ],
+            [
+                1625,
+                "But, over the years we've heard "
+            ],
+            [
+                1627,
+                "that this can be a little "
+            ],
+            [
+                1628,
+                "frustrating. "
+            ],
+            [
+                1629,
+                "So, let's take a look at how you "
+            ],
+            [
+                1632,
+                "can implement better merge "
+            ],
+            [
+                1633,
+                "behavior and align that merge "
+            ],
+            [
+                1635,
+                "behavior with your specific "
+            ],
+            [
+                1637,
+                "customer use cases using "
+            ],
+            [
+                1639,
+                "relationships.\n\n"
+            ],
+            [
+                1642,
+                "To do that, we're going to use "
+            ],
+            [
+                1644,
+                "our post application again. "
+            ],
+            [
+                1646,
+                "And I'm going to create a post, "
+            ],
+            [
+                1647,
+                "but I'm not going to assign it "
+            ],
+            [
+                1649,
+                "any content.\n\n"
+            ],
+            [
+                1650,
+                "I'll let it sync over to another "
+            ],
+            [
+                1652,
+                "device let's say, and then I'll "
+            ],
+            [
+                1654,
+                "make some edits on each device "
+            ],
+            [
+                1656,
+                "at the same time. "
+            ],
+            [
+                1658,
+                "Now, this is what we would "
+            ],
+            [
+                1659,
+                "traditionally term to be a "
+            ],
+            [
+                1660,
+                "conflict. "
+            ],
+            [
+                1661,
+                "But, actually, this is a great "
+            ],
+            [
+                1664,
+                "example of two devices "
+            ],
+            [
+                1665,
+                "attempting to collaborate on a "
+            ],
+            [
+                1667,
+                "value. "
+            ],
+            [
+                1668,
+                "Now, NSPersistentCloudKitContainer "
+            ],
+            [
+                1671,
+                "seeing that something has "
+            ],
+            [
+                1672,
+                "changed in CloudKit while it was "
+            ],
+            [
+                1673,
+                "away, will resolve this to "
+            ],
+            [
+                1675,
+                "preserve one of the two values. "
+            ],
+            [
+                1677,
+                "Right? Using a last writer wins merge "
+            ],
+            [
+                1679,
+                "policy. "
+            ],
+            [
+                1680,
+                "Which means that we'll either "
+            ],
+            [
+                1681,
+                "get collaboration is great or "
+            ],
+            [
+                1683,
+                "everyone should do it. "
+            ],
+            [
+                1685,
+                "And it's true.\n\n"
+            ],
+            [
+                1687,
+                "Of course, you might be thinking "
+            ],
+            [
+                1689,
+                "that -- well, this is kind of "
+            ],
+            [
+                1690,
+                "dumb. "
+            ],
+            [
+                1691,
+                "Why don't you just concatenate "
+            ],
+            [
+                1692,
+                "the two strings together, Core "
+            ],
+            [
+                1693,
+                "Data? "
+            ],
+            [
+                1694,
+                "And we could. "
+            ],
+            [
+                1696,
+                "Except that if you took our "
+            ],
+            [
+                1697,
+                "advice over the years and "
+            ],
+            [
+                1698,
+                "implemented incremental saving "
+            ],
+            [
+                1700,
+                "you might end up with something "
+            ],
+            [
+                1701,
+                "like this, which is not what "
+            ],
+            [
+                1703,
+                "anyone expects. "
+            ],
+            [
+                1705,
+                "And it's not even English.\n\n"
+            ],
+            [
+                1708,
+                "So, how can we do better? "
+            ],
+            [
+                1710,
+                "Right? Clearly this is a problem that's "
+            ],
+            [
+                1711,
+                "very important to us and it's "
+            ],
+            [
+                1713,
+                "very dear to our customers. "
+            ],
+            [
+                1715,
+                "Well, let's look at our post "
+            ],
+            [
+                1717,
+                "entity and see if there's some "
+            ],
+            [
+                1718,
+                "changes we can make that would "
+            ],
+            [
+                1720,
+                "make this better. "
+            ],
+            [
+                1721,
+                "The first thing to do is to stop "
+            ],
+            [
+                1724,
+                "creating collisions on flat "
+            ],
+            [
+                1726,
+                "values. "
+            ],
+            [
+                1727,
+                "Content is simply a flat string "
+            ],
+            [
+                1730,
+                "and there's nothing that we can "
+            ],
+            [
+                1731,
+                "infer about the merge behavior "
+            ],
+            [
+                1732,
+                "that you want for that string, "
+            ],
+            [
+                1734,
+                "simply from looking at it.\n\n"
+            ],
+            [
+                1736,
+                "But, if we break it up as a "
+            ],
+            [
+                1738,
+                "relationship, multiple devices "
+            ],
+            [
+                1741,
+                "can contribute contributions to "
+            ],
+            [
+                1743,
+                "the content field all by "
+            ],
+            [
+                1745,
+                "themselves. "
+            ],
+            [
+                1746,
+                "And because of the way we store "
+            ],
+            [
+                1747,
+                "Two-One relationships, many "
+            ],
+            [
+                1750,
+                "devices can contribute these "
+            ],
+            [
+                1751,
+                "objects at the same time without "
+            ],
+            [
+                1753,
+                "creating a collision on the post "
+            ],
+            [
+                1754,
+                "object itself.\n\n"
+            ],
+            [
+                1756,
+                "So, here I've broken it up as a "
+            ],
+            [
+                1758,
+                "very simple post content entity "
+            ],
+            [
+                1761,
+                "with a simple string.\n\n"
+            ],
+            [
+                1763,
+                "Now, because of how we store "
+            ],
+            [
+                1765,
+                "Two-One relationships, these "
+            ],
+            [
+                1767,
+                "will be combined by devices on "
+            ],
+            [
+                1769,
+                "their own. "
+            ],
+            [
+                1770,
+                "Right? We need to traverse them in "
+            ],
+            [
+                1771,
+                "order to assemble the final "
+            ],
+            [
+                1773,
+                "value. "
+            ],
+            [
+                1774,
+                "And we call this eventual "
+            ],
+            [
+                1775,
+                "consistency. "
+            ],
+            [
+                1776,
+                "As both devices contribute post "
+            ],
+            [
+                1778,
+                "content objects, they'll "
+            ],
+            [
+                1780,
+                "download the post content "
+            ],
+            [
+                1781,
+                "objects from the other device "
+            ],
+            [
+                1782,
+                "and concatenate them or merge "
+            ],
+            [
+                1785,
+                "them, or whatever topology you "
+            ],
+            [
+                1786,
+                "want to apply to this problem to "
+            ],
+            [
+                1788,
+                "assemble the final value.\n\n"
+            ],
+            [
+                1790,
+                "But we want that to be the same "
+            ],
+            [
+                1792,
+                "across all devices and a "
+            ],
+            [
+                1794,
+                "difference in download order "
+            ],
+            [
+                1796,
+                "could create a different final "
+            ],
+            [
+                1797,
+                "value. "
+            ],
+            [
+                1798,
+                "So, we can order them say with "
+            ],
+            [
+                1800,
+                "something as trivial as a date. "
+            ],
+            [
+                1802,
+                "In this way, the devices can "
+            ],
+            [
+                1804,
+                "order the post content objects "
+            ],
+            [
+                1805,
+                "before they do a concatenation "
+            ],
+            [
+                1807,
+                "using a simple sort descriptor "
+            ],
+            [
+                1808,
+                "in Core Data, giving them a "
+            ],
+            [
+                1810,
+                "consistent ordering and merge "
+            ],
+            [
+                1812,
+                "behavior across all devices. "
+            ],
+            [
+                1815,
+                "But, I'm a bit of a distributed "
+            ],
+            [
+                1817,
+                "systems nerd and time is evil.\n\n"
+            ],
+            [
+                1821,
+                "In fact, a devices notion of "
+            ],
+            [
+                1822,
+                "time might not even line up if "
+            ],
+            [
+                1824,
+                "they're in your house together.\n\n"
+            ],
+            [
+                1826,
+                "So, we can take this a step "
+            ],
+            [
+                1828,
+                "further and implement a full "
+            ],
+            [
+                1830,
+                "causal tree by leveraging a "
+            ],
+            [
+                1832,
+                "relationship to a parent "
+            ],
+            [
+                1833,
+                "contribution and giving the "
+            ],
+            [
+                1835,
+                "entity some information about "
+            ],
+            [
+                1837,
+                "the device that's making the "
+            ],
+            [
+                1838,
+                "actual contribution. "
+            ],
+            [
+                1840,
+                "In this way, we've implemented a "
+            ],
+            [
+                1842,
+                "rough sketch of something called "
+            ],
+            [
+                1843,
+                "the conflict-free replicated "
+            ],
+            [
+                1844,
+                "data type. "
+            ],
+            [
+                1846,
+                "And this is an awesome emerging "
+            ],
+            [
+                1847,
+                "field of computer science that "
+            ],
+            [
+                1849,
+                "allows us to deploy algorithms "
+            ],
+            [
+                1851,
+                "to create consistent merge "
+            ],
+            [
+                1852,
+                "behavior across different "
+            ],
+            [
+                1854,
+                "user-user scenarios. "
+            ],
+            [
+                1856,
+                "And that has been Using Core "
+            ],
+            [
+                1860,
+                "Data with CloudKit. "
+            ],
+            [
+                1862,
+                "It's been my pleasure to show "
+            ],
+            [
+                1863,
+                "you NSPersistentCloudKitContainer "
+            ],
+            [
+                1865,
+                "and how you can easily implement "
+            ],
+            [
+                1866,
+                "sync functionality in your "
+            ],
+            [
+                1867,
+                "applications with it. "
+            ],
+            [
+                1869,
+                "We've also got some great new "
+            ],
+            [
+                1870,
+                "sample code and documentation "
+            ],
+            [
+                1872,
+                "for you this year that I hope "
+            ],
+            [
+                1873,
+                "gives you a great experience "
+            ],
+            [
+                1875,
+                "with all of these new APIs. "
+            ],
+            [
+                1877,
+                "And finally, I can't wait to see "
+            ],
+            [
+                1879,
+                "what you build with "
+            ],
+            [
+                1880,
+                "NSPersistentCloudKitContainer "
+            ],
+            [
+                1882,
+                "and how you extend it. "
+            ],
+            [
+                1884,
+                "We'll be in a ton of labs this "
+            ],
+            [
+                1886,
+                "year. "
+            ],
+            [
+                1887,
+                "Every day this week. "
+            ],
+            [
+                1888,
+                "And as you know, we have a talk "
+            ],
+            [
+                1890,
+                "on 3 o'clock that covers a lot "
+            ],
+            [
+                1891,
+                "more features in Core Data in "
+            ],
+            [
+                1893,
+                "Thursday.\n\n"
+            ],
+            [
+                1895,
+                "Thanks a lot, and I hope you "
+            ]
+        ]
+    }
+}

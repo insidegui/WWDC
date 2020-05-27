@@ -45,7 +45,7 @@ public final class Storage {
         deleteOldEventsIfNeeded()
     }
 
-    private func makeRealm() throws -> Realm {
+    public func makeRealm() throws -> Realm {
         return try Realm(configuration: realmConfig)
     }
 

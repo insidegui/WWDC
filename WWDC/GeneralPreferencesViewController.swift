@@ -22,14 +22,22 @@ extension NSStoryboard.SceneIdentifier {
 class GeneralPreferencesViewController: NSViewController {
 
     #if ICLOUD
-    weak var userDataSyncEngine: UserDataSyncEngine?
+    weak var userDataSyncEngine: UserDataSyncEngine? {
+        didSet {
+            bindSyncEngine()
+        }
+    }
     #endif
 
-    static func loadFromStoryboard() -> GeneralPreferencesViewController {
-        let vc = NSStoryboard(name: .preferences, bundle: nil).instantiateController(withIdentifier: .generalPreferencesViewController)
+    private(set) var syncEngine: SyncEngine!
 
+    static func loadFromStoryboard(syncEngine: SyncEngine) -> GeneralPreferencesViewController {
         // swiftlint:disable:next force_cast
-        return vc as! GeneralPreferencesViewController
+        let vc = NSStoryboard(name: .preferences, bundle: nil).instantiateController(withIdentifier: .generalPreferencesViewController) as! GeneralPreferencesViewController
+
+        vc.syncEngine = syncEngine
+
+        return vc
     }
 
     @IBOutlet weak var searchInTranscriptsSwitch: ITSwitch!
@@ -48,11 +56,17 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var skipBackAndForwardBy30SecondsLabel: NSTextField!
     @IBOutlet weak var enableUserDataSyncLabel: NSTextField!
     @IBOutlet weak var syncDescriptionLabel: NSTextField!
+    @IBOutlet weak var transcriptLanguagesPopUp: NSPopUpButton!
+    @IBOutlet weak var loadingLanguagesSpinner: NSProgressIndicator!
+    @IBOutlet weak var languagesDescriptionLabel: NSTextField!
+    @IBOutlet weak var indexingProgressIndicator: NSProgressIndicator!
+    @IBOutlet weak var indexingLabel: NSTextField!
 
     @IBOutlet weak var dividerA: NSBox!
     @IBOutlet weak var dividerB: NSBox!
     @IBOutlet weak var dividerC: NSBox!
     @IBOutlet weak var dividerD: NSBox!
+    @IBOutlet weak var dividerE: NSBox!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,11 +80,13 @@ class GeneralPreferencesViewController: NSViewController {
         downloadsFolderLabel.textColor = .prefsSecondaryText
         enableUserDataSyncLabel.textColor = .prefsPrimaryText
         syncDescriptionLabel.textColor = .prefsSecondaryText
+        languagesDescriptionLabel.textColor = .prefsSecondaryText
 
         dividerA.fillColor = .darkGridColor
         dividerB.fillColor = .darkGridColor
         dividerC.fillColor = .darkGridColor
         dividerD.fillColor = .darkGridColor
+        dividerE.fillColor = .darkGridColor
 
         searchInTranscriptsSwitch.tintColor = .primary
         searchInBookmarksSwitch.tintColor = .primary
@@ -87,9 +103,19 @@ class GeneralPreferencesViewController: NSViewController {
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
 
         bindSyncEngine()
+        bindLanguages()
+        bindTranscriptIndexingState()
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+
+        languagesProvider.fetchAvailableLanguages()
     }
 
     private let disposeBag = DisposeBag()
+
+    private var dummyRelay = BehaviorRelay<Bool>(value: false)
 
     private func bindSyncEngine() {
         #if ICLOUD
@@ -105,6 +131,39 @@ class GeneralPreferencesViewController: NSViewController {
         enableUserDataSyncSwitch?.isHidden = true
         syncDescriptionLabel?.isHidden = true
         #endif
+    }
+
+    private func bindTranscriptIndexingState() {
+        // Disable transcript language pop up while indexing transcripts.
+
+        syncEngine.isIndexingTranscripts.asDriver()
+                                        .map({ !$0 })
+                                        .drive(transcriptLanguagesPopUp.rx.isEnabled)
+                                        .disposed(by: disposeBag)
+
+        // Show indexing progress while indexing.
+
+        syncEngine.isIndexingTranscripts.asObservable()
+                                         .observeOn(MainScheduler.instance)
+                                         .bind { [weak self] isIndexing in
+            guard let self = self else { return }
+
+            if isIndexing {
+                self.indexingLabel?.isHidden = false
+                self.indexingProgressIndicator?.isHidden = false
+                self.indexingProgressIndicator?.startAnimation(nil)
+            } else {
+                self.indexingLabel?.isHidden = true
+                self.indexingProgressIndicator?.isHidden = true
+                self.indexingProgressIndicator?.stopAnimation(nil)
+            }
+        }.disposed(by: disposeBag)
+
+        syncEngine.transcriptIndexingProgress.asObservable()
+                                             .observeOn(MainScheduler.instance)
+                                             .bind { [weak self] progress in
+            self?.indexingProgressIndicator?.doubleValue = Double(progress)
+        }.disposed(by: disposeBag)
     }
 
     @IBAction func searchInTranscriptsSwitchAction(_ sender: Any) {
@@ -149,6 +208,57 @@ class GeneralPreferencesViewController: NSViewController {
 
         Preferences.shared.localVideoStorageURL = url
         downloadsFolderLabel.stringValue = url.path
+    }
+
+    // MARK: - Transcript languages
+
+    private lazy var languagesProvider = TranscriptLanguagesProvider()
+
+    private func showLanguagesLoading() {
+        transcriptLanguagesPopUp.isHidden = true
+        loadingLanguagesSpinner.isHidden = false
+        loadingLanguagesSpinner.startAnimation(self)
+    }
+
+    private func hideLanguagesLoading() {
+        transcriptLanguagesPopUp.isHidden = false
+        loadingLanguagesSpinner.isHidden = true
+        loadingLanguagesSpinner.stopAnimation(self)
+    }
+
+    private func bindLanguages() {
+        showLanguagesLoading()
+
+        languagesProvider.availableLanguageCodes
+            .observeOn(MainScheduler.instance)
+            .bind { [weak self] languages in
+                self?.populateLanguagesPopUp(with: languages)
+            }
+            .disposed(by: disposeBag)
+    }
+
+    private func populateLanguagesPopUp(with languages: [TranscriptLanguage]) {
+        guard !languages.isEmpty else { return }
+
+        transcriptLanguagesPopUp.removeAllItems()
+
+        languages.forEach { lang in
+            let item = NSMenuItem(title: lang.name, action: nil, keyEquivalent: "")
+            item.representedObject = lang
+            transcriptLanguagesPopUp.menu?.addItem(item)
+        }
+
+        if let selectedLang = languages.first(where: { $0.code == Preferences.shared.transcriptLanguageCode }) {
+            transcriptLanguagesPopUp.selectItem(withTitle: selectedLang.name)
+        }
+
+        hideLanguagesLoading()
+    }
+
+    @IBAction func transcriptLanguagesPopUpAction(_ sender: NSPopUpButton) {
+        guard let lang = sender.selectedItem?.representedObject as? TranscriptLanguage else { return }
+
+        Preferences.shared.transcriptLanguageCode = lang.code
     }
 
 }

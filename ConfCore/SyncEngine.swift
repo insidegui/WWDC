@@ -9,6 +9,7 @@
 import Foundation
 import RxCocoa
 import RxSwift
+import os.log
 
 extension Notification.Name {
     public static let SyncEngineDidSyncSessionsAndSchedule = Notification.Name("SyncEngineDidSyncSessionsAndSchedule")
@@ -17,6 +18,8 @@ extension Notification.Name {
 
 public final class SyncEngine {
 
+    private let log = OSLog(subsystem: "ConfCore", category: String(describing: SyncEngine.self))
+
     public let storage: Storage
     public let client: AppleAPIClient
 
@@ -24,32 +27,34 @@ public final class SyncEngine {
     public let userDataSyncEngine: UserDataSyncEngine
     #endif
 
-    private var didRunIndexingService = false
-
-    private lazy var transcriptIndexingConnection: NSXPCConnection = {
-        let c = NSXPCConnection(serviceName: "io.wwdc.app.TranscriptIndexingService")
-
-        c.remoteObjectInterface = NSXPCInterface(with: TranscriptIndexingServiceProtocol.self)
-
-        return c
-    }()
-
-    private var transcriptIndexingService: TranscriptIndexingServiceProtocol? {
-        return transcriptIndexingConnection.remoteObjectProxy as? TranscriptIndexingServiceProtocol
-    }
-
     private let disposeBag = DisposeBag()
 
-    public init(storage: Storage, client: AppleAPIClient) {
+    let transcriptIndexingClient: TranscriptIndexingClient
+
+    public var transcriptLanguage: String {
+        get { transcriptIndexingClient.transcriptLanguage }
+        set { transcriptIndexingClient.transcriptLanguage = newValue }
+    }
+
+    public var isIndexingTranscripts: BehaviorRelay<Bool> { transcriptIndexingClient.isIndexing }
+    public var transcriptIndexingProgress: BehaviorRelay<Float> { transcriptIndexingClient.indexingProgress }
+
+    public init(storage: Storage, client: AppleAPIClient, transcriptLanguage: String) {
         self.storage = storage
         self.client = client
+        self.transcriptIndexingClient = TranscriptIndexingClient(
+            language: transcriptLanguage,
+            storage: storage,
+            appleClient: client
+        )
 
         #if ICLOUD
         self.userDataSyncEngine = UserDataSyncEngine(storage: storage)
         #endif
 
         NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
-            self.startTranscriptIndexingIfNeeded()
+            self.transcriptIndexingClient.startIndexing(ignoringCache: false)
+
             #if ICLOUD
             self.userDataSyncEngine.start()
             #endif
@@ -87,21 +92,6 @@ public final class SyncEngine {
                 }
             }
         }
-    }
-
-    private func startTranscriptIndexingIfNeeded() {
-        guard !ProcessInfo.processInfo.arguments.contains("--disable-transcripts") else { return }
-
-        guard TranscriptIndexer.needsUpdate(in: storage) else { return }
-
-        guard let url = storage.realmConfig.fileURL else { return }
-
-        guard !didRunIndexingService else { return }
-        didRunIndexingService = true
-
-        transcriptIndexingConnection.resume()
-
-        transcriptIndexingService?.indexTranscriptsIfNeeded(storageURL: url, schemaVersion: storage.realmConfig.schemaVersion)
     }
 
 }

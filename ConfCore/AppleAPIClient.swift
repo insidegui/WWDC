@@ -62,12 +62,12 @@ public final class AppleAPIClient {
             return result
         }
 
-        service.configureTransformer(environment.sessionsPath) { (entity: Entity<Data>) throws -> ContentsResponse? in
-            return try decoder.decode(ContentsResponse.self, from: entity.content)
+        service.configureTransformer(environment.configPath) { (entity: Entity<Data>) throws -> RootConfig? in
+            return try decoder.decode(RootConfig.self, from: entity.content)
         }
 
-        service.configureTransformer(environment.videosPath) { (entity: Entity<Data>) throws -> SessionsResponse? in
-            return try decoder.decode(SessionsResponse.self, from: entity.content)
+        service.configureTransformer(environment.sessionsPath) { (entity: Entity<Data>) throws -> ContentsResponse? in
+            return try decoder.decode(ContentsResponse.self, from: entity.content)
         }
 
         service.configureTransformer(environment.liveVideosPath) { (entity: Entity<Data>) throws -> [SessionAsset]? in
@@ -81,12 +81,12 @@ public final class AppleAPIClient {
         currentSessionsRequest?.cancel()
         currentNewsItemsRequest?.cancel()
         currentFeaturedSectionsRequest?.cancel()
+        currentConfigRequest?.cancel()
 
         environment = Environment.current
 
         service = Service(baseURL: environment.baseURL)
         liveVideoAssets = makeLiveVideosResource()
-        sessions = makeSessionsResource()
         schedule = makeScheduleResource()
         news = makeNewsResource()
         featuredSections = makeFeaturedSectionsResource()
@@ -96,20 +96,16 @@ public final class AppleAPIClient {
 
     fileprivate lazy var liveVideoAssets: Resource = self.makeLiveVideosResource()
 
-    fileprivate lazy var sessions: Resource = self.makeSessionsResource()
-
     fileprivate lazy var schedule: Resource = self.makeScheduleResource()
 
     fileprivate lazy var news: Resource = self.makeNewsResource()
 
     fileprivate lazy var featuredSections: Resource = self.makeFeaturedSectionsResource()
 
+    fileprivate lazy var config: Resource = self.makeConfigResource()
+
     fileprivate func makeLiveVideosResource() -> Resource {
         return service.resource(environment.liveVideosPath)
-    }
-
-    fileprivate func makeSessionsResource() -> Resource {
-        return service.resource(environment.videosPath)
     }
 
     fileprivate func makeScheduleResource() -> Resource {
@@ -124,6 +120,10 @@ public final class AppleAPIClient {
         return service.resource(environment.featuredSectionsPath)
     }
 
+    fileprivate func makeConfigResource() -> Resource {
+        return service.resource(environment.configPath)
+    }
+
     // MARK: - Standard API requests
 
     private var liveVideoAssetsResource: Resource!
@@ -131,12 +131,14 @@ public final class AppleAPIClient {
     private var sessionsResource: Resource!
     private var newsItemsResource: Resource!
     private var featuredSectionsResource: Resource!
+    private var configResource: Resource!
 
     private var currentLiveVideosRequest: Request?
     private var currentScheduleRequest: Request?
     private var currentSessionsRequest: Request?
     private var currentNewsItemsRequest: Request?
     private var currentFeaturedSectionsRequest: Request?
+    private var currentConfigRequest: Request?
 
     public func fetchLiveVideoAssets(completion: @escaping (Result<[SessionAsset], APIError>) -> Void) {
         if liveVideoAssetsResource == nil {
@@ -180,6 +182,17 @@ public final class AppleAPIClient {
 
         currentFeaturedSectionsRequest?.cancel()
         currentFeaturedSectionsRequest = featuredSectionsResource.loadIfNeeded()
+    }
+
+    public func fetchConfig(completion: @escaping (Result<RootConfig, APIError>) -> Void) {
+        if configResource == nil {
+            configResource = config.addObserver(owner: self) { [weak self] resource, event in
+                self?.process(resource, event: event, with: completion)
+            }
+        }
+
+        currentConfigRequest?.cancel()
+        currentConfigRequest = configResource.loadIfNeeded()
     }
 
 }

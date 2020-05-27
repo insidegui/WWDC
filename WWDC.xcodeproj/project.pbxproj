@@ -121,6 +121,7 @@
 		DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */; };
+		DD9D3F39247BF8570049CB68 /* RootConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9D3F38247BF8570049CB68 /* RootConfig.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
 		DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1220A90655002EECF5 /* SessionCellView.swift */; };
 		DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */; };
@@ -163,14 +164,10 @@
 		DDBCEC9C228AD30C009300CF /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDC347C220B1E6B700CFF11C /* CloudKitCodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */; };
 		DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */; };
-		DDC677F91EDA76A100A4E19C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC677F81EDA76A100A4E19C /* main.m */; };
 		DDC677FD1EDA76A100A4E19C /* TranscriptIndexingService.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		DDC678061EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */; };
 		DDC678071EDA76E000A4E19C /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
 		DDC678081EDA76E800A4E19C /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
 		DDC678091EDA76EC00A4E19C /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
-		DDC6780B1EDA76FD00A4E19C /* TranscriptIndexingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */; };
-		DDC6780C1EDA77CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */; };
 		DDC6780F1EDB253D00A4E19C /* AboutWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6780E1EDB253D00A4E19C /* AboutWindowController.swift */; };
 		DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC678101EDB26D000A4E19C /* AboutWindowController.xib */; };
 		DDC678171EDB27EF00A4E19C /* ContributorsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */; };
@@ -192,6 +189,30 @@
 		DDD1C9CB20B1EA2400902B1C /* FavoriteSyncObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1C9CA20B1EA2400902B1C /* FavoriteSyncObject.swift */; };
 		DDD1C9CE20B1EC9B00902B1C /* UserDataSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1C9CD20B1EC9B00902B1C /* UserDataSyncEngine.swift */; };
 		DDD3F3A02094D26C00FCF7D9 /* PUITouchBarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD3F39F2094D26C00FCF7D9 /* PUITouchBarItems.swift */; };
+		DDD684AE247BFBAA001BB700 /* config.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD684AD247BFBAA001BB700 /* config.json */; };
+		DDD68507247C3B00001BB700 /* Transcripts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDD684FE247C3B00001BB700 /* Transcripts.framework */; };
+		DDD68510247C3B00001BB700 /* Transcripts.h in Headers */ = {isa = PBXBuildFile; fileRef = DDD68500247C3B00001BB700 /* Transcripts.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DDD68513247C3B00001BB700 /* Transcripts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDD684FE247C3B00001BB700 /* Transcripts.framework */; };
+		DDD68514247C3B00001BB700 /* Transcripts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDD684FE247C3B00001BB700 /* Transcripts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DDD6852C247C3B0E001BB700 /* URLSessionLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD68521247C3B0E001BB700 /* URLSessionLoader.swift */; };
+		DDD6852D247C3B0E001BB700 /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD68522247C3B0E001BB700 /* Loader.swift */; };
+		DDD6852E247C3B0E001BB700 /* TranscriptDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD68523247C3B0E001BB700 /* TranscriptDownloader.swift */; };
+		DDD6852F247C3B0E001BB700 /* Coalescer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD68525247C3B0E001BB700 /* Coalescer.swift */; };
+		DDD68530247C3B0E001BB700 /* TranscriptContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD68527247C3B0E001BB700 /* TranscriptContent.swift */; };
+		DDD68531247C3B0E001BB700 /* TranscriptManifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD68528247C3B0E001BB700 /* TranscriptManifest.swift */; };
+		DDD68532247C3B0E001BB700 /* TranscriptStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6852A247C3B0E001BB700 /* TranscriptStorage.swift */; };
+		DDD68533247C3B0E001BB700 /* Transcripts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6852B247C3B0E001BB700 /* Transcripts.swift */; };
+		DDD68534247C3B2D001BB700 /* Transcripts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDD684FE247C3B00001BB700 /* Transcripts.framework */; };
+		DDD68542247C3B4C001BB700 /* FixtureLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD68538247C3B4B001BB700 /* FixtureLoader.swift */; };
+		DDD68543247C3B4C001BB700 /* FakeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD68539247C3B4B001BB700 /* FakeStorage.swift */; };
+		DDD68544247C3B4C001BB700 /* Bundle+LoadJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6853A247C3B4B001BB700 /* Bundle+LoadJSON.swift */; };
+		DDD68545247C3B4C001BB700 /* TranscriptDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6853B247C3B4B001BB700 /* TranscriptDownloaderTests.swift */; };
+		DDD68546247C3B4C001BB700 /* DecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6853C247C3B4B001BB700 /* DecodingTests.swift */; };
+		DDD68547247C3B4C001BB700 /* wwdc2019-202-transcript-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD6853E247C3B4C001BB700 /* wwdc2019-202-transcript-eng.json */; };
+		DDD68548247C3B4C001BB700 /* wwdc2019-104-transcript-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD6853F247C3B4C001BB700 /* wwdc2019-104-transcript-eng.json */; };
+		DDD68549247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD68540247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json */; };
+		DDD6854A247C3B4C001BB700 /* transcript-manifest-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD68541247C3B4C001BB700 /* transcript-manifest-eng.json */; };
+		DDD6854C247C517A001BB700 /* TranscriptLanguagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */; };
 		DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930701ED4EF1F00D61BE3 /* Fonts.swift */; };
 		DDD930731ED52B2900D61BE3 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930721ED52B2900D61BE3 /* Download.swift */; };
 		DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */; };
@@ -272,6 +293,11 @@
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
+		DDFD618F247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */; };
+		DDFD6191247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */; };
+		DDFD6194247EE21900AD1CD7 /* TranscriptIndexingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */; };
+		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
+		DDFD619B247EE56300AD1CD7 /* TranscriptIndexingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD619A247EE56300AD1CD7 /* TranscriptIndexingService.swift */; };
 		F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */; };
 /* End PBXBuildFile section */
 
@@ -311,6 +337,34 @@
 			remoteGlobalIDString = DDC677F11EDA76A100A4E19C;
 			remoteInfo = TranscriptIndexingService;
 		};
+		DDD68508247C3B00001BB700 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DDD684FD247C3B00001BB700;
+			remoteInfo = Transcripts;
+		};
+		DDD6850A247C3B00001BB700 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD36A4AB1E478C6900B2EA88;
+			remoteInfo = WWDC;
+		};
+		DDD68511247C3B00001BB700 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DDD684FD247C3B00001BB700;
+			remoteInfo = Transcripts;
+		};
+		DDD68535247C3B31001BB700 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DDD684FD247C3B00001BB700;
+			remoteInfo = Transcripts;
+		};
 		DDDAA3F31EC7653300DF9D02 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
@@ -348,6 +402,7 @@
 				DDBCEC8B228AC9C5009300CF /* SwiftyJSON.framework in Embed Frameworks */,
 				DDDAA3F61EC7653300DF9D02 /* ThrowBack.framework in Embed Frameworks */,
 				DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */,
+				DDD68514247C3B00001BB700 /* Transcripts.framework in Embed Frameworks */,
 				DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -492,6 +547,7 @@
 		DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromeCastPlaybackProvider.swift; sourceTree = "<group>"; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMigrator.swift; sourceTree = "<group>"; };
+		DD9D3F38247BF8570049CB68 /* RootConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootConfig.swift; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDA60E1220A90655002EECF5 /* SessionCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCellView.swift; sourceTree = "<group>"; };
 		DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCollectionViewItem.swift; sourceTree = "<group>"; };
@@ -530,11 +586,7 @@
 		DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKitCodable.framework; path = Carthage/Build/Mac/CloudKitCodable.framework; sourceTree = "<group>"; };
 		DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexer.swift; sourceTree = "<group>"; };
 		DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = TranscriptIndexingService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDC677F81EDA76A100A4E19C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DDC677FA1EDA76A100A4E19C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DDC678041EDA76CD00A4E19C /* TranscriptIndexingService-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TranscriptIndexingService-Bridging-Header.h"; sourceTree = "<group>"; };
-		DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingServiceProtocol.swift; sourceTree = "<group>"; };
-		DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingService.swift; sourceTree = "<group>"; };
 		DDC6780E1EDB253D00A4E19C /* AboutWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutWindowController.swift; sourceTree = "<group>"; };
 		DDC678111EDB26D000A4E19C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AboutWindowController.xib; sourceTree = "<group>"; };
 		DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContributorsFetcher.swift; sourceTree = "<group>"; };
@@ -558,6 +610,30 @@
 		DDD1C9CA20B1EA2400902B1C /* FavoriteSyncObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSyncObject.swift; sourceTree = "<group>"; };
 		DDD1C9CD20B1EC9B00902B1C /* UserDataSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSyncEngine.swift; sourceTree = "<group>"; };
 		DDD3F39F2094D26C00FCF7D9 /* PUITouchBarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUITouchBarItems.swift; sourceTree = "<group>"; };
+		DDD684AD247BFBAA001BB700 /* config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = config.json; sourceTree = "<group>"; };
+		DDD684FE247C3B00001BB700 /* Transcripts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Transcripts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDD68500247C3B00001BB700 /* Transcripts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Transcripts.h; sourceTree = "<group>"; };
+		DDD68501247C3B00001BB700 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDD68506247C3B00001BB700 /* TranscriptsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TranscriptsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDD6850F247C3B00001BB700 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDD68521247C3B0E001BB700 /* URLSessionLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionLoader.swift; sourceTree = "<group>"; };
+		DDD68522247C3B0E001BB700 /* Loader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
+		DDD68523247C3B0E001BB700 /* TranscriptDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptDownloader.swift; sourceTree = "<group>"; };
+		DDD68525247C3B0E001BB700 /* Coalescer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coalescer.swift; sourceTree = "<group>"; };
+		DDD68527247C3B0E001BB700 /* TranscriptContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptContent.swift; sourceTree = "<group>"; };
+		DDD68528247C3B0E001BB700 /* TranscriptManifest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptManifest.swift; sourceTree = "<group>"; };
+		DDD6852A247C3B0E001BB700 /* TranscriptStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptStorage.swift; sourceTree = "<group>"; };
+		DDD6852B247C3B0E001BB700 /* Transcripts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transcripts.swift; sourceTree = "<group>"; };
+		DDD68538247C3B4B001BB700 /* FixtureLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixtureLoader.swift; sourceTree = "<group>"; };
+		DDD68539247C3B4B001BB700 /* FakeStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeStorage.swift; sourceTree = "<group>"; };
+		DDD6853A247C3B4B001BB700 /* Bundle+LoadJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+LoadJSON.swift"; sourceTree = "<group>"; };
+		DDD6853B247C3B4B001BB700 /* TranscriptDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptDownloaderTests.swift; sourceTree = "<group>"; };
+		DDD6853C247C3B4B001BB700 /* DecodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodingTests.swift; sourceTree = "<group>"; };
+		DDD6853E247C3B4C001BB700 /* wwdc2019-202-transcript-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "wwdc2019-202-transcript-eng.json"; sourceTree = "<group>"; };
+		DDD6853F247C3B4C001BB700 /* wwdc2019-104-transcript-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "wwdc2019-104-transcript-eng.json"; sourceTree = "<group>"; };
+		DDD68540247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "wwdc2019-103-transcript-eng.json"; sourceTree = "<group>"; };
+		DDD68541247C3B4C001BB700 /* transcript-manifest-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "transcript-manifest-eng.json"; sourceTree = "<group>"; };
+		DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptLanguagesProvider.swift; sourceTree = "<group>"; };
 		DDD930701ED4EF1F00D61BE3 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		DDD930721ED52B2900D61BE3 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		DDD930741ED52BD800D61BE3 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
@@ -636,6 +712,11 @@
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
+		DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingServiceProtocol.swift; sourceTree = "<group>"; };
+		DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingClientProtocol.swift; sourceTree = "<group>"; };
+		DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingClient.swift; sourceTree = "<group>"; };
+		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		DDFD619A247EE56300AD1CD7 /* TranscriptIndexingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingService.swift; sourceTree = "<group>"; };
 		F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedResource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -644,6 +725,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDD68513247C3B00001BB700 /* Transcripts.framework in Frameworks */,
 				012BEFA41EE8658F007E72CA /* EventKit.framework in Frameworks */,
 				DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
 				DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */,
@@ -664,6 +746,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDD68534247C3B2D001BB700 /* Transcripts.framework in Frameworks */,
 				DD65FD4D1E48A01B0054DD35 /* Realm.framework in Frameworks */,
 				DD65FD4E1E48A01B0054DD35 /* RealmSwift.framework in Frameworks */,
 				DD3C4D251E561E4D0093BBD0 /* RxRealm.framework in Frameworks */,
@@ -691,6 +774,21 @@
 				DDC678071EDA76E000A4E19C /* ConfCore.framework in Frameworks */,
 				DDC678081EDA76E800A4E19C /* Realm.framework in Frameworks */,
 				DDC678091EDA76EC00A4E19C /* RealmSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDD684FB247C3B00001BB700 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDD68503247C3B00001BB700 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDD68507247C3B00001BB700 /* Transcripts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,6 +874,8 @@
 				DDDAA3EF1EC7653300DF9D02 /* ThrowBack */,
 				DDF721971ECA12780054C503 /* PlayerUI */,
 				DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */,
+				DDD684FF247C3B00001BB700 /* Transcripts */,
+				DDD6850C247C3B00001BB700 /* TranscriptsTests */,
 				DD36A4AD1E478C6A00B2EA88 /* Products */,
 				DDAE7C531E5BC6CD00CEA205 /* Frameworks */,
 			);
@@ -791,6 +891,8 @@
 				DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */,
 				DDF721961ECA12780054C503 /* PlayerUI.framework */,
 				DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */,
+				DDD684FE247C3B00001BB700 /* Transcripts.framework */,
+				DDD68506247C3B00001BB700 /* TranscriptsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -917,6 +1019,7 @@
 				DD65FD4A1E489FDA0054DD35 /* Models */,
 				DD5DEC1C1E4AA68F00426FA6 /* Decoding */,
 				DDC678151EDB27C100A4E19C /* Helpers */,
+				DDFD618D247EE1C000AD1CD7 /* Transcript Indexing */,
 				DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */,
 				DD36A4CB1E478D7E00B2EA88 /* Info.plist */,
 			);
@@ -949,6 +1052,7 @@
 		DD5DEC231E4AA8C800426FA6 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				DDD684AD247BFBAA001BB700 /* config.json */,
 				3A6227021F9272A300D5F687 /* contents.json */,
 				DD5DEC241E4AA8C800426FA6 /* news.json */,
 				DD5DEC251E4AA8C800426FA6 /* sessions.json */,
@@ -1025,6 +1129,7 @@
 			children = (
 				DDDAA3CB1EC746AE00DF9D02 /* Display */,
 				DDDF806420B9F46C007284F8 /* Featured */,
+				DD9D3F38247BF8570049CB68 /* RootConfig.swift */,
 				DD65FD561E48A0BD0054DD35 /* Event.swift */,
 				DD65FD5C1E48A11F0054DD35 /* Track.swift */,
 				DD65FD5A1E48A1080054DD35 /* Focus.swift */,
@@ -1202,12 +1307,9 @@
 		DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */ = {
 			isa = PBXGroup;
 			children = (
+				DDFD6197247EE54900AD1CD7 /* Source */,
 				DDBFC18F2190C4680030E803 /* TranscriptIndexingService.entitlements */,
-				DDC677F81EDA76A100A4E19C /* main.m */,
 				DDC677FA1EDA76A100A4E19C /* Info.plist */,
-				DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */,
-				DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */,
-				DDC678041EDA76CD00A4E19C /* TranscriptIndexingService-Bridging-Header.h */,
 			);
 			path = TranscriptIndexingService;
 			sourceTree = "<group>";
@@ -1225,6 +1327,7 @@
 			children = (
 				DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */,
 				DDEDFCF71EDA33C3002477C8 /* CloudKitHelper.swift */,
+				DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1294,6 +1397,96 @@
 				DDDF805E20B90842007284F8 /* SessionProgressSyncObject.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		DDD684FF247C3B00001BB700 /* Transcripts */ = {
+			isa = PBXGroup;
+			children = (
+				DDD6851F247C3B0E001BB700 /* Source */,
+				DDD68500247C3B00001BB700 /* Transcripts.h */,
+				DDD68501247C3B00001BB700 /* Info.plist */,
+			);
+			path = Transcripts;
+			sourceTree = "<group>";
+		};
+		DDD6850C247C3B00001BB700 /* TranscriptsTests */ = {
+			isa = PBXGroup;
+			children = (
+				DDD68537247C3B4B001BB700 /* Utils */,
+				DDD6853D247C3B4C001BB700 /* Fixtures */,
+				DDD6853C247C3B4B001BB700 /* DecodingTests.swift */,
+				DDD6853B247C3B4B001BB700 /* TranscriptDownloaderTests.swift */,
+				DDD6850F247C3B00001BB700 /* Info.plist */,
+			);
+			path = TranscriptsTests;
+			sourceTree = "<group>";
+		};
+		DDD6851F247C3B0E001BB700 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				DDD68520247C3B0E001BB700 /* Networking */,
+				DDD68524247C3B0E001BB700 /* Utils */,
+				DDD68526247C3B0E001BB700 /* Models */,
+				DDD68529247C3B0E001BB700 /* Storage */,
+				DDD6852B247C3B0E001BB700 /* Transcripts.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		DDD68520247C3B0E001BB700 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				DDD68521247C3B0E001BB700 /* URLSessionLoader.swift */,
+				DDD68522247C3B0E001BB700 /* Loader.swift */,
+				DDD68523247C3B0E001BB700 /* TranscriptDownloader.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		DDD68524247C3B0E001BB700 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				DDD68525247C3B0E001BB700 /* Coalescer.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		DDD68526247C3B0E001BB700 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DDD68527247C3B0E001BB700 /* TranscriptContent.swift */,
+				DDD68528247C3B0E001BB700 /* TranscriptManifest.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DDD68529247C3B0E001BB700 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				DDD6852A247C3B0E001BB700 /* TranscriptStorage.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		DDD68537247C3B4B001BB700 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				DDD68538247C3B4B001BB700 /* FixtureLoader.swift */,
+				DDD68539247C3B4B001BB700 /* FakeStorage.swift */,
+				DDD6853A247C3B4B001BB700 /* Bundle+LoadJSON.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		DDD6853D247C3B4C001BB700 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				DDD6853E247C3B4C001BB700 /* wwdc2019-202-transcript-eng.json */,
+				DDD6853F247C3B4C001BB700 /* wwdc2019-104-transcript-eng.json */,
+				DDD68540247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json */,
+				DDD68541247C3B4C001BB700 /* transcript-manifest-eng.json */,
+			);
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		DDDAA3CB1EC746AE00DF9D02 /* Display */ = {
@@ -1513,6 +1706,33 @@
 			name = Detail;
 			sourceTree = "<group>";
 		};
+		DDFD618D247EE1C000AD1CD7 /* Transcript Indexing */ = {
+			isa = PBXGroup;
+			children = (
+				DDFD6192247EE20C00AD1CD7 /* Interfaces */,
+				DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */,
+				DDFD619A247EE56300AD1CD7 /* TranscriptIndexingService.swift */,
+			);
+			name = "Transcript Indexing";
+			sourceTree = "<group>";
+		};
+		DDFD6192247EE20C00AD1CD7 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */,
+				DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */,
+			);
+			name = Interfaces;
+			sourceTree = "<group>";
+		};
+		DDFD6197247EE54900AD1CD7 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				DDFD6198247EE55200AD1CD7 /* main.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1521,6 +1741,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD36A4DA1E478D7E00B2EA88 /* ConfCore.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDD684F9247C3B00001BB700 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDD68510247C3B00001BB700 /* Transcripts.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1565,6 +1793,7 @@
 				DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */,
 				DDF7219C1ECA12780054C503 /* PBXTargetDependency */,
 				DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */,
+				DDD68512247C3B00001BB700 /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			productName = WWDC;
@@ -1583,6 +1812,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DDD68536247C3B31001BB700 /* PBXTargetDependency */,
 			);
 			name = ConfCore;
 			productName = ConfCore;
@@ -1624,6 +1854,43 @@
 			productName = TranscriptIndexingService;
 			productReference = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */;
 			productType = "com.apple.product-type.xpc-service";
+		};
+		DDD684FD247C3B00001BB700 /* Transcripts */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DDD68515247C3B00001BB700 /* Build configuration list for PBXNativeTarget "Transcripts" */;
+			buildPhases = (
+				DDD684F9247C3B00001BB700 /* Headers */,
+				DDD684FA247C3B00001BB700 /* Sources */,
+				DDD684FB247C3B00001BB700 /* Frameworks */,
+				DDD684FC247C3B00001BB700 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Transcripts;
+			productName = Transcripts;
+			productReference = DDD684FE247C3B00001BB700 /* Transcripts.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DDD68505247C3B00001BB700 /* TranscriptsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DDD6851A247C3B00001BB700 /* Build configuration list for PBXNativeTarget "TranscriptsTests" */;
+			buildPhases = (
+				DDD68502247C3B00001BB700 /* Sources */,
+				DDD68503247C3B00001BB700 /* Frameworks */,
+				DDD68504247C3B00001BB700 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DDD68509247C3B00001BB700 /* PBXTargetDependency */,
+				DDD6850B247C3B00001BB700 /* PBXTargetDependency */,
+			);
+			name = TranscriptsTests;
+			productName = TranscriptsTests;
+			productReference = DDD68506247C3B00001BB700 /* TranscriptsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		DDDAA3ED1EC7653200DF9D02 /* ThrowBack */ = {
 			isa = PBXNativeTarget;
@@ -1668,7 +1935,7 @@
 		DD36A4A41E478C6900B2EA88 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0820;
+				LastSwiftUpdateCheck = 1150;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Guilherme Rambo";
 				TargetAttributes = {
@@ -1702,13 +1969,24 @@
 					};
 					DDC677F11EDA76A100A4E19C = {
 						CreatedOnToolsVersion = 8.3.2;
-						LastSwiftMigration = "";
+						LastSwiftMigration = 1150;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.HardenedRuntime = {
 								enabled = 1;
 							};
 						};
+					};
+					DDD684FD247C3B00001BB700 = {
+						CreatedOnToolsVersion = 11.5;
+						DevelopmentTeam = 8C7439RJLG;
+						ProvisioningStyle = Automatic;
+					};
+					DDD68505247C3B00001BB700 = {
+						CreatedOnToolsVersion = 11.5;
+						DevelopmentTeam = 8C7439RJLG;
+						ProvisioningStyle = Automatic;
+						TestTargetID = DD36A4AB1E478C6900B2EA88;
 					};
 					DDDAA3ED1EC7653200DF9D02 = {
 						CreatedOnToolsVersion = 8.3.2;
@@ -1741,6 +2019,8 @@
 				DDDAA3ED1EC7653200DF9D02 /* ThrowBack */,
 				DDF721951ECA12780054C503 /* PlayerUI */,
 				DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */,
+				DDD684FD247C3B00001BB700 /* Transcripts */,
+				DDD68505247C3B00001BB700 /* TranscriptsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1772,6 +2052,7 @@
 			files = (
 				DD5DEC2A1E4AA8C800426FA6 /* sessions.json in Resources */,
 				DDDF806F20BA115A007284F8 /* layout.json in Resources */,
+				DDD684AE247BFBAA001BB700 /* config.json in Resources */,
 				DD5DEC2C1E4AA8C800426FA6 /* videos_live.json in Resources */,
 				DD5DEC2D1E4AA8C800426FA6 /* wwdc.json in Resources */,
 				DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */,
@@ -1785,6 +2066,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDD684FC247C3B00001BB700 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDD68504247C3B00001BB700 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDD68548247C3B4C001BB700 /* wwdc2019-104-transcript-eng.json in Resources */,
+				DDD6854A247C3B4C001BB700 /* transcript-manifest-eng.json in Resources */,
+				DDD68549247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json in Resources */,
+				DDD68547247C3B4C001BB700 /* wwdc2019-202-transcript-eng.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1972,12 +2271,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDFD6194247EE21900AD1CD7 /* TranscriptIndexingClient.swift in Sources */,
 				DD5DEC2F1E4AAC9300426FA6 /* DateFormatter+ConfCoreFormat.swift in Sources */,
 				DDAE7C5E1E5C723A00CEA205 /* Resource+Error.swift in Sources */,
 				DDAE7C5A1E5C652600CEA205 /* Environment.swift in Sources */,
 				DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */,
 				DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */,
-				DDC6780C1EDA77CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */,
 				DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */,
 				DDDF806620B9F5EC007284F8 /* FeaturedContent.swift in Sources */,
 				DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */,
@@ -1990,6 +2289,8 @@
 				4D174E342248054F00FE5E87 /* ConditionallyDecodable.swift in Sources */,
 				DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */,
 				DDC927F920B79CB3004C784D /* BookmarkSyncObject.swift in Sources */,
+				DD9D3F39247BF8570049CB68 /* RootConfig.swift in Sources */,
+				DDFD6191247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift in Sources */,
 				DDEDFCF81EDA33C3002477C8 /* CloudKitHelper.swift in Sources */,
 				DDDF805920B90306007284F8 /* Favorite+ConflictResolution.swift in Sources */,
 				DDC927FC20B7A059004C784D /* Data+CloudKit.swift in Sources */,
@@ -1999,6 +2300,7 @@
 				DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */,
 				DDDF806120B9EC3A007284F8 /* FeaturedSection.swift in Sources */,
 				DDAE7C631E5C7E7800CEA205 /* ContentsResponse.swift in Sources */,
+				DDD6854C247C517A001BB700 /* TranscriptLanguagesProvider.swift in Sources */,
 				DDDF805420B8FCBC007284F8 /* Session+Children.swift in Sources */,
 				DD5DEC201E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift in Sources */,
 				DD65FD6D1E48BE270054DD35 /* Bookmark.swift in Sources */,
@@ -2008,10 +2310,12 @@
 				DDAE7C581E5C629800CEA205 /* AppleAPIClient.swift in Sources */,
 				DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */,
 				DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */,
+				DDFD619B247EE56300AD1CD7 /* TranscriptIndexingService.swift in Sources */,
 				DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */,
 				DD65FD551E48A0A70054DD35 /* Room.swift in Sources */,
 				DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */,
 				F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */,
+				DDFD618F247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift in Sources */,
 				DDD1C9CE20B1EC9B00902B1C /* UserDataSyncEngine.swift in Sources */,
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,
 				DDD930731ED52B2900D61BE3 /* Download.swift in Sources */,
@@ -2040,9 +2344,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDC6780B1EDA76FD00A4E19C /* TranscriptIndexingService.swift in Sources */,
-				DDC677F91EDA76A100A4E19C /* main.m in Sources */,
-				DDC678061EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */,
+				DDFD6199247EE55200AD1CD7 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDD684FA247C3B00001BB700 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDD68531247C3B0E001BB700 /* TranscriptManifest.swift in Sources */,
+				DDD68533247C3B0E001BB700 /* Transcripts.swift in Sources */,
+				DDD6852E247C3B0E001BB700 /* TranscriptDownloader.swift in Sources */,
+				DDD6852D247C3B0E001BB700 /* Loader.swift in Sources */,
+				DDD6852C247C3B0E001BB700 /* URLSessionLoader.swift in Sources */,
+				DDD68530247C3B0E001BB700 /* TranscriptContent.swift in Sources */,
+				DDD6852F247C3B0E001BB700 /* Coalescer.swift in Sources */,
+				DDD68532247C3B0E001BB700 /* TranscriptStorage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDD68502247C3B00001BB700 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDD68546247C3B4C001BB700 /* DecodingTests.swift in Sources */,
+				DDD68542247C3B4C001BB700 /* FixtureLoader.swift in Sources */,
+				DDD68543247C3B4C001BB700 /* FakeStorage.swift in Sources */,
+				DDD68545247C3B4C001BB700 /* TranscriptDownloaderTests.swift in Sources */,
+				DDD68544247C3B4C001BB700 /* Bundle+LoadJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2124,6 +2453,26 @@
 			isa = PBXTargetDependency;
 			target = DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */;
 			targetProxy = DDC677FB1EDA76A100A4E19C /* PBXContainerItemProxy */;
+		};
+		DDD68509247C3B00001BB700 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DDD684FD247C3B00001BB700 /* Transcripts */;
+			targetProxy = DDD68508247C3B00001BB700 /* PBXContainerItemProxy */;
+		};
+		DDD6850B247C3B00001BB700 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD36A4AB1E478C6900B2EA88 /* WWDC */;
+			targetProxy = DDD6850A247C3B00001BB700 /* PBXContainerItemProxy */;
+		};
+		DDD68512247C3B00001BB700 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DDD684FD247C3B00001BB700 /* Transcripts */;
+			targetProxy = DDD68511247C3B00001BB700 /* PBXContainerItemProxy */;
+		};
+		DDD68536247C3B31001BB700 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DDD684FD247C3B00001BB700 /* Transcripts */;
+			targetProxy = DDD68535247C3B31001BB700 /* PBXContainerItemProxy */;
 		};
 		DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2789,8 +3138,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -2815,8 +3164,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug_iCloud;
 		};
@@ -2841,7 +3190,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -2866,7 +3215,225 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release_iCloud;
+		};
+		DDD68516247C3B00001BB700 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Transcripts/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DDD68517247C3B00001BB700 /* Debug_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Transcripts/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug_iCloud;
+		};
+		DDD68518247C3B00001BB700 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Transcripts/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DDD68519247C3B00001BB700 /* Release_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "Developer ID Application: GUILHERME RAMBO (8C7439RJLG)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Transcripts/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release_iCloud;
+		};
+		DDD6851B247C3B00001BB700 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TranscriptsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.rambo.TranscriptsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
+			};
+			name = Debug;
+		};
+		DDD6851C247C3B00001BB700 /* Debug_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TranscriptsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.rambo.TranscriptsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
+			};
+			name = Debug_iCloud;
+		};
+		DDD6851D247C3B00001BB700 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TranscriptsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.rambo.TranscriptsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
+			};
+			name = Release;
+		};
+		DDD6851E247C3B00001BB700 /* Release_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = TranscriptsTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.rambo.TranscriptsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
 			};
 			name = Release_iCloud;
 		};
@@ -3107,6 +3674,28 @@
 				DDC678001EDA76A100A4E19C /* Debug_iCloud */,
 				DDC678011EDA76A100A4E19C /* Release */,
 				DDC678021EDA76A100A4E19C /* Release_iCloud */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DDD68515247C3B00001BB700 /* Build configuration list for PBXNativeTarget "Transcripts" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDD68516247C3B00001BB700 /* Debug */,
+				DDD68517247C3B00001BB700 /* Debug_iCloud */,
+				DDD68518247C3B00001BB700 /* Release */,
+				DDD68519247C3B00001BB700 /* Release_iCloud */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DDD6851A247C3B00001BB700 /* Build configuration list for PBXNativeTarget "TranscriptsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDD6851B247C3B00001BB700 /* Debug */,
+				DDD6851C247C3B00001BB700 /* Debug_iCloud */,
+				DDD6851D247C3B00001BB700 /* Release */,
+				DDD6851E247C3B00001BB700 /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
