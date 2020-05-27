@@ -164,14 +164,10 @@
 		DDBCEC9C228AD30C009300CF /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDC347C220B1E6B700CFF11C /* CloudKitCodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */; };
 		DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */; };
-		DDC677F91EDA76A100A4E19C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC677F81EDA76A100A4E19C /* main.m */; };
 		DDC677FD1EDA76A100A4E19C /* TranscriptIndexingService.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		DDC678061EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */; };
 		DDC678071EDA76E000A4E19C /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
 		DDC678081EDA76E800A4E19C /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
 		DDC678091EDA76EC00A4E19C /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
-		DDC6780B1EDA76FD00A4E19C /* TranscriptIndexingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */; };
-		DDC6780C1EDA77CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */; };
 		DDC6780F1EDB253D00A4E19C /* AboutWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6780E1EDB253D00A4E19C /* AboutWindowController.swift */; };
 		DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC678101EDB26D000A4E19C /* AboutWindowController.xib */; };
 		DDC678171EDB27EF00A4E19C /* ContributorsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */; };
@@ -297,6 +293,11 @@
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
+		DDFD618F247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */; };
+		DDFD6191247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */; };
+		DDFD6194247EE21900AD1CD7 /* TranscriptIndexingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */; };
+		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
+		DDFD619B247EE56300AD1CD7 /* TranscriptIndexingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD619A247EE56300AD1CD7 /* TranscriptIndexingService.swift */; };
 		F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */; };
 /* End PBXBuildFile section */
 
@@ -585,11 +586,7 @@
 		DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKitCodable.framework; path = Carthage/Build/Mac/CloudKitCodable.framework; sourceTree = "<group>"; };
 		DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexer.swift; sourceTree = "<group>"; };
 		DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = TranscriptIndexingService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDC677F81EDA76A100A4E19C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DDC677FA1EDA76A100A4E19C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DDC678041EDA76CD00A4E19C /* TranscriptIndexingService-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TranscriptIndexingService-Bridging-Header.h"; sourceTree = "<group>"; };
-		DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingServiceProtocol.swift; sourceTree = "<group>"; };
-		DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingService.swift; sourceTree = "<group>"; };
 		DDC6780E1EDB253D00A4E19C /* AboutWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutWindowController.swift; sourceTree = "<group>"; };
 		DDC678111EDB26D000A4E19C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AboutWindowController.xib; sourceTree = "<group>"; };
 		DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContributorsFetcher.swift; sourceTree = "<group>"; };
@@ -715,6 +712,11 @@
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
+		DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingServiceProtocol.swift; sourceTree = "<group>"; };
+		DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingClientProtocol.swift; sourceTree = "<group>"; };
+		DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingClient.swift; sourceTree = "<group>"; };
+		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		DDFD619A247EE56300AD1CD7 /* TranscriptIndexingService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingService.swift; sourceTree = "<group>"; };
 		F7EBDF1F2067FEDB00EF6460 /* RelatedResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedResource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1017,6 +1019,7 @@
 				DD65FD4A1E489FDA0054DD35 /* Models */,
 				DD5DEC1C1E4AA68F00426FA6 /* Decoding */,
 				DDC678151EDB27C100A4E19C /* Helpers */,
+				DDFD618D247EE1C000AD1CD7 /* Transcript Indexing */,
 				DD36A4CA1E478D7E00B2EA88 /* ConfCore.h */,
 				DD36A4CB1E478D7E00B2EA88 /* Info.plist */,
 			);
@@ -1304,12 +1307,9 @@
 		DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */ = {
 			isa = PBXGroup;
 			children = (
+				DDFD6197247EE54900AD1CD7 /* Source */,
 				DDBFC18F2190C4680030E803 /* TranscriptIndexingService.entitlements */,
-				DDC677F81EDA76A100A4E19C /* main.m */,
 				DDC677FA1EDA76A100A4E19C /* Info.plist */,
-				DDC678051EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift */,
-				DDC6780A1EDA76FD00A4E19C /* TranscriptIndexingService.swift */,
-				DDC678041EDA76CD00A4E19C /* TranscriptIndexingService-Bridging-Header.h */,
 			);
 			path = TranscriptIndexingService;
 			sourceTree = "<group>";
@@ -1706,6 +1706,33 @@
 			name = Detail;
 			sourceTree = "<group>";
 		};
+		DDFD618D247EE1C000AD1CD7 /* Transcript Indexing */ = {
+			isa = PBXGroup;
+			children = (
+				DDFD6192247EE20C00AD1CD7 /* Interfaces */,
+				DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */,
+				DDFD619A247EE56300AD1CD7 /* TranscriptIndexingService.swift */,
+			);
+			name = "Transcript Indexing";
+			sourceTree = "<group>";
+		};
+		DDFD6192247EE20C00AD1CD7 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */,
+				DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */,
+			);
+			name = Interfaces;
+			sourceTree = "<group>";
+		};
+		DDFD6197247EE54900AD1CD7 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				DDFD6198247EE55200AD1CD7 /* main.swift */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1942,7 +1969,7 @@
 					};
 					DDC677F11EDA76A100A4E19C = {
 						CreatedOnToolsVersion = 8.3.2;
-						LastSwiftMigration = "";
+						LastSwiftMigration = 1150;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.HardenedRuntime = {
@@ -2244,12 +2271,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDFD6194247EE21900AD1CD7 /* TranscriptIndexingClient.swift in Sources */,
 				DD5DEC2F1E4AAC9300426FA6 /* DateFormatter+ConfCoreFormat.swift in Sources */,
 				DDAE7C5E1E5C723A00CEA205 /* Resource+Error.swift in Sources */,
 				DDAE7C5A1E5C652600CEA205 /* Environment.swift in Sources */,
 				DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */,
 				DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */,
-				DDC6780C1EDA77CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */,
 				DD0F0C561E7B8DD600B52184 /* Storage.swift in Sources */,
 				DDDF806620B9F5EC007284F8 /* FeaturedContent.swift in Sources */,
 				DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */,
@@ -2263,6 +2290,7 @@
 				DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */,
 				DDC927F920B79CB3004C784D /* BookmarkSyncObject.swift in Sources */,
 				DD9D3F39247BF8570049CB68 /* RootConfig.swift in Sources */,
+				DDFD6191247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift in Sources */,
 				DDEDFCF81EDA33C3002477C8 /* CloudKitHelper.swift in Sources */,
 				DDDF805920B90306007284F8 /* Favorite+ConflictResolution.swift in Sources */,
 				DDC927FC20B7A059004C784D /* Data+CloudKit.swift in Sources */,
@@ -2282,10 +2310,12 @@
 				DDAE7C581E5C629800CEA205 /* AppleAPIClient.swift in Sources */,
 				DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */,
 				DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */,
+				DDFD619B247EE56300AD1CD7 /* TranscriptIndexingService.swift in Sources */,
 				DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */,
 				DD65FD551E48A0A70054DD35 /* Room.swift in Sources */,
 				DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */,
 				F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */,
+				DDFD618F247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift in Sources */,
 				DDD1C9CE20B1EC9B00902B1C /* UserDataSyncEngine.swift in Sources */,
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,
 				DDD930731ED52B2900D61BE3 /* Download.swift in Sources */,
@@ -2314,9 +2344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDC6780B1EDA76FD00A4E19C /* TranscriptIndexingService.swift in Sources */,
-				DDC677F91EDA76A100A4E19C /* main.m in Sources */,
-				DDC678061EDA76CE00A4E19C /* TranscriptIndexingServiceProtocol.swift in Sources */,
+				DDFD6199247EE55200AD1CD7 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3110,8 +3138,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -3136,8 +3164,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug_iCloud;
 		};
@@ -3162,7 +3190,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -3187,7 +3215,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "TranscriptIndexingService/TranscriptIndexingService-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release_iCloud;
 		};

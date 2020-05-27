@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc protocol TranscriptIndexingServiceProtocol: NSObjectProtocol {
+@objc public protocol TranscriptIndexingServiceProtocol: NSObjectProtocol {
 
     func indexTranscriptsIfNeeded(manifestURL: URL, ignoringCache: Bool, storageURL: URL, schemaVersion: UInt64)
 

@@ -85,8 +85,14 @@ public final class TranscriptIndexer {
         makeDownloader()
     }()
 
+    var didStart: () -> Void = { }
+    var progressChanged: (Float) -> Void = { _ in }
+    var didStop: () -> Void = { }
+
     public func downloadTranscriptsIfNeeded() {
         downloader = makeDownloader()
+
+        didStart()
 
         DistributedNotificationCenter.default().postNotificationName(
             .TranscriptIndexingDidStart,
@@ -106,6 +112,8 @@ public final class TranscriptIndexer {
                 guard let self = self else { return }
 
                 os_log("Transcript indexing progresss: %.2f", log: self.log, type: .default, progress)
+
+                self.progressChanged(progress)
             }) { [weak self] in
                 self?.finished()
             }
@@ -137,6 +145,8 @@ public final class TranscriptIndexer {
     }
 
     private func finished() {
+        didStop()
+
         DistributedNotificationCenter.default().postNotificationName(
             .TranscriptIndexingDidStop,
             object: nil,
