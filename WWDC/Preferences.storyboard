@@ -153,7 +153,7 @@
                                     <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eKi-p7-aRV">
                                         <rect key="frame" x="-2" y="29" width="155" height="14"/>
                                         <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" alignment="left" title="/Users/inside/Movies/WWDC" id="IRs-Ob-UjV">
-                                            <font key="font" metaFont="controlContent" size="11"/>
+                                            <font key="font" metaFont="system" size="11"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -272,7 +272,7 @@
                                     <constraint firstAttribute="width" constant="340" id="0Xp-88-sJv"/>
                                 </constraints>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Your favorites, bookmarks and session progress will be synced between all of your Macs logged in to the same iCloud account." id="Mu7-TB-FID">
-                                    <font key="font" metaFont="controlContent" size="11"/>
+                                    <font key="font" metaFont="system" size="11"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -280,8 +280,8 @@
                             <box horizontalHuggingPriority="248" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="CVJ-g8-K90">
                                 <rect key="frame" x="39" y="117" width="611" height="5"/>
                             </box>
-                            <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5e8-zi-7Hw">
-                                <rect key="frame" x="411" y="84" width="33" height="21"/>
+                            <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5e8-zi-7Hw">
+                                <rect key="frame" x="411" y="84" width="103" height="21"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mw6-7C-nEg">
                                         <rect key="frame" x="-2" y="-3" width="38" height="25"/>
@@ -297,12 +297,27 @@
                                     <progressIndicator hidden="YES" wantsLayer="YES" maxValue="100" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="RNs-XG-tCh">
                                         <rect key="frame" x="0.0" y="5" width="16" height="16"/>
                                     </progressIndicator>
+                                    <progressIndicator wantsLayer="YES" maxValue="1" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Ume-78-MMk">
+                                        <rect key="frame" x="37" y="2" width="16" height="16"/>
+                                    </progressIndicator>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WMk-16-lJl">
+                                        <rect key="frame" x="55" y="5" width="50" height="11"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Indexing..." id="eTm-sb-EiG">
+                                            <font key="font" metaFont="system" size="9"/>
+                                            <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
                                 </subviews>
                                 <visibilityPriorities>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
@@ -321,7 +336,7 @@
                                     <constraint firstAttribute="width" constant="340" id="7tV-eK-eZz"/>
                                 </constraints>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Note: many sessions are not available in all languages. English transcripts will be used as a fallback for those sessions." id="HNt-cP-Zvn">
-                                    <font key="font" metaFont="controlContent" size="11"/>
+                                    <font key="font" metaFont="system" size="11"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -383,6 +398,8 @@
                         <outlet property="enableUserDataSyncSwitch" destination="8x0-zb-bwj" id="aae-4V-bAJ"/>
                         <outlet property="includeBookmarksLabel" destination="gpY-Ee-hHn" id="Zik-id-1dy"/>
                         <outlet property="includeTranscriptsLabel" destination="X7h-FH-GQx" id="rkK-EW-ECi"/>
+                        <outlet property="indexingLabel" destination="WMk-16-lJl" id="waO-NK-prs"/>
+                        <outlet property="indexingProgressIndicator" destination="Ume-78-MMk" id="EEh-uS-gzE"/>
                         <outlet property="languagesDescriptionLabel" destination="Gny-ev-Via" id="IxK-qS-Zfi"/>
                         <outlet property="loadingLanguagesSpinner" destination="RNs-XG-tCh" id="ZRc-UD-eQe"/>
                         <outlet property="refreshAutomaticallyLabel" destination="TGp-6Z-M3P" id="l1E-Qe-TR7"/>

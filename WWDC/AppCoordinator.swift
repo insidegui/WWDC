@@ -441,7 +441,9 @@ final class AppCoordinator {
 
     // MARK: - Preferences
 
-    private lazy var preferencesCoordinator = PreferencesCoordinator()
+    private lazy var preferencesCoordinator: PreferencesCoordinator = {
+        PreferencesCoordinator(syncEngine: syncEngine)
+    }()
 
     func showAccountPreferences() {
         preferencesCoordinator.show(in: .account)

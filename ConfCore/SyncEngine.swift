@@ -29,15 +29,15 @@ public final class SyncEngine {
 
     private let disposeBag = DisposeBag()
 
-    private let transcriptIndexingClient: TranscriptIndexingClient
+    let transcriptIndexingClient: TranscriptIndexingClient
 
     public var transcriptLanguage: String {
         get { transcriptIndexingClient.transcriptLanguage }
         set { transcriptIndexingClient.transcriptLanguage = newValue }
     }
 
-    public var isIndexingTranscripts: BehaviorSubject<Bool> { transcriptIndexingClient.isIndexing }
-    public var transcriptIndexingProgress: BehaviorSubject<Float> {  transcriptIndexingClient.indexingProgress  }
+    public var isIndexingTranscripts: BehaviorRelay<Bool> { transcriptIndexingClient.isIndexing }
+    public var transcriptIndexingProgress: BehaviorRelay<Float> { transcriptIndexingClient.indexingProgress }
 
     public init(storage: Storage, client: AppleAPIClient, transcriptLanguage: String) {
         self.storage = storage
