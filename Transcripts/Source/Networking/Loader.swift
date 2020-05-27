@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Combine
 
 public protocol Loader {
     func load<T: Decodable>(from url: URL, decoder: @escaping (Data) throws -> T, completion: @escaping (Result<T, LoaderError>) -> Void)
