@@ -41,6 +41,8 @@ public final class TranscriptDownloader {
     public func fetch(validSessionIdentifiers: [String]? = nil, progress: @escaping ProgressHandler, completion: @escaping CompletionHandler) {
         os_log("%{public}@", log: log, type: .debug, #function)
 
+        transcriptCountLoaded = 0
+
         self.validSessionIdentifiers = validSessionIdentifiers
         self.progressHandler = progress
         self.completionHandler = completion
