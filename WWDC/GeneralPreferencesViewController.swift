@@ -162,7 +162,7 @@ class GeneralPreferencesViewController: NSViewController {
         downloadsFolderLabel.stringValue = url.path
     }
 
-    private lazy var dangeoursLocalStoragePaths: [String] = {
+    private lazy var dangerousLocalStoragePaths: [String] = {
         [
             NSHomeDirectory(),
             "/"
@@ -179,7 +179,7 @@ class GeneralPreferencesViewController: NSViewController {
     }
 
     private func validateDownloadsFolder(_ url: URL) -> Bool {
-        guard !dangeoursLocalStoragePaths.contains(url.path) else {
+        guard !dangerousLocalStoragePaths(url.path) else {
             showStoragePathError(with: "This folder can't be used to store downloaded videos, please choose another one. Downloaded videos can't be stored in the root of your home directory or in the root of the filesystem.")
             return false
         }
