@@ -327,11 +327,19 @@ class AdapterTests: XCTestCase {
 
         XCTAssertEqual(config.feeds.count, 4)
 
-        XCTAssertEqual(config.feeds["en"]!.contents.url.absoluteString, "http://localhost:9042/contents.json")
+        XCTAssertEqual(config.feeds["en"]!.contents.url.absoluteString, "https://devimages-cdn.apple.com/wwdc-services/m5ec5ace/F1CF2B37-A0B5-4323-9E18-07283310EDCA/contents.json")
         XCTAssertEqual(config.feeds["en"]!.contents.etag, "\"3e9d59abf767fca51c271a1a651b265d\"")
 
         XCTAssertEqual(config.feeds["kor"]!.transcripts.url.absoluteString, "https://devimages-cdn.apple.com/wwdc-services/transcripts/manifests/transcript-manifest-kor.json")
-        XCTAssertEqual(config.feeds["kor"]!.transcripts.etag, "\"425bb736d77b93d231be18e58ea498a8\"")
+        XCTAssertEqual(config.feeds["kor"]!.transcripts.etag, "\"42106fe22ddd57ef0620bbe42eacf164\"")
+
+        XCTAssertNotNil(config.eventHero)
+        XCTAssertEqual(config.eventHero?.identifier, "AB1C61AC-02EF-46A4-A16C-AD65A4D6289F")
+        XCTAssertEqual(config.eventHero?.title, "Ready. Set. Code.")
+        XCTAssertEqual(config.eventHero?.titleColor, "#FFFFFF")
+        XCTAssertEqual(config.eventHero?.body, "Starting June 22, WWDC20 takes off. Get ready for the first global, all-online WWDC by turning on your notifications to get all the latest news, with updates for events and sessions. More announcements to come in June.")
+        XCTAssertEqual(config.eventHero?.bodyColor, "#FFFFFF")
+        XCTAssertEqual(config.eventHero?.backgroundImage, "https://devimages-cdn.apple.com/wwdc-services/images/wwdc20/v3-EFE0FCBF-4265-46D6-BBCD-85314EF768CE/BG-WWDCTab-Landscape.heic")
     }
 
 }
