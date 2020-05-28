@@ -14,7 +14,9 @@ public class EventHero: Object, Codable {
 
     @objc public dynamic var identifier = ""
     @objc public dynamic var title = ""
+    @objc public dynamic var titleColor: String?
     @objc public dynamic var body = ""
+    @objc public dynamic var bodyColor: String?
     @objc public dynamic var backgroundImage = ""
 
     public override class func primaryKey() -> String? {

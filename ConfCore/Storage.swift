@@ -515,6 +515,12 @@ public final class Storage {
         }
     }()
 
+    public lazy var eventHeroObservable: Observable<EventHero?> = {
+        let hero = self.realm.objects(EventHero.self)
+
+        return Observable.collection(from: hero).map { $0.first }
+    }()
+
     public func asset(with remoteURL: URL) -> SessionAsset? {
         return realm.objects(SessionAsset.self).filter("remoteURL == %@", remoteURL.absoluteString).first
     }

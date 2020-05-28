@@ -286,7 +286,20 @@ final class AppCoordinator {
                 self.scrollToTodayIfWWDC()
             }).disposed(by: disposeBag)
 
+        bindScheduleAvailability()
+
         liveObserver.start()
+    }
+
+    private func bindScheduleAvailability() {
+        // Show schedule unavailable view if there's no schedule
+
+        storage.scheduleObservable.map({ $0.isEmpty })
+                                  .bind(to: scheduleController.showHeroView)
+                                  .disposed(by: disposeBag)
+
+        storage.eventHeroObservable.bind(to: scheduleController.heroController.hero)
+                                   .disposed(by: disposeBag)
     }
 
     private func updateFeaturedSectionsAfterSync() {

@@ -82,7 +82,7 @@ class WWDCImageView: NSView {
         return l
     }()
 
-    private lazy var imageLayer: WWDCLayer = {
+    private(set) lazy var imageLayer: WWDCLayer = {
         let l = WWDCLayer()
 
         l.contentsGravity = .resizeAspect

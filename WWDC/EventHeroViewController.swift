@@ -69,7 +69,7 @@ public final class EventHeroViewController: NSViewController {
         view.addSubview(textStack)
 
         NSLayoutConstraint.activate([
-            textStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            textStack.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 120),
             textStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             textStack.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 220),
             textStack.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor, constant: -220)
@@ -103,6 +103,16 @@ public final class EventHeroViewController: NSViewController {
 
         hero.compactMap({ $0?.title }).bind(to: titleLabel.rx.text).disposed(by: disposeBag)
         hero.compactMap({ $0?.body }).bind(to: bodyLabel.rx.text).disposed(by: disposeBag)
+
+        hero.compactMap({ $0?.titleColor }).subscribe(onNext: { [weak self] colorHex in
+            guard let self = self else { return }
+            self.titleLabel.textColor = NSColor.fromHexString(hexString: colorHex)
+        }).disposed(by: disposeBag)
+
+        hero.compactMap({ $0?.bodyColor }).subscribe(onNext: { [weak self] colorHex in
+            guard let self = self else { return }
+            self.bodyLabel.textColor = NSColor.fromHexString(hexString: colorHex)
+        }).disposed(by: disposeBag)
     }
 
 }

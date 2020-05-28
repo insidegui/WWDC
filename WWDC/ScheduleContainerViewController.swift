@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import RxSwift
+import RxCocoa
 
 final class ScheduleContainerViewController: NSViewController {
 
@@ -22,6 +24,13 @@ final class ScheduleContainerViewController: NSViewController {
         fatalError()
     }
 
+    /// This should be bound to a state that returns `true` when the schedule is not available.
+    private(set) var showHeroView = BehaviorRelay<Bool>(value: false)
+
+    private(set) lazy var heroController: EventHeroViewController = {
+        EventHeroViewController()
+    }()
+
     override func loadView() {
         view = NSView()
 
@@ -36,6 +45,38 @@ final class ScheduleContainerViewController: NSViewController {
             splitViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
             splitViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        heroController.view.translatesAutoresizingMaskIntoConstraints = false
+        heroController.view.isHidden = true
+
+        addChild(heroController)
+        view.addSubview(heroController.view)
+
+        NSLayoutConstraint.activate([
+            heroController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            heroController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            heroController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            heroController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    private let disposeBag = DisposeBag()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        bindViews()
+    }
+
+    private func bindViews() {
+        showHeroView.asDriver()
+                           .drive(splitViewController.view.rx.isHidden)
+                           .disposed(by: disposeBag)
+
+        showHeroView.asDriver()
+                           .map({ !$0 })
+                           .drive(heroController.view.rx.isHidden)
+                           .disposed(by: disposeBag)
     }
     
 }
