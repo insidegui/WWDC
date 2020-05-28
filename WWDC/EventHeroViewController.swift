@@ -23,6 +23,15 @@ public final class EventHeroViewController: NSViewController {
         return v
     }()
 
+    private lazy var placeholderImageView: FullBleedImageView = {
+        let v = FullBleedImageView()
+
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.image = NSImage(named: .init("schedule-placeholder"))
+
+        return v
+    }()
+
     private lazy var titleLabel: NSTextField = {
         let l = NSTextField(wrappingLabelWithString: "")
 
@@ -56,6 +65,15 @@ public final class EventHeroViewController: NSViewController {
     public override func loadView() {
         view = NSView()
         view.wantsLayer = true
+
+        view.addSubview(placeholderImageView)
+
+        NSLayoutConstraint.activate([
+            placeholderImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            placeholderImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            placeholderImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            placeholderImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         view.addSubview(backgroundImageView)
 
@@ -101,8 +119,12 @@ public final class EventHeroViewController: NSViewController {
             }
         }).disposed(by: disposeBag)
 
-        hero.compactMap({ $0?.title }).bind(to: titleLabel.rx.text).disposed(by: disposeBag)
-        hero.compactMap({ $0?.body }).bind(to: bodyLabel.rx.text).disposed(by: disposeBag)
+        let heroUnavailable = hero.map({ $0 == nil })
+        heroUnavailable.bind(to: backgroundImageView.rx.isHidden).disposed(by: disposeBag)
+        heroUnavailable.map({ !$0 }).bind(to: placeholderImageView.rx.isHidden).disposed(by: disposeBag)
+
+        hero.map({ $0?.title ?? "Schedule not available" }).bind(to: titleLabel.rx.text).disposed(by: disposeBag)
+        hero.map({ $0?.body ?? "The schedule is not currently available. Check back later." }).bind(to: bodyLabel.rx.text).disposed(by: disposeBag)
 
         hero.compactMap({ $0?.titleColor }).subscribe(onNext: { [weak self] colorHex in
             guard let self = self else { return }
