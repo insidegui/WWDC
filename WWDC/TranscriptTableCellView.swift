@@ -36,6 +36,8 @@ class TranscriptTableCellView: NSTableCellView {
         l.textColor = .primaryText
         l.cell?.backgroundStyle = .dark
         l.lineBreakMode = .byTruncatingTail
+        l.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        l.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
         return l
     }()
