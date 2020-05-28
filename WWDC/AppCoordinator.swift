@@ -28,7 +28,7 @@ final class AppCoordinator {
     var tabController: WWDCTabViewController<MainWindowTab>
 
     var featuredController: FeaturedContentViewController
-    var scheduleController: SessionsSplitViewController
+    var scheduleController: ScheduleContainerViewController
     var videosController: SessionsSplitViewController
 
     var currentPlayerController: VideoPlayerViewController?
@@ -93,13 +93,13 @@ final class AppCoordinator {
         tabController.addTabViewItem(featuredItem)
 
         // Schedule
-        scheduleController = SessionsSplitViewController(windowController: windowController, listStyle: .schedule)
+        scheduleController = ScheduleContainerViewController(windowController: windowController, listStyle: .schedule)
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
-        scheduleController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
-        scheduleController.splitView.autosaveName = "ScheduleSplitView"
+        scheduleController.splitViewController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
+        scheduleController.splitViewController.splitView.autosaveName = "ScheduleSplitView"
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
-        scheduleItem.initialFirstResponder = scheduleController.listViewController.tableView
+        scheduleItem.initialFirstResponder = scheduleController.splitViewController.listViewController.tableView
         tabController.addTabViewItem(scheduleItem)
 
         // Videos
@@ -131,7 +131,7 @@ final class AppCoordinator {
     var currentListController: SessionsTableViewController? {
         switch activeTab {
         case .schedule:
-            return scheduleController.listViewController
+            return scheduleController.splitViewController.listViewController
         case .videos:
             return videosController.listViewController
         default:
@@ -146,7 +146,7 @@ final class AppCoordinator {
 
     /// The session that is currently selected on the schedule tab (observable)
     var selectedScheduleItem: Observable<SessionViewModel?> {
-        return scheduleController.listViewController.selectedSession.asObservable()
+        return scheduleController.splitViewController.listViewController.selectedSession.asObservable()
     }
 
     /// The session that is currently selected on the videos tab
@@ -156,7 +156,7 @@ final class AppCoordinator {
 
     /// The session that is currently selected on the schedule tab
     var selectedScheduleItemValue: SessionViewModel? {
-        return scheduleController.listViewController.selectedSession.value
+        return scheduleController.splitViewController.listViewController.selectedSession.value
     }
 
     /// The selected session's view model, regardless of which tab it is selected in
@@ -192,7 +192,7 @@ final class AppCoordinator {
 
         bind(session: selectedSession, to: videosController.detailViewController)
 
-        bind(session: selectedScheduleItem, to: scheduleController.detailViewController)
+        bind(session: selectedScheduleItem, to: scheduleController.splitViewController.detailViewController)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -220,8 +220,8 @@ final class AppCoordinator {
             videosController.listViewController.select(session: viewModel)
             tabController.activeTab = .videos
 
-        } else if scheduleController.listViewController.canDisplay(session: viewModel) {
-            scheduleController.listViewController.select(session: viewModel)
+        } else if scheduleController.splitViewController.listViewController.canDisplay(session: viewModel) {
+            scheduleController.splitViewController.listViewController.select(session: viewModel)
             tabController.activeTab = .schedule
         }
     }
@@ -233,14 +233,14 @@ final class AppCoordinator {
         videoDetail.summaryController.actionsViewController.delegate = self
         videoDetail.summaryController.relatedSessionsViewController.delegate = self
 
-        let scheduleDetail = scheduleController.detailViewController
+        let scheduleDetail = scheduleController.splitViewController.detailViewController
 
         scheduleDetail.shelfController.delegate = self
         scheduleDetail.summaryController.actionsViewController.delegate = self
         scheduleDetail.summaryController.relatedSessionsViewController.delegate = self
 
         videosController.listViewController.delegate = self
-        scheduleController.listViewController.delegate = self
+        scheduleController.splitViewController.listViewController.delegate = self
 
         featuredController.delegate = self
     }
@@ -282,7 +282,7 @@ final class AppCoordinator {
 
                 self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(tracks: tracks)
 
-                self.scheduleController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
+                self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
                 self.scrollToTodayIfWWDC()
             }).disposed(by: disposeBag)
 
@@ -303,7 +303,7 @@ final class AppCoordinator {
 
     private lazy var searchCoordinator: SearchCoordinator = {
         return SearchCoordinator(self.storage,
-                                 sessionsController: self.scheduleController.listViewController,
+                                 sessionsController: self.scheduleController.splitViewController.listViewController,
                                  videosController: self.videosController.listViewController,
                                  restorationFiltersState: Preferences.shared.filtersState)
     }()
@@ -412,7 +412,7 @@ final class AppCoordinator {
         tabController.activeTab = activeTab
 
         if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
-            scheduleController.listViewController.select(session: SessionIdentifier(identifier))
+            scheduleController.splitViewController.listViewController.select(session: SessionIdentifier(identifier))
         }
 
         if let identifier = Preferences.shared.selectedVideoItemIdentifier {
@@ -423,7 +423,7 @@ final class AppCoordinator {
     private func scrollToTodayIfWWDC() {
         guard liveObserver.isWWDCWeek else { return }
 
-        scheduleController.listViewController.scrollToToday()
+        scheduleController.splitViewController.listViewController.scrollToToday()
     }
 
     // MARK: - Deep linking
@@ -432,7 +432,7 @@ final class AppCoordinator {
 
         if link.isForCurrentYear {
             tabController.activeTab = .schedule
-            scheduleController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
+            scheduleController.splitViewController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
         } else {
             tabController.activeTab = .videos
             videosController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
@@ -498,6 +498,8 @@ final class AppCoordinator {
         lastRefresh = now
 
         DispatchQueue.main.async {
+            self.syncEngine.syncConfiguration()
+
             self.syncEngine.syncContent()
 
             self.liveObserver.refresh()

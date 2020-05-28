@@ -157,7 +157,7 @@ final class Preferences {
     public static let fallbackTranscriptLanguageCode = "en"
 
     var transcriptLanguageCode: String {
-        get { defaults.string(forKey: #function) ?? RootConfig.fallbackFeedLanguage }
+        get { defaults.string(forKey: #function) ?? ConfigResponse.fallbackFeedLanguage }
         set {
             let notify = newValue != transcriptLanguageCode
 

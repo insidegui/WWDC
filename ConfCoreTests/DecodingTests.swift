@@ -323,7 +323,7 @@ class AdapterTests: XCTestCase {
     }
 
     func testConfigAdapter() {
-        let config = loadFixture(from: "config", type: RootConfig.self)
+        let config = loadFixture(from: "config", type: ConfigResponse.self)
 
         XCTAssertEqual(config.feeds.count, 4)
 

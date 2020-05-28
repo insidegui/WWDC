@@ -100,6 +100,9 @@
 		DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */; };
 		DD71CC2A20BD009500BB5F47 /* AppCoordinator+Featured.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */; };
 		DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */; };
+		DD7E28FF247FE69400A58370 /* ScheduleContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E28FE247FE69400A58370 /* ScheduleContainerViewController.swift */; };
+		DD7E2902247FEA3900A58370 /* ScheduleUnavailableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2900247FEA3900A58370 /* ScheduleUnavailableViewController.swift */; };
+		DD7E2905247FED7200A58370 /* EventHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2904247FED7200A58370 /* EventHero.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
@@ -121,7 +124,7 @@
 		DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */; };
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */; };
-		DD9D3F39247BF8570049CB68 /* RootConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9D3F38247BF8570049CB68 /* RootConfig.swift */; };
+		DD9D3F39247BF8570049CB68 /* ConfigResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9D3F38247BF8570049CB68 /* ConfigResponse.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
 		DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1220A90655002EECF5 /* SessionCellView.swift */; };
 		DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */; };
@@ -525,6 +528,9 @@
 		DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableCellView.swift; sourceTree = "<group>"; };
 		DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Featured.swift"; sourceTree = "<group>"; };
 		DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCProgressIndicator.swift; sourceTree = "<group>"; };
+		DD7E28FE247FE69400A58370 /* ScheduleContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleContainerViewController.swift; sourceTree = "<group>"; };
+		DD7E2900247FEA3900A58370 /* ScheduleUnavailableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleUnavailableViewController.swift; sourceTree = "<group>"; };
+		DD7E2904247FED7200A58370 /* EventHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHero.swift; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTabViewController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
@@ -547,7 +553,7 @@
 		DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromeCastPlaybackProvider.swift; sourceTree = "<group>"; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMigrator.swift; sourceTree = "<group>"; };
-		DD9D3F38247BF8570049CB68 /* RootConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootConfig.swift; sourceTree = "<group>"; };
+		DD9D3F38247BF8570049CB68 /* ConfigResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigResponse.swift; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDA60E1220A90655002EECF5 /* SessionCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCellView.swift; sourceTree = "<group>"; };
 		DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCollectionViewItem.swift; sourceTree = "<group>"; };
@@ -1129,7 +1135,7 @@
 			children = (
 				DDDAA3CB1EC746AE00DF9D02 /* Display */,
 				DDDF806420B9F46C007284F8 /* Featured */,
-				DD9D3F38247BF8570049CB68 /* RootConfig.swift */,
+				DD7E2904247FED7200A58370 /* EventHero.swift */,
 				DD65FD561E48A0BD0054DD35 /* Event.swift */,
 				DD65FD5C1E48A11F0054DD35 /* Track.swift */,
 				DD65FD5A1E48A1080054DD35 /* Focus.swift */,
@@ -1188,6 +1194,8 @@
 		DD7F38601EABD66D002D8C00 /* Sessions */ = {
 			isa = PBXGroup;
 			children = (
+				DD7E28FE247FE69400A58370 /* ScheduleContainerViewController.swift */,
+				DD7E2900247FEA3900A58370 /* ScheduleUnavailableViewController.swift */,
 				DD36A4B11E478C6A00B2EA88 /* SessionsSplitViewController.swift */,
 				DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */,
 				4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */,
@@ -1266,6 +1274,7 @@
 			children = (
 				DDAE7C621E5C7E7800CEA205 /* ContentsResponse.swift */,
 				DDAE7C641E5CA81C00CEA205 /* SessionsResponse.swift */,
+				DD9D3F38247BF8570049CB68 /* ConfigResponse.swift */,
 			);
 			name = Responses;
 			sourceTree = "<group>";
@@ -2163,6 +2172,7 @@
 				DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */,
 				DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */,
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
+				DD7E2902247FEA3900A58370 /* ScheduleUnavailableViewController.swift in Sources */,
 				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
 				DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
@@ -2190,6 +2200,7 @@
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
 				4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */,
 				4D5EB0F820598E6000D4BC52 /* SessionRowProvider.swift in Sources */,
+				DD7E28FF247FE69400A58370 /* ScheduleContainerViewController.swift in Sources */,
 				DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
@@ -2289,7 +2300,7 @@
 				4D174E342248054F00FE5E87 /* ConditionallyDecodable.swift in Sources */,
 				DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */,
 				DDC927F920B79CB3004C784D /* BookmarkSyncObject.swift in Sources */,
-				DD9D3F39247BF8570049CB68 /* RootConfig.swift in Sources */,
+				DD9D3F39247BF8570049CB68 /* ConfigResponse.swift in Sources */,
 				DDFD6191247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift in Sources */,
 				DDEDFCF81EDA33C3002477C8 /* CloudKitHelper.swift in Sources */,
 				DDDF805920B90306007284F8 /* Favorite+ConflictResolution.swift in Sources */,
@@ -2316,6 +2327,7 @@
 				DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */,
 				F7EBDF202067FEDB00EF6460 /* RelatedResource.swift in Sources */,
 				DDFD618F247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift in Sources */,
+				DD7E2905247FED7200A58370 /* EventHero.swift in Sources */,
 				DDD1C9CE20B1EC9B00902B1C /* UserDataSyncEngine.swift in Sources */,
 				DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */,
 				DDD930731ED52B2900D61BE3 /* Download.swift in Sources */,
