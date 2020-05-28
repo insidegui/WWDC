@@ -94,4 +94,12 @@ public final class SyncEngine {
         }
     }
 
+    public func syncConfiguration() {
+        client.fetchConfig { [weak self] result in
+            DispatchQueue.main.async {
+                self?.storage.store(configResult: result, completion: { _ in })
+            }
+        }
+    }
+
 }

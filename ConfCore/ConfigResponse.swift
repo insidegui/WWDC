@@ -1,5 +1,5 @@
 //
-//  RootConfig.swift
+//  ConfigResponse.swift
 //  ConfCore
 //
 //  Created by Guilherme Rambo on 25/05/20.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct RootConfig: Hashable, Codable {
+public struct ConfigResponse: Hashable, Codable {
 
     public static let fallbackFeedLanguage = "en"
 
@@ -30,5 +30,8 @@ public struct RootConfig: Hashable, Codable {
 
     /// Maps from language ID (such as "en", "zho", etc) to feed manifests.
     public let feeds: [String: FeedManifest]
+
+    /// Depiction of the current event for when the schedule is not available.
+    public let eventHero: EventHero?
 
 }
