@@ -11,8 +11,8 @@ import RealmSwift
 import CloudKit
 import CloudKitCodable
 
-typealias SynchronizableRealmObject = Object & SyncObjectConvertible & SoftDeletable
-typealias SoftDeletableRealmObjectWithCloudKitFields = Object & HasCloudKitFields & SoftDeletable
+typealias SynchronizableObject = Object & SyncObjectConvertible & SoftDeletable
+typealias SoftDeletableSynchronizableObject = Object & HasCloudKitFields & SoftDeletable
 
 public protocol HasCloudKitFields {
     var ckFields: Data { get set }

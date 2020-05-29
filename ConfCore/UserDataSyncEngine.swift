@@ -309,7 +309,7 @@ public final class UserDataSyncEngine {
         clearCloudKitFields(for: Bookmark.self)
     }
 
-    private func clearCloudKitFields<T: SynchronizableRealmObject>(for objectType: T.Type) {
+    private func clearCloudKitFields<T: SynchronizableObject>(for objectType: T.Type) {
         performRealmOperations { realm in
             realm.objects(objectType).forEach { model in
                 var mutableModel = model
@@ -410,7 +410,7 @@ public final class UserDataSyncEngine {
         static let sessionProgress = "SessionProgressSyncObject"
     }
 
-    private var recordTypesToRealmModels: [String: SoftDeletableRealmObjectWithCloudKitFields.Type] = [
+    private var recordTypesToRealmModels: [String: SoftDeletableSynchronizableObject.Type] = [
         RecordTypes.favorite: Favorite.self,
         RecordTypes.bookmark: Bookmark.self,
         RecordTypes.sessionProgress: SessionProgress.self
@@ -418,7 +418,7 @@ public final class UserDataSyncEngine {
 
     private var recordTypesToLastSyncDates: [String: Date] = [:]
 
-    private func realmModel(for recordType: String) -> SoftDeletableRealmObjectWithCloudKitFields.Type? {
+    private func realmModel(for recordType: String) -> SoftDeletableSynchronizableObject.Type? {
         return recordTypesToRealmModels[recordType]
     }
 
@@ -458,7 +458,7 @@ public final class UserDataSyncEngine {
         }
     }
 
-    private func commit<T: SynchronizableRealmObject>(objectType: T.Type, with record: CKRecord, in realm: Realm) {
+    private func commit<T: SynchronizableObject>(objectType: T.Type, with record: CKRecord, in realm: Realm) {
         do {
             let obj = try CloudKitRecordDecoder().decode(objectType.SyncObject.self, from: record)
             let model = objectType.from(syncObject: obj)
@@ -493,7 +493,7 @@ public final class UserDataSyncEngine {
         registerRealmObserver(for: SessionProgress.self)
     }
 
-    private func registerRealmObserver<T: SynchronizableRealmObject>(for objectType: T.Type) {
+    private func registerRealmObserver<T: SynchronizableObject>(for objectType: T.Type) {
         let token = storage.realm.objects(objectType).observe { [unowned self] change in
             switch change {
             case .error(let error):
@@ -512,7 +512,7 @@ public final class UserDataSyncEngine {
         realmNotificationTokens.append(token)
     }
 
-    private func upload<T: SynchronizableRealmObject>(models: [T]) {
+    private func upload<T: SynchronizableObject>(models: [T]) {
         guard models.count > 0 else { return }
 
         os_log("Upload models. Count = %{public}d", log: log, type: .info, models.count)
@@ -638,7 +638,7 @@ public final class UserDataSyncEngine {
         uploadLocalModelsNotUploadedYet(of: SessionProgress.self)
     }
 
-    private func uploadLocalModelsNotUploadedYet<T: SynchronizableRealmObject>(of objectType: T.Type) {
+    private func uploadLocalModelsNotUploadedYet<T: SynchronizableObject>(of objectType: T.Type) {
         let objects = storage.realm.objects(objectType).toArray().filter({ $0.ckFields.count == 0 && !$0.isDeleted })
 
         upload(models: objects)
