@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ThrowBack
 import ConfCore
 import SwiftyJSON
 
@@ -25,19 +24,30 @@ final class Preferences {
 
     private let defaults = UserDefaults.standard
 
+    private static let defaultLocalVideoStoragePath = NSString.path(withComponents: [NSHomeDirectory(), "Library", "Application Support", "WWDC"])
+
+    init() {
+        defaults.register(defaults: [
+            "localVideoStoragePath": Self.defaultLocalVideoStoragePath
+        ])
+    }
+
     /// The URL for the folder where downloaded videos will be saved
     var localVideoStorageURL: URL {
-        get {
-            return URL(fileURLWithPath: TBPreferences.shared.localVideoStoragePath)
-        }
+        set { localVideoStoragePath = newValue.path }
+        get { URL(fileURLWithPath: localVideoStoragePath) }
+    }
+
+    private var localVideoStoragePath: String {
         set {
-            TBPreferences.shared.localVideoStoragePath = newValue.path
-
-            defaults.set(newValue.path, forKey: #function)
-
-            defaults.synchronize()
-
-            NotificationCenter.default.post(name: .LocalVideoStoragePathPreferenceDidChange, object: nil)
+            defaults.set(newValue, forKey: #function)
+        }
+        get {
+            if let path = defaults.object(forKey: #function) as? String {
+                return path
+            } else {
+                return Self.defaultLocalVideoStoragePath
+            }
         }
     }
 
@@ -82,15 +92,6 @@ final class Preferences {
             if let myString = newValue?.rawString() {
                 defaults.set(myString, forKey: #function)
             }
-        }
-    }
-
-    var showedAccountPromptAtStartup: Bool {
-        get {
-            return defaults.bool(forKey: #function)
-        }
-        set {
-            defaults.set(newValue, forKey: #function)
         }
     }
 
