@@ -5,7 +5,7 @@ github "ReactiveX/RxSwift" ~> 5.0
 github "realm/realm-cocoa" ~> 3.14.0
 github "RxSwiftCommunity/RxRealm" ~> 1.0
 
-github "bustoutsolutions/siesta" ~> 1.0
+github "bustoutsolutions/siesta" ~> 1.5.1
 
 github "sparkle-project/Sparkle" ~> 1.17
 
