@@ -44,8 +44,7 @@ public final class SyncEngine {
         self.client = client
         self.transcriptIndexingClient = TranscriptIndexingClient(
             language: transcriptLanguage,
-            storage: storage,
-            appleClient: client
+            storage: storage
         )
 
         #if ICLOUD

@@ -27,7 +27,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
     private let storage: Storage
     private let appleClient: AppleAPIClient
 
-    init(language: String, storage: Storage, appleClient: AppleAPIClient) {
+    init(language: String, storage: Storage, appleClient: AppleAPIClient = AppleAPIClient(environment: .current)) {
         self.transcriptLanguage = language
         self.storage = storage
         self.appleClient = appleClient
