@@ -306,6 +306,34 @@ public final class Storage {
         }, disableAutorefresh: true, completionBlock: completion)
     }
 
+    internal func store(configResult: Result<ConfigResponse, APIError>, completion: @escaping (Error?) -> Void) {
+        let response: ConfigResponse
+
+        do {
+            response = try configResult.get()
+        } catch {
+            os_log("Error downloading config:\n%{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
+            completion(error)
+            return
+        }
+
+        guard let hero = response.eventHero else {
+            os_log("Config response didn't contain an event hero", log: self.log, type: .debug)
+            return
+        }
+
+        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+            // We currently only care about whatever the latest event hero is.
+            let existingHeroData = backgroundRealm.objects(EventHero.self)
+            backgroundRealm.delete(existingHeroData)
+
+            backgroundRealm.add(hero, update: .all)
+        }, disableAutorefresh: false, completionBlock: completion)
+    }
+
     /// Performs a write transaction in the background
     ///
     /// - Parameters:
@@ -485,6 +513,12 @@ public final class Storage {
 
             return Observable.collection(from: sections)
         }
+    }()
+
+    public lazy var eventHeroObservable: Observable<EventHero?> = {
+        let hero = self.realm.objects(EventHero.self)
+
+        return Observable.collection(from: hero).map { $0.first }
     }()
 
     public func asset(with remoteURL: URL) -> SessionAsset? {

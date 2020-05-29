@@ -62,8 +62,8 @@ public final class AppleAPIClient {
             return result
         }
 
-        service.configureTransformer(environment.configPath) { (entity: Entity<Data>) throws -> RootConfig? in
-            return try decoder.decode(RootConfig.self, from: entity.content)
+        service.configureTransformer(environment.configPath) { (entity: Entity<Data>) throws -> ConfigResponse? in
+            return try decoder.decode(ConfigResponse.self, from: entity.content)
         }
 
         service.configureTransformer(environment.sessionsPath) { (entity: Entity<Data>) throws -> ContentsResponse? in
@@ -184,7 +184,7 @@ public final class AppleAPIClient {
         currentFeaturedSectionsRequest = featuredSectionsResource.loadIfNeeded()
     }
 
-    public func fetchConfig(completion: @escaping (Result<RootConfig, APIError>) -> Void) {
+    public func fetchConfig(completion: @escaping (Result<ConfigResponse, APIError>) -> Void) {
         if configResource == nil {
             configResource = config.addObserver(owner: self) { [weak self] resource, event in
                 self?.process(resource, event: event, with: completion)

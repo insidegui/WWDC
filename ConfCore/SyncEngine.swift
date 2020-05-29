@@ -44,8 +44,7 @@ public final class SyncEngine {
         self.client = client
         self.transcriptIndexingClient = TranscriptIndexingClient(
             language: transcriptLanguage,
-            storage: storage,
-            appleClient: client
+            storage: storage
         )
 
         #if ICLOUD
@@ -90,6 +89,14 @@ public final class SyncEngine {
                 self?.storage.store(featuredSectionsResult: result) { error in
                     NotificationCenter.default.post(name: .SyncEngineDidSyncFeaturedSections, object: error)
                 }
+            }
+        }
+    }
+
+    public func syncConfiguration() {
+        client.fetchConfig { [weak self] result in
+            DispatchQueue.main.async {
+                self?.storage.store(configResult: result, completion: { _ in })
             }
         }
     }

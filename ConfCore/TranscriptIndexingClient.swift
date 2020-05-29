@@ -27,7 +27,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
     private let storage: Storage
     private let appleClient: AppleAPIClient
 
-    init(language: String, storage: Storage, appleClient: AppleAPIClient) {
+    init(language: String, storage: Storage, appleClient: AppleAPIClient = AppleAPIClient(environment: .current)) {
         self.transcriptLanguage = language
         self.storage = storage
         self.appleClient = appleClient
@@ -90,11 +90,11 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
         }
     }
 
-    private func doStartTranscriptIndexing(with config: RootConfig, ignoringCache ignoreCache: Bool) {
+    private func doStartTranscriptIndexing(with config: ConfigResponse, ignoringCache ignoreCache: Bool) {
         os_log("%{public}@", log: log, type: .debug, #function)
 
-        guard let feeds = config.feeds[transcriptLanguage] ?? config.feeds[RootConfig.fallbackFeedLanguage] else {
-            os_log("No feeds found for currently set language (%@) or fallback language (%@)", log: self.log, type: .error, transcriptLanguage, RootConfig.fallbackFeedLanguage)
+        guard let feeds = config.feeds[transcriptLanguage] ?? config.feeds[ConfigResponse.fallbackFeedLanguage] else {
+            os_log("No feeds found for currently set language (%@) or fallback language (%@)", log: self.log, type: .error, transcriptLanguage, ConfigResponse.fallbackFeedLanguage)
             return
         }
 
