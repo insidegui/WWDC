@@ -8,8 +8,6 @@
 
 @import Cocoa;
 
-#import "WWDCAppearance.h"
-
 int main(int argc, const char **argv) {
     return NSApplicationMain(argc, argv);
 }

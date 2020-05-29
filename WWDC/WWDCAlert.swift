@@ -13,17 +13,11 @@ final class WWDCAlert {
     static func show(with error: Error) {
         let alert = NSAlert(error: error)
 
-        alert.window.appearance = WWDCAppearance.appearance()
-
         alert.runModal()
     }
 
     static func create() -> NSAlert {
-        let alert = NSAlert()
-
-        alert.window.appearance = WWDCAppearance.appearance()
-
-        return alert
+        NSAlert()
     }
 
 }

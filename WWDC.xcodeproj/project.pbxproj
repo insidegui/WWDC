@@ -106,6 +106,7 @@
 		DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2906248000AA00A58370 /* FullBleedImageView.swift */; };
 		DD7E290924800D0300A58370 /* schedule-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD7E290824800D0300A58370 /* schedule-placeholder.png */; };
 		DD7E293E2481758200A58370 /* NSCodingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E293D2481758200A58370 /* NSCodingExtensions.swift */; };
+		DD7E29442481821000A58370 /* NSFont+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E29432481821000A58370 /* NSFont+Rounded.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
@@ -188,7 +189,6 @@
 		DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC927FD20B7A259004C784D /* NSImage+Compression.swift */; };
 		DDC970BF209291630072B822 /* PUITouchBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC970BE209291630072B822 /* PUITouchBarController.swift */; };
 		DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */; };
-		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
 		DDD1C9CB20B1EA2400902B1C /* FavoriteSyncObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1C9CA20B1EA2400902B1C /* FavoriteSyncObject.swift */; };
 		DDD1C9CE20B1EC9B00902B1C /* UserDataSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1C9CD20B1EC9B00902B1C /* UserDataSyncEngine.swift */; };
@@ -287,7 +287,6 @@
 		DDF721E11ECA12A40054C503 /* PUITimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C61ECA12A40054C503 /* PUITimelineView.swift */; };
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
-		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
 		DDFD618F247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */; };
 		DDFD6191247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */; };
 		DDFD6194247EE21900AD1CD7 /* TranscriptIndexingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */; };
@@ -511,6 +510,8 @@
 		DD7E2906248000AA00A58370 /* FullBleedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBleedImageView.swift; sourceTree = "<group>"; };
 		DD7E290824800D0300A58370 /* schedule-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-placeholder.png"; sourceTree = "<group>"; };
 		DD7E293D2481758200A58370 /* NSCodingExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCodingExtensions.swift; sourceTree = "<group>"; };
+		DD7E29432481821000A58370 /* NSFont+Rounded.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSFont+Rounded.swift"; sourceTree = "<group>"; };
+		DD7E29452481B6EA00A58370 /* NSColor+Accent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSColor+Accent.h"; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTabViewController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
@@ -588,8 +589,6 @@
 		DDC970BE209291630072B822 /* PUITouchBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUITouchBarController.swift; sourceTree = "<group>"; };
 		DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
-		DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWDCAppearance.h; sourceTree = "<group>"; };
-		DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWDCAppearance.m; sourceTree = "<group>"; };
 		DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DDD1C9CA20B1EA2400902B1C /* FavoriteSyncObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSyncObject.swift; sourceTree = "<group>"; };
 		DDD1C9CD20B1EC9B00902B1C /* UserDataSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSyncEngine.swift; sourceTree = "<group>"; };
@@ -689,7 +688,6 @@
 		DDF721C61ECA12A40054C503 /* PUITimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineView.swift; sourceTree = "<group>"; };
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
-		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
 		DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingServiceProtocol.swift; sourceTree = "<group>"; };
 		DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingClientProtocol.swift; sourceTree = "<group>"; };
 		DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingClient.swift; sourceTree = "<group>"; };
@@ -1177,6 +1175,7 @@
 				DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */,
 				DDDAA40B1EC798B600DF9D02 /* Preferences.swift */,
 				DDC927FD20B7A259004C784D /* NSImage+Compression.swift */,
+				DD7E29432481821000A58370 /* NSFont+Rounded.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -1347,13 +1346,11 @@
 		DDCE7ECE1EA7A1A600C7A3CA /* Look */ = {
 			isa = PBXGroup;
 			children = (
-				DDFA10C51EBFA578001DCF66 /* WWDC.car */,
 				DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */,
-				DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */,
-				DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */,
 				DD7F38701EABF6C4002D8C00 /* Colors.swift */,
 				DD7F38751EABFB20002D8C00 /* NSColor+Hex.swift */,
 				DDD930701ED4EF1F00D61BE3 /* Fonts.swift */,
+				DD7E29452481B6EA00A58370 /* NSColor+Accent.h */,
 			);
 			name = Look;
 			sourceTree = "<group>";
@@ -1934,7 +1931,6 @@
 			files = (
 				DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */,
 				DD7E290924800D0300A58370 /* schedule-placeholder.png in Resources */,
-				DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */,
 				DDC6781D1EDB638400A4E19C /* Preferences.storyboard in Resources */,
 				DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */,
 				DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */,
@@ -2060,7 +2056,6 @@
 				DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */,
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
 				DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */,
-				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
 				DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
 				DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */,
@@ -2083,6 +2078,7 @@
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
+				DD7E29442481821000A58370 /* NSFont+Rounded.swift in Sources */,
 				4D4D80C4217D281D00D1C233 /* DownloadViewModel.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
 				4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */,

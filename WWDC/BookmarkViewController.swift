@@ -102,7 +102,6 @@ final class BookmarkViewController: NSViewController {
     override func loadView() {
         view = NSView()
         view.wantsLayer = true
-        view.appearance = WWDCAppearance.appearance()
 
         scrollView.hasVerticalScroller = true
         scrollView.hasHorizontalScroller = false

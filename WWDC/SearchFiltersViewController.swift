@@ -156,10 +156,6 @@ final class SearchFiltersViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(OSX 10.14, *) {
-            vfxView.appearance = WWDCAppearance.appearance()
-        }
-
         setFilters(hidden: true)
 
         updateUI()
