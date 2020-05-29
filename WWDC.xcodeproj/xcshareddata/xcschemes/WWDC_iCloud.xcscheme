@@ -130,8 +130,8 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "2017-06-05T10:00:00-07:00"
-            isEnabled = "NO">
+            argument = "2019-06-03T10:00:00-07:00"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

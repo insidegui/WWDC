@@ -35,8 +35,9 @@ final class SessionCollectionViewItem: NSCollectionViewItem {
         view.addSubview(cellView)
 
         cellView.layer?.masksToBounds = true
-        cellView.layer?.backgroundColor = NSColor.darkGridColor.cgColor
-        cellView.layer?.cornerRadius = 5
+        cellView.layer?.backgroundColor = NSColor.roundedCellBackground.cgColor
+        cellView.layer?.cornerRadius = 6
+        cellView.layer?.cornerCurve = .continuous
 
         let click = NSClickGestureRecognizer(target: self, action: #selector(clickRecognized))
         view.addGestureRecognizer(click)

@@ -52,6 +52,10 @@ import Cocoa
 
     static let darkWindowBackground = NSColor.black
 
+    static let contentBackground = NSColor(named: "contentBackgroundColor")!
+
+    static let roundedCellBackground = NSColor(named: "roundedCellBackgroundColor")!
+
     static let darkTitlebarBackground = NSColor(calibratedRed: 0.06, green: 0.06, blue: 0.06, alpha: 1.00)
 
     static let prefsPrimaryText = NSColor(calibratedRed: 0.90, green: 0.90, blue: 0.90, alpha: 1.00)

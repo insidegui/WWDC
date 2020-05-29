@@ -61,7 +61,7 @@ final class RelatedSessionsViewController: NSViewController {
         l.maximumNumberOfLines = 1
         l.translatesAutoresizingMaskIntoConstraints = false
         l.textColor = .secondaryText
-        l.font = .systemFont(ofSize: 20, weight: .semibold)
+        l.font = .wwdcRoundedSystemFont(ofSize: 20, weight: .semibold)
 
         return l
     }()

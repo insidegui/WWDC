@@ -38,8 +38,6 @@ class SessionSummaryViewController: NSViewController {
         l.maximumNumberOfLines = 2
         l.translatesAutoresizingMaskIntoConstraints = false
         l.isSelectable = true
-        // This prevents the text field from stripping attributes
-        // during selection. 
         l.allowsEditingTextAttributes = true
 
         return l
@@ -62,16 +60,20 @@ class SessionSummaryViewController: NSViewController {
         return c
     }()
 
+    private func attributedSummaryString(from string: String) -> NSAttributedString {
+        .create(with: string, font: .systemFont(ofSize: 15), color: .secondaryText, lineHeightMultiple: 1.2)
+    }
+
     private lazy var summaryLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
-        l.font = .systemFont(ofSize: 18)
-        l.textColor = .secondaryText
+
         l.cell?.backgroundStyle = .dark
-        l.isSelectable = true
         l.lineBreakMode = .byWordWrapping
         l.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         l.allowsDefaultTighteningForTruncation = true
         l.maximumNumberOfLines = 20
+        l.isSelectable = true
+        l.allowsEditingTextAttributes = true
 
         return l
     }()
@@ -170,8 +172,12 @@ class SessionSummaryViewController: NSViewController {
         viewModel.rxTitle.map(NSAttributedString.attributedBoldTitle(with:)).subscribe(onNext: { [weak self] title in
             self?.titleLabel.attributedStringValue = title
         }).disposed(by: disposeBag)
-        viewModel.rxSummary.bind(to: summaryLabel.rx.text).disposed(by: disposeBag)
         viewModel.rxFooter.bind(to: contextLabel.rx.text).disposed(by: disposeBag)
+
+        viewModel.rxSummary.subscribe(onNext: { [weak self] summary in
+            guard let self = self else { return }
+            self.summaryLabel.attributedStringValue = self.attributedSummaryString(from: summary)
+        }).disposed(by: disposeBag)
 
         viewModel.rxRelatedSessions.subscribe(onNext: { [weak self] relatedResources in
             let relatedSessions = relatedResources.compactMap({ $0.session })
