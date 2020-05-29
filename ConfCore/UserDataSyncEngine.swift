@@ -340,12 +340,17 @@ public final class UserDataSyncEngine {
         get {
             guard let data = defaults.data(forKey: #function) else { return nil }
 
-            guard let token = NSKeyedUnarchiver.unarchiveObject(with: data) as? CKServerChangeToken else {
-                os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken", log: log, type: .error)
+            do {
+                guard let token = try NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data) else {
+                    os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken", log: log, type: .error)
+                    return nil
+                }
+
+                return token
+            } catch {
+                os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken: %{public}@", log: self.log, type: .fault, String(describing: error))
                 return nil
             }
-
-            return token
         }
         set {
             guard let newValue = newValue else {
@@ -353,7 +358,7 @@ public final class UserDataSyncEngine {
                 return
             }
 
-            let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
+            let data = NSKeyedArchiver.archiveData(with: newValue, secure: true)
             defaults.set(data, forKey: #function)
         }
     }
@@ -361,11 +366,17 @@ public final class UserDataSyncEngine {
     private func fetchChanges() {
         var changedRecords: [CKRecord] = []
 
-        let options = CKFetchRecordZoneChangesOperation.ZoneOptions()
-        options.previousServerChangeToken = privateChangeToken
+        let operation = CKFetchRecordZoneChangesOperation()
 
-        let operation = CKFetchRecordZoneChangesOperation(recordZoneIDs: [customZoneID], optionsByRecordZoneID: [customZoneID: options])
+        let config = CKFetchRecordZoneChangesOperation.ZoneConfiguration(
+            previousServerChangeToken: privateChangeToken,
+            resultsLimit: nil,
+            desiredKeys: nil
+        )
+
+        operation.recordZoneIDs = [customZoneID]
         operation.fetchAllChanges = privateChangeToken == nil
+        operation.configurationsByRecordZoneID = [customZoneID: config]
 
         operation.recordZoneFetchCompletionBlock = { [unowned self] _, token, _, _, error in
             if let error = error {

@@ -105,6 +105,7 @@
 		DD7E2905247FED7200A58370 /* EventHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2904247FED7200A58370 /* EventHero.swift */; };
 		DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2906248000AA00A58370 /* FullBleedImageView.swift */; };
 		DD7E290924800D0300A58370 /* schedule-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD7E290824800D0300A58370 /* schedule-placeholder.png */; };
+		DD7E293E2481758200A58370 /* NSCodingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E293D2481758200A58370 /* NSCodingExtensions.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
@@ -535,6 +536,7 @@
 		DD7E2904247FED7200A58370 /* EventHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHero.swift; sourceTree = "<group>"; };
 		DD7E2906248000AA00A58370 /* FullBleedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBleedImageView.swift; sourceTree = "<group>"; };
 		DD7E290824800D0300A58370 /* schedule-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-placeholder.png"; sourceTree = "<group>"; };
+		DD7E293D2481758200A58370 /* NSCodingExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCodingExtensions.swift; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTabViewController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
@@ -1340,6 +1342,7 @@
 		DDC678151EDB27C100A4E19C /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				DD7E293D2481758200A58370 /* NSCodingExtensions.swift */,
 				DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */,
 				DDEDFCF71EDA33C3002477C8 /* CloudKitHelper.swift */,
 				DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */,
@@ -2323,6 +2326,7 @@
 				DD65FD5B1E48A1080054DD35 /* Focus.swift in Sources */,
 				DDDF805B20B9035C007284F8 /* Bookmark+ConflictResolution.swift in Sources */,
 				DDAE7C581E5C629800CEA205 /* AppleAPIClient.swift in Sources */,
+				DD7E293E2481758200A58370 /* NSCodingExtensions.swift in Sources */,
 				DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */,
 				DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */,
 				DDFD619B247EE56300AD1CD7 /* TranscriptIndexingService.swift in Sources */,
@@ -2653,7 +2657,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2685,7 +2689,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2714,7 +2718,7 @@
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ConfCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2745,7 +2749,7 @@
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ConfCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2874,7 +2878,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 6.2;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
@@ -2905,7 +2909,7 @@
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ConfCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2957,7 +2961,7 @@
 				INFOPLIST_FILE = ThrowBack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ThrowBack;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3042,7 +3046,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 6.2;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
@@ -3072,7 +3076,7 @@
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ConfCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3123,7 +3127,7 @@
 				INFOPLIST_FILE = ThrowBack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ThrowBack;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3149,7 +3153,7 @@
 				);
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3175,7 +3179,7 @@
 				);
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3201,7 +3205,7 @@
 				);
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3226,7 +3230,7 @@
 				);
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3254,7 +3258,7 @@
 				INFOPLIST_FILE = Transcripts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
@@ -3286,7 +3290,7 @@
 				INFOPLIST_FILE = Transcripts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
@@ -3318,7 +3322,7 @@
 				INFOPLIST_FILE = Transcripts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -3349,7 +3353,7 @@
 				INFOPLIST_FILE = Transcripts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -3480,7 +3484,7 @@
 				INFOPLIST_FILE = ThrowBack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ThrowBack;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3512,7 +3516,7 @@
 				INFOPLIST_FILE = ThrowBack/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ThrowBack;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3542,7 +3546,7 @@
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.PlayerUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3572,7 +3576,7 @@
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.PlayerUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3602,7 +3606,7 @@
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.PlayerUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3632,7 +3636,7 @@
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.PlayerUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

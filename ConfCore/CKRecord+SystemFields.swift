@@ -12,13 +12,11 @@ import CloudKit
 extension CKRecord {
 
     var encodedSystemFields: Data {
-        let data = NSMutableData()
-        let coder = NSKeyedArchiver.init(forWritingWith: data)
-        coder.requiresSecureCoding = true
+        let coder = NSKeyedArchiver(requiringSecureCoding: true)
         encodeSystemFields(with: coder)
         coder.finishEncoding()
 
-        return data as Data
+        return coder.encodedData
     }
 
 }
