@@ -2,23 +2,21 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "share.png",
       "scale" : "1x"
     },
     {
+      "filename" : "share.png",
       "idiom" : "universal",
-      "filename" : "share@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "share@3x.png",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   },
   "properties" : {
     "template-rendering-intent" : "template"
