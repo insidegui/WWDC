@@ -215,6 +215,9 @@ final class SearchFiltersViewController: NSViewController {
         delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
 
         effectiveFilters = updatedFilters
+
+        NSPasteboard(name: .find).clearContents()
+        NSPasteboard(name: .find).setString(text, forType: .string)
     }
 
     private func popUpButton(for filter: MultipleChoiceFilter) -> NSPopUpButton? {

@@ -98,9 +98,16 @@ final class TranscriptSearchController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        searchField.rx.text.throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-                           .bind(to: searchTerm)
-                           .disposed(by: disposeBag)
+        let throttledSearch = searchField.rx.text.throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+
+        throttledSearch.bind(to: searchTerm)
+                       .disposed(by: disposeBag)
+
+        // The skip(1) prevents us from clearing the search pasteboard on initial binding.
+        throttledSearch.skip(1).ignoreNil().subscribe(onNext: { term in
+            NSPasteboard(name: .find).clearContents()
+            NSPasteboard(name: .find).setString(term, forType: .string)
+        }).disposed(by: disposeBag)
     }
 
     @objc private func openInNewWindow() {
@@ -110,6 +117,18 @@ final class TranscriptSearchController: NSViewController {
     private func updateStyle() {
         widthConstraint.isActive = style == .corner
         view.layer?.cornerRadius = style == .corner ? 6 : 0
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+
+        guard let pasteboardTerm = NSPasteboard(name: .find).string(forType: .string),
+            pasteboardTerm != searchTerm.value else {
+            return
+        }
+
+        searchField.stringValue = pasteboardTerm
+        searchTerm.accept(pasteboardTerm)
     }
     
 }
