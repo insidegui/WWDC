@@ -433,15 +433,23 @@ public final class UserDataSyncEngine {
         return recordTypesToRealmModels[recordType]
     }
 
-    private func performRealmOperations(with block: (Realm) -> Void) {
-        storage.realm.beginWrite()
+    private func performRealmOperations(with block: @escaping (Realm) -> Void) {
+        let config = storage.realm.configuration
 
-        block(storage.realm)
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
 
-        do {
-            try storage.realm.commitWrite(withoutNotifying: realmNotificationTokens)
-        } catch {
-            os_log("Failed to perform Realm transaction: %{public}@", log: self.log, type: .error, String(describing: error))
+            do {
+                let queueRealm = try Realm(configuration: config)
+
+                queueRealm.beginWrite()
+
+                block(queueRealm)
+
+                try queueRealm.commitWrite()
+            } catch {
+                os_log("Failed to perform Realm transaction: %{public}@", log: self.log, type: .error, String(describing: error))
+            }
         }
     }
 
@@ -453,15 +461,17 @@ public final class UserDataSyncEngine {
 
         os_log("Will commit %{public}d changed record(s) to the database", log: log, type: .info, records.count)
 
-        performRealmOperations { realm in
+        performRealmOperations { [weak self] queueRealm in
+            guard let self = self else { return }
+
             records.forEach { record in
                 switch record.recordType {
                 case RecordTypes.favorite:
-                    self.commit(objectType: Favorite.self, with: record, in: realm)
+                    self.commit(objectType: Favorite.self, with: record, in: queueRealm)
                 case RecordTypes.bookmark:
-                    self.commit(objectType: Bookmark.self, with: record, in: realm)
+                    self.commit(objectType: Bookmark.self, with: record, in: queueRealm)
                 case RecordTypes.sessionProgress:
-                    self.commit(objectType: SessionProgress.self, with: record, in: realm)
+                    self.commit(objectType: SessionProgress.self, with: record, in: queueRealm)
                 default:
                     os_log("Unknown record type %{public}@", log: self.log, type: .fault, record.recordType)
                 }
@@ -615,11 +625,13 @@ public final class UserDataSyncEngine {
     }
 
     private func updateDatabaseModelsSystemFieldsAfterUpload(with records: [CKRecord]) {
-        performRealmOperations { realm in
+        performRealmOperations { [weak self] realm in
+            guard let self = self else { return }
+
             records.forEach { record in
-                guard let modelType = realmModel(for: record.recordType) else {
+                guard let modelType = self.realmModel(for: record.recordType) else {
                     os_log("There's no corresponding Realm model type for record type %{public}@",
-                           log: log,
+                           log: self.log,
                            type: .error,
                            record.recordType)
                     return
@@ -627,7 +639,7 @@ public final class UserDataSyncEngine {
 
                 guard var object = realm.object(ofType: modelType, forPrimaryKey: record.recordID.recordName) as? HasCloudKitFields else {
                     os_log("Unable to find record type %{public}@ with primary key %{public}@ for update after sync upload",
-                           log: log,
+                           log: self.log,
                            type: .error,
                            record.recordType,
                            record.recordID.recordName)
@@ -636,7 +648,7 @@ public final class UserDataSyncEngine {
 
                 object.ckFields = record.encodedSystemFields
 
-                os_log("Updated ckFields in record of type %{public}@", log: log, type: .debug, record.recordType)
+                os_log("Updated ckFields in record of type %{public}@", log: self.log, type: .debug, record.recordType)
             }
         }
     }
@@ -686,9 +698,15 @@ public final class UserDataSyncEngine {
 
                 DispatchQueue.main.async {
                     // Actually delete previously soft-deleted items from the database
-                    self.performRealmOperations { realm in
-                        deletedFavorites.forEach(realm.delete)
-                        deletedBookmarks.forEach(realm.delete)
+                    let deletedFavoriteObjIDs = deletedFavorites.toArray().map(\.identifier)
+                    let deletedBookmarkObjIDs = deletedBookmarks.toArray().map(\.identifier)
+
+                    self.performRealmOperations { queueRealm in
+                        let favoriteObjs = deletedFavoriteObjIDs.compactMap { queueRealm.object(ofType: Favorite.self, forPrimaryKey: $0) }
+                        let bookmarkObjs = deletedBookmarkObjIDs.compactMap { queueRealm.object(ofType: Bookmark.self, forPrimaryKey: $0) }
+
+                        favoriteObjs.forEach(queueRealm.delete)
+                        bookmarkObjs.forEach(queueRealm.delete)
                     }
                 }
             }
