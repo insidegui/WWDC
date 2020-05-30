@@ -32,7 +32,7 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
 
     struct Metrics {
         static let width: CGFloat = 340
-        static let height: CGFloat = 252
+        static let height: CGFloat = 264
         static let imageAspectRatio: CGFloat = 9 / 16
     }
 
@@ -53,7 +53,8 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
         aspectRatioConstraint.priority = NSLayoutConstraint.Priority(rawValue: 750)
         aspectRatioConstraint.isActive = true
         v.backgroundColor = .black
-
+        v.cornerRadius = 0
+        
         return v
     }()
 
@@ -93,7 +94,7 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
         v.orientation = .vertical
         v.alignment = .leading
         v.distribution = .equalSpacing
-        v.spacing = 0
+        v.spacing = 2
 
         return v
     }()
@@ -134,6 +135,11 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
     }()
 
     private func buildUI() {
+        view.wantsLayer = true
+        view.layer?.cornerCurve = .continuous
+        view.layer?.cornerRadius = 8
+        view.layer?.backgroundColor = NSColor.roundedCellBackground.cgColor
+
         thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
         textStackView.translatesAutoresizingMaskIntoConstraints = false
         iconsStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -147,12 +153,12 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
         thumbnailImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 
         textStackView.topAnchor.constraint(equalTo: thumbnailImageView.bottomAnchor, constant: 10).isActive = true
-        textStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        textStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12).isActive = true
         textStackView.trailingAnchor.constraint(equalTo: iconsStackView.leadingAnchor).isActive = true
 
         iconsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4).isActive = true
         iconsStackView.topAnchor.constraint(equalTo: textStackView.topAnchor).isActive = true
-        iconsStackView.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor).isActive = true
+        iconsStackView.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor, constant: -12).isActive = true
 
         downloadedImageView.isHidden = true
         favoritedImageView.isHidden = true

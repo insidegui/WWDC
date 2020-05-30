@@ -14,19 +14,19 @@ public final class PUIButton: NSControl {
 
     public var activeTintColor: NSColor = .playerHighlight {
         didSet {
-            setNeedsDisplay()
+            setNeedsDisplay(bounds)
         }
     }
 
     public var tintColor: NSColor = .buttonColor {
         didSet {
-            setNeedsDisplay()
+            setNeedsDisplay(bounds)
         }
     }
 
     public var state: NSControl.StateValue = .off {
         didSet {
-            setNeedsDisplay()
+            setNeedsDisplay(bounds)
         }
     }
 
@@ -64,13 +64,13 @@ public final class PUIButton: NSControl {
 
     private var maskImage: CGImage? {
         didSet {
-            setNeedsDisplay()
+            setNeedsDisplay(bounds)
         }
     }
 
     private var alternateMaskImage: CGImage? {
         didSet {
-            setNeedsDisplay()
+            setNeedsDisplay(bounds)
         }
     }
 
@@ -121,19 +121,19 @@ public final class PUIButton: NSControl {
 
     private var shouldDrawHighlighted: Bool = false {
         didSet {
-            setNeedsDisplay()
+            setNeedsDisplay(bounds)
         }
     }
 
     public var shouldAlwaysDrawHighlighted: Bool = false {
         didSet {
-            setNeedsDisplay()
+            setNeedsDisplay(bounds)
         }
     }
 
     public override var isEnabled: Bool {
         didSet {
-            setNeedsDisplay()
+            setNeedsDisplay(bounds)
         }
     }
 

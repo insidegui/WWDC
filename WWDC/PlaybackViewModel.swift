@@ -106,30 +106,34 @@ final class PlaybackViewModel {
         player = AVPlayer(url: finalUrl)
         nowPlayingInfo.accept(PUINowPlayingInfo(playbackViewModel: self))
 
-        if !isLiveStream {
-            if session.isWatched {
-                player.seek(to: CMTimeMakeWithSeconds(0, preferredTimescale: 9000))
-            } else {
-                player.seek(to: CMTimeMakeWithSeconds(Float64(session.currentPosition()), preferredTimescale: 9000))
-            }
+        initializePlayerTimeSyncIfNeeded(with: session)
+    }
 
-            timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, preferredTimescale: 9000), queue: DispatchQueue.main) { [weak self] currentTime in
-                guard let self = self else { return }
+    private func initializePlayerTimeSyncIfNeeded(with session: Session) {
+        guard !isLiveStream else { return }
 
-                guard let duration = self.player.currentItem?.asset.durationIfLoaded else { return }
+        if session.isWatched {
+            player.seek(to: CMTimeMakeWithSeconds(0, preferredTimescale: 9000))
+        } else {
+            player.seek(to: CMTimeMakeWithSeconds(Float64(session.currentPosition()), preferredTimescale: 9000))
+        }
 
-                guard CMTIME_IS_VALID(duration) else { return }
+        timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(5, preferredTimescale: 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+            guard let self = self else { return }
 
-                let p = Double(CMTimeGetSeconds(currentTime))
-                let d = Double(CMTimeGetSeconds(duration))
+            guard let duration = self.player.currentItem?.asset.durationIfLoaded else { return }
 
-                self.sessionViewModel.session.setCurrentPosition(p, d)
+            guard CMTIME_IS_VALID(duration) else { return }
 
-                if !d.isZero {
-                    if var nowPlayingInfo = self.nowPlayingInfo.value {
-                        nowPlayingInfo.progress = p / d
-                        self.nowPlayingInfo.accept(nowPlayingInfo)
-                    }
+            let p = Double(CMTimeGetSeconds(currentTime))
+            let d = Double(CMTimeGetSeconds(duration))
+
+            self.sessionViewModel.session.setCurrentPosition(p, d)
+
+            if !d.isZero {
+                if var nowPlayingInfo = self.nowPlayingInfo.value {
+                    nowPlayingInfo.progress = p / d
+                    self.nowPlayingInfo.accept(nowPlayingInfo)
                 }
             }
         }

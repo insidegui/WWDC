@@ -11,8 +11,8 @@ import RealmSwift
 import CloudKit
 import CloudKitCodable
 
-typealias SynchronizableRealmObject = Object & SyncObjectConvertible & SoftDeletable
-typealias SoftDeletableRealmObjectWithCloudKitFields = Object & HasCloudKitFields & SoftDeletable
+typealias SynchronizableObject = Object & SyncObjectConvertible & SoftDeletable
+typealias SoftDeletableSynchronizableObject = Object & HasCloudKitFields & SoftDeletable
 
 public protocol HasCloudKitFields {
     var ckFields: Data { get set }
@@ -44,8 +44,9 @@ extension HasCloudKitFields {
     public var ckRecordID: CKRecord.ID? {
         guard !ckFields.isEmpty else { return nil }
 
-        let coder = NSKeyedUnarchiver(forReadingWith: ckFields)
+        guard let coder = try? NSKeyedUnarchiver(forReadingFrom: ckFields) else { return nil }
         coder.requiresSecureCoding = true
+
         let metaRecord = CKRecord(coder: coder)
         coder.finishDecoding()
 

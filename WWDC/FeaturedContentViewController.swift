@@ -35,7 +35,7 @@ final class FeaturedContentViewController: NSViewController {
         v.autoresizingMask = [.width, .height]
         v.contentView = FlippedClipView()
         v.hasVerticalScroller = true
-        v.backgroundColor = .listBackground
+        v.backgroundColor = .contentBackground
         v.autohidesScrollers = true
         v.horizontalScrollElasticity = .none
         v.automaticallyAdjustsContentInsets = false

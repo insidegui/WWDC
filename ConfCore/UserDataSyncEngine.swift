@@ -309,7 +309,7 @@ public final class UserDataSyncEngine {
         clearCloudKitFields(for: Bookmark.self)
     }
 
-    private func clearCloudKitFields<T: SynchronizableRealmObject>(for objectType: T.Type) {
+    private func clearCloudKitFields<T: SynchronizableObject>(for objectType: T.Type) {
         performRealmOperations { realm in
             realm.objects(objectType).forEach { model in
                 var mutableModel = model
@@ -340,12 +340,17 @@ public final class UserDataSyncEngine {
         get {
             guard let data = defaults.data(forKey: #function) else { return nil }
 
-            guard let token = NSKeyedUnarchiver.unarchiveObject(with: data) as? CKServerChangeToken else {
-                os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken", log: log, type: .error)
+            do {
+                guard let token = try NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data) else {
+                    os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken", log: log, type: .error)
+                    return nil
+                }
+
+                return token
+            } catch {
+                os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken: %{public}@", log: self.log, type: .fault, String(describing: error))
                 return nil
             }
-
-            return token
         }
         set {
             guard let newValue = newValue else {
@@ -353,7 +358,7 @@ public final class UserDataSyncEngine {
                 return
             }
 
-            let data = NSKeyedArchiver.archivedData(withRootObject: newValue)
+            let data = NSKeyedArchiver.archiveData(with: newValue, secure: true)
             defaults.set(data, forKey: #function)
         }
     }
@@ -361,11 +366,17 @@ public final class UserDataSyncEngine {
     private func fetchChanges() {
         var changedRecords: [CKRecord] = []
 
-        let options = CKFetchRecordZoneChangesOperation.ZoneOptions()
-        options.previousServerChangeToken = privateChangeToken
+        let operation = CKFetchRecordZoneChangesOperation()
 
-        let operation = CKFetchRecordZoneChangesOperation(recordZoneIDs: [customZoneID], optionsByRecordZoneID: [customZoneID: options])
+        let config = CKFetchRecordZoneChangesOperation.ZoneConfiguration(
+            previousServerChangeToken: privateChangeToken,
+            resultsLimit: nil,
+            desiredKeys: nil
+        )
+
+        operation.recordZoneIDs = [customZoneID]
         operation.fetchAllChanges = privateChangeToken == nil
+        operation.configurationsByRecordZoneID = [customZoneID: config]
 
         operation.recordZoneFetchCompletionBlock = { [unowned self] _, token, _, _, error in
             if let error = error {
@@ -410,7 +421,7 @@ public final class UserDataSyncEngine {
         static let sessionProgress = "SessionProgressSyncObject"
     }
 
-    private var recordTypesToRealmModels: [String: SoftDeletableRealmObjectWithCloudKitFields.Type] = [
+    private var recordTypesToRealmModels: [String: SoftDeletableSynchronizableObject.Type] = [
         RecordTypes.favorite: Favorite.self,
         RecordTypes.bookmark: Bookmark.self,
         RecordTypes.sessionProgress: SessionProgress.self
@@ -418,7 +429,7 @@ public final class UserDataSyncEngine {
 
     private var recordTypesToLastSyncDates: [String: Date] = [:]
 
-    private func realmModel(for recordType: String) -> SoftDeletableRealmObjectWithCloudKitFields.Type? {
+    private func realmModel(for recordType: String) -> SoftDeletableSynchronizableObject.Type? {
         return recordTypesToRealmModels[recordType]
     }
 
@@ -458,7 +469,7 @@ public final class UserDataSyncEngine {
         }
     }
 
-    private func commit<T: SynchronizableRealmObject>(objectType: T.Type, with record: CKRecord, in realm: Realm) {
+    private func commit<T: SynchronizableObject>(objectType: T.Type, with record: CKRecord, in realm: Realm) {
         do {
             let obj = try CloudKitRecordDecoder().decode(objectType.SyncObject.self, from: record)
             let model = objectType.from(syncObject: obj)
@@ -493,7 +504,7 @@ public final class UserDataSyncEngine {
         registerRealmObserver(for: SessionProgress.self)
     }
 
-    private func registerRealmObserver<T: SynchronizableRealmObject>(for objectType: T.Type) {
+    private func registerRealmObserver<T: SynchronizableObject>(for objectType: T.Type) {
         let token = storage.realm.objects(objectType).observe { [unowned self] change in
             switch change {
             case .error(let error):
@@ -512,7 +523,7 @@ public final class UserDataSyncEngine {
         realmNotificationTokens.append(token)
     }
 
-    private func upload<T: SynchronizableRealmObject>(models: [T]) {
+    private func upload<T: SynchronizableObject>(models: [T]) {
         guard models.count > 0 else { return }
 
         os_log("Upload models. Count = %{public}d", log: log, type: .info, models.count)
@@ -638,7 +649,7 @@ public final class UserDataSyncEngine {
         uploadLocalModelsNotUploadedYet(of: SessionProgress.self)
     }
 
-    private func uploadLocalModelsNotUploadedYet<T: SynchronizableRealmObject>(of objectType: T.Type) {
+    private func uploadLocalModelsNotUploadedYet<T: SynchronizableObject>(of objectType: T.Type) {
         let objects = storage.realm.objects(objectType).toArray().filter({ $0.ckFields.count == 0 && !$0.isDeleted })
 
         upload(models: objects)

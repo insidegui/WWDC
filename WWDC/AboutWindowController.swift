@@ -50,8 +50,6 @@ final class AboutWindowController: NSWindowController {
         window?.titlebarAppearsTransparent = true
         window?.titleVisibility = .hidden
 
-        window?.appearance = WWDCAppearance.appearance()
-
         guard let info = Bundle.main.infoDictionary else { return }
 
         configureUIFor(infoDictionary: info)

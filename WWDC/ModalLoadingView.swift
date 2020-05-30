@@ -14,7 +14,6 @@ class ModalLoadingView: NSView {
         let v = NSVisualEffectView()
 
         v.material = .ultraDark
-        v.appearance = WWDCAppearance.appearance()
         v.blendingMode = .withinWindow
         v.translatesAutoresizingMaskIntoConstraints = false
         v.state = .active

@@ -35,7 +35,7 @@ public final class EventHeroViewController: NSViewController {
     private lazy var titleLabel: NSTextField = {
         let l = NSTextField(wrappingLabelWithString: "")
 
-        l.font = NSFont.systemFont(ofSize: 24, weight: .medium)
+        l.font = .boldTitleFont
         l.textColor = .primaryText
         l.alignment = .center
 

@@ -105,6 +105,8 @@
 		DD7E2905247FED7200A58370 /* EventHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2904247FED7200A58370 /* EventHero.swift */; };
 		DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2906248000AA00A58370 /* FullBleedImageView.swift */; };
 		DD7E290924800D0300A58370 /* schedule-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD7E290824800D0300A58370 /* schedule-placeholder.png */; };
+		DD7E293E2481758200A58370 /* NSCodingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E293D2481758200A58370 /* NSCodingExtensions.swift */; };
+		DD7E29442481821000A58370 /* NSFont+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E29432481821000A58370 /* NSFont+Rounded.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
@@ -152,8 +154,6 @@
 		DDB3529C1EC8AB5D00254815 /* WWDCLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3529B1EC8AB5D00254815 /* WWDCLayer.swift */; };
 		DDB3529E1EC8D8CD00254815 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB3529D1EC8D8CD00254815 /* main.m */; };
 		DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3529F1EC9088000254815 /* WWDCTableView.swift */; };
-		DDB352A51EC90ACA00254815 /* TBProphylaxis.h in Headers */ = {isa = PBXBuildFile; fileRef = DDB352A31EC90ACA00254815 /* TBProphylaxis.h */; };
-		DDB352A61EC90ACA00254815 /* TBProphylaxis.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB352A41EC90ACA00254815 /* TBProphylaxis.m */; };
 		DDBA0D79208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */; };
 		DDBA0D7B208D3DE70075670F /* PUINowPlayingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */; };
 		DDBCEC83228AC9C5009300CF /* ChromeCastCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -189,7 +189,6 @@
 		DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC927FD20B7A259004C784D /* NSImage+Compression.swift */; };
 		DDC970BF209291630072B822 /* PUITouchBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC970BE209291630072B822 /* PUITouchBarController.swift */; };
 		DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */; };
-		DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */; };
 		DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */; };
 		DDD1C9CB20B1EA2400902B1C /* FavoriteSyncObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1C9CA20B1EA2400902B1C /* FavoriteSyncObject.swift */; };
 		DDD1C9CE20B1EC9B00902B1C /* UserDataSyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1C9CD20B1EC9B00902B1C /* UserDataSyncEngine.swift */; };
@@ -222,15 +221,6 @@
 		DDD930731ED52B2900D61BE3 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930721ED52B2900D61BE3 /* Download.swift */; };
 		DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */; };
 		DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */; };
-		DDDAA3F21EC7653300DF9D02 /* ThrowBack.h in Headers */ = {isa = PBXBuildFile; fileRef = DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DDDAA3F51EC7653300DF9D02 /* ThrowBack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */; };
-		DDDAA3F61EC7653300DF9D02 /* ThrowBack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		DDDAA3FD1EC765B600DF9D02 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
-		DDDAA3FE1EC765CD00DF9D02 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
-		DDDAA3FF1EC768A100DF9D02 /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
-		DDDAA4021EC768C500DF9D02 /* TBUserDataMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA4011EC768C500DF9D02 /* TBUserDataMigrator.swift */; };
-		DDDAA4071EC76D9300DF9D02 /* TBPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA4061EC76D9300DF9D02 /* TBPreferences.swift */; };
-		DDDAA40A1EC775B500DF9D02 /* TBSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA4091EC775B500DF9D02 /* TBSession.swift */; };
 		DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA40B1EC798B600DF9D02 /* Preferences.swift */; };
 		DDDF805420B8FCBC007284F8 /* Session+Children.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF805320B8FCBC007284F8 /* Session+Children.swift */; };
 		DDDF805620B901F2007284F8 /* Error+CloudKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF805520B901F2007284F8 /* Error+CloudKit.swift */; };
@@ -297,7 +287,6 @@
 		DDF721E11ECA12A40054C503 /* PUITimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C61ECA12A40054C503 /* PUITimelineView.swift */; };
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
-		DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */ = {isa = PBXBuildFile; fileRef = DDFA10C51EBFA578001DCF66 /* WWDC.car */; };
 		DDFD618F247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */; };
 		DDFD6191247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */; };
 		DDFD6194247EE21900AD1CD7 /* TranscriptIndexingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */; };
@@ -322,13 +311,6 @@
 			remoteInfo = WWDC;
 		};
 		DD36A4DB1E478D7E00B2EA88 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DD36A4C71E478D7E00B2EA88;
-			remoteInfo = ConfCore;
-		};
-		DDB352941EC7FFE900254815 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
 			proxyType = 1;
@@ -370,13 +352,6 @@
 			remoteGlobalIDString = DDD684FD247C3B00001BB700;
 			remoteInfo = Transcripts;
 		};
-		DDDAA3F31EC7653300DF9D02 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DDDAA3ED1EC7653200DF9D02;
-			remoteInfo = ThrowBack;
-		};
 		DDF7219B1ECA12780054C503 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
@@ -405,7 +380,6 @@
 				DDBCEC89228AC9C5009300CF /* RxRealm.framework in Embed Frameworks */,
 				DDBCEC8A228AC9C5009300CF /* RxSwift.framework in Embed Frameworks */,
 				DDBCEC8B228AC9C5009300CF /* SwiftyJSON.framework in Embed Frameworks */,
-				DDDAA3F61EC7653300DF9D02 /* ThrowBack.framework in Embed Frameworks */,
 				DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */,
 				DDD68514247C3B00001BB700 /* Transcripts.framework in Embed Frameworks */,
 				DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */,
@@ -535,6 +509,9 @@
 		DD7E2904247FED7200A58370 /* EventHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHero.swift; sourceTree = "<group>"; };
 		DD7E2906248000AA00A58370 /* FullBleedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBleedImageView.swift; sourceTree = "<group>"; };
 		DD7E290824800D0300A58370 /* schedule-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-placeholder.png"; sourceTree = "<group>"; };
+		DD7E293D2481758200A58370 /* NSCodingExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCodingExtensions.swift; sourceTree = "<group>"; };
+		DD7E29432481821000A58370 /* NSFont+Rounded.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSFont+Rounded.swift"; sourceTree = "<group>"; };
+		DD7E29452481B6EA00A58370 /* NSColor+Accent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSColor+Accent.h"; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTabViewController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
@@ -585,8 +562,6 @@
 		DDB3529B1EC8AB5D00254815 /* WWDCLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCLayer.swift; sourceTree = "<group>"; };
 		DDB3529D1EC8D8CD00254815 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DDB3529F1EC9088000254815 /* WWDCTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableView.swift; sourceTree = "<group>"; };
-		DDB352A31EC90ACA00254815 /* TBProphylaxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBProphylaxis.h; sourceTree = "<group>"; };
-		DDB352A41EC90ACA00254815 /* TBProphylaxis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TBProphylaxis.m; sourceTree = "<group>"; };
 		DDBA0D74208CD5430075670F /* SwiftProtobuf.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftProtobuf.framework.dSYM; path = Carthage/Build/Mac/SwiftProtobuf.framework.dSYM; sourceTree = "<group>"; };
 		DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfoCoordinator.swift; sourceTree = "<group>"; };
 		DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfo.swift; sourceTree = "<group>"; };
@@ -614,8 +589,6 @@
 		DDC970BE209291630072B822 /* PUITouchBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUITouchBarController.swift; sourceTree = "<group>"; };
 		DDCE7ECC1EA7A0F800C7A3CA /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
-		DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WWDCAppearance.h; sourceTree = "<group>"; };
-		DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WWDCAppearance.m; sourceTree = "<group>"; };
 		DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		DDD1C9CA20B1EA2400902B1C /* FavoriteSyncObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteSyncObject.swift; sourceTree = "<group>"; };
 		DDD1C9CD20B1EC9B00902B1C /* UserDataSyncEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataSyncEngine.swift; sourceTree = "<group>"; };
@@ -649,12 +622,6 @@
 		DDD930741ED52BD800D61BE3 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
 		DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderMonitor.m; sourceTree = "<group>"; };
 		DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleSection.swift; sourceTree = "<group>"; };
-		DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ThrowBack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThrowBack.h; sourceTree = "<group>"; };
-		DDDAA3F11EC7653300DF9D02 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DDDAA4011EC768C500DF9D02 /* TBUserDataMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBUserDataMigrator.swift; sourceTree = "<group>"; };
-		DDDAA4061EC76D9300DF9D02 /* TBPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBPreferences.swift; sourceTree = "<group>"; };
-		DDDAA4091EC775B500DF9D02 /* TBSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TBSession.swift; sourceTree = "<group>"; };
 		DDDAA40B1EC798B600DF9D02 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		DDDF805320B8FCBC007284F8 /* Session+Children.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+Children.swift"; sourceTree = "<group>"; };
 		DDDF805520B901F2007284F8 /* Error+CloudKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+CloudKit.swift"; sourceTree = "<group>"; };
@@ -721,7 +688,6 @@
 		DDF721C61ECA12A40054C503 /* PUITimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineView.swift; sourceTree = "<group>"; };
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
-		DDFA10C51EBFA578001DCF66 /* WWDC.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WWDC.car; path = Design/Theme/WWDC.car; sourceTree = SOURCE_ROOT; };
 		DDFD618E247EE1CF00AD1CD7 /* TranscriptIndexingServiceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingServiceProtocol.swift; sourceTree = "<group>"; };
 		DDFD6190247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingClientProtocol.swift; sourceTree = "<group>"; };
 		DDFD6193247EE21900AD1CD7 /* TranscriptIndexingClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptIndexingClient.swift; sourceTree = "<group>"; };
@@ -743,7 +709,6 @@
 				DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */,
 				DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
-				DDDAA3F51EC7653300DF9D02 /* ThrowBack.framework in Frameworks */,
 				DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */,
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 				DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */,
@@ -799,16 +764,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDD68507247C3B00001BB700 /* Transcripts.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DDDAA3EA1EC7653200DF9D02 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DDDAA3FF1EC768A100DF9D02 /* ConfCore.framework in Frameworks */,
-				DDDAA3FD1EC765B600DF9D02 /* Realm.framework in Frameworks */,
-				DDDAA3FE1EC765CD00DF9D02 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -881,7 +836,6 @@
 				DD36A4AE1E478C6A00B2EA88 /* WWDC */,
 				DD36A4C91E478D7E00B2EA88 /* ConfCore */,
 				DD36A4D61E478D7E00B2EA88 /* ConfCoreTests */,
-				DDDAA3EF1EC7653300DF9D02 /* ThrowBack */,
 				DDF721971ECA12780054C503 /* PlayerUI */,
 				DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */,
 				DDD684FF247C3B00001BB700 /* Transcripts */,
@@ -898,7 +852,6 @@
 				DD36A4AC1E478C6A00B2EA88 /* WWDC.app */,
 				DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */,
 				DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */,
-				DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */,
 				DDF721961ECA12780054C503 /* PlayerUI.framework */,
 				DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */,
 				DDD684FE247C3B00001BB700 /* Transcripts.framework */,
@@ -1222,6 +1175,7 @@
 				DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */,
 				DDDAA40B1EC798B600DF9D02 /* Preferences.swift */,
 				DDC927FD20B7A259004C784D /* NSImage+Compression.swift */,
+				DD7E29432481821000A58370 /* NSFont+Rounded.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -1340,6 +1294,7 @@
 		DDC678151EDB27C100A4E19C /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				DD7E293D2481758200A58370 /* NSCodingExtensions.swift */,
 				DDC678161EDB27EF00A4E19C /* ContributorsFetcher.swift */,
 				DDEDFCF71EDA33C3002477C8 /* CloudKitHelper.swift */,
 				DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */,
@@ -1391,13 +1346,11 @@
 		DDCE7ECE1EA7A1A600C7A3CA /* Look */ = {
 			isa = PBXGroup;
 			children = (
-				DDFA10C51EBFA578001DCF66 /* WWDC.car */,
 				DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */,
-				DDCE7ED01EA7A1D300C7A3CA /* WWDCAppearance.h */,
-				DDCE7ED11EA7A1D300C7A3CA /* WWDCAppearance.m */,
 				DD7F38701EABF6C4002D8C00 /* Colors.swift */,
 				DD7F38751EABFB20002D8C00 /* NSColor+Hex.swift */,
 				DDD930701ED4EF1F00D61BE3 /* Fonts.swift */,
+				DD7E29452481B6EA00A58370 /* NSColor+Accent.h */,
 			);
 			name = Look;
 			sourceTree = "<group>";
@@ -1510,36 +1463,6 @@
 				DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */,
 			);
 			name = Display;
-			sourceTree = "<group>";
-		};
-		DDDAA3EF1EC7653300DF9D02 /* ThrowBack */ = {
-			isa = PBXGroup;
-			children = (
-				DDDAA3F11EC7653300DF9D02 /* Info.plist */,
-				DDDAA3F01EC7653300DF9D02 /* ThrowBack.h */,
-				DDB352A31EC90ACA00254815 /* TBProphylaxis.h */,
-				DDB352A41EC90ACA00254815 /* TBProphylaxis.m */,
-				DDDAA4001EC768A900DF9D02 /* Migration */,
-			);
-			path = ThrowBack;
-			sourceTree = "<group>";
-		};
-		DDDAA4001EC768A900DF9D02 /* Migration */ = {
-			isa = PBXGroup;
-			children = (
-				DDDAA4081EC775AD00DF9D02 /* LegacyModels */,
-				DDDAA4061EC76D9300DF9D02 /* TBPreferences.swift */,
-				DDDAA4011EC768C500DF9D02 /* TBUserDataMigrator.swift */,
-			);
-			name = Migration;
-			sourceTree = "<group>";
-		};
-		DDDAA4081EC775AD00DF9D02 /* LegacyModels */ = {
-			isa = PBXGroup;
-			children = (
-				DDDAA4091EC775B500DF9D02 /* TBSession.swift */,
-			);
-			name = LegacyModels;
 			sourceTree = "<group>";
 		};
 		DDDF805720B902F3007284F8 /* Conflict Resolution */ = {
@@ -1767,15 +1690,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DDDAA3EB1EC7653200DF9D02 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DDB352A51EC90ACA00254815 /* TBProphylaxis.h in Headers */,
-				DDDAA3F21EC7653300DF9D02 /* ThrowBack.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DDF721931ECA12780054C503 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1805,7 +1719,6 @@
 			);
 			dependencies = (
 				DD36A4DC1E478D7E00B2EA88 /* PBXTargetDependency */,
-				DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */,
 				DDF7219C1ECA12780054C503 /* PBXTargetDependency */,
 				DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */,
 				DDD68512247C3B00001BB700 /* PBXTargetDependency */,
@@ -1907,25 +1820,6 @@
 			productReference = DDD68506247C3B00001BB700 /* TranscriptsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		DDDAA3ED1EC7653200DF9D02 /* ThrowBack */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DDDAA3F71EC7653300DF9D02 /* Build configuration list for PBXNativeTarget "ThrowBack" */;
-			buildPhases = (
-				DDDAA3E91EC7653200DF9D02 /* Sources */,
-				DDDAA3EA1EC7653200DF9D02 /* Frameworks */,
-				DDDAA3EB1EC7653200DF9D02 /* Headers */,
-				DDDAA3EC1EC7653200DF9D02 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DDB352951EC7FFE900254815 /* PBXTargetDependency */,
-			);
-			name = ThrowBack;
-			productName = ThrowBack;
-			productReference = DDDAA3EE1EC7653200DF9D02 /* ThrowBack.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		DDF721951ECA12780054C503 /* PlayerUI */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DDF7219F1ECA12780054C503 /* Build configuration list for PBXNativeTarget "PlayerUI" */;
@@ -1951,7 +1845,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = "Guilherme Rambo";
 				TargetAttributes = {
 					DD36A4AB1E478C6900B2EA88 = {
@@ -1999,11 +1893,6 @@
 						CreatedOnToolsVersion = 11.5;
 						TestTargetID = DD36A4AB1E478C6900B2EA88;
 					};
-					DDDAA3ED1EC7653200DF9D02 = {
-						CreatedOnToolsVersion = 8.3.2;
-						LastSwiftMigration = 1000;
-						ProvisioningStyle = Manual;
-					};
 					DDF721951ECA12780054C503 = {
 						CreatedOnToolsVersion = 8.3.2;
 						LastSwiftMigration = 1000;
@@ -2027,7 +1916,6 @@
 				DD36A4AB1E478C6900B2EA88 /* WWDC */,
 				DD36A4C71E478D7E00B2EA88 /* ConfCore */,
 				DD36A4CF1E478D7E00B2EA88 /* ConfCoreTests */,
-				DDDAA3ED1EC7653200DF9D02 /* ThrowBack */,
 				DDF721951ECA12780054C503 /* PlayerUI */,
 				DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */,
 				DDD684FD247C3B00001BB700 /* Transcripts */,
@@ -2043,7 +1931,6 @@
 			files = (
 				DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */,
 				DD7E290924800D0300A58370 /* schedule-placeholder.png in Resources */,
-				DDFA10C61EBFA578001DCF66 /* WWDC.car in Resources */,
 				DDC6781D1EDB638400A4E19C /* Preferences.storyboard in Resources */,
 				DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */,
 				DD36A4B71E478C6A00B2EA88 /* Main.storyboard in Resources */,
@@ -2096,13 +1983,6 @@
 				DDD6854A247C3B4C001BB700 /* transcript-manifest-eng.json in Resources */,
 				DDD68549247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json in Resources */,
 				DDD68547247C3B4C001BB700 /* wwdc2019-202-transcript-eng.json in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DDDAA3EC1EC7653200DF9D02 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2176,7 +2056,6 @@
 				DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */,
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
 				DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */,
-				DDCE7ED21EA7A1D300C7A3CA /* WWDCAppearance.m in Sources */,
 				DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
 				DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */,
@@ -2199,6 +2078,7 @@
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
+				DD7E29442481821000A58370 /* NSFont+Rounded.swift in Sources */,
 				4D4D80C4217D281D00D1C233 /* DownloadViewModel.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
 				4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */,
@@ -2323,6 +2203,7 @@
 				DD65FD5B1E48A1080054DD35 /* Focus.swift in Sources */,
 				DDDF805B20B9035C007284F8 /* Bookmark+ConflictResolution.swift in Sources */,
 				DDAE7C581E5C629800CEA205 /* AppleAPIClient.swift in Sources */,
+				DD7E293E2481758200A58370 /* NSCodingExtensions.swift in Sources */,
 				DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */,
 				DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */,
 				DDFD619B247EE56300AD1CD7 /* TranscriptIndexingService.swift in Sources */,
@@ -2391,17 +2272,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DDDAA3E91EC7653200DF9D02 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DDDAA4071EC76D9300DF9D02 /* TBPreferences.swift in Sources */,
-				DDDAA40A1EC775B500DF9D02 /* TBSession.swift in Sources */,
-				DDDAA4021EC768C500DF9D02 /* TBUserDataMigrator.swift in Sources */,
-				DDB352A61EC90ACA00254815 /* TBProphylaxis.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		DDF721911ECA12780054C503 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2460,11 +2330,6 @@
 			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
 			targetProxy = DD36A4DB1E478D7E00B2EA88 /* PBXContainerItemProxy */;
 		};
-		DDB352951EC7FFE900254815 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
-			targetProxy = DDB352941EC7FFE900254815 /* PBXContainerItemProxy */;
-		};
 		DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */;
@@ -2489,11 +2354,6 @@
 			isa = PBXTargetDependency;
 			target = DDD684FD247C3B00001BB700 /* Transcripts */;
 			targetProxy = DDD68535247C3B31001BB700 /* PBXContainerItemProxy */;
-		};
-		DDDAA3F41EC7653300DF9D02 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DDDAA3ED1EC7653200DF9D02 /* ThrowBack */;
-			targetProxy = DDDAA3F31EC7653300DF9D02 /* PBXContainerItemProxy */;
 		};
 		DDF7219C1ECA12780054C503 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2653,7 +2513,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2685,7 +2545,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 6.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2714,7 +2574,7 @@
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ConfCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2745,7 +2605,7 @@
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ConfCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2874,7 +2734,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 6.2;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
@@ -2905,7 +2765,7 @@
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ConfCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2933,38 +2793,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.guilhermerambo.ConfCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDC.app/Contents/MacOS/WWDC";
-			};
-			name = Debug_iCloud;
-		};
-		DD5910681ECA0C17003C32A4 /* Debug_iCloud */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
-				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = ThrowBack/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ThrowBack;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug_iCloud;
 		};
@@ -3042,7 +2870,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 6.2;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
@@ -3072,7 +2900,7 @@
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ConfCore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3102,37 +2930,6 @@
 			};
 			name = Release_iCloud;
 		};
-		DD59106D1ECA0C20003C32A4 /* Release_iCloud */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
-				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = ThrowBack/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ThrowBack;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release_iCloud;
-		};
 		DDC677FF1EDA76A100A4E19C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3149,7 +2946,7 @@
 				);
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3175,7 +2972,7 @@
 				);
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3201,7 +2998,7 @@
 				);
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3226,7 +3023,7 @@
 				);
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks @loader_path/../../../../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.TranscriptIndexingService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3254,7 +3051,7 @@
 				INFOPLIST_FILE = Transcripts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
@@ -3286,7 +3083,7 @@
 				INFOPLIST_FILE = Transcripts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
@@ -3318,7 +3115,7 @@
 				INFOPLIST_FILE = Transcripts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -3349,7 +3146,7 @@
 				INFOPLIST_FILE = Transcripts/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = io.WWDC.lib.Transcripts;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -3459,69 +3256,6 @@
 			};
 			name = Release_iCloud;
 		};
-		DDDAA3F81EC7653300DF9D02 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
-				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = ThrowBack/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ThrowBack;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		DDDAA3F91EC7653300DF9D02 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
-				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = ThrowBack/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.ThrowBack;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		DDF721A01ECA12780054C503 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3542,7 +3276,7 @@
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.PlayerUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3572,7 +3306,7 @@
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.PlayerUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3602,7 +3336,7 @@
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.PlayerUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3632,7 +3366,7 @@
 				INFOPLIST_FILE = PlayerUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.lib.PlayerUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3718,17 +3452,6 @@
 				DDD6851C247C3B00001BB700 /* Debug_iCloud */,
 				DDD6851D247C3B00001BB700 /* Release */,
 				DDD6851E247C3B00001BB700 /* Release_iCloud */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DDDAA3F71EC7653300DF9D02 /* Build configuration list for PBXNativeTarget "ThrowBack" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DDDAA3F81EC7653300DF9D02 /* Debug */,
-				DD5910681ECA0C17003C32A4 /* Debug_iCloud */,
-				DDDAA3F91EC7653300DF9D02 /* Release */,
-				DD59106D1ECA0C20003C32A4 /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

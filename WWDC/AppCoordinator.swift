@@ -11,7 +11,6 @@ import RealmSwift
 import RxSwift
 import ConfCore
 import PlayerUI
-import ThrowBack
 import os.log
 
 final class AppCoordinator {
@@ -245,15 +244,8 @@ final class AppCoordinator {
         featuredController.delegate = self
     }
 
-    private func updateListsAfterSync(migrate: Bool = false) {
-        if migrate {
-            presentMigrationInterfaceIfNeeded { [weak self] in
-                self?.doUpdateLists()
-                self?.showAccountPreferencesIfAppropriate()
-            }
-        } else {
-            doUpdateLists()
-        }
+    private func updateListsAfterSync() {
+        doUpdateLists()
 
         DownloadManager.shared.syncWithFileSystem()
     }
@@ -351,7 +343,7 @@ final class AppCoordinator {
 
         _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: .main) { note in
             guard checkSyncEngineOperationSucceededAndShowError(note: note) else { return }
-            self.updateListsAfterSync(migrate: true)
+            self.updateListsAfterSync()
         }
 
         _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncFeaturedSections, object: nil, queue: .main) { note in
@@ -369,19 +361,7 @@ final class AppCoordinator {
 
         if Arguments.showPreferences {
             showPreferences(nil)
-        } else {
-            showAccountPreferencesIfAppropriate()
         }
-    }
-
-    private func showAccountPreferencesIfAppropriate() {
-        guard !Preferences.shared.showedAccountPromptAtStartup else { return }
-
-        guard TBUserDataMigrator.presentedMigrationPrompt else { return }
-
-        Preferences.shared.showedAccountPromptAtStartup = true
-
-        showAccountPreferences()
     }
 
     @discardableResult func receiveNotification(with userInfo: [String: Any]) -> Bool {
@@ -457,10 +437,6 @@ final class AppCoordinator {
     private lazy var preferencesCoordinator: PreferencesCoordinator = {
         PreferencesCoordinator(syncEngine: syncEngine)
     }()
-
-    func showAccountPreferences() {
-        preferencesCoordinator.show(in: .account)
-    }
 
     func showPreferences(_ sender: Any?) {
         #if ICLOUD
@@ -550,72 +526,6 @@ final class AppCoordinator {
         guard let code = note.object as? String else { return }
 
         syncEngine.transcriptLanguage = code
-    }
-
-    // MARK: - Data migration
-
-    private var userIsThinkingVeryHardAboutMigration = false
-
-    private var migrator: TBUserDataMigrator!
-
-    private func presentMigrationInterfaceIfNeeded(completion: @escaping () -> Void) {
-        guard !ProcessInfo.processInfo.arguments.contains("--skip-migration") else {
-            completion()
-            return
-        }
-
-        guard !userIsThinkingVeryHardAboutMigration else { return }
-
-        userIsThinkingVeryHardAboutMigration = true
-
-        if migrator != nil { guard !migrator.isPerformingMigration else { return } }
-
-        let legacyURL = URL(fileURLWithPath: PathUtil.appSupportPathAssumingExisting + "/default.realm")
-        migrator = TBUserDataMigrator(legacyDatabaseFileURL: legacyURL, newRealm: storage.realm)
-
-        guard migrator.needsMigration && !TBUserDataMigrator.presentedMigrationPrompt else {
-            completion()
-            return
-        }
-
-        let alert = WWDCAlert.create()
-        alert.messageText = "Migrate your data"
-        alert.informativeText = "I noticed you have a previous version's data on your Mac. Do you want to migrate your preferences, favorites and other user data to the new version?\n\nNOTICE: if you import your data, old versions of the app will no longer work on this computer."
-
-        alert.addButton(withTitle: "Migrate Data")
-        alert.addButton(withTitle: "Start Fresh")
-        alert.addButton(withTitle: "Quit")
-
-        enum Choice: Int {
-            case migrate = 1000
-            case startFresh = 1001
-            case quit = 1002
-        }
-
-        guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
-
-        switch choice {
-        case .migrate:
-            migrator.performMigration { [weak self] result in
-                self?.migrationFinished(with: result, completion: completion)
-            }
-        case .startFresh:
-            completion()
-        case .quit:
-            NSApp.terminate(nil)
-        }
-
-        TBUserDataMigrator.presentedMigrationPrompt = true
-    }
-
-    private func migrationFinished(with result: TBMigrationResult, completion: @escaping () -> Void) {
-        switch result {
-        case .failed(let error):
-            WWDCAlert.show(with: error)
-        default: break
-        }
-
-        completion()
     }
 
 }

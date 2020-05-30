@@ -63,7 +63,7 @@ final class FeaturedSectionViewController: NSViewController {
         l.lineBreakMode = .byTruncatingTail
         l.maximumNumberOfLines = 1
         l.textColor = .primaryText
-        l.font = .systemFont(ofSize: 24, weight: .bold)
+        l.font = .boldTitleFont
 
         return l
     }()
@@ -105,7 +105,7 @@ final class FeaturedSectionViewController: NSViewController {
         v.hasHorizontalScroller = true
         v.horizontalScroller?.alphaValue = 0
         v.scrollerStyle = .overlay
-        v.backgroundColor = .listBackground
+        v.backgroundColor = .clear
 
         _ = NotificationCenter.default.addObserver(forName: NSScroller.preferredScrollerStyleDidChangeNotification, object: nil, queue: nil) { [weak v] _ in
             v?.scrollerStyle = .overlay
@@ -131,7 +131,7 @@ final class FeaturedSectionViewController: NSViewController {
         v.dataSource = self
         v.delegate = self
         v.autoresizingMask = [.width, .height]
-        v.backgroundColors = [.listBackground]
+        v.backgroundColors = [.clear]
 
         return v
     }()

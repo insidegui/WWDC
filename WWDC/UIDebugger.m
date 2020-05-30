@@ -18,16 +18,10 @@
 
 + (void)load
 {
+    [[NSUserDefaults standardUserDefaults] setVolatileDomain:@{@"_NS_4445425547":@(YES)} forName:NSArgumentDomain];
+
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [UIDebuggerMenuItem insertInMainMenu];
-        
-        if ([[NSBundle bundleWithPath:@"/Library/Frameworks/FScript.framework"] load]) {
-            NSLog(@"[UIDebugger] Successfully added FScript menu");
-            
-            [NSApp sendAction:NSSelectorFromString(@"insertInMainMenu") to:NSClassFromString(@"FScriptMenuItem") from:nil];
-        } else {
-            NSLog(@"[UIDebugger] FScript.framework could not be loaded");
-        }
     }];
 }
 
