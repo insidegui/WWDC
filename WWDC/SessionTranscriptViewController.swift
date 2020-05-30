@@ -69,6 +69,8 @@ final class SessionTranscriptViewController: NSViewController {
         return v
     }()
 
+    private lazy var searchController = TranscriptSearchController()
+
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
@@ -82,11 +84,17 @@ final class SessionTranscriptViewController: NSViewController {
 
         view.addSubview(scrollView)
 
+        addChild(searchController)
+        searchController.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(searchController.view)
+
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchController.view.topAnchor.constraint(equalTo: view.topAnchor)
         ])
 
         tableView.dataSource = self
@@ -102,6 +110,7 @@ final class SessionTranscriptViewController: NSViewController {
     private var disposeBag = DisposeBag()
 
     private lazy var annotations = List<TranscriptAnnotation>()
+    private lazy var filteredAnnotations: [TranscriptAnnotation] = []
 
     private func updateUI() {
         guard let viewModel = viewModel else { return }
@@ -110,9 +119,29 @@ final class SessionTranscriptViewController: NSViewController {
 
         viewModel.rxTranscriptAnnotations.observeOn(MainScheduler.instance)
                                          .subscribe(onNext: { [weak self] annotations in
-            self?.annotations = annotations
-            self?.tableView.reloadData()
+            self?.updateAnnotations(with: annotations)
         }).disposed(by: disposeBag)
+
+        searchController.searchTerm.subscribe(onNext: { [weak self] term in
+            self?.updateFilter(with: term)
+        }).disposed(by: disposeBag)
+    }
+
+    private func updateAnnotations(with newAnnotations: List<TranscriptAnnotation>) {
+        annotations = newAnnotations
+        updateFilter(with: searchController.searchTerm.value)
+    }
+
+    private func updateFilter(with term: String?) {
+        defer { tableView.reloadData() }
+
+        guard let term = term, !term.isEmpty else {
+            filteredAnnotations = annotations.toArray()
+            return
+        }
+
+        let predicate = NSPredicate(format: "body CONTAINS[cd] %@", term)
+        filteredAnnotations = annotations.filter(predicate).toArray()
     }
 
     fileprivate var selectionLocked = false
@@ -133,11 +162,11 @@ final class SessionTranscriptViewController: NSViewController {
         withTableViewSelectionLocked {
             guard let timecode = note.object as? String else { return }
 
-            guard let annotation = annotations.first(where: { Transcript.roundedStringFromTimecode($0.timecode) == timecode }) else {
+            guard let annotation = filteredAnnotations.first(where: { Transcript.roundedStringFromTimecode($0.timecode) == timecode }) else {
                 return
             }
 
-            guard let row = annotations.index(of: annotation) else { return }
+            guard let row = filteredAnnotations.index(of: annotation) else { return }
 
             tableView.selectRowIndexes(IndexSet([row]), byExtendingSelection: false)
             tableView.scrollRowToVisible(row)
@@ -153,7 +182,7 @@ extension SessionTranscriptViewController: NSTableViewDataSource, NSTableViewDel
         static let rowIdentifier = "row"
     }
 
-    func numberOfRows(in tableView: NSTableView) -> Int { annotations.count }
+    func numberOfRows(in tableView: NSTableView) -> Int { filteredAnnotations.count }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.cellIdentifier), owner: tableView) as? TranscriptTableCellView
@@ -163,7 +192,7 @@ extension SessionTranscriptViewController: NSTableViewDataSource, NSTableViewDel
             cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.cellIdentifier)
         }
 
-        cell?.annotation = annotations[row]
+        cell?.annotation = filteredAnnotations[row]
 
         return cell
     }
@@ -171,13 +200,13 @@ extension SessionTranscriptViewController: NSTableViewDataSource, NSTableViewDel
     func tableViewSelectionDidChange(_ notification: Notification) {
         guard !selectionLocked else { return }
 
-        guard tableView.selectedRow >= 0 && tableView.selectedRow < annotations.count else { return }
+        guard tableView.selectedRow >= 0 && tableView.selectedRow < filteredAnnotations.count else { return }
 
         guard let transcript = viewModel?.session.transcript() else { return }
 
         let row = tableView.selectedRow
 
-        let notificationObject = (transcript, annotations[row])
+        let notificationObject = (transcript, filteredAnnotations[row])
 
         NotificationCenter.default.post(name: NSNotification.Name.TranscriptControllerDidSelectAnnotation, object: notificationObject)
     }
