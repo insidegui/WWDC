@@ -44,36 +44,46 @@ public final class SessionProgress: Object, HasCloudKitFields, SoftDeletable {
 
 extension Session {
 
+    private static let positionUpdateQueue = DispatchQueue(label: "PositionUpdate", qos: .background)
+
     public func setCurrentPosition(_ position: Double, _ duration: Double) {
-        guard let realm = realm else { return }
+        guard let config = self.realm?.configuration else { return }
+
+        let sessionId = identifier
+
+        Self.positionUpdateQueue.async {
+            guard let realm = try? Realm(configuration: config) else {
+                assertionFailure("Failed to initialize background realm for session progress update")
+                return
+            }
+
+            Self.onQueueSetCurrentPosition(for: sessionId, in: realm, position, duration)
+        }
+    }
+
+    private static func onQueueSetCurrentPosition(for sessionId: String, in queueRealm: Realm, _ position: Double, _ duration: Double) {
+        guard let session = queueRealm.object(ofType: Session.self, forPrimaryKey: sessionId) else { return }
 
         guard !duration.isNaN, !duration.isZero, !duration.isInfinite else { return }
         guard !position.isNaN, !position.isZero, !position.isInfinite else { return }
 
         do {
-            let mustCommit: Bool
-
-            if !realm.isInWriteTransaction {
-                realm.beginWrite()
-                mustCommit = true
-            } else {
-                mustCommit = false
-            }
+            queueRealm.beginWrite()
 
             var progress: SessionProgress
 
-            if let p = progresses.first {
+            if let p = session.progresses.first {
                 progress = p
             } else {
                 progress = SessionProgress()
-                progresses.append(progress)
+                session.progresses.append(progress)
             }
 
             progress.currentPosition = position
             progress.relativePosition = position / duration
             progress.updatedAt = Date()
 
-            if mustCommit { try realm.commitWrite() }
+            try queueRealm.commitWrite()
         } catch {
             os_log("Error updating session progress: %{public}@", log: .default, type: .error, String(describing: error))
         }
