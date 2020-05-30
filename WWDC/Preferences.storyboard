@@ -188,7 +188,7 @@
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFd-RS-NUX">
-                                <rect key="frame" x="242" y="147" width="220" height="21"/>
+                                <rect key="frame" x="242" y="147" width="180" height="21"/>
                                 <subviews>
                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="SF8-ZN-I8k">
                                         <rect key="frame" x="-2" y="-2" width="42" height="24"/>
@@ -197,8 +197,8 @@
                                         </connections>
                                     </switch>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goO-DA-n9P">
-                                        <rect key="frame" x="44" y="5" width="178" height="16"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enable iCloud syncing (beta)" id="CQw-ur-pVI">
+                                        <rect key="frame" x="44" y="5" width="138" height="16"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enable iCloud syncing" id="CQw-ur-pVI">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
