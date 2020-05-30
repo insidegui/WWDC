@@ -36,6 +36,8 @@ final class SessionTranscriptViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var preferredMaximumSize: NSSize { NSSize(width: Int.max, height: Int.max) }
+
     lazy var tableView: WWDCTableView = {
         let v = WWDCTableView()
 
@@ -71,6 +73,21 @@ final class SessionTranscriptViewController: NSViewController {
 
     private lazy var searchController = TranscriptSearchController()
 
+    var showsNewWindowButton: Bool {
+        get { searchController.showsNewWindowButton }
+        set { searchController.showsNewWindowButton = newValue }
+    }
+
+    private lazy var heightConstraint: NSLayoutConstraint = {
+        view.heightAnchor.constraint(equalToConstant: 180)
+    }()
+
+    var enforcesHeight: Bool = true {
+        didSet {
+            heightConstraint.isActive = enforcesHeight
+        }
+    }
+
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
@@ -79,7 +96,7 @@ final class SessionTranscriptViewController: NSViewController {
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
 
-        view.heightAnchor.constraint(equalToConstant: 180).isActive = true
+        heightConstraint.isActive = enforcesHeight
         view.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
 
         view.addSubview(scrollView)
@@ -92,13 +109,15 @@ final class SessionTranscriptViewController: NSViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            searchController.view.topAnchor.constraint(equalTo: view.topAnchor)
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        constrainSearchBar()
 
         tableView.dataSource = self
         tableView.delegate = self
+
+        searchController.didSelectOpenInNewWindow = { [weak self] in self?.detachWindow() }
     }
 
     override func viewDidLoad() {
@@ -166,11 +185,53 @@ final class SessionTranscriptViewController: NSViewController {
                 return
             }
 
-            guard let row = filteredAnnotations.index(of: annotation) else { return }
+            guard let row = filteredAnnotations.firstIndex(of: annotation) else { return }
 
             tableView.selectRowIndexes(IndexSet([row]), byExtendingSelection: false)
             tableView.scrollRowToVisible(row)
         }
+    }
+
+    var searchStyle: TranscriptSearchController.Style {
+        get { searchController.style }
+        set {
+            searchController.style = newValue
+            constrainSearchBar()
+        }
+    }
+
+    private lazy var searchBarLeadingConstraint: NSLayoutConstraint = {
+        searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+    }()
+
+    private func constrainSearchBar() {
+        NSLayoutConstraint.activate([
+            searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchController.view.topAnchor.constraint(equalTo: view.topAnchor)
+        ])
+
+        searchBarLeadingConstraint.isActive = searchStyle == .fullWidth
+
+        scrollView.automaticallyAdjustsContentInsets = searchStyle == .corner
+
+        if searchStyle == .fullWidth {
+            scrollView.contentInsets = NSEdgeInsets(top: TranscriptSearchController.height, left: 0, bottom: 0, right: 0)
+        } else {
+            scrollView.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+    }
+
+    // MARK: - Detached presentation
+
+    private var detachedWindowController: SessionTranscriptWindowController?
+
+    func detachWindow() {
+        if detachedWindowController == nil {
+            detachedWindowController = SessionTranscriptWindowController()
+        }
+
+        detachedWindowController?.showWindow(self)
+        detachedWindowController?.viewModel = viewModel
     }
 
 }
