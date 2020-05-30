@@ -11,6 +11,7 @@ disabled_rules:
   - trailing_whitespace
   - multiple_closures_with_trailing_closure
   - large_tuple
+  - implicit_getter
 
 opt_in_rules:
   - redundant_nil_coalescing

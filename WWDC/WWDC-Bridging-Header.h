@@ -4,6 +4,5 @@
 
 #import "NSImage+CGImage.h"
 #import "MaskImageView.h"
-#import "ITSwitch.h"
 #import "DTFolderMonitor.h"
 #import "NSColor+Accent.h"
