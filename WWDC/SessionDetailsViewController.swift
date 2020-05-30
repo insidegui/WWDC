@@ -154,14 +154,14 @@ class SessionDetailsViewController: NSViewController {
 
     let shelfController: ShelfViewController
     let summaryController: SessionSummaryViewController
-    let transcriptController: TranscriptTableViewController
+    let transcriptController: SessionTranscriptViewController
 
     init(listStyle: SessionsListStyle) {
         self.listStyle = listStyle
 
         shelfController = ShelfViewController()
         summaryController = SessionSummaryViewController()
-        transcriptController = TranscriptTableViewController()
+        transcriptController = SessionTranscriptViewController()
 
         super.init(nibName: nil, bundle: nil)
     }

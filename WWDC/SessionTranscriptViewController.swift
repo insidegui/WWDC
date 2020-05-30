@@ -1,5 +1,5 @@
 //
-//  TranscriptTableViewController.swift
+//  SessionTranscriptViewController.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 28/05/17.
@@ -9,12 +9,14 @@
 import Cocoa
 import ConfCore
 import RealmSwift
+import RxSwift
+import RxCocoa
 
 extension Notification.Name {
     static let TranscriptControllerDidSelectAnnotation = Notification.Name("TranscriptControllerDidSelectAnnotation")
 }
 
-class TranscriptTableViewController: NSViewController {
+final class SessionTranscriptViewController: NSViewController {
 
     var viewModel: SessionViewModel? {
         didSet {
@@ -80,16 +82,16 @@ class TranscriptTableViewController: NSViewController {
 
         view.addSubview(scrollView)
 
-        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         tableView.dataSource = self
         tableView.delegate = self
     }
-
-    fileprivate var transcript: Transcript?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,12 +99,20 @@ class TranscriptTableViewController: NSViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(highlightTranscriptLine), name: .HighlightTranscriptAtCurrentTimecode, object: nil)
     }
 
+    private var disposeBag = DisposeBag()
+
+    private lazy var annotations = List<TranscriptAnnotation>()
+
     private func updateUI() {
-        guard let transcript = viewModel?.session.transcript() else { return }
+        guard let viewModel = viewModel else { return }
 
-        self.transcript = transcript
+        disposeBag = DisposeBag()
 
-        tableView.reloadData()
+        viewModel.rxTranscriptAnnotations.observeOn(MainScheduler.instance)
+                                         .subscribe(onNext: { [weak self] annotations in
+            self?.annotations = annotations
+            self?.tableView.reloadData()
+        }).disposed(by: disposeBag)
     }
 
     fileprivate var selectionLocked = false
@@ -121,13 +131,13 @@ class TranscriptTableViewController: NSViewController {
 
     @objc private func highlightTranscriptLine(_ note: Notification) {
         withTableViewSelectionLocked {
-            guard let transcript = transcript else { return }
             guard let timecode = note.object as? String else { return }
 
-            let annotations = transcript.annotations.filter({ Transcript.roundedStringFromTimecode($0.timecode) == timecode })
-            guard let annotation = annotations.first else { return }
+            guard let annotation = annotations.first(where: { Transcript.roundedStringFromTimecode($0.timecode) == timecode }) else {
+                return
+            }
 
-            guard let row = transcript.annotations.index(of: annotation) else { return }
+            guard let row = annotations.index(of: annotation) else { return }
 
             tableView.selectRowIndexes(IndexSet([row]), byExtendingSelection: false)
             tableView.scrollRowToVisible(row)
@@ -136,20 +146,16 @@ class TranscriptTableViewController: NSViewController {
 
 }
 
-extension TranscriptTableViewController: NSTableViewDataSource, NSTableViewDelegate {
+extension SessionTranscriptViewController: NSTableViewDataSource, NSTableViewDelegate {
 
     private struct Constants {
         static let cellIdentifier = "annotation"
         static let rowIdentifier = "row"
     }
 
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        return transcript?.annotations.count ?? 0
-    }
+    func numberOfRows(in tableView: NSTableView) -> Int { annotations.count }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let annotations = transcript?.annotations else { return nil }
-
         var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.cellIdentifier), owner: tableView) as? TranscriptTableCellView
 
         if cell == nil {
@@ -165,12 +171,13 @@ extension TranscriptTableViewController: NSTableViewDataSource, NSTableViewDeleg
     func tableViewSelectionDidChange(_ notification: Notification) {
         guard !selectionLocked else { return }
 
-        guard let transcript = transcript else { return }
-        guard tableView.selectedRow >= 0 && tableView.selectedRow < transcript.annotations.count else { return }
+        guard tableView.selectedRow >= 0 && tableView.selectedRow < annotations.count else { return }
+
+        guard let transcript = viewModel?.session.transcript() else { return }
 
         let row = tableView.selectedRow
 
-        let notificationObject = (transcript, transcript.annotations[row])
+        let notificationObject = (transcript, annotations[row])
 
         NotificationCenter.default.post(name: NSNotification.Name.TranscriptControllerDidSelectAnnotation, object: notificationObject)
     }

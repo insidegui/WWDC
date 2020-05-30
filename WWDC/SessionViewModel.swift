@@ -31,6 +31,14 @@ final class SessionViewModel {
         return Observable.from(object: session)
     }()
 
+    lazy var rxTranscriptAnnotations: Observable<List<TranscriptAnnotation>> = {
+        guard let annotations = session.transcript()?.annotations else {
+            return Observable.just(List<TranscriptAnnotation>())
+        }
+
+        return Observable.collection(from: annotations)
+    }()
+
     lazy var rxSessionInstance: Observable<SessionInstance> = {
         return Observable.from(object: sessionInstance)
     }()
