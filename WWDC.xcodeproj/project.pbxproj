@@ -136,6 +136,11 @@
 		DDA7B7272483E4BB00F86668 /* CommunityNewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7262483E4BB00F86668 /* CommunityNewsItem.swift */; };
 		DDA7B7292483E67800F86668 /* CocoaHubAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7282483E67800F86668 /* CocoaHubAPIClient.swift */; };
 		DDA7B72B2483F28C00F86668 /* CocoaHubEdition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B72A2483F28C00F86668 /* CocoaHubEdition.swift */; };
+		DDA7B72E2484371C00F86668 /* CommunityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B72D2484371C00F86668 /* CommunityViewController.swift */; };
+		DDA7B730248438B500F86668 /* CommunityCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B72F248438B500F86668 /* CommunityCollectionViewController.swift */; };
+		DDA7B73224843A3A00F86668 /* CommunityCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73124843A3A00F86668 /* CommunityCollectionViewItem.swift */; };
+		DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */; };
+		DDA7B7372484429600F86668 /* CommunitySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
@@ -545,6 +550,12 @@
 		DDA7B7262483E4BB00F86668 /* CommunityNewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItem.swift; sourceTree = "<group>"; };
 		DDA7B7282483E67800F86668 /* CocoaHubAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaHubAPIClient.swift; sourceTree = "<group>"; };
 		DDA7B72A2483F28C00F86668 /* CocoaHubEdition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaHubEdition.swift; sourceTree = "<group>"; };
+		DDA7B72D2484371C00F86668 /* CommunityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewController.swift; sourceTree = "<group>"; };
+		DDA7B72F248438B500F86668 /* CommunityCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityCollectionViewController.swift; sourceTree = "<group>"; };
+		DDA7B73124843A3A00F86668 /* CommunityCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityCollectionViewItem.swift; sourceTree = "<group>"; };
+		DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompositionalLayoutBackgroundSwizzler.h; sourceTree = "<group>"; };
+		DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompositionalLayoutBackgroundSwizzler.m; sourceTree = "<group>"; };
+		DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySectionHeaderView.swift; sourceTree = "<group>"; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
@@ -915,6 +926,7 @@
 				DD90CDCE1ED7A5F900CADE86 /* Search */,
 				DDDF807220BA3110007284F8 /* Featured */,
 				DD7F38601EABD66D002D8C00 /* Sessions */,
+				DDA7B72C248436F600F86668 /* Community */,
 				DD0159CD1ED0CD1D00F980F1 /* Preferences */,
 			);
 			name = Controllers;
@@ -948,6 +960,7 @@
 				DDDF807D20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift */,
 				DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */,
 				DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */,
+				DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1183,6 +1196,8 @@
 				DDDAA40B1EC798B600DF9D02 /* Preferences.swift */,
 				DDC927FD20B7A259004C784D /* NSImage+Compression.swift */,
 				DD7E29432481821000A58370 /* NSFont+Rounded.swift */,
+				DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */,
+				DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -1222,6 +1237,16 @@
 				DDA7B72A2483F28C00F86668 /* CocoaHubEdition.swift */,
 			);
 			name = CocoaHub;
+			sourceTree = "<group>";
+		};
+		DDA7B72C248436F600F86668 /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				DDA7B72D2484371C00F86668 /* CommunityViewController.swift */,
+				DDA7B72F248438B500F86668 /* CommunityCollectionViewController.swift */,
+				DDA7B73124843A3A00F86668 /* CommunityCollectionViewItem.swift */,
+			);
+			name = Community;
 			sourceTree = "<group>";
 		};
 		DDAE7C521E5BC6B000CEA205 /* Networking */ = {
@@ -2075,10 +2100,12 @@
 				DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */,
 				DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
+				DDA7B72E2484371C00F86668 /* CommunityViewController.swift in Sources */,
 				DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */,
 				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
 				DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */,
 				DDB3529E1EC8D8CD00254815 /* main.m in Sources */,
+				DDA7B7372484429600F86668 /* CommunitySectionHeaderView.swift in Sources */,
 				DD7F38781EAC0C98002D8C00 /* ShelfViewController.swift in Sources */,
 				DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */,
 				DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */,
@@ -2094,6 +2121,7 @@
 				DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */,
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
+				DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */,
 				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
 				DD7E29442481821000A58370 /* NSFont+Rounded.swift in Sources */,
 				4D4D80C4217D281D00D1C233 /* DownloadViewModel.swift in Sources */,
@@ -2101,6 +2129,7 @@
 				4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */,
 				4D5EB0F820598E6000D4BC52 /* SessionRowProvider.swift in Sources */,
 				DD7E28FF247FE69400A58370 /* ScheduleContainerViewController.swift in Sources */,
+				DDA7B73224843A3A00F86668 /* CommunityCollectionViewItem.swift in Sources */,
 				DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
@@ -2135,6 +2164,7 @@
 				4DBA2F7620FE71BF00ED0253 /* DownloadsStatusButton.swift in Sources */,
 				DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
+				DDA7B730248438B500F86668 /* CommunityCollectionViewController.swift in Sources */,
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
 				4D66CA52217E2C9B0006A8C9 /* DownloadsManagementTableView.swift in Sources */,
 				DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */,

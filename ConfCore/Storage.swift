@@ -579,6 +579,18 @@ public final class Storage {
         return Observable.collection(from: hero).map { $0.first }
     }()
 
+    public lazy var communityNewsItemsObservable: Observable<Results<CommunityNewsItem>> = {
+        let items = realm.objects(CommunityNewsItem.self).sorted(byKeyPath: "date", ascending: false)
+
+        return Observable.collection(from: items)
+    }()
+
+    public lazy var cocoaHubEditionsObservable: Observable<Results<CocoaHubEdition>> = {
+        let items = realm.objects(CocoaHubEdition.self).sorted(byKeyPath: "index", ascending: false)
+
+        return Observable.collection(from: items)
+    }()
+
     public func asset(with remoteURL: URL) -> SessionAsset? {
         return realm.objects(SessionAsset.self).filter("remoteURL == %@", remoteURL.absoluteString).first
     }
