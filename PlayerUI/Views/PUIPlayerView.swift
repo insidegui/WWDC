@@ -669,8 +669,6 @@ public final class PUIPlayerView: NSView {
         externalStatusController.view.topAnchor.constraint(equalTo: topAnchor).isActive = true
         externalStatusController.view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
-        scrimContainerView = PUIScrimContainerView(frame: bounds)
-
         // Time labels
         timeLabelsContainerView = NSStackView(views: [elapsedTimeLabel, remainingTimeLabel])
         timeLabelsContainerView.distribution = .fillEqually
@@ -725,7 +723,7 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: pipButton)
         centerButtonsContainerView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-        // Main stack view
+        // Main stack view and background scrim
         controlsContainerView = NSStackView(views: [
             timeLabelsContainerView,
             timelineView,
@@ -740,14 +738,16 @@ public final class PUIPlayerView: NSView {
         controlsContainerView.layer?.masksToBounds = false
         controlsContainerView.layer?.zPosition = 10
 
+        scrimContainerView = PUIScrimContainerView(frame: controlsContainerView.bounds)
+
         addSubview(scrimContainerView)
         addSubview(controlsContainerView)
 
         scrimContainerView.translatesAutoresizingMaskIntoConstraints = false
         scrimContainerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         scrimContainerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        scrimContainerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        scrimContainerView.heightAnchor.constraint(equalTo: controlsContainerView.heightAnchor, multiplier: 1.3, constant: 1).isActive = true
 
         controlsContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
         controlsContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true

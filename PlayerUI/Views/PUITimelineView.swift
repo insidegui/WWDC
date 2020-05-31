@@ -99,7 +99,7 @@ public final class PUITimelineView: NSView {
     private var borderLayer: PUIBoringLayer!
     private var bufferingProgressLayer: PUIBufferLayer!
     private var playbackProgressLayer: PUIBoringLayer!
-    private var ghostProgressLayer: PUIBoringLayer!
+    private var seekProgressLayer: PUIBoringLayer!
     private var timePreviewLayer: PUIBoringTextLayer!
 
     private func buildUI() {
@@ -138,13 +138,13 @@ public final class PUITimelineView: NSView {
 
         // Ghost bar
 
-        ghostProgressLayer = PUIBoringLayer()
-        ghostProgressLayer.backgroundColor = NSColor.playerProgress.withAlphaComponent(0.5).cgColor
-        ghostProgressLayer.frame = bounds
-        ghostProgressLayer.cornerRadius = Metrics.cornerRadius
-        ghostProgressLayer.masksToBounds = true
+        seekProgressLayer = PUIBoringLayer()
+        seekProgressLayer.backgroundColor = NSColor.seekProgress.cgColor
+        seekProgressLayer.frame = bounds
+        seekProgressLayer.cornerRadius = Metrics.cornerRadius
+        seekProgressLayer.masksToBounds = true
 
-        layer?.addSublayer(ghostProgressLayer)
+        layer?.addSublayer(seekProgressLayer)
 
         // Time Preview
 
@@ -239,7 +239,7 @@ public final class PUITimelineView: NSView {
         let ghostWidth = point.x
         var ghostRect = bounds
         ghostRect.size.width = ghostWidth
-        ghostProgressLayer.frame = ghostRect
+        seekProgressLayer.frame = ghostRect
     }
 
     private func updateTimePreview(with event: NSEvent) {
@@ -335,7 +335,7 @@ public final class PUITimelineView: NSView {
 
                 self.viewDelegate?.timelineViewDidSeek(to: progress)
 
-                self.ghostProgressLayer.opacity = 0
+                self.seekProgressLayer.opacity = 0
             default: break
             }
         }
@@ -346,11 +346,11 @@ public final class PUITimelineView: NSView {
     private func reactToMouse() {
         if hasMouseInside {
             borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor }
-            ghostProgressLayer.animate { ghostProgressLayer.opacity = 1 }
+            seekProgressLayer.animate { seekProgressLayer.opacity = 1 }
             timePreviewLayer.animateVisible()
         } else {
             borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.cgColor }
-            ghostProgressLayer.animate { ghostProgressLayer.opacity = 0 }
+            seekProgressLayer.animate { seekProgressLayer.opacity = 0 }
             timePreviewLayer.animateInvisible()
         }
     }
