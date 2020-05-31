@@ -10,9 +10,11 @@ import Cocoa
 import ConfCore
 import RxSwift
 import RxCocoa
+import RealmSwift
 
 fileprivate extension NSUserInterfaceItemIdentifier {
     static let communityItem = NSUserInterfaceItemIdentifier(rawValue: "communityItemCell")
+    static let communityEditionItem = NSUserInterfaceItemIdentifier(rawValue: "communityEditionCell")
     static let communitySectionHeader = NSUserInterfaceItemIdentifier(rawValue: "communitySectionHeader")
 }
 
@@ -23,14 +25,15 @@ final class CommunityCollectionViewController: NSViewController {
         case editions
     }
 
-    var newsItems: [CommunityNewsItem] = [] {
+    var newsItems: Results<CommunityNewsItem>? {
         didSet {
-            collectionView.reloadData()
+            reloadData()
         }
     }
-    var editions: [CocoaHubEdition] = [] {
+
+    var editions: Results<CocoaHubEdition>? {
         didSet {
-            collectionView.reloadData()
+            reloadData()
         }
     }
 
@@ -50,12 +53,12 @@ final class CommunityCollectionViewController: NSViewController {
 
     static func makeLayout() -> NSCollectionViewLayout {
         NSCollectionViewCompositionalLayout { index, env in
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(184))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
 
             let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
             layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 22)
 
-            let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.24), heightDimension: .absolute(184))
+            let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.3), heightDimension: .absolute(200))
 
             let group = NSCollectionLayoutGroup.vertical(layoutSize: layoutGroupSize, subitem: layoutItem, count: 1)
 
@@ -63,7 +66,7 @@ final class CommunityCollectionViewController: NSViewController {
 
             section.boundarySupplementaryItems = [Self.makeHeaderLayoutItem()]
             section.orthogonalScrollingBehavior = .continuous
-            section.contentInsets = NSDirectionalEdgeInsets(top: 34, leading: 60, bottom: 22, trailing: 60)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 34, leading: 60, bottom: 22, trailing: 0)
 
             return section
         }
@@ -96,7 +99,13 @@ final class CommunityCollectionViewController: NSViewController {
         ])
 
         collectionView.register(CommunityCollectionViewItem.self, forItemWithIdentifier: .communityItem)
+        collectionView.register(CommunityCollectionViewItem.self, forItemWithIdentifier: .communityEditionItem)
         collectionView.register(CommunitySectionHeaderView.self, forSupplementaryViewOfKind: NSCollectionView.elementKindSectionHeader, withIdentifier: .communitySectionHeader)
+    }
+
+    private func reloadData() {
+        NSObject.cancelPreviousPerformRequests(withTarget: collectionView, selector: #selector(NSCollectionView.reloadData), object: nil)
+        collectionView.perform(#selector(NSCollectionView.reloadData), with: nil, afterDelay: 0.1)
     }
     
 }
@@ -112,15 +121,35 @@ extension CommunityCollectionViewController: NSCollectionViewDataSource, NSColle
 
         switch contentSection {
         case .newsItems:
-            return newsItems.count
+            return newsItems?.count ?? 0
         case .editions:
-            return editions.count
+            return editions?.count ?? 0
         }
     }
 
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        guard let cell = collectionView.makeItem(withIdentifier: .communityItem, for: indexPath) as? CommunityCollectionViewItem else {
+        guard let contentSection = Section(rawValue: indexPath.section) else {
+            preconditionFailure("Invalid section \(indexPath.section)")
+        }
+
+        let identifier: NSUserInterfaceItemIdentifier
+
+        switch contentSection {
+        case .newsItems:
+            identifier = .communityItem
+        case .editions:
+            identifier = .communityEditionItem
+        }
+
+        guard let cell = collectionView.makeItem(withIdentifier: identifier, for: indexPath) as? CommunityCollectionViewItem else {
             preconditionFailure("Invalid cell")
+        }
+
+        switch contentSection {
+        case .newsItems:
+            cell.newsItem = newsItems?[indexPath.item]
+        case .editions:
+            break
         }
 
         return cell

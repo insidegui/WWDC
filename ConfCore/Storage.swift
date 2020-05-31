@@ -580,7 +580,8 @@ public final class Storage {
     }()
 
     public lazy var communityNewsItemsObservable: Observable<Results<CommunityNewsItem>> = {
-        let items = realm.objects(CommunityNewsItem.self).sorted(byKeyPath: "date", ascending: false)
+        let predicate = NSPredicate(format: "summary != nil")
+        let items = realm.objects(CommunityNewsItem.self).filter(predicate).sorted(byKeyPath: "date", ascending: false)
 
         return Observable.collection(from: items)
     }()

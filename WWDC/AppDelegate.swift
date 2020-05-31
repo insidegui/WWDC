@@ -28,7 +28,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.registerForRemoteNotifications(matching: [])
 
         #if DEBUG
-        SiestaLog.Category.enabled = .all
+        if UserDefaults.standard.bool(forKey: "WWDCEnableNetworkDebugging") {
+            SiestaLog.Category.enabled = .all
+        }
         #endif
     }
 

@@ -50,14 +50,14 @@ final class CommunityViewController: NSViewController {
         syncEngine.storage.communityNewsItemsObservable
                           .observeOn(MainScheduler.instance)
                           .subscribe(onNext: { [weak self] results in
-                              self?.collectionController.newsItems = results.toArray()
+                              self?.collectionController.newsItems = results
                           })
                           .disposed(by: disposeBag)
 
         syncEngine.storage.cocoaHubEditionsObservable
                           .observeOn(MainScheduler.instance)
                           .subscribe(onNext: { [weak self] results in
-                              self?.collectionController.editions = results.toArray()
+                              self?.collectionController.editions = results
                           })
                           .disposed(by: disposeBag)
     }
