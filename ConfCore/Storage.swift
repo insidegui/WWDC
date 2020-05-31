@@ -334,11 +334,11 @@ public final class Storage {
         }, disableAutorefresh: false, completionBlock: completion)
     }
 
-    internal func store(cocoaHubNewsResult result: Result<[CommunityNewsItem], APIError>, completion: @escaping (Error?) -> Void) {
-        let items: [CommunityNewsItem]
+    internal func store(cocoaHubNewsResult result: Result<CocoaHubIndexResponse, APIError>, completion: @escaping (Error?) -> Void) {
+        let response: CocoaHubIndexResponse
 
         do {
-            items = try result.get()
+            response = try result.get()
         } catch {
             os_log("Error downloading CocoaHub news:\n%{public}@",
                    log: log,
@@ -349,7 +349,46 @@ public final class Storage {
         }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
-            backgroundRealm.add(items, update: .modified)
+            backgroundRealm.add(response.news, update: .modified)
+
+            response.editions.forEach { edition in
+                if let existingEdition = backgroundRealm.object(ofType: CocoaHubEdition.self, forPrimaryKey: edition.id) {
+                    existingEdition.merge(with: edition)
+                } else {
+                    backgroundRealm.add(edition, update: .all)
+                }
+            }
+        }, disableAutorefresh: false, completionBlock: completion)
+    }
+
+    internal func store(cocoaHubEditionArticles result: Result<CocoaHubEditionResponse, APIError>, completion: @escaping (Error?) -> Void) {
+        let response: CocoaHubEditionResponse
+
+        do {
+            response = try result.get()
+        } catch {
+            os_log("Error downloading CocoaHub edition:\n%{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
+            completion(error)
+            return
+        }
+
+        let editionId = response._id
+
+        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+            guard let edition = backgroundRealm.object(ofType: CocoaHubEdition.self, forPrimaryKey: editionId) else { return }
+
+            response.articles.forEach { article in
+                if let index = edition.articles.index(of: article) {
+                    edition.articles[index] = article
+                } else {
+                    edition.articles.append(article)
+                }
+            }
+
+            backgroundRealm.add(edition, update: .modified)
         }, disableAutorefresh: false, completionBlock: completion)
     }
 

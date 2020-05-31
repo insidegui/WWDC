@@ -14,6 +14,7 @@ import os.log
 extension Notification.Name {
     public static let SyncEngineDidSyncSessionsAndSchedule = Notification.Name("SyncEngineDidSyncSessionsAndSchedule")
     public static let SyncEngineDidSyncFeaturedSections = Notification.Name("SyncEngineDidSyncFeaturedSections")
+    public static let SyncEngineDidSyncCocoaHubEditionArticles = Notification.Name("SyncEngineDidSyncCocoaHubEditionArticles")
 }
 
 public final class SyncEngine {
@@ -108,6 +109,21 @@ public final class SyncEngine {
         cocoaHubClient.fetchNews { [weak self] result in
             DispatchQueue.main.async {
                 self?.storage.store(cocoaHubNewsResult: result, completion: { _ in })
+            }
+        }
+    }
+
+    public func syncCocoaHubEditionArticles(for id: String) {
+        guard let edition = storage.realm.object(ofType: CocoaHubEdition.self, forPrimaryKey: id) else {
+            os_log("Couldn't find CocoaHub edition with identifier %@", log: self.log, type: .error, id)
+            return
+        }
+
+        cocoaHubClient.fetchEditionArticles(for: edition.index) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.storage.store(cocoaHubEditionArticles: result, completion: { error in
+                    NotificationCenter.default.post(name: .SyncEngineDidSyncFeaturedSections, object: error)
+                })
             }
         }
     }

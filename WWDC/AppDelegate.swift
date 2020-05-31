@@ -8,6 +8,7 @@
 
 import Cocoa
 import Sparkle
+import Siesta
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -25,6 +26,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         LoggingHelper.install()
 
         NSApp.registerForRemoteNotifications(matching: [])
+
+        #if DEBUG
+        SiestaLog.Category.enabled = .all
+        #endif
     }
 
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {

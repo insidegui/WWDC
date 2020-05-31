@@ -9,6 +9,16 @@
 import Cocoa
 import Siesta
 
+internal struct CocoaHubIndexResponse: Decodable {
+    let news: [CommunityNewsItem]
+    let editions: [CocoaHubEdition]
+}
+
+internal struct CocoaHubEditionResponse: Decodable {
+    let _id: String
+    let articles: [CommunityNewsItem]
+}
+
 public final class CocoaHubAPIClient {
 
     private var environment: Environment
@@ -35,13 +45,17 @@ public final class CocoaHubAPIClient {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
 
-        service.configureTransformer(Routes.news) { (entity: Entity<Data>) throws -> [CommunityNewsItem]? in
-            struct ResponseWrapper: Decodable {
-                let news: [CommunityNewsItem]
-            }
-
+        service.configureTransformer(Routes.news) { (entity: Entity<Data>) throws -> CocoaHubIndexResponse? in
             do {
-                return try decoder.decode(ResponseWrapper.self, from: entity.content).news
+                return try decoder.decode(CocoaHubIndexResponse.self, from: entity.content)
+            } catch {
+                throw error
+            }
+        }
+
+        service.configureTransformer(Routes.editions) { (entity: Entity<Data>) throws -> CocoaHubEditionResponse? in
+            do {
+                return try decoder.decode(CocoaHubEditionResponse.self, from: entity.content)
             } catch {
                 throw error
             }
@@ -50,6 +64,7 @@ public final class CocoaHubAPIClient {
 
     private struct Routes {
         static let news = "/"
+        static let editions = "/editions"
     }
 
     fileprivate func updateEnvironment() {
@@ -62,9 +77,13 @@ public final class CocoaHubAPIClient {
         service.resource(Routes.news)
     }()
 
+    private func editionResource(with index: Int) -> Resource {
+        service.resource(Routes.editions).withParam("id", "\(index)")
+    }
+
     private var observers: [Resource] = []
 
-    func fetchNews(completion: @escaping (Result<[CommunityNewsItem], APIError>) -> Void) {
+    func fetchNews(completion: @escaping (Result<CocoaHubIndexResponse, APIError>) -> Void) {
         newsResource.removeObservers(ownedBy: self)
         newsResource.invalidate()
 
@@ -74,6 +93,17 @@ public final class CocoaHubAPIClient {
         observers.append(observer)
 
         newsResource.loadIfNeeded()
+    }
+
+    func fetchEditionArticles(for index: Int, completion: @escaping (Result<CocoaHubEditionResponse, APIError>) -> Void) {
+        let editionResource = self.editionResource(with: index)
+
+        let observer = editionResource.addObserver(owner: self) { resource, event in
+            Resource.process(resource, event: event, with: completion)
+        }
+        observers.append(observer)
+
+        editionResource.loadIfNeeded()
     }
 
     deinit {
