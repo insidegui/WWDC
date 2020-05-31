@@ -38,20 +38,37 @@ final class PUIScrimView: NSView {
         return l
     }()
 
+    private lazy var vfxView: NSVisualEffectView = {
+        let v = NSVisualEffectView(frame: .zero)
+
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.blendingMode = .withinWindow
+        v.material = .menu
+        v.appearance = NSAppearance(named: .vibrantDark)
+        v.state = .active
+
+        return v
+    }()
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
         wantsLayer = true
 
-        layer?.addSublayer(lowerScrimLayer)
+//        layer?.addSublayer(lowerScrimLayer)
+        addSubview(vfxView)
+        vfxView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        vfxView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        vfxView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        vfxView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
 
     required init?(coder: NSCoder) {
         fatalError()
     }
 
-    override func layout() {
-        lowerScrimLayer.frame = bounds
-    }
+//    override func layout() {
+////        lowerScrimLayer.frame = bounds
+//    }
 
 }

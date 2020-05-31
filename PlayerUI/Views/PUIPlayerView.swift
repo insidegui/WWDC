@@ -480,10 +480,7 @@ public final class PUIPlayerView: NSView {
     fileprivate var wasPlayingBeforeStartingInteractiveSeek = false
 
     private var extrasMenuContainerView: NSStackView!
-
     fileprivate var scrimContainerView: PUIScrimView!
-
-    private var timeLabelsContainerView: NSStackView!
     private var controlsContainerView: NSStackView!
     private var volumeControlsContainerView: NSStackView!
     private var centerButtonsContainerView: NSStackView!
@@ -669,12 +666,6 @@ public final class PUIPlayerView: NSView {
         externalStatusController.view.topAnchor.constraint(equalTo: topAnchor).isActive = true
         externalStatusController.view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
-        // Time labels
-        timeLabelsContainerView = NSStackView(views: [elapsedTimeLabel, remainingTimeLabel])
-        timeLabelsContainerView.distribution = .fillEqually
-        timeLabelsContainerView.orientation = .horizontal
-        timeLabelsContainerView.alignment = .centerY
-
         // Volume controls
         volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
 
@@ -723,10 +714,18 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: pipButton)
         centerButtonsContainerView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
+        let timelineContainerView = NSStackView(views: [
+            elapsedTimeLabel,
+            timelineView,
+            remainingTimeLabel
+        ])
+        timelineContainerView.distribution = .equalSpacing
+        timelineContainerView.orientation = .horizontal
+        timelineContainerView.alignment = .lastBaseline
+
         // Main stack view and background scrim
         controlsContainerView = NSStackView(views: [
-            timeLabelsContainerView,
-            timelineView,
+            timelineContainerView,
             centerButtonsContainerView
             ])
 
@@ -747,14 +746,11 @@ public final class PUIPlayerView: NSView {
         scrimContainerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         scrimContainerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        scrimContainerView.heightAnchor.constraint(equalTo: controlsContainerView.heightAnchor, multiplier: 1.3, constant: 1).isActive = true
+        scrimContainerView.heightAnchor.constraint(equalTo: controlsContainerView.heightAnchor, multiplier: 1.4, constant: 0).isActive = true
 
         controlsContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
         controlsContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
         controlsContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12).isActive = true
-
-        timeLabelsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
-        timeLabelsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
 
         centerButtonsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
         centerButtonsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
@@ -822,7 +818,7 @@ public final class PUIPlayerView: NSView {
 
         fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
         timelineView.isHidden = !d.playerViewShouldShowTimelineView(self)
-        timeLabelsContainerView.isHidden = !d.playerViewShouldShowTimestampLabels(self)
+//        timeLabelsContainerView.isHidden = !d.playerViewShouldShowTimestampLabels(self)
     }
 
     fileprivate func updateExternalPlaybackControlsAvailability() {
