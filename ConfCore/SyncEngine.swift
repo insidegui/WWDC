@@ -22,6 +22,7 @@ public final class SyncEngine {
 
     public let storage: Storage
     public let client: AppleAPIClient
+    public let cocoaHubClient: CocoaHubAPIClient
 
     #if ICLOUD
     public let userDataSyncEngine: UserDataSyncEngine
@@ -39,9 +40,11 @@ public final class SyncEngine {
     public var isIndexingTranscripts: BehaviorRelay<Bool> { transcriptIndexingClient.isIndexing }
     public var transcriptIndexingProgress: BehaviorRelay<Float> { transcriptIndexingClient.indexingProgress }
 
-    public init(storage: Storage, client: AppleAPIClient, transcriptLanguage: String) {
+    public init(storage: Storage, client: AppleAPIClient, cocoaHubClient: CocoaHubAPIClient, transcriptLanguage: String) {
         self.storage = storage
         self.client = client
+        self.cocoaHubClient = cocoaHubClient
+
         self.transcriptIndexingClient = TranscriptIndexingClient(
             language: transcriptLanguage,
             storage: storage
@@ -97,6 +100,14 @@ public final class SyncEngine {
         client.fetchConfig { [weak self] result in
             DispatchQueue.main.async {
                 self?.storage.store(configResult: result, completion: { _ in })
+            }
+        }
+    }
+
+    public func syncCommunityContent() {
+        cocoaHubClient.fetchNews { [weak self] result in
+            DispatchQueue.main.async {
+                self?.storage.store(cocoaHubNewsResult: result, completion: { _ in })
             }
         }
     }

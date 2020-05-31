@@ -58,12 +58,14 @@ final class AppCoordinator {
             realmConfig.schemaVersion = Constants.coreSchemaVersion
 
             let client = AppleAPIClient(environment: .current)
+            let cocoaHubClient = CocoaHubAPIClient(environment: .current)
 
             storage = try Storage(realmConfig)
 
             syncEngine = SyncEngine(
                 storage: storage,
                 client: client,
+                cocoaHubClient: cocoaHubClient,
                 transcriptLanguage: Preferences.shared.transcriptLanguageCode
             )
 
@@ -490,6 +492,8 @@ final class AppCoordinator {
             self.syncEngine.syncConfiguration()
 
             self.syncEngine.syncContent()
+
+            self.syncEngine.syncCommunityContent()
 
             self.liveObserver.refresh()
 

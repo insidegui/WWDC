@@ -334,6 +334,25 @@ public final class Storage {
         }, disableAutorefresh: false, completionBlock: completion)
     }
 
+    internal func store(cocoaHubNewsResult result: Result<[CommunityNewsItem], APIError>, completion: @escaping (Error?) -> Void) {
+        let items: [CommunityNewsItem]
+
+        do {
+            items = try result.get()
+        } catch {
+            os_log("Error downloading CocoaHub news:\n%{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
+            completion(error)
+            return
+        }
+
+        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+            backgroundRealm.add(items, update: .modified)
+        }, disableAutorefresh: false, completionBlock: completion)
+    }
+
     /// Performs a write transaction in the background
     ///
     /// - Parameters:

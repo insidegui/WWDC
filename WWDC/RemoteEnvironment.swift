@@ -115,6 +115,7 @@ extension Environment {
         guard let baseURLStr = record["baseURL"] as? String, URL(string: baseURLStr) != nil else { return nil }
 
         self.init(baseURL: baseURLStr,
+                  cocoaHubBaseURL: Self.defaultCocoaHubBaseURL,
                   configPath: "/config.json",
                   sessionsPath: "/sessions.json",
                   newsPath: "/news.json",
