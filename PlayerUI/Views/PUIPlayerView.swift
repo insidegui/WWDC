@@ -481,7 +481,7 @@ public final class PUIPlayerView: NSView {
 
     private var extrasMenuContainerView: NSStackView!
 
-    fileprivate var scrimContainerView: PUIScrimContainerView!
+    fileprivate var scrimContainerView: PUIScrimView!
 
     private var timeLabelsContainerView: NSStackView!
     private var controlsContainerView: NSStackView!
@@ -738,7 +738,7 @@ public final class PUIPlayerView: NSView {
         controlsContainerView.layer?.masksToBounds = false
         controlsContainerView.layer?.zPosition = 10
 
-        scrimContainerView = PUIScrimContainerView(frame: controlsContainerView.bounds)
+        scrimContainerView = PUIScrimView(frame: controlsContainerView.bounds)
 
         addSubview(scrimContainerView)
         addSubview(controlsContainerView)

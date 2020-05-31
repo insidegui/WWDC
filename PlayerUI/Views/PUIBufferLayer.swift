@@ -24,7 +24,7 @@ final class PUIBufferLayer: PUIBoringLayer {
     }
 
     override func draw(in ctx: CGContext) {
-        ctx.setFillColor(NSColor.playerBuffer.cgColor)
+        ctx.setFillColor(NSColor.bufferProgress.cgColor)
 
         let cr = PUITimelineView.Metrics.cornerRadius
 

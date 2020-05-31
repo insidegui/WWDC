@@ -22,8 +22,8 @@ extension NSColor {
         return NSColor(calibratedRed: 0.56, green: 0.55, blue: 0.55, alpha: 1.00)
     }
 
-    static var playerBuffer: NSColor {
-        return NSColor(calibratedRed: 0.52, green: 0.52, blue: 0.52, alpha: 1.00)
+    static var bufferProgress: NSColor {
+        return NSColor(calibratedRed: 0.52, green: 0.52, blue: 0.52, alpha: 0.75)
     }
 
     static var playerProgress: NSColor {
