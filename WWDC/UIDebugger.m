@@ -18,7 +18,10 @@
 
 + (void)load
 {
-    [[NSUserDefaults standardUserDefaults] setVolatileDomain:@{@"_NS_4445425547":@(YES)} forName:NSArgumentDomain];
+    NSMutableDictionary *argValues = [[NSUserDefaults standardUserDefaults] volatileDomainForName:NSArgumentDomain].mutableCopy;
+    argValues[@"_NS_4445425547"] = @(YES);
+
+    [[NSUserDefaults standardUserDefaults] setVolatileDomain:argValues forName:NSArgumentDomain];
 
     [[NSNotificationCenter defaultCenter] addObserverForName:NSApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
         [UIDebuggerMenuItem insertInMainMenu];
