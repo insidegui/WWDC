@@ -18,7 +18,9 @@ public class CommunityNewsItem: Object, Decodable {
     @objc public dynamic var url = ""
     @objc public dynamic var isFeatured = false
     @objc public dynamic var image: String?
-    public let tags = List<String>()
+    public let tags = List<CommunityTag>()
+
+    public var rawTags: [String] = []
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -47,9 +49,7 @@ public class CommunityNewsItem: Object, Decodable {
         self.url = try container.decode(String.self, forKey: .url)
         self.image = try container.decodeIfPresent(String.self, forKey: .image)
         self.isFeatured = try container.decodeIfPresent(Bool.self, forKey: .isFeatured) ?? false
-
-        let decodedTags = try container.decode([String].self, forKey: .tags)
-        decodedTags.forEach { tags.append($0) }
+        self.rawTags = try container.decode([String].self, forKey: .tags)
     }
 
 }

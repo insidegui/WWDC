@@ -10,32 +10,50 @@ import Cocoa
 import ConfCore
 import RealmSwift
 
-enum CommunityTag: String {
-    case apple
-    case community
-    case evolution
-    case press
-    case podcast
-    case newsletter
-    case sundell
+struct CommunityTagViewModel: Hashable, RawRepresentable {
+
+    typealias RawValue = String
+
+    var rawValue: String
+
+    var order: Int
+
+    var color: NSColor?
+
+    init(rawValue: String) {
+        self.rawValue = rawValue
+        self.order = Self.defaultOrder(for: rawValue)
+        self.color = NSColor(named: .init("tagColor-" + rawValue))
+    }
 
     var displayName: String {
-        switch self {
-        case .apple: return "Apple"
-        case .community: return "Community"
-        case .evolution: return "Evolution"
-        case .press: return "Press"
-        case .podcast: return "Podcast"
-        case .newsletter: return "Newsletter"
-        case .sundell: return "WWDC by Sundell & Friends"
+        switch rawValue {
+        case "apple": return "Apple"
+        case "community": return "Community"
+        case "evolution": return "Evolution"
+        case "press": return "Press"
+        case "podcast": return "Podcast"
+        case "newsletter": return "Newsletter"
+        case "sundell": return "WWDC by Sundell & Friends"
+        default: return ""
         }
     }
 
-    var color: NSColor? { NSColor(named: .init("tagColor-" + rawValue)) }
+    static func defaultOrder(for value: String) -> Int {
+        switch value {
+        case "apple": return 0
+        case "community": return 1
+        case "podcast": return 2
+        case "sundell": return 3
+        case "evolution": return 4
+        case "press": return 5
+        default: return 99
+        }
+    }
 }
 
 struct CommunitySection: Hashable {
-    let tag: CommunityTag
+    let tag: CommunityTagViewModel
     let title: String
     let color: NSColor
     let items: [CommunityNewsItemViewModel]
@@ -46,7 +64,7 @@ struct CommunityNewsItemViewModel: Hashable {
     let id: String
     let title: String
     let attributedSummary: NSAttributedString?
-    let tag: String?
+    let tag: CommunityTagViewModel
     let url: URL
     let date: Date
     let formattedDate: String
@@ -54,13 +72,23 @@ struct CommunityNewsItemViewModel: Hashable {
 
 }
 
+extension CommunityTagViewModel {
+    init(tag: CommunityTag) {
+        self = CommunityTagViewModel(rawValue: tag.name)
+        color = NSColor.fromHexString(hexString: tag.color)
+        order = tag.order
+    }
+}
+
 extension CommunitySection {
 
     static func sections(from results: Results<CommunityNewsItem>) -> [CommunitySection] {
-        var groups: [CommunityTag: [CommunityNewsItemViewModel]] = [:]
+        var groups: [CommunityTagViewModel: [CommunityNewsItemViewModel]] = [:]
 
         results.forEach { item in
-            guard let rawTag = item.tags.first, let tag = CommunityTag(rawValue: rawTag) else { return }
+            guard let rawTag = item.tags.first else { return }
+
+            let tag = CommunityTagViewModel(tag: rawTag)
 
             guard let viewModel = CommunityNewsItemViewModel(item: item) else {
                 assertionFailure("Expected view model creation to succeed")
@@ -74,7 +102,7 @@ extension CommunitySection {
             }
         }
 
-        return groups.keys.map { tag in
+        return groups.keys.sorted(by: { $0.order < $1.order }).map { tag in
             CommunitySection(
                 tag: tag,
                 title: tag.displayName,
@@ -114,12 +142,16 @@ extension CommunityNewsItemViewModel {
             assertionFailure("Expected string to be a valid URL: \(item.url)")
             return nil
         }
+        guard let rawTag = item.tags.first else {
+            assertionFailure("News item must have at least one tag")
+            return nil
+        }
 
         self.init(
             id: item.id,
             title: item.title,
             attributedSummary: Self.attributedSummary(from: item.summary),
-            tag: item.tags.first,
+            tag: CommunityTagViewModel(tag: rawTag),
             url: url,
             date: item.date,
             formattedDate: Self.dateFormatter.string(from: item.date),

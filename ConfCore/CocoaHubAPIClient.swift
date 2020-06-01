@@ -10,6 +10,7 @@ import Cocoa
 import Siesta
 
 internal struct CocoaHubIndexResponse: Decodable {
+    let tags: [CommunityTag]
     let news: [CommunityNewsItem]
     let editions: [CocoaHubEdition]
 }

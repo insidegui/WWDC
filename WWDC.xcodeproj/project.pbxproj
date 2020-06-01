@@ -148,6 +148,7 @@
 		DDA7B7422485397F00F86668 /* CommunityNewsItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */; };
 		DDA7B76424855BE400F86668 /* FeaturedCommunityCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B76324855BE400F86668 /* FeaturedCommunityCollectionViewItem.swift */; };
 		DDA7B76624855CC200F86668 /* CocoaHubLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B76524855CC200F86668 /* CocoaHubLogoView.swift */; };
+		DDA7B7682485796D00F86668 /* CommunityTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7672485796C00F86668 /* CommunityTag.swift */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
@@ -570,6 +571,7 @@
 		DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItemViewModel.swift; sourceTree = "<group>"; };
 		DDA7B76324855BE400F86668 /* FeaturedCommunityCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedCommunityCollectionViewItem.swift; sourceTree = "<group>"; };
 		DDA7B76524855CC200F86668 /* CocoaHubLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaHubLogoView.swift; sourceTree = "<group>"; };
+		DDA7B7672485796C00F86668 /* CommunityTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityTag.swift; sourceTree = "<group>"; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
@@ -1249,6 +1251,7 @@
 		DDA7B7252483E48900F86668 /* CocoaHub */ = {
 			isa = PBXGroup;
 			children = (
+				DDA7B7672485796C00F86668 /* CommunityTag.swift */,
 				DDA7B7262483E4BB00F86668 /* CommunityNewsItem.swift */,
 				DDA7B72A2483F28C00F86668 /* CocoaHubEdition.swift */,
 			);
@@ -2272,6 +2275,7 @@
 				DDFD6191247EE20100AD1CD7 /* TranscriptIndexingClientProtocol.swift in Sources */,
 				DDEDFCF81EDA33C3002477C8 /* CloudKitHelper.swift in Sources */,
 				DDDF805920B90306007284F8 /* Favorite+ConflictResolution.swift in Sources */,
+				DDA7B7682485796D00F86668 /* CommunityTag.swift in Sources */,
 				DDC927FC20B7A059004C784D /* Data+CloudKit.swift in Sources */,
 				DDA7B7292483E67800F86668 /* CocoaHubAPIClient.swift in Sources */,
 				DD65FD5D1E48A11F0054DD35 /* Track.swift in Sources */,

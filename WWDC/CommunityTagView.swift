@@ -1,5 +1,5 @@
 //
-//  CommunityTagView.swift
+//  CommunityTagViewModelView.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 31/05/20.
@@ -8,9 +8,9 @@
 
 import Cocoa
 
-final class CommunityTagView: NSView {
+final class CommunityTagViewModelView: NSView {
 
-    var tagType: CommunityTag = .apple {
+    var tagType: CommunityTagViewModel = CommunityTagViewModel(rawValue: "apple") {
         didSet {
             updateUI()
         }

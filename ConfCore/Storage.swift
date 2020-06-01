@@ -349,6 +349,17 @@ public final class Storage {
         }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+            response.tags.forEach { tag in
+                backgroundRealm.add(tag, update: .modified)
+            }
+            response.news.forEach { item in
+                item.rawTags.forEach { tagName in
+                    guard let tag = response.tags.first(where: { $0.name == tagName }) else { return }
+
+                    item.tags.append(tag)
+                }
+            }
+            
             backgroundRealm.add(response.news, update: .modified)
 
             response.editions.forEach { edition in
