@@ -48,7 +48,7 @@ final class CommunitySectionHeaderView: NSView, NSCollectionViewSectionHeaderVie
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 50),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 38),
             titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

@@ -31,7 +31,7 @@ final class CommunityCollectionViewController: NSViewController {
         }
     }
 
-    static func makeHeaderLayoutItem() -> NSCollectionLayoutBoundarySupplementaryItem {
+    private func makeHeaderLayoutItem() -> NSCollectionLayoutBoundarySupplementaryItem {
         let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(88))
 
         let item = NSCollectionLayoutBoundarySupplementaryItem(
@@ -40,27 +40,27 @@ final class CommunityCollectionViewController: NSViewController {
             alignment: .topLeading
         )
 
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 0)
 
         return item
     }
 
-    static func makeLayout() -> NSCollectionViewLayout {
+    private func makeLayout() -> NSCollectionViewLayout {
         NSCollectionViewCompositionalLayout { index, env in
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
 
             let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-            layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 22)
 
             let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.3), heightDimension: .absolute(200))
 
             let group = NSCollectionLayoutGroup.vertical(layoutSize: layoutGroupSize, subitem: layoutItem, count: 1)
+            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 22, bottom: 0, trailing: 0)
 
             let section = NSCollectionLayoutSection(group: group)
 
-            section.boundarySupplementaryItems = [Self.makeHeaderLayoutItem()]
+            section.boundarySupplementaryItems = [self.makeHeaderLayoutItem()]
             section.orthogonalScrollingBehavior = .continuous
-            section.contentInsets = NSDirectionalEdgeInsets(top: 34, leading: 60, bottom: 22, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 22, trailing: 0)
 
             return section
         }
@@ -80,7 +80,7 @@ final class CommunityCollectionViewController: NSViewController {
         let v = NSCollectionView()
 
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.collectionViewLayout = Self.makeLayout()
+        v.collectionViewLayout = self.makeLayout()
         v.backgroundColors = []
         v.dataSource = self
         v.delegate = self

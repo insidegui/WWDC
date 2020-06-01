@@ -71,10 +71,6 @@ final class CommunityNewsItemView: NSView {
         return v
     }()
 
-    private lazy var tagView: CommunityTagView = {
-        CommunityTagView()
-    }()
-
     private lazy var dateLabel: NSTextField = {
         let v = NSTextField(labelWithString: "")
 
@@ -97,23 +93,20 @@ final class CommunityNewsItemView: NSView {
         addSubview(titleLabel)
         addSubview(shareButton)
         addSubview(summaryLabel)
-        addSubview(tagView)
         addSubview(dateLabel)
 
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            shareButton.topAnchor.constraint(equalTo: topAnchor),
-            shareButton.trailingAnchor.constraint(equalTo: trailingAnchor),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: shareButton.leadingAnchor, constant: -6),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             summaryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             summaryLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             summaryLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            summaryLabel.bottomAnchor.constraint(lessThanOrEqualTo: tagView.topAnchor, constant: 12),
-            tagView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            tagView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            summaryLabel.bottomAnchor.constraint(lessThanOrEqualTo: dateLabel.topAnchor, constant: 4),
+            shareButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            shareButton.centerYAnchor.constraint(equalTo: dateLabel.centerYAnchor, constant: -1),
             dateLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            dateLabel.centerYAnchor.constraint(equalTo: tagView.centerYAnchor)
+            dateLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
@@ -141,7 +134,6 @@ final class CommunityNewsItemView: NSView {
         titleLabel.stringValue = ""
         dateLabel.stringValue = ""
         titleLabel.toolTip = nil
-        tagView.isHidden = true
     }
 
     @objc private func share() {
