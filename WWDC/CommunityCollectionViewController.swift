@@ -71,7 +71,9 @@ final class CommunityCollectionViewController: NSViewController {
 
         v.hasHorizontalScroller = false
         v.hasVerticalScroller = false
-        v.backgroundColor = .contentBackground
+        v.backgroundColor = .clear
+        v.automaticallyAdjustsContentInsets = false
+        v.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: 80, right: 0)
 
         return v
     }()
@@ -81,7 +83,7 @@ final class CommunityCollectionViewController: NSViewController {
 
         v.translatesAutoresizingMaskIntoConstraints = false
         v.collectionViewLayout = self.makeLayout()
-        v.backgroundColors = []
+        v.backgroundColors = [.clear]
         v.dataSource = self
         v.delegate = self
 

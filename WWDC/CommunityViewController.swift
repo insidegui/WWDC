@@ -29,6 +29,22 @@ final class CommunityViewController: NSViewController {
         CommunityCollectionViewController()
     }()
 
+    private lazy var centeredLogo: CocoaHubLogoView = {
+        let v = CocoaHubLogoView()
+
+        v.translatesAutoresizingMaskIntoConstraints = false
+
+        return v
+    }()
+
+    private lazy var cornerLogo: CocoaHubLogoView = {
+        let v = CocoaHubLogoView()
+
+        v.translatesAutoresizingMaskIntoConstraints = false
+
+        return v
+    }()
+
     private let disposeBag = DisposeBag()
 
     override func loadView() {
@@ -40,21 +56,38 @@ final class CommunityViewController: NSViewController {
         collectionController.view.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionController.view)
 
+        view.addSubview(centeredLogo)
+        view.addSubview(cornerLogo)
+
         NSLayoutConstraint.activate([
             collectionController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            collectionController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            centeredLogo.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            centeredLogo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            cornerLogo.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -42),
+            cornerLogo.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32)
         ])
 
         syncEngine.storage.communityNewsItemsObservable
-                          .distinctUntilChanged()
                           .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
                           .observeOn(MainScheduler.instance)
                           .subscribe(onNext: { [weak self] results in
                             self?.collectionController.sections = CommunitySection.sections(from: results)
                           })
                           .disposed(by: disposeBag)
+
+        let emptyObservable = syncEngine.storage.communityNewsItemsObservable.map { $0.isEmpty }
+
+        emptyObservable.asDriver(onErrorJustReturn: true)
+                       .map({ !$0 })
+                       .drive(centeredLogo.rx.isHidden)
+                       .disposed(by: disposeBag)
+
+        emptyObservable.asDriver(onErrorJustReturn: true)
+                       .drive(cornerLogo.rx.isHidden)
+                       .disposed(by: disposeBag)
     }
     
 }
