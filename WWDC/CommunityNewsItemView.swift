@@ -138,8 +138,11 @@ final class CommunityNewsItemView: NSView {
         titleLabel.toolTip = nil
     }
 
-    @objc private func share() {
-        fatalError("Not implemented")
+    @objc private func share(_ sender: VectorButton) {
+        guard let url = newsItem?.url else { return }
+        let picker = NSSharingServicePicker(items: [url])
+        picker.delegate = PickerDelegate.shared
+        picker.show(relativeTo: .zero, of: sender, preferredEdge: .minY)
     }
     
 }

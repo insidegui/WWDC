@@ -66,6 +66,15 @@ class VectorButton: NSControl {
 
         layer?.addSublayer(containerLayer)
         applyTint()
+
+        let click = NSClickGestureRecognizer(target: self, action: #selector(clicked))
+        addGestureRecognizer(click)
+    }
+
+    @objc private func clicked() {
+        guard let action = action, let target = target else { return }
+
+        NSApp.sendAction(action, to: target, from: self)
     }
 
     private func applyTint() {
@@ -78,14 +87,6 @@ class VectorButton: NSControl {
         super.layout()
 
         resizeLayer(containerLayer)
-    }
-
-    override func mouseDown(with event: NSEvent) {
-        guard isEnabled else { return }
-
-        if let action = action, let target = target {
-            NSApp.sendAction(action, to: target, from: self)
-        }
     }
 
 }
