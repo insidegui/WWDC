@@ -10,7 +10,7 @@ import Cocoa
 
 final class CommunityTagView: NSView {
 
-    var tagType: TagType = .apple {
+    var tagType: CommunityTag = .apple {
         didSet {
             updateUI()
         }
@@ -24,28 +24,6 @@ final class CommunityTagView: NSView {
 
     required init?(coder: NSCoder) {
         fatalError()
-    }
-
-    enum TagType: String {
-        case apple
-        case community
-        case evolution
-        case press
-        case podcast
-        case newsletter
-
-        var displayName: String {
-            switch self {
-            case .apple: return "APPLE"
-            case .community: return "COMMUNITY"
-            case .evolution: return "EVOLUTION"
-            case .press: return "PRESS"
-            case .podcast: return "PODCAST"
-            case .newsletter: return "NEWSLETTER"
-            }
-        }
-
-        var color: NSColor? { NSColor(named: .init("tagColor-" + rawValue)) }
     }
 
     private lazy var label: NSTextField = {

@@ -25,6 +25,11 @@ final class CommunitySectionHeaderView: NSView, NSCollectionViewSectionHeaderVie
         set { titleLabel.stringValue = newValue }
     }
 
+    var color: NSColor? {
+        get { titleLabel.textColor }
+        set { titleLabel.textColor = newValue }
+    }
+
     private lazy var titleLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
 

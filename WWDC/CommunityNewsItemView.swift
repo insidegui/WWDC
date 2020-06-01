@@ -12,7 +12,7 @@ import PlayerUI
 
 final class CommunityNewsItemView: NSView {
 
-    var newsItem: CommunityNewsItem? {
+    var newsItem: CommunityNewsItemViewModel? {
         didSet {
             updateUI()
         }
@@ -43,24 +43,23 @@ final class CommunityNewsItemView: NSView {
         return v
     }()
 
-    private lazy var shareButton: PUIButton = {
-        let v = PUIButton(frame: .zero)
+    private lazy var shareButton: VectorButton = {
+        let v = VectorButton(assetNamed: "share-vector")
 
-        v.image = #imageLiteral(resourceName: "share")
         v.target = self
         v.action = #selector(share)
-        v.sendsActionOnMouseDown = true
         v.toolTip = "Share"
         v.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         v.widthAnchor.constraint(equalToConstant: 13).isActive = true
         v.heightAnchor.constraint(equalToConstant: 16).isActive = true
         v.translatesAutoresizingMaskIntoConstraints = false
-
+        v.backgroundColor = .roundedCellBackground
+        
         return v
     }()
 
-    private lazy var summaryLabel: WWDCTextField = {
-        let v = WWDCTextField(wrappingLabelWithString: "")
+    private lazy var summaryLabel: NSTextField = {
+        let v = NSTextField(wrappingLabelWithString: "")
 
         v.font = NSFont.systemFont(ofSize: 14)
         v.textColor = .secondaryText
@@ -89,7 +88,12 @@ final class CommunityNewsItemView: NSView {
         return v
     }()
 
+    override var isOpaque: Bool { true }
+
     private func setup() {
+        wantsLayer = true
+        layer?.backgroundColor = NSColor.roundedCellBackground.cgColor
+
         addSubview(titleLabel)
         addSubview(shareButton)
         addSubview(summaryLabel)
@@ -105,7 +109,7 @@ final class CommunityNewsItemView: NSView {
             summaryLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
             summaryLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             summaryLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            summaryLabel.bottomAnchor.constraint(lessThanOrEqualTo: tagView.topAnchor, constant: -12),
+            summaryLabel.bottomAnchor.constraint(lessThanOrEqualTo: tagView.topAnchor, constant: 12),
             tagView.bottomAnchor.constraint(equalTo: bottomAnchor),
             tagView.leadingAnchor.constraint(equalTo: leadingAnchor),
             dateLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -124,29 +128,12 @@ final class CommunityNewsItemView: NSView {
     }()
 
     private func updateUI() {
-        guard let item = newsItem, !item.isInvalidated else { return }
+        guard let item = newsItem else { return }
 
         titleLabel.stringValue = item.title
         titleLabel.toolTip = item.title
         dateLabel.stringValue = dateFormatter.string(from: item.date)
-
-        if let tag = item.tags.first, let tagType = CommunityTagView.TagType(rawValue: tag) {
-            tagView.isHidden = false
-            tagView.tagType = tagType
-        } else {
-            tagView.isHidden = true
-        }
-
-        if let summary = item.summary {
-            summaryLabel.attributedStringValue = NSAttributedString.create(
-                with: summary,
-                font: .systemFont(ofSize: 14),
-                color: .secondaryText,
-                lineHeightMultiple: 1.28
-            )
-        } else {
-            summaryLabel.attributedStringValue = NSAttributedString()
-        }
+        summaryLabel.attributedStringValue = item.attributedSummary ?? NSAttributedString()
     }
 
     override func prepareForReuse() {

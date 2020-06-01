@@ -25,13 +25,7 @@ final class CommunityCollectionViewController: NSViewController {
         case editions
     }
 
-    var newsItems: Results<CommunityNewsItem>? {
-        didSet {
-            reloadData()
-        }
-    }
-
-    var editions: Results<CocoaHubEdition>? {
+    var sections: [CommunitySection] = [] {
         didSet {
             reloadData()
         }
@@ -72,6 +66,16 @@ final class CommunityCollectionViewController: NSViewController {
         }
     }
 
+    private lazy var scrollView: NSScrollView = {
+        let v = NSScrollView(frame: view.bounds)
+
+        v.hasHorizontalScroller = false
+        v.hasVerticalScroller = false
+        v.backgroundColor = .contentBackground
+
+        return v
+    }()
+
     private lazy var collectionView: NSCollectionView = {
         let v = NSCollectionView()
 
@@ -89,13 +93,17 @@ final class CommunityCollectionViewController: NSViewController {
     override func loadView() {
         view = NSView()
         view.wantsLayer = true
-        view.addSubview(collectionView)
+
+        scrollView.frame = view.bounds
+        scrollView.autoresizingMask = [.width, .height]
+        view.addSubview(scrollView)
+        scrollView.documentView = collectionView
 
         NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
         collectionView.register(CommunityCollectionViewItem.self, forItemWithIdentifier: .communityItem)
@@ -107,69 +115,35 @@ final class CommunityCollectionViewController: NSViewController {
         NSObject.cancelPreviousPerformRequests(withTarget: collectionView, selector: #selector(NSCollectionView.reloadData), object: nil)
         collectionView.perform(#selector(NSCollectionView.reloadData), with: nil, afterDelay: 0.1)
     }
-    
+
 }
 
 extension CommunityCollectionViewController: NSCollectionViewDataSource, NSCollectionViewDelegate {
 
-    func numberOfSections(in collectionView: NSCollectionView) -> Int { Section.allCases.count }
+    func numberOfSections(in collectionView: NSCollectionView) -> Int { sections.count }
 
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let contentSection = Section(rawValue: section) else {
-            preconditionFailure("Invalid section \(section)")
-        }
-
-        switch contentSection {
-        case .newsItems:
-            return newsItems?.count ?? 0
-        case .editions:
-            return editions?.count ?? 0
-        }
+        sections[section].items.count
     }
 
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        guard let contentSection = Section(rawValue: indexPath.section) else {
-            preconditionFailure("Invalid section \(indexPath.section)")
-        }
-
-        let identifier: NSUserInterfaceItemIdentifier
-
-        switch contentSection {
-        case .newsItems:
-            identifier = .communityItem
-        case .editions:
-            identifier = .communityEditionItem
-        }
-
-        guard let cell = collectionView.makeItem(withIdentifier: identifier, for: indexPath) as? CommunityCollectionViewItem else {
+        guard let cell = collectionView.makeItem(withIdentifier: .communityItem, for: indexPath) as? CommunityCollectionViewItem else {
             preconditionFailure("Invalid cell")
         }
 
-        switch contentSection {
-        case .newsItems:
-            cell.newsItem = newsItems?[indexPath.item]
-        case .editions:
-            break
-        }
+        cell.newsItem = sections[indexPath.section].items[indexPath.item]
 
         return cell
     }
 
     func collectionView(_ collectionView: NSCollectionView, viewForSupplementaryElementOfKind kind: NSCollectionView.SupplementaryElementKind, at indexPath: IndexPath) -> NSView {
-        guard let contentSection = Section(rawValue: indexPath.section) else {
-            preconditionFailure("Invalid section \(indexPath.section)")
-        }
-
         guard let headerView = collectionView.makeSupplementaryView(ofKind: kind, withIdentifier: .communitySectionHeader, for: indexPath) as? CommunitySectionHeaderView else {
             return NSView()
         }
 
-        switch contentSection {
-        case .newsItems:
-            headerView.title = "Latest News"
-        case .editions:
-            headerView.title = "CocoaHub Editions"
-        }
+        let section = sections[indexPath.section]
+        headerView.title = section.title
+        headerView.color = section.color
 
         return headerView
     }

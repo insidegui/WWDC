@@ -11,7 +11,7 @@ import ConfCore
 
 final class CommunityCollectionViewItem: NSCollectionViewItem {
 
-    var newsItem: CommunityNewsItem? {
+    var newsItem: CommunityNewsItemViewModel? {
         get { itemView.newsItem }
         set { itemView.newsItem = newValue }
     }
@@ -24,21 +24,40 @@ final class CommunityCollectionViewItem: NSCollectionViewItem {
         return v
     }()
 
-    override func loadView() {
-        view = NSView()
-        view.wantsLayer = true
-        view.layer?.cornerCurve = .continuous
-        view.layer?.cornerRadius = 18
-        view.layer?.backgroundColor = NSColor.roundedCellBackground.cgColor
+    private lazy var contentView = CommunityCollectionContentView(frame: .zero)
 
-        view.addSubview(itemView)
+    override func loadView() {
+        view = CommunityCollectionContentView(frame: .zero)
+        contentView.autoresizingMask = [.width, .height]
+        view.addSubview(contentView)
+        contentView.layer?.cornerCurve = .continuous
+        contentView.layer?.cornerRadius = 18
+        contentView.layer?.backgroundColor = NSColor.roundedCellBackground.cgColor
+
+        contentView.addSubview(itemView)
 
         NSLayoutConstraint.activate([
-            itemView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 22),
-            itemView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -22),
-            itemView.topAnchor.constraint(equalTo: view.topAnchor, constant: 22),
-            itemView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -22)
+            itemView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 22),
+            itemView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -22),
+            itemView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
+            itemView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -22)
         ])
     }
     
+}
+
+fileprivate final class CommunityCollectionContentView: NSView {
+
+    override var isOpaque: Bool { true }
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+
+        wantsLayer = true
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+
 }

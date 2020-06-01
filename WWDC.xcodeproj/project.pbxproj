@@ -143,6 +143,9 @@
 		DDA7B7372484429600F86668 /* CommunitySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */; };
 		DDA7B7392484477100F86668 /* CommunityNewsItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */; };
 		DDA7B73B24845F3200F86668 /* CommunityTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73A24845F3200F86668 /* CommunityTagView.swift */; };
+		DDA7B73D24852FDB00F86668 /* VectorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73C24852FDB00F86668 /* VectorButton.swift */; };
+		DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */; };
+		DDA7B7422485397F00F86668 /* CommunityNewsItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
@@ -560,6 +563,9 @@
 		DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySectionHeaderView.swift; sourceTree = "<group>"; };
 		DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItemView.swift; sourceTree = "<group>"; };
 		DDA7B73A24845F3200F86668 /* CommunityTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityTagView.swift; sourceTree = "<group>"; };
+		DDA7B73C24852FDB00F86668 /* VectorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorButton.swift; sourceTree = "<group>"; };
+		DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Asset.swift"; sourceTree = "<group>"; };
+		DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItemViewModel.swift; sourceTree = "<group>"; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
@@ -964,9 +970,8 @@
 				DDDF807D20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift */,
 				DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */,
 				DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */,
-				DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */,
-				DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */,
-				DDA7B73A24845F3200F86668 /* CommunityTagView.swift */,
+				DDA7B7402485392000F86668 /* Community */,
+				DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -982,6 +987,7 @@
 				DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */,
 				DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */,
 				4D4D80C3217D281D00D1C233 /* DownloadViewModel.swift */,
+				DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */,
 			);
 			name = ViewModels;
 			sourceTree = "<group>";
@@ -1251,6 +1257,17 @@
 				DDA7B72D2484371C00F86668 /* CommunityViewController.swift */,
 				DDA7B72F248438B500F86668 /* CommunityCollectionViewController.swift */,
 				DDA7B73124843A3A00F86668 /* CommunityCollectionViewItem.swift */,
+			);
+			name = Community;
+			sourceTree = "<group>";
+		};
+		DDA7B7402485392000F86668 /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */,
+				DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */,
+				DDA7B73A24845F3200F86668 /* CommunityTagView.swift */,
+				DDA7B73C24852FDB00F86668 /* VectorButton.swift */,
 			);
 			name = Community;
 			sourceTree = "<group>";
@@ -2107,6 +2124,7 @@
 				DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */,
 				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
 				DDA7B72E2484371C00F86668 /* CommunityViewController.swift in Sources */,
+				DDA7B7422485397F00F86668 /* CommunityNewsItemViewModel.swift in Sources */,
 				DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */,
 				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
 				DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */,
@@ -2153,6 +2171,7 @@
 				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
 				DDDF807420BA3124007284F8 /* FeaturedContentViewController.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
+				DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */,
 				4D66CA50217E2C800006A8C9 /* DownloadsManagementTableRowView.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
@@ -2191,6 +2210,7 @@
 				DDA7B7392484477100F86668 /* CommunityNewsItemView.swift in Sources */,
 				DDDF807C20BA470B007284F8 /* FeaturedSectionViewModel.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
+				DDA7B73D24852FDB00F86668 /* VectorButton.swift in Sources */,
 				4DDF6A782177A00C008E5539 /* DownloadsManagementTableCellView.swift in Sources */,
 				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
 				DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */,
