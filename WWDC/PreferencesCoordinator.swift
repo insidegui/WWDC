@@ -13,7 +13,7 @@ import ConfCore
 
 enum PreferencesTab: Int {
     case general
-    case account
+    case playback
 }
 
 final class PreferencesCoordinator {
@@ -25,6 +25,7 @@ final class PreferencesCoordinator {
     private let tabController: WWDCTabViewController<PreferencesTab>
 
     private let generalController: GeneralPreferencesViewController
+    private let playbackController: PlaybackPreferencesViewController
 
     #if ICLOUD
     var userDataSyncEngine: UserDataSyncEngine? {
@@ -47,6 +48,13 @@ final class PreferencesCoordinator {
         let generalItem = NSTabViewItem(viewController: generalController)
         generalItem.label = "General"
         tabController.addTabViewItem(generalItem)
+
+        // Playback
+        playbackController = PlaybackPreferencesViewController.loadFromStoryboard()
+        playbackController.identifier = NSUserInterfaceItemIdentifier(rawValue: "videos")
+        let playbackItem = NSTabViewItem(viewController: playbackController)
+        playbackItem.label = "Playback"
+        tabController.addTabViewItem(playbackItem)
 
         windowController.contentViewController = tabController
     }

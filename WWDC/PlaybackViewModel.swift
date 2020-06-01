@@ -112,8 +112,12 @@ final class PlaybackViewModel {
     private func initializePlayerTimeSyncIfNeeded(with session: Session) {
         guard !isLiveStream else { return }
 
-        if session.isWatched {
-            player.seek(to: CMTimeMakeWithSeconds(0, preferredTimescale: 9000))
+        if session.isWatched || session.currentPosition().isZero {
+            if Preferences.shared.skipIntro {
+                player.seek(to: CMTimeMakeWithSeconds(Float64(session.firstAnnotationTime), preferredTimescale: 1), toleranceBefore: .zero, toleranceAfter: .zero)
+            } else {
+                player.seek(to: CMTimeMakeWithSeconds(0, preferredTimescale: 9000))
+            }
         } else {
             player.seek(to: CMTimeMakeWithSeconds(Float64(session.currentPosition()), preferredTimescale: 9000))
         }
@@ -163,4 +167,10 @@ extension PUINowPlayingInfo {
         )
     }
 
+}
+
+extension Session {
+    var firstAnnotationTime: Double {
+        transcript()?.annotations.first?.timecode ?? 0
+    }
 }
