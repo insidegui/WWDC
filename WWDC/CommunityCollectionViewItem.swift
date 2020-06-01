@@ -11,6 +11,8 @@ import ConfCore
 
 final class CommunityCollectionViewItem: NSCollectionViewItem {
 
+    var clickHandler: () -> Void = { }
+
     var newsItem: CommunityNewsItemViewModel? {
         get { itemView.newsItem }
         set { itemView.newsItem = newValue }
@@ -42,6 +44,13 @@ final class CommunityCollectionViewItem: NSCollectionViewItem {
             itemView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
             itemView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -22)
         ])
+
+        let click = NSClickGestureRecognizer(target: self, action: #selector(clicked))
+        view.addGestureRecognizer(click)
+    }
+
+    @objc private func clicked() {
+        clickHandler()
     }
     
 }

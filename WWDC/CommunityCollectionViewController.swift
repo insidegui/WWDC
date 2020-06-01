@@ -20,6 +20,8 @@ fileprivate extension NSUserInterfaceItemIdentifier {
 
 final class CommunityCollectionViewController: NSViewController {
 
+    var didSelectItem: (CommunityNewsItemViewModel) -> Void = { _ in }
+
     enum Section: Int, CaseIterable {
         case newsItems
         case editions
@@ -166,7 +168,11 @@ extension CommunityCollectionViewController: NSCollectionViewDataSource, NSColle
             preconditionFailure("Invalid cell")
         }
 
-        cell.newsItem = effectiveSections[indexPath.section].items[indexPath.item]
+        let item = effectiveSections[indexPath.section].items[indexPath.item]
+        cell.newsItem = item
+        cell.clickHandler = { [weak self] in
+            self?.didSelectItem(item)
+        }
 
         return cell
     }
@@ -176,7 +182,11 @@ extension CommunityCollectionViewController: NSCollectionViewDataSource, NSColle
             preconditionFailure("Invalid cell")
         }
 
-        cell.newsItem = effectiveSections[indexPath.section].items[indexPath.item]
+        let item = effectiveSections[indexPath.section].items[indexPath.item]
+        cell.newsItem = item
+        cell.clickHandler = { [weak self] in
+            self?.didSelectItem(item)
+        }
 
         return cell
     }

@@ -27,7 +27,13 @@ final class CommunityViewController: NSViewController {
     }
 
     private lazy var collectionController: CommunityCollectionViewController = {
-        CommunityCollectionViewController()
+        let c = CommunityCollectionViewController()
+
+        c.didSelectItem = { [weak self] item in
+            self?.handleContentSelected(item)
+        }
+
+        return c
     }()
 
     private lazy var centeredLogo: CocoaHubLogoView = {
@@ -98,6 +104,14 @@ final class CommunityViewController: NSViewController {
                        .drive(cornerLogo.rx.isHidden)
                        .disposed(by: disposeBag)
     }
+
+    private func handleContentSelected(_ item: CommunityNewsItemViewModel) {
+        if item.url.isAppleDeveloperURL {
+            NotificationCenter.default.post(name: .openWWDCURL, object: item.url)
+        } else {
+            NSWorkspace.shared.open(item.url)
+        }
+    }
     
 }
 
@@ -114,5 +128,12 @@ fileprivate extension CommunitySection {
             color: .primaryText,
             items: items.compactMap(CommunityNewsItemViewModel.init)
         )
+    }
+}
+
+fileprivate extension URL {
+    var isAppleDeveloperURL: Bool {
+        guard let host = host else { return false }
+        return host == DeepLink.Constants.host
     }
 }

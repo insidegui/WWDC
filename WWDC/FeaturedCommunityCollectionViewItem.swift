@@ -10,6 +10,8 @@ import Cocoa
 
 final class FeaturedCommunityCollectionViewItem: NSCollectionViewItem {
 
+    var clickHandler: () -> Void = { }
+
     var newsItem: CommunityNewsItemViewModel? {
         didSet {
             guard newsItem != oldValue else { return }
@@ -80,6 +82,13 @@ final class FeaturedCommunityCollectionViewItem: NSCollectionViewItem {
             imageContainerView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
             imageContainerView.heightAnchor.constraint(equalToConstant: 166)
         ])
+
+        let click = NSClickGestureRecognizer(target: self, action: #selector(clicked))
+        view.addGestureRecognizer(click)
+    }
+
+    @objc private func clicked() {
+        clickHandler()
     }
 
     override func viewDidLayout() {
