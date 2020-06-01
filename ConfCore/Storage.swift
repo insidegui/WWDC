@@ -206,8 +206,6 @@ public final class Storage {
             backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
                     resource.session = session
-                } else {
-                    os_log("Expected session to match related activity identifier: %{public}@", log: self.log, type: .info, String(describing: resource.identifier))
                 }
             }
 

@@ -14,7 +14,7 @@ import RealmSwift
 
 fileprivate extension NSUserInterfaceItemIdentifier {
     static let communityItem = NSUserInterfaceItemIdentifier(rawValue: "communityItemCell")
-    static let communityEditionItem = NSUserInterfaceItemIdentifier(rawValue: "communityEditionCell")
+    static let communityFeaturedItem = NSUserInterfaceItemIdentifier(rawValue: "communityFeaturedCell")
     static let communitySectionHeader = NSUserInterfaceItemIdentifier(rawValue: "communitySectionHeader")
 }
 
@@ -25,7 +25,27 @@ final class CommunityCollectionViewController: NSViewController {
         case editions
     }
 
+    var featuredSection: CommunitySection? {
+        didSet {
+            updateSections()
+        }
+    }
+
     var sections: [CommunitySection] = [] {
+        didSet {
+            updateSections()
+        }
+    }
+
+    private func updateSections() {
+        if let featured = featuredSection {
+            effectiveSections = [featured] + sections
+        } else {
+            effectiveSections = sections
+        }
+    }
+
+    private var effectiveSections: [CommunitySection] = [] {
         didSet {
             reloadData()
         }
@@ -40,27 +60,32 @@ final class CommunityCollectionViewController: NSViewController {
             alignment: .topLeading
         )
 
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 30, bottom: 0, trailing: 0)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0)
 
         return item
     }
 
     private func makeLayout() -> NSCollectionViewLayout {
         NSCollectionViewCompositionalLayout { index, env in
+            let isFeaturedSection = self.featuredSection != nil && index == 0
+
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
 
             let layoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+            layoutItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: -22, bottom: 0, trailing: 0)
+            let layoutGroupSize = NSCollectionLayoutSize(
+                widthDimension: isFeaturedSection ? .absolute(588) : .fractionalWidth(0.3),
+                heightDimension: isFeaturedSection ? .absolute(207) : .absolute(200)
+            )
 
-            let layoutGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.3), heightDimension: .absolute(200))
-
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: layoutGroupSize, subitem: layoutItem, count: 1)
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 22, bottom: 0, trailing: 0)
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: layoutGroupSize, subitems: [layoutItem])
+            group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 22, bottom: 0, trailing: 22)
 
             let section = NSCollectionLayoutSection(group: group)
 
-            section.boundarySupplementaryItems = [self.makeHeaderLayoutItem()]
+            section.boundarySupplementaryItems = isFeaturedSection ? [] : [self.makeHeaderLayoutItem()]
             section.orthogonalScrollingBehavior = .continuous
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 22, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 22, bottom: 22, trailing: 0)
 
             return section
         }
@@ -73,7 +98,8 @@ final class CommunityCollectionViewController: NSViewController {
         v.hasVerticalScroller = false
         v.backgroundColor = .clear
         v.automaticallyAdjustsContentInsets = false
-        v.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: 80, right: 0)
+        v.contentInsets = NSEdgeInsets(top: 42, left: 0, bottom: 80, right: 0)
+        v.translatesAutoresizingMaskIntoConstraints = false
 
         return v
     }()
@@ -81,7 +107,6 @@ final class CommunityCollectionViewController: NSViewController {
     private lazy var collectionView: NSCollectionView = {
         let v = NSCollectionView()
 
-        v.translatesAutoresizingMaskIntoConstraints = false
         v.collectionViewLayout = self.makeLayout()
         v.backgroundColors = [.clear]
         v.dataSource = self
@@ -96,8 +121,6 @@ final class CommunityCollectionViewController: NSViewController {
         view = NSView()
         view.wantsLayer = true
 
-        scrollView.frame = view.bounds
-        scrollView.autoresizingMask = [.width, .height]
         view.addSubview(scrollView)
         scrollView.documentView = collectionView
 
@@ -109,7 +132,7 @@ final class CommunityCollectionViewController: NSViewController {
         ])
 
         collectionView.register(CommunityCollectionViewItem.self, forItemWithIdentifier: .communityItem)
-        collectionView.register(CommunityCollectionViewItem.self, forItemWithIdentifier: .communityEditionItem)
+        collectionView.register(FeaturedCommunityCollectionViewItem.self, forItemWithIdentifier: .communityFeaturedItem)
         collectionView.register(CommunitySectionHeaderView.self, forSupplementaryViewOfKind: NSCollectionView.elementKindSectionHeader, withIdentifier: .communitySectionHeader)
     }
 
@@ -122,18 +145,38 @@ final class CommunityCollectionViewController: NSViewController {
 
 extension CommunityCollectionViewController: NSCollectionViewDataSource, NSCollectionViewDelegate {
 
-    func numberOfSections(in collectionView: NSCollectionView) -> Int { sections.count }
+    func numberOfSections(in collectionView: NSCollectionView) -> Int { effectiveSections.count }
 
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        sections[section].items.count
+        effectiveSections[section].items.count
     }
 
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        let item = effectiveSections[indexPath.section].items[indexPath.item]
+
+        if item.isFeatured {
+            return featuredCollectionViewItem(for: item, at: indexPath)
+        } else {
+            return newsCollectionViewItem(for: item, at: indexPath)
+        }
+    }
+
+    private func newsCollectionViewItem(for item: CommunityNewsItemViewModel, at indexPath: IndexPath) -> NSCollectionViewItem {
         guard let cell = collectionView.makeItem(withIdentifier: .communityItem, for: indexPath) as? CommunityCollectionViewItem else {
             preconditionFailure("Invalid cell")
         }
 
-        cell.newsItem = sections[indexPath.section].items[indexPath.item]
+        cell.newsItem = effectiveSections[indexPath.section].items[indexPath.item]
+
+        return cell
+    }
+
+    private func featuredCollectionViewItem(for item: CommunityNewsItemViewModel, at indexPath: IndexPath) -> NSCollectionViewItem {
+        guard let cell = collectionView.makeItem(withIdentifier: .communityFeaturedItem, for: indexPath) as? FeaturedCommunityCollectionViewItem else {
+            preconditionFailure("Invalid cell")
+        }
+
+        cell.newsItem = effectiveSections[indexPath.section].items[indexPath.item]
 
         return cell
     }
@@ -143,7 +186,7 @@ extension CommunityCollectionViewController: NSCollectionViewDataSource, NSColle
             return NSView()
         }
 
-        let section = sections[indexPath.section]
+        let section = effectiveSections[indexPath.section]
         headerView.title = section.title
         headerView.color = section.color
 

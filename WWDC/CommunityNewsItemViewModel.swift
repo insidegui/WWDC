@@ -35,6 +35,7 @@ struct CommunityNewsItemViewModel: Hashable {
     let url: URL
     let date: Date
     let formattedDate: String
+    let isFeatured: Bool
     let image: URL?
 
 }
@@ -125,6 +126,7 @@ extension CommunityNewsItemViewModel {
             url: url,
             date: item.date,
             formattedDate: Self.dateFormatter.string(from: item.date),
+            isFeatured: item.isFeatured,
             image: item.image.flatMap(URL.init)
         )
     }

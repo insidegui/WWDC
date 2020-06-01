@@ -14,6 +14,8 @@ final class CommunityNewsItemView: NSView {
 
     var newsItem: CommunityNewsItemViewModel? {
         didSet {
+            guard newsItem != oldValue else { return }
+
             updateUI()
         }
     }

@@ -10,6 +10,7 @@ import Cocoa
 import ConfCore
 import RxSwift
 import RxCocoa
+import RealmSwift
 
 final class CommunityViewController: NSViewController {
 
@@ -78,6 +79,14 @@ final class CommunityViewController: NSViewController {
                           })
                           .disposed(by: disposeBag)
 
+        syncEngine.storage.featuredCommunityNewsItemsObservable
+                          .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+                          .observeOn(MainScheduler.instance)
+                          .subscribe(onNext: { [weak self] results in
+                            self?.collectionController.featuredSection = CommunitySection.featuredSection(with: results)
+                          })
+                          .disposed(by: disposeBag)
+
         let emptyObservable = syncEngine.storage.communityNewsItemsObservable.map { $0.isEmpty }
 
         emptyObservable.asDriver(onErrorJustReturn: true)
@@ -90,4 +99,20 @@ final class CommunityViewController: NSViewController {
                        .disposed(by: disposeBag)
     }
     
+}
+
+fileprivate extension CommunitySection {
+    static func featuredSection(with items: Results<CommunityNewsItem>) -> CommunitySection {
+        CommunitySection(
+            tag: CommunityTagViewModel(
+                name: "featured",
+                title: "Featured",
+                order: -1,
+                color: .primaryText
+            ),
+            title: "Featured",
+            color: .primaryText,
+            items: items.compactMap(CommunityNewsItemViewModel.init)
+        )
+    }
 }
