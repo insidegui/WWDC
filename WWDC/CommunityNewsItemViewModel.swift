@@ -10,46 +10,13 @@ import Cocoa
 import ConfCore
 import RealmSwift
 
-struct CommunityTagViewModel: Hashable, RawRepresentable {
+struct CommunityTagViewModel: Hashable {
 
-    typealias RawValue = String
+    let name: String
+    let title: String
+    let order: Int
+    let color: NSColor
 
-    var rawValue: String
-
-    var order: Int
-
-    var color: NSColor?
-
-    init(rawValue: String) {
-        self.rawValue = rawValue
-        self.order = Self.defaultOrder(for: rawValue)
-        self.color = NSColor(named: .init("tagColor-" + rawValue))
-    }
-
-    var displayName: String {
-        switch rawValue {
-        case "apple": return "Apple"
-        case "community": return "Community"
-        case "evolution": return "Evolution"
-        case "press": return "Press"
-        case "podcast": return "Podcast"
-        case "newsletter": return "Newsletter"
-        case "sundell": return "WWDC by Sundell & Friends"
-        default: return ""
-        }
-    }
-
-    static func defaultOrder(for value: String) -> Int {
-        switch value {
-        case "apple": return 0
-        case "community": return 1
-        case "podcast": return 2
-        case "sundell": return 3
-        case "evolution": return 4
-        case "press": return 5
-        default: return 99
-        }
-    }
 }
 
 struct CommunitySection: Hashable {
@@ -74,9 +41,12 @@ struct CommunityNewsItemViewModel: Hashable {
 
 extension CommunityTagViewModel {
     init(tag: CommunityTag) {
-        self = CommunityTagViewModel(rawValue: tag.name)
-        color = NSColor.fromHexString(hexString: tag.color)
-        order = tag.order
+        self.init(
+            name: tag.name,
+            title: tag.title,
+            order: tag.order,
+            color: NSColor.fromHexString(hexString: tag.color)
+        )
     }
 }
 
@@ -105,8 +75,8 @@ extension CommunitySection {
         return groups.keys.sorted(by: { $0.order < $1.order }).map { tag in
             CommunitySection(
                 tag: tag,
-                title: tag.displayName,
-                color: tag.color ?? .systemGray,
+                title: tag.title,
+                color: tag.color,
                 items: groups[tag] ?? []
             )
         }

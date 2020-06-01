@@ -142,7 +142,6 @@
 		DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */; };
 		DDA7B7372484429600F86668 /* CommunitySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */; };
 		DDA7B7392484477100F86668 /* CommunityNewsItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */; };
-		DDA7B73B24845F3200F86668 /* CommunityTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73A24845F3200F86668 /* CommunityTagView.swift */; };
 		DDA7B73D24852FDB00F86668 /* VectorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73C24852FDB00F86668 /* VectorButton.swift */; };
 		DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */; };
 		DDA7B7422485397F00F86668 /* CommunityNewsItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */; };
@@ -565,7 +564,6 @@
 		DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompositionalLayoutBackgroundSwizzler.m; sourceTree = "<group>"; };
 		DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySectionHeaderView.swift; sourceTree = "<group>"; };
 		DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItemView.swift; sourceTree = "<group>"; };
-		DDA7B73A24845F3200F86668 /* CommunityTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityTagView.swift; sourceTree = "<group>"; };
 		DDA7B73C24852FDB00F86668 /* VectorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorButton.swift; sourceTree = "<group>"; };
 		DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Asset.swift"; sourceTree = "<group>"; };
 		DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItemViewModel.swift; sourceTree = "<group>"; };
@@ -1274,7 +1272,6 @@
 			children = (
 				DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */,
 				DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */,
-				DDA7B73A24845F3200F86668 /* CommunityTagView.swift */,
 				DDA7B73C24852FDB00F86668 /* VectorButton.swift */,
 				DDA7B76524855CC200F86668 /* CocoaHubLogoView.swift */,
 			);
@@ -2191,7 +2188,6 @@
 				DD6E06F41EDBC11F000EAEA4 /* WWDCTextButton.swift in Sources */,
 				DDDF807A20BA3F1B007284F8 /* FeaturedContentViewModel.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
-				DDA7B73B24845F3200F86668 /* CommunityTagView.swift in Sources */,
 				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
 				DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
