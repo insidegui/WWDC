@@ -167,6 +167,11 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         picker.delegate = PickerDelegate.shared
         picker.show(relativeTo: .zero, of: sender, preferredEdge: .minY)
     }
+
+    func sessionActionsDidSelectShareClip(_ sender: NSView?) {
+        videosController.detailViewController.shelfController.showClipUI()
+    }
+
 }
 
 final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
@@ -193,7 +198,18 @@ final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
         }
 
         var proposedServices = proposedServices
-        proposedServices.insert(copyService, at: 0)
+
+        // Add a "Reveal in Finder" option for local file URLs
+        if let url = items.first as? URL, url.isFileURL {
+            let finderService = NSSharingService(title: "Reveal in Finder", image: #imageLiteral(resourceName: "reveal-in-finder"), alternateImage: nil) {
+                NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: url.deletingLastPathComponent().path)
+            }
+
+            proposedServices.insert(finderService, at: 0)
+        } else {
+            proposedServices.insert(copyService, at: 0)
+        }
+
 
         return proposedServices
     }

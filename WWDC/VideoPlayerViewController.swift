@@ -171,6 +171,23 @@ final class VideoPlayerViewController: NSViewController {
         player.seek(to: time)
     }
 
+    var currentTime: CMTime? {
+        player?.currentTime()
+    }
+
+    var isPlaying: Bool {
+        guard let player = player else { return false }
+        return !player.rate.isZero
+    }
+
+    func play() {
+        player?.play()
+    }
+
+    func pause() {
+        player?.pause()
+    }
+
     // MARK: - Player Observation
 
     private var playerStatusObserver: NSKeyValueObservation?

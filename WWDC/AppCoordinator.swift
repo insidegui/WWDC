@@ -49,6 +49,9 @@ final class AppCoordinator {
     /// Whether we're currently in the middle of a player context transition
     var isTransitioningPlayerContext = false
 
+    /// Whether we were playing the video when a clip sharing session begin, to restore state later.
+    var wasPlayingWhenClipSharingBegan = false
+
     init(windowController: MainWindowController) {
         do {
             let supportPath = try PathUtil.appSupportPathCreatingIfNeeded()

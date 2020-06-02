@@ -1154,12 +1154,17 @@ public final class PUIPlayerView: NSView {
         case l = 37
     }
 
+    /// Setting this to `false` disables event handing for keyboard events.
+    public var isEnabled = true
+
     private func startMonitoringKeyEvents() {
         if keyDownEventMonitor != nil {
             stopMonitoringKeyEvents()
         }
 
         keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [unowned self] event in
+            guard self.isEnabled else { return event }
+
             guard let command = KeyCommands(rawValue: event.keyCode) else {
                 return event
             }
