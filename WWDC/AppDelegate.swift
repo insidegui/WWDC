@@ -41,17 +41,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func application(_ application: NSApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([NSUserActivityRestoring]) -> Void) -> Bool {
-        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
-            guard let url = userActivity.webpageURL else { return false }
-            guard let link = DeepLink(url: url) else { return false }
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else { return false }
+        guard let url = userActivity.webpageURL else { return false }
+        guard let link = DeepLink(url: url) else { return false }
 
-            coordinator.handle(link: link, deferIfNeeded: true)
+        coordinator.handle(link: link, deferIfNeeded: true)
 
-            return true
-        } else {
-            #warning("TODO: Handle handoff")
-            return false
-        }
+        return true
     }
 
     @IBAction func showPreferences(_ sender: Any) {
