@@ -53,8 +53,4 @@ extension NSColor {
     static var externalPlaybackText: NSColor {
         return #colorLiteral(red: 0.8980392156862745, green: 0.8980392156862745, blue: 0.8980392156862745, alpha: 1)
     }
-
-    static var scrimColor: NSColor {
-        return NSColor.black
-    }
 }
