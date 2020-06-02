@@ -11,7 +11,9 @@ import Foundation
 struct DeepLink {
 
     struct Constants {
-        static let host = "developer.apple.com"
+        static let appleHost = "developer.apple.com"
+        static let nativeHost = "wwdc.io"
+        static let hosts = [Self.appleHost, Self.nativeHost]
     }
 
     let year: Int
@@ -25,7 +27,8 @@ struct DeepLink {
     }
 
     init?(url: URL) {
-        guard url.host == Constants.host else { return nil }
+        guard let host = url.host else { return nil }
+        guard Constants.hosts.contains(host) else { return nil }
 
         let components = url.pathComponents
 
@@ -58,4 +61,13 @@ struct DeepLink {
         isForCurrentYear = (year == currentYearDigits)
     }
 
+}
+
+extension URL {
+    var replacingAppleDeveloperHostWithNativeHost: URL {
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else { return self }
+        components.host = DeepLink.Constants.nativeHost
+        components.path = "/share" + components.path
+        return components.url ?? self
+    }
 }

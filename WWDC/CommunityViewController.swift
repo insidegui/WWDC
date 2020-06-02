@@ -134,6 +134,6 @@ fileprivate extension CommunitySection {
 fileprivate extension URL {
     var isAppleDeveloperURL: Bool {
         guard let host = host else { return false }
-        return host == DeepLink.Constants.host
+        return host == DeepLink.Constants.appleHost
     }
 }

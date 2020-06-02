@@ -66,6 +66,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator.handle(link: link, deferIfNeeded: true)
     }
 
+    func application(_ application: NSApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([NSUserActivityRestoring]) -> Void) -> Bool {
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else { return false }
+        guard let url = userActivity.webpageURL else { return false }
+        guard let link = DeepLink(url: url) else { return false }
+
+        coordinator.handle(link: link, deferIfNeeded: true)
+
+        return true
+    }
+
     @IBAction func showPreferences(_ sender: Any) {
         coordinator.showPreferences(sender)
     }

@@ -163,7 +163,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
 
         guard let url = URL(string: webpageAsset.remoteURL) else { return }
 
-        let picker = NSSharingServicePicker(items: [url])
+        let picker = NSSharingServicePicker(items: [url.replacingAppleDeveloperHostWithNativeHost])
         picker.delegate = PickerDelegate.shared
         picker.show(relativeTo: .zero, of: sender, preferredEdge: .minY)
     }
