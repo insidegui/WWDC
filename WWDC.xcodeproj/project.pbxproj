@@ -431,6 +431,8 @@
 		DD0159D81ED11A9800F980F1 /* ModalLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalLoadingView.swift; sourceTree = "<group>"; };
 		DD0159FB1ED23F7700F980F1 /* RemoteEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteEnvironment.swift; sourceTree = "<group>"; };
 		DD0F0C551E7B8DD600B52184 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		DD1879C224868E5700164AD1 /* WWDCDebug_iCloud.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WWDCDebug_iCloud.entitlements; sourceTree = "<group>"; };
+		DD1879C324868EF700164AD1 /* WWDCRelease_iCloud.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WWDCRelease_iCloud.entitlements; sourceTree = "<group>"; };
 		DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfView.swift; sourceTree = "<group>"; };
 		DD34A79A1EC3CD5900E0B575 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DD34DA061E4AB0E400F25C45 /* DecodingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodingTests.swift; sourceTree = "<group>"; };
@@ -863,6 +865,8 @@
 		DD36A4AE1E478C6A00B2EA88 /* WWDC */ = {
 			isa = PBXGroup;
 			children = (
+				DD1879C224868E5700164AD1 /* WWDCDebug_iCloud.entitlements */,
+				DD1879C324868EF700164AD1 /* WWDCRelease_iCloud.entitlements */,
 				DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */,
 				DD59106E1ECA0C2F003C32A4 /* WWDC.entitlements */,
 				DD9301BE1EE3210F00BE724B /* Playback Support */,
@@ -2716,7 +2720,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
+				CODE_SIGN_ENTITLEMENTS = WWDC/WWDCDebug_iCloud.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -2851,13 +2855,13 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
-				CODE_SIGN_IDENTITY = "Developer ID Application: GUILHERME RAMBO (8C7439RJLG)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = WWDC/WWDCRelease_iCloud.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = 922;
-				DEVELOPMENT_TEAM = 8C7439RJLG;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2873,7 +2877,7 @@
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "WWDC Prod 2020";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDC/WWDC-Bridging-Header.h";
 			};
 			name = Release_iCloud;
