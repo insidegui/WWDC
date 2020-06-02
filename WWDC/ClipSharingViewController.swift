@@ -243,6 +243,8 @@ final class ClipSharingViewController: NSViewController {
     }
 
     private func showProgressUI() {
+        playerView.controlsStyle = .none
+
         progressIndicator.isIndeterminate = false
         progressIndicator.minValue = 0
         progressIndicator.maxValue = 1
