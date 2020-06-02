@@ -206,8 +206,6 @@ public final class Storage {
             backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
                     resource.session = session
-                } else {
-                    os_log("Expected session to match related activity identifier: %{public}@", log: self.log, type: .info, String(describing: resource.identifier))
                 }
             }
 
@@ -331,6 +329,75 @@ public final class Storage {
             backgroundRealm.delete(existingHeroData)
 
             backgroundRealm.add(hero, update: .all)
+        }, disableAutorefresh: false, completionBlock: completion)
+    }
+
+    internal func store(cocoaHubNewsResult result: Result<CocoaHubIndexResponse, APIError>, completion: @escaping (Error?) -> Void) {
+        let response: CocoaHubIndexResponse
+
+        do {
+            response = try result.get()
+        } catch {
+            os_log("Error downloading CocoaHub news:\n%{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
+            completion(error)
+            return
+        }
+
+        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+            response.tags.forEach { tag in
+                backgroundRealm.add(tag, update: .modified)
+            }
+            response.news.forEach { item in
+                item.rawTags.forEach { tagName in
+                    guard let tag = response.tags.first(where: { $0.name == tagName }) else { return }
+
+                    item.tags.append(tag)
+                }
+            }
+            
+            backgroundRealm.add(response.news, update: .modified)
+
+            response.editions.forEach { edition in
+                if let existingEdition = backgroundRealm.object(ofType: CocoaHubEdition.self, forPrimaryKey: edition.id) {
+                    existingEdition.merge(with: edition)
+                } else {
+                    backgroundRealm.add(edition, update: .all)
+                }
+            }
+        }, disableAutorefresh: false, completionBlock: completion)
+    }
+
+    internal func store(cocoaHubEditionArticles result: Result<CocoaHubEditionResponse, APIError>, completion: @escaping (Error?) -> Void) {
+        let response: CocoaHubEditionResponse
+
+        do {
+            response = try result.get()
+        } catch {
+            os_log("Error downloading CocoaHub edition:\n%{public}@",
+                   log: log,
+                   type: .error,
+                   String(describing: error))
+            completion(error)
+            return
+        }
+
+        let editionId = response._id
+
+        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+            guard let edition = backgroundRealm.object(ofType: CocoaHubEdition.self, forPrimaryKey: editionId) else { return }
+
+            response.articles.forEach { article in
+                if let index = edition.articles.index(of: article) {
+                    edition.articles[index] = article
+                } else {
+                    edition.articles.append(article)
+                }
+            }
+
+            backgroundRealm.add(edition, update: .modified)
         }, disableAutorefresh: false, completionBlock: completion)
     }
 
@@ -519,6 +586,26 @@ public final class Storage {
         let hero = self.realm.objects(EventHero.self)
 
         return Observable.collection(from: hero).map { $0.first }
+    }()
+
+    public lazy var communityNewsItemsObservable: Observable<Results<CommunityNewsItem>> = {
+        let predicate = NSPredicate(format: "summary != nil AND isFeatured = false")
+        let items = realm.objects(CommunityNewsItem.self).filter(predicate).sorted(byKeyPath: "date", ascending: false)
+
+        return Observable.collection(from: items)
+    }()
+
+    public lazy var featuredCommunityNewsItemsObservable: Observable<Results<CommunityNewsItem>> = {
+        let predicate = NSPredicate(format: "summary != nil AND isFeatured = true")
+        let items = realm.objects(CommunityNewsItem.self).filter(predicate).sorted(byKeyPath: "date", ascending: false)
+
+        return Observable.collection(from: items)
+    }()
+
+    public lazy var cocoaHubEditionsObservable: Observable<Results<CocoaHubEdition>> = {
+        let items = realm.objects(CocoaHubEdition.self).sorted(byKeyPath: "index", ascending: false)
+
+        return Observable.collection(from: items)
     }()
 
     public func asset(with remoteURL: URL) -> SessionAsset? {

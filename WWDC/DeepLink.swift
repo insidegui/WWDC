@@ -10,7 +10,7 @@ import Foundation
 
 struct DeepLink {
 
-    private struct LinkConstants {
+    struct Constants {
         static let host = "developer.apple.com"
     }
 
@@ -25,7 +25,7 @@ struct DeepLink {
     }
 
     init?(url: URL) {
-        guard url.host == LinkConstants.host else { return nil }
+        guard url.host == Constants.host else { return nil }
 
         let components = url.pathComponents
 

@@ -8,6 +8,11 @@
 
 import Cocoa
 import Sparkle
+import Siesta
+
+extension Notification.Name {
+    static let openWWDCURL = Notification.Name(rawValue: "OpenWWDCURLNotification")
+}
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -19,12 +24,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
     }
 
+    private var urlObservationToken: NSObjectProtocol?
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
 
         LoggingHelper.install()
 
         NSApp.registerForRemoteNotifications(matching: [])
+
+        #if DEBUG
+        if UserDefaults.standard.bool(forKey: "WWDCEnableNetworkDebugging") {
+            SiestaLog.Category.enabled = .all
+        }
+        #endif
+
+        urlObservationToken = NotificationCenter.default.addObserver(forName: .openWWDCURL, object: nil, queue: .main) { [weak self] note in
+            guard let url = note.object as? URL else { return }
+            self?.openURL(url)
+        }
     }
 
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
@@ -35,7 +53,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let event = event else { return }
         guard let urlString = event.paramDescriptor(forKeyword: UInt32(keyDirectObject))?.stringValue else { return }
         guard let url = URL(string: urlString) else { return }
-        guard let link = DeepLink(url: url) else { return }
+
+        openURL(url)
+    }
+
+    private func openURL(_ url: URL) {
+        guard let link = DeepLink(url: url) else {
+            NSWorkspace.shared.open(url)
+            return
+        }
 
         coordinator.handle(link: link, deferIfNeeded: true)
     }
