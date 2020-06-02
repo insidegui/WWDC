@@ -112,7 +112,8 @@ final class ClipRenderer: NSObject {
                 os_log("Export session started")
             case .completed:
                 os_log("Export session finished")
-
+                self.progressUpdateTimer?.invalidate()
+                
                 self.reportCompletion(with: .success(self.outputURL))
             case .failed:
                 if let error = session.error {
@@ -123,7 +124,9 @@ final class ClipRenderer: NSObject {
 
                 self.reportCompletion(with: .failure(self.error(with: "The export failed.")))
             case .cancelled:
-                self.reportCompletion(with: .failure(self.error(with: "The export was cancelled.")))
+                self.progressUpdateTimer?.invalidate()
+                os_log("Cancelled", log: self.log, type: .debug)
+                return
             @unknown default:
                 fatalError("Unknown case")
             }

@@ -77,6 +77,15 @@ final class ClipSharingViewController: NSViewController {
         return v
     }()
 
+    private lazy var cancelButton: NSButton = {
+        let v = NSButton(title: "Cancel", target: self, action: #selector(cancel))
+
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.controlSize = .small
+
+        return v
+    }()
+
     private(set) lazy var playerView: AVPlayerView = {
         let v = AVPlayerView()
 
@@ -145,6 +154,10 @@ final class ClipSharingViewController: NSViewController {
 
     func hide() {
         guard view.superview != nil else { return }
+
+        if renderer != nil {
+            cancel()
+        }
 
         view.removeFromSuperview()
         removeFromParent()
@@ -238,10 +251,13 @@ final class ClipSharingViewController: NSViewController {
         exportingBackgroundView.frame = view.bounds
         view.addSubview(exportingBackgroundView, positioned: .below, relativeTo: progressIndicator)
         view.addSubview(exportingLabel)
+        view.addSubview(cancelButton)
 
         NSLayoutConstraint.activate([
             exportingLabel.topAnchor.constraint(equalTo: progressIndicator.bottomAnchor, constant: 6),
-            exportingLabel.centerXAnchor.constraint(equalTo: progressIndicator.centerXAnchor)
+            exportingLabel.centerXAnchor.constraint(equalTo: progressIndicator.centerXAnchor),
+            cancelButton.topAnchor.constraint(equalTo: exportingLabel.bottomAnchor, constant: 6),
+            cancelButton.centerXAnchor.constraint(equalTo: progressIndicator.centerXAnchor)
         ])
     }
 
@@ -249,6 +265,7 @@ final class ClipSharingViewController: NSViewController {
         progressIndicator.doubleValue = Double(progress)
 
         if progress >= 0.97 {
+            cancelButton.isEnabled = false
             exportingLabel.stringValue = "Done!"
             progressIndicator.stopAnimation(nil)
         }
@@ -261,12 +278,20 @@ final class ClipSharingViewController: NSViewController {
         case .failure(let error):
             presentError(error)
         }
+
+        renderer = nil
     }
 
     private func shareVideo(with url: URL) {
         let picker = NSSharingServicePicker(items: [url])
         picker.delegate = self
         picker.show(relativeTo: NSRect(x: view.bounds.midX, y: view.bounds.midY, width: 1, height: 1), of: view, preferredEdge: .maxY)
+    }
+
+    @objc func cancel() {
+        renderer?.cancel()
+        renderer = nil
+        hide()
     }
     
 }
