@@ -95,7 +95,7 @@
 		DD65FD6D1E48BE270054DD35 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD6C1E48BE270054DD35 /* Bookmark.swift */; };
 		DD6E06F41EDBC11F000EAEA4 /* WWDCTextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F31EDBC11F000EAEA4 /* WWDCTextButton.swift */; };
 		DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */; };
-		DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */; };
+		DD6E06F81EDBC62D000EAEA4 /* SessionTranscriptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F71EDBC62D000EAEA4 /* SessionTranscriptViewController.swift */; };
 		DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */; };
 		DD71CC2A20BD009500BB5F47 /* AppCoordinator+Featured.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */; };
 		DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */; };
@@ -133,6 +133,8 @@
 		DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */; };
 		DDA60E1720A9083E002EECF5 /* RelatedSessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1620A9083E002EECF5 /* RelatedSessionsViewController.swift */; };
 		DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */; };
+		DDA7B7142482A4A500F86668 /* TranscriptSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7132482A4A500F86668 /* TranscriptSearchController.swift */; };
+		DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */; };
 		DDAE001B1EC52D2B0036C7E9 /* SessionProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDAE7C4F1E5BA4E300CEA205 /* transcript.json in Resources */ = {isa = PBXBuildFile; fileRef = DDAE7C4E1E5BA4E300CEA205 /* transcript.json */; };
@@ -498,7 +500,7 @@
 		DD65FD6C1E48BE270054DD35 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
 		DD6E06F31EDBC11F000EAEA4 /* WWDCTextButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTextButton.swift; sourceTree = "<group>"; };
 		DD6E06F51EDBC379000EAEA4 /* WWDCBottomBorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCBottomBorderView.swift; sourceTree = "<group>"; };
-		DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableViewController.swift; sourceTree = "<group>"; };
+		DD6E06F71EDBC62D000EAEA4 /* SessionTranscriptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionTranscriptViewController.swift; sourceTree = "<group>"; };
 		DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableCellView.swift; sourceTree = "<group>"; };
 		DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Featured.swift"; sourceTree = "<group>"; };
 		DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCProgressIndicator.swift; sourceTree = "<group>"; };
@@ -538,6 +540,8 @@
 		DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCollectionViewItem.swift; sourceTree = "<group>"; };
 		DDA60E1620A9083E002EECF5 /* RelatedSessionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedSessionsViewController.swift; sourceTree = "<group>"; };
 		DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPreferencesViewController.swift; sourceTree = "<group>"; };
+		DDA7B7132482A4A500F86668 /* TranscriptSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptSearchController.swift; sourceTree = "<group>"; };
+		DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTranscriptWindowController.swift; sourceTree = "<group>"; };
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
@@ -1133,7 +1137,9 @@
 			isa = PBXGroup;
 			children = (
 				DD6E06FA1EDBC644000EAEA4 /* Summary */,
-				DD6E06F71EDBC62D000EAEA4 /* TranscriptTableViewController.swift */,
+				DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */,
+				DD6E06F71EDBC62D000EAEA4 /* SessionTranscriptViewController.swift */,
+				DDA7B7132482A4A500F86668 /* TranscriptSearchController.swift */,
 			);
 			name = Tabs;
 			sourceTree = "<group>";
@@ -2113,7 +2119,7 @@
 				4D0E806F217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift in Sources */,
 				DDDF807820BA3DAA007284F8 /* FeaturedSectionViewController.swift in Sources */,
 				4DBA2F7620FE71BF00ED0253 /* DownloadsStatusButton.swift in Sources */,
-				DD6E06F81EDBC62D000EAEA4 /* TranscriptTableViewController.swift in Sources */,
+				DD6E06F81EDBC62D000EAEA4 /* SessionTranscriptViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
 				DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */,
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
@@ -2121,6 +2127,7 @@
 				DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */,
 				DDDF808020BA53A4007284F8 /* FlippedClipView.swift in Sources */,
 				DDB3529C1EC8AB5D00254815 /* WWDCLayer.swift in Sources */,
+				DDA7B7142482A4A500F86668 /* TranscriptSearchController.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,
 				DD34A79B1EC3CD5900E0B575 /* Constants.swift in Sources */,
 				4DA9C4D120EC098800710354 /* DownloadsManagementViewController.swift in Sources */,
@@ -2154,6 +2161,7 @@
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
 				DDC6781B1EDB629C00A4E19C /* GeneralPreferencesViewController.swift in Sources */,
 				DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */,
+				DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */,
 				DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */,
 				DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */,
 				DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */,
