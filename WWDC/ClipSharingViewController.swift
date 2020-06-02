@@ -12,6 +12,12 @@ import AVKit
 
 final class ClipSharingViewController: NSViewController {
 
+    struct Constants {
+        // Limit shared clips to a maximum of 5 minutes.
+        static let maximumDuration: Float64 = 60 * 5
+        static let humanReadableMaxDuration = "5 minutes"
+    }
+
     let assetURL: URL
     let asset: AVURLAsset
     let initialBeginTime: CMTime?
@@ -189,6 +195,12 @@ final class ClipSharingViewController: NSViewController {
 
         guard let item = player.currentItem else { return }
 
+        let range = CMTimeRangeFromTimeToTime(start: item.reversePlaybackEndTime, end: item.forwardPlaybackEndTime)
+        guard CMTimeGetSeconds(range.duration) <= Constants.maximumDuration else {
+            showTimeLimitError()
+            return
+        }
+
         showProgressUI()
 
         renderer = ClipRenderer(
@@ -203,6 +215,18 @@ final class ClipSharingViewController: NSViewController {
         }, completion: { [weak self] result in
             self?.handleCompletion(with: result)
         })
+    }
+
+    private func showTimeLimitError() {
+        guard let window = view.window else { return }
+
+        let alert = NSAlert()
+        alert.messageText = "Selection too long"
+        alert.informativeText = "Sorry, shared clips are limited to a maximum duration of \(Constants.humanReadableMaxDuration). Please select a shorter segment to share."
+        alert.addButton(withTitle: "OK")
+        alert.beginSheetModal(for: window) { [weak self] _ in
+            self?.beginTrimming()
+        }
     }
 
     private func showProgressUI() {
