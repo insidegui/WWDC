@@ -45,7 +45,7 @@ extension SessionRow {
 
     func represents(session: SessionIdentifiable) -> Bool {
         if case .session(let viewModel) = kind {
-            return viewModel.identifier == session.sessionIdentifier
+            return viewModel.identifier.contains(session.sessionIdentifier)
         }
         return false
     }

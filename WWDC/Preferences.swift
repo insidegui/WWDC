@@ -133,6 +133,11 @@ final class Preferences {
         }
     }
 
+    var skipIntro: Bool {
+        get { defaults.bool(forKey: #function) }
+        set { defaults.set(newValue, forKey: #function) }
+    }
+
     var skipBackAndForwardBy30Seconds: Bool {
         get {
             return defaults.bool(forKey: #function)

@@ -40,11 +40,10 @@ class GeneralPreferencesViewController: NSViewController {
         return vc
     }
 
-    @IBOutlet weak var searchInTranscriptsSwitch: ITSwitch!
-    @IBOutlet weak var searchInBookmarksSwitch: ITSwitch!
-    @IBOutlet weak var refreshPeriodicallySwitch: ITSwitch!
-    @IBOutlet weak var skipBackAndForwardBy30SecondsSwitch: ITSwitch!
-    @IBOutlet weak var enableUserDataSyncSwitch: ITSwitch!
+    @IBOutlet weak var searchInTranscriptsSwitch: NSSwitch!
+    @IBOutlet weak var searchInBookmarksSwitch: NSSwitch!
+    @IBOutlet weak var refreshPeriodicallySwitch: NSSwitch!
+    @IBOutlet weak var enableUserDataSyncSwitch: NSSwitch!
 
     @IBOutlet weak var downloadsFolderLabel: NSTextField!
 
@@ -53,7 +52,6 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var includeBookmarksLabel: NSTextField!
     @IBOutlet weak var includeTranscriptsLabel: NSTextField!
     @IBOutlet weak var refreshAutomaticallyLabel: NSTextField!
-    @IBOutlet weak var skipBackAndForwardBy30SecondsLabel: NSTextField!
     @IBOutlet weak var enableUserDataSyncLabel: NSTextField!
     @IBOutlet weak var syncDescriptionLabel: NSTextField!
     @IBOutlet weak var transcriptLanguagesPopUp: NSPopUpButton!
@@ -65,7 +63,6 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var dividerA: NSBox!
     @IBOutlet weak var dividerB: NSBox!
     @IBOutlet weak var dividerC: NSBox!
-    @IBOutlet weak var dividerD: NSBox!
     @IBOutlet weak var dividerE: NSBox!
 
     override func viewDidLoad() {
@@ -76,29 +73,20 @@ class GeneralPreferencesViewController: NSViewController {
         includeBookmarksLabel.textColor = .prefsPrimaryText
         includeTranscriptsLabel.textColor = .prefsPrimaryText
         refreshAutomaticallyLabel.textColor = .prefsPrimaryText
-        skipBackAndForwardBy30SecondsLabel.textColor = .prefsPrimaryText
         downloadsFolderLabel.textColor = .prefsSecondaryText
         enableUserDataSyncLabel.textColor = .prefsPrimaryText
         syncDescriptionLabel.textColor = .prefsSecondaryText
         languagesDescriptionLabel.textColor = .prefsSecondaryText
 
-        dividerA.fillColor = .darkGridColor
-        dividerB.fillColor = .darkGridColor
-        dividerC.fillColor = .darkGridColor
-        dividerD.fillColor = .darkGridColor
-        dividerE.fillColor = .darkGridColor
+        dividerA.fillColor = .separatorColor
+        dividerB.fillColor = .separatorColor
+        dividerC.fillColor = .separatorColor
+        dividerE.fillColor = .separatorColor
 
-        searchInTranscriptsSwitch.tintColor = .primary
-        searchInBookmarksSwitch.tintColor = .primary
-        refreshPeriodicallySwitch.tintColor = .primary
-        skipBackAndForwardBy30SecondsSwitch.tintColor = .primary
-        enableUserDataSyncSwitch.tintColor = .primary
-
-        searchInTranscriptsSwitch.checked = Preferences.shared.searchInTranscripts
-        searchInBookmarksSwitch.checked = Preferences.shared.searchInBookmarks
-        refreshPeriodicallySwitch.checked = Preferences.shared.refreshPeriodically
-        skipBackAndForwardBy30SecondsSwitch.checked = Preferences.shared.skipBackAndForwardBy30Seconds
-        enableUserDataSyncSwitch.checked = Preferences.shared.syncUserData
+        searchInTranscriptsSwitch.isOn = Preferences.shared.searchInTranscripts
+        searchInBookmarksSwitch.isOn = Preferences.shared.searchInBookmarks
+        refreshPeriodicallySwitch.isOn = Preferences.shared.refreshPeriodically
+        enableUserDataSyncSwitch.isOn = Preferences.shared.syncUserData
 
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
 
@@ -127,7 +115,6 @@ class GeneralPreferencesViewController: NSViewController {
                                         .drive(enableUserDataSyncSwitch.rx.isEnabled)
                                         .disposed(by: disposeBag)
         #else
-        dividerD?.isHidden = true
         enableUserDataSyncSwitch?.isHidden = true
         syncDescriptionLabel?.isHidden = true
         #endif
@@ -167,25 +154,21 @@ class GeneralPreferencesViewController: NSViewController {
     }
 
     @IBAction func searchInTranscriptsSwitchAction(_ sender: Any) {
-        Preferences.shared.searchInTranscripts = searchInTranscriptsSwitch.checked
+        Preferences.shared.searchInTranscripts = searchInTranscriptsSwitch.isOn
     }
 
     @IBAction func searchInBookmarksSwitchAction(_ sender: Any) {
-        Preferences.shared.searchInBookmarks = searchInBookmarksSwitch.checked
+        Preferences.shared.searchInBookmarks = searchInBookmarksSwitch.isOn
     }
 
     @IBAction func refreshPeriodicallySwitchAction(_ sender: Any) {
-        Preferences.shared.refreshPeriodically = refreshPeriodicallySwitch.checked
-    }
-
-    @IBAction func skipBackAndForwardBy30SecondsSwitchAction(_ sender: Any) {
-        Preferences.shared.skipBackAndForwardBy30Seconds = skipBackAndForwardBy30SecondsSwitch.checked
+        Preferences.shared.refreshPeriodically = refreshPeriodicallySwitch.isOn
     }
 
     @IBAction func enableUserDataSyncSwitchAction(_ sender: Any) {
         #if ICLOUD
-        Preferences.shared.syncUserData = enableUserDataSyncSwitch.checked
-        userDataSyncEngine?.isEnabled = enableUserDataSyncSwitch.checked
+        Preferences.shared.syncUserData = enableUserDataSyncSwitch.isOn
+        userDataSyncEngine?.isEnabled = enableUserDataSyncSwitch.isOn
         #endif
     }
 
@@ -322,4 +305,11 @@ class GeneralPreferencesViewController: NSViewController {
         Preferences.shared.transcriptLanguageCode = lang.code
     }
 
+}
+
+extension NSSwitch {
+    var isOn: Bool {
+        get { state == .on }
+        set { state = newValue ? .on : .off }
+    }
 }

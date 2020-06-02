@@ -142,8 +142,8 @@ public final class AppleAPIClient {
 
     public func fetchLiveVideoAssets(completion: @escaping (Result<[SessionAsset], APIError>) -> Void) {
         if liveVideoAssetsResource == nil {
-            liveVideoAssetsResource = liveVideoAssets.addObserver(owner: self) { [weak self] resource, event in
-                self?.process(resource, event: event, with: completion)
+            liveVideoAssetsResource = liveVideoAssets.addObserver(owner: self) { resource, event in
+                Resource.process(resource, event: event, with: completion)
             }
         }
 
@@ -153,8 +153,8 @@ public final class AppleAPIClient {
 
     public func fetchContent(completion: @escaping (Result<ContentsResponse, APIError>) -> Void) {
         if contentsResource == nil {
-            contentsResource = schedule.addObserver(owner: self) { [weak self] resource, event in
-                self?.process(resource, event: event, with: completion)
+            contentsResource = schedule.addObserver(owner: self) { resource, event in
+                Resource.process(resource, event: event, with: completion)
             }
         }
 
@@ -164,8 +164,8 @@ public final class AppleAPIClient {
 
     public func fetchNewsItems(completion: @escaping (Result<[NewsItem], APIError>) -> Void) {
         if newsItemsResource == nil {
-            newsItemsResource = news.addObserver(owner: self) { [weak self] resource, event in
-                self?.process(resource, event: event, with: completion)
+            newsItemsResource = news.addObserver(owner: self) { resource, event in
+                Resource.process(resource, event: event, with: completion)
             }
         }
 
@@ -175,8 +175,8 @@ public final class AppleAPIClient {
 
     public func fetchFeaturedSections(completion: @escaping (Result<[FeaturedSection], APIError>) -> Void) {
         if featuredSectionsResource == nil {
-            featuredSectionsResource = featuredSections.addObserver(owner: self) { [weak self] resource, event in
-                self?.process(resource, event: event, with: completion)
+            featuredSectionsResource = featuredSections.addObserver(owner: self) { resource, event in
+                Resource.process(resource, event: event, with: completion)
             }
         }
 
@@ -186,8 +186,8 @@ public final class AppleAPIClient {
 
     public func fetchConfig(completion: @escaping (Result<ConfigResponse, APIError>) -> Void) {
         if configResource == nil {
-            configResource = config.addObserver(owner: self) { [weak self] resource, event in
-                self?.process(resource, event: event, with: completion)
+            configResource = config.addObserver(owner: self) { resource, event in
+                Resource.process(resource, event: event, with: completion)
             }
         }
 
@@ -199,9 +199,9 @@ public final class AppleAPIClient {
 
 // MARK: - API results processing
 
-extension AppleAPIClient {
+extension Resource {
 
-    fileprivate func process<M>(_ resource: Resource, event: ResourceEvent, with completion: @escaping (Result<M, APIError>) -> Void) {
+    static func process<M>(_ resource: Resource, event: ResourceEvent, with completion: @escaping (Result<M, APIError>) -> Void) {
         switch event {
         case .error:
             completion(.failure(resource.error))

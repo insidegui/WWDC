@@ -86,6 +86,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-WWDCEnableNetworkDebugging YES"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-syncUserData NO"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -131,7 +135,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "2019-06-03T10:00:00-07:00"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
