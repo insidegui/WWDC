@@ -133,9 +133,16 @@ class ShelfViewController: NSViewController {
         guard let session = viewModel?.session else { return }
         guard let url = DownloadManager.shared.downloadedFileURL(for: session) else { return }
 
+        let subtitle = session.event.first?.name ?? "Apple Developer"
+
         let suggestedTime = delegate?.suggestedBeginTimeForClipSharingInShelfViewController(self)
 
-        let controller = ClipSharingViewController(with: url, initialBeginTime: suggestedTime)
+        let controller = ClipSharingViewController(
+            with: url,
+            initialBeginTime: suggestedTime,
+            title: session.title,
+            subtitle: subtitle
+        )
 
         addChild(controller)
         controller.view.autoresizingMask = [.width, .height]

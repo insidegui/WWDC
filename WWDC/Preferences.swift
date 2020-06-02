@@ -28,7 +28,8 @@ final class Preferences {
 
     init() {
         defaults.register(defaults: [
-            "localVideoStoragePath": Self.defaultLocalVideoStoragePath
+            "localVideoStoragePath": Self.defaultLocalVideoStoragePath,
+            "includeAppBannerInSharedClips": true
         ])
     }
 
@@ -134,6 +135,11 @@ final class Preferences {
     }
 
     var skipIntro: Bool {
+        get { defaults.bool(forKey: #function) }
+        set { defaults.set(newValue, forKey: #function) }
+    }
+
+    var includeAppBannerInSharedClips: Bool {
         get { defaults.bool(forKey: #function) }
         set { defaults.set(newValue, forKey: #function) }
     }

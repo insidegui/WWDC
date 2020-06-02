@@ -16,9 +16,13 @@ final class ClipRenderer: NSObject {
 
     let playerItem: AVPlayerItem
     let fileNameHint: String?
+    let title: String
+    let subtitle: String
 
-    init(playerItem: AVPlayerItem, fileNameHint: String?) {
+    init(playerItem: AVPlayerItem, title: String, subtitle: String, fileNameHint: String?) {
         self.playerItem = playerItem
+        self.title = title
+        self.subtitle = subtitle
         self.fileNameHint = fileNameHint
 
         super.init()
@@ -57,16 +61,31 @@ final class ClipRenderer: NSObject {
 
         let preset = AVAssetExportPreset1280x720
 
-        guard let session = AVAssetExportSession(asset: playerItem.asset, presetName: preset) else {
-            completion(.failure(error(with: "The export session couldn't be initialized.")))
-            return
+        do {
+            let comp = try ClipComposition(
+                video: playerItem.asset,
+                title: title,
+                subtitle: subtitle,
+                includeBanner: Preferences.shared.includeAppBannerInSharedClips
+            )
+
+            guard let session = AVAssetExportSession(asset: comp, presetName: preset) else {
+                completion(.failure(error(with: "The export session couldn't be initialized.")))
+                return
+            }
+
+            session.videoComposition = comp.videoComposition
+
+            currentSession = session
+
+            startExport(with: session)
+
+            startProgressReporting()
+        } catch {
+            os_log("Composition initialization failed: %{public}@", log: self.log, type: .error, String(describing: error))
+
+            reportCompletion(with: .failure(self.error(with: "Couldn't create video composition for clip.")))
         }
-
-        currentSession = session
-
-        startExport(with: session)
-
-        startProgressReporting()
     }
 
     private func startExport(with session: AVAssetExportSession) {

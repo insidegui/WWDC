@@ -275,6 +275,7 @@
 		DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */; };
 		DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */; };
 		DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */; };
+		DDF5A5092487066200135E70 /* ClipComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF5A5082487066200135E70 /* ClipComposition.swift */; };
 		DDF7219A1ECA12780054C503 /* PlayerUI.h in Headers */ = {isa = PBXBuildFile; fileRef = DDF721981ECA12780054C503 /* PlayerUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721961ECA12780054C503 /* PlayerUI.framework */; };
 		DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721961ECA12780054C503 /* PlayerUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -697,6 +698,7 @@
 		DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Shelf.swift"; sourceTree = "<group>"; };
 		DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+SessionActions.swift"; sourceTree = "<group>"; };
 		DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTableView+Rx.swift"; sourceTree = "<group>"; };
+		DDF5A5082487066200135E70 /* ClipComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipComposition.swift; sourceTree = "<group>"; };
 		DDF721961ECA12780054C503 /* PlayerUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlayerUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF721981ECA12780054C503 /* PlayerUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerUI.h; sourceTree = "<group>"; };
 		DDF721991ECA12780054C503 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1334,6 +1336,7 @@
 				DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */,
 				DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */,
 				DD3D14F52486C91F00FCBBBD /* ClipRenderer.swift */,
+				DDF5A5082487066200135E70 /* ClipComposition.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -2212,6 +2215,7 @@
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
 				DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */,
 				DDA7B730248438B500F86668 /* CommunityCollectionViewController.swift in Sources */,
+				DDF5A5092487066200135E70 /* ClipComposition.swift in Sources */,
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
 				4D66CA52217E2C9B0006A8C9 /* DownloadsManagementTableView.swift in Sources */,
 				DD3D14F42486C90B00FCBBBD /* ClipSharingViewController.swift in Sources */,

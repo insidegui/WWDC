@@ -15,15 +15,19 @@ final class ClipSharingViewController: NSViewController {
     let assetURL: URL
     let asset: AVURLAsset
     let initialBeginTime: CMTime?
+    let clipTitle: String
+    let clipSubtitle: String
 
     var completionHandler: () -> Void = { }
 
-    init(with assetURL: URL, initialBeginTime: CMTime?) {
+    init(with assetURL: URL, initialBeginTime: CMTime?, title: String, subtitle: String) {
         assert(assetURL.isFileURL, "Clip sharing is not supported with streaming video")
 
         self.assetURL = assetURL
         self.asset = AVURLAsset(url: assetURL)
         self.initialBeginTime = initialBeginTime
+        self.clipTitle = title
+        self.clipSubtitle = subtitle
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -187,7 +191,13 @@ final class ClipSharingViewController: NSViewController {
 
         showProgressUI()
 
-        renderer = ClipRenderer(playerItem: item, fileNameHint: nil)
+        renderer = ClipRenderer(
+            playerItem: item,
+            title: clipTitle,
+            subtitle: clipSubtitle,
+            fileNameHint: clipTitle.replacingOccurrences(of: ":", with: "")
+        )
+
         renderer?.renderClip(progress: { [weak self] progress in
             self?.updateProgress(with: progress)
         }, completion: { [weak self] result in

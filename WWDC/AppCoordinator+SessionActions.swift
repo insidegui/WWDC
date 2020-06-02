@@ -210,7 +210,6 @@ final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
             proposedServices.insert(copyService, at: 0)
         }
 
-
         return proposedServices
     }
 }
