@@ -11,7 +11,7 @@ import Cocoa
 extension NSColor {
 
     static var timeLabel: NSColor {
-        return NSColor(calibratedRed: 1, green: 1, blue: 1, alpha: 1.00)
+        return NSColor(calibratedRed: 1.00, green: 1.00, blue: 1.00, alpha: 1.00)
     }
 
     static var playerBorder: NSColor {
@@ -23,7 +23,7 @@ extension NSColor {
     }
 
     static var bufferProgress: NSColor {
-        return NSColor(calibratedRed: 0.52, green: 0.52, blue: 0.52, alpha: 0.75)
+        return NSColor(calibratedRed: 0.52, green: 0.52, blue: 0.52, alpha: 1.00)
     }
 
     static var playerProgress: NSColor {
@@ -47,7 +47,7 @@ extension NSColor {
     }
 
     static var buttonColor: NSColor {
-        return NSColor(calibratedRed: 1, green: 1, blue: 1, alpha: 1.00)
+        return NSColor(calibratedRed: 1.00, green: 1.00, blue: 1.00, alpha: 1.00)
     }
 
     static var externalPlaybackText: NSColor {
