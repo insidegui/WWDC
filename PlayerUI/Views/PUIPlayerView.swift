@@ -921,6 +921,8 @@ public final class PUIPlayerView: NSView {
     }
 
     @IBAction public func play(_ sender: Any?) {
+        guard isEnabled else { return }
+
         if player?.error != nil
             || player?.currentItem?.error != nil,
             let asset = player?.currentItem?.asset as? AVURLAsset {
@@ -1154,8 +1156,12 @@ public final class PUIPlayerView: NSView {
         case l = 37
     }
 
-    /// Setting this to `false` disables event handing for keyboard events.
-    public var isEnabled = true
+    public var isEnabled = true {
+        didSet {
+            guard isEnabled != oldValue else { return }
+            if !isEnabled { hideControls(animated: true) }
+        }
+    }
 
     private func startMonitoringKeyEvents() {
         if keyDownEventMonitor != nil {
@@ -1319,6 +1325,8 @@ public final class PUIPlayerView: NSView {
 
     private func showControls(animated: Bool) {
         NSCursor.unhide()
+
+        guard isEnabled else { return }
 
         setControls(opacity: 1, animated: animated)
     }
