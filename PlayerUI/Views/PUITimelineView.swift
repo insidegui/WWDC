@@ -244,24 +244,7 @@ public final class PUITimelineView: NSView {
 
     private func updateTimePreview(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
-
-        let currentTimestamp = makeTimestamp(for: CGPoint(x: playbackProgressLayer.frame.size.width, y: point.y))
-        let currentTimestampString = attributedString(for: currentTimestamp, ofSize: Metrics.timePreviewTextSize)
-        let currentTimestampWidth = currentTimestampString.size().width
-
-        let remainingTimestamp = makeTimestamp(for: CGPoint(x: bounds.width - point.x, y: point.y))
-        let remainingTimestampString = attributedString(for: remainingTimestamp, ofSize: Metrics.timePreviewTextSize)
-        let remainingTimestampWidth = remainingTimestampString.size().width
-
         let previewTimestampString = attributedString(for: makeTimestamp(for: point), ofSize: Metrics.timePreviewTextSize)
-        let previewTimestampWidth = previewTimestampString.size().width
-
-        let leftMargin = currentTimestampWidth + (previewTimestampWidth * Metrics.timePreviewLeftOfMouseWidthMultiplier)
-        let rightMargin = bounds.width - remainingTimestampWidth - (previewTimestampWidth * Metrics.timePreviewRightOfMouseWidthMultiplier)
-        guard (leftMargin...rightMargin).contains(point.x) else {
-            timePreviewLayer.animateInvisible()
-            return
-        }
 
         timePreviewLayer.opacity = 1
         timePreviewLayer.string = previewTimestampString
