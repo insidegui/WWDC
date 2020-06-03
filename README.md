@@ -60,7 +60,6 @@ A number of third-party libraries are used by the app:
 - [Realm](https://realm.io): data storage and caching
 - [Sparkle](https://sparkle-project.org/): automatic updates
 - [CloudKitCodable](https://github.com/insidegui/CloudKitCodable): sync support
-- [Fabric](https://fabric.io): crash reporting and error logging
 - [Siesta](http://bustoutsolutions.github.io/siesta/): networking
 - [RxSwift](https://github.com/ReactiveX/RxSwift): reactive extensions
 - [RxRealm](https://github.com/RxSwiftCommunity/RxRealm): reactive extensions for Realm

@@ -15,9 +15,7 @@ profile
 *.moved-aside
 DerivedData
 .idea/
-Crashlytics.sh
 generatechangelog.sh
 Pods/
 Carthage
 Provisioning
-Crashlytics.sh

@@ -153,7 +153,6 @@ final class FilterResults {
                    log: .default,
                    type: .error,
                    String(describing: error))
-            LoggingHelper.registerError(error, info: ["when": "Searching"])
         }
     }
 }

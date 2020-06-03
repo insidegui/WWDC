@@ -29,8 +29,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
 
-        LoggingHelper.install()
-
         NSApp.registerForRemoteNotifications(matching: [])
 
         #if DEBUG

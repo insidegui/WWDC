@@ -37,20 +37,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>Fabric</key>
-	<dict>
-		<key>APIKey</key>
-		<string>69b44b9b0e1f177a7fb1b6199e9a040897e9dfc0</string>
-		<key>Kits</key>
-		<array>
-			<dict>
-				<key>KitInfo</key>
-				<dict/>
-				<key>KitName</key>
-				<string>Crashlytics</string>
-			</dict>
-		</array>
-	</dict>
 	<key>GRBundleDesignContributorWebsite</key>
 	<string>https://twitter.com/bcmn96</string>
 	<key>GRBundleIconCreatorWebsite</key>

@@ -60,9 +60,6 @@
 		DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */; };
 		DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */; };
 		DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED601ED6577100624EAF /* Sparkle.framework */; };
-		DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED661ED6604300624EAF /* Fabric.framework */; };
-		DD4DED691ED6604300624EAF /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED671ED6604300624EAF /* Crashlytics.framework */; };
-		DD4DED6B1ED6605D00624EAF /* LoggingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */; };
 		DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD59106F1ECA0C3B003C32A4 /* CloudKit.framework */; };
 		DD5DEC201E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5DEC1F1E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift */; };
 		DD5DEC291E4AA8C800426FA6 /* news.json in Resources */ = {isa = PBXBuildFile; fileRef = DD5DEC241E4AA8C800426FA6 /* news.json */; };
@@ -132,9 +129,9 @@
 		DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1220A90655002EECF5 /* SessionCellView.swift */; };
 		DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */; };
 		DDA60E1720A9083E002EECF5 /* RelatedSessionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1620A9083E002EECF5 /* RelatedSessionsViewController.swift */; };
-		DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */; };
 		DDA7B7142482A4A500F86668 /* TranscriptSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7132482A4A500F86668 /* TranscriptSearchController.swift */; };
 		DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */; };
+		DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */; };
 		DDA7B7272483E4BB00F86668 /* CommunityNewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7262483E4BB00F86668 /* CommunityNewsItem.swift */; };
 		DDA7B7292483E67800F86668 /* CocoaHubAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7282483E67800F86668 /* CocoaHubAPIClient.swift */; };
 		DDA7B72B2483F28C00F86668 /* CocoaHubEdition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B72A2483F28C00F86668 /* CocoaHubEdition.swift */; };
@@ -475,9 +472,6 @@
 		DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+RelatedSessions.swift"; sourceTree = "<group>"; };
 		DD4DED601ED6577100624EAF /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Carthage/Build/Mac/Sparkle.framework; sourceTree = "<group>"; };
 		DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Sparkle.framework.dSYM; path = Carthage/Build/Mac/Sparkle.framework.dSYM; sourceTree = "<group>"; };
-		DD4DED661ED6604300624EAF /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
-		DD4DED671ED6604300624EAF /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoggingHelper.swift; sourceTree = "<group>"; };
 		DD59106E1ECA0C2F003C32A4 /* WWDC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WWDC.entitlements; sourceTree = "<group>"; };
 		DD59106F1ECA0C3B003C32A4 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		DD5DEC1F1E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConditionallyDecodableCollection.swift; sourceTree = "<group>"; };
@@ -556,9 +550,9 @@
 		DDA60E1220A90655002EECF5 /* SessionCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCellView.swift; sourceTree = "<group>"; };
 		DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCollectionViewItem.swift; sourceTree = "<group>"; };
 		DDA60E1620A9083E002EECF5 /* RelatedSessionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedSessionsViewController.swift; sourceTree = "<group>"; };
-		DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPreferencesViewController.swift; sourceTree = "<group>"; };
 		DDA7B7132482A4A500F86668 /* TranscriptSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptSearchController.swift; sourceTree = "<group>"; };
 		DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTranscriptWindowController.swift; sourceTree = "<group>"; };
+		DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPreferencesViewController.swift; sourceTree = "<group>"; };
 		DDA7B7262483E4BB00F86668 /* CommunityNewsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItem.swift; sourceTree = "<group>"; };
 		DDA7B7282483E67800F86668 /* CocoaHubAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaHubAPIClient.swift; sourceTree = "<group>"; };
 		DDA7B72A2483F28C00F86668 /* CocoaHubEdition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaHubEdition.swift; sourceTree = "<group>"; };
@@ -741,7 +735,6 @@
 				012BEFA41EE8658F007E72CA /* EventKit.framework in Frameworks */,
 				DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
 				DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */,
-				DD4DED691ED6604300624EAF /* Crashlytics.framework in Frameworks */,
 				DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */,
 				DD0F0C571E7B95EC00B52184 /* RxRealm.framework in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
@@ -749,7 +742,6 @@
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 				DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */,
 				DD9301B81EE3202F00BE724B /* ChromeCastCore.framework in Frameworks */,
-				DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1105,8 +1097,6 @@
 				DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */,
 				DDBCEC99228AD2CC009300CF /* CloudKitCodable.framework */,
 				DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */,
-				DD4DED661ED6604300624EAF /* Fabric.framework */,
-				DD4DED671ED6604300624EAF /* Crashlytics.framework */,
 				DD4DED601ED6577100624EAF /* Sparkle.framework */,
 				DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */,
 				DD5F517F1E47DE7E0017F9EC /* Realm.framework */,
@@ -1328,7 +1318,6 @@
 				DDB352831EC7C74C00254815 /* LiveObserver.swift */,
 				DD0159A61ECFE26200F980F1 /* DeepLink.swift */,
 				DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */,
-				DD4DED6A1ED6605D00624EAF /* LoggingHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1790,7 +1779,6 @@
 				DD36A4A91E478C6900B2EA88 /* Frameworks */,
 				DD36A4AA1E478C6900B2EA88 /* Resources */,
 				DD36A4E41E478D7E00B2EA88 /* Embed Frameworks */,
-				DD4DED651ED6602700624EAF /* Fabric */,
 				DDC678031EDA76A100A4E19C /* Embed XPC Services */,
 				F72964482015787100A7A571 /* SwiftLint Warnings */,
 			);
@@ -2077,20 +2065,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DD4DED651ED6602700624EAF /* Fabric */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = Fabric;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ -f \"./Crashlytics.sh\" ]; then\n./Crashlytics.sh\nfi";
-		};
 		DD55E73522AC2958004BBA7A /* Fix Sparkle for notarization */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -2180,7 +2154,6 @@
 				DDC678221EDB956700A4E19C /* BookmarkViewController.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */,
-				DD4DED6B1ED6605D00624EAF /* LoggingHelper.swift in Sources */,
 				DD36A4B21E478C6A00B2EA88 /* SessionsSplitViewController.swift in Sources */,
 				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
 				DDDF807420BA3124007284F8 /* FeaturedContentViewController.swift in Sources */,
