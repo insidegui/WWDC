@@ -84,6 +84,7 @@
 		DD600AC92487F2330071B90E /* NSColor+Accent.h in Headers */ = {isa = PBXBuildFile; fileRef = DD600AC82487F2330071B90E /* NSColor+Accent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD600ACB2487F2D90071B90E /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD600ACA2487F2D90071B90E /* Fonts.swift */; };
 		DD600ACE2487F3540071B90E /* NSColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD600ACD2487F3540071B90E /* NSColor+Hex.swift */; };
+		DD600ACF2487F4570071B90E /* ConfUIFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD600AB02487F1720071B90E /* ConfUIFoundation.framework */; };
 		DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD4B1E489FF50054DD35 /* SessionAsset.swift */; };
 		DD65FD4D1E48A01B0054DD35 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
 		DD65FD4E1E48A01B0054DD35 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
@@ -343,6 +344,13 @@
 			remoteInfo = ConfCore;
 		};
 		DD600AB52487F1730071B90E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD600AAF2487F1720071B90E;
+			remoteInfo = ConfUIFoundation;
+		};
+		DD600AD02487F45B0071B90E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
 			proxyType = 1;
@@ -838,6 +846,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD600ACF2487F4570071B90E /* ConfUIFoundation.framework in Frameworks */,
 				DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2025,6 +2034,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DD600AD12487F45B0071B90E /* PBXTargetDependency */,
 			);
 			name = PlayerUI;
 			productName = PlayerUI;
@@ -2568,6 +2578,11 @@
 			isa = PBXTargetDependency;
 			target = DD600AAF2487F1720071B90E /* ConfUIFoundation */;
 			targetProxy = DD600AB52487F1730071B90E /* PBXContainerItemProxy */;
+		};
+		DD600AD12487F45B0071B90E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD600AAF2487F1720071B90E /* ConfUIFoundation */;
+			targetProxy = DD600AD02487F45B0071B90E /* PBXContainerItemProxy */;
 		};
 		DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

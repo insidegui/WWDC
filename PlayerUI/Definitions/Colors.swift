@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+@_exported import ConfUIFoundation
 
 extension NSColor {
 
@@ -30,21 +31,9 @@ extension NSColor {
         return NSColor(calibratedRed: 0.90, green: 0.90, blue: 0.90, alpha: 1.00)
     }
 
-    static var seekProgress: NSColor {
-        if #available(macOS 10.14, *) {
-            return .controlAccentColor
-        } else {
-            return NSColor(calibratedRed: 0.00, green: 0.80, blue: 0.92, alpha: 1.00)
-        }
-    }
+    static var seekProgress: NSColor { .primary }
 
-    static var playerHighlight: NSColor {
-        if #available(macOS 10.14, *) {
-            return .controlAccentColor
-        } else {
-            return NSColor(calibratedRed: 0.00, green: 0.80, blue: 0.92, alpha: 1.00)
-        }
-    }
+    static var playerHighlight: NSColor { .primary }
 
     static var buttonColor: NSColor {
         return NSColor(calibratedRed: 1.00, green: 1.00, blue: 1.00, alpha: 1.00)
