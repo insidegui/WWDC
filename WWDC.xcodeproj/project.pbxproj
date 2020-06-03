@@ -2245,7 +2245,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ] || [ \"${CODE_SIGN_IDENTITY}\" = \"\" ] ; then\necho \"Skipping because we're in a debug build or couldn't find code signing ID.\"\nexit 0\nfi\n\nCARTHAGE_BUILD_MAC_DIR=\"${PROJECT_DIR}/Carthage/Build/Mac\"\nSPARKLE_AUTOUPDATE_PATH=\"${CARTHAGE_BUILD_MAC_DIR}/Sparkle.framework/Resources/Autoupdate.app\"\ncodesign --force --deep -o runtime --sign \"$CODE_SIGN_IDENTITY\" \"$SPARKLE_AUTOUPDATE_PATH\"\n";
+			shellScript = "if [ \"$CONFIGURATION\" != \"Release_iCloud\" ]; then\n    echo \"Skipping step because we're not building for an iCloud-enabled release.\"\n    exit 0\nfi\n\nCARTHAGE_BUILD_MAC_DIR=\"${PROJECT_DIR}/Carthage/Build/Mac\"\nSPARKLE_AUTOUPDATE_PATH=\"${CARTHAGE_BUILD_MAC_DIR}/Sparkle.framework/Resources/Autoupdate.app\"\ncodesign --force --deep -o runtime --sign \"Apple Development: Guilherme Rambo (6XE654FHAW)\" \"$SPARKLE_AUTOUPDATE_PATH\"\n";
 		};
 		F72964482015787100A7A571 /* SwiftLint Warnings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2755,7 +2755,7 @@
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 922;
+				CURRENT_PROJECT_VERSION = 1000;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2768,7 +2768,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 6.2;
+				MARKETING_VERSION = 7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "WWDC Debug 2019";
@@ -2787,7 +2787,7 @@
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 922;
+				CURRENT_PROJECT_VERSION = 1000;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2800,7 +2800,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 6.2;
+				MARKETING_VERSION = 7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "WWDC Release 2019 B";
@@ -2976,7 +2976,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 922;
+				CURRENT_PROJECT_VERSION = 1000;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2989,7 +2989,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 6.2;
+				MARKETING_VERSION = 7.0;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3112,7 +3112,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 922;
+				CURRENT_PROJECT_VERSION = 1000;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3125,7 +3125,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 6.2;
+				MARKETING_VERSION = 7.0;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
