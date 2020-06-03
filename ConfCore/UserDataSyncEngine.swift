@@ -354,7 +354,7 @@ public final class UserDataSyncEngine {
         }
         set {
             guard let newValue = newValue else {
-                defaults.setNilValueForKey(#function)
+                defaults.removeObject(forKey: #function)
                 return
             }
 
@@ -385,7 +385,16 @@ public final class UserDataSyncEngine {
                        type: .error,
                        String(describing: error))
 
-                error.retryCloudKitOperationIfPossible(self.log) { self.fetchChanges() }
+                if (error as? CKError)?.code == CKError.Code.changeTokenExpired {
+                    os_log("Change token expired, clearing token and retrying", log: self.log, type: .error)
+
+                    DispatchQueue.main.async {
+                        self.privateChangeToken = nil
+                        self.fetchChanges()
+                    }
+                } else {
+                    error.retryCloudKitOperationIfPossible(self.log) { self.fetchChanges() }
+                }
             } else {
                 self.privateChangeToken = token
             }
@@ -434,22 +443,14 @@ public final class UserDataSyncEngine {
     }
 
     private func performRealmOperations(with block: @escaping (Realm) -> Void) {
-        let config = storage.realm.configuration
+        do {
+            storage.realm.beginWrite()
 
-        workQueue.async { [weak self] in
-            guard let self = self else { return }
+            block(storage.realm)
 
-            do {
-                let queueRealm = try Realm(configuration: config)
-
-                queueRealm.beginWrite()
-
-                block(queueRealm)
-
-                try queueRealm.commitWrite()
-            } catch {
-                os_log("Failed to perform Realm transaction: %{public}@", log: self.log, type: .error, String(describing: error))
-            }
+            try storage.realm.commitWrite(withoutNotifying: realmNotificationTokens)
+        } catch {
+            os_log("Failed to perform Realm transaction: %{public}@", log: self.log, type: .error, String(describing: error))
         }
     }
 
@@ -509,6 +510,14 @@ public final class UserDataSyncEngine {
     private var realmNotificationTokens: [NotificationToken] = []
 
     private func observeLocalChanges() {
+        guard !storage.realm.isInWriteTransaction else {
+            os_log("Realm is in a write transaction, waiting before registering observers", log: self.log, type: .debug)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.observeLocalChanges()
+            }
+            return
+        }
+        
         registerRealmObserver(for: Favorite.self)
         registerRealmObserver(for: Bookmark.self)
         registerRealmObserver(for: SessionProgress.self)

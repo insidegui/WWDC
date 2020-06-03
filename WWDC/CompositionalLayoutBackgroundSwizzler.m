@@ -9,6 +9,7 @@
 #import "CompositionalLayoutBackgroundSwizzler.h"
 
 @import Cocoa;
+@import ConfUIFoundation;
 
 #import "WWDC-Swift.h"
 #import <objc/runtime.h>

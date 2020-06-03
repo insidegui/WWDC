@@ -8,7 +8,12 @@
 
 import Cocoa
 
-class WWDCWindow: NSWindow {
+extension Notification.Name {
+    static let WWDCWindowWillShowUIMask = Notification.Name("WWDCWindowWillShowUIMask")
+    static let WWDCWindowWillHideUIMask = Notification.Name("WWDCWindowWillHideUIMask")
+}
+
+final class WWDCWindow: NSWindow {
 
     // MARK: - Initialization
 
@@ -18,7 +23,7 @@ class WWDCWindow: NSWindow {
         applyCustomizations()
     }
 
-    open override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
 
         applyCustomizations()
@@ -27,7 +32,7 @@ class WWDCWindow: NSWindow {
     // MARK: - Custom appearance
 
     fileprivate var _storedTitlebarView: NSVisualEffectView?
-    open var titlebarView: NSVisualEffectView? {
+    public var titlebarView: NSVisualEffectView? {
         guard _storedTitlebarView == nil else { return _storedTitlebarView }
         guard let containerClass = NSClassFromString("NSTitlebarContainerView") else { return nil }
 
@@ -51,4 +56,70 @@ class WWDCWindow: NSWindow {
         titlebarView?.state = .inactive
         titlebarView?.layer?.backgroundColor = NSColor.darkTitlebarBackground.cgColor
     }
+
+    private var uiMaskView: WWDCUIMaskView?
+
+    @objc func maskUI(preserving view: NSView) {
+        guard let contentView = contentView else { return }
+        guard let frame = view.superview?.convert(view.frame, to: nil) else { return }
+
+        NotificationCenter.default.post(name: .WWDCWindowWillShowUIMask, object: self)
+
+        let mask = WWDCUIMaskView(frame: contentView.bounds)
+        mask.holeRect = frame
+        mask.autoresizingMask = [.width, .height]
+        mask.alphaValue = 0
+        contentView.addSubview(mask)
+
+        uiMaskView = mask
+
+        mask.animator().alphaValue = 1
+
+        styleMask.remove(.resizable)
+    }
+
+    @objc func hideUIMask() {
+        NotificationCenter.default.post(name: .WWDCWindowWillHideUIMask, object: self)
+
+        NSAnimationContext.runAnimationGroup { ctx in
+            ctx.completionHandler = { [weak self] in
+                self?.uiMaskView?.removeFromSuperview()
+                self?.uiMaskView = nil
+            }
+
+            self.uiMaskView?.animator().alphaValue = 0
+        }
+
+        styleMask.insert(.resizable)
+    }
+
+}
+
+fileprivate final class WWDCUIMaskView: NSView {
+
+    var holeRect: CGRect = .zero {
+        didSet {
+            setNeedsDisplay(bounds)
+        }
+    }
+
+    override func draw(_ dirtyRect: NSRect) {
+        NSColor.black.withAlphaComponent(0.88).setFill()
+        bounds.fill()
+
+        NSColor.clear.setFill()
+        holeRect.fill(using: .sourceOut)
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        let clickedPoint = convert(event.locationInWindow, from: nil)
+
+        guard !holeRect.contains(clickedPoint) else {
+            super.mouseDown(with: event)
+            return
+        }
+
+        NSApp.sendAction(#selector(WWDCWindow.hideUIMask), to: nil, from: nil)
+    }
+
 }

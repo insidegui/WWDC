@@ -99,7 +99,7 @@ public final class PUITimelineView: NSView {
     private var borderLayer: PUIBoringLayer!
     private var bufferingProgressLayer: PUIBufferLayer!
     private var playbackProgressLayer: PUIBoringLayer!
-    private var ghostProgressLayer: PUIBoringLayer!
+    private var seekProgressLayer: PUIBoringLayer!
     private var timePreviewLayer: PUIBoringTextLayer!
 
     private func buildUI() {
@@ -138,13 +138,13 @@ public final class PUITimelineView: NSView {
 
         // Ghost bar
 
-        ghostProgressLayer = PUIBoringLayer()
-        ghostProgressLayer.backgroundColor = NSColor.playerProgress.withAlphaComponent(0.5).cgColor
-        ghostProgressLayer.frame = bounds
-        ghostProgressLayer.cornerRadius = Metrics.cornerRadius
-        ghostProgressLayer.masksToBounds = true
+        seekProgressLayer = PUIBoringLayer()
+        seekProgressLayer.backgroundColor = NSColor.seekProgress.cgColor
+        seekProgressLayer.frame = bounds
+        seekProgressLayer.cornerRadius = Metrics.cornerRadius
+        seekProgressLayer.masksToBounds = true
 
-        layer?.addSublayer(ghostProgressLayer)
+        layer?.addSublayer(seekProgressLayer)
 
         // Time Preview
 
@@ -239,29 +239,12 @@ public final class PUITimelineView: NSView {
         let ghostWidth = point.x
         var ghostRect = bounds
         ghostRect.size.width = ghostWidth
-        ghostProgressLayer.frame = ghostRect
+        seekProgressLayer.frame = ghostRect
     }
 
     private func updateTimePreview(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
-
-        let currentTimestamp = makeTimestamp(for: CGPoint(x: playbackProgressLayer.frame.size.width, y: point.y))
-        let currentTimestampString = attributedString(for: currentTimestamp, ofSize: Metrics.timePreviewTextSize)
-        let currentTimestampWidth = currentTimestampString.size().width
-
-        let remainingTimestamp = makeTimestamp(for: CGPoint(x: bounds.width - point.x, y: point.y))
-        let remainingTimestampString = attributedString(for: remainingTimestamp, ofSize: Metrics.timePreviewTextSize)
-        let remainingTimestampWidth = remainingTimestampString.size().width
-
         let previewTimestampString = attributedString(for: makeTimestamp(for: point), ofSize: Metrics.timePreviewTextSize)
-        let previewTimestampWidth = previewTimestampString.size().width
-
-        let leftMargin = currentTimestampWidth + (previewTimestampWidth * Metrics.timePreviewLeftOfMouseWidthMultiplier)
-        let rightMargin = bounds.width - remainingTimestampWidth - (previewTimestampWidth * Metrics.timePreviewRightOfMouseWidthMultiplier)
-        guard (leftMargin...rightMargin).contains(point.x) else {
-            timePreviewLayer.animateInvisible()
-            return
-        }
 
         timePreviewLayer.opacity = 1
         timePreviewLayer.string = previewTimestampString
@@ -335,7 +318,7 @@ public final class PUITimelineView: NSView {
 
                 self.viewDelegate?.timelineViewDidSeek(to: progress)
 
-                self.ghostProgressLayer.opacity = 0
+                self.seekProgressLayer.opacity = 0
             default: break
             }
         }
@@ -346,11 +329,11 @@ public final class PUITimelineView: NSView {
     private func reactToMouse() {
         if hasMouseInside {
             borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor }
-            ghostProgressLayer.animate { ghostProgressLayer.opacity = 1 }
+            seekProgressLayer.animate { seekProgressLayer.opacity = 1 }
             timePreviewLayer.animateVisible()
         } else {
             borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.cgColor }
-            ghostProgressLayer.animate { ghostProgressLayer.opacity = 0 }
+            seekProgressLayer.animate { seekProgressLayer.opacity = 0 }
             timePreviewLayer.animateInvisible()
         }
     }

@@ -30,7 +30,7 @@ extension Notification.Name {
 
 final class MainWindowController: WWDCWindowController {
 
-    weak var activePlayerView: PUIPlayerView? {
+    weak var touchBarProvider: NSResponder? {
         didSet {
             touchBar = nil
         }
@@ -62,7 +62,7 @@ final class MainWindowController: WWDCWindowController {
     }
 
     override func makeTouchBar() -> NSTouchBar? {
-        return activePlayerView?.makeTouchBar()
+        return touchBarProvider?.makeTouchBar()
     }
 
 }

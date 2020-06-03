@@ -126,6 +126,8 @@ final class TabItemView: NSView {
         }
     }
 
+    private var uiMaskNotificationTokens: [NSObjectProtocol] = []
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
@@ -136,6 +138,15 @@ final class TabItemView: NSView {
         stackView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
 
         titleLabel.centerYAnchor.constraint(equalTo: stackView.centerYAnchor, constant: -1).isActive = true
+
+        let showToken = NotificationCenter.default.addObserver(forName: .WWDCWindowWillShowUIMask, object: nil, queue: .main) { [weak self] _ in
+            self?.isEnabled = false
+        }
+        let hideToken = NotificationCenter.default.addObserver(forName: .WWDCWindowWillHideUIMask, object: nil, queue: .main) { [weak self] _ in
+            self?.isEnabled = true
+        }
+
+        uiMaskNotificationTokens = [showToken, hideToken]
     }
 
     required init?(coder: NSCoder) {
@@ -147,8 +158,16 @@ final class TabItemView: NSView {
     }
 
     override func mouseDown(with event: NSEvent) {
+        guard isEnabled else { return }
+
         if let target = target, let action = action {
             NSApp.sendAction(action, to: target, from: self)
+        }
+    }
+
+    var isEnabled = true {
+        didSet {
+            animator().alphaValue = isEnabled ? 1 : 0.3
         }
     }
 

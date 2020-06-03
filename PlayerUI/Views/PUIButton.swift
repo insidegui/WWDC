@@ -177,14 +177,6 @@ public final class PUIButton: NSControl {
         menu.popUp(positioning: nil, at: .zero, in: self)
     }
 
-    public override var effectiveAppearance: NSAppearance {
-        if #available(OSX 10.14, *) {
-            return super.effectiveAppearance
-        } else {
-            return NSAppearance(named: .vibrantDark)!
-        }
-    }
-
     public override var allowsVibrancy: Bool {
         return true
     }

@@ -21,13 +21,7 @@ final class WWDCProgressIndicator: NSView {
         }
     }
 
-    var fillColor: NSColor {
-        if #available(macOS 10.14, *) {
-            return .controlAccentColor
-        } else {
-            return .primary
-        }
-    }
+    var fillColor: NSColor { .primary }
 
     var isIndeterminate = false {
         didSet {

@@ -11,6 +11,7 @@ import RealmSwift
 import RxSwift
 import ConfCore
 import PlayerUI
+import CoreMedia
 
 extension AppCoordinator: ShelfViewControllerDelegate {
 
@@ -123,6 +124,34 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         }
     }
 
+    func suggestedBeginTimeForClipSharingInShelfViewController(_ controller: ShelfViewController) -> CMTime? {
+        currentPlayerController?.currentTime
+    }
+
+    func shelfViewController(_ controller: ShelfViewController, didBeginClipSharingWithHost hostView: NSView) {
+        wasPlayingWhenClipSharingBegan = currentPlayerController?.isPlaying == true
+
+        // Prevents the player view from receiving key events.
+        currentPlayerController?.playerView.isEnabled = false
+        currentPlayerController?.pause()
+
+        playerTouchBarContainer?.touchBarProvider = hostView
+    }
+
+    func shelfViewControllerDidEndClipSharing(_ controller: ShelfViewController) {
+        // Give control of the TouchBar back to the current player controller, if one exists.
+        guard let playerController = currentPlayerController else { return }
+
+        playerTouchBarContainer?.touchBarProvider = playerController.playerView
+
+        currentPlayerController?.playerView.isEnabled = true
+
+        if wasPlayingWhenClipSharingBegan {
+            currentPlayerController?.play()
+            wasPlayingWhenClipSharingBegan = false
+        }
+    }
+
     private var playerTouchBarContainer: MainWindowController? {
         return currentPlayerController?.view.window?.windowController as? MainWindowController
     }
@@ -148,7 +177,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         playerController.view.alphaValue = 1
 
-        playerTouchBarContainer?.activePlayerView = playerController.playerView
+        playerTouchBarContainer?.touchBarProvider = playerController.playerView
     }
 
     func publishNowPlayingInfo() {

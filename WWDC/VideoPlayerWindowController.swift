@@ -44,12 +44,6 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         let window = PUIPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = true
 
-        if #available(OSX 10.11, *) {
-            // ¯\_(ツ)_/¯
-        } else {
-            window.collectionBehavior = .fullScreenPrimary
-        }
-
         super.init(window: window)
 
         window.delegate = self

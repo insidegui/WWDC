@@ -1,6 +1,6 @@
 //
 //  NSColor+Hex.swift
-//  WWDC
+//  ConfUIFoundation
 //
 //  Created by Guilherme Rambo on 22/04/17.
 //  Copyright © 2017 Guilherme Rambo. All rights reserved.
@@ -8,9 +8,9 @@
 
 import Cocoa
 
-extension NSColor {
+public extension NSColor {
 
-    public class func fromHexString(hexString: String) -> NSColor {
+    class func fromHexString(hexString: String) -> NSColor {
         return NSColor(hexString: hexString) ?? NSColor.black
     }
 

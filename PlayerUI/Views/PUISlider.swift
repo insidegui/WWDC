@@ -44,18 +44,15 @@ class PUISliderCell: NSSliderCell {
     override func drawBar(inside rect: NSRect, flipped: Bool) {
         let finalRect = rect.insetBy(dx: 2, dy: 0.5)
 
-        NSColor.playerBuffer.withAlphaComponent(0.8).setFill()
+        NSColor.bufferProgress.withAlphaComponent(0.8).setFill()
 
         let barPath = NSBezierPath(roundedRect: finalRect, xRadius: 2, yRadius: 2)
         barPath.fill()
 
         let progressRect = NSRect(x: finalRect.origin.x, y: finalRect.origin.y, width: finalRect.width * CGFloat(doubleValue / maxValue), height: finalRect.height)
         let progressPath = NSBezierPath(roundedRect: progressRect, xRadius: 2, yRadius: 2)
-        if #available(OSX 10.14, *) {
-            NSColor.controlAccentColor.setFill()
-        } else {
-            NSColor(calibratedWhite: 1, alpha: 0.7).setFill()
-        }
+
+        NSColor.primary.setFill()
         progressPath.fill()
     }
 
