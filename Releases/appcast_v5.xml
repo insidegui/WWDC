@@ -7,6 +7,30 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 7</title>
+			<description><![CDATA[
+				<h2>Welcome to WWDC for macOS version 7!</h2>
+
+				<p>This update has lots of fixes and improvements, as well as some cool new features.</p>
+
+				<ul>
+					<li>The app's UI has been modernized to look better in macOS Catalina, with new fonts and colors</li>
+					<li>The video player has also received a UI refresh to improve the contrast between controls and the background</li>
+					<li>Transcripts are now provided by Apple, which means they're the same as the ones in the Apple Developer app, including support for multiple languages</li>
+					<li>You can now search within a specific session's transcript</li>
+					<li>The transcript can now be detached into its own window, so you can rearrange your workspace with more flexibility, such as putting the video and transcript side-by-side in fullscreen</li>
+					<li>Meet the new Community tab: in partnership with CocoaHub, we're bringing you curated content from the community, including Apple announcements, blog posts, podcast episodes, conference videos, and more</li>
+					<li>Clip Sharing: if you've ever wanted to share a specific segment of a video with someone, you now can! With a downloaded video selected, just click the scissors button and select a portion of the video to share</li>
+				</ul>
+
+				<p><strong>NOTE: starting with this version, the app requires macOS Catalina (10.15) or later</strong></p>
+			]]></description>
+            <pubDate>Wed, 03 Jun 2020 14:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/7.0/WWDC_v7.zip" sparkle:version="1001" sparkle:shortVersionString="7.0" length="11529629" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+        </item>	
+
+		<item>
             <title>Version 6.2</title>
 			<description><![CDATA[
 				<ul>
