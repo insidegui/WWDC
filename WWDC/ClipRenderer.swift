@@ -29,12 +29,22 @@ final class ClipRenderer: NSObject {
     }
 
     private func generateOutputURL() -> URL {
+        var baseURL = Preferences.shared.localVideoStorageURL.appendingPathComponent("_Clips")
+
+        if !FileManager.default.fileExists(atPath: baseURL.path) {
+            do {
+                try FileManager.default.createDirectory(at: baseURL, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                baseURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                os_log("Couldn't create clips directory: %{public}@", log: self.log, type: .error, String(describing: error))
+            }
+        }
+
         let basename = fileNameHint ?? UUID().uuidString
         let filename = basename + "-" + String(Int(Date().timeIntervalSinceReferenceDate))
 
-        return URL(fileURLWithPath: NSTemporaryDirectory())
-            .appendingPathComponent(filename)
-            .appendingPathExtension("mp4")
+        return baseURL.appendingPathComponent(filename)
+                      .appendingPathExtension("mp4")
     }
 
     private(set) lazy var outputURL: URL = {
