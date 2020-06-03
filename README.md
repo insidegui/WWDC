@@ -1,20 +1,20 @@
 # The unofficial WWDC app for macOS
 
-WWDC for macOS allows both attendees and non-attendees to access WWDC livestreams, videos and sessions during the conference and as a year-round resource.
+Enjoy WWDC from the comfort of your Mac with the unofficial WWDC app for macOS. Whether you're (virtually) attending or not, you can access livestreams, videos and sessions during the conference and as a year-round resource.
+
+In partnership with CocoaHub, you can also use the app's Community tab to browse through Apple announcements, updates to the Swift language, new episodes from your favorite podcasts, community blog posts, and more.
 
 ⬇️ If you just want to download the latest release, go to [the website](https://wwdc.io).
 
 ## Schedule
 
-The schedule tab shows the schedule for the most recent WWDC, and allows you to watch live streams for the Keynote and other sessions throughout the week.
-
-![schedule](./screenshots/v5/Schedule.png)
+The schedule tab shows the schedule for the current edition of WWDC, and allows you to watch live streams for the Keynote and other sessions throughout the week.
 
 ## Videos
 
-Watch this year's videos as they're released and access videos from previous years. With [ASCIIWWDC](http://asciiwwdc.com) integration, you can also read transcripts of sessions and easily jump to a specific point in the relevant video.
+Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in
 
-![videos](./screenshots/v5/Transcript.png)
+![videos](./screenshots/v7/Transcript.png)
 
 ### Video features
 
@@ -22,11 +22,17 @@ Watch this year's videos as they're released and access videos from previous yea
 - Fullscreen and native picture-in-picture support
 - Navigate video contents easily with the help of transcripts
 
+### Clip Sharing
+
+Clip Sharing allows you to share a short segment (up to 5 minutes) from a session's video. This is a great feature for quickly sharing snippets of content from the conference.
+
+![clipsharing](./screenshots/v7/ClipSharing.png)
+
 ## Chromecast
 
 You can watch WWDC videos (both live and on-demand) on your Chromecast. Just click the Chromecast button while playing a video, choose your device from the list and control playback using the Google Home app on your phone.
 
-![chromecast](./screenshots/v5/ChromeCast.png)
+![chromecast](./screenshots/v7/ChromeCast.png)
 
 ## Bookmarks
 
@@ -34,15 +40,21 @@ Have you ever found yourself watching a WWDC session and wishing you could take 
 
 With bookmarks, you can create a reference point within a video and add an annotation to it. Your bookmark annotations can also be considered while using the search, so it's easier than ever to find the content you've bookmarked before.
 
-![bookmarks](./screenshots/v5/Video-Bookmark.png)
+![bookmarks](./screenshots/v7/Video-Bookmark.png)
+
+## Community
+
+Browse content curated by the [CocoaHub](http://cocoahub.app) team in the Community tab.
+
+![community](./screenshots/v7/Community.png)
 
 ## iCloud Sync
 
-With version 6.0, you can try out our new iCloud sync feature. Enable the feature in preferences and your favorites, bookmarks and progress in sessions will be synced accross all your Macs.
+Enable the iCloud sync in preferences and your favorites, bookmarks and progress in sessions will be synced accross your Macs.
 
 ## Sharing
 
-You can easily share links to sessions or videos by using the share button. The links shared are for Apple's developer website, but the app can open these links if you drag them into the icon. You can also handoff content from your Mac to the Apple Developer app on iOS.
+You can easily share links to sessions or videos by using the share button. The links shared are universal links that redirect to Apple's developer website, so if they're opened on a Mac which has the app installed, they will open in the app. The links are also compatible with iOS devices using the Apple Developer app.
 
 ## Nerdy bits 🤓
 
@@ -67,12 +79,13 @@ A number of third-party libraries are used by the app:
 ### Internal libraries
 
 - **ConfCore** is the core of the app that deals with Apple's WWDC API, data storage, caching, syncing and transcripts (everything that has to do with data, basically)
+- **ConfUIFoundation** contains shared color, font definitions and other useful extensions used by the main app target and `PlayerUI`
 - **PlayerUI** contains the UI components for the video player and some general-purpose UI components used throughout the app
 - **ThrowBack** provides support for migration of user data and preferences from old versions of the app
 
 ## Building the app
 
-**Building requires Xcode 10.2 or later.**
+**Building requires Xcode 11.5 or later.**
 
 Building the app requires [Carthage](https://github.com/Carthage/Carthage) to be installed.
 
@@ -82,7 +95,7 @@ Since the app uses CloudKit, when you build it yourself, all of the CloudKit-dep
 
 To build the app yourself without the need for a developer account and a CloudKit container, **always use the `WWDC` target when building**. The `WWDC with iCloud` target requires a paid developer account and a CloudKit container, which you won't be able to create because of the app's bundle identifier.
 
-![schedule](./screenshots/v5/BuildTarget.png)
+![schedule](./screenshots/v7/BuildTarget.png)
 
 ### Clearing app data during development
 
