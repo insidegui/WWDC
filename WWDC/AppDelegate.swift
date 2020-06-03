@@ -9,6 +9,7 @@
 import Cocoa
 import Sparkle
 import Siesta
+@_exported import ConfUIFoundation
 
 extension Notification.Name {
     static let openWWDCURL = Notification.Name(rawValue: "OpenWWDCURLNotification")
