@@ -124,6 +124,13 @@ final class ClipComposition: AVMutableComposition {
         container.isGeometryFlipped = true
 
         videoComposition?.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: container)
+
+        box.sublayers?.compactMap({ $0 as? CATextLayer }).forEach { layer in
+            layer.minificationFilter = .trilinear
+
+            /// Workaround rdar://32718905
+            layer.display()
+        }
     }
 
     private lazy var attributedTitle: NSAttributedString = {
