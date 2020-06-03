@@ -21,12 +21,14 @@ final class PlaybackPreferencesViewController: NSViewController {
 
     @IBOutlet private var skipIntroSwitch: NSSwitch!
     @IBOutlet private var skipBackAndForwardBy30SecondsSwitch: NSSwitch!
+    @IBOutlet weak var includeAppBannerInClipsSwitch: NSSwitch!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         skipIntroSwitch.isOn = Preferences.shared.skipIntro
         skipBackAndForwardBy30SecondsSwitch.isOn = Preferences.shared.skipBackAndForwardBy30Seconds
+        includeAppBannerInClipsSwitch.isOn = Preferences.shared.includeAppBannerInSharedClips
     }
 
     @IBAction func skipIntroSwitchAction(_ sender: Any) {
@@ -35,6 +37,10 @@ final class PlaybackPreferencesViewController: NSViewController {
 
     @IBAction func skipBackAndForwardBy30SecondsSwitchAction(_ sender: Any) {
         Preferences.shared.skipBackAndForwardBy30Seconds = skipBackAndForwardBy30SecondsSwitch.isOn
+    }
+
+    @IBAction func includeAppBannerInClipsSwitchAction(_ sender: NSSwitch) {
+        Preferences.shared.includeAppBannerInSharedClips = includeAppBannerInClipsSwitch.isOn
     }
     
 }

@@ -35,11 +35,7 @@ final class PUIPictureContainerViewController: NSViewController {
         view = NSView()
         view.wantsLayer = true
         view.layer = PUIBoringLayer()
-        view.layer?.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
         view.layer?.backgroundColor = NSColor.black.cgColor
-
-        playerLayer.frame = view.bounds
-        playerLayer.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
 
         view.layer?.addSublayer(playerLayer)
 
@@ -58,6 +54,12 @@ final class PUIPictureContainerViewController: NSViewController {
 
     func viewDidMoveToSuperview() {
         delegate?.pictureContainerViewSuperviewDidChange(to: view.superview)
+    }
+
+    override func viewDidLayout() {
+        super.viewDidLayout()
+
+        playerLayer.frame = view.bounds
     }
 
     deinit {

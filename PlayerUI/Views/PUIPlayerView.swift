@@ -916,6 +916,8 @@ public final class PUIPlayerView: NSView {
     }
 
     @IBAction public func play(_ sender: Any?) {
+        guard isEnabled else { return }
+
         if player?.error != nil
             || player?.currentItem?.error != nil,
             let asset = player?.currentItem?.asset as? AVURLAsset {
@@ -1149,12 +1151,21 @@ public final class PUIPlayerView: NSView {
         case l = 37
     }
 
+    public var isEnabled = true {
+        didSet {
+            guard isEnabled != oldValue else { return }
+            if !isEnabled { hideControls(animated: true) }
+        }
+    }
+
     private func startMonitoringKeyEvents() {
         if keyDownEventMonitor != nil {
             stopMonitoringKeyEvents()
         }
 
         keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [unowned self] event in
+            guard self.isEnabled else { return event }
+
             guard let command = KeyCommands(rawValue: event.keyCode) else {
                 return event
             }
@@ -1309,6 +1320,8 @@ public final class PUIPlayerView: NSView {
 
     private func showControls(animated: Bool) {
         NSCursor.unhide()
+
+        guard isEnabled else { return }
 
         setControls(opacity: 1, animated: animated)
     }

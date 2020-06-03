@@ -425,12 +425,41 @@
                             <box horizontalHuggingPriority="248" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="4tF-Jf-uRi">
                                 <rect key="frame" x="39" y="305" width="611" height="5"/>
                             </box>
+                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MB9-co-AOw">
+                                <rect key="frame" x="242" y="267" width="254" height="21"/>
+                                <subviews>
+                                    <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="Xtm-cF-96x">
+                                        <rect key="frame" x="-2" y="-2" width="42" height="24"/>
+                                        <connections>
+                                            <action selector="includeAppBannerInClipsSwitchAction:" target="CaZ-mY-PLo" id="x48-78-Rag"/>
+                                        </connections>
+                                    </switch>
+                                    <textField toolTip="Skip back or forward in a video by 30 seconds instead of 15." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UIT-Jh-rd5">
+                                        <rect key="frame" x="44" y="5" width="212" height="16"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include app banner in shared clips" id="V8N-Tx-tVG">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="MB9-co-AOw" firstAttribute="leading" secondItem="CYB-Js-nMq" secondAttribute="leading" id="96z-R2-U73"/>
                             <constraint firstAttribute="trailing" secondItem="4tF-Jf-uRi" secondAttribute="trailing" id="KpR-vb-ubQ"/>
                             <constraint firstItem="EB1-cz-f3w" firstAttribute="top" secondItem="5hl-wi-FfU" secondAttribute="top" constant="22" id="L10-pu-XBx"/>
                             <constraint firstItem="4tF-Jf-uRi" firstAttribute="leading" secondItem="5hl-wi-FfU" secondAttribute="leading" constant="39" id="R85-Mx-vUo"/>
                             <constraint firstItem="CYB-Js-nMq" firstAttribute="top" secondItem="jzw-u5-Zjs" secondAttribute="bottom" constant="19" id="Y9R-1o-KAR"/>
+                            <constraint firstItem="MB9-co-AOw" firstAttribute="top" secondItem="4tF-Jf-uRi" secondAttribute="bottom" constant="19" id="gXK-Yz-Lbr"/>
                             <constraint firstItem="jzw-u5-Zjs" firstAttribute="leading" secondItem="5hl-wi-FfU" secondAttribute="leading" constant="39" id="hca-zI-uZm"/>
                             <constraint firstAttribute="trailing" secondItem="jzw-u5-Zjs" secondAttribute="trailing" id="iiG-rP-bbp"/>
                             <constraint firstItem="EB1-cz-f3w" firstAttribute="leading" secondItem="5hl-wi-FfU" secondAttribute="leading" constant="242" id="jit-Cb-SsI"/>
@@ -440,6 +469,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="includeAppBannerInClipsSwitch" destination="Xtm-cF-96x" id="TMN-ja-MJe"/>
                         <outlet property="skipBackAndForwardBy30SecondsSwitch" destination="JEt-pq-hrP" id="CqT-YK-nZZ"/>
                         <outlet property="skipIntroSwitch" destination="yfb-Pt-KGS" id="ZvD-Nu-XWb"/>
                     </connections>
