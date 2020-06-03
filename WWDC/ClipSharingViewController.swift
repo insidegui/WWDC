@@ -178,8 +178,7 @@ final class ClipSharingViewController: NSViewController {
         progressIndicator.stopAnimation(nil)
 
         if let suggestedTime = initialBeginTime {
-            player.currentItem?.reversePlaybackEndTime = suggestedTime
-            player.seek(to: suggestedTime)
+            configureClipForSuggestedTime(suggestedTime)
         }
 
         playerView.beginTrimming { [weak self] result in
@@ -194,6 +193,22 @@ final class ClipSharingViewController: NSViewController {
         }
 
         view.window?.makeFirstResponder(playerView)
+    }
+
+    private func configureClipForSuggestedTime(_ time: CMTime) {
+        let fifteenSeconds = CMTimeMakeWithSeconds(15, preferredTimescale: 9000)
+        let startTime = CMTimeSubtract(time, fifteenSeconds)
+        let endTime = CMTimeAdd(time, fifteenSeconds)
+
+        if CMTIME_IS_VALID(startTime) {
+            player.currentItem?.reversePlaybackEndTime = startTime
+        }
+
+        if CMTIME_IS_VALID(endTime) {
+            player.currentItem?.forwardPlaybackEndTime = endTime
+        }
+
+        player.seek(to: time)
     }
 
     private var renderer: ClipRenderer?
