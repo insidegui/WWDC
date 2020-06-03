@@ -75,6 +75,15 @@
 		DD5DEC2F1E4AAC9300426FA6 /* DateFormatter+ConfCoreFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5DEC2E1E4AAC9300426FA6 /* DateFormatter+ConfCoreFormat.swift */; };
 		DD5F51871E47DE7E0017F9EC /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */; };
 		DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; };
+		DD600AB42487F1730071B90E /* ConfUIFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = DD600AB22487F1720071B90E /* ConfUIFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DD600AB72487F1730071B90E /* ConfUIFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD600AB02487F1720071B90E /* ConfUIFoundation.framework */; };
+		DD600AB82487F1730071B90E /* ConfUIFoundation.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD600AB02487F1720071B90E /* ConfUIFoundation.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DD600AC12487F1B50071B90E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD600AC02487F1B50071B90E /* Colors.swift */; };
+		DD600AC32487F1C00071B90E /* ConfUIFoundation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD600AC22487F1C00071B90E /* ConfUIFoundation.swift */; };
+		DD600AC62487F1FB0071B90E /* ConfUIFoundation.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD600AC52487F1FB0071B90E /* ConfUIFoundation.xcassets */; };
+		DD600AC92487F2330071B90E /* NSColor+Accent.h in Headers */ = {isa = PBXBuildFile; fileRef = DD600AC82487F2330071B90E /* NSColor+Accent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DD600ACB2487F2D90071B90E /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD600ACA2487F2D90071B90E /* Fonts.swift */; };
+		DD600ACE2487F3540071B90E /* NSColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD600ACD2487F3540071B90E /* NSColor+Hex.swift */; };
 		DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD4B1E489FF50054DD35 /* SessionAsset.swift */; };
 		DD65FD4D1E48A01B0054DD35 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
 		DD65FD4E1E48A01B0054DD35 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
@@ -107,15 +116,12 @@
 		DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2906248000AA00A58370 /* FullBleedImageView.swift */; };
 		DD7E290924800D0300A58370 /* schedule-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = DD7E290824800D0300A58370 /* schedule-placeholder.png */; };
 		DD7E293E2481758200A58370 /* NSCodingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E293D2481758200A58370 /* NSCodingExtensions.swift */; };
-		DD7E29442481821000A58370 /* NSFont+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E29432481821000A58370 /* NSFont+Rounded.swift */; };
 		DD7F385D1EABD449002D8C00 /* SyncEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385C1EABD449002D8C00 /* SyncEngine.swift */; };
 		DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */; };
 		DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */; };
 		DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */; };
 		DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */; };
 		DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */; };
-		DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38701EABF6C4002D8C00 /* Colors.swift */; };
-		DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38751EABFB20002D8C00 /* NSColor+Hex.swift */; };
 		DD7F38781EAC0C98002D8C00 /* ShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */; };
 		DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */; };
 		DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */; };
@@ -236,7 +242,6 @@
 		DDD68549247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD68540247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json */; };
 		DDD6854A247C3B4C001BB700 /* transcript-manifest-eng.json in Resources */ = {isa = PBXBuildFile; fileRef = DDD68541247C3B4C001BB700 /* transcript-manifest-eng.json */; };
 		DDD6854C247C517A001BB700 /* TranscriptLanguagesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */; };
-		DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930701ED4EF1F00D61BE3 /* Fonts.swift */; };
 		DDD930731ED52B2900D61BE3 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD930721ED52B2900D61BE3 /* Download.swift */; };
 		DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */; };
 		DDDAA3CD1EC746BC00DF9D02 /* ScheduleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA3CC1EC746BC00DF9D02 /* ScheduleSection.swift */; };
@@ -337,6 +342,13 @@
 			remoteGlobalIDString = DD36A4C71E478D7E00B2EA88;
 			remoteInfo = ConfCore;
 		};
+		DD600AB52487F1730071B90E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DD600AAF2487F1720071B90E;
+			remoteInfo = ConfUIFoundation;
+		};
 		DDC677FB1EDA76A100A4E19C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
@@ -389,6 +401,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				4D82B5F82343DABF005AC3EC /* RxRelay.framework in Embed Frameworks */,
+				DD600AB82487F1730071B90E /* ConfUIFoundation.framework in Embed Frameworks */,
 				DDBCEC9C228AD30C009300CF /* SwiftProtobuf.framework in Embed Frameworks */,
 				DDBCEC9A228AD2D0009300CF /* CloudKitCodable.framework in Embed Frameworks */,
 				DDBCEC83228AC9C5009300CF /* ChromeCastCore.framework in Embed Frameworks */,
@@ -505,6 +518,15 @@
 		DD5F51821E47DE7E0017F9EC /* RxRealm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRealm.framework; path = Carthage/Build/Mac/RxRealm.framework; sourceTree = "<group>"; };
 		DD5F51831E47DE7E0017F9EC /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/Mac/RxSwift.framework; sourceTree = "<group>"; };
 		DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/Mac/SwiftyJSON.framework; sourceTree = "<group>"; };
+		DD600AB02487F1720071B90E /* ConfUIFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ConfUIFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD600AB22487F1720071B90E /* ConfUIFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfUIFoundation.h; sourceTree = "<group>"; };
+		DD600AB32487F1730071B90E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD600AC02487F1B50071B90E /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		DD600AC22487F1C00071B90E /* ConfUIFoundation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfUIFoundation.swift; sourceTree = "<group>"; };
+		DD600AC52487F1FB0071B90E /* ConfUIFoundation.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ConfUIFoundation.xcassets; sourceTree = "<group>"; };
+		DD600AC82487F2330071B90E /* NSColor+Accent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+Accent.h"; sourceTree = "<group>"; };
+		DD600ACA2487F2D90071B90E /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		DD600ACD2487F3540071B90E /* NSColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSColor+Hex.swift"; sourceTree = "<group>"; };
 		DD65FD4B1E489FF50054DD35 /* SessionAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionAsset.swift; sourceTree = "<group>"; };
 		DD65FD501E48A05C0054DD35 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		DD65FD521E48A06A0054DD35 /* NewsItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsItem.swift; sourceTree = "<group>"; };
@@ -532,16 +554,12 @@
 		DD7E2906248000AA00A58370 /* FullBleedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullBleedImageView.swift; sourceTree = "<group>"; };
 		DD7E290824800D0300A58370 /* schedule-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "schedule-placeholder.png"; sourceTree = "<group>"; };
 		DD7E293D2481758200A58370 /* NSCodingExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCodingExtensions.swift; sourceTree = "<group>"; };
-		DD7E29432481821000A58370 /* NSFont+Rounded.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSFont+Rounded.swift"; sourceTree = "<group>"; };
-		DD7E29452481B6EA00A58370 /* NSColor+Accent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSColor+Accent.h"; sourceTree = "<group>"; };
 		DD7F385C1EABD449002D8C00 /* SyncEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncEngine.swift; sourceTree = "<group>"; };
 		DD7F385E1EABD631002D8C00 /* WWDCTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTabViewController.swift; sourceTree = "<group>"; };
 		DD7F38611EABD6CF002D8C00 /* SessionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionsTableViewController.swift; sourceTree = "<group>"; };
 		DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDetailsViewController.swift; sourceTree = "<group>"; };
 		DD7F38671EABE4E4002D8C00 /* SessionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionViewModel.swift; sourceTree = "<group>"; };
 		DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionTableCellView.swift; sourceTree = "<group>"; };
-		DD7F38701EABF6C4002D8C00 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		DD7F38751EABFB20002D8C00 /* NSColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSColor+Hex.swift"; sourceTree = "<group>"; };
 		DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfViewController.swift; sourceTree = "<group>"; };
 		DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionSummaryViewController.swift; sourceTree = "<group>"; };
 		DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTextField.swift; sourceTree = "<group>"; };
@@ -658,7 +676,6 @@
 		DDD68540247C3B4C001BB700 /* wwdc2019-103-transcript-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "wwdc2019-103-transcript-eng.json"; sourceTree = "<group>"; };
 		DDD68541247C3B4C001BB700 /* transcript-manifest-eng.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "transcript-manifest-eng.json"; sourceTree = "<group>"; };
 		DDD6854B247C517A001BB700 /* TranscriptLanguagesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptLanguagesProvider.swift; sourceTree = "<group>"; };
-		DDD930701ED4EF1F00D61BE3 /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		DDD930721ED52B2900D61BE3 /* Download.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		DDD930741ED52BD800D61BE3 /* DTFolderMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderMonitor.h; sourceTree = "<group>"; };
 		DDD930751ED52BD800D61BE3 /* DTFolderMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderMonitor.m; sourceTree = "<group>"; };
@@ -754,6 +771,7 @@
 				DD5F51891E47DE7E0017F9EC /* RxSwift.framework in Frameworks */,
 				DD0F0C581E7B95FB00B52184 /* RealmSwift.framework in Frameworks */,
 				DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */,
+				DD600AB72487F1730071B90E /* ConfUIFoundation.framework in Frameworks */,
 				DD9301B81EE3202F00BE724B /* ChromeCastCore.framework in Frameworks */,
 				DD4DED681ED6604300624EAF /* Fabric.framework in Frameworks */,
 			);
@@ -781,6 +799,13 @@
 				DD36A4D11E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
 				DD65FD641E48AE540054DD35 /* Realm.framework in Frameworks */,
 				DD65FD651E48AE540054DD35 /* RealmSwift.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD600AAD2487F1720071B90E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -883,6 +908,7 @@
 				DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */,
 				DDD684FF247C3B00001BB700 /* Transcripts */,
 				DDD6850C247C3B00001BB700 /* TranscriptsTests */,
+				DD600AB12487F1720071B90E /* ConfUIFoundation */,
 				DD36A4AD1E478C6A00B2EA88 /* Products */,
 				DDAE7C531E5BC6CD00CEA205 /* Frameworks */,
 			);
@@ -899,6 +925,7 @@
 				DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */,
 				DDD684FE247C3B00001BB700 /* Transcripts.framework */,
 				DDD68506247C3B00001BB700 /* TranscriptsTests.xctest */,
+				DD600AB02487F1720071B90E /* ConfUIFoundation.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1125,6 +1152,61 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DD600AB12487F1720071B90E /* ConfUIFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				DD600AC42487F1EC0071B90E /* Resources */,
+				DD600ABE2487F18B0071B90E /* Source */,
+				DD600AB22487F1720071B90E /* ConfUIFoundation.h */,
+				DD600AB32487F1730071B90E /* Info.plist */,
+			);
+			path = ConfUIFoundation;
+			sourceTree = "<group>";
+		};
+		DD600ABE2487F18B0071B90E /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				DD600AC22487F1C00071B90E /* ConfUIFoundation.swift */,
+				DD600ABF2487F1910071B90E /* Definitions */,
+				DD600AC72487F22C0071B90E /* Headers */,
+				DD600ACC2487F3450071B90E /* Util */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		DD600ABF2487F1910071B90E /* Definitions */ = {
+			isa = PBXGroup;
+			children = (
+				DD600AC02487F1B50071B90E /* Colors.swift */,
+				DD600ACA2487F2D90071B90E /* Fonts.swift */,
+			);
+			path = Definitions;
+			sourceTree = "<group>";
+		};
+		DD600AC42487F1EC0071B90E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DD600AC52487F1FB0071B90E /* ConfUIFoundation.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		DD600AC72487F22C0071B90E /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				DD600AC82487F2330071B90E /* NSColor+Accent.h */,
+			);
+			path = Headers;
+			sourceTree = "<group>";
+		};
+		DD600ACC2487F3450071B90E /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				DD600ACD2487F3540071B90E /* NSColor+Hex.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 		DD65FD4A1E489FDA0054DD35 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -1225,7 +1307,6 @@
 				DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */,
 				DDDAA40B1EC798B600DF9D02 /* Preferences.swift */,
 				DDC927FD20B7A259004C784D /* NSImage+Compression.swift */,
-				DD7E29432481821000A58370 /* NSFont+Rounded.swift */,
 				DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */,
 				DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */,
 			);
@@ -1434,10 +1515,6 @@
 			isa = PBXGroup;
 			children = (
 				DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */,
-				DD7F38701EABF6C4002D8C00 /* Colors.swift */,
-				DD7F38751EABFB20002D8C00 /* NSColor+Hex.swift */,
-				DDD930701ED4EF1F00D61BE3 /* Fonts.swift */,
-				DD7E29452481B6EA00A58370 /* NSColor+Accent.h */,
 			);
 			name = Look;
 			sourceTree = "<group>";
@@ -1770,6 +1847,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DD600AAB2487F1720071B90E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD600AB42487F1730071B90E /* ConfUIFoundation.h in Headers */,
+				DD600AC92487F2330071B90E /* NSColor+Accent.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DDD684F9247C3B00001BB700 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1810,6 +1896,7 @@
 				DDF7219C1ECA12780054C503 /* PBXTargetDependency */,
 				DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */,
 				DDD68512247C3B00001BB700 /* PBXTargetDependency */,
+				DD600AB62487F1730071B90E /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			productName = WWDC;
@@ -1853,6 +1940,24 @@
 			productName = ConfCoreTests;
 			productReference = DD36A4D01E478D7E00B2EA88 /* ConfCoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DD600AAF2487F1720071B90E /* ConfUIFoundation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD600ABD2487F1730071B90E /* Build configuration list for PBXNativeTarget "ConfUIFoundation" */;
+			buildPhases = (
+				DD600AAB2487F1720071B90E /* Headers */,
+				DD600AAC2487F1720071B90E /* Sources */,
+				DD600AAD2487F1720071B90E /* Frameworks */,
+				DD600AAE2487F1720071B90E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ConfUIFoundation;
+			productName = ConfUIFoundation;
+			productReference = DD600AB02487F1720071B90E /* ConfUIFoundation.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */ = {
 			isa = PBXNativeTarget;
@@ -1964,6 +2069,11 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = DD36A4AB1E478C6900B2EA88;
 					};
+					DD600AAF2487F1720071B90E = {
+						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
+						ProvisioningStyle = Automatic;
+					};
 					DDC677F11EDA76A100A4E19C = {
 						CreatedOnToolsVersion = 8.3.2;
 						LastSwiftMigration = 1150;
@@ -2008,6 +2118,7 @@
 				DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */,
 				DDD684FD247C3B00001BB700 /* Transcripts */,
 				DDD68505247C3B00001BB700 /* TranscriptsTests */,
+				DD600AAF2487F1720071B90E /* ConfUIFoundation */,
 			);
 		};
 /* End PBXProject section */
@@ -2046,6 +2157,14 @@
 				DD5DEC291E4AA8C800426FA6 /* news.json in Resources */,
 				3A6227031F9272A300D5F687 /* contents.json in Resources */,
 				DD5DEC2B1E4AA8C800426FA6 /* videos.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DD600AAE2487F1720071B90E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD600AC62487F1FB0071B90E /* ConfUIFoundation.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2144,7 +2263,6 @@
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
 				DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */,
 				DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */,
-				DD7F38711EABF6C4002D8C00 /* Colors.swift in Sources */,
 				DDA7B72E2484371C00F86668 /* CommunityViewController.swift in Sources */,
 				DDA7B7422485397F00F86668 /* CommunityNewsItemViewModel.swift in Sources */,
 				DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */,
@@ -2170,8 +2288,6 @@
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */,
-				DD7F38761EABFB20002D8C00 /* NSColor+Hex.swift in Sources */,
-				DD7E29442481821000A58370 /* NSFont+Rounded.swift in Sources */,
 				4D4D80C4217D281D00D1C233 /* DownloadViewModel.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
 				4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */,
@@ -2181,7 +2297,6 @@
 				DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
-				DDD930711ED4EF1F00D61BE3 /* Fonts.swift in Sources */,
 				DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */,
 				DDA60E1720A9083E002EECF5 /* RelatedSessionsViewController.swift in Sources */,
 				DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */,
@@ -2345,6 +2460,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DD600AAC2487F1720071B90E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD600ACE2487F3540071B90E /* NSColor+Hex.swift in Sources */,
+				DD600AC32487F1C00071B90E /* ConfUIFoundation.swift in Sources */,
+				DD600ACB2487F2D90071B90E /* Fonts.swift in Sources */,
+				DD600AC12487F1B50071B90E /* Colors.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DDC677EE1EDA76A100A4E19C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2437,6 +2563,11 @@
 			isa = PBXTargetDependency;
 			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
 			targetProxy = DD36A4DB1E478D7E00B2EA88 /* PBXContainerItemProxy */;
+		};
+		DD600AB62487F1730071B90E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DD600AAF2487F1720071B90E /* ConfUIFoundation */;
+			targetProxy = DD600AB52487F1730071B90E /* PBXContainerItemProxy */;
 		};
 		DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3038,6 +3169,142 @@
 			};
 			name = Release_iCloud;
 		};
+		DD600AB92487F1730071B90E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ConfUIFoundation/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.rambo.ConfUIFoundation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DD600ABA2487F1730071B90E /* Debug_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ConfUIFoundation/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.rambo.ConfUIFoundation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug_iCloud;
+		};
+		DD600ABB2487F1730071B90E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ConfUIFoundation/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.rambo.ConfUIFoundation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DD600ABC2487F1730071B90E /* Release_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ConfUIFoundation/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = codes.rambo.ConfUIFoundation;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release_iCloud;
+		};
 		DDC677FF1EDA76A100A4E19C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -3527,6 +3794,17 @@
 				DD5910671ECA0C17003C32A4 /* Debug_iCloud */,
 				DD36A4E21E478D7E00B2EA88 /* Release */,
 				DD59106C1ECA0C20003C32A4 /* Release_iCloud */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD600ABD2487F1730071B90E /* Build configuration list for PBXNativeTarget "ConfUIFoundation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD600AB92487F1730071B90E /* Debug */,
+				DD600ABA2487F1730071B90E /* Debug_iCloud */,
+				DD600ABB2487F1730071B90E /* Release */,
+				DD600ABC2487F1730071B90E /* Release_iCloud */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

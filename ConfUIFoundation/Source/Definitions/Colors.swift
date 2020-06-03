@@ -1,6 +1,6 @@
 //
 //  Colors.swift
-//  WWDC
+//  ConfUIFoundation
 //
 //  Created by Guilherme Rambo on 22/04/17.
 //  Copyright © 2017 Guilherme Rambo. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Cocoa
 
-@objc extension NSColor {
+@objc public extension NSColor {
 
     static var listBackground: NSColor { .underPageBackgroundColor }
 
@@ -22,7 +22,7 @@ import Cocoa
 
     /// Color used as a fallback when the system accent color is graphite,
     /// to prevent issues with lack of color contrast.
-    private static let fallbackAccentColor = NSColor(named: "fallbackAccentColor")!
+    private static let fallbackAccentColor = NSColor(named: "fallbackAccentColor", bundle: .confUIFoundation)!
 
     private static var wwdcAccentColor: NSColor {
         guard !isAccentColorGraphite else { return fallbackAccentColor }
@@ -52,9 +52,9 @@ import Cocoa
 
     static let darkWindowBackground = NSColor.black
 
-    static let contentBackground = NSColor(named: "contentBackgroundColor")!
+    static let contentBackground = NSColor(named: "contentBackgroundColor", bundle: .confUIFoundation)!
 
-    static let roundedCellBackground = NSColor(named: "roundedCellBackgroundColor")!
+    static let roundedCellBackground = NSColor(named: "roundedCellBackgroundColor", bundle: .confUIFoundation)!
 
     static let darkTitlebarBackground = NSColor(calibratedRed: 0.06, green: 0.06, blue: 0.06, alpha: 1.00)
 
