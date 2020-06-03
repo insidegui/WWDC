@@ -42,6 +42,12 @@ With bookmarks, you can create a reference point within a video and add an annot
 
 ![bookmarks](./screenshots/v7/Video-Bookmark.png)
 
+## Community
+
+Browse content curated by the [CocoaHub](http://cocoahub.app) team in the Community tab.
+
+![community](./screenshots/v7/Community.png)
+
 ## iCloud Sync
 
 Enable the iCloud sync in preferences and your favorites, bookmarks and progress in sessions will be synced accross your Macs.
