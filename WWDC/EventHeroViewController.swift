@@ -32,12 +32,23 @@ public final class EventHeroViewController: NSViewController {
         return v
     }()
 
+    private func makeShadow() -> NSShadow {
+        let shadow = NSShadow()
+
+        shadow.shadowBlurRadius = 1
+        shadow.shadowColor = NSColor.black.withAlphaComponent(0.7)
+        shadow.shadowOffset = NSSize(width: 1, height: 1)
+
+        return shadow
+    }
+
     private lazy var titleLabel: NSTextField = {
         let l = NSTextField(wrappingLabelWithString: "")
 
         l.font = .boldTitleFont
         l.textColor = .primaryText
         l.alignment = .center
+        l.shadow = makeShadow()
 
         return l
     }()
@@ -48,8 +59,25 @@ public final class EventHeroViewController: NSViewController {
         l.font = NSFont.systemFont(ofSize: 14)
         l.textColor = .secondaryText
         l.alignment = .center
+        l.shadow = makeShadow()
 
         return l
+    }()
+
+    private lazy var scrollView: NSScrollView = {
+        let v = NSScrollView()
+
+        v.contentView = FlippedClipView()
+        v.drawsBackground = false
+        v.backgroundColor = .clear
+        v.borderType = .noBorder
+        v.documentView = self.textStack
+        v.autohidesScrollers = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.automaticallyAdjustsContentInsets = false
+        v.contentInsets = NSEdgeInsets(top: 120, left: 0, bottom: 0, right: 0)
+
+        return v
     }()
 
     private lazy var textStack: NSStackView = {
@@ -84,13 +112,22 @@ public final class EventHeroViewController: NSViewController {
             backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        view.addSubview(textStack)
+        view.addSubview(scrollView)
 
         NSLayoutConstraint.activate([
-            textStack.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 120),
-            textStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            textStack.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 220),
-            textStack.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor, constant: -220)
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scrollView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 220),
+            scrollView.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor, constant: -220)
+        ])
+
+        NSLayoutConstraint.activate([
+            textStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            textStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            textStack.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            textStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            textStack.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
     }
 
@@ -124,11 +161,24 @@ public final class EventHeroViewController: NSViewController {
         heroUnavailable.map({ !$0 }).bind(to: placeholderImageView.rx.isHidden).disposed(by: disposeBag)
 
         hero.map({ $0?.title ?? "Schedule not available" }).bind(to: titleLabel.rx.text).disposed(by: disposeBag)
-        hero.map({ $0?.body ?? "The schedule is not currently available. Check back later." }).bind(to: bodyLabel.rx.text).disposed(by: disposeBag)
+        hero.map({ hero in
+            let unavailable = "The schedule is not currently available. Check back later."
+            guard let hero = hero else { return unavailable }
+            if hero.textComponents.isEmpty {
+                return hero.body
+            } else {
+                return hero.textComponents.joined(separator: "\n\n")
+            }
+        }).bind(to: bodyLabel.rx.text).disposed(by: disposeBag)
 
         hero.compactMap({ $0?.titleColor }).subscribe(onNext: { [weak self] colorHex in
             guard let self = self else { return }
             self.titleLabel.textColor = NSColor.fromHexString(hexString: colorHex)
+        }).disposed(by: disposeBag)
+
+        // Dim background when there's a lot of text to show
+        hero.compactMap({ $0 }).map({ $0.textComponents.count > 2 }).subscribe(onNext: { [weak self] largeText in
+            self?.backgroundImageView.alphaValue = 0.5
         }).disposed(by: disposeBag)
 
         hero.compactMap({ $0?.bodyColor }).subscribe(onNext: { [weak self] colorHex in
