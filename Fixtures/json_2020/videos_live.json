@@ -1,0 +1,13 @@
+{
+    "updated": "2020-06-22T09:45:00-07:00",
+    "live_sessions": {
+        "101": {
+            "iosUrl": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+            "tvosUrl": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8",
+            "actualEndDate": "2020-06-22T12:00:00-07:00",
+            "images": {
+                "shelf": "http://devstreaming.apple.com/videos/wwdc/2016/201h1g4asm31ti2l9n1/201/images/201_734x413.jpg"
+            }
+        }
+    }
+}

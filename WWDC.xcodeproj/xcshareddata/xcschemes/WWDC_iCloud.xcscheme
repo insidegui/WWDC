@@ -94,7 +94,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-WWDCEnvironmentBaseURL &quot;https://red-fire-a9a4.rambo.workers.dev&quot;"
+            argument = "-WWDCEnvironmentBaseURL &quot;https://ab98cbf7a548.ngrok.io&quot;"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -134,7 +134,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "2019-06-03T10:00:00-07:00"
+            argument = "2020-06-22T17:00:00-03:00"
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
