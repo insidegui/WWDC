@@ -134,8 +134,8 @@ struct LiveAssetWrapper: Decodable {
         asset.sessionId = "wwdc\(asset.year)-"+sessionId
         asset.rawAssetType = SessionAssetType.liveStreamVideo.rawValue
         asset.remoteURL = remoteURL
-        // Check if date is done like this
-        asset.actualEndDate = try container.decodeIfPresent(Date.self, forKey: .actualEndDate)
+        // Not using decodeIfPresent because date can actually be an empty string :/
+        asset.actualEndDate = try? container.decode(Date.self, forKey: .actualEndDate)
 
         self.liveSession = asset
     }
