@@ -185,7 +185,7 @@ public class Session: Object, Decodable {
         let eventYear = eventIdentifier.replacingOccurrences(of: "wwdc", with: "")
         let title = try sessionContainer.decode(String.self, forKey: .title)
         let summary = try sessionContainer.decode(String.self, forKey: .description)
-        let trackIdentifier = try sessionContainer.decode(Int.self, forKey: .track)
+        let trackIdentifier = try sessionContainer.decodeIfPresent(Int.self, forKey: .track) ?? SessionInstance.defaultTrackId
         let eventContentId = try sessionContainer.decode(Int.self, forKey: .eventContentId)
 
         self.init()

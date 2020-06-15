@@ -34,7 +34,7 @@ public enum SessionInstanceType: Int, Decodable {
 /// A session instance represents a specific occurence of a session with a location and start/end times
 public class SessionInstance: Object, ConditionallyDecodable {
 
-    private static let defaultTrackId = "4"
+    static let defaultTrackId = 4
 
     /// Unique identifier
     @objc public dynamic var identifier = ""
@@ -199,7 +199,7 @@ public class SessionInstance: Object, ConditionallyDecodable {
             self.roomIdentifier = roomNumber.flatMap { String($0) } ?? ""
 
             let trackNumber = try container.decodeIfPresent(Int.self, forKey: .track)
-            self.trackIdentifier = trackNumber.flatMap { String($0) } ?? Self.defaultTrackId
+            self.trackIdentifier = trackNumber.flatMap { String($0) } ?? String(Self.defaultTrackId)
         } catch let error as DecodingError where error.isKeyNotFound {
             throw ConditionallyDecodableError.missingKey(error)
         }
