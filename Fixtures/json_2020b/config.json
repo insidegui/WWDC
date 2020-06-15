@@ -1,0 +1,157 @@
+{
+    "minimumSupportedAppVersion": 0,
+    "features": {
+        "isLiveStreamingEnabled": true,
+        "isLabQueueingEnabled": true
+    },
+    "fetchIntervals": {
+        "master": 300,
+        "appResumeMinimum": 0,
+        "liveVideos": 60
+    },
+    "analytics": {
+        "isEnabled": true
+    },
+    "feeds": {
+        "en": {
+            "contents": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/contents.json",
+                "etag": "\"0c5f629d5c0da7d4157a84368c00d05f\""
+            },
+            "articles": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/articles.json",
+                "etag": "\"27dc1e27ccec271ce88e0c95bc7844f0\""
+            },
+            "layout": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/layout.json",
+                "etag": "\"a2cde5d5587fad1268f5f4c539d284c7\""
+            },
+            "maps": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/maps.json",
+                "etag": "\"98a137ed4bd40ee51cb2b725af5dfa0a\""
+            },
+            "liveVideos": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/videos_live.json"
+            },
+            "discover": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/discover.json",
+                "etag": "\"4193dc74e1e67f73f7a09d03eb231c17\""
+            },
+            "event": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/event.json",
+                "etag": "\"e8ccea1be3bb626be64232412b079478\""
+            },
+            "transcripts": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/transcripts/manifests/transcript-manifest-eng.json",
+                "etag": "\"f6b043cf0919bf0232221b2e2d56a236\""
+            }
+        },
+        "zho": {
+            "contents": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/contents_zho.json",
+                "etag": "\"0a0681cf58c442d2eb805ea474afe34f\""
+            },
+            "articles": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/articles_zho.json",
+                "etag": "\"622097626c71a2ae4b7bc74166117375\""
+            },
+            "layout": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/layout_zho.json",
+                "etag": "\"7d23cf90bb2bec8bbe4e670714e3fdc2\""
+            },
+            "maps": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/maps.json",
+                "etag": "\"98a137ed4bd40ee51cb2b725af5dfa0a\""
+            },
+            "liveVideos": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/videos_live.json"
+            },
+            "discover": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/discover_zho.json",
+                "etag": "\"8fea6f96bf45e453a166265a08005122\""
+            },
+            "event": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/event_zho.json",
+                "etag": "\"b761fc26d28bb75abc5fe64b1645a44c\""
+            },
+            "transcripts": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/transcripts/manifests/transcript-manifest-zho.json",
+                "etag": "\"764d7099ef7c814b72a37a6a8d74e80b\""
+            }
+        },
+        "jpn": {
+            "contents": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/contents_jpn.json",
+                "etag": "\"befecce76fdf5a200fd0345225fe5c23\""
+            },
+            "articles": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/articles_jpn.json",
+                "etag": "\"47fbec4f6a3c791c2b87682ff5eab8a5\""
+            },
+            "layout": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/layout_jpn.json",
+                "etag": "\"2403844760d6e8ede2db44ce4febb1df\""
+            },
+            "maps": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/maps.json",
+                "etag": "\"98a137ed4bd40ee51cb2b725af5dfa0a\""
+            },
+            "liveVideos": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/videos_live.json"
+            },
+            "discover": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/discover_jpn.json",
+                "etag": "\"a052ae3bf96c736acba56c32f9162ff2\""
+            },
+            "event": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/event_jpn.json",
+                "etag": "\"49e7f7b2f7bb0e7607445da154888c8d\""
+            },
+            "transcripts": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/transcripts/manifests/transcript-manifest-jpn.json",
+                "etag": "\"fe084b99a0972e00501a2fe7251fa4db\""
+            }
+        },
+        "kor": {
+            "contents": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/contents_kor.json",
+                "etag": "\"55ee17afe06b95504d9a857bc09ffc81\""
+            },
+            "articles": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/articles_kor.json",
+                "etag": "\"03cd512b56a6f0e91cfecd367c2c728e\""
+            },
+            "layout": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/layout_kor.json",
+                "etag": "\"0804d187c34b2aeae94196714dad4dc7\""
+            },
+            "maps": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/maps.json",
+                "etag": "\"98a137ed4bd40ee51cb2b725af5dfa0a\""
+            },
+            "liveVideos": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/videos_live.json"
+            },
+            "discover": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/discover_kor.json",
+                "etag": "\"b032fbd489679719cb8e858c4402cceb\""
+            },
+            "event": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/n233a99f/5D23F1E9-9551-4768-ACF3-E3920F9C572D/event_kor.json",
+                "etag": "\"34d040312dc3ac520a715eeda8842599\""
+            },
+            "transcripts": {
+                "url": "https://devimages-cdn.apple.com/wwdc-services/transcripts/manifests/transcript-manifest-kor.json",
+                "etag": "\"0a29515811642153175f336b01bc2e5a\""
+            }
+        }
+    },
+    "services": {
+        "pushRegistration": {
+            "url": "https://krakatau.apple.com/apns/v2/device"
+        },
+        "walletPass": {
+            "url": "https://developer.apple.com/services-tickets/wwdc/getPass"
+        }
+    }
+}

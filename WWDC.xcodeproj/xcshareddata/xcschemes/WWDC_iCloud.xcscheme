@@ -94,8 +94,8 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-WWDCEnvironmentBaseURL &quot;https://ab98cbf7a548.ngrok.io&quot;"
-            isEnabled = "NO">
+            argument = "-WWDCEnvironmentBaseURL &quot;https://calm-block-8cce.rambo.workers.dev&quot;"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--enable-updates"
