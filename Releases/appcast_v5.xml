@@ -7,6 +7,35 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 7.0.2</title>
+			<description><![CDATA[
+				<p>Minor changes to get the app ready ahead of next week's event.</p>
+				<p>Apple has just released their official Developer app for macOS, <a href="https://apps.apple.com/app/apple-developer/id640199958">check it out in the App Store</a>.</p>
+
+				<h2>From the previous release:</h2>
+				
+				<h3>Welcome to WWDC for macOS version 7!</h3>
+
+				<p>This update has lots of fixes and improvements, as well as some cool new features.</p>
+
+				<ul>
+					<li>The app's UI has been modernized to look better in macOS Catalina, with new fonts and colors</li>
+					<li>The video player has also received a UI refresh to improve the contrast between controls and the background</li>
+					<li>Transcripts are now provided by Apple, which means they're the same as the ones in the Apple Developer app, including support for multiple languages</li>
+					<li>You can now search within a specific session's transcript</li>
+					<li>The transcript can now be detached into its own window, so you can rearrange your workspace with more flexibility, such as putting the video and transcript side-by-side in fullscreen</li>
+					<li>Meet the new Community tab: in partnership with CocoaHub, we're bringing you curated content from the community, including Apple announcements, blog posts, podcast episodes, conference videos, and more</li>
+					<li>Clip Sharing: if you've ever wanted to share a specific segment of a video with someone, you now can! With a downloaded video selected, just click the scissors button and select a portion of the video to share</li>
+				</ul>
+
+				<p><strong>NOTE: starting with this version, the app requires macOS Catalina (10.15) or later</strong></p>
+			]]></description>
+            <pubDate>Thu, 15 Jun 2020 15:30:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/7.0.2/WWDC_v7.0.2.zip" sparkle:version="1003" sparkle:shortVersionString="7.0.2" length="11325920" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+        </item>	
+		
+		<item>
             <title>Version 7.0.1</title>
 			<description><![CDATA[
 				<p>This update contains a bug fix in the schedule tab.</p>
