@@ -29,6 +29,10 @@ class SessionSummaryViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    enum Metrics {
+        static let summaryHeight: CGFloat = 100
+    }
+
     private lazy var titleLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
         l.cell?.backgroundStyle = .dark
@@ -63,19 +67,37 @@ class SessionSummaryViewController: NSViewController {
     private func attributedSummaryString(from string: String) -> NSAttributedString {
         .create(with: string, font: .systemFont(ofSize: 15), color: .secondaryText, lineHeightMultiple: 1.2)
     }
+    
+    private lazy var summaryTextView: NSTextView = {
+        let v = NSTextView()
 
-    private lazy var summaryLabel: WWDCTextField = {
-        let l = WWDCTextField(labelWithString: "")
+        v.drawsBackground = false
+        v.backgroundColor = .clear
+        v.autoresizingMask = [.width]
+        v.textContainer?.widthTracksTextView = true
+        v.textContainer?.heightTracksTextView = false
+        v.isEditable = false
+        v.isVerticallyResizable = true
+        v.isHorizontallyResizable = false
+        v.textContainer?.containerSize = NSSize(width: 100, height: CGFloat.greatestFiniteMagnitude)
 
-        l.cell?.backgroundStyle = .dark
-        l.lineBreakMode = .byWordWrapping
-        l.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        l.allowsDefaultTighteningForTruncation = true
-        l.maximumNumberOfLines = 20
-        l.isSelectable = true
-        l.allowsEditingTextAttributes = true
+        return v
+    }()
 
-        return l
+    private lazy var summaryScrollView: NSScrollView = {
+        let v = NSScrollView()
+
+        v.contentView = FlippedClipView()
+        v.drawsBackground = false
+        v.backgroundColor = .clear
+        v.borderType = .noBorder
+        v.documentView = self.summaryTextView
+        v.autohidesScrollers = true
+        v.hasVerticalScroller = true
+        v.hasHorizontalScroller = false
+        v.verticalScrollElasticity = .none
+
+        return v
     }()
 
     private lazy var contextLabel: NSTextField = {
@@ -113,7 +135,7 @@ class SessionSummaryViewController: NSViewController {
     }()
 
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.summaryLabel, self.contextStackView])
+        let v = NSStackView(views: [self.summaryScrollView, self.contextStackView])
 
         v.orientation = .vertical
         v.alignment = .leading
@@ -146,6 +168,7 @@ class SessionSummaryViewController: NSViewController {
         stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        summaryScrollView.heightAnchor.constraint(equalToConstant: Metrics.summaryHeight).isActive = true
 
         addChild(relatedSessionsViewController)
         relatedSessionsViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -164,6 +187,7 @@ class SessionSummaryViewController: NSViewController {
     private func updateBindings() {
         actionsViewController.view.isHidden = (viewModel == nil)
         actionsViewController.viewModel = viewModel
+        self.summaryScrollView.scroll(.zero)
 
         guard let viewModel = viewModel else { return }
 
@@ -176,7 +200,8 @@ class SessionSummaryViewController: NSViewController {
 
         viewModel.rxSummary.subscribe(onNext: { [weak self] summary in
             guard let self = self else { return }
-            self.summaryLabel.attributedStringValue = self.attributedSummaryString(from: summary)
+            let range = NSRange(location: 0, length: self.summaryTextView.string.count)
+            self.summaryTextView.textStorage?.replaceCharacters(in: range, with: self.attributedSummaryString(from: summary))
         }).disposed(by: disposeBag)
 
         viewModel.rxRelatedSessions.subscribe(onNext: { [weak self] relatedResources in

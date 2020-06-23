@@ -249,6 +249,8 @@ private class SessionDetailsTabContainer: NSView {
 
     var currentView: NSView? {
         didSet {
+            guard oldValue !== currentView else { return }
+
             oldValue?.removeFromSuperview()
 
             if let newView = currentView {

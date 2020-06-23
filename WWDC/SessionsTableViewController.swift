@@ -507,9 +507,11 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
         switch menuItem.option {
         case .download:
-            return !DownloadManager.shared.isDownloading(viewModel.session) && !DownloadManager.shared.hasDownloadedVideo(session: viewModel.session)
+            return DownloadManager.shared.isDownloadable(viewModel.session) &&
+                !DownloadManager.shared.isDownloading(viewModel.session) &&
+                !DownloadManager.shared.hasDownloadedVideo(session: viewModel.session)
         case .cancelDownload:
-            return DownloadManager.shared.isDownloading(viewModel.session)
+            return DownloadManager.shared.isDownloadable(viewModel.session) && DownloadManager.shared.isDownloading(viewModel.session)
         case .revealInFinder:
             return DownloadManager.shared.hasDownloadedVideo(session: viewModel.session)
         default: ()

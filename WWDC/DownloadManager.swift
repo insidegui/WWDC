@@ -144,6 +144,10 @@ final class DownloadManager: NSObject {
         return isDownloading(url)
     }
 
+    func isDownloadable(_ session: Session) -> Bool {
+        return session.asset(ofType: DownloadManager.downloadQuality) != nil
+    }
+
     func downloadedFileURL(for session: Session) -> URL? {
         guard let asset = session.asset(ofType: DownloadManager.downloadQuality) else { return nil }
 
