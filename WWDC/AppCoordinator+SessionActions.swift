@@ -169,7 +169,13 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     }
 
     func sessionActionsDidSelectShareClip(_ sender: NSView?) {
-        videosController.detailViewController.shelfController.showClipUI()
+        switch activeTab {
+        case .schedule:
+            scheduleController.splitViewController.detailViewController.shelfController.showClipUI()
+        case .videos:
+            videosController.detailViewController.shelfController.showClipUI()
+        default:()
+        }
     }
 
 }
