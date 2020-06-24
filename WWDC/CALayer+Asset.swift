@@ -88,7 +88,7 @@ public extension CALayer {
 
 }
 
-extension NSView {
+extension CALayer {
 
     func resizeLayer(_ targetLayer: CALayer?) {
         guard let targetLayer = targetLayer else { return }

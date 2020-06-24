@@ -95,7 +95,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCEnvironmentBaseURL &quot;https://calm-block-8cce.rambo.workers.dev&quot;"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--enable-updates"

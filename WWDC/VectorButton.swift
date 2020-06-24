@@ -86,7 +86,7 @@ class VectorButton: NSControl {
     override func layout() {
         super.layout()
 
-        resizeLayer(containerLayer)
+        layer?.resizeLayer(containerLayer)
     }
 
 }

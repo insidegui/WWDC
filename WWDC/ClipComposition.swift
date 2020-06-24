@@ -64,17 +64,17 @@ final class ClipComposition: AVMutableComposition {
         videoComposition = AVMutableVideoComposition(propertiesOf: video)
         videoComposition?.instructions = [mainInstruction]
 
-        composeTemplate()
+        composeTemplate(with: videoTrack.naturalSize)
     }
 
-    private func composeTemplate() {
+    private func composeTemplate(with renderSize: CGSize) {
         guard let asset = CALayer.load(assetNamed: "ClipTemplate") else {
             fatalError("Missing ClipTemplate asset")
         }
-        guard let container = asset.sublayer(named: "container", of: CALayer.self) else {
+        guard let assetContainer = asset.sublayer(named: "container", of: CALayer.self) else {
             fatalError("Missing container layer")
         }
-        guard let box = container.sublayer(named: "box", of: CALayer.self) else {
+        guard let box = assetContainer.sublayer(named: "box", of: CALayer.self) else {
             fatalError("Missing box layer")
         }
         guard let titleLayer = box.sublayer(named: "sessionTitle", of: CATextLayer.self) else {
@@ -83,7 +83,7 @@ final class ClipComposition: AVMutableComposition {
         guard let subtitleLayer = box.sublayer(named: "eventName", of: CATextLayer.self) else {
             fatalError("Missing sessionTitle layer")
         }
-        guard let videoLayer = container.sublayer(named: "video", of: CALayer.self) else {
+        guard let videoLayer = assetContainer.sublayer(named: "video", of: CALayer.self) else {
             fatalError("Missing video layer")
         }
 
@@ -121,7 +121,12 @@ final class ClipComposition: AVMutableComposition {
             titleLayer.frame = titleFrame
         }
 
-        container.isGeometryFlipped = true
+        let container = CALayer()
+        container.frame = CGRect(origin: .zero, size: renderSize)
+        container.addSublayer(assetContainer)
+        container.resizeLayer(assetContainer)
+
+        assetContainer.isGeometryFlipped = true
 
         videoComposition?.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: container)
 
