@@ -61,6 +61,19 @@ extension Session {
         }
     }
 
+    public static func setCurrentPosition(for sessionId: String, in storage: Storage, position: Double, duration: Double) {
+        let config = storage.realm.configuration
+
+        Self.positionUpdateQueue.async {
+            guard let realm = try? Realm(configuration: config) else {
+                assertionFailure("Failed to initialize background realm for session progress update")
+                return
+            }
+
+            Self.onQueueSetCurrentPosition(for: sessionId, in: realm, position, duration)
+        }
+    }
+
     private static func onQueueSetCurrentPosition(for sessionId: String, in queueRealm: Realm, _ position: Double, _ duration: Double) {
         guard let session = queueRealm.object(ofType: Session.self, forPrimaryKey: sessionId) else { return }
 

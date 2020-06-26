@@ -41,11 +41,14 @@ final class PlaybackViewModel {
     var imageURL: URL?
     var image: NSImage?
 
+    private let storage: Storage
+
     private var timeObserver: Any?
 
     var nowPlayingInfo: BehaviorRelay<PUINowPlayingInfo?> = BehaviorRelay(value: nil)
 
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
+        self.storage = storage
         title = sessionViewModel.title
         imageURL = sessionViewModel.imageUrl
 
@@ -109,6 +112,8 @@ final class PlaybackViewModel {
         initializePlayerTimeSyncIfNeeded(with: session)
     }
 
+    private let progressQueue = DispatchQueue(label: "Progress", qos: .background)
+
     private func initializePlayerTimeSyncIfNeeded(with session: Session) {
         guard !isLiveStream else { return }
 
@@ -122,7 +127,7 @@ final class PlaybackViewModel {
             player.seek(to: CMTimeMakeWithSeconds(Float64(session.currentPosition()), preferredTimescale: 9000))
         }
 
-        timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(10, preferredTimescale: 9000), queue: DispatchQueue.main) { [weak self] currentTime in
+        timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(15, preferredTimescale: 9000), queue: progressQueue) { [weak self] currentTime in
             guard let self = self else { return }
 
             guard let duration = self.player.currentItem?.asset.durationIfLoaded else { return }
@@ -132,12 +137,19 @@ final class PlaybackViewModel {
             let p = Double(CMTimeGetSeconds(currentTime))
             let d = Double(CMTimeGetSeconds(duration))
 
-            self.sessionViewModel.session.setCurrentPosition(p, d)
+            Session.setCurrentPosition(
+                for: self.sessionViewModel.sessionIdentifier,
+                in: self.storage,
+                position: p,
+                duration: d
+            )
 
             if !d.isZero {
-                if var nowPlayingInfo = self.nowPlayingInfo.value {
-                    nowPlayingInfo.progress = p / d
-                    self.nowPlayingInfo.accept(nowPlayingInfo)
+                DispatchQueue.main.async {
+                    if var nowPlayingInfo = self.nowPlayingInfo.value {
+                        nowPlayingInfo.progress = p / d
+                        self.nowPlayingInfo.accept(nowPlayingInfo)
+                    }
                 }
             }
         }
