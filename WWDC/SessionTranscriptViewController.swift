@@ -160,7 +160,11 @@ final class SessionTranscriptViewController: NSViewController {
         }
 
         let predicate = NSPredicate(format: "body CONTAINS[cd] %@", term)
-        filteredAnnotations = annotations.filter(predicate).toArray()
+        if annotations.realm == nil {
+            filteredAnnotations = []
+        } else {
+            filteredAnnotations = annotations.filter(predicate).toArray()
+        }
     }
 
     fileprivate var selectionLocked = false
