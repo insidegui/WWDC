@@ -28,7 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var urlObservationToken: NSObjectProtocol?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
+        UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": false])
 
         NSApp.registerForRemoteNotifications(matching: [])
 

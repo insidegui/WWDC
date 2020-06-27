@@ -190,7 +190,7 @@ public extension ObservableType where Element: NotificationEmitter {
                     observer.onNext(collection)
                 }
 
-                let token = collection.observe { changeset in
+                let token = collection.observe(on: nil) { changeset in
 
                     var value: Element?
 
