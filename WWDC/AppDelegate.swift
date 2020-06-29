@@ -67,8 +67,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator?.startup()
     }
 
-    private func handleBootstrapError(_ error: Error) {
+    private func handleBootstrapError(_ error: Boot.BootstrapError) {
+        if error.code == .unusableStorage {
+            handleStorageError(error)
+        } else {
+            let alert = NSAlert()
+            alert.messageText = "Failed to start"
+            alert.informativeText = error.localizedDescription
+            alert.addButton(withTitle: "Quit")
+            alert.runModal()
+            NSApp.terminate(nil)
+        }
+    }
 
+    private func handleStorageError(_ error: Boot.BootstrapError) {
+        let alert = NSAlert()
+        alert.messageText = "Failed to start"
+        alert.informativeText = error.localizedDescription
+        alert.addButton(withTitle: "Quit")
+
+        alert.runModal()
+        NSApp.terminate(self)
     }
 
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {

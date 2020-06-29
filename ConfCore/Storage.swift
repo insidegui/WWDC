@@ -379,6 +379,8 @@ public final class Storage {
         }, disableAutorefresh: false, completionBlock: completion)
     }
 
+    private let serialQueue = DispatchQueue(label: "Database Serial", qos: .userInteractive)
+
     /// Performs a write transaction in the background
     ///
     /// - Parameters:
@@ -394,7 +396,7 @@ public final class Storage {
                                                    completionBlock: ((Error?) -> Void)? = nil) {
         if disableAutorefresh { realm.autorefresh = false }
 
-        DispatchQueue.global(qos: .userInitiated).async {
+        serialQueue.async {
             var storageError: Error?
 
             self.storageQueue.addOperation { [unowned self] in
