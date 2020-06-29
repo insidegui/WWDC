@@ -134,6 +134,7 @@
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */; };
 		DD9D3F39247BF8570049CB68 /* ConfigResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9D3F38247BF8570049CB68 /* ConfigResponse.swift */; };
+		DDA50E3524AA5090007C77C6 /* Boot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA50E3424AA5090007C77C6 /* Boot.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
 		DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1220A90655002EECF5 /* SessionCellView.swift */; };
 		DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */; };
@@ -577,6 +578,7 @@
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMigrator.swift; sourceTree = "<group>"; };
 		DD9D3F38247BF8570049CB68 /* ConfigResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigResponse.swift; sourceTree = "<group>"; };
+		DDA50E3424AA5090007C77C6 /* Boot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Boot.swift; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDA60E1220A90655002EECF5 /* SessionCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCellView.swift; sourceTree = "<group>"; };
 		DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCollectionViewItem.swift; sourceTree = "<group>"; };
@@ -956,6 +958,7 @@
 			isa = PBXGroup;
 			children = (
 				01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */,
+				DDA50E3424AA5090007C77C6 /* Boot.swift */,
 				DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */,
 				DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */,
 				DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */,
@@ -2355,6 +2358,7 @@
 				DD382B7C1EAC345F009760C4 /* NSImage+CGImage.m in Sources */,
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
+				DDA50E3524AA5090007C77C6 /* Boot.swift in Sources */,
 				DDC6781B1EDB629C00A4E19C /* GeneralPreferencesViewController.swift in Sources */,
 				DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */,
 				DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */,
@@ -2728,7 +2732,7 @@
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1005;
+				CURRENT_PROJECT_VERSION = 1006;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2759,7 +2763,7 @@
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1005;
+				CURRENT_PROJECT_VERSION = 1006;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2945,7 +2949,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1005;
+				CURRENT_PROJECT_VERSION = 1006;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3079,7 +3083,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1005;
+				CURRENT_PROJECT_VERSION = 1006;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (

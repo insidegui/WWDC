@@ -52,33 +52,9 @@ final class AppCoordinator {
     /// Whether we were playing the video when a clip sharing session begin, to restore state later.
     var wasPlayingWhenClipSharingBegan = false
 
-    init(windowController: MainWindowController) {
-        do {
-            let supportPath = try PathUtil.appSupportPathCreatingIfNeeded()
-
-            let filePath = supportPath + "/ConfCore.realm"
-
-            var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
-            realmConfig.schemaVersion = Constants.coreSchemaVersion
-
-            let client = AppleAPIClient(environment: .current)
-            let cocoaHubClient = CocoaHubAPIClient(environment: .current)
-
-            storage = try Storage(realmConfig)
-
-            syncEngine = SyncEngine(
-                storage: storage,
-                client: client,
-                cocoaHubClient: cocoaHubClient,
-                transcriptLanguage: Preferences.shared.transcriptLanguageCode
-            )
-
-            #if ICLOUD
-            syncEngine.userDataSyncEngine.isEnabled = Preferences.shared.syncUserData
-            #endif
-        } catch {
-            fatalError("Realm initialization error: \(error)")
-        }
+    init(windowController: MainWindowController, storage: Storage, syncEngine: SyncEngine) {
+        self.storage = storage
+        self.syncEngine = syncEngine
 
         DownloadManager.shared.start(with: storage)
 
@@ -131,7 +107,6 @@ final class AppCoordinator {
         setupBindings()
         setupDelegation()
 
-        _ = NotificationCenter.default.addObserver(forName: NSApplication.didFinishLaunchingNotification, object: nil, queue: nil) { _ in self.startup() }
         _ = NotificationCenter.default.addObserver(forName: NSApplication.willTerminateNotification, object: nil, queue: nil) { _ in self.saveApplicationState() }
         _ = NotificationCenter.default.addObserver(forName: .RefreshPeriodicallyPreferenceDidChange, object: nil, queue: nil, using: { _  in self.resetAutorefreshTimer() })
         _ = NotificationCenter.default.addObserver(forName: .PreferredTranscriptLanguageDidChange, object: nil, queue: .main, using: { self.preferredTranscriptLanguageDidChange($0) })
@@ -326,7 +301,7 @@ final class AppCoordinator {
                                  restorationFiltersState: Preferences.shared.filtersState)
     }()
 
-    private func startup() {
+    func startup() {
         RemoteEnvironment.shared.start()
 
         ContributorsFetcher.shared.load()

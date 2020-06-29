@@ -106,10 +106,9 @@ final class FilterResults {
         self.storage = storage
         self.query = query
 
-        if let appDelegate = NSApplication.shared.delegate as? AppDelegate {
+        if let coordinator = (NSApplication.shared.delegate as? AppDelegate)?.coordinator {
 
-            appDelegate
-                .coordinator
+            coordinator
                 .rxPlayerOwnerSessionIdentifier
                 .subscribe(onNext: { [weak self] _ in
                     self?.bindResults()
@@ -161,7 +160,7 @@ fileprivate extension NSPredicate {
 
     func orCurrentlyPlayingSession() -> NSPredicate {
 
-        guard let playingSession = (NSApplication.shared.delegate as? AppDelegate)?.coordinator.playerOwnerSessionIdentifier else {
+        guard let playingSession = (NSApplication.shared.delegate as? AppDelegate)?.coordinator?.playerOwnerSessionIdentifier else {
             return self
         }
 
