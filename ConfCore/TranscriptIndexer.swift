@@ -29,7 +29,7 @@ public final class TranscriptIndexer {
         self.manifestURL = manifestURL
     }
 
-    fileprivate let queue = DispatchQueue.global(qos: .utility)
+    fileprivate let queue = DispatchQueue(label: "Transcript Indexer", qos: .background)
 
     fileprivate lazy var backgroundOperationQueue: OperationQueue = {
         let q = OperationQueue()
@@ -42,7 +42,7 @@ public final class TranscriptIndexer {
 
     private lazy var onQueueRealm: Realm = {
         // swiftlint:disable:next force_try
-        try! storage.makeRealm()
+        try! storage.makeRealm(on: queue)
     }()
 
     /// How many days before transcripts will be refreshed based on the remote manifest, ignoring
@@ -102,7 +102,7 @@ public final class TranscriptIndexer {
         )
 
         do {
-            let realm = try storage.makeRealm()
+            let realm = try storage.makeRealm(on: nil)
 
             let knownSessionIds = Array(realm.objects(Session.self).map(\.identifier))
 

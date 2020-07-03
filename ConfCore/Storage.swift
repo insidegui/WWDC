@@ -41,8 +41,8 @@ public final class Storage {
         deleteOldEventsIfNeeded()
     }
 
-    public func makeRealm() throws -> Realm {
-        return try Realm(configuration: realmConfig)
+    public func makeRealm(on queue: DispatchQueue? = nil) throws -> Realm {
+        return try Realm(configuration: realmConfig, queue: queue)
     }
 
     private lazy var dispatchQueue = DispatchQueue(label: "WWDC Storage", qos: .background)
@@ -402,7 +402,7 @@ public final class Storage {
             self.storageQueue.addOperation { [unowned self] in
                 autoreleasepool {
                     do {
-                        let backgroundRealm = try self.makeRealm()
+                        let backgroundRealm = try self.makeRealm(on: self.dispatchQueue)
 
                         if createTransaction { backgroundRealm.beginWrite() }
 
