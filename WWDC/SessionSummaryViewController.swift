@@ -200,8 +200,9 @@ class SessionSummaryViewController: NSViewController {
 
         viewModel.rxSummary.subscribe(onNext: { [weak self] summary in
             guard let self = self else { return }
-            let range = NSRange(location: 0, length: self.summaryTextView.string.count)
-            self.summaryTextView.textStorage?.replaceCharacters(in: range, with: self.attributedSummaryString(from: summary))
+            guard let textStorage = self.summaryTextView.textStorage else { return }
+            let range = NSRange(location: 0, length: textStorage.length)
+            textStorage.replaceCharacters(in: range, with: self.attributedSummaryString(from: summary))
         }).disposed(by: disposeBag)
 
         viewModel.rxRelatedSessions.subscribe(onNext: { [weak self] relatedResources in
