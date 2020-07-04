@@ -41,6 +41,7 @@ public final class Storage {
         deleteOldEventsIfNeeded()
     }
 
+    // In order to call this with a specific queue, you must already be on the target queue
     public func makeRealm(on queue: DispatchQueue? = nil) throws -> Realm {
         return try Realm(configuration: realmConfig, queue: queue)
     }

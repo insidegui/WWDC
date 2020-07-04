@@ -67,11 +67,18 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
     func startIndexing(ignoringCache ignoreCache: Bool) {
         guard !ProcessInfo.processInfo.arguments.contains("--disable-transcripts") else { return }
 
+        let effectiveIgnoreCache: Bool
+        if ProcessInfo.processInfo.arguments.contains("--force-transcript-update") {
+            effectiveIgnoreCache = true
+        } else {
+            effectiveIgnoreCache = ignoreCache
+        }
+
         if !migratedTranscriptsToNativeVersion {
             os_log("Transcripts need migration", log: self.log, type: .debug)
         }
 
-        if !ignoreCache && migratedTranscriptsToNativeVersion {
+        if !effectiveIgnoreCache && migratedTranscriptsToNativeVersion {
             guard TranscriptIndexer.needsUpdate(in: storage) else { return }
         }
 
@@ -83,7 +90,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
 
             switch result {
             case .success(let config):
-                self.doStartTranscriptIndexing(with: config, ignoringCache: ignoreCache)
+                self.doStartTranscriptIndexing(with: config, ignoringCache: effectiveIgnoreCache)
             case .failure(let error):
                 os_log("Config fetch failed: %{public}@", log: self.log, type: .error, String(describing: error))
             }

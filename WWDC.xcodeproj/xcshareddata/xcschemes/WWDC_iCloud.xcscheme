@@ -107,6 +107,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--force-transcript-update"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

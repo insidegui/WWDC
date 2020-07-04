@@ -42,7 +42,7 @@ public final class TranscriptIndexer {
 
     private lazy var onQueueRealm: Realm = {
         // swiftlint:disable:next force_try
-        try! storage.makeRealm(on: queue)
+        try! storage.makeRealm()
     }()
 
     /// How many days before transcripts will be refreshed based on the remote manifest, ignoring
@@ -102,7 +102,7 @@ public final class TranscriptIndexer {
         )
 
         do {
-            let realm = try storage.makeRealm(on: nil)
+            let realm = try storage.makeRealm()
 
             let knownSessionIds = Array(realm.objects(Session.self).map(\.identifier))
 
@@ -125,6 +125,7 @@ public final class TranscriptIndexer {
     fileprivate func store(_ transcripts: [Transcript]) {
         storage.backgroundUpdate { [weak self] backgroundRealm in
             guard let self = self else { return }
+            os_log("Start transcript realm updates", log: self.log, type: .debug)
 
             transcripts.forEach { transcript in
                 guard let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: transcript.identifier) else {
@@ -139,8 +140,10 @@ public final class TranscriptIndexer {
                 session.transcriptIdentifier = transcript.identifier
                 session.transcriptText = transcript.fullText
 
-                backgroundRealm.add(transcript, update: .all)
+                backgroundRealm.add(transcript, update: .modified)
             }
+
+            os_log("Finished transcript realm updates", log: self.log, type: .debug)
         }
     }
 
