@@ -56,7 +56,7 @@ public final class SyncEngine {
         #endif
 
         NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
-            self.transcriptIndexingClient.startIndexing(ignoringCache: false)
+            self.transcriptIndexingClient.startIndexing(ignoringCache: true)
 
             #if ICLOUD
             self.userDataSyncEngine.start()
