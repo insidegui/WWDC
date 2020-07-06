@@ -261,12 +261,29 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
                     selectedIndexes.insert(overrideIndex)
                 } else {
                     // Preserve selected rows if possible
-                    let selectedRows = self.tableView.selectedRowIndexes.compactMap { (index) -> IndexedSessionRow? in
+                    let previouslySelectedRows = self.tableView.selectedRowIndexes.compactMap { (index) -> IndexedSessionRow? in
                         guard index < oldValue.endIndex else { return nil }
                         return IndexedSessionRow(sessionRow: oldValue[index], index: index)
                     }
 
-                    selectedIndexes = IndexSet(newRowsSet.intersection(selectedRows).map { $0.index })
+                    let newSelection = newRowsSet.intersection(previouslySelectedRows)
+                    if let topOfPreviousSelection = previouslySelectedRows.first, newSelection.isEmpty {
+                        // The update has removed the selected row(s).
+                        // e.g. You have the unwatched filter active and then mark the selection as watched
+                        stride(from: topOfPreviousSelection.index, to: -1, by: -1).lazy.compactMap {
+                            return IndexedSessionRow(sessionRow: oldValue[$0], index: $0)
+                        }.first { (indexedRow: IndexedSessionRow) -> Bool in
+                            newRowsSet.contains(indexedRow)
+                        }.flatMap {
+                            newRowsSet.firstIndex(of: $0)
+                        }.map {
+                            newRowsSet[$0].index
+                        }.map {
+                            selectedIndexes = IndexSet(integer: $0)
+                        }
+                    } else {
+                        selectedIndexes = IndexSet(newSelection.map { $0.index })
+                    }
                 }
 
                 if selectedIndexes.isEmpty, let defaultIndex = newValue.firstSessionRowIndex() {
