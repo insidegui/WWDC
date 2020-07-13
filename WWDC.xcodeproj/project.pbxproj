@@ -21,6 +21,7 @@
 		4D7482CA20FF735D008D156C /* WWDCWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7482C920FF735D008D156C /* WWDCWindowController.swift */; };
 		4D7482CC20FFAA09008D156C /* DownloadsStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */; };
 		4D82B5F82343DABF005AC3EC /* RxRelay.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4D82B5F72343DABE005AC3EC /* RxRelay.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9EE96324BCE097001B1720 /* FilterState.swift */; };
 		4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DC721063CD500762BBD /* TitleBarViewController.swift */; };
 		4DA25DCC21064B4800762BBD /* WWDCTabViewControllerTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */; };
 		4DA83FE222AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */; };
@@ -85,7 +86,6 @@
 		DD65FD4C1E489FF50054DD35 /* SessionAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD4B1E489FF50054DD35 /* SessionAsset.swift */; };
 		DD65FD4D1E48A01B0054DD35 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
 		DD65FD4E1E48A01B0054DD35 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
-		DD65FD4F1E48A01B0054DD35 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */; };
 		DD65FD511E48A05C0054DD35 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD501E48A05C0054DD35 /* Session.swift */; };
 		DD65FD531E48A06A0054DD35 /* NewsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD521E48A06A0054DD35 /* NewsItem.swift */; };
 		DD65FD551E48A0A70054DD35 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD541E48A0A70054DD35 /* Room.swift */; };
@@ -187,7 +187,6 @@
 		DDBCEC88228AC9C5009300CF /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDBCEC89228AC9C5009300CF /* RxRealm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51821E47DE7E0017F9EC /* RxRealm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDBCEC8A228AC9C5009300CF /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51831E47DE7E0017F9EC /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		DDBCEC8B228AC9C5009300CF /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDBCEC9A228AD2D0009300CF /* CloudKitCodable.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDBCEC99228AD2CC009300CF /* CloudKitCodable.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDBCEC9C228AD30C009300CF /* SwiftProtobuf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDC347C220B1E6B700CFF11C /* CloudKitCodable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */; };
@@ -417,7 +416,6 @@
 				DDBCEC88228AC9C5009300CF /* RxCocoa.framework in Embed Frameworks */,
 				DDBCEC89228AC9C5009300CF /* RxRealm.framework in Embed Frameworks */,
 				DDBCEC8A228AC9C5009300CF /* RxSwift.framework in Embed Frameworks */,
-				DDBCEC8B228AC9C5009300CF /* SwiftyJSON.framework in Embed Frameworks */,
 				DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */,
 				DDD68514247C3B00001BB700 /* Transcripts.framework in Embed Frameworks */,
 				DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */,
@@ -453,6 +451,7 @@
 		4D7482C920FF735D008D156C /* WWDCWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCWindowController.swift; sourceTree = "<group>"; };
 		4D7482CB20FFAA09008D156C /* DownloadsStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsStatusViewController.swift; sourceTree = "<group>"; };
 		4D82B5F72343DABE005AC3EC /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/Mac/RxRelay.framework; sourceTree = "<group>"; };
+		4D9EE96324BCE097001B1720 /* FilterState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterState.swift; sourceTree = "<group>"; };
 		4DA25DC721063CD500762BBD /* TitleBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarViewController.swift; sourceTree = "<group>"; };
 		4DA25DCB21064B4800762BBD /* WWDCTabViewControllerTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCTabViewControllerTabBar.swift; sourceTree = "<group>"; };
 		4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIVibrantBackgroundButton.swift; sourceTree = "<group>"; };
@@ -787,7 +786,6 @@
 				DD3C4D251E561E4D0093BBD0 /* RxRealm.framework in Frameworks */,
 				DD3C4D261E561E4E0093BBD0 /* RxSwift.framework in Frameworks */,
 				DDAE7C551E5BC6CD00CEA205 /* Siesta.framework in Frameworks */,
-				DD65FD4F1E48A01B0054DD35 /* SwiftyJSON.framework in Frameworks */,
 				DDC347C220B1E6B700CFF11C /* CloudKitCodable.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1319,6 +1317,7 @@
 				DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */,
 				DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */,
 				DDEDFCF21ED92F2A002477C8 /* TextualFilter.swift */,
+				4D9EE96324BCE097001B1720 /* FilterState.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -2341,6 +2340,7 @@
 				DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
+				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DD382B7B1EAC345F009760C4 /* MaskImageView.m in Sources */,

@@ -11,10 +11,10 @@ import ConfCore
 
 struct TextualFilter: FilterType {
 
-    var identifier: String
+    var identifier: FilterIdentifier
     var value: String?
 
-    init(identifier: String, value: String?) {
+    init(identifier: FilterIdentifier, value: String?) {
         self.identifier = identifier
         self.value = value
     }
@@ -58,11 +58,11 @@ struct TextualFilter: FilterType {
         value = nil
     }
 
-    func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
-        var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
+    var state: State {
+        State(value: value)
+    }
 
-        dictionary["value"] = value
-
-        return dictionary
+    struct State: Codable {
+        let value: String?
     }
 }
