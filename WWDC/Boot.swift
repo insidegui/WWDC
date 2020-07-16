@@ -54,19 +54,19 @@ final class Boot {
             realmConfig.schemaVersion = Constants.coreSchemaVersion
 
             realmConfig.shouldCompactOnLaunch = { [unowned self] totalBytes, usedBytes in
-                guard Self.isCompactOnLaunchEnabled else {
-                    os_log("Database compression disabled by flag", log: self.log, type: .default)
-                    return false
-                }
+//                guard Self.isCompactOnLaunchEnabled else {
+//                    os_log("Database compression disabled by flag", log: self.log, type: .default)
+//                    return false
+//                }
+//
+//                let oneHundredMB = 100 * 1024 * 1024
 
-                let oneHundredMB = 100 * 1024 * 1024
-
-                if (totalBytes > oneHundredMB) && (Double(usedBytes) / Double(totalBytes)) < 0.8 {
-                    os_log("Database will be compacted. Total bytes: %d, used bytes: %d", log: self.log, type: .default, totalBytes, usedBytes)
+//                if (totalBytes > oneHundredMB) && (Double(usedBytes) / Double(totalBytes)) < 0.8 {
+//                    os_log("Database will be compacted. Total bytes: %d, used bytes: %d", log: self.log, type: .default, totalBytes, usedBytes)
                     return true
-                } else {
-                    return false
-                }
+//                } else {
+//                    return false
+//                }
             }
             realmConfig.encryptionKey = nil
             realmConfig.migrationBlock = Storage.migrate(migration:oldVersion:)
