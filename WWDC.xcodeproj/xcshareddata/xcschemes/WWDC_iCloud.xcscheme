@@ -111,7 +111,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--force-transcript-update"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--prefs"
