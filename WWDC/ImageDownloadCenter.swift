@@ -10,7 +10,11 @@ import Cocoa
 import RealmSwift
 import os.log
 
-typealias ImageDownloadCompletionBlock = (_ sourceURL: URL, _ original: NSImage?, _ thumbnail: NSImage?) -> Void
+typealias ImageDownloadCompletionBlock = (_ sourceURL: URL, _ image: NSImage?) -> Void
+
+private struct ImageDownload {
+    static let subsystemName = "io.WWDC.app.imageDownload"
+}
 
 final class ImageDownloadCenter {
 
@@ -18,22 +22,11 @@ final class ImageDownloadCenter {
 
     private let cacheProvider = ImageCacheProvider()
     private let queue = OperationQueue()
-    private let log = OSLog(subsystem: "WWDC", category: "ImageDownloadCenter")
+    private let log = OSLog(subsystem: ImageDownload.subsystemName, category: "ImageDownloadCenter")
 
     func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
-        if let cache = cacheProvider.cacheEntity(for: url) {
-            var original: NSImage?
-
-            if !thumbnailOnly {
-                original = NSImage(data: cache.original)
-            }
-
-            let thumb = NSImage(data: cache.thumbnail)
-
-            original?.cacheMode = .never
-            thumb?.cacheMode = .never
-
-            completion(url, original, thumb)
+        if let cachedImage = cacheProvider.cachedImage(for: url) {
+            completion(url, cachedImage)
 
             return nil
         }
@@ -80,59 +73,86 @@ final class ImageCacheEntity: Object {
 
 private final class ImageCacheProvider {
 
-    private var originalCaches: [URL: URL] = [:]
-    private var thumbCaches: [URL: URL] = [:]
+    private lazy var inMemoryCache: NSCache<NSString, NSImage> = {
+        let c = NSCache<NSString, NSImage>()
 
-    private let upperLimit = 16 * 1024 * 1024
-    private let log = OSLog(subsystem: "WWDC", category: "ImageCacheProvider")
+        c.countLimit = 100
 
-    private func makeRealm() -> Realm? {
-        let filePath = PathUtil.appSupportPathAssumingExisting + "/ImageCache.realm"
-
-        var realmConfig = Realm.Configuration(fileURL: URL(fileURLWithPath: filePath))
-        realmConfig.objectTypes = [ImageCacheEntity.self]
-        realmConfig.schemaVersion = 1
-        realmConfig.migrationBlock = { _, _ in }
-
-        return try? Realm(configuration: realmConfig)
-    }
-
-    private lazy var realm: Realm? = {
-        return self.makeRealm()
+        return c
     }()
 
-    func cacheEntity(for url: URL) -> ImageCacheEntity? {
-        return realm?.object(ofType: ImageCacheEntity.self, forPrimaryKey: url.absoluteString)
+    private let upperLimit = 16 * 1024 * 1024
+    private let log = OSLog(subsystem: ImageDownload.subsystemName, category: "ImageCacheProvider")
+
+    private let storageQueue = DispatchQueue(label: "ImageStorage", qos: .utility)
+
+    private let fileManager = FileManager()
+
+    private lazy var cacheURL: URL = {
+        let url = URL(fileURLWithPath: PathUtil.appSupportPathAssumingExisting).appendingPathComponent("ImageCache")
+
+        if !fileManager.fileExists(atPath: url.path) {
+            do {
+                try fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                os_log("Failed to create image cache directory: %{public}@", log: self.log, type: .error, String(describing: error))
+            }
+        }
+
+        return url
+    }()
+
+    private func cacheFileURL(for sourceURL: URL) -> URL { self.cacheURL.appendingPathComponent(sourceURL.imageCacheKey) }
+
+    func cacheImage(for sourceURL: URL, original: URL?, completion: @escaping (NSImage?) -> Void) {
+        guard let original = original else {
+            completion(nil)
+            return
+        }
+
+        storageQueue.async {
+            do {
+                let url = self.cacheFileURL(for: sourceURL)
+
+                if self.fileManager.fileExists(atPath: url.path) {
+                    try self.fileManager.removeItem(at: url)
+                }
+
+                try self.fileManager.copyItem(at: original, to: url)
+
+                guard let image = NSImage(contentsOf: url) else {
+                    os_log("Failed to initalize image with %@", log: self.log, type: .error, url.path)
+                    completion(nil)
+                    return
+                }
+
+                image.cacheMode = .never
+
+                self.inMemoryCache.setObject(image, forKey: url.imageCacheKey as NSString)
+
+                completion(image)
+            } catch {
+                os_log("Image storage failed: %{public}@", log: self.log, type: .error, String(describing: error))
+
+                completion(nil)
+            }
+        }
     }
 
-    func cacheImage(for key: URL, original: Data?, thumbnail: Data?) {
-        guard let original = original, let thumbnail = thumbnail else { return }
+    func cachedImage(for sourceURL: URL) -> NSImage? {
+        let memoryKey = sourceURL.imageCacheKey as NSString
 
-        guard original.count < upperLimit, thumbnail.count < upperLimit else { return }
+        if let fastImage = inMemoryCache.object(forKey: memoryKey) {
+            return fastImage
+        }
 
-        DispatchQueue.global(qos: .utility).async {
-            autoreleasepool {
-                guard let bgRealm = self.makeRealm() else { return }
+        let cacheURL = self.cacheFileURL(for: sourceURL)
 
-                let entity = ImageCacheEntity()
-
-                entity.key = key.absoluteString
-                entity.original = original
-                entity.thumbnail = thumbnail
-
-                do {
-                    try bgRealm.write {
-                        bgRealm.add(entity, update: .all)
-                    }
-
-                    bgRealm.invalidate()
-                } catch {
-                    os_log("Failed to save cached image to disk: %{public}@",
-                           log: self.log,
-                           type: .error,
-                           String(describing: error))
-                }
-            }
+        if fileManager.fileExists(atPath: cacheURL.path), let image = NSImage(contentsOf: cacheURL) {
+            inMemoryCache.setObject(image, forKey: memoryKey)
+            return image
+        } else {
+            return nil
         }
     }
 
@@ -183,68 +203,80 @@ private final class ImageDownloadOperation: Operation {
         return _finished
     }
 
+    override func cancel() {
+        inFlightTask?.cancel()
+
+        super.cancel()
+    }
+
+    private lazy var session: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.waitsForConnectivity = true
+
+        return URLSession(configuration: config)
+    }()
+
+    private var inFlightTask: URLSessionDownloadTask?
+
     override func start() {
         _executing = true
 
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let welf = self else { return }
+        inFlightTask = session.downloadTask(with: url) { [weak self] fileURL, response, error in
+            guard let self = self else { return }
 
-            guard !welf.isCancelled else {
-                welf._executing = false
-                welf._finished = true
+            guard !self.isCancelled else {
+                self._executing = false
+                self._finished = true
                 return
             }
 
-            guard let data = data, let httpResponse = response as? HTTPURLResponse, error == nil else {
-                DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
-                welf._executing = false
-                welf._finished = true
+            guard let fileURL = fileURL, let httpResponse = response as? HTTPURLResponse, error == nil else {
+                DispatchQueue.main.async { self.imageCompletionHandler?(self.url, nil) }
+                self._executing = false
+                self._finished = true
                 return
             }
 
             guard httpResponse.statusCode == 200 else {
-                DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
-                welf._executing = false
-                welf._finished = true
+                DispatchQueue.main.async { self.imageCompletionHandler?(self.url, nil) }
+                self._executing = false
+                self._finished = true
                 return
             }
 
-            guard data.count > 0 else {
-                DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
-                welf._executing = false
-                welf._finished = true
+            guard !self.isCancelled else {
+                self._executing = false
+                self._finished = true
                 return
             }
 
-            guard let originalImage = NSImage(data: data) else {
-                DispatchQueue.main.async { welf.imageCompletionHandler?(welf.url, nil, nil) }
-                welf._executing = false
-                welf._finished = true
-                return
+            self.cacheProvider.cacheImage(for: self.url, original: fileURL) { [weak self] image in
+                guard let self = self else { return }
+
+                guard let image = image else {
+                    DispatchQueue.main.async { self.imageCompletionHandler?(self.url, nil) }
+                    self._executing = false
+                    self._finished = true
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    self.imageCompletionHandler?(self.url, image)
+                }
+
+                self._executing = false
+                self._finished = true
             }
-
-            guard !welf.isCancelled else {
-                welf._executing = false
-                welf._finished = true
-                return
-            }
-
-            let thumbnailImage = originalImage.resized(to: welf.thumbnailHeight)
-
-            originalImage.cacheMode = .never
-            thumbnailImage.cacheMode = .never
-
-            DispatchQueue.main.async {
-                welf.imageCompletionHandler?(welf.url, originalImage, thumbnailImage)
-            }
-
-            welf.cacheProvider.cacheImage(for: welf.url, original: data, thumbnail: thumbnailImage.tiffRepresentation)
-
-            welf._executing = false
-            welf._finished = true
-        }.resume()
+        }
+        inFlightTask?.resume()
     }
 
+}
+
+fileprivate extension URL {
+    var imageCacheKey: String {
+        pathComponents.joined(separator: "-")
+    }
 }
 
 extension NSImage {

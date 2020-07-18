@@ -149,7 +149,7 @@ public final class EventHeroViewController: NSViewController {
 
             self.imageDownloadOperation?.cancel()
 
-            self.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, image, _ in
+            self.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, image in
                 guard url == imageUrl, image != nil else { return }
 
                 self.backgroundImageView.image = image

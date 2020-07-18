@@ -104,7 +104,7 @@ final class FeaturedCommunityCollectionViewItem: NSCollectionViewItem {
 
         imageDownloadOperation?.cancel()
 
-        imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, image, _ in
+        imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, image in
             guard let self = self else { return }
 
             guard url == imageUrl, image != nil else { return }

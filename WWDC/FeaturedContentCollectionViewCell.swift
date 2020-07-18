@@ -183,10 +183,10 @@ final class FeaturedContentCollectionViewItem: NSCollectionViewItem {
 
             self?.imageDownloadOperation?.cancel()
 
-            self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, _, thumb in
+            self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, image in
                 guard url == imageUrl else { return }
 
-                self?.thumbnailImageView.image = thumb
+                self?.thumbnailImageView.image = image
             }
         }).disposed(by: disposeBag)
     }
