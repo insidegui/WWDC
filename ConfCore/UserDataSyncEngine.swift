@@ -395,8 +395,10 @@ public final class UserDataSyncEngine {
                     os_log("Change token expired, clearing token and retrying", log: self.log, type: .error)
 
                     DispatchQueue.main.async {
+                        self.privateChangeToken = nil
                         self.fetchChanges()
                     }
+                    return
                 } else if error.isCKZoneDeleted {
                     os_log("User deleted CK zone, recreating", log: self.log, type: .error)
 
@@ -410,6 +412,7 @@ public final class UserDataSyncEngine {
                             self.fetchChanges()
                         }
                     }
+                    return
                 } else {
                     error.retryCloudKitOperationIfPossible(self.log) { self.fetchChanges() }
                 }
@@ -421,17 +424,10 @@ public final class UserDataSyncEngine {
         operation.recordChangedBlock = { changedRecords.append($0) }
 
         operation.fetchRecordZoneChangesCompletionBlock = { [unowned self] error in
-            if let error = error {
-                os_log("Failed to fetch record zone changes: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
+            guard error == nil else { return }
 
-                error.retryCloudKitOperationIfPossible(self.log) { self.fetchChanges() }
-            } else {
-                os_log("Finished fetching record zone changes", log: self.log, type: .info)
-                self.databaseQueue.async { self.commitServerChangesToDatabase(with: changedRecords) }
-            }
+            os_log("Finished fetching record zone changes", log: self.log, type: .info)
+            self.databaseQueue.async { self.commitServerChangesToDatabase(with: changedRecords) }
         }
 
         operation.qualityOfService = .userInitiated
