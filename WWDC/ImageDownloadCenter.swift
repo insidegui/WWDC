@@ -108,7 +108,6 @@ private final class ImageCacheProvider {
         return c
     }()
 
-    private let upperLimit = 16 * 1024 * 1024
     private let log = OSLog(subsystem: ImageDownload.subsystemName, category: "ImageCacheProvider")
 
     private let storageQueue = DispatchQueue(label: "ImageStorage", qos: .userInitiated, attributes: .concurrent)
@@ -217,6 +216,9 @@ private final class ImageCacheProvider {
                 original = storedImage(for: sourceURL)
             }
         }
+
+        original?.cacheMode = .never
+        thumb?.cacheMode = .never
 
         return (original, thumb)
     }
