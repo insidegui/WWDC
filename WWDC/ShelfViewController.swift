@@ -114,8 +114,8 @@ class ShelfViewController: NSViewController {
                 return
             }
 
-            self?.currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, image in
-                self?.shelfView.image = image
+            self?.currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, result in
+                self?.shelfView.image = result.original
             }
         }).disposed(by: disposeBag)
     }
