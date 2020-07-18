@@ -98,6 +98,16 @@ final class Boot {
                 syncEngine.userDataSyncEngine.isEnabled = Preferences.shared.syncUserData
                 #endif
 
+                #if DEBUG
+                if UserDefaults.standard.bool(forKey: "WWDCSimulateDatabaseLoadingHang") {
+                    os_log("### WWDCSimulateDatabaseLoadingHang enabled, if the app is being slow to start, that's why! ###", log: self.log, type: .default)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                        completion(.success((storage, syncEngine)))
+                    }
+                    return
+                }
+                #endif
+
                 completion(.success((storage, syncEngine)))
             }
         } catch {

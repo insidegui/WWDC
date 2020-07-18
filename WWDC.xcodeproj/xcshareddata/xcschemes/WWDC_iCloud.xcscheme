@@ -86,6 +86,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-WWDCSimulateDatabaseLoadingHang YES"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-WWDCEnableNetworkDebugging YES"
             isEnabled = "NO">
          </CommandLineArgument>
