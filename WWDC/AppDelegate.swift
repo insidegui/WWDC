@@ -12,6 +12,7 @@ import Siesta
 @_exported import ConfUIFoundation
 import ConfCore
 import RealmSwift
+import SwiftUI
 
 extension Notification.Name {
     static let openWWDCURL = Notification.Name(rawValue: "OpenWWDCURLNotification")
@@ -31,6 +32,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let boot = Boot()
 
+    private var migrationSplashScreenWorkItem: DispatchWorkItem?
+    private let slowMigrationToleranceInSeconds: TimeInterval = 1.5
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": false])
 
@@ -47,7 +51,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self?.openURL(url)
         }
 
+        let item = DispatchWorkItem(block: showMigrationSplashScreen)
+        migrationSplashScreenWorkItem = item
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + slowMigrationToleranceInSeconds, execute: item)
+
         boot.bootstrapDependencies { [unowned self] result in
+            self.migrationSplashScreenWorkItem?.cancel()
+            self.migrationSplashScreenWorkItem = nil
+            self.hideMigrationSplash()
+
             switch result {
             case .failure(let error):
                 self.handleBootstrapError(error)
@@ -90,6 +103,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         alert.runModal()
         NSApp.terminate(self)
+    }
+
+    private lazy var slowMigrationController: NSWindowController = {
+        let viewController = NSHostingController(rootView: SlowMigrationView())
+        let windowController = NSWindowController(window: NSWindow(contentRect: .zero, styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: false))
+
+        windowController.contentViewController = viewController
+        windowController.window?.center()
+        windowController.window?.isReleasedWhenClosed = true
+        windowController.window?.titlebarAppearsTransparent = true
+
+        return windowController
+    }()
+
+    private var migrationSplashShown = false
+
+    private func showMigrationSplashScreen() {
+        migrationSplashShown = true
+        slowMigrationController.showWindow(self)
+    }
+
+    private func hideMigrationSplash() {
+        guard migrationSplashShown else { return }
+        slowMigrationController.close()
     }
 
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
