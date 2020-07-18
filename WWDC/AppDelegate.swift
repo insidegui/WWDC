@@ -55,6 +55,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 self.startupUI(using: dependencies.storage, syncEngine: dependencies.syncEngine)
             }
         }
+
+        ImageDownloadCenter.shared.deleteLegacyImageCacheIfNeeded()
     }
 
     private func startupUI(using storage: Storage, syncEngine: SyncEngine) {

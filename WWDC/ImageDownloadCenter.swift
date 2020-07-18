@@ -20,8 +20,16 @@ final class ImageDownloadCenter {
     static let shared: ImageDownloadCenter = ImageDownloadCenter()
 
     private let cacheProvider = ImageCacheProvider()
-    private let queue = OperationQueue()
     private let log = OSLog(subsystem: ImageDownload.subsystemName, category: "ImageDownloadCenter")
+
+    private let dispatchQueue = DispatchQueue(label: "ImageDownloadCenter", qos: .userInitiated, attributes: .concurrent)
+    private lazy var queue: OperationQueue = {
+        let q = OperationQueue()
+        
+        q.underlyingQueue = dispatchQueue
+
+        return q
+    }()
 
     func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
         if thumbnailOnly {
@@ -63,6 +71,31 @@ final class ImageDownloadCenter {
         }
     }
 
+    private var deletedLegacyImageCache: Bool {
+        get { UserDefaults.standard.bool(forKey: #function) }
+        set { UserDefaults.standard.set(newValue, forKey: #function) }
+    }
+
+    func deleteLegacyImageCacheIfNeeded() {
+        guard !deletedLegacyImageCache else { return }
+        deletedLegacyImageCache = true
+
+        os_log("%{public}@", log: log, type: .debug, #function)
+
+        let baseURL = URL(fileURLWithPath: PathUtil.appSupportPathAssumingExisting)
+        let realmURL = baseURL.appendingPathComponent("ImageCache.realm")
+        let lockURL = realmURL.appendingPathExtension("lock")
+        let managementURL = realmURL.appendingPathExtension("management")
+
+        do {
+            try FileManager.default.removeItem(at: realmURL)
+            try FileManager.default.removeItem(at: lockURL)
+            try FileManager.default.removeItem(at: managementURL)
+        } catch {
+            os_log("Failed to delete legacy image cache: %{public}@", log: self.log, type: .error, String(describing: error))
+        }
+    }
+
 }
 
 private final class ImageCacheProvider {
@@ -78,7 +111,7 @@ private final class ImageCacheProvider {
     private let upperLimit = 16 * 1024 * 1024
     private let log = OSLog(subsystem: ImageDownload.subsystemName, category: "ImageCacheProvider")
 
-    private let storageQueue = DispatchQueue(label: "ImageStorage", qos: .utility)
+    private let storageQueue = DispatchQueue(label: "ImageStorage", qos: .userInitiated, attributes: .concurrent)
 
     private let fileManager = FileManager()
 
