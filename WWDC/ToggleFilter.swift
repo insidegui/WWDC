@@ -10,7 +10,7 @@ import Foundation
 
 struct ToggleFilter: FilterType {
 
-    var identifier: String
+    var identifier: FilterIdentifier
     var isOn: Bool
     var defaultValue: Bool
 
@@ -30,11 +30,11 @@ struct ToggleFilter: FilterType {
         isOn = defaultValue
     }
 
-    func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
-        var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
+    var state: State {
+        State(isOn: isOn)
+    }
 
-        dictionary["isOn"] = isOn
-
-        return dictionary
+    struct State: Codable {
+        let isOn: Bool
     }
 }

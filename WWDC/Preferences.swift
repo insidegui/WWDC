@@ -8,7 +8,6 @@
 
 import Foundation
 import ConfCore
-import SwiftyJSON
 
 extension Notification.Name {
     static let LocalVideoStoragePathPreferenceDidChange = Notification.Name("LocalVideoStoragePathPreferenceDidChange")
@@ -81,18 +80,12 @@ final class Preferences {
         }
     }
 
-    var filtersState: JSON? {
+    var filtersState: String? {
         get {
-            if let string = defaults.object(forKey: #function) as? String {
-                return JSON(parseJSON: string)
-            } else {
-                return nil
-            }
+            defaults.object(forKey: #function) as? String
         }
         set {
-            if let myString = newValue?.rawString() {
-                defaults.set(myString, forKey: #function)
-            }
+            defaults.set(newValue, forKey: #function)
         }
     }
 

@@ -8,47 +8,13 @@
 
 import Foundation
 
-typealias WWDCFiltersStateDictionary = [ String : [ FilterIdentifier.RawValue: WWDCFilterTypeDictionary ] ]
-typealias WWDCFilterTypeDictionary = [ String: Any ]
-
 protocol FilterType {
 
-    var identifier: String { get set }
+    var identifier: FilterIdentifier { get set }
     var isEmpty: Bool { get }
     var predicate: NSPredicate? { get }
     mutating func reset()
-    func dictionaryRepresentation() -> WWDCFilterTypeDictionary
 
-}
-
-// Can't use WWDCFilterTypeDictionary as Value's type, likely a bug in Swift
-extension Dictionary where Key == String, Value == [ String: Any ] {
-
-    init?(filters: [FilterType]) {
-
-        self = [String: WWDCFilterTypeDictionary]()
-
-        for filter in filters {
-
-            guard let filterID = FilterIdentifier(rawValue: filter.identifier) else {
-                continue
-            }
-
-            switch filterID {
-            case .text:
-                //TextualFilter
-                self[filterID.rawValue] = filter.dictionaryRepresentation()
-
-            case .event, .focus, .track:
-                //MultipleChoiceFilter
-                self[filterID.rawValue] = filter.dictionaryRepresentation()
-
-            case .isFavorite, .isDownloaded, .isUnwatched, .hasBookmarks:
-                //ToggleFilters
-                self[filterID.rawValue] = filter.dictionaryRepresentation()
-            }
-        }
-    }
 }
 
 extension Array where Element == FilterType {

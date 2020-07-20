@@ -8,10 +8,10 @@
 
 import Foundation
 
-struct FilterOption: Equatable {
+struct FilterOption: Equatable, Codable {
     let title: String
     let value: String
-    let isNegative: Bool
+    var isNegative: Bool = false
 
     init(title: String, value: String, isNegative: Bool = false) {
         self.title = title
@@ -23,13 +23,8 @@ struct FilterOption: Equatable {
         return FilterOption(title: newTitle, value: value, isNegative: true)
     }
 
-    func dictionaryRepresentation() -> [String: String] {
-        var dictionary = [String: String]()
-
-        dictionary["value"] = value
-        dictionary["title"] = title
-
-        return dictionary
+    enum CodingKeys: String, CodingKey {
+        case value, title
     }
 }
 
@@ -50,21 +45,11 @@ extension Array where Element == FilterOption {
         }
     }
 
-    func dictionaryRepresentation() -> [[String: String]] {
-        var array = [[String: String]]()
-
-        for option in self {
-            array.append(option.dictionaryRepresentation())
-        }
-
-        return array
-    }
-
 }
 
 struct MultipleChoiceFilter: FilterType {
 
-    var identifier: String
+    var identifier: FilterIdentifier
     var isSubquery: Bool
     var collectionKey: String
     var modelKey: String
@@ -118,7 +103,7 @@ struct MultipleChoiceFilter: FilterType {
         return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates)
     }
 
-    init(identifier: String, isSubquery: Bool, collectionKey: String, modelKey: String, options: [FilterOption], selectedOptions: [FilterOption], emptyTitle: String) {
+    init(identifier: FilterIdentifier, isSubquery: Bool, collectionKey: String, modelKey: String, options: [FilterOption], selectedOptions: [FilterOption], emptyTitle: String) {
         self.identifier = identifier
         self.isSubquery = isSubquery
         self.collectionKey = collectionKey
@@ -134,11 +119,12 @@ struct MultipleChoiceFilter: FilterType {
         selectedOptions = []
     }
 
-    func dictionaryRepresentation() -> WWDCFilterTypeDictionary {
-        var dictionary: WWDCFilterTypeDictionary = WWDCFilterTypeDictionary()
+    var state: State {
+        State(selectedOptions: selectedOptions)
+    }
 
-        dictionary["selectedOptions"] = selectedOptions.dictionaryRepresentation()
-
-        return dictionary
+    struct State: Codable {
+        let selectedOptions: [FilterOption]
     }
 }
+
