@@ -149,10 +149,10 @@ public final class EventHeroViewController: NSViewController {
 
             self.imageDownloadOperation?.cancel()
 
-            self.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, image, _ in
-                guard url == imageUrl, image != nil else { return }
+            self.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, result in
+                guard url == imageUrl, result.original != nil else { return }
 
-                self.backgroundImageView.image = image
+                self.backgroundImageView.image = result.original
             }
         }).disposed(by: disposeBag)
 

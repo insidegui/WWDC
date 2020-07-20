@@ -104,12 +104,12 @@ final class FeaturedCommunityCollectionViewItem: NSCollectionViewItem {
 
         imageDownloadOperation?.cancel()
 
-        imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, image, _ in
+        imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, result in
             guard let self = self else { return }
 
-            guard url == imageUrl, image != nil else { return }
+            guard url == imageUrl, result.original != nil else { return }
 
-            self.imageLayer.contents = image
+            self.imageLayer.contents = result.original
         }
 
         titleLabel.stringValue = item.title

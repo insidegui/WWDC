@@ -74,10 +74,10 @@ final class SessionCellView: NSView {
 
             self?.imageDownloadOperation?.cancel()
 
-            self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { [weak self] url, _, thumb in
-                guard url == imageUrl, thumb != nil else { return }
+            self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight, thumbnailOnly: true) { [weak self] url, result in
+                guard url == imageUrl, result.thumbnail != nil else { return }
 
-                self?.thumbnailImageView.image = thumb
+                self?.thumbnailImageView.image = result.thumbnail
             }
         }).disposed(by: disposeBag)
 

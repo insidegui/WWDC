@@ -86,6 +86,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-WWDCSimulateDatabaseLoadingHang YES"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-WWDCEnableNetworkDebugging YES"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -107,7 +111,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
-            isEnabled = "YES">
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--force-transcript-update"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--prefs"
