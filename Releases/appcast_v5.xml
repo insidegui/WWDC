@@ -7,6 +7,24 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 7.1</title>
+			<description><![CDATA[
+				<p>This update improves the performance and reliability of the app, including fixes for common crashes which were affecting a significant number of users.</p>
+				
+				<ul>
+					<li>Fixes a crash that would occur when the directory in "~/Library/Application Support" used by the app had the wrong persmissions for the current user. The app will now display an appropriate error message in the UI.</li>
+					<li>Addresses a common crash that would occur while playing videos.</li>
+					<li>Fixes some syncing issues that could happen if the user deleted their iCloud data for the WWDC app.</li>
+					<li>The session summary text is now scrollable, leaving more space for the video area when it is not in full screen.</li>
+					<li>Fixes an issue that would prevent Clip Sharing from working when in the "Schedule" tab.</li>
+				</ul>
+			]]></description>
+            <pubDate>Mon, 20 Jul 2020 20:10:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/7.1/WWDC_v7.1.zip" sparkle:version="1008" sparkle:shortVersionString="7.1" length="11234594" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+        </item>	
+		
+		<item>
             <title>Version 7.0.2</title>
 			<description><![CDATA[
 				<p>Minor changes to get the app ready ahead of next week's event.</p>
