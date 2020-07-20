@@ -107,6 +107,7 @@
 		DD6E06F81EDBC62D000EAEA4 /* SessionTranscriptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06F71EDBC62D000EAEA4 /* SessionTranscriptViewController.swift */; };
 		DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */; };
 		DD71CC2A20BD009500BB5F47 /* AppCoordinator+Featured.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */; };
+		DD78588124C3594B008C1C22 /* SlowMigrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD78588024C3594B008C1C22 /* SlowMigrationView.swift */; };
 		DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */; };
 		DD7E28FF247FE69400A58370 /* ScheduleContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E28FE247FE69400A58370 /* ScheduleContainerViewController.swift */; };
 		DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7E2900247FEA3900A58370 /* EventHeroViewController.swift */; };
@@ -134,6 +135,7 @@
 		DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */; };
 		DD9AEFBB20963D3C00EA203F /* StorageMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */; };
 		DD9D3F39247BF8570049CB68 /* ConfigResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9D3F38247BF8570049CB68 /* ConfigResponse.swift */; };
+		DDA50E3524AA5090007C77C6 /* Boot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA50E3424AA5090007C77C6 /* Boot.swift */; };
 		DDA5E4941EDCD6E7003B1780 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */; };
 		DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1220A90655002EECF5 /* SessionCellView.swift */; };
 		DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */; };
@@ -548,6 +550,7 @@
 		DD6E06F71EDBC62D000EAEA4 /* SessionTranscriptViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionTranscriptViewController.swift; sourceTree = "<group>"; };
 		DD6E06FB1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptTableCellView.swift; sourceTree = "<group>"; };
 		DD71CC2920BD009500BB5F47 /* AppCoordinator+Featured.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Featured.swift"; sourceTree = "<group>"; };
+		DD78588024C3594B008C1C22 /* SlowMigrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMigrationView.swift; sourceTree = "<group>"; };
 		DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCProgressIndicator.swift; sourceTree = "<group>"; };
 		DD7E28FE247FE69400A58370 /* ScheduleContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleContainerViewController.swift; sourceTree = "<group>"; };
 		DD7E2900247FEA3900A58370 /* EventHeroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeroViewController.swift; sourceTree = "<group>"; };
@@ -576,6 +579,7 @@
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMigrator.swift; sourceTree = "<group>"; };
 		DD9D3F38247BF8570049CB68 /* ConfigResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigResponse.swift; sourceTree = "<group>"; };
+		DDA50E3424AA5090007C77C6 /* Boot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Boot.swift; sourceTree = "<group>"; };
 		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDA60E1220A90655002EECF5 /* SessionCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCellView.swift; sourceTree = "<group>"; };
 		DDA60E1420A907B6002EECF5 /* SessionCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCollectionViewItem.swift; sourceTree = "<group>"; };
@@ -954,6 +958,7 @@
 			isa = PBXGroup;
 			children = (
 				01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */,
+				DDA50E3424AA5090007C77C6 /* Boot.swift */,
 				DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */,
 				DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */,
 				DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */,
@@ -1012,6 +1017,7 @@
 				DDDF807D20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift */,
 				DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */,
 				DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */,
+				DD78588024C3594B008C1C22 /* SlowMigrationView.swift */,
 				DDA7B7402485392000F86668 /* Community */,
 				DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */,
 			);
@@ -2302,6 +2308,7 @@
 				DD6E06F41EDBC11F000EAEA4 /* WWDCTextButton.swift in Sources */,
 				DDDF807A20BA3F1B007284F8 /* FeaturedContentViewModel.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
+				DD78588124C3594B008C1C22 /* SlowMigrationView.swift in Sources */,
 				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
 				DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
@@ -2355,6 +2362,7 @@
 				DD382B7C1EAC345F009760C4 /* NSImage+CGImage.m in Sources */,
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
+				DDA50E3524AA5090007C77C6 /* Boot.swift in Sources */,
 				DDC6781B1EDB629C00A4E19C /* GeneralPreferencesViewController.swift in Sources */,
 				DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */,
 				DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */,
@@ -2728,7 +2736,7 @@
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1004;
+				CURRENT_PROJECT_VERSION = 1008;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2740,7 +2748,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 7.0.3;
+				MARKETING_VERSION = 7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "WWDC Debug 2019";
@@ -2759,7 +2767,7 @@
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1004;
+				CURRENT_PROJECT_VERSION = 1008;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2771,7 +2779,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 7.0.3;
+				MARKETING_VERSION = 7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "WWDC Release 2019 B";
@@ -2945,7 +2953,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1004;
+				CURRENT_PROJECT_VERSION = 1008;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2957,7 +2965,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 7.0.3;
+				MARKETING_VERSION = 7.1;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3079,7 +3087,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1004;
+				CURRENT_PROJECT_VERSION = 1008;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3091,7 +3099,7 @@
 				INFOPLIST_FILE = WWDC/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 7.0.3;
+				MARKETING_VERSION = 7.1;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";

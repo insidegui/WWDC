@@ -54,7 +54,7 @@ extension Error {
         return resolver(clientRecord, serverRecord)
     }
 
-    @discardableResult func retryCloudKitOperationIfPossible(_ log: OSLog? = nil, with block: @escaping () -> Void) -> Bool {
+    @discardableResult func retryCloudKitOperationIfPossible(_ log: OSLog? = nil, in queue: DispatchQueue = .main, with block: @escaping () -> Void) -> Bool {
         let effectiveLog = log ?? .default
 
         guard let effectiveError = self as? CKError else { return false }
@@ -66,7 +66,7 @@ extension Error {
 
         os_log("Error is recoverable. Will retry after %{public}f seconds", log: effectiveLog, type: .error, retryDelay)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+        queue.asyncAfter(deadline: .now() + retryDelay) {
             block()
         }
 

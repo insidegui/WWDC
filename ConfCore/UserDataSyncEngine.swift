@@ -234,7 +234,7 @@ public final class UserDataSyncEngine {
         }
     }
 
-    private func createCustomZoneIfNeeded() {
+    private func createCustomZoneIfNeeded(then completion: (() -> Void)? = nil) {
         guard !createdCustomZone else {
             os_log("Already have custom zone, skipping creation", log: log, type: .debug)
             return
@@ -256,6 +256,8 @@ public final class UserDataSyncEngine {
             } else {
                 os_log("Zone created successfully", log: self.log, type: .info)
                 self.createdCustomZone = true
+
+                DispatchQueue.main.async { completion?() }
             }
         }
 
@@ -304,6 +306,10 @@ public final class UserDataSyncEngine {
         createdPrivateSubscription = false
         createdCustomZone = false
 
+        clearCloudKitFields()
+    }
+
+    private func clearCloudKitFields() {
         clearCloudKitFields(for: Favorite.self)
         clearCloudKitFields(for: SessionProgress.self)
         clearCloudKitFields(for: Bookmark.self)
@@ -385,13 +391,28 @@ public final class UserDataSyncEngine {
                        type: .error,
                        String(describing: error))
 
-                if (error as? CKError)?.code == CKError.Code.changeTokenExpired {
+                if error.isCKTokenExpired {
                     os_log("Change token expired, clearing token and retrying", log: self.log, type: .error)
 
                     DispatchQueue.main.async {
                         self.privateChangeToken = nil
                         self.fetchChanges()
                     }
+                    return
+                } else if error.isCKZoneDeleted {
+                    os_log("User deleted CK zone, recreating", log: self.log, type: .error)
+
+                    DispatchQueue.main.async {
+                        self.privateChangeToken = nil
+                        self.createdCustomZone = false
+
+                        self.createCustomZoneIfNeeded {
+                            self.clearCloudKitFields()
+                            self.uploadLocalDataNotUploadedYet()
+                            self.fetchChanges()
+                        }
+                    }
+                    return
                 } else {
                     error.retryCloudKitOperationIfPossible(self.log) { self.fetchChanges() }
                 }
@@ -403,17 +424,10 @@ public final class UserDataSyncEngine {
         operation.recordChangedBlock = { changedRecords.append($0) }
 
         operation.fetchRecordZoneChangesCompletionBlock = { [unowned self] error in
-            if let error = error {
-                os_log("Failed to fetch record zone changes: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
+            guard error == nil else { return }
 
-                error.retryCloudKitOperationIfPossible(self.log) { self.fetchChanges() }
-            } else {
-                os_log("Finished fetching record zone changes", log: self.log, type: .info)
-                DispatchQueue.main.async { self.commitServerChangesToDatabase(with: changedRecords) }
-            }
+            os_log("Finished fetching record zone changes", log: self.log, type: .info)
+            self.databaseQueue.async { self.commitServerChangesToDatabase(with: changedRecords) }
         }
 
         operation.qualityOfService = .userInitiated
@@ -443,12 +457,20 @@ public final class UserDataSyncEngine {
     }
 
     private func performRealmOperations(with block: @escaping (Realm) -> Void) {
+        databaseQueue.async {
+            self.onQueuePerformRealmOperations(with: block)
+        }
+    }
+
+    private func onQueuePerformRealmOperations(with block: @escaping (Realm) -> Void) {
+        guard let realm = backgroundRealm else { fatalError("Missing background Realm") }
+
         do {
-            storage.realm.beginWrite()
+            realm.beginWrite()
 
-            block(storage.realm)
+            block(realm)
 
-            try storage.realm.commitWrite(withoutNotifying: realmNotificationTokens)
+            try realm.commitWrite(withoutNotifying: realmNotificationTokens)
         } catch {
             os_log("Failed to perform Realm transaction: %{public}@", log: self.log, type: .error, String(describing: error))
         }
@@ -510,21 +532,43 @@ public final class UserDataSyncEngine {
     private var realmNotificationTokens: [NotificationToken] = []
 
     private func observeLocalChanges() {
-        guard !storage.realm.isInWriteTransaction else {
-            os_log("Realm is in a write transaction, waiting before registering observers", log: self.log, type: .debug)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.observeLocalChanges()
-            }
-            return
+        openBackgroundRealm {
+            self.registerRealmObserver(for: Favorite.self)
+            self.registerRealmObserver(for: Bookmark.self)
+            self.registerRealmObserver(for: SessionProgress.self)
         }
-        
-        registerRealmObserver(for: Favorite.self)
-        registerRealmObserver(for: Bookmark.self)
-        registerRealmObserver(for: SessionProgress.self)
+    }
+
+    private let databaseQueue = DispatchQueue(label: "Database", qos: .background)
+    private var backgroundRealm: Realm?
+
+    private func openBackgroundRealm(completion: @escaping () -> Void) {
+        Realm.asyncOpen(configuration: storage.realm.configuration, callbackQueue: databaseQueue) { realm, error in
+            if let error = error {
+                os_log("Failed to open background Realm for sync operations: %{public}@", log: self.log, type: .fault, String(describing: error))
+                return
+            }
+
+            self.backgroundRealm = realm
+
+            DispatchQueue.main.async { completion() }
+        }
     }
 
     private func registerRealmObserver<T: SynchronizableObject>(for objectType: T.Type) {
-        let token = storage.realm.objects(objectType).observe { [unowned self] change in
+        databaseQueue.async {
+            do {
+                try self.onQueueRegisterRealmObserver(for: objectType)
+            } catch {
+                os_log("Failed to register notification: %{public}@", log: self.log, type: .error, String(describing: error))
+            }
+        }
+    }
+
+    private func onQueueRegisterRealmObserver<T: SynchronizableObject>(for objectType: T.Type) throws {
+        guard let realm = backgroundRealm else { return }
+
+        let token = realm.objects(objectType).observe { [unowned self] change in
             switch change {
             case .error(let error):
                 os_log("Realm observer error: %{public}@",
@@ -569,11 +613,6 @@ public final class UserDataSyncEngine {
 
         if let lastSyncDate = recordTypesToLastSyncDates[firstRecord.recordType] {
             guard Date().timeIntervalSince(lastSyncDate) > objectType.syncThrottlingInterval else {
-                os_log("Throttled. Interval for %{public}@ is %{public}f seconds",
-                       log: log,
-                       type: .debug,
-                       firstRecord.recordType,
-                       objectType.syncThrottlingInterval)
                 return
             }
         }
@@ -619,7 +658,7 @@ public final class UserDataSyncEngine {
             } else {
                 os_log("Successfully uploaded %{public}d record(s)", log: self.log, type: .info, records.count)
 
-                DispatchQueue.main.async {
+                self.databaseQueue.async {
                     guard let serverRecords = serverRecords else { return }
                     self.updateDatabaseModelsSystemFieldsAfterUpload(with: serverRecords)
                 }
@@ -665,23 +704,38 @@ public final class UserDataSyncEngine {
     // MARK: Initial data upload
 
     private func uploadLocalDataNotUploadedYet() {
+        os_log("%{public}@", log: log, type: .debug, #function)
+
         uploadLocalModelsNotUploadedYet(of: Favorite.self)
         uploadLocalModelsNotUploadedYet(of: Bookmark.self)
         uploadLocalModelsNotUploadedYet(of: SessionProgress.self)
     }
 
     private func uploadLocalModelsNotUploadedYet<T: SynchronizableObject>(of objectType: T.Type) {
-        let objects = storage.realm.objects(objectType).toArray().filter({ $0.ckFields.count == 0 && !$0.isDeleted })
+        databaseQueue.async {
+            guard let objects = self.backgroundRealm?.objects(objectType).toArray() else { return }
 
-        upload(models: objects)
+            self.upload(models: objects.filter({ $0.ckFields.count == 0 && !$0.isDeleted }))
+        }
     }
 
     // MARK: - Deletion
 
     private func incinerateSoftDeletedObjects() {
+        databaseQueue.async {
+            self.onQueueIncinerateSoftDeletedObjects()
+        }
+    }
+
+    private func onQueueIncinerateSoftDeletedObjects() {
+        guard let realm = backgroundRealm else { return }
+
         let predicate = NSPredicate(format: "isDeleted == true")
-        let deletedFavorites = storage.realm.objects(Favorite.self).filter(predicate)
-        let deletedBookmarks = storage.realm.objects(Bookmark.self).filter(predicate)
+        let deletedFavorites = realm.objects(Favorite.self).filter(predicate)
+        let deletedBookmarks = realm.objects(Bookmark.self).filter(predicate)
+
+        let deletedFavoriteObjIDs = deletedFavorites.toArray().map(\.identifier)
+        let deletedBookmarkObjIDs = deletedBookmarks.toArray().map(\.identifier)
 
         os_log("Will incinerate %{public}d deleted object(s)", log: log, type: .info, deletedFavorites.count + deletedBookmarks.count)
 
@@ -698,7 +752,7 @@ public final class UserDataSyncEngine {
                        type: .error,
                        String(describing: error))
 
-                error.retryCloudKitOperationIfPossible(self.log) { self.incinerateSoftDeletedObjects() }
+                error.retryCloudKitOperationIfPossible(self.log, in: self.databaseQueue) { self.incinerateSoftDeletedObjects() }
             } else {
                 os_log("Successfully incinerated %{public}d record(s)",
                        log: self.log,
@@ -707,9 +761,6 @@ public final class UserDataSyncEngine {
 
                 DispatchQueue.main.async {
                     // Actually delete previously soft-deleted items from the database
-                    let deletedFavoriteObjIDs = deletedFavorites.toArray().map(\.identifier)
-                    let deletedBookmarkObjIDs = deletedBookmarks.toArray().map(\.identifier)
-
                     self.performRealmOperations { queueRealm in
                         let favoriteObjs = deletedFavoriteObjIDs.compactMap { queueRealm.object(ofType: Favorite.self, forPrimaryKey: $0) }
                         let bookmarkObjs = deletedBookmarkObjIDs.compactMap { queueRealm.object(ofType: Bookmark.self, forPrimaryKey: $0) }
@@ -728,4 +779,10 @@ public final class UserDataSyncEngine {
     }
 
 }
+
+extension Error {
+    var isCKTokenExpired: Bool { (self as? CKError)?.code == .changeTokenExpired }
+    var isCKZoneDeleted: Bool { (self as? CKError)?.code == .userDeletedZone }
+}
+
 #endif

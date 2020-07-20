@@ -10,6 +10,9 @@ import Cocoa
 import Sparkle
 import Siesta
 @_exported import ConfUIFoundation
+import ConfCore
+import RealmSwift
+import SwiftUI
 
 extension Notification.Name {
     static let openWWDCURL = Notification.Name(rawValue: "OpenWWDCURLNotification")
@@ -17,7 +20,7 @@ extension Notification.Name {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    let coordinator = AppCoordinator(windowController: MainWindowController())
+    private(set) var coordinator: AppCoordinator?
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
@@ -27,8 +30,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var urlObservationToken: NSObjectProtocol?
 
+    private let boot = Boot()
+
+    private var migrationSplashScreenWorkItem: DispatchWorkItem?
+    private let slowMigrationToleranceInSeconds: TimeInterval = 1.5
+
     func applicationDidFinishLaunching(_ notification: Notification) {
-        UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
+        UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": false])
 
         NSApp.registerForRemoteNotifications(matching: [])
 
@@ -42,10 +50,87 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             guard let url = note.object as? URL else { return }
             self?.openURL(url)
         }
+
+        let item = DispatchWorkItem(block: showMigrationSplashScreen)
+        migrationSplashScreenWorkItem = item
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + slowMigrationToleranceInSeconds, execute: item)
+
+        boot.bootstrapDependencies { [unowned self] result in
+            self.migrationSplashScreenWorkItem?.cancel()
+            self.migrationSplashScreenWorkItem = nil
+            self.hideMigrationSplash()
+
+            switch result {
+            case .failure(let error):
+                self.handleBootstrapError(error)
+            case .success(let dependencies):
+                self.startupUI(using: dependencies.storage, syncEngine: dependencies.syncEngine)
+            }
+        }
+
+        ImageDownloadCenter.shared.deleteLegacyImageCacheIfNeeded()
+    }
+
+    private func startupUI(using storage: Storage, syncEngine: SyncEngine) {
+        coordinator = AppCoordinator(
+            windowController: MainWindowController(),
+            storage: storage,
+            syncEngine: syncEngine
+        )
+        coordinator?.windowController.showWindow(self)
+        coordinator?.startup()
+    }
+
+    private func handleBootstrapError(_ error: Boot.BootstrapError) {
+        if error.code == .unusableStorage {
+            handleStorageError(error)
+        } else {
+            let alert = NSAlert()
+            alert.messageText = "Failed to start"
+            alert.informativeText = error.localizedDescription
+            alert.addButton(withTitle: "Quit")
+            alert.runModal()
+            NSApp.terminate(nil)
+        }
+    }
+
+    private func handleStorageError(_ error: Boot.BootstrapError) {
+        let alert = NSAlert()
+        alert.messageText = "Failed to start"
+        alert.informativeText = error.localizedDescription
+        alert.addButton(withTitle: "Quit")
+
+        alert.runModal()
+        NSApp.terminate(self)
+    }
+
+    private lazy var slowMigrationController: NSWindowController = {
+        let viewController = NSHostingController(rootView: SlowMigrationView())
+        let windowController = NSWindowController(window: NSWindow(contentRect: .zero, styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: false))
+
+        windowController.contentViewController = viewController
+        windowController.window?.center()
+        windowController.window?.isReleasedWhenClosed = true
+        windowController.window?.titlebarAppearsTransparent = true
+
+        return windowController
+    }()
+
+    private var migrationSplashShown = false
+
+    private func showMigrationSplashScreen() {
+        migrationSplashShown = true
+        slowMigrationController.showWindow(self)
+    }
+
+    private func hideMigrationSplash() {
+        guard migrationSplashShown else { return }
+        slowMigrationController.close()
     }
 
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String: Any]) {
-        coordinator.receiveNotification(with: userInfo)
+        coordinator?.receiveNotification(with: userInfo)
     }
 
     @objc func handleURLEvent(_ event: NSAppleEventDescriptor?, replyEvent: NSAppleEventDescriptor?) {
@@ -62,7 +147,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        coordinator.handle(link: link, deferIfNeeded: true)
+        coordinator?.handle(link: link, deferIfNeeded: true)
     }
 
     func application(_ application: NSApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([NSUserActivityRestoring]) -> Void) -> Bool {
@@ -70,33 +155,33 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let url = userActivity.webpageURL else { return false }
         guard let link = DeepLink(url: url) else { return false }
 
-        coordinator.handle(link: link, deferIfNeeded: true)
+        coordinator?.handle(link: link, deferIfNeeded: true)
 
         return true
     }
 
     @IBAction func showPreferences(_ sender: Any) {
-        coordinator.showPreferences(sender)
+        coordinator?.showPreferences(sender)
     }
 
     @IBAction func reload(_ sender: Any) {
-        coordinator.refresh(sender)
+        coordinator?.refresh(sender)
     }
 
     @IBAction func showAboutWindow(_ sender: Any) {
-        coordinator.showAboutWindow()
+        coordinator?.showAboutWindow()
     }
 
     @IBAction func viewFeatured(_ sender: Any) {
-        coordinator.showFeatured()
+        coordinator?.showFeatured()
     }
 
     @IBAction func viewSchedule(_ sender: Any) {
-        coordinator.showSchedule()
+        coordinator?.showSchedule()
     }
 
     @IBAction func viewVideos(_ sender: Any) {
-        coordinator.showVideos()
+        coordinator?.showVideos()
     }
 
     @IBAction func viewHelp(_ sender: Any) {
@@ -109,7 +194,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Switches to app via application switcher
         if !NSApp.windows.contains(where: { $0.isVisible }) {
-            coordinator.windowController.showWindow(self)
+            coordinator?.windowController.showWindow(self)
         }
     }
 
@@ -117,7 +202,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // User clicks dock item, double clicks app in finder, etc
         if !flag {
-            coordinator.windowController.showWindow(sender)
+            coordinator?.windowController.showWindow(sender)
 
             return true
         }

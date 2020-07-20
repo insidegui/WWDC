@@ -48,33 +48,25 @@ extension Session {
 
     public func setCurrentPosition(_ position: Double, _ duration: Double) {
         guard let config = self.realm?.configuration else { return }
-
         let sessionId = identifier
 
         Self.positionUpdateQueue.async {
-            guard let realm = try? Realm(configuration: config) else {
-                assertionFailure("Failed to initialize background realm for session progress update")
-                return
-            }
-
-            Self.onQueueSetCurrentPosition(for: sessionId, in: realm, position, duration)
+            Self.onQueueSetCurrentPosition(configuration: config, for: sessionId, position, duration)
         }
     }
 
     public static func setCurrentPosition(for sessionId: String, in storage: Storage, position: Double, duration: Double) {
-        let config = storage.realm.configuration
-
         Self.positionUpdateQueue.async {
-            guard let realm = try? Realm(configuration: config) else {
-                assertionFailure("Failed to initialize background realm for session progress update")
-                return
-            }
-
-            Self.onQueueSetCurrentPosition(for: sessionId, in: realm, position, duration)
+            Self.onQueueSetCurrentPosition(configuration: storage.realm.configuration, for: sessionId, position, duration)
         }
     }
 
-    private static func onQueueSetCurrentPosition(for sessionId: String, in queueRealm: Realm, _ position: Double, _ duration: Double) {
+    private static func onQueueSetCurrentPosition(configuration: Realm.Configuration, for sessionId: String, _ position: Double, _ duration: Double) {
+        guard let queueRealm = try? Realm(configuration: configuration, queue: positionUpdateQueue) else {
+            assertionFailure("Failed to initialize background realm for session progress update")
+            return
+        }
+
         guard let session = queueRealm.object(ofType: Session.self, forPrimaryKey: sessionId) else { return }
 
         guard !duration.isNaN, !duration.isZero, !duration.isInfinite else { return }

@@ -18,7 +18,8 @@ import os.log
     public func indexTranscriptsIfNeeded(manifestURL: URL, ignoringCache: Bool, storageURL: URL, schemaVersion: UInt64) {
         do {
             let config = Realm.Configuration(fileURL: storageURL, schemaVersion: schemaVersion)
-            let storage = try Storage(config)
+            let realm = try Realm(configuration: config)
+            let storage = Storage(realm)
 
             indexer = TranscriptIndexer(storage, manifestURL: manifestURL)
 

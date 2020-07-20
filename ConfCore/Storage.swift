@@ -22,29 +22,9 @@ public final class Storage {
     private static let log = OSLog(subsystem: "ConfCore", category: "Storage")
     private let log = Storage.log
 
-    public init(_ configuration: Realm.Configuration) throws {
-        var config = configuration
-
-        config.shouldCompactOnLaunch = { totalBytes, usedBytes in
-            guard Self.isCompactOnLaunchEnabled else {
-                os_log("Database compression disabled by flag", log: Self.log, type: .default)
-                return false
-            }
-
-            let oneHundredMB = 100 * 1024 * 1024
-
-            if (totalBytes > oneHundredMB) && (Double(usedBytes) / Double(totalBytes)) < 0.8 {
-                os_log("Database will be compacted. Total bytes: %d, used bytes: %d", log: Self.log, type: .default, totalBytes, usedBytes)
-                return true
-            } else {
-                return false
-            }
-        }
-        config.migrationBlock = Storage.migrate(migration:oldVersion:)
-
-        realmConfig = config
-
-        realm = try Realm(configuration: config)
+    public init(_ realm: Realm) {
+        self.realmConfig = realm.configuration
+        self.realm = realm
 
         DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStart).subscribe(onNext: { [unowned self] _ in
             os_log("Locking Realm auto-updates until transcript indexing is finished", log: self.log, type: .info)
@@ -61,10 +41,9 @@ public final class Storage {
         deleteOldEventsIfNeeded()
     }
 
-    private static var isCompactOnLaunchEnabled: Bool { !UserDefaults.standard.bool(forKey: "WWDCDisableDatabaseCompression") }
-
-    public func makeRealm() throws -> Realm {
-        return try Realm(configuration: realmConfig)
+    // In order to call this with a specific queue, you must already be on the target queue
+    public func makeRealm(on queue: DispatchQueue? = nil) throws -> Realm {
+        return try Realm(configuration: realmConfig, queue: queue)
     }
 
     private lazy var dispatchQueue = DispatchQueue(label: "WWDC Storage", qos: .background)
@@ -95,7 +74,7 @@ public final class Storage {
         }
     }
 
-    internal static func migrate(migration: Migration, oldVersion: UInt64) {
+    public static func migrate(migration: Migration, oldVersion: UInt64) {
         let migrator = StorageMigrator(migration: migration, oldVersion: oldVersion)
 
         migrator.perform()
@@ -401,6 +380,8 @@ public final class Storage {
         }, disableAutorefresh: false, completionBlock: completion)
     }
 
+    private let serialQueue = DispatchQueue(label: "Database Serial", qos: .userInteractive)
+
     /// Performs a write transaction in the background
     ///
     /// - Parameters:
@@ -416,13 +397,13 @@ public final class Storage {
                                                    completionBlock: ((Error?) -> Void)? = nil) {
         if disableAutorefresh { realm.autorefresh = false }
 
-        DispatchQueue.global(qos: .userInitiated).async {
+        serialQueue.async {
             var storageError: Error?
 
             self.storageQueue.addOperation { [unowned self] in
                 autoreleasepool {
                     do {
-                        let backgroundRealm = try self.makeRealm()
+                        let backgroundRealm = try self.makeRealm(on: self.dispatchQueue)
 
                         if createTransaction { backgroundRealm.beginWrite() }
 

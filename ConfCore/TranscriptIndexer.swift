@@ -29,7 +29,7 @@ public final class TranscriptIndexer {
         self.manifestURL = manifestURL
     }
 
-    fileprivate let queue = DispatchQueue.global(qos: .utility)
+    fileprivate let queue = DispatchQueue(label: "Transcript Indexer", qos: .background)
 
     fileprivate lazy var backgroundOperationQueue: OperationQueue = {
         let q = OperationQueue()
@@ -125,6 +125,7 @@ public final class TranscriptIndexer {
     fileprivate func store(_ transcripts: [Transcript]) {
         storage.backgroundUpdate { [weak self] backgroundRealm in
             guard let self = self else { return }
+            os_log("Start transcript realm updates", log: self.log, type: .debug)
 
             transcripts.forEach { transcript in
                 guard let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: transcript.identifier) else {
@@ -139,8 +140,10 @@ public final class TranscriptIndexer {
                 session.transcriptIdentifier = transcript.identifier
                 session.transcriptText = transcript.fullText
 
-                backgroundRealm.add(transcript, update: .all)
+                backgroundRealm.add(transcript, update: .modified)
             }
+
+            os_log("Finished transcript realm updates", log: self.log, type: .debug)
         }
     }
 
