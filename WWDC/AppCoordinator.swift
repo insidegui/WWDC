@@ -462,6 +462,10 @@ final class AppCoordinator {
         tabController.activeTab = .videos
     }
 
+    func showCommunity() {
+        tabController.activeTab = .community
+    }
+
     // MARK: - Refresh
 
     /// Used to prevent the refresh system from being spammed. Resetting

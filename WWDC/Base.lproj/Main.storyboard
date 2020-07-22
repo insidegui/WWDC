@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -558,6 +557,11 @@
                                                 <action selector="viewVideos:" target="Ady-hI-5gd" id="xWC-aO-kEM"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Community" keyEquivalent="4" id="4dz-Cg-bRA" userLabel="Community">
+                                            <connections>
+                                                <action selector="viewCommunity:" target="Voe-Tx-rLC" id="IVY-IA-xBb"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="eT5-6l-QRY"/>
                                         <menuItem title="Reload" keyEquivalent="r" id="VAB-X3-ZCo">
                                             <connections>
@@ -686,7 +690,7 @@
                                                 <rect key="frame" x="9" y="87" width="325" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="JF0-nF-AYP" id="wIo-Pd-ApE">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <font key="font" metaFont="label" size="11"/>
                                                     <menu key="menu" id="l2w-hX-oZz">
                                                         <items>
                                                             <menuItem title="Item 1" state="on" hidden="YES" id="JF0-nF-AYP"/>
@@ -703,7 +707,7 @@
                                                 <rect key="frame" x="9" y="61" width="325" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="Hl8-Jf-3YQ" id="lKh-OJ-Ma5">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <font key="font" metaFont="label" size="11"/>
                                                     <menu key="menu" id="Q7H-rU-Yd4">
                                                         <items>
                                                             <menuItem title="Item 1" state="on" hidden="YES" id="Hl8-Jf-3YQ"/>
@@ -720,7 +724,7 @@
                                                 <rect key="frame" x="9" y="35" width="325" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="aWW-Dt-aEc" id="e63-aO-rTw">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <font key="font" metaFont="label" size="11"/>
                                                     <menu key="menu" id="U9w-bV-6BF">
                                                         <items>
                                                             <menuItem title="Item 1" state="on" hidden="YES" id="aWW-Dt-aEc"/>
@@ -736,7 +740,7 @@
                                             <segmentedControl horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Teg-LY-Sf3" customClass="WWDCSegmentedControl" customModule="WWDC" customModuleProvider="target">
                                                 <rect key="frame" x="10" y="10" width="323" height="21"/>
                                                 <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectAny" id="0Zl-mA-eiw">
-                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <font key="font" metaFont="label" size="11"/>
                                                     <segments>
                                                         <segment label="Favorites"/>
                                                         <segment label="Downloaded" tag="1"/>
