@@ -127,3 +127,4 @@ struct MultipleChoiceFilter: FilterType {
         let selectedOptions: [FilterOption]
     }
 }
+
