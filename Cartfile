@@ -1,6 +1,6 @@
 github "ReactiveX/RxSwift" ~> 5.0
 
-github "realm/realm-cocoa" ~> 5.3.1
+github "realm/realm-cocoa" ~> 5.4.0
 github "RxSwiftCommunity/RxRealm" ~> 3.0
 
 github "bustoutsolutions/siesta" ~> 1.5.1

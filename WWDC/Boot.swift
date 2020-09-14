@@ -38,9 +38,7 @@ final class Boot {
     private let log = OSLog(subsystem: "WWDC", category: String(describing: Boot.self))
 
     private static var isCompactOnLaunchEnabled: Bool {
-//        !UserDefaults.standard.bool(forKey: "WWDCDisableDatabaseCompression")
-        // Temporarily disabled because of https://github.com/realm/realm-cocoa/issues/6652
-        return false
+        !UserDefaults.standard.bool(forKey: "WWDCDisableDatabaseCompression")
     }
 
     func bootstrapDependencies(then completion: @escaping (Result<(storage: Storage, syncEngine: SyncEngine), BootstrapError>) -> Void) {
