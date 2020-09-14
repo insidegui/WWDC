@@ -7,6 +7,16 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 7.1.1</title>
+			<description><![CDATA[
+				<p>This release adds a keyboard shortcut to access the Community tab and also fixes some common crashes caused by Realm.</p>
+			]]></description>
+            <pubDate>Mon, 14 Sep 2020 09:25:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/7.1.1/WWDC_v7.1.1.zip" sparkle:version="1010" sparkle:shortVersionString="7.1.1" length="11279092" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+        </item>	
+		
+		<item>
             <title>Version 7.1</title>
 			<description><![CDATA[
 				<p>This update improves the performance and reliability of the app, including fixes for common crashes which were affecting a significant number of users.</p>
