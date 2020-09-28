@@ -33,6 +33,7 @@ final class TranscriptSearchController: NSViewController {
     }
 
     var didSelectOpenInNewWindow: () -> Void = { }
+    var didSelectExportTranscript: () -> Void = { }
 
     private(set) var searchTerm = BehaviorRelay<String?>(value: nil)
 
@@ -49,6 +50,18 @@ final class TranscriptSearchController: NSViewController {
 
         return b
     }()
+    
+    private lazy var exportButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+        
+        b.image = #imageLiteral(resourceName: "share")
+        b.target = self
+        b.action = #selector(exportTranscript)
+        b.toolTip = "Export Transcript"
+        b.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+
+        return b
+    }()
 
     private lazy var searchField: NSSearchField = {
         let f = NSSearchField()
@@ -60,7 +73,7 @@ final class TranscriptSearchController: NSViewController {
     }()
 
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.searchField, self.detachButton])
+        let v = NSStackView(views: [self.exportButton, self.searchField, self.detachButton])
 
         v.orientation = .horizontal
         v.spacing = 6
@@ -129,6 +142,10 @@ final class TranscriptSearchController: NSViewController {
 
         searchField.stringValue = pasteboardTerm
         searchTerm.accept(pasteboardTerm)
+    }
+    
+    @objc private func exportTranscript() {
+        didSelectExportTranscript()
     }
     
 }

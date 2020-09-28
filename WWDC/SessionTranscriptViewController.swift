@@ -118,6 +118,7 @@ final class SessionTranscriptViewController: NSViewController {
         tableView.delegate = self
 
         searchController.didSelectOpenInNewWindow = { [weak self] in self?.detachWindow() }
+        searchController.didSelectExportTranscript = { [weak self] in self?.exportTranscript() }
     }
 
     override func viewDidLoad() {
@@ -222,6 +223,23 @@ final class SessionTranscriptViewController: NSViewController {
             scrollView.contentInsets = NSEdgeInsets(top: TranscriptSearchController.height, left: 0, bottom: 0, right: 0)
         } else {
             scrollView.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+    }
+    
+    private func exportTranscript() {
+        guard let sessionName = viewModel?.session.title,
+              let transcript = viewModel?.session.transcriptText,
+              let transcriptData = transcript.data(using: .utf8) else { return }
+        
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = "\(sessionName).txt"
+        panel.begin { response in
+            switch (response, panel.url) {
+            case (.OK, let url?):
+                FileManager.default.createFile(atPath: url.path, contents: transcriptData, attributes: nil)
+            default:
+                break
+            }
         }
     }
 
