@@ -14,6 +14,7 @@ lessThan() {
 SWIFTLINT_MIN="0.27"
 SWIFTLINT_INSTALLED=$([ `command -v swiftlint` ] && echo true || echo false )
 BREW_INSTALLED=$([ `command -v brew` ] && echo true || echo false )
+CARTHAGE_INSTALLED=$([ `command -v carthage` ] && echo true || echo false )
 
 SWIFTLINT_UPDATED=false
 if $SWIFTLINT_INSTALLED; then
@@ -41,6 +42,25 @@ if ! $SWIFTLINT_INSTALLED || ! $SWIFTLINT_UPDATED; then
         fi
     else
         echo 'Please install SwiftLint & try again to continue.'
+        exit 1
+    fi
+fi
+
+if ! $CARTHAGE_INSTALLED; then
+    echo "Carthage is not installed."
+
+    if $BREW_INSTALLED; then
+        read -p "Use Homebrew to globally install the latest version of Carthage? [Y/n] " -n 1 -r
+        echo
+
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            brew install carthage
+        else
+            echo 'Please install Carthage & try again to continue.'
+            exit 1
+        fi
+    else
+        echo 'Please install Carthage & try again to continue.'
         exit 1
     fi
 fi
