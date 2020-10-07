@@ -51,7 +51,7 @@ final class TranscriptSearchController: NSViewController {
         return b
     }()
     
-    private lazy var exportButton: PUIButton = {
+    private lazy var exportButton: NSView = {
         let b = PUIButton(frame: .zero)
         
         b.image = #imageLiteral(resourceName: "share")
@@ -59,8 +59,22 @@ final class TranscriptSearchController: NSViewController {
         b.action = #selector(exportTranscript)
         b.toolTip = "Export Transcript"
         b.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-
-        return b
+        b.translatesAutoresizingMaskIntoConstraints = false
+        
+        let container = NSView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(b)
+        
+        NSLayoutConstraint.activate([
+            b.widthAnchor.constraint(equalToConstant: 14),
+            b.heightAnchor.constraint(equalToConstant: 18),
+            container.widthAnchor.constraint(equalToConstant: 14),
+            container.heightAnchor.constraint(equalToConstant: 22),
+            b.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            b.centerYAnchor.constraint(equalTo: container.centerYAnchor, constant: -2)
+        ])
+        
+        return container
     }()
 
     private lazy var searchField: NSSearchField = {
@@ -73,10 +87,10 @@ final class TranscriptSearchController: NSViewController {
     }()
 
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.exportButton, self.searchField, self.detachButton])
+        let v = NSStackView(views: [self.searchField, self.exportButton, self.detachButton])
 
         v.orientation = .horizontal
-        v.spacing = 6
+        v.spacing = 8
         v.translatesAutoresizingMaskIntoConstraints = false
 
         return v
