@@ -14,7 +14,6 @@ import RxCocoa
 import RxSwift
 import os.log
 
-#if ICLOUD
 public final class UserDataSyncEngine {
 
     public init(storage: Storage, defaults: UserDefaults = .standard, container: CKContainer = .default()) {
@@ -98,10 +97,11 @@ public final class UserDataSyncEngine {
     private let disposeBag = DisposeBag()
 
     public func start() {
+        guard ConfCoreCapabilities.isCloudKitEnabled else { return }
+
         guard !isWaitingForAccountAvailabilityToStart else { return }
         guard isEnabled else { return }
 
-        #if ICLOUD
         guard !isRunning else { return }
 
         os_log("Start!", log: log, type: .debug)
@@ -137,7 +137,6 @@ public final class UserDataSyncEngine {
             self.observeLocalChanges()
             self.fetchChanges()
         }
-        #endif
     }
 
     public private(set) var isStopping = BehaviorRelay<Bool>(value: false)
@@ -784,5 +783,3 @@ extension Error {
     var isCKTokenExpired: Bool { (self as? CKError)?.code == .changeTokenExpired }
     var isCKZoneDeleted: Bool { (self as? CKError)?.code == .userDeletedZone }
 }
-
-#endif

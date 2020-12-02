@@ -25,9 +25,7 @@ public final class SyncEngine {
     public let client: AppleAPIClient
     public let cocoaHubClient: CocoaHubAPIClient
 
-    #if ICLOUD
-    public let userDataSyncEngine: UserDataSyncEngine
-    #endif
+    public let userDataSyncEngine: UserDataSyncEngine?
 
     private let disposeBag = DisposeBag()
 
@@ -51,16 +49,16 @@ public final class SyncEngine {
             storage: storage
         )
 
-        #if ICLOUD
-        self.userDataSyncEngine = UserDataSyncEngine(storage: storage)
-        #endif
+        if ConfCoreCapabilities.isCloudKitEnabled {
+            self.userDataSyncEngine = UserDataSyncEngine(storage: storage)
+        } else {
+            self.userDataSyncEngine = nil
+        }
 
         NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
             self.transcriptIndexingClient.startIndexing(ignoringCache: false)
 
-            #if ICLOUD
-            self.userDataSyncEngine.start()
-            #endif
+            self.userDataSyncEngine?.start()
         }).disposed(by: disposeBag)
     }
 

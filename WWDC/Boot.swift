@@ -93,7 +93,7 @@ final class Boot {
                 )
 
                 #if ICLOUD
-                syncEngine.userDataSyncEngine.isEnabled = Preferences.shared.syncUserData
+                syncEngine.userDataSyncEngine?.isEnabled = ConfCoreCapabilities.isCloudKitEnabled
                 #endif
 
                 #if DEBUG

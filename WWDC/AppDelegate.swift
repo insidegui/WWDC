@@ -26,6 +26,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
 
         NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+
+        #if ICLOUD
+        ConfCoreCapabilities.isCloudKitEnabled = true
+        #endif
     }
 
     private var urlObservationToken: NSObjectProtocol?

@@ -11,7 +11,7 @@ let package = Package(
         .library(
             name: "ConfCore",
             type: .dynamic,
-            targets: ["ConfCore"]),
+            targets: ["ConfCore"])
     ],
     dependencies: [
         .package(name: "Siesta", url: "https://github.com/bustoutsolutions/siesta", from: "1.5.2"),
@@ -33,6 +33,6 @@ let package = Package(
 				"RxRealm",
                 "Transcripts"
 			],
-			path: "ConfCore/"),
+			path: "ConfCore/")
     ]
 )

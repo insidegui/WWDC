@@ -106,6 +106,8 @@
 		DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2622577E67A00995FF1 /* ConfCore */; };
 		DDB1A2642577E67A00995FF1 /* ConfCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2622577E67A00995FF1 /* ConfCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		DDB1A26A2577E7E900995FF1 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2692577E7E900995FF1 /* Sparkle */; };
+		DDB1A2912577EF0D00995FF1 /* TranscriptIndexingService.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DDB1A2982577EF1A00995FF1 /* ConfCore in Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2972577EF1A00995FF1 /* ConfCore */; };
 		DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */; };
 		DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F851EAD20A10077703F /* UIDebugger.m */; };
 		DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */; };
@@ -208,6 +210,13 @@
 			remoteGlobalIDString = DD600AAF2487F1720071B90E;
 			remoteInfo = ConfUIFoundation;
 		};
+		DDB1A28C2577EEF800995FF1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DDC677F11EDA76A100A4E19C;
+			remoteInfo = TranscriptIndexingService;
+		};
 		DDF7219B1ECA12780054C503 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
@@ -237,6 +246,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
 			dstSubfolderSpec = 16;
 			files = (
+				DDB1A2912577EF0D00995FF1 /* TranscriptIndexingService.xpc in Embed XPC Services */,
 			);
 			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,6 +476,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDB1A2982577EF1A00995FF1 /* ConfCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1121,6 +1132,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DDB1A28D2577EEF800995FF1 /* PBXTargetDependency */,
 				DDF7219C1ECA12780054C503 /* PBXTargetDependency */,
 				DD600AB62487F1730071B90E /* PBXTargetDependency */,
 			);
@@ -1162,8 +1174,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				DDB1A2962577EF1500995FF1 /* PBXTargetDependency */,
 			);
 			name = TranscriptIndexingService;
+			packageProductDependencies = (
+				DDB1A2972577EF1A00995FF1 /* ConfCore */,
+			);
 			productName = TranscriptIndexingService;
 			productReference = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */;
 			productType = "com.apple.product-type.xpc-service";
@@ -1518,6 +1534,15 @@
 			target = DD600AAF2487F1720071B90E /* ConfUIFoundation */;
 			targetProxy = DD600AD02487F45B0071B90E /* PBXContainerItemProxy */;
 		};
+		DDB1A28D2577EEF800995FF1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */;
+			targetProxy = DDB1A28C2577EEF800995FF1 /* PBXContainerItemProxy */;
+		};
+		DDB1A2962577EF1500995FF1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = DDB1A2952577EF1500995FF1 /* ConfCore */;
+		};
 		DDF7219C1ECA12780054C503 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DDF721951ECA12780054C503 /* PlayerUI */;
@@ -1672,7 +1697,6 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -1706,7 +1730,6 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -1776,6 +1799,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-D ICLOUD -D DEBUG";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1799,7 +1823,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -1863,6 +1886,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_SWIFT_FLAGS = "-D ICLOUD";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1887,7 +1911,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -2383,6 +2406,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */;
 			productName = Sparkle;
+		};
+		DDB1A2952577EF1500995FF1 /* ConfCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ConfCore;
+		};
+		DDB1A2972577EF1A00995FF1 /* ConfCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ConfCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

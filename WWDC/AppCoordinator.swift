@@ -356,7 +356,7 @@ final class AppCoordinator {
         let userDataSyncEngineHandled: Bool
 
         #if ICLOUD
-        userDataSyncEngineHandled = syncEngine.userDataSyncEngine.processSubscriptionNotification(with: userInfo)
+        userDataSyncEngineHandled = syncEngine.userDataSyncEngine?.processSubscriptionNotification(with: userInfo) == true
         #else
         userDataSyncEngineHandled = false
         #endif

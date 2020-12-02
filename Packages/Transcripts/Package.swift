@@ -11,13 +11,13 @@ let package = Package(
         .library(
             name: "Transcripts",
             type: .dynamic,
-            targets: ["Transcripts"]),
+            targets: ["Transcripts"])
     ],
     dependencies: [ ],
     targets: [
         .target(
             name: "Transcripts",
             dependencies: [ ],
-			path: "Transcripts/"),
+			path: "Transcripts/")
     ]
 )
