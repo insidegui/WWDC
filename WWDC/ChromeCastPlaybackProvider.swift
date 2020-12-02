@@ -6,6 +6,16 @@
 //  Copyright © 2017 Guilherme Rambo. All rights reserved.
 //
 
+/*
+ ChromeCast support was disabled as part of the Apple Silicon transition,
+ since we're moving to SPM instead of Carthage. ChromeCastCore includes
+ Objective-C code which would need to be rewritten in Swift in order
+ to work properly under SPM. Additionally, I'm not sure how much people
+ actually use this feature and have no way to test it in practice,
+ so I've decided to just disable it for the time being.
+ */
+#if ENABLE_CHROMECAST
+
 import Cocoa
 import ChromeCastCore
 import PlayerUI
@@ -343,3 +353,5 @@ extension ChromeCastPlaybackProvider: CastClientDelegate {
     }
 
 }
+
+#endif

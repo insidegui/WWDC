@@ -72,7 +72,7 @@ open class PUIPlayerWindow: NSWindow {
         titleVisibility = .hidden
         isMovableByWindowBackground = true
 
-        titlebarView?.material = .ultraDark
+        titlebarView?.material = .titlebar
         titlebarView?.state = .active
 
         installTitlebarGradientIfNeeded()

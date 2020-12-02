@@ -364,7 +364,7 @@ final class DownloadManager: NSObject {
 
     private func removeDownload(_ url: String) throws {
         if isDownloading(url) {
-            _ = cancelDownloads([url])
+            cancelDownloads([url])
             return
         }
 

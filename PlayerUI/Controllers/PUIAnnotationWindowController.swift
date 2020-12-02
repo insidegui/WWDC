@@ -34,7 +34,7 @@ class PUIAnnotationWindowController: NSWindowController {
 
         v.state = .active
         v.blendingMode = .behindWindow
-        v.material = .dark
+        v.material = .hudWindow
         v.appearance = NSAppearance(named: .vibrantDark)
         v.maskImage = self.maskImage(with: Metrics.cornerRadius)
 

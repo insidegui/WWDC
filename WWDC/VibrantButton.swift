@@ -60,7 +60,7 @@ class VibrantButton: NSView {
 
         v.translatesAutoresizingMaskIntoConstraints = false
         v.blendingMode = .withinWindow
-        v.material = .ultraDark
+        v.material = .sidebar
         v.appearance = NSAppearance(named: .vibrantDark)
         v.state = .active
 

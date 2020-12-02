@@ -91,7 +91,9 @@ final class VideoPlayerViewController: NSViewController {
         playerView.frame = view.bounds
         view.addSubview(playerView)
 
+        #if ENABLE_CHROMECAST
         playerView.registerExternalPlaybackProvider(ChromeCastPlaybackProvider.self)
+        #endif
 
         playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
