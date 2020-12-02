@@ -1,0 +1,70 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire",
+        "state": {
+          "branch": null,
+          "revision": "9e0328127dfb801cefe8ac53a13c0c90a7770448",
+          "version": "5.4.0"
+        }
+      },
+      {
+        "package": "CloudKitCodable",
+        "repositoryURL": "https://github.com/insidegui/CloudKitCodable",
+        "state": {
+          "branch": "spm",
+          "revision": "0aed3041c4d03c07280fb6f47fabd943a337a43a",
+          "version": null
+        }
+      },
+      {
+        "package": "Realm",
+        "repositoryURL": "https://github.com/realm/realm-cocoa",
+        "state": {
+          "branch": null,
+          "revision": "11ac74e1cc1faec1cad0e6a9a41652ef1432d4c1",
+          "version": "5.5.0"
+        }
+      },
+      {
+        "package": "RealmCore",
+        "repositoryURL": "https://github.com/realm/realm-core",
+        "state": {
+          "branch": null,
+          "revision": "612057010f5521d41559970306054f4c5b12632a",
+          "version": "6.1.4"
+        }
+      },
+      {
+        "package": "RxRealm",
+        "repositoryURL": "https://github.com/RxSwiftCommunity/RxRealm",
+        "state": {
+          "branch": null,
+          "revision": "4dcae40562b5a086dd4711fa8a596be0436dc474",
+          "version": "3.1.0"
+        }
+      },
+      {
+        "package": "RxSwift",
+        "repositoryURL": "https://github.com/ReactiveX/RxSwift",
+        "state": {
+          "branch": null,
+          "revision": "002d325b0bdee94e7882e1114af5ff4fe1e96afa",
+          "version": "5.1.1"
+        }
+      },
+      {
+        "package": "Siesta",
+        "repositoryURL": "https://github.com/bustoutsolutions/siesta",
+        "state": {
+          "branch": null,
+          "revision": "43f34046ebb5beb6802200353c473af303bbc31e",
+          "version": "1.5.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
