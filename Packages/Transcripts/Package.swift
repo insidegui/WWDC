@@ -10,7 +10,6 @@ let package = Package(
     products: [
         .library(
             name: "Transcripts",
-            type: .dynamic,
             targets: ["Transcripts"])
     ],
     dependencies: [ ],
