@@ -57,7 +57,6 @@
 		DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4648461ECA5947005C57C6 /* WWDCWindow.swift */; };
 		DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */; };
 		DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */; };
-		DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED601ED6577100624EAF /* Sparkle.framework */; };
 		DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD59106F1ECA0C3B003C32A4 /* CloudKit.framework */; };
 		DD5DEC201E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5DEC1F1E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift */; };
 		DD5DEC291E4AA8C800426FA6 /* news.json in Resources */ = {isa = PBXBuildFile; fileRef = DD5DEC241E4AA8C800426FA6 /* news.json */; };
@@ -87,8 +86,6 @@
 		DD65FD5F1E48A3900054DD35 /* SessionInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD5E1E48A3900054DD35 /* SessionInstance.swift */; };
 		DD65FD611E48A86A0054DD35 /* PhotoRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD601E48A86A0054DD35 /* PhotoRepresentation.swift */; };
 		DD65FD631E48ACA90054DD35 /* Keyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD621E48ACA90054DD35 /* Keyword.swift */; };
-		DD65FD641E48AE540054DD35 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F517F1E47DE7E0017F9EC /* Realm.framework */; };
-		DD65FD651E48AE540054DD35 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */; };
 		DD65FD671E48BAAD0054DD35 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD661E48BAAD0054DD35 /* Transcript.swift */; };
 		DD65FD691E48BBEF0054DD35 /* TranscriptAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD681E48BBEF0054DD35 /* TranscriptAnnotation.swift */; };
 		DD65FD6B1E48BD9F0054DD35 /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD65FD6A1E48BD9F0054DD35 /* Favorite.swift */; };
@@ -179,9 +176,7 @@
 		DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB3529F1EC9088000254815 /* WWDCTableView.swift */; };
 		DDBA0D79208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */; };
 		DDBA0D7B208D3DE70075670F /* PUINowPlayingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */; };
-		DDBCEC84228AC9C5009300CF /* Sparkle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DD4DED601ED6577100624EAF /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDC677ED1EDA6A3000A4E19C /* TranscriptIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */; };
-		DDC677FD1EDA76A100A4E19C /* TranscriptIndexingService.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DDC678071EDA76E000A4E19C /* ConfCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD36A4C81E478D7E00B2EA88 /* ConfCore.framework */; };
 		DDC6780F1EDB253D00A4E19C /* AboutWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC6780E1EDB253D00A4E19C /* AboutWindowController.swift */; };
 		DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDC678101EDB26D000A4E19C /* AboutWindowController.xib */; };
@@ -341,12 +336,12 @@
 			remoteGlobalIDString = DD600AAF2487F1720071B90E;
 			remoteInfo = ConfUIFoundation;
 		};
-		DDC677FB1EDA76A100A4E19C /* PBXContainerItemProxy */ = {
+		DD69E03D2577DC81008201CB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = DDC677F11EDA76A100A4E19C;
-			remoteInfo = TranscriptIndexingService;
+			remoteGlobalIDString = DD36A4C71E478D7E00B2EA88;
+			remoteInfo = ConfCore;
 		};
 		DDD68508247C3B00001BB700 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -393,7 +388,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				DD600AB82487F1730071B90E /* ConfUIFoundation.framework in Embed Frameworks */,
-				DDBCEC84228AC9C5009300CF /* Sparkle.framework in Embed Frameworks */,
 				DD36A4DE1E478D7E00B2EA88 /* ConfCore.framework in Embed Frameworks */,
 				DDD68514247C3B00001BB700 /* Transcripts.framework in Embed Frameworks */,
 				DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */,
@@ -407,7 +401,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
 			dstSubfolderSpec = 16;
 			files = (
-				DDC677FD1EDA76A100A4E19C /* TranscriptIndexingService.xpc in Embed XPC Services */,
 			);
 			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -472,8 +465,6 @@
 		DD4648461ECA5947005C57C6 /* WWDCWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCWindow.swift; sourceTree = "<group>"; };
 		DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSToolbarItemViewer+Overrides.m"; sourceTree = "<group>"; };
 		DD4873D220AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+RelatedSessions.swift"; sourceTree = "<group>"; };
-		DD4DED601ED6577100624EAF /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Carthage/Build/Mac/Sparkle.framework; sourceTree = "<group>"; };
-		DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Sparkle.framework.dSYM; path = Carthage/Build/Mac/Sparkle.framework.dSYM; sourceTree = "<group>"; };
 		DD59106E1ECA0C2F003C32A4 /* WWDC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WWDC.entitlements; sourceTree = "<group>"; };
 		DD59106F1ECA0C3B003C32A4 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		DD5DEC1F1E4AA6F800426FA6 /* ConditionallyDecodableCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConditionallyDecodableCollection.swift; sourceTree = "<group>"; };
@@ -483,19 +474,6 @@
 		DD5DEC271E4AA8C800426FA6 /* videos_live.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = videos_live.json; sourceTree = "<group>"; };
 		DD5DEC281E4AA8C800426FA6 /* wwdc.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = wwdc.json; sourceTree = "<group>"; };
 		DD5DEC2E1E4AAC9300426FA6 /* DateFormatter+ConfCoreFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DateFormatter+ConfCoreFormat.swift"; sourceTree = "<group>"; };
-		DD5F516E1E47DE0F0017F9EC /* Realm.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Realm.framework.dSYM; path = Carthage/Build/Mac/Realm.framework.dSYM; sourceTree = "<group>"; };
-		DD5F516F1E47DE0F0017F9EC /* RealmSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RealmSwift.framework.dSYM; path = Carthage/Build/Mac/RealmSwift.framework.dSYM; sourceTree = "<group>"; };
-		DD5F51701E47DE0F0017F9EC /* RxBlocking.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxBlocking.framework.dSYM; path = Carthage/Build/Mac/RxBlocking.framework.dSYM; sourceTree = "<group>"; };
-		DD5F51711E47DE0F0017F9EC /* RxCocoa.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxCocoa.framework.dSYM; path = Carthage/Build/Mac/RxCocoa.framework.dSYM; sourceTree = "<group>"; };
-		DD5F51721E47DE0F0017F9EC /* RxRealm.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxRealm.framework.dSYM; path = Carthage/Build/Mac/RxRealm.framework.dSYM; sourceTree = "<group>"; };
-		DD5F51731E47DE0F0017F9EC /* RxSwift.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = RxSwift.framework.dSYM; path = Carthage/Build/Mac/RxSwift.framework.dSYM; sourceTree = "<group>"; };
-		DD5F51741E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftyJSON.framework.dSYM; path = Carthage/Build/Mac/SwiftyJSON.framework.dSYM; sourceTree = "<group>"; };
-		DD5F517F1E47DE7E0017F9EC /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/Mac/Realm.framework; sourceTree = "<group>"; };
-		DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/Mac/RealmSwift.framework; sourceTree = "<group>"; };
-		DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/Mac/RxCocoa.framework; sourceTree = "<group>"; };
-		DD5F51821E47DE7E0017F9EC /* RxRealm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRealm.framework; path = Carthage/Build/Mac/RxRealm.framework; sourceTree = "<group>"; };
-		DD5F51831E47DE7E0017F9EC /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/Mac/RxSwift.framework; sourceTree = "<group>"; };
-		DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/Mac/SwiftyJSON.framework; sourceTree = "<group>"; };
 		DD600AB02487F1720071B90E /* ConfUIFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ConfUIFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD600AB22487F1720071B90E /* ConfUIFoundation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfUIFoundation.h; sourceTree = "<group>"; };
 		DD600AB32487F1730071B90E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -549,8 +527,6 @@
 		DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFiltersViewController.swift; sourceTree = "<group>"; };
 		DD90CDCA1ED77A4800CADE86 /* FilterType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 		DD90CDCC1ED7A5ED00CADE86 /* SearchCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
-		DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ChromeCastCore.framework; path = Carthage/Build/Mac/ChromeCastCore.framework; sourceTree = "<group>"; };
-		DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = ChromeCastCore.framework.dSYM; path = Carthage/Build/Mac/ChromeCastCore.framework.dSYM; sourceTree = "<group>"; };
 		DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromeCastPlaybackProvider.swift; sourceTree = "<group>"; };
 		DD9564221ED27FBE00051D07 /* NSImage+Thumbnail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSImage+Thumbnail.swift"; sourceTree = "<group>"; };
 		DD9AEFBA20963D3C00EA203F /* StorageMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageMigrator.swift; sourceTree = "<group>"; };
@@ -582,8 +558,6 @@
 		DDAE001A1EC52D2B0036C7E9 /* SessionProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionProgress.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDAE7C4E1E5BA4E300CEA205 /* transcript.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = transcript.json; sourceTree = "<group>"; };
-		DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Siesta.framework; path = Carthage/Build/Mac/Siesta.framework; sourceTree = "<group>"; };
-		DDAE7C561E5BC6E300CEA205 /* Siesta.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = Siesta.framework.dSYM; path = Carthage/Build/Mac/Siesta.framework.dSYM; sourceTree = "<group>"; };
 		DDAE7C571E5C629800CEA205 /* AppleAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleAPIClient.swift; sourceTree = "<group>"; };
 		DDAE7C591E5C652600CEA205 /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		DDAE7C5D1E5C723A00CEA205 /* Resource+Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Resource+Error.swift"; sourceTree = "<group>"; };
@@ -602,13 +576,9 @@
 		DDB3529B1EC8AB5D00254815 /* WWDCLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCLayer.swift; sourceTree = "<group>"; };
 		DDB3529D1EC8D8CD00254815 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DDB3529F1EC9088000254815 /* WWDCTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTableView.swift; sourceTree = "<group>"; };
-		DDBA0D74208CD5430075670F /* SwiftProtobuf.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = SwiftProtobuf.framework.dSYM; path = Carthage/Build/Mac/SwiftProtobuf.framework.dSYM; sourceTree = "<group>"; };
 		DDBA0D78208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfoCoordinator.swift; sourceTree = "<group>"; };
 		DDBA0D7A208D3DE70075670F /* PUINowPlayingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUINowPlayingInfo.swift; sourceTree = "<group>"; };
-		DDBCEC99228AD2CC009300CF /* CloudKitCodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKitCodable.framework; path = Carthage/Build/Mac/CloudKitCodable.framework; sourceTree = "<group>"; };
-		DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/Mac/SwiftProtobuf.framework; sourceTree = "<group>"; };
 		DDBFC18F2190C4680030E803 /* TranscriptIndexingService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TranscriptIndexingService.entitlements; sourceTree = "<group>"; };
-		DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKitCodable.framework; path = Carthage/Build/Mac/CloudKitCodable.framework; sourceTree = "<group>"; };
 		DDC677EC1EDA6A3000A4E19C /* TranscriptIndexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptIndexer.swift; sourceTree = "<group>"; };
 		DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = TranscriptIndexingService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC677FA1EDA76A100A4E19C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -746,7 +716,6 @@
 				DD36A4DD1E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
 				DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
-				DD4DED611ED6577100624EAF /* Sparkle.framework in Frameworks */,
 				DD600AB72487F1730071B90E /* ConfUIFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -772,8 +741,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD36A4D11E478D7E00B2EA88 /* ConfCore.framework in Frameworks */,
-				DD65FD641E48AE540054DD35 /* Realm.framework in Frameworks */,
-				DD65FD651E48AE540054DD35 /* RealmSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -873,7 +840,6 @@
 		DD36A4A31E478C6900B2EA88 = {
 			isa = PBXGroup;
 			children = (
-				DD5F517C1E47DE150017F9EC /* Vendor */,
 				DD36A4AE1E478C6A00B2EA88 /* WWDC */,
 				DD36A4C91E478D7E00B2EA88 /* ConfCore */,
 				DD36A4D61E478D7E00B2EA88 /* ConfCoreTests */,
@@ -1080,51 +1046,6 @@
 			name = Fixtures;
 			path = Fixtures/json;
 			sourceTree = SOURCE_ROOT;
-		};
-		DD5F517C1E47DE150017F9EC /* Vendor */ = {
-			isa = PBXGroup;
-			children = (
-				DD5F517E1E47DE7D0017F9EC /* Frameworks */,
-				DD5F517D1E47DE190017F9EC /* DSYMs */,
-			);
-			name = Vendor;
-			sourceTree = "<group>";
-		};
-		DD5F517D1E47DE190017F9EC /* DSYMs */ = {
-			isa = PBXGroup;
-			children = (
-				DD4DED631ED6579900624EAF /* Sparkle.framework.dSYM */,
-				DDAE7C561E5BC6E300CEA205 /* Siesta.framework.dSYM */,
-				DD5F516E1E47DE0F0017F9EC /* Realm.framework.dSYM */,
-				DD5F516F1E47DE0F0017F9EC /* RealmSwift.framework.dSYM */,
-				DD5F51701E47DE0F0017F9EC /* RxBlocking.framework.dSYM */,
-				DD5F51711E47DE0F0017F9EC /* RxCocoa.framework.dSYM */,
-				DD5F51721E47DE0F0017F9EC /* RxRealm.framework.dSYM */,
-				DD5F51731E47DE0F0017F9EC /* RxSwift.framework.dSYM */,
-				DDBA0D74208CD5430075670F /* SwiftProtobuf.framework.dSYM */,
-				DD9301BA1EE3205800BE724B /* ChromeCastCore.framework.dSYM */,
-				DD5F51741E47DE0F0017F9EC /* SwiftyJSON.framework.dSYM */,
-			);
-			name = DSYMs;
-			sourceTree = "<group>";
-		};
-		DD5F517E1E47DE7D0017F9EC /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				DDBCEC9B228AD309009300CF /* SwiftProtobuf.framework */,
-				DDBCEC99228AD2CC009300CF /* CloudKitCodable.framework */,
-				DD9301B61EE3202F00BE724B /* ChromeCastCore.framework */,
-				DD4DED601ED6577100624EAF /* Sparkle.framework */,
-				DDAE7C541E5BC6CD00CEA205 /* Siesta.framework */,
-				DD5F517F1E47DE7E0017F9EC /* Realm.framework */,
-				DD5F51801E47DE7E0017F9EC /* RealmSwift.framework */,
-				DD5F51811E47DE7E0017F9EC /* RxCocoa.framework */,
-				DD5F51821E47DE7E0017F9EC /* RxRealm.framework */,
-				DD5F51831E47DE7E0017F9EC /* RxSwift.framework */,
-				DD5F51841E47DE7E0017F9EC /* SwiftyJSON.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
 		};
 		DD600AB12487F1720071B90E /* ConfUIFoundation */ = {
 			isa = PBXGroup;
@@ -1362,7 +1283,6 @@
 		DDAE7C531E5BC6CD00CEA205 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DDC347C020B1E69700CFF11C /* CloudKitCodable.framework */,
 				012BEFA31EE8658F007E72CA /* EventKit.framework */,
 				DD59106F1ECA0C3B003C32A4 /* CloudKit.framework */,
 				DDF721E21ECA12FC0054C503 /* PIP.framework */,
@@ -1854,7 +1774,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DD36A4BB1E478C6A00B2EA88 /* Build configuration list for PBXNativeTarget "WWDC" */;
 			buildPhases = (
-				DD55E73522AC2958004BBA7A /* Fix Sparkle for notarization */,
 				DD36A4A81E478C6900B2EA88 /* Sources */,
 				DD36A4A91E478C6900B2EA88 /* Frameworks */,
 				DD36A4AA1E478C6900B2EA88 /* Resources */,
@@ -1867,7 +1786,6 @@
 			dependencies = (
 				DD36A4DC1E478D7E00B2EA88 /* PBXTargetDependency */,
 				DDF7219C1ECA12780054C503 /* PBXTargetDependency */,
-				DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */,
 				DDD68512247C3B00001BB700 /* PBXTargetDependency */,
 				DD600AB62487F1730071B90E /* PBXTargetDependency */,
 			);
@@ -1953,6 +1871,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DD69E03E2577DC81008201CB /* PBXTargetDependency */,
 			);
 			name = TranscriptIndexingService;
 			productName = TranscriptIndexingService;
@@ -2196,24 +2115,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DD55E73522AC2958004BBA7A /* Fix Sparkle for notarization */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Fix Sparkle for notarization";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"$CONFIGURATION\" != \"Release_iCloud\" ]; then\n    echo \"Skipping step because we're not building for an iCloud-enabled release.\"\n    exit 0\nfi\n\nCARTHAGE_BUILD_MAC_DIR=\"${PROJECT_DIR}/Carthage/Build/Mac\"\nSPARKLE_AUTOUPDATE_PATH=\"${CARTHAGE_BUILD_MAC_DIR}/Sparkle.framework/Resources/Autoupdate.app\"\ncodesign --force --deep -o runtime --sign \"Apple Development: Guilherme Rambo (6XE654FHAW)\" \"$SPARKLE_AUTOUPDATE_PATH\"\n";
-		};
 		F72964482015787100A7A571 /* SwiftLint Warnings */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2554,10 +2455,10 @@
 			target = DD600AAF2487F1720071B90E /* ConfUIFoundation */;
 			targetProxy = DD600AD02487F45B0071B90E /* PBXContainerItemProxy */;
 		};
-		DDC677FC1EDA76A100A4E19C /* PBXTargetDependency */ = {
+		DD69E03E2577DC81008201CB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */;
-			targetProxy = DDC677FB1EDA76A100A4E19C /* PBXContainerItemProxy */;
+			target = DD36A4C71E478D7E00B2EA88 /* ConfCore */;
+			targetProxy = DD69E03D2577DC81008201CB /* PBXContainerItemProxy */;
 		};
 		DDD68509247C3B00001BB700 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2797,10 +2698,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -2831,10 +2729,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3005,10 +2900,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -3151,10 +3043,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = ConfCore/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
