@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -646,14 +647,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <visualEffectView wantsLayer="YES" appearanceType="vibrantDark" blendingMode="withinWindow" material="dark" state="inactive" translatesAutoresizingMaskIntoConstraints="NO" id="5qS-lc-ZT8">
+                            <visualEffectView wantsLayer="YES" appearanceType="vibrantDark" blendingMode="withinWindow" material="headerView" state="inactive" translatesAutoresizingMaskIntoConstraints="NO" id="5qS-lc-ZT8">
                                 <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NlN-Z6-drQ">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
                                         <subviews>
                                             <stackView distribution="fillProportionally" orientation="horizontal" alignment="bottom" spacing="12" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qTs-9y-MbZ">
-                                                <rect key="frame" x="12" y="116" width="319" height="25"/>
+                                                <rect key="frame" x="12" y="108" width="307" height="33"/>
                                                 <subviews>
                                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-Ig-nku">
                                                         <rect key="frame" x="0.0" y="0.0" width="228" height="22"/>
@@ -666,8 +667,8 @@
                                                             <action selector="searchFieldAction:" target="QVl-wd-WlW" id="Ddj-Dd-VpH"/>
                                                         </connections>
                                                     </searchField>
-                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U2p-0d-s5K">
-                                                        <rect key="frame" x="234" y="-7" width="91" height="32"/>
+                                                    <button wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U2p-0d-s5K">
+                                                        <rect key="frame" x="233" y="-7" width="81" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Filter" bezelStyle="rounded" image="filter" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2aA-6Y-5tJ">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -686,8 +687,8 @@
                                                     <real value="3.4028234663852886e+38"/>
                                                 </customSpacing>
                                             </stackView>
-                                            <popUpButton verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="jW0-0M-Xya">
-                                                <rect key="frame" x="9" y="87" width="325" height="22"/>
+                                            <popUpButton wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="jW0-0M-Xya">
+                                                <rect key="frame" x="8" y="80" width="327" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="JF0-nF-AYP" id="wIo-Pd-ApE">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="label" size="11"/>
@@ -703,8 +704,8 @@
                                                     <action selector="eventsPopUpAction:" target="QVl-wd-WlW" id="NpK-5c-Afm"/>
                                                 </connections>
                                             </popUpButton>
-                                            <popUpButton verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Mft-xX-6dt">
-                                                <rect key="frame" x="9" y="61" width="325" height="22"/>
+                                            <popUpButton wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Mft-xX-6dt">
+                                                <rect key="frame" x="8" y="56" width="327" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="Hl8-Jf-3YQ" id="lKh-OJ-Ma5">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="label" size="11"/>
@@ -720,8 +721,8 @@
                                                     <action selector="focusesPopUpAction:" target="QVl-wd-WlW" id="gon-g6-flH"/>
                                                 </connections>
                                             </popUpButton>
-                                            <popUpButton verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="d8i-uR-hrT">
-                                                <rect key="frame" x="9" y="35" width="325" height="22"/>
+                                            <popUpButton wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="d8i-uR-hrT">
+                                                <rect key="frame" x="8" y="32" width="327" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="aWW-Dt-aEc" id="e63-aO-rTw">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="label" size="11"/>
@@ -738,7 +739,7 @@
                                                 </connections>
                                             </popUpButton>
                                             <segmentedControl horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Teg-LY-Sf3" customClass="WWDCSegmentedControl" customModule="WWDC" customModuleProvider="target">
-                                                <rect key="frame" x="10" y="10" width="323" height="21"/>
+                                                <rect key="frame" x="9" y="9" width="325" height="21"/>
                                                 <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="selectAny" id="0Zl-mA-eiw">
                                                     <font key="font" metaFont="label" size="11"/>
                                                     <segments>
