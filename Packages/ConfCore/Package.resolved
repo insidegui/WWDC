@@ -24,17 +24,17 @@
         "repositoryURL": "https://github.com/realm/realm-cocoa",
         "state": {
           "branch": null,
-          "revision": "11ac74e1cc1faec1cad0e6a9a41652ef1432d4c1",
-          "version": "5.5.0"
+          "revision": "ae8e646590396dfc13c1abbf8aa2e48c43766dce",
+          "version": "10.7.2"
         }
       },
       {
-        "package": "RealmCore",
+        "package": "RealmDatabase",
         "repositoryURL": "https://github.com/realm/realm-core",
         "state": {
           "branch": null,
-          "revision": "612057010f5521d41559970306054f4c5b12632a",
-          "version": "6.1.4"
+          "revision": "bab46acdca91c417a0d4849b8f4992a3c17e29a5",
+          "version": "10.5.5"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/RxSwiftCommunity/RxRealm",
         "state": {
           "branch": null,
-          "revision": "4dcae40562b5a086dd4711fa8a596be0436dc474",
-          "version": "3.1.0"
+          "revision": "7eef1d1ba130627af7d140682f912c89830cf1eb",
+          "version": "5.0.1"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/ReactiveX/RxSwift",
         "state": {
           "branch": null,
-          "revision": "002d325b0bdee94e7882e1114af5ff4fe1e96afa",
-          "version": "5.1.1"
+          "revision": "7e01c05f25c025143073eaa3be3532f9375c614b",
+          "version": "6.1.0"
         }
       },
       {

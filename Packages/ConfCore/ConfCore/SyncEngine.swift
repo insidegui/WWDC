@@ -55,7 +55,7 @@ public final class SyncEngine {
             self.userDataSyncEngine = nil
         }
 
-        NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
+        NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observe(on: MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
             self.transcriptIndexingClient.startIndexing(ignoringCache: false)
 
             self.userDataSyncEngine?.start()

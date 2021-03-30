@@ -113,7 +113,7 @@ public final class UserDataSyncEngine {
             os_log("iCloud account is not available yet, waiting for availability to start", log: log, type: .info)
             isWaitingForAccountAvailabilityToStart = true
 
-            isAccountAvailable.asObservable().observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] available in
+            isAccountAvailable.asObservable().observe(on: MainScheduler.instance).subscribe(onNext: { [unowned self] available in
                 guard self.isWaitingForAccountAvailabilityToStart else { return }
 
                 os_log("iCloud account available = %{public}@", log: self.log, type: .info, String(describing: available))
@@ -542,15 +542,14 @@ public final class UserDataSyncEngine {
     private var backgroundRealm: Realm?
 
     private func openBackgroundRealm(completion: @escaping () -> Void) {
-        Realm.asyncOpen(configuration: storage.realm.configuration, callbackQueue: databaseQueue) { realm, error in
-            if let error = error {
+        Realm.asyncOpen(configuration: storage.realm.configuration, callbackQueue: databaseQueue) { result in
+            switch result {
+            case .failure(let error):
                 os_log("Failed to open background Realm for sync operations: %{public}@", log: self.log, type: .fault, String(describing: error))
-                return
+            case .success(let realm):
+                self.backgroundRealm = realm
+                DispatchQueue.main.async { completion() }
             }
-
-            self.backgroundRealm = realm
-
-            DispatchQueue.main.async { completion() }
         }
     }
 
