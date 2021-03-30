@@ -261,9 +261,9 @@ public final class PUITimelineView: NSView {
     }
 
     public override var mouseDownCanMoveWindow: Bool {
+        get { return false }
         // swiftlint:disable:next unused_setter_value
         set { }
-        get { return false }
     }
 
     public override func mouseDown(with event: NSEvent) {

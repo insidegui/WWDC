@@ -1328,7 +1328,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SWIFTLINT_MIN=\"0.24\"\n\nlessThanOrEqual() {\n    [  \"$1\" = \"`echo -e \"$1\\n$2\" | sort -V | head -n1`\" ]\n}\n\nlessThan() {\n    [ \"$1\" = \"$2\" ] && return 1 || lessThanOrEqual $1 $2\n}\n\nif command -v swiftlint >/dev/null; then\n    if lessThan `swiftlint version` $SWIFTLINT_MIN; then\n        echo \"warning: WWDC for macOS uses SwiftLint ${SWIFTLINT_MIN} or above to ensure a consistent codestyle. Please be aware that the installed version of SwiftLint may behave unexpectedly.\"\n    fi\n\n    swiftlint\nelse\n    echo \"error: SwiftLint not installed, please run 'brew install swiftlint' or download from https://github.com/realm/SwiftLint\"\n    return 1\nfi";
+			shellScript = "# Ensure path for HomeBrew on Apple Silicon is correctly set.\nPATH=\"$PATH:/opt/homebrew/bin/\"\n\nSWIFTLINT_MIN=\"0.24\"\n\nlessThanOrEqual() {\n    [  \"$1\" = \"`echo -e \"$1\\n$2\" | sort -V | head -n1`\" ]\n}\n\nlessThan() {\n    [ \"$1\" = \"$2\" ] && return 1 || lessThanOrEqual $1 $2\n}\n\nif command -v swiftlint >/dev/null; then\n    if lessThan `swiftlint version` $SWIFTLINT_MIN; then\n        echo \"warning: WWDC for macOS uses SwiftLint ${SWIFTLINT_MIN} or above to ensure a consistent codestyle. Please be aware that the installed version of SwiftLint may behave unexpectedly.\"\n    fi\n\n    swiftlint\nelse\n    echo \"error: SwiftLint not installed, please run 'brew install swiftlint' or download from https://github.com/realm/SwiftLint\"\n    return 1\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2082,10 +2082,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2112,10 +2109,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2142,10 +2136,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2171,10 +2162,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = TranscriptIndexingService/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

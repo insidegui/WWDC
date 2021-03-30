@@ -201,6 +201,9 @@ open class PUIPlayerWindow: NSWindow {
     }
 
     open override var contentView: NSView? {
+        get {
+            return super.contentView
+        }
         set {
             let darkContentView = PUIPlayerWindowContentView(frame: newValue?.frame ?? NSRect.zero)
             if let newContentView = newValue {
@@ -208,9 +211,6 @@ open class PUIPlayerWindow: NSWindow {
                 darkContentView.addSubview(newContentView)
             }
             super.contentView = darkContentView
-        }
-        get {
-            return super.contentView
         }
     }
 

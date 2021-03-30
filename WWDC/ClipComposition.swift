@@ -133,7 +133,7 @@ final class ClipComposition: AVMutableComposition {
         box.sublayers?.compactMap({ $0 as? CATextLayer }).forEach { layer in
             layer.minificationFilter = .trilinear
 
-            /// Workaround rdar://32718905
+            // Workaround rdar://32718905
             layer.display()
         }
     }

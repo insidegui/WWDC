@@ -11,15 +11,13 @@ import Cocoa
 class PUISlider: NSSlider {
 
     override class var cellClass: AnyClass? {
+        get {
+            return PUISliderCell.self
+        }
         // swiftlint:disable:next unused_setter_value
         set {
             super.cellClass = PUISliderCell.self
         }
-
-        get {
-            return PUISliderCell.self
-        }
-
     }
 
 }

@@ -74,7 +74,6 @@ final class RelatedSessionsViewController: NSViewController {
         v.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: Metrics.scrollerOffset, right: 0)
         v.scrollerInsets = NSEdgeInsets(top: 0, left: 0, bottom: -Metrics.scrollerOffset, right: 0)
 
-        /// Force overlay style
         v.scrollerStyle = .overlay
         _ = NotificationCenter.default.addObserver(forName: NSScroller.preferredScrollerStyleDidChangeNotification, object: nil, queue: nil) { [weak v] _ in
             v?.scrollerStyle = .overlay

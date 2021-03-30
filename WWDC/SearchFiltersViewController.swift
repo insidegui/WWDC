@@ -64,14 +64,14 @@ final class SearchFiltersViewController: NSViewController {
     @IBOutlet weak var vfxView: NSVisualEffectView!
 
     var filters: [FilterType] {
+        get {
+            return effectiveFilters
+        }
         set {
 
             effectiveFilters = newValue
 
             updateUI()
-        }
-        get {
-            return effectiveFilters
         }
     }
 
