@@ -166,7 +166,7 @@ final class AppCoordinator {
 
         func bind(session: Observable<SessionViewModel?>, to detailsController: SessionDetailsViewController) {
 
-            session.subscribeOn(MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
+            session.subscribe(on: MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
                 NSAnimationContext.runAnimationGroup({ context in
                     context.duration = 0.35
 
@@ -285,7 +285,7 @@ final class AppCoordinator {
         storage
             .featuredSectionsObservable
             .filter { !$0.isEmpty }
-            .subscribeOn(MainScheduler.instance)
+            .subscribe(on: MainScheduler.instance)
             .take(1)
             .subscribe(onNext: { [weak self] sections in
                 self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }

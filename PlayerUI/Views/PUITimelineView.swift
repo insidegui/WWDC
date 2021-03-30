@@ -10,7 +10,7 @@ import Cocoa
 import AVFoundation
 import os.log
 
-protocol PUITimelineViewDelegate: class {
+protocol PUITimelineViewDelegate: AnyObject {
 
     func timelineViewWillBeginInteractiveSeek()
     func timelineViewDidSeek(to progress: Double)

@@ -19,7 +19,7 @@ extension Notification.Name {
     static let HighlightTranscriptAtCurrentTimecode = Notification.Name("HighlightTranscriptAtCurrentTimecode")
 }
 
-protocol VideoPlayerViewControllerDelegate: class {
+protocol VideoPlayerViewControllerDelegate: AnyObject {
 
     func createBookmark(at timecode: Double, with snapshot: NSImage?)
     func createFavorite()
@@ -119,7 +119,7 @@ final class VideoPlayerViewController: NSViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
 
-        NotificationCenter.default.rx.notification(.SkipBackAndForwardBy30SecondsPreferenceDidChange).observeOn(MainScheduler.instance).subscribe { _ in
+        NotificationCenter.default.rx.notification(.SkipBackAndForwardBy30SecondsPreferenceDidChange).observe(on: MainScheduler.instance).subscribe { _ in
             self.playerView.invalidateAppearance()
         }.disposed(by: disposeBag)
     }
@@ -160,7 +160,7 @@ final class VideoPlayerViewController: NSViewController {
 
     func updateUI() {
         let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode")
-        Observable.shallowCollection(from: bookmarks).observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
+        Observable.shallowCollection(from: bookmarks).observe(on: MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
             self?.playerView.annotations = bookmarks.toArray()
         }).disposed(by: disposeBag)
     }

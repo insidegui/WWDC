@@ -8,7 +8,7 @@
 
 import Cocoa
 
-protocol SearchFiltersViewControllerDelegate: class {
+protocol SearchFiltersViewControllerDelegate: AnyObject {
 
     func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType])
 

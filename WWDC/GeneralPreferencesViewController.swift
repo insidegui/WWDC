@@ -131,7 +131,7 @@ class GeneralPreferencesViewController: NSViewController {
         // Show indexing progress while indexing.
 
         syncEngine.isIndexingTranscripts.asObservable()
-                                         .observeOn(MainScheduler.instance)
+                                         .observe(on: MainScheduler.instance)
                                          .bind { [weak self] isIndexing in
             guard let self = self else { return }
 
@@ -147,7 +147,7 @@ class GeneralPreferencesViewController: NSViewController {
         }.disposed(by: disposeBag)
 
         syncEngine.transcriptIndexingProgress.asObservable()
-                                             .observeOn(MainScheduler.instance)
+                                             .observe(on: MainScheduler.instance)
                                              .bind { [weak self] progress in
             self?.indexingProgressIndicator?.doubleValue = Double(progress)
         }.disposed(by: disposeBag)
@@ -274,7 +274,7 @@ class GeneralPreferencesViewController: NSViewController {
         showLanguagesLoading()
 
         languagesProvider.availableLanguageCodes
-            .observeOn(MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .bind { [weak self] languages in
                 self?.populateLanguagesPopUp(with: languages)
             }

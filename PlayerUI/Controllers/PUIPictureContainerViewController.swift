@@ -9,7 +9,7 @@
 import Cocoa
 import AVFoundation
 
-protocol PUIPictureContainerViewControllerDelegate: class {
+protocol PUIPictureContainerViewControllerDelegate: AnyObject {
 
     func pictureContainerViewSuperviewDidChange(to superview: NSView?)
 

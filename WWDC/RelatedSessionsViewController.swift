@@ -14,7 +14,7 @@ private extension NSUserInterfaceItemIdentifier {
     static let sessionItem = NSUserInterfaceItemIdentifier("sessionCell")
 }
 
-protocol RelatedSessionsViewControllerDelegate: class {
+protocol RelatedSessionsViewControllerDelegate: AnyObject {
     func relatedSessionsViewController(_ controller: RelatedSessionsViewController, didSelectSession viewModel: SessionViewModel)
 }
 

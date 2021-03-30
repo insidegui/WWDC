@@ -58,7 +58,7 @@ extension Reactive where Base: NSTableView {
             } else {
                 return delegate.selectedRowSubject.startWith(nil)
             }
-            }.takeUntil(deallocated)
+            }.take(until: deallocated)
 
         let observer = Binder(base) { (control, value: Int?) in
             if let row = value {

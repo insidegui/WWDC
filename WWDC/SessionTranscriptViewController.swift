@@ -137,7 +137,7 @@ final class SessionTranscriptViewController: NSViewController {
 
         disposeBag = DisposeBag()
 
-        viewModel.rxTranscriptAnnotations.observeOn(MainScheduler.instance)
+        viewModel.rxTranscriptAnnotations.observe(on: MainScheduler.instance)
                                          .subscribe(onNext: { [weak self] annotations in
             self?.updateAnnotations(with: annotations)
         }).disposed(by: disposeBag)

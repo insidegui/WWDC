@@ -14,7 +14,7 @@ private extension NSUserInterfaceItemIdentifier {
     static let featuredContentItem = NSUserInterfaceItemIdentifier("featuredContentItem")
 }
 
-protocol FeaturedSectionViewControllerDelegate: class {
+protocol FeaturedSectionViewControllerDelegate: AnyObject {
     func featuredSectionViewController(_ controller: FeaturedSectionViewController, didSelectContent viewModel: FeaturedContentViewModel)
 }
 

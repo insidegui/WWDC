@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>1014</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Guilherme Rambo. All rights reserved.</string>
 	<key>XPCService</key>
