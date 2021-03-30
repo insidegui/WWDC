@@ -272,9 +272,7 @@ final class AppCoordinator {
     }
 
     private func bindScheduleAvailability() {
-        // Show schedule unavailable view if there's no schedule
-
-        storage.scheduleObservable.map({ $0.isEmpty })
+        storage.eventHeroObservable.map({ $0 != nil })
                                   .bind(to: scheduleController.showHeroView)
                                   .disposed(by: disposeBag)
 
