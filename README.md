@@ -2,7 +2,7 @@
 
 Enjoy WWDC from the comfort of your Mac with the unofficial WWDC app for macOS. Whether you're (virtually) attending or not, you can access livestreams, videos and sessions during the conference and as a year-round resource.
 
-In partnership with CocoaHub, you can also use the app's Community tab to browse through Apple announcements, updates to the Swift language, new episodes from your favorite podcasts, community blog posts, and more.
+In partnership with CocoaHub, you can also use the app's Community tab to browse through Apple announcements, Swift language updates, new episodes from your favorite podcasts, community blog posts, and more.
 
 ⬇️ If you just want to download the latest release, go to [the website](https://wwdc.io).
 
@@ -12,7 +12,7 @@ The schedule tab shows the schedule for the current edition of WWDC, and allows 
 
 ## Videos
 
-Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in
+Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the video. Transcripts are also searchable and available.
 
 ![videos](./screenshots/v7/Transcript.png)
 
@@ -36,7 +36,7 @@ You can watch WWDC videos (both live and on-demand) on your Chromecast. Just cli
 
 ## Bookmarks
 
-Have you ever found yourself watching a WWDC session and wishing you could take notes at a specific point in the video to refer back to later on? This is now possible with bookmarks.
+Have you ever found yourself watching a WWDC session and wishing you could take notes at a specific point in the video for reference? This is now possible with bookmarks.
 
 With bookmarks, you can create a reference point within a video and add an annotation to it. Your bookmark annotations can also be considered while using the search, so it's easier than ever to find the content you've bookmarked before.
 
@@ -50,7 +50,7 @@ Browse content curated by the [CocoaHub](http://cocoahub.app) team in the Commun
 
 ## iCloud Sync
 
-Enable the iCloud sync in preferences and your favorites, bookmarks and progress in sessions will be synced accross your Macs.
+Enable iCloud sync in preferences in order for your favorites, bookmarks and progress in sessions to be synced across your Macs.
 
 ## Sharing
 
@@ -59,7 +59,7 @@ You can easily share links to sessions or videos by using the share button. The 
 ## Nerdy bits 🤓
 
 ### Code of Conduct
-We expect all of our contributors to help uphold the values set out in our [code of conduct](./CODE_OF_CONDUCT.md). We fundamentally believe this will help us build a better community, and with it a better app.
+We expect all of our contributors to help uphold the values set out in our [code of conduct](./CODE_OF_CONDUCT.md). We fundamentally believe this will help us build a better community, and ultimately a better app.
 
 ### Contributing
 
