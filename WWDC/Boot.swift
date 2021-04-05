@@ -76,37 +76,36 @@ final class Boot {
             let client = AppleAPIClient(environment: .current)
             let cocoaHubClient = CocoaHubAPIClient(environment: .current)
 
-            Realm.asyncOpen(configuration: realmConfig) { realm, error in
-                guard let realm = realm else {
-                    guard let error = error else { fatalError("Swift.Result FTW") }
-                    completion(.failure(.generic(error: error)))
-                    return
-                }
+            Realm.asyncOpen(configuration: realmConfig) { result in
+                switch result {
+                case .success(let realm):
+                    let storage = Storage(realm)
 
-                let storage = Storage(realm)
+                    let syncEngine = SyncEngine(
+                        storage: storage,
+                        client: client,
+                        cocoaHubClient: cocoaHubClient,
+                        transcriptLanguage: Preferences.shared.transcriptLanguageCode
+                    )
 
-                let syncEngine = SyncEngine(
-                    storage: storage,
-                    client: client,
-                    cocoaHubClient: cocoaHubClient,
-                    transcriptLanguage: Preferences.shared.transcriptLanguageCode
-                )
+                    #if ICLOUD
+                    syncEngine.userDataSyncEngine?.isEnabled = ConfCoreCapabilities.isCloudKitEnabled
+                    #endif
 
-                #if ICLOUD
-                syncEngine.userDataSyncEngine.isEnabled = Preferences.shared.syncUserData
-                #endif
-
-                #if DEBUG
-                if UserDefaults.standard.bool(forKey: "WWDCSimulateDatabaseLoadingHang") {
-                    os_log("### WWDCSimulateDatabaseLoadingHang enabled, if the app is being slow to start, that's why! ###", log: self.log, type: .default)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
-                        completion(.success((storage, syncEngine)))
+                    #if DEBUG
+                    if UserDefaults.standard.bool(forKey: "WWDCSimulateDatabaseLoadingHang") {
+                        os_log("### WWDCSimulateDatabaseLoadingHang enabled, if the app is being slow to start, that's why! ###", log: self.log, type: .default)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+                            completion(.success((storage, syncEngine)))
+                        }
+                        return
                     }
-                    return
-                }
-                #endif
+                    #endif
 
-                completion(.success((storage, syncEngine)))
+                    completion(.success((storage, syncEngine)))
+                case .failure(let error):
+                    completion(.failure(.generic(error: error)))
+                }
             }
         } catch {
             os_log("Bootstrap failed: %{public}@", log: self.log, type: .fault, String(describing: error))

@@ -35,5 +35,9 @@ class WWDCWindowController: NSWindowController {
         window?.titleVisibility = .hidden
         window?.addTitlebarAccessoryViewController(titleBarViewController)
         window?.toolbar = NSToolbar(identifier: "DummyToolbar")
+        
+        if #available(macOS 11.0, *) {        
+            window?.titlebarAppearsTransparent = true
+        }
     }
 }

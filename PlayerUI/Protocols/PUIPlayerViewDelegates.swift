@@ -12,7 +12,7 @@ public enum PUIPiPExitReason {
     case returnButton, exitButton
 }
 
-public protocol PUIPlayerViewDelegate: class {
+public protocol PUIPlayerViewDelegate: AnyObject {
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView)
     func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, reason: PUIPiPExitReason)
@@ -22,7 +22,7 @@ public protocol PUIPlayerViewDelegate: class {
 
 }
 
-public protocol PUIPlayerViewAppearanceDelegate: class {
+public protocol PUIPlayerViewAppearanceDelegate: AnyObject {
 
     func playerViewShouldShowTimelineView(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowSubtitlesControl(_ playerView: PUIPlayerView) -> Bool

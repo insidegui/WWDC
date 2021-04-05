@@ -170,5 +170,7 @@ final class TabItemView: NSView {
             animator().alphaValue = isEnabled ? 1 : 0.3
         }
     }
+    
+    override var mouseDownCanMoveWindow: Bool { false }
 
 }

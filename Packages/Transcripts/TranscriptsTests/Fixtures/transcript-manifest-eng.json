@@ -1,0 +1,21 @@
+{
+    "updated": "2020-05-24T14:32:04+00:00",
+    "digest": {
+        "etag": "\"3de45a13f3b668d93f8b646bedfa2704\"",
+        "url": "https://devimages-cdn.apple.com/wwdc-services/transcripts/digests/transcript-digest-eng.json"
+    },
+    "individual": {
+        "wwdc2019-103": {
+            "etag": "\"ea551e731dca2e07093c5c4e0dabc0b2\"",
+            "url": "http://localhost:9042/wwdc2019-103-transcript-eng.json"
+        },
+        "wwdc2019-104": {
+            "etag": "\"47f84c64e9757a4658628243d793141a\"",
+            "url": "http://localhost:9042/wwdc2019-104-transcript-eng.json"
+        },
+        "wwdc2019-202": {
+            "etag": "\"22b1002ee9f7b1757af9097f80a4b5e8\"",
+            "url": "http://localhost:9042/wwdc2019-202-transcript-eng.json"
+        }
+    }
+}

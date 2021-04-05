@@ -16,7 +16,7 @@ let NSURLPboardType = NSPasteboard.PasteboardType(kUTTypeURL as String)
 let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 #endif
 
-protocol WWDCImageViewDelegate: class {
+protocol WWDCImageViewDelegate: AnyObject {
 
     func wwdcImageView(_ imageView: WWDCImageView, didReceiveNewImageWithFileURL url: URL)
 

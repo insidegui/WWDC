@@ -380,6 +380,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         v.floatsGroupRows = true
         v.gridStyleMask = .solidHorizontalGridLineMask
         v.gridColor = .darkGridColor
+        if #available(macOS 11.0, *) { v.style = .plain }
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
         v.addTableColumn(column)

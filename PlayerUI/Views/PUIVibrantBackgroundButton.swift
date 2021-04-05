@@ -15,7 +15,7 @@ class PUIVibrantButton: NSView {
 
         v.translatesAutoresizingMaskIntoConstraints = false
         v.blendingMode = .withinWindow
-        v.material = .dark
+        v.material = .sidebar
         v.appearance = NSAppearance(named: .vibrantDark)
         v.state = .active
 

@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-public protocol PUIExternalPlaybackConsumer: class {
+public protocol PUIExternalPlaybackConsumer: AnyObject {
 
     /// Tells the consumer that this provider's availability status has changed
     ///

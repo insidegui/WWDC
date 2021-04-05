@@ -34,20 +34,20 @@ final class Preferences {
 
     /// The URL for the folder where downloaded videos will be saved
     var localVideoStorageURL: URL {
-        set { localVideoStoragePath = newValue.path }
         get { URL(fileURLWithPath: localVideoStoragePath) }
+        set { localVideoStoragePath = newValue.path }
     }
 
     private var localVideoStoragePath: String {
-        set {
-            defaults.set(newValue, forKey: #function)
-        }
         get {
             if let path = defaults.object(forKey: #function) as? String {
                 return path
             } else {
                 return Self.defaultLocalVideoStoragePath
             }
+        }
+        set {
+            defaults.set(newValue, forKey: #function)
         }
     }
 

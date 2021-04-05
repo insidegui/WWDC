@@ -13,7 +13,7 @@ class ModalLoadingView: NSView {
     private lazy var backgroundView: NSVisualEffectView = {
         let v = NSVisualEffectView()
 
-        v.material = .ultraDark
+        v.material = .sidebar
         v.blendingMode = .withinWindow
         v.translatesAutoresizingMaskIntoConstraints = false
         v.state = .active

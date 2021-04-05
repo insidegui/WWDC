@@ -1,0 +1,4715 @@
+{
+    "wwdc2019-104": {
+        "language": "eng",
+        "transcript": [
+            [
+                7,
+                "Good evening, developers, and "
+            ],
+            [
+                9,
+                "welcome to the 2019 Apple Design "
+            ],
+            [
+                13,
+                "Awards. "
+            ],
+            [
+                14,
+                "Now, here's your host, Senior "
+            ],
+            [
+                16,
+                "Director of Evangelism, John "
+            ],
+            [
+                18,
+                "Geleynse.\n\n"
+            ],
+            [
+                26,
+                "Hello. Well, hello, and "
+            ],
+            [
+                28,
+                "welcome to another Apple Design "
+            ],
+            [
+                30,
+                "Awards. "
+            ],
+            [
+                31,
+                "Thanks for joining us this "
+            ],
+            [
+                32,
+                "afternoon, especially after a "
+            ],
+            [
+                34,
+                "long, but exciting day. "
+            ],
+            [
+                36,
+                "And I just want to particularly "
+            ],
+            [
+                39,
+                "thank all of you who have joined "
+            ],
+            [
+                40,
+                "us from around the world online "
+            ],
+            [
+                43,
+                "on the live stream for the "
+            ],
+            [
+                44,
+                "ceremony right now. "
+            ],
+            [
+                45,
+                "We've got a huge group.\n\n"
+            ],
+            [
+                50,
+                "You know, it's great for us to "
+            ],
+            [
+                52,
+                "join as a community, and gather "
+            ],
+            [
+                53,
+                "like this to take a few moments "
+            ],
+            [
+                56,
+                "to celebrate and acknowledge "
+            ],
+            [
+                58,
+                "excellence in innovation and "
+            ],
+            [
+                60,
+                "design.\n\n"
+            ],
+            [
+                61,
+                "Because at Apple, we've been "
+            ],
+            [
+                63,
+                "awarding excellent design for "
+            ],
+            [
+                65,
+                "more than two decades now.\n\n"
+            ],
+            [
+                68,
+                "What started originally as the "
+            ],
+            [
+                69,
+                "Apple Human Interface Design "
+            ],
+            [
+                71,
+                "Excellence Awards, or HIDE "
+            ],
+            [
+                73,
+                "Awards for short, was renamed a "
+            ],
+            [
+                75,
+                "few years later to what is now "
+            ],
+            [
+                77,
+                "known as the Apple Design "
+            ],
+            [
+                79,
+                "Awards.\n\n"
+            ],
+            [
+                82,
+                "You know, the world around us is "
+            ],
+            [
+                84,
+                "stunningly beautiful, and as "
+            ],
+            [
+                87,
+                "humans, we're attracted to "
+            ],
+            [
+                89,
+                "beautiful things, and to "
+            ],
+            [
+                92,
+                "incredible designs.\n\n"
+            ],
+            [
+                94,
+                "We're drawn to these things, and "
+            ],
+            [
+                96,
+                "we respond to them deeply. "
+            ],
+            [
+                99,
+                "And at Apple, we believe the "
+            ],
+            [
+                102,
+                "true -- the beauty -- that "
+            ],
+            [
+                103,
+                "beautiful design is both "
+            ],
+            [
+                104,
+                "appearance and function, and "
+            ],
+            [
+                107,
+                "something that works well with "
+            ],
+            [
+                109,
+                "each component deeply "
+            ],
+            [
+                111,
+                "considered, and each aspect "
+            ],
+            [
+                113,
+                "carefully crafted -- that that "
+            ],
+            [
+                115,
+                "can be profoundly beautiful.\n\n"
+            ],
+            [
+                118,
+                "And so, simply judging something "
+            ],
+            [
+                119,
+                "by how it looks isn't enough.\n\n"
+            ],
+            [
+                123,
+                "It's how it works. "
+            ],
+            [
+                124,
+                "It has to work as beautifully as "
+            ],
+            [
+                126,
+                "it looks, and great design "
+            ],
+            [
+                130,
+                "reflects the broader definition "
+            ],
+            [
+                132,
+                "of beauty. "
+            ],
+            [
+                133,
+                "And it runs deeper than the "
+            ],
+            [
+                135,
+                "interface. "
+            ],
+            [
+                136,
+                "It's coherent, and it's "
+            ],
+            [
+                138,
+                "cohesive. "
+            ],
+            [
+                139,
+                "And it helps us to engage with "
+            ],
+            [
+                141,
+                "each other in new, and "
+            ],
+            [
+                143,
+                "innovative, and life-enhancing "
+            ],
+            [
+                145,
+                "ways, and like compelling "
+            ],
+            [
+                147,
+                "beauty, great design draws us "
+            ],
+            [
+                150,
+                "in. "
+            ],
+            [
+                151,
+                "And the Apple Design Awards have "
+            ],
+            [
+                153,
+                "always been about this -- "
+            ],
+            [
+                156,
+                "recognizing great design, and "
+            ],
+            [
+                158,
+                "then celebrating the developers "
+            ],
+            [
+                160,
+                "who positively impact everyone "
+            ],
+            [
+                162,
+                "else, and real people with the "
+            ],
+            [
+                164,
+                "things that they create, the "
+            ],
+            [
+                166,
+                "things that you create.\n\n"
+            ],
+            [
+                169,
+                "Now, we select our winners each "
+            ],
+            [
+                171,
+                "year by evaluating them in "
+            ],
+            [
+                173,
+                "basically three key areas.\n\n"
+            ],
+            [
+                177,
+                "The first area is design.\n\n"
+            ],
+            [
+                180,
+                "We're looking for apps that are "
+            ],
+            [
+                182,
+                "-- that have strong visual "
+            ],
+            [
+                183,
+                "design, that are efficient and "
+            ],
+            [
+                186,
+                "easy to use, that have great "
+            ],
+            [
+                189,
+                "game play, that have attention "
+            ],
+            [
+                192,
+                "to detail and polish, that are "
+            ],
+            [
+                195,
+                "internally coherent. "
+            ],
+            [
+                197,
+                "On the technology front, we're "
+            ],
+            [
+                199,
+                "evaluating technology usage, and "
+            ],
+            [
+                202,
+                "so we're looking for apps that "
+            ],
+            [
+                203,
+                "are fast and responsive. "
+            ],
+            [
+                205,
+                "We're looking for apps that take "
+            ],
+            [
+                207,
+                "full advantage of all of the "
+            ],
+            [
+                208,
+                "capabilities of our latest "
+            ],
+            [
+                210,
+                "devices, and we're looking for "
+            ],
+            [
+                212,
+                "apps that use the latest Apple "
+            ],
+            [
+                214,
+                "technologies to do really great "
+            ],
+            [
+                217,
+                "new things. "
+            ],
+            [
+                219,
+                "And on the innovation front, "
+            ],
+            [
+                222,
+                "we're looking for brilliance. "
+            ],
+            [
+                225,
+                "We're looking for new ideas. "
+            ],
+            [
+                228,
+                "We're looking for uniqueness, "
+            ],
+            [
+                231,
+                "platform differentiation, and "
+            ],
+            [
+                234,
+                "things that just weren't "
+            ],
+            [
+                235,
+                "possible before. "
+            ],
+            [
+                237,
+                "And the developers of our "
+            ],
+            [
+                239,
+                "winning apps this evening have "
+            ],
+            [
+                242,
+                "done an outstanding job, and "
+            ],
+            [
+                244,
+                "outstanding work in these three "
+            ],
+            [
+                246,
+                "areas, and more, and we want to "
+            ],
+            [
+                249,
+                "honor that work. "
+            ],
+            [
+                250,
+                "We want to acknowledge the "
+            ],
+            [
+                252,
+                "distinct joy and the challenges "
+            ],
+            [
+                254,
+                "of the app creation process that "
+            ],
+            [
+                256,
+                "we're all so familiar with.\n\n"
+            ],
+            [
+                259,
+                "We want to honor the endless "
+            ],
+            [
+                260,
+                "hours, the late nights, and the "
+            ],
+            [
+                262,
+                "dedication that goes into the "
+            ],
+            [
+                264,
+                "pursuit of excellence. "
+            ],
+            [
+                266,
+                "We want to recognize the "
+            ],
+            [
+                269,
+                "dead-ends, and the frustration, "
+            ],
+            [
+                272,
+                "and the exhaustion sometimes "
+            ],
+            [
+                274,
+                "that often goes unseen, and "
+            ],
+            [
+                277,
+                "we're all familiar with that.\n\n"
+            ],
+            [
+                279,
+                "And we want to honor the "
+            ],
+            [
+                281,
+                "unconventional thinking, the "
+            ],
+            [
+                283,
+                "creativity, and the new ideas "
+            ],
+            [
+                286,
+                "that lead to breakthroughs and "
+            ],
+            [
+                288,
+                "innovative solutions. "
+            ],
+            [
+                290,
+                "So let's get started.\n\n"
+            ],
+            [
+                292,
+                "Winners tonight are going to win "
+            ],
+            [
+                293,
+                "some pretty great -- some pretty "
+            ],
+            [
+                295,
+                "amazing prizes, and each prize "
+            ],
+            [
+                298,
+                "package includes a 512 gigabyte "
+            ],
+            [
+                302,
+                "iPhone XS with a set of AirPods, "
+            ],
+            [
+                306,
+                "a 512 gigabyte 12.9-inch iPad "
+            ],
+            [
+                309,
+                "Pro with Apple Pencil 2, "
+            ],
+            [
+                311,
+                "a 64 gigabyte 4K Apple TV, an "
+            ],
+            [
+                319,
+                "Apple Watch Series 4, "
+            ],
+            [
+                322,
+                "a top-of-the-line MacBook Pro, "
+            ],
+            [
+                327,
+                "and a fully-loaded iMac Pro.\n\n"
+            ],
+            [
+                331,
+                "In addition -- "
+            ],
+            [
+                336,
+                "in addition -- and this is what "
+            ],
+            [
+                337,
+                "all of you want -- each winner "
+            ],
+            [
+                341,
+                "will -- each winning develop -- "
+            ],
+            [
+                342,
+                "each winning app will be "
+            ],
+            [
+                343,
+                "highlighted on the App Store, "
+            ],
+            [
+                345,
+                "similar to what we did last year "
+            ],
+            [
+                347,
+                "on the Today tab for the Apple "
+            ],
+            [
+                348,
+                "Design Award winners, and what "
+            ],
+            [
+                349,
+                "we did throughout the year "
+            ],
+            [
+                351,
+                "following the ceremony. "
+            ],
+            [
+                352,
+                "So this year's winners will be "
+            ],
+            [
+                353,
+                "highlighted in prominent ways on "
+            ],
+            [
+                355,
+                "the App Stores. "
+            ],
+            [
+                357,
+                "And lastly, each winner will "
+            ],
+            [
+                358,
+                "take home one of the coveted "
+            ],
+            [
+                360,
+                "Apple Design Award trophies, "
+            ],
+            [
+                364,
+                "except that we thought it was "
+            ],
+            [
+                366,
+                "time for a refresh. "
+            ],
+            [
+                368,
+                "And so, we have a completely new "
+            ],
+            [
+                371,
+                "trophy this year, redesigned "
+            ],
+            [
+                373,
+                "from the Apple Design Team. "
+            ],
+            [
+                375,
+                "It retains the integrity and "
+            ],
+            [
+                377,
+                "recognizable qualities of the "
+            ],
+            [
+                378,
+                "original award, but reinterprets "
+            ],
+            [
+                381,
+                "these with the qualities of our "
+            ],
+            [
+                382,
+                "latest products. "
+            ],
+            [
+                384,
+                "It's made out of 100% recycled "
+            ],
+            [
+                386,
+                "aluminum, and featured a "
+            ],
+            [
+                387,
+                "mirror-finished stainless steel "
+            ],
+            [
+                389,
+                "Apple logo inlay. "
+            ],
+            [
+                392,
+                "It's pretty sweet, if you ask "
+            ],
+            [
+                393,
+                "me.\n\n"
+            ],
+            [
+                397,
+                "All right. "
+            ],
+            [
+                398,
+                "So we have nine -- we have nine "
+            ],
+            [
+                401,
+                "winners today, and each winner "
+            ],
+            [
+                403,
+                "will be announced and demoed by "
+            ],
+            [
+                405,
+                "a colleague -- by colleagues of "
+            ],
+            [
+                406,
+                "mine from the Apple -- from the "
+            ],
+            [
+                408,
+                "-- from Apple's World Wide "
+            ],
+            [
+                409,
+                "Developer Relations Team. "
+            ],
+            [
+                411,
+                "Now, a little bit differently "
+            ],
+            [
+                412,
+                "than other years -- if we "
+            ],
+            [
+                414,
+                "announce your app, if we "
+            ],
+            [
+                415,
+                "announce you as a winner, please "
+            ],
+            [
+                417,
+                "stay in your seat because we're "
+            ],
+            [
+                419,
+                "going to first talk about your "
+            ],
+            [
+                420,
+                "app, and explain it to the "
+            ],
+            [
+                422,
+                "community. "
+            ],
+            [
+                423,
+                "And we're going to demo it, and "
+            ],
+            [
+                424,
+                "when we've completed the demo, "
+            ],
+            [
+                426,
+                "we're going to call you forward "
+            ],
+            [
+                427,
+                "on stage, and ask that you'd "
+            ],
+            [
+                429,
+                "come up on stage using these "
+            ],
+            [
+                430,
+                "stairs here at this location. "
+            ],
+            [
+                434,
+                "So, let's find out who the "
+            ],
+            [
+                437,
+                "winners are. "
+            ],
+            [
+                438,
+                "To present our first winners, "
+            ],
+            [
+                441,
+                "I'd like to invite my colleagues, Si Ching and Oscar "
+            ],
+            [
+                444,
+                "on stage.\n\n"
+            ],
+            [
+                451,
+                "Thanks, John.\n\n"
+            ],
+            [
+                453,
+                "For our first award today, we "
+            ],
+            [
+                454,
+                "have a gorgeous platform game "
+            ],
+            [
+                457,
+                "designed for the mobile screen "
+            ],
+            [
+                458,
+                "from the ground up. "
+            ],
+            [
+                460,
+                "It's optimized for the portrait "
+            ],
+            [
+                461,
+                "orientation with simple "
+            ],
+            [
+                463,
+                "drag-and-release controls. "
+            ],
+            [
+                465,
+                "Oscar and I had so much fun with "
+            ],
+            [
+                466,
+                "this game, and we can't wait to "
+            ],
+            [
+                468,
+                "show it to you. "
+            ],
+            [
+                469,
+                "The first award goes to Ordia by "
+            ],
+            [
+                473,
+                "Loju.\n\n"
+            ],
+            [
+                484,
+                "Okay, let's get the demo up.\n\n"
+            ],
+            [
+                488,
+                "Okay, Oscar, let's take this "
+            ],
+            [
+                489,
+                "game for a spin. "
+            ],
+            [
+                491,
+                "Ordia tells the story of a first "
+            ],
+            [
+                494,
+                "life form emerging from this "
+            ],
+            [
+                496,
+                "gooey primordial soup, and then "
+            ],
+            [
+                498,
+                "goes on a precarious trip to "
+            ],
+            [
+                500,
+                "start its journey as a living "
+            ],
+            [
+                501,
+                "being. "
+            ],
+            [
+                502,
+                "It needs to jump through caves, "
+            ],
+            [
+                504,
+                "gather nutrition, while also "
+            ],
+            [
+                506,
+                "avoid being eaten or killed.\n\n"
+            ],
+            [
+                508,
+                "Ordia has its amazingly-rich and "
+            ],
+            [
+                511,
+                "vibrant design style, a lovely "
+            ],
+            [
+                513,
+                "blobbiness and bounciness "
+            ],
+            [
+                514,
+                "throughout -- not just with the "
+            ],
+            [
+                516,
+                "visuals, but also the sound "
+            ],
+            [
+                517,
+                "design.\n\n"
+            ],
+            [
+                522,
+                "What we love about this game is "
+            ],
+            [
+                524,
+                "that it's intuitive enough so "
+            ],
+            [
+                526,
+                "you simply start playing, and it "
+            ],
+            [
+                528,
+                "introduces rules and challenges "
+            ],
+            [
+                530,
+                "gradually as you go through the "
+            ],
+            [
+                532,
+                "levels. "
+            ],
+            [
+                533,
+                "It uses colors to communicate "
+            ],
+            [
+                534,
+                "the roles of each element. "
+            ],
+            [
+                536,
+                "Green and yellow things are "
+            ],
+            [
+                537,
+                "friendly, while pink things must "
+            ],
+            [
+                539,
+                "be avoided. It also leverages our Taptic "
+            ],
+            [
+                542,
+                "Engine just the right amount, so "
+            ],
+            [
+                544,
+                "you get this subtle and "
+            ],
+            [
+                545,
+                "satisfying feedback while you "
+            ],
+            [
+                546,
+                "play.\n\n"
+            ],
+            [
+                551,
+                "Ordia has three universes. "
+            ],
+            [
+                553,
+                "They are immersive, consistent, "
+            ],
+            [
+                556,
+                "yet also distinct from each "
+            ],
+            [
+                557,
+                "other, with carefully balanced "
+            ],
+            [
+                559,
+                "color palette, different game "
+            ],
+            [
+                561,
+                "elements, and soundtracks. "
+            ],
+            [
+                563,
+                "Now, let's have a look at the "
+            ],
+            [
+                564,
+                "jungle universe. "
+            ],
+            [
+                565,
+                "This is actually a really tough "
+            ],
+            [
+                566,
+                "level. "
+            ],
+            [
+                567,
+                "I've never been able to go "
+            ],
+            [
+                568,
+                "through without dying, so good "
+            ],
+            [
+                569,
+                "luck, Oscar.\n\n"
+            ],
+            [
+                573,
+                "I love the pacing of this game. "
+            ],
+            [
+                575,
+                "The challenges alternate "
+            ],
+            [
+                577,
+                "smoothly between speed, timing, "
+            ],
+            [
+                578,
+                "and accuracy, while also offers "
+            ],
+            [
+                582,
+                "you these little resting pods, "
+            ],
+            [
+                583,
+                "where your Ordia can regenerate "
+            ],
+            [
+                585,
+                "if it dies, so you can breathe a "
+            ],
+            [
+                586,
+                "little. "
+            ],
+            [
+                587,
+                "The balance between difficulty "
+            ],
+            [
+                589,
+                "and satisfaction is very well "
+            ],
+            [
+                591,
+                "managed, so you just feel like "
+            ],
+            [
+                593,
+                "you have to play one more level.\n\n"
+            ],
+            [
+                597,
+                "Ordia caters for accessibility "
+            ],
+            [
+                599,
+                "with great care. "
+            ],
+            [
+                600,
+                "Its colorblindness mode has even "
+            ],
+            [
+                602,
+                "been tested on monochrome. "
+            ],
+            [
+                603,
+                "Now, what if you want to do a "
+            ],
+            [
+                606,
+                "challenge on a level where you "
+            ],
+            [
+                608,
+                "catch every single nutrition, or "
+            ],
+            [
+                610,
+                "race for your fastest completion "
+            ],
+            [
+                611,
+                "time? "
+            ],
+            [
+                612,
+                "No problem. "
+            ],
+            [
+                613,
+                "You can also play on an iPad "
+            ],
+            [
+                614,
+                "with a much larger screen. "
+            ],
+            [
+                616,
+                "The game automatically syncs "
+            ],
+            [
+                618,
+                "your progress via iCloud. "
+            ],
+            [
+                619,
+                "Loju is the creator of Ordia, a "
+            ],
+            [
+                623,
+                "very small and talented game "
+            ],
+            [
+                625,
+                "studio based in London. "
+            ],
+            [
+                627,
+                "They spent two years building "
+            ],
+            [
+                629,
+                "this game, and have just "
+            ],
+            [
+                630,
+                "launched it a month ago. "
+            ],
+            [
+                632,
+                "Please, go ahead. "
+            ],
+            [
+                633,
+                "Download it today and have a "
+            ],
+            [
+                635,
+                "play. I'm sure you'll get so much "
+            ],
+            [
+                637,
+                "inspiration from it. "
+            ],
+            [
+                638,
+                "And now, let's welcome Team Loju "
+            ],
+            [
+                641,
+                "to the stage. "
+            ],
+            [
+                643,
+                "Congratulations.\n\n"
+            ],
+            [
+                688,
+                "That's a fun game.\n\n"
+            ],
+            [
+                690,
+                "Alright. To award our next "
+            ],
+            [
+                693,
+                "winner, I'd like to bring up "
+            ],
+            [
+                694,
+                "Dave and Mike.\n\n"
+            ],
+            [
+                707,
+                "Notebooks are one of the most "
+            ],
+            [
+                708,
+                "successful designs humanity has "
+            ],
+            [
+                710,
+                "ever produced. "
+            ],
+            [
+                712,
+                "They're simple inventions -- "
+            ],
+            [
+                713,
+                "just a stack of pages bound "
+            ],
+            [
+                715,
+                "together, and protected by a "
+            ],
+            [
+                716,
+                "cover. "
+            ],
+            [
+                717,
+                "But from the earliest notebooks, "
+            ],
+            [
+                719,
+                "there's always been a sense of "
+            ],
+            [
+                720,
+                "excitement, starting with a "
+            ],
+            [
+                721,
+                "blank page.\n\n"
+            ],
+            [
+                723,
+                "When inspiration strikes, you "
+            ],
+            [
+                724,
+                "grab a pen, and let the ideas "
+            ],
+            [
+                726,
+                "flow.\n\n"
+            ],
+            [
+                728,
+                "Our next winner captures the "
+            ],
+            [
+                729,
+                "essence of this experience in "
+            ],
+            [
+                731,
+                "digital form. "
+            ],
+            [
+                733,
+                "Please help me congratulate Flow "
+            ],
+            [
+                735,
+                "by Moleskine.\n\n"
+            ],
+            [
+                741,
+                "Thanks, Dave.\n\n"
+            ],
+            [
+                743,
+                "This demo was really hard to "
+            ],
+            [
+                745,
+                "prepare. "
+            ],
+            [
+                746,
+                "Every time I would launch Flow, "
+            ],
+            [
+                747,
+                "and try to figure out what I "
+            ],
+            [
+                748,
+                "would share with you today, I "
+            ],
+            [
+                750,
+                "would start drawing, and "
+            ],
+            [
+                751,
+                "completely lose track of what I "
+            ],
+            [
+                752,
+                "was supposed to be doing, which "
+            ],
+            [
+                754,
+                "is a testament, I think, to how "
+            ],
+            [
+                756,
+                "well this app is designed. "
+            ],
+            [
+                758,
+                "Now, to help you to get into and "
+            ],
+            [
+                761,
+                "stay in a state of creative "
+            ],
+            [
+                762,
+                "flow, they encourage you to set "
+            ],
+            [
+                764,
+                "up everything in advance, like "
+            ],
+            [
+                766,
+                "picking the color of the paper, "
+            ],
+            [
+                768,
+                "or the patterns that you want to "
+            ],
+            [
+                770,
+                "use. "
+            ],
+            [
+                771,
+                "They also encourage you to set "
+            ],
+            [
+                772,
+                "up the drawing tools in advance, "
+            ],
+            [
+                773,
+                "so you're not messing around "
+            ],
+            [
+                775,
+                "with interface later, and they "
+            ],
+            [
+                777,
+                "have some really great drawing "
+            ],
+            [
+                778,
+                "tools, like this mechanical "
+            ],
+            [
+                780,
+                "pencil. "
+            ],
+            [
+                781,
+                "Now, as you can see here, "
+            ],
+            [
+                782,
+                "drawing is very realistic, and "
+            ],
+            [
+                784,
+                "by supporting Apple Pencil 2 "
+            ],
+            [
+                786,
+                "gestures, iOS drawing APIs, and "
+            ],
+            [
+                789,
+                "Metal, you can get some really "
+            ],
+            [
+                791,
+                "realistic shading effects.\n\n"
+            ],
+            [
+                794,
+                "It looks pretty true-to-life. "
+            ],
+            [
+                796,
+                "They have a great felt-tip pen "
+            ],
+            [
+                798,
+                "that looks basically like you "
+            ],
+            [
+                800,
+                "would expect a pen to look, and "
+            ],
+            [
+                802,
+                "they have great markers with "
+            ],
+            [
+                804,
+                "really nice buildup of ink for "
+            ],
+            [
+                807,
+                "realistic marker-like "
+            ],
+            [
+                809,
+                "experience. "
+            ],
+            [
+                811,
+                "They also have an awesome "
+            ],
+            [
+                812,
+                "calligraphy pen. "
+            ],
+            [
+                814,
+                "Now, playing with these tools -- "
+            ],
+            [
+                816,
+                "it kind of -- it takes me back "
+            ],
+            [
+                818,
+                "to when I was a kid. "
+            ],
+            [
+                819,
+                "My mom -- she was a really great "
+            ],
+            [
+                821,
+                "calligrapher, and she had a "
+            ],
+            [
+                822,
+                "business called Inklings. "
+            ],
+            [
+                824,
+                "And -- yeah, I thought that was "
+            ],
+            [
+                826,
+                "a pretty clever name, by the "
+            ],
+            [
+                827,
+                "way. "
+            ],
+            [
+                828,
+                "And when she would get supplies "
+            ],
+            [
+                829,
+                "for her business, she would "
+            ],
+            [
+                831,
+                "often take me with her, and I "
+            ],
+            [
+                833,
+                "would have so much fun just "
+            ],
+            [
+                835,
+                "playing with all of the markers "
+            ],
+            [
+                837,
+                "and pens. "
+            ],
+            [
+                838,
+                "Drawing tools here really kind "
+            ],
+            [
+                840,
+                "of takes me back to that "
+            ],
+            [
+                841,
+                "experience, but the real heart "
+            ],
+            [
+                844,
+                "of the interface here is "
+            ],
+            [
+                846,
+                "customizing the drawing tools. "
+            ],
+            [
+                849,
+                "Everything in this interface is "
+            ],
+            [
+                850,
+                "animated, and they even have "
+            ],
+            [
+                852,
+                "these really great optional "
+            ],
+            [
+                853,
+                "sound effects. "
+            ],
+            [
+                855,
+                "Check out when you change the "
+            ],
+            [
+                856,
+                "brush size, how the nibs change "
+            ],
+            [
+                858,
+                "in response, or when you change "
+            ],
+            [
+                860,
+                "the nibs, they pop on and pop "
+            ],
+            [
+                863,
+                "off.\n\n"
+            ],
+            [
+                864,
+                "But the heart of this interface "
+            ],
+            [
+                866,
+                "is changing the color. "
+            ],
+            [
+                867,
+                "You adjust the value on the side "
+            ],
+            [
+                869,
+                "here on the right, swipe side to "
+            ],
+            [
+                871,
+                "side to adjust saturation, and "
+            ],
+            [
+                874,
+                "color by just spinning the color "
+            ],
+            [
+                876,
+                "wheel. "
+            ],
+            [
+                877,
+                "And check out how all of these "
+            ],
+            [
+                880,
+                "-- all of these colors have "
+            ],
+            [
+                881,
+                "unique names. "
+            ],
+            [
+                883,
+                "There's 1400 names in all. "
+            ],
+            [
+                885,
+                "It's just like a real marker "
+            ],
+            [
+                886,
+                "set. "
+            ],
+            [
+                888,
+                "Now, I'm feeling inspired to "
+            ],
+            [
+                890,
+                "actually draw something, so to "
+            ],
+            [
+                892,
+                "extend the canvas and stay in a "
+            ],
+            [
+                894,
+                "state of flow, I just swipe over "
+            ],
+            [
+                896,
+                "to the side. "
+            ],
+            [
+                897,
+                "I'll draw something in the theme "
+            ],
+            [
+                899,
+                "of calligraphy in front of a "
+            ],
+            [
+                901,
+                "couple thousand people, so "
+            ],
+            [
+                902,
+                "hopefully I do this all right. "
+            ],
+            [
+                903,
+                "I'm going to draw a little "
+            ],
+            [
+                905,
+                "feather pen. "
+            ],
+            [
+                907,
+                "So I'm just going to trace in "
+            ],
+            [
+                908,
+                "the outline with a felt-tip "
+            ],
+            [
+                909,
+                "marker. "
+            ],
+            [
+                911,
+                "It's looking pretty good. "
+            ],
+            [
+                915,
+                "It's a little bit flat, so I "
+            ],
+            [
+                918,
+                "think I'm going to add in some "
+            ],
+            [
+                920,
+                "shading. "
+            ],
+            [
+                922,
+                "It's a little bit more "
+            ],
+            [
+                925,
+                "realistic. And then zoom in here -- whoops "
+            ],
+            [
+                930,
+                "-- add in some color for the "
+            ],
+            [
+                934,
+                "feather pen, and then touch "
+            ],
+            [
+                937,
+                "things up with the eraser.\n\n"
+            ],
+            [
+                940,
+                "All right. "
+            ],
+            [
+                941,
+                "That's looking pretty good, but, "
+            ],
+            [
+                943,
+                "you know, no drawing is complete "
+            ],
+            [
+                945,
+                "until you sign your name. "
+            ],
+            [
+                948,
+                "All right. "
+            ],
+            [
+                953,
+                "I think we're done. "
+            ],
+            [
+                955,
+                "Dave? "
+            ],
+            [
+                956,
+                "Thanks, Mike. "
+            ],
+            [
+                957,
+                "Please help me welcome to the "
+            ],
+            [
+                958,
+                "stage the team from Moleskine to "
+            ],
+            [
+                960,
+                "accept their award for Flow.\n\n"
+            ],
+            [
+                1024,
+                "Yeah, the attention to detail "
+            ],
+            [
+                1025,
+                "in that app is amazing, and "
+            ],
+            [
+                1027,
+                "that's one of the things that we "
+            ],
+            [
+                1028,
+                "look for when we evaluate for "
+            ],
+            [
+                1029,
+                "design. "
+            ],
+            [
+                1030,
+                "All right, help me to welcome my "
+            ],
+            [
+                1032,
+                "-- our next presenters, Lauren "
+            ],
+            [
+                1034,
+                "Stralo and T.C. Chan.\n\n"
+            ],
+            [
+                1045,
+                "Thanks, John. "
+            ],
+            [
+                1046,
+                "The next award goes to The "
+            ],
+            [
+                1049,
+                "Gardens Between.\n\n"
+            ],
+            [
+                1056,
+                "Now, we absolutely love this "
+            ],
+            [
+                1058,
+                "game because it captures the "
+            ],
+            [
+                1060,
+                "magic of time. "
+            ],
+            [
+                1062,
+                "Have you ever wanted to travel "
+            ],
+            [
+                1064,
+                "back in time, or maybe just "
+            ],
+            [
+                1066,
+                "relive a moment that you "
+            ],
+            [
+                1067,
+                "reminisce about? "
+            ],
+            [
+                1069,
+                "Well, technology hasn't quite "
+            ],
+            [
+                1070,
+                "gotten us there yet, but playing "
+            ],
+            [
+                1072,
+                "this game gives you a sense of "
+            ],
+            [
+                1074,
+                "what that might be like. "
+            ],
+            [
+                1076,
+                "And you play as these two main "
+            ],
+            [
+                1078,
+                "characters, named Arina and "
+            ],
+            [
+                1080,
+                "Frendt.\n\n"
+            ],
+            [
+                1082,
+                "This game tells a special story "
+            ],
+            [
+                1084,
+                "about friendship, and we "
+            ],
+            [
+                1085,
+                "absolutely love it for its "
+            ],
+            [
+                1086,
+                "cinematic moments and its "
+            ],
+            [
+                1087,
+                "immersive experience. "
+            ],
+            [
+                1089,
+                "Let's take a closer look. "
+            ],
+            [
+                1091,
+                "T.C.? "
+            ],
+            [
+                1098,
+                "Let's have a moment to take "
+            ],
+            [
+                1100,
+                "in this whole island.\n\n"
+            ],
+            [
+                1103,
+                "Now, beyond the stunning imagery "
+            ],
+            [
+                1105,
+                "that you see, what really "
+            ],
+            [
+                1108,
+                "impressed us about this game is "
+            ],
+            [
+                1109,
+                "that this kind of attention to "
+            ],
+            [
+                1111,
+                "detail actually extends to its "
+            ],
+            [
+                1113,
+                "bespoke soundtrack, its "
+            ],
+            [
+                1115,
+                "natural-feeling haptics, and "
+            ],
+            [
+                1117,
+                "more than that, the "
+            ],
+            [
+                1118,
+                "storytelling. "
+            ],
+            [
+                1120,
+                "Notice how Frendt is taken aback "
+            ],
+            [
+                1122,
+                "when Arina's able to walk over "
+            ],
+            [
+                1123,
+                "the clouds, and then he catches "
+            ],
+            [
+                1125,
+                "up, still a little unsure. "
+            ],
+            [
+                1127,
+                "And here, I just stopped time, "
+            ],
+            [
+                1130,
+                "and I do that by just not "
+            ],
+            [
+                1132,
+                "tapping anything. "
+            ],
+            [
+                1134,
+                "This means that I'm never "
+            ],
+            [
+                1135,
+                "feeling rushed or under any kind "
+            ],
+            [
+                1137,
+                "of time pressure. "
+            ],
+            [
+                1138,
+                "We think this game play mechanic "
+            ],
+            [
+                1141,
+                "is really simple, yet effective. "
+            ],
+            [
+                1145,
+                "Now, because you move both "
+            ],
+            [
+                1146,
+                "characters at once, and only "
+            ],
+            [
+                1147,
+                "control the flow of time, an "
+            ],
+            [
+                1149,
+                "interesting interplay happens "
+            ],
+            [
+                1151,
+                "between the two characters. "
+            ],
+            [
+                1153,
+                "Here, you will notice that Arina "
+            ],
+            [
+                1156,
+                "is no longer able to move any "
+            ],
+            [
+                1158,
+                "more forward in time, and that's "
+            ],
+            [
+                1160,
+                "because Frendt has fallen "
+            ],
+            [
+                1161,
+                "behind. "
+            ],
+            [
+                1162,
+                "So let's go back in time, and "
+            ],
+            [
+                1164,
+                "see what we can do differently "
+            ],
+            [
+                1166,
+                "to help him out. "
+            ],
+            [
+                1167,
+                "Now, you might notice that with "
+            ],
+            [
+                1169,
+                "each time I hop over the saw "
+            ],
+            [
+                1171,
+                "handle, it continues to cut "
+            ],
+            [
+                1173,
+                "through the plank. "
+            ],
+            [
+                1174,
+                "So let me go back and forth in "
+            ],
+            [
+                1176,
+                "time a few times.\n\n"
+            ],
+            [
+                1183,
+                "Nice. I see what you did "
+            ],
+            [
+                1184,
+                "there, T.C. "
+            ],
+            [
+                1185,
+                "Yeah. All right. "
+            ],
+            [
+                1186,
+                "So now, Frendt is able to catch "
+            ],
+            [
+                1188,
+                "up, and they continue their "
+            ],
+            [
+                1190,
+                "journey. Just around the island, there "
+            ],
+            [
+                1192,
+                "are these bells. "
+            ],
+            [
+                1193,
+                "They're highlighted because "
+            ],
+            [
+                1194,
+                "they're interactive. So I just need to tap the "
+            ],
+            [
+                1196,
+                "screen. "
+            ],
+            [
+                1197,
+                "Frendt hits the bell, and in "
+            ],
+            [
+                1199,
+                "this case, the light is given "
+            ],
+            [
+                1201,
+                "back to Irina. The objective is to bring the "
+            ],
+            [
+                1203,
+                "light to the top of each island.\n\n"
+            ],
+            [
+                1206,
+                "Now, let's move away from game "
+            ],
+            [
+                1208,
+                "play for a while, and have a "
+            ],
+            [
+                1210,
+                "look at this heartwarming scene. "
+            ],
+            [
+                1213,
+                "As you play this game, you "
+            ],
+            [
+                1215,
+                "will learn that things are "
+            ],
+            [
+                1216,
+                "considered and deliberate, and "
+            ],
+            [
+                1219,
+                "probably a hint. "
+            ],
+            [
+                1220,
+                "So we're not going to spoil any "
+            ],
+            [
+                1221,
+                "more of this for you today. "
+            ],
+            [
+                1223,
+                "So please help us welcome The "
+            ],
+            [
+                1224,
+                "Gardens Between creators to the "
+            ],
+            [
+                1226,
+                "stage, The Voxel Agents. "
+            ],
+            [
+                1227,
+                "Congratulations.\n\n"
+            ],
+            [
+                1276,
+                "I mean, how cool is that? "
+            ],
+            [
+                1278,
+                "That is an app that is crafted "
+            ],
+            [
+                1280,
+                "with care.\n\n"
+            ],
+            [
+                1281,
+                "All right, for our next winner, "
+            ],
+            [
+                1283,
+                "I'd like to invite Adrian and "
+            ],
+            [
+                1284,
+                "Corinne.\n\n"
+            ],
+            [
+                1293,
+                "Thanks, John. "
+            ],
+            [
+                1294,
+                "Great apps combine seamless "
+            ],
+            [
+                1296,
+                "onboarding, intuitive controls, "
+            ],
+            [
+                1298,
+                "and stunning visuals to create a "
+            ],
+            [
+                1300,
+                "truly immersive experience. "
+            ],
+            [
+                1301,
+                "And when it comes to games, it's "
+            ],
+            [
+                1304,
+                "these elements that can make "
+            ],
+            [
+                1305,
+                "even a novice player feel like a "
+            ],
+            [
+                1307,
+                "pro. "
+            ],
+            [
+                1308,
+                "Next up, the award goes to "
+            ],
+            [
+                1310,
+                "Gameloft for Asphalt 9 Legends.\n\n"
+            ],
+            [
+                1319,
+                "Asphalt 9 is a hyper-realistic "
+            ],
+            [
+                1321,
+                "arcade racing game with "
+            ],
+            [
+                1323,
+                "incredible graphics. "
+            ],
+            [
+                1325,
+                "Let's take a look.\n\n"
+            ],
+            [
+                1328,
+                "My colleague Corinne's going to "
+            ],
+            [
+                1330,
+                "jump in to see if she has what "
+            ],
+            [
+                1331,
+                "it takes to become a legend.\n\n"
+            ],
+            [
+                1333,
+                "There are over 50 of the world's "
+            ],
+            [
+                1335,
+                "most amazing high-speed vehicles "
+            ],
+            [
+                1336,
+                "available to select. "
+            ],
+            [
+                1338,
+                "Each is a meticulously-detailed "
+            ],
+            [
+                1340,
+                "version of the vehicle, with "
+            ],
+            [
+                1341,
+                "endless customization. "
+            ],
+            [
+                1343,
+                "We're going with one of my "
+            ],
+            [
+                1344,
+                "personal favorites, the Chevy "
+            ],
+            [
+                1345,
+                "Camaro, and of course, we had to "
+            ],
+            [
+                1347,
+                "make it purple.\n\n"
+            ],
+            [
+                1350,
+                "With 70 courses spanning the "
+            ],
+            [
+                1351,
+                "globe, from Cairo to the "
+            ],
+            [
+                1353,
+                "Himalayas, today, we're going to "
+            ],
+            [
+                1354,
+                "be racing the streets of "
+            ],
+            [
+                1356,
+                "Shanghai.\n\n"
+            ],
+            [
+                1358,
+                "All right, here we go.\n\n"
+            ],
+            [
+                1362,
+                "And she's off. "
+            ],
+            [
+                1363,
+                "You'll immediately notice the "
+            ],
+            [
+                1366,
+                "realistic details due to some "
+            ],
+            [
+                1368,
+                "post-processing effects, "
+            ],
+            [
+                1369,
+                "including motion blur, "
+            ],
+            [
+                1371,
+                "reflection, color grading, even "
+            ],
+            [
+                1375,
+                "god rays-- Gameloft was able "
+            ],
+            [
+                1376,
+                "to achieve these console-style "
+            ],
+            [
+                1377,
+                "graphics with their custom "
+            ],
+            [
+                1379,
+                "engine and with Metal 2 "
+            ],
+            [
+                1380,
+                "integration, all with an "
+            ],
+            [
+                1382,
+                "impressive 60 frames per second "
+            ],
+            [
+                1384,
+                "of smooth performance.\n\n"
+            ],
+            [
+                1387,
+                "Controls are easy to pick up "
+            ],
+            [
+                1389,
+                "with Touch Drive. "
+            ],
+            [
+                1390,
+                "Acceleration and braking are "
+            ],
+            [
+                1391,
+                "handled for you, so that you can "
+            ],
+            [
+                1393,
+                "focus on navigating the course, "
+            ],
+            [
+                1395,
+                "but don't let the simple "
+            ],
+            [
+                1396,
+                "controls fool you. "
+            ],
+            [
+                1397,
+                "Players are responsible for "
+            ],
+            [
+                1398,
+                "timing drifts, nitro boosts, and "
+            ],
+            [
+                1400,
+                "finding shortcuts in order to "
+            ],
+            [
+                1402,
+                "beat the competition.\n\n"
+            ],
+            [
+                1404,
+                "The team was inspired by "
+            ],
+            [
+                1405,
+                "skateboarding, and wanted the "
+            ],
+            [
+                1407,
+                "vehicle maneuvers to reflect "
+            ],
+            [
+                1408,
+                "that stunting style. "
+            ],
+            [
+                1410,
+                "So you'll see 360-degree spins, "
+            ],
+            [
+                1413,
+                "barrel rolls, and tons of "
+            ],
+            [
+                1415,
+                "fearless jumps. "
+            ],
+            [
+                1416,
+                "Add in a bit of nitro boost, and "
+            ],
+            [
+                1418,
+                "hold on.\n\n"
+            ],
+            [
+                1425,
+                "Speaking of style, have a listen "
+            ],
+            [
+                1426,
+                "to that soundtrack.\n\n"
+            ],
+            [
+                1441,
+                "Asphalt 9 mixes over two hours "
+            ],
+            [
+                1443,
+                "of music to keep your heart "
+            ],
+            [
+                1445,
+                "racing as you cut those close "
+            ],
+            [
+                1446,
+                "corners. "
+            ],
+            [
+                1447,
+                "Three control styles, endless "
+            ],
+            [
+                1449,
+                "customizations, single and "
+            ],
+            [
+                1451,
+                "multiplayer mode -- Asphalt 9 "
+            ],
+            [
+                1453,
+                "truly has something for "
+            ],
+            [
+                1454,
+                "everyone. "
+            ],
+            [
+                1455,
+                "And with a combined 4.8-star "
+            ],
+            [
+                1457,
+                "rating from over 300,000 "
+            ],
+            [
+                1459,
+                "players, it certainly does. "
+            ],
+            [
+                1461,
+                "The question is, like Corinne "
+            ],
+            [
+                1463,
+                "here, do you have what it takes "
+            ],
+            [
+                1465,
+                "to become a legend? "
+            ],
+            [
+                1467,
+                "Please welcome to the stage "
+            ],
+            [
+                1469,
+                "Gameloft. "
+            ],
+            [
+                1470,
+                "Congratulations.\n\n"
+            ],
+            [
+                1521,
+                "That's an incredibly "
+            ],
+            [
+                1522,
+                "innovative game with the new "
+            ],
+            [
+                1524,
+                "type of driving, and the "
+            ],
+            [
+                1526,
+                "technology integration's "
+            ],
+            [
+                1527,
+                "phenomenal with that kind of "
+            ],
+            [
+                1528,
+                "performance. "
+            ],
+            [
+                1529,
+                "All right, up next, for our next "
+            ],
+            [
+                1531,
+                "winner, my colleagues Ennis and "
+            ],
+            [
+                1533,
+                "Eric.\n\n"
+            ],
+            [
+                1542,
+                "Do you sometimes find that "
+            ],
+            [
+                1543,
+                "you take a photo, and it doesn't "
+            ],
+            [
+                1545,
+                "quite capture the feeling of the "
+            ],
+            [
+                1547,
+                "moment? The secret is, professional "
+            ],
+            [
+                1549,
+                "photographers adjust their "
+            ],
+            [
+                1550,
+                "photos after the shoot, and "
+            ],
+            [
+                1551,
+                "create the desired effect. "
+            ],
+            [
+                1553,
+                "But that takes time, and for "
+            ],
+            [
+                1554,
+                "most of us, we don't even know "
+            ],
+            [
+                1556,
+                "where to start -- what colors "
+            ],
+            [
+                1557,
+                "need adjusting, or how do you "
+            ],
+            [
+                1558,
+                "find that perfect composition. "
+            ],
+            [
+                1559,
+                "But this is exactly where this "
+            ],
+            [
+                1561,
+                "app truly shines. "
+            ],
+            [
+                1562,
+                "The award goes to Pixelmator "
+            ],
+            [
+                1564,
+                "Photo.\n\n"
+            ],
+            [
+                1571,
+                "Eric will show you now what can "
+            ],
+            [
+                1572,
+                "be achieved with this incredible "
+            ],
+            [
+                1573,
+                "app exclusively on the iPad. "
+            ],
+            [
+                1576,
+                "Thank you, Ennis. "
+            ],
+            [
+                1577,
+                "I'm really excited to show you "
+            ],
+            [
+                1578,
+                "all just how easy it is to edit "
+            ],
+            [
+                1580,
+                "photos on your iPad using "
+            ],
+            [
+                1582,
+                "Pixelmator Photo. "
+            ],
+            [
+                1584,
+                "Let's get started. "
+            ],
+            [
+                1585,
+                "I've got this great image of "
+            ],
+            [
+                1586,
+                "this boy playing soccer on a "
+            ],
+            [
+                1588,
+                "beach in India, but I think with "
+            ],
+            [
+                1590,
+                "a few simple adjustments, we can "
+            ],
+            [
+                1592,
+                "really make this photo pop. "
+            ],
+            [
+                1594,
+                "I'm first going to hit the "
+            ],
+            [
+                1595,
+                "Auto-Enhance button, which is "
+            ],
+            [
+                1597,
+                "already making this look quite a "
+            ],
+            [
+                1599,
+                "bit better. "
+            ],
+            [
+                1600,
+                "But I want it to have a more "
+            ],
+            [
+                1601,
+                "vintage look to it, and for "
+            ],
+            [
+                1603,
+                "that, I'm going to have a look "
+            ],
+            [
+                1604,
+                "at some of the many built-in "
+            ],
+            [
+                1606,
+                "presets within this app. "
+            ],
+            [
+                1607,
+                "I love all these different film "
+            ],
+            [
+                1610,
+                "looks, and the urban looks, but "
+            ],
+            [
+                1612,
+                "I specifically like these "
+            ],
+            [
+                1613,
+                "classic films. "
+            ],
+            [
+                1615,
+                "So I'm going to choose number 2. "
+            ],
+            [
+                1617,
+                "I think that looks really good, "
+            ],
+            [
+                1619,
+                "and there's one more thing I "
+            ],
+            [
+                1620,
+                "want to do to this image, which "
+            ],
+            [
+                1622,
+                "is to crop it before I share it "
+            ],
+            [
+                1625,
+                "with my friends. "
+            ],
+            [
+                1627,
+                "And what's really unique about "
+            ],
+            [
+                1629,
+                "the cropping in Pixelmator Photo "
+            ],
+            [
+                1630,
+                "is, the team trained a custom "
+            ],
+            [
+                1633,
+                "Core ML model on thousands and "
+            ],
+            [
+                1635,
+                "thousands of images to gain a "
+            ],
+            [
+                1636,
+                "deep understanding of the "
+            ],
+            [
+                1638,
+                "content of the photos. "
+            ],
+            [
+                1640,
+                "And by doing that, they let me, "
+            ],
+            [
+                1644,
+                "as their customer, just simply "
+            ],
+            [
+                1646,
+                "enable this Smart Cropping "
+            ],
+            [
+                1648,
+                "feature, and I can choose a "
+            ],
+            [
+                1650,
+                "different aspect ratio, like a "
+            ],
+            [
+                1652,
+                "square frame. "
+            ],
+            [
+                1653,
+                "And there, in two taps, I have "
+            ],
+            [
+                1655,
+                "this perfectly-cropped image "
+            ],
+            [
+                1656,
+                "ready to share. "
+            ],
+            [
+                1657,
+                "Let's take a look at one more "
+            ],
+            [
+                1659,
+                "photo. "
+            ],
+            [
+                1660,
+                "I'm going to tap on the Files "
+            ],
+            [
+                1661,
+                "button here on the top, and I'm "
+            ],
+            [
+                1664,
+                "going to choose this photo of "
+            ],
+            [
+                1666,
+                "this lovely couple in New York. "
+            ],
+            [
+                1668,
+                "And this is indicative of a lot "
+            ],
+            [
+                1671,
+                "of the photos we have in our "
+            ],
+            [
+                1672,
+                "personal libraries. "
+            ],
+            [
+                1673,
+                "It's a really sweet moment, but "
+            ],
+            [
+                1676,
+                "it suffers from a very "
+            ],
+            [
+                1677,
+                "unfortunate lighting situation. "
+            ],
+            [
+                1680,
+                "I'm going to use the ML Enhance "
+            ],
+            [
+                1683,
+                "again to immediately improve the "
+            ],
+            [
+                1685,
+                "image, but what I want to show "
+            ],
+            [
+                1688,
+                "you is what's happening behind "
+            ],
+            [
+                1689,
+                "the scenes. "
+            ],
+            [
+                1691,
+                "The Pixelmator team spent months "
+            ],
+            [
+                1694,
+                "training a custom Core ML model "
+            ],
+            [
+                1696,
+                "on over 20 million image pairs, "
+            ],
+            [
+                1699,
+                "and from that, they learned how "
+            ],
+            [
+                1701,
+                "to automatically control over 32 "
+            ],
+            [
+                1704,
+                "different adjustments, from "
+            ],
+            [
+                1705,
+                "white balance, hue and "
+            ],
+            [
+                1707,
+                "saturation, lightness, color "
+            ],
+            [
+                1709,
+                "balance. "
+            ],
+            [
+                1710,
+                "Understanding all these "
+            ],
+            [
+                1711,
+                "individual adjustments on your "
+            ],
+            [
+                1713,
+                "own can be very daunting, but "
+            ],
+            [
+                1716,
+                "with the ML Enhance feature, "
+            ],
+            [
+                1718,
+                "it's a perfect place to start. "
+            ],
+            [
+                1719,
+                "I can do something like simply "
+            ],
+            [
+                1721,
+                "bump the black point just a "
+            ],
+            [
+                1723,
+                "little bit more, and I think "
+            ],
+            [
+                1725,
+                "that looks great. "
+            ],
+            [
+                1726,
+                "I can deep-press on this photo "
+            ],
+            [
+                1728,
+                "to compare it, and I think "
+            ],
+            [
+                1730,
+                "you'll agree that's a much "
+            ],
+            [
+                1731,
+                "better version of this image. "
+            ],
+            [
+                1734,
+                "So that's just a very quick tour "
+            ],
+            [
+                1736,
+                "of the simplicity of Pixelmator "
+            ],
+            [
+                1740,
+                "Photo. "
+            ],
+            [
+                1741,
+                "By leveraging Metal and Core ML, "
+            ],
+            [
+                1744,
+                "the app is fast, and it's "
+            ],
+            [
+                1746,
+                "intelligent. And with this beautiful, simple "
+            ],
+            [
+                1749,
+                "UI, and direct integration with "
+            ],
+            [
+                1751,
+                "files, it really is easy photo "
+            ],
+            [
+                1754,
+                "editing for everyone. "
+            ],
+            [
+                1756,
+                "Amazing app. "
+            ],
+            [
+                1758,
+                "Well, as we seen, Team "
+            ],
+            [
+                1759,
+                "Pixelmator's native Lithuanian "
+            ],
+            [
+                1761,
+                ". Congratulations, and please, "
+            ],
+            [
+                1763,
+                "welcome to the stage.\n\n"
+            ],
+            [
+                1835,
+                "You know, we love how "
+            ],
+            [
+                1836,
+                "Pixelmator Photo uses Apple "
+            ],
+            [
+                1838,
+                "technologies to do new things, "
+            ],
+            [
+                1840,
+                "and this isn't the first time "
+            ],
+            [
+                1842,
+                "that this team has been on "
+            ],
+            [
+                1843,
+                "stage. And that's not without good "
+            ],
+            [
+                1846,
+                "reason. "
+            ],
+            [
+                1847,
+                "The Pixelmator Team is "
+            ],
+            [
+                1848,
+                "consistently in lockstep with "
+            ],
+            [
+                1851,
+                "new devices that we release, and "
+            ],
+            [
+                1853,
+                "new technologies. "
+            ],
+            [
+                1855,
+                "Phenomenal, phenomenal work. "
+            ],
+            [
+                1856,
+                "All right, to present our sixth "
+            ],
+            [
+                1858,
+                "award, I'd like to bring on "
+            ],
+            [
+                1860,
+                "Lauren and Paolo Verani.\n\n"
+            ],
+            [
+                1871,
+                "Now, we love the game ELOH "
+            ],
+            [
+                1873,
+                "for its beautiful animation, "
+            ],
+            [
+                1875,
+                "illustration, and creative "
+            ],
+            [
+                1876,
+                "approach to throwing a ball at a "
+            ],
+            [
+                1878,
+                "block. "
+            ],
+            [
+                1879,
+                "While you play, you learn basic "
+            ],
+            [
+                1881,
+                "physics and geometry with rhythm "
+            ],
+            [
+                1884,
+                "and music. "
+            ],
+            [
+                1885,
+                "Now, music and sound effects are "
+            ],
+            [
+                1887,
+                "key elements to helping you "
+            ],
+            [
+                1888,
+                "solve this chilled-out puzzle "
+            ],
+            [
+                1890,
+                "game. You can play, relax, and "
+            ],
+            [
+                1893,
+                "decompress all while finding "
+            ],
+            [
+                1895,
+                "your groove. "
+            ],
+            [
+                1896,
+                "Now, I absolutely love playing "
+            ],
+            [
+                1897,
+                "this game, and I know you do, "
+            ],
+            [
+                1899,
+                "too, Paolo. Yeah, I do. "
+            ],
+            [
+                1900,
+                "Will you help us take a look? "
+            ],
+            [
+                1902,
+                "I do, actually, Lauren. "
+            ],
+            [
+                1903,
+                "I actually love playing this "
+            ],
+            [
+                1905,
+                "game with my son, Luca. "
+            ],
+            [
+                1907,
+                "It's his favorite game right "
+            ],
+            [
+                1908,
+                "now, and the reason for that is "
+            ],
+            [
+                1910,
+                "that the first time you launch "
+            ],
+            [
+                1911,
+                "ELOH, you realize that there is "
+            ],
+            [
+                1913,
+                "no onboarding. "
+            ],
+            [
+                1914,
+                "There are no instructions. "
+            ],
+            [
+                1915,
+                "Just like many great iOS games, "
+            ],
+            [
+                1918,
+                "you just learn by playing. "
+            ],
+            [
+                1920,
+                "Now, the goal of the game is to "
+            ],
+            [
+                1921,
+                "get the little ball that emits "
+            ],
+            [
+                1923,
+                "from this speaker down to the "
+            ],
+            [
+                1925,
+                "target, and you do that by -- "
+            ],
+            [
+                1927,
+                "you achieve that by tapping on "
+            ],
+            [
+                1929,
+                "these tribal masks, and moving "
+            ],
+            [
+                1932,
+                "them around the screen. "
+            ],
+            [
+                1934,
+                "Great. "
+            ],
+            [
+                1935,
+                "I think my reputation is saved. "
+            ],
+            [
+                1936,
+                "Level four is done. "
+            ],
+            [
+                1938,
+                "Now, the game has 99 levels, and "
+            ],
+            [
+                1940,
+                "as you would expect, things can "
+            ],
+            [
+                1943,
+                "get more complicated. "
+            ],
+            [
+                1945,
+                "Yet, the game still offers a "
+            ],
+            [
+                1948,
+                "very relaxing experience, and I "
+            ],
+            [
+                1950,
+                "think the key component here is "
+            ],
+            [
+                1952,
+                "the sound effects, and the "
+            ],
+            [
+                1954,
+                "soundtrack, which complements "
+            ],
+            [
+                1956,
+                "the beautiful graphics and "
+            ],
+            [
+                1959,
+                "delightful animations. "
+            ],
+            [
+                1961,
+                "And the other fun aspect is "
+            ],
+            [
+                1963,
+                "that, while you're playing, "
+            ],
+            [
+                1964,
+                "you're actually composing your "
+            ],
+            [
+                1966,
+                "very own soundtrack. "
+            ],
+            [
+                1967,
+                "Cool. "
+            ],
+            [
+                1968,
+                "Let's get through level 12. "
+            ],
+            [
+                1972,
+                "Great. "
+            ],
+            [
+                1973,
+                "Now, level 12 is special, "
+            ],
+            [
+                1975,
+                "because we get rewarded with a "
+            ],
+            [
+                1977,
+                "little totem animation. "
+            ],
+            [
+                1978,
+                "What is also fun about this game "
+            ],
+            [
+                1980,
+                "is that there is no score. "
+            ],
+            [
+                1982,
+                "There is no -- there are no time "
+            ],
+            [
+                1984,
+                "constraints. "
+            ],
+            [
+                1985,
+                "Therefore, a little six-year-old "
+            ],
+            [
+                1988,
+                "kid can play without any time "
+            ],
+            [
+                1990,
+                "pressure, or fear of making "
+            ],
+            [
+                1992,
+                "mistakes.\n\n"
+            ],
+            [
+                1995,
+                "ELOH is the result of a great "
+            ],
+            [
+                1997,
+                "team collaborating from across "
+            ],
+            [
+                1999,
+                "the world with the creator and "
+            ],
+            [
+                2001,
+                "developer of the game, which is "
+            ],
+            [
+                2003,
+                "an Italian guy based in Vienna, "
+            ],
+            [
+                2005,
+                "a sound designer based in "
+            ],
+            [
+                2007,
+                "Seattle, an artist in New York, "
+            ],
+            [
+                2010,
+                "and a Portuguese animator. "
+            ],
+            [
+                2012,
+                "Whether you're six or 96 years "
+            ],
+            [
+                2014,
+                "old, ELOH will deliver hours of "
+            ],
+            [
+                2018,
+                "relaxing fun. "
+            ],
+            [
+                2020,
+                "Please help me welcome the "
+            ],
+            [
+                2021,
+                "Broken Rules Team to the stage. "
+            ],
+            [
+                2023,
+                "Congratulations.\n\n"
+            ],
+            [
+                2078,
+                "Now, that is a game with "
+            ],
+            [
+                2079,
+                "personality, which is a great -- "
+            ],
+            [
+                2081,
+                "characteristic of great design. "
+            ],
+            [
+                2083,
+                "All right, up next, we have an "
+            ],
+            [
+                2085,
+                "app that sets a new bar for "
+            ],
+            [
+                2086,
+                "innovation, and to tell us more "
+            ],
+            [
+                2088,
+                "about it, I'd like to introduce "
+            ],
+            [
+                2090,
+                "Alexis from the Health Team and "
+            ],
+            [
+                2092,
+                "Chris from Developer Relations.\n\n"
+            ],
+            [
+                2101,
+                "At Apple, we believe a "
+            ],
+            [
+                2102,
+                "powerful combination of hardware "
+            ],
+            [
+                2105,
+                "and software, combined with a "
+            ],
+            [
+                2106,
+                "delightful user experience, can "
+            ],
+            [
+                2108,
+                "change the world. "
+            ],
+            [
+                2109,
+                "Our next winner combines "
+            ],
+            [
+                2111,
+                "their innovative device with a "
+            ],
+            [
+                2112,
+                "beautiful iOS app to create an "
+            ],
+            [
+                2114,
+                "experience that is changing "
+            ],
+            [
+                2116,
+                "medicine. "
+            ],
+            [
+                2117,
+                "The winner is Butterfly IQ "
+            ],
+            [
+                2119,
+                "from Butterfly Network.\n\n"
+            ],
+            [
+                2129,
+                "As a cardiologist, the "
+            ],
+            [
+                2130,
+                "ability to see inside the body "
+            ],
+            [
+                2132,
+                "provides me with insights that "
+            ],
+            [
+                2133,
+                "simply aren't possible through "
+            ],
+            [
+                2135,
+                "other means, and 2/3 of the "
+            ],
+            [
+                2136,
+                "world has no imaging at all. "
+            ],
+            [
+                2141,
+                "This is Butterfly IQ. "
+            ],
+            [
+                2143,
+                "It's a handheld ultrasound, and "
+            ],
+            [
+                2145,
+                "it costs $2000. "
+            ],
+            [
+                2147,
+                "The current state of a common "
+            ],
+            [
+                2148,
+                "ultrasound machine is $60,000+, "
+            ],
+            [
+                2151,
+                "and is about the size of a "
+            ],
+            [
+                2153,
+                "refrigerator. "
+            ],
+            [
+                2154,
+                "This device is built on the "
+            ],
+            [
+                2155,
+                "premise that you can move "
+            ],
+            [
+                2156,
+                "ultrasound to a microchip, and "
+            ],
+            [
+                2158,
+                "move the compute to an iOS "
+            ],
+            [
+                2160,
+                "device. "
+            ],
+            [
+                2161,
+                "Let's get started with a "
+            ],
+            [
+                2162,
+                "quick scan of Chris's heart.\n\n"
+            ],
+            [
+                2178,
+                "All right, let's take a look.\n\n"
+            ],
+            [
+                2183,
+                "You'll notice the design is made "
+            ],
+            [
+                2184,
+                "to work well with one hand, no "
+            ],
+            [
+                2186,
+                "click wheel or keyboard. "
+            ],
+            [
+                2189,
+                "We love the attention Butterfly "
+            ],
+            [
+                2191,
+                "paid to this one-handed "
+            ],
+            [
+                2192,
+                "experience.\n\n"
+            ],
+            [
+                2195,
+                "I can adjust how deep the "
+            ],
+            [
+                2197,
+                "ultrasound can see with the "
+            ],
+            [
+                2199,
+                "swipe of a finger, and take a "
+            ],
+            [
+                2201,
+                "video clip of the image. "
+            ],
+            [
+                2203,
+                "Okay, don't breathe.\n\n"
+            ],
+            [
+                2208,
+                "All right. Congratulations, Chris. "
+            ],
+            [
+                2210,
+                "Your heart looks good. All right.\n\n"
+            ],
+            [
+                2218,
+                "Being able to take this device "
+            ],
+            [
+                2220,
+                "and plug it into an iPad or an "
+            ],
+            [
+                2222,
+                "iPhone helps make imaging "
+            ],
+            [
+                2223,
+                "simple. "
+            ],
+            [
+                2224,
+                "And now, I want to show you "
+            ],
+            [
+                2226,
+                "something truly amazing. "
+            ],
+            [
+                2228,
+                "On the screen, you are going to "
+            ],
+            [
+                2230,
+                "see Butterfly's AI and ML-backed "
+            ],
+            [
+                2232,
+                "technology helping me take a "
+            ],
+            [
+                2234,
+                "measurement called an ejection "
+            ],
+            [
+                2235,
+                "fraction that I use regularly. "
+            ],
+            [
+                2238,
+                "As I start to get the image, "
+            ],
+            [
+                2239,
+                "you'll see that slider at the "
+            ],
+            [
+                2240,
+                "bottom, hinting to me, guiding "
+            ],
+            [
+                2242,
+                "me, helping me get a "
+            ],
+            [
+                2244,
+                "diagnostically-useful image. "
+            ],
+            [
+                2247,
+                "We love this thoughtful design "
+            ],
+            [
+                2248,
+                "cue that is helpful, subtle, and "
+            ],
+            [
+                2251,
+                "powerful. "
+            ],
+            [
+                2252,
+                "After I get a useful image, I "
+            ],
+            [
+                2254,
+                "can have the app calculate "
+            ],
+            [
+                2255,
+                "ejection fraction.\n\n"
+            ],
+            [
+                2259,
+                "Isn't that spectacular? "
+            ],
+            [
+                2270,
+                "And one of the things I love "
+            ],
+            [
+                2271,
+                "about this design is that it "
+            ],
+            [
+                2272,
+                "shows you the data behind the "
+            ],
+            [
+                2273,
+                "calculations. "
+            ],
+            [
+                2274,
+                "So you saw on the screen there "
+            ],
+            [
+                2275,
+                "that outline of the heart. "
+            ],
+            [
+                2277,
+                "If I saw a point that looked "
+            ],
+            [
+                2278,
+                "off, I could just correct it.\n\n"
+            ],
+            [
+                2281,
+                "What Butterfly has done with "
+            ],
+            [
+                2282,
+                "this app and hardware is truly "
+            ],
+            [
+                2284,
+                "an exceptional display of "
+            ],
+            [
+                2285,
+                "design, from the design of the "
+            ],
+            [
+                2286,
+                "chip, to the design of the "
+            ],
+            [
+                2287,
+                "device, to the design of the "
+            ],
+            [
+                2289,
+                "app, and all the technologies "
+            ],
+            [
+                2290,
+                "involved. "
+            ],
+            [
+                2291,
+                "Congratulations to Butterfly IQ.\n\n"
+            ],
+            [
+                2365,
+                "Now, that is an inspiring "
+            ],
+            [
+                2366,
+                "example of innovation, bringing "
+            ],
+            [
+                2368,
+                "healthcare to -- all over the "
+            ],
+            [
+                2370,
+                "world, to places where it would "
+            ],
+            [
+                2372,
+                "not be available otherwise, "
+            ],
+            [
+                2373,
+                "using this new technology. "
+            ],
+            [
+                2375,
+                "All right, I'd like to call on "
+            ],
+            [
+                2376,
+                "my next -- on -- next up, my "
+            ],
+            [
+                2378,
+                "colleagues Mark and Corinne to "
+            ],
+            [
+                2380,
+                "talk about our next winner.\n\n"
+            ],
+            [
+                2387,
+                "Thanks, John. "
+            ],
+            [
+                2389,
+                "Our next winner is a music "
+            ],
+            [
+                2390,
+                "rhythm game, but it's unlike any "
+            ],
+            [
+                2391,
+                "rhythm game I've ever played. "
+            ],
+            [
+                2393,
+                "In fact, it's unlike any game "
+            ],
+            [
+                2395,
+                "I've ever played, period. "
+            ],
+            [
+                2396,
+                "Our next winner is Thumper.\n\n"
+            ],
+            [
+                2399,
+                "Thumper -- here's my best "
+            ],
+            [
+                2400,
+                "attempt to describe it. "
+            ],
+            [
+                2401,
+                "You play as a metallic space "
+            ],
+            [
+                2403,
+                "beetle matching a dark, "
+            ],
+            [
+                2404,
+                "industrial beat, which propels "
+            ],
+            [
+                2406,
+                "you down a narrow track towards "
+            ],
+            [
+                2407,
+                "psychedelic alien space "
+            ],
+            [
+                2409,
+                "monsters. "
+            ],
+            [
+                2410,
+                "Yeah, you've got to see this for "
+            ],
+            [
+                2414,
+                "yourself. "
+            ],
+            [
+                2415,
+                "Thumper does a terrific job "
+            ],
+            [
+                2416,
+                "introducing new game play "
+            ],
+            [
+                2417,
+                "mechanics one by one. "
+            ],
+            [
+                2419,
+                "Now, in this case, we're learning to change lanes, but "
+            ],
+            [
+                2421,
+                "just to get you up to speed "
+            ],
+            [
+                2422,
+                "quickly, we've already learned "
+            ],
+            [
+                2423,
+                "to tap when we pass over a "
+            ],
+            [
+                2424,
+                "glowing pad, swipe left and "
+            ],
+            [
+                2426,
+                "right to turn, and swipe up to "
+            ],
+            [
+                2428,
+                "jump.\n\n"
+            ],
+            [
+                2430,
+                "Now, audio cues actually guide "
+            ],
+            [
+                2431,
+                "our swipe timing, but just when "
+            ],
+            [
+                2433,
+                "you think you have it figured "
+            ],
+            [
+                2434,
+                "out, the cadence switches.\n\n"
+            ],
+            [
+                2442,
+                "The custom soundtrack in Thumper "
+            ],
+            [
+                2444,
+                "plays a key role in defining the "
+            ],
+            [
+                2445,
+                "tone of the game, which the "
+            ],
+            [
+                2446,
+                "developer describes as dread on "
+            ],
+            [
+                2448,
+                "a cosmic scale.\n\n"
+            ],
+            [
+                2454,
+                "Now, in this low-level boss "
+            ],
+            [
+                2455,
+                "battle, if you make a mistake, "
+            ],
+            [
+                2456,
+                "the level will seamlessly reset "
+            ],
+            [
+                2458,
+                "and advance toward you. "
+            ],
+            [
+                2459,
+                "With ceaseless levels and a "
+            ],
+            [
+                2460,
+                "pulsating beat, Thumper is an "
+            ],
+            [
+                2463,
+                "intense, continuous experience.\n\n"
+            ],
+            [
+                2470,
+                "Thumper's visuals are difficult "
+            ],
+            [
+                2471,
+                "to describe, but easy to "
+            ],
+            [
+                2473,
+                "appreciate. "
+            ],
+            [
+                2474,
+                "Inspired by psychedelic rock, "
+            ],
+            [
+                2476,
+                "pinball machines, and more, "
+            ],
+            [
+                2477,
+                "these graphics rival those on "
+            ],
+            [
+                2479,
+                "any other platform. "
+            ],
+            [
+                2480,
+                "In fact, the developer created a "
+            ],
+            [
+                2482,
+                "custom engine which is powered "
+            ],
+            [
+                2483,
+                "by Metal and renders at 60 "
+            ],
+            [
+                2484,
+                "frames per second -- very "
+            ],
+            [
+                2485,
+                "impressive.\n\n"
+            ],
+            [
+                2492,
+                "Now, we hardly have time to talk "
+            ],
+            [
+                2493,
+                "about all the careful design "
+            ],
+            [
+                2494,
+                "decisions that the developer "
+            ],
+            [
+                2495,
+                "made, like supporting real-time "
+            ],
+            [
+                2498,
+                "portrait and landscape "
+            ],
+            [
+                2499,
+                "switching.\n\n"
+            ],
+            [
+                2502,
+                "Haptic feedback to emphasize a "
+            ],
+            [
+                2504,
+                "crash, tilt controls to change "
+            ],
+            [
+                2506,
+                "lanes -- they created a custom "
+            ],
+            [
+                2508,
+                "gestural system to detect swipes "
+            ],
+            [
+                2510,
+                "for the turns, and then, of "
+            ],
+            [
+                2512,
+                "course, they have a pause button "
+            ],
+            [
+                2513,
+                "that fades away until just the "
+            ],
+            [
+                2515,
+                "moment when you need it. "
+            ],
+            [
+                2519,
+                "It's incredibly satisfying to "
+            ],
+            [
+                2520,
+                "beat a level in Thumper, but "
+            ],
+            [
+                2521,
+                "there's no time to celebrate, as "
+            ],
+            [
+                2522,
+                "the next level comes screaming "
+            ],
+            [
+                2524,
+                "toward you.\n\n"
+            ],
+            [
+                2526,
+                "Thumper also supports Game "
+            ],
+            [
+                2527,
+                "Center leader boards, and iCloud "
+            ],
+            [
+                2529,
+                "Sync to save games across "
+            ],
+            [
+                2530,
+                "devices. "
+            ],
+            [
+                2531,
+                "All right, let's turn the volume "
+            ],
+            [
+                2532,
+                "up so you can really appreciate "
+            ],
+            [
+                2533,
+                "how well the graphics and "
+            ],
+            [
+                2534,
+                "soundtrack are orchestrated.\n\n"
+            ],
+            [
+                2550,
+                "Thumper's striking graphics, "
+            ],
+            [
+                2551,
+                "driving soundtrack, and unified "
+            ],
+            [
+                2553,
+                "design make it a deserving "
+            ],
+            [
+                2555,
+                "winner of an Apple design award. "
+            ],
+            [
+                2556,
+                "Congratulations to Drool. "
+            ],
+            [
+                2557,
+                "Please welcome them to the "
+            ],
+            [
+                2558,
+                "stage.\n\n"
+            ],
+            [
+                2598,
+                "That is pretty great. "
+            ],
+            [
+                2599,
+                "I think it's super-fun, and "
+            ],
+            [
+                2601,
+                "super-compelling, with great "
+            ],
+            [
+                2603,
+                "game play and deep system "
+            ],
+            [
+                2605,
+                "integration. "
+            ],
+            [
+                2606,
+                "All right, to present our final "
+            ],
+            [
+                2608,
+                "award tonight, I'd like to "
+            ],
+            [
+                2609,
+                "introduce Doug Lemoine and Larry "
+            ],
+            [
+                2612,
+                "Moss.\n\n"
+            ],
+            [
+                2621,
+                "So this last app shows that "
+            ],
+            [
+                2623,
+                "you don't need to be a big team "
+            ],
+            [
+                2625,
+                "to create an experience that's "
+            ],
+            [
+                2627,
+                "truly groundbreaking. "
+            ],
+            [
+                2629,
+                "It solves a new problem using "
+            ],
+            [
+                2631,
+                "powerful technology that's so "
+            ],
+            [
+                2632,
+                "seamless, it's almost invisible. "
+            ],
+            [
+                2635,
+                "When Larry and I first saw "
+            ],
+            [
+                2637,
+                "this, I think we had the same "
+            ],
+            [
+                2638,
+                "reaction. "
+            ],
+            [
+                2639,
+                "This must be fake. "
+            ],
+            [
+                2640,
+                "This must be fake . "
+            ],
+            [
+                2642,
+                "The winner of the next Apple "
+            ],
+            [
+                2643,
+                "Design Award is HomeCourt by NEX "
+            ],
+            [
+                2645,
+                "Team.\n\n"
+            ],
+            [
+                2653,
+                "All right, let's take a look. "
+            ],
+            [
+                2655,
+                "The core of the experience is a "
+            ],
+            [
+                2657,
+                "list of drills and workouts. "
+            ],
+            [
+                2659,
+                "These drills are super-easy to "
+            ],
+            [
+                2661,
+                "set up, and require no special "
+            ],
+            [
+                2663,
+                "equipment, unless you count this "
+            ],
+            [
+                2668,
+                "headband, which I carry "
+            ],
+            [
+                2670,
+                "everywhere. "
+            ],
+            [
+                2671,
+                "Let's do a dribbling drill.\n\n"
+            ],
+            [
+                2674,
+                "In this case, we're going to "
+            ],
+            [
+                2676,
+                "use a tripod, but it's just as "
+            ],
+            [
+                2678,
+                "common to use your iPhone popped "
+            ],
+            [
+                2680,
+                "up against a water bottle. "
+            ],
+            [
+                2682,
+                "So the drill will get started "
+            ],
+            [
+                2684,
+                "when I'm in the frame. "
+            ],
+            [
+                2685,
+                "The iPhone camera, Core ML, "
+            ],
+            [
+                2688,
+                "and Vision frameworks are doing "
+            ],
+            [
+                2690,
+                "all the work, not Doug. "
+            ],
+            [
+                2692,
+                "But to be fair, Doug is really "
+            ],
+            [
+                2695,
+                "good, but even non-experts can "
+            ],
+            [
+                2697,
+                "benefit from HomeCourt's ability "
+            ],
+            [
+                2698,
+                "to make them a better basketball "
+            ],
+            [
+                2700,
+                "player. "
+            ],
+            [
+                2701,
+                "Lower and faster dribbling will "
+            ],
+            [
+                2702,
+                "make you score more points. "
+            ],
+            [
+                2703,
+                "Faster, Doug, faster. "
+            ],
+            [
+                2706,
+                "Good job. "
+            ],
+            [
+                2707,
+                "So at the end of the drill, I "
+            ],
+            [
+                2709,
+                "get a nice little summary.\n\n"
+            ],
+            [
+                2711,
+                "And in addition to doing "
+            ],
+            [
+                2713,
+                "these dribbling workouts, "
+            ],
+            [
+                2714,
+                "HomeCourt is also great for "
+            ],
+            [
+                2715,
+                "tracking shooting drills. "
+            ],
+            [
+                2717,
+                "In fact, you can see up here on "
+            ],
+            [
+                2718,
+                "the screen, it has tracked your "
+            ],
+            [
+                2720,
+                "makes and your misses, as well "
+            ],
+            [
+                2722,
+                "as where you shot the ball from. "
+            ],
+            [
+                2724,
+                "In fact, it also gives you this "
+            ],
+            [
+                2725,
+                "nice video where you can see "
+            ],
+            [
+                2727,
+                "your shots, and where you took "
+            ],
+            [
+                2728,
+                "them from. "
+            ],
+            [
+                2729,
+                "You know, Doug, this is really "
+            ],
+            [
+                2732,
+                "revolutionary. "
+            ],
+            [
+                2733,
+                "It's true, Larry .\n\n"
+            ],
+            [
+                2735,
+                "Before HomeCourt, you would have "
+            ],
+            [
+                2737,
+                "to do this stuff manually. "
+            ],
+            [
+                2739,
+                "You'd have to have someone track "
+            ],
+            [
+                2741,
+                "it for you. "
+            ],
+            [
+                2742,
+                "Absolutely. "
+            ],
+            [
+                2743,
+                "And today, you see kids, and "
+            ],
+            [
+                2745,
+                "even adults, using HomeCourt to "
+            ],
+            [
+                2747,
+                "improve their skills. "
+            ],
+            [
+                2749,
+                "So when you finish a drill, "
+            ],
+            [
+                2750,
+                "you can actually share your "
+            ],
+            [
+                2751,
+                "results with your friends, your "
+            ],
+            [
+                2752,
+                "teammates, your coaches, or with "
+            ],
+            [
+                2754,
+                "people around the world. "
+            ],
+            [
+                2756,
+                "But you know, Doug, "
+            ],
+            [
+                2757,
+                "basketball is way more fun when "
+            ],
+            [
+                2760,
+                "you play against someone else. "
+            ],
+            [
+                2761,
+                "And HomeCourt has competitive "
+            ],
+            [
+                2763,
+                "drills, too. "
+            ],
+            [
+                2764,
+                "Do you want to show them? "
+            ],
+            [
+                2765,
+                "Oh, totally. "
+            ],
+            [
+                2766,
+                "You're on.\n\n"
+            ],
+            [
+                2777,
+                "So the objective in this "
+            ],
+            [
+                2779,
+                "drill is to not hit the red "
+            ],
+            [
+                2781,
+                "targets.\n\n"
+            ],
+            [
+                2788,
+                "Your shoe's untied. "
+            ],
+            [
+                2789,
+                "Yeah, that's what you think.\n\n"
+            ],
+            [
+                2792,
+                "Get into frame, man.\n\n"
+            ],
+            [
+                2816,
+                "You beat me again.\n\n"
+            ],
+            [
+                2823,
+                "HomeCourt's use of amazing Core "
+            ],
+            [
+                2825,
+                "ML technology really makes it so "
+            ],
+            [
+                2828,
+                "that everyone can become a "
+            ],
+            [
+                2829,
+                "better basketball player. "
+            ],
+            [
+                2831,
+                "Come on up.\n\n"
+            ],
+            [
+                2880,
+                "All right, well done. "
+            ],
+            [
+                2882,
+                "Well done. Incredible work. "
+            ],
+            [
+                2883,
+                "All right, so that's a wrap. "
+            ],
+            [
+                2886,
+                "Please join me in thanking my "
+            ],
+            [
+                2887,
+                "colleagues who were here on "
+            ],
+            [
+                2888,
+                "stage showing you the apps this "
+            ],
+            [
+                2890,
+                "evening.\n\n"
+            ],
+            [
+                2896,
+                "And more importantly, let's "
+            ],
+            [
+                2898,
+                "thank our winners one last time. "
+            ],
+            [
+                2901,
+                "So please stand. "
+            ],
+            [
+                2902,
+                "If you're in the rest of the "
+            ],
+            [
+                2903,
+                "house, please stand as well if "
+            ],
+            [
+                2904,
+                "you're one of the winners. "
+            ],
+            [
+                2905,
+                "Give them a big round of "
+            ],
+            [
+                2906,
+                "applause.\n\n"
+            ],
+            [
+                2919,
+                "So nine great apps and games "
+            ],
+            [
+                2922,
+                "that stand on the shoulders of "
+            ],
+            [
+                2923,
+                "88 winners before them, and "
+            ],
+            [
+                2926,
+                "raise the bar even higher.\n\n"
+            ],
+            [
+                2929,
+                "We look forward to what you're "
+            ],
+            [
+                2930,
+                "going to do for next year based "
+            ],
+            [
+                2933,
+                "on all of the technologies that "
+            ],
+            [
+                2934,
+                "you learned about today, and "
+            ],
+            [
+                2936,
+                "that you're going to learn about "
+            ],
+            [
+                2937,
+                "throughout this week. "
+            ],
+            [
+                2940,
+                "Thanks for coming again. "
+            ],
+            [
+                2942,
+                "We hope you have a great WWDC. "
+            ]
+        ]
+    }
+}

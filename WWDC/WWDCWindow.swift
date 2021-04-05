@@ -52,7 +52,7 @@ final class WWDCWindow: NSWindow {
         isMovableByWindowBackground = true
         tabbingMode = .disallowed
 
-        titlebarView?.material = .ultraDark
+        titlebarView?.material = .titlebar
         titlebarView?.state = .inactive
         titlebarView?.layer?.backgroundColor = NSColor.darkTitlebarBackground.cgColor
     }

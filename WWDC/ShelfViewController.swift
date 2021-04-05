@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import CoreMedia
 
-protocol ShelfViewControllerDelegate: class {
+protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
     func shelfViewController(_ controller: ShelfViewController, didBeginClipSharingWithHost hostView: NSView)
     func suggestedBeginTimeForClipSharingInShelfViewController(_ controller: ShelfViewController) -> CMTime?

@@ -8,7 +8,7 @@
 
 import Cocoa
 
-public protocol PUITimelineDelegate: class {
+public protocol PUITimelineDelegate: AnyObject {
 
     func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController?
     func timelineDidHighlightAnnotation(_ annotation: PUITimelineAnnotation?)

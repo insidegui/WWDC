@@ -85,11 +85,9 @@ A number of third-party libraries are used by the app:
 
 ## Building the app
 
-**Building requires Xcode 11.5 or later.**
+**Building requires Xcode 12.4 or later.**
 
-Building the app requires [Carthage](https://github.com/Carthage/Carthage) to be installed.
-
-**Clone this branch and before opening the project, run `./bootstrap.sh`** to fetch the dependencies (this script can take a while to run, that's normal).
+**Clone this branch and before opening the project, run `./bootstrap.sh`** to setup the environment. It will install `swiftlint` for you using `brew` if you don't have it yet.
 
 Since the app uses CloudKit, when you build it yourself, all of the CloudKit-dependant functionality will not be available. CloudKit requires a provisioning profile and a paid developer account.
 

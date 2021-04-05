@@ -11,7 +11,7 @@ import RealmSwift
 import RxSwift
 import RxCocoa
 
-protocol FeaturedContentViewControllerDelegate: class {
+protocol FeaturedContentViewControllerDelegate: AnyObject {
     func featuredContentViewController(_ controller: FeaturedContentViewController, didSelectContent content: FeaturedContentViewModel)
 }
 

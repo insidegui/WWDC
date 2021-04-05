@@ -79,7 +79,7 @@ final class CommunityViewController: NSViewController {
 
         syncEngine.storage.communityNewsItemsObservable
                           .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-                          .observeOn(MainScheduler.instance)
+                          .observe(on: MainScheduler.instance)
                           .subscribe(onNext: { [weak self] results in
                             self?.collectionController.sections = CommunitySection.sections(from: results)
                           })
@@ -87,7 +87,7 @@ final class CommunityViewController: NSViewController {
 
         syncEngine.storage.featuredCommunityNewsItemsObservable
                           .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-                          .observeOn(MainScheduler.instance)
+                          .observe(on: MainScheduler.instance)
                           .subscribe(onNext: { [weak self] results in
                             self?.collectionController.featuredSection = CommunitySection.featuredSection(with: results)
                           })

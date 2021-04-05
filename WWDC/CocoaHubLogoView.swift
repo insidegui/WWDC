@@ -24,7 +24,7 @@ final class CocoaHubLogoView: NSView {
         let v = NSVisualEffectView()
 
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.material = .appearanceBased
+        v.material = .menu
         v.blendingMode = .withinWindow
 
         return v

@@ -24,7 +24,6 @@ struct SlowMigrationView: View {
     }
 }
 
-// swiftlint:disable:next type_name
 struct SlowMigrationView_Previews: PreviewProvider {
     static var previews: some View {
         SlowMigrationView()

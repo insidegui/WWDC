@@ -27,7 +27,7 @@ public struct PUIExternalPlaybackMediaStatus {
 
 }
 
-public protocol PUIExternalPlaybackProvider: class {
+public protocol PUIExternalPlaybackProvider: AnyObject {
 
     /// Initializes the external playback provider to start playing the media at the specified URL
     ///

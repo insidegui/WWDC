@@ -12,7 +12,7 @@ import ConfCore
 import RxSwift
 import RxCocoa
 
-protocol SessionActionsViewControllerDelegate: class {
+protocol SessionActionsViewControllerDelegate: AnyObject {
 
     func sessionActionsDidSelectSlides(_ sender: NSView?)
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
