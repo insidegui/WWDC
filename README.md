@@ -14,7 +14,7 @@ The schedule tab shows the schedule for the current edition of WWDC, and allows 
 
 Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in
 
-![videos](./screenshots/v7/Transcript.png)
+![videos](./img/v7/Transcript.png)
 
 ### Video features
 
@@ -26,13 +26,13 @@ Watch this year's videos as they're released and access videos from previous yea
 
 Clip Sharing allows you to share a short segment (up to 5 minutes) from a session's video. This is a great feature for quickly sharing snippets of content from the conference.
 
-![clipsharing](./screenshots/v7/ClipSharing.png)
+![clipsharing](./img/v7/ClipSharing.png)
 
 ## Chromecast
 
 You can watch WWDC videos (both live and on-demand) on your Chromecast. Just click the Chromecast button while playing a video, choose your device from the list and control playback using the Google Home app on your phone.
 
-![chromecast](./screenshots/v7/ChromeCast.png)
+![chromecast](./img/v7/ChromeCast.png)
 
 ## Bookmarks
 
@@ -40,13 +40,13 @@ Have you ever found yourself watching a WWDC session and wishing you could take 
 
 With bookmarks, you can create a reference point within a video and add an annotation to it. Your bookmark annotations can also be considered while using the search, so it's easier than ever to find the content you've bookmarked before.
 
-![bookmarks](./screenshots/v7/Video-Bookmark.png)
+![bookmarks](./img/v7/Video-Bookmark.png)
 
 ## Community
 
 Browse content curated by the [CocoaHub](http://cocoahub.app) team in the Community tab.
 
-![community](./screenshots/v7/Community.png)
+![community](./img/v7/Community.png)
 
 ## iCloud Sync
 
@@ -93,8 +93,10 @@ Since the app uses CloudKit, when you build it yourself, all of the CloudKit-dep
 
 To build the app yourself without the need for a developer account and a CloudKit container, **always use the `WWDC` target when building**. The `WWDC with iCloud` target requires a paid developer account and a CloudKit container, which you won't be able to create because of the app's bundle identifier.
 
-![schedule](./screenshots/v7/BuildTarget.png)
+![schedule](./img/v7/BuildTarget.png)
 
 ### Clearing app data during development
 
 If you need to clear the app's preferences and stored data during development, you can run `./cleardata.sh` in the project folder. **This will delete all of your preferences and data like favorites, bookmarks and progress in videos, so be careful**.
+
+<a href="https://macstadium.com" title="The unofficial WWDC app is using MacStadium"><img src="./img/MacStadiumOSS.png" alt="Powered by MacStadium"></a>
