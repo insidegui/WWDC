@@ -193,6 +193,28 @@
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
+		F4749CE9265C005500062B83 /* WWDCAgentAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */; };
+		F4749CED265C005500062B83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEC265C005500062B83 /* Assets.xcassets */; };
+		F4749CF0265C005500062B83 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEF265C005500062B83 /* Preview Assets.xcassets */; };
+		F4749CF3265C005500062B83 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4749CF1265C005500062B83 /* Main.storyboard */; };
+		F4749CFC265C006800062B83 /* ConfCore in Frameworks */ = {isa = PBXBuildFile; productRef = F4749CFB265C006800062B83 /* ConfCore */; };
+		F4749CFE265C006800062B83 /* ConfCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = F4749CFB265C006800062B83 /* ConfCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		F4749D04265C018100062B83 /* PathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38871EAC2275002D8C00 /* PathUtil.swift */; };
+		F4749D06265C024B00062B83 /* WWDCAgentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D05265C024B00062B83 /* WWDCAgentService.swift */; };
+		F4749D08265C031500062B83 /* WWDCAgentInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D07265C031500062B83 /* WWDCAgentInterface.swift */; };
+		F4749D09265C03E100062B83 /* Boot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA50E3424AA5090007C77C6 /* Boot.swift */; };
+		F4749D0A265C03F000062B83 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD34A79A1EC3CD5900E0B575 /* Constants.swift */; };
+		F4749D0B265C03F600062B83 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAA40B1EC798B600DF9D02 /* Preferences.swift */; };
+		F4749D13265C053800062B83 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D12265C053800062B83 /* AppDelegate.swift */; };
+		F4749D15265C053800062B83 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D14265C053800062B83 /* ContentView.swift */; };
+		F4749D17265C053900062B83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749D16265C053900062B83 /* Assets.xcassets */; };
+		F4749D1A265C053900062B83 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749D19265C053900062B83 /* Preview Assets.xcassets */; };
+		F4749D1D265C053900062B83 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F4749D1B265C053900062B83 /* Main.storyboard */; };
+		F4749D26265C054E00062B83 /* WWDCAgentClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D25265C054E00062B83 /* WWDCAgentClient.swift */; };
+		F4749D27265C073600062B83 /* WWDCAgentInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D07265C031500062B83 /* WWDCAgentInterface.swift */; };
+		F4749D29265C08F000062B83 /* WWDCSessionXPCObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */; };
+		F4749D2A265C095000062B83 /* WWDCSessionXPCObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */; };
+		F4749D2F265C0F1800062B83 /* NSURL+RealHome.m in Sources */ = {isa = PBXBuildFile; fileRef = F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -249,6 +271,17 @@
 				DDB1A2912577EF0D00995FF1 /* TranscriptIndexingService.xpc in Embed XPC Services */,
 			);
 			name = "Embed XPC Services";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4749CFD265C006800062B83 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F4749CFE265C006800062B83 /* ConfCore in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -449,6 +482,28 @@
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F4749CE6265C005400062B83 /* WWDCAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentAppDelegate.swift; sourceTree = "<group>"; };
+		F4749CEC265C005500062B83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F4749CEF265C005500062B83 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F4749CF2265C005500062B83 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F4749CF4265C005500062B83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F4749CF5265C005500062B83 /* WWDCAgent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WWDCAgent.entitlements; sourceTree = "<group>"; };
+		F4749D05265C024B00062B83 /* WWDCAgentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentService.swift; sourceTree = "<group>"; };
+		F4749D07265C031500062B83 /* WWDCAgentInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentInterface.swift; sourceTree = "<group>"; };
+		F4749D10265C053800062B83 /* WWDCAgentTestClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCAgentTestClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4749D12265C053800062B83 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F4749D14265C053800062B83 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F4749D16265C053900062B83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F4749D19265C053900062B83 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F4749D1C265C053900062B83 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F4749D1E265C053900062B83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F4749D1F265C053900062B83 /* WWDCAgentTestClient.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WWDCAgentTestClient.entitlements; sourceTree = "<group>"; };
+		F4749D25265C054E00062B83 /* WWDCAgentClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentClient.swift; sourceTree = "<group>"; };
+		F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCSessionXPCObject.swift; sourceTree = "<group>"; };
+		F4749D2C265C0F1700062B83 /* WWDCAgent-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDCAgent-Bridging-Header.h"; sourceTree = "<group>"; };
+		F4749D2D265C0F1800062B83 /* NSURL+RealHome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+RealHome.h"; sourceTree = "<group>"; };
+		F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+RealHome.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -486,6 +541,21 @@
 			files = (
 				DD600ACF2487F4570071B90E /* ConfUIFoundation.framework in Frameworks */,
 				DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4749CE3265C005400062B83 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4749CFC265C006800062B83 /* ConfCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4749D0D265C053800062B83 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +602,8 @@
 				DDC677F31EDA76A100A4E19C /* TranscriptIndexingService */,
 				DD600AB12487F1720071B90E /* ConfUIFoundation */,
 				DDB1A25D2577E51200995FF1 /* LocalDependencies */,
+				F4749CE7265C005500062B83 /* WWDCAgent */,
+				F4749D11265C053800062B83 /* WWDCAgentTestClient */,
 				DD36A4AD1E478C6A00B2EA88 /* Products */,
 				DDAE7C531E5BC6CD00CEA205 /* Frameworks */,
 			);
@@ -545,6 +617,8 @@
 				DDF721961ECA12780054C503 /* PlayerUI.framework */,
 				DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */,
 				DD600AB02487F1720071B90E /* ConfUIFoundation.framework */,
+				F4749CE6265C005400062B83 /* WWDCAgent.app */,
+				F4749D10265C053800062B83 /* WWDCAgentTestClient.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1094,6 +1168,64 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
+		F4749CE7265C005500062B83 /* WWDCAgent */ = {
+			isa = PBXGroup;
+			children = (
+				F4749D2B265C0F0A00062B83 /* Util */,
+				F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */,
+				F4749D07265C031500062B83 /* WWDCAgentInterface.swift */,
+				F4749D05265C024B00062B83 /* WWDCAgentService.swift */,
+				F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */,
+				F4749CEC265C005500062B83 /* Assets.xcassets */,
+				F4749CF1265C005500062B83 /* Main.storyboard */,
+				F4749CF4265C005500062B83 /* Info.plist */,
+				F4749CF5265C005500062B83 /* WWDCAgent.entitlements */,
+				F4749CEE265C005500062B83 /* Preview Content */,
+			);
+			path = WWDCAgent;
+			sourceTree = "<group>";
+		};
+		F4749CEE265C005500062B83 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				F4749CEF265C005500062B83 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F4749D11265C053800062B83 /* WWDCAgentTestClient */ = {
+			isa = PBXGroup;
+			children = (
+				F4749D12265C053800062B83 /* AppDelegate.swift */,
+				F4749D14265C053800062B83 /* ContentView.swift */,
+				F4749D16265C053900062B83 /* Assets.xcassets */,
+				F4749D1B265C053900062B83 /* Main.storyboard */,
+				F4749D1E265C053900062B83 /* Info.plist */,
+				F4749D1F265C053900062B83 /* WWDCAgentTestClient.entitlements */,
+				F4749D18265C053900062B83 /* Preview Content */,
+				F4749D25265C054E00062B83 /* WWDCAgentClient.swift */,
+			);
+			path = WWDCAgentTestClient;
+			sourceTree = "<group>";
+		};
+		F4749D18265C053900062B83 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				F4749D19265C053900062B83 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F4749D2B265C0F0A00062B83 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				F4749D2D265C0F1800062B83 /* NSURL+RealHome.h */,
+				F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */,
+				F4749D2C265C0F1700062B83 /* WWDCAgent-Bridging-Header.h */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1203,13 +1335,52 @@
 			productReference = DDF721961ECA12780054C503 /* PlayerUI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		F4749CE5265C005400062B83 /* WWDCAgent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4749CFA265C005500062B83 /* Build configuration list for PBXNativeTarget "WWDCAgent" */;
+			buildPhases = (
+				F4749CE2265C005400062B83 /* Sources */,
+				F4749CE3265C005400062B83 /* Frameworks */,
+				F4749CE4265C005400062B83 /* Resources */,
+				F4749CFD265C006800062B83 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F4749D00265C007500062B83 /* PBXTargetDependency */,
+			);
+			name = WWDCAgent;
+			packageProductDependencies = (
+				F4749CFB265C006800062B83 /* ConfCore */,
+			);
+			productName = WWDCAgent;
+			productReference = F4749CE6265C005400062B83 /* WWDCAgent.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F4749D0F265C053800062B83 /* WWDCAgentTestClient */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F4749D20265C053900062B83 /* Build configuration list for PBXNativeTarget "WWDCAgentTestClient" */;
+			buildPhases = (
+				F4749D0C265C053800062B83 /* Sources */,
+				F4749D0D265C053800062B83 /* Frameworks */,
+				F4749D0E265C053800062B83 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WWDCAgentTestClient;
+			productName = WWDCAgentTestClient;
+			productReference = F4749D10265C053800062B83 /* WWDCAgentTestClient.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		DD36A4A41E478C6900B2EA88 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1150;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Guilherme Rambo";
 				TargetAttributes = {
@@ -1249,6 +1420,13 @@
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 					};
+					F4749CE5265C005400062B83 = {
+						CreatedOnToolsVersion = 12.5;
+						LastSwiftMigration = 1250;
+					};
+					F4749D0F265C053800062B83 = {
+						CreatedOnToolsVersion = 12.5;
+					};
 				};
 			};
 			buildConfigurationList = DD36A4A71E478C6900B2EA88 /* Build configuration list for PBXProject "WWDC" */;
@@ -1271,6 +1449,8 @@
 				DDF721951ECA12780054C503 /* PlayerUI */,
 				DDC677F11EDA76A100A4E19C /* TranscriptIndexingService */,
 				DD600AAF2487F1720071B90E /* ConfUIFoundation */,
+				F4749CE5265C005400062B83 /* WWDCAgent */,
+				F4749D0F265C053800062B83 /* WWDCAgentTestClient */,
 			);
 		};
 /* End PBXProject section */
@@ -1310,6 +1490,26 @@
 			files = (
 				DDF721D41ECA12A40054C503 /* WhiteSpinner.car in Resources */,
 				DDF721D31ECA12A40054C503 /* Media.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4749CE4265C005400062B83 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4749CF3265C005500062B83 /* Main.storyboard in Resources */,
+				F4749CF0265C005500062B83 /* Preview Assets.xcassets in Resources */,
+				F4749CED265C005500062B83 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4749D0E265C053800062B83 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4749D1D265C053900062B83 /* Main.storyboard in Resources */,
+				F4749D1A265C053900062B83 /* Preview Assets.xcassets in Resources */,
+				F4749D17265C053900062B83 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1521,6 +1721,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F4749CE2265C005400062B83 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4749D29265C08F000062B83 /* WWDCSessionXPCObject.swift in Sources */,
+				F4749D2F265C0F1800062B83 /* NSURL+RealHome.m in Sources */,
+				F4749D08265C031500062B83 /* WWDCAgentInterface.swift in Sources */,
+				F4749D0B265C03F600062B83 /* Preferences.swift in Sources */,
+				F4749D04265C018100062B83 /* PathUtil.swift in Sources */,
+				F4749D06265C024B00062B83 /* WWDCAgentService.swift in Sources */,
+				F4749D09265C03E100062B83 /* Boot.swift in Sources */,
+				F4749CE9265C005500062B83 /* WWDCAgentAppDelegate.swift in Sources */,
+				F4749D0A265C03F000062B83 /* Constants.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4749D0C265C053800062B83 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F4749D27265C073600062B83 /* WWDCAgentInterface.swift in Sources */,
+				F4749D15265C053800062B83 /* ContentView.swift in Sources */,
+				F4749D2A265C095000062B83 /* WWDCSessionXPCObject.swift in Sources */,
+				F4749D13265C053800062B83 /* AppDelegate.swift in Sources */,
+				F4749D26265C054E00062B83 /* WWDCAgentClient.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1548,6 +1776,10 @@
 			target = DDF721951ECA12780054C503 /* PlayerUI */;
 			targetProxy = DDF7219B1ECA12780054C503 /* PBXContainerItemProxy */;
 		};
+		F4749D00265C007500062B83 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = F4749CFF265C007500062B83 /* ConfCore */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1565,6 +1797,22 @@
 				DDC678111EDB26D000A4E19C /* Base */,
 			);
 			name = AboutWindowController.xib;
+			sourceTree = "<group>";
+		};
+		F4749CF1265C005500062B83 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F4749CF2265C005500062B83 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F4749D1B265C053900062B83 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F4749D1C265C053900062B83 /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -2302,6 +2550,278 @@
 			};
 			name = Release_iCloud;
 		};
+		F4749CF6265C005500062B83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WWDCAgent/WWDCAgent.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"WWDCAgent/Preview Content\"";
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = WWDCAgent/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "-D DEBUG -D AGENT";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WWDCAgent/Util/WWDCAgent-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F4749CF7265C005500062B83 /* Debug_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WWDCAgent/WWDCAgent.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"WWDCAgent/Preview Content\"";
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = WWDCAgent/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WWDCAgent/Util/WWDCAgent-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug_iCloud;
+		};
+		F4749CF8265C005500062B83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WWDCAgent/WWDCAgent.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"WWDCAgent/Preview Content\"";
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = WWDCAgent/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "-D AGENT";
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WWDCAgent/Util/WWDCAgent-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F4749CF9265C005500062B83 /* Release_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WWDCAgent/WWDCAgent.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"WWDCAgent/Preview Content\"";
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = WWDCAgent/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgent;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WWDCAgent/Util/WWDCAgent-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release_iCloud;
+		};
+		F4749D21265C053900062B83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WWDCAgentTestClient/WWDCAgentTestClient.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"WWDCAgentTestClient/Preview Content\"";
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = WWDCAgentTestClient/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgentTestClient;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F4749D22265C053900062B83 /* Debug_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WWDCAgentTestClient/WWDCAgentTestClient.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"WWDCAgentTestClient/Preview Content\"";
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = WWDCAgentTestClient/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgentTestClient;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug_iCloud;
+		};
+		F4749D23265C053900062B83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WWDCAgentTestClient/WWDCAgentTestClient.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"WWDCAgentTestClient/Preview Content\"";
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = WWDCAgentTestClient/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgentTestClient;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F4749D24265C053900062B83 /* Release_iCloud */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WWDCAgentTestClient/WWDCAgentTestClient.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"WWDCAgentTestClient/Preview Content\"";
+				DEVELOPMENT_TEAM = 8C7439RJLG;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = WWDCAgentTestClient/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgentTestClient;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release_iCloud;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2360,6 +2880,28 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		F4749CFA265C005500062B83 /* Build configuration list for PBXNativeTarget "WWDCAgent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4749CF6265C005500062B83 /* Debug */,
+				F4749CF7265C005500062B83 /* Debug_iCloud */,
+				F4749CF8265C005500062B83 /* Release */,
+				F4749CF9265C005500062B83 /* Release_iCloud */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F4749D20265C053900062B83 /* Build configuration list for PBXNativeTarget "WWDCAgentTestClient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F4749D21265C053900062B83 /* Debug */,
+				F4749D22265C053900062B83 /* Debug_iCloud */,
+				F4749D23265C053900062B83 /* Release */,
+				F4749D24265C053900062B83 /* Release_iCloud */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -2388,6 +2930,14 @@
 			productName = ConfCore;
 		};
 		DDB1A2972577EF1A00995FF1 /* ConfCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ConfCore;
+		};
+		F4749CFB265C006800062B83 /* ConfCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ConfCore;
+		};
+		F4749CFF265C007500062B83 /* ConfCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ConfCore;
 		};
