@@ -104,6 +104,11 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
             os_log("No feeds found for currently set language (%@) or fallback language (%@)", log: self.log, type: .error, transcriptLanguage, ConfigResponse.fallbackFeedLanguage)
             return
         }
+        
+        guard let transcriptsFeedURL = feeds.transcripts?.url else {
+            os_log("Manifest doesn't have a URL for the transcripts feed", log: self.log, type: .error)
+            return
+        }
 
         guard let storageURL = storage.realmConfig.fileURL else { return }
 
@@ -111,7 +116,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
         migratedTranscriptsToNativeVersion = true
 
         transcriptIndexingService?.indexTranscriptsIfNeeded(
-            manifestURL: feeds.transcripts.url,
+            manifestURL: transcriptsFeedURL,
             ignoringCache: ignoreCache,
             storageURL: storageURL,
             schemaVersion: storage.realmConfig.schemaVersion
