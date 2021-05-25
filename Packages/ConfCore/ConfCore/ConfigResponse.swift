@@ -19,13 +19,13 @@ public struct ConfigResponse: Hashable, Codable {
         }
 
         public let contents: Feed
-        public let articles: Feed
-        public let layout: Feed
-        public let maps: Feed
-        public let liveVideos: Feed
-        public let discover: Feed
-        public let event: Feed
-        public let transcripts: Feed
+        public let articles: Feed?
+        public let layout: Feed?
+        public let maps: Feed?
+        public let liveVideos: Feed?
+        public let discover: Feed?
+        public let event: Feed?
+        public let transcripts: Feed?
     }
 
     /// Maps from language ID (such as "en", "zho", etc) to feed manifests.
