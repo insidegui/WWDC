@@ -113,7 +113,7 @@ extension Environment {
                                          liveVideosPath: "/videos_live.json",
                                          featuredSectionsPath: "/_featured.json")
 
-    public static let production = Environment(baseURL: "https://api2020.wwdc.io",
+    public static let production = Environment(baseURL: "https://api2021.wwdc.io",
                                                cocoaHubBaseURL: Self.defaultCocoaHubBaseURL,
                                                configPath: "/config.json",
                                                sessionsPath: "/contents.json",
