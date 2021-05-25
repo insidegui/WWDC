@@ -98,7 +98,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-WWDCEnvironmentBaseURL &quot;https://calm-block-8cce.rambo.workers.dev&quot;"
+            argument = "-WWDCEnvironmentBaseURL &quot;http://localhost:7777&quot;"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
