@@ -10,7 +10,11 @@ import Foundation
 
 @objc protocol WWDCAgentInterface: AnyObject {
     func testAgentConnection(with completion: @escaping (Bool) -> Void)
-    func searchForSessions(matching predicate: NSPredicate, completion: @escaping ([WWDCSessionXPCObject]) -> Void)
+    
+    func fetchFavoriteSessions(for event: String?, completion: @escaping ([String]) -> Void)
+    func fetchDownloadedSessions(for event: String?, completion: @escaping ([String]) -> Void)
+    func fetchWatchedSessions(for event: String?, completion: @escaping ([String]) -> Void)
+    func fetchUnwatchedSessions(for event: String?, completion: @escaping ([String]) -> Void)
     
     func revealVideo(with id: String, completion: @escaping (Bool) -> Void)
     

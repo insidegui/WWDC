@@ -14,18 +14,44 @@ final class WWDCAgentClient: NSObject, ObservableObject {
     
     private let log = OSLog(subsystem: "io.wwdc.app.AgentClient", category: String(describing: WWDCAgentClient.self))
     
+    static let allEventsToken = "(All Events)"
+    
     @Published private(set) var isConnected = false
-    @Published private(set) var searchResults: [WWDCSessionXPCObject] = []
+    @Published private(set) var searchResults: [String] = []
+    @Published var filterEventId: String = WWDCAgentClient.allEventsToken
+    
+    private var eventId: String? { filterEventId == Self.allEventsToken ? nil : filterEventId }
+    
     @Published var searchTerm: String = ""
     
     private var cancellables = Set<AnyCancellable>()
     
     override init() {
         super.init()
-        
-        $searchTerm.throttle(for: 0.3, scheduler: DispatchQueue.main, latest: true).sink { [weak self] term in
-            self?.performSearch(with: term)
-        }.store(in: &cancellables)
+    }
+    
+    func fetchFavoriteIdentifiers() {
+        agent?.fetchFavoriteSessions(for: eventId, completion: { [weak self] ids in
+            DispatchQueue.main.async { self?.searchResults = ids }
+        })
+    }
+    
+    func fetchDownloadedIdentifiers() {
+        agent?.fetchDownloadedSessions(for: eventId, completion: { [weak self] ids in
+            DispatchQueue.main.async { self?.searchResults = ids }
+        })
+    }
+    
+    func fetchWatchedIdentifiers() {
+        agent?.fetchWatchedSessions(for: eventId, completion: { [weak self] ids in
+            DispatchQueue.main.async { self?.searchResults = ids }
+        })
+    }
+    
+    func fetchUnwatchedIdentifiers() {
+        agent?.fetchUnwatchedSessions(for: eventId, completion: { [weak self] ids in
+            DispatchQueue.main.async { self?.searchResults = ids }
+        })
     }
     
     private lazy var connection: NSXPCConnection = {
@@ -38,14 +64,7 @@ final class WWDCAgentClient: NSObject, ObservableObject {
             DispatchQueue.main.async { self?.isConnected = false }
         }
         c.remoteObjectInterface = NSXPCInterface(with: WWDCAgentInterface.self)
-        
-        c.remoteObjectInterface?.setClasses(
-            NSSet(array: [NSArray.self, WWDCSessionXPCObject.self]) as! Set<AnyHashable>,
-            for: #selector(WWDCAgentInterface.searchForSessions(matching:completion:)),
-            argumentIndex: 0,
-            ofReply: true
-        )
-        
+
         return c
     }()
     
@@ -61,18 +80,7 @@ final class WWDCAgentClient: NSObject, ObservableObject {
             DispatchQueue.main.async { completion(result) }
         })
     }
-    
-    func performSearch(with term: String) {
-        guard term.count >= 3 else {
-            searchResults = []
-            return
-        }
-        
-        agent?.searchForSessions(matching: NSPredicate(format: "title contains[cd] %@ OR summary contains[cd] %@", term, term), completion: { [weak self] objects in
-            DispatchQueue.main.async { self?.searchResults = objects }
-        })
-    }
-    
+
     private var resumed = false
     
     func connect() {

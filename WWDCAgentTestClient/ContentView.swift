@@ -14,6 +14,9 @@ struct ContentView: View {
     @StateObject var client = WWDCAgentClient()
     
     @State private var isShowingTestResult = false
+    @State private var selectedSessionId: String?
+    
+    private let eventOptions = ["(All Events)", "wwdc2020", "wwdc2019", "wwdc2018", "wwdc2017", "wwdc2016", "wwdc2015", "wwdc2014", "insights", "tech-talks"]
     
     var body: some View {
         VStack {
@@ -32,39 +35,71 @@ struct ContentView: View {
                 }
             }
             
-            TextField("Search", text: $client.searchTerm)
+            VStack {
+                HStack {
+                    Picker("Limit results to", selection: $client.filterEventId) {
+                        ForEach(eventOptions, id: \.self) { identifier in
+                            Text(identifier).tag(identifier)
+                        }
+                    }
+                }
+                
+                HStack {
+                    Text("Fetch:")
+                    Button("Favorites") {
+                        client.fetchFavoriteIdentifiers()
+                    }
+                    
+                    Button("Downloaded") {
+                        client.fetchDownloadedIdentifiers()
+                    }
+                    
+                    Button("Watched") {
+                        client.fetchWatchedIdentifiers()
+                    }
+                    
+                    Button("Unwatched") {
+                        client.fetchUnwatchedIdentifiers()
+                    }
+                }
+            }
             
-            List {
-                ForEach(client.searchResults) { session in
-                    Text(session.title)
+            List(selection: $selectedSessionId) {
+                ForEach(client.searchResults, id: \.self) { sessionId in
+                    Text(sessionId)
+                        .tag(sessionId)
                 }
             }
             
             Spacer()
             
             VStack {
-                Text("Test commands (apply to \(testSessionID))")
-                
-                HStack {
-                    Button("Reveal") {
-                        client.revealVideo(with: testSessionID)
-                    }
+                if let selectedId = selectedSessionId {
+                    Text("Test commands (apply to \(selectedId))")
                     
-                    Button("Favorite") {
-                        client.toggleFavorite(for: testSessionID)
+                    HStack {
+                        Button("Reveal") {
+                            client.revealVideo(with: selectedId)
+                        }
+                        
+                        Button("Favorite") {
+                            client.toggleFavorite(for: selectedId)
+                        }
+                        
+                        Button("Watched") {
+                            client.toggleWatched(for: selectedId)
+                        }
+                        
+                        Button("Download") {
+                            client.startDownload(for: selectedId)
+                        }
+                        
+                        Button("Stop Download") {
+                            client.stopDownload(for: selectedId)
+                        }
                     }
-                    
-                    Button("Watched") {
-                        client.toggleWatched(for: testSessionID)
-                    }
-                    
-                    Button("Download") {
-                        client.startDownload(for: testSessionID)
-                    }
-                    
-                    Button("Stop Download") {
-                        client.stopDownload(for: testSessionID)
-                    }
+                } else {
+                    Text("Select a session ID to test commands")
                 }
             }
         }
