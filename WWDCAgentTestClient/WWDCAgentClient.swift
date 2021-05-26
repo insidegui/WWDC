@@ -8,8 +8,11 @@
 
 import Cocoa
 import Combine
+import os.log
 
 final class WWDCAgentClient: NSObject, ObservableObject {
+    
+    private let log = OSLog(subsystem: "io.wwdc.app.AgentClient", category: String(describing: WWDCAgentClient.self))
     
     @Published private(set) var isConnected = false
     @Published private(set) var searchResults: [WWDCSessionXPCObject] = []
@@ -26,7 +29,7 @@ final class WWDCAgentClient: NSObject, ObservableObject {
     }
     
     private lazy var connection: NSXPCConnection = {
-        let c = NSXPCConnection(machServiceName: "io.wwdc.app.AgentService", options: [])
+        let c = NSXPCConnection(machServiceName: "io.wwdc.app.WWDCAgent", options: [])
         
         c.invalidationHandler = { [weak self] in
             DispatchQueue.main.async { self?.isConnected = false }
@@ -80,5 +83,37 @@ final class WWDCAgentClient: NSObject, ObservableObject {
         
         isConnected = true
     }
-
+    
+    func toggleFavorite(for videoId: String) {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
+        agent?.toggleFavorite(for: videoId, completion: { result in
+            os_log("Result: %{public}@", log: self.log, type: .debug, String(describing: result))
+        })
+    }
+    
+    func toggleWatched(for videoId: String) {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
+        agent?.toggleWatched(for: videoId, completion: { result in
+            os_log("Result: %{public}@", log: self.log, type: .debug, String(describing: result))
+        })
+    }
+    
+    func startDownload(for videoId: String) {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
+        agent?.startDownload(for: videoId, completion: { result in
+            os_log("Result: %{public}@", log: self.log, type: .debug, String(describing: result))
+        })
+    }
+    
+    func stopDownload(for videoId: String) {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
+        agent?.stopDownload(for: videoId, completion: { result in
+            os_log("Result: %{public}@", log: self.log, type: .debug, String(describing: result))
+        })
+    }
+    
 }

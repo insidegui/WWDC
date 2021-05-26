@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+let testSessionID = "wwdc20-10694"
+
 struct ContentView: View {
     @StateObject var client = WWDCAgentClient()
     
@@ -39,6 +41,28 @@ struct ContentView: View {
             }
             
             Spacer()
+            
+            VStack {
+                Text("Test commands (apply to \(testSessionID))")
+                
+                HStack {
+                    Button("Favorite") {
+                        client.toggleFavorite(for: testSessionID)
+                    }
+                    
+                    Button("Watched") {
+                        client.toggleWatched(for: testSessionID)
+                    }
+                    
+                    Button("Download") {
+                        client.startDownload(for: testSessionID)
+                    }
+                    
+                    Button("Stop Download") {
+                        client.stopDownload(for: testSessionID)
+                    }
+                }
+            }
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)

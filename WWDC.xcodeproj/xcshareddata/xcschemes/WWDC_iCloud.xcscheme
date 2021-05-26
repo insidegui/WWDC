@@ -86,6 +86,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "--background"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-WWDCSimulateDatabaseLoadingHang YES"
             isEnabled = "NO">
          </CommandLineArgument>

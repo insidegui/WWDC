@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>com.apple.security.app-sandbox</key>
-	<true/>
-	<key>com.apple.security.temporary-exception.files.home-relative-path.read-only</key>
-	<array>
-		<string>/Library/Application Support/io.wwdc.app/</string>
-		<string>/Library/Application Support/io.wwdc.app.debug/</string>
-	</array>
-	<key>com.apple.security.temporary-exception.mach-register.global-name</key>
-	<array>
-		<string>io.wwdc.app.AgentService</string>
-	</array>
-</dict>
+<dict/>
 </plist>

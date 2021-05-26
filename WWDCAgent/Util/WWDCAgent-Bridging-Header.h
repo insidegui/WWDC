@@ -3,3 +3,4 @@
 //
 
 #import "NSURL+RealHome.h"
+#import "XPCConnectionValidator.h"

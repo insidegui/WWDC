@@ -215,6 +215,11 @@
 		F4749D29265C08F000062B83 /* WWDCSessionXPCObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */; };
 		F4749D2A265C095000062B83 /* WWDCSessionXPCObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */; };
 		F4749D2F265C0F1800062B83 /* NSURL+RealHome.m in Sources */ = {isa = PBXBuildFile; fileRef = F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */; };
+		F4CCF93A265EC0AE00A69E62 /* XPCConnectionValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF938265EC0AE00A69E62 /* XPCConnectionValidator.m */; };
+		F4CCF93B265EC0AE00A69E62 /* XPCConnectionValidator+.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF939265EC0AE00A69E62 /* XPCConnectionValidator+.swift */; };
+		F4CCF93D265EC34400A69E62 /* WWDCAppPuppeteer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93C265EC34400A69E62 /* WWDCAppPuppeteer.swift */; };
+		F4CCF93F265EC58900A69E62 /* WWDCAppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93E265EC58900A69E62 /* WWDCAppCommand.swift */; };
+		F4CCF940265EC5A100A69E62 /* WWDCAppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93E265EC58900A69E62 /* WWDCAppCommand.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -504,6 +509,11 @@
 		F4749D2C265C0F1700062B83 /* WWDCAgent-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDCAgent-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4749D2D265C0F1800062B83 /* NSURL+RealHome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+RealHome.h"; sourceTree = "<group>"; };
 		F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+RealHome.m"; sourceTree = "<group>"; };
+		F4CCF937265EC0AE00A69E62 /* XPCConnectionValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPCConnectionValidator.h; sourceTree = "<group>"; };
+		F4CCF938265EC0AE00A69E62 /* XPCConnectionValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPCConnectionValidator.m; sourceTree = "<group>"; };
+		F4CCF939265EC0AE00A69E62 /* XPCConnectionValidator+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XPCConnectionValidator+.swift"; sourceTree = "<group>"; };
+		F4CCF93C265EC34400A69E62 /* WWDCAppPuppeteer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAppPuppeteer.swift; sourceTree = "<group>"; };
+		F4CCF93E265EC58900A69E62 /* WWDCAppCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAppCommand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1176,6 +1186,8 @@
 				F4749D07265C031500062B83 /* WWDCAgentInterface.swift */,
 				F4749D05265C024B00062B83 /* WWDCAgentService.swift */,
 				F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */,
+				F4CCF93C265EC34400A69E62 /* WWDCAppPuppeteer.swift */,
+				F4CCF93E265EC58900A69E62 /* WWDCAppCommand.swift */,
 				F4749CEC265C005500062B83 /* Assets.xcassets */,
 				F4749CF1265C005500062B83 /* Main.storyboard */,
 				F4749CF4265C005500062B83 /* Info.plist */,
@@ -1219,6 +1231,9 @@
 		F4749D2B265C0F0A00062B83 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				F4CCF937265EC0AE00A69E62 /* XPCConnectionValidator.h */,
+				F4CCF938265EC0AE00A69E62 /* XPCConnectionValidator.m */,
+				F4CCF939265EC0AE00A69E62 /* XPCConnectionValidator+.swift */,
 				F4749D2D265C0F1800062B83 /* NSURL+RealHome.h */,
 				F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */,
 				F4749D2C265C0F1700062B83 /* WWDCAgent-Bridging-Header.h */,
@@ -1632,6 +1647,7 @@
 				DDDF807C20BA470B007284F8 /* FeaturedSectionViewModel.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
 				DDA7B73D24852FDB00F86668 /* VectorButton.swift in Sources */,
+				F4CCF940265EC5A100A69E62 /* WWDCAppCommand.swift in Sources */,
 				4DDF6A782177A00C008E5539 /* DownloadsManagementTableCellView.swift in Sources */,
 				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
 				DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */,
@@ -1726,7 +1742,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4749D29265C08F000062B83 /* WWDCSessionXPCObject.swift in Sources */,
+				F4CCF93D265EC34400A69E62 /* WWDCAppPuppeteer.swift in Sources */,
 				F4749D2F265C0F1800062B83 /* NSURL+RealHome.m in Sources */,
+				F4CCF93F265EC58900A69E62 /* WWDCAppCommand.swift in Sources */,
+				F4CCF93A265EC0AE00A69E62 /* XPCConnectionValidator.m in Sources */,
 				F4749D08265C031500062B83 /* WWDCAgentInterface.swift in Sources */,
 				F4749D0B265C03F600062B83 /* Preferences.swift in Sources */,
 				F4749D04265C018100062B83 /* PathUtil.swift in Sources */,
@@ -1734,6 +1753,7 @@
 				F4749D09265C03E100062B83 /* Boot.swift in Sources */,
 				F4749CE9265C005500062B83 /* WWDCAgentAppDelegate.swift in Sources */,
 				F4749D0A265C03F000062B83 /* Constants.swift in Sources */,
+				F4CCF93B265EC0AE00A69E62 /* XPCConnectionValidator+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2615,6 +2635,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "-D ICLOUD -D DEBUG -D AGENT";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDCAgent/Util/WWDCAgent-Bridging-Header.h";
@@ -2685,6 +2706,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "-D ICLOUD -D AGENT";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDCAgent/Util/WWDCAgent-Bridging-Header.h";

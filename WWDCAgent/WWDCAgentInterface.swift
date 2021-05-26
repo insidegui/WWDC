@@ -11,4 +11,10 @@ import Foundation
 @objc protocol WWDCAgentInterface: AnyObject {
     func testAgentConnection(with completion: @escaping (Bool) -> Void)
     func searchForSessions(matching predicate: NSPredicate, completion: @escaping ([WWDCSessionXPCObject]) -> Void)
+    
+    func toggleFavorite(for videoId: String, completion: @escaping (Bool) -> Void)
+    func toggleWatched(for videoId: String, completion: @escaping (Bool) -> Void)
+    
+    func startDownload(for videoId: String, completion: @escaping (Bool) -> Void)
+    func stopDownload(for videoId: String, completion: @escaping (Bool) -> Void)
 }
