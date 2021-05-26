@@ -215,6 +215,7 @@
 		F4749D29265C08F000062B83 /* WWDCSessionXPCObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */; };
 		F4749D2A265C095000062B83 /* WWDCSessionXPCObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */; };
 		F4749D2F265C0F1800062B83 /* NSURL+RealHome.m in Sources */ = {isa = PBXBuildFile; fileRef = F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */; };
+		F4B22FB1265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B22FB0265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift */; };
 		F4CCF93A265EC0AE00A69E62 /* XPCConnectionValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF938265EC0AE00A69E62 /* XPCConnectionValidator.m */; };
 		F4CCF93B265EC0AE00A69E62 /* XPCConnectionValidator+.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF939265EC0AE00A69E62 /* XPCConnectionValidator+.swift */; };
 		F4CCF93D265EC34400A69E62 /* WWDCAppPuppeteer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93C265EC34400A69E62 /* WWDCAppPuppeteer.swift */; };
@@ -510,6 +511,7 @@
 		F4749D2C265C0F1700062B83 /* WWDCAgent-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDCAgent-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4749D2D265C0F1800062B83 /* NSURL+RealHome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+RealHome.h"; sourceTree = "<group>"; };
 		F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+RealHome.m"; sourceTree = "<group>"; };
+		F4B22FB0265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesAgentHelpViewController.swift; sourceTree = "<group>"; };
 		F4CCF937265EC0AE00A69E62 /* XPCConnectionValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPCConnectionValidator.h; sourceTree = "<group>"; };
 		F4CCF938265EC0AE00A69E62 /* XPCConnectionValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPCConnectionValidator.m; sourceTree = "<group>"; };
 		F4CCF939265EC0AE00A69E62 /* XPCConnectionValidator+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XPCConnectionValidator+.swift"; sourceTree = "<group>"; };
@@ -593,6 +595,7 @@
 				DD0159D01ED0CEF500F980F1 /* PreferencesCoordinator.swift */,
 				DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */,
 				DDC6781A1EDB629C00A4E19C /* GeneralPreferencesViewController.swift */,
+				F4B22FB0265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift */,
 				DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */,
 			);
 			name = Preferences;
@@ -1630,6 +1633,7 @@
 				DDA7B730248438B500F86668 /* CommunityCollectionViewController.swift in Sources */,
 				DDF5A5092487066200135E70 /* ClipComposition.swift in Sources */,
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
+				F4B22FB1265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift in Sources */,
 				4D66CA52217E2C9B0006A8C9 /* DownloadsManagementTableView.swift in Sources */,
 				DD3D14F42486C90B00FCBBBD /* ClipSharingViewController.swift in Sources */,
 				DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */,

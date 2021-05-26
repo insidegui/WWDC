@@ -141,7 +141,7 @@ final class AboutWindowController: NSWindowController {
 
 }
 
-fileprivate extension Dictionary where Key == String, Value == Any {
+extension Dictionary where Key == String, Value == Any {
 
     func stringOrEmpty(for key: String) -> String {
 

@@ -44,7 +44,8 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var searchInBookmarksSwitch: NSSwitch!
     @IBOutlet weak var refreshPeriodicallySwitch: NSSwitch!
     @IBOutlet weak var enableUserDataSyncSwitch: NSSwitch!
-
+    @IBOutlet weak var enableWWDCAgentSwitch: NSSwitch!
+    
     @IBOutlet weak var downloadsFolderLabel: NSTextField!
 
     @IBOutlet weak var downloadsFolderIntroLabel: NSTextField!
@@ -64,7 +65,8 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var dividerB: NSBox!
     @IBOutlet weak var dividerC: NSBox!
     @IBOutlet weak var dividerE: NSBox!
-
+    @IBOutlet weak var dividerF: NSBox!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -172,6 +174,9 @@ class GeneralPreferencesViewController: NSViewController {
         #endif
     }
 
+    @IBAction func enableWWDCAgentSwitchAction(_ sender: NSSwitch) {
+    }
+    
     // MARK: - Downloads folder
 
     @IBAction func revealDownloadsFolderInFinder(_ sender: NSButton) {
