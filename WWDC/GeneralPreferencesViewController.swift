@@ -89,6 +89,7 @@ class GeneralPreferencesViewController: NSViewController {
         searchInBookmarksSwitch.isOn = Preferences.shared.searchInBookmarks
         refreshPeriodicallySwitch.isOn = Preferences.shared.refreshPeriodically
         enableUserDataSyncSwitch.isOn = Preferences.shared.syncUserData
+        enableWWDCAgentSwitch.isOn = agentController.isAgentEnabled
 
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
 
@@ -173,8 +174,21 @@ class GeneralPreferencesViewController: NSViewController {
         userDataSyncEngine?.isEnabled = enableUserDataSyncSwitch.isOn
         #endif
     }
+    
+    private lazy var agentController = WWDCAgentController()
 
     @IBAction func enableWWDCAgentSwitchAction(_ sender: NSSwitch) {
+        if sender.isOn {
+            let success = agentController.enableAgent()
+
+            // The agent installation might fail (rare), in which case we disable the switch again.
+            DispatchQueue.main.async { sender.isOn = success }
+        } else {
+            let success = agentController.disableAgent()
+
+            // The agent removal might fail (rare), in which case we enable the switch again.
+            DispatchQueue.main.async { sender.isOn = !success }
+        }
     }
     
     // MARK: - Downloads folder

@@ -216,6 +216,8 @@
 		F4749D2A265C095000062B83 /* WWDCSessionXPCObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D28265C08F000062B83 /* WWDCSessionXPCObject.swift */; };
 		F4749D2F265C0F1800062B83 /* NSURL+RealHome.m in Sources */ = {isa = PBXBuildFile; fileRef = F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */; };
 		F4B22FB1265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B22FB0265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift */; };
+		F4B22FB5265EDED100632C9C /* WWDCAgent.app in Embed Agent */ = {isa = PBXBuildFile; fileRef = F4749CE6265C005400062B83 /* WWDCAgent.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F4B22FB7265EDF2D00632C9C /* WWDCAgentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B22FB6265EDF2D00632C9C /* WWDCAgentController.swift */; };
 		F4CCF93A265EC0AE00A69E62 /* XPCConnectionValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF938265EC0AE00A69E62 /* XPCConnectionValidator.m */; };
 		F4CCF93B265EC0AE00A69E62 /* XPCConnectionValidator+.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF939265EC0AE00A69E62 /* XPCConnectionValidator+.swift */; };
 		F4CCF93D265EC34400A69E62 /* WWDCAppPuppeteer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93C265EC34400A69E62 /* WWDCAppPuppeteer.swift */; };
@@ -253,6 +255,13 @@
 			remoteGlobalIDString = DDF721951ECA12780054C503;
 			remoteInfo = PlayerUI;
 		};
+		F4B22FB2265EDEAF00632C9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DD36A4A41E478C6900B2EA88 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F4749CE5265C005400062B83;
+			remoteInfo = WWDCAgent;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -289,6 +298,17 @@
 				F4749CFE265C006800062B83 /* ConfCore in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F4B22FB4265EDEB600632C9C /* Embed Agent */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LoginItems;
+			dstSubfolderSpec = 1;
+			files = (
+				F4B22FB5265EDED100632C9C /* WWDCAgent.app in Embed Agent */,
+			);
+			name = "Embed Agent";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -512,6 +532,7 @@
 		F4749D2D265C0F1800062B83 /* NSURL+RealHome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+RealHome.h"; sourceTree = "<group>"; };
 		F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+RealHome.m"; sourceTree = "<group>"; };
 		F4B22FB0265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesAgentHelpViewController.swift; sourceTree = "<group>"; };
+		F4B22FB6265EDF2D00632C9C /* WWDCAgentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentController.swift; sourceTree = "<group>"; };
 		F4CCF937265EC0AE00A69E62 /* XPCConnectionValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPCConnectionValidator.h; sourceTree = "<group>"; };
 		F4CCF938265EC0AE00A69E62 /* XPCConnectionValidator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPCConnectionValidator.m; sourceTree = "<group>"; };
 		F4CCF939265EC0AE00A69E62 /* XPCConnectionValidator+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XPCConnectionValidator+.swift"; sourceTree = "<group>"; };
@@ -597,6 +618,7 @@
 				DDC6781A1EDB629C00A4E19C /* GeneralPreferencesViewController.swift */,
 				F4B22FB0265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift */,
 				DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */,
+				F4B22FB6265EDF2D00632C9C /* WWDCAgentController.swift */,
 			);
 			name = Preferences;
 			sourceTree = "<group>";
@@ -1281,6 +1303,7 @@
 				DD36A4E41E478D7E00B2EA88 /* Embed Frameworks */,
 				DDC678031EDA76A100A4E19C /* Embed XPC Services */,
 				F72964482015787100A7A571 /* SwiftLint Warnings */,
+				F4B22FB4265EDEB600632C9C /* Embed Agent */,
 			);
 			buildRules = (
 			);
@@ -1288,6 +1311,7 @@
 				DDB1A28D2577EEF800995FF1 /* PBXTargetDependency */,
 				DDF7219C1ECA12780054C503 /* PBXTargetDependency */,
 				DD600AB62487F1730071B90E /* PBXTargetDependency */,
+				F4B22FB3265EDEAF00632C9C /* PBXTargetDependency */,
 			);
 			name = WWDC;
 			packageProductDependencies = (
@@ -1622,6 +1646,7 @@
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
 				DD78588124C3594B008C1C22 /* SlowMigrationView.swift in Sources */,
 				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
+				F4B22FB7265EDF2D00632C9C /* WWDCAgentController.swift in Sources */,
 				DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				4D0E806F217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift in Sources */,
@@ -1807,6 +1832,11 @@
 		F4749D00265C007500062B83 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = F4749CFF265C007500062B83 /* ConfCore */;
+		};
+		F4B22FB3265EDEAF00632C9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F4749CE5265C005400062B83 /* WWDCAgent */;
+			targetProxy = F4B22FB2265EDEAF00632C9C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

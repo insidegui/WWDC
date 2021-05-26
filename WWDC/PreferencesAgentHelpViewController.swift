@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class PreferencesAgentHelpViewController: NSViewController {
+final class PreferencesAgentHelpViewController: NSViewController {
 
     @IBOutlet weak var raycastLinkLabel: ActionLabel!
     @IBOutlet weak var githubLinkLabel: ActionLabel!
