@@ -53,10 +53,10 @@ final class WWDCAgentController: NSObject {
         return isAgentEnabled
     }
     
-    func disableAgent() -> Bool {
-        isAgentEnabled = SMLoginItemSetEnabled(agentBundleIdentifier as CFString, false)
+    func disableAgent() {
+        SMLoginItemSetEnabled(agentBundleIdentifier as CFString, false)
         
-        return isAgentEnabled
+        isAgentEnabled = false
     }
 
 }

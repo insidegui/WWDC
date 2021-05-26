@@ -24,10 +24,31 @@ final class WWDCAgentClient: NSObject, ObservableObject {
     
     @Published var searchTerm: String = ""
     
+    /// Whether the user has enabled the agent in the app.
+    /// The app will also post the distributed notification "io.wwdc.app.AgentEnabledPreferenceChanged" when it's changed.
+    var isAgentPreferenceEnabled: Bool {
+        guard let defaults = UserDefaults(suiteName: "io.wwdc.app") else { return false }
+        return defaults.bool(forKey: "isAgentEnabled")
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     
     override init() {
         super.init()
+        
+        os_log("Agent enabled preference is currently set to %{public}@", log: self.log, type: .debug, String(describing: isAgentPreferenceEnabled))
+        
+        DistributedNotificationCenter.default().addObserver(
+            self,
+            selector: #selector(preferenceChanged),
+            name: NSNotification.Name("io.wwdc.app.AgentEnabledPreferenceChanged"),
+            object: nil,
+            suspensionBehavior: .deliverImmediately
+        )
+    }
+    
+    @objc private func preferenceChanged(_ note: Notification) {
+        os_log("Agent enabled preference changed to %{public}@", log: self.log, type: .debug, String(describing: isAgentPreferenceEnabled))
     }
     
     func fetchFavoriteIdentifiers() {

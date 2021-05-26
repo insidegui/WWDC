@@ -184,10 +184,7 @@ class GeneralPreferencesViewController: NSViewController {
             // The agent installation might fail (rare), in which case we disable the switch again.
             DispatchQueue.main.async { sender.isOn = success }
         } else {
-            let success = agentController.disableAgent()
-
-            // The agent removal might fail (rare), in which case we enable the switch again.
-            DispatchQueue.main.async { sender.isOn = !success }
+            agentController.disableAgent()
         }
     }
     
