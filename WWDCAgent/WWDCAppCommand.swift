@@ -19,6 +19,17 @@ enum WWDCAppCommand {
 
 extension WWDCAppCommand {
     
+    /// `true` if the command can change user content, in which case it won't work
+    /// unless the preference to enable the agent is set to on.
+    var modifiesUserContent: Bool {
+        switch self {
+        case .toggleFavorite, .toggleWatched, .download, .cancelDownload:
+            return true
+        case .launchPreferences, .revealVideo:
+            return false
+        }
+    }
+    
     /// If `true`, then the app should become visible when it receives this command.
     var isForeground: Bool {
         switch self {
@@ -28,6 +39,7 @@ extension WWDCAppCommand {
             return false
         }
     }
+    
 }
 
 // MARK: - URL scheme

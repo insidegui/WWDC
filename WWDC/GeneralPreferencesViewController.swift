@@ -89,7 +89,7 @@ class GeneralPreferencesViewController: NSViewController {
         searchInBookmarksSwitch.isOn = Preferences.shared.searchInBookmarks
         refreshPeriodicallySwitch.isOn = Preferences.shared.refreshPeriodically
         enableUserDataSyncSwitch.isOn = Preferences.shared.syncUserData
-        enableWWDCAgentSwitch.isOn = agentController.isAgentEnabled
+        enableWWDCAgentSwitch.isOn = WWDCAgentController.isAgentEnabled
 
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
 

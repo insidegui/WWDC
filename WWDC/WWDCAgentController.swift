@@ -15,7 +15,7 @@ extension Notification.Name {
 
 final class WWDCAgentController: NSObject {
     
-    private(set) var isAgentEnabled: Bool {
+    static private(set) var isAgentEnabled: Bool {
         get { UserDefaults.standard.bool(forKey: #function) }
         set {
             guard newValue != isAgentEnabled else { return }
@@ -48,15 +48,15 @@ final class WWDCAgentController: NSObject {
     }()
     
     func enableAgent() -> Bool {
-        isAgentEnabled = SMLoginItemSetEnabled(agentBundleIdentifier as CFString, true)
+        Self.isAgentEnabled = SMLoginItemSetEnabled(agentBundleIdentifier as CFString, true)
         
-        return isAgentEnabled
+        return Self.isAgentEnabled
     }
     
     func disableAgent() {
         SMLoginItemSetEnabled(agentBundleIdentifier as CFString, false)
         
-        isAgentEnabled = false
+        Self.isAgentEnabled = false
     }
 
 }

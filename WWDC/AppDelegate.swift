@@ -307,6 +307,13 @@ extension AppDelegate {
             DispatchQueue.main.async { NSApp.activate(ignoringOtherApps: true) }
         }
         
+        if command.modifiesUserContent {
+            guard WWDCAgentController.isAgentEnabled else {
+                os_log("Refusing to run command %{public}@ because it's disabled in preferences", log: self.log, type: .error, String(describing: command))
+                return
+            }
+        }
+        
         guard let storage = storage else { return }
         
         if let link = commandsReceiver.handle(command, storage: storage) {
