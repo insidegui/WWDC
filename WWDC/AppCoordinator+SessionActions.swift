@@ -23,13 +23,9 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     }
 
     func sessionActionsDidSelectFavorite(_ sender: NSView?) {
-        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        guard let session = selectedViewModelRegardlessOfTab?.session else { return }
 
-        if viewModel.isFavorite {
-            storage.removeFavorite(for: viewModel.session)
-        } else {
-            storage.createFavorite(for: viewModel.session)
-        }
+        storage.toggleFavorite(on: session)
     }
 
     func sessionActionsDidSelectSlides(_ sender: NSView?) {
@@ -217,5 +213,15 @@ final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
         }
 
         return proposedServices
+    }
+}
+
+extension Storage {
+    func toggleFavorite(on session: Session) {
+        if session.isFavorite {
+            removeFavorite(for: session)
+        } else {
+            createFavorite(for: session)
+        }
     }
 }

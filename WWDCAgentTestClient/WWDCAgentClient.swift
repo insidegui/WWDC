@@ -116,4 +116,12 @@ final class WWDCAgentClient: NSObject, ObservableObject {
         })
     }
     
+    func revealVideo(with id: String) {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
+        agent?.revealVideo(with: id, completion: { result in
+            os_log("Result: %{public}@", log: self.log, type: .debug, String(describing: result))
+        })
+    }
+    
 }

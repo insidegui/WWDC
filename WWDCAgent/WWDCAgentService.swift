@@ -109,6 +109,12 @@ import Realm
         pupetteer.sendCommand(.cancelDownload(videoId), completion: completion)
     }
     
+    func revealVideo(with id: String, completion: @escaping (Bool) -> Void) {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
+        pupetteer.sendCommand(.revealVideo(id), completion: completion)
+    }
+    
 }
 
 extension WWDCAgentService: NSXPCListenerDelegate {

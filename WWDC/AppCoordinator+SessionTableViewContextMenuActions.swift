@@ -17,22 +17,14 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
     func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel]) {
         storage.modify(viewModels.map({ $0.session })) { sessions in
             sessions.forEach { session in
-                if let instance = session.instances.first {
-                    guard !instance.isCurrentlyLive else { return }
-
-                    guard session.asset(ofType: .streamingVideo) != nil else {
-                        return
-                    }
-                }
-
-                session.setCurrentPosition(1, 1)
+                self.storage.setWatched(true, on: session)
             }
         }
     }
 
     func sessionTableViewContextMenuActionUnWatch(viewModels: [SessionViewModel]) {
         storage.modify(viewModels.map({ $0.session })) { sessions in
-            sessions.forEach { $0.resetProgress() }
+            sessions.forEach { self.storage.setWatched(false, on: $0) }
         }
     }
 
@@ -88,4 +80,26 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
         NSWorkspace.shared.selectFile(localURL.path, inFileViewerRootedAtPath: localURL.deletingLastPathComponent().path)
     }
 
+}
+
+extension Storage {
+    func setWatched(_ watched: Bool, on session: Session) {
+        if let instance = session.instances.first {
+            guard !instance.isCurrentlyLive else { return }
+
+            guard session.asset(ofType: .streamingVideo) != nil else {
+                return
+            }
+        }
+
+        if watched {
+            session.setCurrentPosition(1, 1)
+        } else {
+            session.resetProgress()
+        }
+    }
+    
+    func toggleWatched(on session: Session) {
+        setWatched(!session.isWatched, on: session)
+    }
 }

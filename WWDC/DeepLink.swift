@@ -60,6 +60,18 @@ struct DeepLink {
         self.sessionNumber = sessionNumber
         isForCurrentYear = (year == currentYearDigits)
     }
+    
+    init?(from command: WWDCAppCommand) {
+        guard case .revealVideo(let id) = command else { return nil }
+        
+        let components = id.components(separatedBy: "-")
+        
+        guard components.count == 2 else { return nil }
+        
+        guard let url = URL(string: "https://wwdc.io/share/\(components[0])/\(components[1])") else { return nil }
+        
+        self.init(url: url)
+    }
 
 }
 

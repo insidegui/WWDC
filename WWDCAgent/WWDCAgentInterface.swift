@@ -12,6 +12,8 @@ import Foundation
     func testAgentConnection(with completion: @escaping (Bool) -> Void)
     func searchForSessions(matching predicate: NSPredicate, completion: @escaping ([WWDCSessionXPCObject]) -> Void)
     
+    func revealVideo(with id: String, completion: @escaping (Bool) -> Void)
+    
     func toggleFavorite(for videoId: String, completion: @escaping (Bool) -> Void)
     func toggleWatched(for videoId: String, completion: @escaping (Bool) -> Void)
     

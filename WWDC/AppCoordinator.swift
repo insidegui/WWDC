@@ -407,7 +407,7 @@ final class AppCoordinator {
 
     // MARK: - Deep linking
 
-    func handle(link: DeepLink, deferIfNeeded: Bool) {
+    func handle(link: DeepLink) {
 
         if link.isForCurrentYear {
             tabController.activeTab = .schedule

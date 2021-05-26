@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-let testSessionID = "wwdc20-10694"
+let testSessionID = "wwdc2020-10694"
 
 struct ContentView: View {
     @StateObject var client = WWDCAgentClient()
@@ -46,6 +46,10 @@ struct ContentView: View {
                 Text("Test commands (apply to \(testSessionID))")
                 
                 HStack {
+                    Button("Reveal") {
+                        client.revealVideo(with: testSessionID)
+                    }
+                    
                     Button("Favorite") {
                         client.toggleFavorite(for: testSessionID)
                     }

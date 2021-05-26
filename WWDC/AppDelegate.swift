@@ -23,7 +23,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private let log = OSLog(subsystem: "io.wwdc.app", category: String(describing: AppDelegate.self))
 
-    private(set) var coordinator: AppCoordinator?
+    private lazy var commandsReceiver = AppCommandsReceiver()
+    
+    private(set) var coordinator: AppCoordinator? {
+        didSet {
+            if coordinator != nil {
+                openPendingDeepLinkIfNeeded()
+            }
+        }
+    }
     
     var startedAsAgent = false
 
@@ -182,7 +190,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        coordinator?.handle(link: link, deferIfNeeded: true)
+        openDeepLink(link)
+    }
+    
+    private var pendingDeepLink: DeepLink?
+    
+    private func openDeepLink(_ link: DeepLink) {
+        guard let coordinator = coordinator else {
+            pendingDeepLink = link
+            return
+        }
+        
+        coordinator.handle(link: link)
+    }
+    
+    private func openPendingDeepLinkIfNeeded() {
+        guard let deepLink = pendingDeepLink else { return }
+        
+        coordinator?.handle(link: deepLink)
+        
+        pendingDeepLink = nil
     }
 
     func application(_ application: NSApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([NSUserActivityRestoring]) -> Void) -> Bool {
@@ -190,7 +217,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let url = userActivity.webpageURL else { return false }
         guard let link = DeepLink(url: url) else { return false }
 
-        coordinator?.handle(link: link, deferIfNeeded: true)
+        coordinator?.handle(link: link)
 
         return true
     }
@@ -236,15 +263,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             coordinator?.windowController.showWindow(self)
         }
     }
-
-    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+    
+    private func activateUI() {
         if coordinator == nil, startedAsAgent, let storage = storage, let syncEngine = syncEngine {
             os_log("Starting up UI late since we started out as an agent", log: self.log, type: .debug)
             
             startupUI(using: storage, syncEngine: syncEngine, force: true)
         }
-
+    
         NSApp.setActivationPolicy(.regular)
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        activateUI()
         
         // User clicks dock item, double clicks app in finder, etc
         if !flag {
@@ -271,6 +302,15 @@ extension AppDelegate: SUUpdaterDelegate {
 
 extension AppDelegate {
     func handle(_ command: WWDCAppCommand) {
-        os_log("%{public}@ %@", log: log, type: .debug, #function, String(describing: command))
+        if command.isForeground {
+            activateUI()
+            DispatchQueue.main.async { NSApp.activate(ignoringOtherApps: true) }
+        }
+        
+        guard let storage = storage else { return }
+        
+        if let link = commandsReceiver.handle(command, storage: storage) {
+            openDeepLink(link)
+        }
     }
 }

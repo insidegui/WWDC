@@ -220,6 +220,7 @@
 		F4CCF93D265EC34400A69E62 /* WWDCAppPuppeteer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93C265EC34400A69E62 /* WWDCAppPuppeteer.swift */; };
 		F4CCF93F265EC58900A69E62 /* WWDCAppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93E265EC58900A69E62 /* WWDCAppCommand.swift */; };
 		F4CCF940265EC5A100A69E62 /* WWDCAppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93E265EC58900A69E62 /* WWDCAppCommand.swift */; };
+		F4CCF942265ED24500A69E62 /* AppCommandsReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF941265ED24500A69E62 /* AppCommandsReceiver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -514,6 +515,7 @@
 		F4CCF939265EC0AE00A69E62 /* XPCConnectionValidator+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XPCConnectionValidator+.swift"; sourceTree = "<group>"; };
 		F4CCF93C265EC34400A69E62 /* WWDCAppPuppeteer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAppPuppeteer.swift; sourceTree = "<group>"; };
 		F4CCF93E265EC58900A69E62 /* WWDCAppCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAppCommand.swift; sourceTree = "<group>"; };
+		F4CCF941265ED24500A69E62 /* AppCommandsReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommandsReceiver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -661,6 +663,7 @@
 				DDA50E3424AA5090007C77C6 /* Boot.swift */,
 				DD36A4AF1E478C6A00B2EA88 /* AppDelegate.swift */,
 				DDCE7ED81EA7A86600C7A3CA /* AppCoordinator.swift */,
+				F4CCF941265ED24500A69E62 /* AppCommandsReceiver.swift */,
 				DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */,
 				DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */,
 				DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */,
@@ -1568,6 +1571,7 @@
 				DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */,
 				DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
+				F4CCF942265ED24500A69E62 /* AppCommandsReceiver.swift in Sources */,
 				DDB3529A1EC8AB2800254815 /* WWDCImageView.swift in Sources */,
 				DD3D14F62486C91F00FCBBBD /* ClipRenderer.swift in Sources */,
 				DDDF807620BA3719007284F8 /* FeaturedContentCollectionViewCell.swift in Sources */,
