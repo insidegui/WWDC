@@ -14,6 +14,7 @@ enum WWDCAppCommand {
     case download(_ videoId: String)
     case cancelDownload(_ videoId: String)
     case revealVideo(_ videoId: String)
+    case launchPreferences
 }
 
 extension WWDCAppCommand {
@@ -21,8 +22,10 @@ extension WWDCAppCommand {
     /// If `true`, then the app should become visible when it receives this command.
     var isForeground: Bool {
         switch self {
-        case .revealVideo: return true
-        default: return false
+        case .revealVideo, .launchPreferences:
+            return true
+        default:
+            return false
         }
     }
 }
@@ -35,6 +38,7 @@ private enum WWDCAppCommandVerb: String {
     case download
     case cancelDownload
     case revealVideo
+    case launchPreferences
 }
 
 private enum WWDCAppCommandParameter: String {
@@ -63,6 +67,8 @@ extension WWDCAppCommand {
             return generateURL(with: .cancelDownload, parameters: [.id: videoId])
         case .revealVideo(let videoId):
             return generateURL(with: .revealVideo, parameters: [.id: videoId])
+        case .launchPreferences:
+            return generateURL(with: .launchPreferences, parameters: [:])
         }
     }
     
@@ -89,6 +95,8 @@ extension WWDCAppCommand {
         case .revealVideo:
             guard let id = url.queryItemValue(for: .id) else { return nil }
             self = .revealVideo(id)
+        case .launchPreferences:
+            self = .launchPreferences
         }
     }
 }

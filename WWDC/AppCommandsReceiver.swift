@@ -60,6 +60,10 @@ final class AppCommandsReceiver {
             }
             
             return link
+        case .launchPreferences:
+            NSApp.sendAction(#selector(AppDelegate.showPreferences(_:)), to: nil, from: nil)
+            
+            return nil
         }
     }
 }
