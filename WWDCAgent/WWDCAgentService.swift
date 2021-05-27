@@ -30,7 +30,7 @@ import Realm
     private let boot = Boot()
     
     func start() {
-        boot.bootstrapDependencies(readOnly: true) { [weak self] result in
+        boot.bootstrapDependencies(readOnly: false) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
