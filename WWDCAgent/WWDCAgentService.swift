@@ -174,7 +174,7 @@ extension WWDCAgentService: WWDCAgentInterface {
     func fetchWatchedSessions(for event: String?, completion: @escaping ([String]) -> Void) {
         os_log("%{public}@", log: log, type: .debug, #function)
         
-        let predicate = NSPredicate(format: "(SUBQUERY(progresses, $progress, $progress.relativePosition >= \(Constants.watchedVideoRelativePosition)).@count > 0 OR progresses.@count == 0) AND ANY assets.rawAssetType == \"WWDCSessionAssetTypeStreamingVideo\"")
+        let predicate = NSPredicate(format: "(SUBQUERY(progresses, $progress, $progress.relativePosition >= \(Constants.watchedVideoRelativePosition)).@count > 0) AND ANY assets.rawAssetType == \"WWDCSessionAssetTypeStreamingVideo\"")
         
         let sessionIdentifiers = fetchSessionIdentifiers(for: andPredicateWithOptionalEventId(event, predicate))
         
