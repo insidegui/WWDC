@@ -18,8 +18,8 @@ import Foundation
     
     func revealVideo(with id: String, completion: @escaping (Bool) -> Void)
     
-    func toggleFavorite(for videoId: String, completion: @escaping (Bool) -> Void)
-    func toggleWatched(for videoId: String, completion: @escaping (Bool) -> Void)
+    func setFavorite(_ isFavorite: Bool, for videoId: String, completion: @escaping (Bool) -> Void)
+    func setWatched(_ watched: Bool, for videoId: String, completion: @escaping (Bool) -> Void)
     
     func startDownload(for videoId: String, completion: @escaping (Bool) -> Void)
     func stopDownload(for videoId: String, completion: @escaping (Bool) -> Void)

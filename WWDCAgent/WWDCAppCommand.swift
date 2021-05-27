@@ -9,8 +9,10 @@
 import Foundation
 
 enum WWDCAppCommand {
-    case toggleFavorite(_ videoId: String)
-    case toggleWatched(_ videoId: String)
+    case favorite(_ videoId: String)
+    case unfavorite(_ videoId: String)
+    case watch(_ videoId: String)
+    case unwatch(_ videoId: String)
     case download(_ videoId: String)
     case cancelDownload(_ videoId: String)
     case revealVideo(_ videoId: String)
@@ -23,7 +25,7 @@ extension WWDCAppCommand {
     /// unless the preference to enable the agent is set to on.
     var modifiesUserContent: Bool {
         switch self {
-        case .toggleFavorite, .toggleWatched, .download, .cancelDownload:
+        case .favorite, .unfavorite, .watch, .unwatch, .download, .cancelDownload:
             return true
         case .launchPreferences, .revealVideo:
             return false
@@ -45,8 +47,10 @@ extension WWDCAppCommand {
 // MARK: - URL scheme
 
 private enum WWDCAppCommandVerb: String {
-    case toggleFavorite
-    case toggleWatched
+    case favorite
+    case unfavorite
+    case watch
+    case unwatch
     case download
     case cancelDownload
     case revealVideo
@@ -69,10 +73,14 @@ extension WWDCAppCommand {
     
     var url: URL? {
         switch self {
-        case .toggleFavorite(let videoId):
-            return generateURL(with: .toggleFavorite, parameters: [.id: videoId])
-        case .toggleWatched(let videoId):
-            return generateURL(with: .toggleWatched, parameters: [.id: videoId])
+        case .favorite(let videoId):
+            return generateURL(with: .favorite, parameters: [.id: videoId])
+        case .unfavorite(let videoId):
+            return generateURL(with: .unfavorite, parameters: [.id: videoId])
+        case .watch(let videoId):
+            return generateURL(with: .watch, parameters: [.id: videoId])
+        case .unwatch(let videoId):
+            return generateURL(with: .unwatch, parameters: [.id: videoId])
         case .download(let videoId):
             return generateURL(with: .download, parameters: [.id: videoId])
         case .cancelDownload(let videoId):
@@ -92,12 +100,18 @@ extension WWDCAppCommand {
         guard let verb = WWDCAppCommandVerb(rawValue: host) else { return nil }
         
         switch verb {
-        case .toggleFavorite:
+        case .favorite:
             guard let id = url.queryItemValue(for: .id) else { return nil }
-            self = .toggleFavorite(id)
-        case .toggleWatched:
+            self = .favorite(id)
+        case .unfavorite:
             guard let id = url.queryItemValue(for: .id) else { return nil }
-            self = .toggleWatched(id)
+            self = .unfavorite(id)
+        case .watch:
+            guard let id = url.queryItemValue(for: .id) else { return nil }
+            self = .watch(id)
+        case .unwatch:
+            guard let id = url.queryItemValue(for: .id) else { return nil }
+            self = .unwatch(id)
         case .download:
             guard let id = url.queryItemValue(for: .id) else { return nil }
             self = .download(id)

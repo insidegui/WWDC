@@ -86,16 +86,16 @@ extension WWDCAgentService: WWDCAgentInterface {
     
     // MARK: - Commands
     
-    func toggleFavorite(for videoId: String, completion: @escaping (Bool) -> Void) {
+    func setFavorite(_ isFavorite: Bool, for videoId: String, completion: @escaping (Bool) -> Void) {
         os_log("%{public}@", log: log, type: .debug, #function)
         
-        pupetteer.sendCommand(.toggleFavorite(videoId), completion: completion)
+        pupetteer.sendCommand(isFavorite ? .favorite(videoId) : .unfavorite(videoId), completion: completion)
     }
     
-    func toggleWatched(for videoId: String, completion: @escaping (Bool) -> Void) {
+    func setWatched(_ watched: Bool, for videoId: String, completion: @escaping (Bool) -> Void) {
         os_log("%{public}@", log: log, type: .debug, #function)
         
-        pupetteer.sendCommand(.toggleWatched(videoId), completion: completion)
+        pupetteer.sendCommand(watched ? .watch(videoId) : .unwatch(videoId), completion: completion)
     }
     
     func startDownload(for videoId: String, completion: @escaping (Bool) -> Void) {

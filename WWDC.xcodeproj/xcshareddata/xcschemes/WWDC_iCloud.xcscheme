@@ -87,7 +87,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--background"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCSimulateDatabaseLoadingHang YES"
@@ -111,7 +111,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCUseDebugStorage YES"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"

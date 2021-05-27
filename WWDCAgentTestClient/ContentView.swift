@@ -83,11 +83,19 @@ struct ContentView: View {
                         }
                         
                         Button("Favorite") {
-                            client.toggleFavorite(for: selectedId)
+                            client.setFavorite(true, for: selectedId)
                         }
                         
-                        Button("Watched") {
-                            client.toggleWatched(for: selectedId)
+                        Button("Unfavorite") {
+                            client.setFavorite(false, for: selectedId)
+                        }
+                        
+                        Button("Watch") {
+                            client.setWatched(true, for: selectedId)
+                        }
+                        
+                        Button("Unwatch") {
+                            client.setWatched(false, for: selectedId)
                         }
                         
                         Button("Download") {

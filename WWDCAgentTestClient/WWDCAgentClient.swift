@@ -113,18 +113,18 @@ final class WWDCAgentClient: NSObject, ObservableObject {
         isConnected = true
     }
     
-    func toggleFavorite(for videoId: String) {
+    func setFavorite(_ isFavorite: Bool, for videoId: String) {
         os_log("%{public}@", log: log, type: .debug, #function)
         
-        agent?.toggleFavorite(for: videoId, completion: { result in
+        agent?.setFavorite(isFavorite, for: videoId, completion: { result in
             os_log("Result: %{public}@", log: self.log, type: .debug, String(describing: result))
         })
     }
     
-    func toggleWatched(for videoId: String) {
+    func setWatched(_ watched: Bool, for videoId: String) {
         os_log("%{public}@", log: log, type: .debug, #function)
         
-        agent?.toggleWatched(for: videoId, completion: { result in
+        agent?.setWatched(watched, for: videoId, completion: { result in
             os_log("Result: %{public}@", log: self.log, type: .debug, String(describing: result))
         })
     }

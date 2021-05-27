@@ -15,40 +15,40 @@ final class AppCommandsReceiver {
 
     func handle(_ command: WWDCAppCommand, storage: Storage) -> DeepLink? {
         os_log("%{public}@ %@", log: log, type: .debug, #function, String(describing: command))
-        
+
         switch command {
-        case .toggleFavorite(let id):
-            guard let session = storage.session(with: id) else {
-                os_log("Couldn't find session with id %{public}@", log: self.log, type: .error, id)
-                return nil
-            }
+        case .favorite:
+            guard let session = command.session(in: storage) else { return nil }
             
-            storage.toggleFavorite(on: session)
+            storage.createFavorite(for: session)
             
             return nil
-        case .toggleWatched(let id):
-            guard let session = storage.session(with: id) else {
-                os_log("Couldn't find session with id %{public}@", log: self.log, type: .error, id)
-                return nil
-            }
+        case .unfavorite:
+            guard let session = command.session(in: storage) else { return nil }
             
-            storage.toggleWatched(on: session)
+            storage.removeFavorite(for: session)
             
             return nil
-        case .download(let id):
-            guard let session = storage.session(with: id) else {
-                os_log("Couldn't find session with id %{public}@", log: self.log, type: .error, id)
-                return nil
-            }
+        case .watch:
+            guard let session = command.session(in: storage) else { return nil }
+            
+            storage.setWatched(true, on: session)
+            
+            return nil
+        case .unwatch:
+            guard let session = command.session(in: storage) else { return nil }
+            
+            storage.setWatched(false, on: session)
+            
+            return nil
+        case .download:
+            guard let session = command.session(in: storage) else { return nil }
             
             DownloadManager.shared.download([session])
             
             return nil
-        case .cancelDownload(let id):
-            guard let session = storage.session(with: id) else {
-                os_log("Couldn't find session with id %{public}@", log: self.log, type: .error, id)
-                return nil
-            }
+        case .cancelDownload:
+            guard let session = command.session(in: storage) else { return nil }
             
             DownloadManager.shared.cancelDownloads([session])
             
@@ -65,5 +65,33 @@ final class AppCommandsReceiver {
             
             return nil
         }
+    }
+}
+
+extension WWDCAppCommand {
+    var sessionId: String? {
+        switch self {
+        case .favorite(let id):
+            return id
+        case .unfavorite(let id):
+            return id
+        case .watch(let id):
+            return id
+        case .unwatch(let id):
+            return id
+        case .download(let id):
+            return id
+        case .cancelDownload(let id):
+            return id
+        case .revealVideo(let id):
+            return id
+        case .launchPreferences:
+            return nil
+        }
+    }
+    
+    func session(in storage: Storage) -> Session? {
+        guard let id = sessionId else { return nil }
+        return storage.session(with: id)
     }
 }
