@@ -34,7 +34,7 @@ extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate
     func createFavorite() {
         guard let session = currentPlayerController?.sessionViewModel.session else { return }
 
-        storage.createFavorite(for: session)
+        storage.setFavorite(true, onSessionsWithIDs: [session.identifier])
     }
 
     func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController? {

@@ -330,3 +330,7 @@ extension Session {
         return assets.filter(predicate)
     }
 }
+
+public extension Session {
+    var isFavorite: Bool { !favorites.filter("isDeleted == false").isEmpty }
+}

@@ -218,10 +218,6 @@ final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
 
 extension Storage {
     func toggleFavorite(on session: Session) {
-        if session.isFavorite {
-            removeFavorite(for: session)
-        } else {
-            createFavorite(for: session)
-        }
+        setFavorite(!session.isFavorite, onSessionsWithIDs: [session.identifier])
     }
 }

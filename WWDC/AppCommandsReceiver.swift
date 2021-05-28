@@ -18,16 +18,12 @@ final class AppCommandsReceiver {
         os_log("%{public}@ %@", log: log, type: .debug, #function, String(describing: command))
 
         switch command {
-        case .favorite:
-            guard let session = command.session(in: storage) else { return nil }
-            
-            storage.createFavorite(for: session)
+        case .favorite(let id):
+            storage.setFavorite(true, onSessionsWithIDs: [id])
             
             return nil
-        case .unfavorite:
-            guard let session = command.session(in: storage) else { return nil }
-            
-            storage.removeFavorite(for: session)
+        case .unfavorite(let id):
+            storage.setFavorite(false, onSessionsWithIDs: [id])
             
             return nil
         case .watch:

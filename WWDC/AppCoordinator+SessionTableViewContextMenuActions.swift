@@ -29,17 +29,11 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
     }
 
     func sessionTableViewContextMenuActionFavorite(viewModels: [SessionViewModel]) {
-        storage.modify(viewModels.map({ $0.session })) { sessions in
-            sessions.forEach { $0.favorites.append(Favorite()) }
-        }
+        storage.setFavorite(true, onSessionsWithIDs: viewModels.map({ $0.session.identifier }))
     }
 
     func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel]) {
-        storage.modify(viewModels.map({ $0.session })) { sessions in
-            sessions.forEach { session in
-                session.favorites.forEach { $0.isDeleted = true }
-            }
-        }
+        storage.setFavorite(false, onSessionsWithIDs: viewModels.map({ $0.session.identifier }))
     }
 
     func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel]) {
