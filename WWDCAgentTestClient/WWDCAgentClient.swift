@@ -91,7 +91,6 @@ final class WWDCAgentClient: NSObject, ObservableObject {
     
     private var agent: WWDCAgentInterface? {
         return connection.remoteObjectProxyWithErrorHandler { [weak self] error in
-            print(error)
             DispatchQueue.main.async { self?.isConnected = false }
         } as? WWDCAgentInterface
     }

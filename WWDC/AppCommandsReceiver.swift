@@ -13,6 +13,7 @@ import os.log
 final class AppCommandsReceiver {
     private let log = OSLog(subsystem: "io.wwdc.app", category: String(describing: AppCommandsReceiver.self))
 
+    // swiftlint:disable:next cyclomatic_complexity
     func handle(_ command: WWDCAppCommand, storage: Storage) -> DeepLink? {
         os_log("%{public}@ %@", log: log, type: .debug, #function, String(describing: command))
 

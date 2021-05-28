@@ -32,4 +32,3 @@ final class WWDCAgentAppDelegate: NSObject, NSApplicationDelegate {
     }
 
 }
-

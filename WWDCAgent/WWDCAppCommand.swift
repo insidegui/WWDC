@@ -92,6 +92,7 @@ extension WWDCAppCommand {
         }
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     init?(from url: URL) {
         guard url.scheme == Self.urlScheme else { return nil }
         
