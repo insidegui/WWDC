@@ -308,9 +308,19 @@ extension AppDelegate {
         }
         
         if command.modifiesUserContent {
-            guard WWDCAgentController.isAgentEnabled else {
-                os_log("Refusing to run command %{public}@ because it's disabled in preferences", log: self.log, type: .error, String(describing: command))
-                return
+            let needsAgentPrefEnabled: Bool
+            
+            #if DEBUG
+            needsAgentPrefEnabled = !UserDefaults.standard.bool(forKey: "WWDCForceAllowAgentCommands")
+            #else
+            needsAgentPrefEnabled = true
+            #endif
+            
+            if needsAgentPrefEnabled {
+                guard WWDCAgentController.isAgentEnabled else {
+                    os_log("Refusing to run command %{public}@ because it's disabled in preferences", log: self.log, type: .error, String(describing: command))
+                    return
+                }
             }
         }
         
