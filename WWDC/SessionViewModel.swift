@@ -354,3 +354,9 @@ extension SessionViewModel {
 extension Session {
     var isFavorite: Bool { !favorites.filter("isDeleted == false").isEmpty }
 }
+
+extension Session {
+    func unfavorite() {
+        favorites.forEach { $0.isDeleted = true }
+    }
+}

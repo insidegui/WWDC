@@ -36,7 +36,9 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
 
     func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel]) {
         storage.modify(viewModels.map({ $0.session })) { sessions in
-            sessions.forEach { $0.favorites.removeAll() }
+            sessions.forEach { session in
+                session.favorites.forEach { $0.isDeleted = true }
+            }
         }
     }
 
