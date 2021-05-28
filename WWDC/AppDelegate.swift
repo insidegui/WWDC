@@ -13,17 +13,38 @@ import Siesta
 import ConfCore
 import RealmSwift
 import SwiftUI
+import os.log
 
 extension Notification.Name {
     static let openWWDCURL = Notification.Name(rawValue: "OpenWWDCURLNotification")
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    
+    private let log = OSLog(subsystem: "io.wwdc.app", category: String(describing: AppDelegate.self))
 
-    private(set) var coordinator: AppCoordinator?
+    private lazy var commandsReceiver = AppCommandsReceiver()
+    
+    private(set) var coordinator: AppCoordinator? {
+        didSet {
+            if coordinator != nil {
+                openPendingDeepLinkIfNeeded()
+            }
+        }
+    }
+    
+    var startedAsAgent = false
 
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
+
+        if ProcessInfo.processInfo.arguments.contains("--background") {
+            NSApp.setActivationPolicy(.accessory)
+            startedAsAgent = true
+            os_log("WWDC running in background mode to respond to deep-linked commands", log: self.log, type: .default)
+        } else {
+            NSApp.setActivationPolicy(.regular)
+        }
 
         NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
 
@@ -75,8 +96,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         ImageDownloadCenter.shared.deleteLegacyImageCacheIfNeeded()
     }
+    
+    private var storage: Storage?
+    private var syncEngine: SyncEngine?
 
-    private func startupUI(using storage: Storage, syncEngine: SyncEngine) {
+    private func startupUI(using storage: Storage, syncEngine: SyncEngine, force: Bool = false) {
+        self.storage = storage
+        self.syncEngine = syncEngine
+        
+        if !force {
+            guard !startedAsAgent else {
+                os_log("Skipping UI since we're running as an agent", log: self.log, type: .debug)
+                return
+            }
+        }
+        
         coordinator = AppCoordinator(
             windowController: MainWindowController(),
             storage: storage,
@@ -146,12 +180,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func openURL(_ url: URL) {
+        if let command = WWDCAppCommand(from: url) {
+            handle(command)
+            return
+        }
+        
         guard let link = DeepLink(url: url) else {
             NSWorkspace.shared.open(url)
             return
         }
 
-        coordinator?.handle(link: link, deferIfNeeded: true)
+        openDeepLink(link)
+    }
+    
+    private var pendingDeepLink: DeepLink?
+    
+    private func openDeepLink(_ link: DeepLink) {
+        guard let coordinator = coordinator else {
+            pendingDeepLink = link
+            return
+        }
+        
+        coordinator.handle(link: link)
+    }
+    
+    private func openPendingDeepLinkIfNeeded() {
+        guard let deepLink = pendingDeepLink else { return }
+        
+        coordinator?.handle(link: deepLink)
+        
+        pendingDeepLink = nil
     }
 
     func application(_ application: NSApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([NSUserActivityRestoring]) -> Void) -> Bool {
@@ -159,7 +217,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard let url = userActivity.webpageURL else { return false }
         guard let link = DeepLink(url: url) else { return false }
 
-        coordinator?.handle(link: link, deferIfNeeded: true)
+        coordinator?.handle(link: link)
 
         return true
     }
@@ -205,9 +263,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             coordinator?.windowController.showWindow(self)
         }
     }
+    
+    private func activateUI() {
+        if coordinator == nil, startedAsAgent, let storage = storage, let syncEngine = syncEngine {
+            os_log("Starting up UI late since we started out as an agent", log: self.log, type: .debug)
+            
+            startupUI(using: storage, syncEngine: syncEngine, force: true)
+        }
+    
+        NSApp.setActivationPolicy(.regular)
+    }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-
+        activateUI()
+        
         // User clicks dock item, double clicks app in finder, etc
         if !flag {
             coordinator?.windowController.showWindow(sender)
@@ -217,6 +286,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         return false
     }
+
 }
 
 extension AppDelegate: SUUpdaterDelegate {
@@ -227,5 +297,37 @@ extension AppDelegate: SUUpdaterDelegate {
         #else
             return true
         #endif
+    }
+}
+
+extension AppDelegate {
+    func handle(_ command: WWDCAppCommand) {
+        if command.isForeground {
+            activateUI()
+            DispatchQueue.main.async { NSApp.activate(ignoringOtherApps: true) }
+        }
+        
+        if command.modifiesUserContent {
+            let needsAgentPrefEnabled: Bool
+            
+            #if DEBUG
+            needsAgentPrefEnabled = !UserDefaults.standard.bool(forKey: "WWDCForceAllowAgentCommands")
+            #else
+            needsAgentPrefEnabled = true
+            #endif
+            
+            if needsAgentPrefEnabled {
+                guard WWDCAgentController.isAgentEnabled else {
+                    os_log("Refusing to run command %{public}@ because it's disabled in preferences", log: self.log, type: .error, String(describing: command))
+                    return
+                }
+            }
+        }
+        
+        guard let storage = storage else { return }
+        
+        if let link = commandsReceiver.handle(command, storage: storage) {
+            openDeepLink(link)
+        }
     }
 }

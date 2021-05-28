@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>7.3</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -34,9 +34,19 @@
 				<string>https</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>WWDC Command URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>x-wwdc-command</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1016</string>
+	<string>1017</string>
 	<key>GRBundleDesignContributorWebsite</key>
 	<string>https://twitter.com/bcmn96</string>
 	<key>GRBundleIconCreatorWebsite</key>
@@ -55,6 +65,8 @@
 	<string>https://twitter.com/VicenteBorrell</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>LSUIElement</key>
+	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoadsForMedia</key>

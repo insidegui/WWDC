@@ -9,6 +9,9 @@
 import Cocoa
 
 final class PathUtil {
+    
+    /// The bundle identifier to be used for constructing paths in Application Support.
+    static var bundleIdentifier = Bundle.main.bundleIdentifier
 
     /// The WWDCUseDebugStorage flag can be used to force debug builds to use
     /// a separate storage from release builds
@@ -29,11 +32,20 @@ final class PathUtil {
 
     /// The application support directory path for the app, use this if you can assume it to be already created
     static var appSupportPathAssumingExisting: String {
-        guard let identifier = Bundle.main.bundleIdentifier else {
+        guard let identifier = bundleIdentifier else {
             fatalError("Bundle identifier is nil, this should never happen")
         }
 
-        let dir = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first!
+        let dir: String
+        
+        #if AGENT
+        dir = NSURL.realHomeDirectory()
+            .appendingPathComponent("Library")
+            .appendingPathComponent("Application Support")
+            .path
+        #else
+        dir = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first!
+        #endif
 
         #if DEBUG
             var path = dir + "/\(identifier)"

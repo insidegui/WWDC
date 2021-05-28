@@ -41,33 +41,37 @@ final class Boot {
         !UserDefaults.standard.bool(forKey: "WWDCDisableDatabaseCompression")
     }
 
-    func bootstrapDependencies(then completion: @escaping (Result<(storage: Storage, syncEngine: SyncEngine), BootstrapError>) -> Void) {
+    func bootstrapDependencies(readOnly: Bool = false, then completion: @escaping (Result<(storage: Storage, syncEngine: SyncEngine), BootstrapError>) -> Void) {
         do {
             let supportPath = try PathUtil.appSupportPathCreatingIfNeeded()
             let filePath = supportPath + "/ConfCore.realm"
             let url = URL(fileURLWithPath: filePath)
 
-            guard isUsableStorage(at: url) else {
-                completion(.failure(.unusableStorage(at: url)))
-                return
+            if !readOnly {
+                guard isUsableStorage(at: url) else {
+                    completion(.failure(.unusableStorage(at: url)))
+                    return
+                }
             }
 
-            var realmConfig = Realm.Configuration(fileURL: url)
+            var realmConfig = Realm.Configuration(fileURL: url, readOnly: readOnly)
             realmConfig.schemaVersion = Constants.coreSchemaVersion
 
-            realmConfig.shouldCompactOnLaunch = { [unowned self] totalBytes, usedBytes in
-                guard Self.isCompactOnLaunchEnabled else {
-                    os_log("Database compression disabled by flag", log: self.log, type: .default)
-                    return false
-                }
-
-                let oneHundredMB = 100 * 1024 * 1024
-
-                if (totalBytes > oneHundredMB) && (Double(usedBytes) / Double(totalBytes)) < 0.8 {
-                    os_log("Database will be compacted. Total bytes: %d, used bytes: %d", log: self.log, type: .default, totalBytes, usedBytes)
-                    return true
-                } else {
-                    return false
+            if !readOnly {
+                realmConfig.shouldCompactOnLaunch = { [unowned self] totalBytes, usedBytes in
+                    guard Self.isCompactOnLaunchEnabled else {
+                        os_log("Database compression disabled by flag", log: self.log, type: .default)
+                        return false
+                    }
+                    
+                    let oneHundredMB = 100 * 1024 * 1024
+                    
+                    if (totalBytes > oneHundredMB) && (Double(usedBytes) / Double(totalBytes)) < 0.8 {
+                        os_log("Database will be compacted. Total bytes: %d, used bytes: %d", log: self.log, type: .default, totalBytes, usedBytes)
+                        return true
+                    } else {
+                        return false
+                    }
                 }
             }
             realmConfig.encryptionKey = nil

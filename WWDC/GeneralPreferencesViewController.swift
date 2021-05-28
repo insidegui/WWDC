@@ -44,7 +44,8 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var searchInBookmarksSwitch: NSSwitch!
     @IBOutlet weak var refreshPeriodicallySwitch: NSSwitch!
     @IBOutlet weak var enableUserDataSyncSwitch: NSSwitch!
-
+    @IBOutlet weak var enableWWDCAgentSwitch: NSSwitch!
+    
     @IBOutlet weak var downloadsFolderLabel: NSTextField!
 
     @IBOutlet weak var downloadsFolderIntroLabel: NSTextField!
@@ -64,7 +65,8 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var dividerB: NSBox!
     @IBOutlet weak var dividerC: NSBox!
     @IBOutlet weak var dividerE: NSBox!
-
+    @IBOutlet weak var dividerF: NSBox!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -87,6 +89,7 @@ class GeneralPreferencesViewController: NSViewController {
         searchInBookmarksSwitch.isOn = Preferences.shared.searchInBookmarks
         refreshPeriodicallySwitch.isOn = Preferences.shared.refreshPeriodically
         enableUserDataSyncSwitch.isOn = Preferences.shared.syncUserData
+        enableWWDCAgentSwitch.isOn = WWDCAgentController.isAgentEnabled
 
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
 
@@ -171,7 +174,20 @@ class GeneralPreferencesViewController: NSViewController {
         userDataSyncEngine?.isEnabled = enableUserDataSyncSwitch.isOn
         #endif
     }
+    
+    private lazy var agentController = WWDCAgentController()
 
+    @IBAction func enableWWDCAgentSwitchAction(_ sender: NSSwitch) {
+        if sender.isOn {
+            let success = agentController.enableAgent()
+
+            // The agent installation might fail (rare), in which case we disable the switch again.
+            DispatchQueue.main.async { sender.isOn = success }
+        } else {
+            agentController.disableAgent()
+        }
+    }
+    
     // MARK: - Downloads folder
 
     @IBAction func revealDownloadsFolderInFinder(_ sender: NSButton) {

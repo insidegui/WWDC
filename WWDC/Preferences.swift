@@ -51,6 +51,7 @@ final class Preferences {
         }
     }
 
+    #if !AGENT
     var activeTab: MainWindowTab {
         get {
             let rawValue = defaults.integer(forKey: #function)
@@ -61,6 +62,7 @@ final class Preferences {
             defaults.set(newValue.rawValue, forKey: #function)
         }
     }
+    #endif
 
     var selectedScheduleItemIdentifier: String? {
         get {

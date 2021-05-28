@@ -510,22 +510,23 @@ public final class Storage {
         return realm.object(ofType: Session.self, forPrimaryKey: identifier)
     }
 
-    public func createFavorite(for session: Session) {
-        modify(session) { bgSession in
-            bgSession.favorites.append(Favorite())
-        }
-    }
-
     public var isEmpty: Bool {
         return realm.objects(Event.self).isEmpty
     }
-
-    public func removeFavorite(for session: Session) {
-        guard let favorite = session.favorites.first else { return }
-
-        modify(favorite) { bgFavorite in
-            bgFavorite.isDeleted = true
-        }
+    
+    public func setFavorite(_ isFavorite: Bool, onSessionsWithIDs ids: [String]) {
+        performSerializedBackgroundWrite(writeBlock: { realm in
+            let sessions = realm.objects(Session.self).filter(NSPredicate(format: "identifier IN %@", ids))
+            
+            sessions.forEach { session in
+                if isFavorite {
+                    guard !session.isFavorite else { return }
+                    session.favorites.append(Favorite())
+                } else {
+                    session.favorites.forEach { $0.isDeleted = true }
+                }
+            }
+        }, disableAutorefresh: false, createTransaction: true)
     }
 
     public lazy var eventsObservable: Observable<Results<Event>> = {
