@@ -4,7 +4,9 @@ Enjoy WWDC from the comfort of your Mac with the unofficial WWDC app for macOS. 
 
 In partnership with CocoaHub, you can also use the app's Community tab to browse through Apple announcements, updates to the Swift language, new episodes from your favorite podcasts, community blog posts, and more.
 
-⬇️ If you just want to download the latest release, go to [the website](https://wwdc.io).
+You may also search for your WWDC content in [Raycast][1] if you have both apps installed, just enable “Allow other apps access to your WWDC content” in preferences.
+
+⬇️ If you just want to download the latest release, go to [the website][2].
 
 ## Schedule
 
@@ -12,9 +14,9 @@ The schedule tab shows the schedule for the current edition of WWDC, and allows 
 
 ## Videos
 
-Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in
+Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in multiple languages.
 
-![videos](./img/v7/Transcript.png)
+![videos][image-1]
 
 ### Video features
 
@@ -26,13 +28,13 @@ Watch this year's videos as they're released and access videos from previous yea
 
 Clip Sharing allows you to share a short segment (up to 5 minutes) from a session's video. This is a great feature for quickly sharing snippets of content from the conference.
 
-![clipsharing](./img/v7/ClipSharing.png)
+![clipsharing][image-2]
 
 ## Chromecast
 
 You can watch WWDC videos (both live and on-demand) on your Chromecast. Just click the Chromecast button while playing a video, choose your device from the list and control playback using the Google Home app on your phone.
 
-![chromecast](./img/v7/ChromeCast.png)
+![chromecast][image-3]
 
 ## Bookmarks
 
@@ -40,17 +42,17 @@ Have you ever found yourself watching a WWDC session and wishing you could take 
 
 With bookmarks, you can create a reference point within a video and add an annotation to it. Your bookmark annotations can also be considered while using the search, so it's easier than ever to find the content you've bookmarked before.
 
-![bookmarks](./img/v7/Video-Bookmark.png)
+![bookmarks][image-4]
 
 ## Community
 
-Browse content curated by the [CocoaHub](http://cocoahub.app) team in the Community tab.
+Browse content curated by the [CocoaHub][3] team in the Community tab.
 
-![community](./img/v7/Community.png)
+![community][image-5]
 
 ## iCloud Sync
 
-Enable the iCloud sync in preferences and your favorites, bookmarks and progress in sessions will be synced accross your Macs.
+Enable the iCloud sync in preferences and your favorites, bookmarks and progress in sessions will be synced across your Macs.
 
 ## Sharing
 
@@ -59,22 +61,22 @@ You can easily share links to sessions or videos by using the share button. The 
 ## Nerdy bits 🤓
 
 ### Code of Conduct
-We expect all of our contributors to help uphold the values set out in our [code of conduct](./CODE_OF_CONDUCT.md). We fundamentally believe this will help us build a better community, and with it a better app.
+We expect all of our contributors to help uphold the values set out in our [code of conduct][4]. We fundamentally believe this will help us build a better community, and with it a better app.
 
 ### Contributing
 
-Please read the [contribution guidelines](CONTRIBUTING.md) before opening an issue or pull request.
+Please read the [contribution guidelines][5] before opening an issue or pull request.
 
 ### External libraries
 
 A number of third-party libraries are used by the app:
 
-- [Realm](https://realm.io): data storage and caching
-- [Sparkle](https://sparkle-project.org/): automatic updates
-- [CloudKitCodable](https://github.com/insidegui/CloudKitCodable): sync support
-- [Siesta](http://bustoutsolutions.github.io/siesta/): networking
-- [RxSwift](https://github.com/ReactiveX/RxSwift): reactive extensions
-- [RxRealm](https://github.com/RxSwiftCommunity/RxRealm): reactive extensions for Realm
+- [Realm][6]: data storage and caching
+- [Sparkle][7]: automatic updates
+- [CloudKitCodable][8]: sync support
+- [Siesta][9]: networking
+- [RxSwift][10]: reactive extensions
+- [RxRealm][11]: reactive extensions for Realm
 
 ### Internal libraries
 
@@ -85,7 +87,7 @@ A number of third-party libraries are used by the app:
 
 ## Building the app
 
-**Building requires Xcode 12.4 or later.**
+**Building requires Xcode 12.5 or later.**
 
 **Clone this branch and before opening the project, run `./bootstrap.sh`** to setup the environment. It will install `swiftlint` for you using `brew` if you don't have it yet.
 
@@ -93,10 +95,29 @@ Since the app uses CloudKit, when you build it yourself, all of the CloudKit-dep
 
 To build the app yourself without the need for a developer account and a CloudKit container, **always use the `WWDC` target when building**. The `WWDC with iCloud` target requires a paid developer account and a CloudKit container, which you won't be able to create because of the app's bundle identifier.
 
-![schedule](./img/v7/BuildTarget.png)
+![schedule][image-6]
 
 ### Clearing app data during development
 
 If you need to clear the app's preferences and stored data during development, you can run `./cleardata.sh` in the project folder. **This will delete all of your preferences and data like favorites, bookmarks and progress in videos, so be careful**.
 
 <a href="https://macstadium.com" title="The unofficial WWDC app is using MacStadium"><img src="./img/MacStadiumOSS.png" alt="Powered by MacStadium"></a>
+
+[1]:	https://raycast.com
+[2]:	https://wwdc.io
+[3]:	http://cocoahub.app
+[4]:	./CODE_OF_CONDUCT.md
+[5]:	CONTRIBUTING.md
+[6]:	https://realm.io
+[7]:	https://sparkle-project.org/
+[8]:	https://github.com/insidegui/CloudKitCodable
+[9]:	http://bustoutsolutions.github.io/siesta/
+[10]:	https://github.com/ReactiveX/RxSwift
+[11]:	https://github.com/RxSwiftCommunity/RxRealm
+
+[image-1]:	./img/v7/Transcript.png
+[image-2]:	./img/v7/ClipSharing.png
+[image-3]:	./img/v7/ChromeCast.png
+[image-4]:	./img/v7/Video-Bookmark.png
+[image-5]:	./img/v7/Community.png
+[image-6]:	./img/v7/BuildTarget.png
