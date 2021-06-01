@@ -296,6 +296,12 @@ public final class Storage {
             completion(error)
             return
         }
+        
+        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+            // We currently only care about whatever the latest event hero is.
+            let existingHeroData = backgroundRealm.objects(EventHero.self)
+            backgroundRealm.delete(existingHeroData)
+        }, disableAutorefresh: false, completionBlock: completion)
 
         guard let hero = response.eventHero else {
             os_log("Config response didn't contain an event hero", log: self.log, type: .debug)
@@ -303,10 +309,6 @@ public final class Storage {
         }
 
         performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
-            // We currently only care about whatever the latest event hero is.
-            let existingHeroData = backgroundRealm.objects(EventHero.self)
-            backgroundRealm.delete(existingHeroData)
-
             backgroundRealm.add(hero, update: .all)
         }, disableAutorefresh: false, completionBlock: completion)
     }
