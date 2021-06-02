@@ -4,6 +4,8 @@ Enjoy WWDC from the comfort of your Mac with the unofficial WWDC app for macOS. 
 
 In partnership with CocoaHub, you can also use the app's Community tab to browse through Apple announcements, updates to the Swift language, new episodes from your favorite podcasts, community blog posts, and more.
 
+You may also search for your WWDC content in [Raycast](https://raycast.com) if you have both apps installed, just enable “Allow other apps access to your WWDC content” in preferences.
+
 ⬇️ If you just want to download the latest release, go to [the website](https://wwdc.io).
 
 ## Schedule
@@ -12,7 +14,7 @@ The schedule tab shows the schedule for the current edition of WWDC, and allows 
 
 ## Videos
 
-Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in
+Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in multiple languages.
 
 ![videos](./img/v7/Transcript.png)
 
@@ -50,7 +52,7 @@ Browse content curated by the [CocoaHub](http://cocoahub.app) team in the Commun
 
 ## iCloud Sync
 
-Enable the iCloud sync in preferences and your favorites, bookmarks and progress in sessions will be synced accross your Macs.
+Enable the iCloud sync in preferences and your favorites, bookmarks and progress in sessions will be synced across your Macs.
 
 ## Sharing
 
@@ -85,7 +87,7 @@ A number of third-party libraries are used by the app:
 
 ## Building the app
 
-**Building requires Xcode 12.4 or later.**
+**Building requires Xcode 12.5 or later.**
 
 **Clone this branch and before opening the project, run `./bootstrap.sh`** to setup the environment. It will install `swiftlint` for you using `brew` if you don't have it yet.
 
