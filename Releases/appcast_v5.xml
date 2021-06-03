@@ -7,6 +7,22 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 7.3.1</title>
+			<description><![CDATA[
+				<p><em>This is a minor patch to version 7.3 that addresses an issue where Raycast integration wouldn't work when running on a macOS version below 11.3. The original release notes can be found below.</em></p>
+				<ul>
+				<li>Updated for WWDC 2021</li>
+				<li>Adds integration with <a href="https://raycast.com">Raycast</a> so that you can find your WWDC content there (this must be enabled in preferences)</li>
+				<li>Addresses an issue that prevented sessions from being unfavorited</li>
+				<li>Minor bug fixes</li>
+			</ul>
+			]]></description>
+            <pubDate>Wed, 3 Jun 2021 11:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/7.3.1/WWDC_v7.3.1-1021.dmg" sparkle:version="1021" sparkle:shortVersionString="7.3.1" length="20483768" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+        </item>	
+		
+		<item>
             <title>Version 7.3</title>
 			<description><![CDATA[
 				<ul>
@@ -17,7 +33,7 @@
 			</ul>
 			]]></description>
             <pubDate>Wed, 2 Jun 2021 14:00:00 -0300</pubDate>
-            <enclosure url="https://github.com/insidegui/WWDC/releases/download/7.3/WWDC_v7.3-1019.dmg" sparkle:version="1019" sparkle:shortVersionString="7.2" length="20483517" type="application/octet-stream" />
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/7.3/WWDC_v7.3-1019.dmg" sparkle:version="1019" sparkle:shortVersionString="7.3" length="20483517" type="application/octet-stream" />
             <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
         </item>	
 		
