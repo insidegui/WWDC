@@ -2627,7 +2627,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-D DEBUG -D AGENT";
@@ -2665,7 +2664,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD -D DEBUG -D AGENT";
@@ -2703,7 +2701,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-D AGENT";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgent;
@@ -2739,7 +2736,6 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MTL_FAST_MATH = YES;
 				OTHER_SWIFT_FLAGS = "-D ICLOUD -D AGENT";
 				PRODUCT_BUNDLE_IDENTIFIER = io.wwdc.app.WWDCAgent;
