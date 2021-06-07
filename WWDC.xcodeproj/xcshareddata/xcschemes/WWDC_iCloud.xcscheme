@@ -115,7 +115,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCUseDebugStorage YES"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
@@ -147,11 +147,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--delorean"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "2020-06-22T17:00:00-03:00"
-            isEnabled = "NO">
+            argument = "2021-06-07T14:01:00-03:00"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

@@ -15,9 +15,9 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.3.1</string>
+	<string>7.3.2</string>
 	<key>CFBundleVersion</key>
-	<string>1021</string>
+	<string>1022</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Guilherme Rambo. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
