@@ -21,6 +21,8 @@ extension Notification.Name {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     
+    private lazy var agentController = WWDCAgentController()
+    
     private let log = OSLog(subsystem: "io.wwdc.app", category: String(describing: AppDelegate.self))
 
     private lazy var commandsReceiver = AppCommandsReceiver()
@@ -62,6 +64,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": false])
+        
+        agentController.registerAgentVersion()
 
         NSApp.registerForRemoteNotifications(matching: [])
 
