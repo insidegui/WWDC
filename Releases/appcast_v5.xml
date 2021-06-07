@@ -7,6 +7,22 @@
         <language>en</language>
 		
 		<item>
+            <title>Version 7.3.2</title>
+			<description><![CDATA[
+				<p><em>This is a minor patch to version 7.3.1 that addresses an issue which caused links for live sessions to not reveal the correct tab within the app.</em></p>
+				<ul>
+				<li>Updated for WWDC 2021</li>
+				<li>Adds integration with <a href="https://raycast.com">Raycast</a> so that you can find your WWDC content there (this must be enabled in preferences)</li>
+				<li>Addresses an issue that prevented sessions from being unfavorited</li>
+				<li>Minor bug fixes</li>
+				</ul>
+			]]></description>
+            <pubDate>Mon, 7 Jun 2021 13:00:00 -0300</pubDate>
+            <enclosure url="https://github.com/insidegui/WWDC/releases/download/7.3.2/WWDC_v7.3.2-1022.dmg" sparkle:version="1022" sparkle:shortVersionString="7.3.2" length="20484126" type="application/octet-stream" />
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+        </item>	
+		
+		<item>
             <title>Version 7.3.1</title>
 			<description><![CDATA[
 				<p><em>This is a minor patch to version 7.3 that addresses an issue where Raycast integration wouldn't work when running on a macOS version below 11.3. The original release notes can be found below.</em></p>
