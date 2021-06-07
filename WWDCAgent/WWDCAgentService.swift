@@ -154,7 +154,7 @@ extension WWDCAgentService: WWDCAgentInterface {
     func fetchFavoriteSessions(for event: String?, completion: @escaping ([String]) -> Void) {
         os_log("%{public}@", log: log, type: .debug, #function)
         
-        let predicate = NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == 0).@count > 0 AND ANY assets.rawAssetType == \"WWDCSessionAssetTypeStreamingVideo\"")
+        let predicate = NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == 0).@count > 0")
         
         let sessionIdentifiers = fetchSessionIdentifiers(for: andPredicateWithOptionalEventId(event, predicate))
         
