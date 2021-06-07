@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.3.2</string>
+	<string>7.3.3</string>
 	<key>CFBundleVersion</key>
-	<string>1022</string>
+	<string>1023</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Guilherme Rambo. All rights reserved.</string>
 	<key>XPCService</key>
