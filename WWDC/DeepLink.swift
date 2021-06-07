@@ -58,7 +58,7 @@ struct DeepLink {
         self.year = yearNumber
         eventIdentifier = "wwdc\(year)"
         self.sessionNumber = sessionNumber
-        isForCurrentYear = (year == currentYearDigits)
+        isForCurrentYear = (year == currentYearDigits || year == currentYear)
     }
     
     init?(from command: WWDCAppCommand) {
