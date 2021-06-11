@@ -20,11 +20,7 @@ struct WatchWWDCActivity: GroupActivity {
         var meta = GroupActivityMetadata()
         
         meta.title = "Watch WWDC session \"\(session.title)\""
-        
-        if let link = session.asset(ofType: .webpage)?.remoteURL {
-            meta.fallbackURL = URL(string: link)
-        }
-        
+
         if let imageURLStr = session.asset(ofType: .image)?.remoteURL,
            let imageURL = URL(string: imageURLStr),
            let image = ImageDownloadCenter.shared.cachedThumbnail(from: imageURL) {

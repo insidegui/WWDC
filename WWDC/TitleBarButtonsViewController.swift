@@ -58,7 +58,7 @@ final class TitleBarButtonsViewController: NSViewController {
         SharePlayManager.shared.$canStartSharePlay.sink { [weak self] available in
             guard let self = self else { return }
             
-            self.sharePlayViewModel.state = (available) ? SharePlayManager.shared.state.buttonState : .unavailable
+            DispatchQueue.main.async { self.sharePlayViewModel.state = (available) ? SharePlayManager.shared.state.buttonState : .unavailable }
         }.store(in: &cancellables)
         
         SharePlayManager.shared.$state.sink { [weak self] state in
@@ -66,7 +66,7 @@ final class TitleBarButtonsViewController: NSViewController {
             
             let available = SharePlayManager.shared.canStartSharePlay
             
-            self.sharePlayViewModel.state = (available) ? state.buttonState : .unavailable
+            DispatchQueue.main.async { self.sharePlayViewModel.state = (available) ? state.buttonState : .unavailable }
         }.store(in: &cancellables)
     }
 

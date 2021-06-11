@@ -43,7 +43,6 @@ final class SharePlayManager: ObservableObject {
     
     @Published private(set) var currentActivity: WatchWWDCActivity?
 
-    @MainActor
     func startObservingState() {
         logger.debug(#function)
         
@@ -60,7 +59,7 @@ final class SharePlayManager: ObservableObject {
                 session.$state.sink { state in
                     guard case .invalidated = state else { return }
                     
-                    self.state = .idle
+                    DispatchQueue.main.async { self.state = .idle }
                     self.cancellables.removeAll()
                 }.store(in: &self.cancellables)
 
@@ -69,7 +68,7 @@ final class SharePlayManager: ObservableObject {
                 session.$activity.sink { newActivity in
                     self.logger.debug("New activity: \(String(describing: newActivity))")
                     
-                    self.currentActivity = newActivity
+                    DispatchQueue.main.async { self.currentActivity = newActivity }
                 }.store(in: &self.cancellables)
                 
                 self.state = .session(session)
@@ -79,7 +78,6 @@ final class SharePlayManager: ObservableObject {
         tasks.insert(task)
     }
     
-    @MainActor
     func startActivity(for session: Session) {
         logger.debug(#function)
         

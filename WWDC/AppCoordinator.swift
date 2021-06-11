@@ -537,8 +537,7 @@ final class AppCoordinator {
     private lazy var cancellables = Set<AnyCancellable>()
     
     private var sharePlayConfigured = false
-    
-    @MainActor
+
     func configureSharePlayIfSupported() {
         guard #available(macOS 12.0, *) else { return }
         
@@ -570,7 +569,9 @@ final class AppCoordinator {
             
             self.selectSessionOnAppropriateTab(with: viewModel)
             
-            DispatchQueue.main.async { self.currentPlayerController?.play() }
+            DispatchQueue.main.async {
+                self.videosController.detailViewController.shelfController.play(nil)
+            }
         }.store(in: &cancellables)
         
         SharePlayManager.shared.startObservingState()
@@ -587,8 +588,7 @@ final class AppCoordinator {
         
         newPlayer?.playbackCoordinator.coordinateWithSession(session)
     }
-    
-    @MainActor
+
     func startSharePlay() {
         guard #available(macOS 12.0, *) else { return }
         
