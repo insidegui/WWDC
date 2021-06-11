@@ -9,6 +9,8 @@
 		<string>applinks:wwdc.io</string>
 		<string>activitycontinuation:wwdc.io</string>
 	</array>
+	<key>com.apple.developer.group-session</key>
+	<true/>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
 		<string>iCloud.$(CFBundleIdentifier)</string>
