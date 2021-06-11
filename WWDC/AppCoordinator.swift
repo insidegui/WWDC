@@ -592,6 +592,20 @@ final class AppCoordinator {
     func startSharePlay() {
         guard #available(macOS 12.0, *) else { return }
         
+        if case .session = SharePlayManager.shared.state {
+            let alert = NSAlert()
+            alert.messageText = "Leave SharePlay?"
+            alert.informativeText = "Are you sure you'd like to leave this SharePlay session?"
+            alert.addButton(withTitle: "Cancel")
+            alert.addButton(withTitle: "Leave")
+            
+            if alert.runModal() == .alertSecondButtonReturn {
+                SharePlayManager.shared.leaveActivity()
+            }
+            
+            return
+        }
+        
         guard let viewModel = selectedSessionValue else {
             let alert = NSAlert()
             alert.messageText = "Select a Session"

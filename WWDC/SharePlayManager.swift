@@ -111,5 +111,11 @@ final class SharePlayManager: ObservableObject {
             }
         }
     }
+    
+    func leaveActivity() {
+        guard case .session(let session) = state else { return }
+        
+        session.leave()
+    }
 
 }

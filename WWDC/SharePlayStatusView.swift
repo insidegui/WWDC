@@ -44,8 +44,6 @@ struct SharePlayStatusView: View {
                     }
                 }
                 .disabled(viewModel.state == .loading)
-            } else {
-                EmptyView()
             }
         }
     }
