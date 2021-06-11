@@ -60,8 +60,6 @@ final class AppCoordinator {
 
         DownloadManager.shared.start(with: storage)
 
-        windowController.titleBarViewController.statusViewController = DownloadsStatusViewController(downloadManager: DownloadManager.shared, storage: storage)
-
         liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
 
         // Primary UI Intialization
@@ -114,6 +112,16 @@ final class AppCoordinator {
         _ = NotificationCenter.default.addObserver(forName: .PreferredTranscriptLanguageDidChange, object: nil, queue: .main, using: { self.preferredTranscriptLanguageDidChange($0) })
 
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
+        
+        let buttonsController = TitleBarButtonsViewController(
+            downloadManager: DownloadManager.shared,
+            storage: storage
+        )
+        windowController.titleBarViewController.statusViewController = buttonsController
+        
+        buttonsController.handleSharePlayClicked = { [weak self] in
+            DispatchQueue.main.async { self?.startSharePlay() }
+        }
     }
 
     /// The list controller for the active tab
@@ -534,6 +542,8 @@ final class AppCoordinator {
     func configureSharePlayIfSupported() {
         guard #available(macOS 12.0, *) else { return }
         
+        let log = OSLog(subsystem: SharePlayManager.subsystemName, category: String(describing: AppCoordinator.self))
+        
         guard !sharePlayConfigured else { return }
         sharePlayConfigured = true
         
@@ -543,6 +553,24 @@ final class AppCoordinator {
             guard case .session(let session) = state else { return }
             
             self.currentPlayerController?.player?.playbackCoordinator.coordinateWithSession(session)
+        }.store(in: &cancellables)
+        
+        SharePlayManager.shared.$currentActivity.sink { [weak self] activity in
+            guard let self = self, let activity = activity else { return }
+            
+            guard let wwdcSession = self.storage.session(with: activity.sessionID) else {
+                os_log("Couldn't find the session with ID %{public}@", log: log, type: .error, activity.sessionID)
+                return
+            }
+            
+            guard let viewModel = SessionViewModel(session: wwdcSession) else {
+                os_log("Couldn't create the view model for session %{public}@", log: log, type: .error, activity.sessionID)
+                return
+            }
+            
+            self.selectSessionOnAppropriateTab(with: viewModel)
+            
+            DispatchQueue.main.async { self.currentPlayerController?.play() }
         }.store(in: &cancellables)
         
         SharePlayManager.shared.startObservingState()
@@ -558,6 +586,22 @@ final class AppCoordinator {
         os_log("Attaching new player to active SharePlay session", log: self.log, type: .debug)
         
         newPlayer?.playbackCoordinator.coordinateWithSession(session)
+    }
+    
+    @MainActor
+    func startSharePlay() {
+        guard #available(macOS 12.0, *) else { return }
+        
+        guard let viewModel = selectedSessionValue else {
+            let alert = NSAlert()
+            alert.messageText = "Select a Session"
+            alert.informativeText = "Please select the session you'd like to watch together, then start SharePlay."
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+            return
+        }
+
+        SharePlayManager.shared.startActivity(for: viewModel.session)
     }
 
 }
