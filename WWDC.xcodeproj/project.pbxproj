@@ -213,6 +213,8 @@
 		F4749D26265C054E00062B83 /* WWDCAgentClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D25265C054E00062B83 /* WWDCAgentClient.swift */; };
 		F4749D27265C073600062B83 /* WWDCAgentInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749D07265C031500062B83 /* WWDCAgentInterface.swift */; };
 		F4749D2F265C0F1800062B83 /* NSURL+RealHome.m in Sources */ = {isa = PBXBuildFile; fileRef = F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */; };
+		F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DEC826737EFA00B28B31 /* SharePlayManager.swift */; };
+		F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */; };
 		F4B22FB1265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B22FB0265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift */; };
 		F4B22FB5265EDED100632C9C /* WWDCAgent.app in Embed Agent */ = {isa = PBXBuildFile; fileRef = F4749CE6265C005400062B83 /* WWDCAgent.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F4B22FB7265EDF2D00632C9C /* WWDCAgentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B22FB6265EDF2D00632C9C /* WWDCAgentController.swift */; };
@@ -528,6 +530,8 @@
 		F4749D2C265C0F1700062B83 /* WWDCAgent-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDCAgent-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4749D2D265C0F1800062B83 /* NSURL+RealHome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+RealHome.h"; sourceTree = "<group>"; };
 		F4749D2E265C0F1800062B83 /* NSURL+RealHome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+RealHome.m"; sourceTree = "<group>"; };
+		F474DEC826737EFA00B28B31 /* SharePlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePlayManager.swift; sourceTree = "<group>"; };
+		F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWWDCActivity.swift; sourceTree = "<group>"; };
 		F4B22FB0265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesAgentHelpViewController.swift; sourceTree = "<group>"; };
 		F4B22FB6265EDF2D00632C9C /* WWDCAgentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentController.swift; sourceTree = "<group>"; };
 		F4CCF937265EC0AE00A69E62 /* XPCConnectionValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPCConnectionValidator.h; sourceTree = "<group>"; };
@@ -664,6 +668,7 @@
 				DD1879C324868EF700164AD1 /* WWDCRelease_iCloud.entitlements */,
 				DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */,
 				DD59106E1ECA0C2F003C32A4 /* WWDC.entitlements */,
+				F474DECA2673800000B28B31 /* SharePlay */,
 				DD9301BE1EE3210F00BE724B /* Playback Support */,
 				DD34A7991EC3CD4F00E0B575 /* Definitions */,
 				DDB352851EC7C75100254815 /* Helpers */,
@@ -1265,6 +1270,23 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		F474DECA2673800000B28B31 /* SharePlay */ = {
+			isa = PBXGroup;
+			children = (
+				F474DECB2673800900B28B31 /* Models */,
+				F474DEC826737EFA00B28B31 /* SharePlayManager.swift */,
+			);
+			name = SharePlay;
+			sourceTree = "<group>";
+		};
+		F474DECB2673800900B28B31 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1632,6 +1654,7 @@
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
 				DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */,
+				F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */,
 				4D66CA50217E2C800006A8C9 /* DownloadsManagementTableRowView.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
 				DD0159D11ED0CEF500F980F1 /* PreferencesCoordinator.swift in Sources */,
@@ -1684,6 +1707,7 @@
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
+				F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DD382B7B1EAC345F009760C4 /* MaskImageView.m in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,

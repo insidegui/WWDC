@@ -11,7 +11,9 @@ import RealmSwift
 import RxSwift
 import ConfCore
 import PlayerUI
+import Combine
 import os.log
+import AVFoundation
 
 final class AppCoordinator {
 
@@ -518,6 +520,37 @@ final class AppCoordinator {
         guard let code = note.object as? String else { return }
 
         syncEngine.transcriptLanguage = code
+    }
+    
+    // MARK: - SharePlay
+    
+    private lazy var cancellables = Set<AnyCancellable>()
+    
+    @MainActor
+    func configureSharePlayIfSupported() {
+        guard #available(macOS 12.0, *) else { return }
+        
+        SharePlayManager.shared.$state.sink { [weak self] state in
+            guard let self = self else { return }
+            
+            guard case .session(let session) = state else { return }
+            
+            self.currentPlayerController?.player?.playbackCoordinator.coordinateWithSession(session)
+        }.store(in: &cancellables)
+        
+        SharePlayManager.shared.startObservingState()
+    }
+    
+    func activePlayerDidChange(to newPlayer: AVPlayer?) {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
+        guard #available(macOS 12.0, *) else { return }
+        
+        guard case .session(let session) = SharePlayManager.shared.state else { return }
+        
+        os_log("Attaching new player to active SharePlay session", log: self.log, type: .debug)
+        
+        newPlayer?.playbackCoordinator.coordinateWithSession(session)
     }
 
 }
