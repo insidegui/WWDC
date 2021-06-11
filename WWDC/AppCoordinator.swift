@@ -271,6 +271,8 @@ final class AppCoordinator {
         bindScheduleAvailability()
 
         liveObserver.start()
+
+        DispatchQueue.main.async { self.configureSharePlayIfSupported() }
     }
 
     private func bindScheduleAvailability() {
@@ -526,9 +528,14 @@ final class AppCoordinator {
     
     private lazy var cancellables = Set<AnyCancellable>()
     
+    private var sharePlayConfigured = false
+    
     @MainActor
     func configureSharePlayIfSupported() {
         guard #available(macOS 12.0, *) else { return }
+        
+        guard !sharePlayConfigured else { return }
+        sharePlayConfigured = true
         
         SharePlayManager.shared.$state.sink { [weak self] state in
             guard let self = self else { return }

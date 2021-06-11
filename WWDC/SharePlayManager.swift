@@ -34,8 +34,6 @@ final class SharePlayManager: ObservableObject {
     
     @Published private(set) var canStartSharePlay = false {
         didSet {
-            guard canStartSharePlay != oldValue else { return }
-            
             logger.debug("canStartSharePlay = \(self.canStartSharePlay)")
         }
     }
@@ -47,7 +45,11 @@ final class SharePlayManager: ObservableObject {
 
     @MainActor
     func startObservingState() {
-        observer.$isEligibleForGroupSession.assign(to: &$canStartSharePlay)
+        logger.debug(#function)
+        
+        observer.$isEligibleForGroupSession.sink { newValue in
+            self.canStartSharePlay = newValue
+        }.store(in: &cancellables)
         
         let task = detach {
             for await session in WatchWWDCActivity.sessions() {
