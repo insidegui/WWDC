@@ -50,7 +50,7 @@ final class SharePlayManager: ObservableObject {
             self.canStartSharePlay = newValue
         }.store(in: &cancellables)
         
-        let task = detach {
+        let task = Task.detached {
             for await session in WatchWWDCActivity.sessions() {
                 self.cancellables.removeAll()
                 
@@ -85,7 +85,7 @@ final class SharePlayManager: ObservableObject {
         
         let activity = WatchWWDCActivity(with: session)
         
-        async {
+        Task {
             let result = await activity.prepareForActivation()
             
             switch result {
