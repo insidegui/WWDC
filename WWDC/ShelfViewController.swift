@@ -120,8 +120,7 @@ class ShelfViewController: NSViewController {
         }).disposed(by: disposeBag)
     }
 
-    @objc private func play(_ sender: Any?) {
-
+    @objc func play(_ sender: Any?) {
         self.delegate?.shelfViewControllerDidSelectPlay(self)
     }
 

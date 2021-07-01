@@ -30,6 +30,8 @@ final class ImageDownloadCenter {
 
         return q
     }()
+    
+    func cachedThumbnail(from url: URL) -> NSImage? { cacheProvider.cachedImage(for: url, thumbnailOnly: true).thumbnail }
 
     func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
         if thumbnailOnly {
