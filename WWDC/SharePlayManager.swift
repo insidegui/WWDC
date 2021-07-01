@@ -39,7 +39,7 @@ final class SharePlayManager: ObservableObject {
     }
     
     private lazy var cancellables = Set<AnyCancellable>()
-    private lazy var tasks = Set<Task.Handle<(), Never>>()
+    private lazy var tasks = Set<Task<(), Never>>()
     
     @Published private(set) var currentActivity: WatchWWDCActivity?
 
