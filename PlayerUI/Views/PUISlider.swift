@@ -31,7 +31,7 @@ class PUISliderCell: NSSliderCell {
             NSColor.highlightedPlayerBorder.setFill()
         }
 
-        let path = NSBezierPath(ovalIn: knobRect.insetBy(dx: 4, dy: 4))
+        let path = NSBezierPath(ovalIn: knobRect.insetBy(dx: 2, dy: 4))
 
         NSColor(calibratedWhite: 0, alpha: 0.4).setStroke()
 
