@@ -91,10 +91,22 @@ final class SharePlayManager: ObservableObject {
             switch result {
             case .activationPreferred:
                 logger.debug("Activating activity")
-                
-                activity.activate()
-                
-                state = .starting
+
+                do {
+                    if try await activity.activate() {
+                        logger.debug("Activity activated")
+                        
+                        state = .starting
+                    } else {
+                        logger.error("Activity did not activate")
+                        
+                        state = .idle
+                    }
+                } catch {
+                    logger.error("Failed to activate activity: \(String(describing: error), privacy: .public)")
+                    
+                    state = .idle
+                }
             case .activationDisabled:
                 logger.error("Activity activation disabled")
                 
