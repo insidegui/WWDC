@@ -87,7 +87,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCForceAllowAgentCommands YES"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--background"
@@ -147,11 +147,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--delorean"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "2021-06-07T14:01:00-03:00"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
