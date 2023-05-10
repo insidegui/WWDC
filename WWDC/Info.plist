@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.3.3</string>
+	<string>7.4</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -46,7 +46,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1024</string>
+	<string>1027</string>
 	<key>GRBundleDesignContributorWebsite</key>
 	<string>https://twitter.com/bcmn96</string>
 	<key>GRBundleIconCreatorWebsite</key>

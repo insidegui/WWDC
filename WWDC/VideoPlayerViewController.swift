@@ -23,6 +23,7 @@ protocol VideoPlayerViewControllerDelegate: AnyObject {
 
     func createBookmark(at timecode: Double, with snapshot: NSImage?)
     func createFavorite()
+    func activePlayerDidChange(to newPlayer: AVPlayer?)
 
 }
 
@@ -156,6 +157,8 @@ final class VideoPlayerViewController: NSViewController {
         }
 
         setupTranscriptSync()
+        
+        delegate?.activePlayerDidChange(to: player)
     }
 
     func updateUI() {
