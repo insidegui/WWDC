@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -556,11 +556,6 @@
                                         <menuItem title="Videos" keyEquivalent="3" id="DmZ-h7-bFP">
                                             <connections>
                                                 <action selector="viewVideos:" target="Ady-hI-5gd" id="xWC-aO-kEM"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Community" keyEquivalent="4" id="4dz-Cg-bRA" userLabel="Community">
-                                            <connections>
-                                                <action selector="viewCommunity:" target="Voe-Tx-rLC" id="IVY-IA-xBb"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="eT5-6l-QRY"/>

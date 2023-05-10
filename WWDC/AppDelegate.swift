@@ -250,10 +250,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator?.showVideos()
     }
 
-    @IBAction func viewCommunity(_ sender: Any) {
-        coordinator?.showCommunity()
-    }
-
     @IBAction func viewHelp(_ sender: Any) {
         if let helpUrl = URL(string: "https://github.com/insidegui/WWDC/issues") {
             NSWorkspace.shared.open(helpUrl)
