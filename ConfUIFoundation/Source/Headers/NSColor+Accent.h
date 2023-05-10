@@ -6,8 +6,6 @@
 //  Copyright © 2020 Guilherme Rambo. All rights reserved.
 //
 
-@import AppKit;
-
 #define kGraphiteAccentColor -1
 
 extern NSInteger NSColorGetUserAccentColor(void);
