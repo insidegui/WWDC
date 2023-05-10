@@ -9,6 +9,7 @@
 import Cocoa
 import AVFoundation
 
+// swiftlint:disable:next type_name
 protocol PUIPictureContainerViewControllerDelegate: AnyObject {
 
     func pictureContainerViewSuperviewDidChange(to superview: NSView?)

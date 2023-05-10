@@ -30,7 +30,10 @@ public extension CALayer {
         }
 
         do {
-            let rootObject = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(asset.data)
+            let unarchiver = try NSKeyedUnarchiver(forReadingFrom: asset.data)
+            unarchiver.requiresSecureCoding = false
+
+            let rootObject = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey)
 
             guard let dictionary = rootObject as? NSDictionary else {
                 assertionFailure("Failed to load asset")

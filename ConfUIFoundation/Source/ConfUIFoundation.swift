@@ -8,7 +8,7 @@
 
 @_exported import Cocoa
 
-fileprivate final class _StubForBundleInit { }
+private final class _StubForBundleInit { }
 
 extension Bundle {
     static let confUIFoundation = Bundle(for: _StubForBundleInit.self)

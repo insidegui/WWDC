@@ -55,7 +55,7 @@ final class CommunityCollectionViewItem: NSCollectionViewItem {
     
 }
 
-fileprivate final class CommunityCollectionContentView: NSView {
+private final class CommunityCollectionContentView: NSView {
 
     override var isOpaque: Bool { true }
 

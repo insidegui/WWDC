@@ -328,7 +328,8 @@ final class AppCoordinator {
                 switch error {
                 case .adapter, .unknown:
                     WWDCAlert.show(with: error)
-                case .http:()
+                case .http:
+                    break
                 }
             } else if let error = note.object as? Error {
                 WWDCAlert.show(with: error)

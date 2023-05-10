@@ -58,7 +58,7 @@ class WWDCImageView: NSView {
         }
     }
 
-    var image: NSImage? = nil {
+    var image: NSImage? {
         didSet {
             imageLayer.contents = image
         }

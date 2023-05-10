@@ -170,7 +170,8 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
             scheduleController.splitViewController.detailViewController.shelfController.showClipUI()
         case .videos:
             videosController.detailViewController.shelfController.showClipUI()
-        default:()
+        default:
+            break
         }
     }
 

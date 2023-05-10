@@ -250,7 +250,7 @@ class GeneralPreferencesViewController: NSViewController {
 
         var rootFileCount = 0
 
-        while let _ = enumerator.nextObject() as? String {
+        while enumerator.nextObject() as? String != nil {
             rootFileCount += 1
         }
 

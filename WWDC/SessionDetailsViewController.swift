@@ -20,7 +20,7 @@ class SessionDetailsViewController: NSViewController {
 
     let listStyle: SessionsListStyle
 
-    var viewModel: SessionViewModel? = nil {
+    var viewModel: SessionViewModel? {
         didSet {
             view.animator().alphaValue = (viewModel == nil) ? 0 : 1
 

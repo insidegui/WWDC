@@ -15,9 +15,6 @@ public class Keyword: Object, Decodable {
     /// The keyword
     @objc public dynamic var name = ""
 
-    /// Sessions containing this keyword
-    //    public let sessionInstances = LinkingObjects(fromType: SessionInstance.self, property: "keywords")
-
     public override class func primaryKey() -> String? {
         return "name"
     }

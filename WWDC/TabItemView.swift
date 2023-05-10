@@ -120,10 +120,7 @@ final class TabItemView: NSView {
             s.width += 29
             return s
         }
-        // swiftlint:disable:next unused_setter_value
-        set {
-
-        }
+        set { }
     }
 
     private var uiMaskNotificationTokens: [NSObjectProtocol] = []

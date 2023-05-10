@@ -24,7 +24,7 @@ class ShelfViewController: NSViewController {
 
     private var disposeBag = DisposeBag()
 
-    var viewModel: SessionViewModel? = nil {
+    var viewModel: SessionViewModel? {
         didSet {
             updateBindings()
         }

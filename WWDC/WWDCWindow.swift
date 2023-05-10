@@ -95,7 +95,7 @@ final class WWDCWindow: NSWindow {
 
 }
 
-fileprivate final class WWDCUIMaskView: NSView {
+private final class WWDCUIMaskView: NSView {
 
     var holeRect: CGRect = .zero {
         didSet {
