@@ -90,17 +90,8 @@
 		DDA7B7142482A4A500F86668 /* TranscriptSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7132482A4A500F86668 /* TranscriptSearchController.swift */; };
 		DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */; };
 		DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */; };
-		DDA7B72E2484371C00F86668 /* CommunityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B72D2484371C00F86668 /* CommunityViewController.swift */; };
-		DDA7B730248438B500F86668 /* CommunityCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B72F248438B500F86668 /* CommunityCollectionViewController.swift */; };
-		DDA7B73224843A3A00F86668 /* CommunityCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73124843A3A00F86668 /* CommunityCollectionViewItem.swift */; };
 		DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */; };
-		DDA7B7372484429600F86668 /* CommunitySectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */; };
-		DDA7B7392484477100F86668 /* CommunityNewsItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */; };
-		DDA7B73D24852FDB00F86668 /* VectorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73C24852FDB00F86668 /* VectorButton.swift */; };
 		DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */; };
-		DDA7B7422485397F00F86668 /* CommunityNewsItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */; };
-		DDA7B76424855BE400F86668 /* FeaturedCommunityCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B76324855BE400F86668 /* FeaturedCommunityCollectionViewItem.swift */; };
-		DDA7B76624855CC200F86668 /* CocoaHubLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B76524855CC200F86668 /* CocoaHubLogoView.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2622577E67A00995FF1 /* ConfCore */; };
 		DDB1A2642577E67A00995FF1 /* ConfCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2622577E67A00995FF1 /* ConfCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -404,18 +395,9 @@
 		DDA7B7132482A4A500F86668 /* TranscriptSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptSearchController.swift; sourceTree = "<group>"; };
 		DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionTranscriptWindowController.swift; sourceTree = "<group>"; };
 		DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPreferencesViewController.swift; sourceTree = "<group>"; };
-		DDA7B72D2484371C00F86668 /* CommunityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewController.swift; sourceTree = "<group>"; };
-		DDA7B72F248438B500F86668 /* CommunityCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityCollectionViewController.swift; sourceTree = "<group>"; };
-		DDA7B73124843A3A00F86668 /* CommunityCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityCollectionViewItem.swift; sourceTree = "<group>"; };
 		DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompositionalLayoutBackgroundSwizzler.h; sourceTree = "<group>"; };
 		DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompositionalLayoutBackgroundSwizzler.m; sourceTree = "<group>"; };
-		DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySectionHeaderView.swift; sourceTree = "<group>"; };
-		DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItemView.swift; sourceTree = "<group>"; };
-		DDA7B73C24852FDB00F86668 /* VectorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorButton.swift; sourceTree = "<group>"; };
 		DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Asset.swift"; sourceTree = "<group>"; };
-		DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityNewsItemViewModel.swift; sourceTree = "<group>"; };
-		DDA7B76324855BE400F86668 /* FeaturedCommunityCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedCommunityCollectionViewItem.swift; sourceTree = "<group>"; };
-		DDA7B76524855CC200F86668 /* CocoaHubLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocoaHubLogoView.swift; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDB1A25E2577E51E00995FF1 /* ConfCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ConfCore; path = Packages/ConfCore; sourceTree = "<group>"; };
 		DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VibrantButton.swift; sourceTree = "<group>"; };
@@ -717,7 +699,6 @@
 				DD90CDCE1ED7A5F900CADE86 /* Search */,
 				DDDF807220BA3110007284F8 /* Featured */,
 				DD7F38601EABD66D002D8C00 /* Sessions */,
-				DDA7B72C248436F600F86668 /* Community */,
 				DD0159CD1ED0CD1D00F980F1 /* Preferences */,
 			);
 			name = Controllers;
@@ -750,7 +731,6 @@
 				DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */,
 				DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */,
 				DD78588024C3594B008C1C22 /* SlowMigrationView.swift */,
-				DDA7B7402485392000F86668 /* Community */,
 				DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */,
 			);
 			name = Views;
@@ -767,7 +747,6 @@
 				DDF32EAC1EBE2F9F0028E39D /* SessionRow.swift */,
 				DDB28F8D1EAD257B0077703F /* PlaybackViewModel.swift */,
 				4D4D80C3217D281D00D1C233 /* DownloadViewModel.swift */,
-				DDA7B7412485397F00F86668 /* CommunityNewsItemViewModel.swift */,
 			);
 			name = ViewModels;
 			sourceTree = "<group>";
@@ -919,28 +898,6 @@
 				DD9301BF1EE3212D00BE724B /* ChromeCastPlaybackProvider.swift */,
 			);
 			name = "Playback Support";
-			sourceTree = "<group>";
-		};
-		DDA7B72C248436F600F86668 /* Community */ = {
-			isa = PBXGroup;
-			children = (
-				DDA7B72D2484371C00F86668 /* CommunityViewController.swift */,
-				DDA7B72F248438B500F86668 /* CommunityCollectionViewController.swift */,
-				DDA7B73124843A3A00F86668 /* CommunityCollectionViewItem.swift */,
-				DDA7B76324855BE400F86668 /* FeaturedCommunityCollectionViewItem.swift */,
-			);
-			name = Community;
-			sourceTree = "<group>";
-		};
-		DDA7B7402485392000F86668 /* Community */ = {
-			isa = PBXGroup;
-			children = (
-				DDA7B7362484429600F86668 /* CommunitySectionHeaderView.swift */,
-				DDA7B7382484477100F86668 /* CommunityNewsItemView.swift */,
-				DDA7B73C24852FDB00F86668 /* VectorButton.swift */,
-				DDA7B76524855CC200F86668 /* CocoaHubLogoView.swift */,
-			);
-			name = Community;
 			sourceTree = "<group>";
 		};
 		DDAE7C531E5BC6CD00CEA205 /* Frameworks */ = {
@@ -1618,13 +1575,10 @@
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
 				DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */,
 				DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */,
-				DDA7B72E2484371C00F86668 /* CommunityViewController.swift in Sources */,
-				DDA7B7422485397F00F86668 /* CommunityNewsItemViewModel.swift in Sources */,
 				DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */,
 				DD7F38681EABE4E4002D8C00 /* SessionViewModel.swift in Sources */,
 				DD9564231ED27FBE00051D07 /* NSImage+Thumbnail.swift in Sources */,
 				DDB3529E1EC8D8CD00254815 /* main.m in Sources */,
-				DDA7B7372484429600F86668 /* CommunitySectionHeaderView.swift in Sources */,
 				DD7F38781EAC0C98002D8C00 /* ShelfViewController.swift in Sources */,
 				DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */,
 				DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */,
@@ -1638,7 +1592,6 @@
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
 				DDC678191EDB2CD300A4E19C /* ActionLabel.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
-				DDA7B76624855CC200F86668 /* CocoaHubLogoView.swift in Sources */,
 				DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */,
 				DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */,
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
@@ -1649,7 +1602,6 @@
 				4DA25DC821063CD500762BBD /* TitleBarViewController.swift in Sources */,
 				4D5EB0F820598E6000D4BC52 /* SessionRowProvider.swift in Sources */,
 				DD7E28FF247FE69400A58370 /* ScheduleContainerViewController.swift in Sources */,
-				DDA7B73224843A3A00F86668 /* CommunityCollectionViewItem.swift in Sources */,
 				DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */,
 				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
@@ -1687,7 +1639,6 @@
 				DD6E06F81EDBC62D000EAEA4 /* SessionTranscriptViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
 				DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */,
-				DDA7B730248438B500F86668 /* CommunityCollectionViewController.swift in Sources */,
 				DDF5A5092487066200135E70 /* ClipComposition.swift in Sources */,
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
 				F4B22FB1265EDDCC00632C9C /* PreferencesAgentHelpViewController.swift in Sources */,
@@ -1708,10 +1659,8 @@
 				4D7482CA20FF735D008D156C /* WWDCWindowController.swift in Sources */,
 				DD0159FC1ED23F7700F980F1 /* RemoteEnvironment.swift in Sources */,
 				4DA25DCC21064B4800762BBD /* WWDCTabViewControllerTabBar.swift in Sources */,
-				DDA7B7392484477100F86668 /* CommunityNewsItemView.swift in Sources */,
 				DDDF807C20BA470B007284F8 /* FeaturedSectionViewModel.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
-				DDA7B73D24852FDB00F86668 /* VectorButton.swift in Sources */,
 				F4CCF940265EC5A100A69E62 /* WWDCAppCommand.swift in Sources */,
 				4DDF6A782177A00C008E5539 /* DownloadsManagementTableCellView.swift in Sources */,
 				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
@@ -1726,7 +1675,6 @@
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
 				F4A882842673AC8500BAB7F5 /* TitleBarButtonsViewController.swift in Sources */,
 				DDC6780F1EDB253D00A4E19C /* AboutWindowController.swift in Sources */,
-				DDA7B76424855BE400F86668 /* FeaturedCommunityCollectionViewItem.swift in Sources */,
 				01B3EB4A1EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift in Sources */,
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,

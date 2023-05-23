@@ -14,7 +14,6 @@ import os.log
 extension Notification.Name {
     public static let SyncEngineDidSyncSessionsAndSchedule = Notification.Name("SyncEngineDidSyncSessionsAndSchedule")
     public static let SyncEngineDidSyncFeaturedSections = Notification.Name("SyncEngineDidSyncFeaturedSections")
-    public static let SyncEngineDidSyncCocoaHubEditionArticles = Notification.Name("SyncEngineDidSyncCocoaHubEditionArticles")
 }
 
 public final class SyncEngine {
@@ -23,7 +22,6 @@ public final class SyncEngine {
 
     public let storage: Storage
     public let client: AppleAPIClient
-    public let cocoaHubClient: CocoaHubAPIClient
 
     public let userDataSyncEngine: UserDataSyncEngine?
 
@@ -39,10 +37,9 @@ public final class SyncEngine {
     public var isIndexingTranscripts: BehaviorRelay<Bool> { transcriptIndexingClient.isIndexing }
     public var transcriptIndexingProgress: BehaviorRelay<Float> { transcriptIndexingClient.indexingProgress }
 
-    public init(storage: Storage, client: AppleAPIClient, cocoaHubClient: CocoaHubAPIClient, transcriptLanguage: String) {
+    public init(storage: Storage, client: AppleAPIClient, transcriptLanguage: String) {
         self.storage = storage
         self.client = client
-        self.cocoaHubClient = cocoaHubClient
 
         self.transcriptIndexingClient = TranscriptIndexingClient(
             language: transcriptLanguage,
@@ -99,29 +96,6 @@ public final class SyncEngine {
         client.fetchConfig { [weak self] result in
             DispatchQueue.main.async {
                 self?.storage.store(configResult: result, completion: { _ in })
-            }
-        }
-    }
-
-    public func syncCommunityContent() {
-        cocoaHubClient.fetchNews { [weak self] result in
-            DispatchQueue.main.async {
-                self?.storage.store(cocoaHubNewsResult: result, completion: { _ in })
-            }
-        }
-    }
-
-    public func syncCocoaHubEditionArticles(for id: String) {
-        guard let edition = storage.realm.object(ofType: CocoaHubEdition.self, forPrimaryKey: id) else {
-            os_log("Couldn't find CocoaHub edition with identifier %@", log: self.log, type: .error, id)
-            return
-        }
-
-        cocoaHubClient.fetchEditionArticles(for: edition.index) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.storage.store(cocoaHubEditionArticles: result, completion: { error in
-                    NotificationCenter.default.post(name: .SyncEngineDidSyncFeaturedSections, object: error)
-                })
             }
         }
     }

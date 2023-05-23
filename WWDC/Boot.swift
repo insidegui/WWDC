@@ -78,7 +78,6 @@ final class Boot {
             realmConfig.migrationBlock = Storage.migrate(migration:oldVersion:)
 
             let client = AppleAPIClient(environment: .current)
-            let cocoaHubClient = CocoaHubAPIClient(environment: .current)
 
             Realm.asyncOpen(configuration: realmConfig) { result in
                 switch result {
@@ -88,7 +87,6 @@ final class Boot {
                     let syncEngine = SyncEngine(
                         storage: storage,
                         client: client,
-                        cocoaHubClient: cocoaHubClient,
                         transcriptLanguage: Preferences.shared.transcriptLanguageCode
                     )
 

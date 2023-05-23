@@ -31,7 +31,6 @@ final class AppCoordinator {
     var featuredController: FeaturedContentViewController
     var scheduleController: ScheduleContainerViewController
     var videosController: SessionsSplitViewController
-    var communityController: CommunityViewController
 
     var currentPlayerController: VideoPlayerViewController?
 
@@ -92,13 +91,6 @@ final class AppCoordinator {
         videosItem.label = "Videos"
         videosItem.initialFirstResponder = videosController.listViewController.tableView
         tabController.addTabViewItem(videosItem)
-
-        // Community
-        communityController = CommunityViewController(syncEngine: syncEngine)
-        communityController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Community")
-        let communityItem = NSTabViewItem(viewController: communityController)
-        communityItem.label = "Community"
-        tabController.addTabViewItem(communityItem)
 
         self.windowController = windowController
 
@@ -473,10 +465,6 @@ final class AppCoordinator {
         tabController.activeTab = .videos
     }
 
-    func showCommunity() {
-        tabController.activeTab = .community
-    }
-
     // MARK: - Refresh
 
     /// Used to prevent the refresh system from being spammed. Resetting
@@ -493,8 +481,6 @@ final class AppCoordinator {
             self.syncEngine.syncConfiguration()
 
             self.syncEngine.syncContent()
-
-            self.syncEngine.syncCommunityContent()
 
             self.liveObserver.refresh()
 
