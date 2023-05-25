@@ -526,8 +526,6 @@ final class AppCoordinator {
     private var sharePlayConfigured = false
 
     func configureSharePlayIfSupported() {
-        guard #available(macOS 12.0, *) else { return }
-        
         let log = OSLog(subsystem: SharePlayManager.subsystemName, category: String(describing: AppCoordinator.self))
         
         guard !sharePlayConfigured else { return }
@@ -567,8 +565,6 @@ final class AppCoordinator {
     func activePlayerDidChange(to newPlayer: AVPlayer?) {
         os_log("%{public}@", log: log, type: .debug, #function)
         
-        guard #available(macOS 12.0, *) else { return }
-        
         guard case .session(let session) = SharePlayManager.shared.state else { return }
         
         os_log("Attaching new player to active SharePlay session", log: self.log, type: .debug)
@@ -577,8 +573,6 @@ final class AppCoordinator {
     }
 
     func startSharePlay() {
-        guard #available(macOS 12.0, *) else { return }
-        
         if case .session = SharePlayManager.shared.state {
             let alert = NSAlert()
             alert.messageText = "Leave SharePlay?"

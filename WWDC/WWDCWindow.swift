@@ -82,11 +82,8 @@ final class WWDCWindow: NSWindow {
         tabbingMode = .disallowed
         titleVisibility = .hidden
         toolbar = NSToolbar(identifier: "DummyToolbar")
-
-        if #available(macOS 11.0, *) {
-            titlebarAppearsTransparent = true
-            toolbarStyle = .unified
-        }
+        titlebarAppearsTransparent = true
+        toolbarStyle = .unified
 
         guard let titlebarContainerView else { return }
 

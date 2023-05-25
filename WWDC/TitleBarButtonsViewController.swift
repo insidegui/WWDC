@@ -19,15 +19,9 @@ final class TitleBarButtonsViewController: NSViewController {
     private weak var managementViewController: DownloadsManagementViewController?
     
     var handleSharePlayClicked: () -> Void = { }
-    
-    private var _sharePlayStateHolder: Any?
-    
-    @available(macOS 12.0, *)
-    private var sharePlayViewModel: SharePlayStatusViewModel {
-        // swiftlint:disable:next force_cast
-        _sharePlayStateHolder as! SharePlayStatusViewModel
-    }
-    
+
+    private lazy var sharePlayViewModel = SharePlayStatusViewModel()
+
     private lazy var cancellables = Set<AnyCancellable>()
 
     init(downloadManager: DownloadManager, storage: Storage) {
@@ -43,18 +37,14 @@ final class TitleBarButtonsViewController: NSViewController {
                 self?.statusButton.isHidden = $0.isEmpty
             }).disposed(by: disposeBag)
         
-        bindSharePlayStateIfSupported()
+        bindSharePlayState()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func bindSharePlayStateIfSupported() {
-        guard #available(macOS 12.0, *) else { return }
-        
-        _sharePlayStateHolder = SharePlayStatusViewModel()
-        
+    private func bindSharePlayState() {
         SharePlayManager.shared.$canStartSharePlay.sink { [weak self] available in
             guard let self = self else { return }
             
@@ -128,7 +118,6 @@ final class TitleBarButtonsViewController: NSViewController {
     }
 }
 
-@available(macOS 12.0, *)
 private extension SharePlayManager.State {
     var buttonState: SharePlayState {
         switch self {

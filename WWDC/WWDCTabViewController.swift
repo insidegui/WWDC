@@ -159,9 +159,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     }
     
     /// Puts a header view in the titlebar area when running on macOS 11 or later.
-    private func installModernHeaderViewIfNeeded() {
-        guard #available(macOS 11.0, *) else { return }
-        
+    private func installModernHeaderViewIfNeeded() {        
         guard backgroundView.superview == nil else { return }
         
         view.addSubview(backgroundView)

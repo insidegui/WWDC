@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(macOS 12.0, *)
 enum SharePlayState: Int {
     case unavailable
     case inactive
@@ -15,12 +14,10 @@ enum SharePlayState: Int {
     case active
 }
 
-@available(macOS 12.0, *)
 final class SharePlayStatusViewModel: ObservableObject {
     @Published var state: SharePlayState = .unavailable
 }
 
-@available(macOS 12.0, *)
 struct SharePlayStatusView: View {
     @EnvironmentObject var viewModel: SharePlayStatusViewModel
     

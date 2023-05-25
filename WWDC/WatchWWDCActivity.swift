@@ -10,7 +10,6 @@ import Foundation
 import GroupActivities
 import ConfCore
 
-@available(macOS 12.0, *)
 struct WatchWWDCActivity: GroupActivity {
     
     let sessionID: String
