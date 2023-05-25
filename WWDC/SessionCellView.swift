@@ -115,7 +115,7 @@ final class SessionCellView: NSView {
         let l = NSTextField(labelWithString: "")
         l.font = .systemFont(ofSize: 14, weight: .medium)
         l.textColor = .primaryText
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
 
         return l
@@ -125,7 +125,7 @@ final class SessionCellView: NSView {
         let l = NSTextField(labelWithString: "")
         l.font = .systemFont(ofSize: 12)
         l.textColor = .secondaryText
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
 
         return l
@@ -135,7 +135,7 @@ final class SessionCellView: NSView {
         let l = NSTextField(labelWithString: "")
         l.font = .systemFont(ofSize: 12)
         l.textColor = .tertiaryText
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
 
         return l

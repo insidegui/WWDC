@@ -59,7 +59,7 @@ final class FeaturedSectionViewController: NSViewController {
     private lazy var titleLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
 
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
         l.maximumNumberOfLines = 1
         l.textColor = .primaryText
@@ -71,7 +71,7 @@ final class FeaturedSectionViewController: NSViewController {
     private lazy var subtitleLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
 
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
         l.maximumNumberOfLines = 1
         l.textColor = .secondaryText

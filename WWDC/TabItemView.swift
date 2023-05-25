@@ -98,7 +98,7 @@ final class TabItemView: NSView {
 
         l.font = .systemFont(ofSize: 14)
         l.textColor = .toolbarTint
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
 
         return l
     }()

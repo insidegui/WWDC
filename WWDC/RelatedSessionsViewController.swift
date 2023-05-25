@@ -56,7 +56,7 @@ final class RelatedSessionsViewController: NSViewController {
 
     private lazy var titleLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
         l.maximumNumberOfLines = 1
         l.translatesAutoresizingMaskIntoConstraints = false

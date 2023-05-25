@@ -34,7 +34,7 @@ class TranscriptTableCellView: NSTableCellView {
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = .systemFont(ofSize: 14, weight: .medium)
         l.textColor = .primaryText
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
         l.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         l.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -48,7 +48,7 @@ class TranscriptTableCellView: NSTableCellView {
         l.translatesAutoresizingMaskIntoConstraints = false
         l.font = .systemFont(ofSize: 12)
         l.textColor = .secondaryText
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
 
         return l

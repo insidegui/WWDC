@@ -47,7 +47,7 @@ class WWDCTextButton: NSButton {
 
         sizeToFit()
 
-        cell?.backgroundStyle = .dark
+        cell?.backgroundStyle = .emphasized
     }
 
     override var state: NSControl.StateValue {
