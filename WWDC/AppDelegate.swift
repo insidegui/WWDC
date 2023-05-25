@@ -46,6 +46,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             os_log("WWDC running in background mode to respond to deep-linked commands", log: self.log, type: .default)
         } else {
             NSApp.setActivationPolicy(.regular)
+
+            DispatchQueue.main.async {
+                NSApp.activate(ignoringOtherApps: false)
+            }
         }
 
         NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
