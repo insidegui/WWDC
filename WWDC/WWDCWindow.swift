@@ -31,19 +31,48 @@ final class WWDCWindow: NSWindow {
 
     // MARK: - Custom appearance
 
-    fileprivate var _storedTitlebarView: NSVisualEffectView?
-    public var titlebarView: NSVisualEffectView? {
-        guard _storedTitlebarView == nil else { return _storedTitlebarView }
+    fileprivate var _storedTitlebarContainerView: NSView?
+    public var titlebarContainerView: NSView? {
+        guard _storedTitlebarContainerView == nil else { return _storedTitlebarContainerView }
         guard let containerClass = NSClassFromString("NSTitlebarContainerView") else { return nil }
 
         guard let containerView = contentView?.superview?.subviews.reversed().first(where: { $0.isKind(of: containerClass) }) else { return nil }
 
-        guard let titlebar = containerView.subviews.reversed().first(where: { $0.isKind(of: NSVisualEffectView.self) }) as? NSVisualEffectView else { return nil }
+        _storedTitlebarContainerView = containerView
 
-        _storedTitlebarView = titlebar
-
-        return _storedTitlebarView
+        return _storedTitlebarContainerView
     }
+
+    private lazy var titlebarLook: NSView = {
+        let v = NSVisualEffectView()
+
+        v.wantsLayer = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.material = .headerView
+        v.appearance = NSAppearance(named: .darkAqua)
+        v.blendingMode = .withinWindow
+        v.state = .followsWindowActiveState
+
+        let divider = NSBox()
+
+        divider.wantsLayer = true
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        divider.boxType = .custom
+        divider.fillColor = NSColor.black.withAlphaComponent(0.5)
+        divider.borderWidth = 0
+        divider.appearance = NSAppearance(named: .darkAqua)
+
+        v.addSubview(divider)
+
+        NSLayoutConstraint.activate([
+            divider.leadingAnchor.constraint(equalTo: v.leadingAnchor),
+            divider.trailingAnchor.constraint(equalTo: v.trailingAnchor),
+            divider.heightAnchor.constraint(equalToConstant: 1),
+            divider.bottomAnchor.constraint(equalTo: v.bottomAnchor)
+        ])
+
+        return v
+    }()
 
     fileprivate func applyCustomizations(_ note: Notification? = nil) {
         backgroundColor = .darkWindowBackground
@@ -51,10 +80,24 @@ final class WWDCWindow: NSWindow {
         titleVisibility = .hidden
         isMovableByWindowBackground = true
         tabbingMode = .disallowed
+        titleVisibility = .hidden
+        toolbar = NSToolbar(identifier: "DummyToolbar")
 
-        titlebarView?.material = .titlebar
-        titlebarView?.state = .inactive
-        titlebarView?.layer?.backgroundColor = NSColor.darkTitlebarBackground.cgColor
+        if #available(macOS 11.0, *) {
+            titlebarAppearsTransparent = true
+            toolbarStyle = .unified
+        }
+
+        guard let titlebarContainerView else { return }
+
+        titlebarContainerView.addSubview(titlebarLook, positioned: .below, relativeTo: nil)
+
+        NSLayoutConstraint.activate([
+            titlebarLook.leadingAnchor.constraint(equalTo: titlebarContainerView.leadingAnchor),
+            titlebarLook.trailingAnchor.constraint(equalTo: titlebarContainerView.trailingAnchor),
+            titlebarLook.topAnchor.constraint(equalTo: titlebarContainerView.topAnchor),
+            titlebarLook.bottomAnchor.constraint(equalTo: titlebarContainerView.bottomAnchor)
+        ])
     }
 
     private var uiMaskView: WWDCUIMaskView?
