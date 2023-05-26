@@ -2,11 +2,7 @@
 
 Enjoy WWDC from the comfort of your Mac with the unofficial WWDC app for macOS. Whether you're (virtually) attending or not, you can access livestreams, videos and sessions during the conference and as a year-round resource.
 
-In partnership with CocoaHub, you can also use the app's Community tab to browse through Apple announcements, updates to the Swift language, new episodes from your favorite podcasts, community blog posts, and more.
-
-You may also search for your WWDC content in [Raycast](https://raycast.com) if you have both apps installed, just enable “Allow other apps access to your WWDC content” in preferences.
-
-⬇️ If you just want to download the latest release, go to [the website](https://wwdc.io).
+⬇️ If you just want to download the latest release, go to [the releases page](https://github.com/insidegui/WWDC/releases/latest).
 
 ## Schedule
 
@@ -16,7 +12,7 @@ The schedule tab shows the schedule for the current edition of WWDC, and allows 
 
 Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in multiple languages.
 
-![videos](./img/v7/Transcript.png)
+![videos](./img/v7/Transcript.heic)
 
 ### Video features
 
@@ -28,13 +24,7 @@ Watch this year's videos as they're released and access videos from previous yea
 
 Clip Sharing allows you to share a short segment (up to 5 minutes) from a session's video. This is a great feature for quickly sharing snippets of content from the conference.
 
-![clipsharing](./img/v7/ClipSharing.png)
-
-## Chromecast
-
-You can watch WWDC videos (both live and on-demand) on your Chromecast. Just click the Chromecast button while playing a video, choose your device from the list and control playback using the Google Home app on your phone.
-
-![chromecast](./img/v7/ChromeCast.png)
+![clipsharing](./img/v7/ClipSharing.heic)
 
 ## Bookmarks
 
@@ -42,13 +32,7 @@ Have you ever found yourself watching a WWDC session and wishing you could take 
 
 With bookmarks, you can create a reference point within a video and add an annotation to it. Your bookmark annotations can also be considered while using the search, so it's easier than ever to find the content you've bookmarked before.
 
-![bookmarks](./img/v7/Video-Bookmark.png)
-
-## Community
-
-Browse content curated by the [CocoaHub](http://cocoahub.app) team in the Community tab.
-
-![community](./img/v7/Community.png)
+![bookmarks](./img/v7/Video-Bookmark.heic)
 
 ## iCloud Sync
 
@@ -83,11 +67,10 @@ A number of third-party libraries are used by the app:
 - **ConfCore** is the core of the app that deals with Apple's WWDC API, data storage, caching, syncing and transcripts (everything that has to do with data, basically)
 - **ConfUIFoundation** contains shared color, font definitions and other useful extensions used by the main app target and `PlayerUI`
 - **PlayerUI** contains the UI components for the video player and some general-purpose UI components used throughout the app
-- **ThrowBack** provides support for migration of user data and preferences from old versions of the app
 
 ## Building the app
 
-**Building requires Xcode 12.5 or later.**
+**Building requires Xcode 14 or later.**
 
 **Clone this branch and before opening the project, run `./bootstrap.sh`** to setup the environment. It will install `swiftlint` for you using `brew` if you don't have it yet.
 
