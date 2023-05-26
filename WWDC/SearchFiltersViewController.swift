@@ -174,11 +174,16 @@ final class SearchFiltersViewController: NSViewController {
         guard let menu = popUp.menu else { return }
         guard var filter = effectiveFilters[filterIndex] as? MultipleChoiceFilter else { return }
 
-        selectedItem.state = (selectedItem.state == .off) ? .on : .off
+        if let option = selectedItem.representedObject as? FilterOption, option.isClear {
+            filter.selectedOptions = []
+            menu.items.forEach { $0.state = .off }
+        } else {
+            selectedItem.state = (selectedItem.state == .off) ? .on : .off
 
-        let selected = menu.items.filter({ $0.state == .on }).compactMap({ $0.representedObject as? FilterOption })
+            let selected = menu.items.filter({ $0.state == .on }).compactMap({ $0.representedObject as? FilterOption })
 
-        filter.selectedOptions = selected
+            filter.selectedOptions = selected
+        }
 
         var updatedFilters = effectiveFilters
         updatedFilters[filterIndex] = filter
@@ -253,23 +258,7 @@ final class SearchFiltersViewController: NSViewController {
             switch filter {
 
             case let filter as MultipleChoiceFilter:
-                guard let popUp = popUpButton(for: filter) else { return }
-
-                popUp.removeAllItems()
-
-                popUp.addItem(withTitle: filter.title)
-
-                filter.options.forEach { option in
-                    guard !option.isSeparator else {
-                        popUp.menu?.addItem(.separator())
-                        return
-                    }
-                    
-                    let item = NSMenuItem(title: option.title, action: nil, keyEquivalent: "")
-                    item.representedObject = option
-                    item.state = filter.selectedOptions.contains(option) ? .on : .off
-                    popUp.menu?.addItem(item)
-                }
+                updatePopUp(for: filter)
             case let filter as TextualFilter:
                 searchField.stringValue = filter.value ?? ""
             case let filter as ToggleFilter:
@@ -288,5 +277,25 @@ final class SearchFiltersViewController: NSViewController {
         downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
         unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
         bookmarksSegmentSelected = bottomSegmentedControl.isSelected(for: .bookmarks)
+    }
+
+    private func updatePopUp(for filter: MultipleChoiceFilter) {
+        guard let popUp = popUpButton(for: filter) else { return }
+
+        popUp.removeAllItems()
+
+        popUp.addItem(withTitle: filter.title)
+
+        filter.options.forEach { option in
+            guard !option.isSeparator else {
+                popUp.menu?.addItem(.separator())
+                return
+            }
+
+            let item = NSMenuItem(title: option.title, action: nil, keyEquivalent: "")
+            item.representedObject = option
+            item.state = filter.selectedOptions.contains(option) ? .on : .off
+            popUp.menu?.addItem(item)
+        }
     }
 }

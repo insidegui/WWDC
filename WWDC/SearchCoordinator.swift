@@ -202,7 +202,13 @@ final class SearchCoordinator {
                                                  videosBookmarksFilter]
 
         if !videosSearchController.filters.isIdentical(to: videosSearchFilters) {
-            videosSearchController.filters = videosSearchFilters
+            videosSearchController.filters = videosSearchFilters.map {
+                guard let multipleChoice = $0 as? MultipleChoiceFilter else { return $0 }
+                var withClearOption = multipleChoice
+                withClearOption.options.append(.separator)
+                withClearOption.options.append(.clear)
+                return withClearOption
+            }
         }
 
         // set delegates

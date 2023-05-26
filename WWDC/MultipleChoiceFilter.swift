@@ -10,6 +10,7 @@ import Foundation
 
 struct FilterOption: Equatable, Codable {
     private static let separatorTitle = "-------"
+    private static let clearTitle = "Clear"
 
     let title: String
     let value: String
@@ -30,8 +31,10 @@ struct FilterOption: Equatable, Codable {
     }
 
     static var separator: FilterOption { .init(title: Self.separatorTitle, value: Self.separatorTitle) }
+    static var clear: FilterOption { .init(title: Self.clearTitle, value: Self.clearTitle) }
 
     var isSeparator: Bool { title == Self.separatorTitle }
+    var isClear: Bool { title == Self.clearTitle }
 }
 
 extension Array where Element == FilterOption {
