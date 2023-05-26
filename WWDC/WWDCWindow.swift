@@ -74,7 +74,7 @@ final class WWDCWindow: NSWindow {
         titleVisibility = .hidden
         toolbar = NSToolbar(identifier: "DummyToolbar")
         titlebarAppearsTransparent = true
-        toolbarStyle = .unified
+        toolbarStyle = .unifiedCompact
 
         guard let titlebarContainerView else { return }
 
