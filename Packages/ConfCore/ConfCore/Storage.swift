@@ -566,7 +566,7 @@ public final class Storage {
     public var eventsForFiltering: [Event] {
         return realm.objects(Event.self)
             .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType == %@).@count > %d", SessionAssetType.streamingVideo.rawValue, 0)
-            .sorted(byKeyPath: "name", ascending: true)
+            .sorted(byKeyPath: "startDate", ascending: false)
             .toArray()
     }
 
