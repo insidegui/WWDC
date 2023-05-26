@@ -188,6 +188,11 @@ public final class Storage {
                 }
             }
 
+            // Remove tracks that don't include any future session instances nor any sessions with video/live video
+            let emptyTracks = backgroundRealm.objects(Track.self)
+                .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType = %@ OR ANY $session.assets.rawAssetType = %@).@count == 0", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
+            backgroundRealm.delete(emptyTracks)
+
             // Create schedule view
             backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
 
