@@ -12,11 +12,14 @@ class WWDCTableRowView: NSTableRowView {
 
     override var isGroupRowStyle: Bool {
         didSet {
-            setNeedsDisplay(bounds)
+            guard isGroupRowStyle != oldValue else { return }
+            setupGroupRowStyleIfNeeded()
         }
     }
 
     override func drawSelection(in dirtyRect: NSRect) {
+        guard !isGroupRowStyle else { return }
+
         if window?.isKeyWindow == false || NSApp.isActive == false {
             super.drawSelection(in: dirtyRect)
         } else {
@@ -26,12 +29,30 @@ class WWDCTableRowView: NSTableRowView {
     }
 
     override func drawBackground(in dirtyRect: NSRect) {
-        if isGroupRowStyle {
-            NSColor.sectionHeaderBackground.set()
-            dirtyRect.fill()
-        } else {
-            super.drawBackground(in: dirtyRect)
+        guard !isGroupRowStyle else { return }
+
+        super.drawBackground(in: dirtyRect)
+    }
+
+    private var groupBackground: NSVisualEffectView?
+
+    private func setupGroupRowStyleIfNeeded() {
+        guard isGroupRowStyle else {
+            groupBackground?.removeFromSuperview()
+            return
         }
+
+        guard groupBackground == nil else { return }
+
+        let bg = NSVisualEffectView(frame: bounds)
+        bg.appearance = NSAppearance(named: .darkAqua)
+        bg.material = .headerView
+        bg.blendingMode = .withinWindow
+        bg.state = .followsWindowActiveState
+        bg.autoresizingMask = [.width, .height]
+        addSubview(bg)
+
+        groupBackground = bg
     }
 
 }

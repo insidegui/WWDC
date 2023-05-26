@@ -560,8 +560,8 @@ private extension NSMenuItem {
 
 extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
 
-    fileprivate struct Metrics {
-        static let headerRowHeight: CGFloat = 20
+    struct Metrics {
+        static let headerRowHeight: CGFloat = 32
         static let sessionRowHeight: CGFloat = 64
     }
 
@@ -569,6 +569,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
         static let sessionCellIdentifier = "sessionCell"
         static let titleCellIdentifier = "titleCell"
         static let rowIdentifier = "row"
+        static let headerRowIdentifier = "headerRow"
     }
 
     func numberOfRows(in tableView: NSTableView) -> Int {
@@ -587,21 +588,27 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier), owner: tableView) as? WWDCTableRowView
-
-        if rowView == nil {
-            rowView = WWDCTableRowView(frame: .zero)
-            rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier)
-        }
 
         switch displayedRows[row].kind {
-        case .sectionHeader:
-            rowView?.isGroupRowStyle = true
+        case .sectionHeader(let title):
+            var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.headerRowIdentifier), owner: tableView) as? TopicHeaderRow
+            if rowView == nil {
+                rowView = TopicHeaderRow(frame: .zero)
+                rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.headerRowIdentifier)
+            }
+            rowView?.content = .init(title: title, symbolName: "dot.square")
+            return rowView
         default:
-            rowView?.isGroupRowStyle = false
-        }
+            var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier), owner: tableView) as? WWDCTableRowView
 
-        return rowView
+            if rowView == nil {
+                rowView = WWDCTableRowView(frame: .zero)
+                rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier)
+            }
+            rowView?.isGroupRowStyle = false
+
+            return rowView
+        }
     }
 
     private func cellForSessionViewModel(_ viewModel: SessionViewModel) -> SessionTableCellView? {
@@ -625,7 +632,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
             cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.titleCellIdentifier)
         }
 
-        cell?.title = title
+//        cell?.title = title
 
         return cell
     }

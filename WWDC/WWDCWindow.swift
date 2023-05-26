@@ -53,21 +53,12 @@ final class WWDCWindow: NSWindow {
         v.blendingMode = .withinWindow
         v.state = .followsWindowActiveState
 
-        let divider = NSBox()
-
-        divider.wantsLayer = true
-        divider.translatesAutoresizingMaskIntoConstraints = false
-        divider.boxType = .custom
-        divider.fillColor = NSColor.black.withAlphaComponent(0.5)
-        divider.borderWidth = 0
-        divider.appearance = NSAppearance(named: .darkAqua)
-
+        let divider = NSView.divider
         v.addSubview(divider)
 
         NSLayoutConstraint.activate([
             divider.leadingAnchor.constraint(equalTo: v.leadingAnchor),
             divider.trailingAnchor.constraint(equalTo: v.trailingAnchor),
-            divider.heightAnchor.constraint(equalToConstant: 1),
             divider.bottomAnchor.constraint(equalTo: v.bottomAnchor)
         ])
 
@@ -162,4 +153,20 @@ private final class WWDCUIMaskView: NSView {
         NSApp.sendAction(#selector(WWDCWindow.hideUIMask), to: nil, from: nil)
     }
 
+}
+
+extension NSView {
+    static var divider: NSBox {
+        let v = NSBox()
+
+        v.wantsLayer = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.boxType = .custom
+        v.fillColor = NSColor.black.withAlphaComponent(0.5)
+        v.borderWidth = 0
+        v.appearance = NSAppearance(named: .darkAqua)
+        v.heightAnchor.constraint(equalToConstant: 1).isActive = true
+
+        return v
+    }
 }

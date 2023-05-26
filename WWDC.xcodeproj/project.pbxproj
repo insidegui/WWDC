@@ -217,6 +217,7 @@
 		F4CCF940265EC5A100A69E62 /* WWDCAppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF93E265EC58900A69E62 /* WWDCAppCommand.swift */; };
 		F4CCF942265ED24500A69E62 /* AppCommandsReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF941265ED24500A69E62 /* AppCommandsReceiver.swift */; };
 		F4D0F0362A2012C700C74B50 /* VisualEffectDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D0F0352A2012C700C74B50 /* VisualEffectDebugger.m */; };
+		F4D0F03A2A21056900C74B50 /* TopicHeaderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0F0392A21056900C74B50 /* TopicHeaderRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -527,6 +528,7 @@
 		F4CCF941265ED24500A69E62 /* AppCommandsReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommandsReceiver.swift; sourceTree = "<group>"; };
 		F4D0F0352A2012C700C74B50 /* VisualEffectDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisualEffectDebugger.m; sourceTree = "<group>"; };
 		F4D0F0382A20162200C74B50 /* Main.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Main.xcconfig; sourceTree = "<group>"; };
+		F4D0F0392A21056900C74B50 /* TopicHeaderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicHeaderRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1028,6 +1030,7 @@
 			children = (
 				DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */,
 				DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */,
+				F4D0F0392A21056900C74B50 /* TopicHeaderRow.swift */,
 				DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */,
 				DD7F38691EABE996002D8C00 /* SessionTableCellView.swift */,
 				DDB3529F1EC9088000254815 /* WWDCTableView.swift */,
@@ -1700,6 +1703,7 @@
 				DDA50E3524AA5090007C77C6 /* Boot.swift in Sources */,
 				DDC6781B1EDB629C00A4E19C /* GeneralPreferencesViewController.swift in Sources */,
 				DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */,
+				F4D0F03A2A21056900C74B50 /* TopicHeaderRow.swift in Sources */,
 				DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */,
 				DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */,
 				DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */,
