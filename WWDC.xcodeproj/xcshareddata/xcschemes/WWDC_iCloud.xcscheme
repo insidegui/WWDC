@@ -123,7 +123,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-AUIEnableVisualEffectDebugger YES"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--force-transcript-update"

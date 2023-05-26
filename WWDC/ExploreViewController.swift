@@ -34,8 +34,8 @@ final class ExploreViewController: NSViewController, ObservableObject {
     override func loadView() {
         let backgroundView = NSVisualEffectView()
         backgroundView.blendingMode = .behindWindow
-        backgroundView.material = .hudWindow
-        backgroundView.state = .followsWindowActiveState
+        backgroundView.material = .menu
+        backgroundView.state = .active
         backgroundView.appearance = NSAppearance(named: .darkAqua)
         view = backgroundView
         view.wantsLayer = true
