@@ -15,7 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Siesta", url: "https://github.com/bustoutsolutions/siesta", from: "1.5.2"),
-        .package(name: "Realm", url: "https://github.com/realm/realm-cocoa", from: "10.5.0"),
+        .package(name: "Realm", url: "https://github.com/realm/realm-swift", from: "10.0.0"),
         .package(url: "https://github.com/ReactiveX/RxSwift", from: "6.0.0"),
         .package(url: "https://github.com/RxSwiftCommunity/RxRealm", from: "5.0.1"),
         .package(url: "https://github.com/insidegui/CloudKitCodable", .branch("spm")),
@@ -26,7 +26,7 @@ let package = Package(
             name: "ConfCore",
             dependencies: [
 				"CloudKitCodable",
-				"Realm",
+                .product(name: "RealmSwift", package: "Realm"),
 				"Siesta",
 				"RxSwift",
                 .product(name: "RxCocoa", package: "RxSwift"),
