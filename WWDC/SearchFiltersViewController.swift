@@ -260,6 +260,11 @@ final class SearchFiltersViewController: NSViewController {
                 popUp.addItem(withTitle: filter.title)
 
                 filter.options.forEach { option in
+                    guard !option.isSeparator else {
+                        popUp.menu?.addItem(.separator())
+                        return
+                    }
+                    
                     let item = NSMenuItem(title: option.title, action: nil, keyEquivalent: "")
                     item.representedObject = option
                     item.state = filter.selectedOptions.contains(option) ? .on : .off

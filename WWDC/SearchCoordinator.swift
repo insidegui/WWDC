@@ -156,7 +156,16 @@ final class SearchCoordinator {
 
         var videosTextualFilter = scheduleTextualFilter
 
-        let videosEventOptions = storage.allEvents.map { FilterOption(title: $0.name, value: $0.identifier) }
+        var videosEventOptions = storage.allEvents
+            .map { FilterOption(title: $0.name, value: $0.identifier) }
+            // Ensure WWDC events are always on top of non-WWDC events.
+            .sorted(by: { $0.isWWDCEvent && !$1.isWWDCEvent })
+
+        /// Add a separator between WWDC and non-WWDC events.
+        if let lastWWDCIndex = videosEventOptions.lastIndex(where: { $0.isWWDCEvent }), lastWWDCIndex != videosEventOptions.endIndex {
+            videosEventOptions.insert(.separator, at: lastWWDCIndex + 1)
+        }
+        
         var videosEventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event,
                                                      isSubquery: false,
                                                      collectionKey: "",
@@ -261,4 +270,8 @@ extension SearchCoordinator: SearchFiltersViewControllerDelegate {
         }
     }
 
+}
+
+private extension FilterOption {
+    var isWWDCEvent: Bool { title.uppercased().hasPrefix("WWDC") }
 }

@@ -9,6 +9,8 @@
 import Foundation
 
 struct FilterOption: Equatable, Codable {
+    private static let separatorTitle = "-------"
+
     let title: String
     let value: String
     var isNegative: Bool = false
@@ -26,6 +28,10 @@ struct FilterOption: Equatable, Codable {
     enum CodingKeys: String, CodingKey {
         case value, title
     }
+
+    static var separator: FilterOption { .init(title: Self.separatorTitle, value: Self.separatorTitle) }
+
+    var isSeparator: Bool { title == Self.separatorTitle }
 }
 
 extension Array where Element == FilterOption {
