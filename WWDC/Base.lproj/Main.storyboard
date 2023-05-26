@@ -642,7 +642,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <visualEffectView wantsLayer="YES" appearanceType="vibrantDark" blendingMode="withinWindow" material="headerView" state="inactive" translatesAutoresizingMaskIntoConstraints="NO" id="5qS-lc-ZT8">
+                            <visualEffectView wantsLayer="YES" appearanceType="darkAqua" blendingMode="withinWindow" material="headerView" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="5qS-lc-ZT8">
                                 <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NlN-Z6-drQ">

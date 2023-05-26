@@ -51,10 +51,18 @@ final class TopicHeaderRow: NSTableRowView {
             return
         }
 
+        let bg = NSVisualEffectView(frame: bounds)
+        bg.appearance = NSAppearance(named: .darkAqua)
+        bg.material = .headerView
+        bg.blendingMode = .withinWindow
+        bg.state = .followsWindowActiveState
+        bg.autoresizingMask = [.width, .height]
+        addSubview(bg)
+
         let v = NSHostingView(rootView: content)
         v.translatesAutoresizingMaskIntoConstraints = false
 
-        addSubview(v)
+        bg.addSubview(v)
 
         NSLayoutConstraint.activate([
             v.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -85,7 +93,6 @@ struct TopicHeaderRowContent: View, Hashable {
         }
         .padding(.horizontal)
         .frame(maxWidth: .infinity, minHeight: SessionsTableViewController.Metrics.headerRowHeight, maxHeight: SessionsTableViewController.Metrics.headerRowHeight, alignment: .leading)
-        .background(Material.thin, in: Rectangle())
         .overlay {
             let divider = Color.black.frame(height: 1)
                 .opacity(0.3)

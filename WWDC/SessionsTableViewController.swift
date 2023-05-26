@@ -51,17 +51,30 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         view.addSubview(scrollView)
         view.addSubview(searchController.view)
 
+        scrollView.contentView.automaticallyAdjustsContentInsets = false
+
         searchController.view.translatesAutoresizingMaskIntoConstraints = false
 
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        scrollView.topAnchor.constraint(equalTo: searchController.view.bottomAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
         searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    }
+
+    override func viewWillLayout() {
+        super.viewWillLayout()
+
+        let topInset = searchController.view.fittingSize.height
+
+        let insets = NSEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        scrollView.scrollerInsets = insets
+        scrollView.contentView.contentInsets = insets
+        scrollView.contentView.needsLayout = true
     }
 
     override func viewDidLoad() {
