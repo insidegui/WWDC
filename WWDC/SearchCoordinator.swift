@@ -93,7 +93,7 @@ final class SearchCoordinator {
                                                        modelKey: "trackName",
                                                        options: trackOptions,
                                                        selectedOptions: [],
-                                                       emptyTitle: "All Tracks")
+                                                       emptyTitle: "All Topics")
 
         let favoritePredicate = NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == false).@count > 0")
         var scheduleFavoriteFilter = ToggleFilter(identifier: FilterIdentifier.isFavorite,

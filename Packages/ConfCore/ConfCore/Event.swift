@@ -66,7 +66,7 @@ public class Event: Object, Decodable {
         startDate = try container.decode(key: .start)
         year = Calendar.current.component(.year, from: startDate)
         endDate = try container.decode(key: .end)
-        isCurrent = try container.decode(key: .current)
+        isCurrent = (try? container.decodeIfPresent(key: .current)) ?? false
         imagesPath = try container.decode(key: .imagesPath)
     }
 
