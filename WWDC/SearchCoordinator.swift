@@ -156,7 +156,7 @@ final class SearchCoordinator {
 
         var videosTextualFilter = scheduleTextualFilter
 
-        var videosEventOptions = storage.allEvents
+        var videosEventOptions = storage.eventsForFiltering
             .map { FilterOption(title: $0.name, value: $0.identifier) }
             // Ensure WWDC events are always on top of non-WWDC events.
             .sorted(by: { $0.isWWDCEvent && !$1.isWWDCEvent })

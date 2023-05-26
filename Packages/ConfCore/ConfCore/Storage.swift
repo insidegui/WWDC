@@ -563,6 +563,13 @@ public final class Storage {
         return realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).toArray()
     }
 
+    public var eventsForFiltering: [Event] {
+        return realm.objects(Event.self)
+            .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType == %@).@count > %d", SessionAssetType.streamingVideo.rawValue, 0)
+            .sorted(byKeyPath: "name", ascending: true)
+            .toArray()
+    }
+
     public var allFocuses: [Focus] {
         return realm.objects(Focus.self).sorted(byKeyPath: "name").toArray()
     }
