@@ -65,6 +65,21 @@ final class WWDCWindow: NSWindow {
         return v
     }()
 
+    func setTitleBarHidden(_ hidden: Bool, animated: Bool = true) {
+        NSAnimationContext.runAnimationGroup { ctx in
+            if !hidden { titlebarLook.isHidden = false }
+            
+            ctx.duration = animated ? 0.3 : 0
+
+            ctx.completionHandler = { [weak self] in
+                guard let self = self else { return }
+                if hidden { self.titlebarLook.isHidden = true }
+            }
+
+            titlebarLook.animator().alphaValue = hidden ? 0 : 1
+        }
+    }
+
     fileprivate func applyCustomizations(_ note: Notification? = nil) {
         backgroundColor = .darkWindowBackground
 

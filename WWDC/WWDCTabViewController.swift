@@ -10,7 +10,15 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
-class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Tab.RawValue == Int {
+protocol WWDCTab: RawRepresentable {
+    var hidesWindowTitleBar: Bool { get }
+}
+
+extension WWDCTab {
+    var hidesWindowTitleBar: Bool { false }
+}
+
+class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValue == Int {
 
     var activeTab: Tab {
         get {
@@ -43,7 +51,11 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
                 }
             }
 
-            activeTabVar.accept(Tab(rawValue: selectedTabViewItemIndex)!)
+            let tab = Tab(rawValue: selectedTabViewItemIndex)!
+
+            activeTabVar.accept(tab)
+
+            (view.window as? WWDCWindow)?.setTitleBarHidden(tab.hidesWindowTitleBar, animated: true)
         }
     }
 

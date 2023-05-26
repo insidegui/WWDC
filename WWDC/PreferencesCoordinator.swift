@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 import ConfCore
 
-enum PreferencesTab: Int {
+enum PreferencesTab: Int, WWDCTab {
     case general
     case playback
 }
