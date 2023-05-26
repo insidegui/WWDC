@@ -119,7 +119,7 @@ extension Environment {
                   sessionsPath: "/sessions.json",
                   newsPath: "/news.json",
                   liveVideosPath: "/videos_live.json",
-                  featuredSectionsPath: "/_featured.json")
+                  featuredSectionsPath: "/explore.json")
     }
 
 }

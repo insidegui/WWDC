@@ -28,7 +28,7 @@ final class AppCoordinator {
     var windowController: MainWindowController
     var tabController: WWDCTabViewController<MainWindowTab>
 
-    var featuredController: FeaturedContentViewController
+    var exploreController: ExploreViewController
     var scheduleController: ScheduleContainerViewController
     var videosController: SessionsSplitViewController
 
@@ -65,12 +65,12 @@ final class AppCoordinator {
 
         tabController = WWDCTabViewController(windowController: windowController)
 
-        // Featured
-        featuredController = FeaturedContentViewController()
-        featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
-        let featuredItem = NSTabViewItem(viewController: featuredController)
-        featuredItem.label = "Featured"
-        tabController.addTabViewItem(featuredItem)
+        // Explore
+        exploreController = ExploreViewController()
+        exploreController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
+        let exploreItem = NSTabViewItem(viewController: exploreController)
+        exploreItem.label = "Explore"
+        tabController.addTabViewItem(exploreItem)
 
         // Schedule
         scheduleController = ScheduleContainerViewController(windowController: windowController, listStyle: .schedule)
@@ -230,8 +230,6 @@ final class AppCoordinator {
 
         videosController.listViewController.delegate = self
         scheduleController.splitViewController.listViewController.delegate = self
-
-        featuredController.delegate = self
     }
 
     private func updateListsAfterSync() {
@@ -284,15 +282,15 @@ final class AppCoordinator {
                                    .disposed(by: disposeBag)
     }
 
-    private func updateFeaturedSectionsAfterSync() {
-
+    private func updateExploreTabContentAfterSync() {
         storage
             .featuredSectionsObservable
             .filter { !$0.isEmpty }
             .subscribe(on: MainScheduler.instance)
             .take(1)
             .subscribe(onNext: { [weak self] sections in
-                self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
+                guard let self = self else { return }
+                self.exploreController.update(with: sections)
             }).disposed(by: disposeBag)
     }
 
@@ -339,7 +337,7 @@ final class AppCoordinator {
 
         _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncFeaturedSections, object: nil, queue: .main) { note in
             guard checkSyncEngineOperationSucceededAndShowError(note: note) else { return }
-            self.updateFeaturedSectionsAfterSync()
+            self.updateExploreTabContentAfterSync()
         }
 
         _ = NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: .main) { _ in
@@ -348,7 +346,7 @@ final class AppCoordinator {
 
         refresh(nil)
         updateListsAfterSync()
-        updateFeaturedSectionsAfterSync()
+        updateExploreTabContentAfterSync()
 
         if Arguments.showPreferences {
             showPreferences(nil)
@@ -416,10 +414,10 @@ final class AppCoordinator {
 
         if link.isForCurrentYear {
             tabController.activeTab = .schedule
-            scheduleController.splitViewController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
+            scheduleController.splitViewController.listViewController.select(session: link)
         } else {
             tabController.activeTab = .videos
-            videosController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
+            videosController.listViewController.select(session: link)
         }
     }
 
@@ -453,8 +451,8 @@ final class AppCoordinator {
         aboutWindowController.showWindow(nil)
     }
 
-    func showFeatured() {
-        tabController.activeTab = .featured
+    func showExplore() {
+        tabController.activeTab = .explore
     }
 
     func showSchedule() {
@@ -473,6 +471,8 @@ final class AppCoordinator {
     private var lastRefresh = Date.distantPast
 
     func refresh(_ sender: Any?) {
+        guard !NSApp.isPreview else { return }
+
         let now = Date()
         guard now.timeIntervalSince(lastRefresh) > 5 else { return }
         lastRefresh = now

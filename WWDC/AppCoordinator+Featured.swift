@@ -9,12 +9,12 @@
 import Cocoa
 import ConfCore
 
-extension AppCoordinator: FeaturedContentViewControllerDelegate {
-
-    func featuredContentViewController(_ controller: FeaturedContentViewController, didSelectContent content: FeaturedContentViewModel) {
-        guard let sessionViewModel = content.sessionViewModel else { return }
-
-        selectSessionOnAppropriateTab(with: sessionViewModel)
-    }
-
-}
+//extension AppCoordinator: FeaturedContentViewControllerDelegate {
+//
+//    func featuredContentViewController(_ controller: FeaturedContentViewController, didSelectContent content: FeaturedContentViewModel) {
+//        guard let sessionViewModel = content.sessionViewModel else { return }
+//
+//        selectSessionOnAppropriateTab(with: sessionViewModel)
+//    }
+//
+//}

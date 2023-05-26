@@ -45,6 +45,7 @@ public class FeaturedSection: Object, Decodable {
         }
     }
 
+    @objc public dynamic var identifier: String = ""
     @objc public dynamic var title: String = ""
     @objc public dynamic var summary: String = ""
 
@@ -63,13 +64,13 @@ public class FeaturedSection: Object, Decodable {
     }
 
     public override static func primaryKey() -> String? {
-        return "title"
+        return "identifier"
     }
 
     // MARK: - Codable
 
     private enum CodingKeys: String, CodingKey {
-        case ordinal, format, title, description, content, author, published
+        case identifier, ordinal, format, title, description, content, author, published
         case colorA = "ios_color"
         case colorB = "tvos_light_style_color"
         case colorC = "tvos_dark_style_color"
@@ -80,6 +81,9 @@ public class FeaturedSection: Object, Decodable {
 
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
+        identifier = try container.decode(String.self, forKey: .identifier)
+        if identifier.isEmpty { identifier = UUID().uuidString }
+        
         content.append(objectsIn: try container.decode([FeaturedContent].self, forKey: .content))
         author = try container.decodeIfPresent(key: .author)
         order = try container.decode(key: .ordinal)

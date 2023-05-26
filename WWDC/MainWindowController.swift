@@ -10,7 +10,7 @@ import Cocoa
 import PlayerUI
 
 enum MainWindowTab: Int {
-    case featured
+    case explore
     case schedule
     case videos
 

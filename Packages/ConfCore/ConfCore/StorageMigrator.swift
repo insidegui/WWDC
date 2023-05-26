@@ -28,7 +28,8 @@ final class StorageMigrator {
         34: migrateOldTranscriptModels,
         37: migrateIdentifiersWithoutReplacement,
         43: migrateTracks,
-        44: removeInvalidLiveAssets
+        44: removeInvalidLiveAssets,
+        57: resetFeaturedSections
     ]
 
     init(migration: Migration, oldVersion: UInt64) {
@@ -176,6 +177,15 @@ final class StorageMigrator {
             guard asset["rawAssetType"] as? String == "WWDCSessionAssetTypeLiveStreamVideo" else { return }
             migration.delete(asset)
         }
+    }
+
+    private static func resetFeaturedSections(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+        os_log("resetFeaturedSections", log: log, type: .info)
+
+        // Delete all featured content
+        migration.deleteData(forType: "FeaturedSection")
+        migration.deleteData(forType: "FeaturedContent")
+        migration.deleteData(forType: "FeaturedAuthor")
     }
 
 }

@@ -22,10 +22,6 @@ struct DeepLink {
 
     let isForCurrentYear: Bool
 
-    var sessionIdentifier: String {
-        return "\(year)-\(sessionNumber)"
-    }
-
     init?(url: URL) {
         guard let host = url.host else { return nil }
         guard Constants.hosts.contains(host) else { return nil }
@@ -51,14 +47,20 @@ struct DeepLink {
             fullYear = "20\(year)"
         }
 
-        guard let yearNumber = Int(fullYear) else { return nil }
-        let currentYear = "\(Calendar.current.component(.year, from: today()))"
-        let currentYearDigits = String(currentYear[currentYear.index(currentYear.startIndex, offsetBy: 2)...])
+        if let yearNumber = Int(fullYear) {
+            let currentYear = "\(Calendar.current.component(.year, from: today()))"
+            let currentYearDigits = String(currentYear[currentYear.index(currentYear.startIndex, offsetBy: 2)...])
 
-        self.year = yearNumber
-        eventIdentifier = "wwdc\(year)"
+            self.year = yearNumber
+            eventIdentifier = "wwdc\(year)"
+            isForCurrentYear = (year == currentYearDigits || year == currentYear)
+        } else {
+            eventIdentifier = components[components.startIndex..<components.endIndex-1].joined(separator: "-")
+            isForCurrentYear = false
+            self.year = 0
+        }
+
         self.sessionNumber = sessionNumber
-        isForCurrentYear = (year == currentYearDigits || year == currentYear)
     }
     
     init?(from command: WWDCAppCommand) {
@@ -66,9 +68,12 @@ struct DeepLink {
         
         let components = id.components(separatedBy: "-")
         
-        guard components.count == 2 else { return nil }
+        guard components.count >= 2 else { return nil }
+
+        let event = components[components.startIndex..<components.endIndex-1].joined(separator: "-")
+        let content = components[components.endIndex-1]
         
-        guard let url = URL(string: "https://wwdc.io/share/\(components[0])/\(components[1])") else { return nil }
+        guard let url = URL(string: "https://wwdc.io/share/\(event)/\(content)") else { return nil }
         
         self.init(url: url)
     }
@@ -81,5 +86,15 @@ extension URL {
         components.host = DeepLink.Constants.nativeHost
         components.path = "/share" + components.path
         return components.url ?? self
+    }
+}
+
+extension DeepLink: SessionIdentifiable {
+    var sessionIdentifier: String {
+        if year == 0 {
+            return "\(sessionNumber)"
+        } else {
+            return "\(year)-\(sessionNumber)"
+        }
     }
 }

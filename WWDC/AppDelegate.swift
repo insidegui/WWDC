@@ -40,6 +40,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
 
+        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+
+        assumeAgentPersonalityIfNeeded()
+
+        #if ICLOUD
+        ConfCoreCapabilities.isCloudKitEnabled = true
+        #endif
+    }
+
+    private func assumeAgentPersonalityIfNeeded() {
+        guard !NSApp.isPreview else { return }
+
         if ProcessInfo.processInfo.arguments.contains("--background") {
             NSApp.setActivationPolicy(.accessory)
             startedAsAgent = true
@@ -51,12 +63,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 NSApp.activate(ignoringOtherApps: false)
             }
         }
-
-        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
-
-        #if ICLOUD
-        ConfCoreCapabilities.isCloudKitEnabled = true
-        #endif
     }
 
     private var urlObservationToken: NSObjectProtocol?
@@ -243,7 +249,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func viewFeatured(_ sender: Any) {
-        coordinator?.showFeatured()
+        coordinator?.showExplore()
     }
 
     @IBAction func viewSchedule(_ sender: Any) {
