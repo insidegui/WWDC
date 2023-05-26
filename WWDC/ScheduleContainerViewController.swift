@@ -10,7 +10,7 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
-final class ScheduleContainerViewController: NSViewController {
+final class ScheduleContainerViewController: WWDCMainWindowContentViewController {
 
     let splitViewController: SessionsSplitViewController
 
@@ -77,6 +77,16 @@ final class ScheduleContainerViewController: NSViewController {
                            .map({ !$0 })
                            .drive(heroController.view.rx.isHidden)
                            .disposed(by: disposeBag)
+
+        showHeroView.asObservable().subscribe { [weak self] _ in
+            guard let self = self else { return }
+            self.view.needsUpdateConstraints = true
+        }
+        .disposed(by: disposeBag)
+    }
+
+    override var childForWindowTopSafeAreaConstraint: NSViewController? {
+        showHeroView.value ? heroController : nil
     }
     
 }

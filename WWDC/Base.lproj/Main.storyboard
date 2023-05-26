@@ -781,7 +781,7 @@
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="5qS-lc-ZT8" secondAttribute="trailing" id="PtR-c0-t2m"/>
-                            <constraint firstItem="5qS-lc-ZT8" firstAttribute="top" secondItem="hX1-jY-chB" secondAttribute="top" id="TbA-dG-pSt"/>
+                            <constraint firstItem="5qS-lc-ZT8" firstAttribute="top" secondItem="hX1-jY-chB" secondAttribute="top" placeholder="YES" id="TbA-dG-pSt"/>
                             <constraint firstAttribute="bottom" secondItem="5qS-lc-ZT8" secondAttribute="bottom" id="pie-uj-yDq"/>
                             <constraint firstItem="5qS-lc-ZT8" firstAttribute="leading" secondItem="hX1-jY-chB" secondAttribute="leading" id="usW-Qi-sup"/>
                         </constraints>
@@ -792,6 +792,7 @@
                         <outlet property="filterButton" destination="U2p-0d-s5K" id="0Yp-vl-SM4"/>
                         <outlet property="focusesPopUp" destination="Mft-xX-6dt" id="Ekq-uQ-Mgl"/>
                         <outlet property="searchField" destination="Fla-Ig-nku" id="eqN-jH-kkZ"/>
+                        <outlet property="stackView" destination="NlN-Z6-drQ" id="SaM-HA-Dem"/>
                         <outlet property="tracksPopUp" destination="d8i-uR-hrT" id="dyo-n0-cYV"/>
                         <outlet property="vfxView" destination="5qS-lc-ZT8" id="0j7-9F-QCX"/>
                     </connections>

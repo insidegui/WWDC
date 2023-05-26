@@ -87,25 +87,6 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         tabBar.addItem(itemView)
     }
 
-    var isTopConstraintAdded = false
-
-    override func  updateViewConstraints() {
-        super.updateViewConstraints()
-
-        // The top constraint keeps the tabView from extending
-        // under the title bar
-        if !isTopConstraintAdded, let window = view.window {
-            isTopConstraintAdded = true
-            NSLayoutConstraint(item: tabView,
-                               attribute: .top,
-                               relatedBy: .equal,
-                               toItem: window.contentLayoutGuide,
-                               attribute: .top,
-                               multiplier: 1,
-                               constant: 0).isActive = true
-        }
-    }
-
     override func transition(from fromViewController: NSViewController, to toViewController: NSViewController, options: NSViewController.TransitionOptions = [], completionHandler completion: (() -> Void)? = nil) {
 
         // Disable the crossfade animation here instead of removing it from the transition options
@@ -138,38 +119,6 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
 
     func hideLoading() {
         loadingView?.hide()
-    }
-    
-    private lazy var backgroundView: NSVisualEffectView = {
-        let v = NSVisualEffectView()
-        
-        v.material = .headerView
-        v.state = .followsWindowActiveState
-        v.appearance = NSAppearance(named: .darkAqua)
-        v.blendingMode = .withinWindow
-        v.translatesAutoresizingMaskIntoConstraints = false
-        
-        return v
-    }()
-    
-    override func viewDidAppear() {
-        super.viewDidAppear()
-        
-        installModernHeaderViewIfNeeded()
-    }
-    
-    /// Puts a header view in the titlebar area when running on macOS 11 or later.
-    private func installModernHeaderViewIfNeeded() {        
-        guard backgroundView.superview == nil else { return }
-        
-        view.addSubview(backgroundView)
-        
-        NSLayoutConstraint.activate([
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        ])
     }
 
 }

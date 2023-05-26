@@ -55,6 +55,7 @@ final class SearchFiltersViewController: NSViewController {
         return storyboard.instantiateController(withIdentifier: "SearchFiltersViewController") as! SearchFiltersViewController
     }
 
+    @IBOutlet weak var stackView: NSStackView!
     @IBOutlet weak var eventsPopUp: NSPopUpButton!
     @IBOutlet weak var focusesPopUp: NSPopUpButton!
     @IBOutlet weak var tracksPopUp: NSPopUpButton!
@@ -155,6 +156,9 @@ final class SearchFiltersViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        /// Move background and content from behind the title bar.
+        vfxView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
 
         setFilters(hidden: true)
 

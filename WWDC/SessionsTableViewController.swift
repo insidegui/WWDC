@@ -412,6 +412,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         v.hasHorizontalScroller = false
         v.translatesAutoresizingMaskIntoConstraints = false
         v.alphaValue = 0
+        v.automaticallyAdjustsContentInsets = false
 
         return v
     }()
