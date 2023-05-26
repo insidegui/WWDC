@@ -21,6 +21,9 @@ public class Track: Object, Decodable {
     /// The order in which the track should be listed
     @objc public dynamic var order = 0
 
+    /// SF Symbol name representing the track.
+    @objc public dynamic var symbolName = ""
+
     /// Dark theme color
     @objc public dynamic var darkColor = ""
 
@@ -48,6 +51,7 @@ public class Track: Object, Decodable {
     private enum CodingKeys: String, CodingKey {
         case name, color, darkColor, titleColor, lightBGColor, ordinal
         case identifier = "id"
+        case symbolName = "sfSymbolName"
     }
 
     public convenience required init(from decoder: Decoder) throws {
@@ -62,5 +66,8 @@ public class Track: Object, Decodable {
         lightColor = try container.decode(key: .color)
         titleColor = try container.decode(key: .titleColor)
         order = try container.decodeIfPresent(key: .ordinal) ?? 0
+        symbolName = (try? container.decodeIfPresent(key: .symbolName)) ?? Self.fallbackSymbolName
     }
+
+    private static let fallbackSymbolName = "dot.square"
 }
