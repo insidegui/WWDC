@@ -70,12 +70,14 @@ final class TopicHeaderRow: NSTableRowView {
 
 struct TopicHeaderRowContent: View, Hashable {
     var title: String
-    var symbolName: String
+    var symbolName: String?
 
     var body: some View {
         HStack {
-            Image(systemName: symbolName)
-                .foregroundStyle(.secondary)
+            if let symbolName {
+                Image(systemName: symbolName)
+                    .foregroundStyle(.secondary)
+            }
 
             Text(title)
                 .font(.headline)

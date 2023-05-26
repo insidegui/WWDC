@@ -558,18 +558,18 @@ private extension NSMenuItem {
 
 // MARK: - Datasource / Delegate
 
+private extension NSUserInterfaceItemIdentifier {
+    static let sessionRow = NSUserInterfaceItemIdentifier(rawValue: "sessionRow")
+    static let headerRow = NSUserInterfaceItemIdentifier(rawValue: "headerRow")
+
+    static let sessionCell = NSUserInterfaceItemIdentifier(rawValue: "sessionCell")
+}
+
 extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
 
     struct Metrics {
         static let headerRowHeight: CGFloat = 32
         static let sessionRowHeight: CGFloat = 64
-    }
-
-    private struct Constants {
-        static let sessionCellIdentifier = "sessionCell"
-        static let titleCellIdentifier = "titleCell"
-        static let rowIdentifier = "row"
-        static let headerRowIdentifier = "headerRow"
     }
 
     func numberOfRows(in tableView: NSTableView) -> Int {
@@ -582,57 +582,43 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
         switch sessionRow.kind {
         case .session(let viewModel):
             return cellForSessionViewModel(viewModel)
-        case .sectionHeader(let title):
-            return cellForSectionTitle(title)
+        case .sectionHeader:
+            return nil
         }
+    }
+
+    private func rowView<T>(with id: NSUserInterfaceItemIdentifier) -> T? where T: NSTableRowView {
+        var rowView = tableView.makeView(withIdentifier: id, owner: tableView) as? T
+        if rowView == nil {
+            rowView = T(frame: .zero)
+            rowView?.identifier = id
+        }
+        return rowView
     }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
 
         switch displayedRows[row].kind {
-        case .sectionHeader(let title):
-            var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.headerRowIdentifier), owner: tableView) as? TopicHeaderRow
-            if rowView == nil {
-                rowView = TopicHeaderRow(frame: .zero)
-                rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.headerRowIdentifier)
-            }
-            rowView?.content = .init(title: title, symbolName: "dot.square")
+        case .sectionHeader(let content):
+            let rowView: TopicHeaderRow? = rowView(with: .headerRow)
+
+            rowView?.content = content
+
             return rowView
         default:
-            var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier), owner: tableView) as? WWDCTableRowView
-
-            if rowView == nil {
-                rowView = WWDCTableRowView(frame: .zero)
-                rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier)
-            }
-            rowView?.isGroupRowStyle = false
-
-            return rowView
+            return rowView(with: .sessionRow)
         }
     }
 
     private func cellForSessionViewModel(_ viewModel: SessionViewModel) -> SessionTableCellView? {
-        var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.sessionCellIdentifier), owner: tableView) as? SessionTableCellView
+        var cell = tableView.makeView(withIdentifier: .sessionCell, owner: tableView) as? SessionTableCellView
 
         if cell == nil {
             cell = SessionTableCellView(frame: .zero)
-            cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.sessionCellIdentifier)
+            cell?.identifier = .sessionCell
         }
 
         cell?.viewModel = viewModel
-
-        return cell
-    }
-
-    private func cellForSectionTitle(_ title: String) -> TitleTableCellView? {
-        var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.titleCellIdentifier), owner: tableView) as? TitleTableCellView
-
-        if cell == nil {
-            cell = TitleTableCellView(frame: .zero)
-            cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.titleCellIdentifier)
-        }
-
-//        cell?.title = title
 
         return cell
     }
