@@ -85,6 +85,7 @@ struct TopicHeaderRowContent: View, Hashable {
             if let symbolName {
                 Image(systemName: symbolName)
                     .foregroundStyle(.secondary)
+                    .symbolVariant(.fill)
             }
 
             Text(title)
