@@ -23,7 +23,7 @@ struct WatchWWDCActivity: GroupActivity {
         if let imageURLStr = session.asset(ofType: .image)?.remoteURL,
            let imageURL = URL(string: imageURLStr),
            let image = ImageDownloadCenter.shared.cachedThumbnail(from: imageURL) {
-            meta.previewImage = image.cgImage
+            meta.previewImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
         }
         
         self.sessionID = session.identifier

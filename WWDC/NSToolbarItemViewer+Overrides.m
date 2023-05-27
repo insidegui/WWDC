@@ -13,9 +13,9 @@
 
 @implementation NSToolbarItemViewer (Overrides)
 
-- (BOOL)_shouldDrawSelectionIndicator
-{
-    return NO;
-}
+//- (BOOL)_shouldDrawSelectionIndicator
+//{
+//    return NO;
+//}
 
 @end

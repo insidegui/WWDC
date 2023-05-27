@@ -95,7 +95,6 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValu
         itemView.title = tabViewItem.label
         itemView.controllerIdentifier = (tabViewItem.viewController?.identifier).map { $0.rawValue } ?? ""
         itemView.image = NSImage(named: itemView.controllerIdentifier.lowercased())
-        itemView.alternateImage = NSImage(named: itemView.controllerIdentifier.lowercased() + "-filled")
         itemView.sizeToFit()
 
         itemView.target = self

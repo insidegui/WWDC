@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import ConfUIFoundation
+import Combine
 
 extension NSStackView {
 
@@ -58,35 +60,17 @@ final class TabItemView: NSView {
         }
     }
 
-    var alternateImage: NSImage? {
-        didSet {
-            if state == .on {
-                imageView.image = alternateImage
-                sizeToFit()
-            }
-        }
-    }
+    var activeColor: NSColor { .desaturatedAccentColor }
+    var inactiveColor: NSColor { .secondaryLabelColor }
 
     var state: NSControl.StateValue = .off {
-        didSet {
-            if state == .on {
-                imageView.tintColor = .toolbarTintActive
-                imageView.image = alternateImage ?? image
-                titleLabel.textColor = .toolbarTintActive
-                titleLabel.font = .systemFont(ofSize: 14, weight: .medium)
-            } else {
-                imageView.tintColor = .toolbarTint
-                imageView.image = image
-                titleLabel.textColor = .toolbarTint
-                titleLabel.font = .systemFont(ofSize: 14)
-            }
-        }
+        didSet { needsLayout = true }
     }
 
-    lazy var imageView: MaskImageView = {
-        let v = MaskImageView()
+    lazy var imageView: NSImageView = {
+        let v = NSImageView()
 
-        v.tintColor = .toolbarTint
+        v.contentTintColor = .secondaryLabelColor
         v.widthAnchor.constraint(equalToConstant: 20).isActive = true
         v.heightAnchor.constraint(equalToConstant: 15).isActive = true
 
@@ -97,8 +81,7 @@ final class TabItemView: NSView {
         let l = NSTextField(labelWithString: "")
 
         l.font = .systemFont(ofSize: 14)
-        l.textColor = .toolbarTint
-        l.cell?.backgroundStyle = .emphasized
+        l.textColor = .secondaryLabelColor
 
         return l
     }()
@@ -107,7 +90,7 @@ final class TabItemView: NSView {
         let v = NSStackView(views: [self.imageView, self.titleLabel])
 
         v.orientation = .horizontal
-        v.spacing = 10
+        v.spacing = 8
         v.alignment = .centerY
         v.distribution = .equalCentering
 
@@ -154,14 +137,6 @@ final class TabItemView: NSView {
         frame = NSRect(x: frame.origin.x, y: frame.origin.y, width: intrinsicContentSize.width, height: intrinsicContentSize.height)
     }
 
-    override func mouseDown(with event: NSEvent) {
-        guard isEnabled else { return }
-
-        if let target = target, let action = action {
-            NSApp.sendAction(action, to: target, from: self)
-        }
-    }
-
     var isEnabled = true {
         didSet {
             animator().alphaValue = isEnabled ? 1 : 0.3
@@ -170,4 +145,120 @@ final class TabItemView: NSView {
     
     override var mouseDownCanMoveWindow: Bool { false }
 
+    override func layout() {
+        super.layout()
+
+        guard let window else { return }
+
+        let effectiveActiveColor = window.isKeyWindow ? activeColor : inactiveColor
+        let color = state == .on ? effectiveActiveColor : isHovered ? inactiveColor.withSystemEffect(.rollover) : inactiveColor
+        let effectiveColor = isPressed ? color.withSystemEffect(.pressed) : color
+
+        imageView.contentTintColor = effectiveColor
+        titleLabel.textColor = effectiveColor
+    }
+
+    private lazy var windowCancellables = Set<AnyCancellable>()
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+
+        guard let window else {
+            windowCancellables.removeAll()
+            return
+        }
+
+        Publishers.CombineLatest(
+            NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification, object: window),
+            NotificationCenter.default.publisher(for: NSWindow.didResignKeyNotification, object: window)
+        ).sink { [weak self] _, _ in
+            guard let self = self else { return }
+            self.needsLayout = true
+        }
+        .store(in: &windowCancellables)
+    }
+
+    private var hoverArea: NSTrackingArea?
+
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+
+        if let hoverArea {
+            removeTrackingArea(hoverArea)
+        }
+
+        let area = NSTrackingArea(rect: bounds, options: [.inVisibleRect, .activeAlways, .mouseEnteredAndExited], owner: self, userInfo: nil)
+        addTrackingArea(area)
+        hoverArea = area
+    }
+
+    private var isHovered = false {
+        didSet { needsLayout = true }
+    }
+
+    private var isPressed = false {
+        didSet { needsLayout = true }
+    }
+
+    override func mouseEntered(with event: NSEvent) {
+        super.mouseEntered(with: event)
+
+        guard state != .on else { return }
+
+        isHovered = true
+    }
+
+    override func mouseExited(with event: NSEvent) {
+        super.mouseExited(with: event)
+
+        guard state != .on else { return }
+
+        isHovered = false
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        guard isEnabled else { return }
+
+        guard state != .on else {
+            super.mouseDown(with: event)
+            return
+        }
+
+        isPressed = true
+    }
+
+    override func mouseDragged(with event: NSEvent) {
+        guard state != .on else {
+            super.mouseDragged(with: event)
+            return
+        }
+
+        guard let superview else { return }
+        let p = superview.convert(event.locationInWindow, from: nil)
+        let p2 = convert(p, from: superview)
+
+        isHovered = bounds.contains(p2)
+    }
+
+    override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
+
+        guard state != .on else { return }
+
+        isPressed = false
+
+        guard isEnabled, isHovered else { return }
+
+        if let target = target, let action = action {
+            NSApp.sendAction(action, to: target, from: self)
+        }
+    }
+
+}
+
+extension NSColor {
+    /// A version of the system accent color desaturated to look better in vibrant contexts.
+    static var desaturatedAccentColor: NSColor {
+        .toolbarTintActive.blended(withFraction: 0.2, of: .white) ?? .toolbarTintActive
+    }
 }
