@@ -26,17 +26,19 @@ public final class Storage {
         self.realmConfig = realm.configuration
         self.realm = realm
 
-        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStart).subscribe(onNext: { [unowned self] _ in
-            os_log("Locking Realm auto-updates until transcript indexing is finished", log: self.log, type: .info)
-
-            self.realm.autorefresh = false
-        }).disposed(by: disposeBag)
-
-        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStop).subscribe(onNext: { [unowned self] _ in
-            os_log("Realm auto-updates unlocked", log: self.log, type: .info)
-
-            self.realm.autorefresh = true
-        }).disposed(by: disposeBag)
+        /// This used to be necessary because of CPU usage in the app during script indexing, but it causes a long period of time during indexing where content doesn't reflect what's on the database,
+        /// including for user actions such as favoriting, etc. Tested with the current version of Realm in the app and it doesn't seem to be an issue anymore.
+//        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStart).subscribe(onNext: { [unowned self] _ in
+//            os_log("Locking Realm auto-updates until transcript indexing is finished", log: self.log, type: .info)
+//
+//            self.realm.autorefresh = false
+//        }).disposed(by: disposeBag)
+//
+//        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStop).subscribe(onNext: { [unowned self] _ in
+//            os_log("Realm auto-updates unlocked", log: self.log, type: .info)
+//
+//            self.realm.autorefresh = true
+//        }).disposed(by: disposeBag)
 
         deleteOldEventsIfNeeded()
     }
