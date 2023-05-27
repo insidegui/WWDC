@@ -25,7 +25,7 @@ public final class SessionProgress: Object, HasCloudKitFields, SoftDeletable {
     /// When the progress was created
     @objc public dynamic var createdAt = Date()
 
-    /// When the progress was last update
+    /// When the progress was last updated
     @objc public dynamic var updatedAt = Date()
 
     /// The current position in the video (in seconds)

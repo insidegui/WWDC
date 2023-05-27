@@ -83,6 +83,9 @@ public final class UserDataSyncEngine {
         didSet {
             guard oldValue != isEnabled else { return }
 
+            /// Prevents `isEnabled` from causing start before `start()` has been called at least once.
+            guard canStart else { return }
+
             if isEnabled {
                 os_log("Starting because isEnabled has changed to true", log: log, type: .debug)
                 start()
@@ -96,7 +99,11 @@ public final class UserDataSyncEngine {
 
     private let disposeBag = DisposeBag()
 
+    private var canStart = false
+
     public func start() {
+        canStart = true
+
         guard ConfCoreCapabilities.isCloudKitEnabled else { return }
 
         guard !isWaitingForAccountAvailabilityToStart else { return }
@@ -300,10 +307,13 @@ public final class UserDataSyncEngine {
         cloudOperationQueue.addOperation(operation)
     }
 
-    private func clearSyncMetadata() {
+    func clearSyncMetadata() {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
         privateChangeToken = nil
         createdPrivateSubscription = false
         createdCustomZone = false
+        tombstoneRecords.removeAll()
 
         clearCloudKitFields()
     }
