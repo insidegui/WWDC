@@ -180,6 +180,9 @@
 		F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */; };
 		F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */; };
 		F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82342A22921300FDE980 /* ExploreTabProvider.swift */; };
+		F44C82372A22B84F00FDE980 /* PreviewAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F44C82362A22B84F00FDE980 /* PreviewAssets.xcassets */; };
+		F44C823A2A22B8DD00FDE980 /* ExploreTabContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82392A22B8DD00FDE980 /* ExploreTabContent.swift */; };
+		F44C823C2A22B90600FDE980 /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C823B2A22B90600FDE980 /* RemoteImage.swift */; };
 		F4749CE9265C005500062B83 /* WWDCAgentAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */; };
 		F4749CED265C005500062B83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEC265C005500062B83 /* Assets.xcassets */; };
 		F4749CF0265C005500062B83 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEF265C005500062B83 /* Preview Assets.xcassets */; };
@@ -489,6 +492,9 @@
 		F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
 		F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarBlurFadeView.swift; sourceTree = "<group>"; };
 		F44C82342A22921300FDE980 /* ExploreTabProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreTabProvider.swift; sourceTree = "<group>"; };
+		F44C82362A22B84F00FDE980 /* PreviewAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PreviewAssets.xcassets; sourceTree = "<group>"; };
+		F44C82392A22B8DD00FDE980 /* ExploreTabContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreTabContent.swift; sourceTree = "<group>"; };
+		F44C823B2A22B90600FDE980 /* RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
 		F4749CE6265C005400062B83 /* WWDCAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentAppDelegate.swift; sourceTree = "<group>"; };
 		F4749CEC265C005500062B83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -761,6 +767,7 @@
 			children = (
 				DD7E290824800D0300A58370 /* schedule-placeholder.png */,
 				DD36A4B31E478C6A00B2EA88 /* Assets.xcassets */,
+				F44C82362A22B84F00FDE980 /* PreviewAssets.xcassets */,
 				DD36A4B51E478C6A00B2EA88 /* Main.storyboard */,
 				DDC678101EDB26D000A4E19C /* AboutWindowController.xib */,
 				DDC6781C1EDB638400A4E19C /* Preferences.storyboard */,
@@ -1171,6 +1178,14 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
+		F44C82382A22B8D500FDE980 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F44C82392A22B8DD00FDE980 /* ExploreTabContent.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		F4749CE7265C005500062B83 /* WWDCAgent */ = {
 			isa = PBXGroup;
 			children = (
@@ -1270,6 +1285,7 @@
 		F4FB069D2A2148D800799F84 /* ExploreTab */ = {
 			isa = PBXGroup;
 			children = (
+				F44C82382A22B8D500FDE980 /* Models */,
 				F4FB06BD2A216C1700799F84 /* Components */,
 				F4FB069E2A2148EA00799F84 /* ExploreTabRootView.swift */,
 			);
@@ -1280,6 +1296,7 @@
 			isa = PBXGroup;
 			children = (
 				F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */,
+				F44C823B2A22B90600FDE980 /* RemoteImage.swift */,
 				F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */,
 				F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */,
 			);
@@ -1524,6 +1541,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD36A4B41E478C6A00B2EA88 /* Assets.xcassets in Resources */,
+				F44C82372A22B84F00FDE980 /* PreviewAssets.xcassets in Resources */,
 				DD7E290924800D0300A58370 /* schedule-placeholder.png in Resources */,
 				DDC6781D1EDB638400A4E19C /* Preferences.storyboard in Resources */,
 				DDC678121EDB26D000A4E19C /* AboutWindowController.xib in Resources */,
@@ -1620,6 +1638,7 @@
 				DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */,
 				DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */,
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
+				F44C823C2A22B90600FDE980 /* RemoteImage.swift in Sources */,
 				F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */,
 				F4D0F0362A2012C700C74B50 /* VisualEffectDebugger.m in Sources */,
 				DDC678191EDB2CD300A4E19C /* ActionLabel.swift in Sources */,
@@ -1667,6 +1686,7 @@
 				F4B22FB7265EDF2D00632C9C /* WWDCAgentController.swift in Sources */,
 				DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
+				F44C823A2A22B8DD00FDE980 /* ExploreTabContent.swift in Sources */,
 				4D0E806F217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift in Sources */,
 				4DBA2F7620FE71BF00ED0253 /* DownloadsStatusButton.swift in Sources */,
 				DD6E06F81EDBC62D000EAEA4 /* SessionTranscriptViewController.swift in Sources */,
@@ -2015,6 +2035,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = WWDC/PreviewAssets.xcassets;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2045,6 +2066,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = WWDC/PreviewAssets.xcassets;
 				ENABLE_HARDENED_RUNTIME = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2136,6 +2158,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = WWDC/PreviewAssets.xcassets;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2224,6 +2247,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = WWDC/PreviewAssets.xcassets;
 				DEVELOPMENT_TEAM = 8C7439RJLG;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
