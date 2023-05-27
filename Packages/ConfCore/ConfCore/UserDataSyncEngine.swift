@@ -152,8 +152,12 @@ public final class UserDataSyncEngine {
 
     public private(set) var isAccountAvailable = BehaviorRelay<Bool>(value: false)
 
-    public func stop(harsh: Bool = false) {
-        guard isRunning, !isStopping.value else { return }
+    public func stop() {
+        guard isRunning, !isStopping.value else {
+            self.clearSyncMetadata()
+            return
+        }
+        
         isStopping.accept(true)
 
         workQueue.async { [unowned self] in
@@ -171,8 +175,6 @@ public final class UserDataSyncEngine {
 
                 self.realmNotificationTokens.forEach { $0.invalidate() }
                 self.realmNotificationTokens.removeAll()
-
-                guard harsh else { return }
 
                 self.clearSyncMetadata()
             }
