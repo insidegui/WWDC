@@ -21,7 +21,7 @@ final class ExploreTabProvider: ObservableObject {
         let cutoffDate = Calendar.current.date(byAdding: Constants.continueWatchingMaxLastProgressUpdateInterval, to: Date()) ?? Date.distantPast
 
         let videoPredicate = Session.videoPredicate
-        let progressPredicate = NSPredicate(format: "SUBQUERY(progresses, $progress, $progress.updatedAt >= %@ AND $progress.relativePosition < %f).@count >= 1", cutoffDate as NSDate, Constants.continueWatchingMaxRelativePosition)
+        let progressPredicate = NSPredicate(format: "SUBQUERY(progresses, $progress, $progress.updatedAt >= %@ AND $progress.relativePosition >= %f AND $progress.relativePosition < %f AND $progress.isDeleted = false).@count >= 1", cutoffDate as NSDate, Constants.continueWatchingMinRelativePosition, Constants.continueWatchingMaxRelativePosition)
 
         let sessions = storage.realm.objects(Session.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [videoPredicate, progressPredicate]))
@@ -60,13 +60,10 @@ final class ExploreTabProvider: ObservableObject {
             title: "Continue Watching",
             icon: .symbol("list.bullet.below.rectangle"),
             items: sortedContinueWatchingSessions.prefix(Constants.maxContinueWatchingItems).compactMap { session in
-                if let progress = session.progresses.first {
-                    if session.title.contains("Discover Reference Mode") {
-                        print(progress)
-                        print("")
-                    }
-                }
-                return ExploreTabContent.Item(session, duration: session.mediaDuration - session.currentPosition())
+                ExploreTabContent.Item(
+                    session,
+                    duration: session.mediaDuration - session.currentPosition()
+                )
             }
         )
 
@@ -131,6 +128,13 @@ private extension ExploreTabContent.Item {
         guard let event = session.event.first else { return nil }
 
         let effectiveDuration = duration ?? session.mediaDuration
+        let progress: Double?
+
+        if duration != nil, let progressItem = session.progresses.first {
+            progress = progressItem.relativePosition
+        } else {
+            progress = nil
+        }
 
         self.init(
             id: session.identifier,
@@ -139,7 +143,8 @@ private extension ExploreTabContent.Item {
             overlayText: effectiveDuration > 0 ? String(timestamp: effectiveDuration) : nil,
             overlaySymbol: session.mediaDuration > 0 ? "play" : nil,
             imageURL: session.imageURL,
-            deepLink: WWDCAppCommand.revealVideo(session.identifier).url
+            deepLink: WWDCAppCommand.revealVideo(session.identifier).url,
+            progress: progress
         )
     }
 }

@@ -9,6 +9,7 @@ struct ExploreTabContent: Codable {
         var overlaySymbol: String?
         var imageURL: URL?
         var deepLink: URL?
+        var progress: Double?
     }
 
     struct Section: Identifiable, Codable {

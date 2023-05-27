@@ -81,10 +81,14 @@ private struct ExploreTabItem: View {
     var width: CGFloat = 240
     var imageHeight: CGFloat = 200
 
+    private var overlayAlignment: Alignment {
+        item.progress != nil ? .topTrailing : .bottomTrailing
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             thumbnail
-                .overlay(alignment: .bottomTrailing) {
+                .overlay(alignment: overlayAlignment) {
                     HStack(spacing: 4) {
                         if let symbolName = item.overlaySymbol {
                             Image(systemName: symbolName)
@@ -99,6 +103,11 @@ private struct ExploreTabItem: View {
                     .padding(.horizontal, 6)
                     .background(Material.thin, in: RoundedRectangle(cornerRadius: 5, style: .continuous))
                     .padding(4)
+                }
+                .overlay(alignment: .bottom) {
+                    if let progress = item.progress {
+                        MiniProgressBar(progress: progress)
+                    }
                 }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -137,17 +146,31 @@ private struct ExploreTabItem: View {
     }
 }
 
+private struct MiniProgressBar: View {
+    var progress: Double
 
+    var body: some View {
+        Rectangle()
+            .foregroundStyle(Material.thin)
+            .frame(height: 6)
+            .overlay(alignment: .leading) {
+                GeometryReader { proxy in
+                    Rectangle()
+                        .foregroundStyle(Color.white.opacity(0.7))
+                        .frame(width: proxy.size.width * progress)
+                        .blendMode(.plusLighter)
+                }
+            }
+            .clipShape(Capsule(style: .continuous))
+            .padding(6)
+    }
+}
 
 #if DEBUG
-// swiftlint:disable all
-
 struct ExploreTabContentView_Previews: PreviewProvider {
     static var previews: some View {
         ExploreTabContentView(content: .preview, scrollOffset: .constant(.zero))
             .frame(minWidth: 700, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)
     }
 }
-
-// swiftlint:enable all
 #endif

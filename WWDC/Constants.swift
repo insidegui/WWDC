@@ -19,6 +19,10 @@ struct Constants {
     /// Maximum number of videos to list in the "Continue Watching" section.
     static let maxContinueWatchingItems = 15
 
+    /// Videos will only be considered for the "Continue Watching" feature if the current progress is above this limit,
+    /// this prevents videos that have basically just had the play button pressed from showing up in continue watching
+    static let continueWatchingMinRelativePosition: Double = 0.05
+
     /// Videos will only be considered for the "Continue Watching" feature if the current progress is below this limit
     static let continueWatchingMaxRelativePosition: Double = 0.9
 
