@@ -43,8 +43,8 @@ struct ExploreTabRootView: View {
         if let content = provider.content {
             ExploreTabContentView(content: content, scrollOffset: $provider.scrollOffset)
         } else {
-            Text("Nothing here yet 👀")
-                .foregroundStyle(.secondary)
+            ExploreTabContentView(content: .placeholder, scrollOffset: .constant(.zero))
+                .redacted(reason: .placeholder)
         }
     }
 }
@@ -258,3 +258,45 @@ extension ExploreTabContent {
 
 // swiftlint:enable all
 #endif
+
+extension ExploreTabContent.Item {
+    static let placeholderItems: [ExploreTabContent.Item] = [
+        .init(
+            id: "1",
+            title: "Placeholder Item Regular",
+            subtitle: "Placeholder Item Description 1",
+            overlayText: "20m",
+            overlaySymbol: "play",
+            imageURL: nil,
+            deepLink: nil
+        ),
+        .init(
+            id: "2",
+            title: "Placeholder",
+            subtitle: "Placeholder Item Description 2",
+            overlayText: "25m",
+            overlaySymbol: "play",
+            imageURL: nil,
+            deepLink: nil
+        ),
+        .init(
+            id: "3",
+            title: "Placeholder Item Longer Title",
+            subtitle: "Placeholder Item Description 3",
+            overlayText: "35m",
+            overlaySymbol: "play",
+            imageURL: nil,
+            deepLink: nil
+        ),
+    ]
+}
+
+extension ExploreTabContent {
+    static let placeholder: ExploreTabContent = {
+        ExploreTabContent(id: "1", sections: [
+            Section(id: "placeholder-1", title: "Placeholder Section First", icon: .symbol("app.badge.checkmark"), items: ExploreTabContent.Item.placeholderItems),
+            Section(id: "placeholder-2", title: "Placeholder Section Second Longer Title", icon: .symbol("app.badge.checkmark"), items: ExploreTabContent.Item.placeholderItems),
+            Section(id: "placeholder-3", title: "Placeholder Short", icon: .symbol("app.badge.checkmark"), items: ExploreTabContent.Item.placeholderItems),
+        ])
+    }()
+}

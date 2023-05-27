@@ -179,6 +179,7 @@
 		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
 		F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */; };
 		F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */; };
+		F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82342A22921300FDE980 /* ExploreTabProvider.swift */; };
 		F4749CE9265C005500062B83 /* WWDCAgentAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */; };
 		F4749CED265C005500062B83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEC265C005500062B83 /* Assets.xcassets */; };
 		F4749CF0265C005500062B83 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEF265C005500062B83 /* Preview Assets.xcassets */; };
@@ -487,6 +488,7 @@
 		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
 		F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarBlurFadeView.swift; sourceTree = "<group>"; };
+		F44C82342A22921300FDE980 /* ExploreTabProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreTabProvider.swift; sourceTree = "<group>"; };
 		F4749CE6265C005400062B83 /* WWDCAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentAppDelegate.swift; sourceTree = "<group>"; };
 		F4749CEC265C005500062B83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1007,6 +1009,7 @@
 		DDDF807220BA3110007284F8 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
+				F44C82342A22921300FDE980 /* ExploreTabProvider.swift */,
 				DDDF807320BA3124007284F8 /* ExploreViewController.swift */,
 			);
 			name = Explore;
@@ -1624,6 +1627,7 @@
 				DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */,
 				DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */,
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
+				F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */,
 				4D4D80C4217D281D00D1C233 /* DownloadViewModel.swift in Sources */,

@@ -3,32 +3,19 @@ import SwiftUI
 import Combine
 import ConfCore
 
-final class ExploreTabProvider: ObservableObject {
-    @Published private(set) var content: ExploreTabContent?
-    @Published var scrollOffset = CGPoint.zero
-
-    func update(with sections: Results<FeaturedSection>) {
-        let contentSections = sections.compactMap(ExploreTabContent.Section.init)
-
-        guard !contentSections.isEmpty else {
-            content = nil
-            return
-        }
-
-        content = ExploreTabContent(
-            id: "explore",
-            sections: Array(contentSections)
-        )
-    }
-}
-
 final class ExploreViewController: NSViewController, ObservableObject {
 
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    private let provider: ExploreTabProvider
+
+    init(provider: ExploreTabProvider) {
+        self.provider = provider
+
+        super.init(nibName: nil, bundle: nil)
     }
 
-    private let provider = ExploreTabProvider()
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
 
     @Published private var scrollOffset = CGPoint.zero
 
@@ -51,12 +38,17 @@ final class ExploreViewController: NSViewController, ObservableObject {
 
     private lazy var cancellables = Set<AnyCancellable>()
 
-    private lazy var titleBarFadeView = TitleBarBlurFadeView()
+    private lazy var titleBarFadeView: TitleBarBlurFadeView = {
+        let v = TitleBarBlurFadeView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
 
     private func installRootViewIfNeeded() {
         guard rootView.superview == nil else { return }
 
         view.addSubview(rootView)
+        view.addSubview(titleBarFadeView)
 
         NSLayoutConstraint.activate([
             rootView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -65,8 +57,6 @@ final class ExploreViewController: NSViewController, ObservableObject {
             rootView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        titleBarFadeView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(titleBarFadeView)
         NSLayoutConstraint.activate([
             titleBarFadeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             titleBarFadeView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -130,91 +120,24 @@ final class ExploreViewController: NSViewController, ObservableObject {
         CATransaction.commit()
     }
 
-    func update(with sections: Results<FeaturedSection>) {
-        guard isViewLoaded else { return }
-        
-        DispatchQueue.main.async {
-            self.provider.update(with: sections)
+    override func viewWillAppear() {
+        super.viewWillAppear()
 
-            self.installRootViewIfNeeded()
-        }
+        provider.activate()
     }
 
-}
+    override func viewDidAppear() {
+        super.viewDidAppear()
 
-private extension ExploreTabContent.Section {
-    init?(_ section: FeaturedSection) {
-        guard let format = section.format else {
-            assertionFailure("Featured section is missing format: \(section)")
-            return nil
-        }
-
-        let items = Array(section.content.compactMap(ExploreTabContent.Item.init))
-
-        guard !items.isEmpty else { return nil }
-
-        let icon: ExploreTabContent.Section.Icon
-
-        if let symbolName = format.symbolName {
-            icon = .symbol(symbolName)
-        } else if let glyphURLStr = section.content.compactMap({ $0.session?.event.first?.glyphURL }).first,
-                  let glyphURL = URL(string: glyphURLStr)
-        {
-            icon = .remoteGlyph(glyphURL)
-        } else {
-            icon = .symbol("play")
-        }
-
-        self.init(
-            id: section.identifier,
-            title: section.title,
-            icon: icon,
-            items: items
-        )
+        installRootViewIfNeeded()
     }
-}
 
-private extension ExploreTabContent.Item {
-    init?(_ content: FeaturedContent) {
-        guard let session = content.session else { return nil }
-        guard let event = session.event.first else { return nil }
+    override func viewDidDisappear() {
+        super.viewDidDisappear()
 
-        self.init(
-            id: session.identifier,
-            title: event.name,
-            subtitle: session.title,
-            overlayText: session.mediaDuration > 0 ? String(timestamp: session.mediaDuration) : nil,
-            overlaySymbol: session.mediaDuration > 0 ? "play" : nil,
-            imageURL: session.imageURL,
-            deepLink: WWDCAppCommand.revealVideo(session.identifier).url
-        )
+        provider.invalidate()
     }
-}
 
-private extension FeaturedSectionFormat {
-    var symbolName: String? {
-        switch self {
-        case .largeGrid, .smallGrid:
-            return nil
-        case .curated:
-            return "pencil"
-        case .history:
-            return "list.bullet.below.rectangle"
-        case .favorites:
-            return "star"
-        case .live:
-            return "record.circle"
-        case .upNext:
-            return "sparkles"
-        }
-    }
-}
-
-private extension Session {
-    var imageURL: URL? {
-        guard let asset = asset(ofType: .image) else { return nil }
-        return URL(string: asset.remoteURL)
-    }
 }
 
 extension NSWindow {

@@ -73,8 +73,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let slowMigrationToleranceInSeconds: TimeInterval = 1.5
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": false])
-        
         agentController.registerAgentVersion()
 
         NSApp.registerForRemoteNotifications(matching: [])

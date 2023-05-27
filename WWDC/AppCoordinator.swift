@@ -66,7 +66,7 @@ final class AppCoordinator {
         tabController = WWDCTabViewController(windowController: windowController)
 
         // Explore
-        exploreController = ExploreViewController()
+        exploreController = ExploreViewController(provider: ExploreTabProvider(storage: storage))
         exploreController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
         let exploreItem = NSTabViewItem(viewController: exploreController)
         exploreItem.label = "Explore"
@@ -246,15 +246,14 @@ final class AppCoordinator {
         let startupDependencies = Observable.combineLatest(storage.tracksObservable,
                                                           storage.eventsObservable,
                                                           storage.focusesObservable,
-                                                          storage.scheduleObservable,
-                                                          storage.featuredSectionsObservable)
+                                                          storage.scheduleObservable)
 
         startupDependencies
             .filter {
-                !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.4.isEmpty
+                !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty
             }
             .take(1)
-            .subscribe(onNext: { [weak self] tracks, _, _, sections, _ in
+            .subscribe(onNext: { [weak self] tracks, _, _, sections in
                 guard let self = self else { return }
 
                 self.tabController.hideLoading()
@@ -280,18 +279,6 @@ final class AppCoordinator {
 
         storage.eventHeroObservable.bind(to: scheduleController.heroController.hero)
                                    .disposed(by: disposeBag)
-    }
-
-    private func updateExploreTabContentAfterSync() {
-        storage
-            .featuredSectionsObservable
-            .filter { !$0.isEmpty }
-            .subscribe(on: MainScheduler.instance)
-            .take(1)
-            .subscribe(onNext: { [weak self] sections in
-                guard let self = self else { return }
-                self.exploreController.update(with: sections)
-            }).disposed(by: disposeBag)
     }
 
     private lazy var searchCoordinator: SearchCoordinator = {
@@ -335,18 +322,12 @@ final class AppCoordinator {
             self.updateListsAfterSync()
         }
 
-        _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncFeaturedSections, object: nil, queue: .main) { note in
-            guard checkSyncEngineOperationSucceededAndShowError(note: note) else { return }
-            self.updateExploreTabContentAfterSync()
-        }
-
         _ = NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: .main) { _ in
             self.refresh(nil)
         }
 
         refresh(nil)
         updateListsAfterSync()
-        updateExploreTabContentAfterSync()
 
         if Arguments.showPreferences {
             showPreferences(nil)

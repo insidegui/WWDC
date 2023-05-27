@@ -16,6 +16,16 @@ struct Constants {
 
     static let autorefreshInterval: TimeInterval = 5 * 60
 
+    /// Maximum number of videos to list in the "Continue Watching" section.
+    static let maxContinueWatchingItems = 15
+
+    /// Videos will only be considered for the "Continue Watching" feature if the current progress is below this limit
+    static let continueWatchingMaxRelativePosition: Double = 0.9
+
+    /// Videos will only be considered for the "Continue Watching" feature if the current progress was registered
+    /// within the past X days, so that videos started a long time ago are not displayed in the section.
+    static let continueWatchingMaxLastProgressUpdateInterval = DateComponents(day: -30)
+
     /// The relative position within the video the user must be before it is considered fully watched
     static let watchedVideoRelativePosition: Double = 0.97
 
