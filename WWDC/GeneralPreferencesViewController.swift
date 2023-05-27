@@ -19,7 +19,7 @@ extension NSStoryboard.SceneIdentifier {
     static let generalPreferencesViewController = NSStoryboard.SceneIdentifier("GeneralPreferencesViewController")
 }
 
-class GeneralPreferencesViewController: NSViewController {
+final class GeneralPreferencesViewController: WWDCWindowContentViewController {
 
     #if ICLOUD
     weak var userDataSyncEngine: UserDataSyncEngine? {
@@ -39,6 +39,8 @@ class GeneralPreferencesViewController: NSViewController {
 
         return vc
     }
+
+    @IBOutlet weak var downloadsStackView: NSStackView?
 
     @IBOutlet weak var searchInTranscriptsSwitch: NSSwitch!
     @IBOutlet weak var searchInBookmarksSwitch: NSSwitch!
@@ -66,6 +68,8 @@ class GeneralPreferencesViewController: NSViewController {
     @IBOutlet weak var dividerC: NSBox!
     @IBOutlet weak var dividerE: NSBox!
     @IBOutlet weak var dividerF: NSBox!
+
+    override var viewForWindowTopSafeAreaConstraint: NSView? { downloadsStackView }
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -10,7 +10,7 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
-final class SessionDetailsViewController: WWDCMainWindowContentViewController {
+final class SessionDetailsViewController: WWDCWindowContentViewController {
 
     private struct Metrics {
         static let padding: CGFloat = 46

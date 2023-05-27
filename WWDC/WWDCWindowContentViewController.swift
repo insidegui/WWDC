@@ -1,6 +1,6 @@
 import Cocoa
 
-class WWDCMainWindowContentViewController: NSViewController {
+class WWDCWindowContentViewController: NSViewController {
 
     var topSafeAreaPadding: CGFloat { 22 }
 

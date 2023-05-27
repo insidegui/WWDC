@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -255,7 +255,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ORc-5v-yfb">
-                                        <rect key="frame" x="344" y="1" width="18" height="19"/>
+                                        <rect key="frame" x="344" y="0.0" width="18" height="19"/>
                                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WPm-F8-kUH">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="smallSystem"/>
@@ -377,7 +377,7 @@
                             <constraint firstAttribute="trailing" secondItem="OZk-0e-tyQ" secondAttribute="trailing" id="XjQ-NC-K2O"/>
                             <constraint firstItem="Yew-yF-ZWD" firstAttribute="trailing" secondItem="YmL-o7-wzA" secondAttribute="trailing" id="Y8B-RI-3h4"/>
                             <constraint firstItem="gSp-wk-rap" firstAttribute="top" secondItem="GJT-d9-qvO" secondAttribute="bottom" constant="19" id="YEj-fP-BPe"/>
-                            <constraint firstItem="jme-OU-7GG" firstAttribute="top" secondItem="scn-7e-mlv" secondAttribute="top" constant="29" id="YsL-oL-7FX"/>
+                            <constraint firstItem="jme-OU-7GG" firstAttribute="top" secondItem="scn-7e-mlv" secondAttribute="top" constant="29" placeholder="YES" id="YsL-oL-7FX"/>
                             <constraint firstItem="YmL-o7-wzA" firstAttribute="top" secondItem="jme-OU-7GG" secondAttribute="top" constant="-2" id="cfW-zf-bJk"/>
                             <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Gny-ev-Via" secondAttribute="bottom" constant="20" symbolic="YES" id="ekP-Wn-wjY"/>
                             <constraint firstItem="Yew-yF-ZWD" firstAttribute="top" secondItem="N9Z-iX-jvK" secondAttribute="top" constant="-2" id="fxi-jB-18m"/>
@@ -398,6 +398,7 @@
                         <outlet property="dividerF" destination="Ljr-be-BXp" id="rRz-AP-0Dd"/>
                         <outlet property="downloadsFolderIntroLabel" destination="YmL-o7-wzA" id="qdP-fS-wMy"/>
                         <outlet property="downloadsFolderLabel" destination="eKi-p7-aRV" id="9xi-lk-ZjI"/>
+                        <outlet property="downloadsStackView" destination="jme-OU-7GG" id="sIY-CY-bkM"/>
                         <outlet property="enableUserDataSyncLabel" destination="goO-DA-n9P" id="juP-k6-qjZ"/>
                         <outlet property="enableUserDataSyncSwitch" destination="SF8-ZN-I8k" id="e7r-tv-jPV"/>
                         <outlet property="enableWWDCAgentSwitch" destination="Vk1-ZC-mPn" id="u9F-PR-puc"/>
@@ -519,7 +520,7 @@
                         <constraints>
                             <constraint firstItem="MB9-co-AOw" firstAttribute="leading" secondItem="CYB-Js-nMq" secondAttribute="leading" id="96z-R2-U73"/>
                             <constraint firstAttribute="trailing" secondItem="4tF-Jf-uRi" secondAttribute="trailing" id="KpR-vb-ubQ"/>
-                            <constraint firstItem="EB1-cz-f3w" firstAttribute="top" secondItem="5hl-wi-FfU" secondAttribute="top" constant="22" id="L10-pu-XBx"/>
+                            <constraint firstItem="EB1-cz-f3w" firstAttribute="top" secondItem="5hl-wi-FfU" secondAttribute="top" constant="22" placeholder="YES" id="L10-pu-XBx"/>
                             <constraint firstItem="4tF-Jf-uRi" firstAttribute="leading" secondItem="5hl-wi-FfU" secondAttribute="leading" constant="39" id="R85-Mx-vUo"/>
                             <constraint firstItem="CYB-Js-nMq" firstAttribute="top" secondItem="jzw-u5-Zjs" secondAttribute="bottom" constant="19" id="Y9R-1o-KAR"/>
                             <constraint firstItem="MB9-co-AOw" firstAttribute="top" secondItem="4tF-Jf-uRi" secondAttribute="bottom" constant="19" id="gXK-Yz-Lbr"/>
@@ -534,6 +535,7 @@
                     <connections>
                         <outlet property="includeAppBannerInClipsSwitch" destination="Xtm-cF-96x" id="TMN-ja-MJe"/>
                         <outlet property="skipBackAndForwardBy30SecondsSwitch" destination="JEt-pq-hrP" id="CqT-YK-nZZ"/>
+                        <outlet property="skipIntroStackView" destination="EB1-cz-f3w" id="dKH-G5-mrm"/>
                         <outlet property="skipIntroSwitch" destination="yfb-Pt-KGS" id="ZvD-Nu-XWb"/>
                     </connections>
                 </viewController>
@@ -558,7 +560,7 @@
                                             <constraint firstAttribute="width" constant="231" id="D34-Ex-Ec6"/>
                                         </constraints>
                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="jHp-TC-67d">
-                                            <font key="font" metaFont="system" size="12"/>
+                                            <font key="font" metaFont="cellTitle"/>
                                             <string key="title">This will run an agent in the background that gives other apps the opportunity to access your content from the WWDC app. Currently, this is supported by the Raycast app. If you'd like to integrate WWDC content into your app, open an issue on Github describing your app and what you'd like to do.</string>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -570,7 +572,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I1j-2K-qhm" customClass="ActionLabel" customModule="WWDC" customModuleProvider="target">
                                         <rect key="frame" x="-2" y="23" width="49" height="15"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Raycast" id="x44-Wc-9ts">
-                                            <font key="font" metaFont="system" size="12"/>
+                                            <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -581,7 +583,7 @@
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6PJ-m2-K7t" customClass="ActionLabel" customModule="WWDC" customModuleProvider="target">
                                         <rect key="frame" x="-2" y="0.0" width="104" height="15"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="WWDC on Github" id="IBm-XP-HKb">
-                                            <font key="font" metaFont="system" size="12"/>
+                                            <font key="font" metaFont="cellTitle"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>

@@ -12,16 +12,19 @@ extension NSStoryboard.SceneIdentifier {
     static let playbackPreferencesViewController = NSStoryboard.SceneIdentifier("PlaybackPreferencesViewController")
 }
 
-final class PlaybackPreferencesViewController: NSViewController {
+final class PlaybackPreferencesViewController: WWDCWindowContentViewController {
 
     static func loadFromStoryboard() -> PlaybackPreferencesViewController {
         // swiftlint:disable:next force_cast
         return NSStoryboard(name: .preferences, bundle: nil).instantiateController(withIdentifier: .playbackPreferencesViewController) as! PlaybackPreferencesViewController
     }
 
+    @IBOutlet weak var skipIntroStackView: NSStackView?
     @IBOutlet private var skipIntroSwitch: NSSwitch!
     @IBOutlet private var skipBackAndForwardBy30SecondsSwitch: NSSwitch!
     @IBOutlet weak var includeAppBannerInClipsSwitch: NSSwitch!
+
+    override var viewForWindowTopSafeAreaConstraint: NSView? { skipIntroSwitch }
 
     override func viewDidLoad() {
         super.viewDidLoad()

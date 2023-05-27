@@ -10,7 +10,7 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
-final class ScheduleContainerViewController: WWDCMainWindowContentViewController {
+final class ScheduleContainerViewController: WWDCWindowContentViewController {
 
     let splitViewController: SessionsSplitViewController
 

@@ -51,12 +51,19 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValu
                 }
             }
 
-            let tab = Tab(rawValue: selectedTabViewItemIndex)!
+            guard let tab = Tab(rawValue: selectedTabViewItemIndex) else {
+                assertionFailure("selectedTabViewItemIndex of \(selectedTabViewItemIndex) doesn't correspond to a valid tab item")
+                return
+            }
 
             activeTabVar.accept(tab)
 
-            (view.window as? WWDCWindow)?.setTitleBarHidden(tab.hidesWindowTitleBar, animated: true)
+            updateWindowTitleBarVisibility(for: tab)
         }
+    }
+
+    private func updateWindowTitleBarVisibility(for tab: Tab, animated: Bool = true) {
+        (view.window as? WWDCWindow)?.setTitleBarHidden(tab.hidesWindowTitleBar, animated: animated)
     }
 
     private(set) lazy var tabBar = WWDCTabViewControllerTabBar()
@@ -94,7 +101,9 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValu
         itemView.target = self
         itemView.action = #selector(changeTab)
 
-        itemView.state = (tabViewItems.firstIndex(of: tabViewItem) == selectedTabViewItemIndex) ? .on : .off
+        let isActiveTab = (tabViewItems.firstIndex(of: tabViewItem) == selectedTabViewItemIndex)
+
+        itemView.state = isActiveTab ? .on : .off
 
         tabBar.addItem(itemView)
     }
@@ -131,6 +140,14 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValu
 
     func hideLoading() {
         loadingView?.hide()
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+
+        if let tab = Tab(rawValue: selectedTabViewItemIndex) {
+            updateWindowTitleBarVisibility(for: tab, animated: false)
+        }
     }
 
 }
