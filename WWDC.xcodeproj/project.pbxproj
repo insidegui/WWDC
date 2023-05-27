@@ -177,6 +177,8 @@
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
+		F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */; };
+		F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */; };
 		F4749CE9265C005500062B83 /* WWDCAgentAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */; };
 		F4749CED265C005500062B83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEC265C005500062B83 /* Assets.xcassets */; };
 		F4749CF0265C005500062B83 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEF265C005500062B83 /* Preview Assets.xcassets */; };
@@ -483,6 +485,8 @@
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
+		F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarBlurFadeView.swift; sourceTree = "<group>"; };
 		F4749CE6265C005400062B83 /* WWDCAgent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCAgent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentAppDelegate.swift; sourceTree = "<group>"; };
 		F4749CEC265C005500062B83 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1273,6 +1277,8 @@
 			isa = PBXGroup;
 			children = (
 				F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */,
+				F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */,
+				F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */,
 			);
 			name = Components;
 			sourceTree = "<group>";
@@ -1611,6 +1617,7 @@
 				DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */,
 				DD90CDCB1ED77A4800CADE86 /* FilterType.swift in Sources */,
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
+				F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */,
 				F4D0F0362A2012C700C74B50 /* VisualEffectDebugger.m in Sources */,
 				DDC678191EDB2CD300A4E19C /* ActionLabel.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
@@ -1630,6 +1637,7 @@
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */,
 				DDA60E1720A9083E002EECF5 /* RelatedSessionsViewController.swift in Sources */,
+				F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */,
 				DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */,
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DDB352821EC7C55300254815 /* DateProvider.swift in Sources */,

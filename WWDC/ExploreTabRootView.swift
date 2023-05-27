@@ -37,11 +37,11 @@ struct ExploreTabContent {
 }
 
 struct ExploreTabRootView: View {
-    @EnvironmentObject private var provider: ExploreTabContentProvider
+    @EnvironmentObject private var provider: ExploreTabProvider
 
     var body: some View {
         if let content = provider.content {
-            ExploreTabContentView(content: content)
+            ExploreTabContentView(content: content, scrollOffset: $provider.scrollOffset)
         } else {
             Text("Nothing here yet 👀")
                 .foregroundStyle(.secondary)
@@ -52,8 +52,10 @@ struct ExploreTabRootView: View {
 private struct ExploreTabContentView: View {
     var content: ExploreTabContent
 
+    @Binding var scrollOffset: CGPoint
+
     var body: some View {
-        ScrollView(.vertical, showsIndicators: true) {
+        OffsetObservingScrollView(axes: [.vertical], showsIndicators: true, offset: $scrollOffset) {
             LazyVStack(alignment: .leading, spacing: 42) {
                 ForEach(content.sections) { section in
                     VStack(alignment: .leading, spacing: 16) {
@@ -198,7 +200,7 @@ private struct RemoteImage<Content: View, Placeholder: View>: View {
 
 struct ExploreTabContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ExploreTabContentView(content: .preview)
+        ExploreTabContentView(content: .preview, scrollOffset: .constant(.zero))
             .frame(minWidth: 700, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)
     }
 }

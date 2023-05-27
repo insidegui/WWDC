@@ -1,12 +1,11 @@
 import Cocoa
-import RealmSwift
-import RxSwift
-import RxCocoa
 import SwiftUI
+import Combine
 import ConfCore
 
-final class ExploreTabContentProvider: ObservableObject {
+final class ExploreTabProvider: ObservableObject {
     @Published private(set) var content: ExploreTabContent?
+    @Published var scrollOffset = CGPoint.zero
 
     func update(with sections: Results<FeaturedSection>) {
         let contentSections = sections.compactMap(ExploreTabContent.Section.init)
@@ -29,7 +28,9 @@ final class ExploreViewController: NSViewController, ObservableObject {
         self.init(nibName: nil, bundle: nil)
     }
 
-    private let contentProvider = ExploreTabContentProvider()
+    private let provider = ExploreTabProvider()
+
+    @Published private var scrollOffset = CGPoint.zero
 
     override func loadView() {
         let backgroundView = NSVisualEffectView()
@@ -42,10 +43,15 @@ final class ExploreViewController: NSViewController, ObservableObject {
     }
 
     private lazy var rootView: NSView = {
-        let host = NSHostingView(rootView: ExploreTabRootView().environmentObject(contentProvider))
+        let host = NSHostingView(rootView: ExploreTabRootView().environmentObject(provider))
         host.translatesAutoresizingMaskIntoConstraints = false
+        host.wantsLayer = true
         return host
     }()
+
+    private lazy var cancellables = Set<AnyCancellable>()
+
+    private lazy var titleBarFadeView = TitleBarBlurFadeView()
 
     private func installRootViewIfNeeded() {
         guard rootView.superview == nil else { return }
@@ -58,13 +64,77 @@ final class ExploreViewController: NSViewController, ObservableObject {
             rootView.topAnchor.constraint(equalTo: view.topAnchor),
             rootView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        titleBarFadeView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(titleBarFadeView)
+        NSLayoutConstraint.activate([
+            titleBarFadeView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleBarFadeView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            titleBarFadeView.topAnchor.constraint(equalTo: view.topAnchor)
+        ])
+
+        rootView.layer?.mask = contentMask
+
+        provider.$scrollOffset.sink { [weak self] offset in
+            guard let self = self else { return }
+            self.updateTitleBarFadeVisibility(with: offset)
+        }.store(in: &cancellables)
+    }
+
+    private func updateTitleBarFadeVisibility(with offset: CGPoint) {
+        let visible = offset.y >= 9
+
+        titleBarFadeView.isHidden = !visible
+    }
+
+    private lazy var contentMask: CALayer = {
+        let l = CALayer()
+
+        l.autoresizingMask = []
+        l.addSublayer(contentMaskArea)
+        l.addSublayer(contentFadeLayer)
+
+        return l
+    }()
+
+    private lazy var contentMaskArea: CALayer = {
+        let l = CALayer()
+
+        l.backgroundColor = NSColor.cyan.cgColor
+        l.autoresizingMask = []
+
+        return l
+    }()
+
+    private lazy var contentFadeLayer: CAGradientLayer = {
+        let l = CAGradientLayer()
+        l.colors = [NSColor.red.withAlphaComponent(0).cgColor, NSColor.red.withAlphaComponent(0.4).cgColor, NSColor.red.cgColor]
+        l.locations = [NSNumber(value: 0), NSNumber(value: 0.7), NSNumber(value: 1)]
+        l.startPoint = CGPoint(x: 0, y: 0)
+        l.endPoint = CGPoint(x: 0, y: 1)
+        l.autoresizingMask = []
+        return l
+    }()
+
+    override func viewDidLayout() {
+        super.viewDidLayout()
+
+        guard let window = rootView.window else { return }
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        CATransaction.setAnimationDuration(0)
+        contentMask.frame = rootView.bounds
+        contentMaskArea.frame = CGRect(x: 0, y: window.titleBarHeight, width: rootView.bounds.width, height: rootView.bounds.height - window.titleBarHeight)
+        contentFadeLayer.frame = CGRect(x: 0, y: 0, width: rootView.bounds.width, height: window.titleBarHeight)
+        CATransaction.commit()
     }
 
     func update(with sections: Results<FeaturedSection>) {
         guard isViewLoaded else { return }
         
         DispatchQueue.main.async {
-            self.contentProvider.update(with: sections)
+            self.provider.update(with: sections)
 
             self.installRootViewIfNeeded()
         }
@@ -145,4 +215,8 @@ private extension Session {
         guard let asset = asset(ofType: .image) else { return nil }
         return URL(string: asset.remoteURL)
     }
+}
+
+extension NSWindow {
+    var titleBarHeight: CGFloat { contentRect(forFrameRect: frame).height - contentLayoutRect.height }
 }
