@@ -7,8 +7,7 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 
 protocol WWDCTab: RawRepresentable {
     var hidesWindowTitleBar: Bool { get }
@@ -29,11 +28,8 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValu
         }
     }
 
-    private var activeTabVar = BehaviorRelay<Tab>(value: Tab(rawValue: 0)!)
-
-    var rxActiveTab: Observable<Tab> {
-        return activeTabVar.asObservable()
-    }
+    @Published
+    private(set) var activeTabVar = Tab(rawValue: 0)!
 
     override var selectedTabViewItemIndex: Int {
         didSet {
@@ -56,7 +52,7 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValu
                 return
             }
 
-            activeTabVar.accept(tab)
+            activeTabVar = tab
 
             updateWindowTitleBarVisibility(for: tab)
         }

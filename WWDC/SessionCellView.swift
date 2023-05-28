@@ -7,12 +7,11 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 
 final class SessionCellView: NSView {
 
-    private var disposeBag = DisposeBag()
+    private var cancellables: Set<AnyCancellable> = []
 
     var viewModel: SessionViewModel? {
         didSet {
@@ -45,33 +44,31 @@ final class SessionCellView: NSView {
     }
 
     private func bindUI() {
-        disposeBag = DisposeBag()
+        cancellables = []
 
         guard let viewModel = viewModel else { return }
 
-        viewModel.rxTitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).disposed(by: disposeBag)
-        viewModel.rxSubtitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(subtitleLabel.rx.text).disposed(by: disposeBag)
-        viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).disposed(by: disposeBag)
-
-        viewModel.rxIsFavorite.distinctUntilChanged().map({ !$0 }).bind(to: favoritedImageView.rx.isHidden).disposed(by: disposeBag)
-        viewModel.rxIsDownloaded.distinctUntilChanged().map({ !$0 }).bind(to: downloadedImageView.rx.isHidden).disposed(by: disposeBag)
-
-        let isSnowFlake = Observable.zip(viewModel.rxIsCurrentlyLive, viewModel.rxIsLab)
-
-        isSnowFlake.map({ !$0.0 && !$0.1 }).bind(to: snowFlakeView.rx.isHidden).disposed(by: disposeBag)
-        isSnowFlake.map({ $0.0 || $0.1 }).bind(to: thumbnailImageView.rx.isHidden).disposed(by: disposeBag)
-
-        isSnowFlake.subscribe(onNext: { [weak self] (isLive: Bool, isLab: Bool) -> Void in
-            if isLive {
-                self?.snowFlakeView.image = #imageLiteral(resourceName: "live-indicator")
-            } else if isLab {
-                self?.snowFlakeView.image = #imageLiteral(resourceName: "lab-indicator")
-            }
-        }).disposed(by: disposeBag)
-
-        viewModel.rxImageUrl.distinctUntilChanged({ $0 != $1 }).subscribe(onNext: { [weak self] imageUrl in
-            guard let imageUrl = imageUrl else { return }
-
+        viewModel.rxTitle.removeDuplicates().receive(on: DispatchQueue.main).replaceError(with: "").assign(to: \.stringValue, onWeak: titleLabel).store(in: &cancellables)
+        viewModel.rxSubtitle.removeDuplicates().receive(on: DispatchQueue.main).replaceError(with: "").assign(to: \.stringValue, onWeak: subtitleLabel).store(in: &cancellables)
+//        viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).store(in: &cancellables)
+//
+//        viewModel.rxIsFavorite.distinctUntilChanged().map({ !$0 }).bind(to: favoritedImageView.rx.isHidden).store(in: &cancellables)
+//        viewModel.rxIsDownloaded.distinctUntilChanged().map({ !$0 }).bind(to: downloadedImageView.rx.isHidden).store(in: &cancellables)
+//
+//        let isSnowFlake = Observable.zip(viewModel.rxIsCurrentlyLive, viewModel.rxIsLab)
+//
+//        isSnowFlake.map({ !$0.0 && !$0.1 }).bind(to: snowFlakeView.rx.isHidden).store(in: &cancellables)
+//        isSnowFlake.map({ $0.0 || $0.1 }).bind(to: thumbnailImageView.rx.isHidden).store(in: &cancellables)
+//
+//        isSnowFlake.subscribe(onNext: { [weak self] (isLive: Bool, isLab: Bool) -> Void in
+//            if isLive {
+//                self?.snowFlakeView.image = #imageLiteral(resourceName: "live-indicator")
+//            } else if isLab {
+//                self?.snowFlakeView.image = #imageLiteral(resourceName: "lab-indicator")
+//            }
+//        }).store(in: &cancellables)
+//
+        viewModel.rxImageUrl.removeDuplicates().replaceErrorWithEmpty().compacted().sink { [weak self] imageUrl in
             self?.imageDownloadOperation?.cancel()
 
             self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight, thumbnailOnly: true) { [weak self] url, result in
@@ -79,27 +76,28 @@ final class SessionCellView: NSView {
 
                 self?.thumbnailImageView.image = result.thumbnail
             }
-        }).disposed(by: disposeBag)
+        }
+        .store(in: &cancellables)
 
-        viewModel.rxColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
+        viewModel.rxColor.removeDuplicates().replaceErrorWithEmpty().sink(receiveValue: { [weak self] color in
             self?.contextColorView.color = color
-        }).disposed(by: disposeBag)
+        }).store(in: &cancellables)
 
-        viewModel.rxDarkColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
+        viewModel.rxDarkColor.removeDuplicates().replaceErrorWithEmpty().sink(receiveValue: { [weak self] color in
             self?.snowFlakeView.backgroundColor = color
-        }).disposed(by: disposeBag)
+        }).store(in: &cancellables)
 
-        viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
-            if let progress = progresses.first {
-                self?.contextColorView.hasValidProgress = true
-                self?.contextColorView.progress = progress.relativePosition
-            } else {
-                self?.contextColorView.hasValidProgress = false
-                self?.contextColorView.progress = 0
-            }
-        }).disposed(by: disposeBag)
+//        viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
+//            if let progress = progresses.first {
+//                self?.contextColorView.hasValidProgress = true
+//                self?.contextColorView.progress = progress.relativePosition
+//            } else {
+//                self?.contextColorView.hasValidProgress = false
+//                self?.contextColorView.progress = 0
+//            }
+//        }).store(in: &cancellables)
 
-        viewModel.rxSessionType.distinctUntilChanged().subscribe(onNext: { [weak self] type in
+        viewModel.rxSessionType.removeDuplicates().replaceErrorWithEmpty().sink(receiveValue: { [weak self] type in
             guard ![.lab, .session, .labByAppointment].contains(type) else { return }
 
             switch type {
@@ -108,7 +106,7 @@ final class SessionCellView: NSView {
             default:
                 self?.thumbnailImageView.image = #imageLiteral(resourceName: "special")
             }
-        }).disposed(by: disposeBag)
+        }).store(in: &cancellables)
     }
 
     private lazy var titleLabel: NSTextField = {

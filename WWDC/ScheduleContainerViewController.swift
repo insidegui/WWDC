@@ -7,8 +7,7 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 
 final class ScheduleContainerViewController: WWDCWindowContentViewController {
 
@@ -25,7 +24,8 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
     }
 
     /// This should be bound to a state that returns `true` when the schedule is not available.
-    private(set) var showHeroView = BehaviorRelay<Bool>(value: false)
+    @Published
+    private(set) var showHeroView = false
 
     private(set) lazy var heroController: EventHeroViewController = {
         EventHeroViewController()
@@ -60,7 +60,7 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
         ])
     }
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,24 +69,24 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
     }
 
     private func bindViews() {
-        showHeroView.asDriver()
-                           .drive(splitViewController.view.rx.isHidden)
-                           .disposed(by: disposeBag)
-
-        showHeroView.asDriver()
-                           .map({ !$0 })
-                           .drive(heroController.view.rx.isHidden)
-                           .disposed(by: disposeBag)
-
-        showHeroView.asObservable().subscribe { [weak self] _ in
-            guard let self = self else { return }
-            self.view.needsUpdateConstraints = true
-        }
-        .disposed(by: disposeBag)
+//        showHeroView.asDriver()
+//                           .drive(splitViewController.view.rx.isHidden)
+//                           .store(in: &cancellables)
+//
+//        showHeroView.asDriver()
+//                           .map({ !$0 })
+//                           .drive(heroController.view.rx.isHidden)
+//                           .store(in: &cancellables)
+//
+//        showHeroView.asObservable().subscribe { [weak self] _ in
+//            guard let self = self else { return }
+//            self.view.needsUpdateConstraints = true
+//        }
+//        .store(in: &cancellables)
     }
 
     override var childForWindowTopSafeAreaConstraint: NSViewController? {
-        showHeroView.value ? heroController : nil
+        showHeroView ? heroController : nil
     }
     
 }

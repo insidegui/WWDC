@@ -7,8 +7,7 @@
 //
 
 import Foundation
-import RxCocoa
-import RxSwift
+import Combine
 import os.log
 
 extension Notification.Name {
@@ -25,7 +24,7 @@ public final class SyncEngine {
 
     public let userDataSyncEngine: UserDataSyncEngine?
 
-    private let disposeBag = DisposeBag()
+    private var cancellables: Set<AnyCancellable> = []
 
     let transcriptIndexingClient: TranscriptIndexingClient
 
@@ -34,8 +33,8 @@ public final class SyncEngine {
         set { transcriptIndexingClient.transcriptLanguage = newValue }
     }
 
-    public var isIndexingTranscripts: BehaviorRelay<Bool> { transcriptIndexingClient.isIndexing }
-    public var transcriptIndexingProgress: BehaviorRelay<Float> { transcriptIndexingClient.indexingProgress }
+    public var isIndexingTranscripts: AnyPublisher<Bool, Never> { transcriptIndexingClient.$isIndexing.eraseToAnyPublisher() }
+    public var transcriptIndexingProgress: AnyPublisher<Float, Never> { transcriptIndexingClient.$indexingProgress.eraseToAnyPublisher() }
 
     public init(storage: Storage, client: AppleAPIClient, transcriptLanguage: String) {
         self.storage = storage
@@ -52,11 +51,11 @@ public final class SyncEngine {
             self.userDataSyncEngine = nil
         }
 
-        NotificationCenter.default.rx.notification(.SyncEngineDidSyncSessionsAndSchedule).observe(on: MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
+        NotificationCenter.default.publisher(for: .SyncEngineDidSyncSessionsAndSchedule).receive(on: DispatchQueue.main).sink(receiveValue: { [unowned self] _ in
             self.transcriptIndexingClient.startIndexing(ignoringCache: false)
 
             self.userDataSyncEngine?.start()
-        }).disposed(by: disposeBag)
+        }).store(in: &cancellables)
     }
 
     public func syncContent() {

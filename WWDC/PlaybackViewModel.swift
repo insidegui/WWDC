@@ -10,8 +10,7 @@ import Foundation
 import ConfCore
 import AVFoundation
 import PlayerUI
-import RxCocoa
-import RxSwift
+import Combine
 
 enum PlaybackError: Error {
     case sessionNotFound(String)
@@ -45,7 +44,8 @@ final class PlaybackViewModel {
 
     private var timeObserver: Any?
 
-    var nowPlayingInfo: BehaviorRelay<PUINowPlayingInfo?> = BehaviorRelay(value: nil)
+    @Published
+    var nowPlayingInfo: PUINowPlayingInfo?
 
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
         self.storage = storage
@@ -107,7 +107,7 @@ final class PlaybackViewModel {
         #endif
 
         player = AVPlayer(url: finalUrl)
-        nowPlayingInfo.accept(PUINowPlayingInfo(playbackViewModel: self))
+        nowPlayingInfo = PUINowPlayingInfo(playbackViewModel: self)
 
         initializePlayerTimeSyncIfNeeded(with: session)
     }
@@ -146,9 +146,9 @@ final class PlaybackViewModel {
 
             if !d.isZero {
                 DispatchQueue.main.async {
-                    if var nowPlayingInfo = self.nowPlayingInfo.value {
+                    if var nowPlayingInfo = self.nowPlayingInfo {
                         nowPlayingInfo.progress = p / d
-                        self.nowPlayingInfo.accept(nowPlayingInfo)
+                        self.nowPlayingInfo = nowPlayingInfo
                     }
                 }
             }

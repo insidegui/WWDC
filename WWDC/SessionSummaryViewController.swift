@@ -7,13 +7,12 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
 import ConfCore
+import Combine
 
 class SessionSummaryViewController: NSViewController {
 
-    private var disposeBag = DisposeBag()
+    private var cancellables: Set<AnyCancellable> = []
 
     var viewModel: SessionViewModel? {
         didSet {
@@ -191,28 +190,35 @@ class SessionSummaryViewController: NSViewController {
 
         guard let viewModel = viewModel else { return }
 
-        disposeBag = DisposeBag()
+        cancellables = []
 
-        viewModel.rxTitle.map(NSAttributedString.attributedBoldTitle(with:)).subscribe(onNext: { [weak self] title in
-            self?.titleLabel.attributedStringValue = title
-        }).disposed(by: disposeBag)
-        viewModel.rxFooter.bind(to: contextLabel.rx.text).disposed(by: disposeBag)
+        viewModel
+            .rxTitle
+            .replaceError(with: "")
+            .map(NSAttributedString.attributedBoldTitle(with:))
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.attributedStringValue, onWeak: titleLabel)
+            .store(in: &cancellables)
+        viewModel.rxFooter.driveUI(\.stringValue, on: contextLabel, default: "").store(in: &cancellables)
 
-        viewModel.rxSummary.subscribe(onNext: { [weak self] summary in
+        viewModel.rxSummary.driveUI { [weak self] summary in
             guard let self = self else { return }
             guard let textStorage = self.summaryTextView.textStorage else { return }
             let range = NSRange(location: 0, length: textStorage.length)
             textStorage.replaceCharacters(in: range, with: self.attributedSummaryString(from: summary))
-        }).disposed(by: disposeBag)
+        }
+        .store(in: &cancellables)
 
-        viewModel.rxRelatedSessions.subscribe(onNext: { [weak self] relatedResources in
+        viewModel.rxRelatedSessions.driveUI { [weak self] relatedResources in
             let relatedSessions = relatedResources.compactMap({ $0.session })
             self?.relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
-        }).disposed(by: disposeBag)
+        }
+        .store(in: &cancellables)
 
         relatedSessionsViewController.scrollToBeginningOfDocument(nil)
 
-        viewModel.rxActionPrompt.bind(to: actionLinkLabel.rx.text).disposed(by: disposeBag)
+        // TODO: Not even sure what this does
+        viewModel.rxActionPrompt.map { $0 ?? "" }.driveUI(\.stringValue, on: actionLinkLabel, default: "").store(in: &cancellables)
     }
 
     @objc private func clickedActionLabel() {
