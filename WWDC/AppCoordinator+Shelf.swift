@@ -8,7 +8,6 @@
 
 import Cocoa
 import RealmSwift
-import RxSwift
 import ConfCore
 import PlayerUI
 import CoreMedia
@@ -181,7 +180,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
     }
 
     func publishNowPlayingInfo() {
-        currentPlayerController?.playerView.nowPlayingInfo = currentPlaybackViewModel?.nowPlayingInfo.value
+        currentPlayerController?.playerView.nowPlayingInfo = currentPlaybackViewModel?.nowPlayingInfo
     }
 
 }

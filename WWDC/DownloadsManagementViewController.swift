@@ -7,7 +7,7 @@
 //
 
 import ConfCore
-import RxSwift
+import Combine
 
 class DownloadsManagementViewController: NSViewController {
 
@@ -77,7 +77,7 @@ class DownloadsManagementViewController: NSViewController {
 
     let downloadManager: DownloadManager
     let storage: Storage
-    var disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     var downloads = [DownloadManager.Download]() {
         didSet {
@@ -104,13 +104,13 @@ class DownloadsManagementViewController: NSViewController {
 
         super.init(nibName: nil, bundle: nil)
 
-        downloadManager
-            .downloadsObservable
-            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-
-                self?.downloads = $0.sorted(by: DownloadManager.Download.sortingFunction)
-            }).disposed(by: disposeBag)
+//        downloadManager
+//            .$downloads
+//            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] in
+//
+//                self?.downloads = $0.sorted(by: DownloadManager.Download.sortingFunction)
+//            }).disposed(by: disposeBag)
     }
 
     required init?(coder: NSCoder) {

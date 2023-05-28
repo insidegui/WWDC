@@ -7,13 +7,33 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
 import ConfCore
+import Combine
+
+extension Publisher where Failure == Never {
+    func assign<Root: AnyObject>(
+        to keyPath: ReferenceWritableKeyPath<Root, Output>,
+        onWeak object: Root
+    ) -> AnyCancellable {
+        sink { [weak object] value in
+            object?[keyPath: keyPath] = value
+        }
+    }
+
+    func assignDebug<Root: AnyObject>(
+        to keyPath: ReferenceWritableKeyPath<Root, Output>,
+        onWeak object: Root
+    ) -> AnyCancellable {
+        sink { [weak object] value in
+            Swift.print("\(value)")
+            object?[keyPath: keyPath] = value
+        }
+    }
+}
 
 class SessionSummaryViewController: NSViewController {
 
-    private var disposeBag = DisposeBag()
+    private var cancellables: Set<AnyCancellable> = []
 
     var viewModel: SessionViewModel? {
         didSet {
@@ -191,28 +211,32 @@ class SessionSummaryViewController: NSViewController {
 
         guard let viewModel = viewModel else { return }
 
-        disposeBag = DisposeBag()
+        cancellables = []
 
-        viewModel.rxTitle.map(NSAttributedString.attributedBoldTitle(with:)).subscribe(onNext: { [weak self] title in
-            self?.titleLabel.attributedStringValue = title
-        }).disposed(by: disposeBag)
-        viewModel.rxFooter.bind(to: contextLabel.rx.text).disposed(by: disposeBag)
-
-        viewModel.rxSummary.subscribe(onNext: { [weak self] summary in
-            guard let self = self else { return }
-            guard let textStorage = self.summaryTextView.textStorage else { return }
-            let range = NSRange(location: 0, length: textStorage.length)
-            textStorage.replaceCharacters(in: range, with: self.attributedSummaryString(from: summary))
-        }).disposed(by: disposeBag)
-
-        viewModel.rxRelatedSessions.subscribe(onNext: { [weak self] relatedResources in
-            let relatedSessions = relatedResources.compactMap({ $0.session })
-            self?.relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
-        }).disposed(by: disposeBag)
-
-        relatedSessionsViewController.scrollToBeginningOfDocument(nil)
-
-        viewModel.rxActionPrompt.bind(to: actionLinkLabel.rx.text).disposed(by: disposeBag)
+        viewModel
+            .rxTitle
+            .replaceError(with: "")
+            .map(NSAttributedString.attributedBoldTitle(with:))
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.attributedStringValue, onWeak: titleLabel)
+            .store(in: &cancellables)
+//        viewModel.rxFooter.bind(to: contextLabel.rx.text).disposed(by: disposeBag)
+//
+//        viewModel.rxSummary.subscribe(onNext: { [weak self] summary in
+//            guard let self = self else { return }
+//            guard let textStorage = self.summaryTextView.textStorage else { return }
+//            let range = NSRange(location: 0, length: textStorage.length)
+//            textStorage.replaceCharacters(in: range, with: self.attributedSummaryString(from: summary))
+//        }).disposed(by: disposeBag)
+//
+//        viewModel.rxRelatedSessions.subscribe(onNext: { [weak self] relatedResources in
+//            let relatedSessions = relatedResources.compactMap({ $0.session })
+//            self?.relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
+//        }).disposed(by: disposeBag)
+//
+//        relatedSessionsViewController.scrollToBeginningOfDocument(nil)
+//
+//        viewModel.rxActionPrompt.bind(to: actionLinkLabel.rx.text).disposed(by: disposeBag)
     }
 
     @objc private func clickedActionLabel() {

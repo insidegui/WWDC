@@ -6,7 +6,7 @@
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 
-import RxSwift
+import Combine
 
 final class DownloadsManagementTableCellView: NSTableCellView {
 
@@ -35,7 +35,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         return status
     }
 
-    var disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     var viewModel: DownloadViewModel? {
         didSet {
@@ -55,7 +55,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
     }
 
     func bindUI() {
-        disposeBag = DisposeBag()
+        cancellables = []
 
         sessionTitleLabel.stringValue = viewModel?.session.title ?? "No ViewModel"
 
@@ -63,36 +63,36 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         let status = viewModel.status
         let download = viewModel.download
 
-        let throttledStatus = status.throttle(.milliseconds(100), latest: true, scheduler: MainScheduler.instance)
+//        let throttledStatus = status.throttle(.milliseconds(100), latest: true, scheduler: MainScheduler.instance)
+//
+//        throttledStatus
+//            .subscribe(onNext: { [weak self] status in
+//                guard let self = self else { return }
+//
+//                switch status {
+//                case .downloading(let info), .paused(let info):
+//                    if info.totalBytesExpectedToWrite > 0 {
+//                        self.progressIndicator.isIndeterminate = false
+//                        self.progressIndicator.doubleValue = info.progress
+//                    } else {
+//                        self.progressIndicator.isIndeterminate = true
+//                        self.progressIndicator.startAnimation(nil)
+//                    }
+//                    self.downloadStatusLabel.stringValue = DownloadsManagementTableCellView.statusString(for: info, download: download)
+//                case .finished, .cancelled, .none, .failed: ()
+//                }
+//            }).disposed(by: disposeBag)
 
-        throttledStatus
-            .subscribe(onNext: { [weak self] status in
-                guard let self = self else { return }
-
-                switch status {
-                case .downloading(let info), .paused(let info):
-                    if info.totalBytesExpectedToWrite > 0 {
-                        self.progressIndicator.isIndeterminate = false
-                        self.progressIndicator.doubleValue = info.progress
-                    } else {
-                        self.progressIndicator.isIndeterminate = true
-                        self.progressIndicator.startAnimation(nil)
-                    }
-                    self.downloadStatusLabel.stringValue = DownloadsManagementTableCellView.statusString(for: info, download: download)
-                case .finished, .cancelled, .none, .failed: ()
-                }
-            }).disposed(by: disposeBag)
-
-        status
-            .map { status -> NSControl.StateValue in
-                if case .downloading = status {
-                    return NSControl.StateValue.off
-                }
-                return NSControl.StateValue.on
-            }
-            .distinctUntilChanged()
-            .bind(to: suspendResumeButton.rx.state)
-            .disposed(by: disposeBag)
+//        status
+//            .map { status -> NSControl.StateValue in
+//                if case .downloading = status {
+//                    return NSControl.StateValue.off
+//                }
+//                return NSControl.StateValue.on
+//            }
+//            .distinctUntilChanged()
+//            .bind(to: suspendResumeButton.rx.state)
+//            .disposed(by: disposeBag)
     }
 
     private lazy var sessionTitleLabel: NSTextField = {

@@ -7,8 +7,7 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 
 final class ScheduleContainerViewController: NSViewController {
 
@@ -25,7 +24,8 @@ final class ScheduleContainerViewController: NSViewController {
     }
 
     /// This should be bound to a state that returns `true` when the schedule is not available.
-    private(set) var showHeroView = BehaviorRelay<Bool>(value: false)
+    @Published
+    private(set) var showHeroView = false
 
     private(set) lazy var heroController: EventHeroViewController = {
         EventHeroViewController()
@@ -60,7 +60,7 @@ final class ScheduleContainerViewController: NSViewController {
         ])
     }
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,14 +69,14 @@ final class ScheduleContainerViewController: NSViewController {
     }
 
     private func bindViews() {
-        showHeroView.asDriver()
-                           .drive(splitViewController.view.rx.isHidden)
-                           .disposed(by: disposeBag)
-
-        showHeroView.asDriver()
-                           .map({ !$0 })
-                           .drive(heroController.view.rx.isHidden)
-                           .disposed(by: disposeBag)
+//        showHeroView.asDriver()
+//                           .drive(splitViewController.view.rx.isHidden)
+//                           .disposed(by: disposeBag)
+//
+//        showHeroView.asDriver()
+//                           .map({ !$0 })
+//                           .drive(heroController.view.rx.isHidden)
+//                           .disposed(by: disposeBag)
     }
     
 }

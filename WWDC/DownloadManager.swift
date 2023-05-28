@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import RxSwift
+import Combine
 import ConfCore
 import RealmSwift
 import os.log
@@ -32,13 +32,14 @@ final class DownloadManager: NSObject {
     private var backgroundSession: Foundation.URLSession!
     private var downloadTasks: [String: Download] = [:] {
         didSet {
-            downloadTasksSubject.onNext(Array(downloadTasks.values))
+            downloads = Array(downloadTasks.values)
         }
     }
-    private let downloadTasksSubject = BehaviorSubject<[Download]>(value: [])
-    var downloadsObservable: Observable<[Download]> {
-        return downloadTasksSubject.asObservable()
-    }
+    @Published private(set) var downloads: [Download] = []
+//    private let downloadTasksSubject = BehaviorSubject<[Download]>(value: [])
+//    var downloadsObservable: Observable<[Download]> {
+//        return downloadTasksSubject.asObservable()
+//    }
     private let defaults = UserDefaults.standard
 
     var storage: Storage!
@@ -178,109 +179,109 @@ final class DownloadManager: NSObject {
         }
     }
 
-    func downloadStatusObservable(for download: Download) -> Observable<DownloadStatus>? {
+    func downloadStatusObservable(for download: Download) -> AnyPublisher<DownloadStatus, Never>? {
         guard let remoteURL = URL(string: download.remoteURL) else { return nil }
         guard let downloadingAsset = storage.asset(with: remoteURL) else { return nil }
 
         return downloadStatusObservable(for: downloadingAsset)
     }
 
-    func downloadStatusObservable(for session: Session) -> Observable<DownloadStatus>? {
+    func downloadStatusObservable(for session: Session) -> AnyPublisher<DownloadStatus, Never>? {
         guard let asset = session.asset(ofType: DownloadManager.downloadQuality) else { return nil }
 
         return downloadStatusObservable(for: asset)
     }
 
-    private func downloadStatusObservable(for asset: SessionAsset) -> Observable<DownloadStatus>? {
-
-        return Observable<DownloadStatus>.create { observer -> Disposable in
-            let nc = NotificationCenter.default
-            var latestInfo: DownloadInfo = .unknown
-
-            let checkDownloadedState = {
-                if let download = self.downloadTasks[asset.remoteURL],
-                    let task = download.task {
-
-                    latestInfo = DownloadInfo(task: task)
-
-                    switch task.state {
-                    case .running:
-                        observer.onNext(.downloading(latestInfo))
-                    case .suspended:
-                        observer.onNext(.paused(latestInfo))
-                    case .canceling:
-                        observer.onNext(.cancelled)
-                    case .completed:
-                        observer.onNext(.finished)
-                    @unknown default:
-                        assertionFailure("An unexpected case was discovered on an non-frozen obj-c enum")
-                        observer.onNext(.downloading(latestInfo))
-                    }
-                } else if self.hasDownloadedVideo(remoteURL: asset.remoteURL) {
-                    observer.onNext(.finished)
-                } else {
-                    observer.onNext(.none)
-                }
-            }
-
-            checkDownloadedState()
-
-            let fileDeleted = nc.dm_addObserver(forName: .DownloadManagerFileDeletedNotification, filteredBy: asset.relativeLocalURL) { _ in
-
-                observer.onNext(.none)
-            }
-
-            let fileAdded = nc.dm_addObserver(forName: .DownloadManagerFileAddedNotification, filteredBy: asset.relativeLocalURL) { _ in
-
-                observer.onNext(.finished)
-            }
-
-            let started = nc.dm_addObserver(forName: .DownloadManagerDownloadStarted, filteredBy: asset.remoteURL) { _ in
-
-                observer.onNext(.downloading(.unknown))
-            }
-
-            let cancelled = nc.dm_addObserver(forName: .DownloadManagerDownloadCancelled, filteredBy: asset.remoteURL) { _ in
-
-                observer.onNext(.cancelled)
-            }
-
-            let paused = nc.dm_addObserver(forName: .DownloadManagerDownloadPaused, filteredBy: asset.remoteURL) { _ in
-
-                observer.onNext(.paused(latestInfo))
-            }
-
-            let resumed = nc.dm_addObserver(forName: .DownloadManagerDownloadResumed, filteredBy: asset.remoteURL) { _ in
-
-                observer.onNext(.downloading(latestInfo))
-            }
-
-            let failed = nc.dm_addObserver(forName: .DownloadManagerDownloadFailed, filteredBy: asset.remoteURL) { note in
-
-                let error = note.userInfo?["error"] as? Error
-                observer.onNext(.failed(error))
-            }
-
-            let finished = nc.dm_addObserver(forName: .DownloadManagerDownloadFinished, filteredBy: asset.remoteURL) { _ in
-
-                observer.onNext(.finished)
-            }
-
-            let progress = nc.dm_addObserver(forName: .DownloadManagerDownloadProgressChanged, filteredBy: asset.remoteURL) { note in
-
-                if let info = note.userInfo?["info"] as? DownloadInfo {
-                    latestInfo = info
-                    observer.onNext(.downloading(info))
-                } else {
-                    observer.onNext(.downloading(.unknown))
-                }
-            }
-
-            return Disposables.create {
-                [fileDeleted, fileAdded, started, cancelled,
-                 paused, resumed, failed, finished, progress].forEach(nc.removeObserver)
-            }
-        }
+    private func downloadStatusObservable(for asset: SessionAsset) -> AnyPublisher<DownloadStatus, Never>? {
+        return Empty<DownloadStatus, Never>().eraseToAnyPublisher()
+//        return Observable<DownloadStatus>.create { observer -> Disposable in
+//            let nc = NotificationCenter.default
+//            var latestInfo: DownloadInfo = .unknown
+//
+//            let checkDownloadedState = {
+//                if let download = self.downloadTasks[asset.remoteURL],
+//                    let task = download.task {
+//
+//                    latestInfo = DownloadInfo(task: task)
+//
+//                    switch task.state {
+//                    case .running:
+//                        observer.onNext(.downloading(latestInfo))
+//                    case .suspended:
+//                        observer.onNext(.paused(latestInfo))
+//                    case .canceling:
+//                        observer.onNext(.cancelled)
+//                    case .completed:
+//                        observer.onNext(.finished)
+//                    @unknown default:
+//                        assertionFailure("An unexpected case was discovered on an non-frozen obj-c enum")
+//                        observer.onNext(.downloading(latestInfo))
+//                    }
+//                } else if self.hasDownloadedVideo(remoteURL: asset.remoteURL) {
+//                    observer.onNext(.finished)
+//                } else {
+//                    observer.onNext(.none)
+//                }
+//            }
+//
+//            checkDownloadedState()
+//
+//            let fileDeleted = nc.dm_addObserver(forName: .DownloadManagerFileDeletedNotification, filteredBy: asset.relativeLocalURL) { _ in
+//
+//                observer.onNext(.none)
+//            }
+//
+//            let fileAdded = nc.dm_addObserver(forName: .DownloadManagerFileAddedNotification, filteredBy: asset.relativeLocalURL) { _ in
+//
+//                observer.onNext(.finished)
+//            }
+//
+//            let started = nc.dm_addObserver(forName: .DownloadManagerDownloadStarted, filteredBy: asset.remoteURL) { _ in
+//
+//                observer.onNext(.downloading(.unknown))
+//            }
+//
+//            let cancelled = nc.dm_addObserver(forName: .DownloadManagerDownloadCancelled, filteredBy: asset.remoteURL) { _ in
+//
+//                observer.onNext(.cancelled)
+//            }
+//
+//            let paused = nc.dm_addObserver(forName: .DownloadManagerDownloadPaused, filteredBy: asset.remoteURL) { _ in
+//
+//                observer.onNext(.paused(latestInfo))
+//            }
+//
+//            let resumed = nc.dm_addObserver(forName: .DownloadManagerDownloadResumed, filteredBy: asset.remoteURL) { _ in
+//
+//                observer.onNext(.downloading(latestInfo))
+//            }
+//
+//            let failed = nc.dm_addObserver(forName: .DownloadManagerDownloadFailed, filteredBy: asset.remoteURL) { note in
+//
+//                let error = note.userInfo?["error"] as? Error
+//                observer.onNext(.failed(error))
+//            }
+//
+//            let finished = nc.dm_addObserver(forName: .DownloadManagerDownloadFinished, filteredBy: asset.remoteURL) { _ in
+//
+//                observer.onNext(.finished)
+//            }
+//
+//            let progress = nc.dm_addObserver(forName: .DownloadManagerDownloadProgressChanged, filteredBy: asset.remoteURL) { note in
+//
+//                if let info = note.userInfo?["info"] as? DownloadInfo {
+//                    latestInfo = info
+//                    observer.onNext(.downloading(info))
+//                } else {
+//                    observer.onNext(.downloading(.unknown))
+//                }
+//            }
+//
+//            return Disposables.create {
+//                [fileDeleted, fileAdded, started, cancelled,
+//                 paused, resumed, failed, finished, progress].forEach(nc.removeObserver)
+//            }
+//        }
     }
 
     // MARK: - URL-based Internal API

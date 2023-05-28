@@ -10,8 +10,7 @@ import Foundation
 import CloudKit
 import CloudKitCodable
 import RealmSwift
-import RxCocoa
-import RxSwift
+import Combine
 import os.log
 
 public final class UserDataSyncEngine {
@@ -94,7 +93,7 @@ public final class UserDataSyncEngine {
         }
     }
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     public func start() {
         guard ConfCoreCapabilities.isCloudKitEnabled else { return }
@@ -109,20 +108,20 @@ public final class UserDataSyncEngine {
         // Only start the sync engine if there's an iCloud account available, if availability is not
         // determined yet, start the sync engine after the account availability is known and == available
 
-        guard isAccountAvailable.value else {
+        guard isAccountAvailable else {
             os_log("iCloud account is not available yet, waiting for availability to start", log: log, type: .info)
             isWaitingForAccountAvailabilityToStart = true
 
-            isAccountAvailable.asObservable().observe(on: MainScheduler.instance).subscribe(onNext: { [unowned self] available in
-                guard self.isWaitingForAccountAvailabilityToStart else { return }
-
-                os_log("iCloud account available = %{public}@", log: self.log, type: .info, String(describing: available))
-
-                if available {
-                    self.isWaitingForAccountAvailabilityToStart = false
-                    self.start()
-                }
-            }).disposed(by: disposeBag)
+//            isAccountAvailable.asObservable().observe(on: MainScheduler.instance).subscribe(onNext: { [unowned self] available in
+//                guard self.isWaitingForAccountAvailabilityToStart else { return }
+//
+//                os_log("iCloud account available = %{public}@", log: self.log, type: .info, String(describing: available))
+//
+//                if available {
+//                    self.isWaitingForAccountAvailabilityToStart = false
+//                    self.start()
+//                }
+//            }).disposed(by: disposeBag)
 
             return
         }
@@ -139,20 +138,23 @@ public final class UserDataSyncEngine {
         }
     }
 
-    public private(set) var isStopping = BehaviorRelay<Bool>(value: false)
+    @Published
+    public private(set) var isStopping = false
 
-    public private(set) var isPerformingSyncOperation = BehaviorRelay<Bool>(value: false)
+    @Published
+    public private(set) var isPerformingSyncOperation = false
 
-    public private(set) var isAccountAvailable = BehaviorRelay<Bool>(value: false)
+    @Published
+    public private(set) var isAccountAvailable = false
 
     public func stop(harsh: Bool = false) {
-        guard isRunning, !isStopping.value else { return }
-        isStopping.accept(true)
+        guard isRunning, !isStopping else { return }
+        isStopping = true
 
         workQueue.async { [unowned self] in
             defer {
                 DispatchQueue.main.async {
-                    self.isStopping.accept(false)
+                    self.isStopping = false
                     self.isRunning = false
                 }
             }
@@ -176,7 +178,7 @@ public final class UserDataSyncEngine {
 
     private func startObservingSyncOperations() {
         cloudQueueObservation = cloudOperationQueue.observe(\.operationCount) { [unowned self] queue, _ in
-            self.isPerformingSyncOperation.accept(queue.operationCount > 0)
+            self.isPerformingSyncOperation = queue.operationCount > 0
         }
     }
 
@@ -210,9 +212,9 @@ public final class UserDataSyncEngine {
 
             switch status {
             case .available:
-                self.isAccountAvailable.accept(true)
+                self.isAccountAvailable = true
             default:
-                self.isAccountAvailable.accept(false)
+                self.isAccountAvailable = false
             }
         }
     }

@@ -7,8 +7,7 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 
 class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Tab.RawValue == Int {
 
@@ -21,11 +20,8 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         }
     }
 
-    private var activeTabVar = BehaviorRelay<Tab>(value: Tab(rawValue: 0)!)
-
-    var rxActiveTab: Observable<Tab> {
-        return activeTabVar.asObservable()
-    }
+    @Published
+    private(set) var activeTabVar = Tab(rawValue: 0)!
 
     override var selectedTabViewItemIndex: Int {
         didSet {
@@ -43,7 +39,7 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
                 }
             }
 
-            activeTabVar.accept(Tab(rawValue: selectedTabViewItemIndex)!)
+            activeTabVar = Tab(rawValue: selectedTabViewItemIndex)!
         }
     }
 

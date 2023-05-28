@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import RxSwift
-import RxCocoa
 import os.log
 
 final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol {
@@ -37,8 +35,10 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
         transcriptIndexingConnection.resume()
     }
 
-    private(set) var isIndexing = BehaviorRelay<Bool>(value: false)
-    private(set) var indexingProgress = BehaviorRelay<Float>(value: 0)
+    @Published
+    private(set) var isIndexing = false
+    @Published
+    private(set) var indexingProgress: Float = 0
 
     private var didRunService = false
 
@@ -126,17 +126,17 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
     func transcriptIndexingStarted() {
         os_log("%{public}@", log: log, type: .debug, #function)
 
-        isIndexing.accept(true)
+        isIndexing = true
     }
 
     func transcriptIndexingProgressDidChange(_ progress: Float) {
-        indexingProgress.accept(progress)
+        indexingProgress = progress
     }
 
     func transcriptIndexingStopped() {
         os_log("%{public}@", log: log, type: .debug, #function)
 
-        isIndexing.accept(false)
+        isIndexing = false
     }
 
 }

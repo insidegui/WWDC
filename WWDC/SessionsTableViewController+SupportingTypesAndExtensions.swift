@@ -8,8 +8,7 @@
 
 import ConfCore
 import RealmSwift
-import RxRealm
-import RxSwift
+import Combine
 import os.log
 
 /// Conforming to this protocol means the type is capable
@@ -96,8 +95,8 @@ final class FilterResults {
 
     private(set) var latestSearchResults: Results<Session>?
 
-    private var disposeBag = DisposeBag()
-    private let nowPlayingBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
+    private var nowPlayingBag: Set<AnyCancellable> = []
 
     private var observerClosure: ((Results<Session>?) -> Void)?
     private var observerToken: NotificationToken?
@@ -109,10 +108,11 @@ final class FilterResults {
         if let coordinator = (NSApplication.shared.delegate as? AppDelegate)?.coordinator {
 
             coordinator
-                .rxPlayerOwnerSessionIdentifier
-                .subscribe(onNext: { [weak self] _ in
+                .$playerOwnerSessionIdentifier
+                .sink(receiveValue: { [weak self] _ in
                     self?.bindResults()
-                }).disposed(by: nowPlayingBag)
+                })
+                .store(in: &nowPlayingBag)
         }
     }
 
@@ -133,26 +133,26 @@ final class FilterResults {
         guard let observerClosure = observerClosure else { return }
         guard let storage = storage, let query = query?.orCurrentlyPlayingSession() else { return }
 
-        disposeBag = DisposeBag()
+        cancellables = []
 
-        do {
-            let realm = try Realm(configuration: storage.realmConfig)
-
-            let objects = realm.objects(Session.self).filter(query)
-
-            Observable
-                .shallowCollection(from: objects, synchronousStart: true)
-                .subscribe(onNext: { [weak self] in
-                    self?.latestSearchResults = $0
-                    observerClosure($0)
-                }).disposed(by: disposeBag)
-        } catch {
-            observerClosure(nil)
-            os_log("Failed to initialize Realm for searching: %{public}@",
-                   log: .default,
-                   type: .error,
-                   String(describing: error))
-        }
+//        do {
+//            let realm = try Realm(configuration: storage.realmConfig)
+//
+//            let objects = realm.objects(Session.self).filter(query)
+//
+//            Observable
+//                .shallowCollection(from: objects, synchronousStart: true)
+//                .subscribe(onNext: { [weak self] in
+//                    self?.latestSearchResults = $0
+//                    observerClosure($0)
+//                }).disposed(by: disposeBag)
+//        } catch {
+//            observerClosure(nil)
+//            os_log("Failed to initialize Realm for searching: %{public}@",
+//                   log: .default,
+//                   type: .error,
+//                   String(describing: error))
+//        }
     }
 }
 
@@ -168,51 +168,51 @@ fileprivate extension NSPredicate {
     }
 }
 
-public extension ObservableType where Element: NotificationEmitter {
-
-    /**
-     Returns an `Observable<E>` that emits each time elements are added or removed from the collection.
-     The observable emits an initial value upon subscription. Similar to `collection(from:synchronousStart)` but
-     is limited to emitting when elements are added or removed from the collection. Useful for less brute-forcey UI
-     updates.
-
-     - parameter from: A Realm collection of type `E`: either `Results`, `List`, `LinkingObjects` or `AnyRealmCollection`.
-     - parameter synchronousStart: whether the resulting `Observable` should emit its first element synchronously (e.g. better for UI bindings)
-
-     - returns: `Observable<E>`, e.g. when called on `Results<Model>` it will return `Observable<Results<Model>>`, on a `List<User>` it will return `Observable<List<User>>`, etc.
-     */
-    static func shallowCollection(from collection: Element, synchronousStart: Bool = true)
-        -> Observable<Element> {
-
-            return Observable.create { observer in
-                if synchronousStart {
-                    observer.onNext(collection)
-                }
-
-                let token = collection.observe(keyPaths: nil, on: nil) { changeset in
-
-                    var value: Element?
-
-                    switch changeset {
-                    case .initial(let latestValue):
-                        guard !synchronousStart else { return }
-                        value = latestValue
-
-                    case .update(let latestValue, let deletions, let insertions, _) where !deletions.isEmpty || !insertions.isEmpty:
-                        value = latestValue
-
-                    case .error(let error):
-                        observer.onError(error)
-                        return
-                    default: ()
-                    }
-
-                    value.map(observer.onNext)
-                }
-
-                return Disposables.create {
-                    token.invalidate()
-                }
-            }
-    }
-}
+//public extension ObservableType where Element: NotificationEmitter {
+//
+//    /**
+//     Returns an `Observable<E>` that emits each time elements are added or removed from the collection.
+//     The observable emits an initial value upon subscription. Similar to `collection(from:synchronousStart)` but
+//     is limited to emitting when elements are added or removed from the collection. Useful for less brute-forcey UI
+//     updates.
+//
+//     - parameter from: A Realm collection of type `E`: either `Results`, `List`, `LinkingObjects` or `AnyRealmCollection`.
+//     - parameter synchronousStart: whether the resulting `Observable` should emit its first element synchronously (e.g. better for UI bindings)
+//
+//     - returns: `Observable<E>`, e.g. when called on `Results<Model>` it will return `Observable<Results<Model>>`, on a `List<User>` it will return `Observable<List<User>>`, etc.
+//     */
+//    static func shallowCollection(from collection: Element, synchronousStart: Bool = true)
+//        -> Observable<Element> {
+//
+//            return Observable.create { observer in
+//                if synchronousStart {
+//                    observer.onNext(collection)
+//                }
+//
+//                let token = collection.observe(keyPaths: nil, on: nil) { changeset in
+//
+//                    var value: Element?
+//
+//                    switch changeset {
+//                    case .initial(let latestValue):
+//                        guard !synchronousStart else { return }
+//                        value = latestValue
+//
+//                    case .update(let latestValue, let deletions, let insertions, _) where !deletions.isEmpty || !insertions.isEmpty:
+//                        value = latestValue
+//
+//                    case .error(let error):
+//                        observer.onError(error)
+//                        return
+//                    default: ()
+//                    }
+//
+//                    value.map(observer.onNext)
+//                }
+//
+//                return Disposables.create {
+//                    token.invalidate()
+//                }
+//            }
+//    }
+//}

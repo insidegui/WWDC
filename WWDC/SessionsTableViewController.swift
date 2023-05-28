@@ -7,8 +7,7 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 import RealmSwift
 import ConfCore
 import os.log
@@ -17,11 +16,12 @@ import os.log
 
 class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    var selectedSession = BehaviorRelay<SessionViewModel?>(value: nil)
+    @Published
+    var selectedSession: SessionViewModel?
 
     let style: SessionsListStyle
 
@@ -85,12 +85,16 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
         setupContextualMenu()
 
-        tableView.rx.selectedRow.map { index -> SessionViewModel? in
-            guard let index = index else { return nil }
-            guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
-
-            return viewModel
-        }.bind(to: selectedSession).disposed(by: disposeBag)
+//        tableView.rx.selectedRow.map { index -> SessionViewModel? in
+//            guard let index = index else { return nil }
+//            guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
+//
+//            return viewModel
+//        }
+//        .subscribe(onNext: { [weak self] in
+//            self?.selectedSession = $0
+//        })
+//        .disposed(by: disposeBag)
     }
 
     override func viewDidAppear() {
