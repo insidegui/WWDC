@@ -9,31 +9,15 @@
 import Cocoa
 import ConfCore
 import PlayerUI
-import RxSwift
-import RxCocoa
-
-extension Notification.Name {
-    fileprivate static let WWDCTextViewTextChanged = Notification.Name("WWDCTextViewTextChanged")
-}
+import Combine
 
 private final class WWDCTextView: NSTextView {
-
-    lazy var rxText: Observable<String> = {
-        return Observable<String>.create { [weak self] observer -> Disposable in
-            let token = NotificationCenter.default.addObserver(forName: .WWDCTextViewTextChanged, object: self, queue: OperationQueue.main) { _ in
-                observer.onNext(self?.string ?? "")
-            }
-
-            return Disposables.create {
-                NotificationCenter.default.removeObserver(token)
-            }
-        }
-    }()
+    @Published var stringPublished: String = ""
 
     override func didChangeText() {
         super.didChangeText()
 
-        NotificationCenter.default.post(name: .WWDCTextViewTextChanged, object: self)
+        stringPublished = string
     }
 }
 
@@ -113,7 +97,7 @@ final class BookmarkViewController: NSViewController {
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,11 +105,11 @@ final class BookmarkViewController: NSViewController {
         imageView.image = NSImage(data: bookmark.snapshot)
         textView.string = bookmark.body
 
-        textView.rxText.throttle(.seconds(1), scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] text in
+        textView.$stringPublished.throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true).sink(receiveValue: { [weak self] text in
             guard let bookmark = self?.bookmark else { return }
 
             self?.storage.modify(bookmark) { $0.body = text }
-        }).disposed(by: disposeBag)
+        }).store(in: &cancellables)
     }
 
 }

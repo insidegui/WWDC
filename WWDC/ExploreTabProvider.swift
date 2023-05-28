@@ -2,7 +2,6 @@ import Cocoa
 import SwiftUI
 import Combine
 import ConfCore
-import RxSwift
 import RealmSwift
 
 final class ExploreTabProvider: ObservableObject {
@@ -15,11 +14,11 @@ final class ExploreTabProvider: ObservableObject {
     @Published private(set) var content: ExploreTabContent?
     @Published var scrollOffset = CGPoint.zero
 
-    private lazy var featuredSectionsObservable: Observable<Results<FeaturedSection>> = {
+    private lazy var featuredSectionsObservable: some Publisher<Results<FeaturedSection>, Error> = {
         storage.featuredSectionsObservable
     }()
 
-    private lazy var continueWatchingSessionsObservable: Observable<[Session]> = {
+    private lazy var continueWatchingSessionsObservable: some Publisher<[Session], Error> = {
         let cutoffDate = Calendar.current.date(byAdding: Constants.continueWatchingMaxLastProgressUpdateInterval, to: Date()) ?? Date.distantPast
 
         let videoPredicate = Session.videoPredicate
@@ -28,7 +27,7 @@ final class ExploreTabProvider: ObservableObject {
         let sessions = storage.realm.objects(Session.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [videoPredicate, progressPredicate]))
 
-        return Observable.collection(from: sessions).map {
+        return sessions.collectionPublisher.map {
             Array($0.sorted(by: {
                 guard let p1 = $0.progresses.first else { return false }
                 guard let p2 = $1.progresses.first else { return false }
@@ -38,7 +37,7 @@ final class ExploreTabProvider: ObservableObject {
         }
     }()
 
-    private lazy var recentFavoriteSessionsObservable: Observable<[Session]> = {
+    private lazy var recentFavoriteSessionsObservable: some Publisher<[Session], Error> = {
         let cutoffDate = Calendar.current.date(byAdding: Constants.recentFavoritesMaxDateInterval, to: Date()) ?? Date.distantPast
 
         let favoritePredicate = NSPredicate(format: "createdAt >= %@ AND isDeleted = false", cutoffDate as NSDate)
@@ -47,30 +46,30 @@ final class ExploreTabProvider: ObservableObject {
             .filter(favoritePredicate)
             .sorted(byKeyPath: "createdAt", ascending: false)
 
-        return Observable.collection(from: favorites).map {
+        return favorites.collectionPublisher.map {
             Array($0.compactMap { $0.session.first }
                 .prefix(Constants.maxRecentFavoritesItems))
         }
     }()
 
-    private lazy var topicsObservable: Observable<[Track]> = {
+    private lazy var topicsObservable: some Publisher<[Track], Error> = {
         let tracks = storage.realm.objects(Track.self)
             .filter(NSPredicate(format: "sessions.@count >= 1 OR instances.@count >= 1"))
             .sorted(byKeyPath: "name")
 
-        return Observable.collection(from: tracks).map({ $0.toArray() })
+        return tracks.collectionPublisher.map({ $0.toArray() })
     }()
 
-    private lazy var liveEventObservable: Observable<Session?> = {
+    private lazy var liveEventObservable: some Publisher<Session?, Error> = {
         let liveInstances = storage.realm.objects(SessionInstance.self)
             .filter("rawSessionType == 'Special Event' AND isCurrentlyLive == true")
             .sorted(byKeyPath: "startTime", ascending: false)
 
-        return Observable.collection(from: liveInstances)
+        return liveInstances.collectionPublisher
             .map({ $0.toArray().first?.session })
     }()
 
-    private var disposeBag = DisposeBag()
+    private var cancellables: Set<AnyCancellable> = []
 
     fileprivate struct SourceData {
         var featuredSections: Results<FeaturedSection>
@@ -81,24 +80,26 @@ final class ExploreTabProvider: ObservableObject {
     }
 
     func activate() {
-        Observable.combineLatest(
+        Publishers.CombineLatest4(
             featuredSectionsObservable,
             continueWatchingSessionsObservable,
             recentFavoriteSessionsObservable,
-            topicsObservable,
-            liveEventObservable
-        )
-        .filter { !$0.isEmpty || !$1.isEmpty || !$2.isEmpty || !$3.isEmpty || $4 != nil }
-        .subscribe(on: MainScheduler.instance)
-        .map(SourceData.init)
-        .subscribe(onNext: { [weak self] data in
-            self?.update(with: data)
+            topicsObservable
+        ).combineLatest(liveEventObservable, { first, second in
+            (first.0, first.1, first.2, first.3, second)
         })
-        .disposed(by: disposeBag)
+        .replaceErrorWithEmpty()
+        .filter { !$0.isEmpty || !$1.isEmpty || !$2.isEmpty || !$3.isEmpty || $4 != nil }
+        .map(SourceData.init)
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] data in
+            self?.update(with: data)
+        }
+        .store(in: &cancellables)
     }
 
     func invalidate() {
-        disposeBag = DisposeBag()
+        cancellables = []
     }
 
     private func update(with data: SourceData) {

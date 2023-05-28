@@ -7,8 +7,7 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 import RealmSwift
 import ConfCore
 import OSLog
@@ -17,11 +16,12 @@ import OSLog
 
 class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    var selectedSession = BehaviorRelay<SessionViewModel?>(value: nil)
+    @Published
+    var selectedSession: SessionViewModel?
 
     let style: SessionsListStyle
 
@@ -84,13 +84,6 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         tableView.delegate = self
 
         setupContextualMenu()
-
-        tableView.rx.selectedRow.map { index -> SessionViewModel? in
-            guard let index = index else { return nil }
-            guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
-
-            return viewModel
-        }.bind(to: selectedSession).disposed(by: disposeBag)
     }
 
     override func viewDidAppear() {
@@ -584,6 +577,19 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     struct Metrics {
         static let headerRowHeight: CGFloat = 32
         static let sessionRowHeight: CGFloat = 64
+    }
+
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        let numberOfRows = tableView.numberOfRows
+        let selectedRow = tableView.selectedRow
+
+        let row: Int? = (0..<numberOfRows).contains(selectedRow) ? selectedRow : nil
+
+        if let row, case .session(let viewModel) = self.displayedRows[row].kind {
+            selectedSession = viewModel
+        } else {
+            selectedSession = nil
+        }
     }
 
     func numberOfRows(in tableView: NSTableView) -> Int {

@@ -9,8 +9,7 @@
 import Cocoa
 import ConfCore
 import RealmSwift
-import RxSwift
-import RxCocoa
+import Combine
 
 extension Notification.Name {
     static let TranscriptControllerDidSelectAnnotation = Notification.Name("TranscriptControllerDidSelectAnnotation")
@@ -127,7 +126,7 @@ final class SessionTranscriptViewController: NSViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(highlightTranscriptLine), name: .HighlightTranscriptAtCurrentTimecode, object: nil)
     }
 
-    private var disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     private lazy var annotations = List<TranscriptAnnotation>()
     private lazy var filteredAnnotations: [TranscriptAnnotation] = []
@@ -135,21 +134,26 @@ final class SessionTranscriptViewController: NSViewController {
     private func updateUI() {
         guard let viewModel = viewModel else { return }
 
-        disposeBag = DisposeBag()
+        cancellables = []
 
-        viewModel.rxTranscriptAnnotations.observe(on: MainScheduler.instance)
-                                         .subscribe(onNext: { [weak self] annotations in
-            self?.updateAnnotations(with: annotations)
-        }).disposed(by: disposeBag)
+        viewModel
+            .rxTranscriptAnnotations
+            .driveUI { [weak self] annotations in
+                self?.updateAnnotations(with: annotations)
+            }
+            .store(in: &cancellables)
 
-        searchController.searchTerm.subscribe(onNext: { [weak self] term in
-            self?.updateFilter(with: term)
-        }).disposed(by: disposeBag)
+        searchController
+            .$searchTerm
+            .driveUI { [weak self] term in
+                self?.updateFilter(with: term)
+            }
+            .store(in: &cancellables)
     }
 
     private func updateAnnotations(with newAnnotations: List<TranscriptAnnotation>) {
         annotations = newAnnotations
-        updateFilter(with: searchController.searchTerm.value)
+        updateFilter(with: searchController.searchTerm)
     }
 
     private func updateFilter(with term: String?) {

@@ -7,8 +7,7 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 import CoreMedia
 
 protocol ShelfViewControllerDelegate: AnyObject {
@@ -22,7 +21,7 @@ class ShelfViewController: NSViewController {
 
     weak var delegate: ShelfViewControllerDelegate?
 
-    private var disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     var viewModel: SessionViewModel? {
         didSet {
@@ -96,16 +95,16 @@ class ShelfViewController: NSViewController {
     private weak var currentImageDownloadOperation: Operation?
 
     private func updateBindings() {
-        disposeBag = DisposeBag()
+        cancellables = []
 
         guard let viewModel = viewModel else {
             shelfView.image = nil
             return
         }
 
-        viewModel.rxCanBePlayed.map({ !$0 }).bind(to: playButton.rx.isHidden).disposed(by: disposeBag)
+        viewModel.rxCanBePlayed.toggled().replaceError(with: true).driveUI(\.isHidden, on: playButton).store(in: &cancellables)
 
-        viewModel.rxImageUrl.subscribe(onNext: { [weak self] imageUrl in
+        viewModel.rxImageUrl.replaceErrorWithEmpty().sink { [weak self] imageUrl in
             self?.currentImageDownloadOperation?.cancel()
             self?.currentImageDownloadOperation = nil
 
@@ -117,7 +116,8 @@ class ShelfViewController: NSViewController {
             self?.currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, result in
                 self?.shelfView.image = result.original
             }
-        }).disposed(by: disposeBag)
+        }
+        .store(in: &cancellables)
     }
 
     @objc func play(_ sender: Any?) {

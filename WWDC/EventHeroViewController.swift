@@ -8,12 +8,12 @@
 
 import Cocoa
 import ConfCore
-import RxSwift
-import RxCocoa
+import Combine
 
 public final class EventHeroViewController: NSViewController {
 
-    private(set) var hero = BehaviorRelay<EventHero?>(value: nil)
+    @Published
+    var hero: EventHero?
 
     private lazy var backgroundImageView: FullBleedImageView = {
         let v = FullBleedImageView()
@@ -139,12 +139,12 @@ public final class EventHeroViewController: NSViewController {
 
     private var imageDownloadOperation: Operation?
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     private func bindViews() {
-        let image = hero.compactMap({ $0?.backgroundImage }).compactMap(URL.init)
+        let image = $hero.compactMap({ $0?.backgroundImage }).compactMap(URL.init)
 
-        image.distinctUntilChanged().subscribe(onNext: { [weak self] imageUrl in
+        image.driveUI { [weak self] imageUrl in
             guard let self = self else { return }
 
             self.imageDownloadOperation?.cancel()
@@ -154,14 +154,14 @@ public final class EventHeroViewController: NSViewController {
 
                 self.backgroundImageView.image = result.original
             }
-        }).disposed(by: disposeBag)
+        }.store(in: &cancellables)
 
-        let heroUnavailable = hero.map({ $0 == nil })
-        heroUnavailable.bind(to: backgroundImageView.rx.isHidden).disposed(by: disposeBag)
-        heroUnavailable.map({ !$0 }).bind(to: placeholderImageView.rx.isHidden).disposed(by: disposeBag)
+        let heroUnavailable = $hero.map({ $0 == nil })
+        heroUnavailable.replaceError(with: true).driveUI(\.isHidden, on: backgroundImageView).store(in: &cancellables)
+        heroUnavailable.toggled().replaceError(with: false).driveUI(\.isHidden, on: placeholderImageView).store(in: &cancellables)
 
-        hero.map({ $0?.title ?? "Schedule not available" }).bind(to: titleLabel.rx.text).disposed(by: disposeBag)
-        hero.map({ hero in
+        $hero.map(\.?.title).replaceNil(with: "Schedule not available").replaceError(with: "Schedule not available").driveUI(\.stringValue, on: titleLabel).store(in: &cancellables)
+        $hero.map({ hero in
             let unavailable = "The schedule is not currently available. Check back later."
             guard let hero = hero else { return unavailable }
             if hero.textComponents.isEmpty {
@@ -169,22 +169,22 @@ public final class EventHeroViewController: NSViewController {
             } else {
                 return hero.textComponents.joined(separator: "\n\n")
             }
-        }).bind(to: bodyLabel.rx.text).disposed(by: disposeBag)
+        }).replaceError(with: "").driveUI(\.stringValue, on: bodyLabel).store(in: &cancellables)
 
-        hero.compactMap({ $0?.titleColor }).subscribe(onNext: { [weak self] colorHex in
+        $hero.compactMap({ $0?.titleColor }).driveUI { [weak self] colorHex in
             guard let self = self else { return }
             self.titleLabel.textColor = NSColor.fromHexString(hexString: colorHex)
-        }).disposed(by: disposeBag)
+        }.store(in: &cancellables)
 
         // Dim background when there's a lot of text to show
-        hero.compactMap({ $0 }).map({ $0.textComponents.count > 2 }).subscribe(onNext: { [weak self] largeText in
+        $hero.compactMap({ $0 }).map({ $0.textComponents.count > 2 }).driveUI { [weak self] largeText in
             self?.backgroundImageView.alphaValue = 0.5
-        }).disposed(by: disposeBag)
+        }.store(in: &cancellables)
 
-        hero.compactMap({ $0?.bodyColor }).subscribe(onNext: { [weak self] colorHex in
+        $hero.compactMap({ $0?.bodyColor }).driveUI { [weak self] colorHex in
             guard let self = self else { return }
             self.bodyLabel.textColor = NSColor.fromHexString(hexString: colorHex)
-        }).disposed(by: disposeBag)
+        }.store(in: &cancellables)
     }
 
 }

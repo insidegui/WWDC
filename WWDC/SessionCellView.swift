@@ -7,12 +7,11 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 
 final class SessionCellView: NSView {
 
-    private var disposeBag = DisposeBag()
+    private var cancellables: Set<AnyCancellable> = []
 
     var viewModel: SessionViewModel? {
         didSet {
@@ -45,20 +44,18 @@ final class SessionCellView: NSView {
     }
 
     private func bindUI() {
-        disposeBag = DisposeBag()
+        cancellables = []
 
         guard let viewModel = viewModel else { return }
 
-        viewModel.rxTitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(titleLabel.rx.text).disposed(by: disposeBag)
-        viewModel.rxSubtitle.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(subtitleLabel.rx.text).disposed(by: disposeBag)
-        viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).disposed(by: disposeBag)
+        viewModel.rxTitle.replaceError(with: "").driveUI(\.stringValue, on: titleLabel).store(in: &cancellables)
+        viewModel.rxSubtitle.replaceError(with: "").driveUI(\.stringValue, on: subtitleLabel).store(in: &cancellables)
+        viewModel.rxContext.replaceError(with: "").driveUI(\.stringValue, on: contextLabel).store(in: &cancellables)
 
-        viewModel.rxIsFavorite.distinctUntilChanged().map({ !$0 }).bind(to: favoritedImageView.rx.isHidden).disposed(by: disposeBag)
-        viewModel.rxIsDownloaded.distinctUntilChanged().map({ !$0 }).bind(to: downloadedImageView.rx.isHidden).disposed(by: disposeBag)
+        viewModel.rxIsFavorite.toggled().replaceError(with: true).driveUI(\.isHidden, on: favoritedImageView).store(in: &cancellables)
+        viewModel.rxIsDownloaded.toggled().replaceError(with: true).driveUI(\.isHidden, on: downloadedImageView).store(in: &cancellables)
 
-        viewModel.rxImageUrl.distinctUntilChanged({ $0 != $1 }).subscribe(onNext: { [weak self] imageUrl in
-            guard let imageUrl = imageUrl else { return }
-
+        viewModel.rxImageUrl.removeDuplicates().replaceErrorWithEmpty().compacted().sink { [weak self] imageUrl in
             self?.imageDownloadOperation?.cancel()
 
             self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight, thumbnailOnly: true) { [weak self] url, result in
@@ -66,17 +63,18 @@ final class SessionCellView: NSView {
 
                 self?.thumbnailImageView.image = result.thumbnail
             }
-        }).disposed(by: disposeBag)
+        }
+        .store(in: &cancellables)
 
-        viewModel.rxColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
+        viewModel.rxColor.removeDuplicates().replaceErrorWithEmpty().sink(receiveValue: { [weak self] color in
             self?.contextColorView.color = color
-        }).disposed(by: disposeBag)
+        }).store(in: &cancellables)
 
-        viewModel.rxDarkColor.distinctUntilChanged({ $0 == $1 }).subscribe(onNext: { [weak self] color in
+        viewModel.rxDarkColor.removeDuplicates().replaceErrorWithEmpty().sink(receiveValue: { [weak self] color in
             self?.snowFlakeView.backgroundColor = color
-        }).disposed(by: disposeBag)
+        }).store(in: &cancellables)
 
-        viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
+        viewModel.rxProgresses.replaceErrorWithEmpty().sink(receiveValue: { [weak self] progresses in
             if let progress = progresses.first {
                 self?.contextColorView.hasValidProgress = true
                 self?.contextColorView.progress = progress.relativePosition
@@ -84,7 +82,7 @@ final class SessionCellView: NSView {
                 self?.contextColorView.hasValidProgress = false
                 self?.contextColorView.progress = 0
             }
-        }).disposed(by: disposeBag)
+        }).store(in: &cancellables)
     }
 
     private lazy var titleLabel: NSTextField = {

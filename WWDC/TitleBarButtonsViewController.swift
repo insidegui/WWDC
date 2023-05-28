@@ -8,14 +8,12 @@
 
 import Cocoa
 import ConfCore
-import RxSwift
 import Combine
 import SwiftUI
 
 final class TitleBarButtonsViewController: NSViewController {
     private let downloadManager: DownloadManager
     private let storage: Storage
-    private let disposeBag = DisposeBag()
     private weak var managementViewController: DownloadsManagementViewController?
     
     var handleSharePlayClicked: () -> Void = { }
@@ -31,11 +29,11 @@ final class TitleBarButtonsViewController: NSViewController {
         super.init(nibName: nil, bundle: nil)
 
         downloadManager
-            .downloadsObservable
-            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
+            .$downloads
+            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] in
                 self?.statusButton.isHidden = $0.isEmpty
-            }).disposed(by: disposeBag)
+            }.store(in: &cancellables)
         
         bindSharePlayState()
     }
