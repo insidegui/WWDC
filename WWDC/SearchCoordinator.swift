@@ -49,14 +49,11 @@ final class SearchCoordinator {
     }
 
     func apply(_ state: WWDCFiltersState) {
-        configureFilters(restoringState: state)
+        restorationFiltersState = state
+        configureFilters()
     }
 
-    func configureFilters(restoringState customRestoreState: WWDCFiltersState? = nil) {
-        let effectiveRestoreState = customRestoreState ?? self.restorationFiltersState
-
-        self.restorationFiltersState = nil
-
+    func configureFilters() {
         // Schedule Filters Configuration
 
         var scheduleTextualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
@@ -122,7 +119,7 @@ final class SearchCoordinator {
 
         // Schedule Filtering State Restoration
 
-        let savedScheduleFiltersState = effectiveRestoreState?.scheduleTab
+        let savedScheduleFiltersState = restorationFiltersState?.scheduleTab
 
         scheduleTextualFilter.value = savedScheduleFiltersState?.text?.value
         scheduleEventFilter.selectedOptions = savedScheduleFiltersState?.event?.selectedOptions ?? []
@@ -148,7 +145,7 @@ final class SearchCoordinator {
 
         // Videos Filter Configuration
 
-        let savedVideosFiltersState = effectiveRestoreState?.videosTab
+        let savedVideosFiltersState = restorationFiltersState?.videosTab
 
         var videosTextualFilter = scheduleTextualFilter
 

@@ -100,6 +100,17 @@ private struct ExploreTabItem: View {
                 PillLayout(item: item)
             }
         }
+        .contentShape(Rectangle())
+        #if DEBUG
+        .contextMenu {
+            if let url = item.destinationURL {
+                Button("Copy Deep Link") {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(url.absoluteString, forType: .string)
+                }
+            }
+        }
+        #endif
     }
 
     private struct CardLayout: View {
@@ -224,3 +235,16 @@ struct ExploreTabContentView_Previews: PreviewProvider {
     }
 }
 #endif
+
+extension ExploreTabContent.Item {
+    var destinationURL: URL? {
+        guard let destination else { return nil }
+
+        switch destination {
+        case .command(let command):
+            return command.url
+        case .url(let url):
+            return url
+        }
+    }
+}

@@ -403,7 +403,10 @@ final class AppCoordinator {
 
     func applyFilter(state: WWDCFiltersState) {
         tabController.activeTab = .videos
-        searchCoordinator.apply(state)
+
+        DispatchQueue.main.async {
+            self.searchCoordinator.apply(state)
+        }
     }
 
     // MARK: - Preferences
