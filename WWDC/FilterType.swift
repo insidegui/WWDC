@@ -8,6 +8,17 @@
 
 import Foundation
 
+enum FilterIdentifier: String {
+    case text
+    case event
+    case focus
+    case track
+    case isFavorite
+    case isDownloaded
+    case isUnwatched
+    case hasBookmarks
+}
+
 protocol FilterType {
 
     var identifier: FilterIdentifier { get set }

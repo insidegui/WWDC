@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum WWDCAppCommand {
+enum WWDCAppCommand: Codable {
     case favorite(_ videoId: String)
     case unfavorite(_ videoId: String)
     case watch(_ videoId: String)
@@ -16,6 +16,7 @@ enum WWDCAppCommand {
     case download(_ videoId: String)
     case cancelDownload(_ videoId: String)
     case revealVideo(_ videoId: String)
+    case filter(_ state: WWDCFiltersState)
     case launchPreferences
 }
 
@@ -27,7 +28,7 @@ extension WWDCAppCommand {
         switch self {
         case .favorite, .unfavorite, .watch, .unwatch, .download, .cancelDownload:
             return true
-        case .launchPreferences, .revealVideo:
+        case .launchPreferences, .revealVideo, .filter:
             return false
         }
     }
@@ -35,7 +36,7 @@ extension WWDCAppCommand {
     /// If `true`, then the app should become visible when it receives this command.
     var isForeground: Bool {
         switch self {
-        case .revealVideo, .launchPreferences:
+        case .revealVideo, .launchPreferences, .filter:
             return true
         default:
             return false
@@ -55,10 +56,12 @@ private enum WWDCAppCommandVerb: String {
     case cancelDownload
     case revealVideo
     case launchPreferences
+    case filter
 }
 
 private enum WWDCAppCommandParameter: String {
     case id
+    case filter
 }
 
 extension WWDCAppCommand {
@@ -89,6 +92,9 @@ extension WWDCAppCommand {
             return generateURL(with: .revealVideo, parameters: [.id: videoId])
         case .launchPreferences:
             return generateURL(with: .launchPreferences, parameters: [:])
+        case .filter(let state):
+            guard let encoded = state.base64Encoded else { return nil }
+            return generateURL(with: .filter, parameters: [.filter: encoded])
         }
     }
     
@@ -124,6 +130,10 @@ extension WWDCAppCommand {
             self = .revealVideo(id)
         case .launchPreferences:
             self = .launchPreferences
+        case .filter:
+            guard let encoded = url.queryItemValue(for: .filter) else { return nil }
+            guard let state = WWDCFiltersState(base64Encoded: encoded) else { return nil }
+            self = .filter(state)
         }
     }
 }

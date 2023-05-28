@@ -42,11 +42,7 @@ private struct ExploreTabContentView: View {
                                 ForEach(section.items) { item in
                                     ExploreTabItem(layout: section.layout, item: item)
                                         .contentShape(Rectangle())
-                                        .onTapGesture {
-                                            if let url = item.deepLink {
-                                                NSWorkspace.shared.open(url)
-                                            }
-                                        }
+                                        .onTapGesture { open(item) }
                                 }
                             }
                             .padding(.horizontal)
@@ -55,6 +51,19 @@ private struct ExploreTabContentView: View {
                 }
             }
             .padding(.vertical)
+        }
+    }
+
+    private func open(_ item: ExploreTabContent.Item) {
+        guard let destination = item.destination else {
+            return
+        }
+
+        switch destination {
+        case .command(let command):
+            AppDelegate.run(command)
+        case .url(let url):
+            NSWorkspace.shared.open(url)
         }
     }
 }

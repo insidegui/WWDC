@@ -11,17 +11,6 @@ import ConfCore
 import RealmSwift
 import os.log
 
-enum FilterIdentifier: String {
-    case text
-    case event
-    case focus
-    case track
-    case isFavorite
-    case isDownloaded
-    case isUnwatched
-    case hasBookmarks
-}
-
 final class SearchCoordinator {
 
     let storage: Storage
@@ -32,7 +21,7 @@ final class SearchCoordinator {
     private let log = OSLog(subsystem: "WWDC", category: "SearchCoordinator")
 
     /// The desired state of the filters upon configuration
-    private let restorationFiltersState: WWDCFiltersState?
+    private var restorationFiltersState: WWDCFiltersState?
 
     fileprivate var scheduleSearchController: SearchFiltersViewController {
         return scheduleController.searchController
@@ -59,7 +48,14 @@ final class SearchCoordinator {
                                                object: nil)
     }
 
-    func configureFilters() {
+    func apply(_ state: WWDCFiltersState) {
+        configureFilters(restoringState: state)
+    }
+
+    func configureFilters(restoringState customRestoreState: WWDCFiltersState? = nil) {
+        let effectiveRestoreState = customRestoreState ?? self.restorationFiltersState
+
+        self.restorationFiltersState = nil
 
         // Schedule Filters Configuration
 
@@ -126,7 +122,7 @@ final class SearchCoordinator {
 
         // Schedule Filtering State Restoration
 
-        let savedScheduleFiltersState = restorationFiltersState?.scheduleTab
+        let savedScheduleFiltersState = effectiveRestoreState?.scheduleTab
 
         scheduleTextualFilter.value = savedScheduleFiltersState?.text?.value
         scheduleEventFilter.selectedOptions = savedScheduleFiltersState?.event?.selectedOptions ?? []
@@ -152,7 +148,7 @@ final class SearchCoordinator {
 
         // Videos Filter Configuration
 
-        let savedVideosFiltersState = restorationFiltersState?.videosTab
+        let savedVideosFiltersState = effectiveRestoreState?.videosTab
 
         var videosTextualFilter = scheduleTextualFilter
 
@@ -254,14 +250,15 @@ final class SearchCoordinator {
         }
     }
 
-    func currentFiltersState() -> String? {
-
-        let state = WWDCFiltersState(
+    private var uiState: WWDCFiltersState {
+        WWDCFiltersState(
             scheduleTab: WWDCFiltersState.Tab(filters: scheduleSearchController.filters),
             videosTab: WWDCFiltersState.Tab(filters: videosSearchController.filters)
         )
+    }
 
-        return (try? JSONEncoder().encode(state))
+    func restorationSnapshot() -> String? {
+        (try? JSONEncoder().encode(uiState))
             .flatMap { String(bytes: $0, encoding: .utf8) }
     }
 }

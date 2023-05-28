@@ -61,6 +61,10 @@ final class AppCommandsReceiver {
             NSApp.sendAction(#selector(AppDelegate.showPreferences(_:)), to: nil, from: nil)
             
             return nil
+        case .filter(let state):
+            NSApp.sendAction(#selector(AppDelegate.applyFilterState), to: nil, from: state)
+
+            return nil
         }
     }
 }
@@ -82,7 +86,7 @@ extension WWDCAppCommand {
             return id
         case .revealVideo(let id):
             return id
-        case .launchPreferences:
+        case .launchPreferences, .filter:
             return nil
         }
     }

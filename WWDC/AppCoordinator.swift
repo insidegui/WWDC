@@ -366,7 +366,7 @@ final class AppCoordinator {
         Preferences.shared.activeTab = activeTab
         Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
         Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
-        Preferences.shared.filtersState = searchCoordinator.currentFiltersState()
+        Preferences.shared.filtersState = searchCoordinator.restorationSnapshot()
     }
 
     private func restoreApplicationState() {
@@ -392,7 +392,6 @@ final class AppCoordinator {
     // MARK: - Deep linking
 
     func handle(link: DeepLink) {
-
         if link.isForCurrentYear {
             tabController.activeTab = .schedule
             scheduleController.splitViewController.listViewController.select(session: link)
@@ -400,6 +399,11 @@ final class AppCoordinator {
             tabController.activeTab = .videos
             videosController.listViewController.select(session: link)
         }
+    }
+
+    func applyFilter(state: WWDCFiltersState) {
+        tabController.activeTab = .videos
+        searchCoordinator.apply(state)
     }
 
     // MARK: - Preferences

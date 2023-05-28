@@ -183,6 +183,11 @@
 		F44C82372A22B84F00FDE980 /* PreviewAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F44C82362A22B84F00FDE980 /* PreviewAssets.xcassets */; };
 		F44C823A2A22B8DD00FDE980 /* ExploreTabContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82392A22B8DD00FDE980 /* ExploreTabContent.swift */; };
 		F44C823C2A22B90600FDE980 /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C823B2A22B90600FDE980 /* RemoteImage.swift */; };
+		F44C826C2A23B64B00FDE980 /* FilterState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D9EE96324BCE097001B1720 /* FilterState.swift */; };
+		F44C826D2A23B65600FDE980 /* MultipleChoiceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCEE1ED92785002477C8 /* MultipleChoiceFilter.swift */; };
+		F44C826E2A23B65D00FDE980 /* ToggleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCF01ED927A4002477C8 /* ToggleFilter.swift */; };
+		F44C826F2A23B66300FDE980 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDCA1ED77A4800CADE86 /* FilterType.swift */; };
+		F44C82712A23B68900FDE980 /* TextualFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEDFCF21ED92F2A002477C8 /* TextualFilter.swift */; };
 		F4749CE9265C005500062B83 /* WWDCAgentAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4749CE8265C005500062B83 /* WWDCAgentAppDelegate.swift */; };
 		F4749CED265C005500062B83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEC265C005500062B83 /* Assets.xcassets */; };
 		F4749CF0265C005500062B83 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F4749CEF265C005500062B83 /* Preview Assets.xcassets */; };
@@ -1813,13 +1818,18 @@
 				F4CCF93D265EC34400A69E62 /* WWDCAppPuppeteer.swift in Sources */,
 				F4749D2F265C0F1800062B83 /* NSURL+RealHome.m in Sources */,
 				F4CCF93F265EC58900A69E62 /* WWDCAppCommand.swift in Sources */,
+				F44C826F2A23B66300FDE980 /* FilterType.swift in Sources */,
 				F4CCF93A265EC0AE00A69E62 /* XPCConnectionValidator.m in Sources */,
+				F44C82712A23B68900FDE980 /* TextualFilter.swift in Sources */,
+				F44C826D2A23B65600FDE980 /* MultipleChoiceFilter.swift in Sources */,
 				F4749D08265C031500062B83 /* WWDCAgentInterface.swift in Sources */,
 				F4749D0B265C03F600062B83 /* Preferences.swift in Sources */,
+				F44C826E2A23B65D00FDE980 /* ToggleFilter.swift in Sources */,
 				F4749D04265C018100062B83 /* PathUtil.swift in Sources */,
 				F4749D06265C024B00062B83 /* WWDCAgentService.swift in Sources */,
 				F4749D09265C03E100062B83 /* Boot.swift in Sources */,
 				F4749CE9265C005500062B83 /* WWDCAgentAppDelegate.swift in Sources */,
+				F44C826C2A23B64B00FDE980 /* FilterState.swift in Sources */,
 				F4749D0A265C03F000062B83 /* Constants.swift in Sources */,
 				F4CCF93B265EC0AE00A69E62 /* XPCConnectionValidator+.swift in Sources */,
 			);

@@ -258,6 +258,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         coordinator?.showVideos()
     }
 
+    @objc func applyFilterState(_ sender: Any?) {
+        guard let state = sender as? WWDCFiltersState else { return }
+
+        coordinator?.applyFilter(state: state)
+    }
+
     @IBAction func viewHelp(_ sender: Any) {
         if let helpUrl = URL(string: "https://github.com/insidegui/WWDC/issues") {
             NSWorkspace.shared.open(helpUrl)
@@ -309,13 +315,17 @@ extension AppDelegate: SUUpdaterDelegate {
 }
 
 extension AppDelegate {
-    func handle(_ command: WWDCAppCommand) {
+    static func run(_ command: WWDCAppCommand) {
+        (NSApp.delegate as? Self)?.handle(command, assumeSafe: true)
+    }
+
+    func handle(_ command: WWDCAppCommand, assumeSafe: Bool = false) {
         if command.isForeground {
             activateUI()
             DispatchQueue.main.async { NSApp.activate(ignoringOtherApps: true) }
         }
         
-        if command.modifiesUserContent {
+        if !assumeSafe, command.modifiesUserContent {
             let needsAgentPrefEnabled: Bool
             
             #if DEBUG

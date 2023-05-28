@@ -2,13 +2,17 @@ import SwiftUI
 
 struct ExploreTabContent: Codable {
     struct Item: Identifiable, Codable {
+        enum Destination: Codable {
+            case url(URL)
+            case command(WWDCAppCommand)
+        }
         var id: String
         var title: String
         var subtitle: String?
         var overlayText: String?
         var overlaySymbol: String?
         var imageURL: URL?
-        var deepLink: URL?
+        var destination: Destination?
         var progress: Double?
     }
 
@@ -42,8 +46,7 @@ extension ExploreTabContent.Item {
             subtitle: "Placeholder Item Description 1",
             overlayText: "20m",
             overlaySymbol: "play",
-            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!,
-            deepLink: nil
+            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!
         ),
         .init(
             id: "2",
@@ -51,8 +54,7 @@ extension ExploreTabContent.Item {
             subtitle: "Placeholder Item Description 2",
             overlayText: "25m",
             overlaySymbol: "play",
-            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!,
-            deepLink: nil
+            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!
         ),
         .init(
             id: "3",
@@ -60,8 +62,7 @@ extension ExploreTabContent.Item {
             subtitle: "Placeholder Item Description 3",
             overlayText: "35m",
             overlaySymbol: "play",
-            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!,
-            deepLink: nil
+            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!
         )
     ]
 }

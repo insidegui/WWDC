@@ -108,7 +108,6 @@ final class ExploreTabProvider: ObservableObject {
             items: data.recentFavorites.compactMap { ExploreTabContent.Item($0) }
         )
 
-        #warning("TODO: Deep link for topics")
         let topics = ExploreTabContent.Section(
             id: "topics",
             title: "Topics",
@@ -122,7 +121,7 @@ final class ExploreTabProvider: ObservableObject {
                     overlayText: nil,
                     overlaySymbol: $0.symbolName,
                     imageURL: nil,
-                    deepLink: nil,
+                    destination: .command(.filter(.topic($0))),
                     progress: nil
                 )
             }
@@ -211,7 +210,7 @@ private extension ExploreTabContent.Item {
             overlayText: effectiveDuration > 0 ? String(timestamp: effectiveDuration) : nil,
             overlaySymbol: session.mediaDuration > 0 ? "play" : nil,
             imageURL: session.imageURL,
-            deepLink: WWDCAppCommand.revealVideo(session.identifier).url,
+            destination: .command(.revealVideo(session.identifier)),
             progress: progress
         )
     }
@@ -240,5 +239,25 @@ private extension Session {
     var imageURL: URL? {
         guard let asset = asset(ofType: .image) else { return nil }
         return URL(string: asset.remoteURL)
+    }
+}
+
+extension WWDCFiltersState {
+    static func topic(_ topic: Track) -> WWDCFiltersState {
+        WWDCFiltersState(
+            scheduleTab: .init(filters: []),
+            videosTab: .init(
+                focus: nil,
+                event: nil,
+                track: .init(selectedOptions: [
+                    .init(title: topic.name, value: topic.name)
+                ]),
+                isDownloaded: nil,
+                isFavorite: nil,
+                hasBookmarks: nil,
+                isUnwatched: nil,
+                text: nil
+            )
+        )
     }
 }
