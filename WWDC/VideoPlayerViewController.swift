@@ -9,10 +9,8 @@
 import Cocoa
 import AVFoundation
 import PlayerUI
-import RxSwift
-import RxCocoa
+import Combine
 import RealmSwift
-import RxRealm
 import ConfCore
 
 extension Notification.Name {
@@ -29,7 +27,7 @@ protocol VideoPlayerViewControllerDelegate: AnyObject {
 
 final class VideoPlayerViewController: NSViewController {
 
-    private var disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: VideoPlayerViewControllerDelegate?
 
@@ -37,7 +35,7 @@ final class VideoPlayerViewController: NSViewController {
 
     var sessionViewModel: SessionViewModel {
         didSet {
-            disposeBag = DisposeBag()
+            cancellables = []
 
             updateUI()
             resetAppearanceDelegate()
@@ -120,9 +118,9 @@ final class VideoPlayerViewController: NSViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
 
-        NotificationCenter.default.rx.notification(.SkipBackAndForwardBy30SecondsPreferenceDidChange).observe(on: MainScheduler.instance).subscribe { _ in
+        NotificationCenter.default.publisher(for: .SkipBackAndForwardBy30SecondsPreferenceDidChange).receive(on: DispatchQueue.main).sink { _ in
             self.playerView.invalidateAppearance()
-        }.disposed(by: disposeBag)
+        }.store(in: &cancellables)
     }
 
     func resetAppearanceDelegate() {
@@ -162,10 +160,12 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     func updateUI() {
-        let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode")
-        Observable.shallowCollection(from: bookmarks).observe(on: MainScheduler.instance).subscribe(onNext: { [weak self] bookmarks in
-            self?.playerView.annotations = bookmarks.toArray()
-        }).disposed(by: disposeBag)
+        let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode").collectionChangedPublisher
+        bookmarks
+            .map { $0.toArray() }
+            .print("\(type(of: self))")
+            .driveUI(\.annotations, on: playerView, default: [])
+            .store(in: &cancellables)
     }
 
     @objc private func annotationSelected(notification: Notification) {

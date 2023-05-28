@@ -7,9 +7,17 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 import ConfCore
+
+extension Publisher {
+    func replaceErrorWithEmpty() -> some Publisher<Output, Never> {
+        self.catch { _ in
+            // TODO: Errors
+            Empty<Output, Never>()
+        }
+    }
+}
 
 extension NSStoryboard.Name {
     static let preferences = NSStoryboard.Name("Preferences")
@@ -108,9 +116,7 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         languagesProvider.fetchAvailableLanguages()
     }
 
-    private let disposeBag = DisposeBag()
-
-    private var dummyRelay = BehaviorRelay<Bool>(value: false)
+    private var cancellables: Set<AnyCancellable> = []
 
     private func bindSyncEngine() {
         #if ICLOUD
@@ -120,7 +126,7 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         engine.isPerformingSyncOperation.asDriver()
                                         .map({ !$0 })
                                         .drive(enableUserDataSyncSwitch.rx.isEnabled)
-                                        .disposed(by: disposeBag)
+                                        .store(in: &cancellables)
         #else
         enableUserDataSyncSwitch?.isHidden = true
         syncDescriptionLabel?.isHidden = true
@@ -130,34 +136,34 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
     private func bindTranscriptIndexingState() {
         // Disable transcript language pop up while indexing transcripts.
 
-        syncEngine.isIndexingTranscripts.asDriver()
-                                        .map({ !$0 })
-                                        .drive(transcriptLanguagesPopUp.rx.isEnabled)
-                                        .disposed(by: disposeBag)
+//        syncEngine.isIndexingTranscripts.asDriver()
+//                                        .map({ !$0 })
+//                                        .drive(transcriptLanguagesPopUp.rx.isEnabled)
+//                                        .store(in: &cancellables)
 
         // Show indexing progress while indexing.
 
-        syncEngine.isIndexingTranscripts.asObservable()
-                                         .observe(on: MainScheduler.instance)
-                                         .bind { [weak self] isIndexing in
-            guard let self = self else { return }
+        syncEngine.isIndexingTranscripts
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isIndexing in
+                guard let self = self else { return }
 
-            if isIndexing {
-                self.indexingLabel?.isHidden = false
-                self.indexingProgressIndicator?.isHidden = false
-                self.indexingProgressIndicator?.startAnimation(nil)
-            } else {
-                self.indexingLabel?.isHidden = true
-                self.indexingProgressIndicator?.isHidden = true
-                self.indexingProgressIndicator?.stopAnimation(nil)
-            }
-        }.disposed(by: disposeBag)
+                if isIndexing {
+                    self.indexingLabel?.isHidden = false
+                    self.indexingProgressIndicator?.isHidden = false
+                    self.indexingProgressIndicator?.startAnimation(nil)
+                } else {
+                    self.indexingLabel?.isHidden = true
+                    self.indexingProgressIndicator?.isHidden = true
+                    self.indexingProgressIndicator?.stopAnimation(nil)
+                }
+            }.store(in: &cancellables)
 
-        syncEngine.transcriptIndexingProgress.asObservable()
-                                             .observe(on: MainScheduler.instance)
-                                             .bind { [weak self] progress in
-            self?.indexingProgressIndicator?.doubleValue = Double(progress)
-        }.disposed(by: disposeBag)
+        syncEngine.transcriptIndexingProgress
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] progress in
+                self?.indexingProgressIndicator?.doubleValue = Double(progress)
+            }.store(in: &cancellables)
     }
 
     @IBAction func searchInTranscriptsSwitchAction(_ sender: Any) {
@@ -294,11 +300,12 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         showLanguagesLoading()
 
         languagesProvider.availableLanguageCodes
-            .observe(on: MainScheduler.instance)
-            .bind { [weak self] languages in
+            .receive(on: DispatchQueue.main)
+            .replaceErrorWithEmpty()
+            .sink { [weak self] languages in
                 self?.populateLanguagesPopUp(with: languages)
             }
-            .disposed(by: disposeBag)
+            .store(in: &cancellables)
     }
 
     private func populateLanguagesPopUp(with languages: [TranscriptLanguage]) {

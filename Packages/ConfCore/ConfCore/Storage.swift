@@ -6,19 +6,40 @@
 //  Copyright © 2017 Guilherme Rambo. All rights reserved.
 //
 
+import Combine
 import Foundation
 import RealmSwift
-import RxSwift
-import RxRealm
-import RxCocoa
 import os.log
+
+// TODO: Relocate these
+extension List {
+    public func toAnyCollection() -> AnyRealmCollection<Element> {
+        return AnyRealmCollection<Element>(self)
+    }
+
+    public typealias ElementType = Element
+    public func toArray() -> [Element] {
+        return Array(self)
+    }
+}
+
+extension Results {
+    func toAnyCollection() -> AnyRealmCollection<Element> {
+        return AnyRealmCollection<ElementType>(self)
+    }
+
+    typealias ElementType = Element
+    public func toArray() -> [Element] {
+        return Array(self)
+    }
+}
 
 public final class Storage {
 
     public let realmConfig: Realm.Configuration
     public let realm: Realm
 
-    let disposeBag = DisposeBag()
+    private var disposeBag: Set<AnyCancellable> = []
     private static let log = OSLog(subsystem: "ConfCore", category: "Storage")
     private let log = Storage.log
 
@@ -26,19 +47,17 @@ public final class Storage {
         self.realmConfig = realm.configuration
         self.realm = realm
 
-        /// This used to be necessary because of CPU usage in the app during script indexing, but it causes a long period of time during indexing where content doesn't reflect what's on the database,
-        /// including for user actions such as favoriting, etc. Tested with the current version of Realm in the app and it doesn't seem to be an issue anymore.
-//        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStart).subscribe(onNext: { [unowned self] _ in
-//            os_log("Locking Realm auto-updates until transcript indexing is finished", log: self.log, type: .info)
-//
-//            self.realm.autorefresh = false
-//        }).disposed(by: disposeBag)
-//
-//        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStop).subscribe(onNext: { [unowned self] _ in
-//            os_log("Realm auto-updates unlocked", log: self.log, type: .info)
-//
-//            self.realm.autorefresh = true
-//        }).disposed(by: disposeBag)
+        DistributedNotificationCenter.default().publisher(for: .TranscriptIndexingDidStart).sink(receiveValue: { [unowned self] _ in
+            os_log("Locking Realm auto-updates until transcript indexing is finished", log: self.log, type: .info)
+
+            self.realm.autorefresh = false
+        }).store(in: &disposeBag)
+
+        DistributedNotificationCenter.default().publisher(for: .TranscriptIndexingDidStop).sink(receiveValue: { [unowned self] _ in
+            os_log("Realm auto-updates unlocked", log: self.log, type: .info)
+
+            self.realm.autorefresh = true
+        }).store(in: &disposeBag)
 
         deleteOldEventsIfNeeded()
     }
@@ -432,14 +451,14 @@ public final class Storage {
         }, createTransaction: false)
     }
 
-    public lazy var events: Observable<Results<Event>> = {
+    public lazy var events: some Publisher<Results<Event>, Error> = {
         let eventsSortedByDateDescending = self.realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false)
 
-        return Observable.collection(from: eventsSortedByDateDescending)
+        return eventsSortedByDateDescending.collectionPublisher
     }()
 
-    public lazy var sessionsObservable: Observable<Results<Session>> = {
-        return Observable.collection(from: self.realm.objects(Session.self))
+    public lazy var sessionsObservable: some Publisher<Results<Session>, Error> = {
+        return self.realm.objects(Session.self).collectionPublisher
     }()
 
     public var sessions: Results<Session> {
@@ -469,45 +488,45 @@ public final class Storage {
         }, disableAutorefresh: false, createTransaction: true)
     }
 
-    public lazy var eventsObservable: Observable<Results<Event>> = {
+    public lazy var eventsObservable: some Publisher<Results<Event>, Error> = {
         let events = realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false)
 
-        return Observable.collection(from: events)
+        return events.collectionPublisher
     }()
 
-    public lazy var focusesObservable: Observable<Results<Focus>> = {
+    public lazy var focusesObservable: some Publisher<Results<Focus>, Error> = {
         let focuses = realm.objects(Focus.self).sorted(byKeyPath: "name")
 
-        return Observable.collection(from: focuses)
+        return focuses.collectionPublisher
     }()
 
-    public lazy var tracksObservable: Observable<Results<Track>> = {
+    public lazy var tracksObservable: some Publisher<Results<Track>, Error> = {
         let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
 
-        return Observable.collection(from: tracks)
+        return tracks.collectionPublisher
     }()
 
-    public lazy var featuredSectionsObservable: Observable<Results<FeaturedSection>> = {
+    public lazy var featuredSectionsObservable: some Publisher<Results<FeaturedSection>, Error> = {
         let predicate = NSPredicate(format: "isPublished = true AND content.@count > 0")
         let sections = self.realm.objects(FeaturedSection.self).filter(predicate)
 
-        return Observable.collection(from: sections)
+        return sections.collectionPublisher
     }()
 
-    public lazy var scheduleObservable: Observable<Results<ScheduleSection>> = {
+    public lazy var scheduleObservable: some Publisher<Results<ScheduleSection>, Error> = {
         let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
 
-        return Observable.collection(from: currentEvents).map({ $0.first?.identifier }).flatMap { (identifier: String?) -> Observable<Results<ScheduleSection>> in
+        return currentEvents.collectionPublisher.map({ $0.first?.identifier }).flatMap { (identifier: String?) -> AnyPublisher<Results<ScheduleSection>, Error> in
             let sections = self.realm.objects(ScheduleSection.self).filter("eventIdentifier == %@", identifier ?? "").sorted(byKeyPath: "representedDate")
 
-            return Observable.collection(from: sections)
+            return sections.collectionPublisher.eraseToAnyPublisher()
         }
     }()
 
-    public lazy var eventHeroObservable: Observable<EventHero?> = {
+    public lazy var eventHeroObservable: some Publisher<EventHero?, Error> = {
         let hero = self.realm.objects(EventHero.self)
 
-        return Observable.collection(from: hero).map { $0.first }
+        return hero.collectionPublisher.map { $0.first }
     }()
 
     public func asset(with remoteURL: URL) -> SessionAsset? {

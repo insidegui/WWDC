@@ -9,8 +9,7 @@
 import Cocoa
 import ConfCore
 import PlayerUI
-import RxSwift
-import RxCocoa
+import Combine
 
 extension Notification.Name {
     fileprivate static let WWDCTextViewTextChanged = Notification.Name("WWDCTextViewTextChanged")
@@ -18,16 +17,11 @@ extension Notification.Name {
 
 private final class WWDCTextView: NSTextView {
 
-    lazy var rxText: Observable<String> = {
-        return Observable<String>.create { [weak self] observer -> Disposable in
-            let token = NotificationCenter.default.addObserver(forName: .WWDCTextViewTextChanged, object: self, queue: OperationQueue.main) { _ in
-                observer.onNext(self?.string ?? "")
-            }
-
-            return Disposables.create {
-                NotificationCenter.default.removeObserver(token)
-            }
+    lazy var rxText: some Publisher<String, Never> = {
+        return NotificationCenter.default.publisher(for: .WWDCTextViewTextChanged, object: self).map { [weak self] _ in
+            self?.string ?? ""
         }
+        .receive(on: DispatchQueue.main)
     }()
 
     override func didChangeText() {
@@ -113,7 +107,7 @@ final class BookmarkViewController: NSViewController {
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,11 +115,11 @@ final class BookmarkViewController: NSViewController {
         imageView.image = NSImage(data: bookmark.snapshot)
         textView.string = bookmark.body
 
-        textView.rxText.throttle(.seconds(1), scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] text in
-            guard let bookmark = self?.bookmark else { return }
-
-            self?.storage.modify(bookmark) { $0.body = text }
-        }).disposed(by: disposeBag)
+//        textView.rxText.throttle(.seconds(1), scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] text in
+//            guard let bookmark = self?.bookmark else { return }
+//
+//            self?.storage.modify(bookmark) { $0.body = text }
+//        }).store(in: &cancellables)
     }
 
 }

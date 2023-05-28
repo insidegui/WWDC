@@ -8,17 +8,16 @@
 
 import Cocoa
 import RealmSwift
-import RxSwift
+import Combine
 import ConfCore
 import PlayerUI
-import Combine
 import os.log
 import AVFoundation
 
 final class AppCoordinator {
 
     let log = OSLog(subsystem: "WWDC", category: "AppCoordinator")
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables = Set<AnyCancellable>()
 
     var liveObserver: LiveObserver
 
@@ -42,10 +41,8 @@ final class AppCoordinator {
     var playerOwnerTab: MainWindowTab?
 
     /// The session that "owns" the current player (the one that was selected on the active tab when "play" was pressed)
-    var playerOwnerSessionIdentifier: String? {
-        didSet { rxPlayerOwnerSessionIdentifier.onNext(playerOwnerSessionIdentifier) }
-    }
-    var rxPlayerOwnerSessionIdentifier = BehaviorSubject<String?>(value: nil)
+    @Published
+    var playerOwnerSessionIdentifier: String?
 
     /// Whether we're currently in the middle of a player context transition
     var isTransitioningPlayerContext = false
@@ -61,7 +58,7 @@ final class AppCoordinator {
 
         liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
 
-        // Primary UI Intialization
+        // Primary UI Initialization
 
         tabController = WWDCTabViewController(windowController: windowController)
 
@@ -128,34 +125,35 @@ final class AppCoordinator {
         }
     }
 
-    var exploreTabLiveSession: Observable<SessionViewModel?> {
+    var exploreTabLiveSession: some Publisher<SessionViewModel?, Never> {
         let liveInstances = storage.realm.objects(SessionInstance.self)
             .filter("rawSessionType == 'Special Event' AND isCurrentlyLive == true")
             .sorted(byKeyPath: "startTime", ascending: false)
 
-        return Observable.collection(from: liveInstances)
+        return liveInstances.collectionPublisher
             .map({ $0.toArray().first?.session })
             .map({ SessionViewModel(session: $0, instance: $0?.instances.first, style: .schedule) })
+            .replaceErrorWithEmpty()
     }
 
     /// The session that is currently selected on the videos tab (observable)
-    var selectedSession: Observable<SessionViewModel?> {
-        return videosController.listViewController.selectedSession.asObservable()
+    var selectedSession: some Publisher<SessionViewModel?, Never> {
+        return videosController.listViewController.$selectedSession
     }
 
     /// The session that is currently selected on the schedule tab (observable)
-    var selectedScheduleItem: Observable<SessionViewModel?> {
-        return scheduleController.splitViewController.listViewController.selectedSession.asObservable()
+    var selectedScheduleItem: some Publisher<SessionViewModel?, Never> {
+        return scheduleController.splitViewController.listViewController.$selectedSession
     }
 
     /// The session that is currently selected on the videos tab
     var selectedSessionValue: SessionViewModel? {
-        return videosController.listViewController.selectedSession.value
+        return videosController.listViewController.selectedSession
     }
 
     /// The session that is currently selected on the schedule tab
     var selectedScheduleItemValue: SessionViewModel? {
-        return scheduleController.splitViewController.listViewController.selectedSession.value
+        return scheduleController.splitViewController.listViewController.selectedSession
     }
 
     /// The selected session's view model, regardless of which tab it is selected in
@@ -169,24 +167,27 @@ final class AppCoordinator {
     }
 
     private func setupBindings() {
-        tabController.rxActiveTab.subscribe(onNext: { [weak self] activeTab in
+        tabController
+            .$activeTabVar
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] activeTab in
+                self?.activeTab = activeTab
 
-            self?.activeTab = activeTab
+                self?.updateSelectedViewModelRegardlessOfTab()
+            }
+            .store(in: &cancellables)
 
-            self?.updateSelectedViewModelRegardlessOfTab()
-        }).disposed(by: disposeBag)
+        func bind<P: Publisher>(session: P, to detailsController: SessionDetailsViewController) where P.Output == SessionViewModel?, P.Failure == Never {
 
-        func bind(session: Observable<SessionViewModel?>, to detailsController: SessionDetailsViewController) {
-
-            session.subscribe(on: MainScheduler.instance).subscribe(onNext: { [weak self] viewModel in
-                NSAnimationContext.runAnimationGroup({ context in
+            session.receive(on: DispatchQueue.main).sink { [weak self] viewModel in
+                NSAnimationContext.runAnimationGroup { context in
                     context.duration = 0.35
 
                     detailsController.viewModel = viewModel
                     self?.updateSelectedViewModelRegardlessOfTab()
-                })
-
-            }).disposed(by: disposeBag)
+                }
+            }
+            .store(in: &cancellables)
         }
 
         bind(session: selectedSession, to: videosController.detailViewController)
@@ -256,22 +257,28 @@ final class AppCoordinator {
         DownloadManager.shared.syncWithFileSystem()
     }
 
+    typealias StartUpDependencies = (tracks: Results<Track>, events: Results<Event>, foci: Results<Focus>, scheduleSections: Results<ScheduleSection>, featuredSections: Results<FeaturedSection>)
+
     private func doUpdateLists() {
 
         // Initial app launch waits for all of these things to be loaded before dismissing the primary loading spinner
         // It may, however, delay the presentation of content on tabs that already have everything they need
 
-        let startupDependencies = Observable.combineLatest(storage.tracksObservable,
-                                                          storage.eventsObservable,
-                                                          storage.focusesObservable,
-                                                          storage.scheduleObservable)
+        let startupDependencies = Publishers.CombineLatest4(
+            storage.tracksObservable,
+            storage.eventsObservable,
+            storage.focusesObservable,
+            storage.scheduleObservable
+        )
 
         startupDependencies
+            .replaceErrorWithEmpty()
             .filter {
                 !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty
             }
-            .take(1)
-            .subscribe(onNext: { [weak self] tracks, _, _, sections in
+            .prefix(1)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] tracks, _, _, sections in
                 guard let self = self else { return }
 
                 self.tabController.hideLoading()
@@ -281,7 +288,8 @@ final class AppCoordinator {
 
                 self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
                 self.scrollToTodayIfWWDC()
-            }).disposed(by: disposeBag)
+            }
+            .store(in: &cancellables)
 
         bindScheduleAvailability()
 
@@ -291,12 +299,12 @@ final class AppCoordinator {
     }
 
     private func bindScheduleAvailability() {
-        storage.eventHeroObservable.map({ $0 != nil })
-                                  .bind(to: scheduleController.showHeroView)
-                                  .disposed(by: disposeBag)
-
-        storage.eventHeroObservable.bind(to: scheduleController.heroController.hero)
-                                   .disposed(by: disposeBag)
+//        storage.eventHeroObservable.map({ $0 != nil })
+//                                  .bind(to: scheduleController.showHeroView)
+//                                  .store(in: &cancellables)
+//
+//        storage.eventHeroObservable.bind(to: scheduleController.heroController.hero)
+//                                   .store(in: &cancellables)
     }
 
     private lazy var searchCoordinator: SearchCoordinator = {
@@ -368,14 +376,14 @@ final class AppCoordinator {
 
     // MARK: - Now playing info
 
-    private var nowPlayingInfoBag = DisposeBag()
+    private var nowPlayingInfoBag: Set<AnyCancellable> = []
 
     private func observeNowPlayingInfo() {
-        nowPlayingInfoBag = DisposeBag()
+        nowPlayingInfoBag = []
 
-        currentPlaybackViewModel?.nowPlayingInfo.asObservable().subscribe(onNext: { [weak self] _ in
-            self?.publishNowPlayingInfo()
-        }).disposed(by: nowPlayingInfoBag)
+//        currentPlaybackViewModel?.nowPlayingInfo.asObservable().subscribe(onNext: { [weak self] _ in
+//            self?.publishNowPlayingInfo()
+//        }).disposed(by: nowPlayingInfoBag)
     }
 
     // MARK: - State restoration
@@ -526,8 +534,6 @@ final class AppCoordinator {
     }
     
     // MARK: - SharePlay
-    
-    private lazy var cancellables = Set<AnyCancellable>()
     
     private var sharePlayConfigured = false
 
