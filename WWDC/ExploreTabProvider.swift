@@ -17,7 +17,7 @@ final class ExploreTabProvider: ObservableObject {
         storage.featuredSectionsObservable
     }()
 
-    public lazy var continueWatchingSessionsObservable: Observable<Results<Session>> = {
+    public lazy var continueWatchingSessionsObservable: Observable<[Session]> = {
         let cutoffDate = Calendar.current.date(byAdding: Constants.continueWatchingMaxLastProgressUpdateInterval, to: Date()) ?? Date.distantPast
 
         let videoPredicate = Session.videoPredicate
@@ -26,21 +26,50 @@ final class ExploreTabProvider: ObservableObject {
         let sessions = storage.realm.objects(Session.self)
             .filter(NSCompoundPredicate(andPredicateWithSubpredicates: [videoPredicate, progressPredicate]))
 
-        return Observable.collection(from: sessions)
+        return Observable.collection(from: sessions).map {
+            Array($0.sorted(by: {
+                guard let p1 = $0.progresses.first else { return false }
+                guard let p2 = $1.progresses.first else { return false }
+                return p1.updatedAt > p2.updatedAt
+            })
+            .prefix(Constants.maxContinueWatchingItems))
+        }
+    }()
+
+    public lazy var recentFavoriteSessionsObservable: Observable<[Session]> = {
+        let cutoffDate = Calendar.current.date(byAdding: Constants.recentFavoritesMaxDateInterval, to: Date()) ?? Date.distantPast
+
+        let favoritePredicate = NSPredicate(format: "createdAt >= %@ AND isDeleted = false", cutoffDate as NSDate)
+
+        let favorites = storage.realm.objects(Favorite.self)
+            .filter(favoritePredicate)
+            .sorted(byKeyPath: "createdAt", ascending: false)
+
+        return Observable.collection(from: favorites).map {
+            Array($0.compactMap { $0.session.first }
+                .prefix(Constants.maxRecentFavoritesItems))
+        }
     }()
 
     private var disposeBag = DisposeBag()
 
+    private struct SourceData {
+        var featuredSections: Results<FeaturedSection>
+        var continueWatching: [Session]
+        var recentFavorites: [Session]
+    }
+
     func activate() {
         Observable.combineLatest(
             featuredSectionsObservable,
-            continueWatchingSessionsObservable
+            continueWatchingSessionsObservable,
+            recentFavoriteSessionsObservable
         )
-        .filter { !$0.isEmpty || !$1.isEmpty }
+        .filter { !$0.isEmpty || !$1.isEmpty || !$2.isEmpty }
         .subscribe(on: MainScheduler.instance)
-        .subscribe(onNext: { [weak self] sections, continueWatchingSessions in
-            guard let self = self else { return }
-            self.update(with: sections, continueWatchingSessions: continueWatchingSessions)
+        .map(SourceData.init)
+        .subscribe(onNext: { [weak self] data in
+            self?.update(with: data)
         })
         .disposed(by: disposeBag)
     }
@@ -49,17 +78,12 @@ final class ExploreTabProvider: ObservableObject {
         disposeBag = DisposeBag()
     }
 
-    func update(with sections: Results<FeaturedSection>, continueWatchingSessions: Results<Session>) {
-        let sortedContinueWatchingSessions = continueWatchingSessions.sorted(by: {
-            guard let p1 = $0.progresses.first else { return false }
-            guard let p2 = $1.progresses.first else { return false }
-            return p1.updatedAt > p2.updatedAt
-        })
+    private func update(with data: SourceData) {
         let continueWatchingSection = ExploreTabContent.Section(
             id: "continue-watching",
             title: "Continue Watching",
             icon: .symbol("list.bullet.below.rectangle"),
-            items: sortedContinueWatchingSessions.prefix(Constants.maxContinueWatchingItems).compactMap { session in
+            items: data.continueWatching.compactMap { session in
                 ExploreTabContent.Item(
                     session,
                     duration: session.mediaDuration - session.currentPosition()
@@ -67,9 +91,16 @@ final class ExploreTabProvider: ObservableObject {
             }
         )
 
-        let remoteSections = sections.compactMap(ExploreTabContent.Section.init)
+        let recentFavoritesSection = ExploreTabContent.Section(
+            id: "recent-favorites",
+            title: "Recent Favorites",
+            icon: .symbol("star"),
+            items: data.recentFavorites.compactMap { ExploreTabContent.Item($0) }
+        )
 
-        let contentSections = ([continueWatchingSection] + remoteSections).filter({ !$0.items.isEmpty })
+        let remoteSections = data.featuredSections.compactMap(ExploreTabContent.Section.init)
+
+        let contentSections = ([continueWatchingSection, recentFavoritesSection] + remoteSections).filter({ !$0.items.isEmpty })
 
         guard !contentSections.isEmpty else {
             content = nil
