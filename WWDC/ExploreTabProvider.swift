@@ -51,21 +51,31 @@ final class ExploreTabProvider: ObservableObject {
         }
     }()
 
+    public lazy var topicsObservable: Observable<[Track]> = {
+        let tracks = storage.realm.objects(Track.self)
+            .filter(NSPredicate(format: "sessions.@count >= 1 OR instances.@count >= 1"))
+            .sorted(byKeyPath: "name", ascending: false)
+
+        return Observable.collection(from: tracks).map({ $0.toArray() })
+    }()
+
     private var disposeBag = DisposeBag()
 
     private struct SourceData {
         var featuredSections: Results<FeaturedSection>
         var continueWatching: [Session]
         var recentFavorites: [Session]
+        var topics: [Track]
     }
 
     func activate() {
         Observable.combineLatest(
             featuredSectionsObservable,
             continueWatchingSessionsObservable,
-            recentFavoriteSessionsObservable
+            recentFavoriteSessionsObservable,
+            topicsObservable
         )
-        .filter { !$0.isEmpty || !$1.isEmpty || !$2.isEmpty }
+        .filter { !$0.isEmpty || !$1.isEmpty || !$2.isEmpty || !$3.isEmpty }
         .subscribe(on: MainScheduler.instance)
         .map(SourceData.init)
         .subscribe(onNext: { [weak self] data in
@@ -98,9 +108,36 @@ final class ExploreTabProvider: ObservableObject {
             items: data.recentFavorites.compactMap { ExploreTabContent.Item($0) }
         )
 
+        #warning("TODO: Deep link for topics")
+        let topics = ExploreTabContent.Section(
+            id: "topics",
+            title: "Topics",
+            layout: .pill,
+            icon: .symbol("magnifyingglass"),
+            items: data.topics.compactMap {
+                ExploreTabContent.Item(
+                    id: $0.identifier,
+                    title: $0.name,
+                    subtitle: nil,
+                    overlayText: nil,
+                    overlaySymbol: $0.symbolName,
+                    imageURL: nil,
+                    deepLink: nil,
+                    progress: nil
+                )
+            }
+        )
+
         let remoteSections = data.featuredSections.compactMap(ExploreTabContent.Section.init)
 
-        let contentSections = ([continueWatchingSection, recentFavoritesSection] + remoteSections).filter({ !$0.items.isEmpty })
+        let contentSections = (
+            [
+                continueWatchingSection,
+                recentFavoritesSection
+            ]
+            + remoteSections
+            + [topics]
+        ).filter({ !$0.items.isEmpty })
 
         guard !contentSections.isEmpty else {
             content = nil

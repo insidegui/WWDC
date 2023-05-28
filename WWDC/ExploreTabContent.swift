@@ -13,12 +13,17 @@ struct ExploreTabContent: Codable {
     }
 
     struct Section: Identifiable, Codable {
+        enum Layout: Codable {
+            case card
+            case pill
+        }
         enum Icon: Codable {
             case symbol(String)
             case remoteGlyph(URL)
         }
         var id: String
         var title: String
+        var layout: Layout = .card
         var icon: Icon
         var items: [Item]
     }

@@ -40,7 +40,7 @@ private struct ExploreTabContentView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(alignment: .top, spacing: 16) {
                                 ForEach(section.items) { item in
-                                    ExploreTabItem(item: item)
+                                    ExploreTabItem(layout: section.layout, item: item)
                                         .contentShape(Rectangle())
                                         .onTapGesture {
                                             if let url = item.deepLink {
@@ -76,72 +76,113 @@ extension ExploreTabContent.Section.Icon: View {
 }
 
 private struct ExploreTabItem: View {
+    var layout: ExploreTabContent.Section.Layout
     var item: ExploreTabContent.Item
-
     var width: CGFloat = 240
     var imageHeight: CGFloat = 200
 
-    private var overlayAlignment: Alignment {
-        item.progress != nil ? .topTrailing : .bottomTrailing
-    }
-
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            thumbnail
-                .overlay(alignment: overlayAlignment) {
-                    HStack(spacing: 4) {
-                        if let symbolName = item.overlaySymbol {
-                            Image(systemName: symbolName)
-                                .symbolVariant(.fill)
-                        }
-                        if let text = item.overlayText {
-                            Text(text)
-                        }
-                    }
-                    .font(.caption.weight(.medium))
-                    .padding(.vertical, 4)
-                    .padding(.horizontal, 6)
-                    .background(Material.thin, in: RoundedRectangle(cornerRadius: 5, style: .continuous))
-                    .padding(4)
-                }
-                .overlay(alignment: .bottom) {
-                    if let progress = item.progress {
-                        MiniProgressBar(progress: progress)
-                    }
-                }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(item.title)
-                    .font(.system(.subheadline).weight(.medium))
-                    .foregroundStyle(.secondary)
-                    .textCase(.uppercase)
-
-                if let subtitle = item.subtitle {
-                    Text(subtitle)
-                        .lineLimit(2)
-                        .font(.system(.headline).weight(.medium))
-                        .foregroundStyle(.primary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+        Group {
+            switch layout {
+            case .card:
+                CardLayout(item: item, imageHeight: imageHeight)
+                    .frame(width: width)
+            case .pill:
+                PillLayout(item: item)
             }
-            .padding(.leading, 2)
         }
-        .frame(width: width)
     }
 
-    @ViewBuilder
-    private var thumbnail: some View {
-        if let url = item.imageURL {
-            RemoteImage(url: url, thumbnailHeight: imageHeight) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-            } placeholder: {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .foregroundStyle(.quaternary)
+    private struct CardLayout: View {
+        var item: ExploreTabContent.Item
+        var imageHeight: CGFloat = 200
+
+        private var overlayAlignment: Alignment {
+            item.progress != nil ? .topTrailing : .bottomTrailing
+        }
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 8) {
+                thumbnail
+                    .overlay(alignment: overlayAlignment) {
+                        HStack(spacing: 4) {
+                            if let symbolName = item.overlaySymbol {
+                                Image(systemName: symbolName)
+                                    .symbolVariant(.fill)
+                            }
+                            if let text = item.overlayText {
+                                Text(text)
+                            }
+                        }
+                        .font(.caption.weight(.medium))
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 6)
+                        .background(Material.thin, in: RoundedRectangle(cornerRadius: 5, style: .continuous))
+                        .padding(4)
+                    }
+                    .overlay(alignment: .bottom) {
+                        if let progress = item.progress {
+                            MiniProgressBar(progress: progress)
+                        }
+                    }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(item.title)
+                        .font(.system(.subheadline).weight(.medium))
+                        .foregroundStyle(.secondary)
+                        .textCase(.uppercase)
+
+                    if let subtitle = item.subtitle {
+                        Text(subtitle)
+                            .lineLimit(2)
+                            .font(.system(.headline).weight(.medium))
+                            .foregroundStyle(.primary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .padding(.leading, 2)
             }
-            .frame(width: 236, height: 134)
+        }
+
+        @ViewBuilder
+        private var thumbnail: some View {
+            if let url = item.imageURL {
+                RemoteImage(url: url, thumbnailHeight: imageHeight) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                } placeholder: {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .foregroundStyle(.quaternary)
+                }
+                .frame(width: 236, height: 134)
+            }
+        }
+    }
+
+    private struct PillLayout: View {
+        var item: ExploreTabContent.Item
+
+        var body: some View {
+            HStack {
+                if let name = item.overlaySymbol {
+                    Image(systemName: name)
+                }
+                Text(item.title)
+            }
+                .font(.system(size: 15, weight: .medium, design: .rounded))
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity, minHeight: 48, maxHeight: 48)
+                .background(Color(nsColor: .quaternaryLabelColor), in: shape)
+                .overlay {
+                    shape
+                        .strokeBorder(Color.black.opacity(0.2))
+                }
+        }
+
+        private var shape: some InsettableShape {
+            Capsule(style: .continuous)
         }
     }
 }
@@ -170,7 +211,7 @@ private struct MiniProgressBar: View {
 struct ExploreTabContentView_Previews: PreviewProvider {
     static var previews: some View {
         ExploreTabContentView(content: .preview, scrollOffset: .constant(.zero))
-            .frame(minWidth: 700, maxWidth: .infinity, minHeight: 600, maxHeight: .infinity)
+            .frame(minWidth: 700, maxWidth: .infinity, minHeight: 2000, maxHeight: .infinity)
     }
 }
 #endif
