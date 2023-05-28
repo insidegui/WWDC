@@ -55,7 +55,7 @@ struct DeepLink {
             eventIdentifier = "wwdc\(year)"
             isForCurrentYear = (year == currentYearDigits || year == currentYear)
         } else {
-            eventIdentifier = components[components.startIndex..<components.endIndex-1].joined(separator: "-")
+            eventIdentifier = components[components.index(components.endIndex, offsetBy: -2)..<components.index(components.endIndex, offsetBy: -1)].joined(separator: "-")
             isForCurrentYear = false
             self.year = 0
         }
@@ -90,11 +90,5 @@ extension URL {
 }
 
 extension DeepLink: SessionIdentifiable {
-    var sessionIdentifier: String {
-        if year == 0 {
-            return "\(sessionNumber)"
-        } else {
-            return "\(year)-\(sessionNumber)"
-        }
-    }
+    var sessionIdentifier: String { "\(eventIdentifier)-\(sessionNumber)" }
 }
