@@ -9,10 +9,7 @@
 import Cocoa
 import AVFoundation
 import PlayerUI
-import RxSwift
-import RxCocoa
 import RealmSwift
-import RxRealm
 import ConfCore
 
 extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate {

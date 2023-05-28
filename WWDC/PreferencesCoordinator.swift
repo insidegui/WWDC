@@ -7,8 +7,6 @@
 //
 
 import Cocoa
-import RxCocoa
-import RxSwift
 import ConfCore
 
 enum PreferencesTab: Int, WWDCTab {
@@ -17,8 +15,6 @@ enum PreferencesTab: Int, WWDCTab {
 }
 
 final class PreferencesCoordinator {
-
-    private let disposeBag = DisposeBag()
 
     private let windowController: PreferencesWindowController
 

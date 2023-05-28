@@ -2,6 +2,7 @@ import Cocoa
 import SwiftUI
 import Combine
 import ConfCore
+import RxSwift
 
 final class ExploreTabProvider: ObservableObject {
     let storage: Storage

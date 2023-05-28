@@ -7,8 +7,6 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
 
 private extension NSUserInterfaceItemIdentifier {
     static let sessionItem = NSUserInterfaceItemIdentifier("sessionCell")
@@ -36,8 +34,6 @@ final class RelatedSessionsViewController: NSViewController {
         static let itemWidth: CGFloat = 360
         static let padding: CGFloat = 24
     }
-
-    private let disposeBag = DisposeBag()
 
     var sessions: [SessionViewModel] = [] {
         didSet {
