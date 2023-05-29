@@ -3,6 +3,10 @@ if [[ ${CI} ]]; then
     echo -en '\033[33;1mBootstrap\033[0m travis_fold:start:bootstrap\\r'
 fi
 
+echo ""
+
+./teamid.sh
+
 lessThanOrEqual() {
     [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
 }
@@ -46,4 +50,3 @@ if ! $SWIFTLINT_INSTALLED || ! $SWIFTLINT_UPDATED; then
 fi
 
 echo "All done"
-xed .
