@@ -10,15 +10,6 @@ import Cocoa
 import Combine
 import ConfCore
 
-extension Publisher {
-    func replaceErrorWithEmpty() -> some Publisher<Output, Never> {
-        self.catch { _ in
-            // TODO: Errors
-            Empty<Output, Never>()
-        }
-    }
-}
-
 extension NSStoryboard.Name {
     static let preferences = NSStoryboard.Name("Preferences")
 }
@@ -136,34 +127,29 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
     private func bindTranscriptIndexingState() {
         // Disable transcript language pop up while indexing transcripts.
 
-//        syncEngine.isIndexingTranscripts.asDriver()
-//                                        .map({ !$0 })
-//                                        .drive(transcriptLanguagesPopUp.rx.isEnabled)
-//                                        .store(in: &cancellables)
+        syncEngine.isIndexingTranscripts.map({ !$0 })
+                                        .driveUI(\.isEnabled, on: transcriptLanguagesPopUp, default: true)
+                                        .store(in: &cancellables)
 
         // Show indexing progress while indexing.
 
-        syncEngine.isIndexingTranscripts
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isIndexing in
-                guard let self = self else { return }
+        syncEngine.isIndexingTranscripts.driveUI { [weak self] isIndexing in
+            guard let self = self else { return }
 
-                if isIndexing {
-                    self.indexingLabel?.isHidden = false
-                    self.indexingProgressIndicator?.isHidden = false
-                    self.indexingProgressIndicator?.startAnimation(nil)
-                } else {
-                    self.indexingLabel?.isHidden = true
-                    self.indexingProgressIndicator?.isHidden = true
-                    self.indexingProgressIndicator?.stopAnimation(nil)
-                }
-            }.store(in: &cancellables)
+            if isIndexing {
+                self.indexingLabel?.isHidden = false
+                self.indexingProgressIndicator?.isHidden = false
+                self.indexingProgressIndicator?.startAnimation(nil)
+            } else {
+                self.indexingLabel?.isHidden = true
+                self.indexingProgressIndicator?.isHidden = true
+                self.indexingProgressIndicator?.stopAnimation(nil)
+            }
+        }.store(in: &cancellables)
 
-        syncEngine.transcriptIndexingProgress
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] progress in
-                self?.indexingProgressIndicator?.doubleValue = Double(progress)
-            }.store(in: &cancellables)
+        syncEngine.transcriptIndexingProgress.driveUI { [weak self] progress in
+            self?.indexingProgressIndicator?.doubleValue = Double(progress)
+        }.store(in: &cancellables)
     }
 
     @IBAction func searchInTranscriptsSwitchAction(_ sender: Any) {

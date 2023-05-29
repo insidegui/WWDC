@@ -95,3 +95,12 @@ public extension RealmCollection where Self: RealmSubscribable {
             }
     }
 }
+
+extension Publisher {
+    func replaceErrorWithEmpty() -> some Publisher<Output, Never> {
+        self.catch { _ in
+            // TODO: Errors
+            Empty<Output, Never>()
+        }
+    }
+}

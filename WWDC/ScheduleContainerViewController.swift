@@ -25,7 +25,7 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
 
     /// This should be bound to a state that returns `true` when the schedule is not available.
     @Published
-    private(set) var showHeroView = false
+    var showHeroView = false
 
     private(set) lazy var heroController: EventHeroViewController = {
         EventHeroViewController()
@@ -69,16 +69,18 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
     }
 
     private func bindViews() {
-//        showHeroView.asDriver()
-//                           .drive(splitViewController.view.rx.isHidden)
-//                           .store(in: &cancellables)
+        $showHeroView
+            .print("\(ScheduleContainerViewController.self)")
+            .driveUI(\.view.isHidden, on: splitViewController, default: false)
+            .store(in: &cancellables)
+
+        $showHeroView
+            .map({ !$0 })
+            .print("Hero Controller: \(ScheduleContainerViewController.self)")
+            .driveUI(\.view.isHidden, on: heroController, default: true)
+            .store(in: &cancellables)
 //
-//        showHeroView.asDriver()
-//                           .map({ !$0 })
-//                           .drive(heroController.view.rx.isHidden)
-//                           .store(in: &cancellables)
-//
-//        showHeroView.asObservable().subscribe { [weak self] _ in
+//        $showHeroView.driveUI { [weak self] _ in
 //            guard let self = self else { return }
 //            self.view.needsUpdateConstraints = true
 //        }

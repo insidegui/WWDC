@@ -257,8 +257,6 @@ final class AppCoordinator {
         DownloadManager.shared.syncWithFileSystem()
     }
 
-    typealias StartUpDependencies = (tracks: Results<Track>, events: Results<Event>, foci: Results<Focus>, scheduleSections: Results<ScheduleSection>, featuredSections: Results<FeaturedSection>)
-
     private func doUpdateLists() {
 
         // Initial app launch waits for all of these things to be loaded before dismissing the primary loading spinner
@@ -299,12 +297,15 @@ final class AppCoordinator {
     }
 
     private func bindScheduleAvailability() {
-//        storage.eventHeroObservable.map({ $0 != nil })
-//                                  .bind(to: scheduleController.showHeroView)
-//                                  .store(in: &cancellables)
-//
-//        storage.eventHeroObservable.bind(to: scheduleController.heroController.hero)
-//                                   .store(in: &cancellables)
+        storage.eventHeroObservable.map({ $0 != nil })
+            .replaceError(with: false)
+            .print()
+            .receive(on: DispatchQueue.main)
+            .assign(to: &scheduleController.$showHeroView)
+
+        storage.eventHeroObservable
+            .driveUI(\.heroController.hero, on: scheduleController, default: nil)
+            .store(in: &cancellables)
     }
 
     private lazy var searchCoordinator: SearchCoordinator = {
