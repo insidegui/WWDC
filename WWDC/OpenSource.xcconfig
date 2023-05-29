@@ -1,0 +1,6 @@
+#include "Main.xcconfig"
+
+// Once you set your project's development team,
+// you'll have a unique bundle identifier. This is because the bundle identifier
+// is derived based on the 'SAMPLE_CODE_DISAMBIGUATOR' value.
+SAMPLE_CODE_DISAMBIGUATOR=${DEVELOPMENT_TEAM}

@@ -19,3 +19,4 @@ generatechangelog.sh
 Pods/
 Carthage
 Provisioning
+TeamID.xcconfig
