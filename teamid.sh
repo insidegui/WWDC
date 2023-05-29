@@ -2,16 +2,45 @@
 
 TEAM_ID_FILE=WWDC/TeamID.xcconfig
 
-if [ -z "$1" ]; then
-  echo "What is your Apple Developer Team ID? (looks like 1A23BDCD)"
-  read TEAM_ID
+function print_team_ids() {
+  echo ""
+  echo "FYI, here are the team IDs found in your Xcode preferences:"
+  echo ""
+  
+  XCODEPREFS="$HOME/Library/Preferences/com.apple.dt.Xcode.plist"
+  TEAM_KEYS=(`/usr/libexec/PlistBuddy -c "Print :IDEProvisioningTeams" "$XCODEPREFS" | perl -lne 'print $1 if /^    (\S*) =/'`)
+  
+  for KEY in $TEAM_KEYS 
+  do
+      i=0
+      while true ; do
+          NAME=$(/usr/libexec/PlistBuddy -c "Print :IDEProvisioningTeams:$KEY:$i:teamName" "$XCODEPREFS" 2>/dev/null)
+          TEAMID=$(/usr/libexec/PlistBuddy -c "Print :IDEProvisioningTeams:$KEY:$i:teamID" "$XCODEPREFS" 2>/dev/null)
+          
+          if [ $? -ne 0 ]; then
+              break
+          fi
+          
+          echo "$TEAMID - $NAME"
+          
+          i=$(($i + 1))
+      done
+  done
+}
 
-  if [ -z "$TEAM_ID" ]; then
-    echo "You must enter a team id"
-    exit 1
-  fi
+if [ -z "$1" ]; then
+  print_team_ids
+  echo ""
+  echo "> What is your Apple Developer Team ID? (looks like 1A23BDCD)"
+  read TEAM_ID
 else
   TEAM_ID=$1
+fi
+
+if [ -z "$TEAM_ID" ]; then
+  echo "You must enter a team id"
+  print_team_ids
+  exit 1
 fi
 
 echo "Setting team ID to $TEAM_ID"
