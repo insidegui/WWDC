@@ -128,6 +128,16 @@ final class AppCoordinator {
         }
     }
 
+    var exploreTabLiveSession: Observable<SessionViewModel?> {
+        let liveInstances = storage.realm.objects(SessionInstance.self)
+            .filter("rawSessionType == 'Special Event' AND isCurrentlyLive == true")
+            .sorted(byKeyPath: "startTime", ascending: false)
+
+        return Observable.collection(from: liveInstances)
+            .map({ $0.toArray().first?.session })
+            .map({ SessionViewModel(session: $0, instance: $0?.instances.first, style: .schedule) })
+    }
+
     /// The session that is currently selected on the videos tab (observable)
     var selectedSession: Observable<SessionViewModel?> {
         return videosController.listViewController.selectedSession.asObservable()
@@ -182,6 +192,8 @@ final class AppCoordinator {
         bind(session: selectedSession, to: videosController.detailViewController)
 
         bind(session: selectedScheduleItem, to: scheduleController.splitViewController.detailViewController)
+
+        bind(session: exploreTabLiveSession, to: exploreController.liveSessionController)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -216,6 +228,12 @@ final class AppCoordinator {
     }
 
     private func setupDelegation() {
+        let exploreLiveDetail = exploreController.liveSessionController
+
+        exploreLiveDetail.shelfController.delegate = self
+        exploreLiveDetail.summaryController.actionsViewController.delegate = self
+        exploreLiveDetail.summaryController.relatedSessionsViewController.delegate = self
+
         let videoDetail = videosController.detailViewController
 
         videoDetail.shelfController.delegate = self

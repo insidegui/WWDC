@@ -167,7 +167,7 @@ private struct ExploreTabItem: View {
         @ViewBuilder
         private var thumbnail: some View {
             if let url = item.imageURL {
-                RemoteImage(url: url, thumbnailHeight: imageHeight) { image in
+                RemoteImage(url: url, size: .thumbnail(height: imageHeight)) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)

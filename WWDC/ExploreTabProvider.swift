@@ -17,7 +17,7 @@ final class ExploreTabProvider: ObservableObject {
         storage.featuredSectionsObservable
     }()
 
-    public lazy var continueWatchingSessionsObservable: Observable<[Session]> = {
+    private lazy var continueWatchingSessionsObservable: Observable<[Session]> = {
         let cutoffDate = Calendar.current.date(byAdding: Constants.continueWatchingMaxLastProgressUpdateInterval, to: Date()) ?? Date.distantPast
 
         let videoPredicate = Session.videoPredicate
@@ -36,7 +36,7 @@ final class ExploreTabProvider: ObservableObject {
         }
     }()
 
-    public lazy var recentFavoriteSessionsObservable: Observable<[Session]> = {
+    private lazy var recentFavoriteSessionsObservable: Observable<[Session]> = {
         let cutoffDate = Calendar.current.date(byAdding: Constants.recentFavoritesMaxDateInterval, to: Date()) ?? Date.distantPast
 
         let favoritePredicate = NSPredicate(format: "createdAt >= %@ AND isDeleted = false", cutoffDate as NSDate)
@@ -51,12 +51,21 @@ final class ExploreTabProvider: ObservableObject {
         }
     }()
 
-    public lazy var topicsObservable: Observable<[Track]> = {
+    private lazy var topicsObservable: Observable<[Track]> = {
         let tracks = storage.realm.objects(Track.self)
             .filter(NSPredicate(format: "sessions.@count >= 1 OR instances.@count >= 1"))
-            .sorted(byKeyPath: "name", ascending: false)
+            .sorted(byKeyPath: "name")
 
         return Observable.collection(from: tracks).map({ $0.toArray() })
+    }()
+
+    private lazy var liveEventObservable: Observable<Session?> = {
+        let liveInstances = storage.realm.objects(SessionInstance.self)
+            .filter("rawSessionType == 'Special Event' AND isCurrentlyLive == true")
+            .sorted(byKeyPath: "startTime", ascending: false)
+
+        return Observable.collection(from: liveInstances)
+            .map({ $0.toArray().first?.session })
     }()
 
     private var disposeBag = DisposeBag()
@@ -66,6 +75,7 @@ final class ExploreTabProvider: ObservableObject {
         var continueWatching: [Session]
         var recentFavorites: [Session]
         var topics: [Track]
+        var liveEventSession: Session?
     }
 
     func activate() {
@@ -73,9 +83,10 @@ final class ExploreTabProvider: ObservableObject {
             featuredSectionsObservable,
             continueWatchingSessionsObservable,
             recentFavoriteSessionsObservable,
-            topicsObservable
+            topicsObservable,
+            liveEventObservable
         )
-        .filter { !$0.isEmpty || !$1.isEmpty || !$2.isEmpty || !$3.isEmpty }
+        .filter { !$0.isEmpty || !$1.isEmpty || !$2.isEmpty || !$3.isEmpty || $4 != nil }
         .subscribe(on: MainScheduler.instance)
         .map(SourceData.init)
         .subscribe(onNext: { [weak self] data in
@@ -145,8 +156,11 @@ final class ExploreTabProvider: ObservableObject {
 
         content = ExploreTabContent(
             id: "explore",
-            sections: contentSections
+            sections: contentSections,
+            liveEventItem: data.liveEventSession.flatMap { ExploreTabContent.Item($0) }
         )
+
+        print("->> LIVE EVENT ITEM: \(content?.liveEventItem)")
     }
 }
 
@@ -203,6 +217,18 @@ private extension ExploreTabContent.Item {
             progress = nil
         }
 
+        let stream: LiveStream?
+
+        if let instance = session.instances.first, instance.startTime > today(), instance.endTime < today()  {
+            stream = LiveStream(
+                startTime: instance.startTime,
+                endTime: instance.endTime,
+                url: session.asset(ofType: .liveStreamVideo).flatMap({ URL(string: $0.remoteURL) })
+            )
+        } else {
+            stream = nil
+        }
+
         self.init(
             id: session.identifier,
             title: event.name,
@@ -211,7 +237,8 @@ private extension ExploreTabContent.Item {
             overlaySymbol: session.mediaDuration > 0 ? "play" : nil,
             imageURL: session.imageURL,
             destination: .command(.revealVideo(session.identifier)),
-            progress: progress
+            progress: progress,
+            liveStream: stream
         )
     }
 }

@@ -6,6 +6,11 @@ struct ExploreTabContent: Codable {
             case url(URL)
             case command(WWDCAppCommand)
         }
+        struct LiveStream: Codable {
+            var startTime: Date
+            var endTime: Date
+            var url: URL?
+        }
         var id: String
         var title: String
         var subtitle: String?
@@ -14,6 +19,7 @@ struct ExploreTabContent: Codable {
         var imageURL: URL?
         var destination: Destination?
         var progress: Double?
+        var liveStream: LiveStream?
     }
 
     struct Section: Identifiable, Codable {
@@ -34,6 +40,7 @@ struct ExploreTabContent: Codable {
 
     var id: String
     var sections: [Section]
+    var liveEventItem: Item?
 }
 
 // MARK: - Placeholder Content
@@ -82,16 +89,20 @@ extension ExploreTabContent {
 #if DEBUG
 
 extension ExploreTabContent {
-    static let preview: ExploreTabContent = {
-        guard let data = NSDataAsset(name: "ExploreTab")?.data else {
-            fatalError("Missing ExploreTab development asset")
+    static let preview: ExploreTabContent = preview(named: "ExploreTab")
+    static let previewLiveSoon: ExploreTabContent = preview(named: "ExploreTab-Live")
+    static let previewLiveCurrent: ExploreTabContent = preview(named: "ExploreTab-Live-Current")
+
+    private static func preview(named name: String) -> Self {
+        guard let data = NSDataAsset(name: name)?.data else {
+            fatalError("Missing \(name) development asset")
         }
         do {
             return try JSONDecoder().decode(ExploreTabContent.self, from: data)
         } catch {
-            fatalError("Failed to decode ExploreTab development asset: \(error)")
+            fatalError("Failed to decode \(name) development asset: \(error)")
         }
-    }()
+    }
 
     func exportJSON() {
         do {
