@@ -1,0 +1,14 @@
+// If you see this error: "could not find included file 'TeamID.xcconfig' in search paths"
+// Make sure you have run the bootstrap script from the project's root directory to set up signing for your team ID.
+#include "TeamID.xcconfig"
+
+MARKETING_VERSION = 7.4
+CURRENT_PROJECT_VERSION = 1030
+
+MACOSX_DEPLOYMENT_TARGET = 12.0
+
+VERSIONING_SYSTEM = apple-generic
+
+COPYRIGHT=© 2017-2023 Buddy Software LTD
+
+CODE_SIGN_STYLE = Automatic
