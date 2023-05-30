@@ -21,8 +21,6 @@ extension Notification.Name {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    private lazy var agentController = WWDCAgentController()
-    
     private let log = OSLog(subsystem: "io.wwdc.app", category: String(describing: AppDelegate.self))
 
     private lazy var commandsReceiver = AppCommandsReceiver()
@@ -35,34 +33,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    var startedAsAgent = false
-
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
 
         NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
 
-        assumeAgentPersonalityIfNeeded()
-
         #if ICLOUD
         ConfCoreCapabilities.isCloudKitEnabled = true
         #endif
-    }
-
-    private func assumeAgentPersonalityIfNeeded() {
-        guard !NSApp.isPreview else { return }
-
-        if ProcessInfo.processInfo.arguments.contains("--background") {
-            NSApp.setActivationPolicy(.accessory)
-            startedAsAgent = true
-            os_log("WWDC running in background mode to respond to deep-linked commands", log: self.log, type: .default)
-        } else {
-            NSApp.setActivationPolicy(.regular)
-
-            DispatchQueue.main.async {
-                NSApp.activate(ignoringOtherApps: false)
-            }
-        }
     }
 
     private var urlObservationToken: NSObjectProtocol?
@@ -73,8 +51,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let slowMigrationToleranceInSeconds: TimeInterval = 1.5
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        agentController.registerAgentVersion()
-
         NSApp.registerForRemoteNotifications(matching: [])
 
         #if DEBUG
@@ -112,17 +88,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var storage: Storage?
     private var syncEngine: SyncEngine?
 
-    private func startupUI(using storage: Storage, syncEngine: SyncEngine, force: Bool = false) {
+    private func startupUI(using storage: Storage, syncEngine: SyncEngine) {
         self.storage = storage
         self.syncEngine = syncEngine
-        
-        if !force {
-            guard !startedAsAgent else {
-                os_log("Skipping UI since we're running as an agent", log: self.log, type: .debug)
-                return
-            }
-        }
-        
+
         coordinator = AppCoordinator(
             windowController: MainWindowController(),
             storage: storage,
@@ -277,20 +246,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             coordinator?.windowController.showWindow(self)
         }
     }
-    
-    private func activateUI() {
-        if coordinator == nil, startedAsAgent, let storage = storage, let syncEngine = syncEngine {
-            os_log("Starting up UI late since we started out as an agent", log: self.log, type: .debug)
-            
-            startupUI(using: storage, syncEngine: syncEngine, force: true)
-        }
-    
-        NSApp.setActivationPolicy(.regular)
-    }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        activateUI()
-        
         // User clicks dock item, double clicks app in finder, etc
         if !flag {
             coordinator?.windowController.showWindow(sender)
@@ -321,27 +278,9 @@ extension AppDelegate {
 
     func handle(_ command: WWDCAppCommand, assumeSafe: Bool = false) {
         if command.isForeground {
-            activateUI()
             DispatchQueue.main.async { NSApp.activate(ignoringOtherApps: true) }
         }
-        
-        if !assumeSafe, command.modifiesUserContent {
-            let needsAgentPrefEnabled: Bool
-            
-            #if DEBUG
-            needsAgentPrefEnabled = !UserDefaults.standard.bool(forKey: "WWDCForceAllowAgentCommands")
-            #else
-            needsAgentPrefEnabled = true
-            #endif
-            
-            if needsAgentPrefEnabled {
-                guard WWDCAgentController.isAgentEnabled else {
-                    os_log("Refusing to run command %{public}@ because it's disabled in preferences", log: self.log, type: .error, String(describing: command))
-                    return
-                }
-            }
-        }
-        
+
         guard let storage = storage else { return }
         
         if let link = commandsReceiver.handle(command, storage: storage) {

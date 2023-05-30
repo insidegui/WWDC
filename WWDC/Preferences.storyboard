@@ -11,20 +11,20 @@
             <objects>
                 <viewController storyboardIdentifier="GeneralPreferencesViewController" id="9dt-pe-Bsa" customClass="GeneralPreferencesViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="scn-7e-mlv">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="552"/>
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="440"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="oXs-gK-eLO">
-                                <rect key="frame" x="39" y="458" width="611" height="5"/>
+                                <rect key="frame" x="39" y="346" width="611" height="5"/>
                             </box>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="OZk-0e-tyQ">
-                                <rect key="frame" x="39" y="367" width="611" height="5"/>
+                                <rect key="frame" x="39" y="255" width="611" height="5"/>
                             </box>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gSp-wk-rap">
-                                <rect key="frame" x="39" y="306" width="611" height="5"/>
+                                <rect key="frame" x="39" y="194" width="611" height="5"/>
                             </box>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N9Z-iX-jvK">
-                                <rect key="frame" x="244" y="389" width="161" height="52"/>
+                                <rect key="frame" x="244" y="277" width="161" height="52"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="horizontal" alignment="baseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aFN-Kq-0II">
                                         <rect key="frame" x="0.0" y="30" width="161" height="22"/>
@@ -92,7 +92,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yew-yF-ZWD">
-                                <rect key="frame" x="188" y="427" width="50" height="16"/>
+                                <rect key="frame" x="188" y="315" width="50" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Search:" id="fto-X6-Q8v">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -100,7 +100,7 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="horizontal" alignment="baseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GJT-d9-qvO">
-                                <rect key="frame" x="244" y="328" width="297" height="22"/>
+                                <rect key="frame" x="244" y="216" width="297" height="22"/>
                                 <subviews>
                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="Xvh-jU-3qW">
                                         <rect key="frame" x="-2" y="-2" width="42" height="25"/>
@@ -127,7 +127,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YmL-o7-wzA">
-                                <rect key="frame" x="121" y="509" width="117" height="16"/>
+                                <rect key="frame" x="121" y="397" width="117" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Downloads Folder:" id="wBE-cT-TAg">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -135,7 +135,7 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jme-OU-7GG">
-                                <rect key="frame" x="244" y="481" width="216" height="42"/>
+                                <rect key="frame" x="244" y="369" width="216" height="42"/>
                                 <subviews>
                                     <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eKi-p7-aRV">
                                         <rect key="frame" x="-2" y="28" width="154" height="14"/>
@@ -189,7 +189,7 @@
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="horizontal" alignment="baseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFd-RS-NUX">
-                                <rect key="frame" x="244" y="264" width="180" height="22"/>
+                                <rect key="frame" x="244" y="152" width="180" height="22"/>
                                 <subviews>
                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="SF8-ZN-I8k">
                                         <rect key="frame" x="-2" y="-2" width="42" height="25"/>
@@ -216,7 +216,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T2X-gb-6tZ">
-                                <rect key="frame" x="288" y="228" width="344" height="28"/>
+                                <rect key="frame" x="288" y="116" width="344" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="0Xp-88-sJv"/>
                                 </constraints>
@@ -226,64 +226,11 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NPh-L7-iwo">
-                                <rect key="frame" x="288" y="128" width="344" height="28"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="340" id="E24-EW-s9m"/>
-                                </constraints>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="This allows approved apps to read and modify your favorites, session progress, and downloads." id="UiQ-QL-CRo">
-                                    <font key="font" metaFont="label" size="11"/>
-                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dg4-kH-FAX">
-                                <rect key="frame" x="244" y="164" width="361" height="22"/>
-                                <subviews>
-                                    <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="Vk1-ZC-mPn">
-                                        <rect key="frame" x="-2" y="-2" width="42" height="25"/>
-                                        <connections>
-                                            <action selector="enableWWDCAgentSwitchAction:" target="9dt-pe-Bsa" id="exi-Yw-bf5"/>
-                                        </connections>
-                                    </switch>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mGb-p3-CG5">
-                                        <rect key="frame" x="44" y="3" width="295" height="16"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Allow other apps to access your WWDC content" id="uat-fz-TqE">
-                                            <font key="font" metaFont="system"/>
-                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
-                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ORc-5v-yfb">
-                                        <rect key="frame" x="344" y="0.0" width="18" height="19"/>
-                                        <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WPm-F8-kUH">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <segue destination="FFs-ei-mvW" kind="popover" popoverAnchorView="ORc-5v-yfb" popoverBehavior="t" preferredEdge="maxY" id="Mdp-VV-QVy"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <visibilityPriorities>
-                                    <integer value="1000"/>
-                                    <integer value="1000"/>
-                                    <integer value="1000"/>
-                                </visibilityPriorities>
-                                <customSpacing>
-                                    <real value="3.4028234663852886e+38"/>
-                                    <real value="3.4028234663852886e+38"/>
-                                    <real value="3.4028234663852886e+38"/>
-                                </customSpacing>
-                            </stackView>
                             <box horizontalHuggingPriority="248" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="CVJ-g8-K90">
-                                <rect key="frame" x="39" y="206" width="611" height="5"/>
-                            </box>
-                            <box horizontalHuggingPriority="248" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Ljr-be-BXp">
-                                <rect key="frame" x="39" y="106" width="611" height="5"/>
+                                <rect key="frame" x="39" y="94" width="611" height="5"/>
                             </box>
                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5e8-zi-7Hw">
-                                <rect key="frame" x="422" y="68" width="102" height="20"/>
+                                <rect key="frame" x="422" y="56" width="102" height="20"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mw6-7C-nEg">
                                         <rect key="frame" x="-3" y="-4" width="39" height="25"/>
@@ -325,7 +272,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hK9-wv-pXK">
-                                <rect key="frame" x="288" y="70" width="128" height="16"/>
+                                <rect key="frame" x="288" y="58" width="128" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Transcript language:" id="sYf-Uq-UWl">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -333,7 +280,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gny-ev-Via">
-                                <rect key="frame" x="288" y="32" width="344" height="28"/>
+                                <rect key="frame" x="288" y="20" width="344" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="7tV-eK-eZz"/>
                                 </constraints>
@@ -352,22 +299,15 @@
                             <constraint firstItem="oXs-gK-eLO" firstAttribute="top" secondItem="jme-OU-7GG" secondAttribute="bottom" constant="20" id="4QJ-hT-eOL"/>
                             <constraint firstItem="OZk-0e-tyQ" firstAttribute="top" secondItem="N9Z-iX-jvK" secondAttribute="bottom" constant="19" id="AhL-at-kXx"/>
                             <constraint firstItem="hK9-wv-pXK" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="scn-7e-mlv" secondAttribute="leading" constant="20" symbolic="YES" id="DJL-Fq-lsn"/>
-                            <constraint firstItem="Ljr-be-BXp" firstAttribute="top" secondItem="NPh-L7-iwo" secondAttribute="bottom" constant="19" id="ENI-Eo-G83"/>
                             <constraint firstItem="oXs-gK-eLO" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="EjV-FM-lh2"/>
                             <constraint firstItem="gSp-wk-rap" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="F8V-gE-mGP"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="5e8-zi-7Hw" secondAttribute="trailing" constant="20" symbolic="YES" id="FWl-xd-1Nz"/>
                             <constraint firstAttribute="trailing" secondItem="CVJ-g8-K90" secondAttribute="trailing" id="FwU-SE-O4x"/>
                             <constraint firstItem="hK9-wv-pXK" firstAttribute="leading" secondItem="goO-DA-n9P" secondAttribute="leading" id="Hk3-t3-HrJ"/>
                             <constraint firstItem="jme-OU-7GG" firstAttribute="leading" secondItem="YmL-o7-wzA" secondAttribute="trailing" constant="8" id="I77-eJ-dPD"/>
-                            <constraint firstItem="hK9-wv-pXK" firstAttribute="leading" secondItem="NPh-L7-iwo" secondAttribute="leading" id="IG8-uC-f0T"/>
-                            <constraint firstItem="hK9-wv-pXK" firstAttribute="top" secondItem="Ljr-be-BXp" secondAttribute="bottom" constant="22" id="IY4-M1-0hN"/>
-                            <constraint firstAttribute="trailing" secondItem="Ljr-be-BXp" secondAttribute="trailing" id="Ji8-SI-Iov"/>
                             <constraint firstItem="Gny-ev-Via" firstAttribute="top" secondItem="hK9-wv-pXK" secondAttribute="bottom" constant="10" id="KGt-tt-HA3"/>
                             <constraint firstItem="OZk-0e-tyQ" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="KTG-p7-qfO"/>
-                            <constraint firstItem="Ljr-be-BXp" firstAttribute="leading" secondItem="CVJ-g8-K90" secondAttribute="leading" id="Kiq-Tk-dMF"/>
                             <constraint firstItem="5e8-zi-7Hw" firstAttribute="centerY" secondItem="hK9-wv-pXK" secondAttribute="centerY" id="NqN-ga-JNh"/>
-                            <constraint firstItem="dg4-kH-FAX" firstAttribute="top" secondItem="CVJ-g8-K90" secondAttribute="bottom" constant="22" id="Nw4-14-979"/>
-                            <constraint firstItem="dg4-kH-FAX" firstAttribute="leading" secondItem="qFd-RS-NUX" secondAttribute="leading" id="OpO-U9-STS"/>
                             <constraint firstAttribute="trailing" secondItem="gSp-wk-rap" secondAttribute="trailing" id="P0a-0m-Exf"/>
                             <constraint firstItem="CVJ-g8-K90" firstAttribute="leading" secondItem="scn-7e-mlv" secondAttribute="leading" constant="39" id="RDm-xF-21P"/>
                             <constraint firstItem="5e8-zi-7Hw" firstAttribute="leading" secondItem="hK9-wv-pXK" secondAttribute="trailing" constant="8" id="RE6-jW-3pf"/>
@@ -385,7 +325,7 @@
                             <constraint firstItem="GJT-d9-qvO" firstAttribute="leading" secondItem="N9Z-iX-jvK" secondAttribute="leading" id="nXM-1D-bSD"/>
                             <constraint firstItem="N9Z-iX-jvK" firstAttribute="leading" secondItem="jme-OU-7GG" secondAttribute="leading" id="pGf-PU-WzS"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Gny-ev-Via" secondAttribute="trailing" constant="20" symbolic="YES" id="q46-sR-DbM"/>
-                            <constraint firstItem="NPh-L7-iwo" firstAttribute="top" secondItem="dg4-kH-FAX" secondAttribute="bottom" constant="8" id="skb-4T-P9x"/>
+                            <constraint firstItem="hK9-wv-pXK" firstAttribute="top" secondItem="CVJ-g8-K90" secondAttribute="bottom" constant="22" id="sll-td-8hH"/>
                             <constraint firstAttribute="trailing" secondItem="jme-OU-7GG" secondAttribute="trailing" constant="190" id="tyN-cS-DJP"/>
                             <constraint firstItem="CVJ-g8-K90" firstAttribute="top" secondItem="T2X-gb-6tZ" secondAttribute="bottom" constant="19" id="vsv-9y-kDh"/>
                         </constraints>
@@ -395,13 +335,11 @@
                         <outlet property="dividerB" destination="OZk-0e-tyQ" id="bqR-GF-4P2"/>
                         <outlet property="dividerC" destination="gSp-wk-rap" id="Ywu-do-H09"/>
                         <outlet property="dividerE" destination="CVJ-g8-K90" id="8h3-59-qZK"/>
-                        <outlet property="dividerF" destination="Ljr-be-BXp" id="rRz-AP-0Dd"/>
                         <outlet property="downloadsFolderIntroLabel" destination="YmL-o7-wzA" id="qdP-fS-wMy"/>
                         <outlet property="downloadsFolderLabel" destination="eKi-p7-aRV" id="9xi-lk-ZjI"/>
                         <outlet property="downloadsStackView" destination="jme-OU-7GG" id="sIY-CY-bkM"/>
                         <outlet property="enableUserDataSyncLabel" destination="goO-DA-n9P" id="juP-k6-qjZ"/>
                         <outlet property="enableUserDataSyncSwitch" destination="SF8-ZN-I8k" id="e7r-tv-jPV"/>
-                        <outlet property="enableWWDCAgentSwitch" destination="Vk1-ZC-mPn" id="u9F-PR-puc"/>
                         <outlet property="includeBookmarksLabel" destination="gpY-Ee-hHn" id="Zik-id-1dy"/>
                         <outlet property="includeTranscriptsLabel" destination="X7h-FH-GQx" id="rkK-EW-ECi"/>
                         <outlet property="indexingLabel" destination="WMk-16-lJl" id="waO-NK-prs"/>
@@ -419,7 +357,7 @@
                 </viewController>
                 <customObject id="Cjz-NA-wrV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="56" y="283"/>
+            <point key="canvasLocation" x="56" y="193"/>
         </scene>
         <!--Playback Preferences View Controller-->
         <scene sceneID="Lp0-ua-x0G">
@@ -542,85 +480,6 @@
                 <customObject id="pvc-br-Ach" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="742" y="224.5"/>
-        </scene>
-        <!--Preferences Agent Help View Controller-->
-        <scene sceneID="2nD-3m-bJV">
-            <objects>
-                <viewController id="FFs-ei-mvW" customClass="PreferencesAgentHelpViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="dM2-kq-jDN">
-                        <rect key="frame" x="0.0" y="0.0" width="271" height="221"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v4k-0F-Nho">
-                                <rect key="frame" x="20" y="24" width="231" height="175"/>
-                                <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PRZ-0N-Z7L">
-                                        <rect key="frame" x="-2" y="55" width="235" height="120"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="231" id="D34-Ex-Ec6"/>
-                                        </constraints>
-                                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="jHp-TC-67d">
-                                            <font key="font" metaFont="cellTitle"/>
-                                            <string key="title">This will run an agent in the background that gives other apps the opportunity to access your content from the WWDC app. Currently, this is supported by the Raycast app. If you'd like to integrate WWDC content into your app, open an issue on Github describing your app and what you'd like to do.</string>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                    </textField>
-                                    <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="dbp-PX-MOS">
-                                        <rect key="frame" x="0.0" y="44" width="96" height="5"/>
-                                    </box>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I1j-2K-qhm" customClass="ActionLabel" customModule="WWDC" customModuleProvider="target">
-                                        <rect key="frame" x="-2" y="23" width="49" height="15"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Raycast" id="x44-Wc-9ts">
-                                            <font key="font" metaFont="cellTitle"/>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                        <connections>
-                                            <action selector="openRaycastLink:" target="FFs-ei-mvW" id="gWa-l6-gAI"/>
-                                        </connections>
-                                    </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6PJ-m2-K7t" customClass="ActionLabel" customModule="WWDC" customModuleProvider="target">
-                                        <rect key="frame" x="-2" y="0.0" width="104" height="15"/>
-                                        <textFieldCell key="cell" lineBreakMode="clipping" title="WWDC on Github" id="IBm-XP-HKb">
-                                            <font key="font" metaFont="cellTitle"/>
-                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                        </textFieldCell>
-                                        <connections>
-                                            <action selector="openGithubLink:" target="FFs-ei-mvW" id="N49-ra-AB6"/>
-                                        </connections>
-                                    </textField>
-                                </subviews>
-                                <visibilityPriorities>
-                                    <integer value="1000"/>
-                                    <integer value="1000"/>
-                                    <integer value="1000"/>
-                                    <integer value="1000"/>
-                                </visibilityPriorities>
-                                <customSpacing>
-                                    <real value="3.4028234663852886e+38"/>
-                                    <real value="3.4028234663852886e+38"/>
-                                    <real value="3.4028234663852886e+38"/>
-                                    <real value="3.4028234663852886e+38"/>
-                                </customSpacing>
-                            </stackView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="v4k-0F-Nho" firstAttribute="top" secondItem="dM2-kq-jDN" secondAttribute="top" constant="20" symbolic="YES" id="5d9-z1-IqC"/>
-                            <constraint firstAttribute="bottom" secondItem="v4k-0F-Nho" secondAttribute="bottom" constant="24" id="C0x-nz-eao"/>
-                            <constraint firstItem="v4k-0F-Nho" firstAttribute="leading" secondItem="dM2-kq-jDN" secondAttribute="leading" constant="20" symbolic="YES" id="kkJ-fn-WW8"/>
-                            <constraint firstAttribute="trailing" secondItem="v4k-0F-Nho" secondAttribute="trailing" constant="20" symbolic="YES" id="pCV-Jn-Tod"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="githubLinkLabel" destination="6PJ-m2-K7t" id="Loq-b2-ybM"/>
-                        <outlet property="raycastLinkLabel" destination="I1j-2K-qhm" id="BM9-yc-6ja"/>
-                    </connections>
-                </viewController>
-                <customObject id="wEx-sg-gld" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-33.5" y="867"/>
         </scene>
     </scenes>
 </document>

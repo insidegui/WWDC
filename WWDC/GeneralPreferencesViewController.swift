@@ -46,8 +46,7 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
     @IBOutlet weak var searchInBookmarksSwitch: NSSwitch!
     @IBOutlet weak var refreshPeriodicallySwitch: NSSwitch!
     @IBOutlet weak var enableUserDataSyncSwitch: NSSwitch!
-    @IBOutlet weak var enableWWDCAgentSwitch: NSSwitch!
-    
+
     @IBOutlet weak var downloadsFolderLabel: NSTextField!
 
     @IBOutlet weak var downloadsFolderIntroLabel: NSTextField!
@@ -67,7 +66,6 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
     @IBOutlet weak var dividerB: NSBox!
     @IBOutlet weak var dividerC: NSBox!
     @IBOutlet weak var dividerE: NSBox!
-    @IBOutlet weak var dividerF: NSBox!
 
     override var viewForWindowTopSafeAreaConstraint: NSView? { downloadsStackView }
     
@@ -93,7 +91,6 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         searchInBookmarksSwitch.isOn = Preferences.shared.searchInBookmarks
         refreshPeriodicallySwitch.isOn = Preferences.shared.refreshPeriodically
         enableUserDataSyncSwitch.isOn = Preferences.shared.syncUserData
-        enableWWDCAgentSwitch.isOn = WWDCAgentController.isAgentEnabled
 
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
 
@@ -177,19 +174,6 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         Preferences.shared.syncUserData = enableUserDataSyncSwitch.isOn
         userDataSyncEngine?.isEnabled = enableUserDataSyncSwitch.isOn
         #endif
-    }
-    
-    private lazy var agentController = WWDCAgentController()
-
-    @IBAction func enableWWDCAgentSwitchAction(_ sender: NSSwitch) {
-        if sender.isOn {
-            let success = agentController.enableAgent()
-
-            // The agent installation might fail (rare), in which case we disable the switch again.
-            DispatchQueue.main.async { sender.isOn = success }
-        } else {
-            agentController.disableAgent()
-        }
     }
     
     // MARK: - Downloads folder
