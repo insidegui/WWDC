@@ -96,17 +96,24 @@ public class Session: Object, Decodable {
     public static let videoPredicate: NSPredicate = NSPredicate(format: "ANY assets.rawAssetType == %@", SessionAssetType.streamingVideo.rawValue)
 
     public static func standardSort(sessionA: Session, sessionB: Session) -> Bool {
-        guard let eventA = sessionA.event.first, let eventB = sessionB.event.first else { return false }
         guard let trackA = sessionA.track.first, let trackB = sessionB.track.first else { return false }
 
         if trackA.order == trackB.order {
-            if eventA.startDate == eventB.startDate {
-                return sessionA.title < sessionB.title
-            } else {
-                return eventA.startDate > eventB.startDate
-            }
+            return Self.sameTrackSort(sessionA: sessionA, sessionB: sessionB)
         } else {
+            // Sort by track order
             return trackA.order < trackB.order
+        }
+    }
+
+    public static func sameTrackSort(sessionA: Session, sessionB: Session) -> Bool {
+        // If they're in the same track, sort them by their event start date
+        guard let eventA = sessionA.event.first, let eventB = sessionB.event.first else { return false }
+        if eventA.startDate == eventB.startDate {
+            // If they're part of the same event, sort them by their title
+            return sessionA.title < sessionB.title
+        } else {
+            return eventA.startDate > eventB.startDate
         }
     }
 

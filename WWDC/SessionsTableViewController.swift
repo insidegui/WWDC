@@ -91,7 +91,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
         view.window?.makeFirstResponder(tableView)
 
-        performFirstUpdateIfNeeded()
+//        performFirstUpdateIfNeeded()
     }
 
     // MARK: - Selection
@@ -139,43 +139,54 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
     /// This function is meant to ensure the table view gets populated
     /// even if its data model gets added while it is offscreen. Specifically,
     /// when this table view is not the initial active tab.
-    private func performFirstUpdateIfNeeded() {
+    private func performFirstUpdateIfNeeded(rows: SessionRows) {
         guard !hasPerformedFirstUpdate && sessionRowProvider != nil && view.window != nil else { return }
         hasPerformedFirstUpdate = true
 
-        updateWith(searchResults: filterResults.latestSearchResults, animated: false, selecting: nil)
+        updateWith(rows: rows, searchResults: filterResults.latestSearchResults, animated: false, selecting: nil)
     }
 
-    private func updateWith(searchResults: Results<Session>?, animated: Bool, selecting session: SessionIdentifiable?) {
+    private func updateWith(rows: SessionRows, searchResults: Results<Session>?, animated: Bool, selecting session: SessionIdentifiable?) {
         guard hasPerformedFirstUpdate else { return }
 
-        guard let results = searchResults else {
-            setDisplayedRows(sessionRowProvider?.allRows ?? [], animated: animated, overridingSelectionWith: session)
+        let rowsToDisplay: [SessionRow]
+        if searchResults == nil {
+            rowsToDisplay = rows.all
+        } else {
+            rowsToDisplay = rows.filtered
+        }
+
+        guard performInitialRowDisplayIfNeeded(displaying: rowsToDisplay, allRows: rows.all) else {
             return
         }
 
-        guard let sessionRowProvider = sessionRowProvider else { return }
-
-        let sessionRows = sessionRowProvider.filteredRows(onlyIncludingRowsFor: results)
-
-        setDisplayedRows(sessionRows, animated: animated, overridingSelectionWith: session)
+        setDisplayedRows(rowsToDisplay, animated: animated, overridingSelectionWith: session)
     }
 
     // MARK: - Updating the Displayed Rows
 
+    var rowProviderCancellable: AnyCancellable?
+
     var sessionRowProvider: SessionRowProvider? {
         didSet {
-            performFirstUpdateIfNeeded()
+            guard var sessionRowProvider else { return }
+            sessionRowProvider.filterResults = filterResults.latestSearchResults
+            rowProviderCancellable = sessionRowProvider
+                .rows
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] in
+                    self?.performFirstUpdateIfNeeded(rows: $0)
+                }
         }
     }
 
-    private(set) var displayedRows: [SessionRow] = []
+    private var displayedRows: [SessionRow] = []
 
     lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
 
     private var hasPerformedInitialRowDisplay = false
 
-    private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow]) -> Bool {
+    private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow], allRows: [SessionRow]) -> Bool {
 
         guard !hasPerformedInitialRowDisplay else { return true }
         hasPerformedInitialRowDisplay = true
@@ -190,7 +201,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
             searchController.resetFilters()
             _filterResults = .empty
-            displayedRows = sessionRowProvider?.allRows ?? []
+            displayedRows = allRows
         }
 
         tableView.reloadData()
@@ -219,10 +230,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         return false
     }
 
-    func setDisplayedRows(_ newValue: [SessionRow], animated: Bool, overridingSelectionWith session: SessionIdentifiable?) {
-
-        guard performInitialRowDisplayIfNeeded(displaying: newValue) else { return }
-
+    private func setDisplayedRows(_ newValue: [SessionRow], animated: Bool, overridingSelectionWith session: SessionIdentifiable?) {
         // Dismiss the menu when the displayed rows are about to change otherwise it will crash
         tableView.menu?.cancelTrackingWithoutAnimation()
 
@@ -337,9 +345,10 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
     }
 
     func canDisplay(session: SessionIdentifiable) -> Bool {
-        return sessionRowProvider?.allRows.contains { row -> Bool in
-            row.represents(session: session)
-        } ?? false
+        return false
+//        return sessionRowProvider?.allRows.contains { row -> Bool in
+//            row.represents(session: session)
+//        } ?? false
     }
 
     // MARK: - Search
@@ -349,7 +358,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
     func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
         _filterResults = filterResults
         filterResults.observe { [weak self] in
-            self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
+            self?.sessionRowProvider?.filterResults = $0
+//            self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
         }
     }
 
@@ -361,7 +371,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         set {
             _filterResults = newValue
             filterResults.observe { [weak self] in
-                self?.updateWith(searchResults: $0, animated: false, selecting: nil)
+                self?.sessionRowProvider?.filterResults = $0
+//                self?.updateWith(searchResults: $0, animated: false, selecting: nil)
             }
         }
     }

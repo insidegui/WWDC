@@ -44,4 +44,3 @@ struct RemoteImage<Content: View, Placeholder: View>: View {
         }
     }
 }
-

@@ -169,4 +169,3 @@ fileprivate extension NSPredicate {
         return NSCompoundPredicate(orPredicateWithSubpredicates: [self, NSPredicate(format: "identifier == %@", playingSession)])
     }
 }
-

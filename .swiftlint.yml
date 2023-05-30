@@ -29,7 +29,7 @@ force_try:
 custom_rules:
   os_log_over_all:
     name: "Logging"
-    regex: '(print|NSLog)\('
+    regex: '(?<!\.)(print|NSLog)\('
     message: "Project convention favours os_log for logging."
     match_kinds:
       - identifier

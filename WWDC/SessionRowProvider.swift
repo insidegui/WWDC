@@ -8,25 +8,41 @@
 
 import ConfCore
 import RealmSwift
+import Combine
+
+struct SessionRows {
+    let all: [SessionRow]
+    let filtered: [SessionRow]
+
+    init(all: [SessionRow] = [], filtered: [SessionRow] = []) {
+        self.all = all
+        self.filtered = filtered
+    }
+}
 
 protocol SessionRowProvider {
     func sessionRowIdentifierForToday() -> SessionIdentifiable?
-    func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow]
 
-    var allRows: [SessionRow] { get }
+    /// Set the filter results to update `filteredRows`
+    var filterResults: Results<Session>? { get set }
+    var rows: AnyPublisher<SessionRows, Never> { get }
 }
 
-struct VideosSessionRowProvider: SessionRowProvider {
-    private(set) var allRows = [SessionRow]()
+final class VideosSessionRowProvider: SessionRowProvider {
+    var filterResults: Results<Session>?
+
+    @Published var _rows: SessionRows = SessionRows()
+    var rows: AnyPublisher<SessionRows, Never> { $_rows.eraseToAnyPublisher() }
+
     let tracks: Results<Track>
 
     init(tracks: Results<Track>) {
         self.tracks = tracks
 
-        allRows = filteredRows(onlyIncludingRowsFor: nil)
+//        allRows = filteredRows(onlyIncludingRowsFor: nil)
     }
 
-    func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow] {
+    private func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow] {
         return filteredRows(onlyIncludingRowsFor: Optional.some(onlyIncludingRowsFor))
     }
 
@@ -44,7 +60,7 @@ struct VideosSessionRowProvider: SessionRowProvider {
 
             let titleRow = SessionRow(content: .init(title: track.name, symbolName: track.symbolName))
 
-            let sessionRows: [SessionRow] = thing.sorted(by: Session.standardSort).compactMap { session in
+            let sessionRows: [SessionRow] = thing.sorted(by: Session.sameTrackSort).compactMap { session in
                 guard let viewModel = SessionViewModel(session: session) else { return nil }
 
                 return SessionRow(viewModel: viewModel)
@@ -61,14 +77,17 @@ struct VideosSessionRowProvider: SessionRowProvider {
     }
 }
 
-struct ScheduleSessionRowProvider: SessionRowProvider {
-    private(set) var allRows = [SessionRow]()
+final class ScheduleSessionRowProvider: SessionRowProvider {
+    var filterResults: Results<Session>?
+
+    @Published var _rows: SessionRows = SessionRows()
+    var rows: AnyPublisher<SessionRows, Never> { $_rows.eraseToAnyPublisher() }
     let scheduleSections: Results<ScheduleSection>
 
     init(scheduleSections: Results<ScheduleSection>) {
         self.scheduleSections = scheduleSections
 
-        allRows = filteredRows(onlyIncludingRowsFor: nil)
+//        allRows = filteredRows(onlyIncludingRowsFor: nil)
     }
 
     func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow] {
