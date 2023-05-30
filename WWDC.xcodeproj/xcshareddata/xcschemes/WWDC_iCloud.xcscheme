@@ -115,10 +115,14 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCUseDebugStorage YES"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-AUIEnableVisualEffectDebugger YES"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -127,10 +131,6 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--prefs"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "--no-remote"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -150,7 +150,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "2021-06-07T14:01:00-03:00"
+            argument = "2022-06-06T17:10:00+00:00"
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>

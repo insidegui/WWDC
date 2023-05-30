@@ -19,7 +19,8 @@ final class ImageDownloadCenter {
 
     static let shared: ImageDownloadCenter = ImageDownloadCenter()
 
-    private let cacheProvider = ImageCacheProvider()
+    let cache = ImageCacheProvider()
+
     private let log = OSLog(subsystem: ImageDownload.subsystemName, category: "ImageDownloadCenter")
 
     private let dispatchQueue = DispatchQueue(label: "ImageDownloadCenter", qos: .userInitiated, attributes: .concurrent)
@@ -31,17 +32,18 @@ final class ImageDownloadCenter {
         return q
     }()
     
-    func cachedThumbnail(from url: URL) -> NSImage? { cacheProvider.cachedImage(for: url, thumbnailOnly: true).thumbnail }
+    func cachedThumbnail(from url: URL) -> NSImage? { cache.cachedImage(for: url, thumbnailOnly: true).thumbnail }
 
+    @discardableResult
     func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
         if thumbnailOnly {
-            if let thumbnailImage = cacheProvider.cachedImage(for: url, thumbnailOnly: true).thumbnail {
+            if let thumbnailImage = cache.cachedImage(for: url, thumbnailOnly: true).thumbnail {
                 completion(url, (nil, thumbnailImage))
                 return nil
             }
         }
 
-        let cachedResult = cacheProvider.cachedImage(for: url)
+        let cachedResult = cache.cachedImage(for: url)
 
         guard cachedResult.original == nil && cachedResult.thumbnail == nil else {
             completion(url, cachedResult)
@@ -59,7 +61,7 @@ final class ImageDownloadCenter {
             return nil
         }
 
-        let operation = ImageDownloadOperation(url: url, cache: cacheProvider, thumbnailHeight: thumbnailHeight)
+        let operation = ImageDownloadOperation(url: url, cache: cache, thumbnailHeight: thumbnailHeight)
         operation.addCompletionHandler(with: completion)
 
         queue.addOperation(operation)
@@ -100,7 +102,7 @@ final class ImageDownloadCenter {
 
 }
 
-private final class ImageCacheProvider {
+final class ImageCacheProvider {
 
     private lazy var inMemoryCache: NSCache<NSString, NSImage> = {
         let c = NSCache<NSString, NSImage>()
@@ -133,7 +135,7 @@ private final class ImageCacheProvider {
     private func cacheFileURL(for sourceURL: URL) -> URL { self.cacheURL.appendingPathComponent(sourceURL.imageCacheKey) }
     private func thumbnailCacheFileURL(for sourceURL: URL) -> URL { self.cacheURL.appendingPathComponent(sourceURL.thumbCacheKey) }
 
-    func cacheImage(for sourceURL: URL, original: URL?, thumbnailHeight: CGFloat, completion: @escaping ((original: NSImage, thumbnail: NSImage)?) -> Void) {
+    func cacheImage(for sourceURL: URL, original: URL?, thumbnailHeight: CGFloat? = nil, completion: @escaping ((original: NSImage, thumbnail: NSImage)?) -> Void) {
         guard let original = original else {
             completion(nil)
             return
@@ -155,20 +157,28 @@ private final class ImageCacheProvider {
                     return
                 }
 
-                let thumbImage = image.resized(to: thumbnailHeight)
-                guard let thumbData = thumbImage.pngRepresentation else {
-                    os_log("Failed to create thumbnail", log: self.log, type: .fault)
-                    completion(nil)
-                    return
+                let thumbImage: NSImage
+
+                if let thumbnailHeight {
+                    let thumb = image.resized(to: thumbnailHeight)
+                    guard let thumbData = thumb.pngRepresentation else {
+                        os_log("Failed to create thumbnail", log: self.log, type: .fault)
+                        completion(nil)
+                        return
+                    }
+
+                    let thumbURL = self.thumbnailCacheFileURL(for: sourceURL)
+                    try thumbData.write(to: thumbURL)
+
+                    image.cacheMode = .never
+                    thumb.cacheMode = .never
+
+                    self.inMemoryCache.setObject(thumb, forKey: url.thumbCacheKey as NSString)
+                    thumbImage = thumb
+                } else {
+                    thumbImage = image
                 }
 
-                let thumbURL = self.thumbnailCacheFileURL(for: sourceURL)
-                try thumbData.write(to: thumbURL)
-
-                image.cacheMode = .never
-                thumbImage.cacheMode = .never
-
-                self.inMemoryCache.setObject(thumbImage, forKey: url.thumbCacheKey as NSString)
                 self.inMemoryCache.setObject(image, forKey: url.imageCacheKey as NSString)
 
                 completion((image, thumbImage))

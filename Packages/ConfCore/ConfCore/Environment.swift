@@ -72,7 +72,7 @@ extension Environment {
             sessionsPath: "/sessions.json",
             newsPath: "/news.json",
             liveVideosPath: "/videos_live.json",
-            featuredSectionsPath: "/_featured.json"
+            featuredSectionsPath: "/explore.json"
         )
     }
 
@@ -84,7 +84,7 @@ extension Environment {
                                sessionsPath: "/contents.json",
                                newsPath: "/news.json",
                                liveVideosPath: "/videos_live.json",
-                               featuredSectionsPath: "/_featured.json")
+                               featuredSectionsPath: "/explore.json")
         }
         #endif
         if ProcessInfo.processInfo.arguments.contains("--test") {
@@ -103,13 +103,13 @@ extension Environment {
                                          sessionsPath: "/contents.json",
                                          newsPath: "/news.json",
                                          liveVideosPath: "/videos_live.json",
-                                         featuredSectionsPath: "/_featured.json")
+                                         featuredSectionsPath: "/explore.json")
 
     public static let production = Environment(baseURL: "https://api2021.wwdc.io",
                                                configPath: "/config.json",
                                                sessionsPath: "/contents.json",
                                                newsPath: "/news.json",
                                                liveVideosPath: "/videos_live.json",
-                                               featuredSectionsPath: "/_featured.json")
+                                               featuredSectionsPath: "/explore.json")
 
 }

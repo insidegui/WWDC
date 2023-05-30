@@ -50,3 +50,16 @@ extension Array where Element == FilterType {
         return result as? T
     }
 }
+
+extension WWDCFiltersState {
+    var base64Encoded: String? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return data.base64EncodedString()
+    }
+
+    init?(base64Encoded: String) {
+        guard let data = Data(base64Encoded: Data(base64Encoded.utf8)) else { return nil }
+        guard let decoded = try? JSONDecoder().decode(Self.self, from: data) else { return nil }
+        self = decoded
+    }
+}

@@ -51,17 +51,30 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         view.addSubview(scrollView)
         view.addSubview(searchController.view)
 
+        scrollView.contentView.automaticallyAdjustsContentInsets = false
+
         searchController.view.translatesAutoresizingMaskIntoConstraints = false
 
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        scrollView.topAnchor.constraint(equalTo: searchController.view.bottomAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
         searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    }
+
+    override func viewWillLayout() {
+        super.viewWillLayout()
+
+        let topInset = searchController.view.fittingSize.height
+
+        let insets = NSEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        scrollView.scrollerInsets = insets
+        scrollView.contentView.contentInsets = insets
+        scrollView.contentView.needsLayout = true
     }
 
     override func viewDidLoad() {
@@ -380,7 +393,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         v.floatsGroupRows = true
         v.gridStyleMask = .solidHorizontalGridLineMask
         v.gridColor = .darkGridColor
-        if #available(macOS 11.0, *) { v.style = .plain }
+        v.style = .plain
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
         v.addTableColumn(column)
@@ -399,6 +412,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         v.hasHorizontalScroller = false
         v.translatesAutoresizingMaskIntoConstraints = false
         v.alphaValue = 0
+        v.automaticallyAdjustsContentInsets = false
 
         return v
     }()
@@ -558,17 +572,18 @@ private extension NSMenuItem {
 
 // MARK: - Datasource / Delegate
 
+private extension NSUserInterfaceItemIdentifier {
+    static let sessionRow = NSUserInterfaceItemIdentifier(rawValue: "sessionRow")
+    static let headerRow = NSUserInterfaceItemIdentifier(rawValue: "headerRow")
+
+    static let sessionCell = NSUserInterfaceItemIdentifier(rawValue: "sessionCell")
+}
+
 extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
 
-    fileprivate struct Metrics {
-        static let headerRowHeight: CGFloat = 20
+    struct Metrics {
+        static let headerRowHeight: CGFloat = 32
         static let sessionRowHeight: CGFloat = 64
-    }
-
-    private struct Constants {
-        static let sessionCellIdentifier = "sessionCell"
-        static let titleCellIdentifier = "titleCell"
-        static let rowIdentifier = "row"
     }
 
     func numberOfRows(in tableView: NSTableView) -> Int {
@@ -581,51 +596,43 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
         switch sessionRow.kind {
         case .session(let viewModel):
             return cellForSessionViewModel(viewModel)
-        case .sectionHeader(let title):
-            return cellForSectionTitle(title)
+        case .sectionHeader:
+            return nil
         }
     }
 
-    func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        var rowView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier), owner: tableView) as? WWDCTableRowView
-
+    private func rowView<T>(with id: NSUserInterfaceItemIdentifier) -> T? where T: NSTableRowView {
+        var rowView = tableView.makeView(withIdentifier: id, owner: tableView) as? T
         if rowView == nil {
-            rowView = WWDCTableRowView(frame: .zero)
-            rowView?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.rowIdentifier)
+            rowView = T(frame: .zero)
+            rowView?.identifier = id
         }
-
-        switch displayedRows[row].kind {
-        case .sectionHeader:
-            rowView?.isGroupRowStyle = true
-        default:
-            rowView?.isGroupRowStyle = false
-        }
-
         return rowView
     }
 
+    func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
+
+        switch displayedRows[row].kind {
+        case .sectionHeader(let content):
+            let rowView: TopicHeaderRow? = rowView(with: .headerRow)
+
+            rowView?.content = content
+
+            return rowView
+        default:
+            return rowView(with: .sessionRow)
+        }
+    }
+
     private func cellForSessionViewModel(_ viewModel: SessionViewModel) -> SessionTableCellView? {
-        var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.sessionCellIdentifier), owner: tableView) as? SessionTableCellView
+        var cell = tableView.makeView(withIdentifier: .sessionCell, owner: tableView) as? SessionTableCellView
 
         if cell == nil {
             cell = SessionTableCellView(frame: .zero)
-            cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.sessionCellIdentifier)
+            cell?.identifier = .sessionCell
         }
 
         cell?.viewModel = viewModel
-
-        return cell
-    }
-
-    private func cellForSectionTitle(_ title: String) -> TitleTableCellView? {
-        var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.titleCellIdentifier), owner: tableView) as? TitleTableCellView
-
-        if cell == nil {
-            cell = TitleTableCellView(frame: .zero)
-            cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.titleCellIdentifier)
-        }
-
-        cell?.title = title
 
         return cell
     }

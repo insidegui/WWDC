@@ -42,7 +42,7 @@ struct VideosSessionRowProvider: SessionRowProvider {
                 guard !thing.isEmpty else { return [] }
             }
 
-            let titleRow = SessionRow(title: track.name)
+            let titleRow = SessionRow(content: .init(title: track.name, symbolName: track.symbolName))
 
             let sessionRows: [SessionRow] = thing.sorted(by: Session.standardSort).compactMap { session in
                 guard let viewModel = SessionViewModel(session: session) else { return nil }

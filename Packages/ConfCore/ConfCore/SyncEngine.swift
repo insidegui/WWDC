@@ -67,6 +67,7 @@ public final class SyncEngine {
 
                     guard error == nil else { return }
 
+                    self.userDataSyncEngine?.commitRecordsPendingContentSyncIfNeeded()
                     self.syncFeaturedSections()
                 }
             }

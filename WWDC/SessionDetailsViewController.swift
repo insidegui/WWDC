@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class SessionDetailsViewController: NSViewController {
+final class SessionDetailsViewController: WWDCWindowContentViewController {
 
     private struct Metrics {
         static let padding: CGFloat = 46
@@ -196,7 +196,6 @@ class SessionDetailsViewController: NSViewController {
 
         shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding).isActive = true
         shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding).isActive = true
-        shelfController.view.topAnchor.constraint(equalTo: view.topAnchor, constant: 22).isActive = true
 
         informationStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding).isActive = true
         informationStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding).isActive = true
@@ -207,6 +206,8 @@ class SessionDetailsViewController: NSViewController {
 
         showOverview()
     }
+
+    override var childForWindowTopSafeAreaConstraint: NSViewController? { shelfController }
 
     @objc private func tabButtonAction(_ sender: WWDCTextButton) {
         if sender == overviewButton {

@@ -7,8 +7,9 @@
 //
 
 import Cocoa
+import SwiftUI
 
-class ModalLoadingView: NSView {
+final class ModalLoadingView: NSView {
 
     private lazy var backgroundView: NSVisualEffectView = {
         let v = NSVisualEffectView()
@@ -21,14 +22,10 @@ class ModalLoadingView: NSView {
         return v
     }()
 
-    private lazy var spinner: NSProgressIndicator = {
-        let p = NSProgressIndicator()
-
-        p.isIndeterminate = true
-        p.style = .spinning
-        p.translatesAutoresizingMaskIntoConstraints = false
-
-        return p
+    private lazy var content: NSView = {
+        let v = NSHostingView(rootView: LoadingContent())
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
     }()
 
     override init(frame frameRect: NSRect) {
@@ -37,15 +34,15 @@ class ModalLoadingView: NSView {
         wantsLayer = true
 
         addSubview(backgroundView)
-        backgroundView.addSubview(spinner)
+        backgroundView.addSubview(content)
 
         backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         backgroundView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
-        spinner.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
-        spinner.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
+        content.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor).isActive = true
+        content.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor).isActive = true
     }
 
     required init?(coder: NSCoder) {
@@ -61,24 +58,69 @@ class ModalLoadingView: NSView {
     }
 
     func show(in view: NSView) {
-        alphaValue = 0
         autoresizingMask = [.width, .height]
-        spinner.startAnimation(nil)
 
         view.addSubview(self)
-
-        NSAnimationContext.runAnimationGroup({ _ in
-            self.alphaValue = 1
-        }, completionHandler: nil)
     }
 
     func hide() {
-        NSAnimationContext.runAnimationGroup({ _ in
-            self.spinner.stopAnimation(nil)
-            self.alphaValue = 0
-        }, completionHandler: {
-            self.removeFromSuperview()
-        })
+        removeFromSuperview()
     }
 
+}
+
+private struct LoadingContent: View {
+    @State private var animated = false
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Spinner()
+                .opacity(animated ? 1 : 0)
+
+            VStack(spacing: 6) {
+                Text("Fetching and Indexing Content")
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                    .opacity(animated ? 1 : 0)
+                    .delay(1.5)
+
+                Text("This may take a moment the first time the app is launched")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .opacity(animated ? 1 : 0)
+                    .delay(3)
+            }
+        }
+        .onAppear {
+            withAnimation(.easeIn(duration: 1)) {
+                animated = true
+            }
+        }
+    }
+}
+
+private struct Spinner: NSViewRepresentable {
+    typealias NSViewType = NSProgressIndicator
+
+    func makeNSView(context: Context) -> NSProgressIndicator {
+        let v = NSProgressIndicator()
+
+        v.style = .spinning
+        v.isIndeterminate = true
+        v.startAnimation(nil)
+
+        return v
+    }
+
+    func updateNSView(_ nsView: NSProgressIndicator, context: Context) {
+
+    }
+}
+
+private extension View {
+    func delay(_ time: TimeInterval) -> some View {
+        transaction { t in
+            t.animation = t.animation?.delay(time)
+        }
+    }
 }

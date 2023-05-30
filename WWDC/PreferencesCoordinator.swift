@@ -9,7 +9,7 @@
 import Cocoa
 import ConfCore
 
-enum PreferencesTab: Int {
+enum PreferencesTab: Int, WWDCTab {
     case general
     case playback
 }

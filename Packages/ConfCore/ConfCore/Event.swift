@@ -29,6 +29,9 @@ public class Event: Object, Decodable {
     /// Is this the current event?
     @objc public dynamic var isCurrent = false
 
+    /// URL to a glyph image representing the event.
+    @objc public dynamic var glyphURL: String = ""
+
     /// Sessions held at this event
     public let sessions = List<Session>()
 
@@ -54,6 +57,7 @@ public class Event: Object, Decodable {
         case start = "startTime"
         case end = "endTime"
         case identifier = "id"
+        case glyphURL = "imageURL"
     }
 
     public required convenience init(from decoder: Decoder) throws {
@@ -66,8 +70,9 @@ public class Event: Object, Decodable {
         startDate = try container.decode(key: .start)
         year = Calendar.current.component(.year, from: startDate)
         endDate = try container.decode(key: .end)
-        isCurrent = try container.decode(key: .current)
+        isCurrent = (try? container.decodeIfPresent(key: .current)) ?? false
         imagesPath = try container.decode(key: .imagesPath)
+        glyphURL = (try? container.decodeIfPresent(key: .glyphURL)) ?? ""
     }
 
 }

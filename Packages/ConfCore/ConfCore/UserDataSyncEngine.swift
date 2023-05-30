@@ -83,6 +83,9 @@ public final class UserDataSyncEngine {
         didSet {
             guard oldValue != isEnabled else { return }
 
+            /// Prevents `isEnabled` from causing start before `start()` has been called at least once.
+            guard canStart else { return }
+
             if isEnabled {
                 os_log("Starting because isEnabled has changed to true", log: log, type: .debug)
                 start()
@@ -96,7 +99,11 @@ public final class UserDataSyncEngine {
 
     private let disposeBag = DisposeBag()
 
+    private var canStart = false
+
     public func start() {
+        canStart = true
+
         guard ConfCoreCapabilities.isCloudKitEnabled else { return }
 
         guard !isWaitingForAccountAvailabilityToStart else { return }
@@ -145,8 +152,12 @@ public final class UserDataSyncEngine {
 
     public private(set) var isAccountAvailable = BehaviorRelay<Bool>(value: false)
 
-    public func stop(harsh: Bool = false) {
-        guard isRunning, !isStopping.value else { return }
+    public func stop() {
+        guard isRunning, !isStopping.value else {
+            self.clearSyncMetadata()
+            return
+        }
+        
         isStopping.accept(true)
 
         workQueue.async { [unowned self] in
@@ -164,8 +175,6 @@ public final class UserDataSyncEngine {
 
                 self.realmNotificationTokens.forEach { $0.invalidate() }
                 self.realmNotificationTokens.removeAll()
-
-                guard harsh else { return }
 
                 self.clearSyncMetadata()
             }
@@ -300,10 +309,13 @@ public final class UserDataSyncEngine {
         cloudOperationQueue.addOperation(operation)
     }
 
-    private func clearSyncMetadata() {
+    func clearSyncMetadata() {
+        os_log("%{public}@", log: log, type: .debug, #function)
+        
         privateChangeToken = nil
         createdPrivateSubscription = false
         createdCustomZone = false
+        tombstoneRecords.removeAll()
 
         clearCloudKitFields()
     }
@@ -475,7 +487,18 @@ public final class UserDataSyncEngine {
         }
     }
 
-    private func commitServerChangesToDatabase(with records: [CKRecord]) {
+    /// Record tombstone keys for sync objects that are known to no longer have valid content associated with them.
+    private var tombstoneRecords: Set<String> {
+        get { Set(UserDefaults.standard.stringArray(forKey: #function) ?? []) }
+        set {
+            UserDefaults.standard.set(Array(newValue), forKey: #function)
+            UserDefaults.standard.synchronize()
+        }
+    }
+
+    private var recordsPendingContentSync = Set<CKRecord>()
+
+    private func commitServerChangesToDatabase(with records: [CKRecord], shouldRetryAfterContentSync: Bool = true) {
         guard records.count > 0 else {
             os_log("Finished record zone changes fetch with no changes", log: log, type: .info)
             return
@@ -486,22 +509,83 @@ public final class UserDataSyncEngine {
         performRealmOperations { [weak self] queueRealm in
             guard let self = self else { return }
 
-            records.forEach { record in
-                switch record.recordType {
+            let pendingRecords: [CKRecord] = records.compactMap { pendingRecord in
+                let result: CommitResult
+
+                switch pendingRecord.recordType {
                 case RecordTypes.favorite:
-                    self.commit(objectType: Favorite.self, with: record, in: queueRealm)
+                    result = self.commit(objectType: Favorite.self, with: pendingRecord, in: queueRealm)
                 case RecordTypes.bookmark:
-                    self.commit(objectType: Bookmark.self, with: record, in: queueRealm)
+                    result = self.commit(objectType: Bookmark.self, with: pendingRecord, in: queueRealm)
                 case RecordTypes.sessionProgress:
-                    self.commit(objectType: SessionProgress.self, with: record, in: queueRealm)
+                    result = self.commit(objectType: SessionProgress.self, with: pendingRecord, in: queueRealm)
                 default:
-                    os_log("Unknown record type %{public}@", log: self.log, type: .fault, record.recordType)
+                    os_log("Unknown record type %{public}@", log: self.log, type: .fault, pendingRecord.recordType)
+                    return nil
+                }
+
+                guard result == .pendingContent else {
+                    self.removeFromPending(pendingRecord)
+                    return nil
+                }
+
+                /// Record is pending content sync.
+                return pendingRecord
+            }
+
+            if pendingRecords.isEmpty {
+                os_log("Finished commit Realm operations", log: self.log, type: .debug)
+            } else {
+                if shouldRetryAfterContentSync {
+                    let validPendingRecords = pendingRecords.filter({ !self.tombstoneRecords.contains($0.tombstoneKey) })
+
+                    os_log("Finished commit Realm operations with %{public}d record(s) pending content sync", log: self.log, type: .debug, validPendingRecords.count)
+
+                    self.workQueue.async {
+                        self.recordsPendingContentSync.formUnion(validPendingRecords)
+                    }
+                } else {
+                    os_log("Invalidating %{public}d sync objects for no longer having valid content associated with them", log: self.log, type: .debug, pendingRecords.count)
+
+                    self.tombstoneRecords.formUnion(pendingRecords.map(\.tombstoneKey))
                 }
             }
         }
     }
 
-    private func commit<T: SynchronizableObject>(objectType: T.Type, with record: CKRecord, in realm: Realm) {
+    private func removeFromPending(_ record: CKRecord) {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+
+            guard let pendingRecord = self.recordsPendingContentSync.first(where: { $0.recordID == record.recordID }) else { return }
+            self.recordsPendingContentSync.remove(pendingRecord)
+        }
+    }
+
+    /// Attempts to ingest remote records into the local database which were pending the availability of local content.
+    func commitRecordsPendingContentSyncIfNeeded() {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+
+            guard !self.recordsPendingContentSync.isEmpty else { return }
+
+            os_log("Will commit %{public}d record(s) pending content sync", log: self.log, type: .debug, self.recordsPendingContentSync.count)
+
+            let snapshot = self.recordsPendingContentSync
+
+            self.recordsPendingContentSync.removeAll()
+
+            self.commitServerChangesToDatabase(with: Array(snapshot), shouldRetryAfterContentSync: false)
+        }
+    }
+
+    private enum CommitResult {
+        case pendingContent
+        case failure
+        case success
+    }
+
+    private func commit<T: SynchronizableObject>(objectType: T.Type, with record: CKRecord, in realm: Realm) -> CommitResult {
         do {
             let obj = try CloudKitRecordDecoder().decode(objectType.SyncObject.self, from: record)
             let model = objectType.from(syncObject: obj)
@@ -510,19 +594,22 @@ public final class UserDataSyncEngine {
 
             guard let sessionId = obj.sessionId else {
                 os_log("Sync object didn't have a sessionId!", log: self.log, type: .fault)
-                return
+                return .failure
             }
             guard let session = realm.object(ofType: Session.self, forPrimaryKey: sessionId) else {
-                os_log("Failed to find session with identifier: %{public}@ for synced object", log: self.log, type: .error, sessionId)
-                return
+                os_log("No session #%{public}@ for %{public}@ object", log: self.log, type: .info, sessionId, record.recordType)
+                return .pendingContent
             }
 
             session.addChild(object: model)
+
+            return .success
         } catch {
             os_log("Failed to decode sync object from cloud record: %{public}@",
                    log: self.log,
                    type: .error,
                    String(describing: error))
+            return .failure
         }
     }
 
@@ -781,4 +868,8 @@ public final class UserDataSyncEngine {
 extension Error {
     var isCKTokenExpired: Bool { (self as? CKError)?.code == .changeTokenExpired }
     var isCKZoneDeleted: Bool { (self as? CKError)?.code == .userDeletedZone }
+}
+
+private extension CKRecord {
+    var tombstoneKey: String { "\(recordID.zoneID.ownerName)-\(recordID.zoneID.zoneName)-\(recordType)-\(recordID.recordName)" }
 }

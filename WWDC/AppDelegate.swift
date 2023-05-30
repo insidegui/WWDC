@@ -40,19 +40,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
 
+        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+
+        assumeAgentPersonalityIfNeeded()
+
+        #if ICLOUD
+        ConfCoreCapabilities.isCloudKitEnabled = true
+        #endif
+    }
+
+    private func assumeAgentPersonalityIfNeeded() {
+        guard !NSApp.isPreview else { return }
+
         if ProcessInfo.processInfo.arguments.contains("--background") {
             NSApp.setActivationPolicy(.accessory)
             startedAsAgent = true
             os_log("WWDC running in background mode to respond to deep-linked commands", log: self.log, type: .default)
         } else {
             NSApp.setActivationPolicy(.regular)
+
+            DispatchQueue.main.async {
+                NSApp.activate(ignoringOtherApps: false)
+            }
         }
-
-        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
-
-        #if ICLOUD
-        ConfCoreCapabilities.isCloudKitEnabled = true
-        #endif
     }
 
     private var urlObservationToken: NSObjectProtocol?
@@ -63,8 +73,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let slowMigrationToleranceInSeconds: TimeInterval = 1.5
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": false])
-        
         agentController.registerAgentVersion()
 
         NSApp.registerForRemoteNotifications(matching: [])
@@ -239,7 +247,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func viewFeatured(_ sender: Any) {
-        coordinator?.showFeatured()
+        coordinator?.showExplore()
     }
 
     @IBAction func viewSchedule(_ sender: Any) {
@@ -248,6 +256,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func viewVideos(_ sender: Any) {
         coordinator?.showVideos()
+    }
+
+    @objc func applyFilterState(_ sender: Any?) {
+        guard let state = sender as? WWDCFiltersState else { return }
+
+        coordinator?.applyFilter(state: state)
     }
 
     @IBAction func viewHelp(_ sender: Any) {
@@ -301,13 +315,17 @@ extension AppDelegate: SUUpdaterDelegate {
 }
 
 extension AppDelegate {
-    func handle(_ command: WWDCAppCommand) {
+    static func run(_ command: WWDCAppCommand) {
+        (NSApp.delegate as? Self)?.handle(command, assumeSafe: true)
+    }
+
+    func handle(_ command: WWDCAppCommand, assumeSafe: Bool = false) {
         if command.isForeground {
             activateUI()
             DispatchQueue.main.async { NSApp.activate(ignoringOtherApps: true) }
         }
         
-        if command.modifiesUserContent {
+        if !assumeSafe, command.modifiesUserContent {
             let needsAgentPrefEnabled: Bool
             
             #if DEBUG

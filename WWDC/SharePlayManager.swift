@@ -12,7 +12,6 @@ import Combine
 import ConfCore
 import OSLog
 
-@available(macOS 12.0, *)
 final class SharePlayManager: ObservableObject {
     
     enum State {

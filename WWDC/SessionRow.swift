@@ -9,7 +9,7 @@
 import Foundation
 
 enum SessionRowKind {
-    case sectionHeader(String)
+    case sectionHeader(TopicHeaderRowContent)
     case session(SessionViewModel)
 }
 
@@ -21,20 +21,20 @@ final class SessionRow: CustomDebugStringConvertible {
         kind = .session(viewModel)
     }
 
-    init(title: String) {
-        kind = .sectionHeader(title)
+    init(content: TopicHeaderRowContent) {
+        kind = .sectionHeader(content)
     }
 
     convenience init(date: Date, showTimeZone: Bool = false) {
         let title = SessionViewModel.standardFormatted(date: date, withTimeZoneName: showTimeZone)
 
-        self.init(title: title)
+        self.init(content: .init(title: title))
     }
 
     var debugDescription: String {
         switch kind {
-        case .sectionHeader(let title):
-            return "Header: " + title
+        case .sectionHeader(let content):
+            return "Header: " + content.title
         case .session(let viewModel):
             return "Session: " + viewModel.identifier + " " + viewModel.title
         }
@@ -45,7 +45,7 @@ extension SessionRow {
 
     func represents(session: SessionIdentifiable) -> Bool {
         if case .session(let viewModel) = kind {
-            return viewModel.identifier.contains(session.sessionIdentifier)
+            return viewModel.identifier == session.sessionIdentifier
         }
         return false
     }

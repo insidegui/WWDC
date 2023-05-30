@@ -35,7 +35,7 @@ class SessionSummaryViewController: NSViewController {
 
     private lazy var titleLabel: WWDCTextField = {
         let l = WWDCTextField(labelWithString: "")
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byWordWrapping
         l.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         l.allowsDefaultTighteningForTruncation = true
@@ -104,7 +104,7 @@ class SessionSummaryViewController: NSViewController {
         let l = NSTextField(labelWithString: "")
         l.font = .systemFont(ofSize: 16)
         l.textColor = .tertiaryText
-        l.cell?.backgroundStyle = .dark
+        l.cell?.backgroundStyle = .emphasized
         l.lineBreakMode = .byTruncatingTail
         l.allowsDefaultTighteningForTruncation = true
 

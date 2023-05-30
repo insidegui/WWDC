@@ -26,17 +26,19 @@ public final class Storage {
         self.realmConfig = realm.configuration
         self.realm = realm
 
-        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStart).subscribe(onNext: { [unowned self] _ in
-            os_log("Locking Realm auto-updates until transcript indexing is finished", log: self.log, type: .info)
-
-            self.realm.autorefresh = false
-        }).disposed(by: disposeBag)
-
-        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStop).subscribe(onNext: { [unowned self] _ in
-            os_log("Realm auto-updates unlocked", log: self.log, type: .info)
-
-            self.realm.autorefresh = true
-        }).disposed(by: disposeBag)
+        // This used to be necessary because of CPU usage in the app during script indexing, but it causes a long period of time during indexing where content doesn't reflect what's on the database,
+        // including for user actions such as favoriting, etc. Tested with the current version of Realm in the app and it doesn't seem to be an issue anymore.
+//        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStart).subscribe(onNext: { [unowned self] _ in
+//            os_log("Locking Realm auto-updates until transcript indexing is finished", log: self.log, type: .info)
+//
+//            self.realm.autorefresh = false
+//        }).disposed(by: disposeBag)
+//
+//        DistributedNotificationCenter.default().rx.notification(.TranscriptIndexingDidStop).subscribe(onNext: { [unowned self] _ in
+//            os_log("Realm auto-updates unlocked", log: self.log, type: .info)
+//
+//            self.realm.autorefresh = true
+//        }).disposed(by: disposeBag)
 
         deleteOldEventsIfNeeded()
     }
@@ -187,6 +189,11 @@ public final class Storage {
                     resource.session = session
                 }
             }
+
+            // Remove tracks that don't include any future session instances nor any sessions with video/live video
+            let emptyTracks = backgroundRealm.objects(Track.self)
+                .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType = %@ OR ANY $session.assets.rawAssetType = %@).@count == 0", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
+            backgroundRealm.delete(emptyTracks)
 
             // Create schedule view
             backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
@@ -561,6 +568,13 @@ public final class Storage {
 
     public var allEvents: [Event] {
         return realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).toArray()
+    }
+
+    public var eventsForFiltering: [Event] {
+        return realm.objects(Event.self)
+            .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType == %@).@count > %d", SessionAssetType.streamingVideo.rawValue, 0)
+            .sorted(byKeyPath: "startDate", ascending: false)
+            .toArray()
     }
 
     public var allFocuses: [Focus] {

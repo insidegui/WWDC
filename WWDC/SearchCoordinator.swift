@@ -11,17 +11,6 @@ import ConfCore
 import RealmSwift
 import os.log
 
-enum FilterIdentifier: String {
-    case text
-    case event
-    case focus
-    case track
-    case isFavorite
-    case isDownloaded
-    case isUnwatched
-    case hasBookmarks
-}
-
 final class SearchCoordinator {
 
     let storage: Storage
@@ -32,7 +21,7 @@ final class SearchCoordinator {
     private let log = OSLog(subsystem: "WWDC", category: "SearchCoordinator")
 
     /// The desired state of the filters upon configuration
-    private let restorationFiltersState: WWDCFiltersState?
+    private var restorationFiltersState: WWDCFiltersState?
 
     fileprivate var scheduleSearchController: SearchFiltersViewController {
         return scheduleController.searchController
@@ -59,8 +48,12 @@ final class SearchCoordinator {
                                                object: nil)
     }
 
-    func configureFilters() {
+    func apply(_ state: WWDCFiltersState) {
+        restorationFiltersState = state
+        configureFilters()
+    }
 
+    func configureFilters() {
         // Schedule Filters Configuration
 
         var scheduleTextualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
@@ -93,7 +86,7 @@ final class SearchCoordinator {
                                                        modelKey: "trackName",
                                                        options: trackOptions,
                                                        selectedOptions: [],
-                                                       emptyTitle: "All Tracks")
+                                                       emptyTitle: "All Topics")
 
         let favoritePredicate = NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == false).@count > 0")
         var scheduleFavoriteFilter = ToggleFilter(identifier: FilterIdentifier.isFavorite,
@@ -156,7 +149,16 @@ final class SearchCoordinator {
 
         var videosTextualFilter = scheduleTextualFilter
 
-        let videosEventOptions = storage.allEvents.map { FilterOption(title: $0.name, value: $0.identifier) }
+        var videosEventOptions = storage.eventsForFiltering
+            .map { FilterOption(title: $0.name, value: $0.identifier) }
+            // Ensure WWDC events are always on top of non-WWDC events.
+            .sorted(by: { $0.isWWDCEvent && !$1.isWWDCEvent })
+
+        /// Add a separator between WWDC and non-WWDC events.
+        if let lastWWDCIndex = videosEventOptions.lastIndex(where: { $0.isWWDCEvent }), lastWWDCIndex != videosEventOptions.endIndex {
+            videosEventOptions.insert(.separator, at: lastWWDCIndex + 1)
+        }
+        
         var videosEventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event,
                                                      isSubquery: false,
                                                      collectionKey: "",
@@ -193,7 +195,13 @@ final class SearchCoordinator {
                                                  videosBookmarksFilter]
 
         if !videosSearchController.filters.isIdentical(to: videosSearchFilters) {
-            videosSearchController.filters = videosSearchFilters
+            videosSearchController.filters = videosSearchFilters.map {
+                guard let multipleChoice = $0 as? MultipleChoiceFilter else { return $0 }
+                var withClearOption = multipleChoice
+                withClearOption.options.append(.separator)
+                withClearOption.options.append(.clear)
+                return withClearOption
+            }
         }
 
         // set delegates
@@ -239,14 +247,15 @@ final class SearchCoordinator {
         }
     }
 
-    func currentFiltersState() -> String? {
-
-        let state = WWDCFiltersState(
+    private var uiState: WWDCFiltersState {
+        WWDCFiltersState(
             scheduleTab: WWDCFiltersState.Tab(filters: scheduleSearchController.filters),
             videosTab: WWDCFiltersState.Tab(filters: videosSearchController.filters)
         )
+    }
 
-        return (try? JSONEncoder().encode(state))
+    func restorationSnapshot() -> String? {
+        (try? JSONEncoder().encode(uiState))
             .flatMap { String(bytes: $0, encoding: .utf8) }
     }
 }
@@ -261,4 +270,8 @@ extension SearchCoordinator: SearchFiltersViewControllerDelegate {
         }
     }
 
+}
+
+private extension FilterOption {
+    var isWWDCEvent: Bool { title.uppercased().hasPrefix("WWDC") }
 }

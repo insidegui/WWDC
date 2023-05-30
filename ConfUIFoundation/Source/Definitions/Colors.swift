@@ -34,8 +34,6 @@ import Cocoa
 
     static var toolbarTintActive: NSColor { .wwdcAccentColor }
 
-    static var toolbarTint = NSColor(calibratedRed: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
-
     static var sectionHeaderBackground: NSColor {
         return NSColor(calibratedRed: 0.40, green: 0.40, blue: 0.40, alpha: 0.97)
     }

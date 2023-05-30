@@ -28,7 +28,7 @@ final class AppCoordinator {
     var windowController: MainWindowController
     var tabController: WWDCTabViewController<MainWindowTab>
 
-    var featuredController: FeaturedContentViewController
+    var exploreController: ExploreViewController
     var scheduleController: ScheduleContainerViewController
     var videosController: SessionsSplitViewController
 
@@ -65,12 +65,12 @@ final class AppCoordinator {
 
         tabController = WWDCTabViewController(windowController: windowController)
 
-        // Featured
-        featuredController = FeaturedContentViewController()
-        featuredController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
-        let featuredItem = NSTabViewItem(viewController: featuredController)
-        featuredItem.label = "Featured"
-        tabController.addTabViewItem(featuredItem)
+        // Explore
+        exploreController = ExploreViewController(provider: ExploreTabProvider(storage: storage))
+        exploreController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
+        let exploreItem = NSTabViewItem(viewController: exploreController)
+        exploreItem.label = "Explore"
+        tabController.addTabViewItem(exploreItem)
 
         // Schedule
         scheduleController = ScheduleContainerViewController(windowController: windowController, listStyle: .schedule)
@@ -126,6 +126,16 @@ final class AppCoordinator {
         default:
             return nil
         }
+    }
+
+    var exploreTabLiveSession: Observable<SessionViewModel?> {
+        let liveInstances = storage.realm.objects(SessionInstance.self)
+            .filter("rawSessionType == 'Special Event' AND isCurrentlyLive == true")
+            .sorted(byKeyPath: "startTime", ascending: false)
+
+        return Observable.collection(from: liveInstances)
+            .map({ $0.toArray().first?.session })
+            .map({ SessionViewModel(session: $0, instance: $0?.instances.first, style: .schedule) })
     }
 
     /// The session that is currently selected on the videos tab (observable)
@@ -230,8 +240,6 @@ final class AppCoordinator {
 
         videosController.listViewController.delegate = self
         scheduleController.splitViewController.listViewController.delegate = self
-
-        featuredController.delegate = self
     }
 
     private func updateListsAfterSync() {
@@ -248,15 +256,14 @@ final class AppCoordinator {
         let startupDependencies = Observable.combineLatest(storage.tracksObservable,
                                                           storage.eventsObservable,
                                                           storage.focusesObservable,
-                                                          storage.scheduleObservable,
-                                                          storage.featuredSectionsObservable)
+                                                          storage.scheduleObservable)
 
         startupDependencies
             .filter {
-                !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty && !$0.4.isEmpty
+                !$0.0.isEmpty && !$0.1.isEmpty && !$0.2.isEmpty
             }
             .take(1)
-            .subscribe(onNext: { [weak self] tracks, _, _, sections, _ in
+            .subscribe(onNext: { [weak self] tracks, _, _, sections in
                 guard let self = self else { return }
 
                 self.tabController.hideLoading()
@@ -284,18 +291,6 @@ final class AppCoordinator {
                                    .disposed(by: disposeBag)
     }
 
-    private func updateFeaturedSectionsAfterSync() {
-
-        storage
-            .featuredSectionsObservable
-            .filter { !$0.isEmpty }
-            .subscribe(on: MainScheduler.instance)
-            .take(1)
-            .subscribe(onNext: { [weak self] sections in
-                self?.featuredController.sections = sections.map { FeaturedSectionViewModel(section: $0) }
-            }).disposed(by: disposeBag)
-    }
-
     private lazy var searchCoordinator: SearchCoordinator = {
         return SearchCoordinator(self.storage,
                                  sessionsController: self.scheduleController.splitViewController.listViewController,
@@ -304,8 +299,6 @@ final class AppCoordinator {
     }()
 
     func startup() {
-        RemoteEnvironment.shared.start()
-
         ContributorsFetcher.shared.load()
 
         windowController.contentViewController = tabController
@@ -337,18 +330,12 @@ final class AppCoordinator {
             self.updateListsAfterSync()
         }
 
-        _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncFeaturedSections, object: nil, queue: .main) { note in
-            guard checkSyncEngineOperationSucceededAndShowError(note: note) else { return }
-            self.updateFeaturedSectionsAfterSync()
-        }
-
         _ = NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: .main) { _ in
             self.refresh(nil)
         }
 
         refresh(nil)
         updateListsAfterSync()
-        updateFeaturedSectionsAfterSync()
 
         if Arguments.showPreferences {
             showPreferences(nil)
@@ -365,8 +352,7 @@ final class AppCoordinator {
         #endif
 
         return userDataSyncEngineHandled ||
-            liveObserver.processSubscriptionNotification(with: userInfo) ||
-            RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo)
+            liveObserver.processSubscriptionNotification(with: userInfo)
     }
 
     // MARK: - Now playing info
@@ -387,7 +373,7 @@ final class AppCoordinator {
         Preferences.shared.activeTab = activeTab
         Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
         Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
-        Preferences.shared.filtersState = searchCoordinator.currentFiltersState()
+        Preferences.shared.filtersState = searchCoordinator.restorationSnapshot()
     }
 
     private func restoreApplicationState() {
@@ -413,13 +399,20 @@ final class AppCoordinator {
     // MARK: - Deep linking
 
     func handle(link: DeepLink) {
-
         if link.isForCurrentYear {
             tabController.activeTab = .schedule
-            scheduleController.splitViewController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
+            scheduleController.splitViewController.listViewController.select(session: link)
         } else {
             tabController.activeTab = .videos
-            videosController.listViewController.select(session: SessionIdentifier(link.sessionIdentifier))
+            videosController.listViewController.select(session: link)
+        }
+    }
+
+    func applyFilter(state: WWDCFiltersState) {
+        tabController.activeTab = .videos
+
+        DispatchQueue.main.async {
+            self.searchCoordinator.apply(state)
         }
     }
 
@@ -453,8 +446,8 @@ final class AppCoordinator {
         aboutWindowController.showWindow(nil)
     }
 
-    func showFeatured() {
-        tabController.activeTab = .featured
+    func showExplore() {
+        tabController.activeTab = .explore
     }
 
     func showSchedule() {
@@ -473,6 +466,8 @@ final class AppCoordinator {
     private var lastRefresh = Date.distantPast
 
     func refresh(_ sender: Any?) {
+        guard !NSApp.isPreview else { return }
+
         let now = Date()
         guard now.timeIntervalSince(lastRefresh) > 5 else { return }
         lastRefresh = now
@@ -526,8 +521,6 @@ final class AppCoordinator {
     private var sharePlayConfigured = false
 
     func configureSharePlayIfSupported() {
-        guard #available(macOS 12.0, *) else { return }
-        
         let log = OSLog(subsystem: SharePlayManager.subsystemName, category: String(describing: AppCoordinator.self))
         
         guard !sharePlayConfigured else { return }
@@ -567,8 +560,6 @@ final class AppCoordinator {
     func activePlayerDidChange(to newPlayer: AVPlayer?) {
         os_log("%{public}@", log: log, type: .debug, #function)
         
-        guard #available(macOS 12.0, *) else { return }
-        
         guard case .session(let session) = SharePlayManager.shared.state else { return }
         
         os_log("Attaching new player to active SharePlay session", log: self.log, type: .debug)
@@ -577,8 +568,6 @@ final class AppCoordinator {
     }
 
     func startSharePlay() {
-        guard #available(macOS 12.0, *) else { return }
-        
         if case .session = SharePlayManager.shared.state {
             let alert = NSAlert()
             alert.messageText = "Leave SharePlay?"

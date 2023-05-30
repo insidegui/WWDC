@@ -10,7 +10,15 @@ import Cocoa
 import RxSwift
 import RxCocoa
 
-class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Tab.RawValue == Int {
+protocol WWDCTab: RawRepresentable {
+    var hidesWindowTitleBar: Bool { get }
+}
+
+extension WWDCTab {
+    var hidesWindowTitleBar: Bool { false }
+}
+
+class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValue == Int {
 
     var activeTab: Tab {
         get {
@@ -43,8 +51,19 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
                 }
             }
 
-            activeTabVar.accept(Tab(rawValue: selectedTabViewItemIndex)!)
+            guard let tab = Tab(rawValue: selectedTabViewItemIndex) else {
+                assertionFailure("selectedTabViewItemIndex of \(selectedTabViewItemIndex) doesn't correspond to a valid tab item")
+                return
+            }
+
+            activeTabVar.accept(tab)
+
+            updateWindowTitleBarVisibility(for: tab)
         }
+    }
+
+    private func updateWindowTitleBarVisibility(for tab: Tab, animated: Bool = true) {
+        (view.window as? WWDCWindow)?.setTitleBarHidden(tab.hidesWindowTitleBar, animated: animated)
     }
 
     private(set) lazy var tabBar = WWDCTabViewControllerTabBar()
@@ -76,34 +95,16 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
         itemView.title = tabViewItem.label
         itemView.controllerIdentifier = (tabViewItem.viewController?.identifier).map { $0.rawValue } ?? ""
         itemView.image = NSImage(named: itemView.controllerIdentifier.lowercased())
-        itemView.alternateImage = NSImage(named: itemView.controllerIdentifier.lowercased() + "-filled")
         itemView.sizeToFit()
 
         itemView.target = self
         itemView.action = #selector(changeTab)
 
-        itemView.state = (tabViewItems.firstIndex(of: tabViewItem) == selectedTabViewItemIndex) ? .on : .off
+        let isActiveTab = (tabViewItems.firstIndex(of: tabViewItem) == selectedTabViewItemIndex)
+
+        itemView.state = isActiveTab ? .on : .off
 
         tabBar.addItem(itemView)
-    }
-
-    var isTopConstraintAdded = false
-
-    override func  updateViewConstraints() {
-        super.updateViewConstraints()
-
-        // The top constraint keeps the tabView from extending
-        // under the title bar
-        if !isTopConstraintAdded, let window = view.window {
-            isTopConstraintAdded = true
-            NSLayoutConstraint(item: tabView,
-                               attribute: .top,
-                               relatedBy: .equal,
-                               toItem: window.contentLayoutGuide,
-                               attribute: .top,
-                               multiplier: 1,
-                               constant: 0).isActive = true
-        }
     }
 
     override func transition(from fromViewController: NSViewController, to toViewController: NSViewController, options: NSViewController.TransitionOptions = [], completionHandler completion: (() -> Void)? = nil) {
@@ -139,39 +140,13 @@ class WWDCTabViewController<Tab: RawRepresentable>: NSTabViewController where Ta
     func hideLoading() {
         loadingView?.hide()
     }
-    
-    private lazy var backgroundView: NSVisualEffectView = {
-        let v = NSVisualEffectView()
-        
-        v.material = .headerView
-        v.state = .followsWindowActiveState
-        v.appearance = NSAppearance(named: .darkAqua)
-        v.blendingMode = .withinWindow
-        v.translatesAutoresizingMaskIntoConstraints = false
-        
-        return v
-    }()
-    
+
     override func viewDidAppear() {
         super.viewDidAppear()
-        
-        installModernHeaderViewIfNeeded()
-    }
-    
-    /// Puts a header view in the titlebar area when running on macOS 11 or later.
-    private func installModernHeaderViewIfNeeded() {
-        guard #available(macOS 11.0, *) else { return }
-        
-        guard backgroundView.superview == nil else { return }
-        
-        view.addSubview(backgroundView)
-        
-        NSLayoutConstraint.activate([
-            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backgroundView.topAnchor.constraint(equalTo: view.topAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        ])
+
+        if let tab = Tab(rawValue: selectedTabViewItemIndex) {
+            updateWindowTitleBarVisibility(for: tab, animated: false)
+        }
     }
 
 }
