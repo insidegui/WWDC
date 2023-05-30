@@ -52,8 +52,8 @@ final class SessionCellView: NSView {
         viewModel.rxSubtitle.removeDuplicates().receive(on: DispatchQueue.main).replaceError(with: "").assign(to: \.stringValue, onWeak: subtitleLabel).store(in: &cancellables)
         viewModel.rxContext.driveUI(\.stringValue, on: contextLabel, default: "").store(in: &cancellables)
 
-        viewModel.rxIsFavorite.removeDuplicates().map({ !$0 }).driveUI(\.isHidden, on: favoritedImageView, default: true).store(in: &cancellables)
-        viewModel.rxIsDownloaded.removeDuplicates().map({ !$0 }).driveUI(\.isHidden, on: downloadedImageView, default: true).store(in: &cancellables)
+        viewModel.rxIsFavorite.toggled().driveUI(\.isHidden, on: favoritedImageView, default: true).store(in: &cancellables)
+        viewModel.rxIsDownloaded.toggled().driveUI(\.isHidden, on: downloadedImageView, default: true).store(in: &cancellables)
 
         let isSnowFlake = Publishers.Zip(viewModel.rxIsCurrentlyLive, viewModel.rxIsLab)
 

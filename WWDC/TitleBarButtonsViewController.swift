@@ -33,8 +33,7 @@ final class TitleBarButtonsViewController: NSViewController {
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] in
                 self?.statusButton.isHidden = $0.isEmpty
-            }
-            .store(in: &cancellables)
+            }.store(in: &cancellables)
         
         bindSharePlayState()
     }

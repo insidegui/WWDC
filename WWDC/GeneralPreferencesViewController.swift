@@ -286,9 +286,7 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         showLanguagesLoading()
 
         languagesProvider.availableLanguageCodes
-            .receive(on: DispatchQueue.main)
-            .replaceErrorWithEmpty()
-            .sink { [weak self] languages in
+            .driveUI { [weak self] languages in
                 self?.populateLanguagesPopUp(with: languages)
             }
             .store(in: &cancellables)

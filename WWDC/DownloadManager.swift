@@ -36,10 +36,6 @@ final class DownloadManager: NSObject {
         }
     }
     @Published private(set) var downloads: [Download] = []
-//    private let downloadTasksSubject = BehaviorSubject<[Download]>(value: [])
-//    var downloadsObservable: Observable<[Download]> {
-//        return downloadTasksSubject.asObservable()
-//    }
     private let defaults = UserDefaults.standard
 
     var storage: Storage!

@@ -102,7 +102,7 @@ class ShelfViewController: NSViewController {
             return
         }
 
-        viewModel.rxCanBePlayed.map({ !$0 }).replaceError(with: false).receive(on: DispatchQueue.main).assign(to: \.isHidden, on: playButton).store(in: &cancellables)
+        viewModel.rxCanBePlayed.toggled().driveUI(\.isHidden, on: playButton, default: true).store(in: &cancellables)
 
         viewModel.rxImageUrl.replaceErrorWithEmpty().sink { [weak self] imageUrl in
             self?.currentImageDownloadOperation?.cancel()

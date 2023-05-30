@@ -104,3 +104,9 @@ extension Publisher {
         }
     }
 }
+
+extension Publisher where Output == Bool {
+    func toggled() -> some Publisher<Output, Failure> {
+        map { !$0 }
+    }
+}
