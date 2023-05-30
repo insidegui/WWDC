@@ -1,11 +1,3 @@
-//
-//  WWDCAppCommand.swift
-//  WWDCAgent
-//
-//  Created by Guilherme Rambo on 26/05/21.
-//  Copyright © 2021 Guilherme Rambo. All rights reserved.
-//
-
 import Foundation
 
 enum WWDCAppCommand: Codable {
@@ -22,8 +14,7 @@ enum WWDCAppCommand: Codable {
 
 extension WWDCAppCommand {
     
-    /// `true` if the command can change user content, in which case it won't work
-    /// unless the preference to enable the agent is set to on.
+    /// `true` if the command can change user content.
     var modifiesUserContent: Bool {
         switch self {
         case .favorite, .unfavorite, .watch, .unwatch, .download, .cancelDownload:

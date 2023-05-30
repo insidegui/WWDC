@@ -36,16 +36,7 @@ final class PathUtil {
             fatalError("Bundle identifier is nil, this should never happen")
         }
 
-        let dir: String
-        
-        #if AGENT
-        dir = NSURL.realHomeDirectory()
-            .appendingPathComponent("Library")
-            .appendingPathComponent("Application Support")
-            .path
-        #else
-        dir = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first!
-        #endif
+        let dir = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true).first!
 
         #if DEBUG
             var path = dir + "/\(identifier)"
