@@ -69,22 +69,17 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
     }
 
     private func bindViews() {
-        $showHeroView
-            .print("\(ScheduleContainerViewController.self)")
-            .driveUI(\.view.isHidden, on: splitViewController, default: false)
-            .store(in: &cancellables)
+        $showHeroView.driveUI(\.view.isHidden, on: splitViewController, default: false)
+                           .store(in: &cancellables)
 
-        $showHeroView
-            .map({ !$0 })
-            .print("Hero Controller: \(ScheduleContainerViewController.self)")
-            .driveUI(\.view.isHidden, on: heroController, default: true)
-            .store(in: &cancellables)
-//
-//        $showHeroView.driveUI { [weak self] _ in
-//            guard let self = self else { return }
-//            self.view.needsUpdateConstraints = true
-//        }
-//        .store(in: &cancellables)
+        $showHeroView.map({ !$0 })
+                           .driveUI(\.view.isHidden, on: heroController, default: true)
+                           .store(in: &cancellables)
+
+        $showHeroView.driveUI { [weak self] _ in
+            self?.view.needsUpdateConstraints = true
+        }
+        .store(in: &cancellables)
     }
 
     override var childForWindowTopSafeAreaConstraint: NSViewController? {

@@ -119,16 +119,16 @@ public final class UserDataSyncEngine {
             os_log("iCloud account is not available yet, waiting for availability to start", log: log, type: .info)
             isWaitingForAccountAvailabilityToStart = true
 
-//            isAccountAvailable.asObservable().observe(on: MainScheduler.instance).subscribe(onNext: { [unowned self] available in
-//                guard self.isWaitingForAccountAvailabilityToStart else { return }
-//
-//                os_log("iCloud account available = %{public}@", log: self.log, type: .info, String(describing: available))
-//
-//                if available {
-//                    self.isWaitingForAccountAvailabilityToStart = false
-//                    self.start()
-//                }
-//            }).store(in: &cancellables)
+            $isAccountAvailable.receive(on: DispatchQueue.main).sink(receiveValue: { [unowned self] available in
+                guard self.isWaitingForAccountAvailabilityToStart else { return }
+
+                os_log("iCloud account available = %{public}@", log: self.log, type: .info, String(describing: available))
+
+                if available {
+                    self.isWaitingForAccountAvailabilityToStart = false
+                    self.start()
+                }
+            }).store(in: &cancellables)
 
             return
         }
@@ -145,14 +145,11 @@ public final class UserDataSyncEngine {
         }
     }
 
-    @Published
-    public private(set) var isStopping = false
+    @Published public private(set) var isStopping = false
 
-    @Published
-    public private(set) var isPerformingSyncOperation = false
+    @Published public private(set) var isPerformingSyncOperation = false
 
-    @Published
-    public private(set) var isAccountAvailable = false
+    @Published public private(set) var isAccountAvailable = false
 
     public func stop() {
         guard isRunning, !isStopping else {

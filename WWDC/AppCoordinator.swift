@@ -382,9 +382,9 @@ final class AppCoordinator {
     private func observeNowPlayingInfo() {
         nowPlayingInfoBag = []
 
-//        currentPlaybackViewModel?.nowPlayingInfo.asObservable().subscribe(onNext: { [weak self] _ in
-//            self?.publishNowPlayingInfo()
-//        }).disposed(by: nowPlayingInfoBag)
+        currentPlaybackViewModel?.$nowPlayingInfo.sink(receiveValue: { [weak self] _ in
+            self?.publishNowPlayingInfo()
+        }).store(in: &nowPlayingInfoBag)
     }
 
     // MARK: - State restoration

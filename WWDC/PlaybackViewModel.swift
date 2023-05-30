@@ -44,8 +44,7 @@ final class PlaybackViewModel {
 
     private var timeObserver: Any?
 
-    @Published
-    var nowPlayingInfo: PUINowPlayingInfo?
+    @Published var nowPlayingInfo: PUINowPlayingInfo?
 
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
         self.storage = storage

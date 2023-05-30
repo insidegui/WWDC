@@ -11,23 +11,13 @@ import ConfCore
 import PlayerUI
 import Combine
 
-extension Notification.Name {
-    fileprivate static let WWDCTextViewTextChanged = Notification.Name("WWDCTextViewTextChanged")
-}
-
 private final class WWDCTextView: NSTextView {
-
-    lazy var rxText: some Publisher<String, Never> = {
-        return NotificationCenter.default.publisher(for: .WWDCTextViewTextChanged, object: self).map { [weak self] _ in
-            self?.string ?? ""
-        }
-        .receive(on: DispatchQueue.main)
-    }()
+    @Published var stringPublished: String = ""
 
     override func didChangeText() {
         super.didChangeText()
 
-        NotificationCenter.default.post(name: .WWDCTextViewTextChanged, object: self)
+        stringPublished = string
     }
 }
 
@@ -115,11 +105,11 @@ final class BookmarkViewController: NSViewController {
         imageView.image = NSImage(data: bookmark.snapshot)
         textView.string = bookmark.body
 
-//        textView.rxText.throttle(.seconds(1), scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] text in
-//            guard let bookmark = self?.bookmark else { return }
-//
-//            self?.storage.modify(bookmark) { $0.body = text }
-//        }).store(in: &cancellables)
+        textView.$stringPublished.throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true).sink(receiveValue: { [weak self] text in
+            guard let bookmark = self?.bookmark else { return }
+
+            self?.storage.modify(bookmark) { $0.body = text }
+        }).store(in: &cancellables)
     }
 
 }

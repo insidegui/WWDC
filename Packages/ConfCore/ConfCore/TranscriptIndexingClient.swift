@@ -35,10 +35,8 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
         transcriptIndexingConnection.resume()
     }
 
-    @Published
-    private(set) var isIndexing = false
-    @Published
-    private(set) var indexingProgress: Float = 0
+    @Published private(set) var isIndexing = false
+    @Published private(set) var indexingProgress: Float = 0
 
     private var didRunService = false
 
