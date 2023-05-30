@@ -639,17 +639,17 @@
             <objects>
                 <viewController storyboardIdentifier="SearchFiltersViewController" id="QVl-wd-WlW" customClass="SearchFiltersViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" wantsLayer="YES" id="hX1-jY-chB">
-                        <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
+                        <rect key="frame" x="0.0" y="0.0" width="343" height="166"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <visualEffectView wantsLayer="YES" appearanceType="darkAqua" blendingMode="withinWindow" material="headerView" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="5qS-lc-ZT8">
-                                <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
+                                <rect key="frame" x="0.0" y="0.0" width="343" height="166"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NlN-Z6-drQ">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="153"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="166"/>
                                         <subviews>
                                             <stackView distribution="fillProportionally" orientation="horizontal" alignment="bottom" spacing="12" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qTs-9y-MbZ">
-                                                <rect key="frame" x="12" y="108" width="307" height="33"/>
+                                                <rect key="frame" x="12" y="132" width="307" height="22"/>
                                                 <subviews>
                                                     <searchField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fla-Ig-nku">
                                                         <rect key="frame" x="0.0" y="0.0" width="228" height="22"/>
@@ -683,7 +683,7 @@
                                                 </customSpacing>
                                             </stackView>
                                             <popUpButton wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="jW0-0M-Xya">
-                                                <rect key="frame" x="8" y="80" width="327" height="22"/>
+                                                <rect key="frame" x="8" y="104" width="327" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="JF0-nF-AYP" id="wIo-Pd-ApE">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="label" size="11"/>
@@ -700,7 +700,7 @@
                                                 </connections>
                                             </popUpButton>
                                             <popUpButton wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Mft-xX-6dt">
-                                                <rect key="frame" x="8" y="56" width="327" height="22"/>
+                                                <rect key="frame" x="8" y="80" width="327" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="Hl8-Jf-3YQ" id="lKh-OJ-Ma5">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="label" size="11"/>
@@ -717,7 +717,7 @@
                                                 </connections>
                                             </popUpButton>
                                             <popUpButton wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="d8i-uR-hrT">
-                                                <rect key="frame" x="8" y="32" width="327" height="22"/>
+                                                <rect key="frame" x="8" y="56" width="327" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="aWW-Dt-aEc" id="e63-aO-rTw">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="label" size="11"/>
@@ -731,6 +731,23 @@
                                                 </popUpButtonCell>
                                                 <connections>
                                                     <action selector="tracksPopUpAction:" target="QVl-wd-WlW" id="vqI-ZI-Q95"/>
+                                                </connections>
+                                            </popUpButton>
+                                            <popUpButton wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="7EA-9d-kdM">
+                                                <rect key="frame" x="8" y="32" width="327" height="22"/>
+                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" allowsMixedState="YES" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="Nyj-j2-VYA" id="BqR-at-isf">
+                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="label" size="11"/>
+                                                    <menu key="menu" id="EdZ-XI-emk">
+                                                        <items>
+                                                            <menuItem title="Item 1" state="on" hidden="YES" id="Nyj-j2-VYA"/>
+                                                            <menuItem title="Item 2" id="W9k-wa-Aev"/>
+                                                            <menuItem title="Item 3" id="0Nq-UO-lmI"/>
+                                                        </items>
+                                                    </menu>
+                                                </popUpButtonCell>
+                                                <connections>
+                                                    <action selector="sortPopUpAction:" target="QVl-wd-WlW" id="72u-GP-O30"/>
                                                 </connections>
                                             </popUpButton>
                                             <segmentedControl horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Teg-LY-Sf3" customClass="WWDCSegmentedControl" customModule="WWDC" customModuleProvider="target">
@@ -754,6 +771,7 @@
                                             <constraint firstAttribute="trailing" secondItem="d8i-uR-hrT" secondAttribute="trailing" constant="12" id="AZu-e1-t2n"/>
                                             <constraint firstAttribute="trailing" secondItem="Mft-xX-6dt" secondAttribute="trailing" constant="12" id="Fof-rP-QDA"/>
                                             <constraint firstAttribute="trailing" secondItem="jW0-0M-Xya" secondAttribute="trailing" constant="12" id="U6f-5i-CHp"/>
+                                            <constraint firstAttribute="trailing" secondItem="7EA-9d-kdM" secondAttribute="trailing" constant="12" id="nSS-3L-4le"/>
                                         </constraints>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
@@ -761,8 +779,10 @@
                                             <integer value="1000"/>
                                             <integer value="1000"/>
                                             <integer value="1000"/>
+                                            <integer value="1000"/>
                                         </visibilityPriorities>
                                         <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
                                             <real value="3.4028234663852886e+38"/>
@@ -792,6 +812,7 @@
                         <outlet property="filterButton" destination="U2p-0d-s5K" id="0Yp-vl-SM4"/>
                         <outlet property="focusesPopUp" destination="Mft-xX-6dt" id="Ekq-uQ-Mgl"/>
                         <outlet property="searchField" destination="Fla-Ig-nku" id="eqN-jH-kkZ"/>
+                        <outlet property="sortPopUp" destination="7EA-9d-kdM" id="NS8-bn-fJu"/>
                         <outlet property="stackView" destination="NlN-Z6-drQ" id="SaM-HA-Dem"/>
                         <outlet property="tracksPopUp" destination="d8i-uR-hrT" id="dyo-n0-cYV"/>
                         <outlet property="vfxView" destination="5qS-lc-ZT8" id="0j7-9F-QCX"/>

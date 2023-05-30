@@ -59,6 +59,7 @@ final class SearchFiltersViewController: NSViewController {
     @IBOutlet weak var eventsPopUp: NSPopUpButton!
     @IBOutlet weak var focusesPopUp: NSPopUpButton!
     @IBOutlet weak var tracksPopUp: NSPopUpButton!
+    @IBOutlet weak var sortPopUp: NSPopUpButton!
     @IBOutlet weak var bottomSegmentedControl: NSSegmentedControl!
     @IBOutlet weak var filterButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
@@ -106,6 +107,9 @@ final class SearchFiltersViewController: NSViewController {
         guard let filterIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.track }) else { return }
 
         updateMultipleChoiceFilter(at: filterIndex, with: tracksPopUp)
+    }
+
+    @IBAction func sortPopUpAction(_ sender: NSPopUpButton) {
     }
 
     private var favoriteSegmentSelected = false

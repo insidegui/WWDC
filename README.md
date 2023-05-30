@@ -12,6 +12,8 @@ Keep track of the videos you’d like to watch or the ones you’ve already watc
 
 The Explore tab shows an overview of the latest content available, the videos you haven’t finished watching yet, recently favorited videos, as well as any special events that are currently live.
 
+![explore](./img/v7/ExploreTab.webp)
+
 ## Schedule
 
 The Schedule tab shows the schedule for each day in the current edition of WWDC and allows you to watch live streams for the Keynote and other sessions throughout the week.
