@@ -50,24 +50,24 @@ final class SessionCellView: NSView {
 
         viewModel.rxTitle.removeDuplicates().receive(on: DispatchQueue.main).replaceError(with: "").assign(to: \.stringValue, onWeak: titleLabel).store(in: &cancellables)
         viewModel.rxSubtitle.removeDuplicates().receive(on: DispatchQueue.main).replaceError(with: "").assign(to: \.stringValue, onWeak: subtitleLabel).store(in: &cancellables)
-//        viewModel.rxContext.distinctUntilChanged().asDriver(onErrorJustReturn: "").drive(contextLabel.rx.text).store(in: &cancellables)
-//
-//        viewModel.rxIsFavorite.distinctUntilChanged().map({ !$0 }).bind(to: favoritedImageView.rx.isHidden).store(in: &cancellables)
-//        viewModel.rxIsDownloaded.distinctUntilChanged().map({ !$0 }).bind(to: downloadedImageView.rx.isHidden).store(in: &cancellables)
-//
-//        let isSnowFlake = Observable.zip(viewModel.rxIsCurrentlyLive, viewModel.rxIsLab)
-//
-//        isSnowFlake.map({ !$0.0 && !$0.1 }).bind(to: snowFlakeView.rx.isHidden).store(in: &cancellables)
-//        isSnowFlake.map({ $0.0 || $0.1 }).bind(to: thumbnailImageView.rx.isHidden).store(in: &cancellables)
-//
-//        isSnowFlake.subscribe(onNext: { [weak self] (isLive: Bool, isLab: Bool) -> Void in
-//            if isLive {
-//                self?.snowFlakeView.image = #imageLiteral(resourceName: "live-indicator")
-//            } else if isLab {
-//                self?.snowFlakeView.image = #imageLiteral(resourceName: "lab-indicator")
-//            }
-//        }).store(in: &cancellables)
-//
+        viewModel.rxContext.driveUI(\.stringValue, on: contextLabel, default: "").store(in: &cancellables)
+
+        viewModel.rxIsFavorite.removeDuplicates().map({ !$0 }).driveUI(\.isHidden, on: favoritedImageView, default: true).store(in: &cancellables)
+        viewModel.rxIsDownloaded.removeDuplicates().map({ !$0 }).driveUI(\.isHidden, on: downloadedImageView, default: true).store(in: &cancellables)
+
+        let isSnowFlake = Publishers.Zip(viewModel.rxIsCurrentlyLive, viewModel.rxIsLab)
+
+        isSnowFlake.map({ !$0.0 && !$0.1 }).driveUI(\.isHidden, on: snowFlakeView, default: true).store(in: &cancellables)
+        isSnowFlake.map({ $0.0 || $0.1 }).driveUI(\.isHidden, on: thumbnailImageView, default: true).store(in: &cancellables)
+
+        isSnowFlake.replaceErrorWithEmpty().sink(receiveValue: { [weak self] (isLive: Bool, isLab: Bool) -> Void in
+            if isLive {
+                self?.snowFlakeView.image = #imageLiteral(resourceName: "live-indicator")
+            } else if isLab {
+                self?.snowFlakeView.image = #imageLiteral(resourceName: "lab-indicator")
+            }
+        }).store(in: &cancellables)
+
         viewModel.rxImageUrl.removeDuplicates().replaceErrorWithEmpty().compacted().sink { [weak self] imageUrl in
             self?.imageDownloadOperation?.cancel()
 
@@ -87,15 +87,15 @@ final class SessionCellView: NSView {
             self?.snowFlakeView.backgroundColor = color
         }).store(in: &cancellables)
 
-//        viewModel.rxProgresses.subscribe(onNext: { [weak self] progresses in
-//            if let progress = progresses.first {
-//                self?.contextColorView.hasValidProgress = true
-//                self?.contextColorView.progress = progress.relativePosition
-//            } else {
-//                self?.contextColorView.hasValidProgress = false
-//                self?.contextColorView.progress = 0
-//            }
-//        }).store(in: &cancellables)
+        viewModel.rxProgresses.replaceErrorWithEmpty().sink(receiveValue: { [weak self] progresses in
+            if let progress = progresses.first {
+                self?.contextColorView.hasValidProgress = true
+                self?.contextColorView.progress = progress.relativePosition
+            } else {
+                self?.contextColorView.hasValidProgress = false
+                self?.contextColorView.progress = 0
+            }
+        }).store(in: &cancellables)
 
         viewModel.rxSessionType.removeDuplicates().replaceErrorWithEmpty().sink(receiveValue: { [weak self] type in
             guard ![.lab, .session, .labByAppointment].contains(type) else { return }
