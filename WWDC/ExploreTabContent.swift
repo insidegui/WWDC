@@ -98,7 +98,9 @@ extension ExploreTabContent {
             fatalError("Missing \(name) development asset")
         }
         do {
-            return try JSONDecoder().decode(ExploreTabContent.self, from: data)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            return try decoder.decode(ExploreTabContent.self, from: data)
         } catch {
             fatalError("Failed to decode \(name) development asset: \(error)")
         }

@@ -192,8 +192,6 @@ final class AppCoordinator {
         bind(session: selectedSession, to: videosController.detailViewController)
 
         bind(session: selectedScheduleItem, to: scheduleController.splitViewController.detailViewController)
-
-        bind(session: exploreTabLiveSession, to: exploreController.liveSessionController)
     }
 
     private func updateSelectedViewModelRegardlessOfTab() {
@@ -228,12 +226,6 @@ final class AppCoordinator {
     }
 
     private func setupDelegation() {
-        let exploreLiveDetail = exploreController.liveSessionController
-
-        exploreLiveDetail.shelfController.delegate = self
-        exploreLiveDetail.summaryController.actionsViewController.delegate = self
-        exploreLiveDetail.summaryController.relatedSessionsViewController.delegate = self
-
         let videoDetail = videosController.detailViewController
 
         videoDetail.shelfController.delegate = self

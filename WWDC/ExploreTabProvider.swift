@@ -160,8 +160,6 @@ final class ExploreTabProvider: ObservableObject {
             sections: contentSections,
             liveEventItem: data.liveEventSession.flatMap { ExploreTabContent.Item($0) }
         )
-
-        print("->> LIVE EVENT ITEM: \(content?.liveEventItem)")
     }
 }
 
@@ -218,24 +216,30 @@ private extension ExploreTabContent.Item {
             progress = nil
         }
 
+        let overlayText: String?
+        let overlaySymbol: String?
         let stream: LiveStream?
 
-        if let instance = session.instances.first, instance.startTime > today(), instance.endTime < today()  {
+        if let instance = session.instances.first, instance.startTime <= today(), instance.endTime >= today()  {
             stream = LiveStream(
                 startTime: instance.startTime,
                 endTime: instance.endTime,
                 url: session.asset(ofType: .liveStreamVideo).flatMap({ URL(string: $0.remoteURL) })
             )
+            overlayText = "Live"
+            overlaySymbol = "record.circle"
         } else {
             stream = nil
+            overlayText = effectiveDuration > 0 ? String(timestamp: effectiveDuration) : nil
+            overlaySymbol = session.mediaDuration > 0 ? "play" : nil
         }
 
         self.init(
             id: session.identifier,
             title: event.name,
             subtitle: session.title,
-            overlayText: effectiveDuration > 0 ? String(timestamp: effectiveDuration) : nil,
-            overlaySymbol: session.mediaDuration > 0 ? "play" : nil,
+            overlayText: overlayText,
+            overlaySymbol: overlaySymbol,
             imageURL: session.imageURL,
             destination: .command(.revealVideo(session.identifier)),
             progress: progress,

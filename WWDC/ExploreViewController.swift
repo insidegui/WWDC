@@ -44,10 +44,6 @@ final class ExploreViewController: NSViewController, ObservableObject {
         return v
     }()
 
-    private(set) lazy var liveSessionController: SessionDetailsViewController = {
-        SessionDetailsViewController(listStyle: .schedule)
-    }()
-
     private func installRootViewIfNeeded() {
         guard rootView.superview == nil else { return }
 
@@ -73,18 +69,6 @@ final class ExploreViewController: NSViewController, ObservableObject {
             guard let self = self else { return }
             self.updateTitleBarFadeVisibility(with: offset)
         }.store(in: &cancellables)
-
-//        addChild(liveSessionController)
-//        liveSessionController.view.translatesAutoresizingMaskIntoConstraints = false
-//        liveSessionController.view.wantsLayer = true
-//        liveSessionController.view.layer?.backgroundColor = NSColor.black.cgColor
-//        view.addSubview(liveSessionController.view)
-//        NSLayoutConstraint.activate([
-//            liveSessionController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            liveSessionController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            liveSessionController.view.topAnchor.constraint(equalTo: view.topAnchor),
-//            liveSessionController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-//        ])
     }
 
     private func updateTitleBarFadeVisibility(with offset: CGPoint) {

@@ -51,4 +51,7 @@ struct Constants {
     /// How many MINUTES to add to the end time of a live session to consider it not live anymore
     static let liveSessionEndTimeTolerance: Int = 30
 
+    /// How long before the scheduled start date for a special event the Explore tab will start showing it on the list.
+    static let exploreTabSpecialEventLiveSoonInterval: TimeInterval = 12 * 60 * 60
+
 }

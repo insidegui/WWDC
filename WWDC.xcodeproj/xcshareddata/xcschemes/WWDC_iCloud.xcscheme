@@ -151,11 +151,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--delorean"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "2022-06-06T18:00:00+00:00"
-            isEnabled = "YES">
+            argument = "2022-06-06T17:10:00+00:00"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
