@@ -12,7 +12,7 @@ The schedule tab shows the schedule for the current edition of WWDC, and allows 
 
 Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in multiple languages.
 
-![videos](./img/v7/Transcript.heic)
+![videos](./img/v7/Transcript.webp)
 
 ### Video features
 
@@ -24,7 +24,7 @@ Watch this year's videos as they're released and access videos from previous yea
 
 Clip Sharing allows you to share a short segment (up to 5 minutes) from a session's video. This is a great feature for quickly sharing snippets of content from the conference.
 
-![clipsharing](./img/v7/ClipSharing.heic)
+![clipsharing](./img/v7/ClipSharing.webp)
 
 ## Bookmarks
 
@@ -32,7 +32,7 @@ Have you ever found yourself watching a WWDC session and wishing you could take 
 
 With bookmarks, you can create a reference point within a video and add an annotation to it. Your bookmark annotations can also be considered while using the search, so it's easier than ever to find the content you've bookmarked before.
 
-![bookmarks](./img/v7/Video-Bookmark.heic)
+![bookmarks](./img/v7/Video-Bookmark.webp)
 
 ## iCloud Sync
 
@@ -78,7 +78,7 @@ Since the app uses CloudKit, when you build it yourself, all of the CloudKit-dep
 
 To build the app yourself without the need for a developer account and a CloudKit container, **always use the `WWDC` target when building**. The `WWDC with iCloud` target requires a paid developer account and a CloudKit container, which you won't be able to create because of the app's bundle identifier.
 
-![schedule](./img/v7/BuildTarget.png)
+![schedule](./img/v7/BuildTarget.webp)
 
 ### Clearing app data during development
 
