@@ -1,20 +1,28 @@
 # The unofficial WWDC app for macOS
 
-Enjoy WWDC from the comfort of your Mac with the unofficial WWDC app for macOS. Whether you're (virtually) attending or not, you can access livestreams, videos and sessions during the conference and as a year-round resource.
+Enjoy WWDC from the comfort of your Mac with the unofficial WWDC app for macOS.
+
+Watch the Keynote and Platforms State of the Union live, as well as the videos for all sessions released during WWDC week and other video content you can find on Apple's website or [Developer](https://apps.apple.com/app/apple-developer/id640199958) app.
+
+Keep track of the videos you’d like to watch or the ones you’ve already watched and take notes that you can reference later when trying out new technologies you learned about in the sessions.
 
 ⬇️ If you just want to download the latest release, go to [the releases page](https://github.com/insidegui/WWDC/releases/latest).
 
+## Explore
+
+The Explore tab shows an overview of the latest content available, the videos you haven’t finished watching yet, recently favorited videos, as well as any special events that are currently live.
+
 ## Schedule
 
-The schedule tab shows the schedule for the current edition of WWDC, and allows you to watch live streams for the Keynote and other sessions throughout the week.
+The Schedule tab shows the schedule for each day in the current edition of WWDC and allows you to watch live streams for the Keynote and other sessions throughout the week.
 
 ## Videos
 
-Watch this year's videos as they're released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in multiple languages.
+Watch this year’s videos as they’re released and access videos from previous years. You can also read transcripts of sessions and easily jump to a specific point in the relevant video. Transcripts are also searchable and available in multiple languages.
 
-![videos](./img/v7/Transcript.heic)
+![videos](./img/v7/Transcript.webp)
 
-### Video features
+### Features
 
 - Watch videos in 0.5x, 1x, 1.25x, 1.5x, 1.75x or 2x speeds
 - Fullscreen and native picture-in-picture support
@@ -22,25 +30,25 @@ Watch this year's videos as they're released and access videos from previous yea
 
 ### Clip Sharing
 
-Clip Sharing allows you to share a short segment (up to 5 minutes) from a session's video. This is a great feature for quickly sharing snippets of content from the conference.
+Clip Sharing allows you to share a short segment (up to 5 minutes) from a session’s video. This is a great feature for quickly sharing snippets of content from the conference.
 
-![clipsharing](./img/v7/ClipSharing.heic)
+![clipsharing](./img/v7/ClipSharing.webp)
 
 ## Bookmarks
 
 Have you ever found yourself watching a WWDC session and wishing you could take notes at a specific point in the video to refer back to later on? This is now possible with bookmarks.
 
-With bookmarks, you can create a reference point within a video and add an annotation to it. Your bookmark annotations can also be considered while using the search, so it's easier than ever to find the content you've bookmarked before.
+With bookmarks, you can create a reference point within a video and add an annotation to it. Your bookmark annotations can also be considered while using the search, so it’s easier than ever to find the content you've bookmarked before.
 
-![bookmarks](./img/v7/Video-Bookmark.heic)
+![bookmarks](./img/v7/Video-Bookmark.webp)
 
 ## iCloud Sync
 
-Enable the iCloud sync in preferences and your favorites, bookmarks and progress in sessions will be synced across your Macs.
+Enable the iCloud sync feature in preferences and your favorites, bookmarks and progress in sessions will be synced across your Macs.
 
 ## Sharing
 
-You can easily share links to sessions or videos by using the share button. The links shared are universal links that redirect to Apple's developer website, so if they're opened on a Mac which has the app installed, they will open in the app. The links are also compatible with iOS devices using the Apple Developer app.
+You can easily share links to sessions or videos by using the share button. The links shared are universal links that redirect to Apple’s developer website, so if they’re opened on a Mac which has the app installed, they will open in the app. The links are also compatible with iOS devices using the Apple Developer app.
 
 ## Nerdy bits 🤓
 
@@ -72,16 +80,16 @@ A number of third-party libraries are used by the app:
 
 **Building requires Xcode 14 or later.**
 
-**Clone this branch and before opening the project, run `./bootstrap.sh`** to setup the environment. It will install `swiftlint` for you using `brew` if you don't have it yet.
+**Clone this branch and before opening the project, run `./bootstrap.sh`** to setup the environment. The script will ask for your Apple Developer team ID in order to configure the project. There's no need to change any code signing settings in Xcode. The bootstrap script will also install `swiftlint` for you using `brew` if you don’t have it yet.
 
-Since the app uses CloudKit, when you build it yourself, all of the CloudKit-dependant functionality will not be available. CloudKit requires a provisioning profile and a paid developer account.
+Since the app uses CloudKit, when you build it yourself, all CloudKit-related functionality will be disabled.
 
-To build the app yourself without the need for a developer account and a CloudKit container, **always use the `WWDC` target when building**. The `WWDC with iCloud` target requires a paid developer account and a CloudKit container, which you won't be able to create because of the app's bundle identifier.
+**Always use the `WWDC` scheme when building** (the one that doesn't mention iCloud in its name).
 
-![schedule](./img/v7/BuildTarget.png)
+![schedule](./img/v7/BuildTarget.webp)
 
 ### Clearing app data during development
 
-If you need to clear the app's preferences and stored data during development, you can run `./cleardata.sh` in the project folder. **This will delete all of your preferences and data like favorites, bookmarks and progress in videos, so be careful**.
+If you need to clear the app’s preferences and stored data during development, you can run `./cleardata.sh` in the project folder. **This will delete all of your preferences and data like favorites, bookmarks and progress in videos, so be careful**.
 
 <a href="https://macstadium.com" title="The unofficial WWDC app is using MacStadium"><img src="./img/MacStadiumOSS.png" alt="Powered by MacStadium"></a>
