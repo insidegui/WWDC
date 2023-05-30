@@ -299,8 +299,6 @@ final class AppCoordinator {
     }()
 
     func startup() {
-        RemoteEnvironment.shared.start()
-
         ContributorsFetcher.shared.load()
 
         windowController.contentViewController = tabController
@@ -354,8 +352,7 @@ final class AppCoordinator {
         #endif
 
         return userDataSyncEngineHandled ||
-            liveObserver.processSubscriptionNotification(with: userInfo) ||
-            RemoteEnvironment.shared.processSubscriptionNotification(with: userInfo)
+            liveObserver.processSubscriptionNotification(with: userInfo)
     }
 
     // MARK: - Now playing info
