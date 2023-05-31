@@ -12,12 +12,12 @@ import RxSwift
 import ConfCore
 import PlayerUI
 import Combine
-import os.log
+import OSLog
 import AVFoundation
 
 final class AppCoordinator {
 
-    let log = OSLog(subsystem: "WWDC", category: "AppCoordinator")
+    let log = Logger(subsystem: "WWDC", category: "AppCoordinator")
     private let disposeBag = DisposeBag()
 
     var liveObserver: LiveObserver
@@ -521,7 +521,7 @@ final class AppCoordinator {
     private var sharePlayConfigured = false
 
     func configureSharePlayIfSupported() {
-        let log = OSLog(subsystem: SharePlayManager.subsystemName, category: String(describing: AppCoordinator.self))
+        let log = Logger(subsystem: SharePlayManager.subsystemName, category: String(describing: AppCoordinator.self))
         
         guard !sharePlayConfigured else { return }
         sharePlayConfigured = true
@@ -538,12 +538,12 @@ final class AppCoordinator {
             guard let self = self, let activity = activity else { return }
             
             guard let wwdcSession = self.storage.session(with: activity.sessionID) else {
-                os_log("Couldn't find the session with ID %{public}@", log: log, type: .error, activity.sessionID)
+                log.error("Couldn't find the session with ID \(activity.sessionID, privacy: .public)")
                 return
             }
             
             guard let viewModel = SessionViewModel(session: wwdcSession) else {
-                os_log("Couldn't create the view model for session %{public}@", log: log, type: .error, activity.sessionID)
+                log.error("Couldn't create the view model for session \(activity.sessionID, privacy: .public)")
                 return
             }
             
@@ -558,11 +558,11 @@ final class AppCoordinator {
     }
     
     func activePlayerDidChange(to newPlayer: AVPlayer?) {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
         
         guard case .session(let session) = SharePlayManager.shared.state else { return }
         
-        os_log("Attaching new player to active SharePlay session", log: self.log, type: .debug)
+        log.debug("Attaching new player to active SharePlay session")
         
         newPlayer?.playbackCoordinator.coordinateWithSession(session)
     }

@@ -10,7 +10,7 @@ import Cocoa
 import RxSwift
 import ConfCore
 import RealmSwift
-import os.log
+import OSLog
 
 enum DownloadStatus {
     case none
@@ -27,7 +27,7 @@ final class DownloadManager: NSObject {
     // from one quality to another otherwise you'll encounter minor unexpected behavior
     static let downloadQuality = SessionAssetType.hdVideo
 
-    private let log = OSLog(subsystem: "WWDC", category: "DownloadManager")
+    private let log = Logger(subsystem: "WWDC", category: "DownloadManager")
     private let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
     private var backgroundSession: Foundation.URLSession!
     private var downloadTasks: [String: Download] = [:] {
@@ -295,10 +295,7 @@ final class DownloadManager: NSObject {
             return true
         }
 
-        os_log("Unable to pause download of %{public}@ because there's no task for that URL",
-               log: log,
-               type: .error,
-               url)
+        log.error("Unable to pause download of \(url, privacy: .public) because there's no task for that URL")
 
         return false
     }
@@ -309,10 +306,7 @@ final class DownloadManager: NSObject {
             return true
         }
 
-        os_log("Unable to resume download of %{public}@ because there's no task for that URL",
-               log: log,
-               type: .error,
-               url)
+        log.error("Unable to resume download of \(url, privacy: .public) because there's no task for that URL")
 
         return false
     }
@@ -324,10 +318,7 @@ final class DownloadManager: NSObject {
                 return
             }
 
-            os_log("Unable to cancel download of %{public}@ because there's no task for that URL",
-                   log: log,
-                   type: .error,
-                   url)
+            log.error("Unable to cancel download of \(url, privacy: .public) because there's no task for that URL")
         }
     }
 

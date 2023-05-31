@@ -8,14 +8,14 @@
 
 import Cocoa
 import ConfCore
-import os.log
+import OSLog
 
 final class AppCommandsReceiver {
-    private let log = OSLog(subsystem: "io.wwdc.app", category: String(describing: AppCommandsReceiver.self))
+    private let log = Logger(subsystem: "io.wwdc.app", category: String(describing: AppCommandsReceiver.self))
 
     // swiftlint:disable:next cyclomatic_complexity
     func handle(_ command: WWDCAppCommand, storage: Storage) -> DeepLink? {
-        os_log("%{public}@ %@", log: log, type: .debug, #function, String(describing: command))
+        log.debug("\(#function, privacy: .public) \(String(describing: command))")
 
         switch command {
         case .favorite(let id):
@@ -52,7 +52,7 @@ final class AppCommandsReceiver {
             return nil
         case .revealVideo:
             guard let link = DeepLink(from: command) else {
-                os_log("Failed to construct deep link from command: %{public}@", log: self.log, type: .error, String(describing: command))
+                self.log.error("Failed to construct deep link from command: \(String(describing: command), privacy: .public)")
                 return nil
             }
             

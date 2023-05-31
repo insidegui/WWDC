@@ -8,7 +8,7 @@
 
 import Foundation
 import CloudKitCodable
-import os.log
+import OSLog
 
 public struct SessionProgressSyncObject: CustomCloudKitCodable, BelongsToSession {
     public var cloudKitSystemFields: Data?
@@ -49,10 +49,7 @@ extension SessionProgress: SyncObjectConvertible, BelongsToSession {
 
     public var syncObject: SessionProgressSyncObject? {
         guard let sessionId = session.first?.identifier else {
-            os_log("SessionProgress %@ is not associated to a session. That's illegal!",
-                   log: .default,
-                   type: .fault,
-                   identifier)
+            Logger.default.fault("SessionProgress \(self.identifier) is not associated to a session. That's illegal!")
 
             return nil
         }

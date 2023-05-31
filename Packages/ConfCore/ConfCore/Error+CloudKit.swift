@@ -8,7 +8,7 @@
 
 import Foundation
 import CloudKit
-import os.log
+import OSLog
 
 extension Error {
 
@@ -20,51 +20,39 @@ extension Error {
 
     func resolveConflict(with resolver: (CKRecord, CKRecord) -> CKRecord?) -> CKRecord? {
         guard let effectiveError = self as? CKError else {
-            os_log("resolveConflict called on an error that was not a CKError. The error was %{public}@",
-                   log: .default,
-                   type: .fault,
-                   String(describing: self))
+            Logger.default.fault("resolveConflict called on an error that was not a CKError. The error was \(String(describing: self), privacy: .public)")
             return nil
         }
 
         guard effectiveError.code == .serverRecordChanged else {
-            os_log("resolveConflict called on a CKError that was not a serverRecordChanged error. The error was %{public}@",
-                   log: .default,
-                   type: .fault,
-                   String(describing: effectiveError))
+            Logger.default.fault("resolveConflict called on a CKError that was not a serverRecordChanged error. The error was \(String(describing: effectiveError), privacy: .public)")
             return nil
         }
 
         guard let clientRecord = effectiveError.userInfo[CKRecordChangedErrorClientRecordKey] as? CKRecord else {
-            os_log("Failed to obtain client record from serverRecordChanged error. The error was %{public}@",
-                   log: .default,
-                   type: .fault,
-                   String(describing: effectiveError))
+            Logger.default.fault("Failed to obtain client record from serverRecordChanged error. The error was \(String(describing: effectiveError), privacy: .public)")
             return nil
         }
 
         guard let serverRecord = effectiveError.userInfo[CKRecordChangedErrorServerRecordKey] as? CKRecord else {
-            os_log("Failed to obtain server record from serverRecordChanged error. The error was %{public}@",
-                   log: .default,
-                   type: .fault,
-                   String(describing: effectiveError))
+            Logger.default.fault("Failed to obtain server record from serverRecordChanged error. The error was \(String(describing: effectiveError), privacy: .public)")
             return nil
         }
 
         return resolver(clientRecord, serverRecord)
     }
 
-    @discardableResult func retryCloudKitOperationIfPossible(_ log: OSLog? = nil, in queue: DispatchQueue = .main, with block: @escaping () -> Void) -> Bool {
+    @discardableResult func retryCloudKitOperationIfPossible(_ log: Logger? = nil, in queue: DispatchQueue = .main, with block: @escaping () -> Void) -> Bool {
         let effectiveLog = log ?? .default
 
         guard let effectiveError = self as? CKError else { return false }
 
         guard let retryDelay = effectiveError.retryAfterSeconds else {
-            os_log("Error is not recoverable", log: effectiveLog, type: .error)
+            effectiveLog.error("Error is not recoverable")
             return false
         }
 
-        os_log("Error is recoverable. Will retry after %{public}f seconds", log: effectiveLog, type: .error, retryDelay)
+        effectiveLog.error("Error is recoverable. Will retry after \(retryDelay) seconds")
 
         queue.asyncAfter(deadline: .now() + retryDelay) {
             block()

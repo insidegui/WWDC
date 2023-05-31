@@ -9,7 +9,7 @@
 import Cocoa
 import ConfCore
 import RealmSwift
-import os.log
+import OSLog
 
 final class Boot {
 
@@ -38,7 +38,7 @@ final class Boot {
         }
     }
 
-    private let log = OSLog(subsystem: "WWDC", category: String(describing: Boot.self))
+    private let log = Logger(subsystem: "WWDC", category: String(describing: Boot.self))
 
     private static var isCompactOnLaunchEnabled: Bool {
         !UserDefaults.standard.bool(forKey: "WWDCDisableDatabaseCompression")
@@ -71,14 +71,14 @@ final class Boot {
             if !readOnly {
                 realmConfig.shouldCompactOnLaunch = { [unowned self] totalBytes, usedBytes in
                     guard Self.isCompactOnLaunchEnabled else {
-                        os_log("Database compression disabled by flag", log: self.log, type: .default)
+                        self.log.log("Database compression disabled by flag")
                         return false
                     }
                     
                     let oneHundredMB = 100 * 1024 * 1024
                     
                     if (totalBytes > oneHundredMB) && (Double(usedBytes) / Double(totalBytes)) < 0.8 {
-                        os_log("Database will be compacted. Total bytes: %d, used bytes: %d", log: self.log, type: .default, totalBytes, usedBytes)
+                        self.log.log("Database will be compacted. Total bytes: \(totalBytes), used bytes: \(usedBytes)")
                         return true
                     } else {
                         return false
@@ -107,7 +107,7 @@ final class Boot {
 
                     #if DEBUG
                     if UserDefaults.standard.bool(forKey: "WWDCSimulateDatabaseLoadingHang") {
-                        os_log("### WWDCSimulateDatabaseLoadingHang enabled, if the app is being slow to start, that's why! ###", log: self.log, type: .default)
+                        self.log.log("### WWDCSimulateDatabaseLoadingHang enabled, if the app is being slow to start, that's why! ###")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                             completion(.success((storage, syncEngine)))
                         }
@@ -121,7 +121,7 @@ final class Boot {
                 }
             }
         } catch {
-            os_log("Bootstrap failed: %{public}@", log: self.log, type: .fault, String(describing: error))
+            log.fault("Bootstrap failed: \(String(describing: error), privacy: .public)")
             completion(.failure(.generic(error: error)))
         }
     }
@@ -143,7 +143,7 @@ final class Boot {
 
             return true
         } catch {
-            os_log("Storage path at %{public}@ failed test: %{public}@", log: self.log, type: .error, url.path, String(describing: error))
+            log.error("Storage path at \(url.path, privacy: .public) failed test: \(String(describing: error), privacy: .public)")
             return false
         }
     }

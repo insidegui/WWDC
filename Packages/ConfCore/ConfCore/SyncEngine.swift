@@ -9,7 +9,7 @@
 import Foundation
 import RxCocoa
 import RxSwift
-import os.log
+import OSLog
 
 extension Notification.Name {
     public static let SyncEngineDidSyncSessionsAndSchedule = Notification.Name("SyncEngineDidSyncSessionsAndSchedule")
@@ -18,7 +18,7 @@ extension Notification.Name {
 
 public final class SyncEngine {
 
-    private let log = OSLog(subsystem: "ConfCore", category: String(describing: SyncEngine.self))
+    private let log = Logger(subsystem: "ConfCore", category: String(describing: SyncEngine.self))
 
     public let storage: Storage
     public let client: AppleAPIClient

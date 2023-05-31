@@ -9,7 +9,7 @@
 import Cocoa
 import ConfCore
 import RealmSwift
-import os.log
+import OSLog
 
 final class SearchCoordinator {
 
@@ -18,7 +18,7 @@ final class SearchCoordinator {
     let scheduleController: SessionsTableViewController
     let videosController: SessionsTableViewController
 
-    private let log = OSLog(subsystem: "WWDC", category: "SearchCoordinator")
+    private let log = Logger(subsystem: "WWDC", category: "SearchCoordinator")
 
     /// The desired state of the filters upon configuration
     private var restorationFiltersState: WWDCFiltersState?
@@ -225,7 +225,7 @@ final class SearchCoordinator {
 
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
 
-        os_log("%{public}@", log: log, type: .debug, String(describing: predicate))
+        log.debug("\(String(describing: predicate), privacy: .public)")
 
         return FilterResults(storage: storage, query: predicate)
     }

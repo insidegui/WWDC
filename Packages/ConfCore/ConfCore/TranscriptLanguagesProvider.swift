@@ -8,11 +8,11 @@
 
 import Foundation
 import RxSwift
-import os.log
+import OSLog
 
 public final class TranscriptLanguagesProvider {
 
-    private let log = OSLog(subsystem: "ConfCore", category: String(describing: TranscriptLanguagesProvider.self))
+    private let log = Logger(subsystem: "ConfCore", category: String(describing: TranscriptLanguagesProvider.self))
 
     let client: AppleAPIClient
 
@@ -23,7 +23,7 @@ public final class TranscriptLanguagesProvider {
     public private(set) var availableLanguageCodes: BehaviorSubject<[TranscriptLanguage]> = BehaviorSubject(value: [])
 
     public func fetchAvailableLanguages() {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
 
         client.fetchConfig { [weak self] result in
             guard let self = self else { return }

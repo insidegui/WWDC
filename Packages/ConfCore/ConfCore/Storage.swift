@@ -11,7 +11,7 @@ import RealmSwift
 import RxSwift
 import RxRealm
 import RxCocoa
-import os.log
+import OSLog
 
 public final class Storage {
 
@@ -19,7 +19,7 @@ public final class Storage {
     public let realm: Realm
 
     let disposeBag = DisposeBag()
-    private static let log = OSLog(subsystem: "ConfCore", category: "Storage")
+    private static let log = Logger(subsystem: "ConfCore", category: "Storage")
     private let log = Storage.log
 
     public init(_ realm: Realm) {
@@ -69,10 +69,7 @@ public final class Storage {
                 realm.delete(wwdc2012)
             }
         } catch {
-            os_log("Error deleting old events: %{public}@",
-                   log: log,
-                   type: .error,
-                   String(describing: error))
+            log.error("Error deleting old events: \(String(describing: error), privacy: .public)")
         }
     }
 
@@ -87,10 +84,7 @@ public final class Storage {
         do {
             contentsResponse = try contentResult.get()
         } catch {
-            os_log("Error downloading contents:\n%{public}@",
-                   log: log,
-                   type: .error,
-                   String(describing: error))
+            log.error("Error downloading contents:\n\(String(describing: error), privacy: .public)")
             completion(error)
             return
         }
@@ -228,10 +222,7 @@ public final class Storage {
         do {
             assets = try liveVideosResult.get()
         } catch {
-            os_log("Error downloading live videos:\n%{public}@",
-                   log: log,
-                   type: .error,
-                   String(describing: error))
+            log.error("Error downloading live videos:\n\(String(describing: error), privacy: .public)")
             return
         }
 
@@ -241,11 +232,7 @@ public final class Storage {
             assets.forEach { asset in
                 asset.identifier = asset.generateIdentifier()
 
-                os_log("Registering live asset with year %{public}d and session number %{public}@",
-                       log: self.log,
-                       type: .info,
-                       asset.year,
-                       asset.sessionId)
+                self.log.info("Registering live asset with year \(asset.year, privacy: .public) and session number \(asset.sessionId, privacy: .public)")
 
                 backgroundRealm.add(asset, update: .all)
 
@@ -263,10 +250,7 @@ public final class Storage {
         do {
             sections = try featuredSectionsResult.get()
         } catch {
-            os_log("Error downloading featured sections:\n%{public}@",
-                   log: log,
-                   type: .error,
-                   String(describing: error))
+            log.error("Error downloading featured sections:\n\(String(describing: error), privacy: .public)")
             completion(error)
             return
         }
@@ -296,10 +280,7 @@ public final class Storage {
         do {
             response = try configResult.get()
         } catch {
-            os_log("Error downloading config:\n%{public}@",
-                   log: log,
-                   type: .error,
-                   String(describing: error))
+            log.error("Error downloading config:\n\(String(describing: error), privacy: .public)")
             completion(error)
             return
         }
@@ -311,7 +292,7 @@ public final class Storage {
         }, disableAutorefresh: false, completionBlock: completion)
 
         guard let hero = response.eventHero else {
-            os_log("Config response didn't contain an event hero", log: self.log, type: .debug)
+            log.debug("Config response didn't contain an event hero")
             return
         }
 
@@ -422,7 +403,7 @@ public final class Storage {
             let resolvedObjects = safeObjects.compactMap { backgroundRealm.resolve($0) }
 
             guard resolvedObjects.count == safeObjects.count else {
-                os_log("A background database modification failed because some objects couldn't be resolved'", log: self.log, type: .fault)
+                log.fault("A background database modification failed because some objects couldn't be resolved'")
                 return
             }
 
@@ -522,7 +503,7 @@ public final class Storage {
 
     public func deleteBookmark(with identifier: String) {
         guard let bookmark = bookmark(with: identifier) else {
-            os_log("DELETE ERROR: Bookmark not found with identifier %{public}@", log: log, type: .error, identifier)
+            log.error("DELETE ERROR: Bookmark not found with identifier \(identifier, privacy: .public)")
             return
         }
 
@@ -533,7 +514,7 @@ public final class Storage {
 
     public func softDeleteBookmark(with identifier: String) {
         guard let bookmark = bookmark(with: identifier) else {
-            os_log("SOFT DELETE ERROR: Bookmark not found with identifier %{public}@", log: log, type: .error, identifier)
+            log.error("SOFT DELETE ERROR: Bookmark not found with identifier \(identifier, privacy: .public)")
             return
         }
 
@@ -545,7 +526,7 @@ public final class Storage {
 
     public func moveBookmark(with identifier: String, to timecode: Double) {
         guard let bookmark = bookmark(with: identifier) else {
-            os_log("MOVE ERROR: Bookmark not found with identifier %{public}@", log: log, type: .error, identifier)
+            log.error("MOVE ERROR: Bookmark not found with identifier \(identifier, privacy: .public)")
             return
         }
 

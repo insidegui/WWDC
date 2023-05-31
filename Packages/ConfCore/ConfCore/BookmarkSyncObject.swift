@@ -7,7 +7,7 @@
 //
 
 import CloudKitCodable
-import os.log
+import OSLog
 
 public struct BookmarkSyncObject: CustomCloudKitCodable, BelongsToSession {
     public var cloudKitSystemFields: Data?
@@ -50,10 +50,7 @@ extension Bookmark: SyncObjectConvertible, BelongsToSession {
             do {
                 bookmark.snapshot = try Data(contentsOf: snapshotURL)
             } catch {
-                os_log("Failed to load bookmark snapshot from CloudKit: %{public}@",
-                       log: .default,
-                       type: .fault,
-                       String(describing: error))
+                Logger.default.fault("Failed to load bookmark snapshot from CloudKit: \(String(describing: error), privacy: .public)")
                 bookmark.snapshot = Data()
             }
         } else {
@@ -65,10 +62,7 @@ extension Bookmark: SyncObjectConvertible, BelongsToSession {
 
     public var syncObject: BookmarkSyncObject? {
         guard let sessionId = session.first?.identifier else {
-            os_log("Bookmark %@ is not associated to a session. That's illegal!",
-                   log: .default,
-                   type: .fault,
-                   identifier)
+            Logger.default.fault("Bookmark \(self.identifier) is not associated to a session. That's illegal!")
 
             return nil
         }

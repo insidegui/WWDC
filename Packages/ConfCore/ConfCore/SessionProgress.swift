@@ -8,7 +8,7 @@
 
 import Cocoa
 import RealmSwift
-import os.log
+import OSLog
 
 /// Defines the user action of adding a session as favorite
 public final class SessionProgress: Object, HasCloudKitFields, SoftDeletable {
@@ -90,7 +90,7 @@ extension Session {
 
             try queueRealm.commitWrite()
         } catch {
-            os_log("Error updating session progress: %{public}@", log: .default, type: .error, String(describing: error))
+            Logger.default.error("Error updating session progress: \(String(describing: error), privacy: .public)")
         }
     }
 
@@ -110,7 +110,7 @@ extension Session {
 
             if mustCommit { try realm.commitWrite() }
         } catch {
-            os_log("Error updating session progress: %{public}@", log: .default, type: .error, String(describing: error))
+            Logger.default.error("Error updating session progress: \(String(describing: error), privacy: .public)")
         }
     }
 

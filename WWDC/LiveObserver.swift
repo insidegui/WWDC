@@ -10,11 +10,11 @@ import Foundation
 import ConfCore
 import RealmSwift
 import CloudKit
-import os.log
+import OSLog
 
 final class LiveObserver: NSObject {
 
-    private let log = OSLog(subsystem: "WWDC", category: "LiveObserver")
+    private let log = Logger(subsystem: "WWDC", category: "LiveObserver")
     private let dateProvider: DateProvider
     private let storage: Storage
     private let syncEngine: SyncEngine
@@ -39,16 +39,14 @@ final class LiveObserver: NSObject {
     func start() {
         guard !isRunning else { return }
 
-        os_log("start()", log: log, type: .debug)
+        log.debug("start()")
 
         clearLiveSessions()
 
         specialEventsObserver.fetch()
 
         guard isWWDCWeek else {
-            os_log("Not starting the live event observer because WWDC is not this week",
-                   log: log,
-                   type: .debug)
+            log.debug("Not starting the live event observer because WWDC is not this week")
 
             isRunning = false
             return
@@ -82,7 +80,7 @@ final class LiveObserver: NSObject {
     }
 
     @objc private func checkForLiveSessions() {
-        os_log("checkForLiveSessions()", log: log, type: .debug)
+                log.debug("checkForLiveSessions()")
 
         specialEventsObserver.fetch()
 
@@ -93,19 +91,19 @@ final class LiveObserver: NSObject {
 
     private func updateLiveFlags() {
         guard let startTime = Calendar.current.date(byAdding: DateComponents(minute: Constants.liveSessionStartTimeTolerance), to: dateProvider()) else {
-            os_log("Could not compute a start time to check for live sessions!", log: log, type: .fault)
+            log.fault("Could not compute a start time to check for live sessions!")
             return
         }
 
         guard let endTime = Calendar.current.date(byAdding: DateComponents(minute: Constants.liveSessionEndTimeTolerance), to: dateProvider()) else {
-            os_log("Could not compute an end time to check for live sessions!", log: log, type: .fault)
+            log.fault("Could not compute an end time to check for live sessions!")
             return
         }
 
         let previouslyLiveInstances = allLiveInstances.toArray()
         var notLiveAnymore: [SessionInstance] = []
 
-        os_log("Looking for live instances with startTime <= %{public}@ and endTime >= %{public}@", log: log, type: .debug, String(describing: startTime), String(describing: endTime))
+        log.debug("Looking for live instances with startTime <= \(String(describing: startTime), privacy: .public) and endTime >= \(String(describing: endTime), privacy: .public)")
 
         let liveInstances = storage.realm.objects(SessionInstance.self).filter("startTime <= %@ AND endTime >= %@ AND SUBQUERY(session.assets, $asset, $asset.rawAssetType == %@ AND $asset.actualEndDate == nil).@count > 0", startTime, endTime, SessionAssetType.liveStreamVideo.rawValue)
 
@@ -115,23 +113,16 @@ final class LiveObserver: NSObject {
             }
         }
 
-        os_log("There are %{public}d live instances. %{public}d instances are not live anymore",
-               log: log,
-               type: .debug,
-               liveInstances.count,
-               notLiveAnymore.count)
+        log.debug("There are \(liveInstances.count) live instances. \(notLiveAnymore.count) instances are not live anymore")
         setLiveFlag(false, for: notLiveAnymore)
         setLiveFlag(true, for: liveInstances.toArray())
 
-        let liveIdentifiers: [String] = liveInstances.map({ $0.identifier })
-        let notLiveAnymoreIdentifiers: [String] = notLiveAnymore.map({ $0.identifier })
-
-        if liveIdentifiers.count > 0 {
-            os_log("The following sessions are currently live: %{public}@", log: log, type: .debug, liveIdentifiers.joined(separator: ","))
+        if liveInstances.count > 0 {
+            log.debug("The following sessions are currently live: \(liveInstances.map(\.identifier).joined(separator: ","), privacy: .public)")
         }
 
-        if notLiveAnymoreIdentifiers.count > 0 {
-            os_log("The following sessions are NOT live anymore: %{public}@", log: log, type: .debug, notLiveAnymoreIdentifiers.joined(separator: ","))
+        if notLiveAnymore.count > 0 {
+            log.debug("The following sessions are NOT live anymore: \(notLiveAnymore.map(\.identifier).joined(separator: ","), privacy: .public)")
         }
     }
 
@@ -174,7 +165,7 @@ private extension SessionAsset {
 
 private final class CloudKitLiveObserver {
 
-    private let log = OSLog(subsystem: "WWDC", category: "CloudKitLiveObserver")
+    private let log = Logger(subsystem: "WWDC", category: "CloudKitLiveObserver")
     private let storage: Storage
 
     private lazy var database: CKDatabase = CKContainer.default().publicCloudDatabase
@@ -198,10 +189,7 @@ private final class CloudKitLiveObserver {
 
             operation.queryCompletionBlock = { [unowned self] _, error in
                 if let error = error {
-                    os_log("Error fetching special live records: %{public}@",
-                           log: self.log,
-                           type: .error,
-                           String(describing: error))
+                    log.error("Error fetching special live records: \(String(describing: error), privacy: .public)")
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
                         self.fetch()
@@ -235,12 +223,9 @@ private final class CloudKitLiveObserver {
 
             database.save(subscription) { _, error in
                 if let error = error {
-                    os_log("Error creating subscriptions: %{public}@",
-                           log: self.log,
-                           type: .error,
-                           String(describing: error))
+                    log.error("Error creating subscriptions: \(String(describing: error), privacy: .public)")
                 } else {
-                    os_log("Subscriptions created", log: self.log, type: .info)
+                    log.info("Subscriptions created")
                 }
             }
         #endif
@@ -265,7 +250,7 @@ private final class CloudKitLiveObserver {
     }
 
     private func store(_ records: [CKRecord]) {
-        os_log("Storing live records", log: log, type: .debug)
+        log.debug("Storing live records")
 
         storage.backgroundUpdate { realm in
             records.forEach { record in

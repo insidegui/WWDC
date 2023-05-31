@@ -8,7 +8,7 @@
 
 import Foundation
 import CloudKitCodable
-import os.log
+import OSLog
 
 public struct FavoriteSyncObject: CustomCloudKitCodable, BelongsToSession {
     public var cloudKitSystemFields: Data?
@@ -43,10 +43,7 @@ extension Favorite: SyncObjectConvertible, BelongsToSession {
 
     public var syncObject: FavoriteSyncObject? {
         guard let sessionId = session.first?.identifier else {
-            os_log("Favorite %@ is not associated to a session. That's illegal!",
-                   log: .default,
-                   type: .fault,
-                   identifier)
+            Logger.default.fault("Favorite \(self.identifier) is not associated to a session. That's illegal!")
 
             return nil
         }

@@ -7,13 +7,13 @@
 //
 
 import Cocoa
-import os.log
+import OSLog
 
 public final class ContributorsFetcher {
 
     public static let shared: ContributorsFetcher = ContributorsFetcher()
 
-    private let log = OSLog(subsystem: "WWDC", category: "ContributorsFetcher")
+    private let log = Logger(subsystem: "WWDC", category: "ContributorsFetcher")
 
     fileprivate struct Constants {
         static let contributorsURL = "https://api.github.com/repos/insidegui/WWDC/contributors"
@@ -45,9 +45,9 @@ public final class ContributorsFetcher {
         let task = URLSession.shared.dataTask(with: url) { [unowned self] data, response, error in
             guard let data = data, error == nil else {
                 if let error = error {
-                    os_log("Error fetching contributors: %{public}@", log: self.log, type: .error, String(describing: error))
+                    log.error("Error fetching contributors: \(String(describing: error), privacy: .public)")
                 } else {
-                    os_log("Error fetching contributors: network call returned no data", log: self.log, type: .error)
+                    log.error("Error fetching contributors: network call returned no data")
                 }
 
                 self.buildInfoText(self.names)
@@ -59,7 +59,7 @@ public final class ContributorsFetcher {
                 do {
                     self.names += try self.parseResponse(data)
                 } catch {
-                    os_log("Failed to decode contributors names", log: self.log, type: .error)
+                    log.error("Failed to decode contributors names")
                 }
 
                 if let linkHeader = (response as? HTTPURLResponse)?.allHeaderFields["Link"] as? String,
