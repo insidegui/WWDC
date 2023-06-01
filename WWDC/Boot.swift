@@ -6,7 +6,7 @@
 //  Copyright © 2020 Guilherme Rambo. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 import ConfCore
 import RealmSwift
 import os.log
@@ -20,7 +20,10 @@ final class Boot {
         enum Code: Int {
             case unknown
             case unusableStorage
+            case dataReset
         }
+
+        static let dataReset = BootstrapError(localizedDescription: "", code: .dataReset)
 
         static func unusableStorage(at url: URL) -> Self {
             BootstrapError(
@@ -42,6 +45,12 @@ final class Boot {
     }
 
     func bootstrapDependencies(readOnly: Bool = false, then completion: @escaping (Result<(storage: Storage, syncEngine: SyncEngine), BootstrapError>) -> Void) {
+        guard !confirmDataResetIfNeeded() else {
+            resetLocalStorage()
+            completion(.failure(.dataReset))
+            return
+        }
+
         do {
             let supportPath = try PathUtil.appSupportPathCreatingIfNeeded()
             let filePath = supportPath + "/ConfCore.realm"
@@ -137,4 +146,89 @@ final class Boot {
         }
     }
 
+    // MARK: - Hold Down Option for Reset
+
+    /// Returns `true` if the prompt was shown and the user confirmed the data reset.
+    private func confirmDataResetIfNeeded() -> Bool {
+        guard NSEvent.modifierFlags.contains(.option) else { return false }
+
+        let supportURL = URL(fileURLWithPath: PathUtil.appSupportPathAssumingExisting)
+
+        guard FileManager.default.fileExists(atPath: supportURL.path) else {
+            return false
+        }
+
+        let confirmation = NSAlert()
+        confirmation.messageText = "Reset App Data"
+
+        confirmation.informativeText = """
+        Reset local database and preferences?
+
+        If you're having issues with app hangs, slowdowns, or incorrect data, resetting the local database might help.
+
+        Local data including favorites and bookmarks will be permanently deleted.
+        """
+
+        if Preferences.shared.syncUserData {
+            confirmation.informativeText += "Your data will be restored from iCloud when the app restarts."
+        }
+
+        confirmation.addButton(withTitle: "Cancel")
+
+        confirmation.addButton(withTitle: "Reset")
+        // Tried this for the Reset button, but it looks ugly in Dark Mode for some reason :/
+        // hasDestructiveAction = true
+
+        let response = confirmation.runModal()
+
+        guard response == .alertSecondButtonReturn else { return false }
+
+        return true
+    }
+
+    private func resetLocalStorage() {
+        Task { @MainActor in
+            do {
+                let supportURL = URL(fileURLWithPath: PathUtil.appSupportPathAssumingExisting)
+
+                try await NSWorkspace.shared.recycle([supportURL])
+
+                let relaunch = NSAlert()
+                relaunch.messageText = "Database Reset"
+                relaunch.informativeText = "Would you like to relaunch the app now?"
+                relaunch.addButton(withTitle: "Relaunch")
+                relaunch.addButton(withTitle: "Quit")
+
+                if relaunch.runModal() == .alertFirstButtonReturn {
+                    try NSApplication.shared.relaunch()
+                } else {
+                    NSApplication.shared.terminate(self)
+                }
+            } catch {
+                WWDCAlert.show(with: error)
+            }
+        }
+    }
+
+}
+
+extension NSApplication {
+    // Credit: Andy Kim (PFMoveApplication)
+    func relaunch(at path: String = Bundle.main.bundlePath) throws {
+        let pid = ProcessInfo.processInfo.processIdentifier
+
+        let xattrScript = "/usr/bin/xattr -d -r com.apple.quarantine \(path)"
+        let script = "(while /bin/kill -0 \(pid) >&/dev/null; do /bin/sleep 0.1; done; \(xattrScript); /usr/bin/open \(path)) &"
+
+        let proc = Process()
+        proc.executableURL = URL(fileURLWithPath: "/bin/sh")
+        proc.arguments = [
+            "-c",
+            script
+        ]
+
+        try proc.run()
+
+        exit(0)
+    }
 }
