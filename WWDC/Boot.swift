@@ -170,7 +170,7 @@ final class Boot {
         """
 
         if Preferences.shared.syncUserData {
-            confirmation.informativeText += "Your data will be restored from iCloud when the app restarts."
+            confirmation.informativeText += "\n\nYour data will be restored from iCloud when the app restarts."
         }
 
         confirmation.addButton(withTitle: "Cancel")
@@ -189,6 +189,8 @@ final class Boot {
     private func resetLocalStorage() {
         Task { @MainActor in
             do {
+                UserDataSyncEngine.resetLocalMetadata()
+                
                 let supportURL = URL(fileURLWithPath: PathUtil.appSupportPathAssumingExisting)
 
                 try await NSWorkspace.shared.recycle([supportURL])
