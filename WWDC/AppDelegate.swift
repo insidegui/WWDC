@@ -32,7 +32,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
-    
+
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
 
@@ -102,9 +102,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func handleBootstrapError(_ error: Boot.BootstrapError) {
-        if error.code == .unusableStorage {
+        switch error.code {
+        case .unusableStorage:
             handleStorageError(error)
-        } else {
+        case .dataReset:
+            break
+        default:
             let alert = NSAlert()
             alert.messageText = "Failed to start"
             alert.informativeText = error.localizedDescription
@@ -139,6 +142,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var migrationSplashShown = false
 
     private func showMigrationSplashScreen() {
+        /// Prevent migration splash screen from showing up during other types of launch alerts,
+        /// such as the data reset confirmation when holding down the Option key.
+        guard NSApp.modalWindow == nil else { return }
+
         migrationSplashShown = true
         slowMigrationController.showWindow(self)
     }

@@ -16,9 +16,9 @@ import os.log
 
 public final class UserDataSyncEngine {
 
-    public init(storage: Storage, defaults: UserDefaults = .standard, container: CKContainer = .default()) {
+    public init(storage: Storage, container: CKContainer = .default()) {
         self.storage = storage
-        self.defaults = defaults
+        self.defaults = .standard
         self.container = container
         self.privateDatabase = container.privateCloudDatabase
 
@@ -353,33 +353,6 @@ public final class UserDataSyncEngine {
 
     // MARK: - Data syncing
 
-    private var privateChangeToken: CKServerChangeToken? {
-        get {
-            guard let data = defaults.data(forKey: #function) else { return nil }
-
-            do {
-                guard let token = try NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data) else {
-                    os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken", log: log, type: .error)
-                    return nil
-                }
-
-                return token
-            } catch {
-                os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken: %{public}@", log: self.log, type: .fault, String(describing: error))
-                return nil
-            }
-        }
-        set {
-            guard let newValue = newValue else {
-                defaults.removeObject(forKey: #function)
-                return
-            }
-
-            let data = NSKeyedArchiver.archiveData(with: newValue, secure: true)
-            defaults.set(data, forKey: #function)
-        }
-    }
-
     private func fetchChanges() {
         var changedRecords: [CKRecord] = []
 
@@ -487,12 +460,48 @@ public final class UserDataSyncEngine {
         }
     }
 
+    private static let privateChangeTokenDefaultsKey = "privateChangeToken"
+    private static let tombstoneRecordsDefaultsKey = "tombstoneRecords"
+
+    public static func resetLocalMetadata() {
+        UserDefaults.standard.removeObject(forKey: Self.privateChangeTokenDefaultsKey)
+        UserDefaults.standard.removeObject(forKey: Self.tombstoneRecordsDefaultsKey)
+        UserDefaults.standard.synchronize()
+    }
+
     /// Record tombstone keys for sync objects that are known to no longer have valid content associated with them.
     private var tombstoneRecords: Set<String> {
-        get { Set(UserDefaults.standard.stringArray(forKey: #function) ?? []) }
+        get { Set(UserDefaults.standard.stringArray(forKey: Self.tombstoneRecordsDefaultsKey) ?? []) }
         set {
-            UserDefaults.standard.set(Array(newValue), forKey: #function)
+            UserDefaults.standard.set(Array(newValue), forKey: Self.tombstoneRecordsDefaultsKey)
             UserDefaults.standard.synchronize()
+        }
+    }
+
+    private var privateChangeToken: CKServerChangeToken? {
+        get {
+            guard let data = defaults.data(forKey: Self.privateChangeTokenDefaultsKey) else { return nil }
+
+            do {
+                guard let token = try NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data) else {
+                    os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken", log: log, type: .error)
+                    return nil
+                }
+
+                return token
+            } catch {
+                os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken: %{public}@", log: self.log, type: .fault, String(describing: error))
+                return nil
+            }
+        }
+        set {
+            guard let newValue = newValue else {
+                defaults.removeObject(forKey: Self.privateChangeTokenDefaultsKey)
+                return
+            }
+
+            let data = NSKeyedArchiver.archiveData(with: newValue, secure: true)
+            defaults.set(data, forKey: Self.privateChangeTokenDefaultsKey)
         }
     }
 
