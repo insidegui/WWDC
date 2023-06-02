@@ -27,9 +27,10 @@ final class StorageMigrator {
         32: migrateSessionModels,
         34: migrateOldTranscriptModels,
         37: migrateIdentifiersWithoutReplacement,
-        43: migrateTracks,
+        43: resetTracks,
         44: removeInvalidLiveAssets,
-        57: resetFeaturedSections
+        57: resetFeaturedSections,
+        59: resetTracks
     ]
 
     init(migration: Migration, oldVersion: UInt64) {
@@ -162,8 +163,8 @@ final class StorageMigrator {
         }
     }
 
-    private static func migrateTracks(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("migrateTracks", log: log, type: .info)
+    private static func resetTracks(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+        os_log("resetTracks", log: log, type: .info)
 
         migration.deleteData(forType: "Track")
     }
