@@ -51,6 +51,8 @@ final class Boot {
             return
         }
 
+        WWDCAgentRemover.removeWWDCAgentIfNeeded()
+
         do {
             let supportPath = try PathUtil.appSupportPathCreatingIfNeeded()
             let filePath = supportPath + "/ConfCore.realm"
