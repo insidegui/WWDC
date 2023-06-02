@@ -71,7 +71,7 @@ final class ExploreTabProvider: ObservableObject {
 
     private var disposeBag = DisposeBag()
 
-    private struct SourceData {
+    fileprivate struct SourceData {
         var featuredSections: Results<FeaturedSection>
         var continueWatching: [Session]
         var recentFavorites: [Session]
@@ -101,6 +101,8 @@ final class ExploreTabProvider: ObservableObject {
     }
 
     private func update(with data: SourceData) {
+        guard !data.shouldDisplayPlaceholderUI else { return }
+
         let continueWatchingSection = ExploreTabContent.Section(
             id: "continue-watching",
             title: "Continue Watching",
@@ -291,5 +293,17 @@ extension WWDCFiltersState {
                 text: nil
             )
         )
+    }
+}
+
+private extension ExploreTabProvider.SourceData {
+    /// `true` when all sections except for "Topics" are empty.
+    /// This addresses migration from previous versions without an Explore tab,
+    /// where the local database has topics but no other data relevant to the explore tab.
+    var shouldDisplayPlaceholderUI: Bool {
+        featuredSections.isEmpty
+        && continueWatching.isEmpty
+        && recentFavorites.isEmpty
+        && liveEventSession == nil
     }
 }
