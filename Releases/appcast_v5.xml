@@ -19,8 +19,8 @@
 				<li>Minor bug fixes</li>
 			</ul>
 			]]></description>
-			<pubDate>Wed, 31 May 2023 17:00:00 -0300</pubDate>
-			<enclosure url="https://github.com/insidegui/WWDC/releases/download/7.4/WWDC_v7.4-1033.dmg" sparkle:version="1033" sparkle:shortVersionString="7.4" length="18571831" type="application/octet-stream" />
+			<pubDate>Wed, 2 Jun 2023 12:00:00 -0300</pubDate>
+			<enclosure url="https://github.com/insidegui/WWDC/releases/download/7.4/WWDC_v7.4-1036.dmg" sparkle:version="1036" sparkle:shortVersionString="7.4" length="18560132" type="application/octet-stream" />
 			<sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
 		</item>	
 		
