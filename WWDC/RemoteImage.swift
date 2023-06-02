@@ -28,6 +28,7 @@ struct RemoteImage<Content: View, Placeholder: View>: View {
         }
     }
 
+    @MainActor
     private func load() async -> NSImage? {
         await withCheckedContinuation { continuation in
             switch size {
