@@ -4,15 +4,18 @@ struct ExploreTabRootView: View {
     @EnvironmentObject private var provider: ExploreTabProvider
 
     var body: some View {
-        if let content = provider.content {
-            ExploreTabContentView(content: content, scrollOffset: $provider.scrollOffset)
-                #if DEBUG
-                .contextMenu { Button("Export JSON…", action: content.exportJSON) }
-                #endif
-        } else {
-            ExploreTabContentView(content: .placeholder, scrollOffset: .constant(.zero))
-                .redacted(reason: .placeholder)
+        ZStack {
+            if let content = provider.content {
+                ExploreTabContentView(content: content, scrollOffset: $provider.scrollOffset)
+                    #if DEBUG
+                    .contextMenu { Button("Export JSON…", action: content.exportJSON) }
+                    #endif
+            } else {
+                ExploreTabContentView(content: .placeholder, scrollOffset: .constant(.zero))
+                    .redacted(reason: .placeholder)
+            }
         }
+        .animation(.spring(), value: provider.content?.sections.flatMap(\.items).count)
     }
 
 }

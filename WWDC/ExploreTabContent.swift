@@ -72,13 +72,47 @@ extension ExploreTabContent.Item {
             imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!
         )
     ]
+    static let placeholderItems2: [ExploreTabContent.Item] = [
+        .init(
+            id: "4",
+            title: "Placeholder Item Regular",
+            subtitle: "Placeholder Description 4",
+            overlayText: "24m",
+            overlaySymbol: "play",
+            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!
+        ),
+        .init(
+            id: "5",
+            title: "Placeholder",
+            subtitle: "Placeholder Item Description 5",
+            overlayText: "37m",
+            overlaySymbol: "play",
+            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!
+        ),
+        .init(
+            id: "6",
+            title: "Placeholder Item Longer Title",
+            subtitle: "Placeholder Item Description 6",
+            overlayText: "37m",
+            overlaySymbol: "play",
+            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!
+        ),
+        .init(
+            id: "7",
+            title: "Placeholder",
+            subtitle: "Item Description 7",
+            overlayText: "35m",
+            overlaySymbol: "play",
+            imageURL: URL(string: "https://wwdc.io/images/placeholder.jpg")!
+        )
+    ]
 }
 
 extension ExploreTabContent {
     static let placeholder: ExploreTabContent = {
         ExploreTabContent(id: "1", sections: [
             Section(id: "placeholder-1", title: "Placeholder Section First", icon: .symbol("app.badge.checkmark"), items: ExploreTabContent.Item.placeholderItems),
-            Section(id: "placeholder-2", title: "Placeholder Section Second Longer Title", icon: .symbol("app.badge.checkmark"), items: ExploreTabContent.Item.placeholderItems),
+            Section(id: "placeholder-2", title: "Placeholder Section Second Longer Title", icon: .symbol("app.badge.checkmark"), items: ExploreTabContent.Item.placeholderItems2),
             Section(id: "placeholder-3", title: "Placeholder Short", icon: .symbol("app.badge.checkmark"), items: ExploreTabContent.Item.placeholderItems)
         ])
     }()

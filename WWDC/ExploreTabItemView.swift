@@ -27,7 +27,13 @@ struct ExploreTabItemView: View {
             item.progress != nil ? .topTrailing : .bottomTrailing
         }
 
-        private var hasOverlay: Bool { item.overlayText != nil || item.overlaySymbol != nil }
+        @Environment(\.redactionReasons)
+        private var redactionReasons
+
+        private var hasOverlay: Bool {
+            guard redactionReasons.isEmpty else { return false }
+            return item.overlayText != nil || item.overlaySymbol != nil
+        }
 
         var body: some View {
             VStack(alignment: .leading, spacing: 8) {
