@@ -46,13 +46,13 @@ private extension URL {
 
 }
 
-final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider {
+final class ChromeCastPlaybackProvider: PUIExternalPlaybackProvider, Logging {
 
     fileprivate weak var consumer: PUIExternalPlaybackConsumer?
 
     private lazy var scanner: CastDeviceScanner = CastDeviceScanner()
 
-    private let log = Logger(subsystem: "WWDC", category: "ChromeCastPlaybackProvider")
+    static let log = makeLogger()
 
     /// Initializes the external playback provider to start playing the media at the specified URL
     ///

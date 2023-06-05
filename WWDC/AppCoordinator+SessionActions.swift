@@ -168,22 +168,23 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
 
 }
 
-final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
+final class PickerDelegate: NSObject, NSSharingServicePickerDelegate, Logging {
 
     static let shared = PickerDelegate()
+    static let log = makeLogger()
 
     func sharingServicePicker(_ sharingServicePicker: NSSharingServicePicker, sharingServicesForItems items: [Any], proposedSharingServices proposedServices: [NSSharingService]) -> [NSSharingService] {
 
-        let copyService = NSSharingService(title: "Copy URL", image: #imageLiteral(resourceName: "copy"), alternateImage: nil) {
+        let copyService = NSSharingService(title: "Copy URL", image: #imageLiteral(resourceName: "copy"), alternateImage: nil) { [log] in
 
             if let url = items.first as? URL {
 
                 NSPasteboard.general.clearContents()
                 if !NSPasteboard.general.setString(url.absoluteString, forType: .string) {
-                    Logger.default.error("Failed to copy URL")
+                    log.error("Failed to copy URL")
                 }
             } else {
-                Logger.default.error("Sharing expects a URL and did not receive one")
+                log.error("Sharing expects a URL and did not receive one")
             }
         }
 

@@ -10,7 +10,7 @@ import Foundation
 import QuartzCore
 import OSLog
 
-private let _log = Logger(subsystem: "ConfCore", category: "NSCodingExtensions")
+private let _log = makeLogger(subsystem: "ConfCore", category: "NSCodingExtensions")
 
 public extension NSKeyedArchiver {
 

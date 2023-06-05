@@ -42,7 +42,8 @@ public final class SessionProgress: Object, HasCloudKitFields, SoftDeletable {
     }
 }
 
-extension Session {
+extension Session: Logging {
+    public static let log = makeLogger()
 
     private static let positionUpdateQueue = DispatchQueue(label: "PositionUpdate", qos: .background)
 
@@ -90,7 +91,7 @@ extension Session {
 
             try queueRealm.commitWrite()
         } catch {
-            Logger.default.error("Error updating session progress: \(String(describing: error), privacy: .public)")
+            log.error("Error updating session progress: \(String(describing: error), privacy: .public)")
         }
     }
 
@@ -110,7 +111,7 @@ extension Session {
 
             if mustCommit { try realm.commitWrite() }
         } catch {
-            Logger.default.error("Error updating session progress: \(String(describing: error), privacy: .public)")
+            log.error("Error updating session progress: \(String(describing: error), privacy: .public)")
         }
     }
 

@@ -84,7 +84,8 @@ extension Array where Element == SessionRow {
     }
 }
 
-final class FilterResults {
+final class FilterResults: Logging {
+    static let log = makeLogger()
 
     static var empty: FilterResults {
         return FilterResults(storage: nil, query: nil)
@@ -148,7 +149,7 @@ final class FilterResults {
                 }).disposed(by: disposeBag)
         } catch {
             observerClosure(nil)
-            Logger.default.error("Failed to initialize Realm for searching: \(String(describing: error), privacy: .public)")
+            log.error("Failed to initialize Realm for searching: \(String(describing: error), privacy: .public)")
         }
     }
 }

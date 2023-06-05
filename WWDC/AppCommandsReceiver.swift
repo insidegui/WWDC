@@ -10,8 +10,8 @@ import Cocoa
 import ConfCore
 import OSLog
 
-final class AppCommandsReceiver {
-    private let log = Logger(subsystem: "io.wwdc.app", category: String(describing: AppCommandsReceiver.self))
+final class AppCommandsReceiver: Logging {
+    static let log = makeLogger(subsystem: "io.wwdc.app")
 
     // swiftlint:disable:next cyclomatic_complexity
     func handle(_ command: WWDCAppCommand, storage: Storage) -> DeepLink? {

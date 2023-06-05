@@ -9,11 +9,10 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import OSLog
 
-final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol {
+final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol, Logging {
 
-    private let log = Logger(subsystem: "ConfCore", category: String(describing: TranscriptIndexingClient.self))
+    static let log = makeLogger()
 
     var transcriptLanguage: String {
         didSet {

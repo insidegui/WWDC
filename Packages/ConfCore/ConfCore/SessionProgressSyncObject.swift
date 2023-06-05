@@ -21,7 +21,8 @@ public struct SessionProgressSyncObject: CustomCloudKitCodable, BelongsToSession
     var isDeleted: Bool
 }
 
-extension SessionProgress: SyncObjectConvertible, BelongsToSession {
+extension SessionProgress: SyncObjectConvertible, BelongsToSession, Logging {
+    public static let log = makeLogger()
 
     public static var syncThrottlingInterval: TimeInterval {
         return 20.0
@@ -49,7 +50,7 @@ extension SessionProgress: SyncObjectConvertible, BelongsToSession {
 
     public var syncObject: SessionProgressSyncObject? {
         guard let sessionId = session.first?.identifier else {
-            Logger.default.fault("SessionProgress \(self.identifier) is not associated to a session. That's illegal!")
+            log.fault("SessionProgress \(self.identifier) is not associated to a session. That's illegal!")
 
             return nil
         }

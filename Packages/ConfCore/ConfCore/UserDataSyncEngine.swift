@@ -12,9 +12,9 @@ import CloudKitCodable
 import RealmSwift
 import RxCocoa
 import RxSwift
-import OSLog
+import struct OSLog.Logger
 
-public final class UserDataSyncEngine {
+public final class UserDataSyncEngine: Logging {
 
     public init(storage: Storage, container: CKContainer = .default()) {
         self.storage = storage
@@ -39,7 +39,7 @@ public final class UserDataSyncEngine {
     private let container: CKContainer
     private let privateDatabase: CKDatabase
 
-    private let log = Logger(subsystem: "ConfCore", category: "UserDataSyncEngine")
+    public static let log = makeLogger()
 
     private lazy var cloudOperationQueue: OperationQueue = {
         let q = OperationQueue()

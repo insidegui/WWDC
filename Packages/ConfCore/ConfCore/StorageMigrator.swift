@@ -10,11 +10,11 @@ import Foundation
 import RealmSwift
 import OSLog
 
-final class StorageMigrator {
+final class StorageMigrator: Logging {
 
     let migration: Migration
     let oldVersion: UInt64
-    let log = Logger(subsystem: "ConfCore", category: "StorageMigrator")
+    static let log = makeLogger()
 
     private typealias SchemaVersion = UInt64
     private typealias MigrationBlock = (Migration, SchemaVersion, Logger) -> Void
@@ -161,7 +161,7 @@ final class StorageMigrator {
         }
     }
 
-    private static func resetTracks(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+    private static func resetTracks(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
         log.info("resetTracks")
 
         migration.deleteData(forType: "Track")

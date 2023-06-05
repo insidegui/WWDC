@@ -10,9 +10,9 @@ import Foundation
 import RxSwift
 import OSLog
 
-public final class TranscriptLanguagesProvider {
+public final class TranscriptLanguagesProvider: Logging {
 
-    private let log = Logger(subsystem: "ConfCore", category: String(describing: TranscriptLanguagesProvider.self))
+    public static let log = makeLogger()
 
     let client: AppleAPIClient
 

@@ -13,13 +13,13 @@ import RxRealm
 import RxCocoa
 import OSLog
 
-public final class Storage {
+public final class Storage: Logging {
 
     public let realmConfig: Realm.Configuration
     public let realm: Realm
 
     let disposeBag = DisposeBag()
-    private static let log = Logger(subsystem: "ConfCore", category: "Storage")
+    public static let log = makeLogger()
     private let log = Storage.log
 
     public init(_ realm: Realm) {

@@ -11,7 +11,7 @@ import ConfCore
 import RealmSwift
 import OSLog
 
-final class Boot {
+final class Boot: Logging {
 
     struct BootstrapError: LocalizedError {
         var localizedDescription: String
@@ -38,7 +38,7 @@ final class Boot {
         }
     }
 
-    private let log = Logger(subsystem: "WWDC", category: String(describing: Boot.self))
+    static let log = makeLogger()
 
     private static var isCompactOnLaunchEnabled: Bool {
         !UserDefaults.standard.bool(forKey: "WWDCDisableDatabaseCompression")

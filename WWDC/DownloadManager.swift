@@ -21,13 +21,13 @@ enum DownloadStatus {
     case failed(Error?)
 }
 
-final class DownloadManager: NSObject {
+final class DownloadManager: NSObject, Logging {
 
     // Changing this dynamically isn't supported. Delete all downloads when switching
     // from one quality to another otherwise you'll encounter minor unexpected behavior
     static let downloadQuality = SessionAssetType.hdVideo
 
-    private let log = Logger(subsystem: "WWDC", category: "DownloadManager")
+    static let log = makeLogger()
     private let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
     private var backgroundSession: Foundation.URLSession!
     private var downloadTasks: [String: Download] = [:] {

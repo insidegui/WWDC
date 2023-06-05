@@ -22,7 +22,8 @@ public struct BookmarkSyncObject: CustomCloudKitCodable, BelongsToSession {
     var isDeleted: Bool
 }
 
-extension Bookmark: SyncObjectConvertible, BelongsToSession {
+extension Bookmark: SyncObjectConvertible, BelongsToSession, Logging {
+    public static let log = makeLogger(subsystem: "ConfCore", category: "\(String(describing: Bookmark.self))+Sync")
 
     public static var syncThrottlingInterval: TimeInterval {
         return 0
@@ -50,7 +51,7 @@ extension Bookmark: SyncObjectConvertible, BelongsToSession {
             do {
                 bookmark.snapshot = try Data(contentsOf: snapshotURL)
             } catch {
-                Logger.default.fault("Failed to load bookmark snapshot from CloudKit: \(String(describing: error), privacy: .public)")
+                log.fault("Failed to load bookmark snapshot from CloudKit: \(String(describing: error), privacy: .public)")
                 bookmark.snapshot = Data()
             }
         } else {
@@ -62,7 +63,7 @@ extension Bookmark: SyncObjectConvertible, BelongsToSession {
 
     public var syncObject: BookmarkSyncObject? {
         guard let sessionId = session.first?.identifier else {
-            Logger.default.fault("Bookmark \(self.identifier) is not associated to a session. That's illegal!")
+            log.fault("Bookmark \(self.identifier) is not associated to a session. That's illegal!")
 
             return nil
         }

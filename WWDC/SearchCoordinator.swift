@@ -11,14 +11,14 @@ import ConfCore
 import RealmSwift
 import OSLog
 
-final class SearchCoordinator {
+final class SearchCoordinator: Logging {
 
     let storage: Storage
 
     let scheduleController: SessionsTableViewController
     let videosController: SessionsTableViewController
 
-    private let log = Logger(subsystem: "WWDC", category: "SearchCoordinator")
+    static let log = makeLogger()
 
     /// The desired state of the filters upon configuration
     private var restorationFiltersState: WWDCFiltersState?

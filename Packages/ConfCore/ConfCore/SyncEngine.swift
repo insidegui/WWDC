@@ -16,9 +16,9 @@ extension Notification.Name {
     public static let SyncEngineDidSyncFeaturedSections = Notification.Name("SyncEngineDidSyncFeaturedSections")
 }
 
-public final class SyncEngine {
+public final class SyncEngine: Logging {
 
-    private let log = Logger(subsystem: "ConfCore", category: String(describing: SyncEngine.self))
+    public static let log = makeLogger()
 
     public let storage: Storage
     public let client: AppleAPIClient

@@ -9,11 +9,11 @@
 import Cocoa
 import OSLog
 
-public final class ContributorsFetcher {
+public final class ContributorsFetcher: Logging {
 
     public static let shared: ContributorsFetcher = ContributorsFetcher()
 
-    private let log = Logger(subsystem: "WWDC", category: "ContributorsFetcher")
+    public static let log = makeLogger()
 
     fileprivate struct Constants {
         static let contributorsURL = "https://api.github.com/repos/insidegui/WWDC/contributors"
@@ -55,7 +55,7 @@ public final class ContributorsFetcher {
                 return
             }
 
-            self.syncQueue.async {
+            self.syncQueue.async { [log] in
                 do {
                     self.names += try self.parseResponse(data)
                 } catch {

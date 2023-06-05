@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import OSLog
+import ConfCore
 
 typealias ImageDownloadCompletionBlock = (_ sourceURL: URL, _ result: (original: NSImage?, thumbnail: NSImage?)) -> Void
 
@@ -15,13 +15,13 @@ private struct ImageDownload {
     static let subsystemName = "io.WWDC.app.imageDownload"
 }
 
-final class ImageDownloadCenter {
+final class ImageDownloadCenter: Logging {
 
     static let shared: ImageDownloadCenter = ImageDownloadCenter()
 
     let cache = ImageCacheProvider()
 
-    private let log = Logger(subsystem: ImageDownload.subsystemName, category: "ImageDownloadCenter")
+    static let log = makeLogger(subsystem: ImageDownload.subsystemName, category: "ImageDownloadCenter")
 
     private let dispatchQueue = DispatchQueue(label: "ImageDownloadCenter", qos: .userInitiated, attributes: .concurrent)
     private lazy var queue: OperationQueue = {
@@ -109,7 +109,7 @@ final class ImageCacheProvider {
         return c
     }()
 
-    private let log = Logger(subsystem: ImageDownload.subsystemName, category: "ImageCacheProvider")
+    private let log = makeLogger(subsystem: ImageDownload.subsystemName, category: "ImageCacheProvider")
 
     private let storageQueue = DispatchQueue(label: "ImageStorage", qos: .userInitiated, attributes: .concurrent)
 

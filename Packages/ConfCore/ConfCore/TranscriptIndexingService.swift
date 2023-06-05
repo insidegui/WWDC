@@ -10,10 +10,10 @@ import Foundation
 import RealmSwift
 import OSLog
 
-@objcMembers public final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtocol {
+@objcMembers public final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtocol, Logging {
 
     private var indexer: TranscriptIndexer!
-    private let log = Logger(subsystem: "TranscriptIndexingService", category: "TranscriptIndexingService")
+    public static let log = makeLogger()
 
     public func indexTranscriptsIfNeeded(manifestURL: URL, ignoringCache: Bool, storageURL: URL, schemaVersion: UInt64) {
         os_log(.debug, log: self.log, "Attempting to index transcripts. manifest: \(manifestURL, privacy: .public), ignoringCache: \(ignoringCache)")

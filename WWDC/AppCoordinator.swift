@@ -15,9 +15,9 @@ import Combine
 import OSLog
 import AVFoundation
 
-final class AppCoordinator {
+final class AppCoordinator: Logging {
 
-    let log = Logger(subsystem: "WWDC", category: "AppCoordinator")
+    static let log = makeLogger()
     private let disposeBag = DisposeBag()
 
     var liveObserver: LiveObserver
@@ -521,7 +521,7 @@ final class AppCoordinator {
     private var sharePlayConfigured = false
 
     func configureSharePlayIfSupported() {
-        let log = Logger(subsystem: SharePlayManager.subsystemName, category: String(describing: AppCoordinator.self))
+        let log = ConfCore.makeLogger(subsystem: SharePlayManager.defaultLoggerConfig().subsystem, category: String(describing: AppCoordinator.self))
         
         guard !sharePlayConfigured else { return }
         sharePlayConfigured = true

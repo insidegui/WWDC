@@ -12,9 +12,9 @@ import RealmSwift
 import CloudKit
 import OSLog
 
-final class LiveObserver: NSObject {
+final class LiveObserver: NSObject, Logging {
 
-    private let log = Logger(subsystem: "WWDC", category: "LiveObserver")
+    static let log = makeLogger()
     private let dateProvider: DateProvider
     private let storage: Storage
     private let syncEngine: SyncEngine
@@ -80,7 +80,7 @@ final class LiveObserver: NSObject {
     }
 
     @objc private func checkForLiveSessions() {
-                log.debug("checkForLiveSessions()")
+        log.debug("checkForLiveSessions()")
 
         specialEventsObserver.fetch()
 
@@ -163,9 +163,9 @@ private extension SessionAsset {
 
 }
 
-private final class CloudKitLiveObserver {
+private final class CloudKitLiveObserver: Logging {
 
-    private let log = Logger(subsystem: "WWDC", category: "CloudKitLiveObserver")
+    static let log = makeLogger()
     private let storage: Storage
 
     private lazy var database: CKDatabase = CKContainer.default().publicCloudDatabase

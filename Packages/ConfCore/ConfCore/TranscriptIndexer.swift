@@ -16,11 +16,10 @@ extension Notification.Name {
     public static let TranscriptIndexingDidStop = Notification.Name("io.wwdc.app.TranscriptIndexingDidStopNotification")
 }
 
-public final class TranscriptIndexer {
+public final class TranscriptIndexer: Logging {
 
     private let storage: Storage
-    private static let log = Logger(subsystem: "ConfCore", category: "TranscriptIndexer")
-    private let log = TranscriptIndexer.log
+    public static let log = makeLogger()
     public var manifestURL: URL
     public var ignoreExistingEtags = false
 

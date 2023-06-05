@@ -8,11 +8,11 @@
 
 import Cocoa
 import AVFoundation
-import OSLog
+import ConfCore
 
-final class ClipRenderer: NSObject {
+final class ClipRenderer: NSObject, Logging {
 
-    private let log = Logger(subsystem: "WWDC", category: String(describing: ClipRenderer.self))
+    static let log = makeLogger()
 
     let playerItem: AVPlayerItem
     let fileNameHint: String?
@@ -115,13 +115,13 @@ final class ClipRenderer: NSObject {
 
             switch session.status {
             case .unknown:
-                os_log("Export session received unknown status")
+                log.info("Export session received unknown status")
             case .waiting:
-                os_log("Export session waiting")
+                log.info("Export session waiting")
             case .exporting:
-                os_log("Export session started")
+                log.info("Export session started")
             case .completed:
-                os_log("Export session finished")
+                log.info("Export session finished")
                 self.progressUpdateTimer?.invalidate()
                 
                 self.reportCompletion(with: .success(self.outputURL))

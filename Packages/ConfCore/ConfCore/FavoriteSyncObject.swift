@@ -43,7 +43,7 @@ extension Favorite: SyncObjectConvertible, BelongsToSession {
 
     public var syncObject: FavoriteSyncObject? {
         guard let sessionId = session.first?.identifier else {
-            Logger.default.fault("Favorite \(self.identifier) is not associated to a session. That's illegal!")
+            ckLog.fault("Favorite \(self.identifier) is not associated to a session. That's illegal!")
 
             return nil
         }

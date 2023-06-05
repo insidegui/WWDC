@@ -8,13 +8,16 @@
 
 import Cocoa
 import OSLog
+import ConfCore
+
+extension CALayer: Logging {
+    public static let log = makeLogger()
+}
 
 public extension CALayer {
 
     /// Temporary storage for animations that have been disabled by `disableAllAnimations`
     private static var _animationStorage: [Int: [String: CAAnimation]] = [:]
-
-    private static let log = Logger(subsystem: "WWDC", category: "CALayer+Asset")
 
     /// Loads a `CALayer` from a Core Animation Archive asset.
     ///

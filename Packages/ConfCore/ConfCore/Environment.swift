@@ -48,7 +48,7 @@ public struct Environment: Equatable {
 
         if shouldNotify {
             DispatchQueue.main.async {
-                Logger.default.info("Environment base URL: \(environment.baseURL)")
+                log.info("Environment base URL: \(environment.baseURL)")
 
                 NotificationCenter.default.post(name: .WWDCEnvironmentDidChange, object: environment)
             }
@@ -112,4 +112,8 @@ extension Environment {
                                                liveVideosPath: "/videos_live.json",
                                                featuredSectionsPath: "/explore.json")
 
+}
+
+extension Environment: Logging {
+    public static let log = makeLogger()
 }
