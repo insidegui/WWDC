@@ -168,10 +168,10 @@ final class TabItemView: NSView {
             return
         }
 
-        Publishers.CombineLatest(
+        Publishers.Merge(
             NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification, object: window),
             NotificationCenter.default.publisher(for: NSWindow.didResignKeyNotification, object: window)
-        ).sink { [weak self] _, _ in
+        ).sink { [weak self] _ in
             guard let self = self else { return }
             self.needsLayout = true
         }
