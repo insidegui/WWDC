@@ -208,25 +208,32 @@ final class SessionViewModel {
     }
 
     static func context(for session: Session, instance: SessionInstance? = nil) -> String {
-        if let instance = instance {
-            var result = timeFormatter.string(from: instance.startTime) + " - " + timeFormatter.string(from: instance.endTime)
+        var components = [String]()
 
-            result += " · " + instance.roomName
+        if let instance {
+            components = [timeFormatter.string(from: instance.startTime)]
 
-            return result
+            /// The end time is only relevant when the instance has a live component,
+            /// and let's also ensure the start and end times are not the same just in case.
+            if instance.hasLiveStream, instance.startTime != instance.endTime {
+                components.append(timeFormatter.string(from: instance.endTime))
+            }
+        } else {
+            components = []
+        }
+
+        /// Display either track or focuses, prioritizing track, since both won't fit.
+        if let trackName = session.track.first?.name {
+            components.append(trackName)
         } else {
             let focusesArray = session.focuses.toArray()
-
-            let focuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: true)
-
-            var result = session.track.first?.name ?? ""
-
-            if focusesArray.count > 0 {
-                result = "\(focuses) · " + result
+            if !focusesArray.isEmpty {
+                let focuses = SessionViewModel.focusesDescription(from: focusesArray, collapse: true)
+                components.append(focuses)
             }
-
-            return result
         }
+
+        return components.joined(separator: " · ")
     }
 
     static func footer(for session: Session, at event: ConfCore.Event?) -> String {
