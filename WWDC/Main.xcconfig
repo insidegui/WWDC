@@ -2,8 +2,8 @@
 // Make sure you have run the bootstrap script from the project's root directory to set up signing for your team ID.
 #include "TeamID.xcconfig"
 
-MARKETING_VERSION = 7.4
-CURRENT_PROJECT_VERSION = 1036
+MARKETING_VERSION = 7.4.1
+CURRENT_PROJECT_VERSION = 1038
 
 MACOSX_DEPLOYMENT_TARGET = 12.0
 
