@@ -56,19 +56,6 @@ final class SessionCellView: NSView {
         viewModel.rxIsFavorite.distinctUntilChanged().map({ !$0 }).bind(to: favoritedImageView.rx.isHidden).disposed(by: disposeBag)
         viewModel.rxIsDownloaded.distinctUntilChanged().map({ !$0 }).bind(to: downloadedImageView.rx.isHidden).disposed(by: disposeBag)
 
-        let isSnowFlake = Observable.zip(viewModel.rxIsCurrentlyLive, viewModel.rxIsLab)
-
-        isSnowFlake.map({ !$0.0 && !$0.1 }).bind(to: snowFlakeView.rx.isHidden).disposed(by: disposeBag)
-        isSnowFlake.map({ $0.0 || $0.1 }).bind(to: thumbnailImageView.rx.isHidden).disposed(by: disposeBag)
-
-        isSnowFlake.subscribe(onNext: { [weak self] (isLive: Bool, isLab: Bool) -> Void in
-            if isLive {
-                self?.snowFlakeView.image = #imageLiteral(resourceName: "live-indicator")
-            } else if isLab {
-                self?.snowFlakeView.image = #imageLiteral(resourceName: "lab-indicator")
-            }
-        }).disposed(by: disposeBag)
-
         viewModel.rxImageUrl.distinctUntilChanged({ $0 != $1 }).subscribe(onNext: { [weak self] imageUrl in
             guard let imageUrl = imageUrl else { return }
 
@@ -96,17 +83,6 @@ final class SessionCellView: NSView {
             } else {
                 self?.contextColorView.hasValidProgress = false
                 self?.contextColorView.progress = 0
-            }
-        }).disposed(by: disposeBag)
-
-        viewModel.rxSessionType.distinctUntilChanged().subscribe(onNext: { [weak self] type in
-            guard ![.lab, .session, .labByAppointment].contains(type) else { return }
-
-            switch type {
-            case .getTogether:
-                self?.thumbnailImageView.image = #imageLiteral(resourceName: "get-together")
-            default:
-                self?.thumbnailImageView.image = #imageLiteral(resourceName: "special")
             }
         }).disposed(by: disposeBag)
     }

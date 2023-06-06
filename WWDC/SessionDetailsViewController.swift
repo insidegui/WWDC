@@ -36,23 +36,6 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
 
             let shouldHideButtonsBar = transcriptButton.isHidden && bookmarksButton.isHidden
             menuButtonsContainer.isHidden = shouldHideButtonsBar
-
-            let instance = viewModel.sessionInstance
-            let type = instance.type
-
-            let sessionHasNoVideo = [.lab, .getTogether, .labByAppointment].contains(type) && !(instance.isCurrentlyLive == true)
-
-            shelfController.view.isHidden = sessionHasNoVideo
-
-            // It's worth noting that this condition will always be true since the view
-            // gets loaded when add to the split view controller
-            if isViewLoaded {
-                // Connect stack view (bottom half of screen), to the top of the view
-                // or to the bottom of the video, if it's present
-                shelfBottomConstraint.isActive = !sessionHasNoVideo
-                informationStackViewTopConstraint.isActive = sessionHasNoVideo
-                informationStackViewBottomConstraint.isActive = !sessionHasNoVideo
-            }
         }
     }
 

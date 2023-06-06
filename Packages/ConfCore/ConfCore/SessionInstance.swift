@@ -9,28 +9,6 @@
 import Cocoa
 import RealmSwift
 
-public enum SessionInstanceType: Int, Decodable {
-    case session, lab, video, getTogether, specialEvent, labByAppointment
-
-    init?(rawSessionType: String) {
-        switch rawSessionType {
-        case "Session":
-            self = .session
-        case "Lab":
-            self = .lab
-        case "Video":
-            self = .video
-        case "Get-Together":
-            self = .getTogether
-        case "Special Event":
-            self = .specialEvent
-        case "Lab by Appointment":
-            self = .labByAppointment
-        default: return nil
-        }
-    }
-}
-
 /// A session instance represents a specific occurence of a session with a location and start/end times
 public class SessionInstance: Object, ConditionallyDecodable {
 
@@ -57,17 +35,7 @@ public class SessionInstance: Object, ConditionallyDecodable {
     /// The raw session type as returned by the API
     @objc public dynamic var rawSessionType = "Session"
 
-    /// Type of session (0 = regular session, 1 = lab, 2 = video-only session)
-    @objc public dynamic var sessionType = 0
-
-    public var type: SessionInstanceType {
-        get {
-            return SessionInstanceType(rawValue: sessionType) ?? .session
-        }
-        set {
-            sessionType = newValue.rawValue
-        }
-    }
+    public var sessionType: String { rawSessionType }
 
     /// The start time
     @objc public dynamic var startTime: Date = .distantPast
@@ -98,6 +66,10 @@ public class SessionInstance: Object, ConditionallyDecodable {
     /// Whether the live flag is being forced by an external source
     @objc public dynamic var isForcedLive = false
 
+    /// Whether this is a type of session instance that includes a live streaming video.
+    /// This is usually the case for the Keynote and Platforms State of the Union.
+    @objc public dynamic var hasLiveStream = false
+
     /// The EKEvent's eventIdentifier 
     /// See https://developer.apple.com/reference/eventkit/ekevent/1507437-eventidentifier
     @objc public dynamic var calendarEventIdentifier = ""
@@ -117,19 +89,8 @@ public class SessionInstance: Object, ConditionallyDecodable {
     public static func standardSort(instanceA: SessionInstance, instanceB: SessionInstance) -> Bool {
         guard let sessionA = instanceA.session, let sessionB = instanceB.session else { return false }
 
-        let nA = instanceA.code
-        let nB = instanceB.code
-
         if instanceA.sessionType == instanceB.sessionType {
-            if instanceA.sessionType == SessionInstanceType.session.rawValue {
-                if instanceA.startTime == instanceB.startTime {
-                    return nA < nB
-                } else {
-                    return instanceA.startTime < instanceB.startTime
-                }
-            } else {
-                return Session.standardSort(sessionA: sessionA, sessionB: sessionB)
-            }
+            return Session.standardSort(sessionA: sessionA, sessionB: sessionB)
         } else {
             return instanceA.sessionType < instanceB.sessionType
         }
@@ -140,7 +101,6 @@ public class SessionInstance: Object, ConditionallyDecodable {
 
         number = other.number
         rawSessionType = other.rawSessionType
-        sessionType = other.sessionType
         startTime = other.startTime
         endTime = other.endTime
         roomIdentifier = other.roomIdentifier
@@ -173,6 +133,10 @@ public class SessionInstance: Object, ConditionallyDecodable {
         case eventId, actionLinkPrompt, actionLinkURL
         case room = "roomId"
         case track = "trackId"
+        /// These are used during decoding in order to normalize
+        /// the difference between sessions with live streaming and
+        /// video sessions that only get a publishing date, but no start/end time.
+        case hasLiveStream, originalPublishingDate
     }
 
     public convenience required init(from decoder: Decoder) throws {
@@ -190,10 +154,15 @@ public class SessionInstance: Object, ConditionallyDecodable {
 
             let rawType = try container.decode(String.self, forKey: .type)
             self.rawSessionType = rawType
-            self.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
 
-            self.startTime = try container.decode(Date.self, forKey: .startTime)
-            self.endTime = try container.decode(Date.self, forKey: .endTime)
+            if try container.decodeIfPresent(Bool.self, forKey: .hasLiveStream) == true {
+                self.hasLiveStream = true
+                self.startTime = try container.decode(Date.self, forKey: .startTime)
+                self.endTime = try container.decode(Date.self, forKey: .endTime)
+            } else {
+                self.startTime = try container.decode(Date.self, forKey: .originalPublishingDate)
+                self.endTime = try container.decode(Date.self, forKey: .originalPublishingDate)
+            }
 
             let roomNumber = try container.decodeIfPresent(Int.self, forKey: .room)
             self.roomIdentifier = roomNumber.flatMap { String($0) } ?? ""
