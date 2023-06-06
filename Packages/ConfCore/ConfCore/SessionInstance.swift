@@ -155,14 +155,11 @@ public class SessionInstance: Object, ConditionallyDecodable {
             let rawType = try container.decode(String.self, forKey: .type)
             self.rawSessionType = rawType
 
-            if try container.decodeIfPresent(Bool.self, forKey: .hasLiveStream) == true {
-                self.hasLiveStream = true
-                self.startTime = try container.decode(Date.self, forKey: .startTime)
-                self.endTime = try container.decode(Date.self, forKey: .endTime)
-            } else {
-                self.startTime = try container.decode(Date.self, forKey: .originalPublishingDate)
-                self.endTime = try container.decode(Date.self, forKey: .originalPublishingDate)
+            (try container.decodeIfPresent(Bool.self, forKey: .hasLiveStream)).map {
+                self.hasLiveStream = $0
             }
+            self.startTime = try container.decodeIfPresent(Date.self, forKey: .startTime) ?? (try container.decode(Date.self, forKey: .originalPublishingDate))
+            self.endTime = try container.decodeIfPresent(Date.self, forKey: .endTime) ?? (try container.decode(Date.self, forKey: .originalPublishingDate))
 
             let roomNumber = try container.decodeIfPresent(Int.self, forKey: .room)
             self.roomIdentifier = roomNumber.flatMap { String($0) } ?? ""
