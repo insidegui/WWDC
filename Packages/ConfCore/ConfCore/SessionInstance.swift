@@ -98,6 +98,10 @@ public class SessionInstance: Object, ConditionallyDecodable {
     /// Whether the live flag is being forced by an external source
     @objc public dynamic var isForcedLive = false
 
+    /// Whether this is a type of session instance that includes a live streaming video.
+    /// This is usually the case for the Keynote and Platforms State of the Union.
+    @objc public dynamic var hasLiveStream = false
+
     /// The EKEvent's eventIdentifier 
     /// See https://developer.apple.com/reference/eventkit/ekevent/1507437-eventidentifier
     @objc public dynamic var calendarEventIdentifier = ""
@@ -173,6 +177,10 @@ public class SessionInstance: Object, ConditionallyDecodable {
         case eventId, actionLinkPrompt, actionLinkURL
         case room = "roomId"
         case track = "trackId"
+        /// These are used during decoding in order to normalize
+        /// the difference between sessions with live streaming and
+        /// video sessions that only get a publishing date, but no start/end time.
+        case hasLiveStream, originalPublishingDate
     }
 
     public convenience required init(from decoder: Decoder) throws {
@@ -192,8 +200,14 @@ public class SessionInstance: Object, ConditionallyDecodable {
             self.rawSessionType = rawType
             self.sessionType = SessionInstanceType(rawSessionType: rawType)?.rawValue ?? 0
 
-            self.startTime = try container.decode(Date.self, forKey: .startTime)
-            self.endTime = try container.decode(Date.self, forKey: .endTime)
+            if try container.decodeIfPresent(Bool.self, forKey: .hasLiveStream) == true {
+                self.hasLiveStream = true
+                self.startTime = try container.decode(Date.self, forKey: .startTime)
+                self.endTime = try container.decode(Date.self, forKey: .endTime)
+            } else {
+                self.startTime = try container.decode(Date.self, forKey: .originalPublishingDate)
+                self.endTime = try container.decode(Date.self, forKey: .originalPublishingDate)
+            }
 
             let roomNumber = try container.decodeIfPresent(Int.self, forKey: .room)
             self.roomIdentifier = roomNumber.flatMap { String($0) } ?? ""
