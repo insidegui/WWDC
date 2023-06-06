@@ -45,7 +45,7 @@ struct VideosSessionRowProvider: SessionRowProvider {
             let titleRow = SessionRow(content: .init(title: track.name, symbolName: track.symbolName))
 
             let sessionRows: [SessionRow] = thing.sorted(by: Session.standardSort).compactMap { session in
-                guard let viewModel = SessionViewModel(session: session) else { return nil }
+                guard let viewModel = SessionViewModel(session: session, track: track) else { return nil }
 
                 return SessionRow(viewModel: viewModel)
             }
@@ -96,7 +96,7 @@ struct ScheduleSessionRowProvider: SessionRowProvider {
             shownTimeZone = true
 
             let instanceRows: [SessionRow] = instances.sorted(by: SessionInstance.standardSort).compactMap { instance in
-                guard let viewModel = SessionViewModel(session: instance.session, instance: instance, style: .schedule) else { return nil }
+                guard let viewModel = SessionViewModel(session: instance.session, instance: instance, track: nil, style: .schedule) else { return nil }
 
                 return SessionRow(viewModel: viewModel)
             }

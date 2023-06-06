@@ -20,6 +20,7 @@ final class SessionViewModel {
     var title: String
     let session: Session
     let sessionInstance: SessionInstance
+    let track: Track
     let identifier: String
     var webUrl: URL?
     var imageUrl: URL?
@@ -43,6 +44,10 @@ final class SessionViewModel {
         return Observable.from(object: sessionInstance)
     }()
 
+    lazy var rxTrack: Observable<Track> = {
+        return Observable.from(object: track)
+    }()
+
     lazy var rxTitle: Observable<String> = {
         return rxSession.map { $0.title }
     }()
@@ -52,7 +57,7 @@ final class SessionViewModel {
     }()
 
     lazy var rxTrackName: Observable<String> = {
-        return rxSession.map { $0.track.first?.name }.ignoreNil()
+        return rxTrack.map { $0.name }
     }()
 
     lazy var rxSummary: Observable<String> = {
@@ -79,7 +84,9 @@ final class SessionViewModel {
                 SessionViewModel.context(for: $0.0, instance: $0.1)
             }
         } else {
-            return rxSession.map { SessionViewModel.context(for: $0) }
+            return Observable.combineLatest(rxSession, rxTrack).map {
+                SessionViewModel.context(for: $0.0, track: $0.1)
+            }
         }
     }()
 
@@ -154,17 +161,22 @@ final class SessionViewModel {
     }()
 
     convenience init?(session: Session) {
-        self.init(session: session, instance: nil, style: .videos)
+        self.init(session: session, instance: nil, track: nil, style: .videos)
     }
 
-    init?(session: Session?, instance: SessionInstance?, style: SessionsListStyle) {
+    convenience init?(session: Session, track: Track) {
+        self.init(session: session, instance: nil, track: track, style: .videos)
+    }
+
+    init?(session: Session?, instance: SessionInstance?, track: Track?, style: SessionsListStyle) {
         self.style = style
 
         guard let session = session ?? instance?.session else { return nil }
-        guard let track = session.track.first ?? instance?.track.first else { return nil }
+        guard let track = track ?? session.track.first ?? instance?.track.first else { return nil }
+        self.session = session
+        self.track = track
 
         trackName = track.name
-        self.session = session
         sessionInstance = instance ?? session.instances.first ?? SessionInstance()
         title = session.title
         identifier = session.identifier
@@ -207,7 +219,7 @@ final class SessionViewModel {
         return result
     }
 
-    static func context(for session: Session, instance: SessionInstance? = nil) -> String {
+    static func context(for session: Session, instance: SessionInstance? = nil, track: Track? = nil) -> String {
         var components = [String]()
 
         if let instance {
@@ -223,7 +235,7 @@ final class SessionViewModel {
         }
 
         /// Display either track or focuses, prioritizing track, since both won't fit.
-        if let trackName = session.track.first?.name {
+        if let trackName = (track ?? session.track.first)?.name {
             components.append(trackName)
         } else {
             let focusesArray = session.focuses.toArray()
