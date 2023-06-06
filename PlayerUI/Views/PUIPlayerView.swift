@@ -9,6 +9,7 @@
 import Cocoa
 import AVFoundation
 import os.log
+import AVKit
 
 public final class PUIPlayerView: NSView {
 
@@ -340,7 +341,7 @@ public final class PUIPlayerView: NSView {
     }
 
     fileprivate func updatePlayingState() {
-        pipController?.setPlaying(isPlaying)
+//        pipController?.setPlaying(isPlaying)
 
         if isPlaying {
             playButton.image = .PUIPause
@@ -645,7 +646,8 @@ public final class PUIPlayerView: NSView {
         let b = PUIButton(frame: .zero)
 
         b.isToggle = true
-        b.image = .PUIPictureInPicture
+        b.image = AVPictureInPictureController.pictureInPictureButtonStartImage
+        b.alternateImage = AVPictureInPictureController.pictureInPictureButtonStopImage
         b.target = self
         b.action = #selector(togglePip)
         b.toolTip = "Toggle picture in picture"
@@ -1018,7 +1020,7 @@ public final class PUIPlayerView: NSView {
 
     @IBAction public func togglePip(_ sender: NSView?) {
         if isInPictureInPictureMode {
-            exitPictureInPictureMode()
+            pipController?.stopPictureInPicture()
         } else {
             enterPictureInPictureMode()
         }
@@ -1266,7 +1268,7 @@ public final class PUIPlayerView: NSView {
         }
     }
 
-    fileprivate var pipController: PIPViewController?
+    fileprivate var pipController: AVPictureInPictureController?
 
     fileprivate func enterPictureInPictureMode() {
         delegate?.playerViewWillEnterPictureInPictureMode(self)
@@ -1275,21 +1277,14 @@ public final class PUIPlayerView: NSView {
             self?.externalStatusController.snapshot = image
         }
 
-        pipController = PIPViewController()
+        pipController = AVPictureInPictureController(playerLayer: playerLayer)
         pipController?.delegate = self
-        pipController?.setPlaying(isPlaying)
-        pipController?.aspectRatio = currentPresentationSize ?? NSSize(width: 640, height: 360)
-        pipController?.view.layer?.backgroundColor = NSColor.black.cgColor
+//        pipController?.setPlaying(isPlaying)
+//        pipController?.aspectRatio = currentPresentationSize ?? NSSize(width: 640, height: 360)
+//        pipController?.view.layer?.backgroundColor = NSColor.black.cgColor
 
-        pipController?.presentAsPicture(inPicture: pictureContainer)
-
-        isInPictureInPictureMode = true
-    }
-
-    fileprivate func exitPictureInPictureMode() {
-        if pictureContainer.presentingViewController == pipController {
-            pipController?.dismiss(pictureContainer)
-        }
+//        pipController?.presentAsPicture(inPicture: pictureContainer)
+        pipController?.startPictureInPicture()
     }
 
     // MARK: - Visibility management
@@ -1643,22 +1638,71 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
 
 // MARK: - PiP delegate
 
-extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewControllerDelegate {
+extension PUIPlayerView: PUIPictureContainerViewControllerDelegate, AVPictureInPictureControllerDelegate {
 
-    public func pipActionStop(_ pip: PIPViewController) {
-        pause(pip)
-        delegate?.playerViewWillExitPictureInPictureMode(self, reason: .exitButton)
+//    public func pipActionStop(_ pip: PIPViewController) {
+//        pause(pip)
+//
+//    }
+//
+//    public func pipActionReturn(_ pip: PIPViewController) {
+//        delegate?.playerViewWillExitPictureInPictureModelegate?.playerViewWillExitPictureInPictureMode(self, reason: .exitButton)de(self, reason: .returnButton)
+//
+//        if !NSApp.isActive {
+//            NSApp.activate(ignoringOtherApps: true)
+//        }
+//
+//        if let window = lastKnownWindow {
+//            window.makeKeyAndOrderFront(pip)
+//
+//            if window.isMiniaturized {
+//                window.deminiaturize(nil)
+//            }
+//        }
+//    }
+
+//    public func pipActionPause(_ pip: PIPViewController) {
+//        pause(pip)
+//    }
+//
+//    public func pipActionPlay(_ pip: PIPViewController) {
+//        play(pip)
+//    }
+
+    public func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, failedToStartPictureInPictureWithError error: Error) {
+        isInPictureInPictureMode = false
+        pipController = nil
     }
 
-    public func pipActionReturn(_ pip: PIPViewController) {
+    public func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        print("Player Rate: \(player?.rate)")
+        isInPictureInPictureMode = false
+        pipController = nil
+    }
+
+    public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        isInPictureInPictureMode = true
+    }
+
+//    public func pipDidClose(_ pip: PIPViewController) {
+//        pictureContainer.view.frame = bounds
+//
+//        addSubview(pictureContainer.view, positioned: .below, relativeTo: scrimContainerView)
+//
+//        isInPictureInPictureMode = false
+//        pipController = nil
+//    }
+
+    public func pictureInPictureControllerWillStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         delegate?.playerViewWillExitPictureInPictureMode(self, reason: .returnButton)
+        print("Player Rate: \(player?.rate)")
 
         if !NSApp.isActive {
             NSApp.activate(ignoringOtherApps: true)
         }
 
         if let window = lastKnownWindow {
-            window.makeKeyAndOrderFront(pip)
+            window.makeKeyAndOrderFront(pictureInPictureController)
 
             if window.isMiniaturized {
                 window.deminiaturize(nil)
@@ -1666,28 +1710,11 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
         }
     }
 
-    public func pipActionPause(_ pip: PIPViewController) {
-        pause(pip)
-    }
-
-    public func pipActionPlay(_ pip: PIPViewController) {
-        play(pip)
-    }
-
-    public func pipDidClose(_ pip: PIPViewController) {
-        pictureContainer.view.frame = bounds
-
-        addSubview(pictureContainer.view, positioned: .below, relativeTo: scrimContainerView)
-
-        isInPictureInPictureMode = false
-        pipController = nil
-    }
-
-    public func pipWillClose(_ pip: PIPViewController) {
-        pip.replacementRect = frame
-        pip.replacementView = self
-        pip.replacementWindow = lastKnownWindow
-    }
+//    public func pipWillClose(_ pip: PIPViewController) {
+//        pip.replacementRect = frame
+//        pip.replacementView = self
+//        pip.replacementWindow = lastKnownWindow
+//    }
 
     func pictureContainerViewSuperviewDidChange(to superview: NSView?) {
         guard let superview = superview else { return }
@@ -1696,7 +1723,7 @@ extension PUIPlayerView: PIPViewControllerDelegate, PUIPictureContainerViewContr
 
         if superview == self, pipController != nil {
             if pictureContainer.presentingViewController == pipController {
-                pipController?.dismiss(pictureContainer)
+                pipController?.stopPictureInPicture()
             }
 
             pipController = nil

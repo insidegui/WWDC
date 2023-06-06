@@ -152,7 +152,6 @@
 		DDF721CA1ECA12A40054C503 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721A91ECA12A40054C503 /* Images.swift */; };
 		DDF721CB1ECA12A40054C503 /* Speeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721AA1ECA12A40054C503 /* Speeds.swift */; };
 		DDF721CC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721AC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift */; };
-		DDF721CD1ECA12A40054C503 /* PIP.h in Headers */ = {isa = PBXBuildFile; fileRef = DDF721AE1ECA12A40054C503 /* PIP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDF721CE1ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B01ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift */; };
 		DDF721CF1ECA12A40054C503 /* PUIExternalPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B11ECA12A40054C503 /* PUIExternalPlaybackProvider.swift */; };
 		DDF721D01ECA12A40054C503 /* PUIPlayerViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B21ECA12A40054C503 /* PUIPlayerViewDelegates.swift */; };
@@ -420,7 +419,6 @@
 		DDF721A91ECA12A40054C503 /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		DDF721AA1ECA12A40054C503 /* Speeds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speeds.swift; sourceTree = "<group>"; };
 		DDF721AC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProviderRegistration.swift; sourceTree = "<group>"; };
-		DDF721AE1ECA12A40054C503 /* PIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIP.h; sourceTree = "<group>"; };
 		DDF721B01ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackConsumer.swift; sourceTree = "<group>"; };
 		DDF721B11ECA12A40054C503 /* PUIExternalPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProvider.swift; sourceTree = "<group>"; };
 		DDF721B21ECA12A40054C503 /* PUIPlayerViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerViewDelegates.swift; sourceTree = "<group>"; };
@@ -974,7 +972,6 @@
 				DDF721A41ECA12A40054C503 /* Controllers */,
 				DDF721A71ECA12A40054C503 /* Definitions */,
 				DDF721AB1ECA12A40054C503 /* Models */,
-				DDF721AD1ECA12A40054C503 /* PiP Support */,
 				DDF721AF1ECA12A40054C503 /* Protocols */,
 				DDF721B51ECA12A40054C503 /* Resources */,
 				DDF721B81ECA12A40054C503 /* Util */,
@@ -1011,14 +1008,6 @@
 				DDF721AC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		DDF721AD1ECA12A40054C503 /* PiP Support */ = {
-			isa = PBXGroup;
-			children = (
-				DDF721AE1ECA12A40054C503 /* PIP.h */,
-			);
-			path = "PiP Support";
 			sourceTree = "<group>";
 		};
 		DDF721AF1ECA12A40054C503 /* Protocols */ = {
@@ -1174,7 +1163,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDF721CD1ECA12A40054C503 /* PIP.h in Headers */,
 				DDF7219A1ECA12780054C503 /* PlayerUI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
