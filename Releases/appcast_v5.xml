@@ -5,6 +5,36 @@
         <link>https://github.com/insidegui/WWDC/raw/master/Releases/appcast_v5.xml</link>
         <description>Most recent changes with links to updates.</description>
         <language>en</language>
+		
+		<item>
+			<title>Version 7.4.2</title>
+			<description><![CDATA[
+			<h2>Version 7.4.2</h2>
+			<ul>
+				<li>Addresses a crash when filtering in the Schedule or Videos tab</li>
+			</ul>
+			
+			<h3>Release notes from version 7.4.1</h3>
+			<ul>
+				<li>The schedule tab now lists all content, including unreleased videos</li>
+				<li>Labs, Special Events, and other types of content no longer display a placeholder image</li>
+				<li>Known issue: the timing for labs is not correct</li>
+			</ul>
+			
+			<h3>Release notes from version 7.4</h3>
+			<ul>
+				<li>The new Explore tab replaces the old Featured tab with sections for live events, recently favorited content, content you haven't finished watching yet, as well as featured content from Apple's Developer app</li>
+				<li>Several design tweaks to make the app look better on recent versions of macOS</li>
+				<li>The events filter now separates items for WWDC and other event types such as Tech Talks and Developer Insights</li>
+				<li>Multiple choice filters will now show an option to quickly clear all filters for that criteria</li>
+				<li>Support for SharePlay for watching session videos over FaceTime</li>
+				<li>Minor bug fixes</li>
+			</ul>
+			]]></description>
+			<pubDate>Wed, 6 Jun 2023 14:50:00 -0300</pubDate>
+			<enclosure url="https://github.com/insidegui/WWDC/releases/download/7.4.2/WWDC_v7.4.2-1040.dmg" sparkle:version="1040" sparkle:shortVersionString="7.4.2" length="17955116" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+		</item>	
 
 		<item>
 			<title>Version 7.4.1</title>
