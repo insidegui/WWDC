@@ -58,10 +58,7 @@ final class SearchCoordinator {
 
         var scheduleTextualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
 
-        let sessionOption = FilterOption(title: "Sessions", value: "Session")
-        let labOption = sessionOption.negated(with: "Labs and Others")
-
-        let eventOptions = [sessionOption, labOption]
+        let eventOptions = storage.allSessionTypes.map { FilterOption(title: $0, value: $0) }
         var scheduleEventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event,
                                                        isSubquery: true,
                                                        collectionKey: "instances",
