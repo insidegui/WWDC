@@ -87,10 +87,6 @@ final class SessionViewModel {
         return rxSession.map { SessionViewModel.footer(for: $0, at: $0.event.first) }
     }()
 
-    lazy var rxSessionType: Observable<SessionInstanceType> = {
-        return rxSession.map { $0.instances.first?.type }.ignoreNil()
-    }()
-
     lazy var rxColor: Observable<NSColor> = {
         return rxSession.map { SessionViewModel.trackColor(for: $0) }.ignoreNil()
     }()
@@ -121,14 +117,6 @@ final class SessionViewModel {
         }
 
         return rxSessionInstance.map { $0.isCurrentlyLive }
-    }()
-
-    lazy var rxIsLab: Observable<Bool> = {
-        guard self.sessionInstance.realm != nil else {
-            return Observable.just(false)
-        }
-
-        return rxSessionInstance.map { [.lab, .labByAppointment].contains($0.type) }
     }()
 
     lazy var rxPlayableContent: Observable<Results<SessionAsset>> = {
@@ -266,12 +254,6 @@ final class SessionViewModel {
     }
 
     static func imageUrl(for session: Session) -> URL? {
-        if let instance = session.instances.first {
-            guard [.session, .lab, .labByAppointment].contains(instance.type) else {
-                return nil
-            }
-        }
-
         let imageAsset = session.asset(ofType: .image)
 
         guard let thumbnail = imageAsset?.remoteURL, let thumbnailUrl = URL(string: thumbnail) else { return nil }
