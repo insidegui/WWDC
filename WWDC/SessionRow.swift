@@ -60,6 +60,7 @@ extension SessionRow: Hashable {
             hasher.combine(title)
         case let .session(viewModel):
             hasher.combine(viewModel.identifier)
+            hasher.combine(viewModel.trackName)
         }
     }
 
@@ -69,7 +70,8 @@ extension SessionRow: Hashable {
         switch (lhs.kind, rhs.kind) {
         case let (.sectionHeader(lhsTitle), .sectionHeader(rhsTitle)) where lhsTitle == rhsTitle:
             return true
-        case let (.session(lhsViewModel), .session(rhsViewModel)) where lhsViewModel.identifier == rhsViewModel.identifier:
+        case let (.session(lhsViewModel), .session(rhsViewModel))
+            where lhsViewModel.identifier == rhsViewModel.identifier && lhsViewModel.trackName == rhsViewModel.trackName:
             return true
         default:
             return false

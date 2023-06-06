@@ -135,7 +135,7 @@ final class AppCoordinator {
 
         return Observable.collection(from: liveInstances)
             .map({ $0.toArray().first?.session })
-            .map({ SessionViewModel(session: $0, instance: $0?.instances.first, style: .schedule) })
+            .map({ SessionViewModel(session: $0, instance: $0?.instances.first, track: nil, style: .schedule) })
     }
 
     /// The session that is currently selected on the videos tab (observable)
