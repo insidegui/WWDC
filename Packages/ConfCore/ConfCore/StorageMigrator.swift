@@ -30,7 +30,8 @@ final class StorageMigrator {
         43: resetTracks,
         44: removeInvalidLiveAssets,
         57: resetFeaturedSections,
-        59: resetTracks
+        59: resetTracks,
+        60: resetSessionInstances
     ]
 
     init(migration: Migration, oldVersion: UInt64) {
@@ -187,6 +188,10 @@ final class StorageMigrator {
         migration.deleteData(forType: "FeaturedSection")
         migration.deleteData(forType: "FeaturedContent")
         migration.deleteData(forType: "FeaturedAuthor")
+    }
+
+    private static func resetSessionInstances(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+        migration.deleteData(forType: "SessionInstance")
     }
 
 }
