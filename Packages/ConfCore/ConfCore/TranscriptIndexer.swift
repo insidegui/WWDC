@@ -62,7 +62,7 @@ public final class TranscriptIndexer {
 
     public static let minTranscriptableSessionLimit: Int = 30
 
-    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "ANY event.year > 2012 AND ANY event.year <= 2020 AND transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
+    public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
 
     public static func needsUpdate(in storage: Storage) -> Bool {
         // Manifest-based updates.
@@ -72,9 +72,14 @@ public final class TranscriptIndexer {
         }
 
         // Local cache-based updates.
-        let transcriptedSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
+        let transcriptableSessions = storage.realm.objects(Session.self).filter(TranscriptIndexer.transcriptableSessionsPredicate)
 
-        return transcriptedSessions.count > minTranscriptableSessionLimit
+        let shouldIndex = transcriptableSessions.count > minTranscriptableSessionLimit
+        if !shouldIndex {
+            os_log("needsUpdate is false because %d <= %d", log: self.log, type: .debug, transcriptableSessions.count, minTranscriptableSessionLimit)
+        }
+
+        return shouldIndex
     }
 
     private func makeDownloader() -> TranscriptDownloader {
@@ -90,6 +95,7 @@ public final class TranscriptIndexer {
     var didStop: () -> Void = { }
 
     public func downloadTranscriptsIfNeeded() {
+        os_log("%{public}@", log: self.log, type: .debug, #function)
         downloader = makeDownloader()
 
         didStart()
@@ -111,7 +117,7 @@ public final class TranscriptIndexer {
             downloader.fetch(validSessionIdentifiers: knownSessionIds, progress: { [weak self] progress in
                 guard let self = self else { return }
 
-                os_log("Transcript indexing progresss: %.2f", log: self.log, type: .default, progress)
+                os_log("Transcript indexing progress: %.2f", log: self.log, type: .default, progress)
 
                 self.progressChanged(progress)
             }) { [weak self] in
