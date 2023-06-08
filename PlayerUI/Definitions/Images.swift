@@ -8,102 +8,45 @@
 
 import Cocoa
 
-struct PUIControlMetrics: Hashable {
-    var symbolSize: CGFloat
-    var controlSize: CGFloat?
-
-    static let medium = PUIControlMetrics(symbolSize: 18)
-    static let large = PUIControlMetrics(symbolSize: 28, controlSize: 38)
-
-    var symbolConfiguration: NSImage.SymbolConfiguration {
-        NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.medium.symbolSize, weight: .medium, scale: .medium)
-    }
-}
-
 extension NSImage {
 
-    func withPlayerMetrics(_ metrics: PUIControlMetrics?) -> NSImage {
-        guard let metrics else { return self }
-        
-        guard let configured = withSymbolConfiguration(metrics.symbolConfiguration) else {
-            assertionFailure("Failed to apply control metrics")
-            return self
-        }
-
-        return configured
-    }
-
-    private static var playerBundle: Bundle {
-        return Bundle(for: PUIButton.self)
-    }
+    private static let playerBundle = Bundle(for: PUIButton.self)
 
     static var PUIPlay: NSImage { .PUISystemSymbol(named: "play.fill", label: "Play") }
 
     static var PUIPause: NSImage { .PUISystemSymbol(named: "pause.fill", label: "Pause") }
 
-    static var PUIAirplay: NSImage {
-        return playerBundle.image(forResource: "airplay")!
-    }
+    static var PUIBack15s: NSImage { .PUISystemSymbol(named: "gobackward.15", label: "Forward 15 Seconds") }
 
-    static var PUIBack15s: NSImage {
-        return playerBundle.image(forResource: "back15s")!
-    }
+    static var PUIBack30s: NSImage { .PUISystemSymbol(named: "gobackward.30", label: "Forward 30 Seconds") }
 
-    static var PUIBack30s: NSImage {
-        return playerBundle.image(forResource: "back30s")!
-    }
+    static var PUIAnnotation: NSImage { .PUISystemSymbol(named: "bookmark.fill", label: "Add Bookmark") }
 
-    static var PUIAnnotation: NSImage {
-        return playerBundle.image(forResource: "bookmark")!
-    }
+    static var PUIForward15s: NSImage { .PUISystemSymbol(named: "goforward.15", label: "Forward 15 Seconds") }
 
-    static var PUIForward15s: NSImage {
-        return playerBundle.image(forResource: "forward15s")!
-    }
+    static var PUIForward30s: NSImage { .PUISystemSymbol(named: "goforward.30", label: "Forward 30 Seconds") }
 
-    static var PUIForward30s: NSImage {
-        return playerBundle.image(forResource: "forward30s")!
-    }
+    static var PUIFullScreen: NSImage { .PUISystemSymbol(named: "arrow.up.left.and.arrow.down.right", label: "Enter Full Screen") }
 
-    static var PUIFullScreen: NSImage {
-        return playerBundle.image(forResource: "fullscreen")!
-    }
+    static var PUIFullScreenExit: NSImage { .PUISystemSymbol(named: "arrow.down.right.and.arrow.up.left", label: "Exit Full Screen") }
 
-    static var PUIFullScreenExit: NSImage {
-        return playerBundle.image(forResource: "fullscreenExit")!
-    }
+    static var PUINextAnnotation: NSImage { .PUISystemSymbol(named: "forward.end.fill", label: "Next Bookmark") }
 
-    static var PUINextAnnotation: NSImage {
-        return playerBundle.image(forResource: "nextbookmark")!
-    }
+    static var PUIPreviousAnnotation: NSImage { .PUISystemSymbol(named: "backward.end.fill", label: "Previous Bookmark") }
 
-    static var PUIPreviousAnnotation: NSImage {
-        return playerBundle.image(forResource: "prevbookmark")!
-    }
+    static var PUIPictureInPicture: NSImage { .PUISystemSymbol(named: "pip.enter", label: "Enter PiP") }
 
-    static var PUIPictureInPicture: NSImage {
-        return playerBundle.image(forResource: "pip")!
-    }
+    static var PUIExitPictureInPicture: NSImage { .PUISystemSymbol(named: "pip.exit", label: "Exit PiP") }
 
-    static var PUIExitPictureInPicture: NSImage {
-        return playerBundle.image(forResource: "pipExit")!
-    }
+    static var PUIPictureInPictureLarge: NSImage { .PUISystemSymbol(named: "pip.fill", label: "Picture In Picture") }
 
-    static var PUIPictureInPictureLarge: NSImage {
-        return playerBundle.image(forResource: "pip-big")!
-    }
+    static var PUISubtitles: NSImage { .PUISystemSymbol(named: "text.bubble.fill", label: "Subtitles") }
 
-    static var PUISubtitles: NSImage {
-        return playerBundle.image(forResource: "subtitles")!
-    }
+    static var PUIVolume: NSImage { .PUISystemSymbol(named: "speaker.wave.3.fill", label: "Toggle Mute") }
 
-    static var PUIVolume: NSImage {
-        return playerBundle.image(forResource: "volume")!
-    }
+    static var PUIVolumeMuted: NSImage { .PUISystemSymbol(named: "speaker.slash.fill", label: "Toggle Mute") }
 
-    static var PUIVolumeMuted: NSImage {
-        return playerBundle.image(forResource: "nosound")!
-    }
+    static var PUIAirPlay: NSImage { .PUISystemSymbol(named: "airplayvideo", label: "AirPlay") }
 
     static var PUISpeedOne: NSImage {
         return playerBundle.image(forResource: "speed-1")!
@@ -136,6 +79,33 @@ extension NSImage {
         }
 
         return image
+    }
+}
+
+// MARK: - Metrics
+
+struct PUIControlMetrics: Hashable {
+    var symbolSize: CGFloat
+    var controlSize: CGFloat
+
+    static let medium = PUIControlMetrics(symbolSize: 16, controlSize: 26)
+    static let large = PUIControlMetrics(symbolSize: 28, controlSize: 38)
+
+    var symbolConfiguration: NSImage.SymbolConfiguration {
+        NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.medium.symbolSize, weight: .medium, scale: .medium)
+    }
+}
+
+extension NSImage {
+    func withPlayerMetrics(_ metrics: PUIControlMetrics?) -> NSImage {
+        guard let metrics else { return self }
+
+        guard let configured = withSymbolConfiguration(metrics.symbolConfiguration) else {
+            assertionFailure("Failed to apply control metrics")
+            return self
+        }
+
+        return configured
     }
 }
 

@@ -8,6 +8,7 @@
 
 import Cocoa
 import SwiftUI
+import AVKit
 
 public final class PUIButton: NSControl, ObservableObject {
 
@@ -23,6 +24,13 @@ public final class PUIButton: NSControl, ObservableObject {
 
     public var isToggle = false
 
+    var isAVRoutePickerMasquerade = false {
+        didSet {
+            guard isAVRoutePickerMasquerade != oldValue else { return }
+            setupAVRoutePicker()
+        }
+    }
+
     @Published public var activeTintColor: NSColor = .playerHighlight
 
     @Published public var tintColor: NSColor = .buttonColor
@@ -37,7 +45,7 @@ public final class PUIButton: NSControl, ObservableObject {
 
     @Published public var alternateImage: NSImage?
 
-    @Published var metrics: PUIControlMetrics?
+    @Published var metrics = PUIControlMetrics.medium
 
     @Published fileprivate var shouldDrawHighlighted: Bool = false
 
@@ -101,32 +109,65 @@ public final class PUIButton: NSControl, ObservableObject {
         menu.popUp(positioning: nil, at: .zero, in: self)
     }
 
-    public override var allowsVibrancy: Bool {
-        return true
+    public override var allowsVibrancy: Bool { true }
+
+    public override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+
+    // MARK: - AVRoutePickerView
+
+    var player: AVPlayer? {
+        get { routePicker.player }
+        set { routePicker.player = newValue }
     }
 
-    public override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
-        return true
+    private lazy var routePicker: AVRoutePickerView = {
+        let v = AVRoutePickerView()
+        v.setRoutePickerButtonColor(.buttonColor, for: .normal)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
+    private var installedRoutePicker: AVRoutePickerView?
+
+    private func setupAVRoutePicker() {
+        guard isAVRoutePickerMasquerade else {
+            installedRoutePicker?.removeFromSuperview()
+            return
+        }
+
+        addSubview(routePicker)
+        NSLayoutConstraint.activate([
+            routePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
+            routePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+            routePicker.topAnchor.constraint(equalTo: topAnchor),
+            routePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
+        ])
+
+        // Hack alert
+        routePicker.alphaValue = 0.01
+    }
+
+    public override func hitTest(_ point: NSPoint) -> NSView? {
+        guard isAVRoutePickerMasquerade else { return super.hitTest(point) }
+        return routePicker.subviews.first
     }
 
 }
+
+// MARK: - SwiftUI Content
 
 private struct PUIButtonContent: View {
     @ObservedObject var button: PUIButton
 
     private var currentImage: Image? {
         if let alternateImage = button.alternateImage, button.state == .on {
-            return Image(nsImage: alternateImage)
+            return Image(nsImage: alternateImage.withPlayerMetrics(button.metrics))
         } else if let image = button.image {
-            return Image(nsImage: image)
+            return Image(nsImage: image.withPlayerMetrics(button.metrics))
         } else {
             return nil
         }
     }
-
-    private var customWidth: CGFloat? { button.metrics?.controlSize }
-
-    private var customHeight: CGFloat? { button.metrics?.controlSize }
 
     private var foregroundColor: Color {
         guard !button.shouldAlwaysDrawHighlighted else { return Color(nsColor: button.activeTintColor) }
@@ -152,11 +193,11 @@ private struct PUIButtonContent: View {
             currentImage
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: customWidth, height: customHeight)
+                .frame(width: button.metrics.controlSize, height: button.metrics.controlSize)
                 .foregroundColor(foregroundColor)
                 .opacity(opacity)
                 .scaleEffect(scale)
-                .animation(.spring(), value: button.shouldDrawHighlighted)
         }
     }
 }
+

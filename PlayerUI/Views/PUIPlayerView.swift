@@ -11,6 +11,7 @@ import AVFoundation
 import os.log
 import AVKit
 import Combine
+import SwiftUI
 
 public final class PUIPlayerView: NSView {
 
@@ -257,6 +258,9 @@ public final class PUIPlayerView: NSView {
         playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, preferredTimescale: 9000), queue: .main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
         }
+
+        player.allowsExternalPlayback = true
+        routeButton.player = player
 
         setupNowPlayingCoordinatorIfSupported()
         setupRemoteCommandCoordinator()
@@ -601,6 +605,7 @@ public final class PUIPlayerView: NSView {
         b.target = self
         b.action = #selector(addAnnotation)
         b.toolTip = "Add bookmark"
+        b.metrics = .medium
 
         return b
     }()
@@ -615,6 +620,19 @@ public final class PUIPlayerView: NSView {
         b.action = #selector(togglePip)
         b.toolTip = "Toggle picture in picture"
         b.isEnabled = false
+        b.metrics = .medium
+
+        return b
+    }()
+
+    private lazy var routeButton: PUIButton = {
+        let b = PUIButton(frame: .zero)
+
+        b.isToggle = true
+        b.image = .PUIAirPlay
+        b.toolTip = "AirPlay"
+        b.metrics = .medium
+        b.isAVRoutePickerMasquerade = true
 
         return b
     }()
@@ -670,10 +688,11 @@ public final class PUIPlayerView: NSView {
         // Trailing controls (speed, add annotation, pip)
         centerButtonsContainerView.addView(speedButton, in: .trailing)
         centerButtonsContainerView.addView(addAnnotationButton, in: .trailing)
+        centerButtonsContainerView.addView(routeButton, in: .trailing)
         centerButtonsContainerView.addView(pipButton, in: .trailing)
 
         centerButtonsContainerView.orientation = .horizontal
-        centerButtonsContainerView.spacing = 24
+        centerButtonsContainerView.spacing = 16
         centerButtonsContainerView.distribution = .gravityAreas
         centerButtonsContainerView.alignment = .centerY
 
@@ -688,6 +707,7 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: nextAnnotationButton)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: speedButton)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: addAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: routeButton)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: pipButton)
         centerButtonsContainerView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
@@ -715,19 +735,22 @@ public final class PUIPlayerView: NSView {
         controlsContainerView.layer?.zPosition = 10
 
         scrimContainerView = PUIScrimView(frame: controlsContainerView.bounds)
+        scrimContainerView.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(scrimContainerView)
         addSubview(controlsContainerView)
 
-        scrimContainerView.translatesAutoresizingMaskIntoConstraints = false
-        scrimContainerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        scrimContainerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        scrimContainerView.heightAnchor.constraint(equalTo: controlsContainerView.heightAnchor, multiplier: 1.4, constant: 0).isActive = true
-
-        controlsContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12).isActive = true
-        controlsContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
-        controlsContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12).isActive = true
+        NSLayoutConstraint.activate([
+            scrimContainerView.widthAnchor.constraint(lessThanOrEqualToConstant: 600),
+            scrimContainerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 16),
+            scrimContainerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -16),
+            scrimContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            controlsContainerView.leadingAnchor.constraint(equalTo: scrimContainerView.leadingAnchor, constant: 16),
+            controlsContainerView.trailingAnchor.constraint(equalTo: scrimContainerView.trailingAnchor, constant: -16),
+            controlsContainerView.topAnchor.constraint(equalTo: scrimContainerView.topAnchor, constant: 16),
+            controlsContainerView.bottomAnchor.constraint(equalTo: scrimContainerView.bottomAnchor, constant: -16)
+        ])
 
         centerButtonsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
         centerButtonsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
@@ -1666,3 +1689,48 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
         invalidateTouchBar()
     }
 }
+
+#if DEBUG
+struct PUIPlayerView_Previews: PreviewProvider {
+    static var previews: some View {
+        PUIPlayerViewPreviewWrapper()
+            .frame(width: 640, height: 500)
+    }
+}
+
+private struct PUIPlayerViewPreviewWrapper: NSViewRepresentable {
+    typealias NSViewType = PUIPlayerView
+
+    func makeNSView(context: Context) -> PUIPlayerView {
+        let player = AVPlayer(url: .previewVideoURL)
+        let view = PUIPlayerView(player: player)
+        player.seek(to: CMTimeMakeWithSeconds(30, preferredTimescale: 9000))
+        return view
+    }
+
+    func updateNSView(_ nsView: PUIPlayerView, context: Context) {
+
+    }
+}
+
+import UniformTypeIdentifiers
+
+private extension URL {
+    static let bipbop = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8")!
+
+    static let previewVideoURL: URL = {
+        let dirURL = URL(fileURLWithPath: NSHomeDirectory() + "/Library/Application Support/WWDC")
+        guard let enumerator = FileManager.default.enumerator(at: dirURL, includingPropertiesForKeys: [.contentTypeKey], options: [.skipsHiddenFiles], errorHandler: nil) else {
+            return bipbop
+        }
+
+        while let url = enumerator.nextObject() as? URL {
+            let isMovie = (try? url.resourceValues(forKeys: [.contentTypeKey]))?.contentType?.conforms(to: .movie) == true
+            guard isMovie else { continue }
+            return url
+        }
+
+        return bipbop
+    }()
+}
+#endif
