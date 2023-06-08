@@ -35,6 +35,8 @@ extension String {
     }
 
     public init?(time: CMTime) {
+        guard time.timescale > 0 else { return nil }
+
         let secondCount = time.value / Int64(time.timescale)
 
         self.init(timestamp: Double(secondCount))

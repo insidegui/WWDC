@@ -569,6 +569,7 @@ public final class PUIPlayerView: NSView {
         b.target = self
         b.action = #selector(togglePlaying)
         b.toolTip = "Play/pause"
+        b.metrics = .large
 
         return b
     }()

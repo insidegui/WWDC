@@ -7,134 +7,58 @@
 //
 
 import Cocoa
+import SwiftUI
 
-public final class PUIButton: NSControl {
+public final class PUIButton: NSControl, ObservableObject {
+
+    public override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+
+        setup()
+    }
+
+    public required init?(coder: NSCoder) {
+        fatalError()
+    }
 
     public var isToggle = false
 
-    public var activeTintColor: NSColor = .playerHighlight {
-        didSet {
-            setNeedsDisplay(bounds)
-        }
-    }
+    @Published public var activeTintColor: NSColor = .playerHighlight
 
-    public var tintColor: NSColor = .buttonColor {
-        didSet {
-            setNeedsDisplay(bounds)
-        }
-    }
+    @Published public var tintColor: NSColor = .buttonColor
 
-    public var state: NSControl.StateValue = .off {
-        didSet {
-            setNeedsDisplay(bounds)
-        }
-    }
+    @Published public var state: NSControl.StateValue = .off
 
     public var showsMenuOnLeftClick = false
     public var showsMenuOnRightClick = false
     public var sendsActionOnMouseDown = false
 
-    public var image: NSImage? {
-        didSet {
-            guard let image = image else { return }
+    @Published public var image: NSImage?
 
-            if image.isTemplate {
-                maskImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
-            } else {
-                maskImage = nil
-            }
+    @Published public var alternateImage: NSImage?
 
-            invalidateIntrinsicContentSize()
-        }
-    }
+    @Published var metrics: PUIControlMetrics?
 
-    public var alternateImage: NSImage? {
-        didSet {
-            guard let alternateImage = alternateImage else { return }
+    @Published fileprivate var shouldDrawHighlighted: Bool = false
 
-            if alternateImage.isTemplate {
-                alternateMaskImage = alternateImage.cgImage(forProposedRect: nil, context: nil, hints: nil)
-            } else {
-                alternateMaskImage = nil
-            }
-
-            invalidateIntrinsicContentSize()
-        }
-    }
-
-    private var maskImage: CGImage? {
-        didSet {
-            setNeedsDisplay(bounds)
-        }
-    }
-
-    private var alternateMaskImage: CGImage? {
-        didSet {
-            setNeedsDisplay(bounds)
-        }
-    }
-
-    public override func draw(_ dirtyRect: NSRect) {
-        if let maskImage = maskImage {
-            if let alternateMaskImage = alternateMaskImage, state == .on {
-                drawMask(alternateMaskImage)
-            } else {
-                drawMask(maskImage)
-            }
-        } else {
-            if let alternateImage = alternateImage, state == .on {
-                drawImage(alternateImage)
-            } else {
-                drawImage(image)
-            }
-        }
-    }
-
-    private func drawMask(_ maskImage: CGImage) {
-        guard let ctx = NSGraphicsContext.current?.cgContext else { return }
-
-        ctx.clip(to: bounds, mask: maskImage)
-
-        if shouldDrawHighlighted || state == .on || shouldAlwaysDrawHighlighted {
-            ctx.setFillColor(activeTintColor.cgColor)
-        } else if !isEnabled {
-            let color = shouldAlwaysDrawHighlighted ? activeTintColor : tintColor
-            ctx.setFillColor(color.withAlphaComponent(0.5).cgColor)
-        } else {
-            ctx.setFillColor(tintColor.cgColor)
-        }
-
-        ctx.fill(bounds)
-    }
-
-    private func drawImage(_ image: NSImage?) {
-        image?.draw(in: bounds)
-    }
-
-    public override var intrinsicContentSize: NSSize {
-        if let image = image {
-            return image.size
-        } else {
-            return NSSize(width: -1, height: -1)
-        }
-    }
-
-    private var shouldDrawHighlighted: Bool = false {
-        didSet {
-            setNeedsDisplay(bounds)
-        }
-    }
-
-    public var shouldAlwaysDrawHighlighted: Bool = false {
-        didSet {
-            setNeedsDisplay(bounds)
-        }
-    }
+    @Published public var shouldAlwaysDrawHighlighted: Bool = false
 
     public override var isEnabled: Bool {
         didSet {
-            setNeedsDisplay(bounds)
+            objectWillChange.send()
         }
+    }
+
+    private func setup() {
+        let host = NSHostingView(rootView: PUIButtonContent(button: self))
+        host.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(host)
+        NSLayoutConstraint.activate([
+            host.leadingAnchor.constraint(equalTo: leadingAnchor),
+            host.trailingAnchor.constraint(equalTo: trailingAnchor),
+            host.topAnchor.constraint(equalTo: topAnchor),
+            host.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 
     public override func mouseDown(with event: NSEvent) {
@@ -185,4 +109,49 @@ public final class PUIButton: NSControl {
         return true
     }
 
+}
+
+private struct PUIButtonContent: View {
+    @ObservedObject var button: PUIButton
+
+    private var currentImage: Image? {
+        if let alternateImage = button.alternateImage, button.state == .on {
+            return Image(nsImage: alternateImage)
+        } else if let image = button.image {
+            return Image(nsImage: image)
+        } else {
+            return nil
+        }
+    }
+
+    private var customWidth: CGFloat? { button.metrics?.controlSize }
+
+    private var customHeight: CGFloat? { button.metrics?.controlSize }
+
+    private var foregroundColor: Color { Color(nsColor: button.state == .on ? button.activeTintColor : button.tintColor) }
+
+    private var opacity: CGFloat {
+        guard button.isEnabled else { return 0.5 }
+
+        return button.shouldDrawHighlighted ? 0.8 : 1.0
+    }
+
+    private var scale: CGFloat {
+        guard button.isEnabled else { return 1 }
+
+        return button.shouldDrawHighlighted ? 0.9 : 1.0
+    }
+
+    var body: some View {
+        if let currentImage {
+            currentImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: customWidth, height: customHeight)
+                .foregroundColor(foregroundColor)
+                .opacity(opacity)
+                .scaleEffect(scale)
+                .animation(.spring(), value: button.shouldDrawHighlighted)
+        }
+    }
 }

@@ -8,19 +8,38 @@
 
 import Cocoa
 
+struct PUIControlMetrics: Hashable {
+    var symbolSize: CGFloat
+    var controlSize: CGFloat?
+
+    static let medium = PUIControlMetrics(symbolSize: 18)
+    static let large = PUIControlMetrics(symbolSize: 28, controlSize: 38)
+
+    var symbolConfiguration: NSImage.SymbolConfiguration {
+        NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.medium.symbolSize, weight: .medium, scale: .medium)
+    }
+}
+
 extension NSImage {
+
+    func withPlayerMetrics(_ metrics: PUIControlMetrics?) -> NSImage {
+        guard let metrics else { return self }
+        
+        guard let configured = withSymbolConfiguration(metrics.symbolConfiguration) else {
+            assertionFailure("Failed to apply control metrics")
+            return self
+        }
+
+        return configured
+    }
 
     private static var playerBundle: Bundle {
         return Bundle(for: PUIButton.self)
     }
 
-    static var PUIPlay: NSImage {
-        return playerBundle.image(forResource: "play")!
-    }
+    static var PUIPlay: NSImage { .PUISystemSymbol(named: "play.fill", label: "Play") }
 
-    static var PUIPause: NSImage {
-        return playerBundle.image(forResource: "pause")!
-    }
+    static var PUIPause: NSImage { .PUISystemSymbol(named: "pause.fill", label: "Pause") }
 
     static var PUIAirplay: NSImage {
         return playerBundle.image(forResource: "airplay")!
@@ -110,6 +129,19 @@ extension NSImage {
         return playerBundle.image(forResource: "speed-2")!
     }
 
+    private static func PUISystemSymbol(named name: String, label: String?) -> NSImage {
+        guard let image = NSImage(systemSymbolName: name, accessibilityDescription: label) else {
+            assertionFailure("Missing system symbol \"\(name)\"")
+            return NSImage()
+        }
+
+        return image
+    }
+}
+
+private extension NSImage.SymbolConfiguration {
+    static let PUIMedium = NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.medium.symbolSize, weight: .medium, scale: .medium)
+    static let PUILarge = NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.large.symbolSize, weight: .medium, scale: .large)
 }
 
 // MARK: - Touch Bar
