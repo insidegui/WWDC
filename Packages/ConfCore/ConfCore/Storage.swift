@@ -95,7 +95,7 @@ public final class Storage {
             return
         }
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: true, completionBlock: completion) { backgroundRealm in
             contentsResponse.sessions.forEach { newSession in
                 // Replace any "unknown" resources with their full data
                 newSession.related.filter({$0.type == RelatedResourceType.unknown.rawValue}).forEach { unknownResource in
@@ -197,30 +197,22 @@ public final class Storage {
 
             // Create schedule view
             backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
+            let instances = backgroundRealm.objects(SessionInstance.self)
 
-            let instances = backgroundRealm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
+            // Group all instances by common start time
+            // Technically, a secondary grouping on event should be used, in practice we haven't seen
+            // separate events that overlap in time. Someday this might hurt
+            Dictionary(grouping: instances, by: \.startTime).forEach { startTime, instances in
+                let section = ScheduleSection()
+                section.representedDate = startTime
+                section.eventIdentifier = instances[0].eventIdentifier // 0 index ok, Dictionary grouping will never give us an empty array
+                section.instances.removeAll()
+                section.instances.append(objectsIn: instances)
+                section.identifier = ScheduleSection.identifierFormatter.string(from: startTime)
 
-            var previousStartTime: Date?
-            for instance in instances {
-                guard instance.startTime != previousStartTime else { continue }
-
-                autoreleasepool {
-                    let instancesForSection = instances.filter({ $0.startTime == instance.startTime })
-
-                    let section = ScheduleSection()
-
-                    section.representedDate = instance.startTime
-                    section.eventIdentifier = instance.eventIdentifier
-                    section.instances.removeAll()
-                    section.instances.append(objectsIn: instancesForSection)
-                    section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
-
-                    backgroundRealm.add(section, update: .all)
-
-                    previousStartTime = instance.startTime
-                }
+                backgroundRealm.add(section, update: .all)
             }
-        }, disableAutorefresh: true, completionBlock: completion)
+        }
     }
 
     internal func store(liveVideosResult: Result<[SessionAsset], APIError>) {
@@ -271,7 +263,7 @@ public final class Storage {
             return
         }
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: true, completionBlock: completion) { backgroundRealm in
             let existingSections = backgroundRealm.objects(FeaturedSection.self)
             for section in existingSections {
                 section.content.forEach { backgroundRealm.delete($0) }
@@ -287,7 +279,7 @@ public final class Storage {
                     content.session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: content.sessionId)
                 }
             }
-        }, disableAutorefresh: true, completionBlock: completion)
+        }
     }
 
     internal func store(configResult: Result<ConfigResponse, APIError>, completion: @escaping (Error?) -> Void) {
@@ -304,20 +296,20 @@ public final class Storage {
             return
         }
         
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { backgroundRealm in
             // We currently only care about whatever the latest event hero is.
             let existingHeroData = backgroundRealm.objects(EventHero.self)
             backgroundRealm.delete(existingHeroData)
-        }, disableAutorefresh: false, completionBlock: completion)
+        }
 
         guard let hero = response.eventHero else {
             os_log("Config response didn't contain an event hero", log: self.log, type: .debug)
             return
         }
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { backgroundRealm in
             backgroundRealm.add(hero, update: .all)
-        }, disableAutorefresh: false, completionBlock: completion)
+        }
     }
 
     private let serialQueue = DispatchQueue(label: "Database Serial", qos: .userInteractive)
@@ -330,11 +322,11 @@ public final class Storage {
     ///   - createTransaction: Whether the method should create its own write transaction or use the one already in place
     ///   - notificationTokensToSkip: An array of `NotificationToken` that should not be notified when the write is committed
     ///   - completionBlock: A block to be called when the operation is completed (called on the main queue)
-    internal func performSerializedBackgroundWrite(writeBlock: @escaping (Realm) throws -> Void,
-                                                   disableAutorefresh: Bool = false,
+    internal func performSerializedBackgroundWrite(disableAutorefresh: Bool = false,
                                                    createTransaction: Bool = true,
                                                    notificationTokensToSkip: [NotificationToken] = [],
-                                                   completionBlock: ((Error?) -> Void)? = nil) {
+                                                   completionBlock: ((Error?) -> Void)? = nil,
+                                                   writeBlock: @escaping (Realm) throws -> Void) {
         if disableAutorefresh { realm.autorefresh = false }
 
         serialQueue.async {
@@ -394,13 +386,13 @@ public final class Storage {
     public func modify<T>(_ object: T, with writeBlock: @escaping (T) -> Void) where T: ThreadConfined {
         let safeObject = ThreadSafeReference(to: object)
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(createTransaction: false, writeBlock: { backgroundRealm in
             guard let resolvedObject = backgroundRealm.resolve(safeObject) else { return }
 
             try backgroundRealm.write {
                 writeBlock(resolvedObject)
             }
-        }, createTransaction: false)
+        })
     }
 
     /// Gives you an opportunity to update `objects` on a background queue
@@ -416,7 +408,7 @@ public final class Storage {
     public func modify<T>(_ objects: [T], with writeBlock: @escaping ([T]) -> Void) where T: ThreadConfined {
         let safeObjects = objects.map { ThreadSafeReference(to: $0) }
 
-        performSerializedBackgroundWrite(writeBlock: { [weak self] backgroundRealm in
+        performSerializedBackgroundWrite(createTransaction: false, writeBlock: { [weak self] backgroundRealm in
             guard let self = self else { return }
 
             let resolvedObjects = safeObjects.compactMap { backgroundRealm.resolve($0) }
@@ -429,7 +421,7 @@ public final class Storage {
             try backgroundRealm.write {
                 writeBlock(resolvedObjects)
             }
-        }, createTransaction: false)
+        })
     }
 
     public lazy var events: Observable<Results<Event>> = {
@@ -455,9 +447,9 @@ public final class Storage {
     }
     
     public func setFavorite(_ isFavorite: Bool, onSessionsWithIDs ids: [String]) {
-        performSerializedBackgroundWrite(writeBlock: { realm in
+        performSerializedBackgroundWrite(disableAutorefresh: false, createTransaction: true, writeBlock: { realm in
             let sessions = realm.objects(Session.self).filter(NSPredicate(format: "identifier IN %@", ids))
-            
+
             sessions.forEach { session in
                 if isFavorite {
                     guard !session.isFavorite else { return }
@@ -466,7 +458,7 @@ public final class Storage {
                     session.favorites.forEach { $0.isDeleted = true }
                 }
             }
-        }, disableAutorefresh: false, createTransaction: true)
+        })
     }
 
     public lazy var eventsObservable: Observable<Results<Event>> = {
