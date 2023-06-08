@@ -44,7 +44,7 @@ extension NSImage {
 
     static var PUIVolume: NSImage { .PUISystemSymbol(named: "speaker.wave.3.fill", label: "Toggle Mute") }
 
-    static var PUIVolumeMuted: NSImage { .PUISystemSymbol(named: "speaker.slash.fill", label: "Toggle Mute") }
+    static var PUIVolumeMuted: NSImage { .PUISystemSymbol(named: "speaker.fill", label: "Toggle Mute") }
 
     static var PUIAirPlay: NSImage { .PUISystemSymbol(named: "airplayvideo", label: "AirPlay") }
 

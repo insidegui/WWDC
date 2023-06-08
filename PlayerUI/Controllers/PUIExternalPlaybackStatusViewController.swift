@@ -69,6 +69,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
     private lazy var iconImageView: NSImageView = {
         let v = NSImageView()
 
+        v.imageScaling = .scaleProportionallyUpOrDown
         v.widthAnchor.constraint(equalToConstant: 74).isActive = true
         v.heightAnchor.constraint(equalToConstant: 74).isActive = true
 

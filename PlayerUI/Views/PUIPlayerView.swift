@@ -194,11 +194,7 @@ public final class PUIPlayerView: NSView {
 
     fileprivate weak var lastKnownWindow: NSWindow?
 
-    private var sortedAnnotations: [PUITimelineAnnotation] = [] {
-        didSet {
-            updateAnnotationsState()
-        }
-    }
+    private var sortedAnnotations: [PUITimelineAnnotation] = []
 
     private var playerTimeObserver: Any?
 
@@ -245,6 +241,10 @@ public final class PUIPlayerView: NSView {
         }.store(in: &cancellables)
         player.publisher(for: \.currentItem?.loadedTimeRanges, options: [.initial, .new]).sink { [weak self] change in
             self?.updateBufferedSegments()
+        }.store(in: &cancellables)
+
+        player.publisher(for: \.currentItem?.tracks, options: [.initial, .new]).sink { [weak self] _ in
+            self?.needsLayout = true
         }.store(in: &cancellables)
 
         Task { [weak self] in
@@ -308,14 +308,6 @@ public final class PUIPlayerView: NSView {
         timelineView.loadedSegments = Set<PUIBufferSegment>(segments)
     }
 
-    private func updateAnnotationsState() {
-        let canGoBack = firstAnnotationBeforeCurrentTime != nil
-        let canGoForward = firstAnnotationAfterCurrentTime != nil
-
-        previousAnnotationButton.isEnabled = canGoBack
-        nextAnnotationButton.isEnabled = canGoForward
-    }
-
     fileprivate func updatePlayingState() {
         if isPlaying {
             playButton.image = .PUIPause
@@ -368,7 +360,6 @@ public final class PUIPlayerView: NSView {
             let progress = Double(CMTimeGetSeconds(time) / CMTimeGetSeconds(duration))
             self.timelineView.playbackProgress = progress
 
-            self.updateAnnotationsState()
             self.updateTimeLabels()
         }
     }
@@ -385,6 +376,31 @@ public final class PUIPlayerView: NSView {
 
         let remainingTime = CMTimeSubtract(duration, time)
         remainingTimeLabel.stringValue = String(time: remainingTime) ?? ""
+    }
+
+    public override func layout() {
+        updateVideoLayoutGuide()
+
+        super.layout()
+    }
+
+    private lazy var videoLayoutGuideConstraints = [NSLayoutConstraint]()
+
+    private func updateVideoLayoutGuide() {
+        guard let videoTrack = player?.currentItem?.tracks.first(where: { $0.assetTrack?.mediaType == .video })?.assetTrack else { return }
+
+        let videoRect = AVMakeRect(aspectRatio: videoTrack.naturalSize, insideRect: bounds)
+
+        NSLayoutConstraint.deactivate(videoLayoutGuideConstraints)
+
+        videoLayoutGuideConstraints = [
+            videoLayoutGuide.widthAnchor.constraint(equalToConstant: videoRect.width),
+            videoLayoutGuide.heightAnchor.constraint(equalToConstant: videoRect.height),
+            videoLayoutGuide.centerYAnchor.constraint(equalTo: centerYAnchor),
+            videoLayoutGuide.centerXAnchor.constraint(equalTo: centerXAnchor)
+        ]
+
+        NSLayoutConstraint.activate(videoLayoutGuideConstraints)
     }
 
     deinit {
@@ -541,28 +557,6 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    private lazy var previousAnnotationButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
-        b.image = .PUIPreviousAnnotation
-        b.target = self
-        b.action = #selector(previousAnnotation)
-        b.toolTip = "Go to previous bookmark"
-
-        return b
-    }()
-
-    private lazy var nextAnnotationButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
-        b.image = .PUINextAnnotation
-        b.target = self
-        b.action = #selector(nextAnnotation)
-        b.toolTip = "Go to next bookmark"
-
-        return b
-    }()
-
     private lazy var backButton: PUIButton = {
         let b = PUIButton(frame: .zero)
 
@@ -637,11 +631,15 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
+    private lazy var videoLayoutGuide = NSLayoutGuide()
+
     private var extrasMenuTopConstraint: NSLayoutConstraint!
 
     private lazy var externalStatusController = PUIExternalPlaybackStatusViewController()
 
     private func setupControls() {
+        addLayoutGuide(videoLayoutGuide)
+
         externalStatusController.view.isHidden = true
         externalStatusController.view.translatesAutoresizingMaskIntoConstraints = false
         let playerView = NSView()
@@ -678,14 +676,12 @@ public final class PUIPlayerView: NSView {
 
         centerButtonsContainerView.setCustomSpacing(6, after: volumeButton)
 
-        // Center controls (play, annotations, forward, backward)
+        // Center controls (play, forward, backward)
         centerButtonsContainerView.addView(backButton, in: .center)
-        centerButtonsContainerView.addView(previousAnnotationButton, in: .center)
         centerButtonsContainerView.addView(playButton, in: .center)
-        centerButtonsContainerView.addView(nextAnnotationButton, in: .center)
         centerButtonsContainerView.addView(forwardButton, in: .center)
 
-        // Trailing controls (speed, add annotation, pip)
+        // Trailing controls (speed, add annotation, AirPlay, PiP)
         centerButtonsContainerView.addView(speedButton, in: .trailing)
         centerButtonsContainerView.addView(addAnnotationButton, in: .trailing)
         centerButtonsContainerView.addView(routeButton, in: .trailing)
@@ -701,10 +697,8 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: volumeSlider)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: subtitlesButton)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: backButton)
-        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: previousAnnotationButton)
         centerButtonsContainerView.setVisibilityPriority(.mustHold, for: playButton)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: forwardButton)
-        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: nextAnnotationButton)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: speedButton)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: addAnnotationButton)
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: routeButton)
@@ -740,12 +734,27 @@ public final class PUIPlayerView: NSView {
         addSubview(scrimContainerView)
         addSubview(controlsContainerView)
 
+        /// Ensure a minimum amount of padding between the control area leading and trailing edges and the container.
+        let scrimLeading = scrimContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16)
+        scrimLeading.priority = .defaultLow
+        let scrimTrailing = scrimContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+        scrimTrailing.priority = .defaultLow
+
+        /// Define an absolute maximum width for the control area so that it doesn't look comically wide in full screen,
+        /// set as lower priority so that it can potentially expand beyond this size if needed due to content size.
+        let scrimMaxWidth = scrimContainerView.widthAnchor.constraint(lessThanOrEqualToConstant: 700)
+        scrimMaxWidth.priority = .defaultLow
+
+        /// Define a maximum area of the container that can be filled with the control area.
+        let scrimMaxParentArea = scrimContainerView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.5)
+
         NSLayoutConstraint.activate([
-            scrimContainerView.widthAnchor.constraint(lessThanOrEqualToConstant: 600),
-            scrimContainerView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 16),
-            scrimContainerView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -16),
+            scrimMaxWidth,
+            scrimMaxParentArea,
+            scrimLeading,
+            scrimTrailing,
             scrimContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            scrimContainerView.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor, constant: -16),
             controlsContainerView.leadingAnchor.constraint(equalTo: scrimContainerView.leadingAnchor, constant: 16),
             controlsContainerView.trailingAnchor.constraint(equalTo: scrimContainerView.trailingAnchor, constant: -16),
             controlsContainerView.topAnchor.constraint(equalTo: scrimContainerView.topAnchor, constant: 16),
@@ -764,7 +773,7 @@ public final class PUIPlayerView: NSView {
 
         addSubview(extrasMenuContainerView)
 
-        extrasMenuContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
+        extrasMenuContainerView.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor, constant: -12).isActive = true
         updateExtrasMenuPosition()
     }
 
@@ -799,8 +808,6 @@ public final class PUIPlayerView: NSView {
 
         let disableAnnotationControls = !d.playerViewShouldShowAnnotationControls(self)
         addAnnotationButton.isHidden = disableAnnotationControls
-        previousAnnotationButton.isHidden = disableAnnotationControls
-        nextAnnotationButton.isHidden = disableAnnotationControls
 
         let disableBackAndForward = !d.playerViewShouldShowBackAndForwardControls(self)
         backButton.isHidden = disableBackAndForward
@@ -838,7 +845,7 @@ public final class PUIPlayerView: NSView {
         let topConstant: CGFloat = isDominantViewInWindow ? 34 : 12
 
         if extrasMenuTopConstraint == nil {
-            extrasMenuTopConstraint = extrasMenuContainerView.topAnchor.constraint(equalTo: topAnchor, constant: topConstant)
+            extrasMenuTopConstraint = extrasMenuContainerView.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor, constant: topConstant)
             extrasMenuTopConstraint.isActive = true
         } else {
             extrasMenuTopConstraint.constant = topConstant
@@ -1638,7 +1645,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
 
     public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         pipButton.state = .on
-        externalStatusController.providerIcon = .PUIPictureInPictureLarge
+        externalStatusController.providerIcon = .PUIPictureInPictureLarge.withPlayerMetrics(.large)
         externalStatusController.providerName = "Picture in Picture"
         externalStatusController.providerDescription = "Playing in Picture in Picture"
         externalStatusController.view.isHidden = false
@@ -1694,7 +1701,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
 struct PUIPlayerView_Previews: PreviewProvider {
     static var previews: some View {
         PUIPlayerViewPreviewWrapper()
-            .frame(width: 640, height: 500)
+        .frame(minWidth: 200, maxWidth: .infinity, minHeight: 200, maxHeight: .infinity)
     }
 }
 

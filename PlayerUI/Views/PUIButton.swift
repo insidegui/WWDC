@@ -140,16 +140,11 @@ public final class PUIButton: NSControl, ObservableObject {
             routePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
             routePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
             routePicker.topAnchor.constraint(equalTo: topAnchor),
-            routePicker.bottomAnchor.constraint(equalTo: bottomAnchor),
+            routePicker.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
 
         // Hack alert
         routePicker.alphaValue = 0.01
-    }
-
-    public override func hitTest(_ point: NSPoint) -> NSView? {
-        guard isAVRoutePickerMasquerade else { return super.hitTest(point) }
-        return routePicker.subviews.first
     }
 
 }
