@@ -115,37 +115,27 @@ final class LiveObserver: NSObject {
             }
         }
 
-        setLiveFlag(false, for: notLiveAnymore)
-        setLiveFlag(true, for: liveInstances.toArray())
-
         os_log("There are %{public}d live instances. %{public}d instances are not live anymore",
                log: log,
                type: .debug,
                liveInstances.count,
                notLiveAnymore.count)
+        setLiveFlag(false, for: notLiveAnymore)
+        setLiveFlag(true, for: liveInstances.toArray())
 
         let liveIdentifiers: [String] = liveInstances.map({ $0.identifier })
         let notLiveAnymoreIdentifiers: [String] = notLiveAnymore.map({ $0.identifier })
 
         if liveIdentifiers.count > 0 {
             os_log("The following sessions are currently live: %{public}@", log: log, type: .debug, liveIdentifiers.joined(separator: ","))
-        } else {
-            os_log("There are no live sessions at the moment", log: log, type: .debug)
         }
 
         if notLiveAnymoreIdentifiers.count > 0 {
             os_log("The following sessions are NOT live anymore: %{public}@", log: log, type: .debug, notLiveAnymoreIdentifiers.joined(separator: ","))
-        } else {
-            os_log("There are no sessions that were live and are not live anymore", log: log, type: .debug)
         }
     }
 
     private func setLiveFlag(_ value: Bool, for instances: [SessionInstance]) {
-        os_log("Setting live flag to %{public}@ for %{public}d instances",
-               log: log,
-               type: .info,
-               String(describing: value), instances.count)
-
         storage.modify(instances) { bgInstances in
             bgInstances.forEach { instance in
                 guard !instance.isForcedLive else { return }

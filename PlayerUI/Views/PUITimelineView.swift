@@ -61,11 +61,9 @@ public final class PUITimelineView: NSView {
         }
     }
 
-    public var mediaDuration: Double = 0 {
-        didSet {
-            needsLayout = true
-        }
-    }
+    @MainActor
+    @Invalidating(.layout)
+    public var mediaDuration: Double = 0
 
     public var hasValidMediaDuration: Bool {
         return AVPlayer.validateMediaDurationWithSeconds(mediaDuration)
