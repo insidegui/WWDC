@@ -19,24 +19,7 @@ public final class PUIPlayerView: NSView {
 
     public weak var delegate: PUIPlayerViewDelegate?
 
-    public internal(set) var isInPictureInPictureMode: Bool = false {
-        didSet {
-            guard isInPictureInPictureMode != oldValue else { return }
-
-            pipButton.state = isInPictureInPictureMode ? .on : .off
-
-            if isInPictureInPictureMode {
-                externalStatusController.providerIcon = .PUIPictureInPictureLarge
-                externalStatusController.providerName = "Picture in Picture"
-                externalStatusController.providerDescription = "Playing in Picture in Picture"
-                externalStatusController.view.isHidden = false
-            } else {
-                externalStatusController.view.isHidden = true
-            }
-
-            invalidateTouchBar()
-        }
-    }
+    public var isInPictureInPictureMode: Bool { pipController.isPictureInPictureActive }
 
     public weak var appearanceDelegate: PUIPlayerViewAppearanceDelegate? {
         didSet {
@@ -96,7 +79,6 @@ public final class PUIPlayerView: NSView {
         pipPossibleObservation = pipController.observe(
             \AVPictureInPictureController.isPictureInPicturePossible, options: [.initial, .new]
         ) { [weak self] _, change in
-            // Update the PiP button's enabled state.
             self?.pipButton.isEnabled = change.newValue ?? false
         }
 
@@ -1630,9 +1612,49 @@ extension PUIPlayerView: PUIExternalPlaybackConsumer {
 
 // MARK: - PiP delegate
 
-extension PUIPlayerView: /*PUIPictureContainerViewControllerDelegate,*/ AVPictureInPictureControllerDelegate {
+extension PUIPlayerView: AVPictureInPictureControllerDelegate {
 
-    public func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void) {
+    // Start
+
+    public func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        delegate?.playerViewWillEnterPictureInPictureMode(self)
+
+        snapshotPlayer { [weak self] image in
+            self?.externalStatusController.snapshot = image
+        }
+    }
+
+    public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        pipButton.state = .on
+        externalStatusController.providerIcon = .PUIPictureInPictureLarge
+        externalStatusController.providerName = "Picture in Picture"
+        externalStatusController.providerDescription = "Playing in Picture in Picture"
+        externalStatusController.view.isHidden = false
+
+        invalidateTouchBar()
+    }
+
+    public func pictureInPictureController(
+        _ pictureInPictureController: AVPictureInPictureController,
+        failedToStartPictureInPictureWithError error: Error
+    ) {
+        os_log(.error, log: log, "Failed to start PiP \(error, privacy: .public)")
+    }
+
+    // Stop
+
+    // Called 1st
+    public func pictureInPictureControllerWillStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+
+    }
+
+    // Called 2nd, not called when the exit button is pressed
+    public func pictureInPictureController(
+        _ pictureInPictureController: AVPictureInPictureController,
+        restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void
+    ) {
+        delegate?.playerWillRestoreUserInterfaceForPictureInPictureStop(self)
+
         if !NSApp.isActive {
             NSApp.activate(ignoringOtherApps: true)
         }
@@ -1644,30 +1666,14 @@ extension PUIPlayerView: /*PUIPictureContainerViewControllerDelegate,*/ AVPictur
                 window.deminiaturize(nil)
             }
         }
+
         completionHandler(true)
     }
 
-    public func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, failedToStartPictureInPictureWithError error: Error) {
-        isInPictureInPictureMode = false
-    }
-
+    // Called Last
     public func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        isInPictureInPictureMode = false
-    }
-
-    public func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        delegate?.playerViewWillEnterPictureInPictureMode(self)
-
-        snapshotPlayer { [weak self] image in
-            self?.externalStatusController.snapshot = image
-        }
-    }
-
-    public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        isInPictureInPictureMode = true
-    }
-
-    public func pictureInPictureControllerWillStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
-        delegate?.playerViewWillExitPictureInPictureMode(self, reason: .returnButton)
+        pipButton.state = .off
+        externalStatusController.view.isHidden = true
+        invalidateTouchBar()
     }
 }
