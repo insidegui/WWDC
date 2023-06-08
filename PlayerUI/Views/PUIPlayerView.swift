@@ -1140,15 +1140,37 @@ public final class PUIPlayerView: NSView {
 
     private var keyDownEventMonitor: Any?
 
-    private enum KeyCommands: UInt16 {
-        case spaceBar = 49
-        case leftArrow = 123
-        case rightArrow = 124
-        case minus = 27
-        case plus = 24
-        case j = 38
-        case k = 40
-        case l = 37
+    private enum KeyCommands {
+        case spaceBar
+        case leftArrow
+        case rightArrow
+        case minus
+        case plus
+        case j
+        case k
+        case l
+
+        static func fromEvent(_ event: NSEvent) -> KeyCommands? {
+            switch event.keyCode {
+            case 123: return .leftArrow
+            case 124: return .rightArrow
+            default: break
+            }
+            
+            guard let character = event.charactersIgnoringModifiers else {
+                return nil
+            }
+            
+            switch character {
+            case " ": return .spaceBar
+            case "-": return .minus
+            case "+": return .plus
+            case "j": return .j
+            case "k": return .k
+            case "l": return .l
+            default: return nil
+            }
+        }
     }
 
     public var isEnabled = true {
@@ -1165,8 +1187,8 @@ public final class PUIPlayerView: NSView {
 
         keyDownEventMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [unowned self] event in
             guard self.isEnabled else { return event }
-
-            guard let command = KeyCommands(rawValue: event.keyCode) else {
+            
+            guard let command = KeyCommands.fromEvent(event) else {
                 return event
             }
 
