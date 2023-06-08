@@ -128,16 +128,21 @@ private struct PUIButtonContent: View {
 
     private var customHeight: CGFloat? { button.metrics?.controlSize }
 
-    private var foregroundColor: Color { Color(nsColor: button.state == .on ? button.activeTintColor : button.tintColor) }
+    private var foregroundColor: Color {
+        guard !button.shouldAlwaysDrawHighlighted else { return Color(nsColor: button.activeTintColor) }
+        return Color(nsColor: button.state == .on ? button.activeTintColor : button.tintColor)
+    }
 
     private var opacity: CGFloat {
         guard button.isEnabled else { return 0.5 }
+
+        guard !button.shouldAlwaysDrawHighlighted else { return 1.0 }
 
         return button.shouldDrawHighlighted ? 0.8 : 1.0
     }
 
     private var scale: CGFloat {
-        guard button.isEnabled else { return 1 }
+        guard button.isEnabled, !button.shouldAlwaysDrawHighlighted else { return 1 }
 
         return button.shouldDrawHighlighted ? 0.9 : 1.0
     }
