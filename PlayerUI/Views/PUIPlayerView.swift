@@ -10,16 +10,18 @@ import Cocoa
 import AVFoundation
 import os.log
 import AVKit
+import Combine
 
 public final class PUIPlayerView: NSView {
 
     private let log = OSLog(subsystem: "PlayerUI", category: "PUIPlayerView")
+    private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Public API
 
     public weak var delegate: PUIPlayerViewDelegate?
 
-    public var isInPictureInPictureMode: Bool { pipController.isPictureInPictureActive }
+    public var isInPictureInPictureMode: Bool { pipController?.isPictureInPictureActive == true }
 
     public weak var appearanceDelegate: PUIPlayerViewAppearanceDelegate? {
         didSet {
@@ -55,9 +57,9 @@ public final class PUIPlayerView: NSView {
                 teardown(player: oldPlayer)
             }
 
-            guard player != nil else { return }
+            guard let player else { return }
 
-            setupPlayer()
+            setupPlayer(player)
         }
     }
 
@@ -72,22 +74,19 @@ public final class PUIPlayerView: NSView {
 
     public init(player: AVPlayer) {
         self.player = player
-        self.pipController = AVPictureInPictureController(contentSource: .init(playerLayer: playerLayer))
+        if AVPictureInPictureController.isPictureInPictureSupported() {
+            self.pipController = AVPictureInPictureController(contentSource: .init(playerLayer: playerLayer))
+        } else {
+            self.pipController = nil
+        }
 
         super.init(frame: .zero)
 
-        pipPossibleObservation = pipController.observe(
-            \AVPictureInPictureController.isPictureInPicturePossible, options: [.initial, .new]
-        ) { [weak self] _, change in
-            self?.pipButton.isEnabled = change.newValue ?? false
-        }
-
-        pipController.delegate = self
         wantsLayer = true
         layer = PUIBoringLayer()
         layer?.backgroundColor = NSColor.black.cgColor
 
-        setupPlayer()
+        setupPlayer(player)
         setupControls()
     }
 
@@ -208,30 +207,52 @@ public final class PUIPlayerView: NSView {
 
     private let playerLayer = PUIBoringPlayerLayer()
 
-    private func setupPlayer() {
+    private func setupPlayer(_ player: AVPlayer) {
+        if let pipController {
+            pipPossibleObservation = pipController.observe(
+                \AVPictureInPictureController.isPictureInPicturePossible, options: [.initial, .new]
+            ) { [weak self] _, change in
+                self?.pipButton.isEnabled = change.newValue ?? false
+            }
+            pipController.delegate = self
+        } else {
+            pipButton.isEnabled = false
+        }
+
         elapsedTimeLabel.stringValue = elapsedTimeInitialValue
         remainingTimeLabel.stringValue = remainingTimeInitialValue
         timelineView.resetUI()
 
-        guard let player = player else { return }
-
         playerLayer.player = player
         playerLayer.videoGravity = .resizeAspect
 
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.initial, .new], context: nil)
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.volume), options: [.initial, .new], context: nil)
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.rate), options: [.initial, .new], context: nil)
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem), options: [.initial, .new], context: nil)
-        player.addObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges), options: [.initial, .new], context: nil)
-
-        asset?.loadValuesAsynchronously(forKeys: ["duration"], completionHandler: durationBecameAvailable)
-
-        asset?.loadValuesAsynchronously(forKeys: ["availableMediaCharacteristicsWithMediaSelectionOptions"], completionHandler: { [weak self] in
-
-            if self?.asset?.statusOfValue(forKey: "availableMediaCharacteristicsWithMediaSelectionOptions", error: nil) == .loaded {
-                DispatchQueue.main.async { self?.updateSubtitleSelectionMenu() }
+        let options: NSKeyValueObservingOptions = [.initial, .new]
+        player.publisher(for: \.status, options: options).sink { [weak self] change in
+            self?.playerStatusChanged()
+        }.store(in: &cancellables)
+        player.publisher(for: \.volume, options: options).sink { [weak self] change in
+            self?.playerVolumeChanged()
+        }.store(in: &cancellables)
+        player.publisher(for: \.rate, options: options).sink { [weak self] change in
+            self?.updatePlayingState()
+            self?.updatePowerAssertion()
+        }.store(in: &cancellables)
+        player.publisher(for: \.currentItem, options: options).sink { [weak self] change in
+            if let playerItem = self?.player?.currentItem {
+                playerItem.audioTimePitchAlgorithm = .timeDomain
             }
-        })
+        }.store(in: &cancellables)
+        player.publisher(for: \.currentItem?.loadedTimeRanges, options: [.initial, .new]).sink { [weak self] change in
+            self?.updateBufferedSegments()
+        }.store(in: &cancellables)
+
+        Task { [weak self] in
+            guard let asset = self?.asset else { return }
+            async let duration = asset.load(.duration)
+            async let legible = asset.loadMediaSelectionGroup(for: .legible)
+            self?.timelineView.mediaDuration = Double(CMTimeGetSeconds(try await duration))
+            self?.updateSubtitleSelectionMenu(subtitlesGroup: try await legible)
+        }
 
         playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, preferredTimescale: 9000), queue: .main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
@@ -245,39 +266,10 @@ public final class PUIPlayerView: NSView {
         oldValue.pause()
         oldValue.cancelPendingPrerolls()
 
+        cancellables.removeAll()
         if let observer = playerTimeObserver {
             oldValue.removeTimeObserver(observer)
             playerTimeObserver = nil
-        }
-
-        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status))
-        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.rate))
-        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.volume))
-        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem.loadedTimeRanges))
-        oldValue.removeObserver(self, forKeyPath: #keyPath(AVPlayer.currentItem))
-    }
-
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        DispatchQueue.main.async {
-            guard let keyPath = keyPath else { return }
-
-            switch keyPath {
-            case #keyPath(AVPlayer.status):
-                self.playerStatusChanged()
-            case #keyPath(AVPlayer.currentItem.loadedTimeRanges):
-                self.updateBufferedSegments()
-            case #keyPath(AVPlayer.volume):
-                self.playerVolumeChanged()
-            case #keyPath(AVPlayer.rate):
-                self.updatePlayingState()
-                self.updatePowerAssertion()
-            case #keyPath(AVPlayer.currentItem):
-                if let playerItem = self.player?.currentItem {
-                    playerItem.audioTimePitchAlgorithm = .timeDomain
-                }
-            default:
-                super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-            }
         }
     }
 
@@ -360,14 +352,6 @@ public final class PUIPlayerView: NSView {
         case .readyToPlay:
             updateTimeLabels()
         default: break
-        }
-    }
-
-    private func durationBecameAvailable() {
-        guard let duration = asset?.duration else { return }
-
-        DispatchQueue.main.async {
-            self.timelineView.mediaDuration = Double(CMTimeGetSeconds(duration))
         }
     }
 
@@ -1010,9 +994,9 @@ public final class PUIPlayerView: NSView {
 
     @IBAction public func togglePip(_ sender: NSView?) {
         if isInPictureInPictureMode {
-            pipController.stopPictureInPicture()
+            pipController?.stopPictureInPicture()
         } else {
-            pipController.startPictureInPicture()
+            pipController?.startPictureInPicture()
         }
     }
 
@@ -1054,10 +1038,9 @@ public final class PUIPlayerView: NSView {
     private var subtitlesMenu: NSMenu?
     private var subtitlesGroup: AVMediaSelectionGroup?
 
-    private func updateSubtitleSelectionMenu() {
-        guard let playerItem = player?.currentItem else { return }
-
-        guard let subtitlesGroup = playerItem.asset.mediaSelectionGroup(forMediaCharacteristic: .legible) else {
+    @MainActor
+    private func updateSubtitleSelectionMenu(subtitlesGroup: AVMediaSelectionGroup?) {
+        guard let subtitlesGroup else {
             subtitlesButton.isHidden = true
             return
         }
@@ -1084,16 +1067,15 @@ public final class PUIPlayerView: NSView {
         guard let option = sender.representedObject as? AVMediaSelectionOption else { return }
 
         // reset all item's states
-        sender.menu?.items.forEach({ $0.state = .on })
+        sender.menu?.items.forEach({ $0.state = .off })
 
+        // The current language was clicked again, turn subtitles off
         if option.extendedLanguageTag == player?.currentItem?.currentMediaSelection.selectedMediaOption(in: subtitlesGroup)?.extendedLanguageTag {
             player?.currentItem?.select(nil, in: subtitlesGroup)
-            sender.state = .off
             return
         }
 
         player?.currentItem?.select(option, in: subtitlesGroup)
-
         sender.state = .on
     }
 
@@ -1258,7 +1240,7 @@ public final class PUIPlayerView: NSView {
         }
     }
 
-    fileprivate let pipController: AVPictureInPictureController
+    private let pipController: AVPictureInPictureController?
     private var pipPossibleObservation: Any?
 
     // MARK: - Visibility management
