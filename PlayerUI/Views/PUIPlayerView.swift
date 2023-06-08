@@ -1125,16 +1125,22 @@ public final class PUIPlayerView: NSView {
         case l
 
         static func fromEvent(_ event: NSEvent) -> KeyCommands? {
+            // `keyCode` and `charactersIgnoringModifiers` both will raise exceptions if called on
+            // events that are not key events
+            guard event.type == .keyDown else { return nil }
+
             switch event.keyCode {
             case 123: return .leftArrow
             case 124: return .rightArrow
             default: break
             }
-            
+
+            // Correctly support keyboard localization, different keyboard layouts produce different
+            // characters for the same `keyCode`
             guard let character = event.charactersIgnoringModifiers else {
                 return nil
             }
-            
+
             switch character {
             case " ": return .spaceBar
             case "-": return .minus
