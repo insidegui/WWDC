@@ -50,7 +50,7 @@ final class VideoPlayerViewController: NSViewController {
         }
     }
 
-    var playerWillExitPictureInPicture: ((PUIPiPExitReason) -> Void)?
+    var playerWillRestoreUserInterfaceForPictureInPictureStop: (() -> Void)?
     var playerWillExitFullScreen: (() -> Void)?
 
     init(player: AVPlayer, session: SessionViewModel) {
@@ -336,8 +336,8 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
         playerView.snapshotPlayer(completion: completion)
     }
 
-    func playerViewWillExitPictureInPictureMode(_ playerView: PUIPlayerView, reason: PUIPiPExitReason) {
-        playerWillExitPictureInPicture?(reason)
+    func playerWillRestoreUserInterfaceForPictureInPictureStop(_ playerView: PUIPlayerView) {
+        playerWillRestoreUserInterfaceForPictureInPictureStop?()
     }
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {

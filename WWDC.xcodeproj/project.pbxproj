@@ -147,12 +147,10 @@
 		DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721961ECA12780054C503 /* PlayerUI.framework */; };
 		DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721961ECA12780054C503 /* PlayerUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDF721C71ECA12A40054C503 /* PUIExternalPlaybackStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721A51ECA12A40054C503 /* PUIExternalPlaybackStatusViewController.swift */; };
-		DDF721C81ECA12A40054C503 /* PUIPictureContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721A61ECA12A40054C503 /* PUIPictureContainerViewController.swift */; };
 		DDF721C91ECA12A40054C503 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721A81ECA12A40054C503 /* Colors.swift */; };
 		DDF721CA1ECA12A40054C503 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721A91ECA12A40054C503 /* Images.swift */; };
 		DDF721CB1ECA12A40054C503 /* Speeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721AA1ECA12A40054C503 /* Speeds.swift */; };
 		DDF721CC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721AC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift */; };
-		DDF721CD1ECA12A40054C503 /* PIP.h in Headers */ = {isa = PBXBuildFile; fileRef = DDF721AE1ECA12A40054C503 /* PIP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDF721CE1ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B01ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift */; };
 		DDF721CF1ECA12A40054C503 /* PUIExternalPlaybackProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B11ECA12A40054C503 /* PUIExternalPlaybackProvider.swift */; };
 		DDF721D01ECA12A40054C503 /* PUIPlayerViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B21ECA12A40054C503 /* PUIPlayerViewDelegates.swift */; };
@@ -415,12 +413,10 @@
 		DDF721981ECA12780054C503 /* PlayerUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerUI.h; sourceTree = "<group>"; };
 		DDF721991ECA12780054C503 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDF721A51ECA12A40054C503 /* PUIExternalPlaybackStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackStatusViewController.swift; sourceTree = "<group>"; };
-		DDF721A61ECA12A40054C503 /* PUIPictureContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPictureContainerViewController.swift; sourceTree = "<group>"; };
 		DDF721A81ECA12A40054C503 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		DDF721A91ECA12A40054C503 /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		DDF721AA1ECA12A40054C503 /* Speeds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speeds.swift; sourceTree = "<group>"; };
 		DDF721AC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProviderRegistration.swift; sourceTree = "<group>"; };
-		DDF721AE1ECA12A40054C503 /* PIP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PIP.h; sourceTree = "<group>"; };
 		DDF721B01ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackConsumer.swift; sourceTree = "<group>"; };
 		DDF721B11ECA12A40054C503 /* PUIExternalPlaybackProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIExternalPlaybackProvider.swift; sourceTree = "<group>"; };
 		DDF721B21ECA12A40054C503 /* PUIPlayerViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerViewDelegates.swift; sourceTree = "<group>"; };
@@ -974,7 +970,6 @@
 				DDF721A41ECA12A40054C503 /* Controllers */,
 				DDF721A71ECA12A40054C503 /* Definitions */,
 				DDF721AB1ECA12A40054C503 /* Models */,
-				DDF721AD1ECA12A40054C503 /* PiP Support */,
 				DDF721AF1ECA12A40054C503 /* Protocols */,
 				DDF721B51ECA12A40054C503 /* Resources */,
 				DDF721B81ECA12A40054C503 /* Util */,
@@ -989,7 +984,6 @@
 			isa = PBXGroup;
 			children = (
 				DDF721A51ECA12A40054C503 /* PUIExternalPlaybackStatusViewController.swift */,
-				DDF721A61ECA12A40054C503 /* PUIPictureContainerViewController.swift */,
 				DDC6781E1EDB8EDA00A4E19C /* PUIAnnotationWindowController.swift */,
 			);
 			path = Controllers;
@@ -1011,14 +1005,6 @@
 				DDF721AC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		DDF721AD1ECA12A40054C503 /* PiP Support */ = {
-			isa = PBXGroup;
-			children = (
-				DDF721AE1ECA12A40054C503 /* PIP.h */,
-			);
-			path = "PiP Support";
 			sourceTree = "<group>";
 		};
 		DDF721AF1ECA12A40054C503 /* Protocols */ = {
@@ -1174,7 +1160,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDF721CD1ECA12A40054C503 /* PIP.h in Headers */,
 				DDF7219A1ECA12780054C503 /* PlayerUI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1557,7 +1542,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDF721D11ECA12A40054C503 /* PUITimelineAnnotation.swift in Sources */,
-				DDF721C81ECA12A40054C503 /* PUIPictureContainerViewController.swift in Sources */,
 				DDF721D51ECA12A40054C503 /* AVPlayer+Validation.swift in Sources */,
 				DDF721CA1ECA12A40054C503 /* Images.swift in Sources */,
 				4DA83FE222AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift in Sources */,
