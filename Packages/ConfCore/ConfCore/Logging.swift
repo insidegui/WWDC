@@ -7,16 +7,18 @@
 
 import OSLog
 
+public typealias OSLogger = os.Logger
+
 public struct LoggingConfig {
     public let subsystem: String
     public let category: String
 }
 
 public protocol Logging {
-    static var log: Logger { get }
-    var log: Logger { get }
+    static var log: OSLogger { get }
+    var log: OSLogger { get }
     static func defaultLoggerConfig() -> LoggingConfig
-    static func makeLogger(config: LoggingConfig) -> Logger
+    static func makeLogger(config: LoggingConfig) -> OSLogger
 }
 
 public extension Logging {
@@ -28,23 +30,23 @@ public extension Logging {
         return LoggingConfig(subsystem: String(subsystem), category: String(category))
     }
     @inline(__always)
-    static func makeLogger(config: LoggingConfig = defaultLoggerConfig()) -> Logger {
+    static func makeLogger(config: LoggingConfig = defaultLoggerConfig()) -> OSLogger {
         makeLogger(subsystem: config.subsystem, category: config.category)
     }
     @inline(__always)
-    static func makeLogger(subsystem: String, category: String = String(describing: Self.self)) -> Logger {
+    static func makeLogger(subsystem: String, category: String = String(describing: Self.self)) -> OSLogger {
         ConfCore.makeLogger(subsystem: subsystem, category: category)
     }
 
     /// Convenience forwarding the static log var to the instance just to make things simpler and easier. Types conforming to Logging only
     /// need to create the static var
     @inline(__always)
-    var log: Logger { Self.log }
+    var log: OSLogger { Self.log }
 
 }
 
 /// Mostly for identifying places that log outside of using the Logging protocol. To help with future refactors.
 @inline(__always)
-public func makeLogger(subsystem: String, category: String) -> Logger {
-    Logger(subsystem: subsystem, category: category)
+public func makeLogger(subsystem: String, category: String) -> OSLogger {
+    OSLogger(subsystem: subsystem, category: category)
 }

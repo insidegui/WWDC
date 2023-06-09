@@ -45,8 +45,8 @@ extension Error {
         return resolver(clientRecord, serverRecord)
     }
 
-    @discardableResult func retryCloudKitOperationIfPossible(_ log: Logger? = nil, in queue: DispatchQueue = .main, with block: @escaping () -> Void) -> Bool {
-        let effectiveLog: Logger = log ?? ckLog
+    @discardableResult func retryCloudKitOperationIfPossible(_ log: OSLogger? = nil, in queue: DispatchQueue = .main, with block: @escaping () -> Void) -> Bool {
+        let effectiveLog: OSLogger = log ?? ckLog
 
         guard let effectiveError = self as? CKError else { return false }
 
