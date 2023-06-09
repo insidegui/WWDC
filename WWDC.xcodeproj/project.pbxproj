@@ -152,7 +152,7 @@
 		DDF721D01ECA12A40054C503 /* PUIPlayerViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B21ECA12A40054C503 /* PUIPlayerViewDelegates.swift */; };
 		DDF721D11ECA12A40054C503 /* PUITimelineAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B31ECA12A40054C503 /* PUITimelineAnnotation.swift */; };
 		DDF721D21ECA12A40054C503 /* PUITimelineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B41ECA12A40054C503 /* PUITimelineDelegate.swift */; };
-		DDF721D31ECA12A40054C503 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDF721B61ECA12A40054C503 /* Media.xcassets */; };
+		DDF721D31ECA12A40054C503 /* PlayerUI.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDF721B61ECA12A40054C503 /* PlayerUI.xcassets */; };
 		DDF721D41ECA12A40054C503 /* WhiteSpinner.car in Resources */ = {isa = PBXBuildFile; fileRef = DDF721B71ECA12A40054C503 /* WhiteSpinner.car */; };
 		DDF721D51ECA12A40054C503 /* AVPlayer+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721B91ECA12A40054C503 /* AVPlayer+Validation.swift */; };
 		DDF721D71ECA12A40054C503 /* NSEvent+ForceTouch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721BB1ECA12A40054C503 /* NSEvent+ForceTouch.swift */; };
@@ -169,6 +169,9 @@
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
+		F42863392A33710500DA0113 /* FixSwiftUIMaterialInPreviews.m in Sources */ = {isa = PBXBuildFile; fileRef = F42863382A33710500DA0113 /* FixSwiftUIMaterialInPreviews.m */; };
+		F428633B2A3372F300DA0113 /* PUIPlayerViewControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = F428633A2A3372F300DA0113 /* PUIPlayerViewControls.swift */; };
+		F428633D2A3379FB00DA0113 /* PlayerUIPreview.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F428633C2A3379FB00DA0113 /* PlayerUIPreview.xcassets */; };
 		F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */; };
 		F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */; };
 		F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82342A22921300FDE980 /* ExploreTabProvider.swift */; };
@@ -414,7 +417,7 @@
 		DDF721B21ECA12A40054C503 /* PUIPlayerViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerViewDelegates.swift; sourceTree = "<group>"; };
 		DDF721B31ECA12A40054C503 /* PUITimelineAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineAnnotation.swift; sourceTree = "<group>"; };
 		DDF721B41ECA12A40054C503 /* PUITimelineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineDelegate.swift; sourceTree = "<group>"; };
-		DDF721B61ECA12A40054C503 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		DDF721B61ECA12A40054C503 /* PlayerUI.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PlayerUI.xcassets; sourceTree = "<group>"; };
 		DDF721B71ECA12A40054C503 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; path = WhiteSpinner.car; sourceTree = "<group>"; };
 		DDF721B91ECA12A40054C503 /* AVPlayer+Validation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVPlayer+Validation.swift"; sourceTree = "<group>"; };
 		DDF721BB1ECA12A40054C503 /* NSEvent+ForceTouch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSEvent+ForceTouch.swift"; sourceTree = "<group>"; };
@@ -432,6 +435,9 @@
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		F42472B12A24D6AC00F68237 /* OpenSource.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = OpenSource.xcconfig; sourceTree = "<group>"; };
+		F42863382A33710500DA0113 /* FixSwiftUIMaterialInPreviews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixSwiftUIMaterialInPreviews.m; sourceTree = "<group>"; };
+		F428633A2A3372F300DA0113 /* PUIPlayerViewControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIPlayerViewControls.swift; sourceTree = "<group>"; };
+		F428633C2A3379FB00DA0113 /* PlayerUIPreview.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PlayerUIPreview.xcassets; sourceTree = "<group>"; };
 		F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
 		F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarBlurFadeView.swift; sourceTree = "<group>"; };
 		F44C82342A22921300FDE980 /* ExploreTabProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreTabProvider.swift; sourceTree = "<group>"; };
@@ -994,8 +1000,9 @@
 		DDF721B51ECA12A40054C503 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				DDF721B61ECA12A40054C503 /* Media.xcassets */,
+				DDF721B61ECA12A40054C503 /* PlayerUI.xcassets */,
 				DDF721B71ECA12A40054C503 /* WhiteSpinner.car */,
+				F428633C2A3379FB00DA0113 /* PlayerUIPreview.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1003,6 +1010,7 @@
 		DDF721B81ECA12A40054C503 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				F42863382A33710500DA0113 /* FixSwiftUIMaterialInPreviews.m */,
 				DDF721B91ECA12A40054C503 /* AVPlayer+Validation.swift */,
 				4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */,
 				DDF721BB1ECA12A40054C503 /* NSEvent+ForceTouch.swift */,
@@ -1022,6 +1030,7 @@
 				DDF721C21ECA12A40054C503 /* PUIButton.swift */,
 				4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */,
 				DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */,
+				F428633A2A3372F300DA0113 /* PUIPlayerViewControls.swift */,
 				DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */,
 				DDF721C51ECA12A40054C503 /* PUISlider.swift */,
 				DDF721C61ECA12A40054C503 /* PUITimelineView.swift */,
@@ -1269,7 +1278,7 @@
 					};
 					DDF721951ECA12780054C503 = {
 						CreatedOnToolsVersion = 8.3.2;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1430;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -1332,8 +1341,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F428633D2A3379FB00DA0113 /* PlayerUIPreview.xcassets in Resources */,
 				DDF721D41ECA12A40054C503 /* WhiteSpinner.car in Resources */,
-				DDF721D31ECA12A40054C503 /* Media.xcassets in Resources */,
+				DDF721D31ECA12A40054C503 /* PlayerUI.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1514,6 +1524,7 @@
 			files = (
 				DDF721D11ECA12A40054C503 /* PUITimelineAnnotation.swift in Sources */,
 				DDF721D51ECA12A40054C503 /* AVPlayer+Validation.swift in Sources */,
+				F42863392A33710500DA0113 /* FixSwiftUIMaterialInPreviews.m in Sources */,
 				DDF721CA1ECA12A40054C503 /* Images.swift in Sources */,
 				4DA83FE222AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift in Sources */,
 				DDC970BF209291630072B822 /* PUITouchBarController.swift in Sources */,
@@ -1523,6 +1534,7 @@
 				DDF721C91ECA12A40054C503 /* Colors.swift in Sources */,
 				DDED75571ED3C1BF000BA817 /* PUIScrimView.swift in Sources */,
 				DDF721D01ECA12A40054C503 /* PUIPlayerViewDelegates.swift in Sources */,
+				F428633B2A3372F300DA0113 /* PUIPlayerViewControls.swift in Sources */,
 				DDBA0D79208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift in Sources */,
 				DDF721DE1ECA12A40054C503 /* PUIPlayerView.swift in Sources */,
 				DDF721D21ECA12A40054C503 /* PUITimelineDelegate.swift in Sources */,
@@ -2181,9 +2193,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_ASSET_PATHS = PlayerUI/Resources/PlayerUIPreview.xcassets;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1027;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2206,6 +2220,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -2213,9 +2229,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_ASSET_PATHS = PlayerUI/Resources/PlayerUIPreview.xcassets;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1027;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2238,6 +2256,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug_iCloud;
 		};
@@ -2245,9 +2265,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_ASSET_PATHS = PlayerUI/Resources/PlayerUIPreview.xcassets;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1027;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2270,6 +2292,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -2277,9 +2300,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_ASSET_PATHS = PlayerUI/Resources/PlayerUIPreview.xcassets;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1027;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2302,6 +2327,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release_iCloud;
 		};

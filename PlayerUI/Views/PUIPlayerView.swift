@@ -15,7 +15,6 @@ import SwiftUI
 
 public final class PUIPlayerView: NSView, ObservableObject {
 
-    #warning("TODO: Do we need this to be public?")
     public struct State: Hashable {
         static let placeholderTime = "--:--"
 
@@ -128,7 +127,7 @@ public final class PUIPlayerView: NSView, ObservableObject {
         layer?.backgroundColor = NSColor.black.cgColor
 
         setupPlayer(player)
-        setupControls()
+        setupUI()
     }
 
     public required init?(coder: NSCoder) {
@@ -169,8 +168,6 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
     public var playbackSpeed: PUIPlaybackSpeed = .normal {
         didSet {
-            guard let player = player else { return }
-
             state.speed = playbackSpeed
 
             invalidateTouchBar()
@@ -442,9 +439,42 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
     private lazy var videoLayoutGuide = NSLayoutGuide()
 
-    private func setupControls() {
+    private lazy var controlsContainer: NSView = {
+        let v = NSView()
+        v.wantsLayer = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
+    private lazy var controlsHost: NSView = {
+        let v = NSHostingView(rootView: PUIPlayerViewControls().environmentObject(self))
+        v.wantsLayer = true
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
+    private func setupUI() {
         addLayoutGuide(videoLayoutGuide)
 
+        playerLayer.frame = bounds
+        playerLayer.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
+        layer?.addSublayer(playerLayer)
+
+        addSubview(controlsContainer)
+        NSLayoutConstraint.activate([
+            controlsContainer.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor),
+            controlsContainer.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor),
+            controlsContainer.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor),
+            controlsContainer.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor)
+        ])
+
+        controlsContainer.addSubview(controlsHost)
+        NSLayoutConstraint.activate([
+            controlsHost.leadingAnchor.constraint(equalTo: controlsContainer.leadingAnchor),
+            controlsHost.trailingAnchor.constraint(equalTo: controlsContainer.trailingAnchor),
+            controlsHost.topAnchor.constraint(equalTo: controlsContainer.topAnchor),
+            controlsHost.bottomAnchor.constraint(equalTo: controlsContainer.bottomAnchor)
+        ])
     }
 
     var isConfiguredForBackAndForward30s = false {
@@ -736,7 +766,7 @@ public final class PUIPlayerView: NSView, ObservableObject {
             let firstResponders = allWindows.compactMap { $0.firstResponder }
             let fieldEditors = firstResponders.filter { ($0 as? NSText)?.isEditable == true }
             guard fieldEditors.isEmpty else { return event }
-            #warning("TODO: Commented out special handling might be important")
+            // TODO: Commented out special handling might be important
 //            guard !self.timelineView.isEditingAnnotation else { return event }
 
             switch command {
@@ -822,10 +852,10 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
         return true
 
-        #warning("TODO: Below commented out special handling might be important")
+        // TODO: Below commented out special handling might be important
 //        guard !timelineView.isEditingAnnotation else { return false }
 
-        #warning("TODO: Hover state comes from SwiftUI land?")
+        // TODO: Hover state comes from SwiftUI land?
 //        let windowMouseRect = window.convertFromScreen(NSRect(origin: NSEvent.mouseLocation, size: CGSize(width: 1, height: 1)))
 //        let viewMouseRect = convert(windowMouseRect, from: nil)
 //
@@ -871,7 +901,15 @@ public final class PUIPlayerView: NSView, ObservableObject {
     }
 
     private func setControls(opacity: CGFloat, animated: Bool) {
-        #warning("TODO")
+        if opacity > 0 { controlsContainer.isHidden = false }
+
+        NSAnimationContext.runAnimationGroup { ctx in
+            ctx.duration = animated ? 0.3 : 0
+            controlsContainer.animator().alphaValue = opacity
+        } completionHandler: { [weak self] in
+            guard let self = self else { return }
+            self.controlsContainer.isHidden = opacity <= 0
+        }
     }
 
     public override func viewWillMove(toWindow newWindow: NSWindow?) {
@@ -1084,7 +1122,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
     // Called Last
     public func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         pictureInPictureEvent.send(.stop)
-        
+
         invalidateTouchBar()
     }
 }
