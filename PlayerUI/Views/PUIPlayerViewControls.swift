@@ -67,6 +67,7 @@ private struct PUIPlayerViewControlsContent: View {
                 centerButtons
                     .frame(maxWidth: .infinity)
                     .overlay(alignment: .leading) { audioControls }
+                    .overlay(alignment: .trailing) { auxControls }
             }
             .padding()
             .frame(minWidth: 360, maxWidth: 500)
@@ -173,31 +174,67 @@ private struct PUIPlayerViewControlsContent: View {
         }
     }
 
+    @ViewBuilder
+    private var auxControls: some View {
+        HStack {
+            PlaybackSpeedToggle(speed: $state.speed)
+        }
+    }
+
     private var shape: some InsettableShape {
         RoundedRectangle(cornerRadius: 12, style: .continuous)
     }
 }
 
-extension PUIPlaybackSpeed: View {
-    public var body: some View {
-        switch self {
-        case .slow:
-            <#code#>
-        case .normal:
-            <#code#>
-        case .midFast:
-            <#code#>
-        case .fast:
-            <#code#>
-        case .faster:
-            <#code#>
-        case .fastest:
-            <#code#>
+// MARK: - Aux Components
+
+private struct PlaybackSpeedToggle: View {
+    @Binding var speed: PUIPlaybackSpeed
+
+    var body: some View {
+        Button {
+            if NSEvent.modifierFlags.contains(.shift) {
+                speed = speed.previous
+            } else {
+                speed = speed.next
+            }
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 4, style: .continuous)
+                    .stroke(.secondary, style: .onePixel)
+                HStack(alignment: .firstTextBaseline, spacing: 0) {
+                    Text(speed.description)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.primary)
+
+                    Text("x")
+                        .font(.system(size: 10))
+                        .foregroundStyle(.secondary)
+                }
+                .id(speed)
+                .transition(labelTransition.combined(with: .opacity).combined(with: .scale(scale: 0.6)))
+            }
+            .monospacedDigit()
+            .frame(width: 40, height: 20)
+            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+            .animation(.spring(), value: speed)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.playerControlStatic)
+    }
+
+    private var labelTransition: AnyTransition {
+        if NSEvent.modifierFlags.contains(.shift) {
+            return .asymmetric(insertion: .move(edge: .top), removal: .move(edge: .bottom))
+        } else {
+            return .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top))
         }
     }
 }
 
 struct PUIControlButtonStyle: ButtonStyle {
+    var animatePress = true
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .overlay {
@@ -207,14 +244,29 @@ struct PUIControlButtonStyle: ButtonStyle {
                     .mask(configuration.label)
                     .opacity(configuration.isPressed ? 0.2 : 0)
             }
-            .scaleEffect(configuration.isPressed ? 0.9 : 1)
-            .animation(.spring(), value: configuration.isPressed)
+            .scaleEffect(animatePress && configuration.isPressed ? 0.9 : 1)
+            .animation(animatePress ? .spring() : .linear(duration: 0), value: configuration.isPressed)
     }
 }
 
 extension ButtonStyle where Self == PUIControlButtonStyle {
     static var playerControl: Self { PUIControlButtonStyle() }
+    static var playerControlStatic: Self { PUIControlButtonStyle(animatePress: false) }
 }
+
+// MARK: - Extensions
+
+private extension CGFloat {
+    static var onePixel: CGFloat {
+        guard let scale = NSScreen.main?.backingScaleFactor else { return 1 }
+        return 1 / scale
+    }
+}
+private extension StrokeStyle {
+    static var onePixel: StrokeStyle { .init(lineWidth: .onePixel) }
+}
+
+// MARK: - Previews
 
 #if DEBUG
 struct PUIPlayerViewControlsContent_Previews: PreviewProvider, View {

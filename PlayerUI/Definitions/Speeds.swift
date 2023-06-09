@@ -60,4 +60,16 @@ public enum PUIPlaybackSpeed: Float {
 
         return PUIPlaybackSpeed.all[nextIndex]
     }
+
+    private static let descriptionFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.locale = .init(identifier: "en_US")
+        f.minimumFractionDigits = 0
+        f.maximumFractionDigits = 2
+        return f
+    }()
+
+    var description: String {
+        Self.descriptionFormatter.string(from: NSNumber(value: rawValue)) ?? ""
+    }
 }
