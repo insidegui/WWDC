@@ -7,11 +7,11 @@
 //
 
 import Foundation
-import os.log
+import OSLog
 
 public final class TranscriptDownloader {
 
-    private let log = OSLog(subsystem: Transcripts.subsystemName, category: String(describing: TranscriptDownloader.self))
+    private let log = Logger(subsystem: Transcripts.subsystemName, category: String(describing: TranscriptDownloader.self))
 
     let loader: Loader
     let manifestURL: URL
@@ -39,7 +39,7 @@ public final class TranscriptDownloader {
     private var validSessionIdentifiers: [String]?
 
     public func fetch(validSessionIdentifiers: [String]? = nil, progress: @escaping ProgressHandler, completion: @escaping CompletionHandler) {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug(#function)
 
         transcriptCountLoaded = 0
 
@@ -51,10 +51,10 @@ public final class TranscriptDownloader {
     }
 
     private func callCompletion() {
-        os_log("COMPLETED", log: self.log, type: .default)
+        log.debug("COMPLETED")
 
         if !failedTranscriptIdentifiers.isEmpty {
-            os_log("Failed transcript IDs: %@", log: self.log, type: .default, failedTranscriptIdentifiers.joined(separator: ", "))
+            log.debug("Failed transcript IDs: \(self.failedTranscriptIdentifiers.joined(separator: ", "), privacy: .public)")
         }
 
         queue.async { [weak self] in
@@ -80,7 +80,7 @@ public final class TranscriptDownloader {
         coalescer.run(for: [contents], queue: queue) { [weak self] coalescedContents in
             guard let self = self else { return }
 
-            os_log("Handing out %d transcript(s) for storage", log: self.log, type: .debug, coalescedContents.count)
+            self.log.debug("Handing out \(coalescedContents.count) transcript(s) for storage")
 
             self.storage.store(coalescedContents, manifest: manifest)
         }
@@ -96,11 +96,11 @@ public final class TranscriptDownloader {
             case .success(let manifest):
                 self.currentManifest = manifest
 
-                os_log("Transcript manifest downloaded. %d transcripts available.", log: self.log, type: .debug, manifest.individual.count)
+                self.log.debug("Transcript manifest downloaded. \(manifest.individual.count) transcripts available.")
 
                 self.processManifest(manifest)
             case .failure(let error):
-                os_log("Error downloading transcript manifest: %{public}@", log: self.log, type: .error, String(describing: error))
+                self.log.error("Error downloading transcript manifest: \(String(describing: error), privacy: .public)")
 
                 self.callCompletion()
             }
@@ -125,7 +125,7 @@ public final class TranscriptDownloader {
         guard let validIdentifiers = validSessionIdentifiers else { return true }
 
         if !validIdentifiers.contains(identifier) {
-            os_log("Ignoring %@ on manifest: not a session we know about. Maybe next time...", log: self.log, type: .debug, identifier)
+            self.log.debug("Ignoring \(identifier, privacy: .public) on manifest: not a session we know about. Maybe next time...")
 
             return false
         } else {
@@ -139,22 +139,49 @@ public final class TranscriptDownloader {
         transcriptCountToLoad = validFeeds.count
         transcriptCountLoaded = 0
 
-        validFeeds.forEach { feed in
-            downloadTranscriptIfNeeded(identifier: feed.key, url: feed.value.url, etag: feed.value.etag)
+        let transcripts: [(identifier: String, url: URL, status: CacheStatus)] = validFeeds.map { feed in
+            let identifier = feed.key
+            return (identifier: identifier, url: feed.value.url, status: cacheStatus(identifier: identifier, etag: feed.value.etag))
+        }
+
+        let transcriptsByStatus = Dictionary(grouping: transcripts, by: \.status)
+        let cached = transcriptsByStatus[.match, default: []]
+        let mismatched = transcriptsByStatus[.etagMismatch, default: []]
+        let noPreviousEtag = transcriptsByStatus[.noPreviousEtag, default: []]
+
+        let cachedEtagMessage = cached.count == 0 ? "none" : noPreviousEtag.map(\.identifier).joined(separator: ", ")
+        let mismatchedMessage = mismatched.count == 0 ? "none" : mismatched.map(\.identifier).joined(separator: ", ")
+        let noPreviousEtagMessage = noPreviousEtag.count == 0 ? "none" : noPreviousEtag.map(\.identifier).joined(separator: ", ")
+
+        log.trace(
+            """
+            Transcript Status:
+            \tCached:          \(cachedEtagMessage)
+            \tMissing etag:    \(noPreviousEtagMessage)
+            \tMismatched etag: \(mismatchedMessage)
+            """
+        )
+
+        transcriptCountLoaded += cached.count
+
+        (mismatched + noPreviousEtag).forEach { (identifier, url, _) in
+            downloadTranscript(identifier: identifier, url: url)
         }
     }
 
-    private func downloadTranscriptIfNeeded(identifier: String, url: URL, etag: String) {
-        if let previousEtag = storage.previousEtag(for: identifier) {
-            guard etag != previousEtag else {
-                os_log("Cached transcript %@ still valid, skipping download", log: self.log, type: .debug, identifier)
-                transcriptCountLoaded += 1
-                return
-            }
-        } else {
-            os_log("No previous etag for %@, assuming new and downloading", log: self.log, type: .debug, identifier)
+    enum CacheStatus {
+        case etagMismatch, noPreviousEtag, match
+    }
+
+    private func cacheStatus(identifier: String, etag: String) -> CacheStatus {
+        guard let previousEtag = storage.previousEtag(for: identifier) else {
+            return .noPreviousEtag
         }
 
+        return etag == previousEtag ? .match : .etagMismatch
+    }
+
+    private func downloadTranscript(identifier: String, url: URL) {
         loader.load(from: url, decoder: { try JSONDecoder().decode(TranscriptContent.self, from: $0) }) { [weak self] result in
             guard let self = self else { return }
 
@@ -162,12 +189,12 @@ public final class TranscriptDownloader {
 
             switch result {
             case .success(let content):
-                os_log("Downloaded %@", log: self.log, type: .debug, identifier)
+                self.log.debug("Downloaded \(identifier, privacy: .public)")
                 self.queue.async { self.store(content) }
             case .failure(let error):
                 self.queue.async { self.failedTranscriptIdentifiers.append(identifier) }
 
-                os_log("Failed to download %@: %{public}@", log: self.log, type: .error, identifier, String(describing: error))
+                self.log.error("Failed to download \(identifier, privacy: .public): \(String(describing: error), privacy: .public)")
             }
         }
     }

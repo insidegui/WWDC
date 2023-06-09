@@ -187,7 +187,7 @@ final class StorageMigrator: Logging {
         migration.deleteData(forType: "FeaturedAuthor")
     }
 
-    private static func resetSessionInstances(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+    private static func resetSessionInstances(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
         migration.deleteData(forType: "SessionInstance")
     }
 

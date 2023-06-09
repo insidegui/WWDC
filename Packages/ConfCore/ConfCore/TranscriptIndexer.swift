@@ -75,7 +75,7 @@ public final class TranscriptIndexer: Logging {
 
         let shouldIndex = transcriptableSessions.count > minTranscriptableSessionLimit
         if !shouldIndex {
-            os_log("needsUpdate is false because %d <= %d", log: self.log, type: .debug, transcriptableSessions.count, minTranscriptableSessionLimit)
+            log.debug("needsUpdate is false because \(transcriptableSessions.count) <= \(minTranscriptableSessionLimit)")
         }
 
         return shouldIndex
@@ -94,7 +94,7 @@ public final class TranscriptIndexer: Logging {
     var didStop: () -> Void = { }
 
     public func downloadTranscriptsIfNeeded() {
-        os_log("%{public}@", log: self.log, type: .debug, #function)
+        log.debug(#function)
         downloader = makeDownloader()
 
         didStart()

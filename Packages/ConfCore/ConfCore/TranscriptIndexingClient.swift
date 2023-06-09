@@ -79,7 +79,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
 
         if !effectiveIgnoreCache && migratedTranscriptsToNativeVersion {
             guard TranscriptIndexer.needsUpdate(in: storage) else {
-                os_log("Skipping transcript indexing: TranscriptIndexer indicates no update is needed", log: self.log, type: .debug)
+                log.debug("Skipping transcript indexing: TranscriptIndexer indicates no update is needed")
                 return
             }
         }

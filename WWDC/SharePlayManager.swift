@@ -31,7 +31,7 @@ final class SharePlayManager: ObservableObject, Logging {
     
     @Published private(set) var canStartSharePlay = false {
         didSet {
-            log.debug("canStartSharePlay = \(self.canStartSharePlay)")
+            log.debug("canStartSharePlay: \(self.canStartSharePlay, format: .answer)")
         }
     }
     

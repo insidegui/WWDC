@@ -283,6 +283,7 @@
 		4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+AsyncHelpers.swift"; sourceTree = "<group>"; };
 		4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsManagementTableCellView.swift; sourceTree = "<group>"; };
 		4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionsTableViewController+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
+		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -833,6 +834,7 @@
 		DDB1A25D2577E51200995FF1 /* LocalDependencies */ = {
 			isa = PBXGroup;
 			children = (
+				91037C8C2A32AF62009AF15E /* Transcripts */,
 				DDB1A25E2577E51E00995FF1 /* ConfCore */,
 			);
 			name = LocalDependencies;

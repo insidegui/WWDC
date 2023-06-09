@@ -1626,7 +1626,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
         _ pictureInPictureController: AVPictureInPictureController,
         failedToStartPictureInPictureWithError error: Error
     ) {
-        os_log(.error, log: log, "Failed to start PiP \(error, privacy: .public)")
+        log.error("Failed to start PiP \(error, privacy: .public)")
     }
 
     // Stop

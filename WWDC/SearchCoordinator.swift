@@ -225,7 +225,12 @@ final class SearchCoordinator: Logging {
 
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
 
-        log.debug("\(String(describing: predicate), privacy: .public)")
+        log.debug(
+            """
+            \(String(describing: controller.style).capitalized, privacy: .public) \
+            list filtering with predicate for \(String(describing: predicate), privacy: .public)
+            """
+        )
 
         return FilterResults(storage: storage, query: predicate)
     }

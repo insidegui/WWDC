@@ -16,7 +16,7 @@ import OSLog
     public static let log = makeLogger()
 
     public func indexTranscriptsIfNeeded(manifestURL: URL, ignoringCache: Bool, storageURL: URL, schemaVersion: UInt64) {
-        os_log(.debug, log: self.log, "Attempting to index transcripts. manifest: \(manifestURL, privacy: .public), ignoringCache: \(ignoringCache)")
+        log.debug("Attempting to index transcripts. manifest: \(manifestURL, privacy: .public), ignoringCache: \(ignoringCache)")
         do {
             let config = Realm.Configuration(fileURL: storageURL, schemaVersion: schemaVersion)
             let realm = try Realm(configuration: config)
