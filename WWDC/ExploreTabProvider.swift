@@ -3,6 +3,7 @@ import SwiftUI
 import Combine
 import ConfCore
 import RxSwift
+import RealmSwift
 
 final class ExploreTabProvider: ObservableObject {
     let storage: Storage

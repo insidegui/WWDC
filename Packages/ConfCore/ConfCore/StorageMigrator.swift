@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RealmSwift
+import class RealmSwift.Migration
 import OSLog
 
 final class StorageMigrator: Logging {
