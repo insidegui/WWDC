@@ -135,31 +135,38 @@ public class Session: Object, Decodable {
         self.assets.append(objectsIn: assets)
 
         other.related.forEach { newRelated in
-            let effectiveRelated: RelatedResource
-
-            if let existingResource = realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) {
-                effectiveRelated = existingResource
-            } else {
-                effectiveRelated = newRelated
-            }
-
-            guard !related.contains(where: { $0.identifier == effectiveRelated.identifier }) else { return }
-            related.append(effectiveRelated)
+            realm.add(newRelated, update: .all)
+//            let effectiveRelated: RelatedResource
+//
+//            if let existingResource = realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) {
+//                effectiveRelated = existingResource
+//            } else {
+//                effectiveRelated = newRelated
+//            }
+//
+//            guard !related.contains(where: { $0.identifier == effectiveRelated.identifier }) else { return }
+//            related.append(effectiveRelated)
         }
+        related.removeAll()
+        related.append(objectsIn: other.related)
 
         other.focuses.forEach { newFocus in
-            let effectiveFocus: Focus
-
-            if let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) {
-                effectiveFocus = existingFocus
-            } else {
-                effectiveFocus = newFocus
-            }
-
-            guard !focuses.contains(where: { $0.name == effectiveFocus.name }) else { return }
-
-            focuses.append(effectiveFocus)
+            realm.add(newFocus, update: .all)
+//            let effectiveFocus: Focus
+//
+//            if let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) {
+//                effectiveFocus = existingFocus
+//            } else {
+//                effectiveFocus = newFocus
+//            }
+//
+//            guard !focuses.contains(where: { $0.name == effectiveFocus.name }) else { return }
+//
+//            focuses.append(effectiveFocus)
         }
+
+        focuses.removeAll()
+        focuses.append(objectsIn: other.focuses)
     }
 
     // MARK: - Decodable

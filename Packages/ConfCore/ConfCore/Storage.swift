@@ -95,7 +95,9 @@ public final class Storage {
             return
         }
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: true, completionBlock: completion) { backgroundRealm in
+            var time = Date()
+            print("Starting sessions: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             contentsResponse.sessions.forEach { newSession in
                 // Replace any "unknown" resources with their full data
                 newSession.related.filter({$0.type == RelatedResourceType.unknown.rawValue}).forEach { unknownResource in
@@ -111,7 +113,11 @@ public final class Storage {
                     backgroundRealm.add(newSession, update: .all)
                 }
             }
+            print("Ending sessions: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
+            time = Date()
+            // TODO: Takes 8+ seconds, several notable opportunities to optimize storage accesses
+            print("Starting session instances: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             // Merge existing instance data, preserving user-defined data
             contentsResponse.instances.forEach { newInstance in
                 if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
@@ -128,13 +134,19 @@ public final class Storage {
                     backgroundRealm.add(newInstance, update: .all)
                 }
             }
+            print("Ending session instances: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // Save everything
+            time = Date()
+            print("Starting save everything: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.add(contentsResponse.rooms, update: .all)
             backgroundRealm.add(contentsResponse.tracks, update: .all)
             backgroundRealm.add(contentsResponse.events, update: .all)
+            print("Ending save everything: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // add instances to rooms
+            time = Date()
+            print("Starting add instances to room: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.objects(Room.self).forEach { room in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
 
@@ -143,8 +155,12 @@ public final class Storage {
                 room.instances.removeAll()
                 room.instances.append(objectsIn: instances)
             }
+            print("Ending add instances to room: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // add instances and sessions to events
+            // TODO: takes 0.4 seconds, could these List's become LinkingObjects so we don't have to store them and then pull them back out?
+            time = Date()
+            print("Starting add instances and sessions to events: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.objects(Event.self).forEach { event in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
@@ -155,8 +171,12 @@ public final class Storage {
                 event.sessions.removeAll()
                 event.sessions.append(objectsIn: sessions)
             }
+            print("Ending add instances and sessions to events: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // add instances and sessions to tracks
+            time = Date()
+            print("Starting add instances and sessions to tracks: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
+            // TODO: takes 1.5 seconds, could these List's become LinkingObjects so we don't have to store them and then pull them back out?
             backgroundRealm.objects(Track.self).forEach { track in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
@@ -173,8 +193,11 @@ public final class Storage {
                     instance.session?.trackName = track.name
                 }
             }
+            print("Ending add instances and sessions to tracks: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // add live video assets to sessions
+            time = Date()
+            print("Starting add live video assets to sessions: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
                 if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
                     if !session.assets.contains(liveAsset) {
@@ -182,45 +205,47 @@ public final class Storage {
                     }
                 }
             }
+            print("Ending add live video assets: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // Associate session resources with Session objects in database
+            time = Date()
+            print("Starting Associate session resources with Session objects in database: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
                     resource.session = session
                 }
             }
+            print("Ending Associate session resources: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // Remove tracks that don't include any future session instances nor any sessions with video/live video
+            time = Date()
+            print("Starting Remove tracks that don't include any future session instances nor any sessions with video/live video: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             let emptyTracks = backgroundRealm.objects(Track.self)
                 .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType = %@ OR ANY $session.assets.rawAssetType = %@).@count == 0", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
             backgroundRealm.delete(emptyTracks)
+            print("Ending Remove tracks: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // Create schedule view
+            time = Date()
+            print("Starting Create schedule view: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
+            let instances = backgroundRealm.objects(SessionInstance.self)
 
-            let instances = backgroundRealm.objects(SessionInstance.self).sorted(by: SessionInstance.standardSort)
+            // Group all instances by common start time
+            // Technically, a secondary grouping on event should be used, in practice we haven't seen
+            // separate events that overlap in time. Someday this might hurt
+            Dictionary(grouping: instances, by: \.startTime).forEach { startTime, instances in
+                let section = ScheduleSection()
+                section.representedDate = startTime
+                section.eventIdentifier = instances[0].eventIdentifier // 0 index ok, Dictionary grouping will never give us an empty array
+                section.instances.removeAll()
+                section.instances.append(objectsIn: instances)
+                section.identifier = ScheduleSection.identifierFormatter.string(from: startTime)
 
-            var previousStartTime: Date?
-            for instance in instances {
-                guard instance.startTime != previousStartTime else { continue }
-
-                autoreleasepool {
-                    let instancesForSection = instances.filter({ $0.startTime == instance.startTime })
-
-                    let section = ScheduleSection()
-
-                    section.representedDate = instance.startTime
-                    section.eventIdentifier = instance.eventIdentifier
-                    section.instances.removeAll()
-                    section.instances.append(objectsIn: instancesForSection)
-                    section.identifier = ScheduleSection.identifierFormatter.string(from: instance.startTime)
-
-                    backgroundRealm.add(section, update: .all)
-
-                    previousStartTime = instance.startTime
-                }
+                backgroundRealm.add(section, update: .all)
             }
-        }, disableAutorefresh: true, completionBlock: completion)
+            print("Ending Create schedule view: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
+        }
     }
 
     internal func store(liveVideosResult: Result<[SessionAsset], APIError>) {
@@ -271,7 +296,7 @@ public final class Storage {
             return
         }
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: true, completionBlock: completion) { backgroundRealm in
             let existingSections = backgroundRealm.objects(FeaturedSection.self)
             for section in existingSections {
                 section.content.forEach { backgroundRealm.delete($0) }
@@ -287,7 +312,7 @@ public final class Storage {
                     content.session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: content.sessionId)
                 }
             }
-        }, disableAutorefresh: true, completionBlock: completion)
+        }
     }
 
     internal func store(configResult: Result<ConfigResponse, APIError>, completion: @escaping (Error?) -> Void) {
@@ -304,20 +329,20 @@ public final class Storage {
             return
         }
         
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { backgroundRealm in
             // We currently only care about whatever the latest event hero is.
             let existingHeroData = backgroundRealm.objects(EventHero.self)
             backgroundRealm.delete(existingHeroData)
-        }, disableAutorefresh: false, completionBlock: completion)
+        }
 
         guard let hero = response.eventHero else {
             os_log("Config response didn't contain an event hero", log: self.log, type: .debug)
             return
         }
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { backgroundRealm in
             backgroundRealm.add(hero, update: .all)
-        }, disableAutorefresh: false, completionBlock: completion)
+        }
     }
 
     private let serialQueue = DispatchQueue(label: "Database Serial", qos: .userInteractive)
@@ -330,11 +355,11 @@ public final class Storage {
     ///   - createTransaction: Whether the method should create its own write transaction or use the one already in place
     ///   - notificationTokensToSkip: An array of `NotificationToken` that should not be notified when the write is committed
     ///   - completionBlock: A block to be called when the operation is completed (called on the main queue)
-    internal func performSerializedBackgroundWrite(writeBlock: @escaping (Realm) throws -> Void,
-                                                   disableAutorefresh: Bool = false,
+    internal func performSerializedBackgroundWrite(disableAutorefresh: Bool = false,
                                                    createTransaction: Bool = true,
                                                    notificationTokensToSkip: [NotificationToken] = [],
-                                                   completionBlock: ((Error?) -> Void)? = nil) {
+                                                   completionBlock: ((Error?) -> Void)? = nil,
+                                                   writeBlock: @escaping (Realm) throws -> Void) {
         if disableAutorefresh { realm.autorefresh = false }
 
         serialQueue.async {
@@ -394,13 +419,13 @@ public final class Storage {
     public func modify<T>(_ object: T, with writeBlock: @escaping (T) -> Void) where T: ThreadConfined {
         let safeObject = ThreadSafeReference(to: object)
 
-        performSerializedBackgroundWrite(writeBlock: { backgroundRealm in
+        performSerializedBackgroundWrite(createTransaction: false, writeBlock: { backgroundRealm in
             guard let resolvedObject = backgroundRealm.resolve(safeObject) else { return }
 
             try backgroundRealm.write {
                 writeBlock(resolvedObject)
             }
-        }, createTransaction: false)
+        })
     }
 
     /// Gives you an opportunity to update `objects` on a background queue
@@ -416,7 +441,7 @@ public final class Storage {
     public func modify<T>(_ objects: [T], with writeBlock: @escaping ([T]) -> Void) where T: ThreadConfined {
         let safeObjects = objects.map { ThreadSafeReference(to: $0) }
 
-        performSerializedBackgroundWrite(writeBlock: { [weak self] backgroundRealm in
+        performSerializedBackgroundWrite(createTransaction: false, writeBlock: { [weak self] backgroundRealm in
             guard let self = self else { return }
 
             let resolvedObjects = safeObjects.compactMap { backgroundRealm.resolve($0) }
@@ -429,7 +454,7 @@ public final class Storage {
             try backgroundRealm.write {
                 writeBlock(resolvedObjects)
             }
-        }, createTransaction: false)
+        })
     }
 
     public lazy var events: Observable<Results<Event>> = {
@@ -455,9 +480,9 @@ public final class Storage {
     }
     
     public func setFavorite(_ isFavorite: Bool, onSessionsWithIDs ids: [String]) {
-        performSerializedBackgroundWrite(writeBlock: { realm in
+        performSerializedBackgroundWrite(disableAutorefresh: false, createTransaction: true, writeBlock: { realm in
             let sessions = realm.objects(Session.self).filter(NSPredicate(format: "identifier IN %@", ids))
-            
+
             sessions.forEach { session in
                 if isFavorite {
                     guard !session.isFavorite else { return }
@@ -466,7 +491,7 @@ public final class Storage {
                     session.favorites.forEach { $0.isDeleted = true }
                 }
             }
-        }, disableAutorefresh: false, createTransaction: true)
+        })
     }
 
     public lazy var eventsObservable: Observable<Results<Event>> = {
