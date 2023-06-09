@@ -12,9 +12,9 @@ import CloudKitCodable
 import RealmSwift
 import RxCocoa
 import RxSwift
-import os.log
+import struct OSLog.Logger
 
-public final class UserDataSyncEngine {
+public final class UserDataSyncEngine: Logging {
 
     public init(storage: Storage, container: CKContainer = .default()) {
         self.storage = storage
@@ -39,7 +39,7 @@ public final class UserDataSyncEngine {
     private let container: CKContainer
     private let privateDatabase: CKDatabase
 
-    private let log = OSLog(subsystem: "ConfCore", category: "UserDataSyncEngine")
+    public static let log = makeLogger()
 
     private lazy var cloudOperationQueue: OperationQueue = {
         let q = OperationQueue()
@@ -87,11 +87,11 @@ public final class UserDataSyncEngine {
             guard canStart else { return }
 
             if isEnabled {
-                os_log("Starting because isEnabled has changed to true", log: log, type: .debug)
+                log.debug("Starting because isEnabled has changed to true")
                 start()
             } else {
                 isWaitingForAccountAvailabilityToStart = false
-                os_log("Stopping because isEnabled has changed to false", log: log, type: .debug)
+                log.debug("Stopping because isEnabled has changed to false")
                 stop()
             }
         }
@@ -111,19 +111,19 @@ public final class UserDataSyncEngine {
 
         guard !isRunning else { return }
 
-        os_log("Start!", log: log, type: .debug)
+        log.debug("Start!")
 
         // Only start the sync engine if there's an iCloud account available, if availability is not
         // determined yet, start the sync engine after the account availability is known and == available
 
         guard isAccountAvailable.value else {
-            os_log("iCloud account is not available yet, waiting for availability to start", log: log, type: .info)
+            log.info("iCloud account is not available yet, waiting for availability to start")
             isWaitingForAccountAvailabilityToStart = true
 
             isAccountAvailable.asObservable().observe(on: MainScheduler.instance).subscribe(onNext: { [unowned self] available in
                 guard self.isWaitingForAccountAvailabilityToStart else { return }
 
-                os_log("iCloud account available = %{public}@", log: self.log, type: .info, String(describing: available))
+                log.info("iCloud account available = \(String(describing: available), privacy: .public)@")
 
                 if available {
                     self.isWaitingForAccountAvailabilityToStart = false
@@ -202,20 +202,17 @@ public final class UserDataSyncEngine {
         guard !isWaitingForAccountAvailabilityReply else { return }
         isWaitingForAccountAvailabilityReply = true
 
-        os_log("checkAccountAvailability()", log: log, type: .debug)
+        log.debug("checkAccountAvailability()")
 
         container.accountStatus { [unowned self] status, error in
             defer { self.isWaitingForAccountAvailabilityReply = false }
 
             if let error = error {
-                os_log("Failed to determine iCloud account status: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
+                log.error("Failed to determine iCloud account status: \(String(describing: error), privacy: .public)@")
                 return
             }
 
-            os_log("iCloud availability status is %{public}d", log: self.log, type: .debug, status.rawValue)
+            log.debug("iCloud availability status is \(status.rawValue, privacy: .public)")
 
             switch status {
             case .available:
@@ -244,25 +241,22 @@ public final class UserDataSyncEngine {
 
     private func createCustomZoneIfNeeded(then completion: (() -> Void)? = nil) {
         guard !createdCustomZone else {
-            os_log("Already have custom zone, skipping creation", log: log, type: .debug)
+            log.debug("Already have custom zone, skipping creation")
             return
         }
 
-        os_log("Creating CloudKit zone %@", log: log, type: .info, Constants.zoneName)
+        log.info("Creating CloudKit zone \(Constants.zoneName)")
 
         let zone = CKRecordZone(zoneID: customZoneID)
         let operation = CKModifyRecordZonesOperation(recordZonesToSave: [zone], recordZoneIDsToDelete: nil)
 
         operation.modifyRecordZonesCompletionBlock = { [unowned self] _, _, error in
             if let error = error {
-                os_log("Failed to create custom CloudKit zone: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
+                log.error("Failed to create custom CloudKit zone: \(String(describing: error), privacy: .public)@")
 
                 error.retryCloudKitOperationIfPossible(self.log) { self.createCustomZoneIfNeeded() }
             } else {
-                os_log("Zone created successfully", log: self.log, type: .info)
+                log.info("Zone created successfully")
                 self.createdCustomZone = true
 
                 DispatchQueue.main.async { completion?() }
@@ -277,7 +271,7 @@ public final class UserDataSyncEngine {
 
     private func createPrivateSubscriptionsIfNeeded() {
         guard !createdPrivateSubscription else {
-            os_log("Already subscribed to private database changes, skipping subscription", log: log, type: .debug)
+            log.debug("Already subscribed to private database changes, skipping subscription")
             return
         }
 
@@ -291,14 +285,11 @@ public final class UserDataSyncEngine {
 
         operation.modifySubscriptionsCompletionBlock = { [unowned self] _, _, error in
             if let error = error {
-                os_log("Failed to create private CloudKit subscription: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
+                log.error("Failed to create private CloudKit subscription: \(String(describing: error), privacy: .public)")
 
                 error.retryCloudKitOperationIfPossible(self.log) { self.createPrivateSubscriptionsIfNeeded() }
             } else {
-                os_log("Private subscription created successfully", log: self.log, type: .info)
+                log.info("Private subscription created successfully")
                 self.createdPrivateSubscription = true
             }
         }
@@ -310,7 +301,7 @@ public final class UserDataSyncEngine {
     }
 
     func clearSyncMetadata() {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
         
         privateChangeToken = nil
         createdPrivateSubscription = false
@@ -344,7 +335,7 @@ public final class UserDataSyncEngine {
 
         guard notification?.subscriptionID == Constants.privateSubscriptionId else { return false }
 
-        os_log("Received remote CloudKit notification for user data", log: log, type: .debug)
+        log.debug("Received remote CloudKit notification for user data")
 
         fetchChanges()
 
@@ -370,13 +361,10 @@ public final class UserDataSyncEngine {
 
         operation.recordZoneFetchCompletionBlock = { [unowned self] _, token, _, _, error in
             if let error = error {
-                os_log("Failed to fetch record zone changes: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
+                log.error("Failed to fetch record zone changes: \(String(describing: error), privacy: .public)")
 
                 if error.isCKTokenExpired {
-                    os_log("Change token expired, clearing token and retrying", log: self.log, type: .error)
+                    log.error("Change token expired, clearing token and retrying")
 
                     DispatchQueue.main.async {
                         self.privateChangeToken = nil
@@ -384,7 +372,7 @@ public final class UserDataSyncEngine {
                     }
                     return
                 } else if error.isCKZoneDeleted {
-                    os_log("User deleted CK zone, recreating", log: self.log, type: .error)
+                    log.error("User deleted CK zone, recreating")
 
                     DispatchQueue.main.async {
                         self.privateChangeToken = nil
@@ -410,7 +398,7 @@ public final class UserDataSyncEngine {
         operation.fetchRecordZoneChangesCompletionBlock = { [unowned self] error in
             guard error == nil else { return }
 
-            os_log("Finished fetching record zone changes", log: self.log, type: .info)
+            log.info("Finished fetching record zone changes")
             self.databaseQueue.async { self.commitServerChangesToDatabase(with: changedRecords) }
         }
 
@@ -456,7 +444,7 @@ public final class UserDataSyncEngine {
 
             try realm.commitWrite(withoutNotifying: realmNotificationTokens)
         } catch {
-            os_log("Failed to perform Realm transaction: %{public}@", log: self.log, type: .error, String(describing: error))
+            log.error("Failed to perform Realm transaction: \(String(describing: error), privacy: .public)")
         }
     }
 
@@ -484,13 +472,13 @@ public final class UserDataSyncEngine {
 
             do {
                 guard let token = try NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: data) else {
-                    os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken", log: log, type: .error)
+                    log.error("Failed to decode CKServerChangeToken from defaults key privateChangeToken")
                     return nil
                 }
 
                 return token
             } catch {
-                os_log("Failed to decode CKServerChangeToken from defaults key privateChangeToken: %{public}@", log: self.log, type: .fault, String(describing: error))
+                log.fault("Failed to decode CKServerChangeToken from defaults key privateChangeToken: \(String(describing: error), privacy: .public)")
                 return nil
             }
         }
@@ -509,11 +497,11 @@ public final class UserDataSyncEngine {
 
     private func commitServerChangesToDatabase(with records: [CKRecord], shouldRetryAfterContentSync: Bool = true) {
         guard records.count > 0 else {
-            os_log("Finished record zone changes fetch with no changes", log: log, type: .info)
+            log.info("Finished record zone changes fetch with no changes")
             return
         }
 
-        os_log("Will commit %{public}d changed record(s) to the database", log: log, type: .info, records.count)
+        log.info("Will commit \(records.count, privacy: .public) changed record(s) to the database")
 
         performRealmOperations { [weak self] queueRealm in
             guard let self = self else { return }
@@ -529,7 +517,7 @@ public final class UserDataSyncEngine {
                 case RecordTypes.sessionProgress:
                     result = self.commit(objectType: SessionProgress.self, with: pendingRecord, in: queueRealm)
                 default:
-                    os_log("Unknown record type %{public}@", log: self.log, type: .fault, pendingRecord.recordType)
+                    self.log.fault("Unknown record type \(pendingRecord.recordType, privacy: .public)")
                     return nil
                 }
 
@@ -543,18 +531,18 @@ public final class UserDataSyncEngine {
             }
 
             if pendingRecords.isEmpty {
-                os_log("Finished commit Realm operations", log: self.log, type: .debug)
+                log.debug("Finished commit Realm operations")
             } else {
                 if shouldRetryAfterContentSync {
                     let validPendingRecords = pendingRecords.filter({ !self.tombstoneRecords.contains($0.tombstoneKey) })
 
-                    os_log("Finished commit Realm operations with %{public}d record(s) pending content sync", log: self.log, type: .debug, validPendingRecords.count)
+                    log.debug("Finished commit Realm operations with \(validPendingRecords.count, privacy: .public) record(s) pending content sync")
 
                     self.workQueue.async {
                         self.recordsPendingContentSync.formUnion(validPendingRecords)
                     }
                 } else {
-                    os_log("Invalidating %{public}d sync objects for no longer having valid content associated with them", log: self.log, type: .debug, pendingRecords.count)
+                    log.debug("Invalidating \(pendingRecords.count, privacy: .public) sync objects for no longer having valid content associated with them")
 
                     self.tombstoneRecords.formUnion(pendingRecords.map(\.tombstoneKey))
                 }
@@ -578,7 +566,7 @@ public final class UserDataSyncEngine {
 
             guard !self.recordsPendingContentSync.isEmpty else { return }
 
-            os_log("Will commit %{public}d record(s) pending content sync", log: self.log, type: .debug, self.recordsPendingContentSync.count)
+            log.debug("Will commit \(self.recordsPendingContentSync.count, privacy: .public) record(s) pending content sync")
 
             let snapshot = self.recordsPendingContentSync
 
@@ -602,11 +590,11 @@ public final class UserDataSyncEngine {
             realm.add(model, update: .all)
 
             guard let sessionId = obj.sessionId else {
-                os_log("Sync object didn't have a sessionId!", log: self.log, type: .fault)
+                log.fault("Sync object didn't have a sessionId!")
                 return .failure
             }
             guard let session = realm.object(ofType: Session.self, forPrimaryKey: sessionId) else {
-                os_log("No session #%{public}@ for %{public}@ object", log: self.log, type: .info, sessionId, record.recordType)
+                log.info("No session #\(sessionId, privacy: .public) for \(record.recordType, privacy: .public) object")
                 return .pendingContent
             }
 
@@ -614,10 +602,7 @@ public final class UserDataSyncEngine {
 
             return .success
         } catch {
-            os_log("Failed to decode sync object from cloud record: %{public}@",
-                   log: self.log,
-                   type: .error,
-                   String(describing: error))
+            log.error("Failed to decode sync object from cloud record: \(String(describing: error), privacy: .public)")
             return .failure
         }
     }
@@ -641,7 +626,7 @@ public final class UserDataSyncEngine {
         Realm.asyncOpen(configuration: storage.realm.configuration, callbackQueue: databaseQueue) { result in
             switch result {
             case .failure(let error):
-                os_log("Failed to open background Realm for sync operations: %{public}@", log: self.log, type: .fault, String(describing: error))
+                self.log.fault("Failed to open background Realm for sync operations: \(String(describing: error), privacy: .public)")
             case .success(let realm):
                 self.backgroundRealm = realm
                 DispatchQueue.main.async { completion() }
@@ -654,7 +639,7 @@ public final class UserDataSyncEngine {
             do {
                 try self.onQueueRegisterRealmObserver(for: objectType)
             } catch {
-                os_log("Failed to register notification: %{public}@", log: self.log, type: .error, String(describing: error))
+                self.log.error("Failed to register notification: \(String(describing: error), privacy: .public)")
             }
         }
     }
@@ -665,10 +650,7 @@ public final class UserDataSyncEngine {
         let token = realm.objects(objectType).observe { [unowned self] change in
             switch change {
             case .error(let error):
-                os_log("Realm observer error: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
+                log.error("Realm observer error: \(String(describing: error), privacy: .public)")
             case .update(let objects, _, let inserted, let modified):
                 let objectsToUpload = inserted.map { objects[$0] } + modified.map { objects[$0] }
                 self.upload(models: objectsToUpload)
@@ -683,13 +665,13 @@ public final class UserDataSyncEngine {
     private func upload<T: SynchronizableObject>(models: [T]) {
         guard models.count > 0 else { return }
 
-        os_log("Upload models. Count = %{public}d", log: log, type: .info, models.count)
+        log.info("Upload models. Count = \(models.count, privacy: .public)")
 
         let syncObjects = models.compactMap { $0.syncObject }
 
         let records = syncObjects.compactMap { try? CloudKitRecordEncoder(zoneID: customZoneID).encode($0) }
 
-        os_log("Produced %{public}d record(s) for %{public}d model(s)", log: log, type: .info, records.count, models.count)
+        log.info("Produced \(records.count, privacy: .public) record(s) for \(models.count, privacy: .public) model(s)")
 
         upload(records)
     }
@@ -698,10 +680,7 @@ public final class UserDataSyncEngine {
         guard let firstRecord = records.first else { return }
 
         guard let objectType = realmModel(for: firstRecord.recordType) else {
-            os_log("Refusing to upload record of unknown type: %{public}@",
-                   log: self.log,
-                   type: .error,
-                   firstRecord.recordType)
+            log.error("Refusing to upload record of unknown type: \(firstRecord.recordType, privacy: .public)")
             return
         }
 
@@ -718,39 +697,33 @@ public final class UserDataSyncEngine {
             // We're only interested in conflict errors here
             guard let error = error, error.isCloudKitConflict else { return }
 
-            os_log("CloudKit conflict with record of type %{public}@", log: self.log, type: .error, record.recordType)
+            log.error("CloudKit conflict with record of type \(record.recordType, privacy: .public)")
 
             guard let objectType = self.realmModel(for: record.recordType) else {
-                os_log(
-                    "No object type registered for record type: %{public}@. This should never happen!",
-                    log: self.log,
-                    type: .fault,
-                    record.recordType
+                log.fault(
+                    "No object type registered for record type: \(record.recordType, privacy: .public). This should never happen!"
                 )
                 return
             }
 
             guard let resolvedRecord = error.resolveConflict(with: objectType.resolveConflict) else {
-                os_log(
-                    "Resolving conflict with record of type %{public}@ returned a nil record. Giving up.",
-                    log: self.log,
-                    type: .error,
-                    record.recordType
+                log.error(
+                    "Resolving conflict with record of type \(record.recordType, privacy: .public)@ returned a nil record. Giving up."
                 )
                 return
             }
 
-            os_log("Conflict resolved, will retry upload", log: self.log, type: .info)
+            log.info("Conflict resolved, will retry upload")
 
             self.upload([resolvedRecord])
         }
 
         operation.modifyRecordsCompletionBlock = { [unowned self] serverRecords, _, error in
             if let error = error {
-                os_log("Failed to upload records: %{public}@", log: self.log, type: .error, String(describing: error))
+                log.error("Failed to upload records: \(String(describing: error), privacy: .public)")
                 error.retryCloudKitOperationIfPossible(self.log) { self.upload(records) }
             } else {
-                os_log("Successfully uploaded %{public}d record(s)", log: self.log, type: .info, records.count)
+                log.info("Successfully uploaded \(records.count, privacy: .public) record(s)")
 
                 self.databaseQueue.async {
                     guard let serverRecords = serverRecords else { return }
@@ -772,25 +745,18 @@ public final class UserDataSyncEngine {
 
             records.forEach { record in
                 guard let modelType = self.realmModel(for: record.recordType) else {
-                    os_log("There's no corresponding Realm model type for record type %{public}@",
-                           log: self.log,
-                           type: .error,
-                           record.recordType)
+                    self.log.error("There's no corresponding Realm model type for record type \(record.recordType, privacy: .public)")
                     return
                 }
 
                 guard var object = realm.object(ofType: modelType, forPrimaryKey: record.recordID.recordName) as? HasCloudKitFields else {
-                    os_log("Unable to find record type %{public}@ with primary key %{public}@ for update after sync upload",
-                           log: self.log,
-                           type: .error,
-                           record.recordType,
-                           record.recordID.recordName)
+                    self.log.error("Unable to find record type \(record.recordType, privacy: .public)@ with primary key \(record.recordID.recordName, privacy: .public) for update after sync upload")
                     return
                 }
 
                 object.ckFields = record.encodedSystemFields
 
-                os_log("Updated ckFields in record of type %{public}@", log: self.log, type: .debug, record.recordType)
+                self.log.debug("Updated ckFields in record of type \(record.recordType, privacy: .public)")
             }
         }
     }
@@ -798,7 +764,7 @@ public final class UserDataSyncEngine {
     // MARK: Initial data upload
 
     private func uploadLocalDataNotUploadedYet() {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
 
         uploadLocalModelsNotUploadedYet(of: Favorite.self)
         uploadLocalModelsNotUploadedYet(of: Bookmark.self)
@@ -831,7 +797,7 @@ public final class UserDataSyncEngine {
         let deletedFavoriteObjIDs = deletedFavorites.toArray().map(\.identifier)
         let deletedBookmarkObjIDs = deletedBookmarks.toArray().map(\.identifier)
 
-        os_log("Will incinerate %{public}d deleted object(s)", log: log, type: .info, deletedFavorites.count + deletedBookmarks.count)
+        log.info("Will incinerate \(deletedFavorites.count + deletedBookmarks.count, privacy: .public)d deleted object(s)")
 
         let favoriteIDs: [CKRecord.ID] = deletedFavorites.compactMap { $0.ckRecordID }
         let bookmarkIDs: [CKRecord.ID] = deletedBookmarks.compactMap { $0.ckRecordID }
@@ -841,17 +807,11 @@ public final class UserDataSyncEngine {
 
         operation.modifyRecordsCompletionBlock = { [unowned self] _, _, error in
             if let error = error {
-                os_log("Failed to incinerate records: %{public}@",
-                       log: self.log,
-                       type: .error,
-                       String(describing: error))
+                log.error("Failed to incinerate records: \(String(describing: error), privacy: .public)")
 
                 error.retryCloudKitOperationIfPossible(self.log, in: self.databaseQueue) { self.incinerateSoftDeletedObjects() }
             } else {
-                os_log("Successfully incinerated %{public}d record(s)",
-                       log: self.log,
-                       type: .info,
-                       recordsToIncinerate.count)
+                log.info("Successfully incinerated \(recordsToIncinerate.count, privacy: .public) record(s)")
 
                 DispatchQueue.main.async {
                     // Actually delete previously soft-deleted items from the database

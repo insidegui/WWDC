@@ -13,7 +13,7 @@ public final class URLSessionLoader: Loader {
 
     public init() { }
 
-    private let log = OSLog(subsystem: Transcripts.subsystemName, category: String(describing: URLSessionLoader.self))
+    private let log = Logger(subsystem: Transcripts.subsystemName, category: String(describing: URLSessionLoader.self))
 
     private lazy var session: URLSession = {
         let config = URLSessionConfiguration.default
@@ -27,15 +27,15 @@ public final class URLSessionLoader: Loader {
 
             guard let data = data else {
                 if let error = error {
-                    os_log("Error loading from %@: %{public}@", log: self.log, type: .error, url.absoluteString, String(describing: error))
+                    self.log.error("Error loading from \(url.absoluteString, privacy: .public): \(String(describing: error), privacy: .public)")
 
                     completion(.failure(LoaderError.networking(error)))
                 } else if let response = response as? HTTPURLResponse {
-                    os_log("HTTP error loading from %@: %d", log: self.log, type: .error, url.absoluteString, response.statusCode)
+                    self.log.error("HTTP error loading from \(url.absoluteString, privacy: .public): \(response.statusCode)")
 
                     completion(.failure(.http(response.statusCode)))
                 } else {
-                    os_log("Error loading from %@: no data", log: self.log, type: .error, url.absoluteString)
+                    self.log.error("Error loading from \(url.absoluteString, privacy: .public): no data")
 
                     completion(.failure(LoaderError(localizedDescription: "No data returned from the server.")))
                 }
@@ -48,7 +48,7 @@ public final class URLSessionLoader: Loader {
 
                 completion(.success(decoded))
             } catch {
-                os_log("Failed to decode %@ from %@: %{public}@", log: self.log, type: .error, String(describing: T.self), url.absoluteString, String(describing: error))
+                self.log.error("Failed to decode \(String(describing: T.self), privacy: .public) from \(url.absoluteString, privacy: .public): \(String(describing: error), privacy: .public)")
 
                 completion(.failure(.serialization(error)))
             }

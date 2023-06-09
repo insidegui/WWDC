@@ -10,7 +10,7 @@ import ConfCore
 import RealmSwift
 import RxRealm
 import RxSwift
-import os.log
+import OSLog
 
 /// Conforming to this protocol means the type is capable
 /// of uniquely identifying a `Session`
@@ -84,7 +84,8 @@ extension Array where Element == SessionRow {
     }
 }
 
-final class FilterResults {
+final class FilterResults: Logging {
+    static let log = makeLogger()
 
     static var empty: FilterResults {
         return FilterResults(storage: nil, query: nil)
@@ -148,10 +149,7 @@ final class FilterResults {
                 }).disposed(by: disposeBag)
         } catch {
             observerClosure(nil)
-            os_log("Failed to initialize Realm for searching: %{public}@",
-                   log: .default,
-                   type: .error,
-                   String(describing: error))
+            log.error("Failed to initialize Realm for searching: \(String(describing: error), privacy: .public)")
         }
     }
 }

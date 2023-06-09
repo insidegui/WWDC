@@ -8,15 +8,15 @@
 
 import Foundation
 import RealmSwift
-import os.log
+import OSLog
 
-@objcMembers public final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtocol {
+@objcMembers public final class TranscriptIndexingService: NSObject, TranscriptIndexingServiceProtocol, Logging {
 
     private var indexer: TranscriptIndexer!
-    private let log = OSLog(subsystem: "TranscriptIndexingService", category: "TranscriptIndexingService")
+    public static let log = makeLogger()
 
     public func indexTranscriptsIfNeeded(manifestURL: URL, ignoringCache: Bool, storageURL: URL, schemaVersion: UInt64) {
-        os_log(.debug, log: self.log, "Attempting to index transcripts. manifest: \(manifestURL, privacy: .public), ignoringCache: \(ignoringCache)")
+        log.debug("Attempting to index transcripts. manifest: \(manifestURL, privacy: .public), ignoringCache: \(ignoringCache)")
         do {
             let config = Realm.Configuration(fileURL: storageURL, schemaVersion: schemaVersion)
             let realm = try Realm(configuration: config)
@@ -39,7 +39,7 @@ import os.log
 
             indexer.downloadTranscriptsIfNeeded()
         } catch {
-            os_log("Error initializing indexing service: %{public}@", log: self.log, type: .fault, String(describing: error))
+            log.fault("Error initializing indexing service: \(String(describing: error), privacy: .public)")
             return
         }
     }
@@ -75,7 +75,7 @@ extension TranscriptIndexingService: NSXPCListenerDelegate {
         newConnection.invalidationHandler = { [weak self] in
             guard let self = self else { return }
 
-            os_log("Connection invalidated: %{public}@", log: self.log, type: .debug, String(describing: newConnection))
+            log.debug("Connection invalidated: \(String(describing: newConnection), privacy: .public)")
 
             self.connections.removeAll(where: { $0 == newConnection })
         }

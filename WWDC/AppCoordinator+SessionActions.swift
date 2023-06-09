@@ -11,7 +11,7 @@ import RealmSwift
 import ConfCore
 import PlayerUI
 import EventKit
-import os.log
+import OSLog
 
 extension AppCoordinator: SessionActionsViewControllerDelegate {
 
@@ -88,9 +88,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
             self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
         @unknown default:
             assertionFailure("An unexpected case was discovered on an non-frozen obj-c enum")
-            os_log("Cannot determine EKEventStore authorization status due to an unknown enum case. Doing nothing instead",
-                   log: self.log,
-                   type: .error)
+            log.error("Cannot determine EKEventStore authorization status due to an unknown enum case. Doing nothing instead")
         }
     }
 
@@ -119,10 +117,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
                 do {
                     try eventStore.remove(storedEvent, span: .thisEvent, commit: true)
                 } catch let error as NSError {
-                    os_log("Failed to remove event from calender: %{public}@",
-                           log: self.log,
-                           type: .error,
-                           String(describing: error))
+                    log.error("Failed to remove event from calender: \(String(describing: error), privacy: .public)")
                 }
             default:
                 break
@@ -143,10 +138,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         do {
             try eventStore.save(event, span: .thisEvent, commit: true)
         } catch {
-            os_log("Failed to add event to calendar: %{public}@",
-                   log: self.log,
-                   type: .error,
-                   String(describing: error))
+            log.error("Failed to add event to calendar: \(String(describing: error), privacy: .public)")
         }
     }
 
@@ -176,26 +168,23 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
 
 }
 
-final class PickerDelegate: NSObject, NSSharingServicePickerDelegate {
+final class PickerDelegate: NSObject, NSSharingServicePickerDelegate, Logging {
 
     static let shared = PickerDelegate()
+    static let log = makeLogger()
 
     func sharingServicePicker(_ sharingServicePicker: NSSharingServicePicker, sharingServicesForItems items: [Any], proposedSharingServices proposedServices: [NSSharingService]) -> [NSSharingService] {
 
-        let copyService = NSSharingService(title: "Copy URL", image: #imageLiteral(resourceName: "copy"), alternateImage: nil) {
+        let copyService = NSSharingService(title: "Copy URL", image: #imageLiteral(resourceName: "copy"), alternateImage: nil) { [log] in
 
             if let url = items.first as? URL {
 
                 NSPasteboard.general.clearContents()
                 if !NSPasteboard.general.setString(url.absoluteString, forType: .string) {
-                    os_log("Failed to copy URL",
-                           log: .default,
-                           type: .error)
+                    log.error("Failed to copy URL")
                 }
             } else {
-                os_log("Sharing expects a URL and did not receive one",
-                       log: .default,
-                       type: .error)
+                log.error("Sharing expects a URL and did not receive one")
             }
         }
 

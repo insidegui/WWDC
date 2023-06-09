@@ -13,15 +13,15 @@ import Siesta
 import ConfCore
 import RealmSwift
 import SwiftUI
-import os.log
+import OSLog
 
 extension Notification.Name {
     static let openWWDCURL = Notification.Name(rawValue: "OpenWWDCURLNotification")
 }
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     
-    private let log = OSLog(subsystem: "io.wwdc.app", category: String(describing: AppDelegate.self))
+    static let log = makeLogger(subsystem: "io.wwdc.app")
 
     private lazy var commandsReceiver = AppCommandsReceiver()
     

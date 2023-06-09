@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import RealmSwift
 import ConfCore
-import os.log
+import OSLog
 
 // MARK: - Sessions Table View Controller
 

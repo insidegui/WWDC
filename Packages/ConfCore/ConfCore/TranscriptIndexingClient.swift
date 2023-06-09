@@ -9,11 +9,10 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import os.log
 
-final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol {
+final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol, Logging {
 
-    private let log = OSLog(subsystem: "ConfCore", category: String(describing: TranscriptIndexingClient.self))
+    static let log = makeLogger()
 
     var transcriptLanguage: String {
         didSet {
@@ -55,7 +54,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
     private var transcriptIndexingService: TranscriptIndexingServiceProtocol? {
         return transcriptIndexingConnection.remoteObjectProxyWithErrorHandler { [weak self] error in
             guard let self = self else { return }
-            os_log("Failed to get remote object proxy: %{public}@", log: self.log, type: .fault, String(describing: error))
+            log.fault("Failed to get remote object proxy: \(String(describing: error), privacy: .public)")
         } as? TranscriptIndexingServiceProtocol
     }
 
@@ -75,12 +74,12 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
         }
 
         if !migratedTranscriptsToNativeVersion {
-            os_log("Transcripts need migration", log: self.log, type: .debug)
+            log.debug("Transcripts need migration")
         }
 
         if !effectiveIgnoreCache && migratedTranscriptsToNativeVersion {
             guard TranscriptIndexer.needsUpdate(in: storage) else {
-                os_log("Skipping transcript indexing: TranscriptIndexer indicates no update is needed", log: self.log, type: .debug)
+                log.debug("Skipping transcript indexing: TranscriptIndexer indicates no update is needed")
                 return
             }
         }
@@ -95,21 +94,21 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
             case .success(let config):
                 self.doStartTranscriptIndexing(with: config, ignoringCache: effectiveIgnoreCache)
             case .failure(let error):
-                os_log("Config fetch failed: %{public}@", log: self.log, type: .error, String(describing: error))
+                log.error("Config fetch failed: \(String(describing: error), privacy: .public)")
             }
         }
     }
 
     private func doStartTranscriptIndexing(with config: ConfigResponse, ignoringCache ignoreCache: Bool) {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
 
         guard let feeds = config.feeds[transcriptLanguage] ?? config.feeds[ConfigResponse.fallbackFeedLanguage] else {
-            os_log("No feeds found for currently set language (%@) or fallback language (%@)", log: self.log, type: .error, transcriptLanguage, ConfigResponse.fallbackFeedLanguage)
+            log.error("No feeds found for currently set language (\(self.transcriptLanguage)) or fallback language (\(ConfigResponse.fallbackFeedLanguage))")
             return
         }
         
         guard let transcriptsFeedURL = feeds.transcripts?.url else {
-            os_log("Manifest doesn't have a URL for the transcripts feed", log: self.log, type: .error)
+            log.error("Manifest doesn't have a URL for the transcripts feed")
             return
         }
 
@@ -127,7 +126,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
     }
 
     func transcriptIndexingStarted() {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
 
         isIndexing.accept(true)
     }
@@ -137,7 +136,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
     }
 
     func transcriptIndexingStopped() {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
 
         isIndexing.accept(false)
     }

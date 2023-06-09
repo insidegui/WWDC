@@ -9,4 +9,3 @@
 @_exported import Foundation
 @_exported import RealmSwift
 @_exported import Siesta
-@_exported import Transcripts

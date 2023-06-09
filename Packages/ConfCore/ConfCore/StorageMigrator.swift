@@ -8,16 +8,16 @@
 
 import Foundation
 import RealmSwift
-import os.log
+import OSLog
 
-final class StorageMigrator {
+final class StorageMigrator: Logging {
 
     let migration: Migration
     let oldVersion: UInt64
-    let log = OSLog(subsystem: "ConfCore", category: "StorageMigrator")
+    static let log = makeLogger()
 
     private typealias SchemaVersion = UInt64
-    private typealias MigrationBlock = (Migration, SchemaVersion, OSLog) -> Void
+    private typealias MigrationBlock = (Migration, SchemaVersion, Logger) -> Void
 
     /// Migration block in `prescription.key` will be executed if the previous version is `< prescription.key`
     private let prescription: [SchemaVersion: MigrationBlock] = [
@@ -43,7 +43,7 @@ final class StorageMigrator {
 
     func perform() {
         guard !isPerforming else {
-            os_log("perform() called while isPerform = true", log: log, type: .error)
+            log.error("perform() called while isPerform = true")
             return
         }
 
@@ -53,21 +53,18 @@ final class StorageMigrator {
         let migrationsToPerform = prescription.filter { oldVersion < $0.key }
 
         guard migrationsToPerform.count > 0 else {
-            os_log("No migrations to perform", log: log, type: .info)
+            log.info("No migrations to perform")
             return
         }
 
         let versions = migrationsToPerform.map { $0.key }
-        os_log("Will perform migrations for the following schema versions: %{public}@",
-               log: log,
-               type: .info,
-               String(describing: versions))
+        log.info("Will perform migrations for the following schema versions: \(String(describing: versions), privacy: .public)")
 
         migrationsToPerform.forEach { $0.value(migration, oldVersion, log) }
     }
 
-    private static func migrateAlphaCleanup(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("migrateAlphaCleanup", log: log, type: .info)
+    private static func migrateAlphaCleanup(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info("migrateAlphaCleanup")
 
         migration.deleteData(forType: "Event")
         migration.deleteData(forType: "Track")
@@ -80,14 +77,14 @@ final class StorageMigrator {
         migration.deleteData(forType: "SessionAsset")
     }
 
-    private static func migrateDownloadModelRemoval(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("migrateDownloadModelRemoval", log: log, type: .info)
+    private static func migrateDownloadModelRemoval(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info("migrateDownloadModelRemoval")
 
         migration.deleteData(forType: "Download")
     }
 
-    private static func migrateContentThumbnails(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("migrateContentThumbnails", log: log, type: .info)
+    private static func migrateContentThumbnails(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info("migrateContentThumbnails")
 
         // remove cached images which might have generic session thumbs instead of the correct ones
         migration.deleteData(forType: "ImageCacheEntity")
@@ -102,16 +99,16 @@ final class StorageMigrator {
         }
     }
 
-    private static func migrateSessionModels(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("migrateSessionModels", log: log, type: .info)
+    private static func migrateSessionModels(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info("migrateSessionModels")
 
         migration.deleteData(forType: "Event")
         migration.deleteData(forType: "Track")
         migration.deleteData(forType: "ScheduleSection")
     }
 
-    private static func migrateOldTranscriptModels(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("migrateOldTranscriptModels", log: log, type: .info)
+    private static func migrateOldTranscriptModels(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info("migrateOldTranscriptModels")
 
         migration.deleteData(forType: "Transcript")
         migration.deleteData(forType: "TranscriptAnnotation")
@@ -121,9 +118,9 @@ final class StorageMigrator {
         }
     }
 
-    private static func migrateIdentifiersWithoutReplacement(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+    private static func migrateIdentifiersWithoutReplacement(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
         // version 37 changed identifiers to include the event name prefix (i.e. "wwdc" or "fall")
-        os_log("migrateIdentifiersWithoutReplacement", log: log, type: .info)
+        log.info("migrateIdentifiersWithoutReplacement")
 
         // add `year` to `Event` based on the event's start date
         migration.enumerateObjects(ofType: "Event") { _, event in
@@ -147,7 +144,7 @@ final class StorageMigrator {
             session?["identifier"] = identifierWithPrefix
 
             guard let transcriptIdentifier = session?["transcriptIdentifier"] as? String, !transcriptIdentifier.isEmpty else {
-                os_log("Session %{public}@ had no transcript, skipping", log: log, type: .debug, identifier)
+                log.debug("Session \(identifier, privacy: .public) had no transcript, skipping")
                 return
             }
 
@@ -164,14 +161,14 @@ final class StorageMigrator {
         }
     }
 
-    private static func resetTracks(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("resetTracks", log: log, type: .info)
+    private static func resetTracks(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info("resetTracks")
 
         migration.deleteData(forType: "Track")
     }
 
-    private static func removeInvalidLiveAssets(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("removeInvalidLiveAssets", log: log, type: .info)
+    private static func removeInvalidLiveAssets(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info("removeInvalidLiveAssets")
 
         // Delete invalid live streaming assets
         migration.enumerateObjects(ofType: "SessionAsset") { _, asset in
@@ -181,8 +178,8 @@ final class StorageMigrator {
         }
     }
 
-    private static func resetFeaturedSections(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
-        os_log("resetFeaturedSections", log: log, type: .info)
+    private static func resetFeaturedSections(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info("resetFeaturedSections")
 
         // Delete all featured content
         migration.deleteData(forType: "FeaturedSection")
@@ -190,7 +187,7 @@ final class StorageMigrator {
         migration.deleteData(forType: "FeaturedAuthor")
     }
 
-    private static func resetSessionInstances(with migration: Migration, oldVersion: SchemaVersion, log: OSLog) {
+    private static func resetSessionInstances(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
         migration.deleteData(forType: "SessionInstance")
     }
 
