@@ -96,6 +96,8 @@ public final class Storage {
         }
 
         performSerializedBackgroundWrite(disableAutorefresh: true, completionBlock: completion) { backgroundRealm in
+            var time = Date()
+            print("Starting sessions: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             contentsResponse.sessions.forEach { newSession in
                 // Replace any "unknown" resources with their full data
                 newSession.related.filter({$0.type == RelatedResourceType.unknown.rawValue}).forEach { unknownResource in
@@ -111,7 +113,11 @@ public final class Storage {
                     backgroundRealm.add(newSession, update: .all)
                 }
             }
+            print("Ending sessions: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
+            time = Date()
+            // TODO: Takes 8+ seconds, several notable opportunities to optimize storage accesses
+            print("Starting session instances: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             // Merge existing instance data, preserving user-defined data
             contentsResponse.instances.forEach { newInstance in
                 if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
@@ -128,13 +134,19 @@ public final class Storage {
                     backgroundRealm.add(newInstance, update: .all)
                 }
             }
+            print("Ending session instances: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // Save everything
+            time = Date()
+            print("Starting save everything: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.add(contentsResponse.rooms, update: .all)
             backgroundRealm.add(contentsResponse.tracks, update: .all)
             backgroundRealm.add(contentsResponse.events, update: .all)
+            print("Ending save everything: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // add instances to rooms
+            time = Date()
+            print("Starting add instances to room: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.objects(Room.self).forEach { room in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
 
@@ -143,8 +155,12 @@ public final class Storage {
                 room.instances.removeAll()
                 room.instances.append(objectsIn: instances)
             }
+            print("Ending add instances to room: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // add instances and sessions to events
+            // TODO: takes 0.4 seconds, could these List's become LinkingObjects so we don't have to store them and then pull them back out?
+            time = Date()
+            print("Starting add instances and sessions to events: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.objects(Event.self).forEach { event in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
@@ -155,8 +171,12 @@ public final class Storage {
                 event.sessions.removeAll()
                 event.sessions.append(objectsIn: sessions)
             }
+            print("Ending add instances and sessions to events: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // add instances and sessions to tracks
+            time = Date()
+            print("Starting add instances and sessions to tracks: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
+            // TODO: takes 1.5 seconds, could these List's become LinkingObjects so we don't have to store them and then pull them back out?
             backgroundRealm.objects(Track.self).forEach { track in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
@@ -173,8 +193,11 @@ public final class Storage {
                     instance.session?.trackName = track.name
                 }
             }
+            print("Ending add instances and sessions to tracks: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // add live video assets to sessions
+            time = Date()
+            print("Starting add live video assets to sessions: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
                 if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
                     if !session.assets.contains(liveAsset) {
@@ -182,20 +205,29 @@ public final class Storage {
                     }
                 }
             }
+            print("Ending add live video assets: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // Associate session resources with Session objects in database
+            time = Date()
+            print("Starting Associate session resources with Session objects in database: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
                     resource.session = session
                 }
             }
+            print("Ending Associate session resources: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // Remove tracks that don't include any future session instances nor any sessions with video/live video
+            time = Date()
+            print("Starting Remove tracks that don't include any future session instances nor any sessions with video/live video: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             let emptyTracks = backgroundRealm.objects(Track.self)
                 .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType = %@ OR ANY $session.assets.rawAssetType = %@).@count == 0", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
             backgroundRealm.delete(emptyTracks)
+            print("Ending Remove tracks: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
 
             // Create schedule view
+            time = Date()
+            print("Starting Create schedule view: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
             backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
             let instances = backgroundRealm.objects(SessionInstance.self)
 
@@ -212,6 +244,7 @@ public final class Storage {
 
                 backgroundRealm.add(section, update: .all)
             }
+            print("Ending Create schedule view: \((Date().timeIntervalSince1970 - time.timeIntervalSince1970).formatted(.number.precision(.fractionLength(2))))")
         }
     }
 
