@@ -10,7 +10,7 @@ import ConfCore
 import RealmSwift
 
 protocol SessionRowProvider {
-    func sessionRowIdentifierForToday() -> SessionIdentifiable?
+    func sessionRowIdentifierForToday(onlyIncludingRowsFor included: Results<Session>?) -> SessionIdentifiable?
     func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow]
 
     var allRows: [SessionRow] { get }
@@ -56,7 +56,7 @@ struct VideosSessionRowProvider: SessionRowProvider {
         return rows
     }
 
-    func sessionRowIdentifierForToday() -> SessionIdentifiable? {
+    func sessionRowIdentifierForToday(onlyIncludingRowsFor included: Results<Session>?) -> SessionIdentifiable? {
         return nil
     }
 }
@@ -80,14 +80,13 @@ struct ScheduleSessionRowProvider: SessionRowProvider {
         var shownTimeZone = false
 
         let rows: [SessionRow] = scheduleSections.flatMap { section -> [SessionRow] in
-            var instances: [SessionInstance]
+            let filteredInstances = filteredInstances(in: section, onlyIncludingRowsFor: included).sorted(by: SessionInstance.standardSort)
+            guard !filteredInstances.isEmpty else { return []}
 
-            if let included = included {
-                let sessionIdentifiers = Array(included.map { $0.identifier })
-                instances = Array(section.instances.filter(NSPredicate(format: "session.identifier IN %@", sessionIdentifiers)))
-                guard !instances.isEmpty else { return [] }
-            } else {
-                instances = Array(section.instances)
+            let instanceRows: [SessionRow] = filteredInstances.compactMap { instance in
+                guard let viewModel = SessionViewModel(session: instance.session, instance: instance, track: nil, style: .schedule) else { return nil }
+
+                return SessionRow(viewModel: viewModel)
             }
 
             // Section header
@@ -95,24 +94,29 @@ struct ScheduleSessionRowProvider: SessionRowProvider {
 
             shownTimeZone = true
 
-            let instanceRows: [SessionRow] = instances.sorted(by: SessionInstance.standardSort).compactMap { instance in
-                guard let viewModel = SessionViewModel(session: instance.session, instance: instance, track: nil, style: .schedule) else { return nil }
-
-                return SessionRow(viewModel: viewModel)
-            }
-
             return [titleRow] + instanceRows
         }
 
         return rows
     }
 
-    func sessionRowIdentifierForToday() -> SessionIdentifiable? {
+    func sessionRowIdentifierForToday(onlyIncludingRowsFor included: Results<Session>?) -> SessionIdentifiable? {
 
         guard let section = scheduleSections.filter("representedDate >= %@", today()).first else { return nil }
 
-        guard let identifier = section.instances.first?.session?.identifier else { return nil }
+        let filteredInstances = filteredInstances(in: section, onlyIncludingRowsFor: included).sorted(by: SessionInstance.standardSort)
+
+        guard let identifier = filteredInstances.first?.session?.identifier else { return nil }
 
         return SessionIdentifier(identifier)
+    }
+
+    private func filteredInstances(in section: ScheduleSection, onlyIncludingRowsFor included: Results<Session>?) -> [SessionInstance] {
+        if let included = included {
+            let sessionIdentifiers = Array(included.map { $0.identifier })
+            return Array(section.instances.filter(NSPredicate(format: "session.identifier IN %@", sessionIdentifiers)))
+        } else {
+            return Array(section.instances)
+        }
     }
 }

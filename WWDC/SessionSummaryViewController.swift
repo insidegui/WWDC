@@ -57,6 +57,8 @@ class SessionSummaryViewController: NSViewController {
 
     lazy var relatedSessionsViewController: RelatedSessionsViewController = {
         let c = RelatedSessionsViewController()
+        c.view.isHidden = true
+        c.view.translatesAutoresizingMaskIntoConstraints = false
 
         c.title = "Related Sessions"
 
@@ -170,7 +172,6 @@ class SessionSummaryViewController: NSViewController {
         summaryScrollView.heightAnchor.constraint(equalToConstant: Metrics.summaryHeight).isActive = true
 
         addChild(relatedSessionsViewController)
-        relatedSessionsViewController.view.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(relatedSessionsViewController.view)
         relatedSessionsViewController.view.heightAnchor.constraint(equalToConstant: RelatedSessionsViewController.Metrics.height).isActive = true
         relatedSessionsViewController.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
@@ -185,6 +186,7 @@ class SessionSummaryViewController: NSViewController {
 
     private func updateBindings() {
         actionsViewController.view.isHidden = (viewModel == nil)
+        relatedSessionsViewController.view.isHidden = (viewModel == nil)
         actionsViewController.viewModel = viewModel
         self.summaryScrollView.scroll(.zero)
 

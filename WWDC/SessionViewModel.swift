@@ -47,7 +47,6 @@ final class SessionViewModel {
     }()
 
     lazy var rxSessionInstance: some Publisher<SessionInstance, Error> = {
-        // TODO: Using `share` breaks stuff because I think it results in cold publishers that don't emit the most recent value
         return sessionInstance.valuePublisherWithInitialValue()
     }()
 

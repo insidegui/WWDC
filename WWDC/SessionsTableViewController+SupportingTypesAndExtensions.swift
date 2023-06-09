@@ -141,8 +141,13 @@ final class FilterResults: Logging {
 
             let objects = realm.objects(Session.self).filter(query)
 
+            // Immediately provide the first value
+            self.latestSearchResults = objects
+            observerClosure(objects)
+
             objects
                 .collectionChangedPublisher
+                .dropFirst(1) // first value is provided synchronously to help with timing issues
                 .replaceErrorWithEmpty()
                 .sink { [weak self] in
                     self?.latestSearchResults = $0

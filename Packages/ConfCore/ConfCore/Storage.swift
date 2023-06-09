@@ -11,30 +11,6 @@ import Foundation
 import RealmSwift
 import OSLog
 
-
-// TODO: Relocate these
-extension List {
-    public func toAnyCollection() -> AnyRealmCollection<Element> {
-        return AnyRealmCollection<Element>(self)
-    }
-
-    public typealias ElementType = Element
-    public func toArray() -> [Element] {
-        return Array(self)
-    }
-}
-
-extension Results {
-    func toAnyCollection() -> AnyRealmCollection<Element> {
-        return AnyRealmCollection<ElementType>(self)
-    }
-
-    typealias ElementType = Element
-    public func toArray() -> [Element] {
-        return Array(self)
-    }
-}
-
 public final class Storage: Logging {
 
     public let realmConfig: Realm.Configuration

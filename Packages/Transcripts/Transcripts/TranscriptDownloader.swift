@@ -149,7 +149,7 @@ public final class TranscriptDownloader {
         let mismatched = transcriptsByStatus[.etagMismatch, default: []]
         let noPreviousEtag = transcriptsByStatus[.noPreviousEtag, default: []]
 
-        let cachedEtagMessage = cached.count == 0 ? "none" : noPreviousEtag.map(\.identifier).joined(separator: ", ")
+        let cachedEtagMessage = cached.count == 0 ? "none" : cached.map(\.identifier).joined(separator: ", ")
         let mismatchedMessage = mismatched.count == 0 ? "none" : mismatched.map(\.identifier).joined(separator: ", ")
         let noPreviousEtagMessage = noPreviousEtag.count == 0 ? "none" : noPreviousEtag.map(\.identifier).joined(separator: ", ")
 

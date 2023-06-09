@@ -11,7 +11,6 @@ import RealmSwift
 import Combine
 import ConfCore
 import PlayerUI
-import Combine
 import OSLog
 import AVFoundation
 
@@ -112,6 +111,8 @@ final class AppCoordinator: Logging {
         buttonsController.handleSharePlayClicked = { [weak self] in
             DispatchQueue.main.async { self?.startSharePlay() }
         }
+
+        startup()
     }
 
     /// The list controller for the active tab
@@ -250,6 +251,7 @@ final class AppCoordinator: Logging {
         DownloadManager.shared.syncWithFileSystem()
     }
 
+    var hasPerformedInitialListUpdate = false
     private func doUpdateLists() {
 
         // Initial app launch waits for all of these things to be loaded before dismissing the primary loading spinner
@@ -270,15 +272,26 @@ final class AppCoordinator: Logging {
             .prefix(1)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] tracks, _, _, sections in
-                guard let self = self else { return }
+                guard let self else { return }
 
                 self.tabController.hideLoading()
-                self.searchCoordinator.configureFilters()
+                if !hasPerformedInitialListUpdate {
+                    // Filters only need configured once, the other stuff in
+                    // here might only need to happen once as well
+                    self.searchCoordinator.configureFilters()
+                }
 
+                // These aren't live updating, which is part of the problem. Filter results update live
+                // but get mixed in with these static lists of live-updating objects. We'll change the architecture
+                // of the sessions list to get 2 streams and then combine them which will simplify startup
                 self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(tracks: tracks)
-
                 self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
-                self.scrollToTodayIfWWDC()
+
+                if !hasPerformedInitialListUpdate && liveObserver.isWWDCWeek {
+                    hasPerformedInitialListUpdate = true
+
+                    scheduleController.splitViewController.listViewController.scrollToToday()
+                }
             }
             .store(in: &cancellables)
 
@@ -398,12 +411,6 @@ final class AppCoordinator: Logging {
         if let identifier = Preferences.shared.selectedVideoItemIdentifier {
             videosController.listViewController.select(session: SessionIdentifier(identifier))
         }
-    }
-
-    private func scrollToTodayIfWWDC() {
-        guard liveObserver.isWWDCWeek else { return }
-
-        scheduleController.splitViewController.listViewController.scrollToToday()
     }
 
     // MARK: - Deep linking

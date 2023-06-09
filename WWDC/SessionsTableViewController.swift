@@ -14,7 +14,9 @@ import OSLog
 
 // MARK: - Sessions Table View Controller
 
-class SessionsTableViewController: NSViewController, NSMenuItemValidation {
+class SessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
+
+    static let log = makeLogger()
 
     private lazy var cancellables: Set<AnyCancellable> = []
 
@@ -131,7 +133,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
     func scrollToToday() {
 
-        sessionRowProvider?.sessionRowIdentifierForToday().flatMap { select(session: $0) }
+        sessionRowProvider?.sessionRowIdentifierForToday(onlyIncludingRowsFor: filterResults.latestSearchResults).flatMap { select(session: $0) }
     }
 
     var hasPerformedFirstUpdate = false
@@ -189,7 +191,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
             !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
 
             searchController.resetFilters()
-            _filterResults = .empty
+            filterResults = .empty
             displayedRows = sessionRowProvider?.allRows ?? []
         }
 
@@ -344,25 +346,15 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
     // MARK: - Search
 
+    private var filterResults = FilterResults.empty
+
     /// Provide a session identifier if you'd like to override the default selection behavior. Provide
     /// nil to let the table figure out what selection to apply after the update.
     func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
-        _filterResults = filterResults
+        self.filterResults = filterResults
         filterResults.observe { [weak self] in
+            self?.log.debug("Received filter results")
             self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
-        }
-    }
-
-    var _filterResults = FilterResults.empty
-    private var filterResults: FilterResults {
-        get {
-            return _filterResults
-        }
-        set {
-            _filterResults = newValue
-            filterResults.observe { [weak self] in
-                self?.updateWith(searchResults: $0, animated: false, selecting: nil)
-            }
         }
     }
 
