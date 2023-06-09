@@ -109,14 +109,10 @@ public class SessionInstance: Object, ConditionallyDecodable {
         eventIdentifier = other.eventIdentifier
         calendarEventIdentifier = other.calendarEventIdentifier
 
-        // This requires a ton of work because there are so many session instances
-        // And we
         if let otherSession = other.session, let session = session {
             session.merge(with: otherSession, in: realm)
         }
 
-        // If we collected all the keywords up front and stored them, it'd be faster than
-        // querying against individual sessions' keywords because you end up duplicating a lot of work
         let otherKeywords = other.keywords.map { newKeyword -> (Keyword) in
             if newKeyword.realm == nil,
                 let existingKeyword = realm.object(ofType: Keyword.self, forPrimaryKey: newKeyword.name) {
