@@ -221,11 +221,13 @@ private final class CloudKitLiveObserver: Logging {
                                                    subscriptionID: specialLiveEventsSubscriptionID,
                                                    options: options)
 
-            database.save(subscription) { _, error in
+            database.save(subscription) { [weak self] _, error in
+                guard let self = self else { return }
+
                 if let error = error {
-                    log.error("Error creating subscriptions: \(String(describing: error), privacy: .public)")
+                    self.log.error("Error creating subscriptions: \(String(describing: error), privacy: .public)")
                 } else {
-                    log.info("Subscriptions created")
+                    self.log.info("Subscriptions created")
                 }
             }
         #endif
