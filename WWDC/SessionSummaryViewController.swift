@@ -57,7 +57,7 @@ class SessionSummaryViewController: NSViewController {
 
     lazy var relatedSessionsViewController: RelatedSessionsViewController = {
         let c = RelatedSessionsViewController()
-        c.view.isHidden = true
+        c.view.isHidden = true // It unhides itself when it gets a view model with related sessions, hidden for app launch
         c.view.translatesAutoresizingMaskIntoConstraints = false
 
         c.title = "Related Sessions"
@@ -186,7 +186,6 @@ class SessionSummaryViewController: NSViewController {
 
     private func updateBindings() {
         actionsViewController.view.isHidden = (viewModel == nil)
-        relatedSessionsViewController.view.isHidden = (viewModel == nil)
         actionsViewController.viewModel = viewModel
         self.summaryScrollView.scroll(.zero)
 
