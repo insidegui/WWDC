@@ -198,7 +198,6 @@ final class DownloadManager: NSObject, Logging {
         let currentDownloadState: () -> DownloadStatus = {
             if let download = self.downloadTasks[asset.remoteURL],
                let task = download.task {
-
                 latestInfo = DownloadInfo(task: task)
 
                 switch task.state {
@@ -232,7 +231,12 @@ final class DownloadManager: NSObject, Logging {
         let progress = nc.publisher(for: .DownloadManagerDownloadProgressChanged, filteredBy: asset.remoteURL).map { note in
             if let info = note.userInfo?["info"] as? DownloadInfo {
                 latestInfo = info
-                return DownloadStatus.downloading(info)
+                if info.taskState == .suspended {
+                    // We can get progress updates that were from while the task was suspending
+                    return DownloadStatus.paused(info)
+                } else {
+                    return DownloadStatus.downloading(info)
+                }
             } else {
                 return DownloadStatus.downloading(.unknown)
             }
@@ -518,17 +522,20 @@ extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
         let totalBytesWritten: Int64
         let totalBytesExpectedToWrite: Int64
         let progress: Double
+        let taskState: URLSessionDownloadTask.State?
 
         init(task: URLSessionTask) {
             totalBytesExpectedToWrite = task.countOfBytesExpectedToReceive
             totalBytesWritten = task.countOfBytesReceived
             progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+            taskState = task.state
         }
 
         init(totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64, progress: Double) {
             self.totalBytesWritten = totalBytesWritten
             self.totalBytesExpectedToWrite = totalBytesExpectedToWrite
             self.progress = progress
+            self.taskState = nil
         }
 
         static let unknown = DownloadInfo(totalBytesWritten: 0, totalBytesExpectedToWrite: 0, progress: -1)

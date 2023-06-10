@@ -12,16 +12,6 @@ import Combine
 import RealmSwift
 import PlayerUI
 
-extension RealmSubscribable where Self: Object {
-    func valuePublisherWithInitialValue() -> some Publisher<Self, Error> {
-        let initialValue = Just(self).setFailureType(to: Error.self)
-        return Publishers.Concatenate(
-            prefix: initialValue,
-            suffix: RealmSwift.valuePublisher(self)
-        )
-    }
-}
-
 final class SessionViewModel {
 
     let style: SessionsListStyle
@@ -35,7 +25,7 @@ final class SessionViewModel {
     let trackName: String
 
     lazy var rxSession: some Publisher<Session, Error> = {
-        return session.valuePublisherWithInitialValue()
+        return session.valuePublisher()
     }()
 
     lazy var rxTranscriptAnnotations: AnyPublisher<List<TranscriptAnnotation>, Error> = {
@@ -47,11 +37,11 @@ final class SessionViewModel {
     }()
 
     lazy var rxSessionInstance: some Publisher<SessionInstance, Error> = {
-        return sessionInstance.valuePublisherWithInitialValue()
+        return sessionInstance.valuePublisher()
     }()
 
     lazy var rxTrack: some Publisher<Track, Error> = {
-        return track.valuePublisherWithInitialValue()
+        return track.valuePublisher()
     }()
 
     lazy var rxTitle: some Publisher<String, Error> = {

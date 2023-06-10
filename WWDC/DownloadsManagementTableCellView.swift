@@ -60,7 +60,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         sessionTitleLabel.stringValue = viewModel?.session.title ?? "No ViewModel"
 
         guard let viewModel = viewModel else { return }
-        let status = viewModel.status.share()
+        let status = viewModel.status
         let download = viewModel.download
 
         let throttledStatus = status.throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
@@ -176,6 +176,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
 
         // Horizontal layout
         let gap: CGFloat = -5
+        // fyi, this leading of 20 was chose to make the close button look ok in the detached popover window
         progressIndicator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         progressIndicator.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 3).isActive = true
         progressIndicator.trailingAnchor.constraint(equalTo: suspendResumeButton.leadingAnchor, constant: gap - 2).isActive = true

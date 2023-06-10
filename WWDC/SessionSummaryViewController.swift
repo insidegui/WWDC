@@ -57,7 +57,6 @@ class SessionSummaryViewController: NSViewController {
 
     lazy var relatedSessionsViewController: RelatedSessionsViewController = {
         let c = RelatedSessionsViewController()
-        c.view.isHidden = true // It unhides itself when it gets a view model with related sessions, hidden for app launch
         c.view.translatesAutoresizingMaskIntoConstraints = false
 
         c.title = "Related Sessions"
@@ -68,7 +67,7 @@ class SessionSummaryViewController: NSViewController {
     private func attributedSummaryString(from string: String) -> NSAttributedString {
         .create(with: string, font: .systemFont(ofSize: 15), color: .secondaryText, lineHeightMultiple: 1.2)
     }
-    
+
     private lazy var summaryTextView: NSTextView = {
         let v = NSTextView()
 

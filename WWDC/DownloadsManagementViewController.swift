@@ -34,6 +34,7 @@ class DownloadsManagementViewController: NSViewController {
         v.gridStyleMask = .solidHorizontalGridLineMask
         v.gridColor = NSColor.gridColor
         v.selectionHighlightStyle = .none
+        v.style = .plain
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "download"))
         v.addTableColumn(column)
@@ -69,12 +70,6 @@ class DownloadsManagementViewController: NSViewController {
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Metrics.topPadding).isActive = true
     }
 
-    override func viewDidAppear() {
-        super.viewDidAppear()
-
-        view.window?.title = "Downloads"
-    }
-
     let downloadManager: DownloadManager
     let storage: Storage
     private lazy var cancellables: Set<AnyCancellable> = []
@@ -85,7 +80,10 @@ class DownloadsManagementViewController: NSViewController {
                 dismiss(nil)
             } else if downloads != oldValue {
                 tableView.reloadData()
-                let height = min((Metrics.rowHeight + Metrics.tableGridLineHeight) * CGFloat(downloads.count) + Metrics.topPadding * 2, preferredMaximumSize.height)
+                let height = min(
+                    (Metrics.rowHeight + Metrics.tableGridLineHeight) * CGFloat(downloads.count) + Metrics.topPadding * 2,
+                    preferredMaximumSize.height
+                )
                 self.preferredContentSize = NSSize(width: Metrics.popOverDesiredWidth, height: height)
             }
         }
