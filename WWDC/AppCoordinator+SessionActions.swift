@@ -69,79 +69,6 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         }
     }
 
-    @objc func sessionActionsDidSelectCalendar(_ sender: NSView?) {
-        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
-
-        let status = EKEventStore.authorizationStatus(for: .event)
-        let eventStore = EKEventStore()
-
-        switch status {
-        case .notDetermined, .denied, .restricted:
-            eventStore.requestAccess(to: .event) { hasAccess, _ in
-                guard hasAccess else { return }
-
-                DispatchQueue.main.async {
-                    self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
-                }
-            }
-        case .authorized:
-            self.saveCalendarEvent(viewModel: viewModel, eventStore: eventStore)
-        @unknown default:
-            assertionFailure("An unexpected case was discovered on an non-frozen obj-c enum")
-            log.error("Cannot determine EKEventStore authorization status due to an unknown enum case. Doing nothing instead")
-        }
-    }
-
-    private func saveCalendarEvent(viewModel: SessionViewModel, eventStore: EKEventStore) {
-        let event = EKEvent(eventStore: eventStore)
-
-        if let storedEvent = eventStore.event(withIdentifier: viewModel.sessionInstance.calendarEventIdentifier) {
-            let alert = WWDCAlert.create()
-
-            alert.messageText = "You've already scheduled this session"
-            alert.informativeText = "Would you like to remove it from your calendar?"
-
-            alert.addButton(withTitle: "Remove")
-            alert.addButton(withTitle: "Cancel")
-            alert.window.center()
-
-            enum Choice: NSApplication.ModalResponse.RawValue {
-                case removeCalender = 1000
-                case cancel = 1001
-            }
-
-            guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
-
-            switch choice {
-            case .removeCalender:
-                do {
-                    try eventStore.remove(storedEvent, span: .thisEvent, commit: true)
-                } catch let error as NSError {
-                    log.error("Failed to remove event from calender: \(String(describing: error), privacy: .public)")
-                }
-            default:
-                break
-            }
-
-            return
-        }
-
-        event.startDate = viewModel.sessionInstance.startTime
-        event.endDate = viewModel.sessionInstance.endTime
-        event.title = viewModel.session.title
-        event.location = viewModel.sessionInstance.roomName
-        event.url = viewModel.webUrl
-        event.calendar = eventStore.defaultCalendarForNewEvents
-
-        storage.modify(viewModel.sessionInstance) { $0.calendarEventIdentifier = event.eventIdentifier }
-
-        do {
-            try eventStore.save(event, span: .thisEvent, commit: true)
-        } catch {
-            log.error("Failed to add event to calendar: \(String(describing: error), privacy: .public)")
-        }
-    }
-
     func sessionActionsDidSelectShare(_ sender: NSView?) {
         guard let sender = sender else { return }
         guard let viewModel = selectedViewModelRegardlessOfTab else { return }
@@ -208,5 +135,109 @@ final class PickerDelegate: NSObject, NSSharingServicePickerDelegate, Logging {
 extension Storage {
     func toggleFavorite(on session: Session) {
         setFavorite(!session.isFavorite, onSessionsWithIDs: [session.identifier])
+    }
+}
+
+// MARK: - Calendar Integration
+
+extension AppCoordinator {
+    @objc func sessionActionsDidSelectCalendar(_ sender: NSView?) {
+        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+
+        Task { @MainActor in
+            do {
+                guard let store = try await authorizeCalendarAccess() else { return }
+                saveCalendarEvent(viewModel: viewModel, eventStore: store)
+            } catch {
+                WWDCAlert.show(with: error)
+            }
+        }
+    }
+
+    private func authorizeCalendarAccess() async throws -> EKEventStore? {
+        let store = EKEventStore()
+
+        let status = EKEventStore.authorizationStatus(for: .event)
+
+        // TODO: Compile-time check can be removed once we require Xcode 15 for building
+        #if compiler(>=5.9)
+        if #available(macOS 14.0, *) {
+            if [.writeOnly, .fullAccess].contains(status) { return store }
+
+            guard try await store.requestWriteOnlyAccessToEvents() else { return nil }
+            return store
+        } else {
+            guard status != .authorized else { return store }
+
+            guard try await store.requestAccess(to: .event) else { return nil }
+            return store
+        }
+        #else
+        guard status != .authorized else { return store }
+        guard try await store.requestAccess(to: .event) else { return nil }
+        return store
+        #endif
+    }
+
+    private func saveCalendarEvent(viewModel: SessionViewModel, eventStore: EKEventStore) {
+        if let storedEvent = eventStore.event(withIdentifier: viewModel.sessionInstance.calendarEventIdentifier) {
+            let alert = WWDCAlert.create()
+
+            alert.messageText = "You've already scheduled this session"
+            alert.informativeText = "Would you like to remove it from your calendar?"
+
+            alert.addButton(withTitle: "Remove")
+            alert.addButton(withTitle: "Cancel")
+            alert.window.center()
+
+            enum Choice: NSApplication.ModalResponse.RawValue {
+                case removeCalender = 1000
+                case cancel = 1001
+            }
+
+            guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
+
+            switch choice {
+            case .removeCalender:
+                do {
+                    try eventStore.remove(storedEvent, span: .thisEvent, commit: true)
+                } catch let error as NSError {
+                    log.error("Failed to remove event from calender: \(String(describing: error), privacy: .public)")
+                }
+            default:
+                break
+            }
+
+            return
+        }
+
+        let event = viewModel.calendarEvent(in: eventStore)
+        event.calendar = eventStore.defaultCalendarForNewEvents
+
+        storage.modify(viewModel.sessionInstance) {
+            if let identifier = event.eventIdentifier {
+                $0.calendarEventIdentifier = identifier
+            } else {
+                $0.calendarEventIdentifier = $0.identifier
+            }
+        }
+
+        do {
+            try eventStore.save(event, span: .thisEvent, commit: true)
+        } catch {
+            log.error("Failed to add event to calendar: \(String(describing: error), privacy: .public)")
+        }
+    }
+}
+
+private extension SessionViewModel {
+    func calendarEvent(in store: EKEventStore) -> EKEvent {
+        let event = EKEvent(eventStore: store)
+        event.startDate = sessionInstance.startTime
+        event.endDate = sessionInstance.endTime
+        event.title = session.title
+        event.location = sessionInstance.roomName
+        event.url = webUrl
+        return event
     }
 }
