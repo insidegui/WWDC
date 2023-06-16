@@ -299,8 +299,6 @@ final class AppCoordinator: Logging {
     }()
 
     func startup() {
-        ContributorsFetcher.shared.load()
-
         windowController.contentViewController = tabController
         windowController.showWindow(self)
 
@@ -438,6 +436,8 @@ final class AppCoordinator: Logging {
         ContributorsFetcher.shared.infoTextChangedCallback = { [unowned self] newText in
             self.aboutWindowController.infoText = newText
         }
+
+        ContributorsFetcher.shared.load()
 
         return aboutWC
     }()
