@@ -169,6 +169,7 @@
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
+		F41314B62A3DF2EB00F6F93F /* HoverPositionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41314B52A3DF2EB00F6F93F /* HoverPositionModifier.swift */; };
 		F42863392A33710500DA0113 /* FixSwiftUIMaterialInPreviews.m in Sources */ = {isa = PBXBuildFile; fileRef = F42863382A33710500DA0113 /* FixSwiftUIMaterialInPreviews.m */; };
 		F428633B2A3372F300DA0113 /* PUIPlayerViewControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = F428633A2A3372F300DA0113 /* PUIPlayerViewControls.swift */; };
 		F428633D2A3379FB00DA0113 /* PlayerUIPreview.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F428633C2A3379FB00DA0113 /* PlayerUIPreview.xcassets */; };
@@ -436,6 +437,7 @@
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F41314B52A3DF2EB00F6F93F /* HoverPositionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoverPositionModifier.swift; sourceTree = "<group>"; };
 		F42472B12A24D6AC00F68237 /* OpenSource.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = OpenSource.xcconfig; sourceTree = "<group>"; };
 		F42863382A33710500DA0113 /* FixSwiftUIMaterialInPreviews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixSwiftUIMaterialInPreviews.m; sourceTree = "<group>"; };
 		F428633A2A3372F300DA0113 /* PUIPlayerViewControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIPlayerViewControls.swift; sourceTree = "<group>"; };
@@ -1027,6 +1029,7 @@
 		DDF721BE1ECA12A40054C503 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F41314B42A3DF2D900F6F93F /* Utilities */,
 				DDF721BF1ECA12A40054C503 /* PUIAnnotationLayer.swift */,
 				DDF721C01ECA12A40054C503 /* PUIBoringLayer.swift */,
 				DDF721C11ECA12A40054C503 /* PUIBufferLayer.swift */,
@@ -1059,6 +1062,14 @@
 				DDFD6198247EE55200AD1CD7 /* main.swift */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		F41314B42A3DF2D900F6F93F /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				F41314B52A3DF2EB00F6F93F /* HoverPositionModifier.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		F44C82382A22B8D500FDE980 /* Models */ = {
@@ -1556,6 +1567,7 @@
 				DDC6781F1EDB8EDA00A4E19C /* PUIAnnotationWindowController.swift in Sources */,
 				DDEA82FC20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift in Sources */,
 				DDF721D91ECA12A40054C503 /* String+CMTime.swift in Sources */,
+				F41314B62A3DF2EB00F6F93F /* HoverPositionModifier.swift in Sources */,
 				DDF721DC1ECA12A40054C503 /* PUIBufferLayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

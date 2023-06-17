@@ -99,6 +99,8 @@ private struct PUIPlayerViewControlsContent: View {
             .foregroundStyle(.secondary)
     }
 
+    @State private var timelineHoverPoint: CGPoint?
+
     @ViewBuilder
     private var timeline: some View {
         GeometryReader { proxy in
@@ -114,11 +116,20 @@ private struct PUIPlayerViewControlsContent: View {
                         .offset(x: proxy.size.width * state.startFraction(for: segment))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                Capsule(style: .continuous)
-                    .foregroundStyle(Color.white)
-                    .frame(width: proxy.size.width * state.playbackProgress)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                if let timelineHoverPoint {
+                    Capsule(style: .continuous)
+                        .foregroundStyle(Color.white)
+                        .frame(width: proxy.size.width * timelineHoverPoint.x)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    Capsule(style: .continuous)
+                        .foregroundStyle(Color.white)
+                        .frame(width: proxy.size.width * state.playbackProgress)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
+            .onHoverWithPosition { timelineHoverPoint = $0 }
         }
         .frame(maxWidth: .infinity, minHeight: 8, maxHeight: 8)
     }
