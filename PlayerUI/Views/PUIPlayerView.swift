@@ -67,9 +67,11 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
     private let log = OSLog(subsystem: "PlayerUI", category: "PUIPlayerView")
     private var cancellables: Set<AnyCancellable> = []
+    private var stateCancellables: Set<AnyCancellable> = []
 
     // MARK: - Public API
 
+    public weak var timelineDelegate: PUITimelineDelegate?
     public weak var delegate: PUIPlayerViewDelegate?
 
     public var isInPictureInPictureMode: Bool { pipController?.isPictureInPictureActive == true }
@@ -217,18 +219,18 @@ public final class PUIPlayerView: NSView, ObservableObject {
         player.publisher(for: \.status, options: options).sink { [weak self] change in
             self?.playerStatusChanged()
         }.store(in: &cancellables)
-        player.publisher(for: \.volume, options: options).sink { [weak self] change in
-            self?.playerVolumeChanged()
-        }.store(in: &cancellables)
+
         player.publisher(for: \.rate, options: options).sink { [weak self] change in
             self?.updatePlayingState()
             self?.updatePowerAssertion()
         }.store(in: &cancellables)
+
         player.publisher(for: \.currentItem, options: options).sink { [weak self] change in
             if let playerItem = self?.player?.currentItem {
                 playerItem.audioTimePitchAlgorithm = .timeDomain
             }
         }.store(in: &cancellables)
+
         player.publisher(for: \.currentItem?.loadedTimeRanges, options: [.initial, .new]).sink { [weak self] change in
             self?.updateBufferedSegments()
         }.store(in: &cancellables)
@@ -253,6 +255,7 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
         setupNowPlayingCoordinatorIfSupported()
         setupRemoteCommandCoordinator()
+        setupStateBindings()
     }
 
     private func teardown(player oldValue: AVPlayer) {
@@ -266,8 +269,27 @@ public final class PUIPlayerView: NSView, ObservableObject {
         }
     }
 
-    private func playerVolumeChanged() {
-        state.volume = player?.volume ?? 1
+    private func setupStateBindings() {
+        stateCancellables.removeAll()
+
+        Publishers.CombineLatest($state.map(\.playbackState), $state.map(\.speed)).sink { [weak self] playbackState, speed in
+            guard let self = self else { return }
+
+            switch playbackState {
+            case .playing:
+                self.player?.rate = speed.rawValue
+            case .paused:
+                self.player?.pause()
+            default:
+                break
+            }
+        }
+        .store(in: &stateCancellables)
+
+        $state.map(\.volume).removeDuplicates().sink { [weak self] volume in
+            self?.player?.volume = volume
+        }
+        .store(in: &stateCancellables)
     }
 
     private func updateBufferedSegments() {
