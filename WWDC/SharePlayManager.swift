@@ -12,7 +12,7 @@ import Combine
 import ConfCore
 import OSLog
 
-final class SharePlayManager: ObservableObject {
+final class SharePlayManager: ObservableObject, Logging {
     
     enum State {
         case idle
@@ -23,9 +23,7 @@ final class SharePlayManager: ObservableObject {
     
     @Published private(set) var state = State.idle
     
-    static let subsystemName = "io.wwdc.app.SharePlay"
-    
-    private let logger = Logger(subsystem: SharePlayManager.subsystemName, category: String(describing: SharePlayManager.self))
+    static let log = makeLogger()
     
     private let observer = GroupStateObserver()
     
@@ -33,7 +31,7 @@ final class SharePlayManager: ObservableObject {
     
     @Published private(set) var canStartSharePlay = false {
         didSet {
-            logger.debug("canStartSharePlay = \(self.canStartSharePlay)")
+            log.debug("canStartSharePlay: \(self.canStartSharePlay, format: .answer)")
         }
     }
     
@@ -43,7 +41,7 @@ final class SharePlayManager: ObservableObject {
     @Published private(set) var currentActivity: WatchWWDCActivity?
 
     func startObservingState() {
-        logger.debug(#function)
+        log.debug(#function)
         
         observer.$isEligibleForGroupSession.sink { newValue in
             self.canStartSharePlay = newValue
@@ -53,7 +51,7 @@ final class SharePlayManager: ObservableObject {
             for await session in WatchWWDCActivity.sessions() {
                 self.cancellables.removeAll()
                 
-                self.logger.debug("Got new session in")
+                self.log.debug("Got new session in")
                 
                 session.$state.sink { state in
                     guard case .invalidated = state else { return }
@@ -65,7 +63,7 @@ final class SharePlayManager: ObservableObject {
                 session.join()
                 
                 session.$activity.sink { newActivity in
-                    self.logger.debug("New activity: \(String(describing: newActivity))")
+                    self.log.debug("New activity: \(String(describing: newActivity))")
                     
                     DispatchQueue.main.async { self.currentActivity = newActivity }
                 }.store(in: &self.cancellables)
@@ -78,7 +76,7 @@ final class SharePlayManager: ObservableObject {
     }
     
     func startActivity(for session: Session) {
-        logger.debug(#function)
+        log.debug(#function)
         
         state = .joining
         
@@ -89,33 +87,33 @@ final class SharePlayManager: ObservableObject {
             
             switch result {
             case .activationPreferred:
-                logger.debug("Activating activity")
+                log.debug("Activating activity")
 
                 do {
                     if try await activity.activate() {
-                        logger.debug("Activity activated")
+                        log.debug("Activity activated")
                         
                         state = .starting
                     } else {
-                        logger.error("Activity did not activate")
+                        log.error("Activity did not activate")
                         
                         state = .idle
                     }
                 } catch {
-                    logger.error("Failed to activate activity: \(String(describing: error), privacy: .public)")
+                    log.error("Failed to activate activity: \(String(describing: error), privacy: .public)")
                     
                     state = .idle
                 }
             case .activationDisabled:
-                logger.error("Activity activation disabled")
+                log.error("Activity activation disabled")
                 
                 state = .idle
             case .cancelled:
-                logger.error("Activity activation cancelled")
+                log.error("Activity activation cancelled")
                 
                 state = .idle
             @unknown default:
-                logger.fault("prepareForActivation resulted in unknown case")
+                log.fault("prepareForActivation resulted in unknown case")
                 assertionFailure("Unknown case")
                 
                 state = .idle

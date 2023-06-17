@@ -1,0 +1,59 @@
+{
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire",
+      "state" : {
+        "revision" : "bc268c28fb170f494de9e9927c371b8342979ece",
+        "version" : "5.7.1"
+      }
+    },
+    {
+      "identity" : "cloudkitcodable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/insidegui/CloudKitCodable",
+      "state" : {
+        "branch" : "spm",
+        "revision" : "0aed3041c4d03c07280fb6f47fabd943a337a43a"
+      }
+    },
+    {
+      "identity" : "realm-core",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-core.git",
+      "state" : {
+        "revision" : "36b2df44453ba5e830369c76ab0683799a287605",
+        "version" : "13.13.0"
+      }
+    },
+    {
+      "identity" : "realm-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/realm/realm-swift",
+      "state" : {
+        "revision" : "45ea4a0ec4bb3161c807be0a9a4921161dbe60a2",
+        "version" : "10.40.1"
+      }
+    },
+    {
+      "identity" : "siesta",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/bustoutsolutions/siesta",
+      "state" : {
+        "revision" : "43f34046ebb5beb6802200353c473af303bbc31e",
+        "version" : "1.5.2"
+      }
+    },
+    {
+      "identity" : "sparkle",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sparkle-project/Sparkle",
+      "state" : {
+        "branch" : "master",
+        "revision" : "f453625573fc9a251760b65c74df59023b1471c1"
+      }
+    }
+  ],
+  "version" : 2
+}

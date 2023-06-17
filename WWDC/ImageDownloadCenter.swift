@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import os.log
+import ConfCore
 
 typealias ImageDownloadCompletionBlock = (_ sourceURL: URL, _ result: (original: NSImage?, thumbnail: NSImage?)) -> Void
 
@@ -15,13 +15,13 @@ private struct ImageDownload {
     static let subsystemName = "io.WWDC.app.imageDownload"
 }
 
-final class ImageDownloadCenter {
+final class ImageDownloadCenter: Logging {
 
     static let shared: ImageDownloadCenter = ImageDownloadCenter()
 
     let cache = ImageCacheProvider()
 
-    private let log = OSLog(subsystem: ImageDownload.subsystemName, category: "ImageDownloadCenter")
+    static let log = makeLogger(subsystem: ImageDownload.subsystemName, category: "ImageDownloadCenter")
 
     private let dispatchQueue = DispatchQueue(label: "ImageDownloadCenter", qos: .userInitiated, attributes: .concurrent)
     private lazy var queue: OperationQueue = {
@@ -51,10 +51,7 @@ final class ImageDownloadCenter {
         }
 
         if let pendingOperation = activeOperation(for: url) {
-            os_log("A valid download operation already exists for the URL %@",
-                   log: self.log,
-                   type: .debug,
-                   url.absoluteString)
+            log.debug("A valid download operation already exists for the URL \(url.absoluteString)")
 
             pendingOperation.addCompletionHandler(with: completion)
 
@@ -84,7 +81,7 @@ final class ImageDownloadCenter {
         guard !deletedLegacyImageCache else { return }
         deletedLegacyImageCache = true
 
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
 
         let baseURL = URL(fileURLWithPath: PathUtil.appSupportPathAssumingExisting)
         let realmURL = baseURL.appendingPathComponent("ImageCache.realm")
@@ -96,7 +93,7 @@ final class ImageDownloadCenter {
             try FileManager.default.removeItem(at: lockURL)
             try FileManager.default.removeItem(at: managementURL)
         } catch {
-            os_log("Failed to delete legacy image cache: %{public}@", log: self.log, type: .error, String(describing: error))
+            log.error("Failed to delete legacy image cache: \(String(describing: error), privacy: .public)")
         }
     }
 
@@ -112,7 +109,7 @@ final class ImageCacheProvider {
         return c
     }()
 
-    private let log = OSLog(subsystem: ImageDownload.subsystemName, category: "ImageCacheProvider")
+    private let log = makeLogger(subsystem: ImageDownload.subsystemName, category: "ImageCacheProvider")
 
     private let storageQueue = DispatchQueue(label: "ImageStorage", qos: .userInitiated, attributes: .concurrent)
 
@@ -125,7 +122,7 @@ final class ImageCacheProvider {
             do {
                 try fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                os_log("Failed to create image cache directory: %{public}@", log: self.log, type: .error, String(describing: error))
+                log.error("Failed to create image cache directory: \(String(describing: error), privacy: .public)")
             }
         }
 
@@ -152,7 +149,7 @@ final class ImageCacheProvider {
                 try self.fileManager.copyItem(at: original, to: url)
 
                 guard let image = NSImage(contentsOf: url) else {
-                    os_log("Failed to initalize image with %@", log: self.log, type: .error, url.path)
+                    self.log.error("Failed to initalize image with \(url.path)")
                     completion(nil)
                     return
                 }
@@ -162,7 +159,7 @@ final class ImageCacheProvider {
                 if let thumbnailHeight {
                     let thumb = image.resized(to: thumbnailHeight)
                     guard let thumbData = thumb.pngRepresentation else {
-                        os_log("Failed to create thumbnail", log: self.log, type: .fault)
+                        self.log.fault("Failed to create thumbnail")
                         completion(nil)
                         return
                     }
@@ -183,7 +180,7 @@ final class ImageCacheProvider {
 
                 completion((image, thumbImage))
             } catch {
-                os_log("Image storage failed: %{public}@", log: self.log, type: .error, String(describing: error))
+                self.log.error("Image storage failed: \(String(describing: error), privacy: .public)")
 
                 completion(nil)
             }

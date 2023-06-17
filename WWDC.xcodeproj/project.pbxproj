@@ -24,6 +24,8 @@
 		4DBFA4DA20E160CB00BDF34B /* AVAsset+AsyncHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */; };
 		4DDF6A782177A00C008E5539 /* DownloadsManagementTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */; };
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
+		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
+		91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */; };
@@ -70,7 +72,6 @@
 		DD7F38781EAC0C98002D8C00 /* ShelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */; };
 		DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */; };
 		DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */; };
-		DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F387F1EAC15B4002D8C00 /* RxNil.swift */; };
 		DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7F38871EAC2275002D8C00 /* PathUtil.swift */; };
 		DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */; };
 		DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */; };
@@ -140,7 +141,6 @@
 		DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */; };
 		DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */; };
 		DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */; };
-		DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */; };
 		DDF5A5092487066200135E70 /* ClipComposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF5A5082487066200135E70 /* ClipComposition.swift */; };
 		DDF7219A1ECA12780054C503 /* PlayerUI.h in Headers */ = {isa = PBXBuildFile; fileRef = DDF721981ECA12780054C503 /* PlayerUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721961ECA12780054C503 /* PlayerUI.framework */; };
@@ -282,6 +282,9 @@
 		4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAsset+AsyncHelpers.swift"; sourceTree = "<group>"; };
 		4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsManagementTableCellView.swift; sourceTree = "<group>"; };
 		4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionsTableViewController+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
+		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
+		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
+		91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+Combine.swift"; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -332,7 +335,6 @@
 		DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShelfViewController.swift; sourceTree = "<group>"; };
 		DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionSummaryViewController.swift; sourceTree = "<group>"; };
 		DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCTextField.swift; sourceTree = "<group>"; };
-		DD7F387F1EAC15B4002D8C00 /* RxNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxNil.swift; sourceTree = "<group>"; };
 		DD7F38871EAC2275002D8C00 /* PathUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathUtil.swift; sourceTree = "<group>"; };
 		DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloadCenter.swift; sourceTree = "<group>"; };
 		DD90CDC71ED77A3900CADE86 /* SearchFiltersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFiltersViewController.swift; sourceTree = "<group>"; };
@@ -775,15 +777,16 @@
 		DD7F387E1EAC15A1002D8C00 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				9104BDFD2A25165A00860C08 /* Combine+UI.swift */,
 				DDB28F841EAD20A10077703F /* UIDebugger.h */,
 				DDB28F851EAD20A10077703F /* UIDebugger.m */,
-				DD7F387F1EAC15B4002D8C00 /* RxNil.swift */,
 				DD7F38871EAC2275002D8C00 /* PathUtil.swift */,
 				DD876D331EC2A7410058EE3B /* ImageDownloadCenter.swift */,
 				DDDAA40B1EC798B600DF9D02 /* Preferences.swift */,
 				DDC927FD20B7A259004C784D /* NSImage+Compression.swift */,
 				DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */,
 				DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */,
+				91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -822,6 +825,7 @@
 		DDB1A25D2577E51200995FF1 /* LocalDependencies */ = {
 			isa = PBXGroup;
 			children = (
+				91037C8C2A32AF62009AF15E /* Transcripts */,
 				DDB1A25E2577E51E00995FF1 /* ConfCore */,
 			);
 			name = LocalDependencies;
@@ -1413,7 +1417,7 @@
 				F4FB06C12A2178C000799F84 /* WWDCWindowContentViewController.swift in Sources */,
 				DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */,
 				F4578D592A2659C5005B311A /* LiveStreamOverlay.swift in Sources */,
-				DD7F38801EAC15B4002D8C00 /* RxNil.swift in Sources */,
+				9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */,
 				DDA60E1720A9083E002EECF5 /* RelatedSessionsViewController.swift in Sources */,
@@ -1468,7 +1472,6 @@
 				F4FB069F2A2148EA00799F84 /* ExploreTabRootView.swift in Sources */,
 				4DDF6A782177A00C008E5539 /* DownloadsManagementTableCellView.swift in Sources */,
 				F4578D9F2A26A218005B311A /* WWDCAppCommand.swift in Sources */,
-				DDF32EBF1EBE68EE0028E39D /* NSTableView+Rx.swift in Sources */,
 				F4FB06BF2A216C1F00799F84 /* RemoteGlyph.swift in Sources */,
 				DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
@@ -1483,6 +1486,7 @@
 				01B3EB4A1EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift in Sources */,
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
+				91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
 				DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */,
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,

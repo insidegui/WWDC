@@ -179,7 +179,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
     }
 
     func publishNowPlayingInfo() {
-        currentPlayerController?.playerView.nowPlayingInfo = currentPlaybackViewModel?.nowPlayingInfo.value
+        currentPlayerController?.playerView.nowPlayingInfo = currentPlaybackViewModel?.nowPlayingInfo
     }
 
 }

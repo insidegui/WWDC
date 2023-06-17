@@ -10,7 +10,7 @@ import Cocoa
 
 class VibrantButton: NSView {
 
-    var target: Any?
+    weak var target: AnyObject?
     var action: Selector?
 
     var title: String? {

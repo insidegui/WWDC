@@ -7,21 +7,23 @@
 //
 
 import Cocoa
-import RxSwift
-import RxCocoa
+import Combine
 import RealmSwift
 import ConfCore
-import os.log
+import OSLog
 
 // MARK: - Sessions Table View Controller
 
-class SessionsTableViewController: NSViewController, NSMenuItemValidation {
+class SessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
 
-    private let disposeBag = DisposeBag()
+    static let log = makeLogger()
+
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    var selectedSession = BehaviorRelay<SessionViewModel?>(value: nil)
+    @Published
+    var selectedSession: SessionViewModel?
 
     let style: SessionsListStyle
 
@@ -84,13 +86,6 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
         tableView.delegate = self
 
         setupContextualMenu()
-
-        tableView.rx.selectedRow.map { index -> SessionViewModel? in
-            guard let index = index else { return nil }
-            guard case .session(let viewModel) = self.displayedRows[index].kind else { return nil }
-
-            return viewModel
-        }.bind(to: selectedSession).disposed(by: disposeBag)
     }
 
     override func viewDidAppear() {
@@ -138,7 +133,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
     func scrollToToday() {
 
-        sessionRowProvider?.sessionRowIdentifierForToday().flatMap { select(session: $0) }
+        sessionRowProvider?.sessionRowIdentifierForToday(onlyIncludingRowsFor: filterResults.latestSearchResults).flatMap { select(session: $0) }
     }
 
     var hasPerformedFirstUpdate = false
@@ -196,7 +191,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
             !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
 
             searchController.resetFilters()
-            _filterResults = .empty
+            filterResults = .empty
             displayedRows = sessionRowProvider?.allRows ?? []
         }
 
@@ -351,25 +346,15 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation {
 
     // MARK: - Search
 
+    private var filterResults = FilterResults.empty
+
     /// Provide a session identifier if you'd like to override the default selection behavior. Provide
     /// nil to let the table figure out what selection to apply after the update.
     func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
-        _filterResults = filterResults
+        self.filterResults = filterResults
         filterResults.observe { [weak self] in
+            self?.log.debug("Received filter results")
             self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
-        }
-    }
-
-    var _filterResults = FilterResults.empty
-    private var filterResults: FilterResults {
-        get {
-            return _filterResults
-        }
-        set {
-            _filterResults = newValue
-            filterResults.observe { [weak self] in
-                self?.updateWith(searchResults: $0, animated: false, selecting: nil)
-            }
         }
     }
 
@@ -584,6 +569,19 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     struct Metrics {
         static let headerRowHeight: CGFloat = 32
         static let sessionRowHeight: CGFloat = 64
+    }
+
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        let numberOfRows = tableView.numberOfRows
+        let selectedRow = tableView.selectedRow
+
+        let row: Int? = (0..<numberOfRows).contains(selectedRow) ? selectedRow : nil
+
+        if let row, case .session(let viewModel) = self.displayedRows[row].kind {
+            selectedSession = viewModel
+        } else {
+            selectedSession = nil
+        }
     }
 
     func numberOfRows(in tableView: NSTableView) -> Int {

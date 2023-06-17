@@ -74,6 +74,8 @@
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Calendar access allows you to add events directly from the app to help you plan your WWDC week.</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>Add WWDC sessions and events to Calendar.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(COPYRIGHT)</string>
 	<key>NSMainStoryboardFile</key>
