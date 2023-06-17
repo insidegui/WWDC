@@ -111,10 +111,10 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         guard let engine = userDataSyncEngine, isViewLoaded else { return }
 
         // Disable sync switch while there are sync operations running
-        engine.isPerformingSyncOperation.asDriver()
-                                        .map({ !$0 })
-                                        .drive(enableUserDataSyncSwitch.rx.isEnabled)
-                                        .store(in: &cancellables)
+        engine.$isPerformingSyncOperation.sink { [weak self] in
+            self?.enableUserDataSyncSwitch.isEnabled = !$0
+        }
+        .store(in: &cancellables)
         #else
         enableUserDataSyncSwitch?.isHidden = true
         syncDescriptionLabel?.isHidden = true
