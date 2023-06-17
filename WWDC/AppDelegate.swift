@@ -97,8 +97,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
             storage: storage,
             syncEngine: syncEngine
         )
-        coordinator?.windowController.showWindow(self)
-        coordinator?.startup()
     }
 
     private func handleBootstrapError(_ error: Boot.BootstrapError) {

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 
-import RxSwift
+import Combine
 
 final class DownloadsManagementTableCellView: NSTableCellView {
 
@@ -35,7 +35,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         return status
     }
 
-    var disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     var viewModel: DownloadViewModel? {
         didSet {
@@ -55,7 +55,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
     }
 
     func bindUI() {
-        disposeBag = DisposeBag()
+        cancellables = []
 
         sessionTitleLabel.stringValue = viewModel?.session.title ?? "No ViewModel"
 
@@ -63,10 +63,10 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         let status = viewModel.status
         let download = viewModel.download
 
-        let throttledStatus = status.throttle(.milliseconds(100), latest: true, scheduler: MainScheduler.instance)
+        let throttledStatus = status.throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
 
         throttledStatus
-            .subscribe(onNext: { [weak self] status in
+            .sink { [weak self] status in
                 guard let self = self else { return }
 
                 switch status {
@@ -81,7 +81,8 @@ final class DownloadsManagementTableCellView: NSTableCellView {
                     self.downloadStatusLabel.stringValue = DownloadsManagementTableCellView.statusString(for: info, download: download)
                 case .finished, .cancelled, .none, .failed: ()
                 }
-            }).disposed(by: disposeBag)
+            }
+            .store(in: &cancellables)
 
         status
             .map { status -> NSControl.StateValue in
@@ -90,9 +91,10 @@ final class DownloadsManagementTableCellView: NSTableCellView {
                 }
                 return NSControl.StateValue.on
             }
-            .distinctUntilChanged()
-            .bind(to: suspendResumeButton.rx.state)
-            .disposed(by: disposeBag)
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.state, on: suspendResumeButton)
+            .store(in: &cancellables)
     }
 
     private lazy var sessionTitleLabel: NSTextField = {
@@ -174,6 +176,7 @@ final class DownloadsManagementTableCellView: NSTableCellView {
 
         // Horizontal layout
         let gap: CGFloat = -5
+        // fyi, this leading of 20 was chose to make the close button look ok in the detached popover window
         progressIndicator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         progressIndicator.centerYAnchor.constraint(equalTo: centerYAnchor, constant: 3).isActive = true
         progressIndicator.trailingAnchor.constraint(equalTo: suspendResumeButton.leadingAnchor, constant: gap - 2).isActive = true

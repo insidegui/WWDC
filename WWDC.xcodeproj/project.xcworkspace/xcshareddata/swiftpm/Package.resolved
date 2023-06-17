@@ -37,24 +37,6 @@
       }
     },
     {
-      "identity" : "rxrealm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/RxSwiftCommunity/RxRealm",
-      "state" : {
-        "revision" : "a7de576348d48286d8b100a501f757a1c531f1dd",
-        "version" : "5.0.5"
-      }
-    },
-    {
-      "identity" : "rxswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ReactiveX/RxSwift",
-      "state" : {
-        "revision" : "9dcaa4b333db437b0fbfaf453fad29069044a8b4",
-        "version" : "6.6.0"
-      }
-    },
-    {
       "identity" : "siesta",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/bustoutsolutions/siesta",

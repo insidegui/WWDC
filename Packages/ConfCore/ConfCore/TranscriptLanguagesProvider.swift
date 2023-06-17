@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RxSwift
+import Combine
 import OSLog
 
 public final class TranscriptLanguagesProvider: Logging {
@@ -20,7 +20,7 @@ public final class TranscriptLanguagesProvider: Logging {
         self.client = client
     }
 
-    public private(set) var availableLanguageCodes: BehaviorSubject<[TranscriptLanguage]> = BehaviorSubject(value: [])
+    public private(set) var availableLanguageCodes = CurrentValueSubject<[TranscriptLanguage], Error>([])
 
     public func fetchAvailableLanguages() {
         log.debug("\(#function, privacy: .public)")
@@ -32,9 +32,9 @@ public final class TranscriptLanguagesProvider: Logging {
             case .success(let config):
                 let languages = config.feeds.keys.compactMap(TranscriptLanguage.init)
 
-                self.availableLanguageCodes.on(.next(languages))
+                self.availableLanguageCodes.value = languages
             case .failure(let error):
-                self.availableLanguageCodes.on(.error(error))
+                self.availableLanguageCodes.send(completion: .failure(error))
             }
         }
     }
