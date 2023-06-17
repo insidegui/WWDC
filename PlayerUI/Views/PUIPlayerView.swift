@@ -36,7 +36,10 @@ public final class PUIPlayerView: NSView, ObservableObject {
             case playing
         }
 
+        /// The current time in the AVPlayer.
         public var currentTime: CMTime = .zero
+        /// The current time set by the user.
+        public var userTime: CMTime = .zero
         public internal(set) var duration: CMTime = .zero
         public internal(set) var formattedCurrentTime = Self.placeholderTime
         public internal(set) var formattedTimeRemaining = Self.placeholderTime
@@ -272,7 +275,7 @@ public final class PUIPlayerView: NSView, ObservableObject {
     private func setupStateBindings() {
         stateCancellables.removeAll()
 
-        Publishers.CombineLatest($state.map(\.playbackState), $state.map(\.speed)).sink { [weak self] playbackState, speed in
+        Publishers.CombineLatest($state.map(\.playbackState).removeDuplicates(), $state.map(\.speed).removeDuplicates()).sink { [weak self] playbackState, speed in
             guard let self = self else { return }
 
             switch playbackState {
@@ -288,6 +291,11 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
         $state.map(\.volume).removeDuplicates().sink { [weak self] volume in
             self?.player?.volume = volume
+        }
+        .store(in: &stateCancellables)
+
+        $state.map(\.userTime).removeDuplicates().dropFirst().sink { [weak self] time in
+            self?.seek(to: time)
         }
         .store(in: &stateCancellables)
     }
@@ -371,6 +379,7 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
         let time = player.currentTime()
 
+        state.currentTime = time
         state.formattedCurrentTime = String(time: time) ?? State.placeholderTime
 
         let remainingTime = CMTimeSubtract(time, duration)

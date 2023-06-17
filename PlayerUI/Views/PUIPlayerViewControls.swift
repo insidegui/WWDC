@@ -12,7 +12,6 @@ struct PUIPlayerViewControls: View {
 
 private extension PUIPlayerView.State {
     var durationInSeconds: Double { Double(CMTimeGetSeconds(duration)) }
-    var currentTimeInSeconds: Double { Double(CMTimeGetSeconds(currentTime)) }
 
     func startFraction(for segment: PUIBufferSegment) -> Double {
         guard durationInSeconds > 0 else { return 0 }
@@ -47,6 +46,22 @@ private extension PUIPlayerView.State {
         } else {
             playbackState = .playing
         }
+    }
+
+    private var jumpInterval: CMTime {
+        CMTime(seconds: Double(backForwardSkipInterval), preferredTimescale: duration.timescale)
+    }
+
+    mutating func jumpForward() {
+        let jumpTime = currentTime + jumpInterval
+        guard jumpTime.isValid && jumpTime.isNumeric else { return }
+        self.userTime = jumpTime
+    }
+
+    mutating func jumpBackward() {
+        let jumpTime = currentTime - jumpInterval
+        guard jumpTime.isValid && jumpTime.isNumeric else { return }
+        self.userTime = jumpTime
     }
 }
 
@@ -113,7 +128,7 @@ private struct PUIPlayerViewControlsContent: View {
         HStack(spacing: 12) {
             if state.has(.back) {
                 Button {
-
+                    state.jumpBackward()
                 } label: {
                     Image(systemName: "gobackward.\(state.backForwardSkipInterval)")
                         .imageScale(.large)
@@ -147,7 +162,7 @@ private struct PUIPlayerViewControlsContent: View {
 
             if state.has(.forward) {
                 Button {
-
+                    state.jumpForward()
                 } label: {
                     Image(systemName: "goforward.\(state.backForwardSkipInterval)")
                         .imageScale(.large)
