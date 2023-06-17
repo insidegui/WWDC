@@ -8,7 +8,7 @@
 
 import Foundation
 import CloudKit
-import os.log
+import OSLog
 
 extension SessionProgress {
 

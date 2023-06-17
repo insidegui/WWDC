@@ -8,11 +8,11 @@
 
 import Cocoa
 import AVFoundation
-import os.log
+import ConfCore
 
-final class ClipRenderer: NSObject {
+final class ClipRenderer: NSObject, Logging {
 
-    private let log = OSLog(subsystem: "WWDC", category: String(describing: ClipRenderer.self))
+    static let log = makeLogger()
 
     let playerItem: AVPlayerItem
     let fileNameHint: String?
@@ -36,7 +36,7 @@ final class ClipRenderer: NSObject {
                 try FileManager.default.createDirectory(at: baseURL, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 baseURL = URL(fileURLWithPath: NSTemporaryDirectory())
-                os_log("Couldn't create clips directory: %{public}@", log: self.log, type: .error, String(describing: error))
+                log.error("Couldn't create clips directory: \(String(describing: error), privacy: .public)")
             }
         }
 
@@ -64,7 +64,7 @@ final class ClipRenderer: NSObject {
     private var currentSession: AVAssetExportSession?
 
     func renderClip(progress: @escaping RenderProgressBlock, completion: @escaping RenderCompletionBlock) {
-        os_log("%{public}@", log: log, type: .debug, #function)
+        log.debug("\(#function, privacy: .public)")
 
         progressHandler = progress
         completionHandler = completion
@@ -92,7 +92,7 @@ final class ClipRenderer: NSObject {
 
             startProgressReporting()
         } catch {
-            os_log("Composition initialization failed: %{public}@", log: self.log, type: .error, String(describing: error))
+            log.error("Composition initialization failed: \(String(describing: error), privacy: .public)")
 
             reportCompletion(with: .failure(self.error(with: "Couldn't create video composition for clip.")))
         }
@@ -102,7 +102,7 @@ final class ClipRenderer: NSObject {
         session.outputFileType = .mp4
         session.outputURL = outputURL
 
-        os_log("Will output to %@", log: self.log, type: .debug, outputURL.path)
+        log.debug("Will output to \(self.outputURL.path)")
 
         let startTime = playerItem.reversePlaybackEndTime
         let endTime = playerItem.forwardPlaybackEndTime
@@ -115,27 +115,27 @@ final class ClipRenderer: NSObject {
 
             switch session.status {
             case .unknown:
-                os_log("Export session received unknown status")
+                log.info("Export session received unknown status")
             case .waiting:
-                os_log("Export session waiting")
+                log.info("Export session waiting")
             case .exporting:
-                os_log("Export session started")
+                log.info("Export session started")
             case .completed:
-                os_log("Export session finished")
+                log.info("Export session finished")
                 self.progressUpdateTimer?.invalidate()
                 
                 self.reportCompletion(with: .success(self.outputURL))
             case .failed:
                 if let error = session.error {
-                    os_log("Export session failed with error: %{public}@", log: self.log, type: .error, String(describing: error))
+                    log.error("Export session failed with error: \(String(describing: error), privacy: .public)")
                 } else {
-                    os_log("Export session failed with an unknown error", log: self.log, type: .error)
+                    log.error("Export session failed with an unknown error")
                 }
 
                 self.reportCompletion(with: .failure(self.error(with: "The export failed.")))
             case .cancelled:
                 self.progressUpdateTimer?.invalidate()
-                os_log("Cancelled", log: self.log, type: .debug)
+                log.debug("Cancelled")
                 return
             @unknown default:
                 fatalError("Unknown case")

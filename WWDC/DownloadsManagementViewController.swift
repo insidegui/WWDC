@@ -7,7 +7,7 @@
 //
 
 import ConfCore
-import RxSwift
+import Combine
 
 class DownloadsManagementViewController: NSViewController {
 
@@ -34,6 +34,7 @@ class DownloadsManagementViewController: NSViewController {
         v.gridStyleMask = .solidHorizontalGridLineMask
         v.gridColor = NSColor.gridColor
         v.selectionHighlightStyle = .none
+        v.style = .plain
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "download"))
         v.addTableColumn(column)
@@ -69,15 +70,9 @@ class DownloadsManagementViewController: NSViewController {
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Metrics.topPadding).isActive = true
     }
 
-    override func viewDidAppear() {
-        super.viewDidAppear()
-
-        view.window?.title = "Downloads"
-    }
-
     let downloadManager: DownloadManager
     let storage: Storage
-    var disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     var downloads = [DownloadManager.Download]() {
         didSet {
@@ -85,7 +80,10 @@ class DownloadsManagementViewController: NSViewController {
                 dismiss(nil)
             } else if downloads != oldValue {
                 tableView.reloadData()
-                let height = min((Metrics.rowHeight + Metrics.tableGridLineHeight) * CGFloat(downloads.count) + Metrics.topPadding * 2, preferredMaximumSize.height)
+                let height = min(
+                    (Metrics.rowHeight + Metrics.tableGridLineHeight) * CGFloat(downloads.count) + Metrics.topPadding * 2,
+                    preferredMaximumSize.height
+                )
                 self.preferredContentSize = NSSize(width: Metrics.popOverDesiredWidth, height: height)
             }
         }
@@ -105,12 +103,12 @@ class DownloadsManagementViewController: NSViewController {
         super.init(nibName: nil, bundle: nil)
 
         downloadManager
-            .downloadsObservable
-            .throttle(.milliseconds(200), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-
+            .$downloads
+            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] in
                 self?.downloads = $0.sorted(by: DownloadManager.Download.sortingFunction)
-            }).disposed(by: disposeBag)
+            }
+            .store(in: &cancellables)
     }
 
     required init?(coder: NSCoder) {

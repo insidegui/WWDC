@@ -8,14 +8,14 @@
 
 import Cocoa
 import AVFoundation
-import os.log
+import OSLog
 import AVKit
 import Combine
 import SwiftUI
 
 public final class PUIPlayerView: NSView {
 
-    private let log = OSLog(subsystem: "PlayerUI", category: "PUIPlayerView")
+    private let log = Logger(subsystem: "PlayerUI", category: "PUIPlayerView")
     private var cancellables: Set<AnyCancellable> = []
 
     // MARK: - Public API
@@ -175,7 +175,7 @@ public final class PUIPlayerView: NSView {
     public func registerExternalPlaybackProvider(_ provider: PUIExternalPlaybackProvider.Type) {
         // prevent registering the same provider multiple times
         guard !externalPlaybackProviders.contains(where: { type(of: $0.provider).name == provider.name }) else {
-            os_log("Tried to register provider %{public}@ which was already registered", log: log, type: .error, provider.name)
+            log.error("Tried to register provider \(provider.name, privacy: .public) which was already registered")
             return
         }
 
@@ -1657,7 +1657,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
         _ pictureInPictureController: AVPictureInPictureController,
         failedToStartPictureInPictureWithError error: Error
     ) {
-        os_log(.error, log: log, "Failed to start PiP \(error, privacy: .public)")
+        log.error("Failed to start PiP \(error, privacy: .public)")
     }
 
     // Stop

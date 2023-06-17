@@ -9,8 +9,7 @@
 import Cocoa
 import PlayerUI
 import ConfCore
-import RxSwift
-import RxCocoa
+import Combine
 
 protocol SessionActionsViewControllerDelegate: AnyObject {
 
@@ -34,7 +33,7 @@ class SessionActionsViewController: NSViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private var disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     var viewModel: SessionViewModel? {
         didSet {
@@ -167,14 +166,14 @@ class SessionActionsViewController: NSViewController {
     }
 
     private func updateBindings() {
-        disposeBag = DisposeBag()
+        cancellables = []
 
         guard let viewModel = viewModel else { return }
 
         slidesButton.isHidden = (viewModel.session.asset(ofType: .slides) == nil)
         calendarButton.isHidden = (viewModel.sessionInstance.startTime < today())
 
-        viewModel.rxIsFavorite.subscribe(onNext: { [weak self] isFavorite in
+        viewModel.rxIsFavorite.replaceError(with: false).sink { [weak self] isFavorite in
             self?.favoriteButton.state = isFavorite ? .on : .off
 
             if isFavorite {
@@ -182,44 +181,47 @@ class SessionActionsViewController: NSViewController {
             } else {
                 self?.favoriteButton.toolTip = "Add to favorites"
             }
-        }).disposed(by: disposeBag)
+        }
+        .store(in: &cancellables)
 
-        if let rxDownloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
-            rxDownloadState.throttle(.milliseconds(800), scheduler: MainScheduler.instance).subscribe(onNext: { [weak self] status in
-                switch status {
-                case .downloading(let info):
-                    self?.downloadIndicator.isHidden = false
-                    self?.downloadButton.isHidden = true
-                    self?.clipButton.isHidden = true
+        if let downloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
+            downloadState
+                .throttle(for: .milliseconds(800), scheduler: DispatchQueue.main, latest: true)
+                .sink { [weak self] status in
+                    switch status {
+                    case .downloading(let info):
+                        self?.downloadIndicator.isHidden = false
+                        self?.downloadButton.isHidden = true
+                        self?.clipButton.isHidden = true
 
-                    if info.progress < 0 {
-                        self?.downloadIndicator.isIndeterminate = true
-                        self?.downloadIndicator.startAnimating()
-                    } else {
-                        self?.downloadIndicator.isIndeterminate = false
-                        self?.downloadIndicator.progress = Float(info.progress)
+                        if info.progress < 0 {
+                            self?.downloadIndicator.isIndeterminate = true
+                            self?.downloadIndicator.startAnimating()
+                        } else {
+                            self?.downloadIndicator.isIndeterminate = false
+                            self?.downloadIndicator.progress = Float(info.progress)
+                        }
+
+                    case .failed:
+                        let alert = WWDCAlert.create()
+                        alert.messageText = "Download Failed!"
+                        alert.informativeText = "An error occurred while attempting to download \"\(viewModel.title)\"."
+                        alert.runModal()
+                        fallthrough
+                    case .paused, .cancelled, .none:
+                        self?.resetDownloadButton()
+                        self?.downloadIndicator.isHidden = true
+                        self?.downloadButton.isHidden = false
+                        self?.clipButton.isHidden = true
+                    case .finished:
+                        self?.downloadButton.toolTip = "Delete downloaded video"
+                        self?.downloadButton.isHidden = false
+                        self?.downloadIndicator.isHidden = true
+                        self?.downloadButton.image = #imageLiteral(resourceName: "trash")
+                        self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload)
+                        self?.clipButton.isHidden = false
                     }
-
-                case .failed:
-                    let alert = WWDCAlert.create()
-                    alert.messageText = "Download Failed!"
-                    alert.informativeText = "An error occurred while attempting to download \"\(viewModel.title)\"."
-                    alert.runModal()
-                    fallthrough
-                case .paused, .cancelled, .none:
-                    self?.resetDownloadButton()
-                    self?.downloadIndicator.isHidden = true
-                    self?.downloadButton.isHidden = false
-                    self?.clipButton.isHidden = true
-                case .finished:
-                    self?.downloadButton.toolTip = "Delete downloaded video"
-                    self?.downloadButton.isHidden = false
-                    self?.downloadIndicator.isHidden = true
-                    self?.downloadButton.image = #imageLiteral(resourceName: "trash")
-                    self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload)
-                    self?.clipButton.isHidden = false
-                }
-            }).disposed(by: disposeBag)
+                }.store(in: &cancellables)
         } else {
             // session can't be downloaded (maybe Lab or download not available yet)
             downloadIndicator.isHidden = true

@@ -113,6 +113,9 @@ final class RelatedSessionsViewController: NSViewController {
         view.addSubview(titleLabel)
         titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         titleLabel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+
+        // Stay hidden until we get related sessions to show
+        view.isHidden = true
     }
 
     override func viewDidLoad() {

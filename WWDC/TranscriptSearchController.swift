@@ -8,8 +8,7 @@
 
 import Cocoa
 import ConfCore
-import RxSwift
-import RxCocoa
+import Combine
 import PlayerUI
 
 final class TranscriptSearchController: NSViewController {
@@ -35,7 +34,8 @@ final class TranscriptSearchController: NSViewController {
     var didSelectOpenInNewWindow: () -> Void = { }
     var didSelectExportTranscript: () -> Void = { }
 
-    private(set) var searchTerm = BehaviorRelay<String?>(value: nil)
+    @Published
+    private(set) var searchTerm: String = ""
 
     private lazy var detachButton: PUIButton = {
         let b = PUIButton(frame: .zero)
@@ -120,21 +120,28 @@ final class TranscriptSearchController: NSViewController {
         updateStyle()
     }
 
-    private let disposeBag = DisposeBag()
+    private lazy var cancellables: Set<AnyCancellable> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let throttledSearch = searchField.rx.text.throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+        let throttledSearch = NotificationCenter.default.publisher(for: NSControl.textDidChangeNotification, object: searchField)
+            .map {
+                ($0.object as? NSSearchField)?.stringValue ?? ""
+            }
+            .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: true)
+            .share()
+        
+        throttledSearch.assign(to: &$searchTerm)
 
-        throttledSearch.bind(to: searchTerm)
-                       .disposed(by: disposeBag)
-
-        // The skip(1) prevents us from clearing the search pasteboard on initial binding.
-        throttledSearch.skip(1).ignoreNil().subscribe(onNext: { term in
-            NSPasteboard(name: .find).clearContents()
-            NSPasteboard(name: .find).setString(term, forType: .string)
-        }).disposed(by: disposeBag)
+        // The dropFirst(1) prevents us from clearing the search pasteboard on initial binding.
+        throttledSearch
+            .dropFirst(1)
+            .sink { term in
+                NSPasteboard(name: .find).clearContents()
+                NSPasteboard(name: .find).setString(term, forType: .string)
+            }
+            .store(in: &cancellables)
     }
 
     @objc private func openInNewWindow() {
@@ -150,12 +157,12 @@ final class TranscriptSearchController: NSViewController {
         super.viewDidAppear()
 
         guard let pasteboardTerm = NSPasteboard(name: .find).string(forType: .string),
-            pasteboardTerm != searchTerm.value else {
+            pasteboardTerm != searchTerm else {
             return
         }
 
         searchField.stringValue = pasteboardTerm
-        searchTerm.accept(pasteboardTerm)
+        searchTerm = pasteboardTerm
     }
     
     @objc private func exportTranscript() {
