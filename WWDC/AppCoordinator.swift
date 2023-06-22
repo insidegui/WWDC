@@ -279,13 +279,19 @@ final class AppCoordinator: Logging {
                     // Filters only need configured once, the other stuff in
                     // here might only need to happen once as well
                     self.searchCoordinator.configureFilters()
-                }
 
-                // These aren't live updating, which is part of the problem. Filter results update live
-                // but get mixed in with these static lists of live-updating objects. We'll change the architecture
-                // of the sessions list to get 2 streams and then combine them which will simplify startup
-                self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(tracks: tracks)
-                self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(scheduleSections: sections)
+                    // These aren't live updating, which is part of the problem. Filter results update live
+                    // but get mixed in with these static lists of live-updating objects. We'll change the architecture
+                    // of the sessions list to get 2 streams and then combine them which will simplify startup
+                    self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(
+                        tracks: tracks,
+                        filterPredicate: searchCoordinator.$videosFilterPredicate
+                    )
+                    self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(
+                        scheduleSections: sections,
+                        filterPredicate: searchCoordinator.$scheduleFilterPredicate
+                    )
+                }
 
                 if !hasPerformedInitialListUpdate && liveObserver.isWWDCWeek {
                     hasPerformedInitialListUpdate = true
@@ -315,10 +321,12 @@ final class AppCoordinator: Logging {
     }
 
     private lazy var searchCoordinator: SearchCoordinator = {
-        return SearchCoordinator(self.storage,
-                                 sessionsController: self.scheduleController.splitViewController.listViewController,
-                                 videosController: self.videosController.listViewController,
-                                 restorationFiltersState: Preferences.shared.filtersState)
+        return SearchCoordinator(
+            self.storage,
+            scheduleSearchController: self.scheduleController.splitViewController.listViewController.searchController,
+            videosSearchController: self.videosController.listViewController.searchController,
+            restorationFiltersState: Preferences.shared.filtersState
+        )
     }()
 
     func startup() {

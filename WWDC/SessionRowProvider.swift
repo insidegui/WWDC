@@ -6,45 +6,68 @@
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 
+import Combine
 import ConfCore
 import RealmSwift
 
-protocol SessionRowProvider {
-    func sessionRowIdentifierForToday(onlyIncludingRowsFor included: Results<Session>?) -> SessionIdentifiable?
-    func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow]
+struct SessionRows {
+    let all: [SessionRow]
+    let filtered: [SessionRow]
 
-    var allRows: [SessionRow] { get }
+    init(all: [SessionRow] = [], filtered: [SessionRow] = []) {
+        self.all = all
+        self.filtered = filtered
+    }
 }
 
-struct VideosSessionRowProvider: SessionRowProvider {
-    private(set) var allRows = [SessionRow]()
-    let tracks: Results<Track>
+protocol SessionRowProvider {
+    func sessionRowIdentifierForToday() -> SessionIdentifiable?
 
-    init(tracks: Results<Track>) {
+    var rows: AnyPublisher<SessionRows, Never> { get }
+}
+
+final class VideosSessionRowProvider: SessionRowProvider {
+    private var cancellables: Set<AnyCancellable> = []
+    private let filterPredicate: any Publisher<NSPredicate?, Never>
+
+    @Published var _rows: SessionRows = SessionRows()
+    var rows: AnyPublisher<SessionRows, Never> { $_rows.dropFirst().eraseToAnyPublisher() }
+
+    private var tracks: Results<Track>
+
+    init<P: Publisher>(tracks: Results<Track>, filterPredicate: P) where P.Output == NSPredicate?, P.Failure == Never {
         self.tracks = tracks
+        self.filterPredicate = filterPredicate
 
-        allRows = filteredRows(onlyIncludingRowsFor: nil)
+        Publishers.CombineLatest(
+            tracks.collectionChangedPublisher.replaceErrorWithEmpty(),
+            filterPredicate
+        )
+        .sink { [weak self] (tracks, predicate) in
+            guard let self else { return }
+
+            self.tracks = tracks
+
+            // TODO: Build all rows and filtered rows? Do we even need to know both of them? Can it just be "rows"
+            let rows = filteredRows(predicate)
+            self._rows = .init(all: rows, filtered: rows)
+        }
+        .store(in: &cancellables)
     }
 
-    func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow] {
-        return filteredRows(onlyIncludingRowsFor: Optional.some(onlyIncludingRowsFor))
-    }
-
-    private func filteredRows(onlyIncludingRowsFor included: Results<Session>?) -> [SessionRow] {
+    private func filteredRows(_ predicate: NSPredicate?) -> [SessionRow] {
 
         let rows: [SessionRow] = tracks.flatMap { track -> [SessionRow] in
+            var trackSessions = track.sessions.filter(Session.videoPredicate)
 
-            var thing = track.sessions.filter(Session.videoPredicate)
-
-            if let included = included {
-                let sessionIdentifiers = Array(included.map { $0.identifier })
-                thing = thing.filter(NSPredicate(format: "identifier IN %@", sessionIdentifiers))
-                guard !thing.isEmpty else { return [] }
+            if let predicate {
+                trackSessions = trackSessions.filter(predicate)
+                guard !trackSessions.isEmpty else { return [] }
             }
 
             let titleRow = SessionRow(content: .init(title: track.name, symbolName: track.symbolName))
 
-            let sessionRows: [SessionRow] = thing.sorted(by: Session.standardSort).compactMap { session in
+            let sessionRows: [SessionRow] = trackSessions.sorted(by: Session.sameTrackSort).compactMap { session in
                 guard let viewModel = SessionViewModel(session: session, track: track) else { return nil }
 
                 return SessionRow(viewModel: viewModel)
@@ -56,32 +79,50 @@ struct VideosSessionRowProvider: SessionRowProvider {
         return rows
     }
 
-    func sessionRowIdentifierForToday(onlyIncludingRowsFor included: Results<Session>?) -> SessionIdentifiable? {
+    func sessionRowIdentifierForToday() -> SessionIdentifiable? {
         return nil
     }
 }
 
-struct ScheduleSessionRowProvider: SessionRowProvider {
-    private(set) var allRows = [SessionRow]()
-    let scheduleSections: Results<ScheduleSection>
+// TODO: Consider using covariant/subclassing to make this simpler compared to protocol
+final class ScheduleSessionRowProvider: SessionRowProvider {
+    private var cancellables: Set<AnyCancellable> = []
+    private let filterPredicate: any Publisher<NSPredicate?, Never>
 
-    init(scheduleSections: Results<ScheduleSection>) {
+    @Published var _rows: SessionRows = SessionRows()
+    var rows: AnyPublisher<SessionRows, Never> { $_rows.dropFirst().eraseToAnyPublisher() }
+    private var scheduleSections: Results<ScheduleSection>
+
+    init<P: Publisher>(
+        scheduleSections: Results<ScheduleSection>,
+        filterPredicate: P
+    ) where P.Output == NSPredicate?, P.Failure == Never {
         self.scheduleSections = scheduleSections
+        self.filterPredicate = filterPredicate
 
-        allRows = filteredRows(onlyIncludingRowsFor: nil)
+        Publishers.CombineLatest(
+            scheduleSections.collectionChangedPublisher.replaceErrorWithEmpty(),
+            filterPredicate
+        )
+        .sink { [weak self] (tracks, predicate) in
+            guard let self else { return }
+
+            self.scheduleSections = tracks
+
+            // TODO: Build all rows and filtered rows? Do we even need to know both of them? Can it just be "rows"
+            let rows = filteredRows(predicate)
+            self._rows = .init(all: rows, filtered: rows)
+        }
+        .store(in: &cancellables)
     }
 
-    func filteredRows(onlyIncludingRowsFor: Results<Session>) -> [SessionRow] {
-        return filteredRows(onlyIncludingRowsFor: Optional.some(onlyIncludingRowsFor))
-    }
-
-    private func filteredRows(onlyIncludingRowsFor included: Results<Session>?) -> [SessionRow] {
+    private func filteredRows(_ predicate: NSPredicate?) -> [SessionRow] {
         // Only show the timezone on the first section header
         var shownTimeZone = false
 
         let rows: [SessionRow] = scheduleSections.flatMap { section -> [SessionRow] in
-            let filteredInstances = filteredInstances(in: section, onlyIncludingRowsFor: included).sorted(by: SessionInstance.standardSort)
-            guard !filteredInstances.isEmpty else { return []}
+            let filteredInstances = instances(in: section, filteredBy: predicate).sorted(by: SessionInstance.standardSort)
+            guard !filteredInstances.isEmpty else { return [] }
 
             let instanceRows: [SessionRow] = filteredInstances.compactMap { instance in
                 guard let viewModel = SessionViewModel(session: instance.session, instance: instance, track: nil, style: .schedule) else { return nil }
@@ -100,23 +141,26 @@ struct ScheduleSessionRowProvider: SessionRowProvider {
         return rows
     }
 
-    func sessionRowIdentifierForToday(onlyIncludingRowsFor included: Results<Session>?) -> SessionIdentifiable? {
+    func sessionRowIdentifierForToday() -> SessionIdentifiable? {
 
         guard let section = scheduleSections.filter("representedDate >= %@", today()).first else { return nil }
 
-        let filteredInstances = filteredInstances(in: section, onlyIncludingRowsFor: included).sorted(by: SessionInstance.standardSort)
-
-        guard let identifier = filteredInstances.first?.session?.identifier else { return nil }
+        guard let identifier = section.instances.first?.session?.identifier else { return nil }
 
         return SessionIdentifier(identifier)
     }
 
-    private func filteredInstances(in section: ScheduleSection, onlyIncludingRowsFor included: Results<Session>?) -> [SessionInstance] {
-        if let included = included {
-            let sessionIdentifiers = Array(included.map { $0.identifier })
-            return Array(section.instances.filter(NSPredicate(format: "session.identifier IN %@", sessionIdentifiers)))
-        } else {
-            return Array(section.instances)
-        }
+    private func instances(in section: ScheduleSection, filteredBy predicate: NSPredicate?) -> [SessionInstance] {
+//        if let included = included {
+//            let sessionIdentifiers = Array(included.map { $0.identifier })
+//            return Array(section.instances.filter(NSPredicate(format: "session.identifier IN %@", sessionIdentifiers)))
+//        } else {
+//            return Array(section.instances)
+//        }
+
+//        NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == false).@count > 0")
+        // TODO: The predicates for the schedule need to be updated upstream, the currently target `Session`
+        // TODO: and there is no way to apply them directly to `SessionInstance`
+        section.instances.filter(predicate ?? NSPredicate(value: true)).toArray()
     }
 }

@@ -15,29 +15,26 @@ final class SearchCoordinator: Logging {
 
     let storage: Storage
 
-    let scheduleController: SessionsTableViewController
-    let videosController: SessionsTableViewController
-
     static let log = makeLogger()
 
     /// The desired state of the filters upon configuration
     private var restorationFiltersState: WWDCFiltersState?
 
-    fileprivate var scheduleSearchController: SearchFiltersViewController {
-        return scheduleController.searchController
-    }
+    fileprivate var scheduleSearchController: SearchFiltersViewController
+    @Published var scheduleFilterPredicate: NSPredicate?
 
-    fileprivate var videosSearchController: SearchFiltersViewController {
-        return videosController.searchController
-    }
+    fileprivate var videosSearchController: SearchFiltersViewController
+    @Published var videosFilterPredicate: NSPredicate?
 
-    init(_ storage: Storage,
-         sessionsController: SessionsTableViewController,
-         videosController: SessionsTableViewController,
-         restorationFiltersState: String? = nil) {
+    init(
+        _ storage: Storage,
+        scheduleSearchController: SearchFiltersViewController,
+        videosSearchController: SearchFiltersViewController,
+        restorationFiltersState: String? = nil
+    ) {
         self.storage = storage
-        scheduleController = sessionsController
-        self.videosController = videosController
+        self.scheduleSearchController = scheduleSearchController
+        self.videosSearchController = videosSearchController
         self.restorationFiltersState = restorationFiltersState
             .flatMap { $0.data(using: .utf8) }
             .flatMap { try? JSONDecoder().decode(WWDCFiltersState.self, from: $0) }
@@ -191,6 +188,9 @@ final class SearchCoordinator: Logging {
                                                  videosUnwatchedFilter,
                                                  videosBookmarksFilter]
 
+        // TODO: We should be able to separate state restoration from updating the filtering content from Storage
+        // TODO: after the API call gets incorporated into Realm. At the moment, call this again in response to
+        // TODO: content update results in a potentially stale filter state being set back onto the UI :-(
         if !videosSearchController.filters.isIdentical(to: videosSearchFilters) {
             videosSearchController.filters = videosSearchFilters.map {
                 guard let multipleChoice = $0 as? MultipleChoiceFilter else { return $0 }
@@ -205,21 +205,25 @@ final class SearchCoordinator: Logging {
         scheduleSearchController.delegate = self
         videosSearchController.delegate = self
 
-        updateSearchResults(for: scheduleController, with: scheduleSearchController.filters)
-        updateSearchResults(for: videosController, with: videosSearchController.filters)
+        updateSearchResults(for: .schedule, with: scheduleSearchController.filters)
+        updateSearchResults(for: .videos, with: videosSearchController.filters)
     }
 
-    func newFilterResults(for controller: SessionsTableViewController, filters: [FilterType]) -> FilterResults {
+    enum Thing {
+        case schedule, videos
+    }
+
+    func newFilterPredicate(for controller: Thing, filters: [FilterType]) -> NSPredicate? {
         guard filters.contains(where: { !$0.isEmpty }) else {
-            return FilterResults(storage: storage, query: nil)
+            return nil
         }
 
         var subpredicates = filters.compactMap { $0.predicate }
 
-        if controller == scheduleController {
+        if controller == .schedule {
             subpredicates.append(NSPredicate(format: "ANY event.isCurrent == true"))
             subpredicates.append(NSPredicate(format: "instances.@count > 0"))
-        } else if controller == videosController {
+        } else if controller == .videos {
             subpredicates.append(Session.videoPredicate)
         }
 
@@ -227,16 +231,23 @@ final class SearchCoordinator: Logging {
 
         log.debug(
             """
-            \(String(describing: controller.style).capitalized, privacy: .public) \
+            \(String(describing: controller).capitalized, privacy: .public) \
             list filtering with predicate for \(String(describing: predicate), privacy: .public)
             """
         )
 
-        return FilterResults(storage: storage, query: predicate)
+        return predicate
     }
 
-    fileprivate func updateSearchResults(for controller: SessionsTableViewController, with filters: [FilterType]) {
-        controller.setFilterResults(newFilterResults(for: controller, filters: filters), animated: true, selecting: nil)
+    fileprivate func updateSearchResults(for controller: Thing, with filters: [FilterType]) {
+        let predicate = newFilterPredicate(for: controller, filters: filters)
+
+        switch controller {
+        case .schedule:
+            scheduleFilterPredicate = predicate
+        case .videos:
+            videosFilterPredicate = predicate
+        }
     }
 
     @objc fileprivate func activateSearchField() {
@@ -266,9 +277,9 @@ extension SearchCoordinator: SearchFiltersViewControllerDelegate {
 
     func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType]) {
         if controller == scheduleSearchController {
-            updateSearchResults(for: scheduleController, with: filters)
+            updateSearchResults(for: .schedule, with: filters)
         } else {
-            updateSearchResults(for: videosController, with: filters)
+            updateSearchResults(for: .videos, with: filters)
         }
     }
 

@@ -93,7 +93,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
         view.window?.makeFirstResponder(tableView)
 
-        performFirstUpdateIfNeeded()
+//        performFirstUpdateIfNeeded(rows: <#SessionRows#>)
     }
 
     // MARK: - Selection
@@ -124,8 +124,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         let needsToClearSearchToAllowSelection = !isSessionVisible(for: session) && canDisplay(session: session)
 
         if needsToClearSearchToAllowSelection {
-            searchController.resetFilters()
-            setFilterResults(.empty, animated: view.window != nil, selecting: session)
+            searchController.clearAllFilters()
+//            setFilterResults(.empty, animated: view.window != nil, selecting: session)
         } else {
             selectSessionImmediately(with: session)
         }
@@ -133,7 +133,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
     func scrollToToday() {
 
-        sessionRowProvider?.sessionRowIdentifierForToday(onlyIncludingRowsFor: filterResults.latestSearchResults).flatMap { select(session: $0) }
+        sessionRowProvider?.sessionRowIdentifierForToday().flatMap { select(session: $0) }
     }
 
     var hasPerformedFirstUpdate = false
@@ -141,43 +141,56 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     /// This function is meant to ensure the table view gets populated
     /// even if its data model gets added while it is offscreen. Specifically,
     /// when this table view is not the initial active tab.
-    private func performFirstUpdateIfNeeded() {
+    private func performFirstUpdateIfNeeded(rows: SessionRows) {
         guard !hasPerformedFirstUpdate && sessionRowProvider != nil && view.window != nil else { return }
         hasPerformedFirstUpdate = true
 
-        updateWith(searchResults: filterResults.latestSearchResults, animated: false, selecting: nil)
+        updateWith(rows: rows, animated: false, selecting: nil)
     }
 
-    private func updateWith(searchResults: Results<Session>?, animated: Bool, selecting session: SessionIdentifiable?) {
-        guard hasPerformedFirstUpdate else { return }
-
-        guard let results = searchResults else {
-            setDisplayedRows(sessionRowProvider?.allRows ?? [], animated: animated, overridingSelectionWith: session)
+    private func updateWith(rows: SessionRows, animated: Bool, selecting session: SessionIdentifiable?) {
+        guard hasPerformedFirstUpdate else {
+            hasPerformedFirstUpdate = true
+            updateWith(rows: rows, animated: false, selecting: nil)
             return
         }
 
-        guard let sessionRowProvider = sessionRowProvider else { return }
+        let rowsToDisplay: [SessionRow]
+        rowsToDisplay = rows.filtered
 
-        let sessionRows = sessionRowProvider.filteredRows(onlyIncludingRowsFor: results)
+        guard performInitialRowDisplayIfNeeded(displaying: rowsToDisplay, allRows: rows.filtered) else {
+            return
+        }
 
-        setDisplayedRows(sessionRows, animated: animated, overridingSelectionWith: session)
+        setDisplayedRows(rowsToDisplay, animated: animated, overridingSelectionWith: session)
     }
 
     // MARK: - Updating the Displayed Rows
 
+    var rowProviderCancellable: AnyCancellable?
+
+    // TODO: Wondering if this can be moved to the initializer and become non-mutable
     var sessionRowProvider: SessionRowProvider? {
         didSet {
-            performFirstUpdateIfNeeded()
+            guard let sessionRowProvider else { return }
+
+            rowProviderCancellable = sessionRowProvider
+                .rows
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] in
+//                    self?.performFirstUpdateIfNeeded(rows: $0)
+                    self?.updateWith(rows: $0, animated: true, selecting: nil)
+                }
         }
     }
 
-    private(set) var displayedRows: [SessionRow] = []
+    private var displayedRows: [SessionRow] = []
 
     lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
 
     private var hasPerformedInitialRowDisplay = false
 
-    private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow]) -> Bool {
+    private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow], allRows: [SessionRow]) -> Bool {
 
         guard !hasPerformedInitialRowDisplay else { return true }
         hasPerformedInitialRowDisplay = true
@@ -188,11 +201,11 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
         // Clear filters if there is an initial selection that we can display that isn't gonna be visible
         if let initialSelection = self.initialSelection,
-            !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
+           !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
 
-            searchController.resetFilters()
-            filterResults = .empty
-            displayedRows = sessionRowProvider?.allRows ?? []
+            searchController.clearAllFilters()
+//            _filterResults = .empty
+            displayedRows = allRows
         }
 
         tableView.reloadData()
@@ -207,7 +220,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
             // Ensure an initial selection
             if self.tableView.selectedRow == -1,
-                let defaultIndex = rows.firstSessionRowIndex() {
+               let defaultIndex = rows.firstSessionRowIndex() {
 
                 self.tableView.selectRowIndexes(IndexSet(integer: defaultIndex), byExtendingSelection: false)
             }
@@ -221,10 +234,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         return false
     }
 
-    func setDisplayedRows(_ newValue: [SessionRow], animated: Bool, overridingSelectionWith session: SessionIdentifiable?) {
-
-        guard performInitialRowDisplayIfNeeded(displaying: newValue) else { return }
-
+    private func setDisplayedRows(_ newValue: [SessionRow], animated: Bool, overridingSelectionWith session: SessionIdentifiable?) {
         // Dismiss the menu when the displayed rows are about to change otherwise it will crash
         tableView.menu?.cancelTrackingWithoutAnimation()
 
@@ -237,12 +247,15 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
             let oldRowsSet = Set(oldValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
             let newRowsSet = Set(newValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
+            assert(newRowsSet.count == newValue.count)
+            assert(oldRowsSet.count == oldValue.count)
 
             let removed = oldRowsSet.subtracting(newRowsSet)
             let added = newRowsSet.subtracting(oldRowsSet)
 
             let removedIndexes = IndexSet(removed.map { $0.index })
             let addedIndexes = IndexSet(added.map { $0.index })
+            self.log.trace("\(#function): removed[\(removedIndexes.map { "\($0)" }.joined(separator: ","), privacy: .public)] added[\(addedIndexes.map { "\($0)" }.joined(separator: ","), privacy: .public)]")
 
             // Only reload rows if their relative positioning changes. This prevents
             // cell contents from flashing when cells are unnecessarily reloaded
@@ -264,7 +277,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
                 var selectedIndexes = IndexSet()
                 if let session = session,
-                    let overrideIndex = newValue.index(of: session) {
+                   let overrideIndex = newValue.index(of: session) {
 
                     selectedIndexes.insert(overrideIndex)
                 } else {
@@ -324,6 +337,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
                 self.tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
 
+                self.log.debug("endUpdates: row count[\(self.displayedRows.count)]")
                 self.tableView.endUpdates()
                 NSAnimationContext.endGrouping()
             }
@@ -339,24 +353,37 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     func canDisplay(session: SessionIdentifiable) -> Bool {
-        return sessionRowProvider?.allRows.contains { row -> Bool in
-            row.represents(session: session)
-        } ?? false
+        return false
+        //        return sessionRowProvider?.allRows.contains { row -> Bool in
+        //            row.represents(session: session)
+        //        } ?? false
     }
 
     // MARK: - Search
 
-    private var filterResults = FilterResults.empty
-
-    /// Provide a session identifier if you'd like to override the default selection behavior. Provide
-    /// nil to let the table figure out what selection to apply after the update.
-    func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
-        self.filterResults = filterResults
-        filterResults.observe { [weak self] in
-            self?.log.debug("Received filter results")
-            self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
-        }
-    }
+//    /// Provide a session identifier if you'd like to override the default selection behavior. Provide
+//    /// nil to let the table figure out what selection to apply after the update.
+//    func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
+//        _filterResults = filterResults
+//        filterResults.observe { [weak self] in
+//            self?.sessionRowProvider?.filterResults = $0
+//            //            self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
+//        }
+//    }
+//
+//    var _filterResults = FilterResults.empty
+//    private var filterResults: FilterResults {
+//        get {
+//            return _filterResults
+//        }
+//        set {
+//            _filterResults = newValue
+//            filterResults.observe { [weak self] in
+//                self?.sessionRowProvider?.filterResults = $0
+//                //                self?.updateWith(searchResults: $0, animated: false, selecting: nil)
+//            }
+//        }
+//    }
 
     // MARK: - UI
 
@@ -365,7 +392,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     lazy var tableView: WWDCTableView = {
         let v = WWDCTableView()
 
-        // We control the intial selection during initialization
+        // We control the initial selection during initialization
         v.allowsEmptySelection = true
 
         v.wantsLayer = true

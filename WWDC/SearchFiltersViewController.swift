@@ -78,7 +78,7 @@ final class SearchFiltersViewController: NSViewController {
 
     private var effectiveFilters: [FilterType] = []
 
-    func resetFilters() {
+    func clearAllFilters() {
 
         filters = filters.map {
             var resetFilter = $0
