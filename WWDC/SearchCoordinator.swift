@@ -7,13 +7,14 @@
 //
 
 import Cocoa
+import Combine
 import ConfCore
 import RealmSwift
 import OSLog
 
 final class SearchCoordinator: Logging {
 
-    let storage: Storage
+    private var cancellables: Set<AnyCancellable> = []
 
     static let log = makeLogger()
 
@@ -42,7 +43,7 @@ final class SearchCoordinator: Logging {
         videosSearchController: SearchFiltersViewController,
         restorationFiltersState: String? = nil
     ) {
-        self.storage = storage
+//        self.storage = storage
         self.scheduleSearchController = scheduleSearchController
         self.videosSearchController = videosSearchController
         scheduleSearchController.delegate = self
@@ -55,24 +56,41 @@ final class SearchCoordinator: Logging {
                                                selector: #selector(activateSearchField),
                                                name: .MainWindowWantsToSelectSearchField,
                                                object: nil)
+
+        Publishers.CombineLatest4(
+            storage.eventsForFiltering.collectionPublisher,
+            storage.focusesObservable,
+            storage.tracksObservable,
+            storage.allSessionTypes
+        )
+        .replaceErrorWithEmpty()
+        .sink { (events, focuses, tracks, sessionTypes) in
+            self.configureFilters(
+                events: events.toArray(),
+                focuses: focuses.toArray(),
+                tracks: tracks.toArray(),
+                sessionTypes: sessionTypes
+            )
+        }
+        .store(in: &cancellables)
     }
 
     func apply(_ state: WWDCFiltersState) {
         restorationFiltersState = state
-        configureFilters()
+//        configureFilters()
     }
 
-    func configureFilters() {
+    private func configureFilters(events: [Event], focuses: [Focus], tracks: [Track], sessionTypes: [String]) {
         // Schedule Filters Configuration
 
-        configureVideosFilters()
-        configureScheduleFilters()
+        configureVideosFilters(events: events, focuses: focuses, tracks: tracks)
+        configureScheduleFilters(sessionTypes: sessionTypes, focuses: focuses, tracks: tracks)
     }
 
-    func configureVideosFilters() {
+    func configureVideosFilters(events: [Event], focuses: [Focus], tracks: [Track]) {
         var textualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
 
-        var eventOptions = storage.eventsForFiltering
+        var eventOptions = events
             .map { FilterOption(title: $0.name, value: $0.identifier) }
         // Ensure WWDC events are always on top of non-WWDC events.
             .sorted(by: { $0.isWWDCEvent && !$1.isWWDCEvent })
@@ -89,7 +107,7 @@ final class SearchCoordinator: Logging {
                                                selectedOptions: [],
                                                emptyTitle: "All Events")
 
-        let focusOptions = storage.allFocuses.map { FilterOption(title: $0.name, value: $0.name) }
+        let focusOptions = focuses.map { FilterOption(title: $0.name, value: $0.name) }
         var focusFilter = MultipleChoiceFilter(identifier: FilterIdentifier.focus,
                                                isSubquery: true,
                                                collectionKey: "focuses",
@@ -98,7 +116,7 @@ final class SearchCoordinator: Logging {
                                                selectedOptions: [],
                                                emptyTitle: "All Platforms")
 
-        let trackOptions = storage.allTracks.map { FilterOption(title: $0.name, value: $0.name) }
+        let trackOptions = tracks.map { FilterOption(title: $0.name, value: $0.name) }
         var trackFilter = MultipleChoiceFilter(identifier: FilterIdentifier.track,
                                                isSubquery: false,
                                                collectionKey: "",
@@ -190,12 +208,12 @@ final class SearchCoordinator: Logging {
         videosFilterPredicate = videosSearchController.currentPredicate
     }
 
-    func configureScheduleFilters() {
+    func configureScheduleFilters(sessionTypes: [String], focuses: [Focus], tracks: [Track]) {
         // Schedule Filters Configuration
 
         var textualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
 
-        let eventOptions = storage.allSessionTypes.map { FilterOption(title: $0, value: $0) }
+        let eventOptions = sessionTypes.map { FilterOption(title: $0, value: $0) }
         var eventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event,
                                                isSubquery: true,
                                                collectionKey: "session.instances",
@@ -204,7 +222,7 @@ final class SearchCoordinator: Logging {
                                                selectedOptions: [],
                                                emptyTitle: "All Events")
 
-        let focusOptions = storage.allFocuses.map { FilterOption(title: $0.name, value: $0.name) }
+        let focusOptions = focuses.map { FilterOption(title: $0.name, value: $0.name) }
         var focusFilter = MultipleChoiceFilter(identifier: FilterIdentifier.focus,
                                                isSubquery: true,
                                                collectionKey: "session.focuses",
@@ -213,7 +231,7 @@ final class SearchCoordinator: Logging {
                                                selectedOptions: [],
                                                emptyTitle: "All Platforms")
 
-        let trackOptions = storage.allTracks.map { FilterOption(title: $0.name, value: $0.name) }
+        let trackOptions = tracks.map { FilterOption(title: $0.name, value: $0.name) }
         var trackFilter = MultipleChoiceFilter(identifier: FilterIdentifier.track,
                                                isSubquery: false,
                                                collectionKey: "",

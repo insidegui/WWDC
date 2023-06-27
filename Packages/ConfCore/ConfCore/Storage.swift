@@ -548,22 +548,20 @@ public final class Storage: Logging {
         return realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).toArray()
     }
 
-    public var eventsForFiltering: [Event] {
+    public var eventsForFiltering: Results<Event> {
         return realm.objects(Event.self)
             .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType == %@).@count > %d", SessionAssetType.streamingVideo.rawValue, 0)
             .sorted(byKeyPath: "startDate", ascending: false)
-            .toArray()
     }
 
-    public var allFocuses: [Focus] {
-        return realm.objects(Focus.self).sorted(byKeyPath: "name").toArray()
-    }
-
-    public var allSessionTypes: [String] {
-        Array(
-            Set(realm.objects(SessionInstance.self).map(\.rawSessionType))
-        )
-        .sorted(by: { $0.localizedStandardCompare($1) == .orderedAscending })
+    public var allSessionTypes: some Publisher<[String], Error> {
+        realm
+            .objects(SessionInstance.self)
+            .collectionPublisher
+            .map {
+                Array(Set($0.map(\.rawSessionType)))
+                    .sorted(by: { $0.localizedStandardCompare($1) == .orderedAscending })
+            }
     }
 
     public var allTracks: [Track] {

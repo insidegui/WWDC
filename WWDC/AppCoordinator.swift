@@ -296,7 +296,7 @@ final class AppCoordinator: Logging {
                 if !hasPerformedInitialListUpdate {
                     // Filters only need configured once, the other stuff in
                     // here might only need to happen once as well
-                    self.searchCoordinator.configureFilters()
+//                    self.searchCoordinator.configureFilters()
 
                     // These aren't live updating, which is part of the problem. Filter results update live
                     // but get mixed in with these static lists of live-updating objects. We'll change the architecture
