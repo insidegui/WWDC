@@ -45,6 +45,8 @@ final class SearchCoordinator: Logging {
         self.storage = storage
         self.scheduleSearchController = scheduleSearchController
         self.videosSearchController = videosSearchController
+        scheduleSearchController.delegate = self
+        videosSearchController.delegate = self
         self.restorationFiltersState = restorationFiltersState
             .flatMap { $0.data(using: .utf8) }
             .flatMap { try? JSONDecoder().decode(WWDCFiltersState.self, from: $0) }
@@ -63,144 +65,111 @@ final class SearchCoordinator: Logging {
     func configureFilters() {
         // Schedule Filters Configuration
 
-        var scheduleTextualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
+        configureVideosFilters()
+        configureScheduleFilters()
+    }
 
-        let eventOptions = storage.allSessionTypes.map { FilterOption(title: $0, value: $0) }
-        var scheduleEventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event,
-                                                       isSubquery: true,
-                                                       collectionKey: "instances",
-                                                       modelKey: "rawSessionType",
-                                                       options: eventOptions,
-                                                       selectedOptions: [],
-                                                       emptyTitle: "All Events")
+    func configureVideosFilters() {
+        var textualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
+
+        var eventOptions = storage.eventsForFiltering
+            .map { FilterOption(title: $0.name, value: $0.identifier) }
+        // Ensure WWDC events are always on top of non-WWDC events.
+            .sorted(by: { $0.isWWDCEvent && !$1.isWWDCEvent })
+        /// Add a separator between WWDC and non-WWDC events.
+        if let lastWWDCIndex = eventOptions.lastIndex(where: { $0.isWWDCEvent }), lastWWDCIndex != eventOptions.endIndex {
+            eventOptions.insert(.separator, at: lastWWDCIndex + 1)
+        }
+
+        var eventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event,
+                                               isSubquery: false,
+                                               collectionKey: "",
+                                               modelKey: "eventIdentifier",
+                                               options: eventOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Events")
 
         let focusOptions = storage.allFocuses.map { FilterOption(title: $0.name, value: $0.name) }
-        var scheduleFocusFilter = MultipleChoiceFilter(identifier: FilterIdentifier.focus,
-                                                       isSubquery: true,
-                                                       collectionKey: "focuses",
-                                                       modelKey: "name",
-                                                       options: focusOptions,
-                                                       selectedOptions: [],
-                                                       emptyTitle: "All Platforms")
+        var focusFilter = MultipleChoiceFilter(identifier: FilterIdentifier.focus,
+                                               isSubquery: true,
+                                               collectionKey: "focuses",
+                                               modelKey: "name",
+                                               options: focusOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Platforms")
 
         let trackOptions = storage.allTracks.map { FilterOption(title: $0.name, value: $0.name) }
-        var scheduleTrackFilter = MultipleChoiceFilter(identifier: FilterIdentifier.track,
-                                                       isSubquery: false,
-                                                       collectionKey: "",
-                                                       modelKey: "trackName",
-                                                       options: trackOptions,
-                                                       selectedOptions: [],
-                                                       emptyTitle: "All Topics")
+        var trackFilter = MultipleChoiceFilter(identifier: FilterIdentifier.track,
+                                               isSubquery: false,
+                                               collectionKey: "",
+                                               modelKey: "trackName",
+                                               options: trackOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Topics")
 
         let favoritePredicate = NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == false).@count > 0")
-        var scheduleFavoriteFilter = ToggleFilter(identifier: FilterIdentifier.isFavorite,
-                                                  isOn: false,
-                                                  defaultValue: false,
-                                                  customPredicate: favoritePredicate)
+        var favoriteFilter = ToggleFilter(identifier: FilterIdentifier.isFavorite,
+                                          isOn: false,
+                                          defaultValue: false,
+                                          customPredicate: favoritePredicate)
 
         let downloadedPredicate = NSPredicate(format: "isDownloaded == true")
-        var scheduleDownloadedFilter = ToggleFilter(identifier: FilterIdentifier.isDownloaded,
-                                                    isOn: false,
-                                                    defaultValue: false,
-                                                    customPredicate: downloadedPredicate)
+        var downloadedFilter = ToggleFilter(identifier: FilterIdentifier.isDownloaded,
+                                            isOn: false,
+                                            defaultValue: false,
+                                            customPredicate: downloadedPredicate)
 
         let smallPositionPred = NSPredicate(format: "SUBQUERY(progresses, $progress, $progress.relativePosition < \(Constants.watchedVideoRelativePosition)).@count > 0")
         let noPositionPred = NSPredicate(format: "progresses.@count == 0")
 
         let unwatchedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [smallPositionPred, noPositionPred])
 
-        var scheduleUnwatchedFilter = ToggleFilter(identifier: FilterIdentifier.isUnwatched,
-                                                   isOn: false,
-                                                   defaultValue: false,
-                                                   customPredicate: unwatchedPredicate)
+        var unwatchedFilter = ToggleFilter(identifier: FilterIdentifier.isUnwatched,
+                                           isOn: false,
+                                           defaultValue: false,
+                                           customPredicate: unwatchedPredicate)
 
         let bookmarksPredicate = NSPredicate(format: "SUBQUERY(bookmarks, $bookmark, $bookmark.isDeleted == false).@count > 0")
 
-        var scheduleBookmarksFilter = ToggleFilter(identifier: FilterIdentifier.hasBookmarks,
-                                                     isOn: false,
-                                                     defaultValue: false,
-                                                     customPredicate: bookmarksPredicate)
+        var bookmarksFilter = ToggleFilter(identifier: .hasBookmarks,
+                                           isOn: false,
+                                           defaultValue: false,
+                                           customPredicate: bookmarksPredicate)
 
         // Schedule Filtering State Restoration
 
         let savedScheduleFiltersState = restorationFiltersState?.scheduleTab
 
-        scheduleTextualFilter.value = savedScheduleFiltersState?.text?.value
-        scheduleEventFilter.selectedOptions = savedScheduleFiltersState?.event?.selectedOptions ?? []
-        scheduleFocusFilter.selectedOptions = savedScheduleFiltersState?.focus?.selectedOptions ?? []
-        scheduleTrackFilter.selectedOptions = savedScheduleFiltersState?.track?.selectedOptions ?? []
-        scheduleFavoriteFilter.isOn = savedScheduleFiltersState?.isFavorite?.isOn ?? false
-        scheduleDownloadedFilter.isOn = savedScheduleFiltersState?.isDownloaded?.isOn ?? false
-        scheduleUnwatchedFilter.isOn = savedScheduleFiltersState?.isUnwatched?.isOn ?? false
-        scheduleBookmarksFilter.isOn = savedScheduleFiltersState?.hasBookmarks?.isOn ?? false
-
-        let scheduleSearchFilters: [FilterType] = [scheduleTextualFilter,
-                                                   scheduleEventFilter,
-                                                   scheduleFocusFilter,
-                                                   scheduleTrackFilter,
-                                                   scheduleFavoriteFilter,
-                                                   scheduleDownloadedFilter,
-                                                   scheduleUnwatchedFilter,
-                                                   scheduleBookmarksFilter]
-
-        if !scheduleSearchController.filters.isIdentical(to: scheduleSearchFilters) {
-            scheduleSearchController.filters = scheduleSearchFilters
-            scheduleSearchController.additionalPredicates = [
-//                NSPredicate(format: "ANY event.isCurrent == true"),
-//                NSPredicate(format: "instances.@count > 0")
-            ]
-        }
-
-        // Videos Filter Configuration
+        textualFilter.value = savedScheduleFiltersState?.text?.value
+        eventFilter.selectedOptions = savedScheduleFiltersState?.event?.selectedOptions ?? []
+        focusFilter.selectedOptions = savedScheduleFiltersState?.focus?.selectedOptions ?? []
+        trackFilter.selectedOptions = savedScheduleFiltersState?.track?.selectedOptions ?? []
+        favoriteFilter.isOn = savedScheduleFiltersState?.isFavorite?.isOn ?? false
+        downloadedFilter.isOn = savedScheduleFiltersState?.isDownloaded?.isOn ?? false
+        unwatchedFilter.isOn = savedScheduleFiltersState?.isUnwatched?.isOn ?? false
+        bookmarksFilter.isOn = savedScheduleFiltersState?.hasBookmarks?.isOn ?? false
 
         let savedVideosFiltersState = restorationFiltersState?.videosTab
 
-        var videosTextualFilter = scheduleTextualFilter
+        // Apply State Restoration
 
-        var videosEventOptions = storage.eventsForFiltering
-            .map { FilterOption(title: $0.name, value: $0.identifier) }
-            // Ensure WWDC events are always on top of non-WWDC events.
-            .sorted(by: { $0.isWWDCEvent && !$1.isWWDCEvent })
+        textualFilter.value = savedVideosFiltersState?.text?.value
+        eventFilter.selectedOptions = savedVideosFiltersState?.event?.selectedOptions ?? []
+        focusFilter.selectedOptions = savedVideosFiltersState?.focus?.selectedOptions ?? []
+        trackFilter.selectedOptions = savedVideosFiltersState?.track?.selectedOptions ?? []
+        favoriteFilter.isOn = savedVideosFiltersState?.isFavorite?.isOn ?? false
+        downloadedFilter.isOn = savedVideosFiltersState?.isDownloaded?.isOn ?? false
+        unwatchedFilter.isOn = savedVideosFiltersState?.isUnwatched?.isOn ?? false
+        bookmarksFilter.isOn = savedVideosFiltersState?.hasBookmarks?.isOn ?? false
 
-        /// Add a separator between WWDC and non-WWDC events.
-        if let lastWWDCIndex = videosEventOptions.lastIndex(where: { $0.isWWDCEvent }), lastWWDCIndex != videosEventOptions.endIndex {
-            videosEventOptions.insert(.separator, at: lastWWDCIndex + 1)
-        }
-        
-        var videosEventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event,
-                                                     isSubquery: false,
-                                                     collectionKey: "",
-                                                     modelKey: "eventIdentifier",
-                                                     options: videosEventOptions,
-                                                     selectedOptions: [],
-                                                     emptyTitle: "All Events")
-
-        var videosFocusFilter = scheduleFocusFilter
-        var videosTrackFilter = scheduleTrackFilter
-        var videosFavoriteFilter = scheduleFavoriteFilter
-        var videosDownloadedFilter = scheduleDownloadedFilter
-        var videosUnwatchedFilter = scheduleUnwatchedFilter
-        var videosBookmarksFilter = scheduleBookmarksFilter
-
-        // Videos Filtering State Restoration
-
-        videosTextualFilter.value = savedVideosFiltersState?.text?.value
-        videosEventFilter.selectedOptions = savedVideosFiltersState?.event?.selectedOptions ?? []
-        videosFocusFilter.selectedOptions = savedVideosFiltersState?.focus?.selectedOptions ?? []
-        videosTrackFilter.selectedOptions = savedVideosFiltersState?.track?.selectedOptions ?? []
-        videosFavoriteFilter.isOn = savedVideosFiltersState?.isFavorite?.isOn ?? false
-        videosDownloadedFilter.isOn = savedVideosFiltersState?.isDownloaded?.isOn ?? false
-        videosUnwatchedFilter.isOn = savedVideosFiltersState?.isUnwatched?.isOn ?? false
-        videosBookmarksFilter.isOn = savedVideosFiltersState?.hasBookmarks?.isOn ?? false
-
-        let videosSearchFilters: [FilterType] = [videosTextualFilter,
-                                                 videosEventFilter,
-                                                 videosFocusFilter,
-                                                 videosTrackFilter,
-                                                 videosFavoriteFilter,
-                                                 videosDownloadedFilter,
-                                                 videosUnwatchedFilter,
-                                                 videosBookmarksFilter]
+        let videosSearchFilters: [FilterType] = [textualFilter,
+                                                 eventFilter,
+                                                 focusFilter,
+                                                 trackFilter,
+                                                 favoriteFilter,
+                                                 downloadedFilter,
+                                                 unwatchedFilter,
+                                                 bookmarksFilter]
 
         // TODO: We should be able to separate state restoration from updating the filtering content from Storage
         // TODO: after the API call gets incorporated into Realm. At the moment, call this again in response to
@@ -218,12 +187,103 @@ final class SearchCoordinator: Logging {
             ]
         }
 
-        // set delegates
-        scheduleSearchController.delegate = self
-        videosSearchController.delegate = self
+        videosFilterPredicate = videosSearchController.currentPredicate
+    }
+
+    func configureScheduleFilters() {
+        // Schedule Filters Configuration
+
+        var textualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
+
+        let eventOptions = storage.allSessionTypes.map { FilterOption(title: $0, value: $0) }
+        var eventFilter = MultipleChoiceFilter(identifier: FilterIdentifier.event,
+                                               isSubquery: true,
+                                               collectionKey: "session.instances",
+                                               modelKey: "rawSessionType",
+                                               options: eventOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Events")
+
+        let focusOptions = storage.allFocuses.map { FilterOption(title: $0.name, value: $0.name) }
+        var focusFilter = MultipleChoiceFilter(identifier: FilterIdentifier.focus,
+                                               isSubquery: true,
+                                               collectionKey: "session.focuses",
+                                               modelKey: "name",
+                                               options: focusOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Platforms")
+
+        let trackOptions = storage.allTracks.map { FilterOption(title: $0.name, value: $0.name) }
+        var trackFilter = MultipleChoiceFilter(identifier: FilterIdentifier.track,
+                                               isSubquery: false,
+                                               collectionKey: "",
+                                               modelKey: "session.trackName",
+                                               options: trackOptions,
+                                               selectedOptions: [],
+                                               emptyTitle: "All Topics")
+
+        let favoritePredicate = NSPredicate(format: "SUBQUERY(session.favorites, $favorite, $favorite.isDeleted == false).@count > 0")
+        var favoriteFilter = ToggleFilter(
+            identifier: FilterIdentifier.isFavorite,
+            isOn: false,
+            defaultValue: false,
+            customPredicate: favoritePredicate
+        )
+
+        let downloadedPredicate = NSPredicate(format: "session.isDownloaded == true")
+        var downloadedFilter = ToggleFilter(identifier: FilterIdentifier.isDownloaded,
+                                            isOn: false,
+                                            defaultValue: false,
+                                            customPredicate: downloadedPredicate)
+
+        let smallPositionPred = NSPredicate(format: "SUBQUERY(session.progresses, $progress, $progress.relativePosition < \(Constants.watchedVideoRelativePosition)).@count > 0")
+        let noPositionPred = NSPredicate(format: "session.progresses.@count == 0")
+
+        let unwatchedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [smallPositionPred, noPositionPred])
+
+        var unwatchedFilter = ToggleFilter(identifier: FilterIdentifier.isUnwatched,
+                                           isOn: false,
+                                           defaultValue: false,
+                                           customPredicate: unwatchedPredicate)
+
+        let bookmarksPredicate = NSPredicate(format: "SUBQUERY(session.bookmarks, $bookmark, $bookmark.isDeleted == false).@count > 0")
+
+        var bookmarksFilter = ToggleFilter(identifier: FilterIdentifier.hasBookmarks,
+                                           isOn: false,
+                                           defaultValue: false,
+                                           customPredicate: bookmarksPredicate)
+
+        // Schedule Filtering State Restoration
+
+        let savedScheduleFiltersState = restorationFiltersState?.scheduleTab
+
+        textualFilter.value = savedScheduleFiltersState?.text?.value
+        eventFilter.selectedOptions = savedScheduleFiltersState?.event?.selectedOptions ?? []
+        focusFilter.selectedOptions = savedScheduleFiltersState?.focus?.selectedOptions ?? []
+        trackFilter.selectedOptions = savedScheduleFiltersState?.track?.selectedOptions ?? []
+        favoriteFilter.isOn = savedScheduleFiltersState?.isFavorite?.isOn ?? false
+        downloadedFilter.isOn = savedScheduleFiltersState?.isDownloaded?.isOn ?? false
+        unwatchedFilter.isOn = savedScheduleFiltersState?.isUnwatched?.isOn ?? false
+        bookmarksFilter.isOn = savedScheduleFiltersState?.hasBookmarks?.isOn ?? false
+
+        let scheduleSearchFilters: [FilterType] = [textualFilter,
+                                                   eventFilter,
+                                                   focusFilter,
+                                                   trackFilter,
+                                                   favoriteFilter,
+                                                   downloadedFilter,
+                                                   unwatchedFilter,
+                                                   bookmarksFilter]
+
+        if !scheduleSearchController.filters.isIdentical(to: scheduleSearchFilters) {
+            scheduleSearchController.filters = scheduleSearchFilters
+            scheduleSearchController.additionalPredicates = [
+                NSPredicate(format: "ANY session.event.isCurrent == true"),
+                NSPredicate(format: "session.instances.@count > 0")
+            ]
+        }
 
         scheduleFilterPredicate = scheduleSearchController.currentPredicate
-        videosFilterPredicate = videosSearchController.currentPredicate
     }
 
     @objc fileprivate func activateSearchField() {

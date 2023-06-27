@@ -54,7 +54,7 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
 
         Publishers.CombineLatest(
             tracks,
-            filterPredicate
+            filterPredicate.dropFirst(1).removeDuplicates() // wait for filters to be configured
         )
         .sink { [weak self] (tracks, predicate) in
             guard let self else { return }
@@ -105,20 +105,21 @@ final class ScheduleSessionRowProvider: SessionRowProvider {
 
     @Published var _rows: SessionRows = SessionRows()
     var rows: AnyPublisher<SessionRows, Never> { $_rows.dropFirst().eraseToAnyPublisher() }
-    private var scheduleSections: Results<ScheduleSection>
+    private var scheduleSections: Results<ScheduleSection>?
 
-    init<P: Publisher>(
-        scheduleSections: Results<ScheduleSection>,
+    init<P: Publisher, S: Publisher>(
+        scheduleSections: S,
         filterPredicate: P
-    ) where P.Output == NSPredicate?, P.Failure == Never {
-        self.scheduleSections = scheduleSections
+    ) where P.Output == NSPredicate?, P.Failure == Never, S.Output == Results<ScheduleSection> {
+
+//        self.scheduleSections = scheduleSections
         self.filterPredicate = filterPredicate
 
         Publishers.CombineLatest(
-            scheduleSections.collectionChangedPublisher.replaceErrorWithEmpty(),
-            filterPredicate
+            scheduleSections.replaceErrorWithEmpty(),
+            filterPredicate.dropFirst(1).removeDuplicates() // wait for filters to be configured
         )
-        .prefix(0)
+//        .prefix(0)
         .sink { [weak self] (tracks, predicate) in
             guard let self else { return }
 
@@ -132,6 +133,7 @@ final class ScheduleSessionRowProvider: SessionRowProvider {
     }
 
     private func filteredRows(_ predicate: NSPredicate?) -> [SessionRow] {
+        guard let scheduleSections else { return [] }
         // Only show the timezone on the first section header
         var shownTimeZone = false
 
@@ -157,6 +159,7 @@ final class ScheduleSessionRowProvider: SessionRowProvider {
     }
 
     func sessionRowIdentifierForToday() -> SessionIdentifiable? {
+        guard let scheduleSections else { return nil }
 
         guard let section = scheduleSections.filter("representedDate >= %@", today()).first else { return nil }
 

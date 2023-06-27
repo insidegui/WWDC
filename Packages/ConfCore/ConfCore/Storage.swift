@@ -472,23 +472,6 @@ public final class Storage: Logging {
         return sections.collectionPublisher
     }()
 
-    public lazy var scheduleSections: Results<ScheduleSection> = {
-        return self.realm
-            .objects(ScheduleSection.self)
-//        let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
-//
-//        return currentEvents
-//            .collectionPublisher
-//            .map({ $0.first?.identifier })
-//            .flatMap { (identifier: String?) -> AnyPublisher<Results<ScheduleSection>, Error> in
-//                let sections = self.realm
-//                    .objects(ScheduleSection.self).filter("eventIdentifier == %@", identifier ?? "")
-//                    .sorted(byKeyPath: "representedDate")
-//
-//                return sections.collectionPublisher.eraseToAnyPublisher()
-//            }
-    }()
-
     public lazy var scheduleObservable: some Publisher<Results<ScheduleSection>, Error> = {
         let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
 

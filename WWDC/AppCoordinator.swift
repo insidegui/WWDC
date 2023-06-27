@@ -84,7 +84,7 @@ final class AppCoordinator: Logging {
         scheduleController = ScheduleContainerViewController(
             windowController: windowController,
             rowProvider: ScheduleSessionRowProvider(
-                scheduleSections: storage.scheduleSections,
+                scheduleSections: storage.scheduleObservable,
                 filterPredicate: searchCoordinator.$scheduleFilterPredicate
             ),
             searchController: scheduleSearchController
@@ -270,18 +270,10 @@ final class AppCoordinator: Logging {
         scheduleController.splitViewController.listViewController.delegate = self
     }
 
-    private func updateListsAfterSync() {
-        doUpdateLists()
-
-        DownloadManager.shared.syncWithFileSystem()
-    }
-
     var hasPerformedInitialListUpdate = false
-    private func doUpdateLists() {
-
+    private func observeStartUpTasks() {
         // Initial app launch waits for all of these things to be loaded before dismissing the primary loading spinner
         // It may, however, delay the presentation of content on tabs that already have everything they need
-
         let startupDependencies = Publishers.CombineLatest4(
             storage.tracksObservable,
             storage.eventsObservable,
@@ -289,6 +281,7 @@ final class AppCoordinator: Logging {
             storage.scheduleObservable
         )
 
+        // Instead of watching for storage output, we can watch signals on the things that start up
         startupDependencies
             .replaceErrorWithEmpty()
             .filter {
@@ -308,14 +301,14 @@ final class AppCoordinator: Logging {
                     // These aren't live updating, which is part of the problem. Filter results update live
                     // but get mixed in with these static lists of live-updating objects. We'll change the architecture
                     // of the sessions list to get 2 streams and then combine them which will simplify startup
-//                    self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(
-//                        tracks: tracks,
-//                        filterPredicate: searchCoordinator.$videosFilterPredicate
-//                    )
-//                    self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(
-//                        scheduleSections: sections,
-//                        filterPredicate: searchCoordinator.$scheduleFilterPredicate
-//                    )
+                    //                    self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(
+                    //                        tracks: tracks,
+                    //                        filterPredicate: searchCoordinator.$videosFilterPredicate
+                    //                    )
+                    //                    self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(
+                    //                        scheduleSections: sections,
+                    //                        filterPredicate: searchCoordinator.$scheduleFilterPredicate
+                    //                    )
                 }
 
                 if !hasPerformedInitialListUpdate && liveObserver.isWWDCWeek {
@@ -326,14 +319,6 @@ final class AppCoordinator: Logging {
             }
             .store(in: &cancellables)
 
-        bindScheduleAvailability()
-
-        liveObserver.start()
-
-        DispatchQueue.main.async { self.configureSharePlayIfSupported() }
-    }
-
-    private func bindScheduleAvailability() {
         storage.eventHeroObservable.map({ $0 != nil })
             .replaceError(with: false)
             .receive(on: DispatchQueue.main)
@@ -343,6 +328,12 @@ final class AppCoordinator: Logging {
             .replaceError(with: nil)
             .driveUI(\.heroController.hero, on: scheduleController)
             .store(in: &cancellables)
+
+        liveObserver.start()
+
+        DispatchQueue.main.async { self.configureSharePlayIfSupported() }
+
+        DownloadManager.shared.syncWithFileSystem()
     }
 
     var searchCoordinator: SearchCoordinator
@@ -351,9 +342,9 @@ final class AppCoordinator: Logging {
         windowController.contentViewController = tabController
         windowController.showWindow(self)
 
-        if storage.isEmpty {
+//        if storage.isEmpty {
             tabController.showLoading()
-        }
+//        }
 
         func checkSyncEngineOperationSucceededAndShowError(note: Notification) -> Bool {
             if let error = note.object as? APIError {
@@ -373,8 +364,7 @@ final class AppCoordinator: Logging {
         }
 
         _ = NotificationCenter.default.addObserver(forName: .SyncEngineDidSyncSessionsAndSchedule, object: nil, queue: .main) { note in
-            guard checkSyncEngineOperationSucceededAndShowError(note: note) else { return }
-            self.updateListsAfterSync()
+            _ = checkSyncEngineOperationSucceededAndShowError(note: note)
         }
 
         _ = NotificationCenter.default.addObserver(forName: .WWDCEnvironmentDidChange, object: nil, queue: .main) { _ in
@@ -382,7 +372,7 @@ final class AppCoordinator: Logging {
         }
 
         refresh(nil)
-        updateListsAfterSync()
+        observeStartUpTasks()
 
         if Arguments.showPreferences {
             showPreferences(nil)

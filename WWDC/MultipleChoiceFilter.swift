@@ -101,7 +101,7 @@ struct MultipleChoiceFilter: FilterType {
             let op = option.isNegative ? "!=" : "=="
 
             if isSubquery {
-                format = "SUBQUERY(\(collectionKey), $\(collectionKey), $\(collectionKey).\(modelKey) \(op) %@).@count > 0"
+                format = "SUBQUERY(\(collectionKey), $iter, $iter.\(modelKey) \(op) %@).@count > 0"
             } else {
                 format = "\(modelKey) \(op) %@"
             }
