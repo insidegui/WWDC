@@ -25,14 +25,25 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     @Published
     var selectedSession: SessionViewModel?
 
-    let style: SessionsListStyle
+//    let style: SessionsListStyle
 
-    init(style: SessionsListStyle) {
-        self.style = style
+    init(rowProvider: SessionRowProvider, searchController: SearchFiltersViewController) {
+//        self.style = style
+        self.sessionRowProvider = rowProvider
+        self.searchController = searchController
 
         super.init(nibName: nil, bundle: nil)
 
         identifier = NSUserInterfaceItemIdentifier(rawValue: "videosList")
+
+        rowProviderCancellable = rowProvider
+            .rows
+//            .prefix(1)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                //                    self?.performFirstUpdateIfNeeded(rows: $0)
+                self?.updateWith(rows: $0, animated: true, selecting: nil)
+            }
     }
 
     required init?(coder: NSCoder) {
@@ -149,6 +160,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     private func updateWith(rows: SessionRows, animated: Bool, selecting session: SessionIdentifiable?) {
+        log.debug(#function)
         guard hasPerformedFirstUpdate else {
             hasPerformedFirstUpdate = true
             updateWith(rows: rows, animated: false, selecting: nil)
@@ -159,9 +171,11 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         rowsToDisplay = rows.filtered
 
         guard performInitialRowDisplayIfNeeded(displaying: rowsToDisplay, allRows: rows.filtered) else {
+            log.debug("Performed initial row display")
             return
         }
 
+        log.debug("Set displayed rows")
         setDisplayedRows(rowsToDisplay, animated: animated, overridingSelectionWith: session)
     }
 
@@ -170,7 +184,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     var rowProviderCancellable: AnyCancellable?
 
     // TODO: Wondering if this can be moved to the initializer and become non-mutable
-    var sessionRowProvider: SessionRowProvider? {
+    let sessionRowProvider: SessionRowProvider?/* {
         didSet {
             guard let sessionRowProvider else { return }
 
@@ -182,7 +196,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
                     self?.updateWith(rows: $0, animated: true, selecting: nil)
                 }
         }
-    }
+    }*/
 
     private var displayedRows: [SessionRow] = []
 
@@ -235,6 +249,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     private func setDisplayedRows(_ newValue: [SessionRow], animated: Bool, overridingSelectionWith session: SessionIdentifiable?) {
+        log.debug(#function)
         // Dismiss the menu when the displayed rows are about to change otherwise it will crash
         tableView.menu?.cancelTrackingWithoutAnimation()
 
@@ -359,35 +374,9 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         //        } ?? false
     }
 
-    // MARK: - Search
-
-//    /// Provide a session identifier if you'd like to override the default selection behavior. Provide
-//    /// nil to let the table figure out what selection to apply after the update.
-//    func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
-//        _filterResults = filterResults
-//        filterResults.observe { [weak self] in
-//            self?.sessionRowProvider?.filterResults = $0
-//            //            self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
-//        }
-//    }
-//
-//    var _filterResults = FilterResults.empty
-//    private var filterResults: FilterResults {
-//        get {
-//            return _filterResults
-//        }
-//        set {
-//            _filterResults = newValue
-//            filterResults.observe { [weak self] in
-//                self?.sessionRowProvider?.filterResults = $0
-//                //                self?.updateWith(searchResults: $0, animated: false, selecting: nil)
-//            }
-//        }
-//    }
-
     // MARK: - UI
 
-    lazy var searchController = SearchFiltersViewController.loadFromStoryboard()
+    let searchController: SearchFiltersViewController
 
     lazy var tableView: WWDCTableView = {
         let v = WWDCTableView()

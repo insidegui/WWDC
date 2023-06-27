@@ -20,11 +20,21 @@ final class SearchCoordinator: Logging {
     /// The desired state of the filters upon configuration
     private var restorationFiltersState: WWDCFiltersState?
 
-    fileprivate var scheduleSearchController: SearchFiltersViewController
-    @Published var scheduleFilterPredicate: NSPredicate?
+    fileprivate let scheduleSearchController: SearchFiltersViewController
+    @Published var scheduleFilterPredicate: NSPredicate? {
+        didSet {
+            log.debug(
+                "Schedule new predicate: \(self.scheduleFilterPredicate?.description ?? "nil", privacy: .public)"
+            )
+        }
+    }
 
-    fileprivate var videosSearchController: SearchFiltersViewController
-    @Published var videosFilterPredicate: NSPredicate?
+    fileprivate let videosSearchController: SearchFiltersViewController
+    @Published var videosFilterPredicate: NSPredicate? {
+        didSet {
+            log.debug("Videos new predicate: \(self.videosFilterPredicate?.description ?? "nil", privacy: .public)")
+        }
+    }
 
     init(
         _ storage: Storage,
@@ -135,6 +145,10 @@ final class SearchCoordinator: Logging {
 
         if !scheduleSearchController.filters.isIdentical(to: scheduleSearchFilters) {
             scheduleSearchController.filters = scheduleSearchFilters
+            scheduleSearchController.additionalPredicates = [
+//                NSPredicate(format: "ANY event.isCurrent == true"),
+//                NSPredicate(format: "instances.@count > 0")
+            ]
         }
 
         // Videos Filter Configuration
@@ -199,55 +213,17 @@ final class SearchCoordinator: Logging {
                 withClearOption.options.append(.clear)
                 return withClearOption
             }
+            videosSearchController.additionalPredicates = [
+                Session.videoPredicate
+            ]
         }
 
         // set delegates
         scheduleSearchController.delegate = self
         videosSearchController.delegate = self
 
-        updateSearchResults(for: .schedule, with: scheduleSearchController.filters)
-        updateSearchResults(for: .videos, with: videosSearchController.filters)
-    }
-
-    enum Thing {
-        case schedule, videos
-    }
-
-    func newFilterPredicate(for controller: Thing, filters: [FilterType]) -> NSPredicate? {
-        guard filters.contains(where: { !$0.isEmpty }) else {
-            return nil
-        }
-
-        var subpredicates = filters.compactMap { $0.predicate }
-
-        if controller == .schedule {
-            subpredicates.append(NSPredicate(format: "ANY event.isCurrent == true"))
-            subpredicates.append(NSPredicate(format: "instances.@count > 0"))
-        } else if controller == .videos {
-            subpredicates.append(Session.videoPredicate)
-        }
-
-        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
-
-        log.debug(
-            """
-            \(String(describing: controller).capitalized, privacy: .public) \
-            list filtering with predicate for \(String(describing: predicate), privacy: .public)
-            """
-        )
-
-        return predicate
-    }
-
-    fileprivate func updateSearchResults(for controller: Thing, with filters: [FilterType]) {
-        let predicate = newFilterPredicate(for: controller, filters: filters)
-
-        switch controller {
-        case .schedule:
-            scheduleFilterPredicate = predicate
-        case .videos:
-            videosFilterPredicate = predicate
-        }
+        scheduleFilterPredicate = scheduleSearchController.currentPredicate
+        videosFilterPredicate = videosSearchController.currentPredicate
     }
 
     @objc fileprivate func activateSearchField() {
@@ -277,9 +253,9 @@ extension SearchCoordinator: SearchFiltersViewControllerDelegate {
 
     func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType]) {
         if controller == scheduleSearchController {
-            updateSearchResults(for: .schedule, with: filters)
+            scheduleFilterPredicate = scheduleSearchController.currentPredicate
         } else {
-            updateSearchResults(for: .videos, with: filters)
+            videosFilterPredicate = videosSearchController.currentPredicate
         }
     }
 

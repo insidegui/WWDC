@@ -15,16 +15,16 @@ enum SessionsListStyle {
 
 final class SessionsSplitViewController: NSSplitViewController {
 
-    var listViewController: SessionsTableViewController
-    var detailViewController: SessionDetailsViewController
+    let listViewController: SessionsTableViewController
+    let detailViewController: SessionDetailsViewController
     var isResizingSplitView = false
-    var windowController: MainWindowController
+    let windowController: MainWindowController
     var setupDone = false
 
-    init(windowController: MainWindowController, listStyle: SessionsListStyle) {
+    init(windowController: MainWindowController, rowProvider: SessionRowProvider, searchController: SearchFiltersViewController) {
         self.windowController = windowController
-        listViewController = SessionsTableViewController(style: listStyle)
-        detailViewController = SessionDetailsViewController(listStyle: listStyle)
+        listViewController = SessionsTableViewController(rowProvider: rowProvider, searchController: searchController)
+        detailViewController = SessionDetailsViewController()
 
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView(notification:)), name: .sideBarSizeSyncNotification, object: nil)

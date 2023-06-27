@@ -26,7 +26,8 @@ protocol SessionRowProvider {
     var rows: AnyPublisher<SessionRows, Never> { get }
 }
 
-final class VideosSessionRowProvider: SessionRowProvider {
+final class VideosSessionRowProvider: SessionRowProvider, Logging {
+    static let log = makeLogger()
     private var cancellables: Set<AnyCancellable> = []
     private let filterPredicate: any Publisher<NSPredicate?, Never>
 
@@ -39,13 +40,26 @@ final class VideosSessionRowProvider: SessionRowProvider {
         self.tracks = tracks
         self.filterPredicate = filterPredicate
 
+        let tracks = tracks.collectionChangedPublisher
+            .replaceErrorWithEmpty()
+            .map {
+                Self.log.debug("tracks updated")
+                return $0
+            }
+        let filterPredicate = filterPredicate
+            .map {
+                Self.log.debug("filter predicate updated")
+                return $0
+            }
+
         Publishers.CombineLatest(
-            tracks.collectionChangedPublisher.replaceErrorWithEmpty(),
+            tracks,
             filterPredicate
         )
         .sink { [weak self] (tracks, predicate) in
             guard let self else { return }
 
+            Self.log.debug("Received new update")
             self.tracks = tracks
 
             // TODO: Build all rows and filtered rows? Do we even need to know both of them? Can it just be "rows"
@@ -104,6 +118,7 @@ final class ScheduleSessionRowProvider: SessionRowProvider {
             scheduleSections.collectionChangedPublisher.replaceErrorWithEmpty(),
             filterPredicate
         )
+        .prefix(0)
         .sink { [weak self] (tracks, predicate) in
             guard let self else { return }
 

@@ -54,6 +54,17 @@ final class AppCoordinator: Logging {
         self.storage = storage
         self.syncEngine = syncEngine
 
+        let scheduleSearchController = SearchFiltersViewController.loadFromStoryboard()
+        let videosSearchController = SearchFiltersViewController.loadFromStoryboard()
+
+        let searchCoordinator = SearchCoordinator(
+            self.storage,
+            scheduleSearchController: scheduleSearchController,
+            videosSearchController: videosSearchController,
+            restorationFiltersState: Preferences.shared.filtersState
+        )
+        self.searchCoordinator = searchCoordinator
+
         DownloadManager.shared.start(with: storage)
 
         liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
@@ -70,7 +81,14 @@ final class AppCoordinator: Logging {
         tabController.addTabViewItem(exploreItem)
 
         // Schedule
-        scheduleController = ScheduleContainerViewController(windowController: windowController, listStyle: .schedule)
+        scheduleController = ScheduleContainerViewController(
+            windowController: windowController,
+            rowProvider: ScheduleSessionRowProvider(
+                scheduleSections: storage.scheduleSections,
+                filterPredicate: searchCoordinator.$scheduleFilterPredicate
+            ),
+            searchController: scheduleSearchController
+        )
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
         scheduleController.splitViewController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
         scheduleController.splitViewController.splitView.autosaveName = "ScheduleSplitView"
@@ -80,7 +98,14 @@ final class AppCoordinator: Logging {
         tabController.addTabViewItem(scheduleItem)
 
         // Videos
-        videosController = SessionsSplitViewController(windowController: windowController, listStyle: .videos)
+        videosController = SessionsSplitViewController(
+            windowController: windowController,
+            rowProvider: VideosSessionRowProvider(
+                tracks: storage.tracks,
+                filterPredicate: searchCoordinator.$videosFilterPredicate
+            ),
+            searchController: videosSearchController
+        )
         videosController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Videos")
         videosController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "VideosSplitView")
         videosController.splitView.autosaveName = "VideosSplitView"
@@ -283,14 +308,14 @@ final class AppCoordinator: Logging {
                     // These aren't live updating, which is part of the problem. Filter results update live
                     // but get mixed in with these static lists of live-updating objects. We'll change the architecture
                     // of the sessions list to get 2 streams and then combine them which will simplify startup
-                    self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(
-                        tracks: tracks,
-                        filterPredicate: searchCoordinator.$videosFilterPredicate
-                    )
-                    self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(
-                        scheduleSections: sections,
-                        filterPredicate: searchCoordinator.$scheduleFilterPredicate
-                    )
+//                    self.videosController.listViewController.sessionRowProvider = VideosSessionRowProvider(
+//                        tracks: tracks,
+//                        filterPredicate: searchCoordinator.$videosFilterPredicate
+//                    )
+//                    self.scheduleController.splitViewController.listViewController.sessionRowProvider = ScheduleSessionRowProvider(
+//                        scheduleSections: sections,
+//                        filterPredicate: searchCoordinator.$scheduleFilterPredicate
+//                    )
                 }
 
                 if !hasPerformedInitialListUpdate && liveObserver.isWWDCWeek {
@@ -320,14 +345,7 @@ final class AppCoordinator: Logging {
             .store(in: &cancellables)
     }
 
-    private lazy var searchCoordinator: SearchCoordinator = {
-        return SearchCoordinator(
-            self.storage,
-            scheduleSearchController: self.scheduleController.splitViewController.listViewController.searchController,
-            videosSearchController: self.videosController.listViewController.searchController,
-            restorationFiltersState: Preferences.shared.filtersState
-        )
-    }()
+    var searchCoordinator: SearchCoordinator
 
     func startup() {
         windowController.contentViewController = tabController

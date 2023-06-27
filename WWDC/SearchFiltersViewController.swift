@@ -78,6 +78,20 @@ final class SearchFiltersViewController: NSViewController {
 
     private var effectiveFilters: [FilterType] = []
 
+    var additionalPredicates: [NSPredicate] = []
+    var currentPredicate: NSPredicate? {
+        let filters = filters
+        guard filters.contains(where: { !$0.isEmpty }) || !additionalPredicates.isEmpty else {
+            return nil
+        }
+
+        let subpredicates = filters.compactMap { $0.predicate } + additionalPredicates
+
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
+
+        return predicate
+    }
+
     func clearAllFilters() {
 
         filters = filters.map {
@@ -192,11 +206,11 @@ final class SearchFiltersViewController: NSViewController {
         var updatedFilters = effectiveFilters
         updatedFilters[filterIndex] = filter
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
-
         popUp.title = filter.title
 
         effectiveFilters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
     }
 
     private func updateToggleFilter(at filterIndex: Int, with state: Bool) {
@@ -207,9 +221,9 @@ final class SearchFiltersViewController: NSViewController {
         var updatedFilters = effectiveFilters
         updatedFilters[filterIndex] = filter
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
-
         effectiveFilters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
     }
 
     private func updateTextualFilter(at filterIndex: Int, with text: String) {
@@ -221,9 +235,9 @@ final class SearchFiltersViewController: NSViewController {
         var updatedFilters = effectiveFilters
         updatedFilters[filterIndex] = filter
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
-
         effectiveFilters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
 
         NSPasteboard(name: .find).clearContents()
         NSPasteboard(name: .find).setString(text, forType: .string)
