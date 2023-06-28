@@ -84,7 +84,7 @@ final class AppCoordinator: Logging {
         scheduleController = ScheduleContainerViewController(
             windowController: windowController,
             rowProvider: ScheduleSessionRowProvider(
-                scheduleSections: storage.scheduleObservable,
+                scheduleSections: storage.scheduleShallowObservable,
                 filterPredicate: searchCoordinator.$scheduleFilterPredicate
             ),
             searchController: scheduleSearchController
@@ -277,7 +277,7 @@ final class AppCoordinator: Logging {
         let startupDependencies = Publishers.CombineLatest4(
             storage.tracksObservable,
             storage.eventsObservable,
-            storage.focusesObservable,
+            storage.focusesShallowObservable,
             storage.scheduleObservable
         )
 
@@ -329,7 +329,7 @@ final class AppCoordinator: Logging {
             .driveUI(\.heroController.hero, on: scheduleController)
             .store(in: &cancellables)
 
-        liveObserver.start()
+//        liveObserver.start()
 
         DispatchQueue.main.async { self.configureSharePlayIfSupported() }
 

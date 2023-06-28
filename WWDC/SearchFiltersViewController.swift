@@ -7,11 +7,19 @@
 //
 
 import Cocoa
+import ConfCore
+
+struct FilterUpdateContext {
+    var sessionToSelect: Session
+}
 
 protocol SearchFiltersViewControllerDelegate: AnyObject {
 
-    func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType])
-
+    func searchFiltersViewController(
+        _ controller: SearchFiltersViewController,
+        didChangeFilters filters: [FilterType],
+        context: FilterUpdateContext?
+    )
 }
 
 enum FilterSegment: Int {
@@ -93,13 +101,16 @@ final class SearchFiltersViewController: NSViewController {
     }
 
     func clearAllFilters() {
-
-        filters = filters.map {
+        let updatedFilters = filters.map {
             var resetFilter = $0
             resetFilter.reset()
 
             return resetFilter
         }
+
+        filters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: nil)
     }
 
     weak var delegate: SearchFiltersViewControllerDelegate?
@@ -210,7 +221,7 @@ final class SearchFiltersViewController: NSViewController {
 
         effectiveFilters = updatedFilters
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: nil)
     }
 
     private func updateToggleFilter(at filterIndex: Int, with state: Bool) {
@@ -223,7 +234,7 @@ final class SearchFiltersViewController: NSViewController {
 
         effectiveFilters = updatedFilters
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: nil)
     }
 
     private func updateTextualFilter(at filterIndex: Int, with text: String) {
@@ -237,7 +248,7 @@ final class SearchFiltersViewController: NSViewController {
 
         effectiveFilters = updatedFilters
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: nil)
 
         NSPasteboard(name: .find).clearContents()
         NSPasteboard(name: .find).setString(text, forType: .string)

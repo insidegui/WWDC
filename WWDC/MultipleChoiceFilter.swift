@@ -57,11 +57,25 @@ extension Array where Element == FilterOption {
 }
 
 struct MultipleChoiceFilter: FilterType {
+    private static func optionsWithClear(_ newValue: [FilterOption]) -> [FilterOption] {
+        if !newValue.contains(.clear) {
+            var withClear = newValue
+            withClear.append(.separator)
+            withClear.append(.clear)
+            return withClear
+        } else {
+            return newValue
+        }
+    }
 
     var identifier: FilterIdentifier
     var collectionKey: String?
     var modelKey: String
-    var options: [FilterOption]
+    private var _options: [FilterOption]
+    var options: [FilterOption] {
+        get { _options }
+        set { _options = Self.optionsWithClear(newValue) }
+    }
     private var _selectedOptions: [FilterOption] = []
     var selectedOptions: [FilterOption] {
         get {
@@ -111,11 +125,11 @@ struct MultipleChoiceFilter: FilterType {
         return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates)
     }
 
-    init(_ identifier: FilterIdentifier, modelKey: String, collectionKey: String? = nil, options: [FilterOption], emptyTitle: String) {
+    init(id identifier: FilterIdentifier, modelKey: String, collectionKey: String? = nil, options: [FilterOption], emptyTitle: String) {
         self.identifier = identifier
         self.collectionKey = collectionKey
         self.modelKey = modelKey
-        self.options = options
+        self._options = Self.optionsWithClear(options)
         self.emptyTitle = emptyTitle
     }
 

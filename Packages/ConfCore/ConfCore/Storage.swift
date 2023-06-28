@@ -447,10 +447,10 @@ public final class Storage: Logging {
         return events.collectionPublisher
     }()
 
-    public lazy var focusesObservable: some Publisher<Results<Focus>, Error> = {
+    public lazy var focusesShallowObservable: some Publisher<Results<Focus>, Error> = {
         let focuses = realm.objects(Focus.self).sorted(byKeyPath: "name")
 
-        return focuses.collectionPublisher
+        return focuses.collectionChangedPublisher
     }()
 
     public lazy var tracks: Results<Track> = {
@@ -463,6 +463,12 @@ public final class Storage: Logging {
         let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
 
         return tracks.collectionPublisher
+    }()
+
+    public lazy var tracksShallowObservable: some Publisher<Results<Track>, Error> = {
+        let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
+
+        return tracks.collectionChangedPublisher
     }()
 
     public lazy var featuredSectionsObservable: some Publisher<Results<FeaturedSection>, Error> = {
@@ -479,6 +485,16 @@ public final class Storage: Logging {
             let sections = self.realm.objects(ScheduleSection.self).filter("eventIdentifier == %@", identifier ?? "").sorted(byKeyPath: "representedDate")
 
             return sections.collectionPublisher.eraseToAnyPublisher()
+        }
+    }()
+
+    public lazy var scheduleShallowObservable: some Publisher<Results<ScheduleSection>, Error> = {
+        let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
+
+        return currentEvents.collectionChangedPublisher.map({ $0.first?.identifier }).flatMap { (identifier: String?) -> AnyPublisher<Results<ScheduleSection>, Error> in
+            let sections = self.realm.objects(ScheduleSection.self).filter("eventIdentifier == %@", identifier ?? "").sorted(byKeyPath: "representedDate")
+
+            return sections.collectionChangedPublisher.eraseToAnyPublisher()
         }
     }()
 
@@ -554,10 +570,10 @@ public final class Storage: Logging {
             .sorted(byKeyPath: "startDate", ascending: false)
     }
 
-    public var allSessionTypes: some Publisher<[String], Error> {
+    public var allSessionTypesShallowPublisher: some Publisher<[String], Error> {
         realm
             .objects(SessionInstance.self)
-            .collectionPublisher
+            .collectionChangedPublisher
             .map {
                 Array(Set($0.map(\.rawSessionType)))
                     .sorted(by: { $0.localizedStandardCompare($1) == .orderedAscending })
@@ -568,4 +584,24 @@ public final class Storage: Logging {
         return realm.objects(Track.self).sorted(byKeyPath: "order").toArray()
     }
 
+}
+
+public extension RealmCollection where Self: RealmSubscribable {
+    /// Similar to `changesetPublisher` but only emits a new value when the collection has additions or removals and ignores all upstream
+    /// values caused by objects being modified
+    var collectionChangedPublisher: some Publisher<Self, Error> {
+        changesetPublisher
+            .tryCompactMap { changeset in
+                switch changeset {
+                case .initial(let latestValue):
+                    return latestValue
+                case .update(let latestValue, let deletions, let insertions, _) where !deletions.isEmpty || !insertions.isEmpty:
+                    return latestValue
+                case .update:
+                    return nil
+                case .error(let error):
+                    throw error
+                }
+            }
+    }
 }

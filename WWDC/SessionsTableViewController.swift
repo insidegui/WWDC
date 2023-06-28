@@ -25,10 +25,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     @Published
     var selectedSession: SessionViewModel?
 
-//    let style: SessionsListStyle
-
     init(rowProvider: SessionRowProvider, searchController: SearchFiltersViewController) {
-//        self.style = style
         self.sessionRowProvider = rowProvider
         self.searchController = searchController
 
@@ -36,14 +33,13 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
         identifier = NSUserInterfaceItemIdentifier(rawValue: "videosList")
 
-        rowProviderCancellable = rowProvider
+        rowProvider
             .rows
-//            .prefix(1)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                //                    self?.performFirstUpdateIfNeeded(rows: $0)
                 self?.updateWith(rows: $0, animated: true, selecting: nil)
             }
+            .store(in: &cancellables)
     }
 
     required init?(coder: NSCoder) {
@@ -102,9 +98,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     override func viewDidAppear() {
         super.viewDidAppear()
 
+        // This allows using the arrow keys to navigate
         view.window?.makeFirstResponder(tableView)
-
-//        performFirstUpdateIfNeeded(rows: <#SessionRows#>)
     }
 
     // MARK: - Selection
@@ -136,6 +131,9 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
         if needsToClearSearchToAllowSelection {
             searchController.clearAllFilters()
+            // TODO: The old function did an in-place filter clearing and passed
+            // the session to select on. Here, if we clear the filters, the round trip through
+            // publisher land means we need to stash that information somewhere
 //            setFilterResults(.empty, animated: view.window != nil, selecting: session)
         } else {
             selectSessionImmediately(with: session)
@@ -144,28 +142,11 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
     func scrollToToday() {
 
-        sessionRowProvider?.sessionRowIdentifierForToday().flatMap { select(session: $0) }
-    }
-
-    var hasPerformedFirstUpdate = false
-
-    /// This function is meant to ensure the table view gets populated
-    /// even if its data model gets added while it is offscreen. Specifically,
-    /// when this table view is not the initial active tab.
-    private func performFirstUpdateIfNeeded(rows: SessionRows) {
-        guard !hasPerformedFirstUpdate && sessionRowProvider != nil && view.window != nil else { return }
-        hasPerformedFirstUpdate = true
-
-        updateWith(rows: rows, animated: false, selecting: nil)
+        sessionRowProvider.sessionRowIdentifierForToday().flatMap { select(session: $0) }
     }
 
     private func updateWith(rows: SessionRows, animated: Bool, selecting session: SessionIdentifiable?) {
         log.debug(#function)
-        guard hasPerformedFirstUpdate else {
-            hasPerformedFirstUpdate = true
-            updateWith(rows: rows, animated: false, selecting: nil)
-            return
-        }
 
         let rowsToDisplay: [SessionRow]
         rowsToDisplay = rows.filtered
@@ -181,26 +162,11 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
     // MARK: - Updating the Displayed Rows
 
-    var rowProviderCancellable: AnyCancellable?
-
-    // TODO: Wondering if this can be moved to the initializer and become non-mutable
-    let sessionRowProvider: SessionRowProvider?/* {
-        didSet {
-            guard let sessionRowProvider else { return }
-
-            rowProviderCancellable = sessionRowProvider
-                .rows
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] in
-//                    self?.performFirstUpdateIfNeeded(rows: $0)
-                    self?.updateWith(rows: $0, animated: true, selecting: nil)
-                }
-        }
-    }*/
+    let sessionRowProvider: SessionRowProvider
 
     private var displayedRows: [SessionRow] = []
 
-    lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
+    private lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
 
     private var hasPerformedInitialRowDisplay = false
 
@@ -218,7 +184,6 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
            !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
 
             searchController.clearAllFilters()
-//            _filterResults = .empty
             displayedRows = allRows
         }
 
@@ -368,10 +333,10 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     func canDisplay(session: SessionIdentifiable) -> Bool {
-        return false
-        //        return sessionRowProvider?.allRows.contains { row -> Bool in
-        //            row.represents(session: session)
-        //        } ?? false
+        assert(sessionRowProvider.latestRows != nil, "We should avoid asking this question until things are initialized")
+        return sessionRowProvider.latestRows?.all.contains { row -> Bool in
+            row.represents(session: session)
+        } ?? false
     }
 
     // MARK: - UI

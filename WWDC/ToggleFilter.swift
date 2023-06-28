@@ -10,7 +10,7 @@ import Foundation
 
 struct ToggleFilter: FilterType {
 
-    init(_ identifier: FilterIdentifier, predicate: NSPredicate?) {
+    init(id identifier: FilterIdentifier, predicate: NSPredicate?) {
         self.identifier = identifier
         self.customPredicate = predicate
     }

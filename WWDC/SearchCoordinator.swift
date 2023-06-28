@@ -58,7 +58,7 @@ final class SearchCoordinator: Logging {
 
     fileprivate let scheduleSearchController: SearchFiltersViewController
     @Published var scheduleFilterPredicate: NSPredicate? {
-        didSet {
+        willSet {
             log.debug(
                 "Schedule new predicate: \(self.scheduleFilterPredicate?.description ?? "nil", privacy: .public)"
             )
@@ -67,7 +67,7 @@ final class SearchCoordinator: Logging {
 
     fileprivate let videosSearchController: SearchFiltersViewController
     @Published var videosFilterPredicate: NSPredicate? {
-        didSet {
+        willSet {
             log.debug("Videos new predicate: \(self.videosFilterPredicate?.description ?? "nil", privacy: .public)")
         }
     }
@@ -99,10 +99,10 @@ final class SearchCoordinator: Logging {
 
         Publishers.CombineLatest4(
             // TODO: Make sure these are shallow Realm publishers
-            storage.eventsForFiltering.collectionPublisher,
-            storage.focusesObservable,
-            storage.tracksObservable,
-            storage.allSessionTypes
+            storage.eventsForFiltering.collectionChangedPublisher,
+            storage.focusesShallowObservable,
+            storage.tracksShallowObservable,
+            storage.allSessionTypesShallowPublisher
         )
         .replaceErrorWithEmpty()
         .sink { (events, focuses, tracks, sessionTypes) in
@@ -125,25 +125,19 @@ final class SearchCoordinator: Logging {
     private func configureFilters(events: [Event], focuses: [Focus], tracks: [Track], sessionTypes: [String]) {
         // Schedule Filters Configuration
 
-        var videoFilters = configureVideosFilters(events: events, focuses: focuses, tracks: tracks)
+        var videoFilters = makeVideoFilters(events: events, focuses: focuses, tracks: tracks)
         videoFilters.apply(restorationFiltersState?.videosTab)
 
         // TODO: We should be able to separate state restoration from updating the filtering content from Storage
         // TODO: after the API call gets incorporated into Realm. At the moment, call this again in response to
         // TODO: content update results in a potentially stale filter state being set back onto the UI :-(
         if !videosSearchController.filters.isIdentical(to: videoFilters.all) {
-            videosSearchController.filters = videoFilters.all.map {
-                guard let multipleChoice = $0 as? MultipleChoiceFilter else { return $0 }
-                var withClearOption = multipleChoice
-                withClearOption.options.append(.separator)
-                withClearOption.options.append(.clear)
-                return withClearOption
-            }
+            videosSearchController.filters = videoFilters.all
         }
 
         videosFilterPredicate = videosSearchController.currentPredicate
 
-        var scheduleFilters = configureScheduleFilters(sessionTypes: sessionTypes, focuses: focuses, tracks: tracks)
+        var scheduleFilters = makeScheduleFilters(sessionTypes: sessionTypes, focuses: focuses, tracks: tracks)
         scheduleFilters.apply(restorationFiltersState?.scheduleTab)
 
         if !scheduleSearchController.filters.isIdentical(to: scheduleFilters.all) {
@@ -153,111 +147,71 @@ final class SearchCoordinator: Logging {
         scheduleFilterPredicate = scheduleSearchController.currentPredicate
     }
 
-    func configureVideosFilters(events: [Event], focuses: [Focus], tracks: [Track]) -> IntermediateFiltersStructure {
-        var textualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
-
-        var eventOptions = events
+    func makeVideoFilters(events: [Event], focuses: [Focus], tracks: [Track]) -> IntermediateFiltersStructure {
+        let eventOptionsByType = events
             .map { FilterOption(title: $0.name, value: $0.identifier) }
-            // Ensure WWDC events are always on top of non-WWDC events.
-            .sorted(by: { $0.isWWDCEvent && !$1.isWWDCEvent })
+            .grouped(by: \.isWWDCEvent)
+
         // Add a separator between WWDC and non-WWDC events.
-        if let lastWWDCIndex = eventOptions.lastIndex(where: { $0.isWWDCEvent }),
-            lastWWDCIndex != eventOptions.endIndex {
-            eventOptions.insert(.separator, at: lastWWDCIndex + 1)
-        }
+        let eventOptions = eventOptionsByType[true, default: []] + [.separator] + eventOptionsByType[false, default: []]
 
         let eventFilter = MultipleChoiceFilter(
-            .event,
+            id: .event,
             modelKey: "eventIdentifier",
             options: eventOptions,
             emptyTitle: "All Events"
         )
 
-        let focusFilter = MultipleChoiceFilter(
-            .focus,
-            modelKey: "name",
-            collectionKey: "focuses",
-            options: focuses.map { FilterOption(title: $0.name, value: $0.name) },
-            emptyTitle: "All Platforms"
-        )
-
-        let trackFilter = MultipleChoiceFilter(
-            .track,
-            modelKey: "trackName",
-            options: tracks.map { FilterOption(title: $0.name, value: $0.name) },
-            emptyTitle: "All Topics"
-        )
-
-        let favoritePredicate = NSPredicate(format: "SUBQUERY(favorites, $favorite, $favorite.isDeleted == false).@count > 0")
-        let favoriteFilter = ToggleFilter(.isFavorite, predicate: favoritePredicate)
-
-        let downloadedPredicate = NSPredicate(format: "isDownloaded == true")
-        let downloadedFilter = ToggleFilter(.isDownloaded, predicate: downloadedPredicate)
-
-        let smallPositionPred = NSPredicate(format: "SUBQUERY(progresses, $progress, $progress.relativePosition < \(Constants.watchedVideoRelativePosition)).@count > 0")
-        let noPositionPred = NSPredicate(format: "progresses.@count == 0")
-        let unwatchedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [smallPositionPred, noPositionPred])
-        let unwatchedFilter = ToggleFilter(.isUnwatched, predicate: unwatchedPredicate)
-
-        let bookmarksPredicate = NSPredicate(format: "SUBQUERY(bookmarks, $bookmark, $bookmark.isDeleted == false).@count > 0")
-        let bookmarksFilter = ToggleFilter(.hasBookmarks, predicate: bookmarksPredicate)
-
-        return IntermediateFiltersStructure(
-            textual: textualFilter,
-            event: eventFilter,
-            platform: focusFilter,
-            track: trackFilter,
-            isFavorite: favoriteFilter,
-            isDownloaded: downloadedFilter,
-            isUnwatched: unwatchedFilter,
-            hasBookmarks: bookmarksFilter
-        )
+        return makeFilters(eventFilter: eventFilter, focuses: focuses, tracks: tracks)
     }
 
-    func configureScheduleFilters(sessionTypes: [String], focuses: [Focus], tracks: [Track]) -> IntermediateFiltersStructure {
+    func makeScheduleFilters(sessionTypes: [String], focuses: [Focus], tracks: [Track]) -> IntermediateFiltersStructure {
         // Schedule Filters Configuration
-
-        let textualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
-
         let eventOptions = sessionTypes.map { FilterOption(title: $0, value: $0) }
         let eventFilter = MultipleChoiceFilter(
-            .event,
+            id: .event,
             modelKey: "rawSessionType",
             collectionKey: "session.instances",
             options: eventOptions,
             emptyTitle: "All Events"
         )
 
+        return makeFilters(keyPathPrefix: "session.", eventFilter: eventFilter, focuses: focuses, tracks: tracks)
+    }
+
+    func makeFilters(keyPathPrefix: String = "", eventFilter: MultipleChoiceFilter, focuses: [Focus], tracks: [Track]) -> IntermediateFiltersStructure {
+        let textualFilter = TextualFilter(identifier: FilterIdentifier.text, value: nil)
+
         let focusOptions = focuses.map { FilterOption(title: $0.name, value: $0.name) }
         let focusFilter = MultipleChoiceFilter(
-            .focus,
+            id: .focus,
             modelKey: "name",
-            collectionKey: "session.focuses",
+            collectionKey: "\(keyPathPrefix)focuses",
             options: focusOptions,
             emptyTitle: "All Platforms"
         )
 
         let trackOptions = tracks.map { FilterOption(title: $0.name, value: $0.name) }
         let trackFilter = MultipleChoiceFilter(
-            .track,
-            modelKey: "session.trackName",
+            id: .track,
+            modelKey: "\(keyPathPrefix)trackName",
             options: trackOptions,
             emptyTitle: "All Topics"
         )
 
-        let favoritePredicate = NSPredicate(format: "SUBQUERY(session.favorites, $favorite, $favorite.isDeleted == false).@count > 0")
-        let favoriteFilter = ToggleFilter(.isFavorite, predicate: favoritePredicate)
+        let favoritePredicate = NSPredicate(format: "SUBQUERY(\(keyPathPrefix)favorites, $favorite, $favorite.isDeleted == false).@count > 0")
+        let favoriteFilter = ToggleFilter(id: .isFavorite, predicate: favoritePredicate)
 
-        let downloadedPredicate = NSPredicate(format: "session.isDownloaded == true")
-        let downloadedFilter = ToggleFilter(.isDownloaded, predicate: downloadedPredicate)
+        let downloadedPredicate = NSPredicate(format: "\(keyPathPrefix)isDownloaded == true")
+        let downloadedFilter = ToggleFilter(id: .isDownloaded, predicate: downloadedPredicate)
 
-        let smallPositionPred = NSPredicate(format: "SUBQUERY(session.progresses, $progress, $progress.relativePosition < \(Constants.watchedVideoRelativePosition)).@count > 0")
-        let noPositionPred = NSPredicate(format: "session.progresses.@count == 0")
+        let smallPositionPred = NSPredicate(format: "SUBQUERY(\(keyPathPrefix)progresses, $progress, $progress.relativePosition < \(Constants.watchedVideoRelativePosition)).@count > 0")
+        let noPositionPred = NSPredicate(format: "\(keyPathPrefix)progresses.@count == 0")
         let unwatchedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [smallPositionPred, noPositionPred])
-        let unwatchedFilter = ToggleFilter(.isUnwatched, predicate: unwatchedPredicate)
+        let unwatchedFilter = ToggleFilter(id: .isUnwatched, predicate: unwatchedPredicate)
 
-        let bookmarksPredicate = NSPredicate(format: "SUBQUERY(session.bookmarks, $bookmark, $bookmark.isDeleted == false).@count > 0")
-        let bookmarksFilter = ToggleFilter(.hasBookmarks, predicate: bookmarksPredicate)
+        let bookmarksPredicate = NSPredicate(format: "SUBQUERY(\(keyPathPrefix)bookmarks, $bookmark, $bookmark.isDeleted == false).@count > 0")
+        let bookmarksFilter = ToggleFilter(id: .hasBookmarks, predicate: bookmarksPredicate)
 
         return IntermediateFiltersStructure(
             textual: textualFilter,
@@ -296,7 +250,7 @@ final class SearchCoordinator: Logging {
 
 extension SearchCoordinator: SearchFiltersViewControllerDelegate {
 
-    func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType]) {
+    func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType], context: FilterUpdateContext?) {
         if controller == scheduleSearchController {
             scheduleFilterPredicate = scheduleSearchController.currentPredicate
         } else {

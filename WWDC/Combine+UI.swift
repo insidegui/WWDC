@@ -59,26 +59,6 @@ extension Publisher where Output: Equatable {
 
 }
 
-public extension RealmCollection where Self: RealmSubscribable {
-    /// Similar to `changesetPublisher` but only emits a new value when the collection has additions or removals and ignores all upstream
-    /// values caused by objects being modified
-    var collectionChangedPublisher: some Publisher<Self, Error> {
-        changesetPublisher
-            .tryCompactMap { changeset in
-                switch changeset {
-                case .initial(let latestValue):
-                    return latestValue
-                case .update(let latestValue, let deletions, let insertions, _) where !deletions.isEmpty || !insertions.isEmpty:
-                    return latestValue
-                case .update:
-                    return nil
-                case .error(let error):
-                    throw error
-                }
-            }
-    }
-}
-
 extension Publisher {
     func replaceErrorWithEmpty() -> some Publisher<Output, Never> {
         self.catch { _ in
