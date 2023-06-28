@@ -10,9 +10,13 @@ import Foundation
 
 struct ToggleFilter: FilterType {
 
+    init(_ identifier: FilterIdentifier, predicate: NSPredicate?) {
+        self.identifier = identifier
+        self.customPredicate = predicate
+    }
+
     var identifier: FilterIdentifier
-    var isOn: Bool
-    var defaultValue: Bool
+    var isOn: Bool = false
 
     var customPredicate: NSPredicate?
 
@@ -27,7 +31,7 @@ struct ToggleFilter: FilterType {
     }
 
     mutating func reset() {
-        isOn = defaultValue
+        isOn = false
     }
 
     var state: State {

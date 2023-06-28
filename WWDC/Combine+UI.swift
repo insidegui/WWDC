@@ -60,7 +60,7 @@ extension Publisher where Output: Equatable {
 }
 
 public extension RealmCollection where Self: RealmSubscribable {
-    /// Similar to `changsetPublisher` but only emits a new value when the collection has additions or removals and ignores all upstream
+    /// Similar to `changesetPublisher` but only emits a new value when the collection has additions or removals and ignores all upstream
     /// values caused by objects being modified
     var collectionChangedPublisher: some Publisher<Self, Error> {
         changesetPublisher

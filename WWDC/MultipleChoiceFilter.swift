@@ -59,11 +59,10 @@ extension Array where Element == FilterOption {
 struct MultipleChoiceFilter: FilterType {
 
     var identifier: FilterIdentifier
-    var isSubquery: Bool
-    var collectionKey: String
+    var collectionKey: String?
     var modelKey: String
     var options: [FilterOption]
-    private var _selectedOptions: [FilterOption] = [FilterOption]()
+    private var _selectedOptions: [FilterOption] = []
     var selectedOptions: [FilterOption] {
         get {
             return _selectedOptions
@@ -100,7 +99,7 @@ struct MultipleChoiceFilter: FilterType {
 
             let op = option.isNegative ? "!=" : "=="
 
-            if isSubquery {
+            if let collectionKey {
                 format = "SUBQUERY(\(collectionKey), $iter, $iter.\(modelKey) \(op) %@).@count > 0"
             } else {
                 format = "\(modelKey) \(op) %@"
@@ -112,16 +111,12 @@ struct MultipleChoiceFilter: FilterType {
         return NSCompoundPredicate(orPredicateWithSubpredicates: subpredicates)
     }
 
-    init(identifier: FilterIdentifier, isSubquery: Bool, collectionKey: String, modelKey: String, options: [FilterOption], selectedOptions: [FilterOption], emptyTitle: String) {
+    init(_ identifier: FilterIdentifier, modelKey: String, collectionKey: String? = nil, options: [FilterOption], emptyTitle: String) {
         self.identifier = identifier
-        self.isSubquery = isSubquery
         self.collectionKey = collectionKey
         self.modelKey = modelKey
         self.options = options
         self.emptyTitle = emptyTitle
-
-        // Computed property
-        self.selectedOptions = selectedOptions
     }
 
     mutating func reset() {
