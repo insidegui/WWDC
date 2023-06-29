@@ -260,10 +260,7 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
 
         let sectionsAndSessions = scheduleSections
             .replaceErrorWithEmpty()
-            .map {
-                Self.log.debug("Source sections changed")
-                return $0
-            }
+            .do { Self.log.debug("Source sections changed") }
             .map { (sections: Results<ScheduleSection>) in
                 sections
                     .map { section in
@@ -273,18 +270,14 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
                             .replaceErrorWithEmpty()
                             .map { (section, $0) }
                     }.combineLatest()
-                    .do {
-                        Self.log.debug("Section instances changed")
-                    }
+                    .do { Self.log.debug("Section instances changed") }
             }
             .switchToLatest()
-            .map {
-
-                return Self.allViewModels($0)
-            }
+            .map(Self.allViewModels)
 
         let filterPredicate = filterPredicate
             .drop(while: {
+                // wait for filters to be configured
                 switch $0.changeReason {
                 case .initialValue:
                     return true
@@ -293,10 +286,8 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
                 }
             }).removeDuplicates(by: { previous, current in
                 previous.predicate == current.predicate
-            }) // wait for filters to be configured
-            .do {
-                Self.log.debug("Filter predicate updated")
-            }
+            })
+            .do { Self.log.debug("Filter predicate updated") }
 
         Publishers.CombineLatest(
             sectionsAndSessions.replaceErrorWithEmpty(),
