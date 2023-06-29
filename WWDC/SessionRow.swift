@@ -11,6 +11,42 @@ import Foundation
 enum SessionRowKind {
     case sectionHeader(TopicHeaderRowContent)
     case session(SessionViewModel)
+
+    var isHeader: Bool {
+        switch self {
+        case .sectionHeader:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var headerContent: TopicHeaderRowContent? {
+        switch self {
+        case .sectionHeader(let content):
+            return content
+        default:
+            return nil
+        }
+    }
+
+    var isSession: Bool {
+        switch self {
+        case .session:
+            return true
+        default:
+            return false
+        }
+    }
+
+    var sessionViewModel: SessionViewModel? {
+        switch self {
+        case .session(let viewModel):
+            return viewModel
+        default:
+            return nil
+        }
+    }
 }
 
 final class SessionRow: CustomDebugStringConvertible {
@@ -30,6 +66,11 @@ final class SessionRow: CustomDebugStringConvertible {
 
         self.init(content: .init(title: title))
     }
+
+    var isHeader: Bool { kind.isHeader }
+    var headerContent: TopicHeaderRowContent? { kind.headerContent }
+    var isSession: Bool { kind.isSession }
+    var sessionViewModel: SessionViewModel? { kind.sessionViewModel }
 
     var debugDescription: String {
         switch kind {

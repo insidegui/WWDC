@@ -111,7 +111,15 @@ final class SessionViewModel {
     }()
 
     lazy var rxIsFavorite: some Publisher<Bool, Error> = {
-        return self.session.favorites.filter("isDeleted == false").collectionPublisher.map { $0.count > 0 }
+        // While scrolling the favorites publisher won't be able to fire
+        // because the events are tracking. I'm guessing because it's using the main
+        // runloop? Regardless, putting the subscription on a background queue fixes it
+        return self.session.favorites.filter("isDeleted == false")
+            .collectionPublisher
+            .subscribe(on: DispatchQueue(label: #function))
+            .threadSafeReference()
+            .receive(on: DispatchQueue.main)
+            .map { $0.count > 0 }
     }()
 
     lazy var rxIsCurrentlyLive: some Publisher<Bool, Error> = {

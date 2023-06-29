@@ -270,7 +270,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
                         stride(from: topOfPreviousSelection.index, to: -1, by: -1).lazy.compactMap {
                             return IndexedSessionRow(sessionRow: oldValue[$0], index: $0)
                         }.first { (indexedRow: IndexedSessionRow) -> Bool in
-                            newRowsSet.contains(indexedRow)
+                            newRowsSet.contains(indexedRow) && indexedRow.sessionRow.isSession
                         }.flatMap {
                             newRowsSet.firstIndex(of: $0)
                         }.map {

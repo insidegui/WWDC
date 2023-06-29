@@ -9,6 +9,22 @@
 import Combine
 import RealmSwift
 
+extension Publisher {
+    func `do`(_ closure: @escaping () -> Void) -> some Publisher<Output, Failure> {
+        map {
+            closure()
+            return $0
+        }
+    }
+
+    func `do`(_ closure: @escaping (Output) -> Void) -> some Publisher<Output, Failure> {
+        map {
+            closure($0)
+            return $0
+        }
+    }
+}
+
 extension Publisher where Failure == Never {
     public func driveUI<Root>(
         _ keyPath: ReferenceWritableKeyPath<Root, Self.Output>,

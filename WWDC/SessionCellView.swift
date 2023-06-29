@@ -53,7 +53,11 @@ final class SessionCellView: NSView {
         viewModel.rxSubtitle.replaceError(with: "").driveUI(\.stringValue, on: subtitleLabel).store(in: &cancellables)
         viewModel.rxContext.replaceError(with: "").driveUI(\.stringValue, on: contextLabel).store(in: &cancellables)
 
-        viewModel.rxIsFavorite.toggled().replaceError(with: true).driveUI(\.isHidden, on: favoritedImageView).store(in: &cancellables)
+        viewModel.rxIsFavorite.toggled().replaceError(with: true)
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.isHidden, on: favoritedImageView)
+            .store(in: &cancellables)
         viewModel.rxIsDownloaded.toggled().replaceError(with: true).driveUI(\.isHidden, on: downloadedImageView).store(in: &cancellables)
 
         viewModel.rxImageUrl.removeDuplicates().replaceErrorWithEmpty().compacted().sink { [weak self] imageUrl in

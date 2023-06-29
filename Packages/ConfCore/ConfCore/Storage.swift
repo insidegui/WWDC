@@ -196,13 +196,28 @@ public final class Storage: Logging {
             backgroundRealm.delete(emptyTracks)
 
             // Create schedule view
-            backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
+            let existingSections = backgroundRealm.objects(ScheduleSection.self)
             let instances = backgroundRealm.objects(SessionInstance.self)
 
             // Group all instances by common start time
             // Technically, a secondary grouping on event should be used, in practice we haven't seen
             // separate events that overlap in time. Someday this might hurt
-            Dictionary(grouping: instances, by: \.startTime).forEach { startTime, instances in
+            let newSections = Dictionary(grouping: instances, by: \.startTime)
+            var merged = [Date]()
+            existingSections.forEach { existing in
+                if let new = newSections[existing.representedDate] {
+                    // Section is in new and old, update it's instances
+                    existing.instances.removeAll()
+                    existing.instances.append(objectsIn: new)
+                    merged.append(existing.representedDate)
+                } else {
+                    // Section is not in the new data, delete it
+                    backgroundRealm.delete(existing)
+                }
+            }
+
+            // Explicitly add new sections
+            newSections.filter { !merged.contains($0.key) }.forEach { startTime, instances in
                 let section = ScheduleSection()
                 section.representedDate = startTime
                 section.eventIdentifier = instances[0].eventIdentifier // 0 index ok, Dictionary grouping will never give us an empty array
