@@ -133,7 +133,11 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
     @Published var rows: SessionRows?
     var rowsPublisher: AnyPublisher<SessionRows, Never> { $rows.dropFirst().compacted().eraseToAnyPublisher() }
 
-    init<P: Publisher>(tracks: Results<Track>, filterPredicate: P) where P.Output == FilterPredicate, P.Failure == Never {
+    init<P: Publisher, PlayingSession: Publisher>(
+        tracks: Results<Track>,
+        filterPredicate: P,
+        playingSessionIdentifier: PlayingSession
+    ) where P.Output == FilterPredicate, P.Failure == Never, PlayingSession.Output == String?, PlayingSession.Failure == Never {
         let tracksAndSessions = tracks.collectionChangedPublisher
             .replaceErrorWithEmpty()
             .map {
@@ -170,18 +174,27 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
             .do {
                 Self.log.debug("Filter predicate updated")
             }
-        Publishers.CombineLatest(
+        Publishers.CombineLatest3(
             tracksAndSessions.replaceErrorWithEmpty(),
-            filterPredicate
+            filterPredicate,
+            playingSessionIdentifier
         )
-        .map { (allViewModels, predicate) in
+        .map { (allViewModels, predicate, playingSessionIdentifier) in
+            let effectivePredicate: NSPredicate
+            if let playingSessionIdentifier {
+                effectivePredicate = NSCompoundPredicate(
+                    orPredicateWithSubpredicates: [predicate.predicate ?? NSPredicate(value: true), NSPredicate(format: "identifier == %@", playingSessionIdentifier)]
+                )
+            } else {
+                effectivePredicate = predicate.predicate ?? NSPredicate(value: true)
+            }
             // Observe the filtered sessions
             // These observers emit elements in the case of a session having some property changed that is
             // affected by the query. e.g. Filtering on favorites then unfavorite a session
-            allViewModels.map { (key: SessionRow, value: (Results<Session>, OrderedDictionary<String, SessionRow>)) in
+            return allViewModels.map { (key: SessionRow, value: (Results<Session>, OrderedDictionary<String, SessionRow>)) in
                 let (allTrackSessions, sessionRows) = value
                 return allTrackSessions
-                    .filter(predicate.predicate ?? NSPredicate(value: true))
+                    .filter(effectivePredicate)
                     .collectionChangedPublisher
                     .replaceErrorWithEmpty()
                     .map {
@@ -194,11 +207,8 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
             }
         }
         .switchToLatest()
-        .map { thing in
-            Self.log.debug("Received new update")
-
-            return Self.sessionRows(thing)
-        }
+        .map(Self.sessionRows)
+        .do { Self.log.debug("Received new update") }
         .assign(to: &$rows)
     }
 
@@ -253,10 +263,11 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
     @Published var rows: SessionRows?
     var rowsPublisher: AnyPublisher<SessionRows, Never> { $rows.dropFirst().compacted().eraseToAnyPublisher() }
 
-    init<P: Publisher, S: Publisher>(
+    init<P: Publisher, S: Publisher, PlayingSession: Publisher>(
         scheduleSections: S,
-        filterPredicate: P
-    ) where P.Output == FilterPredicate, P.Failure == Never, S.Output == Results<ScheduleSection> {
+        filterPredicate: P,
+        playingSessionIdentifier: PlayingSession
+    ) where P.Output == FilterPredicate, P.Failure == Never, S.Output == Results<ScheduleSection>, PlayingSession.Output == String?, PlayingSession.Failure == Never {
 
         let sectionsAndSessions = scheduleSections
             .replaceErrorWithEmpty()
@@ -289,18 +300,27 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
             })
             .do { Self.log.debug("Filter predicate updated") }
 
-        Publishers.CombineLatest(
+        Publishers.CombineLatest3(
             sectionsAndSessions.replaceErrorWithEmpty(),
-            filterPredicate
+            filterPredicate,
+            playingSessionIdentifier
         )
-        .map { (allViewModels, predicate) in
+        .map { (allViewModels, predicate, playingSessionIdentifier) in
+            let effectivePredicate: NSPredicate
+            if let playingSessionIdentifier {
+                effectivePredicate = NSCompoundPredicate(
+                    orPredicateWithSubpredicates: [predicate.predicate ?? NSPredicate(value: true), NSPredicate(format: "identifier == %@", playingSessionIdentifier)]
+                )
+            } else {
+                effectivePredicate = predicate.predicate ?? NSPredicate(value: true)
+            }
             // Observe the filtered sessions
             // These observers emit elements in the case of a session having some property changed that is
             // affected by the query. e.g. Filtering on favorites then unfavorite a session
-            allViewModels.map { (key: SessionRow, value: (Results<SessionInstance>, OrderedDictionary<String, SessionRow>)) in
+            return allViewModels.map { (key: SessionRow, value: (Results<SessionInstance>, OrderedDictionary<String, SessionRow>)) in
                 let (allSectionInstances, sessionRows) = value
                 return allSectionInstances
-                    .filter(predicate.predicate ?? NSPredicate(value: true))
+                    .filter(effectivePredicate)
                     .collectionChangedPublisher
                     .replaceErrorWithEmpty()
                     .map {

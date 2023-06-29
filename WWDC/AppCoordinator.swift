@@ -80,12 +80,14 @@ final class AppCoordinator: Logging {
         exploreItem.label = "Explore"
         tabController.addTabViewItem(exploreItem)
 
+        _playerOwnerSessionIdentifier = .init(initialValue: nil)
         // Schedule
         scheduleController = ScheduleContainerViewController(
             windowController: windowController,
             rowProvider: ScheduleSessionRowProvider(
                 scheduleSections: storage.scheduleShallowObservable,
-                filterPredicate: searchCoordinator.$scheduleFilterPredicate
+                filterPredicate: searchCoordinator.$scheduleFilterPredicate,
+                playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
             ),
             searchController: scheduleSearchController
         )
@@ -102,7 +104,8 @@ final class AppCoordinator: Logging {
             windowController: windowController,
             rowProvider: VideosSessionRowProvider(
                 tracks: storage.tracks,
-                filterPredicate: searchCoordinator.$videosFilterPredicate
+                filterPredicate: searchCoordinator.$videosFilterPredicate,
+                playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
             ),
             searchController: videosSearchController
         )
