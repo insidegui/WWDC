@@ -26,6 +26,7 @@
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
 		914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */; };
+		91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */; };
 		91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
@@ -479,6 +480,7 @@
 				DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */,
 				DDB1A26A2577E7E900995FF1 /* Sparkle in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
+				91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */,
 				DD600AB72487F1730071B90E /* ConfUIFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1195,6 +1197,7 @@
 			packageProductDependencies = (
 				DDB1A2622577E67A00995FF1 /* ConfCore */,
 				DDB1A2692577E7E900995FF1 /* Sparkle */,
+				91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */,
 			);
 			productName = WWDC;
 			productReference = DD36A4AC1E478C6A00B2EA88 /* WWDC.app */;
@@ -1318,6 +1321,7 @@
 			mainGroup = DD36A4A31E478C6900B2EA88;
 			packageReferences = (
 				DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = DD36A4AD1E478C6A00B2EA88 /* Products */;
 			projectDirPath = "";
@@ -2404,6 +2408,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sparkle-project/Sparkle";
@@ -2415,6 +2427,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
 		DDB1A2622577E67A00995FF1 /* ConfCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ConfCore;

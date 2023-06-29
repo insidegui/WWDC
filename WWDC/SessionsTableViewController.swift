@@ -16,7 +16,7 @@ import OSLog
 
 class SessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
 
-    static let log = makeLogger()
+    static var log = makeLogger()
 
     private lazy var cancellables: Set<AnyCancellable> = []
 
@@ -26,6 +26,9 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     var selectedSession: SessionViewModel?
 
     init(rowProvider: SessionRowProvider, searchController: SearchFiltersViewController) {
+        var config = Self.defaultLoggerConfig()
+        config.category += ": \(String(reflecting: type(of: rowProvider)))"
+        Self.log = Self.makeLogger(config: config)
         self.sessionRowProvider = rowProvider
         self.searchController = searchController
 
@@ -34,7 +37,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         identifier = NSUserInterfaceItemIdentifier(rawValue: "videosList")
 
         rowProvider
-            .rows
+            .rowsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 self?.updateWith(rows: $0, animated: true, selecting: nil)
@@ -130,11 +133,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         let needsToClearSearchToAllowSelection = !isSessionVisible(for: session) && canDisplay(session: session)
 
         if needsToClearSearchToAllowSelection {
-            searchController.clearAllFilters()
-            // TODO: The old function did an in-place filter clearing and passed
-            // the session to select on. Here, if we clear the filters, the round trip through
-            // publisher land means we need to stash that information somewhere
-//            setFilterResults(.empty, animated: view.window != nil, selecting: session)
+            searchController.clearAllFilters(reason: .allowSelection(session))
         } else {
             selectSessionImmediately(with: session)
         }
@@ -146,17 +145,14 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     private func updateWith(rows: SessionRows, animated: Bool, selecting session: SessionIdentifiable?) {
-        log.debug(#function)
-
         let rowsToDisplay: [SessionRow]
         rowsToDisplay = rows.filtered
 
-        guard performInitialRowDisplayIfNeeded(displaying: rowsToDisplay, allRows: rows.filtered) else {
+        guard performInitialRowDisplayIfNeeded(displaying: rowsToDisplay, allRows: rows.all) else {
             log.debug("Performed initial row display")
             return
         }
 
-        log.debug("Set displayed rows")
         setDisplayedRows(rowsToDisplay, animated: animated, overridingSelectionWith: session)
     }
 
@@ -183,7 +179,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         if let initialSelection = self.initialSelection,
            !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
 
-            searchController.clearAllFilters()
+            searchController.clearAllFilters(reason: .allowSelection(initialSelection))
             displayedRows = allRows
         }
 
@@ -214,7 +210,6 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     private func setDisplayedRows(_ newValue: [SessionRow], animated: Bool, overridingSelectionWith session: SessionIdentifiable?) {
-        log.debug(#function)
         // Dismiss the menu when the displayed rows are about to change otherwise it will crash
         tableView.menu?.cancelTrackingWithoutAnimation()
 
@@ -235,7 +230,6 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
             let removedIndexes = IndexSet(removed.map { $0.index })
             let addedIndexes = IndexSet(added.map { $0.index })
-            self.log.trace("\(#function): removed[\(removedIndexes.map { "\($0)" }.joined(separator: ","), privacy: .public)] added[\(addedIndexes.map { "\($0)" }.joined(separator: ","), privacy: .public)]")
 
             // Only reload rows if their relative positioning changes. This prevents
             // cell contents from flashing when cells are unnecessarily reloaded
@@ -252,6 +246,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
             for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) where oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
                 needReloadedIndexes.insert(newSessionRowIndex.index)
             }
+
+            self.log.trace("setDisplayedRows: removed[\(removedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] added[\(addedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] reload[\(needReloadedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)]")
 
             DispatchQueue.main.sync {
 
@@ -333,8 +329,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     func canDisplay(session: SessionIdentifiable) -> Bool {
-        assert(sessionRowProvider.latestRows != nil, "We should avoid asking this question until things are initialized")
-        return sessionRowProvider.latestRows?.all.contains { row -> Bool in
+        assert(sessionRowProvider.rows != nil, "We should avoid asking this question until things are initialized")
+        return sessionRowProvider.rows?.all.contains { row -> Bool in
             row.represents(session: session)
         } ?? false
     }

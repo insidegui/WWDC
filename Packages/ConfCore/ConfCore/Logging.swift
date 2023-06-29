@@ -9,7 +9,7 @@ import OSLog
 
 public struct LoggingConfig {
     public let subsystem: String
-    public let category: String
+    public var category: String
 }
 
 public protocol Logging {

@@ -47,6 +47,11 @@ struct IntermediateFiltersStructure {
     }
 }
 
+struct FilterPredicate {
+    var predicate: NSPredicate?
+    var changeReason: FilterChangeReason
+}
+
 final class SearchCoordinator: Logging {
 
     private var cancellables: Set<AnyCancellable> = []
@@ -57,18 +62,18 @@ final class SearchCoordinator: Logging {
     private var restorationFiltersState: WWDCFiltersState?
 
     fileprivate let scheduleSearchController: SearchFiltersViewController
-    @Published var scheduleFilterPredicate: NSPredicate? {
+    @Published var scheduleFilterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue) {
         willSet {
             log.debug(
-                "Schedule new predicate: \(self.scheduleFilterPredicate?.description ?? "nil", privacy: .public)"
+                "Schedule new predicate: \(newValue.predicate?.description ?? "nil", privacy: .public)"
             )
         }
     }
 
     fileprivate let videosSearchController: SearchFiltersViewController
-    @Published var videosFilterPredicate: NSPredicate? {
+    @Published var videosFilterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue) {
         willSet {
-            log.debug("Videos new predicate: \(self.videosFilterPredicate?.description ?? "nil", privacy: .public)")
+            log.debug("Videos new predicate: \(newValue.predicate?.description ?? "nil", privacy: .public)")
         }
     }
 
@@ -135,7 +140,7 @@ final class SearchCoordinator: Logging {
             videosSearchController.filters = videoFilters.all
         }
 
-        videosFilterPredicate = videosSearchController.currentPredicate
+        videosFilterPredicate = .init(predicate: videosSearchController.currentPredicate, changeReason: .configurationChange)
 
         var scheduleFilters = makeScheduleFilters(sessionTypes: sessionTypes, focuses: focuses, tracks: tracks)
         scheduleFilters.apply(restorationFiltersState?.scheduleTab)
@@ -144,7 +149,7 @@ final class SearchCoordinator: Logging {
             scheduleSearchController.filters = scheduleFilters.all
         }
 
-        scheduleFilterPredicate = scheduleSearchController.currentPredicate
+        scheduleFilterPredicate = .init(predicate: scheduleSearchController.currentPredicate, changeReason: .configurationChange)
     }
 
     func makeVideoFilters(events: [Event], focuses: [Focus], tracks: [Track]) -> IntermediateFiltersStructure {
@@ -250,14 +255,13 @@ final class SearchCoordinator: Logging {
 
 extension SearchCoordinator: SearchFiltersViewControllerDelegate {
 
-    func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType], context: FilterUpdateContext?) {
+    func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType], context: FilterChangeReason) {
         if controller == scheduleSearchController {
-            scheduleFilterPredicate = scheduleSearchController.currentPredicate
+            scheduleFilterPredicate = .init(predicate: scheduleSearchController.currentPredicate, changeReason: context)
         } else {
-            videosFilterPredicate = videosSearchController.currentPredicate
+            videosFilterPredicate = .init(predicate: videosSearchController.currentPredicate, changeReason: context)
         }
     }
-
 }
 
 private extension FilterOption {

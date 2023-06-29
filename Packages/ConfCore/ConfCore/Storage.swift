@@ -89,6 +89,11 @@ public final class Storage: Logging {
         }
 
         performSerializedBackgroundWrite(disableAutorefresh: true, completionBlock: completion) { backgroundRealm in
+            // Save everything
+            backgroundRealm.add(contentsResponse.rooms, update: .all)
+            backgroundRealm.add(contentsResponse.tracks, update: .all)
+            backgroundRealm.add(contentsResponse.events, update: .all)
+
             contentsResponse.sessions.forEach { newSession in
                 // Replace any "unknown" resources with their full data
                 newSession.related.filter({$0.type == RelatedResourceType.unknown.rawValue}).forEach { unknownResource in
@@ -122,11 +127,6 @@ public final class Storage: Logging {
                 }
             }
 
-            // Save everything
-            backgroundRealm.add(contentsResponse.rooms, update: .all)
-            backgroundRealm.add(contentsResponse.tracks, update: .all)
-            backgroundRealm.add(contentsResponse.events, update: .all)
-
             // add instances to rooms
             backgroundRealm.objects(Room.self).forEach { room in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
@@ -146,6 +146,9 @@ public final class Storage: Logging {
                 event.sessionInstances.append(objectsIn: instances)
 
                 event.sessions.removeAll()
+                sessions.forEach {
+                    $0.eventStartDate = event.startDate
+                }
                 event.sessions.append(objectsIn: sessions)
             }
 
@@ -160,10 +163,14 @@ public final class Storage: Logging {
                 track.sessions.removeAll()
                 track.sessions.append(objectsIn: sessions)
 
-                sessions.forEach({ $0.trackName = track.name })
+                sessions.forEach({
+                    $0.trackName = track.name
+                    $0.trackOrder = track.order
+                })
                 instances.forEach { instance in
                     instance.trackName = track.name
                     instance.session?.trackName = track.name
+                    instance.session?.trackOrder = track.order
                 }
             }
 

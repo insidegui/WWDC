@@ -14,6 +14,8 @@
 //  Copyright © 2020 Combine Community. All rights reserved.
 //
 
+import OrderedCollections
+
 #if canImport(Combine)
 import Combine
 
@@ -121,95 +123,128 @@ struct SessionRows {
 protocol SessionRowProvider {
     func sessionRowIdentifierForToday() -> SessionIdentifiable?
 
-    var rows: AnyPublisher<SessionRows, Never> { get }
-    var latestRows: SessionRows? { get }
+    var rows: SessionRows? { get }
+    var rowsPublisher: AnyPublisher<SessionRows, Never> { get }
 }
 
 final class VideosSessionRowProvider: SessionRowProvider, Logging {
     static let log = makeLogger()
     private var cancellables: Set<AnyCancellable> = []
-    private let filterPredicate: any Publisher<NSPredicate?, Never>
+    private let filterPredicate: any Publisher<FilterPredicate, Never>
 
-    @Published var _rows: SessionRows = SessionRows()
-    var rows: AnyPublisher<SessionRows, Never> { $_rows.dropFirst().eraseToAnyPublisher() }
-    var latestRows: SessionRows?
-//    private var tracks: Results<Track>
+    @Published var rows: SessionRows?
+    var rowsPublisher: AnyPublisher<SessionRows, Never> { $rows.dropFirst().compacted().eraseToAnyPublisher() }
 
-    init<P: Publisher>(tracks: Results<Track>, filterPredicate: P) where P.Output == NSPredicate?, P.Failure == Never {
+    init<P: Publisher>(tracks: Results<Track>, filterPredicate: P) where P.Output == FilterPredicate, P.Failure == Never {
         self.filterPredicate = filterPredicate
 
-        let tracks = tracks.collectionChangedPublisher
+        let tracksAndSessions = tracks.collectionChangedPublisher
             .replaceErrorWithEmpty()
             .map {
                 Self.log.debug("tracks updated")
                 return $0
             }
+            .map { (tracks: Results<Track>) in
+                tracks
+                    .map { track in
+                        track.sessions
+                            .sorted(by: Session.sameTrackSortDescriptors())
+                            .collectionChangedPublisher
+                            .replaceErrorWithEmpty()
+                            .map { (track, $0) }
+                    }.combineLatest()
+            }
+            .switchToLatest()
+            .map {
+                Self.log.debug("Source tracks changed")
+                return Self.allViewModels($0)
+            }
+
         let filterPredicate = filterPredicate
             .map {
                 Self.log.debug("filter predicate updated")
                 return $0
-            }
+            }.drop(while: {
+                switch $0.changeReason {
+                case .initialValue:
+                    return true
+                default:
+                    return false
+                }
+            }).removeDuplicates(by: { previous, current in
+                previous.predicate == current.predicate
+            }) // wait for filters to be configured
 
         Publishers.CombineLatest(
-            tracks.replaceErrorWithEmpty(),
-            filterPredicate.dropFirst(1).removeDuplicates() // wait for filters to be configured
+            tracksAndSessions.replaceErrorWithEmpty(),
+            filterPredicate
         )
-        .map { (tracks, predicate) in
-            tracks
-                .map { track in
-                    track.sessions
-                        .filter(predicate ?? NSPredicate(value: true))
-                        .collectionChangedPublisher
-                        .replaceErrorWithEmpty()
-                        .map { (track, $0) }
-                }.combineLatest()
+        .map { (allViewModels, predicate) in
+            // Observe the filtered sessions
+            // These observers emit elements in the case of a session having some property changed that is
+            // affected by the query. e.g. Filtering on favorites then unfavorite a session
+            allViewModels.map { (key: SessionRow, value: (Results<Session>, OrderedDictionary<String, SessionRow>)) in
+                let (allTrackSessions, sessionRows) = value
+                return allTrackSessions
+                    .filter(predicate.predicate ?? NSPredicate(value: true))
+                    .collectionChangedPublisher
+                    .replaceErrorWithEmpty()
+                    .map {
+                        (key, ($0, sessionRows))
+                    }
+            }
+            .combineLatest()
+            .map {
+                OrderedDictionary(uniqueKeysWithValues: $0)
+            }
         }
         .switchToLatest()
-        .sink { [weak self] filteredTracks in
-            guard let self else { return }
-
+//        .debounce(for: .seconds(0.1), scheduler: RunLoop.main)
+        .map { thing in
             Self.log.debug("Received new update")
-//            self.tracks = tracks.map { $0.0 }
 
-            // TODO: Build all rows and filtered rows? Do we even need to know both of them? Can it just be "rows"
-            let sessionRows = sessionRows(filteredTracks)
-            self.latestRows = sessionRows
-            self._rows = sessionRows
+            return Self.sessionRows(thing)
         }
-        .store(in: &cancellables)
+        .assign(to: &$rows)
     }
 
-    private func sessionRows(_ tracks: [(Track, Results<Session>)]) -> SessionRows {
-        let filteredRows = tracks.flatMap { (track, trackSessions) -> [SessionRow] in
-            guard !trackSessions.isEmpty else { return [] }
+    private static func allViewModels(_ tracks: [(Track, Results<Session>)]) -> OrderedDictionary<SessionRow, (Results<Session>, OrderedDictionary<String, SessionRow>)> {
+        OrderedDictionary(
+            uniqueKeysWithValues: tracks.compactMap { (track, trackSessions) -> (SessionRow, (Results<Session>, OrderedDictionary<String, SessionRow>))? in
+                guard !trackSessions.isEmpty else { return nil }
 
-            let titleRow = SessionRow(content: .init(title: track.name, symbolName: track.symbolName))
+                let titleRow = SessionRow(content: .init(title: track.name, symbolName: track.symbolName))
 
-            let sessionRows: [SessionRow] = trackSessions.sorted(by: Session.sameTrackSort).compactMap { session in
-                guard let viewModel = SessionViewModel(session: session, track: track) else { return nil }
+                let sessionRows = trackSessions.compactMap { session -> (String, SessionRow)? in
+                    guard let viewModel = SessionViewModel(session: session, track: track) else { return nil }
 
-                return SessionRow(viewModel: viewModel)
+                    return (session.identifier, SessionRow(viewModel: viewModel))
+                }
+
+                guard !sessionRows.isEmpty else { return nil }
+
+                return (titleRow, (trackSessions, OrderedDictionary(uniqueKeysWithValues: sessionRows)))
             }
+        )
+    }
 
-            return [titleRow] + sessionRows
+    private static func sessionRows(_ tracks: OrderedDictionary<SessionRow, (Results<Session>, OrderedDictionary<String, SessionRow>)>) -> SessionRows {
+        let all = tracks.flatMap { (headerRow, sessions) in
+            let (_, sessionRows) = sessions
+            return [headerRow] + sessionRows.values
         }
 
-        let all = tracks.flatMap { (track, _) -> [SessionRow] in
-            let trackSessions = track.sessions
-            guard !trackSessions.isEmpty else { return [] }
-
-            let titleRow = SessionRow(content: .init(title: track.name, symbolName: track.symbolName))
-
-            let sessionRows: [SessionRow] = trackSessions.sorted(by: Session.sameTrackSort).compactMap { session in
-                guard let viewModel = SessionViewModel(session: session, track: track) else { return nil }
-
-                return SessionRow(viewModel: viewModel)
+        let filtered = tracks.flatMap { (headerRow, sessions) in
+            let (filteredSessions, sessionRows) = sessions
+            let filteredRows: [SessionRow] = filteredSessions.compactMap { outerSession in
+                sessionRows[outerSession.identifier]
             }
 
-            return [titleRow] + sessionRows
+            guard !filteredRows.isEmpty else { return [SessionRow]() }
+            return [headerRow] + filteredRows
         }
 
-        return SessionRows(all: all, filtered: filteredRows)
+        return SessionRows(all: all, filtered: filtered)
     }
 
     func sessionRowIdentifierForToday() -> SessionIdentifiable? {
@@ -220,57 +255,59 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
 // TODO: Consider using covariant/subclassing to make this simpler compared to protocol
 final class ScheduleSessionRowProvider: SessionRowProvider {
     private var cancellables: Set<AnyCancellable> = []
-    private let filterPredicate: any Publisher<NSPredicate?, Never>
+    private let filterPredicate: any Publisher<FilterPredicate, Never>
 
-    @Published var _rows: SessionRows = SessionRows()
-    var rows: AnyPublisher<SessionRows, Never> { $_rows.dropFirst().eraseToAnyPublisher() }
-    var latestRows: SessionRows?
+    @Published var rows: SessionRows?
+    var rowsPublisher: AnyPublisher<SessionRows, Never> { $rows.dropFirst().compacted().eraseToAnyPublisher() }
     private var scheduleSections: Results<ScheduleSection>?
 
     init<P: Publisher, S: Publisher>(
         scheduleSections: S,
         filterPredicate: P
-    ) where P.Output == NSPredicate?, P.Failure == Never, S.Output == Results<ScheduleSection> {
+    ) where P.Output == FilterPredicate, P.Failure == Never, S.Output == Results<ScheduleSection> {
         self.filterPredicate = filterPredicate
 
         Publishers.CombineLatest(
             scheduleSections.replaceErrorWithEmpty(),
-            filterPredicate.dropFirst(1).removeDuplicates() // wait for filters to be configured
+            filterPredicate.drop(while: {
+                switch $0.changeReason {
+                case .initialValue:
+                    return true
+                default:
+                    return false
+                }
+            }).removeDuplicates(by: { previous, current in
+                previous.predicate == current.predicate
+            }) // wait for filters to be configured
         )
         .map { (scheduleSections, predicate) in
             scheduleSections
                 .map { section in
                     section.instances
-                        .filter(predicate ?? NSPredicate(value: true))
+                        .filter(predicate.predicate ?? NSPredicate(value: true))
                         .collectionChangedPublisher
                         .replaceErrorWithEmpty()
                         .map { (section, $0) }
                 }.combineLatest()
         }
         .switchToLatest()
-        .sink { [weak self] filteredSections in
-            guard let self else { return }
-
-//            self.scheduleSections = filteredSections.map { $0.0 }
-
-            // TODO: Build all rows and filtered rows? Do we even need to know both of them? Can it just be "rows"
-            let sessionRows = sessionRows(filteredSections)
-            self.latestRows = sessionRows
-            self._rows = sessionRows
+        .map { filteredSections in
+            return Self.sessionRows(filteredSections)
         }
-        .store(in: &cancellables)
+        .assign(to: &$rows)
     }
 
-    private func sessionRows(_ scheduleSections: [(ScheduleSection, Results<SessionInstance>)]) -> SessionRows {
+    private static func sessionRows(_ scheduleSections: [(ScheduleSection, Results<SessionInstance>)]) -> SessionRows {
         // Only show the timezone on the first section header
         var shownTimeZone = false
 
         // TODO: I don't think we need `all` to be sorted and modeled we just need to know all the sessions maybe?
+        // TODO: Alternatively, we can always build the all
         let all: [SessionRow] = scheduleSections.flatMap { (section, _) -> [SessionRow] in
             let sectionInstances = section.instances
             guard !sectionInstances.isEmpty else { return [] }
 
-            let filteredInstances = sectionInstances.sorted(by: SessionInstance.standardSort)
+            let filteredInstances = sectionInstances.sorted(by: SessionInstance.standardSortDescriptors())
 
             let instanceRows: [SessionRow] = filteredInstances.compactMap { instance in
                 guard let viewModel = SessionViewModel(session: instance.session, instance: instance, track: nil, style: .schedule) else { return nil }
@@ -291,7 +328,7 @@ final class ScheduleSessionRowProvider: SessionRowProvider {
         let filteredRows: [SessionRow] = scheduleSections.flatMap { (section, sectionInstances) -> [SessionRow] in
             guard !sectionInstances.isEmpty else { return [] }
 
-            let filteredInstances = sectionInstances.sorted(by: SessionInstance.standardSort)
+            let filteredInstances = sectionInstances//.sorted(by: SessionInstance.standardSort)
 
             let instanceRows: [SessionRow] = filteredInstances.compactMap { instance in
                 guard let viewModel = SessionViewModel(session: instance.session, instance: instance, track: nil, style: .schedule) else { return nil }

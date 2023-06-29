@@ -86,14 +86,13 @@ public class SessionInstance: Object, ConditionallyDecodable {
         return ["code"]
     }
 
-    public static func standardSort(instanceA: SessionInstance, instanceB: SessionInstance) -> Bool {
-        guard let sessionA = instanceA.session, let sessionB = instanceB.session else { return false }
-
-        if instanceA.sessionType == instanceB.sessionType {
-            return Session.standardSort(sessionA: sessionA, sessionB: sessionB)
-        } else {
-            return instanceA.sessionType < instanceB.sessionType
-        }
+    public static func standardSortDescriptors() -> [RealmSwift.SortDescriptor] {
+        return [
+            RealmSwift.SortDescriptor(keyPath: "rawSessionType"),
+            RealmSwift.SortDescriptor(keyPath: "session.trackOrder"),
+            RealmSwift.SortDescriptor(keyPath: "session.eventStartDate"),
+            RealmSwift.SortDescriptor(keyPath: "session.title")
+        ]
     }
 
     func merge(with other: SessionInstance, in realm: Realm) {
