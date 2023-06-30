@@ -11,13 +11,14 @@ import Foundation
 import RealmSwift
 import OSLog
 
-public final class Storage: Logging {
+public final class Storage: Logging, Signposting {
 
     public let realmConfig: Realm.Configuration
     public let realm: Realm
 
     private var disposeBag: Set<AnyCancellable> = []
     public static let log = makeLogger()
+    public static var signposter = makeSignposter()
 
     public init(_ realm: Realm) {
         self.realmConfig = realm.configuration
@@ -79,6 +80,7 @@ public final class Storage: Logging {
     }
 
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping (Error?) -> Void) {
+        let state = signposter.beginInterval("store content result", id: signposter.makeSignpostID(), "begin")
         let contentsResponse: ContentsResponse
         do {
             contentsResponse = try contentResult.get()
@@ -88,7 +90,12 @@ public final class Storage: Logging {
             return
         }
 
-        performSerializedBackgroundWrite(disableAutorefresh: true, completionBlock: completion) { backgroundRealm in
+        performSerializedBackgroundWrite(
+            disableAutorefresh: true
+        ) { [weak self] in
+            self?.signposter.endInterval("store content result", state, "end")
+            completion($0)
+        } writeBlock: { backgroundRealm in
             // Save everything
             backgroundRealm.add(contentsResponse.rooms, update: .all)
             backgroundRealm.add(contentsResponse.tracks, update: .all)

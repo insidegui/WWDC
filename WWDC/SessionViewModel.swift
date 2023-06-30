@@ -20,7 +20,9 @@ final class SessionViewModel {
     let sessionInstance: SessionInstance
     let track: Track
     let identifier: String
-    var webUrl: URL?
+    lazy var webUrl: URL? = {
+        SessionViewModel.webUrl(for: session)
+    }()
     var imageUrl: URL?
     let trackName: String
 
@@ -184,11 +186,6 @@ final class SessionViewModel {
         sessionInstance = instance ?? session.instances.first ?? SessionInstance()
         title = session.title
         identifier = session.identifier
-        imageUrl = SessionViewModel.imageUrl(for: session)
-
-        if let webUrlStr = session.asset(ofType: .webpage)?.remoteURL {
-            webUrl = URL(string: webUrlStr)
-        }
     }
 
     static func subtitle(from session: Session, at event: ConfCore.Event?) -> String {

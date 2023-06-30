@@ -149,7 +149,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         rowsToDisplay = rows.filtered
 
         guard performInitialRowDisplayIfNeeded(displaying: rowsToDisplay, allRows: rows.all) else {
-            log.debug("Performed initial row display")
+            log.debug("Performed initial row display with [\(rowsToDisplay.count)] rows")
             return
         }
 
@@ -164,12 +164,12 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
     private lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
 
-    private var hasPerformedInitialRowDisplay = false
+    @Published
+    private(set) var hasPerformedInitialRowDisplay = false
 
     private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow], allRows: [SessionRow]) -> Bool {
 
         guard !hasPerformedInitialRowDisplay else { return true }
-        hasPerformedInitialRowDisplay = true
 
         displayedRowsLock.suspend()
 
@@ -204,6 +204,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
             self.tableView.allowsEmptySelection = false
         }, completionHandler: {
             self.displayedRowsLock.resume()
+            self.hasPerformedInitialRowDisplay = true
         })
 
         return false
@@ -321,15 +322,12 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     func isSessionVisible(for session: SessionIdentifiable) -> Bool {
-        assert(hasPerformedInitialRowDisplay, "Rows must be displayed before checking this value")
-
         return displayedRows.contains { row -> Bool in
             row.represents(session: session)
         }
     }
 
     func canDisplay(session: SessionIdentifiable) -> Bool {
-        assert(sessionRowProvider.rows != nil, "We should avoid asking this question until things are initialized")
         return sessionRowProvider.rows?.all.contains { row -> Bool in
             row.represents(session: session)
         } ?? false

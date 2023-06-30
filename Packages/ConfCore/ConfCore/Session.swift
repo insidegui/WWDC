@@ -117,11 +117,14 @@ public class Session: Object, Decodable {
         mediaDuration = other.mediaDuration
 
         // merge assets
-        let assets = other.assets.filter { otherAsset in
-            return !self.assets.contains(where: { $0.identifier == otherAsset.identifier })
+        // Pulling the identifiers into Swift Arrays is an optimization for realm
+        let currentAssetIds = Array(self.assets.map(\.identifier))
+        other.assets.forEach { otherAsset in
+            guard !currentAssetIds.contains(otherAsset.identifier) else { return }
+            self.assets.append(otherAsset)
         }
-        self.assets.append(objectsIn: assets)
 
+        let currentRelatedIds = Array(related.map(\.identifier))
         other.related.forEach { newRelated in
             let effectiveRelated: RelatedResource
 
@@ -131,10 +134,11 @@ public class Session: Object, Decodable {
                 effectiveRelated = newRelated
             }
 
-            guard !related.contains(where: { $0.identifier == effectiveRelated.identifier }) else { return }
+            guard !currentRelatedIds.contains(effectiveRelated.identifier) else { return }
             related.append(effectiveRelated)
         }
 
+        let currentFocusIds = Array(focuses.map(\.name))
         other.focuses.forEach { newFocus in
             let effectiveFocus: Focus
 
@@ -144,7 +148,7 @@ public class Session: Object, Decodable {
                 effectiveFocus = newFocus
             }
 
-            guard !focuses.contains(where: { $0.name == effectiveFocus.name }) else { return }
+            guard !currentFocusIds.contains(effectiveFocus.name) else { return }
 
             focuses.append(effectiveFocus)
         }
@@ -300,6 +304,21 @@ extension Session {
         guard let baseURL = event.first.flatMap({ URL(string: $0.imagesPath) }) else { return nil }
 
         let filename = "\(staticContentId)_wide_900x506_1x.jpg"
+
+        let url = baseURL.appendingPathComponent("\(staticContentId)/\(filename)")
+
+        let asset = SessionAsset()
+
+        asset.assetType = .image
+        asset.remoteURL = url.absoluteString
+
+        return asset
+    }
+
+    public func thumbImageAsset() -> SessionAsset? {
+        guard let baseURL = event.first.flatMap({ URL(string: $0.imagesPath) }) else { return nil }
+
+        let filename = "\(staticContentId)_wide_162x91_2x.jpg"
 
         let url = baseURL.appendingPathComponent("\(staticContentId)/\(filename)")
 

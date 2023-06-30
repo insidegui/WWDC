@@ -48,3 +48,38 @@ public extension Logging {
 public func makeLogger(subsystem: String, category: String) -> Logger {
     Logger(subsystem: subsystem, category: category)
 }
+
+public protocol Signposting: Logging {
+    static var signposter: OSSignposter { get }
+    var signposter: OSSignposter { get }
+}
+
+public extension Signposting {
+    static func makeSignposter() -> OSSignposter { OSSignposter(logger: log) }
+    var signposter: OSSignposter { Self.signposter }
+}
+
+public extension OSSignposter {
+    /// Convenient but several caveats because OSLogMessage is stupid
+    func withEscapingOneShotIntervalSignpost<T>(
+        _ name: StaticString,
+        _ message: String? = nil,
+        around task: (@escaping () -> Void) throws -> T
+    ) rethrows -> T {
+        var state: OSSignpostIntervalState?
+        if let message {
+            state = beginInterval(name, id: makeSignpostID(), "\(message)")
+        } else {
+            state = beginInterval(name, id: makeSignpostID())
+        }
+
+        let end = {
+            if let innerState = state {
+                state = nil
+                endInterval(name, innerState)
+            }
+        }
+
+        return try task(end)
+    }
+}

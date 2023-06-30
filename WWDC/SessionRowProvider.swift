@@ -15,6 +15,7 @@
 //
 
 import OrderedCollections
+import OSLog
 
 #if canImport(Combine)
 import Combine
@@ -122,16 +123,20 @@ struct SessionRows: Equatable {
 
 protocol SessionRowProvider {
     func sessionRowIdentifierForToday() -> SessionIdentifiable?
+    func startup()
 
     var rows: SessionRows? { get }
     var rowsPublisher: AnyPublisher<SessionRows, Never> { get }
 }
 
-final class VideosSessionRowProvider: SessionRowProvider, Logging {
+final class VideosSessionRowProvider: SessionRowProvider, Logging, Signposting {
     static let log = makeLogger()
+    static let signposter = makeSignposter()
 
     @Published var rows: SessionRows?
     var rowsPublisher: AnyPublisher<SessionRows, Never> { $rows.dropFirst().compacted().eraseToAnyPublisher() }
+
+    private let publisher: AnyPublisher<SessionRows?, Never>
 
     init<P: Publisher, PlayingSession: Publisher>(
         tracks: Results<Track>,
@@ -153,11 +158,15 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
                             .replaceErrorWithEmpty()
                             .map { (track, $0) }
                     }.combineLatest()
+                    .do {
+                        Self.log.debug("Source tracks changed")
+                    }
             }
             .switchToLatest()
-            .map {
-                Self.log.debug("Source tracks changed")
-                return Self.allViewModels($0)
+            .map { sortedTracks in
+                Self.signposter.withIntervalSignpost("Row generation", id: Self.signposter.makeSignpostID(), "Calculate view models") {
+                    Self.allViewModels(sortedTracks)
+                }
             }
 
         let filterPredicate = filterPredicate
@@ -174,7 +183,7 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
             .do {
                 Self.log.debug("Filter predicate updated")
             }
-        Publishers.CombineLatest3(
+        publisher = Publishers.CombineLatest3(
             tracksAndSessions.replaceErrorWithEmpty(),
             filterPredicate,
             playingSessionIdentifier
@@ -208,8 +217,17 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
         }
         .switchToLatest()
         .map(Self.sessionRows)
-        .do { Self.log.debug("Received new update") }
-        .assign(to: &$rows)
+        .removeDuplicates()
+        .do { Self.log.debug("Updated session rows") }
+        .eraseToAnyPublisher()
+    }
+
+    func startup() {
+        Self.signposter.withEscapingOneShotIntervalSignpost("Row generation", "Time to first value") { endInterval in
+            publisher
+                .do(endInterval)
+                .assign(to: &$rows)
+        }
     }
 
     private static func allViewModels(_ tracks: [(Track, Results<Session>)]) -> OrderedDictionary<SessionRow, (Results<Session>, OrderedDictionary<String, SessionRow>)> {
@@ -257,11 +275,14 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging {
 }
 
 // TODO: Consider using covariant/subclassing to make this simpler compared to protocol
-final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
+final class ScheduleSessionRowProvider: SessionRowProvider, Logging, Signposting {
     static let log = makeLogger()
+    static let signposter = makeSignposter()
 
     @Published var rows: SessionRows?
     var rowsPublisher: AnyPublisher<SessionRows, Never> { $rows.dropFirst().compacted().eraseToAnyPublisher() }
+
+    private let publisher: AnyPublisher<SessionRows?, Never>
 
     init<P: Publisher, S: Publisher, PlayingSession: Publisher>(
         scheduleSections: S,
@@ -284,7 +305,11 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
                     .do { Self.log.debug("Section instances changed") }
             }
             .switchToLatest()
-            .map(Self.allViewModels)
+            .map { sortedSections in
+                Self.signposter.withIntervalSignpost("Calculate view models", id: Self.signposter.makeSignpostID()) {
+                    Self.allViewModels(sortedSections)
+                }
+            }
 
         let filterPredicate = filterPredicate
             .drop(while: {
@@ -300,7 +325,7 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
             })
             .do { Self.log.debug("Filter predicate updated") }
 
-        Publishers.CombineLatest3(
+        publisher = Publishers.CombineLatest3(
             sectionsAndSessions.replaceErrorWithEmpty(),
             filterPredicate,
             playingSessionIdentifier
@@ -338,10 +363,16 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging {
         .switchToLatest()
         .map(Self.sessionRows)
         .removeDuplicates()
-        .do {
-            Self.log.debug("Updated session rows")
+        .do { Self.log.debug("Updated session rows") }
+        .eraseToAnyPublisher()
+    }
+
+    func startup() {
+        Self.signposter.withEscapingOneShotIntervalSignpost("Time to first value") { endInterval in
+            publisher
+                .do(endInterval)
+                .assign(to: &$rows)
         }
-        .assign(to: &$rows)
     }
 
     private static func allViewModels(_ sections: [(ScheduleSection, Results<SessionInstance>)]) -> OrderedDictionary<SessionRow, (Results<SessionInstance>, OrderedDictionary<String, SessionRow>)> {

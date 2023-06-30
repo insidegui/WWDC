@@ -191,18 +191,18 @@ extension AppCoordinator {
             alert.window.center()
 
             enum Choice: NSApplication.ModalResponse.RawValue {
-                case removeCalender = 1000
+                case removeCalendar = 1000
                 case cancel = 1001
             }
 
             guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
 
             switch choice {
-            case .removeCalender:
+            case .removeCalendar:
                 do {
                     try eventStore.remove(storedEvent, span: .thisEvent, commit: true)
                 } catch let error as NSError {
-                    log.error("Failed to remove event from calender: \(String(describing: error), privacy: .public)")
+                    log.error("Failed to remove event from calendar: \(String(describing: error), privacy: .public)")
                 }
             default:
                 break
