@@ -112,17 +112,12 @@ public class SessionInstance: Object, ConditionallyDecodable {
             session.merge(with: otherSession, in: realm)
         }
 
-        let otherKeywords = other.keywords.map { newKeyword -> (Keyword) in
-            if newKeyword.realm == nil,
-                let existingKeyword = realm.object(ofType: Keyword.self, forPrimaryKey: newKeyword.name) {
-                return existingKeyword
-            } else {
-                return newKeyword
-            }
-        }
+        let currentKeywordIds = Array(keywords.map(\.name))
+        other.keywords.forEach { newKeyword in
+            guard !currentKeywordIds.contains(newKeyword.name) else { return }
 
-        keywords.removeAll()
-        keywords.append(objectsIn: otherKeywords)
+            keywords.append(realm.object(ofType: Keyword.self, forPrimaryKey: newKeyword.name) ?? newKeyword)
+        }
     }
 
     // MARK: - Decodable

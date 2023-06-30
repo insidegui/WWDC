@@ -118,39 +118,24 @@ public class Session: Object, Decodable {
 
         // merge assets
         // Pulling the identifiers into Swift Arrays is an optimization for realm
-        let currentAssetIds = Array(self.assets.map(\.identifier))
+        let currentAssetIds = Set(self.assets.map { $0.identifier })
         other.assets.forEach { otherAsset in
             guard !currentAssetIds.contains(otherAsset.identifier) else { return }
             self.assets.append(otherAsset)
         }
 
-        let currentRelatedIds = Array(related.map(\.identifier))
+        let currentRelatedIds = Set(related.map { $0.identifier })
         other.related.forEach { newRelated in
-            let effectiveRelated: RelatedResource
+            guard !currentRelatedIds.contains(newRelated.identifier) else { return }
 
-            if let existingResource = realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) {
-                effectiveRelated = existingResource
-            } else {
-                effectiveRelated = newRelated
-            }
-
-            guard !currentRelatedIds.contains(effectiveRelated.identifier) else { return }
-            related.append(effectiveRelated)
+            related.append(realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) ?? newRelated)
         }
 
-        let currentFocusIds = Array(focuses.map(\.name))
+        let currentFocusIds = Set(focuses.map { $0.name })
         other.focuses.forEach { newFocus in
-            let effectiveFocus: Focus
+            guard !currentFocusIds.contains(newFocus.name) else { return }
 
-            if let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) {
-                effectiveFocus = existingFocus
-            } else {
-                effectiveFocus = newFocus
-            }
-
-            guard !currentFocusIds.contains(effectiveFocus.name) else { return }
-
-            focuses.append(effectiveFocus)
+            focuses.append(realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) ?? newFocus)
         }
     }
 

@@ -118,6 +118,7 @@ public final class Storage: Logging, Signposting {
             }
 
             // Merge existing instance data, preserving user-defined data
+            let mergeInstances = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "merge instances")
             contentsResponse.instances.forEach { newInstance in
                 if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
                     existingInstance.merge(with: newInstance, in: backgroundRealm)
@@ -133,8 +134,10 @@ public final class Storage: Logging, Signposting {
                     backgroundRealm.add(newInstance, update: .all)
                 }
             }
+            Self.signposter.endInterval("store content result", mergeInstances)
 
             // add instances to rooms
+            let instancesToRooms = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add instances to rooms")
             backgroundRealm.objects(Room.self).forEach { room in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
 
@@ -143,8 +146,10 @@ public final class Storage: Logging, Signposting {
                 room.instances.removeAll()
                 room.instances.append(objectsIn: instances)
             }
+            Self.signposter.endInterval("store content result", instancesToRooms)
 
             // add instances and sessions to events
+            let instancesToEvents = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add instances and sessions to events")
             backgroundRealm.objects(Event.self).forEach { event in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
@@ -158,8 +163,10 @@ public final class Storage: Logging, Signposting {
                 }
                 event.sessions.append(objectsIn: sessions)
             }
+            Self.signposter.endInterval("store content result", instancesToEvents)
 
             // add instances and sessions to tracks
+            let instancesToTracks = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add instances and sessions to tracks")
             backgroundRealm.objects(Track.self).forEach { track in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
@@ -180,8 +187,10 @@ public final class Storage: Logging, Signposting {
                     instance.session?.trackOrder = track.order
                 }
             }
+            Self.signposter.endInterval("store content result", instancesToTracks)
 
             // add live video assets to sessions
+            let liveVideoAssets = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add live video assets to sessions")
             backgroundRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
                 if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
                     if !session.assets.contains(liveAsset) {
@@ -189,20 +198,26 @@ public final class Storage: Logging, Signposting {
                     }
                 }
             }
+            Self.signposter.endInterval("store content result", liveVideoAssets)
 
             // Associate session resources with Session objects in database
+            let sessionResources = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "associate session resources")
             backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
                     resource.session = session
                 }
             }
+            Self.signposter.endInterval("store content result", sessionResources)
 
             // Remove tracks that don't include any future session instances nor any sessions with video/live video
+            let emptyTracksState = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "delete empty tracks")
             let emptyTracks = backgroundRealm.objects(Track.self)
                 .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType = %@ OR ANY $session.assets.rawAssetType = %@).@count == 0", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
             backgroundRealm.delete(emptyTracks)
+            Self.signposter.endInterval("store content result", emptyTracksState)
 
             // Create schedule view
+            let createScheduleView = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "schedule view")
             let existingSections = backgroundRealm.objects(ScheduleSection.self)
             let instances = backgroundRealm.objects(SessionInstance.self)
 
@@ -234,6 +249,7 @@ public final class Storage: Logging, Signposting {
 
                 backgroundRealm.add(section, update: .all)
             }
+            Self.signposter.endInterval("store content result", createScheduleView)
         }
     }
 
