@@ -159,7 +159,10 @@ public final class Storage: Logging, Signposting {
                 let sessions = backgroundRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
 
                 event.sessionInstances.removeAll()
-                event.sessionInstances.append(objectsIn: instances)
+                event.sessionInstances.forEach {
+                    $0.session?.eventStartDate = event.startDate
+                    event.sessionInstances.append($0)
+                }
 
                 event.sessions.removeAll()
                 sessions.forEach {

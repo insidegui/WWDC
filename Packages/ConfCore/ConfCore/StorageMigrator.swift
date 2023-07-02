@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import class RealmSwift.List
 import class RealmSwift.Migration
+import class RealmSwift.MigrationObject
 import OSLog
 
 final class StorageMigrator: Logging {
@@ -31,7 +33,8 @@ final class StorageMigrator: Logging {
         44: removeInvalidLiveAssets,
         57: resetFeaturedSections,
         59: resetTracks,
-        60: resetSessionInstances
+        60: resetSessionInstances,
+        61: addEventAndTrackInfoToSessionsForFasterSorting
     ]
 
     init(migration: Migration, oldVersion: UInt64) {
@@ -189,6 +192,55 @@ final class StorageMigrator: Logging {
 
     private static func resetSessionInstances(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
         migration.deleteData(forType: "SessionInstance")
+    }
+
+    private static func addEventAndTrackInfoToSessionsForFasterSorting(with migration: Migration, oldVersion: SchemaVersion, log: Logger) {
+        log.info(#function)
+
+        // Logic mirrors the values applied in Storage.store(contentResult:)
+        migration.enumerateObjects(ofType: "Event") { _, event in
+            guard let event, let startDate = event.startDate as? Date else {
+                fatalError("Corrupt database during migration: Event.startDate must be a Date")
+            }
+
+            guard let sessions = event.sessions as? List<MigrationObject> else {
+                fatalError("Corrupt database during migration: Event.sessions must be a List")
+            }
+
+            sessions.forEach { session in
+                session.eventStartDate = startDate
+            }
+
+            guard let instances = event.sessionInstances as? List<MigrationObject> else {
+                fatalError("Corrupt database during migration: Event.sessionInstances must be a List")
+            }
+
+            instances.forEach { instance in
+                (instance.session as? MigrationObject)?.eventStartDate = startDate
+            }
+        }
+
+        migration.enumerateObjects(ofType: "Track") { _, track in
+            guard let track, let trackOrder = track.order as? Int else {
+                fatalError("Corrupt database during migration: Track.order must be an Int")
+            }
+
+            guard let sessions = track.sessions as? List<MigrationObject> else {
+                fatalError("Corrupt database during migration: Track.sessions must be a List")
+            }
+
+            sessions.forEach { session in
+                session.trackOrder = trackOrder
+            }
+
+            guard let instances = track.instances as? List<MigrationObject> else {
+                fatalError("Corrupt database during migration: Track.instances must be a List")
+            }
+
+            instances.forEach { instance in
+                (instance.session as? MigrationObject)?.trackOrder = trackOrder
+            }
+        }
     }
 
 }
