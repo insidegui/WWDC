@@ -515,12 +515,6 @@ public final class Storage: Logging, Signposting {
         return tracks
     }()
 
-    public lazy var tracksObservable: some Publisher<Results<Track>, Error> = {
-        let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
-
-        return tracks.collectionPublisher
-    }()
-
     public lazy var tracksShallowObservable: some Publisher<Results<Track>, Error> = {
         let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
 
@@ -620,10 +614,11 @@ public final class Storage: Logging, Signposting {
         return realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).toArray()
     }
 
-    public var eventsForFiltering: Results<Event> {
+    public var eventsForFilteringShallowPublisher: some Publisher<Results<Event>, Error> {
         return realm.objects(Event.self)
             .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType == %@).@count > %d", SessionAssetType.streamingVideo.rawValue, 0)
             .sorted(byKeyPath: "startDate", ascending: false)
+            .collectionChangedPublisher
     }
 
     public var allSessionTypesShallowPublisher: some Publisher<[String], Error> {

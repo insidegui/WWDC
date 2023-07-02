@@ -79,19 +79,15 @@ final class AppCoordinator: Logging, Signposting {
     }
 
     /// The session that is currently selected on the videos tab (observable)
-    var selectedSession: some Publisher<SessionViewModel?, Never> { videosController.listViewController.$selectedSession }
+    @Published
+    var videosSelectedSessionViewModel: SessionViewModel?
 
     /// The session that is currently selected on the schedule tab (observable)
-    var selectedScheduleItem: some Publisher<SessionViewModel?, Never> { scheduleController.splitViewController.listViewController.$selectedSession }
-
-    /// The session that is currently selected on the videos tab
-    var selectedSessionValue: SessionViewModel? { videosController.listViewController.selectedSession }
-
-    /// The session that is currently selected on the schedule tab
-    var selectedScheduleItemValue: SessionViewModel? { scheduleController.splitViewController.listViewController.selectedSession }
+    @Published
+    var scheduleSelectedSessionViewModel: SessionViewModel?
 
     /// The selected session's view model, regardless of which tab it is selected in
-    var selectedViewModelRegardlessOfTab: SessionViewModel?
+    var activeTabSelectedSessionViewModel: SessionViewModel?
 
     /// The viewModel for the current playback session
     var currentPlaybackViewModel: PlaybackViewModel? {
@@ -134,13 +130,18 @@ final class AppCoordinator: Logging, Signposting {
         _playerOwnerSessionIdentifier = .init(initialValue: nil)
         // Schedule
         scheduleController = ScheduleContainerViewController(
-            windowController: windowController,
-            rowProvider: ScheduleSessionRowProvider(
-                scheduleSections: storage.scheduleShallowObservable,
-                filterPredicate: searchCoordinator.$scheduleFilterPredicate,
-                playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
-            ),
-            searchController: scheduleSearchController
+            splitViewController: SessionsSplitViewController(
+                windowController: windowController,
+                listViewController: SessionsTableViewController(
+                    rowProvider: ScheduleSessionRowProvider(
+                        scheduleSections: storage.scheduleShallowObservable,
+                        filterPredicate: searchCoordinator.$scheduleFilterPredicate,
+                        playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
+                    ),
+                    searchController: scheduleSearchController,
+                    initialSelection: Preferences.shared.selectedScheduleItemIdentifier.map(SessionIdentifier.init)
+                )
+            )
         )
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
         scheduleController.splitViewController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
@@ -153,12 +154,15 @@ final class AppCoordinator: Logging, Signposting {
         // Videos
         videosController = SessionsSplitViewController(
             windowController: windowController,
-            rowProvider: VideosSessionRowProvider(
-                tracks: storage.tracks,
-                filterPredicate: searchCoordinator.$videosFilterPredicate,
-                playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
-            ),
-            searchController: videosSearchController
+            listViewController: SessionsTableViewController(
+                rowProvider: VideosSessionRowProvider(
+                    tracks: storage.tracks,
+                    filterPredicate: searchCoordinator.$videosFilterPredicate,
+                    playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
+                ),
+                searchController: videosSearchController,
+                initialSelection: Preferences.shared.selectedVideoItemIdentifier.map(SessionIdentifier.init)
+            )
         )
         videosController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Videos")
         videosController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "VideosSplitView")
@@ -169,8 +173,7 @@ final class AppCoordinator: Logging, Signposting {
         tabController.addTabViewItem(videosItem)
 
         self.windowController = windowController
-
-        restoreApplicationState()
+        tabController.activeTab = Preferences.shared.activeTab
 
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
         
@@ -233,49 +236,31 @@ final class AppCoordinator: Logging, Signposting {
     }
 
     private func setupBindings() {
-        tabController
-            .$activeTabVar
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] activeTab in
-                self?.activeTab = activeTab
+        videosController.listViewController.$selectedSession.assign(to: &self.$videosSelectedSessionViewModel)
+        scheduleController.splitViewController.listViewController.$selectedSession.assign(to: &self.$scheduleSelectedSessionViewModel)
 
-                self?.updateSelectedViewModelRegardlessOfTab()
-            }
-            .store(in: &cancellables)
+        Publishers.CombineLatest3(
+            tabController.$activeTabVar,
+            $videosSelectedSessionViewModel,
+            $scheduleSelectedSessionViewModel
+        ).receive(on: DispatchQueue.main)
+            .sink { [weak self] (activeTab, _, _) in
+                guard let self else { return }
+                self.activeTab = activeTab
 
-        // Bind the session tables' selections to their respective detail view controller
-        // This seems like it should move down a level as those are both children
-        func bind<P: Publisher>(session: P, to detailsController: SessionDetailsViewController) where P.Output == SessionViewModel?, P.Failure == Never {
-
-            session.receive(on: DispatchQueue.main).sink { [weak self] viewModel in
-                NSAnimationContext.runAnimationGroup { context in
-                    context.duration = 0.35
-
-                    // Here we change the controller
-                    detailsController.viewModel = viewModel
-                    self?.updateSelectedViewModelRegardlessOfTab()
+                switch activeTab {
+                case .schedule:
+                    activeTabSelectedSessionViewModel = scheduleSelectedSessionViewModel
+                case .videos:
+                    activeTabSelectedSessionViewModel = videosSelectedSessionViewModel
+                default:
+                    activeTabSelectedSessionViewModel = nil
                 }
+
+                updateShelfBasedOnSelectionChange()
+                updateCurrentActivity(with: activeTabSelectedSessionViewModel)
             }
             .store(in: &cancellables)
-        }
-
-        bind(session: selectedSession, to: videosController.detailViewController)
-
-        bind(session: selectedScheduleItem, to: scheduleController.splitViewController.detailViewController)
-    }
-
-    private func updateSelectedViewModelRegardlessOfTab() {
-        switch activeTab {
-        case .schedule:
-            selectedViewModelRegardlessOfTab = selectedScheduleItemValue
-        case .videos:
-            selectedViewModelRegardlessOfTab = selectedSessionValue
-        default:
-            selectedViewModelRegardlessOfTab = nil
-        }
-
-        updateShelfBasedOnSelectionChange()
-        updateCurrentActivity(with: selectedViewModelRegardlessOfTab)
     }
 
     private func setupDelegation() {
@@ -331,12 +316,11 @@ final class AppCoordinator: Logging, Signposting {
         .sink { [weak self] _ in
             guard let self else { return }
 
-            signposter.emitEvent("Hide loading", "Hide loading")
-            tabController.hideLoading()
+            self.signposter.emitEvent("Hide loading", "Hide loading")
+            self.tabController.hideLoading()
 
-            // TODO: Think about changing this
             if liveObserver.isWWDCWeek {
-                scheduleController.splitViewController.listViewController.scrollToToday()
+                self.scheduleController.splitViewController.listViewController.scrollToToday()
             }
         }
         .store(in: &cancellables)
@@ -397,23 +381,9 @@ final class AppCoordinator: Logging, Signposting {
 
     private func saveApplicationState() {
         Preferences.shared.activeTab = activeTab
-        Preferences.shared.selectedScheduleItemIdentifier = selectedScheduleItemValue?.identifier
-        Preferences.shared.selectedVideoItemIdentifier = selectedSessionValue?.identifier
+        Preferences.shared.selectedScheduleItemIdentifier = scheduleSelectedSessionViewModel?.identifier
+        Preferences.shared.selectedVideoItemIdentifier = videosSelectedSessionViewModel?.identifier
         Preferences.shared.filtersState = searchCoordinator.restorationSnapshot()
-    }
-
-    private func restoreApplicationState() {
-
-        let activeTab = Preferences.shared.activeTab
-        tabController.activeTab = activeTab
-
-        if let identifier = Preferences.shared.selectedScheduleItemIdentifier {
-            scheduleController.splitViewController.listViewController.select(session: SessionIdentifier(identifier))
-        }
-
-        if let identifier = Preferences.shared.selectedVideoItemIdentifier {
-            videosController.listViewController.select(session: SessionIdentifier(identifier))
-        }
     }
 
     // MARK: - Deep linking
@@ -602,7 +572,7 @@ final class AppCoordinator: Logging, Signposting {
             return
         }
         
-        guard let viewModel = selectedSessionValue else {
+        guard let viewModel = videosSelectedSessionViewModel else {
             let alert = NSAlert()
             alert.messageText = "Select a Session"
             alert.informativeText = "Please select the session you'd like to watch together, then start SharePlay."

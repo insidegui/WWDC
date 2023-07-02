@@ -71,6 +71,9 @@ final class SessionRow: CustomDebugStringConvertible {
     var headerContent: TopicHeaderRowContent? { kind.headerContent }
     var isSession: Bool { kind.isSession }
     var sessionViewModel: SessionViewModel? { kind.sessionViewModel }
+    func represents(session: SessionIdentifiable) -> Bool {
+        sessionViewModel?.identifier == session.sessionIdentifier
+    }
 
     var debugDescription: String {
         switch kind {
@@ -79,16 +82,6 @@ final class SessionRow: CustomDebugStringConvertible {
         case .session(let viewModel):
             return "Session: " + viewModel.identifier + " " + viewModel.title
         }
-    }
-}
-
-extension SessionRow {
-
-    func represents(session: SessionIdentifiable) -> Bool {
-        if case .session(let viewModel) = kind {
-            return viewModel.identifier == session.sessionIdentifier
-        }
-        return false
     }
 }
 

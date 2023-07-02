@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum FilterIdentifier: String {
+enum FilterIdentifier: String, CaseIterable {
     case text
     case event
     case focus

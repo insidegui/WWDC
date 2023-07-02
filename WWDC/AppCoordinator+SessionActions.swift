@@ -16,19 +16,19 @@ import OSLog
 extension AppCoordinator: SessionActionsViewControllerDelegate {
 
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
-        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         DownloadManager.shared.cancelDownloads([viewModel.session])
     }
 
     func sessionActionsDidSelectFavorite(_ sender: NSView?) {
-        guard let session = selectedViewModelRegardlessOfTab?.session else { return }
+        guard let session = activeTabSelectedSessionViewModel?.session else { return }
 
         storage.toggleFavorite(on: session)
     }
 
     func sessionActionsDidSelectSlides(_ sender: NSView?) {
-        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         guard let slidesAsset = viewModel.session.asset(ofType: .slides) else { return }
 
@@ -38,13 +38,13 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
     }
 
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
-        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         DownloadManager.shared.download([viewModel.session])
     }
 
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {
-        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         let alert = WWDCAlert.create()
 
@@ -71,7 +71,7 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
 
     func sessionActionsDidSelectShare(_ sender: NSView?) {
         guard let sender = sender else { return }
-        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         guard let webpageAsset = viewModel.session.asset(ofType: .webpage) else { return }
 
@@ -142,7 +142,7 @@ extension Storage {
 
 extension AppCoordinator {
     @objc func sessionActionsDidSelectCalendar(_ sender: NSView?) {
-        guard let viewModel = selectedViewModelRegardlessOfTab else { return }
+        guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         Task { @MainActor in
             do {

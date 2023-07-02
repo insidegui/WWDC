@@ -9,11 +9,11 @@
 import Cocoa
 import ConfCore
 
-enum FilterChangeReason {
+enum FilterChangeReason: Equatable {
     case initialValue
     case configurationChange
-    case allowSelection(SessionIdentifiable)
     case userInput
+    case allowSelection
 }
 
 protocol SearchFiltersViewControllerDelegate: AnyObject {
@@ -329,5 +329,13 @@ final class SearchFiltersViewController: NSViewController {
             item.state = filter.selectedOptions.contains(option) ? .on : .off
             popUp.menu?.addItem(item)
         }
+    }
+}
+
+extension Array where Element == FilterType {
+    func findBy<T: FilterType>(id: FilterIdentifier) -> T? {
+        guard let index = firstIndex(where: { $0.identifier == id }) else { return nil }
+
+        return self[index] as? T
     }
 }

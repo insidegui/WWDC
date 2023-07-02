@@ -40,6 +40,7 @@ protocol SessionsTableViewControllerDelegate: AnyObject {
     func sessionTableViewContextMenuActionFavorite(viewModels: [SessionViewModel])
     func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel])
     func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel])
+    func sessionTableViewContextMenuActionRemoveDownload(viewModels: [SessionViewModel])
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel])
     func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel])
 }
@@ -52,33 +53,5 @@ extension Session {
         }
 
         return false
-    }
-}
-
-extension Array where Element == SessionRow {
-
-    func index(of session: SessionIdentifiable) -> Int? {
-        return firstIndex { row in
-            guard case .session(let viewModel) = row.kind else { return false }
-
-            return viewModel.identifier == session.sessionIdentifier
-        }
-    }
-
-    func firstSessionRowIndex() -> Int? {
-        return firstIndex { row in
-            if case .session = row.kind {
-                return true
-            }
-            return false
-        }
-    }
-
-    func forEachSessionViewModel(_ body: (SessionViewModel) throws -> Void) rethrows {
-        try forEach {
-            if case .session(let viewModel) = $0.kind {
-                try body(viewModel)
-            }
-        }
     }
 }

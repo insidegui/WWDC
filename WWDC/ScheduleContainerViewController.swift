@@ -13,12 +13,8 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
 
     let splitViewController: SessionsSplitViewController
 
-    init(windowController: MainWindowController, rowProvider: SessionRowProvider, searchController: SearchFiltersViewController) {
-        self.splitViewController = SessionsSplitViewController(
-            windowController: windowController,
-            rowProvider: rowProvider,
-            searchController: searchController
-        )
+    init(splitViewController: SessionsSplitViewController) {
+        self.splitViewController = splitViewController
 
         super.init(nibName: nil, bundle: nil)
     }

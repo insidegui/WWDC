@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Combine
 
 enum SessionsListStyle {
     case schedule
@@ -20,11 +21,21 @@ final class SessionsSplitViewController: NSSplitViewController {
     var isResizingSplitView = false
     let windowController: MainWindowController
     var setupDone = false
+    private var cancellables: Set<AnyCancellable> = []
 
-    init(windowController: MainWindowController, rowProvider: SessionRowProvider, searchController: SearchFiltersViewController) {
+    init(windowController: MainWindowController, listViewController: SessionsTableViewController) {
         self.windowController = windowController
-        listViewController = SessionsTableViewController(rowProvider: rowProvider, searchController: searchController)
-        detailViewController = SessionDetailsViewController()
+        self.listViewController = listViewController
+        let detailViewController = SessionDetailsViewController()
+        self.detailViewController = detailViewController
+
+        listViewController.$selectedSession.receive(on: DispatchQueue.main).sink { viewModel in
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = 0.35
+
+                detailViewController.viewModel = viewModel
+            }
+        }.store(in: &cancellables)
 
         super.init(nibName: nil, bundle: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView(notification:)), name: .sideBarSizeSyncNotification, object: nil)
