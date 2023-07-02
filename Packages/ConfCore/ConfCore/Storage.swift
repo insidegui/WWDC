@@ -45,7 +45,9 @@ public final class Storage: Logging {
         return try Realm(configuration: realmConfig, queue: queue)
     }
 
-    private lazy var dispatchQueue = DispatchQueue(label: "WWDC Storage", qos: .background)
+    /// This is the background dispatch queue for Realm updates to take place not on the main thread.
+    /// While it is not on the main thread, it is very important for the changes to happen quickly so the qos is set to userInitiated
+    private lazy var dispatchQueue = DispatchQueue(label: "WWDC Storage", qos: .userInitiated)
 
     public lazy var storageQueue: OperationQueue = {
         let q = OperationQueue()
