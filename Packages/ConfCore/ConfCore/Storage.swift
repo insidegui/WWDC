@@ -10,6 +10,7 @@ import Combine
 import Foundation
 import RealmSwift
 import OSLog
+import OrderedCollections
 
 public final class Storage: Logging, Signposting {
 
@@ -86,6 +87,7 @@ public final class Storage: Logging, Signposting {
             contentsResponse = try contentResult.get()
         } catch {
             log.error("Error downloading contents:\n\(String(describing: error), privacy: .public)")
+            signposter.endInterval("store content result", state, "end")
             completion(error)
             return
         }
@@ -141,10 +143,12 @@ public final class Storage: Logging, Signposting {
             backgroundRealm.objects(Room.self).forEach { room in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
 
-                instances.forEach({ $0.roomName = room.name })
-
                 room.instances.removeAll()
-                room.instances.append(objectsIn: instances)
+                instances.forEach {
+                    $0.roomName = room.name
+                    // append(contentsOf: other) just does a for loop so we avoid double iteration by doing this
+                    room.instances.append($0)
+                }
             }
             Self.signposter.endInterval("store content result", instancesToRooms)
 
@@ -160,8 +164,9 @@ public final class Storage: Logging, Signposting {
                 event.sessions.removeAll()
                 sessions.forEach {
                     $0.eventStartDate = event.startDate
+                    // append(contentsOf: other) just does a for loop so we avoid double iteration by doing this
+                    event.sessions.append($0)
                 }
-                event.sessions.append(objectsIn: sessions)
             }
             Self.signposter.endInterval("store content result", instancesToEvents)
 
@@ -172,19 +177,20 @@ public final class Storage: Logging, Signposting {
                 let sessions = backgroundRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
 
                 track.instances.removeAll()
-                track.instances.append(objectsIn: instances)
-
-                track.sessions.removeAll()
-                track.sessions.append(objectsIn: sessions)
-
-                sessions.forEach({
-                    $0.trackName = track.name
-                    $0.trackOrder = track.order
-                })
                 instances.forEach { instance in
                     instance.trackName = track.name
                     instance.session?.trackName = track.name
                     instance.session?.trackOrder = track.order
+                    // append(contentsOf: other) just does a for loop so we avoid double iteration by doing this
+                    track.instances.append(instance)
+                }
+
+                track.sessions.removeAll()
+                sessions.forEach {
+                    $0.trackName = track.name
+                    $0.trackOrder = track.order
+                    // append(contentsOf: other) just does a for loop so we avoid double iteration by doing this
+                    track.sessions.append($0)
                 }
             }
             Self.signposter.endInterval("store content result", instancesToTracks)
@@ -218,20 +224,22 @@ public final class Storage: Logging, Signposting {
 
             // Create schedule view
             let createScheduleView = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "schedule view")
-            let existingSections = backgroundRealm.objects(ScheduleSection.self)
+            let sectionsInRealm = backgroundRealm.objects(ScheduleSection.self)
             let instances = backgroundRealm.objects(SessionInstance.self)
 
             // Group all instances by common start time
             // Technically, a secondary grouping on event should be used, in practice we haven't seen
             // separate events that overlap in time. Someday this might hurt
+            // For content updates that don't really change much, like most of the year.
+            // Doing the diffing on the sections is an order of magnitude faster (28ms -> 4ms)
             let newSections = Dictionary(grouping: instances, by: \.startTime)
-            var merged = [Date]()
-            existingSections.forEach { existing in
+            var merged = Set<Date>()
+            sectionsInRealm.forEach { existing in
                 if let new = newSections[existing.representedDate] {
                     // Section is in new and old, update it's instances
                     existing.instances.removeAll()
                     existing.instances.append(objectsIn: new)
-                    merged.append(existing.representedDate)
+                    merged.insert(existing.representedDate)
                 } else {
                     // Section is not in the new data, delete it
                     backgroundRealm.delete(existing)
@@ -648,5 +656,17 @@ public extension RealmCollection where Self: RealmSubscribable {
                     throw error
                 }
             }
+    }
+}
+
+private func merge<T>(old: List<T>, new: List<T>) {
+    let diff = new.difference(from: old)
+    for change in diff {
+        switch change {
+        case let .remove(offset: offset, element: _, associatedWith: _):
+            old.remove(at: offset)
+        case let .insert(offset: offset, element: element, associatedWith: _):
+            old.insert(element, at: offset)
+        }
     }
 }

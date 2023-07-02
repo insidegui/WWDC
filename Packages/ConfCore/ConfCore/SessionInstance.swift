@@ -112,7 +112,7 @@ public class SessionInstance: Object, ConditionallyDecodable {
             session.merge(with: otherSession, in: realm)
         }
 
-        let currentKeywordIds = Array(keywords.map(\.name))
+        let currentKeywordIds = Set(keywords.map(\.name))
         other.keywords.forEach { newKeyword in
             guard !currentKeywordIds.contains(newKeyword.name) else { return }
 

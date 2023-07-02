@@ -77,14 +77,6 @@ public class SessionAsset: Object, Decodable {
         return "identifier"
     }
 
-    func merge(with other: SessionAsset, in realm: Realm) {
-        assert(other.remoteURL == remoteURL, "Can't merge two objects with different identifiers!")
-
-        year = other.year
-        sessionId = other.sessionId
-        relativeLocalURL = other.relativeLocalURL
-    }
-
     public func generateIdentifier() -> String {
         return String(year) + "@" + sessionId + "~" + rawAssetType.replacingOccurrences(of: "WWDCSessionAssetType", with: "")
     }

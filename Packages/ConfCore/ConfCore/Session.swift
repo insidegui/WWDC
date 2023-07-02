@@ -117,7 +117,11 @@ public class Session: Object, Decodable {
         mediaDuration = other.mediaDuration
 
         // merge assets
-        // Pulling the identifiers into Swift Arrays is an optimization for realm
+        // Pulling the identifiers into Swift Set is an optimization for realm,
+        // You can't see it but `map` on `List` is lazy and each call to `.contains(element)`
+        // is O(n) but with a higher constant time because it accesses the realm property
+        // every time. Pulling strings into a Set gets the `.contains` call down to O(1)
+        // and ensures the Realm object accesses are only done once
         let currentAssetIds = Set(self.assets.map { $0.identifier })
         other.assets.forEach { otherAsset in
             guard !currentAssetIds.contains(otherAsset.identifier) else { return }
