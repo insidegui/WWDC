@@ -27,7 +27,7 @@ final class SessionViewModel {
     let trackName: String
 
     lazy var rxSession: some Publisher<Session, Error> = {
-        return session.valuePublisher()
+        return session.valuePublisher(keyPaths: ["title"])
     }()
 
     lazy var rxTranscriptAnnotations: AnyPublisher<List<TranscriptAnnotation>, Error> = {
@@ -43,7 +43,7 @@ final class SessionViewModel {
     }()
 
     lazy var rxTrack: some Publisher<Track, Error> = {
-        return track.valuePublisher()
+        return track.valuePublisher(keyPaths: ["name"])
     }()
 
     lazy var rxTitle: some Publisher<String, Error> = {
@@ -117,7 +117,7 @@ final class SessionViewModel {
         // because the events are tracking. I'm guessing because it's using the main
         // runloop? Regardless, putting the subscription on a background queue fixes it
         return self.session.favorites.filter("isDeleted == false")
-            .collectionPublisher
+            .changesetPublisherShallow(keyPaths: ["identifier"])
             .subscribe(on: DispatchQueue(label: #function))
             .threadSafeReference()
             .receive(on: DispatchQueue.main)

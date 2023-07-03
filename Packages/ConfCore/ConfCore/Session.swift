@@ -304,21 +304,6 @@ extension Session {
         return asset
     }
 
-    public func thumbImageAsset() -> SessionAsset? {
-        guard let baseURL = event.first.flatMap({ URL(string: $0.imagesPath) }) else { return nil }
-
-        let filename = "\(staticContentId)_wide_162x91_2x.jpg"
-
-        let url = baseURL.appendingPathComponent("\(staticContentId)/\(filename)")
-
-        let asset = SessionAsset()
-
-        asset.assetType = .image
-        asset.remoteURL = url.absoluteString
-
-        return asset
-    }
-
     public func assets(matching types: [SessionAssetType]) -> Results<SessionAsset> {
         assert(!types.contains(.image), "This method does not support finding image assets")
 

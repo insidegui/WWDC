@@ -34,18 +34,18 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging, Signposting {
 
     private let publisher: AnyPublisher<SessionRows?, Never>
 
-    init<P: Publisher, PlayingSession: Publisher>(
-        tracks: Results<Track>,
+    init<T: Publisher, P: Publisher, PlayingSession: Publisher>(
+        tracks: T,
         filterPredicate: P,
         playingSessionIdentifier: PlayingSession
-    ) where P.Output == FilterPredicate, P.Failure == Never, PlayingSession.Output == String?, PlayingSession.Failure == Never {
+    ) where T.Output == Results<Track>, P.Output == FilterPredicate, P.Failure == Never, PlayingSession.Output == String?, PlayingSession.Failure == Never {
         // We group by tracks which is important
         // We watch for tracks to be added or removed via `collectionChangedPublisher`
         // Then within each track, we collect all the sessions sorted accordingly and watch for additions or removals via `collectionChangedPublisher`
         // All the tracks' sessions observations are collected via combineLatest() to yield an array of track-to-sorted-sessions
         // The output lets us build all possible rows up front, generally this will only emit a single value for 95% of the year
         // during WWDC they will change.
-        let tracksAndSessions = tracks.collectionChangedPublisher
+        let tracksAndSessions = tracks
             .replaceErrorWithEmpty()
             .do { Self.log.debug("tracks updated") }
             .map { (tracks: Results<Track>) in
@@ -53,7 +53,7 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging, Signposting {
                     .map { track in
                         track.sessions
                             .sorted(by: Session.sameTrackSortDescriptors())
-                            .collectionChangedPublisher
+                            .changesetPublisherShallow(keyPaths: ["identifier"])
                             .replaceErrorWithEmpty()
                             .map { (track, $0) }
                     }.combineLatest()
@@ -103,7 +103,7 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging, Signposting {
                 let (allTrackSessions, sessionRows) = value
                 return allTrackSessions
                     .filter(effectivePredicate)
-                    .collectionChangedPublisher
+                    .changesetPublisherShallow(keyPaths: ["identifier"])
                     .replaceErrorWithEmpty()
                     .map {
                         (key, ($0, sessionRows))
@@ -196,7 +196,7 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging, Signposting
                     .map { section in
                         section.instances
                             .sorted(by: SessionInstance.standardSortDescriptors())
-                            .collectionChangedPublisher
+                            .changesetPublisherShallow(keyPaths: ["identifier"])
                             .replaceErrorWithEmpty()
                             .map { (section, $0) }
                     }.combineLatest()
@@ -235,7 +235,7 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging, Signposting
                 let (allSectionInstances, sessionRows) = value
                 return allSectionInstances
                     .filter(effectivePredicate)
-                    .collectionChangedPublisher
+                    .changesetPublisherShallow(keyPaths: ["identifier"])
                     .replaceErrorWithEmpty()
                     .map {
                         (key, ($0, sessionRows))

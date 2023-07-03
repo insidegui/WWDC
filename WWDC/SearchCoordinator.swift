@@ -63,10 +63,10 @@ final class SearchCoordinator: Logging {
         }.store(in: &cancellables)
 
         Publishers.CombineLatest4(
-            storage.eventsForFilteringShallowPublisher,
-            storage.focusesShallowObservable,
-            storage.tracksShallowObservable,
-            storage.allSessionTypesShallowPublisher
+            storage.eventsForFiltering,
+            storage.focuses,
+            storage.tracks,
+            storage.allSessionTypes
         )
         .replaceErrorWithEmpty()
         .sink { (events, focuses, tracks, sessionTypes) in
@@ -344,14 +344,14 @@ struct IntermediateFiltersStructure {
     }
 
     static func from(existingFilters: [FilterType]) -> IntermediateFiltersStructure? {
-        let textual: TextualFilter? = existingFilters.findBy(id: .text)
-        let event: MultipleChoiceFilter? = existingFilters.findBy(id: .event)
-        let platform: MultipleChoiceFilter? = existingFilters.findBy(id: .focus)
-        let track: MultipleChoiceFilter? = existingFilters.findBy(id: .track)
-        let isFavorite: ToggleFilter? = existingFilters.findBy(id: .isFavorite)
-        let isDownloaded: ToggleFilter? = existingFilters.findBy(id: .isDownloaded)
-        let isUnwatched: ToggleFilter? = existingFilters.findBy(id: .isUnwatched)
-        let hasBookmarks: ToggleFilter? = existingFilters.findBy(id: .hasBookmarks)
+        let textual: TextualFilter? = existingFilters.find(byID: .text)
+        let event: MultipleChoiceFilter? = existingFilters.find(byID: .event)
+        let platform: MultipleChoiceFilter? = existingFilters.find(byID: .focus)
+        let track: MultipleChoiceFilter? = existingFilters.find(byID: .track)
+        let isFavorite: ToggleFilter? = existingFilters.find(byID: .isFavorite)
+        let isDownloaded: ToggleFilter? = existingFilters.find(byID: .isDownloaded)
+        let isUnwatched: ToggleFilter? = existingFilters.find(byID: .isUnwatched)
+        let hasBookmarks: ToggleFilter? = existingFilters.find(byID: .hasBookmarks)
         guard let textual, let event, let platform, let track, let isFavorite, let isDownloaded, let isUnwatched, let hasBookmarks else {
             return nil
         }

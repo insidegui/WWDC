@@ -331,11 +331,3 @@ final class SearchFiltersViewController: NSViewController {
         }
     }
 }
-
-extension Array where Element == FilterType {
-    func findBy<T: FilterType>(id: FilterIdentifier) -> T? {
-        guard let index = firstIndex(where: { $0.identifier == id }) else { return nil }
-
-        return self[index] as? T
-    }
-}

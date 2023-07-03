@@ -134,7 +134,7 @@ final class AppCoordinator: Logging, Signposting {
                 windowController: windowController,
                 listViewController: SessionsTableViewController(
                     rowProvider: ScheduleSessionRowProvider(
-                        scheduleSections: storage.scheduleShallowObservable,
+                        scheduleSections: storage.scheduleSections,
                         filterPredicate: searchCoordinator.$scheduleFilterPredicate,
                         playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
                     ),

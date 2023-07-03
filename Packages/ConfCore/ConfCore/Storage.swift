@@ -466,10 +466,6 @@ public final class Storage: Logging, Signposting {
         return eventsSortedByDateDescending.collectionPublisher
     }()
 
-    public lazy var sessionsObservable: some Publisher<Results<Session>, Error> = {
-        return self.realm.objects(Session.self).collectionPublisher
-    }()
-
     public var sessions: Results<Session> {
         return realm.objects(Session.self).filter("assets.@count > 0")
     }
@@ -497,54 +493,30 @@ public final class Storage: Logging, Signposting {
         })
     }
 
-    public lazy var eventsObservable: some Publisher<Results<Event>, Error> = {
-        let events = realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false)
-
-        return events.collectionPublisher
-    }()
-
-    public lazy var focusesShallowObservable: some Publisher<Results<Focus>, Error> = {
+    public lazy var focuses: some Publisher<Results<Focus>, Error> = {
         let focuses = realm.objects(Focus.self).sorted(byKeyPath: "name")
 
-        return focuses.collectionChangedPublisher
+        return focuses.changesetPublisherShallow(keyPaths: ["name"])
     }()
 
-    public lazy var tracks: Results<Track> = {
-        let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
-
-        return tracks
+    public lazy var tracks: some Publisher<Results<Track>, Error> = {
+        realm.objects(Track.self).sorted(byKeyPath: "order").changesetPublisherShallow(keyPaths: ["identifier"])
     }()
 
-    public lazy var tracksShallowObservable: some Publisher<Results<Track>, Error> = {
-        let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
-
-        return tracks.collectionChangedPublisher
-    }()
-
-    public lazy var featuredSectionsObservable: some Publisher<Results<FeaturedSection>, Error> = {
+    public lazy var featuredSections: some Publisher<Results<FeaturedSection>, Error> = {
         let predicate = NSPredicate(format: "isPublished = true AND content.@count > 0")
         let sections = self.realm.objects(FeaturedSection.self).filter(predicate)
 
         return sections.collectionPublisher
     }()
 
-    public lazy var scheduleObservable: some Publisher<Results<ScheduleSection>, Error> = {
+    public lazy var scheduleSections: some Publisher<Results<ScheduleSection>, Error> = {
         let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
 
-        return currentEvents.collectionPublisher.map({ $0.first?.identifier }).flatMap { (identifier: String?) -> AnyPublisher<Results<ScheduleSection>, Error> in
+        return currentEvents.changesetPublisherShallow(keyPaths: ["identifier"]).map({ $0.first?.identifier }).flatMap { (identifier: String?) -> AnyPublisher<Results<ScheduleSection>, Error> in
             let sections = self.realm.objects(ScheduleSection.self).filter("eventIdentifier == %@", identifier ?? "").sorted(byKeyPath: "representedDate")
 
-            return sections.collectionPublisher.eraseToAnyPublisher()
-        }
-    }()
-
-    public lazy var scheduleShallowObservable: some Publisher<Results<ScheduleSection>, Error> = {
-        let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
-
-        return currentEvents.collectionChangedPublisher.map({ $0.first?.identifier }).flatMap { (identifier: String?) -> AnyPublisher<Results<ScheduleSection>, Error> in
-            let sections = self.realm.objects(ScheduleSection.self).filter("eventIdentifier == %@", identifier ?? "").sorted(byKeyPath: "representedDate")
-
-            return sections.collectionChangedPublisher.eraseToAnyPublisher()
+            return sections.changesetPublisherShallow(keyPaths: ["identifier"]).eraseToAnyPublisher()
         }
     }()
 
@@ -610,61 +582,21 @@ public final class Storage: Logging, Signposting {
         }
     }
 
-    public var allEvents: [Event] {
-        return realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).toArray()
-    }
-
-    public var eventsForFilteringShallowPublisher: some Publisher<Results<Event>, Error> {
+    public var eventsForFiltering: some Publisher<Results<Event>, Error> {
         return realm.objects(Event.self)
             .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType == %@).@count > %d", SessionAssetType.streamingVideo.rawValue, 0)
             .sorted(byKeyPath: "startDate", ascending: false)
-            .collectionChangedPublisher
+            .changesetPublisherShallow(keyPaths: ["identifier"])
     }
 
-    public var allSessionTypesShallowPublisher: some Publisher<[String], Error> {
+    public var allSessionTypes: some Publisher<[String], Error> {
         realm
             .objects(SessionInstance.self)
-            .collectionChangedPublisher
+            .changesetPublisherShallow(keyPaths: ["identifier"])
             .map {
                 Array(Set($0.map(\.rawSessionType)))
                     .sorted(by: { $0.localizedStandardCompare($1) == .orderedAscending })
             }
     }
 
-    public var allTracks: [Track] {
-        return realm.objects(Track.self).sorted(byKeyPath: "order").toArray()
-    }
-
-}
-
-public extension RealmCollection where Self: RealmSubscribable {
-    /// Similar to `changesetPublisher` but only emits a new value when the collection has additions or removals and ignores all upstream
-    /// values caused by objects being modified
-    var collectionChangedPublisher: some Publisher<Self, Error> {
-        changesetPublisher
-            .tryCompactMap { changeset in
-                switch changeset {
-                case .initial(let latestValue):
-                    return latestValue
-                case .update(let latestValue, let deletions, let insertions, _) where !deletions.isEmpty || !insertions.isEmpty:
-                    return latestValue
-                case .update:
-                    return nil
-                case .error(let error):
-                    throw error
-                }
-            }
-    }
-}
-
-private func merge<T>(old: List<T>, new: List<T>) {
-    let diff = new.difference(from: old)
-    for change in diff {
-        switch change {
-        case let .remove(offset: offset, element: _, associatedWith: _):
-            old.remove(at: offset)
-        case let .insert(offset: offset, element: element, associatedWith: _):
-            old.insert(element, at: offset)
-        }
-    }
 }
