@@ -11,6 +11,7 @@ import Combine
 import RealmSwift
 import ConfCore
 import OSLog
+import SwiftUI
 
 // MARK: - Sessions Table View Controller
 
@@ -37,8 +38,20 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         rowProvider
             .rowsPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.updateWith(rows: $0, animated: true)
+            .sink {
+                guard let datasource = self.datasource else { return }
+                var snapshot = NSDiffableDataSourceSnapshot<SessionRow, SessionRow>()
+                let sections = $0.sectioned.first!
+                snapshot.appendSections([sections.key])
+                snapshot.appendItems(sections.value)
+//                sections.forEach {
+//                    snapshot.appendItems($0.value, toSection: $0.key)
+//                }
+
+                datasource.apply(snapshot, animatingDifferences: !self.hasPerformedInitialRowDisplay) {
+                    self.hasPerformedInitialRowDisplay = true
+                }
+//                self?.updateWith(rows: $0, animated: true)
             }
             .store(in: &cancellables)
     }
@@ -90,8 +103,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.dataSource = self
-        tableView.delegate = self
+        tableView.dataSource = self.datasource
 
         setupContextualMenu()
     }
@@ -325,26 +337,69 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
     let searchController: SearchFiltersViewController
 
-    lazy var tableView: WWDCTableView = {
-        let v = WWDCTableView()
+    var datasource: NSTableViewDiffableDataSource<SessionRow, SessionRow>?
+    lazy var tableView: NSTableView = {
+        let v = NSTableView()
 
         // We control the initial selection during initialization
-        v.allowsEmptySelection = true
-
-        v.wantsLayer = true
-        v.focusRingType = .none
-        v.allowsMultipleSelection = true
-        v.backgroundColor = .listBackground
-        v.headerView = nil
-        v.rowHeight = Metrics.sessionRowHeight
-        v.autoresizingMask = [.width, .height]
-        v.floatsGroupRows = true
-        v.gridStyleMask = .solidHorizontalGridLineMask
-        v.gridColor = .darkGridColor
-        v.style = .plain
+//        v.allowsEmptySelection = true
+//
+//        v.wantsLayer = true
+//        v.focusRingType = .none
+//        v.allowsMultipleSelection = true
+//        v.backgroundColor = .listBackground
+//        v.headerView = nil
+//        v.rowHeight = Metrics.sessionRowHeight
+//        v.autoresizingMask = [.width, .height]
+//        v.floatsGroupRows = true
+//        v.gridStyleMask = .solidHorizontalGridLineMask
+//        v.gridColor = .darkGridColor
+//        v.style = .plain
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
+        column.width = 320
         v.addTableColumn(column)
+
+        v.delegate = self
+        self.datasource = NSTableViewDiffableDataSource<SessionRow, SessionRow>(
+            tableView: v,
+            cellProvider: { tableView, tableColumn, row, sessionRow in
+                switch sessionRow.kind {
+                case .session(let viewModel):
+                    return self.cellForSessionViewModel(viewModel)!
+                case .sectionHeader:
+                    return NSTableCellView()
+                }
+            })
+
+        self.datasource?.rowViewProvider = { tableView, row, identifier in
+            guard let sessionRow = identifier as? SessionRow else {
+                fatalError()
+            }
+            switch sessionRow.kind {
+            case .sectionHeader(let content):
+                let rowView: TopicHeaderRow? = self.rowView(with: .headerRow)
+
+                rowView?.content = content
+
+                return rowView!
+            default:
+                return self.rowView(with: .sessionRow)!
+            }
+        }
+
+        self.datasource?.sectionHeaderViewProvider = { tableView, row, identifier in
+            switch identifier.kind {
+            case .sectionHeader(let content):
+                let rowView: TopicHeaderRow? = self.rowView(with: .headerRow)
+
+                rowView?.content = content
+
+                return rowView!
+            default:
+                return self.rowView(with: .sessionRow)!
+            }
+        }
 
         return v
     }()
@@ -536,7 +591,7 @@ private extension NSUserInterfaceItemIdentifier {
     static let sessionCell = NSUserInterfaceItemIdentifier(rawValue: "sessionCell")
 }
 
-extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
+extension SessionsTableViewController: /*NSTableViewDataSource, */NSTableViewDelegate {
 
     struct Metrics {
         static let headerRowHeight: CGFloat = 32
@@ -549,16 +604,16 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
 
         let row: Int? = (0..<numberOfRows).contains(selectedRow) ? selectedRow : nil
 
-        if let row, let viewModel = displayedRows[row].sessionViewModel {
+        if let row, let viewModel = self.datasource?.itemIdentifier(forRow: row)?.sessionViewModel {
             selectedSession = viewModel
         } else {
             selectedSession = nil
         }
     }
 
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        return displayedRows.count
-    }
+//    func numberOfRows(in tableView: NSTableView) -> Int {
+//        return displayedRows.count
+//    }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let sessionRow = displayedRows[row]
@@ -608,7 +663,8 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
 
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-        switch displayedRows[row].kind {
+        guard let row = self.datasource?.itemIdentifier(forRow: row) else { return 100 }
+        switch row.kind {
         case .session:
             return Metrics.sessionRowHeight
         case .sectionHeader:
@@ -617,7 +673,8 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     }
 
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        switch displayedRows[row].kind {
+        guard let row = self.datasource?.itemIdentifier(forRow: row) else { return false }
+        switch row.kind {
         case .sectionHeader:
             return false
         case .session:

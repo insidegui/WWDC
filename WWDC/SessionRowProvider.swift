@@ -15,6 +15,7 @@ import RealmSwift
 struct SessionRows: Equatable {
     let all: [SessionRow]
     let filtered: [SessionRow]
+    let sectioned: [SessionRow: [SessionRow]]
 }
 
 protocol SessionRowProvider {
@@ -165,7 +166,17 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging, Signposting {
             return [headerRow] + filteredRows
         }
 
-        return SessionRows(all: all, filtered: filtered)
+        let sections: [(SessionRow, [SessionRow])] = tracks.compactMap { (headerRow, sessions) in
+            let (filteredSessions, sessionRows) = sessions
+            let filteredRows: [SessionRow] = filteredSessions.compactMap { outerSession in
+                sessionRows[outerSession.identifier]
+            }
+
+            guard !filteredRows.isEmpty else { return nil }
+            return (headerRow, filteredRows)
+        }
+
+        return SessionRows(all: all, filtered: filtered, sectioned: Dictionary.init(uniqueKeysWithValues: sections))
     }
 
     func sessionRowIdentifierForToday() -> SessionIdentifiable? {
@@ -300,7 +311,17 @@ final class ScheduleSessionRowProvider: SessionRowProvider, Logging, Signposting
             return [headerRow] + filteredRows
         }
 
-        return SessionRows(all: all, filtered: filtered)
+        let sections: [(SessionRow, [SessionRow])] = sections.compactMap { (headerRow, sessions) in
+            let (filteredSessions, sessionRows) = sessions
+            let filteredRows: [SessionRow] = filteredSessions.compactMap { outerSession in
+                sessionRows[outerSession.identifier]
+            }
+
+            guard !filteredRows.isEmpty else { return nil }
+            return (headerRow, filteredRows)
+        }
+
+        return SessionRows(all: all, filtered: filtered, sectioned: Dictionary.init(uniqueKeysWithValues: sections))
     }
 
     func sessionRowIdentifierForToday() -> SessionIdentifiable? {
