@@ -15,7 +15,7 @@ final class ExploreTabProvider: ObservableObject {
     @Published var scrollOffset = CGPoint.zero
 
     private lazy var featuredSectionsObservable: some Publisher<Results<FeaturedSection>, Error> = {
-        storage.featuredSectionsObservable
+        storage.featuredSections
     }()
 
     private lazy var continueWatchingSessionsObservable: some Publisher<[Session], Error> = {

@@ -8,6 +8,7 @@
 
 import Cocoa
 import Combine
+import RealmSwift
 
 final class SessionCellView: NSView {
 

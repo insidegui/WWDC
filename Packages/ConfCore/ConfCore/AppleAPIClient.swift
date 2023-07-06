@@ -11,7 +11,9 @@ import Siesta
 
 // MARK: - Initialization and configuration
 
-public final class AppleAPIClient {
+public final class AppleAPIClient: Logging, Signposting {
+    public static let log = makeLogger()
+    public static let signposter = makeSignposter()
 
     fileprivate var environment: Environment
     fileprivate var service: Service
@@ -67,7 +69,9 @@ public final class AppleAPIClient {
         }
 
         service.configureTransformer(environment.sessionsPath) { (entity: Entity<Data>) throws -> ContentsResponse? in
-            return try decoder.decode(ContentsResponse.self, from: entity.content)
+            try Self.signposter.withIntervalSignpost("decode contents", id: Self.signposter.makeSignpostID()) {
+                try decoder.decode(ContentsResponse.self, from: entity.content)
+            }
         }
 
         service.configureTransformer(environment.liveVideosPath) { (entity: Entity<Data>) throws -> [SessionAsset]? in

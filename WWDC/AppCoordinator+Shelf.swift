@@ -34,7 +34,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard currentPlaybackViewModel != nil else { return }
         guard let playerController = currentPlayerController else { return }
 
-        playerOwnerTab.flatMap(shelf(for:))?.playerContainer.animator().isHidden = playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier
+        playerOwnerTab.flatMap(shelf(for:))?.playerContainer.animator().isHidden = playerOwnerSessionIdentifier != activeTabSelectedSessionViewModel?.identifier
 
         // Everything after this point is for automatically entering PiP
 
@@ -45,7 +45,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard !playerController.playerView.isInFullScreenPlayerWindow else { return }
 
         // autopip only activates if the user is leaving the currently playing session
-        guard activeTab != playerOwnerTab || playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier else { return }
+        guard activeTab != playerOwnerTab || playerOwnerSessionIdentifier != activeTabSelectedSessionViewModel?.identifier else { return }
 
         // if the user selected a different session/tab during playback, we move the player to PiP mode and hide the player on the shelf
         if !playerController.playerView.isInPictureInPictureMode {
@@ -65,7 +65,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         tabController.activeTab = playerOwnerTab
 
         // Reveal the session
-        if playerOwnerSessionIdentifier != selectedViewModelRegardlessOfTab?.identifier {
+        if playerOwnerSessionIdentifier != activeTabSelectedSessionViewModel?.identifier {
             currentListController?.select(session: SessionIdentifier(identifier))
         }
 
@@ -80,7 +80,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         guard let viewModel = shelfController.viewModel else { return }
 
         playerOwnerTab = activeTab
-        playerOwnerSessionIdentifier = selectedViewModelRegardlessOfTab?.identifier
+        playerOwnerSessionIdentifier = activeTabSelectedSessionViewModel?.identifier
 
         do {
             let playbackViewModel = try PlaybackViewModel(sessionViewModel: viewModel, storage: storage)

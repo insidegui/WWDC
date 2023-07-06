@@ -86,14 +86,13 @@ public class SessionInstance: Object, ConditionallyDecodable {
         return ["code"]
     }
 
-    public static func standardSort(instanceA: SessionInstance, instanceB: SessionInstance) -> Bool {
-        guard let sessionA = instanceA.session, let sessionB = instanceB.session else { return false }
-
-        if instanceA.sessionType == instanceB.sessionType {
-            return Session.standardSort(sessionA: sessionA, sessionB: sessionB)
-        } else {
-            return instanceA.sessionType < instanceB.sessionType
-        }
+    public static func standardSortDescriptors() -> [RealmSwift.SortDescriptor] {
+        return [
+            RealmSwift.SortDescriptor(keyPath: "rawSessionType"),
+            RealmSwift.SortDescriptor(keyPath: "session.trackOrder"),
+            RealmSwift.SortDescriptor(keyPath: "session.eventStartDate"),
+            RealmSwift.SortDescriptor(keyPath: "session.title")
+        ]
     }
 
     func merge(with other: SessionInstance, in realm: Realm) {
@@ -113,17 +112,12 @@ public class SessionInstance: Object, ConditionallyDecodable {
             session.merge(with: otherSession, in: realm)
         }
 
-        let otherKeywords = other.keywords.map { newKeyword -> (Keyword) in
-            if newKeyword.realm == nil,
-                let existingKeyword = realm.object(ofType: Keyword.self, forPrimaryKey: newKeyword.name) {
-                return existingKeyword
-            } else {
-                return newKeyword
-            }
-        }
+        let currentKeywordIds = Set(keywords.map(\.name))
+        other.keywords.forEach { newKeyword in
+            guard !currentKeywordIds.contains(newKeyword.name) else { return }
 
-        keywords.removeAll()
-        keywords.append(objectsIn: otherKeywords)
+            keywords.append(realm.object(ofType: Keyword.self, forPrimaryKey: newKeyword.name) ?? newKeyword)
+        }
     }
 
     // MARK: - Decodable

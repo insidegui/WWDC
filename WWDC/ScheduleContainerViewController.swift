@@ -13,8 +13,8 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
 
     let splitViewController: SessionsSplitViewController
 
-    init(windowController: MainWindowController, listStyle: SessionsListStyle) {
-        self.splitViewController = SessionsSplitViewController(windowController: windowController, listStyle: listStyle)
+    init(splitViewController: SessionsSplitViewController) {
+        self.splitViewController = splitViewController
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -25,7 +25,7 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
 
     /// This should be bound to a state that returns `true` when the schedule is not available.
     @Published
-    var showHeroView = false
+    var isShowingHeroView = false
 
     private(set) lazy var heroController: EventHeroViewController = {
         EventHeroViewController()
@@ -69,21 +69,21 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
     }
 
     private func bindViews() {
-        $showHeroView.replaceError(with: false).driveUI(\.view.isHidden, on: splitViewController)
+        $isShowingHeroView.replaceError(with: false).driveUI(\.view.isHidden, on: splitViewController)
                            .store(in: &cancellables)
 
-        $showHeroView.toggled().replaceError(with: true)
+        $isShowingHeroView.toggled().replaceError(with: true)
                            .driveUI(\.view.isHidden, on: heroController)
                            .store(in: &cancellables)
 
-        $showHeroView.driveUI { [weak self] _ in
+        $isShowingHeroView.driveUI { [weak self] _ in
             self?.view.needsUpdateConstraints = true
         }
         .store(in: &cancellables)
     }
 
     override var childForWindowTopSafeAreaConstraint: NSViewController? {
-        showHeroView ? heroController : nil
+        isShowingHeroView ? heroController : nil
     }
-    
+
 }

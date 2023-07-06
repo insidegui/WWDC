@@ -160,7 +160,7 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     func updateUI() {
-        let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode").collectionChangedPublisher
+        let bookmarks = sessionViewModel.session.bookmarks.sorted(byKeyPath: "timecode").changesetPublisherShallow(keyPaths: ["identifier"])
         bookmarks
             .map { $0.toArray() }
             .replaceError(with: [])

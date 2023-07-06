@@ -81,6 +81,7 @@ final class Boot: Logging {
                         self.log.log("Database will be compacted. Total bytes: \(totalBytes), used bytes: \(usedBytes)")
                         return true
                     } else {
+                        self.log.log("Database will not be compacted. Total bytes: \(totalBytes), used bytes: \(usedBytes)")
                         return false
                     }
                 }
