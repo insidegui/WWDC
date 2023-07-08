@@ -49,6 +49,7 @@ final class SessionCellView: NSView {
 
         guard let viewModel = viewModel else { return }
 
+        titleLabel.stringValue = viewModel.title
         viewModel.rxTitle.replaceError(with: "").driveUI(\.stringValue, on: titleLabel).store(in: &cancellables)
         viewModel.rxSubtitle.replaceError(with: "").driveUI(\.stringValue, on: subtitleLabel).store(in: &cancellables)
         viewModel.rxContext.replaceError(with: "").driveUI(\.stringValue, on: contextLabel).store(in: &cancellables)

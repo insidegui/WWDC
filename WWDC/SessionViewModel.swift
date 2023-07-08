@@ -27,7 +27,7 @@ final class SessionViewModel {
     let trackName: String
 
     lazy var rxSession: some Publisher<Session, Error> = {
-        return session.valuePublisher(keyPaths: ["title"])
+        return session.valuePublisher()
     }()
 
     lazy var rxTranscriptAnnotations: AnyPublisher<List<TranscriptAnnotation>, Error> = {
@@ -43,7 +43,7 @@ final class SessionViewModel {
     }()
 
     lazy var rxTrack: some Publisher<Track, Error> = {
-        return track.valuePublisher(keyPaths: ["name"])
+        return track.valuePublisher()
     }()
 
     lazy var rxTitle: some Publisher<String, Error> = {
