@@ -99,9 +99,9 @@ public final class Storage: Logging, Signposting {
             completion($0)
         } writeBlock: { backgroundRealm in
             // Save everything
-            backgroundRealm.add(contentsResponse.rooms, update: .all)
-            backgroundRealm.add(contentsResponse.tracks, update: .all)
-            backgroundRealm.add(contentsResponse.events, update: .all)
+            backgroundRealm.add(contentsResponse.rooms, update: .modified)
+            backgroundRealm.add(contentsResponse.tracks, update: .modified)
+            backgroundRealm.add(contentsResponse.events, update: .modified)
 
             contentsResponse.sessions.forEach { newSession in
                 // Replace any "unknown" resources with their full data
@@ -115,7 +115,7 @@ public final class Storage: Logging, Signposting {
                 if let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
                     existingSession.merge(with: newSession, in: backgroundRealm)
                 } else {
-                    backgroundRealm.add(newSession, update: .all)
+                    backgroundRealm.add(newSession, update: .modified)
                 }
             }
 
@@ -133,7 +133,7 @@ public final class Storage: Logging, Signposting {
                         newInstance.session = existingSession
                     }
 
-                    backgroundRealm.add(newInstance, update: .all)
+                    backgroundRealm.add(newInstance, update: .modified)
                 }
             }
             Self.signposter.endInterval("store content result", mergeInstances)
@@ -258,7 +258,7 @@ public final class Storage: Logging, Signposting {
                 section.instances.append(objectsIn: instances)
                 section.identifier = ScheduleSection.identifierFormatter.string(from: startTime)
 
-                backgroundRealm.add(section, update: .all)
+                backgroundRealm.add(section, update: .modified)
             }
             Self.signposter.endInterval("store content result", createScheduleView)
         }
@@ -281,7 +281,7 @@ public final class Storage: Logging, Signposting {
 
                 self.log.info("Registering live asset with year \(asset.year, privacy: .public) and session number \(asset.sessionId, privacy: .public)")
 
-                backgroundRealm.add(asset, update: .all)
+                backgroundRealm.add(asset, update: .modified)
 
                 if let session = backgroundRealm.objects(Session.self).filter("identifier == %@", asset.sessionId).first {
                     if !session.assets.contains(asset) {
@@ -310,7 +310,7 @@ public final class Storage: Logging, Signposting {
                 backgroundRealm.delete(section)
             }
 
-            backgroundRealm.add(sections, update: .all)
+            backgroundRealm.add(sections, update: .modified)
 
             // Associate contents with sessions
             sections.forEach { section in
@@ -344,7 +344,7 @@ public final class Storage: Logging, Signposting {
         }
 
         performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { backgroundRealm in
-            backgroundRealm.add(hero, update: .all)
+            backgroundRealm.add(hero, update: .modified)
         }
     }
 
@@ -442,6 +442,8 @@ public final class Storage: Logging, Signposting {
     ///   it is not guaranteed that your writeBlock will be called.
     ///   Your write block is not called if any of the objects can't be transfered between threads.
     public func modify<T>(_ objects: [T], with writeBlock: @escaping ([T]) -> Void) where T: ThreadConfined {
+        guard !objects.isEmpty else { return }
+
         let safeObjects = objects.map { ThreadSafeReference(to: $0) }
 
         performSerializedBackgroundWrite(createTransaction: false, writeBlock: { [weak self] backgroundRealm in
