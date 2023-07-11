@@ -30,12 +30,12 @@ class WWDCTableView: NSTableView {
 extension NSTableView {
 
     func scrollRowToCenter(_ row: Int) {
-
-        guard let clipView = superview as? NSClipView,
-              let scrollView = clipView.superview as? NSScrollView else {
-
-                assertionFailure("Unexpected NSTableView view hiearchy")
-                return
+        guard
+            let clipView = superview as? NSClipView,
+            let scrollView = clipView.superview as? NSScrollView
+        else {
+            assertionFailure("Unexpected NSTableView view hierarchy")
+            return
         }
 
         let rowRect = rect(ofRow: row)
@@ -49,5 +49,33 @@ extension NSTableView {
         scrollView.flashScrollers()
 
         clipView.setBoundsOrigin(scrollOrigin)
+    }
+
+    var visibleRectExcludingFloatingGroupRow: CGRect {
+        var visibleRect = self.visibleRect
+
+        var floatingRow: NSTableRowView?
+        enumerateAvailableRowViews { view, index in
+            guard view.isFloating && floatingRow == nil else { return }
+
+            floatingRow = view
+        }
+        let floatingRowHeight = floatingRow?.bounds.height ?? 0
+
+        visibleRect.size.height -= floatingRowHeight
+        visibleRect.origin.y += floatingRowHeight
+
+        return visibleRect
+    }
+
+    var visibleRows: IndexSet {
+        let visibleNSRange = self.rows(in: visibleRect)
+        // NSTableView likes to return negative values if you ask immediately after calling endUpdates()
+        guard visibleNSRange.length >= 0, let visibleRange = Range(visibleNSRange) else {
+            return IndexSet()
+        }
+
+        let visibleSet = IndexSet(integersIn: visibleRange)
+        return visibleSet
     }
 }

@@ -11,6 +11,7 @@ import Combine
 import RealmSwift
 import ConfCore
 import OSLog
+import OrderedCollections
 
 // MARK: - Sessions Table View Controller
 
@@ -60,8 +61,6 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
         view.addSubview(scrollView)
         view.addSubview(searchController.view)
-
-        scrollView.contentView.automaticallyAdjustsContentInsets = false
 
         searchController.view.translatesAutoresizingMaskIntoConstraints = false
 
@@ -209,8 +208,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
             // Same elements, same order: https://github.com/apple/swift/blob/master/stdlib/public/core/Arrays.swift.gyb#L2203
             if oldValue == newValue { return }
 
-            let oldRowsSet = Set(oldValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
-            let newRowsSet = Set(newValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
+            let oldRowsSet = OrderedSet(oldValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
+            let newRowsSet = OrderedSet(newValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
             assert(newRowsSet.count == newValue.count)
             assert(oldRowsSet.count == oldValue.count)
 
@@ -224,19 +223,11 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
             // cell contents from flashing when cells are unnecessarily reloaded
             var needReloadedIndexes = IndexSet()
 
-            let sortedOldRows = oldRowsSet.intersection(newRowsSet).sorted(by: { (row1, row2) -> Bool in
-                return row1.index < row2.index
-            })
-
-            let sortedNewRows = newRowsSet.intersection(oldRowsSet).sorted(by: { (row1, row2) -> Bool in
-                return row1.index < row2.index
-            })
-
-            for (oldSessionRowIndex, newSessionRowIndex) in zip(sortedOldRows, sortedNewRows) where oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
+            for (oldSessionRowIndex, newSessionRowIndex) in zip(oldRowsSet, newRowsSet) where oldSessionRowIndex.sessionRow != newSessionRowIndex.sessionRow {
                 needReloadedIndexes.insert(newSessionRowIndex.index)
             }
 
-            self.log.trace("setDisplayedRows: removed[\(removedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] added[\(addedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] reload[\(needReloadedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)]")
+            self.log.trace("setDisplayedRows: removed[\(removedIndexes.map { "\($0)" }.joined(separator: ","), privacy: .public)] added[\(addedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] reload[\(needReloadedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)]")
 
             DispatchQueue.main.sync {
 
@@ -252,46 +243,87 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
                         return IndexedSessionRow(sessionRow: oldValue[index], index: index)
                     }
 
-                    let newSelection = newRowsSet.intersection(previouslySelectedRows)
-                    if let topOfPreviousSelection = previouslySelectedRows.first, newSelection.isEmpty {
-                        // The update has removed the selected row(s).
-                        // e.g. You have the unwatched filter active and then mark the selection as watched
-                        stride(from: topOfPreviousSelection.index, to: -1, by: -1).lazy.compactMap {
-                            return IndexedSessionRow(sessionRow: oldValue[$0], index: $0)
-                        }.first { (indexedRow: IndexedSessionRow) -> Bool in
-                            newRowsSet.contains(indexedRow) && indexedRow.sessionRow.isSession
-                        }.flatMap {
-                            newRowsSet.firstIndex(of: $0)
-                        }.map {
-                            newRowsSet[$0].index
-                        }.map {
-                            selectedIndexes = IndexSet(integer: $0)
-                        }
+                    selectedIndexes = IndexSet(newRowsSet.intersection(previouslySelectedRows).map { $0.index })
+                }
+
+                let visibleIndexes = self.tableView.visibleRows
+                var animateRemovals = false
+                var animateInsertions = false
+
+                if selectedIndexes.isEmpty || newRowsSet.count < visibleIndexes.count {
+                    // Not preserving a selection means we can always animate
+                    // If the newRows will take up less than the visible rows, we can always animate
+                    animateInsertions = true
+                    animateRemovals = true
+                } else {
+                    if !removedIndexes.isEmpty && visibleIndexes.contains(integersIn: removedIndexes) {
+                        // Visible rows contain every single remove
+                        animateRemovals = true
                     } else {
-                        selectedIndexes = IndexSet(newSelection.map { $0.index })
+                        animateRemovals = false
+                    }
+
+                    // We're trying to answer the question: If I added these row indices, would they be visible?
+                    if !addedIndexes.isEmpty && visibleIndexes.contains(integersIn: addedIndexes)  {
+                        // Visible rows contain every single addition
+                        animateInsertions = true
+                    } else if
+                        let lastIndex = oldRowsSet.last?.index,
+                        let selectedIndex = selectedIndexes.first,
+                        self.tableView.rect(ofRow: lastIndex).maxY < self.tableView.visibleRect.maxY
+                            && addedIndexes.allSatisfy({ selectedIndex < $0 })
+                    {
+                        // Insertions are happening in a table view where all rows are visible
+                        // and we're preserving the selection that is guaranteed
+                        animateInsertions = true
+                    } else if oldRowsSet.isEmpty {
+                        // The list is currently empty, we can animate everything in
+                        animateInsertions = true
+                    } else {
+                        animateInsertions = false
                     }
                 }
 
-                if selectedIndexes.isEmpty, let defaultIndex = newValue.firstIndex(where: { $0.isSession }) {
-                    selectedIndexes.insert(defaultIndex)
-                }
+
 
                 NSAnimationContext.beginGrouping()
                 let context = NSAnimationContext.current
-                context.duration = animated ? 0.35 : 0
+                context.duration = animated ? 2 : 0
 
-                context.completionHandler = {
-                    NSAnimationContext.runAnimationGroup({ (context) in
-                        context.allowsImplicitAnimation = animated
-                        self.tableView.scrollRowToCenter(selectedIndexes.first ?? 0)
-                    }, completionHandler: nil)
-                }
+//                context.completionHandler = {
+//                    NSAnimationContext.runAnimationGroup({ (context) in
+//                        context.allowsImplicitAnimation = animated
+//                        self.tableView.scrollRowToCenter(selectedIndexes.first ?? 0)
+//                        if selectedIndexes.isEmpty {
+//                            let firstCompletelyVisibleIndex = self.tableView.visibleRows.first { index in
+//                                let view = self.tableView.rowView(atRow: index, makeIfNecessary: false)
+//                                return self.tableView.visibleRectButForReal.contains(self.tableView.rect(ofRow: index))
+//                                && self.displayedRows[index].isSession
+//                            }
+//                            guard let firstCompletelyVisibleIndex else { return }
+//                            self.tableView.selectRowIndexes(.init(integer: firstCompletelyVisibleIndex), byExtendingSelection: false)
+//                        }
+//                    }, completionHandler: nil)
+//                }
 
                 self.tableView.beginUpdates()
 
-                self.tableView.removeRows(at: removedIndexes, withAnimation: [.slideLeft])
+                if animateRemovals {
+                    for remove in removed.reversed() {
+                        self.tableView.removeRows(
+                            at: .init(integer: remove.index),
+                            withAnimation: self.tableView.rowView(atRow: remove.index, makeIfNecessary: false)?.isFloating == true ? [] : [.slideLeft]
+                        )
+                    }
+                } else {
+                    self.tableView.removeRows(at: removedIndexes, withAnimation: [])
+                }
 
-                self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown])
+                if animateInsertions {
+                    self.tableView.insertRows(at: addedIndexes, withAnimation: [.slideDown, .effectFade])
+                } else {
+                    self.tableView.insertRows(at: addedIndexes)
+                }
 
                 // insertRows(::) and removeRows(::) will query the delegate for the row count at the beginning
                 // so we delay updating the data model until after those methods have done their thing
@@ -300,11 +332,35 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
                 // This must be after you update the backing model
                 self.tableView.reloadData(forRowIndexes: needReloadedIndexes, columnIndexes: IndexSet(integersIn: 0..<1))
 
-                self.tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
-
                 self.log.debug("endUpdates: row count[\(self.displayedRows.count)]")
+                print(self.tableView.visibleRows.commaSeparated)
+
+                if animateInsertions || animateRemovals {
+                    self.tableView.animator().scrollRowToCenter(selectedIndexes.first ?? 0)
+                }
                 self.tableView.endUpdates()
+                print(self.tableView.visibleRows.commaSeparated)
+
+                if !animateInsertions && !animateRemovals {
+//                    context.duration = 0
+                    // The insertions/removals aren't animated, scroll immediately to maintain view
+                    self.tableView.scrollRowToCenter(selectedIndexes.first ?? 0)
+                }
+
                 NSAnimationContext.endGrouping()
+
+                // Ensure a selection after updating
+                if selectedIndexes.isEmpty {
+                    let firstCompletelyVisibleIndex = self.tableView.visibleRows.first { index in
+                        guard let view = self.tableView.rowView(atRow: index, makeIfNecessary: false) else { return false }
+                        guard !view.isFloating else { return false }
+
+                        // Row is contained entirely within the non-occluded visibleRect
+                        return self.tableView.visibleRectExcludingFloatingGroupRow.contains(self.tableView.rect(ofRow: index))
+                    }
+                    guard let firstCompletelyVisibleIndex else { return }
+                    self.tableView.selectRowIndexes(.init(integer: firstCompletelyVisibleIndex), byExtendingSelection: false)
+                }
             }
         }
     }
@@ -361,6 +417,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         v.translatesAutoresizingMaskIntoConstraints = false
         v.alphaValue = 0
         v.automaticallyAdjustsContentInsets = false
+        v.contentView.automaticallyAdjustsContentInsets = false
 
         return v
     }()
@@ -634,4 +691,10 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
         }
     }
 
+}
+
+extension IndexSet {
+    var commaSeparated: String {
+        map { "\($0)" }.joined(separator: ",")
+    }
 }
