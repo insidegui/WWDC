@@ -25,6 +25,11 @@ final class PUIScrimView: NSView {
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
+        wantsLayer = true
+        layer?.cornerCurve = .continuous
+        layer?.cornerRadius = 12
+        layer?.masksToBounds = true
+
         addSubview(vfxView)
         vfxView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         vfxView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
