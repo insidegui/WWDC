@@ -112,7 +112,7 @@ private struct PUIPlayerViewControlsContent: View {
                     let segment = segments[i]
                     Capsule(style: .continuous)
                         .foregroundStyle(.tertiary)
-                        .frame(width: proxy.size.width * state.durationFraction(for: segment))
+                        .frame(width: max(1, proxy.size.width * state.durationFraction(for: segment)))
                         .offset(x: proxy.size.width * state.startFraction(for: segment))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -120,15 +120,16 @@ private struct PUIPlayerViewControlsContent: View {
                 if let timelineHoverPoint {
                     Capsule(style: .continuous)
                         .foregroundStyle(Color.white)
-                        .frame(width: proxy.size.width * timelineHoverPoint.x)
+                        .frame(width: max(1, proxy.size.width * timelineHoverPoint.x))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
                     Capsule(style: .continuous)
                         .foregroundStyle(Color.white)
-                        .frame(width: proxy.size.width * state.playbackProgress)
+                        .frame(width: max(1, proxy.size.width * state.playbackProgress))
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
+            .clipShape(Capsule(style: .continuous))
             .onHoverWithPosition { timelineHoverPoint = $0 }
         }
         .frame(maxWidth: .infinity, minHeight: 8, maxHeight: 8)
@@ -303,7 +304,7 @@ struct PUIPlayerViewControlsContent_Previews: PreviewProvider, View {
         duration: CMTimeMakeWithSeconds(900, preferredTimescale: 9000),
         formattedCurrentTime: "05:00",
         formattedTimeRemaining: "-10:00",
-        playbackProgress: 0.3,
+        playbackProgress: 0,
         isPiPAvailable: true,
         playbackState: .paused,
         speed: .normal,

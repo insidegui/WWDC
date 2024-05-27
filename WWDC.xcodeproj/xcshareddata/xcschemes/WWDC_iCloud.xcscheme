@@ -119,7 +119,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-AUIEnableVisualEffectDebugger YES"
