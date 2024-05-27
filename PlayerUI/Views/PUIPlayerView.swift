@@ -117,6 +117,8 @@ public final class PUIPlayerView: NSView, ObservableObject {
     public var mediaTitle: String?
     public var mediaIsLiveStream: Bool = false
 
+    private let playbackQueue = DispatchQueue(label: "Playback", qos: .userInitiated)
+
     public init(player: AVPlayer) {
         self.player = player
         if AVPictureInPictureController.isPictureInPictureSupported() {
@@ -433,6 +435,9 @@ public final class PUIPlayerView: NSView, ObservableObject {
     }
 
     deinit {
+        if let mouseIdleEventMonitor {
+            NSEvent.removeMonitor(mouseIdleEventMonitor)
+        }
         if let player = player {
             teardown(player: player)
         }
@@ -744,7 +749,10 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
         guard time.isValid && time.isNumeric else { return }
 
-        player?.seek(to: time)
+        playbackQueue.async { [weak self] in
+            guard let self else { return }
+            player?.seek(to: time)
+        }
     }
 
     private func invalidateTouchBar(destructive: Bool = false) {
@@ -948,6 +956,8 @@ public final class PUIPlayerView: NSView, ObservableObject {
         guard canHideControls else { return }
 
         setControls(opacity: 0, animated: animated)
+
+        controlsVisible = false
     }
 
     private func showControls(animated: Bool) {
@@ -956,6 +966,8 @@ public final class PUIPlayerView: NSView, ObservableObject {
         guard isEnabled else { return }
 
         setControls(opacity: 1, animated: animated)
+
+        controlsVisible = true
     }
 
     private func setControls(opacity: CGFloat, animated: Bool) {
@@ -989,6 +1001,8 @@ public final class PUIPlayerView: NSView, ObservableObject {
         resetMouseIdleTimer()
 
         if window != nil {
+            setupMouseIdleEventMonitor()
+
             lastKnownWindow = window
             startMonitoringKeyEvents()
             invalidateTouchBar(destructive: true)
@@ -1046,28 +1060,6 @@ public final class PUIPlayerView: NSView, ObservableObject {
         addTrackingArea(mouseTrackingArea)
     }
 
-    public override func mouseEntered(with event: NSEvent) {
-        showControls(animated: true)
-        resetMouseIdleTimer()
-
-        super.mouseEntered(with: event)
-    }
-
-    public override func mouseMoved(with event: NSEvent) {
-        showControls(animated: true)
-        resetMouseIdleTimer()
-
-        super.mouseMoved(with: event)
-    }
-
-    public override func mouseExited(with event: NSEvent) {
-        resetMouseIdleTimer(start: false)
-
-        hideControls(animated: true)
-
-        super.mouseExited(with: event)
-    }
-
     public override var acceptsFirstResponder: Bool {
         return true
     }
@@ -1082,6 +1074,38 @@ public final class PUIPlayerView: NSView, ObservableObject {
         } else {
             super.mouseDown(with: event)
         }
+    }
+
+    private var controlsVisible = false
+
+    private var mouseIdleEventMonitor: Any?
+
+    private func setupMouseIdleEventMonitor() {
+        guard mouseIdleEventMonitor == nil else { return }
+
+        mouseIdleEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved, .leftMouseDown]) { [weak self] event in
+            guard let self else { return event }
+            handleMouseIdle(event)
+            return event
+        }
+    }
+
+    private func handleMouseIdle(_ event: NSEvent) {
+        guard let superview else { return }
+
+        let location = event.locationInWindow
+        let areaRect = superview.convert(frame, to: nil)
+
+        guard areaRect.contains(location) else {
+            if controlsVisible {
+                resetMouseIdleTimer(start: false)
+                hideControls(animated: true)
+            }
+            return
+        }
+
+        resetMouseIdleTimer()
+        showControls(animated: true)
     }
 
 }
