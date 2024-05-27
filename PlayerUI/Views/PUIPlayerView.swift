@@ -394,10 +394,31 @@ public final class PUIPlayerView: NSView, ObservableObject {
 
     private lazy var videoLayoutGuideConstraints = [NSLayoutConstraint]()
 
+    private var currentLayoutBounds = CGRect.zero
+
     private func updateVideoLayoutGuide() {
         guard let videoTrack = player?.currentItem?.tracks.first(where: { $0.assetTrack?.mediaType == .video })?.assetTrack else { return }
 
+        guard bounds != currentLayoutBounds else { return }
+        currentLayoutBounds = bounds
+
         let videoRect = AVMakeRect(aspectRatio: videoTrack.naturalSize, insideRect: bounds)
+
+        guard videoRect.width.isFinite, videoRect.height.isFinite else { return }
+
+        #if DEBUG
+        os_log(
+            "📐 Update video layout guide with bounds %.2fx%.2f %.2fx%.2f, video rect = %.2fx%.2f %.2fx%.2f", log: self.log, type: .debug,
+            bounds.origin.x,
+            bounds.origin.y,
+            bounds.size.width,
+            bounds.size.height,
+            videoRect.origin.x,
+            videoRect.origin.y,
+            videoRect.size.width,
+            videoRect.size.height
+        )
+        #endif
 
         NSLayoutConstraint.deactivate(videoLayoutGuideConstraints)
 
@@ -700,6 +721,8 @@ public final class PUIPlayerView: NSView, ObservableObject {
     }
 
     private func modifyCurrentTime(with seconds: Double, using function: (CMTime, CMTime) -> CMTime) {
+        os_log("Modify current time with seconds %{public}.3fs", log: self.log, type: .debug, seconds)
+
         guard let player = player else { return }
 
         guard let durationTime = player.currentItem?.duration else { return }
@@ -711,10 +734,14 @@ public final class PUIPlayerView: NSView, ObservableObject {
     }
 
     private func seek(to timestamp: TimeInterval) {
+        os_log("Seek to timestamp %{public}.3fs", log: self.log, type: .debug, timestamp)
+
         seek(to: CMTimeMakeWithSeconds(timestamp, preferredTimescale: 90000))
     }
 
     private func seek(to time: CMTime) {
+        os_log("Seek to CMTime %{public}.3fs", log: self.log, type: .debug, CMTimeGetSeconds(time))
+
         guard time.isValid && time.isNumeric else { return }
 
         player?.seek(to: time)
