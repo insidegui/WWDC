@@ -386,10 +386,17 @@ public final class PUIPlayerView: NSView {
 
     private lazy var videoLayoutGuideConstraints = [NSLayoutConstraint]()
 
+    private var currentBounds = CGRect.zero
+
     private func updateVideoLayoutGuide() {
         guard let videoTrack = player?.currentItem?.tracks.first(where: { $0.assetTrack?.mediaType == .video })?.assetTrack else { return }
 
+        guard bounds != currentBounds else { return }
+        currentBounds = bounds
+
         let videoRect = AVMakeRect(aspectRatio: videoTrack.naturalSize, insideRect: bounds)
+
+        guard videoRect.width.isFinite, videoRect.height.isFinite else { return }
 
         NSLayoutConstraint.deactivate(videoLayoutGuideConstraints)
 
