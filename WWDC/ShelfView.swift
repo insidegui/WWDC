@@ -23,6 +23,7 @@ final class ShelfView: NSView {
 
         wantsLayer = true
         layer = CALayer()
+        clipsToBounds = true
 
         imageLayer = CALayer()
         imageLayer.contentsGravity = .resizeAspectFill
