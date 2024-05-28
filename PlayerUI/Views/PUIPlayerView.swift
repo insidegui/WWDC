@@ -647,7 +647,6 @@ public final class PUIPlayerView: NSView {
     private func setupControls() {
         addLayoutGuide(videoLayoutGuide)
 
-        externalStatusController.view.isHidden = true
         externalStatusController.view.translatesAutoresizingMaskIntoConstraints = false
         let playerView = NSView()
         playerView.translatesAutoresizingMaskIntoConstraints = false
@@ -660,11 +659,13 @@ public final class PUIPlayerView: NSView {
         playerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         playerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
+        externalStatusController.hide()
+
         addSubview(externalStatusController.view)
-        externalStatusController.view.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        externalStatusController.view.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        externalStatusController.view.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        externalStatusController.view.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        externalStatusController.view.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor).isActive = true
+        externalStatusController.view.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor).isActive = true
+        externalStatusController.view.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor).isActive = true
+        externalStatusController.view.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor).isActive = true
 
         // Volume controls
         volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
@@ -1503,7 +1504,7 @@ public final class PUIPlayerView: NSView {
         externalStatusController.providerIcon = current.image
         externalStatusController.providerName = currentProviderName
         externalStatusController.providerDescription = "Playing in \(currentProviderName)" + "\n" + current.info
-        externalStatusController.view.isHidden = false
+        externalStatusController.show()
 
         pipButton.isEnabled = false
         subtitlesButton.isEnabled = false
@@ -1525,7 +1526,7 @@ public final class PUIPlayerView: NSView {
 
         controlsContainerView.alphaValue = 1
 
-        externalStatusController.view.isHidden = true
+        externalStatusController.hide()
     }
 
 }
@@ -1644,14 +1645,15 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
         snapshotPlayer { [weak self] image in
             self?.externalStatusController.snapshot = image
         }
+
+        externalStatusController.providerIcon = .PUIPictureInPictureLarge.withPlayerMetrics(.large)
+        externalStatusController.providerName = "Picture in Picture"
+        externalStatusController.providerDescription = "Playing in Picture in Picture"
+        externalStatusController.show()
     }
 
     public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         pipButton.state = .on
-        externalStatusController.providerIcon = .PUIPictureInPictureLarge.withPlayerMetrics(.large)
-        externalStatusController.providerName = "Picture in Picture"
-        externalStatusController.providerDescription = "Playing in Picture in Picture"
-        externalStatusController.view.isHidden = false
 
         invalidateTouchBar()
     }
@@ -1696,7 +1698,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
     // Called Last
     public func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         pipButton.state = .off
-        externalStatusController.view.isHidden = true
+        externalStatusController.hide()
         invalidateTouchBar()
     }
 }
