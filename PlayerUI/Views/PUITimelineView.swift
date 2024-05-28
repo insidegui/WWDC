@@ -228,7 +228,6 @@ public final class PUITimelineView: NSView {
     }
 
     private func updateGhostProgress(with event: NSEvent) {
-        print("Update ghost \(event)")
         let point = convert(event.locationInWindow, from: nil)
         guard point.x > 0 && point.x < bounds.width else {
             return
