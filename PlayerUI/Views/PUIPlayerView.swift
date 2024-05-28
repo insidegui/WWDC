@@ -282,9 +282,19 @@ public final class PUIPlayerView: NSView {
 
         if player.volume.isZero {
             volumeButton.image = .PUIVolumeMuted
+            volumeButton.toolTip = "Unmute"
             volumeSlider.doubleValue = 0
         } else {
-            volumeButton.image = .PUIVolume
+            switch player.volume {
+            case 0..<0.33:
+                volumeButton.image = .PUIVolume1
+            case 0.33..<0.66:
+                volumeButton.image = .PUIVolume2
+            default:
+                volumeButton.image = .PUIVolume3
+            }
+
+            volumeButton.toolTip = "Mute"
             volumeSlider.doubleValue = Double(player.volume)
         }
     }
@@ -516,14 +526,18 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    private lazy var volumeButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
+    private lazy var volumeButton: NSButton = {
+        let b = NSButton(frame: .zero)
 
-        b.image = .PUIVolume
+        b.image = .PUIVolume3
+        b.font = NSFont.wwdcRoundedSystemFont(ofSize: 16, weight: .medium)
         b.target = self
         b.action = #selector(toggleMute)
+        b.heightAnchor.constraint(equalToConstant: 24).isActive = true
         b.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        b.toolTip = "Mute/unmute"
+        b.title = ""
+        b.isBordered = false
+        (b.cell as? NSButtonCell)?.imageScaling = .scaleNone
 
         return b
     }()

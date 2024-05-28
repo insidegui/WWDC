@@ -42,9 +42,13 @@ extension NSImage {
 
     static var PUISubtitles: NSImage { .PUISystemSymbol(named: "text.bubble.fill", label: "Subtitles") }
 
-    static var PUIVolume: NSImage { .PUISystemSymbol(named: "speaker.wave.3.fill", label: "Toggle Mute") }
+    static var PUIVolumeMuted: NSImage { .PUISystemSymbol(named: "speaker.slash.fill", label: "Unmute") }
 
-    static var PUIVolumeMuted: NSImage { .PUISystemSymbol(named: "speaker.fill", label: "Toggle Mute") }
+    static var PUIVolume1: NSImage { .PUISystemSymbol(named: "speaker.wave.1.fill", label: "Mute") }
+
+    static var PUIVolume2: NSImage { .PUISystemSymbol(named: "speaker.wave.2.fill", label: "Mute") }
+
+    static var PUIVolume3: NSImage { .PUISystemSymbol(named: "speaker.wave.3.fill", label: "Mute") }
 
     static var PUIAirPlay: NSImage { .PUISystemSymbol(named: "airplayvideo", label: "AirPlay") }
 
