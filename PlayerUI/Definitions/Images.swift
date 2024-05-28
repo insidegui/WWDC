@@ -8,9 +8,13 @@
 
 import Cocoa
 
+extension Bundle {
+    static let playerUI = Bundle(for: PUIPlayerView.self)
+}
+
 extension NSImage {
 
-    private static let playerBundle = Bundle(for: PUIButton.self)
+    private static let playerBundle = Bundle.playerUI
 
     static var PUIPlay: NSImage { .PUISystemSymbol(named: "play.fill", label: "Play") }
 

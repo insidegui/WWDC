@@ -88,8 +88,8 @@ public final class PUITimelineView: NSView {
         static let annotationDragThresholdVertical: CGFloat = 15
         static let annotationDragThresholdHorizontal: CGFloat = 6
         static let textSize: CGFloat = 14.0
-        static let timePreviewTextSize: CGFloat = 18.0
-        static let timePreviewYOffset: CGFloat = -32.0
+        static let floatingLayerTextSize: CGFloat = 15.0
+        static let floatingLayerMargin: CGFloat = 8
         static let timePreviewLeftOfMouseWidthMultiplier: CGFloat = 0.5
         static let timePreviewRightOfMouseWidthMultiplier: CGFloat = 0.7
     }
@@ -98,7 +98,8 @@ public final class PUITimelineView: NSView {
     private var bufferingProgressLayer: PUIBufferLayer!
     private var playbackProgressLayer: PUIBoringLayer!
     private var seekProgressLayer: PUIBoringLayer!
-    private var timePreviewLayer: PUIBoringTextLayer!
+
+    private lazy var floatingTimeLayer = PUITimelineFloatingLayer()
 
     private func buildUI() {
         wantsLayer = true
@@ -143,12 +144,14 @@ public final class PUITimelineView: NSView {
 
         layer?.addSublayer(seekProgressLayer)
 
-        // Time Preview
+        // Floating time
 
-        timePreviewLayer = PUIBoringTextLayer()
-        timePreviewLayer.masksToBounds = true
+        layer?.addSublayer(floatingTimeLayer)
 
-        layer?.addSublayer(timePreviewLayer)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.updateFloatingTime(with: CGPoint(x: 100, y: 0))
+            self.floatingTimeLayer.show()
+        }
     }
 
     public func resetUI() {
@@ -223,7 +226,7 @@ public final class PUITimelineView: NSView {
         guard hasMouseInside else { return }
 
         updateGhostProgress(with: event)
-        updateTimePreview(with: event)
+        updateFloatingTime(with: event)
         trackMouseAgainstAnnotations(with: event)
     }
 
@@ -240,22 +243,27 @@ public final class PUITimelineView: NSView {
         seekProgressLayer.frame = ghostRect
     }
 
-    private func updateTimePreview(with event: NSEvent) {
+    private func updateFloatingTime(with event: NSEvent) {
         let point = convert(event.locationInWindow, from: nil)
-        let previewTimestampString = attributedString(for: makeTimestamp(for: point), ofSize: Metrics.timePreviewTextSize)
+        
+        updateFloatingTime(with: point)
+    }
 
-        timePreviewLayer.opacity = 1
-        timePreviewLayer.string = previewTimestampString
-        timePreviewLayer.contentsScale = window?.screen?.backingScaleFactor ?? 1
+    private func updateFloatingTime(with point: CGPoint) {
+        let timestamp = makeTimestamp(for: point)
+        let text = PUITimelineFloatingLayer.attributedString(for: timestamp, font: .monospacedDigitSystemFont(ofSize: Metrics.floatingLayerTextSize, weight: .medium))
 
-        var previewRect = timePreviewLayer.frame
-        if let textLayerContents = timePreviewLayer.string as? NSAttributedString {
-            let s = textLayerContents.size()
-            previewRect.size = CGSize(width: ceil(s.width), height: ceil(s.height))
-        }
-        previewRect.origin = CGPoint(x: point.x - previewRect.width / 2, y: Metrics.timePreviewYOffset)
+        floatingTimeLayer.opacity = 1
+        floatingTimeLayer.attributedText = text
 
-        timePreviewLayer.frame = previewRect
+        var floatingTimeRect = floatingTimeLayer.frame
+
+        floatingTimeRect.origin = CGPoint(
+            x: point.x - floatingTimeRect.width / 2,
+            y: bounds.minY - floatingTimeRect.height - Metrics.floatingLayerMargin
+        )
+
+        floatingTimeLayer.frame = floatingTimeRect
     }
 
     public override var mouseDownCanMoveWindow: Bool {
@@ -309,7 +317,7 @@ public final class PUITimelineView: NSView {
                 }
             case .leftMouseDragged?:
                 if !startedInteractiveSeek {
-                    timePreviewLayer.animateInvisible()
+                    floatingTimeLayer.hide()
                     startedInteractiveSeek = true
                     self.viewDelegate?.timelineViewWillBeginInteractiveSeek()
                 }
@@ -328,11 +336,11 @@ public final class PUITimelineView: NSView {
         if hasMouseInside {
             borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor }
             seekProgressLayer.animate { seekProgressLayer.opacity = 1 }
-            timePreviewLayer.animateVisible()
+            floatingTimeLayer.show()
         } else {
             borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.cgColor }
             seekProgressLayer.animate { seekProgressLayer.opacity = 0 }
-            timePreviewLayer.animateInvisible()
+            floatingTimeLayer.hide()
         }
     }
 
@@ -380,7 +388,7 @@ public final class PUITimelineView: NSView {
 
             let textLayer = PUIBoringTextLayer()
 
-            textLayer.string = attributedString(for: annotation.timestamp)
+            textLayer.string = PUITimelineFloatingLayer.attributedString(for: annotation.timestamp, font: .monospacedDigitSystemFont(ofSize: Metrics.textSize, weight: .medium))
             textLayer.contentsScale = sf
             textLayer.opacity = 0
 
@@ -396,21 +404,6 @@ public final class PUITimelineView: NSView {
         }
 
         annotationLayers.forEach({ layer?.addSublayer($0) })
-    }
-
-    private func attributedString(for timestamp: Double, ofSize size: CGFloat = Metrics.textSize) -> NSAttributedString {
-        let pStyle = NSMutableParagraphStyle()
-        pStyle.alignment = .center
-
-        let timeTextAttributes: [NSAttributedString.Key: Any] = [
-            .font: NSFont.systemFont(ofSize: size, weight: .medium),
-            .foregroundColor: NSColor.playerHighlight,
-            .paragraphStyle: pStyle
-        ]
-
-        let timeStr = String(timestamp: timestamp) ?? ""
-
-        return NSAttributedString(string: timeStr, attributes: timeTextAttributes)
     }
 
     private func layoutAnnotationLayer(_ layer: PUIBoringLayer, for annotation: PUITimelineAnnotation, with diameter: CGFloat, animated: Bool = false) {
@@ -518,7 +511,7 @@ public final class PUITimelineView: NSView {
         layer.borderWidth = 1
         layer.attachedLayer.animateVisible()
 
-        timePreviewLayer.opacity = 0
+        floatingTimeLayer.hide(animated: false)
     }
 
     private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -578,7 +571,7 @@ public final class PUITimelineView: NSView {
         func updateAnnotationTextLayer(at point: CGPoint) {
             let timestamp = makeTimestamp(for: point)
 
-            layer.attachedLayer.string = attributedString(for: timestamp)
+            layer.attachedLayer.string = PUITimelineFloatingLayer.attributedString(for: timestamp, font: .monospacedDigitSystemFont(ofSize: Metrics.textSize, weight: .medium))
         }
 
         func updateAnnotationTextLayer(with string: Any?) {
