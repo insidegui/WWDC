@@ -843,7 +843,10 @@ public final class PUIPlayerView: NSView {
     private func configureWithAppearanceFromDelegate() {
         guard let d = appearanceDelegate else { return }
 
-        subtitlesButton.isHidden = !d.playerViewShouldShowSubtitlesControl(self)
+        /// We need to update based on the availability of subtitles, updating only from the delegate can result in
+        /// the subtitles button becoming visible when there are no subtitles available.
+        updateSubtitleSelectionMenu()
+
         pipButton.isHidden = !d.playerViewShouldShowPictureInPictureControl(self)
         speedButton.isHidden = !d.playerViewShouldShowSpeedControl(self)
 
@@ -1123,7 +1126,9 @@ public final class PUIPlayerView: NSView {
 
         self.subtitlesGroup = subtitlesGroup
 
-        subtitlesButton.isHidden = false
+        let hideSubtitlesButton = !(appearanceDelegate?.playerViewShouldShowSubtitlesControl(self) ?? true)
+
+        subtitlesButton.isHidden = hideSubtitlesButton
 
         let menu = NSMenu()
 
@@ -1136,6 +1141,19 @@ public final class PUIPlayerView: NSView {
         }
 
         subtitlesMenu = menu
+    }
+
+    private func updateSubtitleSelectionMenu() {
+        if let appearanceDelegate {
+            guard appearanceDelegate.playerViewShouldShowSubtitlesControl(self) else {
+                self.subtitlesButton.isHidden = true
+                return
+            }
+        }
+
+        guard let subtitlesGroup else { return }
+        
+        updateSubtitleSelectionMenu(subtitlesGroup: subtitlesGroup)
     }
 
     @objc fileprivate func didSelectSubtitleOption(_ sender: NSMenuItem) {
