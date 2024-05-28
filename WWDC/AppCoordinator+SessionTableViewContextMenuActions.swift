@@ -68,6 +68,12 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
         }
     }
 
+    func sessionTableViewContextMenuActionRemoveDownload(viewModels: [SessionViewModel]) {
+        viewModels.forEach { viewModel in
+            DownloadManager.shared.deleteDownloadedFile(for: viewModel.session)
+        }
+    }
+
     func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel]) {
         guard let firstSession = viewModels.first?.session else { return }
         guard let localURL = DownloadManager.shared.downloadedFileURL(for: firstSession) else { return }

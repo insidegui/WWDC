@@ -9,6 +9,22 @@
 import Combine
 import RealmSwift
 
+extension Publisher {
+    func `do`(_ closure: @escaping () -> Void) -> some Publisher<Output, Failure> {
+        map {
+            closure()
+            return $0
+        }
+    }
+
+    func `do`(_ closure: @escaping (Output) -> Void) -> some Publisher<Output, Failure> {
+        map {
+            closure($0)
+            return $0
+        }
+    }
+}
+
 extension Publisher where Failure == Never {
     public func driveUI<Root>(
         _ keyPath: ReferenceWritableKeyPath<Root, Self.Output>,
@@ -57,26 +73,6 @@ extension Publisher where Output: Equatable {
             .sink(receiveValue: closure)
     }
 
-}
-
-public extension RealmCollection where Self: RealmSubscribable {
-    /// Similar to `changsetPublisher` but only emits a new value when the collection has additions or removals and ignores all upstream
-    /// values caused by objects being modified
-    var collectionChangedPublisher: some Publisher<Self, Error> {
-        changesetPublisher
-            .tryCompactMap { changeset in
-                switch changeset {
-                case .initial(let latestValue):
-                    return latestValue
-                case .update(let latestValue, let deletions, let insertions, _) where !deletions.isEmpty || !insertions.isEmpty:
-                    return latestValue
-                case .update:
-                    return nil
-                case .error(let error):
-                    throw error
-                }
-            }
-    }
 }
 
 extension Publisher {

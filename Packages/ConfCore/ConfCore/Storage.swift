@@ -10,14 +10,16 @@ import Combine
 import Foundation
 import RealmSwift
 import OSLog
+import OrderedCollections
 
-public final class Storage: Logging {
+public final class Storage: Logging, Signposting {
 
     public let realmConfig: Realm.Configuration
     public let realm: Realm
 
     private var disposeBag: Set<AnyCancellable> = []
     public static let log = makeLogger()
+    public static var signposter = makeSignposter()
 
     public init(_ realm: Realm) {
         self.realmConfig = realm.configuration
@@ -45,7 +47,9 @@ public final class Storage: Logging {
         return try Realm(configuration: realmConfig, queue: queue)
     }
 
-    private lazy var dispatchQueue = DispatchQueue(label: "WWDC Storage", qos: .background)
+    /// This is the background dispatch queue for Realm updates to take place not on the main thread.
+    /// While it is not on the main thread, it is very important for the changes to happen quickly so the qos is set to userInitiated
+    private lazy var dispatchQueue = DispatchQueue(label: "WWDC Storage", qos: .userInitiated)
 
     public lazy var storageQueue: OperationQueue = {
         let q = OperationQueue()
@@ -77,16 +81,28 @@ public final class Storage: Logging {
     }
 
     func store(contentResult: Result<ContentsResponse, APIError>, completion: @escaping (Error?) -> Void) {
+        let state = signposter.beginInterval("store content result", id: signposter.makeSignpostID(), "begin")
         let contentsResponse: ContentsResponse
         do {
             contentsResponse = try contentResult.get()
         } catch {
             log.error("Error downloading contents:\n\(String(describing: error), privacy: .public)")
+            signposter.endInterval("store content result", state, "end")
             completion(error)
             return
         }
 
-        performSerializedBackgroundWrite(disableAutorefresh: true, completionBlock: completion) { backgroundRealm in
+        performSerializedBackgroundWrite(
+            disableAutorefresh: true
+        ) { [weak self] in
+            self?.signposter.endInterval("store content result", state, "end")
+            completion($0)
+        } writeBlock: { backgroundRealm in
+            // Save everything
+            backgroundRealm.add(contentsResponse.rooms, update: .modified)
+            backgroundRealm.add(contentsResponse.tracks, update: .modified)
+            backgroundRealm.add(contentsResponse.events, update: .modified)
+
             contentsResponse.sessions.forEach { newSession in
                 // Replace any "unknown" resources with their full data
                 newSession.related.filter({$0.type == RelatedResourceType.unknown.rawValue}).forEach { unknownResource in
@@ -99,11 +115,12 @@ public final class Storage: Logging {
                 if let existingSession = backgroundRealm.object(ofType: Session.self, forPrimaryKey: newSession.identifier) {
                     existingSession.merge(with: newSession, in: backgroundRealm)
                 } else {
-                    backgroundRealm.add(newSession, update: .all)
+                    backgroundRealm.add(newSession, update: .modified)
                 }
             }
 
             // Merge existing instance data, preserving user-defined data
+            let mergeInstances = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "merge instances")
             contentsResponse.instances.forEach { newInstance in
                 if let existingInstance = backgroundRealm.object(ofType: SessionInstance.self, forPrimaryKey: newInstance.identifier) {
                     existingInstance.merge(with: newInstance, in: backgroundRealm)
@@ -116,56 +133,73 @@ public final class Storage: Logging {
                         newInstance.session = existingSession
                     }
 
-                    backgroundRealm.add(newInstance, update: .all)
+                    backgroundRealm.add(newInstance, update: .modified)
                 }
             }
-
-            // Save everything
-            backgroundRealm.add(contentsResponse.rooms, update: .all)
-            backgroundRealm.add(contentsResponse.tracks, update: .all)
-            backgroundRealm.add(contentsResponse.events, update: .all)
+            Self.signposter.endInterval("store content result", mergeInstances)
 
             // add instances to rooms
+            let instancesToRooms = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add instances to rooms")
             backgroundRealm.objects(Room.self).forEach { room in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("roomIdentifier == %@", room.identifier)
 
-                instances.forEach({ $0.roomName = room.name })
-
                 room.instances.removeAll()
-                room.instances.append(objectsIn: instances)
+                instances.forEach {
+                    $0.roomName = room.name
+                    // append(contentsOf: other) just does a for loop so we avoid double iteration by doing this
+                    room.instances.append($0)
+                }
             }
+            Self.signposter.endInterval("store content result", instancesToRooms)
 
             // add instances and sessions to events
+            let instancesToEvents = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add instances and sessions to events")
             backgroundRealm.objects(Event.self).forEach { event in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
 
                 event.sessionInstances.removeAll()
-                event.sessionInstances.append(objectsIn: instances)
+                event.sessionInstances.forEach {
+                    $0.session?.eventStartDate = event.startDate
+                    event.sessionInstances.append($0)
+                }
 
                 event.sessions.removeAll()
-                event.sessions.append(objectsIn: sessions)
+                sessions.forEach {
+                    $0.eventStartDate = event.startDate
+                    // append(contentsOf: other) just does a for loop so we avoid double iteration by doing this
+                    event.sessions.append($0)
+                }
             }
+            Self.signposter.endInterval("store content result", instancesToEvents)
 
             // add instances and sessions to tracks
+            let instancesToTracks = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add instances and sessions to tracks")
             backgroundRealm.objects(Track.self).forEach { track in
                 let instances = backgroundRealm.objects(SessionInstance.self).filter("trackIdentifier == %@", track.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("trackIdentifier == %@", track.identifier)
 
                 track.instances.removeAll()
-                track.instances.append(objectsIn: instances)
-
-                track.sessions.removeAll()
-                track.sessions.append(objectsIn: sessions)
-
-                sessions.forEach({ $0.trackName = track.name })
                 instances.forEach { instance in
                     instance.trackName = track.name
                     instance.session?.trackName = track.name
+                    instance.session?.trackOrder = track.order
+                    // append(contentsOf: other) just does a for loop so we avoid double iteration by doing this
+                    track.instances.append(instance)
+                }
+
+                track.sessions.removeAll()
+                sessions.forEach {
+                    $0.trackName = track.name
+                    $0.trackOrder = track.order
+                    // append(contentsOf: other) just does a for loop so we avoid double iteration by doing this
+                    track.sessions.append($0)
                 }
             }
+            Self.signposter.endInterval("store content result", instancesToTracks)
 
             // add live video assets to sessions
+            let liveVideoAssets = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add live video assets to sessions")
             backgroundRealm.objects(SessionAsset.self).filter("rawAssetType == %@", SessionAssetType.liveStreamVideo.rawValue).forEach { liveAsset in
                 if let session = backgroundRealm.objects(Session.self).filter("ANY event.year == %d AND number == %@", liveAsset.year, liveAsset.sessionId).first {
                     if !session.assets.contains(liveAsset) {
@@ -173,27 +207,50 @@ public final class Storage: Logging {
                     }
                 }
             }
+            Self.signposter.endInterval("store content result", liveVideoAssets)
 
             // Associate session resources with Session objects in database
+            let sessionResources = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "associate session resources")
             backgroundRealm.objects(RelatedResource.self).filter("type == %@", RelatedResourceType.session.rawValue).forEach { resource in
                 if let session = backgroundRealm.object(ofType: Session.self, forPrimaryKey: resource.identifier) {
                     resource.session = session
                 }
             }
+            Self.signposter.endInterval("store content result", sessionResources)
 
             // Remove tracks that don't include any future session instances nor any sessions with video/live video
+            let emptyTracksState = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "delete empty tracks")
             let emptyTracks = backgroundRealm.objects(Track.self)
                 .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType = %@ OR ANY $session.assets.rawAssetType = %@).@count == 0", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
             backgroundRealm.delete(emptyTracks)
+            Self.signposter.endInterval("store content result", emptyTracksState)
 
             // Create schedule view
-            backgroundRealm.delete(backgroundRealm.objects(ScheduleSection.self))
+            let createScheduleView = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "schedule view")
+            let sectionsInRealm = backgroundRealm.objects(ScheduleSection.self)
             let instances = backgroundRealm.objects(SessionInstance.self)
 
             // Group all instances by common start time
             // Technically, a secondary grouping on event should be used, in practice we haven't seen
             // separate events that overlap in time. Someday this might hurt
-            Dictionary(grouping: instances, by: \.startTime).forEach { startTime, instances in
+            // For content updates that don't really change much, like most of the year.
+            // Doing the diffing on the sections is an order of magnitude faster (28ms -> 4ms)
+            let newSections = Dictionary(grouping: instances, by: \.startTime)
+            var merged = Set<Date>()
+            sectionsInRealm.forEach { existing in
+                if let new = newSections[existing.representedDate] {
+                    // Section is in new and old, update it's instances
+                    existing.instances.removeAll()
+                    existing.instances.append(objectsIn: new)
+                    merged.insert(existing.representedDate)
+                } else {
+                    // Section is not in the new data, delete it
+                    backgroundRealm.delete(existing)
+                }
+            }
+
+            // Explicitly add new sections
+            newSections.filter { !merged.contains($0.key) }.forEach { startTime, instances in
                 let section = ScheduleSection()
                 section.representedDate = startTime
                 section.eventIdentifier = instances[0].eventIdentifier // 0 index ok, Dictionary grouping will never give us an empty array
@@ -201,8 +258,9 @@ public final class Storage: Logging {
                 section.instances.append(objectsIn: instances)
                 section.identifier = ScheduleSection.identifierFormatter.string(from: startTime)
 
-                backgroundRealm.add(section, update: .all)
+                backgroundRealm.add(section, update: .modified)
             }
+            Self.signposter.endInterval("store content result", createScheduleView)
         }
     }
 
@@ -223,7 +281,7 @@ public final class Storage: Logging {
 
                 self.log.info("Registering live asset with year \(asset.year, privacy: .public) and session number \(asset.sessionId, privacy: .public)")
 
-                backgroundRealm.add(asset, update: .all)
+                backgroundRealm.add(asset, update: .modified)
 
                 if let session = backgroundRealm.objects(Session.self).filter("identifier == %@", asset.sessionId).first {
                     if !session.assets.contains(asset) {
@@ -252,7 +310,7 @@ public final class Storage: Logging {
                 backgroundRealm.delete(section)
             }
 
-            backgroundRealm.add(sections, update: .all)
+            backgroundRealm.add(sections, update: .modified)
 
             // Associate contents with sessions
             sections.forEach { section in
@@ -286,7 +344,7 @@ public final class Storage: Logging {
         }
 
         performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { backgroundRealm in
-            backgroundRealm.add(hero, update: .all)
+            backgroundRealm.add(hero, update: .modified)
         }
     }
 
@@ -384,6 +442,8 @@ public final class Storage: Logging {
     ///   it is not guaranteed that your writeBlock will be called.
     ///   Your write block is not called if any of the objects can't be transfered between threads.
     public func modify<T>(_ objects: [T], with writeBlock: @escaping ([T]) -> Void) where T: ThreadConfined {
+        guard !objects.isEmpty else { return }
+
         let safeObjects = objects.map { ThreadSafeReference(to: $0) }
 
         performSerializedBackgroundWrite(createTransaction: false, writeBlock: { [weak self] backgroundRealm in
@@ -406,10 +466,6 @@ public final class Storage: Logging {
         let eventsSortedByDateDescending = self.realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false)
 
         return eventsSortedByDateDescending.collectionPublisher
-    }()
-
-    public lazy var sessionsObservable: some Publisher<Results<Session>, Error> = {
-        return self.realm.objects(Session.self).collectionPublisher
     }()
 
     public var sessions: Results<Session> {
@@ -439,38 +495,30 @@ public final class Storage: Logging {
         })
     }
 
-    public lazy var eventsObservable: some Publisher<Results<Event>, Error> = {
-        let events = realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false)
-
-        return events.collectionPublisher
-    }()
-
-    public lazy var focusesObservable: some Publisher<Results<Focus>, Error> = {
+    public lazy var focuses: some Publisher<Results<Focus>, Error> = {
         let focuses = realm.objects(Focus.self).sorted(byKeyPath: "name")
 
-        return focuses.collectionPublisher
+        return focuses.changesetPublisherShallow(keyPaths: ["name"])
     }()
 
-    public lazy var tracksObservable: some Publisher<Results<Track>, Error> = {
-        let tracks = self.realm.objects(Track.self).sorted(byKeyPath: "order")
-
-        return tracks.collectionPublisher
+    public lazy var tracks: some Publisher<Results<Track>, Error> = {
+        realm.objects(Track.self).sorted(byKeyPath: "order").changesetPublisherShallow(keyPaths: ["identifier"])
     }()
 
-    public lazy var featuredSectionsObservable: some Publisher<Results<FeaturedSection>, Error> = {
+    public lazy var featuredSections: some Publisher<Results<FeaturedSection>, Error> = {
         let predicate = NSPredicate(format: "isPublished = true AND content.@count > 0")
         let sections = self.realm.objects(FeaturedSection.self).filter(predicate)
 
         return sections.collectionPublisher
     }()
 
-    public lazy var scheduleObservable: some Publisher<Results<ScheduleSection>, Error> = {
+    public lazy var scheduleSections: some Publisher<Results<ScheduleSection>, Error> = {
         let currentEvents = self.realm.objects(Event.self).filter("isCurrent == true")
 
-        return currentEvents.collectionPublisher.map({ $0.first?.identifier }).flatMap { (identifier: String?) -> AnyPublisher<Results<ScheduleSection>, Error> in
+        return currentEvents.changesetPublisherShallow(keyPaths: ["identifier"]).map({ $0.first?.identifier }).flatMap { (identifier: String?) -> AnyPublisher<Results<ScheduleSection>, Error> in
             let sections = self.realm.objects(ScheduleSection.self).filter("eventIdentifier == %@", identifier ?? "").sorted(byKeyPath: "representedDate")
 
-            return sections.collectionPublisher.eraseToAnyPublisher()
+            return sections.changesetPublisherShallow(keyPaths: ["identifier"]).eraseToAnyPublisher()
         }
     }()
 
@@ -536,30 +584,21 @@ public final class Storage: Logging {
         }
     }
 
-    public var allEvents: [Event] {
-        return realm.objects(Event.self).sorted(byKeyPath: "startDate", ascending: false).toArray()
-    }
-
-    public var eventsForFiltering: [Event] {
+    public var eventsForFiltering: some Publisher<Results<Event>, Error> {
         return realm.objects(Event.self)
             .filter("SUBQUERY(sessions, $session, ANY $session.assets.rawAssetType == %@).@count > %d", SessionAssetType.streamingVideo.rawValue, 0)
             .sorted(byKeyPath: "startDate", ascending: false)
-            .toArray()
+            .changesetPublisherShallow(keyPaths: ["identifier"])
     }
 
-    public var allFocuses: [Focus] {
-        return realm.objects(Focus.self).sorted(byKeyPath: "name").toArray()
-    }
-
-    public var allSessionTypes: [String] {
-        Array(
-            Set(realm.objects(SessionInstance.self).map(\.rawSessionType))
-        )
-        .sorted(by: { $0.localizedStandardCompare($1) == .orderedAscending })
-    }
-
-    public var allTracks: [Track] {
-        return realm.objects(Track.self).sorted(byKeyPath: "order").toArray()
+    public var allSessionTypes: some Publisher<[String], Error> {
+        realm
+            .objects(SessionInstance.self)
+            .changesetPublisherShallow(keyPaths: ["identifier"])
+            .map {
+                Array(Set($0.map(\.rawSessionType)))
+                    .sorted(by: { $0.localizedStandardCompare($1) == .orderedAscending })
+            }
     }
 
 }

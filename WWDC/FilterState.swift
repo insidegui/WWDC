@@ -29,25 +29,15 @@ extension WWDCFiltersState {
 extension WWDCFiltersState.Tab {
     init(filters: [FilterType]) {
         self = .init(
-            focus: filters.get(MultipleChoiceFilter.self, for: .focus)?.state,
-            event: filters.get(MultipleChoiceFilter.self, for: .event)?.state,
-            track: filters.get(MultipleChoiceFilter.self, for: .track)?.state,
-            isDownloaded: filters.get(ToggleFilter.self, for: .isDownloaded)?.state,
-            isFavorite: filters.get(ToggleFilter.self, for: .isFavorite)?.state,
-            hasBookmarks: filters.get(ToggleFilter.self, for: .hasBookmarks)?.state,
-            isUnwatched: filters.get(ToggleFilter.self, for: .isUnwatched)?.state,
-            text: filters.get(TextualFilter.self, for: .text)?.state
+            focus: filters.find(MultipleChoiceFilter.self, byID: .focus)?.state,
+            event: filters.find(MultipleChoiceFilter.self, byID: .event)?.state,
+            track: filters.find(MultipleChoiceFilter.self, byID: .track)?.state,
+            isDownloaded: filters.find(ToggleFilter.self, byID: .isDownloaded)?.state,
+            isFavorite: filters.find(ToggleFilter.self, byID: .isFavorite)?.state,
+            hasBookmarks: filters.find(ToggleFilter.self, byID: .hasBookmarks)?.state,
+            isUnwatched: filters.find(ToggleFilter.self, byID: .isUnwatched)?.state,
+            text: filters.find(TextualFilter.self, byID: .text)?.state
         )
-    }
-}
-
-extension Array where Element == FilterType {
-    func get<T: FilterType>(_ type: T.Type, for identifier: FilterIdentifier) -> T? {
-        let result = self.first { (filter) -> Bool in
-            return filter.identifier == identifier && filter is T
-        }
-
-        return result as? T
     }
 }
 

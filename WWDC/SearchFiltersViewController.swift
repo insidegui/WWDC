@@ -7,11 +7,22 @@
 //
 
 import Cocoa
+import ConfCore
+
+enum FilterChangeReason: Equatable {
+    case initialValue
+    case configurationChange
+    case userInput
+    case allowSelection
+}
 
 protocol SearchFiltersViewControllerDelegate: AnyObject {
 
-    func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType])
-
+    func searchFiltersViewController(
+        _ controller: SearchFiltersViewController,
+        didChangeFilters filters: [FilterType],
+        context: FilterChangeReason
+    )
 }
 
 enum FilterSegment: Int {
@@ -78,14 +89,31 @@ final class SearchFiltersViewController: NSViewController {
 
     private var effectiveFilters: [FilterType] = []
 
-    func resetFilters() {
+    var additionalPredicates: [NSPredicate] = []
+    var currentPredicate: NSPredicate? {
+        let filters = filters
+        guard filters.contains(where: { !$0.isEmpty }) || !additionalPredicates.isEmpty else {
+            return nil
+        }
 
-        filters = filters.map {
+        let subpredicates = filters.compactMap { $0.predicate } + additionalPredicates
+
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subpredicates)
+
+        return predicate
+    }
+
+    func clearAllFilters(reason: FilterChangeReason) {
+        let updatedFilters = filters.map {
             var resetFilter = $0
             resetFilter.reset()
 
             return resetFilter
         }
+
+        filters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: reason)
     }
 
     weak var delegate: SearchFiltersViewControllerDelegate?
@@ -192,11 +220,11 @@ final class SearchFiltersViewController: NSViewController {
         var updatedFilters = effectiveFilters
         updatedFilters[filterIndex] = filter
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
-
         popUp.title = filter.title
 
         effectiveFilters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: .userInput)
     }
 
     private func updateToggleFilter(at filterIndex: Int, with state: Bool) {
@@ -207,9 +235,9 @@ final class SearchFiltersViewController: NSViewController {
         var updatedFilters = effectiveFilters
         updatedFilters[filterIndex] = filter
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
-
         effectiveFilters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: .userInput)
     }
 
     private func updateTextualFilter(at filterIndex: Int, with text: String) {
@@ -221,9 +249,9 @@ final class SearchFiltersViewController: NSViewController {
         var updatedFilters = effectiveFilters
         updatedFilters[filterIndex] = filter
 
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters)
-
         effectiveFilters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: .userInput)
 
         NSPasteboard(name: .find).clearContents()
         NSPasteboard(name: .find).setString(text, forType: .string)

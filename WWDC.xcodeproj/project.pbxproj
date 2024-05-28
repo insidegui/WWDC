@@ -25,6 +25,9 @@
 		4DDF6A782177A00C008E5539 /* DownloadsManagementTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */; };
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
+		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
+		914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */; };
+		91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */; };
 		91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
@@ -285,6 +288,8 @@
 		4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionsTableViewController+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
 		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
+		911C72C82A52169A00CB3757 /* CombineLatestMany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineLatestMany.swift; sourceTree = "<group>"; };
+		9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+GroupedBy.swift"; sourceTree = "<group>"; };
 		91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+Combine.swift"; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
@@ -409,7 +414,6 @@
 		DDF32EB61EBE65930028E39D /* AppCoordinator+UserActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+UserActivity.swift"; sourceTree = "<group>"; };
 		DDF32EB81EBE65B50028E39D /* AppCoordinator+Shelf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Shelf.swift"; sourceTree = "<group>"; };
 		DDF32EBA1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+SessionActions.swift"; sourceTree = "<group>"; };
-		DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTableView+Rx.swift"; sourceTree = "<group>"; };
 		DDF5A5082487066200135E70 /* ClipComposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipComposition.swift; sourceTree = "<group>"; };
 		DDF721961ECA12780054C503 /* PlayerUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PlayerUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF721981ECA12780054C503 /* PlayerUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerUI.h; sourceTree = "<group>"; };
@@ -478,6 +482,7 @@
 				DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */,
 				DDB1A26A2577E7E900995FF1 /* Sparkle in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
+				91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */,
 				DD600AB72487F1730071B90E /* ConfUIFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -790,6 +795,8 @@
 				DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */,
 				DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */,
 				91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */,
+				9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */,
+				911C72C82A52169A00CB3757 /* CombineLatestMany.swift */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -947,7 +954,6 @@
 		DDF32EB01EBE34CE0028E39D /* TableView */ = {
 			isa = PBXGroup;
 			children = (
-				DDF32EBE1EBE68EE0028E39D /* NSTableView+Rx.swift */,
 				DDF32EAA1EBE2E240028E39D /* WWDCTableRowView.swift */,
 				F4D0F0392A21056900C74B50 /* TopicHeaderRow.swift */,
 				DDF32EAE1EBE34CB0028E39D /* TitleTableCellView.swift */,
@@ -1194,6 +1200,7 @@
 			packageProductDependencies = (
 				DDB1A2622577E67A00995FF1 /* ConfCore */,
 				DDB1A2692577E7E900995FF1 /* Sparkle */,
+				91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */,
 			);
 			productName = WWDC;
 			productReference = DD36A4AC1E478C6A00B2EA88 /* WWDC.app */;
@@ -1317,6 +1324,7 @@
 			mainGroup = DD36A4A31E478C6900B2EA88;
 			packageReferences = (
 				DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = DD36A4AD1E478C6A00B2EA88 /* Products */;
 			projectDirPath = "";
@@ -1417,6 +1425,7 @@
 				DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */,
 				F44C823C2A22B90600FDE980 /* RemoteImage.swift in Sources */,
 				F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */,
+				911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */,
 				F4D0F0362A2012C700C74B50 /* VisualEffectDebugger.m in Sources */,
 				DDC678191EDB2CD300A4E19C /* ActionLabel.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
@@ -1485,6 +1494,7 @@
 				DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */,
 				DD9301C01EE3212D00BE724B /* ChromeCastPlaybackProvider.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
+				914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */,
 				4D7482CA20FF735D008D156C /* WWDCWindowController.swift in Sources */,
 				4DA25DCC21064B4800762BBD /* WWDCTabViewControllerTabBar.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
@@ -2402,6 +2412,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sparkle-project/Sparkle";
@@ -2413,6 +2431,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
 		DDB1A2622577E67A00995FF1 /* ConfCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ConfCore;

@@ -20,7 +20,9 @@ final class SessionViewModel {
     let sessionInstance: SessionInstance
     let track: Track
     let identifier: String
-    var webUrl: URL?
+    lazy var webUrl: URL? = {
+        SessionViewModel.webUrl(for: session)
+    }()
     var imageUrl: URL?
     let trackName: String
 
@@ -111,7 +113,15 @@ final class SessionViewModel {
     }()
 
     lazy var rxIsFavorite: some Publisher<Bool, Error> = {
-        return self.session.favorites.filter("isDeleted == false").collectionPublisher.map { $0.count > 0 }
+        // While scrolling the favorites publisher won't be able to fire
+        // because the events are tracking. I'm guessing because it's using the main
+        // runloop? Regardless, putting the subscription on a background queue fixes it
+        return self.session.favorites.filter("isDeleted == false")
+            .changesetPublisherShallow(keyPaths: ["identifier"])
+            .subscribe(on: DispatchQueue(label: #function))
+            .threadSafeReference()
+            .receive(on: DispatchQueue.main)
+            .map { $0.count > 0 }
     }()
 
     lazy var rxIsCurrentlyLive: some Publisher<Bool, Error> = {
@@ -176,11 +186,6 @@ final class SessionViewModel {
         sessionInstance = instance ?? session.instances.first ?? SessionInstance()
         title = session.title
         identifier = session.identifier
-        imageUrl = SessionViewModel.imageUrl(for: session)
-
-        if let webUrlStr = session.asset(ofType: .webpage)?.remoteURL {
-            webUrl = URL(string: webUrlStr)
-        }
     }
 
     static func subtitle(from session: Session, at event: ConfCore.Event?) -> String {

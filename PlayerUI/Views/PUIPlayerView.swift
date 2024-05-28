@@ -1668,6 +1668,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
     }
 
     // Called 2nd, not called when the exit button is pressed
+    // TODO: The restore button doesn't attempt to do a restoration if the source view is no longer in a window
     public func pictureInPictureController(
         _ pictureInPictureController: AVPictureInPictureController,
         restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void

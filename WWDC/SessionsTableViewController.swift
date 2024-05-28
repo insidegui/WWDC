@@ -16,23 +16,31 @@ import OSLog
 
 class SessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
 
-    static let log = makeLogger()
+    static var log = makeLogger()
 
     private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    @Published
-    var selectedSession: SessionViewModel?
-
-    let style: SessionsListStyle
-
-    init(style: SessionsListStyle) {
-        self.style = style
+    init(rowProvider: SessionRowProvider, searchController: SearchFiltersViewController, initialSelection: SessionIdentifiable?) {
+        var config = Self.defaultLoggerConfig()
+        config.category += ": \(String(reflecting: type(of: rowProvider)))"
+        Self.log = Self.makeLogger(config: config)
+        self.sessionRowProvider = rowProvider
+        self.searchController = searchController
+        self.stateRestorationSelection = initialSelection
 
         super.init(nibName: nil, bundle: nil)
 
         identifier = NSUserInterfaceItemIdentifier(rawValue: "videosList")
+
+        rowProvider
+            .rowsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.updateWith(rows: $0, animated: true)
+            }
+            .store(in: &cancellables)
     }
 
     required init?(coder: NSCoder) {
@@ -91,20 +99,23 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     override func viewDidAppear() {
         super.viewDidAppear()
 
+        // This allows using the arrow keys to navigate
         view.window?.makeFirstResponder(tableView)
-
-        performFirstUpdateIfNeeded()
     }
 
     // MARK: - Selection
 
-    private var initialSelection: SessionIdentifiable?
+    @Published
+    var selectedSession: SessionViewModel?
+    /// The state restoration selection will be applied on 1st row display and then cleared
+    private var stateRestorationSelection: SessionIdentifiable?
+    /// The pending selection will be selected on the next update
+    private var pendingSelection: SessionIdentifiable?
 
     private func selectSessionImmediately(with identifier: SessionIdentifiable) {
 
-        guard let index = displayedRows.firstIndex(where: { row in
-            row.represents(session: identifier)
-        }) else {
+        guard let index = displayedRows.firstIndex(where: { $0.represents(session: identifier) }) else {
+            log.debug("Can't select session \(identifier.sessionIdentifier)")
             return
         }
 
@@ -112,124 +123,87 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         tableView.selectRowIndexes(IndexSet([index]), byExtendingSelection: false)
     }
 
-    func select(session: SessionIdentifiable) {
-
-        // If we haven't yet displayed our rows, likely because we haven't come on screen
-        // yet. We defer scrolling to the requested identifier until that time.
-        guard hasPerformedInitialRowDisplay else {
-            initialSelection = session
-            return
-        }
-
-        let needsToClearSearchToAllowSelection = !isSessionVisible(for: session) && canDisplay(session: session)
+    func select(session: SessionIdentifiable, removingFiltersIfNeeded: Bool = true) {
+        let needsToClearSearchToAllowSelection = removingFiltersIfNeeded && !isSessionVisible(for: session) && canDisplay(session: session)
 
         if needsToClearSearchToAllowSelection {
-            searchController.resetFilters()
-            setFilterResults(.empty, animated: view.window != nil, selecting: session)
+            pendingSelection = session
+            searchController.clearAllFilters(reason: .allowSelection)
         } else {
             selectSessionImmediately(with: session)
         }
     }
 
+    /// Select and scroll to the session/get-together/lab that is "upcoming" and in your current filters
+    /// We do not clear filters, so if your schedule view is just showing videos, it'll scroll to the video that will be released next
     func scrollToToday() {
-
-        sessionRowProvider?.sessionRowIdentifierForToday(onlyIncludingRowsFor: filterResults.latestSearchResults).flatMap { select(session: $0) }
+        sessionRowProvider.sessionRowIdentifierForToday().flatMap { select(session: $0, removingFiltersIfNeeded: false) }
     }
 
-    var hasPerformedFirstUpdate = false
+    private func updateWith(rows: SessionRows, animated: Bool) {
+        let rowsToDisplay: [SessionRow]
+        rowsToDisplay = rows.filtered
 
-    /// This function is meant to ensure the table view gets populated
-    /// even if its data model gets added while it is offscreen. Specifically,
-    /// when this table view is not the initial active tab.
-    private func performFirstUpdateIfNeeded() {
-        guard !hasPerformedFirstUpdate && sessionRowProvider != nil && view.window != nil else { return }
-        hasPerformedFirstUpdate = true
-
-        updateWith(searchResults: filterResults.latestSearchResults, animated: false, selecting: nil)
-    }
-
-    private func updateWith(searchResults: Results<Session>?, animated: Bool, selecting session: SessionIdentifiable?) {
-        guard hasPerformedFirstUpdate else { return }
-
-        guard let results = searchResults else {
-            setDisplayedRows(sessionRowProvider?.allRows ?? [], animated: animated, overridingSelectionWith: session)
+        guard performInitialRowDisplayIfNeeded(displaying: rowsToDisplay, allRows: rows.all) else {
+            log.debug("Performed initial row display with [\(rowsToDisplay.count)] rows")
             return
         }
 
-        guard let sessionRowProvider = sessionRowProvider else { return }
-
-        let sessionRows = sessionRowProvider.filteredRows(onlyIncludingRowsFor: results)
-
-        setDisplayedRows(sessionRows, animated: animated, overridingSelectionWith: session)
+        setDisplayedRows(rowsToDisplay, animated: animated)
     }
 
     // MARK: - Updating the Displayed Rows
 
-    var sessionRowProvider: SessionRowProvider? {
-        didSet {
-            performFirstUpdateIfNeeded()
-        }
-    }
+    let sessionRowProvider: SessionRowProvider
 
-    private(set) var displayedRows: [SessionRow] = []
+    private var displayedRows: [SessionRow] = []
 
-    lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
+    private lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
 
-    private var hasPerformedInitialRowDisplay = false
+    @Published
+    private(set) var hasPerformedInitialRowDisplay = false
 
-    private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow]) -> Bool {
-
+    private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow], allRows: [SessionRow]) -> Bool {
         guard !hasPerformedInitialRowDisplay else { return true }
-        hasPerformedInitialRowDisplay = true
 
         displayedRowsLock.suspend()
 
         displayedRows = rows
 
-        // Clear filters if there is an initial selection that we can display that isn't gonna be visible
-        if let initialSelection = self.initialSelection,
-            !isSessionVisible(for: initialSelection) && canDisplay(session: initialSelection) {
-
-            searchController.resetFilters()
-            filterResults = .empty
-            displayedRows = sessionRowProvider?.allRows ?? []
-        }
-
         tableView.reloadData()
 
-        NSAnimationContext.runAnimationGroup({ context in
+        NSAnimationContext.runAnimationGroup { context in
             context.duration = 0
 
-            if let deferredSelection = self.initialSelection {
-                self.initialSelection = nil
+            if let deferredSelection = self.stateRestorationSelection {
+                self.stateRestorationSelection = nil
                 self.selectSessionImmediately(with: deferredSelection)
             }
 
             // Ensure an initial selection
             if self.tableView.selectedRow == -1,
-                let defaultIndex = rows.firstSessionRowIndex() {
+               let defaultIndex = rows.firstIndex(where: { $0.isSession }) {
 
                 self.tableView.selectRowIndexes(IndexSet(integer: defaultIndex), byExtendingSelection: false)
             }
 
             self.scrollView.alphaValue = 1
             self.tableView.allowsEmptySelection = false
-        }, completionHandler: {
+        } completionHandler: {
             self.displayedRowsLock.resume()
-        })
+            self.hasPerformedInitialRowDisplay = true
+        }
 
         return false
     }
 
-    func setDisplayedRows(_ newValue: [SessionRow], animated: Bool, overridingSelectionWith session: SessionIdentifiable?) {
-
-        guard performInitialRowDisplayIfNeeded(displaying: newValue) else { return }
-
+    private func setDisplayedRows(_ newValue: [SessionRow], animated: Bool) {
         // Dismiss the menu when the displayed rows are about to change otherwise it will crash
         tableView.menu?.cancelTrackingWithoutAnimation()
 
         displayedRowsLock.async {
-
+            let sessionToSelect = self.pendingSelection
+            self.pendingSelection = nil
             let oldValue = self.displayedRows
 
             // Same elements, same order: https://github.com/apple/swift/blob/master/stdlib/public/core/Arrays.swift.gyb#L2203
@@ -237,6 +211,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
             let oldRowsSet = Set(oldValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
             let newRowsSet = Set(newValue.enumerated().map { IndexedSessionRow(sessionRow: $1, index: $0) })
+            assert(newRowsSet.count == newValue.count)
+            assert(oldRowsSet.count == oldValue.count)
 
             let removed = oldRowsSet.subtracting(newRowsSet)
             let added = newRowsSet.subtracting(oldRowsSet)
@@ -260,11 +236,13 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
                 needReloadedIndexes.insert(newSessionRowIndex.index)
             }
 
+            self.log.trace("setDisplayedRows: removed[\(removedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] added[\(addedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] reload[\(needReloadedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)]")
+
             DispatchQueue.main.sync {
 
                 var selectedIndexes = IndexSet()
-                if let session = session,
-                    let overrideIndex = newValue.index(of: session) {
+                if let sessionToSelect,
+                   let overrideIndex = newValue.firstIndex(where: { $0.sessionViewModel?.identifier == sessionToSelect.sessionIdentifier }) {
 
                     selectedIndexes.insert(overrideIndex)
                 } else {
@@ -281,7 +259,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
                         stride(from: topOfPreviousSelection.index, to: -1, by: -1).lazy.compactMap {
                             return IndexedSessionRow(sessionRow: oldValue[$0], index: $0)
                         }.first { (indexedRow: IndexedSessionRow) -> Bool in
-                            newRowsSet.contains(indexedRow)
+                            newRowsSet.contains(indexedRow) && indexedRow.sessionRow.isSession
                         }.flatMap {
                             newRowsSet.firstIndex(of: $0)
                         }.map {
@@ -294,7 +272,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
                     }
                 }
 
-                if selectedIndexes.isEmpty, let defaultIndex = newValue.firstSessionRowIndex() {
+                if selectedIndexes.isEmpty, let defaultIndex = newValue.firstIndex(where: { $0.isSession }) {
                     selectedIndexes.insert(defaultIndex)
                 }
 
@@ -324,6 +302,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
                 self.tableView.selectRowIndexes(selectedIndexes, byExtendingSelection: false)
 
+                self.log.debug("endUpdates: row count[\(self.displayedRows.count)]")
                 self.tableView.endUpdates()
                 NSAnimationContext.endGrouping()
             }
@@ -331,41 +310,25 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
     }
 
     func isSessionVisible(for session: SessionIdentifiable) -> Bool {
-        assert(hasPerformedInitialRowDisplay, "Rows must be displayed before checking this value")
-
         return displayedRows.contains { row -> Bool in
             row.represents(session: session)
         }
     }
 
     func canDisplay(session: SessionIdentifiable) -> Bool {
-        return sessionRowProvider?.allRows.contains { row -> Bool in
+        return sessionRowProvider.rows?.all.contains { row -> Bool in
             row.represents(session: session)
         } ?? false
     }
 
-    // MARK: - Search
-
-    private var filterResults = FilterResults.empty
-
-    /// Provide a session identifier if you'd like to override the default selection behavior. Provide
-    /// nil to let the table figure out what selection to apply after the update.
-    func setFilterResults(_ filterResults: FilterResults, animated: Bool, selecting: SessionIdentifiable?) {
-        self.filterResults = filterResults
-        filterResults.observe { [weak self] in
-            self?.log.debug("Received filter results")
-            self?.updateWith(searchResults: $0, animated: animated, selecting: selecting)
-        }
-    }
-
     // MARK: - UI
 
-    lazy var searchController = SearchFiltersViewController.loadFromStoryboard()
+    let searchController: SearchFiltersViewController
 
     lazy var tableView: WWDCTableView = {
         let v = WWDCTableView()
 
-        // We control the intial selection during initialization
+        // We control the initial selection during initialization
         v.allowsEmptySelection = true
 
         v.wantsLayer = true
@@ -411,7 +374,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         case removeFavorite = 1003
         case download = 1004
         case cancelDownload = 1005
-        case revealInFinder = 1006
+        case removeDownload = 1006
+        case revealInFinder = 1007
     }
 
     private func setupContextualMenu() {
@@ -440,6 +404,10 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         let downloadMenuItem = NSMenuItem(title: "Download", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
         downloadMenuItem.option = .download
         contextualMenu.addItem(downloadMenuItem)
+
+        let removeDownloadMenuItem = NSMenuItem(title: "Remove Download", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
+        contextualMenu.addItem(removeDownloadMenuItem)
+        removeDownloadMenuItem.option = .removeDownload
 
         let cancelDownloadMenuItem = NSMenuItem(title: "Cancel Download", action: #selector(tableViewMenuItemClicked(_:)), keyEquivalent: "")
         contextualMenu.addItem(cancelDownloadMenuItem)
@@ -487,6 +455,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
             delegate?.sessionTableViewContextMenuActionDownload(viewModels: viewModels)
         case .cancelDownload:
             delegate?.sessionTableViewContextMenuActionCancelDownload(viewModels: viewModels)
+        case .removeDownload:
+            delegate?.sessionTableViewContextMenuActionRemoveDownload(viewModels: viewModels)
         case .revealInFinder:
             delegate?.sessionTableViewContextMenuActionRevealInFinder(viewModels: viewModels)
         }
@@ -527,6 +497,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
             return DownloadManager.shared.isDownloadable(viewModel.session) &&
                 !DownloadManager.shared.isDownloading(viewModel.session) &&
                 !DownloadManager.shared.hasDownloadedVideo(session: viewModel.session)
+        case .removeDownload:
+            return viewModel.session.isDownloaded
         case .cancelDownload:
             return DownloadManager.shared.isDownloadable(viewModel.session) && DownloadManager.shared.isDownloading(viewModel.session)
         case .revealInFinder:
@@ -577,7 +549,7 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
 
         let row: Int? = (0..<numberOfRows).contains(selectedRow) ? selectedRow : nil
 
-        if let row, case .session(let viewModel) = self.displayedRows[row].kind {
+        if let row, let viewModel = displayedRows[row].sessionViewModel {
             selectedSession = viewModel
         } else {
             selectedSession = nil

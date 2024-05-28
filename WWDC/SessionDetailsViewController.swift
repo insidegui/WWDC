@@ -14,8 +14,6 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
         static let padding: CGFloat = 46
     }
 
-    let listStyle: SessionsListStyle
-
     var viewModel: SessionViewModel? {
         didSet {
             view.animator().alphaValue = (viewModel == nil) ? 0 : 1
@@ -135,9 +133,7 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
     let summaryController: SessionSummaryViewController
     let transcriptController: SessionTranscriptViewController
 
-    init(listStyle: SessionsListStyle) {
-        self.listStyle = listStyle
-
+    init() {
         shelfController = ShelfViewController()
         summaryController = SessionSummaryViewController()
         transcriptController = SessionTranscriptViewController()

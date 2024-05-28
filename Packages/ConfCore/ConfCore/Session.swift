@@ -28,9 +28,11 @@ public class Session: Object, Decodable {
 
     /// The event identifier for the event this session belongs to
     @objc public dynamic var eventIdentifier = ""
+    @objc public dynamic var eventStartDate = Date.distantPast
 
     /// Track name
     @objc public dynamic var trackName = ""
+    @objc public dynamic var trackOrder = 0
 
     /// Track identifier
     @objc public dynamic var trackIdentifier = ""
@@ -95,25 +97,11 @@ public class Session: Object, Decodable {
 
     public static let videoPredicate: NSPredicate = NSPredicate(format: "ANY assets.rawAssetType == %@", SessionAssetType.streamingVideo.rawValue)
 
-    public static func standardSort(sessionA: Session, sessionB: Session) -> Bool {
-        guard let eventA = sessionA.event.first, let eventB = sessionB.event.first else { return false }
-        guard let trackA = sessionA.track.first, let trackB = sessionB.track.first else { return false }
-
-        if trackA.order == trackB.order {
-            if eventA.startDate == eventB.startDate {
-                return sessionA.title < sessionB.title
-            } else {
-                return eventA.startDate > eventB.startDate
-            }
-        } else {
-            return trackA.order < trackB.order
-        }
-    }
-
-    public static func standardSortForSchedule(sessionA: Session, sessionB: Session) -> Bool {
-        guard let instanceA = sessionA.instances.first, let instanceB = sessionB.instances.first else { return false }
-
-        return SessionInstance.standardSort(instanceA: instanceA, instanceB: instanceB)
+    public static func sameTrackSortDescriptors() -> [RealmSwift.SortDescriptor] {
+        return [
+            RealmSwift.SortDescriptor(keyPath: "eventStartDate"),
+            RealmSwift.SortDescriptor(keyPath: "title")
+        ]
     }
 
     func merge(with other: Session, in realm: Realm) {
@@ -129,36 +117,29 @@ public class Session: Object, Decodable {
         mediaDuration = other.mediaDuration
 
         // merge assets
-        let assets = other.assets.filter { otherAsset in
-            return !self.assets.contains(where: { $0.identifier == otherAsset.identifier })
+        // Pulling the identifiers into Swift Set is an optimization for realm,
+        // You can't see it but `map` on `List` is lazy and each call to `.contains(element)`
+        // is O(n) but with a higher constant time because it accesses the realm property
+        // every time. Pulling strings into a Set gets the `.contains` call down to O(1)
+        // and ensures the Realm object accesses are only done once
+        let currentAssetIds = Set(self.assets.map { $0.identifier })
+        other.assets.forEach { otherAsset in
+            guard !currentAssetIds.contains(otherAsset.identifier) else { return }
+            self.assets.append(otherAsset)
         }
-        self.assets.append(objectsIn: assets)
 
+        let currentRelatedIds = Set(related.map { $0.identifier })
         other.related.forEach { newRelated in
-            let effectiveRelated: RelatedResource
+            guard !currentRelatedIds.contains(newRelated.identifier) else { return }
 
-            if let existingResource = realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) {
-                effectiveRelated = existingResource
-            } else {
-                effectiveRelated = newRelated
-            }
-
-            guard !related.contains(where: { $0.identifier == effectiveRelated.identifier }) else { return }
-            related.append(effectiveRelated)
+            related.append(realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) ?? newRelated)
         }
 
+        let currentFocusIds = Set(focuses.map { $0.name })
         other.focuses.forEach { newFocus in
-            let effectiveFocus: Focus
+            guard !currentFocusIds.contains(newFocus.name) else { return }
 
-            if let existingFocus = realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) {
-                effectiveFocus = existingFocus
-            } else {
-                effectiveFocus = newFocus
-            }
-
-            guard !focuses.contains(where: { $0.name == effectiveFocus.name }) else { return }
-
-            focuses.append(effectiveFocus)
+            focuses.append(realm.object(ofType: Focus.self, forPrimaryKey: newFocus.name) ?? newFocus)
         }
     }
 
