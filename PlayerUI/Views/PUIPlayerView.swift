@@ -749,15 +749,11 @@ public final class PUIPlayerView: NSView {
 
         /// Define an absolute maximum width for the control area so that it doesn't look comically wide in full screen,
         /// set as lower priority so that it can potentially expand beyond this size if needed due to content size.
-        let scrimMaxWidth = scrimContainerView.widthAnchor.constraint(lessThanOrEqualToConstant: 700)
+        let scrimMaxWidth = scrimContainerView.widthAnchor.constraint(lessThanOrEqualToConstant: 600)
         scrimMaxWidth.priority = .defaultLow
-
-        /// Define a maximum area of the container that can be filled with the control area.
-        let scrimMaxParentArea = scrimContainerView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.5)
 
         NSLayoutConstraint.activate([
             scrimMaxWidth,
-            scrimMaxParentArea,
             scrimLeading,
             scrimTrailing,
             scrimContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
