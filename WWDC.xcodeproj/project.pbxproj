@@ -171,7 +171,6 @@
 		DDF721DD1ECA12A40054C503 /* PUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C21ECA12A40054C503 /* PUIButton.swift */; };
 		DDF721DE1ECA12A40054C503 /* PUIPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */; };
 		DDF721DF1ECA12A40054C503 /* PUIPlayerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */; };
-		DDF721E01ECA12A40054C503 /* PUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C51ECA12A40054C503 /* PUISlider.swift */; };
 		DDF721E11ECA12A40054C503 /* PUITimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C61ECA12A40054C503 /* PUITimelineView.swift */; };
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
@@ -440,7 +439,6 @@
 		DDF721C21ECA12A40054C503 /* PUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIButton.swift; sourceTree = "<group>"; };
 		DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerView.swift; sourceTree = "<group>"; };
 		DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerWindow.swift; sourceTree = "<group>"; };
-		DDF721C51ECA12A40054C503 /* PUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUISlider.swift; sourceTree = "<group>"; };
 		DDF721C61ECA12A40054C503 /* PUITimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineView.swift; sourceTree = "<group>"; };
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
@@ -1061,7 +1059,6 @@
 				4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */,
 				DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */,
 				DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */,
-				DDF721C51ECA12A40054C503 /* PUISlider.swift */,
 				DDF721C61ECA12A40054C503 /* PUITimelineView.swift */,
 				DDC678231EDBA25A00A4E19C /* PUIAnnotationWindow.swift */,
 			);
@@ -1561,7 +1558,6 @@
 				4DA83FE222AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift in Sources */,
 				DDF721CE1ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift in Sources */,
 				DDC970BF209291630072B822 /* PUITouchBarController.swift in Sources */,
-				DDF721E01ECA12A40054C503 /* PUISlider.swift in Sources */,
 				DDF721DA1ECA12A40054C503 /* PUIAnnotationLayer.swift in Sources */,
 				4DBFA4DA20E160CB00BDF34B /* AVAsset+AsyncHelpers.swift in Sources */,
 				DDF721CC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift in Sources */,

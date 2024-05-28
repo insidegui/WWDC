@@ -528,14 +528,15 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    fileprivate lazy var volumeSlider: PUISlider = {
-        let s = PUISlider(frame: .zero)
+    fileprivate lazy var volumeSlider: NSSlider = {
+        let s = NSSlider(frame: .zero)
 
         s.widthAnchor.constraint(equalToConstant: 88).isActive = true
         s.isContinuous = true
         s.target = self
         s.minValue = 0
         s.maxValue = 1
+        s.controlSize = .small
         s.action = #selector(volumeSliderAction)
 
         return s
