@@ -140,7 +140,6 @@ public final class PUITimelineView: NSView {
         seekProgressLayer.backgroundColor = NSColor.seekProgress.cgColor
         seekProgressLayer.frame = bounds
         seekProgressLayer.cornerRadius = Metrics.cornerRadius
-        seekProgressLayer.masksToBounds = true
 
         layer?.addSublayer(seekProgressLayer)
 
@@ -229,6 +228,7 @@ public final class PUITimelineView: NSView {
     }
 
     private func updateGhostProgress(with event: NSEvent) {
+        print("Update ghost \(event)")
         let point = convert(event.locationInWindow, from: nil)
         guard point.x > 0 && point.x < bounds.width else {
             return
@@ -237,6 +237,7 @@ public final class PUITimelineView: NSView {
         let ghostWidth = point.x
         var ghostRect = bounds
         ghostRect.size.width = ghostWidth
+        seekProgressLayer.opacity = 1
         seekProgressLayer.frame = ghostRect
     }
 
@@ -309,6 +310,7 @@ public final class PUITimelineView: NSView {
                 }
             case .leftMouseDragged?:
                 if !startedInteractiveSeek {
+                    timePreviewLayer.animateInvisible()
                     startedInteractiveSeek = true
                     self.viewDelegate?.timelineViewWillBeginInteractiveSeek()
                 }
