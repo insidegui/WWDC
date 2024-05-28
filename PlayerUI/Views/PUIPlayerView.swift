@@ -216,8 +216,8 @@ public final class PUIPlayerView: NSView {
             pipButton.isEnabled = false
         }
 
-        elapsedTimeLabel.stringValue = elapsedTimeInitialValue
-        remainingTimeLabel.stringValue = remainingTimeInitialValue
+        leadingTimeButton.title = elapsedTimePlaceholder
+        trailingTimeButton.title = timeRemainingPlaceholder
         timelineView.resetUI()
 
         playerLayer.player = player
@@ -374,6 +374,14 @@ public final class PUIPlayerView: NSView {
         }
     }
 
+    private var trailingLabelDisplaysDuration = false {
+        didSet {
+            guard trailingLabelDisplaysDuration != oldValue else { return }
+
+            updateTimeLabels()
+        }
+    }
+
     private func updateTimeLabels() {
         guard let player = player else { return }
 
@@ -382,10 +390,14 @@ public final class PUIPlayerView: NSView {
 
         let time = player.currentTime()
 
-        elapsedTimeLabel.stringValue = String(time: time) ?? ""
+        leadingTimeButton.title = String(time: time) ?? ""
 
-        let remainingTime = CMTimeSubtract(duration, time)
-        remainingTimeLabel.stringValue = String(time: remainingTime) ?? ""
+        if trailingLabelDisplaysDuration {
+            trailingTimeButton.title = String(time: duration) ?? durationPlaceholder
+        } else {
+            let remainingTime = CMTimeSubtract(duration, time)
+            trailingTimeButton.title = "−" + (String(time: remainingTime) ?? timeRemainingPlaceholder)
+        }
     }
 
     public override func layout() {
@@ -493,26 +505,36 @@ public final class PUIPlayerView: NSView {
         return v
     }()
 
-    private var elapsedTimeInitialValue = "00:00:00"
-    private lazy var elapsedTimeLabel: NSTextField = {
-        let l = NSTextField(labelWithString: elapsedTimeInitialValue)
+    private var elapsedTimePlaceholder = "00:00"
+    private var timeRemainingPlaceholder = "−00:00"
+    private var durationPlaceholder = "00:00"
 
-        l.alignment = .left
-        l.font = .monospacedDigitSystemFont(ofSize: 14, weight: .medium)
-        l.textColor = .timeLabel
+    /// Displays the elapsed time.
+    /// This is a button for consistency with `trailingTimeButton`, but it doesn't have an action.
+    private lazy var leadingTimeButton: NSButton = {
+        let b = NSButton(title: elapsedTimePlaceholder, target: nil, action: nil)
 
-        return l
+        b.contentTintColor = .timeLabel
+        b.isBordered = false
+        b.alignment = .left
+        b.font = .monospacedDigitSystemFont(ofSize: 13, weight: .regular)
+        b.isEnabled = false
+        /// Prevents the disabled button from dimming its contents.
+        (b.cell as? NSButtonCell)?.imageDimsWhenDisabled = false
+
+        return b
     }()
 
-    private var remainingTimeInitialValue = "-00:00:00"
-    private lazy var remainingTimeLabel: NSTextField = {
-        let l = NSTextField(labelWithString: remainingTimeInitialValue)
+    /// Displays either elapsed time or duration according to user preference (toggle by clicking).
+    private lazy var trailingTimeButton: NSButton = {
+        let b = NSButton(title: timeRemainingPlaceholder, target: self, action: #selector(toggleTrailingTimeLabelMode))
 
-        l.alignment = .right
-        l.font = .monospacedDigitSystemFont(ofSize: 14, weight: .medium)
-        l.textColor = .timeLabel
+        b.contentTintColor = .timeLabel
+        b.isBordered = false
+        b.alignment = .right
+        b.font = .monospacedDigitSystemFont(ofSize: 13, weight: .regular)
 
-        return l
+        return b
     }()
 
     private lazy var fullScreenButton: PUIVibrantButton = {
@@ -729,13 +751,13 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
         let timelineContainerView = NSStackView(views: [
-            elapsedTimeLabel,
+            leadingTimeButton,
             timelineView,
-            remainingTimeLabel
+            trailingTimeButton
         ])
         timelineContainerView.distribution = .equalSpacing
         timelineContainerView.orientation = .horizontal
-        timelineContainerView.alignment = .lastBaseline
+        timelineContainerView.alignment = .centerY
 
         // Main stack view and background scrim
         controlsContainerView = NSStackView(views: [
@@ -1015,7 +1037,11 @@ public final class PUIPlayerView: NSView {
             playbackSpeed = playbackSpeed.next
         }
     }
-    
+
+    @IBAction public func toggleTrailingTimeLabelMode(_ sender: Any?) {
+        trailingLabelDisplaysDuration.toggle()
+    }
+
     public func reduceSpeed() {
         guard let speedIndex = PUIPlaybackSpeed.all.firstIndex(of: playbackSpeed) else { return }
         if speedIndex > 0 {

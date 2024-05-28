@@ -11,9 +11,7 @@ import Cocoa
 
 extension NSColor {
 
-    static var timeLabel: NSColor {
-        return NSColor(calibratedRed: 1.00, green: 1.00, blue: 1.00, alpha: 1.00)
-    }
+    static var timeLabel = NSColor.labelColor
 
     static let playerBorder = NSColor.quaternaryLabelColor
 
