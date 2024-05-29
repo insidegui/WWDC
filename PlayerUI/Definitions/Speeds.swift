@@ -8,7 +8,9 @@
 
 import Foundation
 
-public enum PUIPlaybackSpeed: Float {
+public enum PUIPlaybackSpeed: Float, Identifiable {
+    public var id: RawValue { rawValue }
+
     case slow = 0.5
     case normal = 1
     case midFast = 1.25
@@ -60,4 +62,37 @@ public enum PUIPlaybackSpeed: Float {
 
         return PUIPlaybackSpeed.all[nextIndex]
     }
+
+    private static let descriptionFormatter: NumberFormatter = {
+        let f = NumberFormatter()
+        f.minimumFractionDigits = 1
+        f.maximumFractionDigits = 2
+        return f
+    }()
+
+    var localizedDescription: String { (Self.descriptionFormatter.string(from: NSNumber(value: rawValue)) ?? "") + "×" }
+
+    var buttonTitle: String {
+        let prefix: String
+
+        switch rawValue {
+        case 0.5:
+            prefix = "½"
+        case 1:
+            prefix = "1"
+        case 1.25:
+            prefix = "1¼"
+        case 1.5:
+            prefix = "1½"
+        case 1.75:
+            prefix = "1¾"
+        case 2:
+            prefix = "2"
+        default:
+            prefix = (Self.descriptionFormatter.string(from: NSNumber(value: rawValue)) ?? "")
+        }
+
+        return prefix 
+    }
 }
+

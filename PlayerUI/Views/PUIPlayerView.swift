@@ -141,13 +141,12 @@ public final class PUIPlayerView: NSView {
         didSet {
             guard let player = player else { return }
 
-            if isPlaying && !isPlayingExternally {
+            if playbackSpeed != oldValue, isPlaying && !isPlayingExternally {
                 player.rate = playbackSpeed.rawValue
                 player.seek(to: player.currentTime()) // Helps the AV sync when speeds change with the TimeDomain algorithm enabled
             }
 
             updatePlaybackSpeedState()
-            updateSelectedMenuItem(forPlaybackSpeed: playbackSpeed)
 
             invalidateTouchBar()
         }
@@ -341,8 +340,10 @@ public final class PUIPlayerView: NSView {
         }
     }
 
+    @MainActor
     fileprivate func updatePlaybackSpeedState() {
-        speedButton.image = playbackSpeed.icon
+        guard playbackSpeed != speedButton.speed else { return }
+        speedButton.speed = playbackSpeed
     }
 
     fileprivate var currentPresentationSize: NSSize? {
@@ -623,18 +624,7 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    fileprivate lazy var speedButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
-        b.image = .PUISpeedOne
-        b.target = self
-        b.action = #selector(toggleSpeed)
-        b.toolTip = "Change playback speed"
-        b.menu = self.speedsMenu
-        b.showsMenuOnRightClick = true
-
-        return b
-    }()
+    fileprivate lazy var speedButton = PUIPlaybackSpeedToggle(frame: .zero)
 
     private lazy var addAnnotationButton: PUIButton = {
         let b = PUIButton(frame: .zero)
@@ -816,6 +806,12 @@ public final class PUIPlayerView: NSView {
 
         extrasMenuContainerView.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor, constant: -12).isActive = true
         updateExtrasMenuPosition()
+
+        speedButton.$speed.removeDuplicates().sink { [weak self] speed in
+            guard let self else { return }
+            self.playbackSpeed = speed
+        }
+        .store(in: &cancellables)
     }
 
     var isConfiguredForBackAndForward30s = false {
@@ -1175,33 +1171,6 @@ public final class PUIPlayerView: NSView {
 
     @IBAction func showSubtitlesMenu(_ sender: PUIButton) {
         subtitlesMenu?.popUp(positioning: nil, at: .zero, in: sender)
-    }
-
-    // MARK: - Playback speeds
-
-    fileprivate lazy var speedsMenu: NSMenu = {
-        let m = NSMenu()
-        for speed in PUIPlaybackSpeed.all {
-            let item = NSMenuItem(title: "\(String(format: "%g", speed.rawValue))x", action: #selector(didSelectSpeed), keyEquivalent: "")
-            item.target = self
-            item.representedObject = speed
-            item.state = speed == self.playbackSpeed ? .on : .off
-            m.addItem(item)
-        }
-        return m
-    }()
-
-    fileprivate func updateSelectedMenuItem(forPlaybackSpeed speed: PUIPlaybackSpeed) {
-        for item in speedsMenu.items {
-            item.state = (item.representedObject as? PUIPlaybackSpeed) == speed ? .on : .off
-        }
-    }
-
-    @objc private func didSelectSpeed(_ sender: NSMenuItem) {
-        guard let speed = sender.representedObject as? PUIPlaybackSpeed else {
-            return
-        }
-        playbackSpeed = speed
     }
 
     // MARK: - Key commands
