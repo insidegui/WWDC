@@ -201,6 +201,7 @@ public final class PUIPlayerView: NSView {
     private var sortedAnnotations: [PUITimelineAnnotation] = []
 
     private var playerTimeObserver: Any?
+    private var annotationTimeDistanceObserver: Any?
 
     fileprivate var asset: AVAsset? {
         return player?.currentItem?.asset
@@ -266,6 +267,10 @@ public final class PUIPlayerView: NSView {
             self?.playerTimeDidChange(time: currentTime)
         }
 
+        annotationTimeDistanceObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1, preferredTimescale: 9000), queue: .main) { [weak self] _ in
+            self?.updateAnnotationButton()
+        }
+
         player.allowsExternalPlayback = true
         routeButton.player = player
 
@@ -281,6 +286,10 @@ public final class PUIPlayerView: NSView {
         if let observer = playerTimeObserver {
             oldValue.removeTimeObserver(observer)
             playerTimeObserver = nil
+        }
+        if let observer = annotationTimeDistanceObserver {
+            oldValue.removeTimeObserver(observer)
+            annotationTimeDistanceObserver = nil
         }
     }
 
@@ -883,8 +892,7 @@ public final class PUIPlayerView: NSView {
         pipButton.isHidden = !d.playerViewShouldShowPictureInPictureControl(self)
         speedButton.isHidden = !d.playerViewShouldShowSpeedControl(self)
 
-        let disableAnnotationControls = !d.playerViewShouldShowAnnotationControls(self)
-        addAnnotationButton.isHidden = disableAnnotationControls
+        updateAnnotationButton()
 
         let disableBackAndForward = !d.playerViewShouldShowBackAndForwardControls(self)
         backButton.isHidden = disableBackAndForward
@@ -902,6 +910,12 @@ public final class PUIPlayerView: NSView {
 
         fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
         timelineView.isHidden = !d.playerViewShouldShowTimelineView(self)
+    }
+
+    private func updateAnnotationButton() {
+        guard let d = appearanceDelegate else { return }
+
+        addAnnotationButton.isEnabled = d.playerViewShouldShowAnnotationControls(self)
     }
 
     fileprivate func updateExternalPlaybackControlsAvailability() {

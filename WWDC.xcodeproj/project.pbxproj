@@ -91,7 +91,6 @@
 		DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */; };
 		DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */; };
 		DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */; };
-		DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2622577E67A00995FF1 /* ConfCore */; };
 		DDB1A2642577E67A00995FF1 /* ConfCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2622577E67A00995FF1 /* ConfCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -177,6 +176,7 @@
 		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
 		F422B8932C077E9600C4B337 /* UILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F422B8922C077E9600C4B337 /* UILog.swift */; };
 		F422B8B02C079DEA00C4B337 /* PUISettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F422B8AF2C079DEA00C4B337 /* PUISettings.swift */; };
+		F422B8B22C07CB6C00C4B337 /* CALayer+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = F422B8B12C07CB6C00C4B337 /* CALayer+Asset.swift */; };
 		F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */; };
 		F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */; };
 		F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82342A22921300FDE980 /* ExploreTabProvider.swift */; };
@@ -363,7 +363,6 @@
 		DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPreferencesViewController.swift; sourceTree = "<group>"; };
 		DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompositionalLayoutBackgroundSwizzler.h; sourceTree = "<group>"; };
 		DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompositionalLayoutBackgroundSwizzler.m; sourceTree = "<group>"; };
-		DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Asset.swift"; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDB1A25E2577E51E00995FF1 /* ConfCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ConfCore; path = Packages/ConfCore; sourceTree = "<group>"; };
 		DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VibrantButton.swift; sourceTree = "<group>"; };
@@ -451,6 +450,7 @@
 		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		F422B8922C077E9600C4B337 /* UILog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILog.swift; sourceTree = "<group>"; };
 		F422B8AF2C079DEA00C4B337 /* PUISettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUISettings.swift; sourceTree = "<group>"; };
+		F422B8B12C07CB6C00C4B337 /* CALayer+Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Asset.swift"; sourceTree = "<group>"; };
 		F42472B12A24D6AC00F68237 /* OpenSource.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = OpenSource.xcconfig; sourceTree = "<group>"; };
 		F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
 		F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarBlurFadeView.swift; sourceTree = "<group>"; };
@@ -668,7 +668,6 @@
 				DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */,
 				DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */,
 				DD78588024C3594B008C1C22 /* SlowMigrationView.swift */,
-				DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -750,6 +749,7 @@
 		DD600ACC2487F3450071B90E /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				F422B8B12C07CB6C00C4B337 /* CALayer+Asset.swift */,
 				DD600ACD2487F3540071B90E /* NSColor+Hex.swift */,
 				F4FB06A02A21493B00799F84 /* PreviewSupport.swift */,
 				F422B8922C077E9600C4B337 /* UILog.swift */,
@@ -1477,7 +1477,6 @@
 				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
 				DDDF807420BA3124007284F8 /* ExploreViewController.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
-				DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */,
 				F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */,
 				4D66CA50217E2C800006A8C9 /* DownloadsManagementTableRowView.swift in Sources */,
@@ -1553,6 +1552,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F422B8B22C07CB6C00C4B337 /* CALayer+Asset.swift in Sources */,
 				F4FB06A12A21493B00799F84 /* PreviewSupport.swift in Sources */,
 				DD600ACE2487F3540071B90E /* NSColor+Hex.swift in Sources */,
 				DD600AC32487F1C00071B90E /* ConfUIFoundation.swift in Sources */,

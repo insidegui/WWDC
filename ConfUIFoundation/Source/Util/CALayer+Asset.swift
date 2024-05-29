@@ -8,10 +8,9 @@
 
 import Cocoa
 import OSLog
-import ConfCore
 
-extension CALayer: Logging {
-    public static let log = makeLogger()
+public extension CALayer {
+    static let log = Logger(subsystem: kConfUIFoundationSubsystem, category: "CALayer+")
 }
 
 public extension CALayer {
@@ -62,6 +61,15 @@ public extension CALayer {
         return sublayers?.first(where: { $0.name == name }) as? T
     }
 
+    func sublayer<T: CALayer>(path: String, of type: T.Type) -> T? {
+        let components = path.components(separatedBy: ".")
+        var target: CALayer? = self
+        for component in components {
+            target = target?.sublayer(named: component, of: CALayer.self)
+        }
+        return target as? T
+    }
+
     /// Disables all animations on the layer, but allows them to be re-enabled later by `enableAllAnimations`.
     func disableAllAnimations() {
         guard let keys = animationKeys() else { return }
@@ -94,7 +102,7 @@ public extension CALayer {
 
 }
 
-extension CALayer {
+public extension CALayer {
 
     func resizeLayer(_ targetLayer: CALayer?) {
         guard let targetLayer = targetLayer else { return }
@@ -119,7 +127,7 @@ extension CALayer {
 
 }
 
-extension NSView {
+public extension NSView {
 
     func rewind(_ assetLayer: CALayer) {
         assetLayer.timeOffset = 0

@@ -75,29 +75,7 @@ final class PUITimelineFloatingLayer: PUIBoringLayer, CAAnimationDelegate {
     }
 
     private lazy var backgroundLayer: CALayer = {
-        guard let asset = NSDataAsset(name: "TimeBubble", bundle: .playerUI) else {
-            assertionFailure("Missing TimeBubble asset in PlayerUI.framework")
-            return CALayer()
-        }
-
-        do {
-            let unarchiver = try NSKeyedUnarchiver(forReadingFrom: asset.data)
-            unarchiver.requiresSecureCoding = false
-
-            guard let dict = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? [String: Any] else {
-                throw AssetError("Root object is not a dictionary")
-            }
-            unarchiver.finishDecoding()
-
-            guard let rootLayer = dict["rootLayer"] as? CALayer else {
-                throw AssetError("Missing or invalid rootLayer")
-            }
-
-            return rootLayer
-        } catch {
-            assertionFailure("TimeBubble asset corrupted: \(error)")
-            return CALayer()
-        }
+        CALayer.load(assetNamed: "TimeBubble", bundle: .playerUI) ?? CALayer()
     }()
 
     private lazy var textLayer: PUIBoringTextLayer = {

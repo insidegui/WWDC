@@ -84,8 +84,8 @@ public final class PUITimelineView: NSView {
 
     struct Metrics {
         static let height: CGFloat = 8
-        static let annotationBubbleDiameter: CGFloat = 12
-        static let annotationBubbleDiameterHoverScale: CGFloat = 1.3
+        static let annotationMarkerWidth: CGFloat = 14
+        static let annotationMarkerHoverScale: CGFloat = 1.3
         static let annotationDragThresholdVertical: CGFloat = 15
         static let annotationDragThresholdHorizontal: CGFloat = 6
         static let textSize: CGFloat = 14.0
@@ -99,6 +99,7 @@ public final class PUITimelineView: NSView {
     private var bufferingProgressLayer: PUIBufferLayer!
     private var playbackProgressLayer: PUIBoringLayer!
     private var seekProgressLayer: PUIBoringLayer!
+    private var annotationsContainerLayer = CALayer()
 
     private lazy var floatingTimeLayer = PUITimelineFloatingLayer()
 
@@ -144,6 +145,13 @@ public final class PUITimelineView: NSView {
         // Floating time
 
         layer?.addSublayer(floatingTimeLayer)
+
+        // Annotations container
+
+        annotationsContainerLayer.frame = bounds
+        annotationsContainerLayer.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
+        annotationsContainerLayer.masksToBounds = false
+        layer?.addSublayer(annotationsContainerLayer)
 
         #if DEBUG
         setupForPreviewIfNeeded()
@@ -389,12 +397,8 @@ public final class PUITimelineView: NSView {
         annotationLayers = annotations.map { annotation in
             let l = PUIAnnotationLayer()
 
-            l.backgroundColor = NSColor.playerHighlight.cgColor
             l.name = annotation.identifier
             l.zPosition = 999
-            l.cornerRadius = Metrics.annotationBubbleDiameter / 2
-            l.borderColor = NSColor.white.cgColor
-            l.borderWidth = 0
 
             return l
         }
@@ -402,17 +406,17 @@ public final class PUITimelineView: NSView {
         annotations.forEach { annotation in
             guard let l = annotationLayers.first(where: { $0.name == annotation.identifier }) else { return }
 
-            layoutAnnotationLayer(l, for: annotation, with: Metrics.annotationBubbleDiameter)
+            layoutAnnotationLayer(l, for: annotation, with: Metrics.annotationMarkerWidth)
         }
 
-        annotationLayers.forEach({ layer?.addSublayer($0) })
+        annotationLayers.forEach({ annotationsContainerLayer.addSublayer($0) })
     }
 
     private func layoutAnnotationLayer(_ layer: PUIBoringLayer, for annotation: PUITimelineAnnotation, with diameter: CGFloat, animated: Bool = false) {
         guard hasValidMediaDuration else { return }
 
         let x: CGFloat = (CGFloat(annotation.timestamp / mediaDuration) * bounds.width) - (diameter / 2)
-        let y: CGFloat = bounds.height / 2 - diameter / 2
+        let y: CGFloat = -1
 
         let f = CGRect(x: x, y: y, width: diameter, height: diameter)
 
@@ -433,12 +437,20 @@ public final class PUITimelineView: NSView {
         }
     }
 
-    private var hoveredAnnotation: AnnotationTuple?
+    private var hoveredAnnotation: AnnotationTuple? {
+        didSet {
+            if oldValue?.layer !== selectedAnnotation?.layer {
+                oldValue?.layer.isHighlighted = false
+            }
+        }
+    }
+
     private var selectedAnnotation: AnnotationTuple? {
         didSet {
             unhighlight(annotationTuple: oldValue)
 
             if selectedAnnotation != nil {
+                seekProgressLayer.opacity = 0
                 showAnnotationWindow()
                 hoveredAnnotation = nil
             } else if oldValue != nil {
@@ -448,20 +460,16 @@ public final class PUITimelineView: NSView {
         }
     }
 
-    private func annotationUnderMouse(with event: NSEvent, diameter: CGFloat = Metrics.annotationBubbleDiameter) -> AnnotationTuple? {
-        var point = convert(event.locationInWindow, from: nil)
-        point.x -= diameter / 2
+    private func annotationUnderMouse(with event: NSEvent, diameter: CGFloat = Metrics.annotationMarkerWidth) -> AnnotationTuple? {
+        let point = convert(event.locationInWindow, from: nil)
 
-        let s = CGSize(width: diameter, height: diameter)
-        let testRect = CGRect(origin: point, size: s)
+        guard let hitAnnotationLayer = annotationsContainerLayer.hitTest(point)?.superlayer as? PUIAnnotationLayer else { return nil }
 
-        guard let annotationLayer = annotationLayers.first(where: { $0.frame.intersects(testRect) }) else { return nil }
-
-        guard let name = annotationLayer.name else { return nil }
+        guard let name = hitAnnotationLayer.name else { return nil }
 
         guard let annotation = annotations.first(where: { $0.identifier == name }) else { return nil }
 
-        return (annotation: annotation, layer: annotationLayer)
+        return (annotation: annotation, layer: hitAnnotationLayer)
     }
 
     private func trackMouseAgainstAnnotations(with event: NSEvent) {
@@ -508,9 +516,7 @@ public final class PUITimelineView: NSView {
     private func configureAnnotationLayerAsHighlighted(layer: PUIBoringLayer) {
         guard let layer = layer as? PUIAnnotationLayer else { return }
 
-        let s = Metrics.annotationBubbleDiameterHoverScale
-        layer.transform = CATransform3DMakeScale(s, s, s)
-        layer.borderWidth = 1
+        layer.isHighlighted = true
 
         floatingTimeLayer.show()
     }
@@ -519,10 +525,7 @@ public final class PUITimelineView: NSView {
         CATransaction.begin()
         defer { CATransaction.commit() }
 
-        layer.animate {
-            layer.transform = CATransform3DIdentity
-            layer.borderWidth = 0
-        }
+        layer.isHighlighted = false
 
         delegate?.timelineDidHighlightAnnotation(nil)
     }
@@ -790,9 +793,10 @@ private extension PUITimelineView {
 
             self.annotations = [
                 FakePreviewAnnotation(timestamp: self.mediaDuration * 0.13),
+                FakePreviewAnnotation(timestamp: self.mediaDuration * 0.16),
                 FakePreviewAnnotation(timestamp: self.mediaDuration * 0.4),
                 FakePreviewAnnotation(timestamp: self.mediaDuration * 0.65),
-                FakePreviewAnnotation(timestamp: self.mediaDuration * 0.85),
+                FakePreviewAnnotation(timestamp: self.mediaDuration * 0.85)
             ]
         }
     }
