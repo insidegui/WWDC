@@ -149,6 +149,8 @@ public final class PUIPlayerView: NSView {
                 player.seek(to: player.currentTime()) // Helps the AV sync when speeds change with the TimeDomain algorithm enabled
             }
 
+            settings.playbackRate = Double(playbackSpeed.rawValue)
+
             updatePlaybackSpeedState()
 
             invalidateTouchBar()
@@ -286,6 +288,13 @@ public final class PUIPlayerView: NSView {
         trailingLabelDisplaysDuration = settings.trailingLabelDisplaysDuration
 
         player.volume = Float(settings.playerVolume)
+
+        let speed = Float(settings.playbackRate)
+        if PUIPlaybackSpeed.validateCustomSpeed(speed) {
+            playbackSpeed = PUIPlaybackSpeed(rawValue: speed) ?? .normal
+        } else {
+            log.error("Playback rate in user preference is invalid, using default (rate: \(speed, privacy: .public))")
+        }
     }
 
     private func playerVolumeChanged() {
