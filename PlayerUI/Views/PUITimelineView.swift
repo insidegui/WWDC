@@ -9,6 +9,7 @@
 import SwiftUI
 import AVFoundation
 import OSLog
+import ConfUIFoundation
 
 protocol PUITimelineViewDelegate: AnyObject {
 
@@ -148,10 +149,9 @@ public final class PUITimelineView: NSView {
 
         layer?.addSublayer(floatingTimeLayer)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.updateFloatingTime(with: CGPoint(x: 100, y: 0))
-            self.floatingTimeLayer.show()
-        }
+        #if DEBUG
+        setupForPreviewIfNeeded()
+        #endif
     }
 
     public func resetUI() {
@@ -772,6 +772,17 @@ public final class PUITimelineView: NSView {
 }
 
 #if DEBUG
+private extension PUITimelineView {
+    func setupForPreviewIfNeeded() {
+        guard ProcessInfo.isSwiftUIPreview else { return }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.updateFloatingTime(with: CGPoint(x: 100, y: 0))
+            self.floatingTimeLayer.show()
+        }
+    }
+}
+
 struct PUITimelineView_Previews: PreviewProvider {
     static var previews: some View { PUIPlayerView_Previews.previews }
 }

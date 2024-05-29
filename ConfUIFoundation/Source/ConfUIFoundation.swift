@@ -7,6 +7,7 @@
 //
 
 @_exported import Cocoa
+@_exported import MacPreviewUtils
 
 private final class _StubForBundleInit { }
 
