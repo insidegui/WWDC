@@ -88,6 +88,10 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-WWDCDisableUILog YES"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--force-transcript-update"
             isEnabled = "NO">
          </CommandLineArgument>

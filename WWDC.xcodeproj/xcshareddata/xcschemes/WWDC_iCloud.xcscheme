@@ -86,6 +86,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-WWDCDisableUILog YES"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-WWDCForceAllowAgentCommands YES"
             isEnabled = "NO">
          </CommandLineArgument>
