@@ -16,6 +16,8 @@ import ConfUIFoundation
 
 public final class PUIPlayerView: NSView {
 
+    private let settings = PUISettings()
+
     private let log = Logger(subsystem: "PlayerUI", category: "PUIPlayerView")
     private var cancellables: Set<AnyCancellable> = []
 
@@ -205,6 +207,9 @@ public final class PUIPlayerView: NSView {
     private let playerLayer = PUIBoringPlayerLayer()
 
     private func setupPlayer(_ player: AVPlayer) {
+        /// User settings are applied before setting up player observations, avoiding accidental overrides when initial values come in.
+        applyUserSettings(to: player)
+
         if let pipController {
             pipPossibleObservation = pipController.observe(
                 \AVPictureInPictureController.isPictureInPicturePossible, options: [.initial, .new]
@@ -277,8 +282,16 @@ public final class PUIPlayerView: NSView {
         }
     }
 
+    private func applyUserSettings(to player: AVPlayer) {
+        trailingLabelDisplaysDuration = settings.trailingLabelDisplaysDuration
+
+        player.volume = Float(settings.playerVolume)
+    }
+
     private func playerVolumeChanged() {
         guard let player = player else { return }
+
+        settings.playerVolume = Double(player.volume)
 
         if player.volume.isZero {
             volumeButton.image = .PUIVolumeMuted
@@ -380,6 +393,7 @@ public final class PUIPlayerView: NSView {
         didSet {
             guard trailingLabelDisplaysDuration != oldValue else { return }
 
+            settings.trailingLabelDisplaysDuration = trailingLabelDisplaysDuration
             updateTimeLabels()
         }
     }
