@@ -40,6 +40,10 @@ final class PUIAnnotationLayer: PUIBoringLayer {
         addSublayer(glyphContainer)
         glyph.fillColor = NSColor.white.cgColor
         glyph.strokeColor = NSColor.white.cgColor
+        glyph.shadowColor = NSColor.black.cgColor
+        glyph.shadowRadius = 6
+        glyph.shadowOffset = .zero
+        glyph.shadowOpacity = 0.2
     }
 
     private lazy var glyphContainer: CALayer = {
