@@ -41,7 +41,7 @@ public final class PUITimelineView: NSView {
     }
 
     public override var intrinsicContentSize: NSSize {
-        return NSSize(width: -1, height: 8)
+        NSSize(width: NSView.noIntrinsicMetric, height: Metrics.height)
     }
 
     public weak var delegate: PUITimelineDelegate?
@@ -83,7 +83,7 @@ public final class PUITimelineView: NSView {
     }
 
     struct Metrics {
-        static let cornerRadius: CGFloat = 4
+        static let height: CGFloat = 8
         static let annotationBubbleDiameter: CGFloat = 12
         static let annotationBubbleDiameterHoverScale: CGFloat = 1.3
         static let annotationDragThresholdVertical: CGFloat = 15
@@ -113,7 +113,6 @@ public final class PUITimelineView: NSView {
         borderLayer.borderColor = NSColor.playerBorder.cgColor
         borderLayer.borderWidth = 1.0
         borderLayer.frame = bounds
-        borderLayer.cornerRadius = Metrics.cornerRadius
 
         layer?.addSublayer(borderLayer)
 
@@ -121,7 +120,6 @@ public final class PUITimelineView: NSView {
 
         bufferingProgressLayer = PUIBufferLayer()
         bufferingProgressLayer.frame = bounds
-        bufferingProgressLayer.cornerRadius = Metrics.cornerRadius
         bufferingProgressLayer.masksToBounds = true
 
         layer?.addSublayer(bufferingProgressLayer)
@@ -131,7 +129,6 @@ public final class PUITimelineView: NSView {
         playbackProgressLayer = PUIBoringLayer()
         playbackProgressLayer.backgroundColor = NSColor.playerProgress.cgColor
         playbackProgressLayer.frame = bounds
-        playbackProgressLayer.cornerRadius = Metrics.cornerRadius
         playbackProgressLayer.masksToBounds = true
 
         layer?.addSublayer(playbackProgressLayer)
@@ -141,7 +138,6 @@ public final class PUITimelineView: NSView {
         seekProgressLayer = PUIBoringLayer()
         seekProgressLayer.backgroundColor = NSColor.seekProgress.cgColor
         seekProgressLayer.frame = bounds
-        seekProgressLayer.cornerRadius = Metrics.cornerRadius
 
         layer?.addSublayer(seekProgressLayer)
 
@@ -166,9 +162,18 @@ public final class PUITimelineView: NSView {
 
         borderLayer.frame = bounds
 
+        updateCornerRadii()
         layoutBufferingLayer()
         layoutPlaybackLayer()
         layoutAnnotations(distributeOnly: true)
+    }
+
+    private func updateCornerRadii() {
+        let radius = bounds.height * 0.5
+        seekProgressLayer.cornerRadius = radius
+        playbackProgressLayer.cornerRadius = radius
+        borderLayer.cornerRadius = radius
+        bufferingProgressLayer.cornerRadius = radius
     }
 
     private func layoutBufferingLayer() {
@@ -184,45 +189,35 @@ public final class PUITimelineView: NSView {
         playbackProgressLayer.frame = playbackRect
     }
 
-    private var hasMouseInside: Bool = false {
+    private(set) var hasMouseInside: Bool = false {
         didSet {
+            guard hasMouseInside != oldValue else { return }
+            
+            UILog("🐭 hasMouseInside = \(hasMouseInside)")
+
             reactToMouse()
         }
     }
 
-    private var mouseTrackingArea: NSTrackingArea!
-
-    public override func updateTrackingAreas() {
-        super.updateTrackingAreas()
-
-        if mouseTrackingArea != nil {
-            removeTrackingArea(mouseTrackingArea)
-        }
-
-        let options: NSTrackingArea.Options = [.mouseEnteredAndExited, .mouseMoved, .activeInActiveApp]
-        let trackingBounds = bounds.insetBy(dx: -2.5, dy: -7)
-        mouseTrackingArea = NSTrackingArea(rect: trackingBounds, options: options, owner: self, userInfo: nil)
-
-        addTrackingArea(mouseTrackingArea)
+    /// Expanded bounds where the mouse cursor should be considered to be inside the timeline view.
+    /// The area is expanded in order to make it easier to interact with the small vertical area of the timeline.
+    var hoverBounds: CGRect {
+        /// Once hovering is established, require a larger distance before disengaging hover.
+        let yOffset: CGFloat = hasMouseInside ? -16 : -8
+        return bounds.insetBy(dx: 0, dy: yOffset)
     }
 
     public override func mouseEntered(with event: NSEvent) {
-        super.mouseEntered(with: event)
-
         hasMouseInside = true
     }
 
     public override func mouseExited(with event: NSEvent) {
-        super.mouseExited(with: event)
-
         hasMouseInside = false
 
         unhighlightCurrentHoveredAnnotationIfNeeded()
     }
 
     public override func mouseMoved(with event: NSEvent) {
-        super.mouseMoved(with: event)
-
         guard hasMouseInside else { return }
 
         updateGhostProgress(with: event)

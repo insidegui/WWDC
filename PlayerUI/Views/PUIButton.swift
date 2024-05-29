@@ -58,7 +58,7 @@ public final class PUIButton: NSControl, ObservableObject {
     }
 
     private func setup() {
-        let host = NSHostingView(rootView: PUIButtonContent(button: self))
+        let host = PUIFirstMouseHostingView(rootView: PUIButtonContent(button: self))
         host.translatesAutoresizingMaskIntoConstraints = false
         addSubview(host)
         NSLayoutConstraint.activate([
@@ -184,6 +184,20 @@ private struct PUIButtonContent: View {
     }
 
     var body: some View {
+        ZStack {
+            if button.isToggle {
+                glyph
+                    .id(button.state)
+                    .transition(.scale(scale: 0.2).combined(with: .opacity))
+            } else {
+                glyph
+            }
+        }
+        .animation(.snappy(extraBounce: button.state == .on ? 0.25 : 0), value: button.state)
+    }
+
+    @ViewBuilder
+    private var glyph: some View {
         if let currentImage {
             currentImage
                 .resizable()
@@ -196,3 +210,12 @@ private struct PUIButtonContent: View {
     }
 }
 
+final class PUIFirstMouseButton: NSButton {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+}
+
+private final class PUIFirstMouseHostingView<RootView: View>: NSHostingView<RootView> {
+
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+
+}

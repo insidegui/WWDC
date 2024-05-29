@@ -12,6 +12,7 @@ import OSLog
 import AVKit
 import Combine
 import SwiftUI
+import ConfUIFoundation
 
 public final class PUIPlayerView: NSView {
 
@@ -319,9 +320,9 @@ public final class PUIPlayerView: NSView {
 
     fileprivate func updatePlayingState() {
         if isPlaying {
-            playButton.image = .PUIPause
+            playButton.state = .on
         } else {
-            playButton.image = .PUIPlay
+            playButton.state = .off
         }
     }
 
@@ -497,6 +498,7 @@ public final class PUIPlayerView: NSView {
     private var controlsContainerView: NSStackView!
     private var volumeControlsContainerView: NSStackView!
     private var centerButtonsContainerView: NSStackView!
+    private var timelineContainerView: NSStackView!
 
     fileprivate lazy var timelineView: PUITimelineView = {
         let v = PUITimelineView(frame: .zero)
@@ -513,7 +515,7 @@ public final class PUIPlayerView: NSView {
     /// Displays the elapsed time.
     /// This is a button for consistency with `trailingTimeButton`, but it doesn't have an action.
     private lazy var leadingTimeButton: NSButton = {
-        let b = NSButton(title: elapsedTimePlaceholder, target: nil, action: nil)
+        let b = PUIFirstMouseButton(title: elapsedTimePlaceholder, target: nil, action: nil)
 
         b.contentTintColor = .timeLabel
         b.isBordered = false
@@ -528,7 +530,7 @@ public final class PUIPlayerView: NSView {
 
     /// Displays either elapsed time or duration according to user preference (toggle by clicking).
     private lazy var trailingTimeButton: NSButton = {
-        let b = NSButton(title: timeRemainingPlaceholder, target: self, action: #selector(toggleTrailingTimeLabelMode))
+        let b = PUIFirstMouseButton(title: timeRemainingPlaceholder, target: self, action: #selector(toggleTrailingTimeLabelMode))
 
         b.contentTintColor = .timeLabel
         b.isBordered = false
@@ -550,7 +552,7 @@ public final class PUIPlayerView: NSView {
     }()
 
     private lazy var volumeButton: NSButton = {
-        let b = NSButton(frame: .zero)
+        let b = PUIFirstMouseButton(frame: .zero)
 
         b.image = .PUIVolume3
         b.font = NSFont.wwdcRoundedSystemFont(ofSize: 16, weight: .medium)
@@ -593,7 +595,11 @@ public final class PUIPlayerView: NSView {
     fileprivate lazy var playButton: PUIButton = {
         let b = PUIButton(frame: .zero)
 
+        b.isToggle = true
         b.image = .PUIPlay
+        b.alternateImage = .PUIPause
+        b.tintColor = .labelColor
+        b.activeTintColor = .labelColor
         b.target = self
         b.action = #selector(togglePlaying)
         b.toolTip = "Play/pause"
@@ -740,7 +746,7 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: pipButton)
         centerButtonsContainerView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-        let timelineContainerView = NSStackView(views: [
+        timelineContainerView = NSStackView(views: [
             leadingTimeButton,
             timelineView,
             trailingTimeButton
@@ -1462,11 +1468,38 @@ public final class PUIPlayerView: NSView {
         super.mouseEntered(with: event)
     }
 
+    private func isMouseEventInTimelineArea(_ event: NSEvent) -> Bool {
+        isPointInsideTimelineArea(convert(event.locationInWindow, from: nil))
+    }
+
+    private func isPointInsideTimelineArea(_ pointInViewCoordinates: CGPoint) -> Bool {
+        let point = convert(pointInViewCoordinates, to: timelineView)
+        return timelineView.hoverBounds.contains(point)
+    }
+
     public override func mouseMoved(with event: NSEvent) {
         showControls(animated: true)
         resetMouseIdleTimer()
 
         super.mouseMoved(with: event)
+
+        if isMouseEventInTimelineArea(event) {
+            /// We don't want timeline hover activation when the app is not active.
+            guard NSApp.isActive else { return }
+
+            if !timelineView.hasMouseInside {
+                UILog("🐭 Sending mouse entered to timeline view")
+
+                timelineView.mouseEntered(with: event)
+            }
+            timelineView.mouseMoved(with: event)
+        } else {
+            if timelineView.hasMouseInside {
+                UILog("🐭 Sending mouse exited to timeline view")
+
+                timelineView.mouseExited(with: event)
+            }
+        }
     }
 
     public override func mouseExited(with event: NSEvent) {
@@ -1481,15 +1514,39 @@ public final class PUIPlayerView: NSView {
         return true
     }
 
+    /// Dynamically modifying the return value for this doesn't work reliably, and we don't want window dragging
+    /// when the cursor is inside the expanded timeline view area, so window drag is handled in `mouseDown`.
+    public override var mouseDownCanMoveWindow: Bool { false }
+
     public override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
-        return true
+        guard let event else { return true }
+
+        if event.type == .leftMouseDown {
+            guard !isMouseEventInTimelineArea(event) else {
+                UILog("🐭 Rejecting first mouse down event because it's within the timeline area")
+                return false
+            }
+            return true
+        } else {
+            return true
+        }
     }
 
     public override func mouseDown(with event: NSEvent) {
+        guard let window else { return }
+        
+        if timelineView.hasMouseInside, isMouseEventInTimelineArea(event) {
+            UILog("🐭 Sending mouse down to timeline view")
+            timelineView.mouseDown(with: event)
+            return
+        }
+
         if event.type == .leftMouseDown && event.clickCount == 2 {
             toggleFullscreen(self)
         } else {
-            super.mouseDown(with: event)
+            /// `mouseDownCanMoveWindow` is `false`, so drag the window manually.
+            /// Once we reach here, we've guaranteed that the cursor is not inside the timeline view area.
+            window.performDrag(with: event)
         }
     }
 

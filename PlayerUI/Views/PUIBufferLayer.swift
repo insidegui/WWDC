@@ -26,15 +26,15 @@ final class PUIBufferLayer: PUIBoringLayer {
     override func draw(in ctx: CGContext) {
         ctx.setFillColor(NSColor.bufferProgress.cgColor)
 
-        let cr = PUITimelineView.Metrics.cornerRadius
+        let radius = bounds.height * 0.5
 
         segments.forEach { segment in
             let rect = self.rect(for: segment)
 
             guard rect.width > 0 && rect.height > 0 else { return }
-            guard rect.width >= cr * 2 else { return }
+            guard rect.width >= radius * 2 else { return }
 
-            let path = CGPath(roundedRect: rect, cornerWidth: cr, cornerHeight: cr, transform: nil)
+            let path = CGPath(roundedRect: rect, cornerWidth: radius, cornerHeight: radius, transform: nil)
             ctx.addPath(path)
 
             ctx.fillPath()
@@ -42,10 +42,10 @@ final class PUIBufferLayer: PUIBoringLayer {
     }
 
     private func rect(for segment: PUIBufferSegment) -> CGRect {
-        let cr = PUITimelineView.Metrics.cornerRadius
+        let radius = bounds.height * 0.5
 
-        let x: CGFloat = round(bounds.width * CGFloat(segment.start) - cr)
-        let w: CGFloat = round(bounds.width * CGFloat(segment.duration) + cr)
+        let x: CGFloat = round(bounds.width * CGFloat(segment.start) - radius)
+        let w: CGFloat = round(bounds.width * CGFloat(segment.duration) + radius)
 
         return CGRect(x: x, y: 0, width: w, height: bounds.height)
     }
