@@ -832,6 +832,14 @@ public final class PUIPlayerView: NSView {
             self.playbackSpeed = speed
         }
         .store(in: &cancellables)
+
+        speedButton.$isEditingCustomSpeed.sink { [weak self] isEditing in
+            guard let self else { return }
+            
+            showControls(animated: false)
+            resetMouseIdleTimer()
+        }
+        .store(in: &cancellables)
     }
 
     var isConfiguredForBackAndForward30s = false {
@@ -1244,6 +1252,11 @@ public final class PUIPlayerView: NSView {
     }
 
     private func startMonitoringKeyEvents() {
+        #if DEBUG
+        /// I was having weird crashes in previews related to key event monitoring...
+        guard !ProcessInfo.isSwiftUIPreview else { return }
+        #endif
+        
         if keyDownEventMonitor != nil {
             stopMonitoringKeyEvents()
         }
@@ -1343,6 +1356,8 @@ public final class PUIPlayerView: NSView {
         guard window.isOnActiveSpace && window.isVisible else { return false }
 
         guard !timelineView.isEditingAnnotation else { return false }
+
+        guard !speedButton.isEditingCustomSpeed else { return false }
 
         let windowMouseRect = window.convertFromScreen(NSRect(origin: NSEvent.mouseLocation, size: CGSize(width: 1, height: 1)))
         let viewMouseRect = convert(windowMouseRect, from: nil)
@@ -1548,7 +1563,10 @@ public final class PUIPlayerView: NSView {
 
     public override func mouseDown(with event: NSEvent) {
         guard let window else { return }
-        
+
+        /// This is important so that clicking outside the custom playback speed editor closes the editor.
+        window.makeFirstResponder(self)
+
         if timelineView.hasMouseInside, isMouseEventInTimelineArea(event) {
             UILog("🐭 Sending mouse down to timeline view")
             timelineView.mouseDown(with: event)
