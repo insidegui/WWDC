@@ -6,7 +6,7 @@
 //  Copyright © 2017 Guilherme Rambo. All rights reserved.
 //
 
-import Cocoa
+import SwiftUI
 import AVFoundation
 import OSLog
 
@@ -770,3 +770,9 @@ public final class PUITimelineView: NSView {
     }
 
 }
+
+#if DEBUG
+struct PUITimelineView_Previews: PreviewProvider {
+    static var previews: some View { PUIPlayerView_Previews.previews }
+}
+#endif

@@ -1,8 +1,8 @@
-import AppKit
+import SwiftUI
 
 final class PUITimelineFloatingLayer: PUIBoringLayer, CAAnimationDelegate {
 
-    var attributedText: NSAttributedString? = nil {
+    var attributedText: NSAttributedString? {
         didSet {
             guard attributedText != oldValue else { return }
 
@@ -211,3 +211,9 @@ extension CASpringAnimation {
         return anim
     }
 }
+
+#if DEBUG
+struct PUITimelineFloatingLayer_Previews: PreviewProvider {
+    static var previews: some View { PUIPlayerView_Previews.previews }
+}
+#endif

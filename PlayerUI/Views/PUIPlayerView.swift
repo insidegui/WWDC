@@ -1766,7 +1766,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
 struct PUIPlayerView_Previews: PreviewProvider {
     static var previews: some View {
         PUIPlayerViewPreviewWrapper()
-        .frame(minWidth: 200, maxWidth: .infinity, minHeight: 200, maxHeight: .infinity)
+            .frame(minWidth: 200, maxWidth: .infinity, minHeight: 200, maxHeight: .infinity)
     }
 }
 
