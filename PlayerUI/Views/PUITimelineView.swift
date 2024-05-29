@@ -226,6 +226,8 @@ public final class PUITimelineView: NSView {
     }
 
     private func updateGhostProgress(with event: NSEvent) {
+        guard selectedAnnotation == nil else { return }
+
         let point = convert(event.locationInWindow, from: nil)
         guard point.x > 0 && point.x < bounds.width else {
             return
@@ -244,17 +246,26 @@ public final class PUITimelineView: NSView {
         updateFloatingTime(with: point)
     }
 
-    private func updateFloatingTime(with point: CGPoint) {
-        let timestamp = makeTimestamp(for: point)
+    private func updateFloatingTime(with point: CGPoint, ignoreAnimationHover: Bool = false) {
+        /// If there's no annotation currently being edited, then the user can prevent the time preview from snapping to the annotation by holding down Command.
+        let annotationIgnoredByUser = selectedAnnotation == nil && NSEvent.modifierFlags.contains(.command)
+        /// `true` if the floating time should be updated based on the current hovered or selected annotation.
+        let useAnnotationData = !(ignoreAnimationHover || annotationIgnoredByUser)
+        /// Will be the annotation tuple for the selected annotation or the hovered annotation.
+        let targetAnnotation: AnnotationTuple? = useAnnotationData ? selectedAnnotation ?? hoveredAnnotation : nil
+
+        let timestamp = targetAnnotation?.annotation.timestamp ?? makeTimestamp(for: point)
+        let position: CGPoint = targetAnnotation?.layer.position ?? point
+
         let text = PUITimelineFloatingLayer.attributedString(for: timestamp, font: .monospacedDigitSystemFont(ofSize: Metrics.floatingLayerTextSize, weight: .medium))
 
-        floatingTimeLayer.opacity = 1
+        floatingTimeLayer.show(animated: false)
         floatingTimeLayer.attributedText = text
 
         var floatingTimeRect = floatingTimeLayer.frame
 
         floatingTimeRect.origin = CGPoint(
-            x: point.x - floatingTimeRect.width / 2,
+            x: position.x - floatingTimeRect.width / 2,
             y: bounds.minY - floatingTimeRect.height - Metrics.floatingLayerMargin
         )
 
@@ -268,14 +279,20 @@ public final class PUITimelineView: NSView {
 
     public override func mouseDown(with event: NSEvent) {
         guard hasValidMediaDuration else { return }
+       
         if let targetAnnotation = hoveredAnnotation {
             mouseDown(targetAnnotation.annotation, layer: targetAnnotation.layer, originalEvent: event)
             return
         }
 
+        let isDeselectingAnnotation = selectedAnnotation != nil
+
         selectedAnnotation = nil
         delegate?.timelineDidSelectAnnotation(nil)
         unhighlightCurrentHoveredAnnotationIfNeeded()
+
+        /// Clicking outside selected annotation should only deselect that annotation and not perform a seek.
+        guard !isDeselectingAnnotation else { return }
 
         var startedInteractiveSeek = false
 
@@ -335,7 +352,7 @@ public final class PUITimelineView: NSView {
         } else {
             borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.cgColor }
             seekProgressLayer.animate { seekProgressLayer.opacity = 0 }
-            floatingTimeLayer.hide()
+            if selectedAnnotation == nil { floatingTimeLayer.hide() }
         }
     }
 
@@ -369,8 +386,6 @@ public final class PUITimelineView: NSView {
         annotationLayers.forEach({ $0.removeFromSuperlayer() })
         annotationLayers.removeAll()
 
-        let sf = window?.screen?.backingScaleFactor ?? 1
-
         annotationLayers = annotations.map { annotation in
             let l = PUIAnnotationLayer()
 
@@ -380,14 +395,6 @@ public final class PUITimelineView: NSView {
             l.cornerRadius = Metrics.annotationBubbleDiameter / 2
             l.borderColor = NSColor.white.cgColor
             l.borderWidth = 0
-
-            let textLayer = PUIBoringTextLayer()
-
-            textLayer.string = PUITimelineFloatingLayer.attributedString(for: annotation.timestamp, font: .monospacedDigitSystemFont(ofSize: Metrics.textSize, weight: .medium))
-            textLayer.contentsScale = sf
-            textLayer.opacity = 0
-
-            l.attach(layer: textLayer, attribute: .top, spacing: 8)
 
             return l
         }
@@ -434,7 +441,7 @@ public final class PUITimelineView: NSView {
             if selectedAnnotation != nil {
                 showAnnotationWindow()
                 hoveredAnnotation = nil
-            } else {
+            } else if oldValue != nil {
                 unhighlightCurrentHoveredAnnotationIfNeeded()
                 hideAnnotationWindow()
             }
@@ -504,9 +511,8 @@ public final class PUITimelineView: NSView {
         let s = Metrics.annotationBubbleDiameterHoverScale
         layer.transform = CATransform3DMakeScale(s, s, s)
         layer.borderWidth = 1
-        layer.attachedLayer.animateVisible()
 
-        floatingTimeLayer.hide(animated: false)
+        floatingTimeLayer.show()
     }
 
     private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -516,7 +522,6 @@ public final class PUITimelineView: NSView {
         layer.animate {
             layer.transform = CATransform3DIdentity
             layer.borderWidth = 0
-            layer.attachedLayer.opacity = 0
         }
 
         delegate?.timelineDidHighlightAnnotation(nil)
@@ -532,8 +537,6 @@ public final class PUITimelineView: NSView {
         let startingPoint = convert(originalEvent.locationInWindow, from: nil)
         let originalPosition = layer.position
 
-        let originalTimestampString = layer.attachedLayer.string
-
         var cancelled = true
 
         let canDelete = delegate?.timelineCanDeleteAnnotation(annotation) ?? false
@@ -543,13 +546,10 @@ public final class PUITimelineView: NSView {
             didSet {
                 if oldValue != .delete && mode == .delete {
                     NSCursor.disappearingItem.push()
-                    layer.attachedLayer.animateInvisible()
                 } else if oldValue == .delete && mode != .delete {
                     NSCursor.pop()
-                    layer.attachedLayer.animateVisible()
                 } else if mode == .none && cancelled {
                     layer.animate { layer.position = originalPosition }
-                    updateAnnotationTextLayer(with: originalTimestampString)
                 }
             }
         }
@@ -561,18 +561,6 @@ public final class PUITimelineView: NSView {
                     NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .default)
                 }
             }
-        }
-
-        func updateAnnotationTextLayer(at point: CGPoint) {
-            let timestamp = makeTimestamp(for: point)
-
-            layer.attachedLayer.string = PUITimelineFloatingLayer.attributedString(for: timestamp, font: .monospacedDigitSystemFont(ofSize: Metrics.textSize, weight: .medium))
-        }
-
-        func updateAnnotationTextLayer(with string: Any?) {
-            guard let str = string else { return }
-
-            layer.attachedLayer.string = str
         }
 
         window?.trackEvents(matching: [.leftMouseUp, .leftMouseDragged, .keyUp], timeout: NSEvent.foreverDuration, mode: .eventTracking) { event, stop in
@@ -611,7 +599,6 @@ public final class PUITimelineView: NSView {
 
                 mode = .none
                 self.hoveredAnnotation = nil
-                updateAnnotationTextLayer(at: point)
 
                 stop.pointee = true
             case .leftMouseDragged?:
@@ -637,8 +624,6 @@ public final class PUITimelineView: NSView {
                     newPosition.x = point.x
                     mode = .move
 
-                    updateAnnotationTextLayer(at: point)
-
                     isSnappingBack = false
                 } else {
                     layer.position = originalPosition
@@ -649,6 +634,12 @@ public final class PUITimelineView: NSView {
 
                 if mode != .none {
                     layer.position = newPosition
+                }
+
+                updateFloatingTime(with: layer.position, ignoreAnimationHover: true)
+                
+                if mode == .delete {
+                    floatingTimeLayer.hide()
                 }
             case .keyUp?:
                 // cancel with ESC
@@ -674,6 +665,9 @@ public final class PUITimelineView: NSView {
     private func showAnnotationWindow() {
         guard let (annotation, annotationLayer) = selectedAnnotation else { return }
         guard let controller = delegate?.viewControllerForTimelineAnnotation(annotation) else { return }
+
+        floatingTimeLayer.show()
+        updateFloatingTime(with: annotationLayer.position)
 
         currentAnnotationEditor = controller
 
@@ -744,6 +738,10 @@ public final class PUITimelineView: NSView {
     }
 
     private func hideAnnotationWindow() {
+        UILog(#function)
+
+        floatingTimeLayer.hide()
+
         if let monitor = annotationCommandsMonitor {
             NSEvent.removeMonitor(monitor)
             annotationCommandsMonitor = nil
@@ -768,14 +766,59 @@ public final class PUITimelineView: NSView {
 
 #if DEBUG
 private extension PUITimelineView {
+    private static let previewDelegate = PreviewTimelineDelegate()
+
     func setupForPreviewIfNeeded() {
         guard ProcessInfo.isSwiftUIPreview else { return }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            self.deferredSetupPreviewContent(
+                forceTimePreviewVisible: false,
+                addAnnotations: true
+            )
+        }
+    }
+
+    private func deferredSetupPreviewContent(forceTimePreviewVisible: Bool, addAnnotations: Bool) {
+        if forceTimePreviewVisible {
             self.updateFloatingTime(with: CGPoint(x: 100, y: 0))
             self.floatingTimeLayer.show()
         }
+
+        if addAnnotations {
+            self.delegate = Self.previewDelegate
+
+            self.annotations = [
+                FakePreviewAnnotation(timestamp: self.mediaDuration * 0.13),
+                FakePreviewAnnotation(timestamp: self.mediaDuration * 0.4),
+                FakePreviewAnnotation(timestamp: self.mediaDuration * 0.65),
+                FakePreviewAnnotation(timestamp: self.mediaDuration * 0.85),
+            ]
+        }
     }
+}
+
+private final class PreviewTimelineDelegate: PUITimelineDelegate {
+    func viewControllerForTimelineAnnotation(_ annotation: any PUITimelineAnnotation) -> NSViewController? { nil }
+
+    func timelineDidHighlightAnnotation(_ annotation: (any PUITimelineAnnotation)?) { }
+
+    func timelineDidSelectAnnotation(_ annotation: (any PUITimelineAnnotation)?) { }
+
+    func timelineCanDeleteAnnotation(_ annotation: any PUITimelineAnnotation) -> Bool { true }
+
+    func timelineCanMoveAnnotation(_ annotation: any PUITimelineAnnotation) -> Bool { true }
+
+    func timelineDidMoveAnnotation(_ annotation: any PUITimelineAnnotation, to timestamp: Double) { }
+
+    func timelineDidDeleteAnnotation(_ annotation: any PUITimelineAnnotation) { }
+}
+
+private struct FakePreviewAnnotation: PUITimelineAnnotation {
+    var identifier: String = UUID().uuidString
+    var timestamp: Double
+    var isValid: Bool = true
+    var isEmpty: Bool = false
 }
 
 struct PUITimelineView_Previews: PreviewProvider {

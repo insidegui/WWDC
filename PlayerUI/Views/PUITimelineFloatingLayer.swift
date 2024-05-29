@@ -2,6 +2,12 @@ import SwiftUI
 
 final class PUITimelineFloatingLayer: PUIBoringLayer, CAAnimationDelegate {
 
+    var annotation: PUITimelineAnnotation? {
+        didSet {
+            attributedText = annotation.flatMap { PUITimelineFloatingLayer.attributedString(for: $0.timestamp, font: .monospacedDigitSystemFont(ofSize: PUITimelineView.Metrics.textSize, weight: .medium)) }
+        }
+    }
+
     var attributedText: NSAttributedString? {
         didSet {
             guard attributedText != oldValue else { return }
@@ -20,12 +26,18 @@ final class PUITimelineFloatingLayer: PUIBoringLayer, CAAnimationDelegate {
         }
     }
 
-    func show() {
+    func show(animated: Bool = true) {
         guard model().isHidden else { return }
 
         isHidden = false
 
         removeAllAnimations()
+
+        guard animated else {
+            transformLayer.sublayerTransform = CATransform3DIdentity
+            transformLayer.opacity = 1
+            return
+        }
 
         let scaleAnim = CASpringAnimation.springFrom(CATransform3DMakeScale(0.2, 0.2, 1), to: CATransform3DIdentity, keyPath: "sublayerTransform")
         transformLayer.add(scaleAnim, forKey: "show")
