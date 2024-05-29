@@ -175,6 +175,7 @@
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
+		F422B8932C077E9600C4B337 /* UILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F422B8922C077E9600C4B337 /* UILog.swift */; };
 		F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */; };
 		F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */; };
 		F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82342A22921300FDE980 /* ExploreTabProvider.swift */; };
@@ -447,6 +448,7 @@
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F422B8922C077E9600C4B337 /* UILog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILog.swift; sourceTree = "<group>"; };
 		F42472B12A24D6AC00F68237 /* OpenSource.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = OpenSource.xcconfig; sourceTree = "<group>"; };
 		F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
 		F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarBlurFadeView.swift; sourceTree = "<group>"; };
@@ -748,6 +750,7 @@
 			children = (
 				DD600ACD2487F3540071B90E /* NSColor+Hex.swift */,
 				F4FB06A02A21493B00799F84 /* PreviewSupport.swift */,
+				F422B8922C077E9600C4B337 /* UILog.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1551,6 +1554,7 @@
 				DD600ACE2487F3540071B90E /* NSColor+Hex.swift in Sources */,
 				DD600AC32487F1C00071B90E /* ConfUIFoundation.swift in Sources */,
 				DD600ACB2487F2D90071B90E /* Fonts.swift in Sources */,
+				F422B8932C077E9600C4B337 /* UILog.swift in Sources */,
 				DD600AC12487F1B50071B90E /* Colors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
