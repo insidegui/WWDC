@@ -50,6 +50,8 @@ public final class PUIPlayerView: NSView {
             sortedAnnotations = newValue.filter({ $0.isValid }).sorted(by: { $0.timestamp < $1.timestamp })
 
             timelineView.annotations = sortedAnnotations
+
+            updateAnnotationButtonEnabled()
         }
     }
 
@@ -268,7 +270,7 @@ public final class PUIPlayerView: NSView {
         }
 
         annotationTimeDistanceObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1, preferredTimescale: 9000), queue: .main) { [weak self] _ in
-            self?.updateAnnotationButton()
+            self?.updateAnnotationButtonEnabled()
         }
 
         player.allowsExternalPlayback = true
@@ -892,7 +894,7 @@ public final class PUIPlayerView: NSView {
         pipButton.isHidden = !d.playerViewShouldShowPictureInPictureControl(self)
         speedButton.isHidden = !d.playerViewShouldShowSpeedControl(self)
 
-        updateAnnotationButton()
+        updateAnnotationButtonVisibility()
 
         let disableBackAndForward = !d.playerViewShouldShowBackAndForwardControls(self)
         backButton.isHidden = disableBackAndForward
@@ -912,10 +914,18 @@ public final class PUIPlayerView: NSView {
         timelineView.isHidden = !d.playerViewShouldShowTimelineView(self)
     }
 
-    private func updateAnnotationButton() {
+    private func updateAnnotationButtonVisibility() {
+        defer { updateAnnotationButtonEnabled() }
+
         guard let d = appearanceDelegate else { return }
 
-        addAnnotationButton.isEnabled = d.playerViewShouldShowAnnotationControls(self)
+        addAnnotationButton.isHidden = !d.playerViewShouldShowAnnotationControls(self)
+    }
+
+    private func updateAnnotationButtonEnabled() {
+        let timestamp = self.currentTimestamp
+        let tooCloseForComfort = timelineView.annotations.contains(where: { $0.isValid && abs($0.timestamp - timestamp) < 30 })
+        self.addAnnotationButton.isEnabled = !tooCloseForComfort
     }
 
     fileprivate func updateExternalPlaybackControlsAvailability() {

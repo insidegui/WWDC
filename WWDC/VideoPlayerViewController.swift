@@ -365,12 +365,7 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
     }
 
     func playerViewShouldShowAnnotationControls(_ playerView: PUIPlayerView) -> Bool {
-        guard !sessionViewModel.sessionInstance.isCurrentlyLive else { return false }
-        guard let player = playerView.player else { return false }
-
-        let currentTime = CMTimeGetSeconds(player.currentTime())
-
-        return !sessionViewModel.session.bookmarks.contains(where: { abs($0.timestamp - currentTime) < 30 })
+        return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
 
     func playerViewShouldShowBackAndForwardControls(_ playerView: PUIPlayerView) -> Bool {
