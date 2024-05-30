@@ -10,6 +10,7 @@ import Cocoa
 import Combine
 import CoreMedia
 import PlayerUI
+import AVFoundation
 
 protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
@@ -18,7 +19,7 @@ protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidEndClipSharing(_ controller: ShelfViewController)
 }
 
-class ShelfViewController: NSViewController {
+final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPresenter {
 
     weak var delegate: ShelfViewControllerDelegate?
 
@@ -93,6 +94,12 @@ class ShelfViewController: NSViewController {
         updateBindings()
     }
 
+    override func viewWillLayout() {
+        updateVideoLayoutGuide()
+
+        super.viewWillLayout()
+    }
+
     private weak var currentImageDownloadOperation: Operation?
 
     private func updateBindings() {
@@ -156,6 +163,62 @@ class ShelfViewController: NSViewController {
 
             self.delegate?.shelfViewControllerDidEndClipSharing(self)
         }
+    }
+
+    // MARK: - Detached Playback Status
+
+    private weak var detachedPlayer: AVPlayer?
+
+    func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
+        guard let player = playerView.player else { return }
+
+        self.detachedPlayer = player
+
+        installDetachedStatusControllerIfNeeded()
+
+        detachedStatusController.status = status
+        detachedStatusController.show()
+    }
+
+    func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
+        guard detachedStatusController.parent != nil else { return }
+
+        detachedStatusController.hide()
+
+        self.detachedPlayer = nil
+    }
+
+    private lazy var detachedStatusController = PUIDetachedPlaybackStatusViewController()
+
+    private func installDetachedStatusControllerIfNeeded() {
+        guard detachedStatusController.parent == nil else { return }
+
+        updateVideoLayoutGuide()
+
+        addChild(detachedStatusController)
+
+        let statusView = detachedStatusController.view
+        statusView.wantsLayer = true
+        statusView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(statusView, positioned: .above, relativeTo: view.subviews.first)
+
+        statusView.layer?.zPosition = 9
+
+        NSLayoutConstraint.activate([
+            statusView.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor),
+            statusView.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor),
+            statusView.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor),
+            statusView.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor)
+        ])
+    }
+
+    private lazy var videoLayoutGuide = NSLayoutGuide()
+    private lazy var videoLayoutGuideConstraints = [NSLayoutConstraint]()
+
+    private func updateVideoLayoutGuide() {
+        guard let detachedPlayer else { return }
+
+        detachedPlayer.updateLayout(guide: videoLayoutGuide, container: view, constraints: &videoLayoutGuideConstraints)
     }
 
 }

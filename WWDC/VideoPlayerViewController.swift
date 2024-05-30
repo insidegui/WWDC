@@ -388,11 +388,11 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
     }
 
     func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
-        #warning("TODO: Implement")
+        shelf?.presentDetachedStatus(status, for: playerView)
     }
 
     func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
-        #warning("TODO: Implement")
+        shelf?.dismissDetachedStatus(status, for: playerView)
     }
 }
 

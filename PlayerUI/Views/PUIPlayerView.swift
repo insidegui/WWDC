@@ -1567,6 +1567,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
     }
 
     public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        fullScreenButton.isHidden = true
         pipButton.state = .on
 
         invalidateTouchBar()
@@ -1605,6 +1606,8 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
                 window.deminiaturize(nil)
             }
         }
+
+        fullScreenButton.isHidden = false
 
         completionHandler(true)
     }
