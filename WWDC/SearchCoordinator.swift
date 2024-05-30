@@ -138,7 +138,7 @@ final class SearchCoordinator: Logging {
             id: .event,
             modelKey: "eventIdentifier",
             options: eventOptions,
-            emptyTitle: "All Events"
+            emptyTitle: "All Content"
         )
         let textualFilter = TextualFilter(identifier: .text, value: nil) { value in
             let modelKeys: [String] = ["title"]
@@ -181,7 +181,7 @@ final class SearchCoordinator: Logging {
             modelKey: "rawSessionType",
             collectionKey: "session.instances",
             options: eventOptions,
-            emptyTitle: "All Events"
+            emptyTitle: "All Content"
         )
         let textualFilter = TextualFilter(identifier: .text, value: nil) { value in
             let modelKeys: [String] = ["title"]
