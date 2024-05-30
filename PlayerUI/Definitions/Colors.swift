@@ -11,27 +11,17 @@ import Cocoa
 
 extension NSColor {
 
-    static var timeLabel: NSColor {
-        return NSColor(calibratedRed: 1.00, green: 1.00, blue: 1.00, alpha: 1.00)
-    }
+    static var timeLabel = NSColor.labelColor
 
-    static var playerBorder: NSColor {
-        return NSColor(calibratedRed: 0.40, green: 0.40, blue: 0.40, alpha: 1.00)
-    }
+    static let playerBorder = NSColor.quaternaryLabelColor
 
-    static var highlightedPlayerBorder: NSColor {
-        return NSColor(calibratedRed: 0.56, green: 0.55, blue: 0.55, alpha: 1.00)
-    }
+    static var highlightedPlayerBorder = NSColor.tertiaryLabelColor
 
-    static var bufferProgress: NSColor {
-        return NSColor(calibratedRed: 0.52, green: 0.52, blue: 0.52, alpha: 1.00)
-    }
+    static let bufferProgress = NSColor.tertiaryLabelColor
 
-    static var playerProgress: NSColor {
-        return NSColor(calibratedRed: 0.90, green: 0.90, blue: 0.90, alpha: 1.00)
-    }
+    static var playerProgress = NSColor.secondaryLabelColor
 
-    static var seekProgress: NSColor { .primary }
+    static var seekProgress = NSColor.labelColor
 
     static var playerHighlight: NSColor { .primary }
 

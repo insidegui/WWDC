@@ -86,6 +86,10 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
+            argument = "-WWDCDisableUILog YES"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-WWDCForceAllowAgentCommands YES"
             isEnabled = "NO">
          </CommandLineArgument>
@@ -103,7 +107,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-syncUserData NO"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCEnvironmentBaseURL &quot;http://localhost:3131&quot;"
@@ -115,11 +119,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCUseDebugStorage YES"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--disable-transcripts"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-AUIEnableVisualEffectDebugger YES"

@@ -58,4 +58,6 @@ class PUIVibrantButton: NSView {
         button.centerXAnchor.constraint(equalTo: vfxView.centerXAnchor).isActive = true
         button.centerYAnchor.constraint(equalTo: vfxView.centerYAnchor).isActive = true
     }
+
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 }

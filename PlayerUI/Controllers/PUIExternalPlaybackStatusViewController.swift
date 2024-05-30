@@ -10,36 +10,11 @@ import Cocoa
 
 class PUIExternalPlaybackStatusViewController: NSViewController {
 
-    private let blurFilter: CIFilter = {
-        let f = CIFilter(name: "CIGaussianBlur")!
-        f.setValue(100, forKey: kCIInputRadiusKey)
-        return f
-    }()
-
-    private let saturationFilter: CIFilter = {
-        let f = CIFilter(name: "CIColorControls")!
-        f.setDefaults()
-        f.setValue(2, forKey: kCIInputSaturationKey)
-        return f
-    }()
-
     private lazy var context = CIContext(options: [.useSoftwareRenderer: true])
 
     var snapshot: CGImage? {
         didSet {
-            snapshotLayer.contents = snapshot.flatMap { cgImage in
-
-                let targetSize = snapshotLayer.bounds
-                let transform = CGAffineTransform(scaleX: targetSize.width / CGFloat(cgImage.width),
-                                                  y: targetSize.height / CGFloat(cgImage.height))
-
-                let ciImage = CIImage(cgImage: cgImage).transformed(by: transform)
-                let filters = [saturationFilter, blurFilter]
-
-                guard let filteredImage = ciImage.filtered(with: filters) else { return nil }
-
-                return context.createCGImage(filteredImage, from: ciImage.extent)
-            }
+            updateSnapshot(with: snapshot)
         }
     }
     var providerIcon: NSImage? {
@@ -69,6 +44,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
     private lazy var iconImageView: NSImageView = {
         let v = NSImageView()
 
+        v.imageScaling = .scaleProportionallyUpOrDown
         v.widthAnchor.constraint(equalToConstant: 74).isActive = true
         v.heightAnchor.constraint(equalToConstant: 74).isActive = true
 
@@ -79,7 +55,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
         let f = NSTextField(labelWithString: "")
 
         f.font = .systemFont(ofSize: 20, weight: .medium)
-        f.textColor = .externalPlaybackText
+        f.textColor = .labelColor
         f.alignment = .center
 
         return f
@@ -89,7 +65,7 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
         let f = NSTextField(labelWithString: "")
 
         f.font = .systemFont(ofSize: 16)
-        f.textColor = .timeLabel
+        f.textColor = .secondaryLabelColor
         f.alignment = .center
 
         return f
@@ -114,19 +90,85 @@ class PUIExternalPlaybackStatusViewController: NSViewController {
         return l
     }()
 
+    private lazy var contrastLayer: PUIBoringLayer = {
+        let l = PUIBoringLayer()
+
+        l.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
+        l.backgroundColor = NSColor.gray.cgColor
+        l.opacity = 0.2
+
+        return l
+    }()
+
+    private lazy var blackoutLayer: CALayer = {
+        let l = CALayer()
+
+        l.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
+        l.backgroundColor = NSColor.black.cgColor
+        l.opacity = 0
+        l.zPosition = 10
+
+        return l
+    }()
+
     override func loadView() {
         view = NSView()
         view.wantsLayer = true
-        view.layer = PUIBoringLayer()
-        view.layer?.masksToBounds = true
-        view.layer?.backgroundColor = NSColor.black.cgColor
+        
+        let container = CALayer()
+        container.masksToBounds = true
+        container.backgroundColor = NSColor.black.cgColor
+        view.layer = container
 
         snapshotLayer.frame = view.bounds
-        view.layer?.addSublayer(snapshotLayer)
+        container.addSublayer(snapshotLayer)
+
+        contrastLayer.frame = view.bounds
+        container.addSublayer(contrastLayer)
 
         view.addSubview(stackView)
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+
+        blackoutLayer.frame = view.bounds
+        container.addSublayer(blackoutLayer)
+    }
+
+    func show() {
+        view.isHidden = false
+    }
+
+    func hide() {
+        view.isHidden = true
+    }
+
+    private lazy var blurFilter: CIFilter? = {
+        let f = CIFilter(name: "CIGaussianBlur")
+        f?.setValue(100, forKey: kCIInputRadiusKey)
+        return f
+    }()
+
+    private lazy var saturationFilter: CIFilter? = {
+        let f = CIFilter(name: "CIColorControls")
+        f?.setDefaults()
+        f?.setValue(1.5, forKey: kCIInputSaturationKey)
+        f?.setValue(-0.25, forKey: kCIInputBrightnessKey)
+        return f
+    }()
+
+    private func updateSnapshot(with cgImage: CGImage?) {
+        guard let cgImage else { return }
+
+        let targetSize = snapshotLayer.bounds
+        let transform = CGAffineTransform(scaleX: targetSize.width / CGFloat(cgImage.width),
+                                          y: targetSize.height / CGFloat(cgImage.height))
+
+        let ciImage = CIImage(cgImage: cgImage).transformed(by: transform)
+        let filters = [saturationFilter, blurFilter].compactMap { $0 }
+
+        guard let filteredImage = ciImage.filtered(with: filters) else { return }
+
+        snapshotLayer.contents = context.createCGImage(filteredImage, from: ciImage.extent)
     }
 }
 

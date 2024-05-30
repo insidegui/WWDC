@@ -6,54 +6,89 @@
 //  Copyright © 2017 Guilherme Rambo. All rights reserved.
 //
 
-import Cocoa
+import SwiftUI
 
-class PUIAnnotationLayer: PUIBoringLayer {
+final class PUIAnnotationLayer: PUIBoringLayer {
 
-    private var attachmentSpacing: CGFloat = 0
-    private var attachmentAttribute: NSLayoutConstraint.Attribute = .notAnAttribute
+    typealias Metrics = PUITimelineView.Metrics
 
-    private(set) var attachedLayer: PUIBoringTextLayer = PUIBoringTextLayer()
-
-    func attach(layer: PUIBoringTextLayer, attribute: NSLayoutConstraint.Attribute, spacing: CGFloat) {
-        guard attribute == .top else {
-            fatalError("Only .top is implemented for now")
+    var isHighlighted = false {
+        didSet {
+            updateHighlightedState()
         }
-
-        attachmentSpacing = spacing
-        attachmentAttribute = attribute
-
-        addSublayer(layer)
-
-        attachedLayer = layer
-
-        layoutAttached(layer: layer)
     }
 
-    private func layoutAttached(layer: PUIBoringTextLayer) {
-        layer.layoutIfNeeded()
+    override init() {
+        super.init()
 
-        var f = layer.frame
+        setup()
+    }
 
-        if let textLayerContents = layer.string as? NSAttributedString {
-            let s = textLayerContents.size()
-            f.size.width = ceil(s.width)
-            f.size.height = ceil(s.height)
+    override init(layer: Any) {
+        super.init(layer: layer)
+
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+
+    private func setup() {
+        glyphContainer.isGeometryFlipped = false
+
+        addSublayer(glyphContainer)
+        glyph.fillColor = NSColor.white.cgColor
+        glyph.strokeColor = NSColor.white.cgColor
+        glyph.shadowColor = NSColor.black.cgColor
+        glyph.shadowRadius = 6
+        glyph.shadowOffset = .zero
+        glyph.shadowOpacity = 0.2
+    }
+
+    private lazy var glyphContainer: CALayer = {
+        CALayer.load(assetNamed: "Annotation", bundle: .playerUI) ?? CALayer()
+    }()
+
+    private lazy var glyph: CAShapeLayer = {
+        guard let shapeLayer = glyphContainer.sublayer(path: "container.scale.position.shape", of: CAShapeLayer.self) else {
+            assertionFailure("Broken Annotation asset")
+            return CAShapeLayer()
         }
+        return shapeLayer
+    }()
 
-        let y: CGFloat = -f.height - attachmentSpacing
-        let x: CGFloat = -f.width / 2 + bounds.width / 2
-
-        f.origin.x = x
-        f.origin.y = y
-
-        layer.frame = f
+    private func updateHighlightedState() {
+        if isHighlighted {
+            glyph.fillColor = NSColor.playerHighlight.cgColor
+            glyph.lineWidth = 1
+            let s = Metrics.annotationMarkerHoverScale
+            transform = CATransform3DMakeScale(s, s, s)
+        } else {
+            animate {
+                glyph.fillColor = NSColor.white.cgColor
+                glyph.lineWidth = 0
+                transform = CATransform3DIdentity
+                borderWidth = 0
+            }
+        }
     }
 
     override func layoutSublayers() {
         super.layoutSublayers()
 
-        layoutAttached(layer: attachedLayer)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        CATransaction.setAnimationDuration(0)
+        defer { CATransaction.commit() }
+
+        resizeLayer(glyphContainer.sublayers?.first)
     }
 
 }
+
+#if DEBUG
+struct PUIAnnotationLayer_Previews: PreviewProvider {
+    static var previews: some View { PUIPlayerView_Previews.previews }
+}
+#endif

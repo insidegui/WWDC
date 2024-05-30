@@ -7,9 +7,12 @@
 //
 
 @_exported import Cocoa
+@_exported import MacPreviewUtils
 
 private final class _StubForBundleInit { }
 
 extension Bundle {
     static let confUIFoundation = Bundle(for: _StubForBundleInit.self)
 }
+
+let kConfUIFoundationSubsystem = "io.wwdc.ConfUIFoundation"

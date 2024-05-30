@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "macpreviewutils",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:insidegui/MacPreviewUtils.git",
+      "state" : {
+        "revision" : "3d52597e5b6b65698b96e037539d2058c4668815",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "realm-core",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core.git",

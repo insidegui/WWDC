@@ -91,7 +91,6 @@
 		DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7152482BB1A00F86668 /* SessionTranscriptWindowController.swift */; };
 		DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */; };
 		DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */; };
-		DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */; };
 		DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */; };
 		DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2622577E67A00995FF1 /* ConfCore */; };
 		DDB1A2642577E67A00995FF1 /* ConfCore in Embed Frameworks */ = {isa = PBXBuildFile; productRef = DDB1A2622577E67A00995FF1 /* ConfCore */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -171,11 +170,13 @@
 		DDF721DD1ECA12A40054C503 /* PUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C21ECA12A40054C503 /* PUIButton.swift */; };
 		DDF721DE1ECA12A40054C503 /* PUIPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */; };
 		DDF721DF1ECA12A40054C503 /* PUIPlayerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */; };
-		DDF721E01ECA12A40054C503 /* PUISlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C51ECA12A40054C503 /* PUISlider.swift */; };
 		DDF721E11ECA12A40054C503 /* PUITimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF721C61ECA12A40054C503 /* PUITimelineView.swift */; };
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
 		DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */; };
 		DDFD6199247EE55200AD1CD7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD6198247EE55200AD1CD7 /* main.swift */; };
+		F422B8932C077E9600C4B337 /* UILog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F422B8922C077E9600C4B337 /* UILog.swift */; };
+		F422B8B02C079DEA00C4B337 /* PUISettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F422B8AF2C079DEA00C4B337 /* PUISettings.swift */; };
+		F422B8B22C07CB6C00C4B337 /* CALayer+Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = F422B8B12C07CB6C00C4B337 /* CALayer+Asset.swift */; };
 		F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */; };
 		F44C82332A22879000FDE980 /* TitleBarBlurFadeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */; };
 		F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F44C82342A22921300FDE980 /* ExploreTabProvider.swift */; };
@@ -194,6 +195,10 @@
 		F4CCF942265ED24500A69E62 /* AppCommandsReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF941265ED24500A69E62 /* AppCommandsReceiver.swift */; };
 		F4D0F0362A2012C700C74B50 /* VisualEffectDebugger.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D0F0352A2012C700C74B50 /* VisualEffectDebugger.m */; };
 		F4D0F03A2A21056900C74B50 /* TopicHeaderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4D0F0392A21056900C74B50 /* TopicHeaderRow.swift */; };
+		F4F189732C068561006EA9A2 /* PUITimelineFloatingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F189722C068561006EA9A2 /* PUITimelineFloatingLayer.swift */; };
+		F4F189762C0773C9006EA9A2 /* MacPreviewUtils in Frameworks */ = {isa = PBXBuildFile; productRef = F4F189752C0773C9006EA9A2 /* MacPreviewUtils */; };
+		F4F189782C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F189772C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift */; };
+		F4F1897A2C0775C5006EA9A2 /* NumericContentTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */; };
 		F4FB069F2A2148EA00799F84 /* ExploreTabRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB069E2A2148EA00799F84 /* ExploreTabRootView.swift */; };
 		F4FB06A12A21493B00799F84 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06A02A21493B00799F84 /* PreviewSupport.swift */; };
 		F4FB06BF2A216C1F00799F84 /* RemoteGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */; };
@@ -358,7 +363,6 @@
 		DDA7B7172482EB8900F86668 /* PlaybackPreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPreferencesViewController.swift; sourceTree = "<group>"; };
 		DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CompositionalLayoutBackgroundSwizzler.h; sourceTree = "<group>"; };
 		DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CompositionalLayoutBackgroundSwizzler.m; sourceTree = "<group>"; };
-		DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Asset.swift"; sourceTree = "<group>"; };
 		DDAE001C1EC534BF0036C7E9 /* TrackColorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackColorView.swift; sourceTree = "<group>"; };
 		DDB1A25E2577E51E00995FF1 /* ConfCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ConfCore; path = Packages/ConfCore; sourceTree = "<group>"; };
 		DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VibrantButton.swift; sourceTree = "<group>"; };
@@ -440,11 +444,13 @@
 		DDF721C21ECA12A40054C503 /* PUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIButton.swift; sourceTree = "<group>"; };
 		DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerView.swift; sourceTree = "<group>"; };
 		DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUIPlayerWindow.swift; sourceTree = "<group>"; };
-		DDF721C51ECA12A40054C503 /* PUISlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUISlider.swift; sourceTree = "<group>"; };
 		DDF721C61ECA12A40054C503 /* PUITimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PUITimelineView.swift; sourceTree = "<group>"; };
 		DDF721E21ECA12FC0054C503 /* PIP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PIP.framework; path = ../../../../../System/Library/PrivateFrameworks/PIP.framework; sourceTree = "<group>"; };
 		DDFA10BE1EBEAAAD001DCF66 /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		DDFD6198247EE55200AD1CD7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		F422B8922C077E9600C4B337 /* UILog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILog.swift; sourceTree = "<group>"; };
+		F422B8AF2C079DEA00C4B337 /* PUISettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUISettings.swift; sourceTree = "<group>"; };
+		F422B8B12C07CB6C00C4B337 /* CALayer+Asset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CALayer+Asset.swift"; sourceTree = "<group>"; };
 		F42472B12A24D6AC00F68237 /* OpenSource.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = OpenSource.xcconfig; sourceTree = "<group>"; };
 		F44C82302A2285AC00FDE980 /* OffsetObservingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetObservingScrollView.swift; sourceTree = "<group>"; };
 		F44C82322A22879000FDE980 /* TitleBarBlurFadeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarBlurFadeView.swift; sourceTree = "<group>"; };
@@ -465,6 +471,9 @@
 		F4D0F0352A2012C700C74B50 /* VisualEffectDebugger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VisualEffectDebugger.m; sourceTree = "<group>"; };
 		F4D0F0382A20162200C74B50 /* Main.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Main.xcconfig; sourceTree = "<group>"; };
 		F4D0F0392A21056900C74B50 /* TopicHeaderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicHeaderRow.swift; sourceTree = "<group>"; };
+		F4F189722C068561006EA9A2 /* PUITimelineFloatingLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUITimelineFloatingLayer.swift; sourceTree = "<group>"; };
+		F4F189772C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIPlaybackSpeedToggle.swift; sourceTree = "<group>"; };
+		F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericContentTransition.swift; sourceTree = "<group>"; };
 		F4F1C9A22A24FF50002C3709 /* TeamID.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TeamID.xcconfig; sourceTree = "<group>"; };
 		F4FB069E2A2148EA00799F84 /* ExploreTabRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreTabRootView.swift; sourceTree = "<group>"; };
 		F4FB06A02A21493B00799F84 /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
@@ -491,6 +500,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4F189762C0773C9006EA9A2 /* MacPreviewUtils in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,7 +668,6 @@
 				DDDF807F20BA53A4007284F8 /* FlippedClipView.swift */,
 				DD7A2102218111470052FD07 /* WWDCProgressIndicator.swift */,
 				DD78588024C3594B008C1C22 /* SlowMigrationView.swift */,
-				DDA7B73E24852FF300F86668 /* CALayer+Asset.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -740,8 +749,10 @@
 		DD600ACC2487F3450071B90E /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				F422B8B12C07CB6C00C4B337 /* CALayer+Asset.swift */,
 				DD600ACD2487F3540071B90E /* NSColor+Hex.swift */,
 				F4FB06A02A21493B00799F84 /* PreviewSupport.swift */,
+				F422B8922C077E9600C4B337 /* UILog.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1046,6 +1057,8 @@
 				DDF721BB1ECA12A40054C503 /* NSEvent+ForceTouch.swift */,
 				DDF721BC1ECA12A40054C503 /* NSWindow+Snapshot.swift */,
 				DDF721BD1ECA12A40054C503 /* String+CMTime.swift */,
+				F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */,
+				F422B8AF2C079DEA00C4B337 /* PUISettings.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1056,14 +1069,15 @@
 				DDF721BF1ECA12A40054C503 /* PUIAnnotationLayer.swift */,
 				DDF721C01ECA12A40054C503 /* PUIBoringLayer.swift */,
 				DDF721C11ECA12A40054C503 /* PUIBufferLayer.swift */,
+				F4F189722C068561006EA9A2 /* PUITimelineFloatingLayer.swift */,
 				DDED75561ED3C1BF000BA817 /* PUIScrimView.swift */,
 				DDF721C21ECA12A40054C503 /* PUIButton.swift */,
 				4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */,
 				DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */,
 				DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */,
-				DDF721C51ECA12A40054C503 /* PUISlider.swift */,
 				DDF721C61ECA12A40054C503 /* PUITimelineView.swift */,
 				DDC678231EDBA25A00A4E19C /* PUIAnnotationWindow.swift */,
+				F4F189772C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1220,6 +1234,9 @@
 			dependencies = (
 			);
 			name = ConfUIFoundation;
+			packageProductDependencies = (
+				F4F189752C0773C9006EA9A2 /* MacPreviewUtils */,
+			);
 			productName = ConfUIFoundation;
 			productReference = DD600AB02487F1720071B90E /* ConfUIFoundation.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1325,6 +1342,7 @@
 			packageReferences = (
 				DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */,
 			);
 			productRefGroup = DD36A4AD1E478C6A00B2EA88 /* Products */;
 			projectDirPath = "";
@@ -1459,7 +1477,6 @@
 				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
 				DDDF807420BA3124007284F8 /* ExploreViewController.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
-				DDA7B73F24852FF300F86668 /* CALayer+Asset.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */,
 				F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */,
 				4D66CA50217E2C800006A8C9 /* DownloadsManagementTableRowView.swift in Sources */,
@@ -1535,10 +1552,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F422B8B22C07CB6C00C4B337 /* CALayer+Asset.swift in Sources */,
 				F4FB06A12A21493B00799F84 /* PreviewSupport.swift in Sources */,
 				DD600ACE2487F3540071B90E /* NSColor+Hex.swift in Sources */,
 				DD600AC32487F1C00071B90E /* ConfUIFoundation.swift in Sources */,
 				DD600ACB2487F2D90071B90E /* Fonts.swift in Sources */,
+				F422B8932C077E9600C4B337 /* UILog.swift in Sources */,
 				DD600AC12487F1B50071B90E /* Colors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1561,16 +1580,19 @@
 				4DA83FE222AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift in Sources */,
 				DDF721CE1ECA12A40054C503 /* PUIExternalPlaybackConsumer.swift in Sources */,
 				DDC970BF209291630072B822 /* PUITouchBarController.swift in Sources */,
-				DDF721E01ECA12A40054C503 /* PUISlider.swift in Sources */,
 				DDF721DA1ECA12A40054C503 /* PUIAnnotationLayer.swift in Sources */,
 				4DBFA4DA20E160CB00BDF34B /* AVAsset+AsyncHelpers.swift in Sources */,
 				DDF721CC1ECA12A40054C503 /* PUIExternalPlaybackProviderRegistration.swift in Sources */,
 				DDF721C91ECA12A40054C503 /* Colors.swift in Sources */,
 				DDED75571ED3C1BF000BA817 /* PUIScrimView.swift in Sources */,
+				F422B8B02C079DEA00C4B337 /* PUISettings.swift in Sources */,
 				DDF721D01ECA12A40054C503 /* PUIPlayerViewDelegates.swift in Sources */,
 				DDBA0D79208D21BD0075670F /* PUINowPlayingInfoCoordinator.swift in Sources */,
 				DDF721CF1ECA12A40054C503 /* PUIExternalPlaybackProvider.swift in Sources */,
 				DDF721DE1ECA12A40054C503 /* PUIPlayerView.swift in Sources */,
+				F4F189782C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift in Sources */,
+				F4F1897A2C0775C5006EA9A2 /* NumericContentTransition.swift in Sources */,
+				F4F189732C068561006EA9A2 /* PUITimelineFloatingLayer.swift in Sources */,
 				DDF721D21ECA12A40054C503 /* PUITimelineDelegate.swift in Sources */,
 				DDF721D81ECA12A40054C503 /* NSWindow+Snapshot.swift in Sources */,
 				DDBA0D7B208D3DE70075670F /* PUINowPlayingInfo.swift in Sources */,
@@ -2428,6 +2450,14 @@
 				kind = branch;
 			};
 		};
+		F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:insidegui/MacPreviewUtils.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2452,6 +2482,11 @@
 		DDB1A2972577EF1A00995FF1 /* ConfCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ConfCore;
+		};
+		F4F189752C0773C9006EA9A2 /* MacPreviewUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */;
+			productName = MacPreviewUtils;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
