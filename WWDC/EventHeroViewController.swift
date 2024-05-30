@@ -142,49 +142,48 @@ public final class EventHeroViewController: NSViewController {
     private lazy var cancellables: Set<AnyCancellable> = []
 
     private func bindViews() {
-        let image = $hero.compactMap({ $0?.backgroundImage }).compactMap(URL.init)
+        $hero
+            .drop(while: { $0 == nil })
+            .sink
+        { [weak self] hero in
+            guard let self else { return }
 
-        image.driveUI { [weak self] imageUrl in
-            guard let self = self else { return }
+            /// A lack of event hero is handled by the app coordinator / schedule controller by hiding this view controller,
+            /// so there's no special handling required when the hero is not available.
+            guard let hero else { return }
 
-            self.imageDownloadOperation?.cancel()
+            setupBackground(with: hero)
+            setupText(with: hero)
+        }
+        .store(in: &cancellables)
+    }
 
-            self.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, result in
-                guard url == imageUrl, result.original != nil else { return }
+    private func setupBackground(with hero: EventHero) {
+        guard let imageUrl = URL(string: hero.backgroundImage) else { return }
 
-                self.backgroundImageView.image = result.original
-            }
-        }.store(in: &cancellables)
+        placeholderImageView.isHidden = true
 
-        let heroUnavailable = $hero.map({ $0 == nil })
-        heroUnavailable.replaceError(with: true).driveUI(\.isHidden, on: backgroundImageView).store(in: &cancellables)
-        heroUnavailable.toggled().replaceError(with: false).driveUI(\.isHidden, on: placeholderImageView).store(in: &cancellables)
+        backgroundImageView.alphaValue = hero.textComponents.count > 1 ? 0.5 : 1
+        backgroundImageView.isHidden = false
 
-        $hero.map(\.?.title).replaceNil(with: "Schedule not available").replaceError(with: "Schedule not available").driveUI(\.stringValue, on: titleLabel).store(in: &cancellables)
-        $hero.map({ hero in
-            let unavailable = "The schedule is not currently available. Check back later."
-            guard let hero = hero else { return unavailable }
-            if hero.textComponents.isEmpty {
-                return hero.body
-            } else {
-                return hero.textComponents.joined(separator: "\n\n")
-            }
-        }).replaceError(with: "").driveUI(\.stringValue, on: bodyLabel).store(in: &cancellables)
+        imageDownloadOperation?.cancel()
 
-        $hero.compactMap({ $0?.titleColor }).driveUI { [weak self] colorHex in
-            guard let self = self else { return }
-            self.titleLabel.textColor = NSColor.fromHexString(hexString: colorHex)
-        }.store(in: &cancellables)
+        imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, result in
+            guard url == imageUrl, result.original != nil else { return }
 
-        // Dim background when there's a lot of text to show
-        $hero.compactMap({ $0 }).map({ $0.textComponents.count > 2 }).driveUI { [weak self] largeText in
-            self?.backgroundImageView.alphaValue = 0.5
-        }.store(in: &cancellables)
+            self.backgroundImageView.image = result.original
+        }
+    }
 
-        $hero.compactMap({ $0?.bodyColor }).driveUI { [weak self] colorHex in
-            guard let self = self else { return }
-            self.bodyLabel.textColor = NSColor.fromHexString(hexString: colorHex)
-        }.store(in: &cancellables)
+    private func setupText(with hero: EventHero) {
+        titleLabel.stringValue = hero.title
+        if hero.textComponents.isEmpty {
+            bodyLabel.stringValue = hero.body
+        } else {
+            bodyLabel.stringValue = hero.textComponents.joined(separator: "\n\n")
+        }
+        titleLabel.textColor = hero.titleColor.flatMap { NSColor.fromHexString(hexString: $0) }
+        bodyLabel.textColor = hero.bodyColor.flatMap { NSColor.fromHexString(hexString: $0) }
     }
 
 }

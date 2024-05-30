@@ -69,15 +69,18 @@ final class ScheduleContainerViewController: WWDCWindowContentViewController {
     }
 
     private func bindViews() {
-        $isShowingHeroView.replaceError(with: false).driveUI(\.view.isHidden, on: splitViewController)
-                           .store(in: &cancellables)
+        /// The debounce in here prevents a little UI flicker when the event hero is available.
+        $isShowingHeroView
+            .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .sink 
+        { [weak self] isShowingHeroView in
+            guard let self else { return }
 
-        $isShowingHeroView.toggled().replaceError(with: true)
-                           .driveUI(\.view.isHidden, on: heroController)
-                           .store(in: &cancellables)
+            splitViewController.view.isHidden = isShowingHeroView
+            heroController.view.isHidden = !isShowingHeroView
 
-        $isShowingHeroView.driveUI { [weak self] _ in
-            self?.view.needsUpdateConstraints = true
+            view.needsUpdateConstraints = true
         }
         .store(in: &cancellables)
     }
