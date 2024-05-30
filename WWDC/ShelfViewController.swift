@@ -186,12 +186,11 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     func showDetachedStatus() {
         guard detachedStatusController.parent != nil else { return }
 
-        /// Ensures video layout guide gets updated for this new detachment.
-        view.needsLayout = true
-
         detachedStatusController.show()
 
         shelfView.isHidden = true
+
+        view.needsLayout = true
     }
 
     /// Hides detached status view without resetting state.
