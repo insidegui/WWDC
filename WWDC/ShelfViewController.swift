@@ -185,7 +185,12 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     func showDetachedStatus() {
         guard detachedStatusController.parent != nil else { return }
 
+        /// Ensures video layout guide gets updated for this new detachment.
+        view.needsLayout = true
+
         detachedStatusController.show()
+
+        shelfView.isHidden = true
     }
 
     /// Hides detached status view without resetting state.
@@ -193,6 +198,8 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         guard detachedStatusController.parent != nil else { return }
 
         detachedStatusController.hide()
+
+        shelfView.isHidden = false
     }
 
     func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
@@ -206,7 +213,8 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         installDetachedStatusControllerIfNeeded()
 
         detachedStatusController.status = status
-        detachedStatusController.show()
+        
+        showDetachedStatus()
     }
 
     func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {

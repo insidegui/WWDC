@@ -1,20 +1,23 @@
 import Cocoa
 import AVFoundation
+import ConfUIFoundation
 
 @MainActor
 public extension AVPlayer {
-    func layoutRect(with bounds: CGRect) -> CGRect? {
-        guard let videoTrack = currentItem?.tracks.first(where: { $0.assetTrack?.mediaType == .video })?.assetTrack else { return nil }
+    static let fallbackNaturalSize = CGSize(width: 1920, height: 1080)
 
-        let videoRect = AVMakeRect(aspectRatio: videoTrack.naturalSize, insideRect: bounds)
+    func fittingRect(with bounds: CGRect) -> CGRect {
+        let videoSize = currentItem?.tracks.first(where: { $0.assetTrack?.mediaType == .video })?.assetTrack?.naturalSize ?? Self.fallbackNaturalSize
 
-        guard videoRect.width.isFinite, videoRect.height.isFinite else { return nil }
+        let fittingRect = AVMakeRect(aspectRatio: videoSize, insideRect: bounds)
 
-        return videoRect
+        UILog("📐 Video size: \(videoSize), fitting size: \(fittingRect.size)")
+
+        return fittingRect
     }
 
     func updateLayout(guide: NSLayoutGuide, container: NSView, constraints: inout [NSLayoutConstraint]) {
-        guard let videoRect = layoutRect(with: container.bounds) else { return }
+        let videoRect = fittingRect(with: container.bounds)
 
         if guide.owningView == nil {
             container.addLayoutGuide(guide)

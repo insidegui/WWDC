@@ -118,17 +118,6 @@ public final class PUIDetachedPlaybackStatusViewController: NSViewController {
         return l
     }()
 
-    private lazy var blackoutLayer: CALayer = {
-        let l = CALayer()
-
-        l.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
-        l.backgroundColor = NSColor.black.cgColor
-        l.opacity = 0
-        l.zPosition = 10
-
-        return l
-    }()
-
     public  override func loadView() {
         view = NSView()
         view.wantsLayer = true
@@ -147,9 +136,6 @@ public final class PUIDetachedPlaybackStatusViewController: NSViewController {
         view.addSubview(stackView)
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-
-        blackoutLayer.frame = view.bounds
-        container.addSublayer(blackoutLayer)
 
         hide()
     }

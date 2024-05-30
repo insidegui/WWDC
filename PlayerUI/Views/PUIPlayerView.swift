@@ -406,15 +406,16 @@ public final class PUIPlayerView: NSView {
 
     private lazy var videoLayoutGuideConstraints = [NSLayoutConstraint]()
 
-    private var currentBounds = CGRect.zero
+    private var currentBounds: CGRect?
 
     private func updateVideoLayoutGuide() {
         guard let player else { return }
 
         guard bounds != currentBounds else { return }
-        currentBounds = bounds
 
         player.updateLayout(guide: videoLayoutGuide, container: self, constraints: &videoLayoutGuideConstraints)
+
+        currentBounds = bounds
     }
 
     deinit {
