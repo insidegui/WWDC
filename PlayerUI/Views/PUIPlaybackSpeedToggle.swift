@@ -64,6 +64,12 @@ private struct PlaybackSpeedToggle: View {
 
     @Namespace private var transition
 
+    /// Transition for custom speed UI doesn't work well in older OS versions.
+    private var customSpeedTransitionEnabled: Bool {
+        guard #available(macOS 14.0, *) else { return false }
+        return true
+    }
+
     var body: some View {
         ZStack {
             shape
@@ -93,8 +99,8 @@ private struct PlaybackSpeedToggle: View {
         }
         .clipShape(shape)
         .shadow(color: .black.opacity(controller.isEditingCustomSpeed ? 0.1 : 0), radius: 2)
-        .scaleEffect(controller.isEditingCustomSpeed ? 1.4 : 1)
-        .animation(controller.isEditingCustomSpeed ? .bouncy : .smooth, value: controller.isEditingCustomSpeed)
+        .scaleEffect(customSpeedTransitionEnabled && controller.isEditingCustomSpeed ? 1.4 : 1)
+        .animation(controller.isEditingCustomSpeed ? .bouncy : .smooth, value: customSpeedTransitionEnabled ? controller.isEditingCustomSpeed : false)
         .animation(.linear, value: customSpeedInvalid)
         .contextMenu {
             Group {
