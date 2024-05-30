@@ -303,13 +303,21 @@ final class AppCoordinator: Logging, Signposting {
         // Wait for the data to be loaded to hide the loading spinner
         // this avoids some jittery UI. Technically this could be changed to only watch
         // the tab that will be visible during startup.
-        Publishers.CombineLatest(
+        Publishers.CombineLatest3(
             self.videosController.listViewController.$hasPerformedInitialRowDisplay,
-            self.scheduleController.splitViewController.listViewController.$hasPerformedInitialRowDisplay
+            self.scheduleController.splitViewController.listViewController.$hasPerformedInitialRowDisplay,
+            self.scheduleController.$isShowingHeroView
         )
         .replaceErrorWithEmpty()
         .drop {
-            $0.0 == false || $0.1 == false
+            /// The videos tab has content.
+            let videosAvailable = $0.0
+            /// The schedule tab has content.
+            let scheduleAvailable = $0.1
+            /// The schedule tab has an event hero landing screen.
+            let scheduleHeroAvailable = $0.2
+            /// We want to reveal the UI once the videos tab has content and the schedule tab has content, be it a schedule or a landing screen.
+            return videosAvailable == false || (scheduleAvailable == false && scheduleHeroAvailable == false)
         }
         .prefix(1) // Happens once then automatically completes
         .receive(on: DispatchQueue.main)
