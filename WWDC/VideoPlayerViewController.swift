@@ -90,10 +90,6 @@ final class VideoPlayerViewController: NSViewController {
         playerView.frame = view.bounds
         view.addSubview(playerView)
 
-        #if ENABLE_CHROMECAST
-        playerView.registerExternalPlaybackProvider(ChromeCastPlaybackProvider.self)
-        #endif
-
         playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         playerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -370,10 +366,6 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
 
     func playerViewShouldShowBackAndForwardControls(_ playerView: PUIPlayerView) -> Bool {
         return !sessionViewModel.sessionInstance.isCurrentlyLive
-    }
-
-    func playerViewShouldShowExternalPlaybackControls(_ playerView: PUIPlayerView) -> Bool {
-        return true
     }
 
     func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool {

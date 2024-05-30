@@ -38,8 +38,8 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         // Everything after this point is for automatically entering PiP
 
-        // ignore when not playing or when playing externally
-        guard playerController.playerView.isInternalPlayerPlaying else { return }
+        // ignore when not playing
+        guard playerController.playerView.isPlaying else { return }
 
         // ignore when playing in fullscreen
         guard !playerController.playerView.isInFullScreenPlayerWindow else { return }

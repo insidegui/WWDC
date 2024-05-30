@@ -1,5 +1,5 @@
 //
-//  PUIExternalPlaybackStatusViewController.swift
+//  PUIDetachedPlaybackStatusViewController.swift
 //  PlayerUI
 //
 //  Created by Guilherme Rambo on 13/05/17.
@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class PUIExternalPlaybackStatusViewController: NSViewController {
+final class PUIDetachedPlaybackStatusViewController: NSViewController {
 
     private lazy var context = CIContext(options: [.useSoftwareRenderer: true])
 
