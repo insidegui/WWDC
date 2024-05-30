@@ -180,6 +180,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     /// ID of the session being displayed by the shelf when the player was detached.
     private var detachedSessionID: String?
     private weak var detachedPlayer: AVPlayer?
+    private var currentDetachedStatusID: DetachedPlaybackStatus.ID?
 
     /// Shows detached status view without modifying state.
     func showDetachedStatus() {
@@ -205,8 +206,14 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
         guard let player = playerView.player else { return }
 
+        /// We can't present multiple detached statuses at once, so the first detachment wins.
+        /// This can happen for example if PiP is initiated in the full screen window,
+        /// we want to keep showing the full screen status, rather than overriding it with PiP.
+        guard currentDetachedStatusID == nil else { return }
+
         UILog("📚 Detaching with \(viewModel?.sessionIdentifier ?? "<nil>")")
 
+        self.currentDetachedStatusID = status.id
         self.detachedSessionID = viewModel?.sessionIdentifier
         self.detachedPlayer = player
 
@@ -218,8 +225,13 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     }
 
     func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
+        /// We only dismiss the detached status that's currently being presented.
+        /// Example: if playing in full screen, user can enter PiP, but exiting PiP won't clear the detached status for full screen.
+        guard status.id == currentDetachedStatusID else { return }
+
         hideDetachedStatus()
 
+        self.currentDetachedStatusID = nil
         self.detachedSessionID = nil
         self.detachedPlayer = nil
     }

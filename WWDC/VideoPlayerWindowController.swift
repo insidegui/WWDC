@@ -36,9 +36,11 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         self.fullscreenOnly = fullscreenOnly
         self.originalContainer = originalContainer
 
+        originalContainer?.layer?.backgroundColor = .black
+
         let styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
 
-        var rect = PUIPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view.superview)
+        var rect = PUIPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view, layoutGuide: playerViewController.playerView.videoLayoutGuide)
         if rect == NSRect.zero { rect = PUIPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
 
         let window = PUIPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .buffered, defer: false)
@@ -105,6 +107,8 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     }
 
     func windowWillExitFullScreen(_ notification: Notification) {
+        originalContainer?.layer?.backgroundColor = .clear
+
         if windowWasAskedToClose {
             windowWasAskedToCloseCleanup()
         } else {
@@ -140,7 +144,7 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
     func window(_ window: NSWindow, startCustomAnimationToExitFullScreenWithDuration duration: TimeInterval) {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = duration
-            let frame = PUIPlayerWindow.bestScreenRectFromDetachingContainer(originalContainer)
+            let frame = PUIPlayerWindow.bestScreenRectFromDetachingContainer(originalContainer, layoutGuide: nil)
             window.animator().setFrame(frame, display: false)
         }, completionHandler: nil)
     }
@@ -182,10 +186,12 @@ private extension PUIPlayerWindow {
         return NSRect(x: screen.frame.width / 2.0 - rect.width / 2.0, y: screen.frame.height / 2.0 - rect.height / 2.0, width: rect.width, height: rect.height)
     }
 
-    class func bestScreenRectFromDetachingContainer(_ containerView: NSView?) -> NSRect {
+    class func bestScreenRectFromDetachingContainer(_ containerView: NSView?, layoutGuide: NSLayoutGuide?) -> NSRect {
         guard let view = containerView, let superview = view.superview else { return NSRect.zero }
 
-        return view.window?.convertToScreen(superview.convert(view.frame, to: nil)) ?? NSRect.zero
+        let targetFrame = layoutGuide?.frame ?? view.frame
+
+        return view.window?.convertToScreen(superview.convert(targetFrame, to: nil)) ?? NSRect.zero
     }
 
     func applySizePreset(_ preset: PUIPlayerWindowSizePreset, center: Bool = true, animated: Bool = true) {

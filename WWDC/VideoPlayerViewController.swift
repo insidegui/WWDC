@@ -87,7 +87,6 @@ final class VideoPlayerViewController: NSViewController {
     override func loadView() {
         view = NSView(frame: NSRect.zero)
         view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.black.cgColor
 
         playerView.translatesAutoresizingMaskIntoConstraints = false
         playerView.frame = view.bounds

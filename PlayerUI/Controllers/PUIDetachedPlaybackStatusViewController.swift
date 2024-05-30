@@ -10,8 +10,8 @@ import Cocoa
 
 public typealias PUISnapshotClosure = (@escaping (CGImage?) -> Void) -> Void
 
-public struct DetachedPlaybackStatus {
-    var id: String
+public struct DetachedPlaybackStatus: Identifiable {
+    public internal(set) var id: String
     var icon: NSImage
     var title: String
     var subtitle: String
@@ -118,7 +118,7 @@ public final class PUIDetachedPlaybackStatusViewController: NSViewController {
         return l
     }()
 
-    public  override func loadView() {
+    public override func loadView() {
         view = NSView()
         view.wantsLayer = true
         
