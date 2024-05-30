@@ -146,7 +146,8 @@ final class SessionViewModel {
     }()
 
     lazy var rxDownloadableContent: some Publisher<Results<SessionAsset>, Error> = {
-        let downloadableAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '')", DownloadManager.downloadQuality.rawValue)
+        let downloadableAssets = self.session
+            .assets(matching: DownloadManager.downloadQuality)
 
         return downloadableAssets.collectionPublisher
     }()

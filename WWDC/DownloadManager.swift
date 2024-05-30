@@ -11,6 +11,7 @@ import Combine
 import ConfCore
 import RealmSwift
 import OSLog
+import AVFoundation
 
 enum DownloadStatus {
     case none
@@ -23,13 +24,12 @@ enum DownloadStatus {
 
 final class DownloadManager: NSObject, Logging {
 
-    // Changing this dynamically isn't supported. Delete all downloads when switching
-    // from one quality to another otherwise you'll encounter minor unexpected behavior
-    static let downloadQuality = SessionAssetType.hdVideo
+    /// If the first asset type is not available, uses the next one.
+    static let downloadQuality: [SessionAssetType] = [.downloadHLS, .hdVideo]
 
     static let log = makeLogger()
     private let configuration = URLSessionConfiguration.background(withIdentifier: "WWDC Video Downloader")
-    private var backgroundSession: Foundation.URLSession!
+    private var backgroundSession: AVAssetDownloadURLSession!
     private var downloadTasks: [String: Download] = [:] {
         didSet {
             downloads = Array(downloadTasks.values)
@@ -47,7 +47,7 @@ final class DownloadManager: NSObject, Logging {
 
         // TODO: Check a little harder into whether we can keep the delegate methods off the main thread.
         // TODO: There are actually UI perf concerns when doing a lot of downloads
-        backgroundSession = URLSession(configuration: configuration, delegate: self, delegateQueue: .main)
+        backgroundSession = AVAssetDownloadURLSession(configuration: configuration, assetDownloadDelegate: self, delegateQueue: .main)
     }
 
     // MARK: - Session-based Public API
@@ -55,20 +55,20 @@ final class DownloadManager: NSObject, Logging {
     func start(with storage: Storage) {
         self.storage = storage
 
-        backgroundSession.getTasksWithCompletionHandler { _, _, pendingTasks in
-            for task in pendingTasks {
-                if let key = task.originalRequest?.url?.absoluteString,
-                    let remoteURL = URL(string: key),
-                    let asset = storage.asset(with: remoteURL),
-                    let session = asset.session.first {
-
-                    self.downloadTasks[key] = Download(session: SessionIdentifier(session.identifier), remoteURL: key, task: task)
-                } else {
-                    // We have a task that is not associated with a session at all, lets cancel it
-                    task.cancel()
-                }
-            }
-        }
+//        backgroundSession.getTasksWithCompletionHandler { _, _, pendingTasks in
+//            for task in pendingTasks {
+//                if let key = task.originalRequest?.url?.absoluteString,
+//                    let remoteURL = URL(string: key),
+//                    let asset = storage.asset(with: remoteURL),
+//                    let session = asset.session.first {
+//
+//                    self.downloadTasks[key] = Download(session: SessionIdentifier(session.identifier), remoteURL: key, task: task)
+//                } else {
+//                    // We have a task that is not associated with a session at all, lets cancel it
+//                    task.cancel()
+//                }
+//            }
+//        }
 
         _ = NotificationCenter.default.addObserver(forName: .LocalVideoStoragePathPreferenceDidChange, object: nil, queue: nil) { _ in
             self.monitorDownloadsFolder()
@@ -84,7 +84,7 @@ final class DownloadManager: NSObject, Logging {
         // Step 1: Collect all the remote URLs on the main thread for Realm reasons
         var sessionURLMap = [SessionIdentifier: String]()
         for session in sessions {
-            guard let asset = session.asset(ofType: DownloadManager.downloadQuality) else { continue }
+            guard let asset = session.firstAsset(in: DownloadManager.downloadQuality) else { continue }
 
             let url = asset.remoteURL
 
@@ -104,8 +104,8 @@ final class DownloadManager: NSObject, Logging {
         DispatchQueue.global(qos: .background).async {
             var successfullyStartedTasks = [String: Download]()
             for (sessionID, urlString) in sessionURLMap {
-                if let task = URL(string: urlString).map({ self.backgroundSession.downloadTask(with: $0) }),
-                    let key = task.originalRequest?.url?.absoluteString {
+                if let task = URL(string: urlString).flatMap({ self.createAssetDownloadTask(with: $0) }) {
+                    let key = task.urlAsset.url.absoluteString
 
                     successfullyStartedTasks[key] = Download(session: sessionID, remoteURL: key, task: task)
                 } else {
@@ -127,10 +127,26 @@ final class DownloadManager: NSObject, Logging {
         }
     }
 
+    private func createAssetDownloadTask(with url: URL) -> AVAggregateAssetDownloadTask? {
+        let asset = AVURLAsset(url: url)
+
+        guard let task = backgroundSession.aggregateAssetDownloadTask(
+            with: asset,
+            mediaSelections: [asset.preferredMediaSelection],
+            assetTitle: url.deletingPathExtension().lastPathComponent,
+            assetArtworkData: nil,
+            options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 265_000])
+        else { return nil }
+
+        task.taskDescription = url.absoluteString
+
+        return task
+    }
+
     func cancelDownloads(_ sessions: [Session]) {
         var urls = [String]()
         for session in sessions {
-            guard let url = session.asset(ofType: DownloadManager.downloadQuality)?.remoteURL else { continue }
+            guard let url = session.firstAsset(in: DownloadManager.downloadQuality)?.remoteURL else { continue }
             urls.append(url)
         }
 
@@ -138,23 +154,21 @@ final class DownloadManager: NSObject, Logging {
     }
 
     func isDownloading(_ session: Session) -> Bool {
-        guard let url = session.asset(ofType: DownloadManager.downloadQuality)?.remoteURL else { return false }
+        guard let url = session.firstAsset(in: DownloadManager.downloadQuality)?.remoteURL else { return false }
 
         return isDownloading(url)
     }
 
     func isDownloadable(_ session: Session) -> Bool {
-        return session.asset(ofType: DownloadManager.downloadQuality) != nil
+        return session.firstAsset(in: DownloadManager.downloadQuality) != nil
     }
 
     func downloadedFileURL(for session: Session) -> URL? {
-        guard let asset = session.asset(ofType: DownloadManager.downloadQuality) else { return nil }
+        let assets = session.assets(matching: DownloadManager.downloadQuality)
 
-        let path = localStoragePath(for: asset)
+        let localURLs = assets.compactMap { URL(fileURLWithPath: self.localStoragePath(for: $0)) }
 
-        guard FileManager.default.fileExists(atPath: path) else { return nil }
-
-        return URL(fileURLWithPath: path)
+        return localURLs.first(where: { FileManager.default.fileExists(atPath: $0.path) })
     }
 
     func hasDownloadedVideo(session: Session) -> Bool {
@@ -168,7 +182,7 @@ final class DownloadManager: NSObject, Logging {
     }
 
     func deleteDownloadedFile(for session: Session) {
-        guard let asset = session.asset(ofType: DownloadManager.downloadQuality) else { return }
+        guard let asset = session.firstAsset(in: DownloadManager.downloadQuality) else { return }
 
         do {
             try removeDownload(asset.remoteURL)
@@ -185,7 +199,7 @@ final class DownloadManager: NSObject, Logging {
     }
 
     func downloadStatusObservable(for session: Session) -> AnyPublisher<DownloadStatus, Never>? {
-        guard let asset = session.asset(ofType: DownloadManager.downloadQuality) else { return nil }
+        guard let asset = session.firstAsset(in: DownloadManager.downloadQuality) else { return nil }
 
         return downloadStatusObservable(for: asset)
     }
@@ -419,7 +433,7 @@ final class DownloadManager: NSObject, Logging {
         var notPresent = [String]()
 
         for session in expectedOnDisk {
-            if let asset = session.asset(ofType: DownloadManager.downloadQuality) {
+            if let asset = session.firstAsset(in: DownloadManager.downloadQuality) {
                 if !hasDownloadedVideo(asset: asset) {
                     notPresent.append(asset.relativeLocalURL)
                 }
@@ -475,16 +489,29 @@ final class DownloadManager: NSObject, Logging {
     }
 }
 
-extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
+extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate, AVAssetDownloadDelegate {
 
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        guard let originalURL = downloadTask.originalRequest?.url else { return }
+    private var remoteURLToLocalAssetDownloadPathMap: [String: String] {
+        get { UserDefaults.standard.dictionary(forKey: #function) as? [String: String] ?? [:] }
+        set {
+            UserDefaults.standard.set(newValue, forKey: #function)
+            UserDefaults.standard.synchronize()
+        }
+    }
 
+    private func localFileURL(for remoteURL: URL) -> URL? {
+        remoteURLToLocalAssetDownloadPathMap[remoteURL.absoluteString]
+            .flatMap { URL(fileURLWithPath: $0) }
+    }
+
+    private func handleDownloadLocalFileArrived(originalURL: URL, location: URL) {
         let originalAbsoluteURLString = originalURL.absoluteString
 
         guard let localPath = lookupAssetLocalVideoPath(remoteURL: originalAbsoluteURLString) else { return }
         let destinationUrl = URL(fileURLWithPath: localPath)
         let destinationDir = destinationUrl.deletingLastPathComponent()
+
+        self.remoteURLToLocalAssetDownloadPathMap[originalURL.absoluteString] = nil
 
         do {
             if !FileManager.default.fileExists(atPath: destinationDir.path) {
@@ -497,13 +524,13 @@ extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
 
             NotificationCenter.default.post(name: .DownloadManagerDownloadFinished, object: originalAbsoluteURLString)
         } catch {
+            log.error("Error moving download into place: \(error, privacy: .public)")
+
             NotificationCenter.default.post(name: .DownloadManagerDownloadFailed, object: originalAbsoluteURLString, userInfo: ["error": error])
         }
     }
 
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        guard let originalURL = task.originalRequest?.url else { return }
-
+    private func handleDownloadFinished(originalURL: URL, error: Error?) {
         let originalAbsoluteURLString = originalURL.absoluteString
 
         downloadTasks.removeValue(forKey: originalAbsoluteURLString)
@@ -516,6 +543,18 @@ extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
                 NotificationCenter.default.post(name: .DownloadManagerDownloadFailed, object: originalAbsoluteURLString, userInfo: ["error": error])
             }
         }
+    }
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        guard let originalURL = downloadTask.wwdc_originalURL else { return }
+
+        handleDownloadLocalFileArrived(originalURL: originalURL, location: location)
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        guard let originalURL = task.wwdc_originalURL else { return }
+
+        handleDownloadFinished(originalURL: originalURL, error: error)
     }
 
     struct DownloadInfo {
@@ -542,10 +581,60 @@ extension DownloadManager: URLSessionDownloadDelegate, URLSessionTaskDelegate {
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        guard let originalURL = downloadTask.originalRequest?.url?.absoluteString else { return }
+        guard let originalURL = downloadTask.wwdc_originalURL?.absoluteString else { return }
 
         let info = DownloadInfo(task: downloadTask)
         NotificationCenter.default.post(name: .DownloadManagerDownloadProgressChanged, object: originalURL, userInfo: ["info": info])
+    }
+
+    func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didFinishDownloadingTo location: URL) {
+        log.debug("🎞️ Finished downloading to \(location.path)")
+    }
+    
+    func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didLoad timeRange: CMTimeRange, totalTimeRangesLoaded loadedTimeRanges: [NSValue], timeRangeExpectedToLoad: CMTimeRange) {
+        log.debug("🎞️ Loaded time range \(String(describing: timeRange)) | total loaded \(loadedTimeRanges.count) | expected to load \(String(describing: timeRangeExpectedToLoad))")
+    }
+    
+    func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didResolve resolvedMediaSelection: AVMediaSelection) {
+        log.debug("🎞️ Resolved media selection \(resolvedMediaSelection)")
+    }
+    
+    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask, willDownloadTo location: URL) {
+        guard let remoteURL = aggregateAssetDownloadTask.wwdc_originalURL else {
+            log.fault("Couldn't determine remote URL for asset download task")
+            assertionFailure("Couldn't determine remote URL for asset download task")
+            return
+        }
+
+        log.debug("🎞️ Will download to \(location.path)")
+
+        self.remoteURLToLocalAssetDownloadPathMap[remoteURL.absoluteString] = location.path
+    }
+
+    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask, didCompleteFor mediaSelection: AVMediaSelection) {
+        log.debug("🎞️ Download task completed for \(mediaSelection)")
+
+        guard let remoteURL = aggregateAssetDownloadTask.wwdc_originalURL else {
+            log.fault("Couldn't determine remote URL for asset download task")
+            assertionFailure("Couldn't determine remote URL for asset download task")
+            return
+        }
+
+        guard let cachedURL = self.localFileURL(for: remoteURL) else {
+            log.fault("Couldn't determine local cached download URL for asset download task with URL \(remoteURL, privacy: .public)")
+            assertionFailure("Couldn't determine local cached download URL for asset download task with URL \(remoteURL)")
+            return
+        }
+
+        handleDownloadLocalFileArrived(originalURL: remoteURL, location: cachedURL)
+    }
+
+    func urlSession(_ session: URLSession, aggregateAssetDownloadTask: AVAggregateAssetDownloadTask, didLoad timeRange: CMTimeRange, totalTimeRangesLoaded loadedTimeRanges: [NSValue], timeRangeExpectedToLoad: CMTimeRange, for mediaSelection: AVMediaSelection) {
+        log.debug("🎞️ Aggregate loaded time range \(String(describing: timeRange)) | total loaded \(loadedTimeRanges.count) | expected to load \(String(describing: timeRangeExpectedToLoad)) | selection \(mediaSelection)")
+    }
+
+    func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, willDownloadVariants variants: [AVAssetVariant]) {
+        log.debug("🎞️ Will download variants \(variants)")
     }
 }
 
@@ -559,7 +648,7 @@ extension DownloadManager {
 
         let session: SessionIdentifier
         fileprivate var remoteURL: String
-        fileprivate weak var task: URLSessionDownloadTask?
+        fileprivate weak var task: AVAggregateAssetDownloadTask?
 
         func pause() {
             guard let task = task else { return }
@@ -635,5 +724,15 @@ private extension NotificationCenter {
             .filter { notification in
                 object == notification.object as? T
             }
+    }
+}
+
+private extension URLSessionTask {
+    var wwdc_originalURL: URL? {
+        if let avTask = self as? AVAssetDownloadTask {
+            return avTask.taskDescription.flatMap(URL.init(string:))
+        } else {
+            return originalRequest?.url
+        }
     }
 }

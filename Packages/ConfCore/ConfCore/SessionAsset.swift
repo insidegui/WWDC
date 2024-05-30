@@ -13,6 +13,7 @@ public enum SessionAssetType: String {
     case none
     case hdVideo = "WWDCSessionAssetTypeHDVideo"
     case sdVideo = "WWDCSessionAssetTypeSDVideo"
+    case downloadHLS = "WWDCSessionAssetTypeDownloadHLS"
     case image = "WWDCSessionAssetTypeShelfImage"
     case slides = "WWDCSessionAssetTypeSlidesPDF"
     case streamingVideo = "WWDCSessionAssetTypeStreamingVideo"

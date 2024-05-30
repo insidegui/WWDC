@@ -145,8 +145,8 @@ public class Session: Object, Decodable {
 
     // MARK: - Decodable
 
-    private enum AssetCodingKeys: String, CodingKey {
-        case id, year, title, downloadHD, downloadSD, slides, hls, images, shelf, duration
+    fileprivate enum AssetCodingKeys: String, CodingKey {
+        case id, year, title, downloadHD, downloadSD, downloadHLS, slides, hls, images, shelf, duration
     }
 
     private enum SessionCodingKeys: String, CodingKey {
@@ -221,6 +221,19 @@ public class Session: Object, Decodable {
                 self.assets.append(sdVideo)
             }
 
+            if let downloadHLS = try assetContainer.decodeIfPresent(String.self, forKey: .downloadHLS) {
+                let downloadHLSVideo = SessionAsset()
+                downloadHLSVideo.rawAssetType = SessionAssetType.downloadHLS.rawValue
+                downloadHLSVideo.remoteURL = downloadHLS
+                downloadHLSVideo.year = Int(eventYear) ?? -1
+                downloadHLSVideo.sessionId = id
+
+                let filename = "\(id) - \(title).movpkg"
+                downloadHLSVideo.relativeLocalURL = "\(eventYear)/\(filename)"
+
+                self.assets.append(downloadHLSVideo)
+            }
+
             if let slides = try assetContainer.decodeIfPresent(String.self, forKey: .slides) {
                 let slidesAsset = SessionAsset()
                 slidesAsset.rawAssetType = SessionAssetType.slides.rawValue
@@ -289,6 +302,13 @@ extension Session {
         }
     }
 
+    public func firstAsset(in types: [SessionAssetType]) -> SessionAsset? {
+        for type in types {
+            if let asset = asset(ofType: type) { return asset }
+        }
+        return nil
+    }
+
     private func imageAsset() -> SessionAsset? {
         guard let baseURL = event.first.flatMap({ URL(string: $0.imagesPath) }) else { return nil }
 
@@ -307,7 +327,7 @@ extension Session {
     public func assets(matching types: [SessionAssetType]) -> Results<SessionAsset> {
         assert(!types.contains(.image), "This method does not support finding image assets")
 
-        let predicate = NSPredicate(format: "rawAssetType IN %@", types.map { $0.rawValue })
+        let predicate = NSPredicate(format: "rawAssetType IN %@ AND remoteURL != ''", types.map { $0.rawValue })
         return assets.filter(predicate)
     }
 }
