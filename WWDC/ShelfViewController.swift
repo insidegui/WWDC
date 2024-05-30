@@ -105,6 +105,16 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     private func updateBindings() {
         cancellables = []
 
+        if detachedSessionID != nil {
+            UILog("📚 Selected session: \(viewModel?.sessionIdentifier ?? "<nil>"), detached session: \(detachedSessionID ?? "<nil>")")
+        }
+
+        if viewModel?.sessionIdentifier != detachedSessionID {
+            hideDetachedStatus()
+        } else if let detachedSessionID, viewModel?.sessionIdentifier == detachedSessionID {
+            showDetachedStatus()
+        }
+
         guard let viewModel = viewModel else {
             shelfView.image = nil
             return
@@ -167,11 +177,30 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     // MARK: - Detached Playback Status
 
+    /// ID of the session being displayed by the shelf when the player was detached.
+    private var detachedSessionID: String?
     private weak var detachedPlayer: AVPlayer?
+
+    /// Shows detached status view without modifying state.
+    func showDetachedStatus() {
+        guard detachedStatusController.parent != nil else { return }
+
+        detachedStatusController.show()
+    }
+
+    /// Hides detached status view without resetting state.
+    func hideDetachedStatus() {
+        guard detachedStatusController.parent != nil else { return }
+
+        detachedStatusController.hide()
+    }
 
     func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
         guard let player = playerView.player else { return }
 
+        UILog("📚 Detaching with \(viewModel?.sessionIdentifier ?? "<nil>")")
+
+        self.detachedSessionID = viewModel?.sessionIdentifier
         self.detachedPlayer = player
 
         installDetachedStatusControllerIfNeeded()
@@ -181,10 +210,9 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     }
 
     func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
-        guard detachedStatusController.parent != nil else { return }
+        hideDetachedStatus()
 
-        detachedStatusController.hide()
-
+        self.detachedSessionID = nil
         self.detachedPlayer = nil
     }
 
