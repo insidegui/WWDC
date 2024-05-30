@@ -8,36 +8,54 @@
 
 import Cocoa
 
-final class PUIDetachedPlaybackStatusViewController: NSViewController {
+public typealias PUISnapshotClosure = (@escaping (CGImage?) -> Void) -> Void
+
+public struct DetachedPlaybackStatus {
+    var id: String
+    var icon: NSImage
+    var title: String
+    var subtitle: String
+    var snapshot: PUISnapshotClosure?
+}
+
+public extension DetachedPlaybackStatus {
+    static let pictureInPicture = DetachedPlaybackStatus(
+        id: "pictureInPicture",
+        icon: .PUIPictureInPictureLarge.withPlayerMetrics(.large),
+        title: "Picture in Picture",
+        subtitle: "Playing in Picture in Picture"
+    )
+    
+    static let fullScreen = DetachedPlaybackStatus(
+        id: "fullScreen",
+        icon: .PUIFullScreen.withPlayerMetrics(.large),
+        title: "Full Screen",
+        subtitle: "Playing in Full Screen"
+    )
+    
+    func snapshot(using closure: @escaping PUISnapshotClosure) -> Self {
+        var mSelf = self
+        mSelf.snapshot = closure
+        return mSelf
+    }
+}
+
+public final class PUIDetachedPlaybackStatusViewController: NSViewController {
 
     private lazy var context = CIContext(options: [.useSoftwareRenderer: true])
 
-    var snapshot: CGImage? {
+    public var status: DetachedPlaybackStatus? {
         didSet {
-            updateSnapshot(with: snapshot)
-        }
-    }
-    var providerIcon: NSImage? {
-        didSet {
-            iconImageView.image = providerIcon
-        }
-    }
-    var providerName: String = "" {
-        didSet {
-            titleLabel.stringValue = providerName
-        }
-    }
-    var providerDescription: String = "" {
-        didSet {
-            descriptionLabel.stringValue = providerDescription
+            guard let status else { return }
+            update(with: status)
         }
     }
 
-    init() {
+    public init() {
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -61,7 +79,7 @@ final class PUIDetachedPlaybackStatusViewController: NSViewController {
         return f
     }()
 
-    private lazy var descriptionLabel: NSTextField = {
+    private lazy var subtitleLabel: NSTextField = {
         let f = NSTextField(labelWithString: "")
 
         f.font = .systemFont(ofSize: 16)
@@ -72,7 +90,7 @@ final class PUIDetachedPlaybackStatusViewController: NSViewController {
     }()
 
     private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [self.iconImageView, self.titleLabel, self.descriptionLabel])
+        let v = NSStackView(views: [self.iconImageView, self.titleLabel, self.subtitleLabel])
 
         v.translatesAutoresizingMaskIntoConstraints = false
         v.orientation = .vertical
@@ -111,7 +129,7 @@ final class PUIDetachedPlaybackStatusViewController: NSViewController {
         return l
     }()
 
-    override func loadView() {
+    public  override func loadView() {
         view = NSView()
         view.wantsLayer = true
         
@@ -132,13 +150,26 @@ final class PUIDetachedPlaybackStatusViewController: NSViewController {
 
         blackoutLayer.frame = view.bounds
         container.addSublayer(blackoutLayer)
+
+        hide()
     }
 
-    func show() {
+    private func update(with status: DetachedPlaybackStatus) {
+        status.snapshot? { [weak self] image in
+            guard let self else { return }
+            updateSnapshot(with: image)
+        }
+
+        iconImageView.image = status.icon
+        titleLabel.stringValue = status.title
+        subtitleLabel.stringValue = status.subtitle
+    }
+
+    public func show() {
         view.isHidden = false
     }
 
-    func hide() {
+    public func hide() {
         view.isHidden = true
     }
 

@@ -30,4 +30,7 @@ public protocol PUIPlayerViewAppearanceDelegate: AnyObject {
     func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool
 
+    func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView)
+    func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView)
+
 }

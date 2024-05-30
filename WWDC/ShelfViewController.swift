@@ -9,6 +9,7 @@
 import Cocoa
 import Combine
 import CoreMedia
+import PlayerUI
 
 protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)

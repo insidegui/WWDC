@@ -91,7 +91,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
             currentPlaybackViewModel = playbackViewModel
 
             if currentPlayerController == nil {
-                currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel)
+                currentPlayerController = VideoPlayerViewController(player: playbackViewModel.player, session: viewModel, shelf: shelfController)
                 currentPlayerController?.playerWillRestoreUserInterfaceForPictureInPictureStop = { [weak self] in
                     self?.returnToPlayingSessionContext()
                 }

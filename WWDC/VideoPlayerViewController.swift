@@ -51,9 +51,12 @@ final class VideoPlayerViewController: NSViewController {
     var playerWillRestoreUserInterfaceForPictureInPictureStop: (() -> Void)?
     var playerWillExitFullScreen: (() -> Void)?
 
-    init(player: AVPlayer, session: SessionViewModel) {
+    private weak var shelf: ShelfViewController?
+
+    init(player: AVPlayer, session: SessionViewModel, shelf: ShelfViewController) {
         sessionViewModel = session
         self.player = player
+        self.shelf = shelf
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -382,6 +385,14 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
 
     func playerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {
         return Preferences.shared.skipBackAndForwardBy30Seconds
+    }
+
+    func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
+        #warning("TODO: Implement")
+    }
+
+    func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
+        #warning("TODO: Implement")
     }
 }
 

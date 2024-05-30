@@ -671,12 +671,9 @@ public final class PUIPlayerView: NSView {
 
     private var topTrailingMenuTopConstraint: NSLayoutConstraint!
 
-    private lazy var detachedStatusController = PUIDetachedPlaybackStatusViewController()
-
     private func setupControls() {
         addLayoutGuide(videoLayoutGuide)
 
-        detachedStatusController.view.translatesAutoresizingMaskIntoConstraints = false
         let playerView = NSView()
         playerView.translatesAutoresizingMaskIntoConstraints = false
         playerView.wantsLayer = true
@@ -687,14 +684,6 @@ public final class PUIPlayerView: NSView {
         playerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         playerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         playerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-
-        detachedStatusController.hide()
-
-        addSubview(detachedStatusController.view)
-        detachedStatusController.view.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor).isActive = true
-        detachedStatusController.view.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor).isActive = true
-        detachedStatusController.view.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor).isActive = true
-        detachedStatusController.view.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor).isActive = true
 
         // Volume controls
         volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
@@ -1390,11 +1379,15 @@ public final class PUIPlayerView: NSView {
     }
 
     @objc private func windowWillEnterFullScreen() {
+        appearanceDelegate?.presentDetachedStatus(.fullScreen.snapshot(using: snapshotClosure), for: self)
+
         fullScreenButton.isHidden = true
         updateTopTrailingMenuPosition()
     }
 
     @objc private func windowWillExitFullScreen() {
+        appearanceDelegate?.dismissDetachedStatus(.fullScreen, for: self)
+        
         if let d = appearanceDelegate {
             fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
         }
@@ -1568,19 +1561,22 @@ extension PUIPlayerView: PUITimelineViewDelegate {
 
 extension PUIPlayerView: AVPictureInPictureControllerDelegate {
 
+    private var snapshotClosure: PUISnapshotClosure {
+        { [weak self] completion in
+            guard let self else {
+                completion(nil)
+                return
+            }
+            snapshotPlayer(completion: completion)
+        }
+    }
+
     // Start
 
     public func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         delegate?.playerViewWillEnterPictureInPictureMode(self)
 
-        snapshotPlayer { [weak self] image in
-            self?.detachedStatusController.snapshot = image
-        }
-
-        detachedStatusController.providerIcon = .PUIPictureInPictureLarge.withPlayerMetrics(.large)
-        detachedStatusController.providerName = "Picture in Picture"
-        detachedStatusController.providerDescription = "Playing in Picture in Picture"
-        detachedStatusController.show()
+        appearanceDelegate?.presentDetachedStatus(.pictureInPicture.snapshot(using: snapshotClosure), for: self)
     }
 
     public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
@@ -1628,8 +1624,8 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
 
     // Called Last
     public func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        appearanceDelegate?.dismissDetachedStatus(.pictureInPicture, for: self)
         pipButton.state = .off
-        detachedStatusController.hide()
         invalidateTouchBar()
     }
 }
