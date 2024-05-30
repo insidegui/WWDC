@@ -409,25 +409,12 @@ public final class PUIPlayerView: NSView {
     private var currentBounds = CGRect.zero
 
     private func updateVideoLayoutGuide() {
-        guard let videoTrack = player?.currentItem?.tracks.first(where: { $0.assetTrack?.mediaType == .video })?.assetTrack else { return }
+        guard let player else { return }
 
         guard bounds != currentBounds else { return }
         currentBounds = bounds
 
-        let videoRect = AVMakeRect(aspectRatio: videoTrack.naturalSize, insideRect: bounds)
-
-        guard videoRect.width.isFinite, videoRect.height.isFinite else { return }
-
-        NSLayoutConstraint.deactivate(videoLayoutGuideConstraints)
-
-        videoLayoutGuideConstraints = [
-            videoLayoutGuide.widthAnchor.constraint(equalToConstant: videoRect.width),
-            videoLayoutGuide.heightAnchor.constraint(equalToConstant: videoRect.height),
-            videoLayoutGuide.centerYAnchor.constraint(equalTo: centerYAnchor),
-            videoLayoutGuide.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ]
-
-        NSLayoutConstraint.activate(videoLayoutGuideConstraints)
+        player.updateLayout(guide: videoLayoutGuide, container: self, constraints: &videoLayoutGuideConstraints)
     }
 
     deinit {

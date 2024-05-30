@@ -199,6 +199,7 @@
 		F4FB06A12A21493B00799F84 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06A02A21493B00799F84 /* PreviewSupport.swift */; };
 		F4FB06BF2A216C1F00799F84 /* RemoteGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */; };
 		F4FB06C12A2178C000799F84 /* WWDCWindowContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06C02A2178C000799F84 /* WWDCWindowContentViewController.swift */; };
+		F4FE95AC2C08FD6E005E76EC /* AVPlayer+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FE95AB2C08FD6E005E76EC /* AVPlayer+Layout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -471,6 +472,7 @@
 		F4FB06A02A21493B00799F84 /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
 		F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteGlyph.swift; sourceTree = "<group>"; };
 		F4FB06C02A2178C000799F84 /* WWDCWindowContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCWindowContentViewController.swift; sourceTree = "<group>"; };
+		F4FE95AB2C08FD6E005E76EC /* AVPlayer+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVPlayer+Layout.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1025,6 +1027,7 @@
 			isa = PBXGroup;
 			children = (
 				DDF721B91ECA12A40054C503 /* AVPlayer+Validation.swift */,
+				F4FE95AB2C08FD6E005E76EC /* AVPlayer+Layout.swift */,
 				4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */,
 				DDF721BB1ECA12A40054C503 /* NSEvent+ForceTouch.swift */,
 				DDF721BC1ECA12A40054C503 /* NSWindow+Snapshot.swift */,
@@ -1545,6 +1548,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4FE95AC2C08FD6E005E76EC /* AVPlayer+Layout.swift in Sources */,
 				DDF721D11ECA12A40054C503 /* PUITimelineAnnotation.swift in Sources */,
 				DDF721D51ECA12A40054C503 /* AVPlayer+Validation.swift in Sources */,
 				DDF721CA1ECA12A40054C503 /* Images.swift in Sources */,
