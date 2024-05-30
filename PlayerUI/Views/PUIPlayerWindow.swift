@@ -22,6 +22,9 @@ open class PUIPlayerWindow: NSWindow {
         super.init(contentRect: contentRect, styleMask: effectiveStyle, backing: bufferingType, defer: flag)
 
         applyCustomizations()
+
+        backgroundColor = .clear
+        isOpaque = false
     }
 
     open override func awakeFromNib() {
@@ -236,7 +239,7 @@ private class PUIPlayerWindowContentView: NSView {
     }
 
     fileprivate override func draw(_ dirtyRect: NSRect) {
-        NSColor.black.setFill()
+        NSColor.clear.setFill()
         dirtyRect.fill()
     }
 

@@ -9,6 +9,8 @@
 import Cocoa
 import Combine
 import CoreMedia
+import PlayerUI
+import AVFoundation
 
 protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
@@ -17,7 +19,7 @@ protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidEndClipSharing(_ controller: ShelfViewController)
 }
 
-class ShelfViewController: NSViewController {
+final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPresenter {
 
     weak var delegate: ShelfViewControllerDelegate?
 
@@ -92,10 +94,26 @@ class ShelfViewController: NSViewController {
         updateBindings()
     }
 
+    override func viewWillLayout() {
+        updateVideoLayoutGuide()
+
+        super.viewWillLayout()
+    }
+
     private weak var currentImageDownloadOperation: Operation?
 
     private func updateBindings() {
         cancellables = []
+
+        if detachedSessionID != nil {
+            UILog("📚 Selected session: \(viewModel?.sessionIdentifier ?? "<nil>"), detached session: \(detachedSessionID ?? "<nil>")")
+        }
+
+        if viewModel?.sessionIdentifier != detachedSessionID {
+            hideDetachedStatus()
+        } else if let detachedSessionID, viewModel?.sessionIdentifier == detachedSessionID {
+            showDetachedStatus()
+        }
 
         guard let viewModel = viewModel else {
             shelfView.image = nil
@@ -155,6 +173,99 @@ class ShelfViewController: NSViewController {
 
             self.delegate?.shelfViewControllerDidEndClipSharing(self)
         }
+    }
+
+    // MARK: - Detached Playback Status
+
+    /// ID of the session being displayed by the shelf when the player was detached.
+    private var detachedSessionID: String?
+    private weak var detachedPlayer: AVPlayer?
+    private var currentDetachedStatusID: DetachedPlaybackStatus.ID?
+
+    /// Shows detached status view without modifying state.
+    func showDetachedStatus() {
+        guard detachedStatusController.parent != nil else { return }
+
+        detachedStatusController.show()
+
+        shelfView.isHidden = true
+
+        view.needsLayout = true
+    }
+
+    /// Hides detached status view without resetting state.
+    func hideDetachedStatus() {
+        guard detachedStatusController.parent != nil else { return }
+
+        detachedStatusController.hide()
+
+        shelfView.isHidden = false
+    }
+
+    func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
+        guard let player = playerView.player else { return }
+
+        /// We can't present multiple detached statuses at once, so the first detachment wins.
+        /// This can happen for example if PiP is initiated in the full screen window,
+        /// we want to keep showing the full screen status, rather than overriding it with PiP.
+        guard currentDetachedStatusID == nil else { return }
+
+        UILog("📚 Detaching with \(viewModel?.sessionIdentifier ?? "<nil>")")
+
+        self.currentDetachedStatusID = status.id
+        self.detachedSessionID = viewModel?.sessionIdentifier
+        self.detachedPlayer = player
+
+        installDetachedStatusControllerIfNeeded()
+
+        detachedStatusController.status = status
+        
+        showDetachedStatus()
+    }
+
+    func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
+        /// We only dismiss the detached status that's currently being presented.
+        /// Example: if playing in full screen, user can enter PiP, but exiting PiP won't clear the detached status for full screen.
+        guard status.id == currentDetachedStatusID else { return }
+
+        hideDetachedStatus()
+
+        self.currentDetachedStatusID = nil
+        self.detachedSessionID = nil
+        self.detachedPlayer = nil
+    }
+
+    private lazy var detachedStatusController = PUIDetachedPlaybackStatusViewController()
+
+    private func installDetachedStatusControllerIfNeeded() {
+        guard detachedStatusController.parent == nil else { return }
+
+        updateVideoLayoutGuide()
+
+        addChild(detachedStatusController)
+
+        let statusView = detachedStatusController.view
+        statusView.wantsLayer = true
+        statusView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(statusView, positioned: .above, relativeTo: view.subviews.first)
+
+        statusView.layer?.zPosition = 9
+
+        NSLayoutConstraint.activate([
+            statusView.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor),
+            statusView.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor),
+            statusView.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor),
+            statusView.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor)
+        ])
+    }
+
+    private lazy var videoLayoutGuide = NSLayoutGuide()
+    private lazy var videoLayoutGuideConstraints = [NSLayoutConstraint]()
+
+    private func updateVideoLayoutGuide() {
+        guard let detachedPlayer else { return }
+
+        detachedPlayer.updateLayout(guide: videoLayoutGuide, container: view, constraints: &videoLayoutGuideConstraints)
     }
 
 }

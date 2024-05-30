@@ -78,6 +78,11 @@ public final class PUIPlayerView: NSView {
     public var mediaTitle: String?
     public var mediaIsLiveStream: Bool = false
 
+    private var backgroundColor: NSColor? {
+        get { layer?.backgroundColor.flatMap { NSColor(cgColor: $0) } }
+        set { layer?.backgroundColor = newValue?.cgColor }
+    }
+
     public init(player: AVPlayer) {
         self.player = player
         if AVPictureInPictureController.isPictureInPictureSupported() {
@@ -90,7 +95,7 @@ public final class PUIPlayerView: NSView {
 
         wantsLayer = true
         layer = PUIBoringLayer()
-        layer?.backgroundColor = NSColor.black.cgColor
+        backgroundColor = .black
 
         setupPlayer(player)
         setupControls()
@@ -406,28 +411,16 @@ public final class PUIPlayerView: NSView {
 
     private lazy var videoLayoutGuideConstraints = [NSLayoutConstraint]()
 
-    private var currentBounds = CGRect.zero
+    private var currentBounds: CGRect?
 
     private func updateVideoLayoutGuide() {
-        guard let videoTrack = player?.currentItem?.tracks.first(where: { $0.assetTrack?.mediaType == .video })?.assetTrack else { return }
+        guard let player else { return }
 
         guard bounds != currentBounds else { return }
+
+        player.updateLayout(guide: videoLayoutGuide, container: self, constraints: &videoLayoutGuideConstraints)
+
         currentBounds = bounds
-
-        let videoRect = AVMakeRect(aspectRatio: videoTrack.naturalSize, insideRect: bounds)
-
-        guard videoRect.width.isFinite, videoRect.height.isFinite else { return }
-
-        NSLayoutConstraint.deactivate(videoLayoutGuideConstraints)
-
-        videoLayoutGuideConstraints = [
-            videoLayoutGuide.widthAnchor.constraint(equalToConstant: videoRect.width),
-            videoLayoutGuide.heightAnchor.constraint(equalToConstant: videoRect.height),
-            videoLayoutGuide.centerYAnchor.constraint(equalTo: centerYAnchor),
-            videoLayoutGuide.centerXAnchor.constraint(equalTo: centerXAnchor)
-        ]
-
-        NSLayoutConstraint.activate(videoLayoutGuideConstraints)
     }
 
     deinit {
@@ -667,16 +660,13 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    private lazy var videoLayoutGuide = NSLayoutGuide()
+    public private(set) lazy var videoLayoutGuide = NSLayoutGuide()
 
     private var topTrailingMenuTopConstraint: NSLayoutConstraint!
-
-    private lazy var detachedStatusController = PUIDetachedPlaybackStatusViewController()
 
     private func setupControls() {
         addLayoutGuide(videoLayoutGuide)
 
-        detachedStatusController.view.translatesAutoresizingMaskIntoConstraints = false
         let playerView = NSView()
         playerView.translatesAutoresizingMaskIntoConstraints = false
         playerView.wantsLayer = true
@@ -687,14 +677,6 @@ public final class PUIPlayerView: NSView {
         playerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         playerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         playerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-
-        detachedStatusController.hide()
-
-        addSubview(detachedStatusController.view)
-        detachedStatusController.view.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor).isActive = true
-        detachedStatusController.view.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor).isActive = true
-        detachedStatusController.view.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor).isActive = true
-        detachedStatusController.view.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor).isActive = true
 
         // Volume controls
         volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
@@ -1366,6 +1348,7 @@ public final class PUIPlayerView: NSView {
 
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillEnterFullScreen), name: NSWindow.willEnterFullScreenNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullScreen), name: NSWindow.willExitFullScreenNotification, object: newWindow)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowDidExitFullScreen), name: NSWindow.didExitFullScreenNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidResignMain), name: NSWindow.didResignMainNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeMain), name: NSWindow.didBecomeMainNotification, object: newWindow)
     }
@@ -1390,16 +1373,30 @@ public final class PUIPlayerView: NSView {
     }
 
     @objc private func windowWillEnterFullScreen() {
+        appearanceDelegate?.presentDetachedStatus(.fullScreen.snapshot(using: snapshotClosure), for: self)
+
         fullScreenButton.isHidden = true
         updateTopTrailingMenuPosition()
     }
 
     @objc private func windowWillExitFullScreen() {
+        /// The transition looks nicer if there's no background color, otherwise the player looks like it attaches
+        /// to the whole shelf area with black bars depending on the aspect ratio.
+        backgroundColor = .clear
+        
         if let d = appearanceDelegate {
             fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
         }
 
         updateTopTrailingMenuPosition()
+    }
+
+    @objc private func windowDidExitFullScreen() {
+        /// Restore solid black background after finishing exit full screen transition.
+        backgroundColor = .black
+
+        /// The detached status presentation takes care of leaving a black background before we finish the full screen transition.
+        appearanceDelegate?.dismissDetachedStatus(.fullScreen, for: self)
     }
 
     @objc private func windowDidBecomeMain() {
@@ -1568,22 +1565,26 @@ extension PUIPlayerView: PUITimelineViewDelegate {
 
 extension PUIPlayerView: AVPictureInPictureControllerDelegate {
 
+    private var snapshotClosure: PUISnapshotClosure {
+        { [weak self] completion in
+            guard let self else {
+                completion(nil)
+                return
+            }
+            snapshotPlayer(completion: completion)
+        }
+    }
+
     // Start
 
     public func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         delegate?.playerViewWillEnterPictureInPictureMode(self)
 
-        snapshotPlayer { [weak self] image in
-            self?.detachedStatusController.snapshot = image
-        }
-
-        detachedStatusController.providerIcon = .PUIPictureInPictureLarge.withPlayerMetrics(.large)
-        detachedStatusController.providerName = "Picture in Picture"
-        detachedStatusController.providerDescription = "Playing in Picture in Picture"
-        detachedStatusController.show()
+        appearanceDelegate?.presentDetachedStatus(.pictureInPicture.snapshot(using: snapshotClosure), for: self)
     }
 
     public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        fullScreenButton.isHidden = true
         pipButton.state = .on
 
         invalidateTouchBar()
@@ -1623,13 +1624,15 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
             }
         }
 
+        fullScreenButton.isHidden = false
+
         completionHandler(true)
     }
 
     // Called Last
     public func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+        appearanceDelegate?.dismissDetachedStatus(.pictureInPicture, for: self)
         pipButton.state = .off
-        detachedStatusController.hide()
         invalidateTouchBar()
     }
 }
