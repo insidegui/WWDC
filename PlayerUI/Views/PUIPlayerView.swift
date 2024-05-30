@@ -51,7 +51,7 @@ public final class PUIPlayerView: NSView {
 
             timelineView.annotations = sortedAnnotations
 
-            updateAnnotationButtonEnabled()
+            validateAnnotationButton()
         }
     }
 
@@ -270,7 +270,7 @@ public final class PUIPlayerView: NSView {
         }
 
         annotationTimeDistanceObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1, preferredTimescale: 9000), queue: .main) { [weak self] _ in
-            self?.updateAnnotationButtonEnabled()
+            self?.validateAnnotationButton()
         }
 
         player.allowsExternalPlayback = true
@@ -915,14 +915,14 @@ public final class PUIPlayerView: NSView {
     }
 
     private func updateAnnotationButtonVisibility() {
-        defer { updateAnnotationButtonEnabled() }
+        defer { validateAnnotationButton() }
 
         guard let d = appearanceDelegate else { return }
 
         addAnnotationButton.isHidden = !d.playerViewShouldShowAnnotationControls(self)
     }
 
-    private func updateAnnotationButtonEnabled() {
+    private func validateAnnotationButton() {
         let timestamp = self.currentTimestamp
         let tooCloseForComfort = timelineView.annotations.contains(where: { $0.isValid && abs($0.timestamp - timestamp) < 30 })
         self.addAnnotationButton.isEnabled = !tooCloseForComfort
@@ -1122,6 +1122,9 @@ public final class PUIPlayerView: NSView {
 
     @IBAction public func addAnnotation(_ sender: NSView?) {
         guard let player = player else { return }
+
+        /// Prevent several clicks in quick succession from creating lots of annotations at the same location.
+        addAnnotationButton.isEnabled = false
 
         let timestamp = Double(CMTimeGetSeconds(player.currentTime()))
 
