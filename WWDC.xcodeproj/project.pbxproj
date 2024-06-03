@@ -186,6 +186,7 @@
 		F46E0AE02C0E6CB20077A5E0 /* MediaDownload+Sorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */; };
 		F46E0AE22C0E6DA80077A5E0 /* Session+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */; };
 		F46E0AE42C0E6EF80077A5E0 /* MediaDownloadManager+.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0AE32C0E6EF80077A5E0 /* MediaDownloadManager+.swift */; };
+		F46E0AE72C0E7B780077A5E0 /* DownloadedContentMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0AE62C0E7B780077A5E0 /* DownloadedContentMonitor.swift */; };
 		F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DEC826737EFA00B28B31 /* SharePlayManager.swift */; };
 		F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */; };
 		F4777ABA2A2A2F6C00A09179 /* WWDCAgentRemover.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4777AB92A2A2F6C00A09179 /* WWDCAgentRemover.swift */; };
@@ -473,6 +474,7 @@
 		F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaDownload+Sorting.swift"; sourceTree = "<group>"; };
 		F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+Download.swift"; sourceTree = "<group>"; };
 		F46E0AE32C0E6EF80077A5E0 /* MediaDownloadManager+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaDownloadManager+.swift"; sourceTree = "<group>"; };
+		F46E0AE62C0E7B780077A5E0 /* DownloadedContentMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadedContentMonitor.swift; sourceTree = "<group>"; };
 		F474DEC826737EFA00B28B31 /* SharePlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePlayManager.swift; sourceTree = "<group>"; };
 		F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWWDCActivity.swift; sourceTree = "<group>"; };
 		F4777AB92A2A2F6C00A09179 /* WWDCAgentRemover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentRemover.swift; sourceTree = "<group>"; };
@@ -1114,6 +1116,15 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		F46E0AE52C0E7B6B0077A5E0 /* Integration */ = {
+			isa = PBXGroup;
+			children = (
+				F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */,
+				F46E0AE62C0E7B780077A5E0 /* DownloadedContentMonitor.swift */,
+			);
+			path = Integration;
+			sourceTree = "<group>";
+		};
 		F474DECA2673800000B28B31 /* SharePlay */ = {
 			isa = PBXGroup;
 			children = (
@@ -1134,6 +1145,7 @@
 		F486B2F72C0E69A60066749F /* MediaDownload */ = {
 			isa = PBXGroup;
 			children = (
+				F46E0AE52C0E7B6B0077A5E0 /* Integration */,
 				F486B3052C0E69E60066749F /* Support */,
 				F486B2FE2C0E69E60066749F /* Engines */,
 				F486B2F92C0E69E60066749F /* FSMediaDownloadMetadataStore.swift */,
@@ -1164,7 +1176,6 @@
 				F486B3032C0E69E60066749F /* URL+FileHelpers.swift */,
 				F486B3042C0E69E60066749F /* URLSessionTask+Media.swift */,
 				F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */,
-				F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -1501,6 +1512,7 @@
 				F486B3122C0E69E60066749F /* URLSessionTask+Media.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */,
+				F46E0AE72C0E7B780077A5E0 /* DownloadedContentMonitor.swift in Sources */,
 				F4578D5B2A2659F0005B311A /* VideoPlayer.swift in Sources */,
 				4D4D80C4217D281D00D1C233 /* DownloadViewModel.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,

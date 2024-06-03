@@ -96,6 +96,8 @@ final class AppCoordinator: Logging, Signposting {
         }
     }
 
+    private lazy var downloadMonitor = DownloadedContentMonitor()
+
     @MainActor
     init(windowController: MainWindowController, storage: Storage, syncEngine: SyncEngine) {
         let signpostState = Self.signposter.beginInterval("initialization", id: Self.signposter.makeSignpostID(), "begin init")
@@ -112,8 +114,6 @@ final class AppCoordinator: Logging, Signposting {
             restorationFiltersState: Preferences.shared.filtersState
         )
         self.searchCoordinator = searchCoordinator
-
-        MediaDownloadManager.shared.activate()
 
         liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
 
@@ -187,6 +187,9 @@ final class AppCoordinator: Logging, Signposting {
         buttonsController.handleSharePlayClicked = { [weak self] in
             DispatchQueue.main.async { self?.startSharePlay() }
         }
+
+        MediaDownloadManager.shared.activate()
+        downloadMonitor.activate(with: storage)
 
         startup()
         Self.signposter.endInterval("initialization", signpostState, "end init")

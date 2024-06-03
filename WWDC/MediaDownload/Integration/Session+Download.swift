@@ -3,7 +3,7 @@ import ConfCore
 
 extension SessionAssetType: DownloadableMediaVariant { }
 
-private extension Session {
+extension Session {
     func asset(for variant: SessionAssetType) -> SessionAsset? { assets(matching: [variant]).first }
 }
 
