@@ -13,6 +13,7 @@ public enum SessionAssetType: String {
     case none
     case hdVideo = "WWDCSessionAssetTypeHDVideo"
     case sdVideo = "WWDCSessionAssetTypeSDVideo"
+    case downloadHLSVideo = "WWDCSessionAssetTypeDownloadHLSVideo"
     case image = "WWDCSessionAssetTypeShelfImage"
     case slides = "WWDCSessionAssetTypeSlidesPDF"
     case streamingVideo = "WWDCSessionAssetTypeStreamingVideo"
@@ -23,14 +24,7 @@ public enum SessionAssetType: String {
 /// Session assets are resources associated with sessions, like videos, PDFs and useful links
 public class SessionAsset: Object, Decodable {
 
-    /// The type of asset:
-    ///
-    /// - WWDCSessionAssetTypeHDVideo
-    /// - WWDCSessionAssetTypeSDVideo
-    /// - WWDCSessionAssetTypeShelfImage
-    /// - WWDCSessionAssetTypeSlidesPDF
-    /// - WWDCSessionAssetTypeStreamingVideo
-    /// - WWDCSessionAssetTypeWebpageURL
+    /// The type of asset.
     @objc internal dynamic var rawAssetType = "" {
         didSet {
             identifier = generateIdentifier()

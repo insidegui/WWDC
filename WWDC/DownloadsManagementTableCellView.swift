@@ -17,19 +17,15 @@ final class DownloadsManagementTableCellView: NSTableCellView {
         return formatter
     }()
 
-    static func statusString(for info: DownloadManager.DownloadInfo, download: DownloadManager.Download) -> String {
+    static func statusString(for info: MediaDownloadState, download: MediaDownload) -> String {
         var status = ""
 
-        if download.state == .suspended {
+        if download.isPaused {
             status = "Paused"
-        } else if info.totalBytesExpectedToWrite == 0 {
+        } else if info == .waiting {
             status = "Waiting..."
         } else {
-            let formatter = DownloadsManagementTableCellView.byteCounterFormatter
-
-            status += "\(formatter.string(fromByteCount: info.totalBytesWritten))"
-            status += " of "
-            status += "\(formatter.string(fromByteCount: info.totalBytesExpectedToWrite))"
+            status = "Downloading"
         }
 
         return status
@@ -70,16 +66,11 @@ final class DownloadsManagementTableCellView: NSTableCellView {
                 guard let self = self else { return }
 
                 switch status {
-                case .downloading(let info), .paused(let info):
-                    if info.totalBytesExpectedToWrite > 0 {
-                        self.progressIndicator.isIndeterminate = false
-                        self.progressIndicator.doubleValue = info.progress
-                    } else {
-                        self.progressIndicator.isIndeterminate = true
-                        self.progressIndicator.startAnimation(nil)
-                    }
-                    self.downloadStatusLabel.stringValue = DownloadsManagementTableCellView.statusString(for: info, download: download)
-                case .finished, .cancelled, .none, .failed: ()
+                case .downloading(let progress), .paused(let progress):
+                    self.progressIndicator.isIndeterminate = false
+                    self.progressIndicator.doubleValue = progress
+                    self.downloadStatusLabel.stringValue = DownloadsManagementTableCellView.statusString(for: status, download: download)
+                case .completed, .cancelled, .failed, .waiting: ()
                 }
             }
             .store(in: &cancellables)
@@ -154,16 +145,28 @@ final class DownloadsManagementTableCellView: NSTableCellView {
 
     @objc
     private func togglePause() {
-        if viewModel?.download.state == .suspended {
-            viewModel?.download.resume()
-        } else if viewModel?.download.state == .running {
-            viewModel?.download.pause()
+        guard let viewModel else { return }
+
+        do {
+            if viewModel.download.isPaused {
+                try MediaDownloadManager.shared.resume(viewModel.download)
+            } else {
+                try MediaDownloadManager.shared.pause(viewModel.download)
+            }
+        } catch {
+            NSAlert(error: error).runModal()
         }
     }
 
     @objc
     private func cancel() {
-        viewModel?.download.cancel()
+        guard let viewModel else { return }
+
+        do {
+            try MediaDownloadManager.shared.cancel(viewModel.download)
+        } catch {
+            NSAlert(error: error).runModal()
+        }
     }
 
     private func setup() {

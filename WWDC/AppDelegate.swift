@@ -88,6 +88,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     private var storage: Storage?
     private var syncEngine: SyncEngine?
 
+    @MainActor
     private func startupUI(using storage: Storage, syncEngine: SyncEngine) {
         self.storage = storage
         self.syncEngine = syncEngine
@@ -157,6 +158,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         coordinator?.receiveNotification(with: userInfo)
     }
 
+    @MainActor
     @objc func handleURLEvent(_ event: NSAppleEventDescriptor?, replyEvent: NSAppleEventDescriptor?) {
         guard let event = event else { return }
         guard let urlString = event.paramDescriptor(forKeyword: UInt32(keyDirectObject))?.stringValue else { return }
@@ -165,6 +167,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         openURL(url)
     }
 
+    @MainActor
     private func openURL(_ url: URL) {
         if let command = WWDCAppCommand(from: url) {
             handle(command)
@@ -277,10 +280,12 @@ extension AppDelegate: SUUpdaterDelegate {
 }
 
 extension AppDelegate {
+    @MainActor
     static func run(_ command: WWDCAppCommand) {
         (NSApp.delegate as? Self)?.handle(command, assumeSafe: true)
     }
 
+    @MainActor
     func handle(_ command: WWDCAppCommand, assumeSafe: Bool = false) {
         if command.isForeground {
             DispatchQueue.main.async { NSApp.activate(ignoringOtherApps: true) }

@@ -70,17 +70,17 @@ public final class MediaDownloadManager: ObservableObject, Logging {
             for variant in variants {
                 if let url = content.remoteDownloadURL(for: variant) {
                     guard let localPath = content.relativeLocalPath(for: variant) else {
-                        throw "Unable to determine local path for downloading \(content.id), variant \(variant)."
+                        throw "Unable to determine local path for downloading \(content.downloadIdentifier), variant \(variant)."
                     }
 
                     return try await _startDownload(for: content, remoteURL: url, relativeLocalPath: localPath)
                 }
             }
 
-            throw "Couldn't find a downloadable variant for \(content.id)"
+            throw "Couldn't find a downloadable variant for \(content.downloadIdentifier)"
         } catch {
-            log.error("Start failed for \(content.id, privacy: .public): \(error, privacy: .public)")
-            
+            log.error("Start failed for \(content.downloadIdentifier, privacy: .public): \(error, privacy: .public)")
+
             throw error
         }
     }
@@ -97,7 +97,7 @@ public final class MediaDownloadManager: ObservableObject, Logging {
         }
         return nil
     }
-    
+
     /// Checks if a given content has been downloaded.
     /// - Parameters:
     ///   - content: The content to check.
@@ -110,20 +110,25 @@ public final class MediaDownloadManager: ObservableObject, Logging {
     /// Deletes existing downloaded media for the specified content / variants.
     public func removeDownloadedMedia<T: Downloadable>(for content: T, variants: [T.MediaVariant] = T.mediaDownloadVariants) throws {
         guard let fileURL = downloadedFileURL(for: content, variants: variants) else {
-            throw "Download doesn't exist for \(content.id)."
+            throw "Download doesn't exist for \(content.downloadIdentifier)."
         }
         try fileManager.removeItem(at: fileURL)
     }
 
     /// Returns the active download for the specified content, if any.
     public func download<T: Downloadable>(for content: T) -> MediaDownload? {
-        try? _download(with: content.id)
+        try? _download(with: content.downloadIdentifier)
+    }
+
+    /// Whether the specified content has any downloadable media.
+    public func canDownloadMedia<T: Downloadable>(for content: T, variants: [T.MediaVariant] = T.mediaDownloadVariants) -> Bool {
+        variants.contains(where: { content.remoteDownloadURL(for: $0) != nil })
     }
 
     /// Checks if there's an active download for the specified content.
     /// Returns `true` for any download state except for `.completed`.
     public func isDownloadingMedia<T: Downloadable>(for content: T) -> Bool {
-        guard let download = (try? _download(with: content.id)) else { return false }
+        guard let download = (try? _download(with: content.downloadIdentifier)) else { return false }
         return download.state != .completed
     }
 
@@ -285,7 +290,7 @@ private extension MediaDownloadManager {
 
     /// Creates and starts a download for the specified content and remote URL.
     func _startDownload<T: Downloadable>(for content: T, remoteURL: URL, relativeLocalPath: String) async throws -> MediaDownload {
-        let id = content.id
+        let id = content.downloadIdentifier
 
         let download: MediaDownload
         var isNewDownload = false
@@ -294,7 +299,7 @@ private extension MediaDownloadManager {
             isNewDownload = true
 
             return MediaDownload(
-                id: content.id,
+                id: id,
                 title: content.title,
                 remoteURL: remoteURL,
                 relativeLocalPath: relativeLocalPath
@@ -312,7 +317,7 @@ private extension MediaDownloadManager {
                 download = createDownload()
             } else {
                 guard existingDownload.state.isResumable else {
-                    throw "A download already exists for \(content.id)."
+                    throw "A download already exists for \(id)."
                 }
 
                 download = existingDownload
@@ -482,7 +487,7 @@ private extension MediaDownloadManager {
                 try _moveIntoPlaceIfNeeded(download, state: state)
             } catch {
                 log.error("Moving into place failed for \(id, privacy: .public): \(error, privacy: .public)")
-                
+
                 DispatchQueue.main.async {
                     download.state = .failed(message: error.localizedDescription)
                 }

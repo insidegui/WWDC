@@ -183,6 +183,9 @@
 		F4578D592A2659C5005B311A /* LiveStreamOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4578D582A2659C5005B311A /* LiveStreamOverlay.swift */; };
 		F4578D5B2A2659F0005B311A /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4578D5A2A2659F0005B311A /* VideoPlayer.swift */; };
 		F4578D9F2A26A218005B311A /* WWDCAppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4578D9E2A26A218005B311A /* WWDCAppCommand.swift */; };
+		F46E0AE02C0E6CB20077A5E0 /* MediaDownload+Sorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */; };
+		F46E0AE22C0E6DA80077A5E0 /* Session+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */; };
+		F46E0AE42C0E6EF80077A5E0 /* MediaDownloadManager+.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0AE32C0E6EF80077A5E0 /* MediaDownloadManager+.swift */; };
 		F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DEC826737EFA00B28B31 /* SharePlayManager.swift */; };
 		F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */; };
 		F4777ABA2A2A2F6C00A09179 /* WWDCAgentRemover.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4777AB92A2A2F6C00A09179 /* WWDCAgentRemover.swift */; };
@@ -467,6 +470,9 @@
 		F4578D582A2659C5005B311A /* LiveStreamOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreamOverlay.swift; sourceTree = "<group>"; };
 		F4578D5A2A2659F0005B311A /* VideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
 		F4578D9E2A26A218005B311A /* WWDCAppCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCAppCommand.swift; sourceTree = "<group>"; };
+		F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaDownload+Sorting.swift"; sourceTree = "<group>"; };
+		F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+Download.swift"; sourceTree = "<group>"; };
+		F46E0AE32C0E6EF80077A5E0 /* MediaDownloadManager+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaDownloadManager+.swift"; sourceTree = "<group>"; };
 		F474DEC826737EFA00B28B31 /* SharePlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePlayManager.swift; sourceTree = "<group>"; };
 		F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWWDCActivity.swift; sourceTree = "<group>"; };
 		F4777AB92A2A2F6C00A09179 /* WWDCAgentRemover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentRemover.swift; sourceTree = "<group>"; };
@@ -1134,6 +1140,7 @@
 				F486B3062C0E69E60066749F /* MediaDownload.swift */,
 				F486B2FA2C0E69E60066749F /* MediaDownloadManager.swift */,
 				F486B2F82C0E69E60066749F /* MediaDownloadProtocols.swift */,
+				F46E0AE32C0E6EF80077A5E0 /* MediaDownloadManager+.swift */,
 			);
 			path = MediaDownload;
 			sourceTree = "<group>";
@@ -1156,6 +1163,8 @@
 				F486B3022C0E69E60066749F /* String+Error.swift */,
 				F486B3032C0E69E60066749F /* URL+FileHelpers.swift */,
 				F486B3042C0E69E60066749F /* URLSessionTask+Media.swift */,
+				F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */,
+				F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -1538,6 +1547,7 @@
 				4DBA2F7620FE71BF00ED0253 /* DownloadsStatusButton.swift in Sources */,
 				DD6E06F81EDBC62D000EAEA4 /* SessionTranscriptViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
+				F46E0AE02C0E6CB20077A5E0 /* MediaDownload+Sorting.swift in Sources */,
 				F486B30F2C0E69E60066749F /* PreviewAndTestingSupport.swift in Sources */,
 				DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */,
 				DDF5A5092487066200135E70 /* ClipComposition.swift in Sources */,
@@ -1577,6 +1587,7 @@
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
 				91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */,
+				F46E0AE42C0E6EF80077A5E0 /* MediaDownloadManager+.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
 				DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */,
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
@@ -1590,6 +1601,7 @@
 				F486B3132C0E69E60066749F /* MediaDownload.swift in Sources */,
 				DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */,
 				DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */,
+				F46E0AE22C0E6DA80077A5E0 /* Session+Download.swift in Sources */,
 				DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

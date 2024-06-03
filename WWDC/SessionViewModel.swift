@@ -145,12 +145,6 @@ final class SessionViewModel {
         return validAssetsObservable.map { $0.count > 0 }
     }()
 
-    lazy var rxDownloadableContent: some Publisher<Results<SessionAsset>, Error> = {
-        let downloadableAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '')", DownloadManager.downloadQuality.rawValue)
-
-        return downloadableAssets.collectionPublisher
-    }()
-
     lazy var rxProgresses: some Publisher<Results<SessionProgress>, Error> = {
         let progresses = self.session.progresses.filter(NSPredicate(value: true))
 

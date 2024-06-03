@@ -96,6 +96,7 @@ final class AppCoordinator: Logging, Signposting {
         }
     }
 
+    @MainActor
     init(windowController: MainWindowController, storage: Storage, syncEngine: SyncEngine) {
         let signpostState = Self.signposter.beginInterval("initialization", id: Self.signposter.makeSignpostID(), "begin init")
         self.storage = storage
@@ -112,7 +113,7 @@ final class AppCoordinator: Logging, Signposting {
         )
         self.searchCoordinator = searchCoordinator
 
-        DownloadManager.shared.start(with: storage)
+        MediaDownloadManager.shared.activate()
 
         liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
 
@@ -178,7 +179,7 @@ final class AppCoordinator: Logging, Signposting {
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
         
         let buttonsController = TitleBarButtonsViewController(
-            downloadManager: DownloadManager.shared,
+            downloadManager: .shared,
             storage: storage
         )
         windowController.titleBarViewController.statusViewController = buttonsController
@@ -209,7 +210,8 @@ final class AppCoordinator: Logging, Signposting {
         }.store(in: &cancellables)
         NotificationCenter.default.publisher(for: .SyncEngineDidSyncSessionsAndSchedule).receive(on: DispatchQueue.main).sink { [weak self] note in
             guard self?.checkSyncEngineOperationSucceededAndShowError(note: note) == true else { return }
-            DownloadManager.shared.syncWithFileSystem()
+            #warning("TODO: Reimplement with new download manager (or remove)")
+//            DownloadManager.shared.syncWithFileSystem()
         }.store(in: &cancellables)
         NotificationCenter.default.publisher(for: .WWDCEnvironmentDidChange).receive(on: DispatchQueue.main).sink { _ in
             self.refresh(nil)

@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct ExploreTabRootView: View {
     @EnvironmentObject private var provider: ExploreTabProvider
 
@@ -20,6 +21,7 @@ struct ExploreTabRootView: View {
 
 }
 
+@MainActor
 struct ExploreTabContentView: View {
     static let cardImageCornerRadius: CGFloat = 8
     static let cardWidth: CGFloat = 240
@@ -94,6 +96,7 @@ struct ExploreTabContentView: View {
         }
     }
 
+    @MainActor
     private func open(_ item: ExploreTabContent.Item) {
         guard let destination = item.destination else {
             return

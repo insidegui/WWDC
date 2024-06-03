@@ -7,6 +7,8 @@ extension URL {
 }
 
 public struct PreviewMediaContainer: DownloadableMediaContainer {
+    public var downloadIdentifier: String { id }
+    
     public static let mediaDownloadVariants = [MediaVariant.preview]
 
     public enum MediaVariant: String, DownloadableMediaVariant {

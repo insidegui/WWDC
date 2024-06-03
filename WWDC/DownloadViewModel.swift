@@ -10,11 +10,11 @@ import ConfCore
 import Combine
 
 final class DownloadViewModel {
-    let download: DownloadManager.Download
-    let status: AnyPublisher<DownloadStatus, Never>
+    let download: MediaDownload
+    let status: AnyPublisher<MediaDownloadState, Never>
     let session: Session
 
-    init(download: DownloadManager.Download, status: AnyPublisher<DownloadStatus, Never>, session: Session) {
+    init(download: MediaDownload, status: AnyPublisher<MediaDownloadState, Never>, session: Session) {
         self.download = download
         self.status = status
         self.session = session

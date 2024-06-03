@@ -184,36 +184,41 @@ class SessionActionsViewController: NSViewController {
         }
         .store(in: &cancellables)
 
-        if let downloadState = DownloadManager.shared.downloadStatusObservable(for: viewModel.session) {
+        if let downloadState = MediaDownloadManager.shared.download(for: viewModel.session)?.$state {
             downloadState
                 .throttle(for: .milliseconds(800), scheduler: DispatchQueue.main, latest: true)
                 .sink { [weak self] status in
                     switch status {
-                    case .downloading(let info):
+                    case .waiting:
+                        self?.downloadIndicator.isHidden = false
+                        self?.downloadButton.isHidden = true
+                        self?.clipButton.isHidden = true
+                        self?.downloadIndicator.isIndeterminate = true
+                        self?.downloadIndicator.startAnimating()
+                    case .downloading(let progress):
                         self?.downloadIndicator.isHidden = false
                         self?.downloadButton.isHidden = true
                         self?.clipButton.isHidden = true
 
-                        if info.progress < 0 {
+                        if progress < 0 {
                             self?.downloadIndicator.isIndeterminate = true
                             self?.downloadIndicator.startAnimating()
                         } else {
                             self?.downloadIndicator.isIndeterminate = false
-                            self?.downloadIndicator.progress = Float(info.progress)
+                            self?.downloadIndicator.progress = Float(progress)
                         }
-
                     case .failed:
                         let alert = WWDCAlert.create()
                         alert.messageText = "Download Failed!"
                         alert.informativeText = "An error occurred while attempting to download \"\(viewModel.title)\"."
                         alert.runModal()
                         fallthrough
-                    case .paused, .cancelled, .none:
+                    case .paused, .cancelled:
                         self?.resetDownloadButton()
                         self?.downloadIndicator.isHidden = true
                         self?.downloadButton.isHidden = false
                         self?.clipButton.isHidden = true
-                    case .finished:
+                    case .completed:
                         self?.downloadButton.toolTip = "Delete downloaded video"
                         self?.downloadButton.isHidden = false
                         self?.downloadIndicator.isHidden = true

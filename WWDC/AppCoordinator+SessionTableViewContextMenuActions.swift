@@ -35,6 +35,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
         storage.setFavorite(false, onSessionsWithIDs: viewModels.map({ $0.session.identifier }))
     }
 
+    @MainActor
     func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel]) {
         if viewModels.count > 5 {
             // asking to download many videos, warn
@@ -56,27 +57,27 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
             guard case .yes = choice else { return }
         }
 
-        DownloadManager.shared.download(viewModels.map { $0.session })
+        MediaDownloadManager.shared.download(viewModels.map(\.session))
     }
 
+    @MainActor
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel]) {
-        viewModels.forEach { viewModel in
-
-            guard DownloadManager.shared.isDownloading(viewModel.session) else { return }
-
-            DownloadManager.shared.deleteDownloadedFile(for: viewModel.session)
-        }
+        let cancellableDownloads = viewModels.map(\.session).filter { MediaDownloadManager.shared.isDownloadingMedia(for: $0) }
+        
+        MediaDownloadManager.shared.cancelDownload(for: cancellableDownloads)
     }
 
+    @MainActor
     func sessionTableViewContextMenuActionRemoveDownload(viewModels: [SessionViewModel]) {
-        viewModels.forEach { viewModel in
-            DownloadManager.shared.deleteDownloadedFile(for: viewModel.session)
-        }
+        let deletableDownloads = viewModels.map(\.session).filter { MediaDownloadManager.shared.hasDownloadedMedia(for: $0) }
+
+        MediaDownloadManager.shared.delete(deletableDownloads)
     }
 
+    @MainActor
     func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel]) {
         guard let firstSession = viewModels.first?.session else { return }
-        guard let localURL = DownloadManager.shared.downloadedFileURL(for: firstSession) else { return }
+        guard let localURL = MediaDownloadManager.shared.downloadedFileURL(for: firstSession) else { return }
 
         NSWorkspace.shared.selectFile(localURL.path, inFileViewerRootedAtPath: localURL.deletingLastPathComponent().path)
     }

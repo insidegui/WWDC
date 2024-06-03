@@ -70,11 +70,11 @@ class DownloadsManagementViewController: NSViewController {
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Metrics.topPadding).isActive = true
     }
 
-    let downloadManager: DownloadManager
+    let downloadManager: MediaDownloadManager
     let storage: Storage
     private lazy var cancellables: Set<AnyCancellable> = []
 
-    var downloads = [DownloadManager.Download]() {
+    var downloads = [MediaDownload]() {
         didSet {
             if downloads.count == 0 {
                 dismiss(nil)
@@ -96,7 +96,7 @@ class DownloadsManagementViewController: NSViewController {
         return mainSize ?? NSSize(width: Metrics.popOverDesiredWidth, height: Metrics.popOverDesiredHeight)
     }
 
-    init(downloadManager: DownloadManager, storage: Storage) {
+    init(downloadManager: MediaDownloadManager, storage: Storage) {
         self.downloadManager = downloadManager
         self.storage = storage
 
@@ -106,7 +106,7 @@ class DownloadsManagementViewController: NSViewController {
             .$downloads
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] in
-                self?.downloads = $0.sorted(by: DownloadManager.Download.sortingFunction)
+                self?.downloads = $0.sorted(by: MediaDownload.sortingFunction)
             }
             .store(in: &cancellables)
     }
@@ -129,7 +129,7 @@ extension DownloadsManagementViewController: NSTableViewDataSource, NSTableViewD
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let download = downloads[row]
-        guard let session = storage.session(with: download.session.sessionIdentifier) else { return nil }
+        guard let session = storage.session(with: download.id) else { return nil }
 
         var cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: Constants.downloadStatusCellIdentifier), owner: tableView) as? DownloadsManagementTableCellView
 
@@ -138,9 +138,7 @@ extension DownloadsManagementViewController: NSTableViewDataSource, NSTableViewD
             cell?.identifier = NSUserInterfaceItemIdentifier(rawValue: Constants.downloadStatusCellIdentifier)
         }
 
-        if let status = downloadManager.downloadStatusObservable(for: download) {
-            cell?.viewModel = DownloadViewModel(download: download, status: status, session: session)
-        }
+        cell?.viewModel = DownloadViewModel(download: download, status: download.$state.eraseToAnyPublisher(), session: session)
 
         return cell
     }

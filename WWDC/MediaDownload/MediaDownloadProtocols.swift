@@ -4,7 +4,10 @@ import Cocoa
 public protocol DownloadableMediaVariant: Hashable { }
 
 /// Protocol adopted by types that have media that can be downloaded by ``MediaDownloadManager``.
-public protocol DownloadableMediaContainer: Identifiable where ID == String {
+public protocol DownloadableMediaContainer {
+    /// Identifier for downloads created for this media container.
+    var downloadIdentifier: String { get }
+
     /// The type that describes the supported downlodable media variants.
     associatedtype MediaVariant: DownloadableMediaVariant
 

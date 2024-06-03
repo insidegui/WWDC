@@ -494,15 +494,15 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
         switch menuItem.option {
         case .download:
-            return DownloadManager.shared.isDownloadable(viewModel.session) &&
-                !DownloadManager.shared.isDownloading(viewModel.session) &&
-                !DownloadManager.shared.hasDownloadedVideo(session: viewModel.session)
+            return MediaDownloadManager.shared.canDownloadMedia(for: viewModel.session) &&
+                   !MediaDownloadManager.shared.isDownloadingMedia(for: viewModel.session) &&
+                   !MediaDownloadManager.shared.hasDownloadedMedia(for: viewModel.session)
         case .removeDownload:
             return viewModel.session.isDownloaded
         case .cancelDownload:
-            return DownloadManager.shared.isDownloadable(viewModel.session) && DownloadManager.shared.isDownloading(viewModel.session)
+            return MediaDownloadManager.shared.canDownloadMedia(for: viewModel.session) && MediaDownloadManager.shared.isDownloadingMedia(for: viewModel.session)
         case .revealInFinder:
-            return DownloadManager.shared.hasDownloadedVideo(session: viewModel.session)
+            return MediaDownloadManager.shared.hasDownloadedMedia(for: viewModel.session)
         default: ()
         }
 

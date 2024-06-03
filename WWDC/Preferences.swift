@@ -28,7 +28,8 @@ final class Preferences {
     init() {
         defaults.register(defaults: [
             "localVideoStoragePath": Self.defaultLocalVideoStoragePath,
-            "includeAppBannerInSharedClips": true
+            "includeAppBannerInSharedClips": true,
+            "preferHLSVideoDownload": true
         ])
     }
 
@@ -36,6 +37,28 @@ final class Preferences {
     var localVideoStorageURL: URL {
         get { URL(fileURLWithPath: localVideoStoragePath) }
         set { localVideoStoragePath = newValue.path }
+    }
+
+    /// Prioritizes downloading the HLS version of the video if available.
+    /// The default is `true`. When `false`, downloads the HD variant (mp4) instead.
+    var preferHLSVideoDownload: Bool {
+        get { defaults.bool(forKey: #function) }
+        set { defaults.set(newValue, forKey: #function) }
+    }
+
+    /// Directory where in-flight download metadata is kept.
+    var downloadMetadataStorageURL: URL {
+        let baseURL = URL(fileURLWithPath: Self.defaultLocalVideoStoragePath)
+        let dirURL = baseURL.appendingPathComponent(".DownloadMetadata")
+        if !FileManager.default.fileExists(atPath: dirURL.path) {
+            do {
+                try FileManager.default.createDirectory(at: dirURL, withIntermediateDirectories: true)
+            } catch {
+                assertionFailure("Error creating download metadata storage directory: \(error)")
+                return URL(fileURLWithPath: NSTemporaryDirectory())
+            }
+        }
+        return dirURL
     }
 
     private var localVideoStoragePath: String {

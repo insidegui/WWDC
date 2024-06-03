@@ -146,7 +146,7 @@ public class Session: Object, Decodable {
     // MARK: - Decodable
 
     private enum AssetCodingKeys: String, CodingKey {
-        case id, year, title, downloadHD, downloadSD, slides, hls, images, shelf, duration
+        case id, year, title, downloadHD, downloadSD, downloadHLS, slides, hls, images, shelf, duration
     }
 
     private enum SessionCodingKeys: String, CodingKey {
@@ -229,6 +229,19 @@ public class Session: Object, Decodable {
                 slidesAsset.sessionId = id
 
                 self.assets.append(slidesAsset)
+            }
+
+            if let downloadHLS = try assetContainer.decodeIfPresent(String.self, forKey: .downloadHLS) {
+                let downloadHLSVideo = SessionAsset()
+                downloadHLSVideo.rawAssetType = SessionAssetType.downloadHLSVideo.rawValue
+                downloadHLSVideo.remoteURL = downloadHLS
+                downloadHLSVideo.year = Int(eventYear) ?? -1
+                downloadHLSVideo.sessionId = downloadHLS
+
+                let filename = "\(title).movpkg"
+                downloadHLSVideo.relativeLocalURL = "\(eventYear)/\(filename)"
+
+                self.assets.append(downloadHLSVideo)
             }
         }
 

@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 struct ExploreTabItemView: View {
     var layout: ExploreTabContent.Section.Layout
     var item: ExploreTabContent.Item
@@ -19,6 +20,7 @@ struct ExploreTabItemView: View {
         .contentShape(Rectangle())
     }
 
+    @MainActor
     private struct CardLayout: View {
         var item: ExploreTabContent.Item
         var imageHeight: CGFloat = 200

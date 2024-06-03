@@ -12,7 +12,7 @@ import Combine
 import SwiftUI
 
 final class TitleBarButtonsViewController: NSViewController {
-    private let downloadManager: DownloadManager
+    private let downloadManager: MediaDownloadManager
     private let storage: Storage
     private weak var managementViewController: DownloadsManagementViewController?
     
@@ -22,7 +22,7 @@ final class TitleBarButtonsViewController: NSViewController {
 
     private lazy var cancellables = Set<AnyCancellable>()
 
-    init(downloadManager: DownloadManager, storage: Storage) {
+    init(downloadManager: MediaDownloadManager, storage: Storage) {
         self.downloadManager = downloadManager
         self.storage = storage
 

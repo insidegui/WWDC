@@ -13,6 +13,7 @@ import OSLog
 final class AppCommandsReceiver: Logging {
     static let log = makeLogger(subsystem: "io.wwdc.app")
 
+    @MainActor
     // swiftlint:disable:next cyclomatic_complexity
     func handle(_ command: WWDCAppCommand, storage: Storage) -> DeepLink? {
         log.debug("\(#function, privacy: .public) \(String(describing: command))")
@@ -40,14 +41,14 @@ final class AppCommandsReceiver: Logging {
             return nil
         case .download:
             guard let session = command.session(in: storage) else { return nil }
-            
-            DownloadManager.shared.download([session])
-            
+
+            MediaDownloadManager.shared.download([session])
+
             return nil
         case .cancelDownload:
             guard let session = command.session(in: storage) else { return nil }
             
-            DownloadManager.shared.cancelDownloads([session])
+            MediaDownloadManager.shared.cancelDownload(for: [session])
             
             return nil
         case .revealVideo:
