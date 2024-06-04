@@ -196,7 +196,7 @@ public final class AppleAPIClient: Logging, Signposting {
         }
 
         currentConfigRequest?.cancel()
-        currentConfigRequest = configResource.loadIfNeeded()
+        currentConfigRequest = configResource.load()
     }
 
 }
