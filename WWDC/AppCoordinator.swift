@@ -212,9 +212,11 @@ final class AppCoordinator: Logging, Signposting {
             self.preferredTranscriptLanguageDidChange($0)
         }.store(in: &cancellables)
         NotificationCenter.default.publisher(for: .SyncEngineDidSyncSessionsAndSchedule).receive(on: DispatchQueue.main).sink { [weak self] note in
-            guard self?.checkSyncEngineOperationSucceededAndShowError(note: note) == true else { return }
-            #warning("TODO: Reimplement with new download manager (or remove)")
-//            DownloadManager.shared.syncWithFileSystem()
+            guard let self else { return }
+
+            guard self.checkSyncEngineOperationSucceededAndShowError(note: note) == true else { return }
+            
+            self.downloadMonitor.syncWithFileSystem()
         }.store(in: &cancellables)
         NotificationCenter.default.publisher(for: .WWDCEnvironmentDidChange).receive(on: DispatchQueue.main).sink { _ in
             self.refresh(nil)
