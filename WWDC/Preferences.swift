@@ -29,7 +29,7 @@ final class Preferences {
         defaults.register(defaults: [
             "localVideoStoragePath": Self.defaultLocalVideoStoragePath,
             "includeAppBannerInSharedClips": true,
-            "preferHLSVideoDownload": true
+            "preferHLSVideoDownload": false
         ])
     }
 
