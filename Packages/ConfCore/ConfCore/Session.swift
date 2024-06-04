@@ -138,6 +138,13 @@ public class Session: Object, Decodable {
             related.append(realm.object(ofType: RelatedResource.self, forPrimaryKey: newRelated.identifier) ?? newRelated)
         }
 
+        let currentChapterIds = Set(chapters.map(\.identifier))
+        other.chapters.forEach { newChapter in
+            guard !currentChapterIds.contains(newChapter.identifier) else { return }
+
+            chapters.append(realm.object(ofType: SessionChapter.self, forPrimaryKey: newChapter.identifier) ?? newChapter)
+        }
+
         let currentFocusIds = Set(focuses.map { $0.name })
         other.focuses.forEach { newFocus in
             guard !currentFocusIds.contains(newFocus.name) else { return }
