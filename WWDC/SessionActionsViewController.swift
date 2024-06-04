@@ -165,6 +165,8 @@ class SessionActionsViewController: NSViewController {
         updateBindings()
     }
 
+    private typealias DownloadButtonConfig = (downloadable: Bool, state: MediaDownloadState?)
+
     private func updateBindings() {
         cancellables = []
 
@@ -184,55 +186,93 @@ class SessionActionsViewController: NSViewController {
         }
         .store(in: &cancellables)
 
-        if let downloadState = MediaDownloadManager.shared.download(for: viewModel.session)?.$state {
-            downloadState
-                .throttle(for: .milliseconds(800), scheduler: DispatchQueue.main, latest: true)
-                .sink { [weak self] status in
-                    switch status {
-                    case .waiting:
-                        self?.downloadIndicator.isHidden = false
-                        self?.downloadButton.isHidden = true
-                        self?.clipButton.isHidden = true
-                        self?.downloadIndicator.isIndeterminate = true
-                        self?.downloadIndicator.startAnimating()
-                    case .downloading(let progress):
-                        self?.downloadIndicator.isHidden = false
-                        self?.downloadButton.isHidden = true
-                        self?.clipButton.isHidden = true
+        let downloadID = viewModel.session.downloadIdentifier
 
-                        if progress < 0 {
-                            self?.downloadIndicator.isIndeterminate = true
-                            self?.downloadIndicator.startAnimating()
-                        } else {
-                            self?.downloadIndicator.isIndeterminate = false
-                            self?.downloadIndicator.progress = Float(progress)
-                        }
-                    case .failed:
-                        let alert = WWDCAlert.create()
-                        alert.messageText = "Download Failed!"
-                        alert.informativeText = "An error occurred while attempting to download \"\(viewModel.title)\"."
-                        alert.runModal()
-                        fallthrough
-                    case .paused, .cancelled:
-                        self?.resetDownloadButton()
-                        self?.downloadIndicator.isHidden = true
-                        self?.downloadButton.isHidden = false
-                        self?.clipButton.isHidden = true
-                    case .completed:
-                        self?.downloadButton.toolTip = "Delete downloaded video"
-                        self?.downloadButton.isHidden = false
-                        self?.downloadIndicator.isHidden = true
-                        self?.downloadButton.image = #imageLiteral(resourceName: "trash")
-                        self?.downloadButton.action = #selector(SessionActionsViewController.deleteDownload)
-                        self?.clipButton.isHidden = false
+        /// Download state for existing in-flight download, or `nil` if there's no in-flight download for the session.
+        let inFlightDownloadSignal = MediaDownloadManager.shared.$downloads.map { $0.first(where: { $0.id == downloadID }) }
+            .eraseToAnyPublisher()
+            .replaceErrorWithEmpty()
+        
+        /// `true` if the session has already been downloaded.
+        let alreadyDownloaded = viewModel.session
+            .valuePublisher(keyPaths: ["isDownloaded"])
+            .replaceErrorWithEmpty()
+
+        /// This publisher includes a flag indicating whether the session can be downloaded, as well as the current download state, if any.
+        let downloadButtonConfig: AnyPublisher<DownloadButtonConfig, Never> = Publishers.CombineLatest(inFlightDownloadSignal, alreadyDownloaded)
+            .map { inFlightDownload, session in
+                if session.isDownloaded {
+                    return (true, MediaDownloadState.completed)
+                } else {
+                    guard !session.assets(matching: Session.mediaDownloadVariants).isEmpty else { return (false, nil) }
+                    if let inFlightDownload {
+                        return (true, inFlightDownload.state)
+                    } else {
+                        return (true, nil)
                     }
-                }.store(in: &cancellables)
-        } else {
-            // session can't be downloaded (maybe Lab or download not available yet)
-            downloadIndicator.isHidden = true
+                }
+            }
+            .eraseToAnyPublisher()
+
+        downloadButtonConfig
+            .throttle(for: .milliseconds(800), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] config in
+                self?.configureDownloadButton(with: config)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func configureDownloadButton(with config: DownloadButtonConfig) {
+        /// Ignore downloadable flag if there's an in-flight download, just in case.
+        if config.state == nil {
+            guard config.downloadable else {
+                /// Session can't be downloaded (maybe Lab or download not available yet)
+                downloadIndicator.isHidden = true
+                downloadButton.isHidden = true
+                clipButton.isHidden = true
+                resetDownloadButton()
+                return
+            }
+        }
+
+        switch config.state {
+        case .waiting:
+            downloadIndicator.isHidden = false
+            downloadButton.isHidden = true
+            downloadButton.toolTip = "Preparing download"
+            clipButton.isHidden = true
+            downloadIndicator.isIndeterminate = true
+            downloadIndicator.startAnimating()
+        case .downloading(let progress):
+            downloadButton.toolTip = "Downloading: \(progress.formattedDownloadPercentage())"
+            downloadIndicator.isHidden = false
             downloadButton.isHidden = true
             clipButton.isHidden = true
+
+            if progress < 0 {
+                downloadIndicator.isIndeterminate = true
+                downloadIndicator.startAnimating()
+            } else {
+                downloadIndicator.isIndeterminate = false
+                downloadIndicator.progress = Float(progress)
+            }
+        case .paused, .cancelled, .none, .failed:
             resetDownloadButton()
+            downloadIndicator.isHidden = true
+            downloadButton.isHidden = false
+            clipButton.isHidden = true
+            if case .failed(let message) = config.state {
+                downloadButton.toolTip = message
+            } else {
+                downloadButton.toolTip = nil
+            }
+        case .completed:
+            downloadButton.toolTip = "Delete downloaded video"
+            downloadButton.isHidden = false
+            downloadIndicator.isHidden = true
+            downloadButton.image = #imageLiteral(resourceName: "trash")
+            downloadButton.action = #selector(SessionActionsViewController.deleteDownload)
+            clipButton.isHidden = false
         }
     }
 
@@ -277,5 +317,20 @@ class SessionActionsViewController: NSViewController {
 
     @IBAction func cancelDownload(_ sender: NSView?) {
         delegate?.sessionActionsDidSelectCancelDownload(sender)
+    }
+}
+
+extension NumberFormatter {
+    static let downloadPercent: NumberFormatter = {
+        let f = NumberFormatter()
+        f.maximumFractionDigits = 0
+        f.numberStyle = .percent
+        return f
+    }()
+}
+
+extension Double {
+    func formattedDownloadPercentage() -> String {
+        NumberFormatter.downloadPercent.string(from: NSNumber(value: self)) ?? ""
     }
 }
