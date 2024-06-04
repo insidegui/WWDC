@@ -211,6 +211,7 @@
 		F4F189762C0773C9006EA9A2 /* MacPreviewUtils in Frameworks */ = {isa = PBXBuildFile; productRef = F4F189752C0773C9006EA9A2 /* MacPreviewUtils */; };
 		F4F189782C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F189772C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift */; };
 		F4F1897A2C0775C5006EA9A2 /* NumericContentTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */; };
+		F4F2792A2C0F777200A029A3 /* DownloadManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F279292C0F777200A029A3 /* DownloadManagerView.swift */; };
 		F4FB069F2A2148EA00799F84 /* ExploreTabRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB069E2A2148EA00799F84 /* ExploreTabRootView.swift */; };
 		F4FB06A12A21493B00799F84 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06A02A21493B00799F84 /* PreviewSupport.swift */; };
 		F4FB06BF2A216C1F00799F84 /* RemoteGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */; };
@@ -500,6 +501,7 @@
 		F4F189772C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIPlaybackSpeedToggle.swift; sourceTree = "<group>"; };
 		F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericContentTransition.swift; sourceTree = "<group>"; };
 		F4F1C9A22A24FF50002C3709 /* TeamID.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TeamID.xcconfig; sourceTree = "<group>"; };
+		F4F279292C0F777200A029A3 /* DownloadManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManagerView.swift; sourceTree = "<group>"; };
 		F4FB069E2A2148EA00799F84 /* ExploreTabRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreTabRootView.swift; sourceTree = "<group>"; };
 		F4FB06A02A21493B00799F84 /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
 		F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteGlyph.swift; sourceTree = "<group>"; };
@@ -558,6 +560,7 @@
 				4D66CA51217E2C9B0006A8C9 /* DownloadsManagementTableView.swift */,
 				4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */,
 				4DBA2F7520FE71BF00ED0253 /* DownloadsStatusButton.swift */,
+				F4F279292C0F777200A029A3 /* DownloadManagerView.swift */,
 			);
 			name = Downloads;
 			sourceTree = "<group>";
@@ -1586,6 +1589,7 @@
 				F4578D9F2A26A218005B311A /* WWDCAppCommand.swift in Sources */,
 				F4FB06BF2A216C1F00799F84 /* RemoteGlyph.swift in Sources */,
 				DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */,
+				F4F2792A2C0F777200A029A3 /* DownloadManagerView.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,

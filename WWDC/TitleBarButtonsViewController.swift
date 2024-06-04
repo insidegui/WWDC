@@ -104,15 +104,28 @@ final class TitleBarButtonsViewController: NSViewController {
         stackView.insertArrangedSubview(hostingView, at: 0)
     }
 
+    private var isPresentingDownloadManagementPopover: Bool {
+        guard let presentedViewControllers, let managementViewController else { return false }
+        return presentedViewControllers.contains(managementViewController)
+    }
+
     @objc
     func toggleDownloadsManagementPopover(sender: NSButton) {
-        if managementViewController == nil {
-            let managementViewController = DownloadsManagementViewController(downloadManager: downloadManager, storage: storage)
-            self.managementViewController = managementViewController
-            present(managementViewController, asPopoverRelativeTo: sender.bounds, of: sender, preferredEdge: .maxY, behavior: .semitransient)
-        } else {
+        guard !isPresentingDownloadManagementPopover else {
             managementViewController?.dismiss(nil)
+            return
         }
+
+        let controller: DownloadsManagementViewController
+
+        if let managementViewController {
+            controller = managementViewController
+        } else {
+            controller = DownloadsManagementViewController(downloadManager: downloadManager, storage: storage)
+            self.managementViewController = controller
+        }
+
+        present(controller, asPopoverRelativeTo: sender.bounds, of: sender, preferredEdge: .maxY, behavior: .semitransient)
     }
 }
 
