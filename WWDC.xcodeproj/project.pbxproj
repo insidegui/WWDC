@@ -183,9 +183,25 @@
 		F4578D592A2659C5005B311A /* LiveStreamOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4578D582A2659C5005B311A /* LiveStreamOverlay.swift */; };
 		F4578D5B2A2659F0005B311A /* VideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4578D5A2A2659F0005B311A /* VideoPlayer.swift */; };
 		F4578D9F2A26A218005B311A /* WWDCAppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4578D9E2A26A218005B311A /* WWDCAppCommand.swift */; };
+		F46E0AE02C0E6CB20077A5E0 /* MediaDownload+Sorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */; };
+		F46E0AE22C0E6DA80077A5E0 /* Session+Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */; };
+		F46E0AE42C0E6EF80077A5E0 /* MediaDownloadManager+.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0AE32C0E6EF80077A5E0 /* MediaDownloadManager+.swift */; };
+		F46E0AE72C0E7B780077A5E0 /* DownloadedContentMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46E0AE62C0E7B780077A5E0 /* DownloadedContentMonitor.swift */; };
 		F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DEC826737EFA00B28B31 /* SharePlayManager.swift */; };
 		F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */; };
 		F4777ABA2A2A2F6C00A09179 /* WWDCAgentRemover.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4777AB92A2A2F6C00A09179 /* WWDCAgentRemover.swift */; };
+		F486B3072C0E69E60066749F /* MediaDownloadProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2F82C0E69E60066749F /* MediaDownloadProtocols.swift */; };
+		F486B3082C0E69E60066749F /* FSMediaDownloadMetadataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2F92C0E69E60066749F /* FSMediaDownloadMetadataStore.swift */; };
+		F486B3092C0E69E60066749F /* MediaDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2FA2C0E69E60066749F /* MediaDownloadManager.swift */; };
+		F486B30A2C0E69E60066749F /* AVAssetMediaDownloadEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2FB2C0E69E60066749F /* AVAssetMediaDownloadEngine.swift */; };
+		F486B30B2C0E69E60066749F /* SimulatedMediaDownloadEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2FC2C0E69E60066749F /* SimulatedMediaDownloadEngine.swift */; };
+		F486B30C2C0E69E60066749F /* URLSessionMediaDownloadEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2FD2C0E69E60066749F /* URLSessionMediaDownloadEngine.swift */; };
+		F486B30D2C0E69E60066749F /* Bundle+URLSessionID.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2FF2C0E69E60066749F /* Bundle+URLSessionID.swift */; };
+		F486B30F2C0E69E60066749F /* PreviewAndTestingSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B3012C0E69E60066749F /* PreviewAndTestingSupport.swift */; };
+		F486B3102C0E69E60066749F /* String+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B3022C0E69E60066749F /* String+Error.swift */; };
+		F486B3112C0E69E60066749F /* URL+FileHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B3032C0E69E60066749F /* URL+FileHelpers.swift */; };
+		F486B3122C0E69E60066749F /* URLSessionTask+Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B3042C0E69E60066749F /* URLSessionTask+Media.swift */; };
+		F486B3132C0E69E60066749F /* MediaDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B3062C0E69E60066749F /* MediaDownload.swift */; };
 		F4A882842673AC8500BAB7F5 /* TitleBarButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A882832673AC8500BAB7F5 /* TitleBarButtonsViewController.swift */; };
 		F4A882882673AD2D00BAB7F5 /* SharePlayStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A882862673AD2D00BAB7F5 /* SharePlayStatusView.swift */; };
 		F4CCF942265ED24500A69E62 /* AppCommandsReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4CCF941265ED24500A69E62 /* AppCommandsReceiver.swift */; };
@@ -195,6 +211,7 @@
 		F4F189762C0773C9006EA9A2 /* MacPreviewUtils in Frameworks */ = {isa = PBXBuildFile; productRef = F4F189752C0773C9006EA9A2 /* MacPreviewUtils */; };
 		F4F189782C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F189772C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift */; };
 		F4F1897A2C0775C5006EA9A2 /* NumericContentTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */; };
+		F4F2792A2C0F777200A029A3 /* DownloadManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4F279292C0F777200A029A3 /* DownloadManagerView.swift */; };
 		F4FB069F2A2148EA00799F84 /* ExploreTabRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB069E2A2148EA00799F84 /* ExploreTabRootView.swift */; };
 		F4FB06A12A21493B00799F84 /* PreviewSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06A02A21493B00799F84 /* PreviewSupport.swift */; };
 		F4FB06BF2A216C1F00799F84 /* RemoteGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */; };
@@ -455,9 +472,25 @@
 		F4578D582A2659C5005B311A /* LiveStreamOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveStreamOverlay.swift; sourceTree = "<group>"; };
 		F4578D5A2A2659F0005B311A /* VideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayer.swift; sourceTree = "<group>"; };
 		F4578D9E2A26A218005B311A /* WWDCAppCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WWDCAppCommand.swift; sourceTree = "<group>"; };
+		F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaDownload+Sorting.swift"; sourceTree = "<group>"; };
+		F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Session+Download.swift"; sourceTree = "<group>"; };
+		F46E0AE32C0E6EF80077A5E0 /* MediaDownloadManager+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaDownloadManager+.swift"; sourceTree = "<group>"; };
+		F46E0AE62C0E7B780077A5E0 /* DownloadedContentMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadedContentMonitor.swift; sourceTree = "<group>"; };
 		F474DEC826737EFA00B28B31 /* SharePlayManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePlayManager.swift; sourceTree = "<group>"; };
 		F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWWDCActivity.swift; sourceTree = "<group>"; };
 		F4777AB92A2A2F6C00A09179 /* WWDCAgentRemover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCAgentRemover.swift; sourceTree = "<group>"; };
+		F486B2F82C0E69E60066749F /* MediaDownloadProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaDownloadProtocols.swift; sourceTree = "<group>"; };
+		F486B2F92C0E69E60066749F /* FSMediaDownloadMetadataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSMediaDownloadMetadataStore.swift; sourceTree = "<group>"; };
+		F486B2FA2C0E69E60066749F /* MediaDownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaDownloadManager.swift; sourceTree = "<group>"; };
+		F486B2FB2C0E69E60066749F /* AVAssetMediaDownloadEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVAssetMediaDownloadEngine.swift; sourceTree = "<group>"; };
+		F486B2FC2C0E69E60066749F /* SimulatedMediaDownloadEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimulatedMediaDownloadEngine.swift; sourceTree = "<group>"; };
+		F486B2FD2C0E69E60066749F /* URLSessionMediaDownloadEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionMediaDownloadEngine.swift; sourceTree = "<group>"; };
+		F486B2FF2C0E69E60066749F /* Bundle+URLSessionID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+URLSessionID.swift"; sourceTree = "<group>"; };
+		F486B3012C0E69E60066749F /* PreviewAndTestingSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewAndTestingSupport.swift; sourceTree = "<group>"; };
+		F486B3022C0E69E60066749F /* String+Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Error.swift"; sourceTree = "<group>"; };
+		F486B3032C0E69E60066749F /* URL+FileHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+FileHelpers.swift"; sourceTree = "<group>"; };
+		F486B3042C0E69E60066749F /* URLSessionTask+Media.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSessionTask+Media.swift"; sourceTree = "<group>"; };
+		F486B3062C0E69E60066749F /* MediaDownload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaDownload.swift; sourceTree = "<group>"; };
 		F4A882832673AC8500BAB7F5 /* TitleBarButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleBarButtonsViewController.swift; sourceTree = "<group>"; };
 		F4A882862673AD2D00BAB7F5 /* SharePlayStatusView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharePlayStatusView.swift; sourceTree = "<group>"; };
 		F4CCF941265ED24500A69E62 /* AppCommandsReceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommandsReceiver.swift; sourceTree = "<group>"; };
@@ -468,6 +501,7 @@
 		F4F189772C0774BE006EA9A2 /* PUIPlaybackSpeedToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIPlaybackSpeedToggle.swift; sourceTree = "<group>"; };
 		F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericContentTransition.swift; sourceTree = "<group>"; };
 		F4F1C9A22A24FF50002C3709 /* TeamID.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = TeamID.xcconfig; sourceTree = "<group>"; };
+		F4F279292C0F777200A029A3 /* DownloadManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManagerView.swift; sourceTree = "<group>"; };
 		F4FB069E2A2148EA00799F84 /* ExploreTabRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreTabRootView.swift; sourceTree = "<group>"; };
 		F4FB06A02A21493B00799F84 /* PreviewSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewSupport.swift; sourceTree = "<group>"; };
 		F4FB06BE2A216C1F00799F84 /* RemoteGlyph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteGlyph.swift; sourceTree = "<group>"; };
@@ -526,6 +560,7 @@
 				4D66CA51217E2C9B0006A8C9 /* DownloadsManagementTableView.swift */,
 				4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */,
 				4DBA2F7520FE71BF00ED0253 /* DownloadsStatusButton.swift */,
+				F4F279292C0F777200A029A3 /* DownloadManagerView.swift */,
 			);
 			name = Downloads;
 			sourceTree = "<group>";
@@ -592,6 +627,7 @@
 				DD36A4C11E478CFC00B2EA88 /* ViewModels */,
 				DD36A4C01E478CF500B2EA88 /* Views */,
 				DD36A4BF1E478CF100B2EA88 /* Controllers */,
+				F486B2F72C0E69A60066749F /* MediaDownload */,
 			);
 			path = WWDC;
 			sourceTree = "<group>";
@@ -1083,6 +1119,15 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		F46E0AE52C0E7B6B0077A5E0 /* Integration */ = {
+			isa = PBXGroup;
+			children = (
+				F46E0AE12C0E6DA80077A5E0 /* Session+Download.swift */,
+				F46E0AE62C0E7B780077A5E0 /* DownloadedContentMonitor.swift */,
+			);
+			path = Integration;
+			sourceTree = "<group>";
+		};
 		F474DECA2673800000B28B31 /* SharePlay */ = {
 			isa = PBXGroup;
 			children = (
@@ -1098,6 +1143,44 @@
 				F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		F486B2F72C0E69A60066749F /* MediaDownload */ = {
+			isa = PBXGroup;
+			children = (
+				F46E0AE52C0E7B6B0077A5E0 /* Integration */,
+				F486B3052C0E69E60066749F /* Support */,
+				F486B2FE2C0E69E60066749F /* Engines */,
+				F486B2F92C0E69E60066749F /* FSMediaDownloadMetadataStore.swift */,
+				F486B3062C0E69E60066749F /* MediaDownload.swift */,
+				F486B2FA2C0E69E60066749F /* MediaDownloadManager.swift */,
+				F486B2F82C0E69E60066749F /* MediaDownloadProtocols.swift */,
+				F46E0AE32C0E6EF80077A5E0 /* MediaDownloadManager+.swift */,
+			);
+			path = MediaDownload;
+			sourceTree = "<group>";
+		};
+		F486B2FE2C0E69E60066749F /* Engines */ = {
+			isa = PBXGroup;
+			children = (
+				F486B2FB2C0E69E60066749F /* AVAssetMediaDownloadEngine.swift */,
+				F486B2FC2C0E69E60066749F /* SimulatedMediaDownloadEngine.swift */,
+				F486B2FD2C0E69E60066749F /* URLSessionMediaDownloadEngine.swift */,
+			);
+			path = Engines;
+			sourceTree = "<group>";
+		};
+		F486B3052C0E69E60066749F /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				F486B2FF2C0E69E60066749F /* Bundle+URLSessionID.swift */,
+				F486B3012C0E69E60066749F /* PreviewAndTestingSupport.swift */,
+				F486B3022C0E69E60066749F /* String+Error.swift */,
+				F486B3032C0E69E60066749F /* URL+FileHelpers.swift */,
+				F486B3042C0E69E60066749F /* URLSessionTask+Media.swift */,
+				F46E0ADF2C0E6CB20077A5E0 /* MediaDownload+Sorting.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		F4A882822673AC4800BAB7F5 /* TitleBar */ = {
@@ -1395,10 +1478,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F486B30A2C0E69E60066749F /* AVAssetMediaDownloadEngine.swift in Sources */,
 				DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */,
 				DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */,
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
 				DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */,
+				F486B30C2C0E69E60066749F /* URLSessionMediaDownloadEngine.swift in Sources */,
 				DDC927FE20B7A259004C784D /* NSImage+Compression.swift in Sources */,
 				F4777ABA2A2A2F6C00A09179 /* WWDCAgentRemover.swift in Sources */,
 				DD7A2103218111470052FD07 /* WWDCProgressIndicator.swift in Sources */,
@@ -1411,6 +1496,7 @@
 				F4578D572A2659B3005B311A /* ExploreTabItemView.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
 				F4CCF942265ED24500A69E62 /* AppCommandsReceiver.swift in Sources */,
+				F486B30B2C0E69E60066749F /* SimulatedMediaDownloadEngine.swift in Sources */,
 				DDB3529A1EC8AB2800254815 /* WWDCImageView.swift in Sources */,
 				DD3D14F62486C91F00FCBBBD /* ClipRenderer.swift in Sources */,
 				DDD930761ED52BD800D61BE3 /* DTFolderMonitor.m in Sources */,
@@ -1426,8 +1512,10 @@
 				DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */,
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
 				F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */,
+				F486B3122C0E69E60066749F /* URLSessionTask+Media.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
 				DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */,
+				F46E0AE72C0E7B780077A5E0 /* DownloadedContentMonitor.swift in Sources */,
 				F4578D5B2A2659F0005B311A /* VideoPlayer.swift in Sources */,
 				4D4D80C4217D281D00D1C233 /* DownloadViewModel.swift in Sources */,
 				DDB28F931EAD48D70077703F /* UserActivityRepresentable.swift in Sources */,
@@ -1437,6 +1525,7 @@
 				F4FB06C12A2178C000799F84 /* WWDCWindowContentViewController.swift in Sources */,
 				DDEDFCF11ED927A4002477C8 /* ToggleFilter.swift in Sources */,
 				F4578D592A2659C5005B311A /* LiveStreamOverlay.swift in Sources */,
+				F486B3092C0E69E60066749F /* MediaDownloadManager.swift in Sources */,
 				9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */,
@@ -1445,6 +1534,7 @@
 				DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */,
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DDB352821EC7C55300254815 /* DateProvider.swift in Sources */,
+				F486B3082C0E69E60066749F /* FSMediaDownloadMetadataStore.swift in Sources */,
 				DDC678221EDB956700A4E19C /* BookmarkViewController.swift in Sources */,
 				DD7F386A1EABE996002D8C00 /* SessionTableCellView.swift in Sources */,
 				4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */,
@@ -1455,9 +1545,11 @@
 				DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */,
 				F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */,
 				4D66CA50217E2C800006A8C9 /* DownloadsManagementTableRowView.swift in Sources */,
+				F486B3072C0E69E60066749F /* MediaDownloadProtocols.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
 				DD0159D11ED0CEF500F980F1 /* PreferencesCoordinator.swift in Sources */,
 				DDEDFCF31ED92F2A002477C8 /* TextualFilter.swift in Sources */,
+				F486B3102C0E69E60066749F /* String+Error.swift in Sources */,
 				DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */,
 				DD6E06F41EDBC11F000EAEA4 /* WWDCTextButton.swift in Sources */,
 				DD7F38621EABD6CF002D8C00 /* SessionsTableViewController.swift in Sources */,
@@ -1470,6 +1562,8 @@
 				4DBA2F7620FE71BF00ED0253 /* DownloadsStatusButton.swift in Sources */,
 				DD6E06F81EDBC62D000EAEA4 /* SessionTranscriptViewController.swift in Sources */,
 				DD36A4B01E478C6A00B2EA88 /* AppDelegate.swift in Sources */,
+				F46E0AE02C0E6CB20077A5E0 /* MediaDownload+Sorting.swift in Sources */,
+				F486B30F2C0E69E60066749F /* PreviewAndTestingSupport.swift in Sources */,
 				DDA7B7182482EB8900F86668 /* PlaybackPreferencesViewController.swift in Sources */,
 				DDF5A5092487066200135E70 /* ClipComposition.swift in Sources */,
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
@@ -1486,6 +1580,7 @@
 				DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
 				914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */,
+				F486B30D2C0E69E60066749F /* Bundle+URLSessionID.swift in Sources */,
 				4D7482CA20FF735D008D156C /* WWDCWindowController.swift in Sources */,
 				4DA25DCC21064B4800762BBD /* WWDCTabViewControllerTabBar.swift in Sources */,
 				DDEA85FC1EB52AB5002AE0EB /* VideoPlayerWindowController.swift in Sources */,
@@ -1494,6 +1589,7 @@
 				F4578D9F2A26A218005B311A /* WWDCAppCommand.swift in Sources */,
 				F4FB06BF2A216C1F00799F84 /* RemoteGlyph.swift in Sources */,
 				DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */,
+				F4F2792A2C0F777200A029A3 /* DownloadManagerView.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,
@@ -1507,17 +1603,21 @@
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
 				91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */,
+				F46E0AE42C0E6EF80077A5E0 /* MediaDownloadManager+.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
 				DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */,
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
+				F486B3112C0E69E60066749F /* URL+FileHelpers.swift in Sources */,
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
 				DDA50E3524AA5090007C77C6 /* Boot.swift in Sources */,
 				DDC6781B1EDB629C00A4E19C /* GeneralPreferencesViewController.swift in Sources */,
 				DD4648471ECA5947005C57C6 /* WWDCWindow.swift in Sources */,
 				F4D0F03A2A21056900C74B50 /* TopicHeaderRow.swift in Sources */,
 				DDA7B7162482BB1A00F86668 /* SessionTranscriptWindowController.swift in Sources */,
+				F486B3132C0E69E60066749F /* MediaDownload.swift in Sources */,
 				DDB28F911EAD2A050077703F /* WWDCAlert.swift in Sources */,
 				DD90CDC81ED77A3900CADE86 /* SearchFiltersViewController.swift in Sources */,
+				F46E0AE22C0E6DA80077A5E0 /* Session+Download.swift in Sources */,
 				DDF32EBB1EBE65DD0028E39D /* AppCoordinator+SessionActions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

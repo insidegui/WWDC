@@ -146,7 +146,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     func showClipUI() {
         guard let session = viewModel?.session else { return }
-        guard let url = DownloadManager.shared.downloadedFileURL(for: session) else { return }
+        guard let url = MediaDownloadManager.shared.downloadedFileURL(for: session) else { return }
 
         let subtitle = session.event.first?.name ?? "Apple Developer"
 

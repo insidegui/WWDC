@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -11,7 +11,7 @@
             <objects>
                 <viewController storyboardIdentifier="GeneralPreferencesViewController" id="9dt-pe-Bsa" customClass="GeneralPreferencesViewController" customModule="WWDC" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="scn-7e-mlv">
-                        <rect key="frame" x="0.0" y="0.0" width="650" height="440"/>
+                        <rect key="frame" x="0.0" y="0.0" width="650" height="470"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="oXs-gK-eLO">
@@ -24,7 +24,7 @@
                                 <rect key="frame" x="39" y="194" width="611" height="5"/>
                             </box>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N9Z-iX-jvK">
-                                <rect key="frame" x="244" y="277" width="161" height="52"/>
+                                <rect key="frame" x="202" y="277" width="161" height="52"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="horizontal" alignment="baseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aFN-Kq-0II">
                                         <rect key="frame" x="0.0" y="30" width="161" height="22"/>
@@ -92,7 +92,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yew-yF-ZWD">
-                                <rect key="frame" x="188" y="315" width="50" height="16"/>
+                                <rect key="frame" x="146" y="315" width="50" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Search:" id="fto-X6-Q8v">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -100,7 +100,7 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="horizontal" alignment="baseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GJT-d9-qvO">
-                                <rect key="frame" x="244" y="216" width="297" height="22"/>
+                                <rect key="frame" x="202" y="216" width="297" height="22"/>
                                 <subviews>
                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="Xvh-jU-3qW">
                                         <rect key="frame" x="-2" y="-2" width="42" height="25"/>
@@ -127,7 +127,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YmL-o7-wzA">
-                                <rect key="frame" x="121" y="397" width="117" height="16"/>
+                                <rect key="frame" x="79" y="427" width="117" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Downloads Folder:" id="wBE-cT-TAg">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -135,10 +135,10 @@
                                 </textFieldCell>
                             </textField>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jme-OU-7GG">
-                                <rect key="frame" x="244" y="369" width="216" height="42"/>
+                                <rect key="frame" x="202" y="369" width="258" height="72"/>
                                 <subviews>
                                     <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eKi-p7-aRV">
-                                        <rect key="frame" x="-2" y="28" width="154" height="14"/>
+                                        <rect key="frame" x="-2" y="58" width="154" height="14"/>
                                         <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" alignment="left" title="/Users/inside/Movies/WWDC" id="IRs-Ob-UjV">
                                             <font key="font" metaFont="label" size="11"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -146,7 +146,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9eP-at-INJ">
-                                        <rect key="frame" x="0.0" y="0.0" width="201" height="20"/>
+                                        <rect key="frame" x="0.0" y="30" width="201" height="20"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zMH-NN-9R2">
                                                 <rect key="frame" x="-7" y="-7" width="130" height="32"/>
@@ -178,18 +178,71 @@
                                             <real value="3.4028234663852886e+38"/>
                                         </customSpacing>
                                     </stackView>
+                                    <stackView distribution="fill" orientation="horizontal" alignment="baseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o3L-5m-ayy">
+                                        <rect key="frame" x="0.0" y="0.0" width="258" height="22"/>
+                                        <subviews>
+                                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="pZ1-7t-Dmm">
+                                                <rect key="frame" x="-2" y="-2" width="42" height="25"/>
+                                                <connections>
+                                                    <action selector="preferHLSDownloadsSwitchAction:" target="9dt-pe-Bsa" id="152-N9-v01"/>
+                                                </connections>
+                                            </switch>
+                                            <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gkn-cy-bDG">
+                                                <rect key="frame" x="46" y="3" width="212" height="17"/>
+                                                <subviews>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wbz-zD-dxx">
+                                                        <rect key="frame" x="-2" y="1" width="192" height="16"/>
+                                                        <string key="toolTip">When searching in the schedule or videos tab, the search results will include any session where any of its bookmarks contains the searched phrase</string>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Download videos with subtitles" id="c7o-MT-MuG">
+                                                            <font key="font" metaFont="system"/>
+                                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dJn-RA-ocR">
+                                                        <rect key="frame" x="195" y="-2" width="18" height="19"/>
+                                                        <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AdL-BV-cBJ">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <segue destination="R0D-EJ-5W6" kind="popover" popoverAnchorView="dJn-RA-ocR" popoverBehavior="t" preferredEdge="minY" id="N8e-iD-b6e"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <visibilityPriorities>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
+                                                </visibilityPriorities>
+                                                <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                </customSpacing>
+                                            </stackView>
+                                        </subviews>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
                                 </subviews>
                                 <visibilityPriorities>
+                                    <integer value="1000"/>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="horizontal" alignment="baseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFd-RS-NUX">
-                                <rect key="frame" x="244" y="152" width="180" height="22"/>
+                                <rect key="frame" x="202" y="152" width="180" height="22"/>
                                 <subviews>
                                     <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="SF8-ZN-I8k">
                                         <rect key="frame" x="-2" y="-2" width="42" height="25"/>
@@ -216,7 +269,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T2X-gb-6tZ">
-                                <rect key="frame" x="288" y="116" width="344" height="28"/>
+                                <rect key="frame" x="246" y="116" width="344" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="0Xp-88-sJv"/>
                                 </constraints>
@@ -230,7 +283,7 @@
                                 <rect key="frame" x="39" y="94" width="611" height="5"/>
                             </box>
                             <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5e8-zi-7Hw">
-                                <rect key="frame" x="422" y="56" width="102" height="20"/>
+                                <rect key="frame" x="380" y="56" width="102" height="20"/>
                                 <subviews>
                                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mw6-7C-nEg">
                                         <rect key="frame" x="-3" y="-4" width="39" height="25"/>
@@ -272,7 +325,7 @@
                                 </customSpacing>
                             </stackView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hK9-wv-pXK">
-                                <rect key="frame" x="288" y="58" width="128" height="16"/>
+                                <rect key="frame" x="246" y="58" width="128" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Transcript language:" id="sYf-Uq-UWl">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -280,7 +333,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gny-ev-Via">
-                                <rect key="frame" x="288" y="20" width="344" height="28"/>
+                                <rect key="frame" x="246" y="20" width="344" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="7tV-eK-eZz"/>
                                 </constraints>
@@ -346,6 +399,8 @@
                         <outlet property="indexingProgressIndicator" destination="Ume-78-MMk" id="EEh-uS-gzE"/>
                         <outlet property="languagesDescriptionLabel" destination="Gny-ev-Via" id="IxK-qS-Zfi"/>
                         <outlet property="loadingLanguagesSpinner" destination="RNs-XG-tCh" id="ZRc-UD-eQe"/>
+                        <outlet property="preferHLSDownloadsLabel" destination="Wbz-zD-dxx" id="SjS-un-Prn"/>
+                        <outlet property="preferHLSDownloadsSwitch" destination="pZ1-7t-Dmm" id="Khi-rn-5QE"/>
                         <outlet property="refreshAutomaticallyLabel" destination="TGp-6Z-M3P" id="l1E-Qe-TR7"/>
                         <outlet property="refreshPeriodicallySwitch" destination="Xvh-jU-3qW" id="eOg-ec-EyX"/>
                         <outlet property="searchInBookmarksSwitch" destination="sOP-i9-bwk" id="E40-hF-7eO"/>
@@ -358,6 +413,41 @@
                 <customObject id="Cjz-NA-wrV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="56" y="193"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="prk-F0-26q">
+            <objects>
+                <viewController id="R0D-EJ-5W6" sceneMemberID="viewController">
+                    <view key="view" id="xF3-QM-w7Z">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="200"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="wN9-vw-rdh">
+                                <rect key="frame" x="18" y="20" width="414" height="160"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="410" id="7QR-lx-5J2"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" id="iXM-dO-dg2">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <mutableString key="title">With this option enabled, the app will download the HLS version of the videos for offline playback. The HLS version includes all subtitles, but it has some downsides when compared to the regular HD download version that's used when this option is disabled. Downsides of the HLS version include slower seek performance and the inability to export clips from downloaded videos.
+
+This setting only applies to new downloads, any videos that have already been downloaded will remain. You can download the new version by deleting and re-downloading videos.</mutableString>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="wN9-vw-rdh" secondAttribute="trailing" constant="20" symbolic="YES" id="d6c-5q-xrN"/>
+                            <constraint firstItem="wN9-vw-rdh" firstAttribute="leading" secondItem="xF3-QM-w7Z" secondAttribute="leading" constant="20" symbolic="YES" id="fh3-rH-5AZ"/>
+                            <constraint firstItem="wN9-vw-rdh" firstAttribute="top" secondItem="xF3-QM-w7Z" secondAttribute="top" constant="20" symbolic="YES" id="prk-tl-U8E"/>
+                            <constraint firstAttribute="bottom" secondItem="wN9-vw-rdh" secondAttribute="bottom" constant="20" symbolic="YES" id="vpt-8v-yXp"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <customObject id="1bR-Sr-Hix" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="217" y="838"/>
         </scene>
         <!--Playback Preferences View Controller-->
         <scene sceneID="Lp0-ua-x0G">

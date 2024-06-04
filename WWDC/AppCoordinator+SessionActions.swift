@@ -15,10 +15,11 @@ import OSLog
 
 extension AppCoordinator: SessionActionsViewControllerDelegate {
 
+    @MainActor
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
-        DownloadManager.shared.cancelDownloads([viewModel.session])
+        MediaDownloadManager.shared.cancelDownload(for: [viewModel.session])
     }
 
     func sessionActionsDidSelectFavorite(_ sender: NSView?) {
@@ -37,10 +38,11 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
         NSWorkspace.shared.open(url)
     }
 
+    @MainActor
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
-        DownloadManager.shared.download([viewModel.session])
+        MediaDownloadManager.shared.download([viewModel.session])
     }
 
     func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {
@@ -63,7 +65,11 @@ extension AppCoordinator: SessionActionsViewControllerDelegate {
 
         switch choice {
         case .yes:
-            DownloadManager.shared.deleteDownloadedFile(for: viewModel.session)
+            do {
+                try MediaDownloadManager.shared.removeDownloadedMedia(for: viewModel.session)
+            } catch {
+                NSAlert(error: error).runModal()
+            }
         case .no:
             break
         }

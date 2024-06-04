@@ -96,6 +96,9 @@ final class AppCoordinator: Logging, Signposting {
         }
     }
 
+    private lazy var downloadMonitor = DownloadedContentMonitor()
+
+    @MainActor
     init(windowController: MainWindowController, storage: Storage, syncEngine: SyncEngine) {
         let signpostState = Self.signposter.beginInterval("initialization", id: Self.signposter.makeSignpostID(), "begin init")
         self.storage = storage
@@ -111,8 +114,6 @@ final class AppCoordinator: Logging, Signposting {
             restorationFiltersState: Preferences.shared.filtersState
         )
         self.searchCoordinator = searchCoordinator
-
-        DownloadManager.shared.start(with: storage)
 
         liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
 
@@ -178,7 +179,7 @@ final class AppCoordinator: Logging, Signposting {
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
         
         let buttonsController = TitleBarButtonsViewController(
-            downloadManager: DownloadManager.shared,
+            downloadManager: .shared,
             storage: storage
         )
         windowController.titleBarViewController.statusViewController = buttonsController
@@ -186,6 +187,9 @@ final class AppCoordinator: Logging, Signposting {
         buttonsController.handleSharePlayClicked = { [weak self] in
             DispatchQueue.main.async { self?.startSharePlay() }
         }
+
+        MediaDownloadManager.shared.activate()
+        downloadMonitor.activate(with: storage)
 
         startup()
         Self.signposter.endInterval("initialization", signpostState, "end init")
@@ -208,8 +212,11 @@ final class AppCoordinator: Logging, Signposting {
             self.preferredTranscriptLanguageDidChange($0)
         }.store(in: &cancellables)
         NotificationCenter.default.publisher(for: .SyncEngineDidSyncSessionsAndSchedule).receive(on: DispatchQueue.main).sink { [weak self] note in
-            guard self?.checkSyncEngineOperationSucceededAndShowError(note: note) == true else { return }
-            DownloadManager.shared.syncWithFileSystem()
+            guard let self else { return }
+
+            guard self.checkSyncEngineOperationSucceededAndShowError(note: note) == true else { return }
+            
+            self.downloadMonitor.syncWithFileSystem()
         }.store(in: &cancellables)
         NotificationCenter.default.publisher(for: .WWDCEnvironmentDidChange).receive(on: DispatchQueue.main).sink { _ in
             self.refresh(nil)

@@ -237,3 +237,5 @@ extension NSApplication {
         exit(0)
     }
 }
+
+extension NSWorkspace: @unchecked Sendable { }
