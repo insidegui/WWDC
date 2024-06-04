@@ -20,7 +20,7 @@ final class DownloadsManagementViewController: NSViewController, ObservableObjec
     private lazy var hostingView: NSView = NSHostingView(rootView: DownloadManagerView(controller: self).environmentObject(downloadManager))
 
     override func loadView() {
-        view = DownloadManagementRootView(frame: NSRect(x: 0, y: 0, width: Metrics.defaultWidth, height: Metrics.defaultHeight))
+        view = NSView(frame: NSRect(x: 0, y: 0, width: Metrics.defaultWidth, height: Metrics.defaultHeight))
 
         hostingView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -95,8 +95,5 @@ extension DownloadsManagementViewController: NSPopoverDelegate {
     func popoverShouldDetach(_ popover: NSPopover) -> Bool {
         return true
     }
-}
 
-private final class DownloadManagementRootView: NSView {
-    override var mouseDownCanMoveWindow: Bool { true }
 }
