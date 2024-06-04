@@ -47,19 +47,6 @@ public class RelatedResource: Object, Decodable {
         return "identifier"
     }
 
-    func merge(with other: RelatedResource, in realm: Realm) {
-        assert(other.identifier == identifier, "Can't merge two objects with different identifiers!")
-
-        title = other.title
-        url = other.url
-        descriptor = other.descriptor
-        type = other.type
-
-        if let otherSession = other.session, let session = session {
-            session.merge(with: otherSession, in: realm)
-        }
-    }
-
     // MARK: - Codable
     enum CodingKeys: String, CodingKey {
         case title, id, url, description

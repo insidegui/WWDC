@@ -43,8 +43,11 @@ public class Session: Object, Decodable {
     /// The session's assets (videos, slides, links)
     public let assets = List<SessionAsset>()
 
-    // The session's "related" resources -- other sessions, documentation, guides and sample code
+    /// The session's "related" resources -- other sessions, documentation, guides and sample code
     public var related = List<RelatedResource>()
+
+    /// Timed chapter metadata for the session's video.
+    public var chapters = List<SessionChapter>()
 
     /// Whether this session is downloaded
     @objc public dynamic var isDownloaded = false
@@ -146,7 +149,7 @@ public class Session: Object, Decodable {
     // MARK: - Decodable
 
     private enum AssetCodingKeys: String, CodingKey {
-        case id, year, title, downloadHD, downloadSD, downloadHLS, slides, hls, images, shelf, duration
+        case id, year, title, downloadHD, downloadSD, downloadHLS, slides, hls, images, shelf, duration, chapters
     }
 
     private enum SessionCodingKeys: String, CodingKey {
@@ -263,8 +266,28 @@ public class Session: Object, Decodable {
             }
         }
 
+        func decodeChaptersIfPresent() {
+            /// Catching errors for chapters because they're not vital to the app so we don't want everything to blow
+            /// up in case something about the chapters changes on the backend.
+            do {
+                let mediaContainer: KeyedDecodingContainer<AssetCodingKeys>
+                do {
+                    mediaContainer = try sessionContainer
+                        .nestedContainer(keyedBy: AssetCodingKeys.self, forKey: .media)
+                } catch DecodingError.keyNotFound { return }
+
+                if let chapters = try mediaContainer.decodeIfPresent([SessionChapter].self, forKey: .chapters) {
+                    chapters.forEach { $0.generateIdentifier(sessionId: id) }
+                    self.chapters.append(objectsIn: chapters)
+                }
+            } catch {
+                log.error("Error decoding chapters for \(id, privacy: .public): \(error, privacy: .public)")
+            }
+        }
+
         try decodeAssetIfPresent()
         try decodeRelatedIfPresent()
+        decodeChaptersIfPresent()
 
         if let permalink = try sessionContainer.decodeIfPresent(String.self, forKey: .webPermalink) {
             let webPageAsset = SessionAsset()
