@@ -48,6 +48,9 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
 
     @IBOutlet weak var downloadsFolderLabel: NSTextField!
 
+    @IBOutlet weak var preferHLSDownloadsLabel: NSTextField!
+    @IBOutlet weak var preferHLSDownloadsSwitch: NSSwitch!
+
     @IBOutlet weak var downloadsFolderIntroLabel: NSTextField!
     @IBOutlet weak var searchIntroLabel: NSTextField!
     @IBOutlet weak var includeBookmarksLabel: NSTextField!
@@ -73,6 +76,7 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
 
         downloadsFolderIntroLabel.textColor = .prefsPrimaryText
         searchIntroLabel.textColor = .prefsPrimaryText
+        preferHLSDownloadsLabel.textColor = .prefsPrimaryText
         includeBookmarksLabel.textColor = .prefsPrimaryText
         includeTranscriptsLabel.textColor = .prefsPrimaryText
         refreshAutomaticallyLabel.textColor = .prefsPrimaryText
@@ -86,6 +90,7 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         dividerC.fillColor = .separatorColor
         dividerE.fillColor = .separatorColor
 
+        preferHLSDownloadsSwitch.isOn = Preferences.shared.preferHLSVideoDownload
         searchInTranscriptsSwitch.isOn = Preferences.shared.searchInTranscripts
         searchInBookmarksSwitch.isOn = Preferences.shared.searchInBookmarks
         refreshPeriodicallySwitch.isOn = Preferences.shared.refreshPeriodically
@@ -249,6 +254,12 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         let response = alert.runModal()
 
         return response == .alertSecondButtonReturn
+    }
+
+    @IBAction func preferHLSDownloadsSwitchAction(_ sender: NSSwitch) {
+        guard sender.isOn != Preferences.shared.preferHLSVideoDownload else { return }
+
+        Preferences.shared.preferHLSVideoDownload = sender.isOn
     }
 
     // MARK: - Transcript languages
