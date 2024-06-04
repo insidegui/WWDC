@@ -332,19 +332,23 @@ public final class Storage: Logging, Signposting {
             return
         }
         
-        performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { backgroundRealm in
+        performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { [weak self] backgroundRealm in
+            guard let self else { return }
+
             // We currently only care about whatever the latest event hero is.
             let existingHeroData = backgroundRealm.objects(EventHero.self)
-            backgroundRealm.delete(existingHeroData)
-        }
+            if !existingHeroData.isEmpty {
+                self.log.info("Removing existing event hero")
+                backgroundRealm.delete(existingHeroData)
+            }
 
-        guard let hero = response.eventHero else {
-            log.debug("Config response didn't contain an event hero")
-            return
-        }
+            if let hero = response.eventHero {
+                self.log.info("Storing event hero \(hero.identifier, privacy: .public)")
 
-        performSerializedBackgroundWrite(disableAutorefresh: false, completionBlock: completion) { backgroundRealm in
-            backgroundRealm.add(hero, update: .modified)
+                backgroundRealm.add(hero, update: .modified)
+            } else {
+                self.log.info("Config response had no event hero")
+            }
         }
     }
 
