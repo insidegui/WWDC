@@ -207,7 +207,7 @@ class SessionActionsViewController: NSViewController {
         /// This publisher includes a flag indicating whether the session can be downloaded, as well as the current download state, if any.
         let downloadButtonConfig: AnyPublisher<DownloadButtonConfig, Never> = Publishers.CombineLatest(inFlightDownloadSignal, alreadyDownloaded)
             .map { inFlightDownload, session in
-                if session.isDownloaded {
+                if session.isDownloaded, MediaDownloadManager.shared.hasDownloadedMedia(for: session) {
                     return DownloadButtonConfig(hasDownloadableContent: true, isDownloaded: true)
                 } else {
                     guard !session.assets(matching: Session.mediaDownloadVariants).isEmpty else {
@@ -253,13 +253,36 @@ class SessionActionsViewController: NSViewController {
             updateDownloadButton(with: nil)
             return
         }
-        
+
         downloadStateCancellable = inFlightDownload.$state.receive(on: DispatchQueue.main).sink { [weak self] state in
             self?.updateDownloadButton(with: state)
         }
     }
 
     private func updateDownloadButton(with state: MediaDownloadState?) {
+        guard let session = viewModel?.session else { return }
+
+        func applyStartDownloadState() {
+            resetDownloadButton()
+            downloadIndicator.isHidden = true
+            downloadButton.isHidden = false
+            clipButton.isHidden = true
+            if case .failed(let message) = state {
+                downloadButton.toolTip = message
+            } else {
+                downloadButton.toolTip = nil
+            }
+        }
+
+        /// We may have a download that's in completed state, but where the file has already been deleted,
+        /// in which case we show the button state to start the download.
+        if case .completed = state {
+            guard MediaDownloadManager.shared.hasDownloadedMedia(for: session) else {
+                applyStartDownloadState()
+                return
+            }
+        }
+
         switch state {
         case .waiting:
             downloadIndicator.isHidden = false
@@ -282,15 +305,7 @@ class SessionActionsViewController: NSViewController {
                 downloadIndicator.progress = Float(progress)
             }
         case .paused, .cancelled, .none, .failed:
-            resetDownloadButton()
-            downloadIndicator.isHidden = true
-            downloadButton.isHidden = false
-            clipButton.isHidden = true
-            if case .failed(let message) = state {
-                downloadButton.toolTip = message
-            } else {
-                downloadButton.toolTip = nil
-            }
+            applyStartDownloadState()
         case .completed:
             downloadButton.toolTip = "Delete downloaded video"
             downloadButton.isHidden = false
