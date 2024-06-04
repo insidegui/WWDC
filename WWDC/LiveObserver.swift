@@ -254,22 +254,43 @@ private final class CloudKitLiveObserver: Logging {
     private func store(_ records: [CKRecord]) {
         log.debug("Storing live records")
 
-        storage.backgroundUpdate { realm in
+        storage.backgroundUpdate { [weak self] realm in
+            guard let self else { return }
+
             records.forEach { record in
                 guard let asset = SessionAsset(record: record) else { return }
                 guard let session = realm.object(ofType: Session.self, forPrimaryKey: asset.sessionId) else { return }
                 guard let instance = session.instances.first else { return }
 
+                /// Allow record to override state from the backend API only if the record's `overrideState` is set to `1`,
+                /// otherwise existing local data from Apple's backend always wins.
+                let canOverrideExistingState = record["overrideState"] as? Int == 1
+
                 if let existingAsset = realm.object(ofType: SessionAsset.self, forPrimaryKey: asset.identifier) {
-                    // update existing asset hls URL if appropriate
-                    existingAsset.remoteURL = asset.remoteURL
+                    /// Update existing asset hls URL if appropriate
+                    if canOverrideExistingState {
+                        existingAsset.remoteURL = asset.remoteURL
+                    } else {
+                        self.log.info("Ignoring remoteURL override from record for \(asset.sessionId, privacy: .public) because overrideState is not 1")
+                    }
                 } else {
                     // add new live asset to corresponding session
                     session.assets.append(asset)
                 }
 
                 instance.isForcedLive = (record["isLive"] as? Int == 1)
-                instance.isCurrentlyLive = instance.isForcedLive
+
+                /// Allow record to override live state from not live to live, but not the other way around.
+                if !instance.isCurrentlyLive {
+                    instance.isCurrentlyLive = instance.isForcedLive
+                } else {
+                    /// Allow record to override live state however it wants if record's `overrideState` is `1`.
+                    if canOverrideExistingState {
+                        instance.isCurrentlyLive = instance.isForcedLive
+                    } else {
+                        self.log.info("Ignoring live state override from record for \(asset.sessionId, privacy: .public) because overrideState is not 1")
+                    }
+                }
             }
         }
     }
