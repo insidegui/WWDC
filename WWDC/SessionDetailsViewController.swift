@@ -7,11 +7,21 @@
 //
 
 import Cocoa
+import SwiftUI
+import ConfUIFoundation
+import Combine
 
 final class SessionDetailsViewController: WWDCWindowContentViewController {
 
+    enum Tab: Int, WWDCTab, CaseIterable {
+        case overview
+        case transcript
+        case chapters
+    }
+
     private struct Metrics {
         static let padding: CGFloat = 46
+        static let minShelfHeight: CGFloat = 280
     }
 
     var viewModel: SessionViewModel? {
@@ -27,12 +37,13 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
             }
 
             if viewModel.identifier != oldValue?.identifier {
-                showOverview()
+                tabController.selectedTab = .overview
             }
 
             transcriptButton.isHidden = (viewModel.session.transcript() == nil)
+            chaptersButton.isHidden = viewModel.session.chapters.isEmpty
 
-            let shouldHideButtonsBar = transcriptButton.isHidden && bookmarksButton.isHidden
+            let shouldHideButtonsBar = tabButtons.suffix(3).allSatisfy(\.isHidden)
             menuButtonsContainer.isHidden = shouldHideButtonsBar
         }
     }
@@ -44,6 +55,7 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
         b.state = .on
         b.target = self
         b.action = #selector(tabButtonAction)
+        b.tag = Tab.overview.rawValue
 
         return b
     }()
@@ -56,20 +68,19 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
         b.target = self
         b.action = #selector(tabButtonAction)
         b.isHidden = true
+        b.tag = Tab.transcript.rawValue
 
         return b
     }()
 
-    private lazy var bookmarksButton: WWDCTextButton = {
+    private lazy var chaptersButton: WWDCTextButton = {
         let b = WWDCTextButton()
 
-        b.title = "Bookmarks"
+        b.title = "Chapters"
         b.state = .off
         b.target = self
         b.action = #selector(tabButtonAction)
-
-        // TODO: enable bookmarks section
-        b.isHidden = true
+        b.tag = Tab.chapters.rawValue
 
         return b
     }()
@@ -78,7 +89,7 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
         let v = NSStackView(views: [
             self.overviewButton,
             self.transcriptButton,
-            self.bookmarksButton
+            self.chaptersButton
             ])
 
         v.orientation = .horizontal
@@ -94,37 +105,23 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
         v.isHidden = true
         v.wantsLayer = true
 
-        v.heightAnchor.constraint(equalToConstant: 36).isActive = true
-
         v.addSubview(self.buttonsStackView)
 
-        self.buttonsStackView.topAnchor.constraint(equalTo: v.topAnchor).isActive = true
-        self.buttonsStackView.centerXAnchor.constraint(equalTo: v.centerXAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            v.heightAnchor.constraint(equalToConstant: 36),
+            buttonsStackView.centerYAnchor.constraint(equalTo: v.centerYAnchor),
+            buttonsStackView.centerXAnchor.constraint(equalTo: v.centerXAnchor)
+        ])
 
         return v
     }()
 
-    private lazy var tabContainer: SessionDetailsTabContainer = {
-        let v = SessionDetailsTabContainer()
-
-        v.wantsLayer = true
-        v.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        v.setContentHuggingPriority(.defaultLow, for: .vertical)
-
-        return v
-    }()
-
-    private lazy var informationStackView: NSStackView = {
-        let v = NSStackView(views: [self.menuButtonsContainer, self.tabContainer])
-
-        v.orientation = .vertical
-        v.spacing = 22
-        v.alignment = .leading
-        v.distribution = .fill
-        v.edgeInsets = NSEdgeInsets(top: 18, left: 0, bottom: 0, right: 0)
-
-        self.tabContainer.leadingAnchor.constraint(equalTo: v.leadingAnchor).isActive = true
-        self.tabContainer.trailingAnchor.constraint(equalTo: v.trailingAnchor).isActive = true
+    private lazy var tabController: SessionDetailsTabController<Tab> = {
+        let v = SessionDetailsTabController<Tab>(tabs: [
+            .overview: summaryController,
+            .transcript: transcriptController,
+            .chapters: chaptersController
+        ])
 
         return v
     }()
@@ -132,11 +129,13 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
     let shelfController: ShelfViewController
     let summaryController: SessionSummaryViewController
     let transcriptController: SessionTranscriptViewController
+    let chaptersController: NSViewController
 
     init() {
         shelfController = ShelfViewController()
         summaryController = SessionSummaryViewController()
         transcriptController = SessionTranscriptViewController()
+        chaptersController = NSHostingController(rootView: ChaptersView())
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -145,96 +144,135 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private lazy var shelfBottomConstraint: NSLayoutConstraint = {
-        return self.shelfController.view.bottomAnchor.constraint(equalTo: self.informationStackView.topAnchor)
-    }()
-
-    private lazy var informationStackViewTopConstraint: NSLayoutConstraint = {
-        return self.informationStackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 22)
-    }()
-
-    private lazy var informationStackViewBottomConstraint: NSLayoutConstraint = {
-        return self.informationStackView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -Metrics.padding)
-    }()
+    private var cancellables = Set<AnyCancellable>()
 
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
 
-        shelfController.view.translatesAutoresizingMaskIntoConstraints = false
-        informationStackView.translatesAutoresizingMaskIntoConstraints = false
+        addChild(shelfController)
+        addChild(tabController)
 
-        let constraint = shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: 280)
-        constraint.priority = NSLayoutConstraint.Priority(rawValue: 999)
-        constraint.isActive = true
+        shelfController.view.translatesAutoresizingMaskIntoConstraints = false
+        tabController.view.translatesAutoresizingMaskIntoConstraints = false
+        menuButtonsContainer.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(shelfController.view)
+        view.addSubview(tabController.view)
+        view.addSubview(menuButtonsContainer)
 
         shelfController.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
 
-        view.addSubview(shelfController.view)
-        view.addSubview(informationStackView)
+        let shelfMinHeightConstraint = shelfController.view.heightAnchor.constraint(greaterThanOrEqualToConstant: Metrics.minShelfHeight)
+        shelfMinHeightConstraint.priority = NSLayoutConstraint.Priority(rawValue: 999)
 
-        shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding).isActive = true
-        shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding).isActive = true
+        NSLayoutConstraint.activate([
+            shelfMinHeightConstraint,
+            shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding),
+            shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding),
+            shelfController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuButtonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            menuButtonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            menuButtonsContainer.topAnchor.constraint(equalTo: shelfController.view.bottomAnchor),
+            tabController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding),
+            tabController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding),
+            tabController.view.topAnchor.constraint(equalTo: menuButtonsContainer.bottomAnchor),
+            tabController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
-        informationStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding).isActive = true
-        informationStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding).isActive = true
-        informationStackViewBottomConstraint.isActive = true
-
-        shelfBottomConstraint.isActive = true
-        informationStackViewTopConstraint.isActive = false
-
-        showOverview()
+        tabController.$selectedTab.removeDuplicates().sink { [weak self] tab in
+            guard let self else { return }
+            updateTabSelection(with: tab)
+        }
+        .store(in: &cancellables)
     }
 
-    override var childForWindowTopSafeAreaConstraint: NSViewController? { shelfController }
+    private lazy var tabButtons = [overviewButton, transcriptButton, chaptersButton]
 
-    @objc private func tabButtonAction(_ sender: WWDCTextButton) {
-        if sender == overviewButton {
-            showOverview()
-        } else if sender == transcriptButton {
-            showTranscript()
-        } else if sender == bookmarksButton {
-            showBookmarks()
+    private func updateTabSelection(with tab: Tab) {
+        tabButtons.forEach {
+            $0.state = $0.tag == tab.rawValue ? .on : .off
         }
     }
 
-    func showOverview() {
-        overviewButton.state = .on
-        transcriptButton.state = .off
-        bookmarksButton.state = .off
-
-        tabContainer.currentView = summaryController.view
+    @objc private func tabButtonAction(_ sender: WWDCTextButton) {
+        guard let tab = Tab(rawValue: sender.tag) else {
+            assertionFailure("Invalid tab \(sender.tag)")
+            return
+        }
+        tabController.selectedTab = tab
     }
 
-    func showTranscript() {
-        transcriptButton.state = .on
-        overviewButton.state = .off
-        bookmarksButton.state = .off
+}
 
-        tabContainer.currentView = transcriptController.view
-    }
-
-    func showBookmarks() {
-        bookmarksButton.state = .on
-        overviewButton.state = .off
-        transcriptButton.state = .off
+struct ChaptersView: View {
+    var body: some View {
+        Text("Chapters Here")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-private class SessionDetailsTabContainer: NSView {
+// MARK: - Tab Controller
 
-    var currentView: NSView? {
+private final class SessionDetailsTabController<Tab: RawRepresentable & CaseIterable & Hashable>: NSTabViewController where Tab.RawValue == Int {
+    @Published
+    var selectedTab = Tab.allCases.first! {
         didSet {
-            guard oldValue !== currentView else { return }
-
-            oldValue?.removeFromSuperview()
-
-            if let newView = currentView {
-                newView.autoresizingMask = [.width, .height]
-                newView.frame = frame
-
-                addSubview(newView)
+            guard selectedTab != oldValue, !isUpdatingSelectedTab else { return }
+            
+            guard let index = tabViewItems.compactMap({ $0.identifier as? Tab }).firstIndex(of: selectedTab) else {
+                assertionFailure("Couldn't find index for tab \(selectedTab)")
+                return
             }
+
+            self.selectedTabViewItemIndex = index
         }
+    }
+
+    init(tabs: [Tab: NSViewController]) {
+        super.init(nibName: nil, bundle: nil)
+
+        tabStyle = .unspecified
+
+        install(tabs)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+
+    private func install(_ tabs: [Tab: NSViewController]) {
+        for tab in tabs.keys.sorted(by: { $0.rawValue < $1.rawValue }) {
+            let item = NSTabViewItem(viewController: tabs[tab]!)
+            item.identifier = tab
+            self.addTabViewItem(item)
+        }
+    }
+
+    private var isUpdatingSelectedTab = false
+
+    override var selectedTabViewItemIndex: Int {
+        didSet {
+            guard selectedTabViewItemIndex != oldValue else { return }
+            guard selectedTabViewItemIndex >= 0 && selectedTabViewItemIndex < tabViewItems.count else { return }
+
+            guard let tab = Tab(rawValue: selectedTabViewItemIndex) else {
+                assertionFailure("selectedTabViewItemIndex of \(selectedTabViewItemIndex) doesn't correspond to a valid tab item")
+                return
+            }
+
+            isUpdatingSelectedTab = true
+
+            selectedTab = tab
+
+            isUpdatingSelectedTab = false
+        }
+    }
+}
+
+extension NSLayoutConstraint {
+    func withPriority(_ priority: Priority) -> Self {
+        self.priority = priority
+        return self
     }
 }

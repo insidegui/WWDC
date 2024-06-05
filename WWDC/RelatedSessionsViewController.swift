@@ -65,7 +65,7 @@ final class RelatedSessionsViewController: NSViewController {
     private lazy var scrollView: NSScrollView = {
         let v = NSScrollView(frame: view.bounds)
 
-        v.hasHorizontalScroller = true
+        v.hasHorizontalScroller = false
         v.automaticallyAdjustsContentInsets = false
         v.contentInsets = NSEdgeInsets(top: 0, left: 0, bottom: Metrics.scrollerOffset, right: 0)
         v.scrollerInsets = NSEdgeInsets(top: 0, left: 0, bottom: -Metrics.scrollerOffset, right: 0)

@@ -30,6 +30,7 @@ class SessionSummaryViewController: NSViewController {
 
     enum Metrics {
         static let summaryHeight: CGFloat = 100
+        static let maxSummaryWidth: CGFloat = 800
     }
 
     private lazy var titleLabel: WWDCTextField = {
@@ -156,25 +157,28 @@ class SessionSummaryViewController: NSViewController {
 
         titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
-        actionsViewController.view.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
-        actionsViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-
-        titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: actionsViewController.view.leadingAnchor, constant: -24).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-
-        stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24).isActive = true
-
-        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        summaryScrollView.heightAnchor.constraint(equalToConstant: Metrics.summaryHeight).isActive = true
+        NSLayoutConstraint.activate([
+            actionsViewController.view.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+            actionsViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: actionsViewController.view.leadingAnchor, constant: -24),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            summaryScrollView.heightAnchor.constraint(equalToConstant: Metrics.summaryHeight),
+            summaryScrollView.widthAnchor.constraint(lessThanOrEqualToConstant: Metrics.maxSummaryWidth)
+        ])
 
         addChild(relatedSessionsViewController)
         stackView.addArrangedSubview(relatedSessionsViewController.view)
-        relatedSessionsViewController.view.heightAnchor.constraint(equalToConstant: RelatedSessionsViewController.Metrics.height).isActive = true
-        relatedSessionsViewController.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
-        relatedSessionsViewController.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
+
+        NSLayoutConstraint.activate([
+            relatedSessionsViewController.view.heightAnchor.constraint(equalToConstant: RelatedSessionsViewController.Metrics.height),
+            relatedSessionsViewController.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+            relatedSessionsViewController.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
+        ])
     }
 
     override func viewDidLoad() {
