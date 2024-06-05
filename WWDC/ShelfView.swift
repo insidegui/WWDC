@@ -26,7 +26,7 @@ final class ShelfView: NSView {
         clipsToBounds = true
 
         imageLayer = CALayer()
-        imageLayer.contentsGravity = .resizeAspectFill
+        imageLayer.contentsGravity = .resizeAspect
         imageLayer.autoresizingMask = [.layerHeightSizable, .layerWidthSizable]
         imageLayer.frame = bounds
 
