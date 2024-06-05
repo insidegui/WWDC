@@ -86,8 +86,20 @@ final class ShelfView: NSView {
         shadowLayer.shadowPath = CGPath(roundedRect: shadowLayer.bounds, cornerWidth: foregroundLayer.cornerRadius, cornerHeight: foregroundLayer.cornerRadius, transform: nil)
     }
 
+    func setBackgroundHidden(_ hidden: Bool, animated: Bool = true) {
+        backgroundLayer.removeAllAnimations()
+
+        let fadeAnim = CABasicAnimation(keyPath: "opacity")
+        fadeAnim.fromValue = (backgroundLayer.presentation() ?? backgroundLayer).opacity
+        fadeAnim.toValue = hidden ? 0 : 1
+        fadeAnim.isRemovedOnCompletion = false
+        fadeAnim.fillMode = .forwards
+        fadeAnim.duration = 0.5
+        backgroundLayer.add(fadeAnim, forKey: "fade")
+    }
+
     #if DEBUG
-    private static let enableDebugMenu = true
+    private static let enableDebugMenu = false
 
     private lazy var debugMenu = NSMenu(title: "Debug")
 
