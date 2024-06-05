@@ -36,8 +36,6 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         self.fullscreenOnly = fullscreenOnly
         self.originalContainer = originalContainer
 
-        originalContainer?.layer?.backgroundColor = .black
-
         let styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
 
         var rect = PUIPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view, layoutGuide: playerViewController.playerView.videoLayoutGuide)
@@ -48,6 +46,8 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 
         super.init(window: window)
 
+        window.titleVisibility = .hidden
+        window.titlebarAppearsTransparent = true
         window.delegate = self
 
         contentViewController = playerViewController

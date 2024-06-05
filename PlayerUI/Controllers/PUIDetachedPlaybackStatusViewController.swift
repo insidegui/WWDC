@@ -103,7 +103,6 @@ public final class PUIDetachedPlaybackStatusViewController: NSViewController {
         let l = PUIBoringLayer()
 
         l.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
-        l.backgroundColor = NSColor.black.cgColor
 
         return l
     }()
@@ -124,7 +123,6 @@ public final class PUIDetachedPlaybackStatusViewController: NSViewController {
         
         let container = CALayer()
         container.masksToBounds = true
-        container.backgroundColor = NSColor.black.cgColor
         view.layer = container
 
         snapshotLayer.frame = view.bounds

@@ -179,6 +179,10 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         shelfView.setBackgroundHidden(hidden, animated: animated)
     }
 
+    func setForegroundHidden(_ hidden: Bool, animated: Bool = true) {
+        shelfView.setForegroundHidden(hidden, animated: animated)
+    }
+
     // MARK: - Detached Playback Status
 
     /// ID of the session being displayed by the shelf when the player was detached.
@@ -192,7 +196,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
         detachedStatusController.show()
 
-        shelfView.isHidden = true
+        shelfView.setForegroundHidden(true)
 
         view.needsLayout = true
     }
@@ -203,7 +207,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
         detachedStatusController.hide()
 
-        shelfView.isHidden = false
+        shelfView.setForegroundHidden(false)
     }
 
     func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {

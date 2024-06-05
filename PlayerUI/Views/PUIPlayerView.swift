@@ -95,7 +95,7 @@ public final class PUIPlayerView: NSView {
 
         wantsLayer = true
         layer = PUIBoringLayer()
-        backgroundColor = .black
+        backgroundColor = .clear
 
         setupPlayer(player)
         setupControls()
@@ -1347,6 +1347,7 @@ public final class PUIPlayerView: NSView {
         NotificationCenter.default.removeObserver(self, name: NSWindow.didBecomeMainNotification, object: window)
 
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillEnterFullScreen), name: NSWindow.willEnterFullScreenNotification, object: newWindow)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowDidEnterFullScreen), name: NSWindow.didEnterFullScreenNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullScreen), name: NSWindow.willExitFullScreenNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidExitFullScreen), name: NSWindow.didExitFullScreenNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidResignMain), name: NSWindow.didResignMainNotification, object: newWindow)
@@ -1380,10 +1381,8 @@ public final class PUIPlayerView: NSView {
     }
 
     @objc private func windowWillExitFullScreen() {
-        /// The transition looks nicer if there's no background color, otherwise the player looks like it attaches
-        /// to the whole shelf area with black bars depending on the aspect ratio.
-        backgroundColor = .clear
-        
+        window?.backgroundColor = .clear
+
         if let d = appearanceDelegate {
             fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
         }
@@ -1391,11 +1390,11 @@ public final class PUIPlayerView: NSView {
         updateTopTrailingMenuPosition()
     }
 
-    @objc private func windowDidExitFullScreen() {
-        /// Restore solid black background after finishing exit full screen transition.
-        backgroundColor = .black
+    @objc private func windowDidEnterFullScreen() {
+        window?.backgroundColor = .black
+    }
 
-        /// The detached status presentation takes care of leaving a black background before we finish the full screen transition.
+    @objc private func windowDidExitFullScreen() {
         appearanceDelegate?.dismissDetachedStatus(.fullScreen, for: self)
     }
 

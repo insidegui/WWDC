@@ -87,15 +87,23 @@ final class ShelfView: NSView {
     }
 
     func setBackgroundHidden(_ hidden: Bool, animated: Bool = true) {
-        backgroundLayer.removeAllAnimations()
+        setHidden(hidden, for: backgroundLayer, animated: animated)
+    }
+
+    func setForegroundHidden(_ hidden: Bool, animated: Bool = true) {
+        setHidden(hidden, for: foregroundLayer, animated: animated)
+    }
+
+    private func setHidden(_ hidden: Bool, for targetLayer: CALayer, animated: Bool) {
+        targetLayer.removeAllAnimations()
 
         let fadeAnim = CABasicAnimation(keyPath: "opacity")
-        fadeAnim.fromValue = (backgroundLayer.presentation() ?? backgroundLayer).opacity
+        fadeAnim.fromValue = (targetLayer.presentation() ?? targetLayer).opacity
         fadeAnim.toValue = hidden ? 0 : 1
         fadeAnim.isRemovedOnCompletion = false
         fadeAnim.fillMode = .forwards
-        fadeAnim.duration = 0.5
-        backgroundLayer.add(fadeAnim, forKey: "fade")
+        fadeAnim.duration = animated ? 0.5 : 0
+        targetLayer.add(fadeAnim, forKey: "fade")
     }
 
     #if DEBUG
