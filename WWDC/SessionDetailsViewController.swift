@@ -170,14 +170,14 @@ final class SessionDetailsViewController: WWDCWindowContentViewController {
             shelfMinHeightConstraint,
             shelfController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding),
             shelfController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding),
-            shelfController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            shelfController.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Metrics.padding),
             menuButtonsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             menuButtonsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            menuButtonsContainer.topAnchor.constraint(equalTo: shelfController.view.bottomAnchor),
+            menuButtonsContainer.topAnchor.constraint(equalTo: shelfController.view.bottomAnchor, constant: Metrics.padding * 0.5),
             tabController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metrics.padding),
             tabController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metrics.padding),
-            tabController.view.topAnchor.constraint(equalTo: menuButtonsContainer.bottomAnchor),
-            tabController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tabController.view.topAnchor.constraint(equalTo: menuButtonsContainer.bottomAnchor, constant: Metrics.padding),
+            tabController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -Metrics.padding)
         ])
 
         tabController.$selectedTab.removeDuplicates().sink { [weak self] tab in
