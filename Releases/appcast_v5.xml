@@ -7,6 +7,47 @@
         <language>en</language>
 		
 		<item>
+			<title>Version 7.5</title>
+			<description><![CDATA[
+			<h2>What's New in Version 7.5</h2>
+			
+			<ul>
+				<li>New video player design (by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/695">#695</a>)</li>
+				<li>New video downloading engine enables downloading session videos with subtitles included; this feature can be enabled in the app's settings (by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/713">#713</a>)</li>
+				<li>The player now features consistent keyboard shortcuts for media player commands across different keyboard layouts (by <a href="https://github.com/boettges">@boettges</a> in <a href="https://github.com/insidegui/WWDC/pull/693">#693</a>)</li>
+				<li>Modernized PiP implementation (by <a href="https://github.com/allenhumphreys">@allenhumphreys</a> in <a href="https://github.com/insidegui/WWDC/pull/691">#691</a>)</li>
+				<li>Improved app startup performance (by <a href="https://github.com/allenhumphreys">@allenhumphreys</a> in <a href="https://github.com/insidegui/WWDC/pull/696">#696</a>)</li>
+				<li>When adding calendar events in macOS Sonoma and later, the app will now require write-only permission instead of full access (by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/700">#700</a>)</li>
+			</ul>
+			
+			<h3>Other Changes</h3>
+			
+			<ul>
+			<li>Load git contributors only when about window is shown by <a href="https://github.com/allenhumphreys">@allenhumphreys</a> in <a href="https://github.com/insidegui/WWDC/pull/701">#701</a></li>
+			<li>Remove RxSwift in favor of combine by <a href="https://github.com/allenhumphreys">@allenhumphreys</a> in <a href="https://github.com/insidegui/WWDC/pull/671">#671</a></li>
+			<li>Change Realm background queue QoS by <a href="https://github.com/allenhumphreys">@allenhumphreys</a> in <a href="https://github.com/insidegui/WWDC/pull/704">#704</a></li>
+			<li>Sessions table view model refactoring by <a href="https://github.com/allenhumphreys">@allenhumphreys</a> in <a href="https://github.com/insidegui/WWDC/pull/703">#703</a></li>
+			<li>Remove keypath filter on SessionViewModel by <a href="https://github.com/allenhumphreys">@allenhumphreys</a> in <a href="https://github.com/insidegui/WWDC/pull/705">#705</a></li>
+			<li>Improved handling of schedule event hero by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/707">#707</a></li>
+			<li>Rename "All Events" filter to "All Content" (Closes #697) by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/708">#708</a></li>
+			<li>Remove external playback support by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/709">#709</a></li>
+			<li>Consistent PiP / full screen state, improved full screen transition by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/710">#710</a></li>
+			<li>Updated API endpoint by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/711">#711</a></li>
+			<li>Event hero / live event improvements by <a href="https://github.com/insidegui">@insidegui</a> in <a href="https://github.com/insidegui/WWDC/pull/712">#712</a></li>
+			</ul>
+			
+			<h3>New Contributors</h3>
+			
+			<p><a href="https://github.com/boettges">@boettges</a> made their first contribution in <a href="https://github.com/insidegui/WWDC/pull/693">#693</a></p>
+			
+			<p><strong>Full Changelog</strong>: <a href="https://github.com/insidegui/WWDC/compare/7.4.2...7.5">https://github.com/insidegui/WWDC/compare/7.4.2...7.5</a></p>
+			]]></description>
+			<pubDate>Fri, 7 Jun 2024 14:00:00 -0300</pubDate>
+			<enclosure url="https://github.com/insidegui/WWDC/releases/download/7.5/WWDC_v7.5-1044.dmg" sparkle:version="1044" sparkle:shortVersionString="7.5" length="19325975" type="application/octet-stream" />
+			<sparkle:minimumSystemVersion>12.0</sparkle:minimumSystemVersion>
+		</item>	
+		
+		<item>
 			<title>Version 7.4.2</title>
 			<description><![CDATA[
 			<h2>Version 7.4.2</h2>
