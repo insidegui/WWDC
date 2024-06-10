@@ -1372,7 +1372,11 @@ public final class PUIPlayerView: NSView {
         return window.styleMask.contains(.fullScreen)
     }
 
+    private var isTransitioningFromFullScreenPlayback = false
+
     @objc private func windowWillEnterFullScreen() {
+        guard window is PUIPlayerWindow else { return }
+
         appearanceDelegate?.presentDetachedStatus(.fullScreen.snapshot(using: snapshotClosure), for: self)
 
         fullScreenButton.isHidden = true
@@ -1380,6 +1384,11 @@ public final class PUIPlayerView: NSView {
     }
 
     @objc private func windowWillExitFullScreen() {
+        guard window is PUIPlayerWindow else { return }
+
+        /// Set this because it's not safe to check for our window's class in `windowDidExitFullScreen`.
+        isTransitioningFromFullScreenPlayback = true
+
         /// The transition looks nicer if there's no background color, otherwise the player looks like it attaches
         /// to the whole shelf area with black bars depending on the aspect ratio.
         backgroundColor = .clear
@@ -1392,6 +1401,10 @@ public final class PUIPlayerView: NSView {
     }
 
     @objc private func windowDidExitFullScreen() {
+        guard isTransitioningFromFullScreenPlayback else { return }
+        
+        isTransitioningFromFullScreenPlayback = false
+
         /// Restore solid black background after finishing exit full screen transition.
         backgroundColor = .black
 
