@@ -25,34 +25,29 @@ protocol SearchFiltersViewControllerDelegate: AnyObject {
     )
 }
 
-enum FilterSegment: Int {
-    case favorite
-    case downloaded
-    case unwatched
-    case bookmarks
-
-    init?(_ id: FilterIdentifier) {
-
-        switch id {
-        case .isFavorite:
-            self = .favorite
-        case .isDownloaded:
-            self = .downloaded
-        case .isUnwatched:
-            self = .unwatched
-        case .hasBookmarks:
-            self = .bookmarks
-
-        default:
-            return nil
-        }
-    }
-}
-
 extension NSSegmentedControl {
 
-    func isSelected(for segment: FilterSegment) -> Bool {
-        return isSelected(forSegment: segment.rawValue)
+    var optionalToggleState: Bool? {
+        get { 
+            switch selectedSegment {
+            case 1: 
+                return true
+            case 2:
+                return false
+            default:
+                return nil
+            }
+        }
+        set { 
+            switch newValue {
+            case true: 
+                selectedSegment = 1
+            case false:
+                selectedSegment = 2
+            default:
+                selectedSegment = 0
+            }
+        }
     }
 
 }
@@ -66,11 +61,14 @@ final class SearchFiltersViewController: NSViewController {
         return storyboard.instantiateController(withIdentifier: "SearchFiltersViewController") as! SearchFiltersViewController
     }
 
-    @IBOutlet weak var stackView: NSStackView!
+    @IBOutlet var filterContainer: NSView!
     @IBOutlet weak var eventsPopUp: NSPopUpButton!
     @IBOutlet weak var focusesPopUp: NSPopUpButton!
     @IBOutlet weak var tracksPopUp: NSPopUpButton!
-    @IBOutlet weak var bottomSegmentedControl: NSSegmentedControl!
+    @IBOutlet weak var favoritesSegmentedControl: NSSegmentedControl!
+    @IBOutlet weak var downloadedSegmentedControl: NSSegmentedControl!
+    @IBOutlet weak var watchedSegmentedControl: NSSegmentedControl!
+    @IBOutlet weak var bookmarksSegmentedControl: NSSegmentedControl!
     @IBOutlet weak var filterButton: NSButton!
     @IBOutlet weak var searchField: NSSearchField!
     @IBOutlet weak var vfxView: NSVisualEffectView!
@@ -135,41 +133,29 @@ final class SearchFiltersViewController: NSViewController {
 
         updateMultipleChoiceFilter(at: filterIndex, with: tracksPopUp)
     }
-
-    private var favoriteSegmentSelected = false
-    private var downloadedSegmentSelected = false
-    private var unwatchedSegmentSelected = false
-    private var bookmarksSegmentSelected = false
-
-    @IBAction func bottomSegmentedControlAction(_ sender: Any) {
-        if favoriteSegmentSelected != bottomSegmentedControl.isSelected(for: .favorite) {
-            if let favoriteIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isFavorite }) {
-                updateToggleFilter(at: favoriteIndex, with: bottomSegmentedControl.isSelected(for: .favorite))
-            }
+    
+    @IBAction func favoritesSegmentedControlAction(_ sender: Any) {
+        if let favoriteIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isFavorite }) {
+            updateOptionalToggleFilter(at: favoriteIndex, with: favoritesSegmentedControl.optionalToggleState)
         }
-
-        if downloadedSegmentSelected != bottomSegmentedControl.isSelected(for: .downloaded) {
-            if let downloadedIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isDownloaded }) {
-                updateToggleFilter(at: downloadedIndex, with: bottomSegmentedControl.isSelected(for: .downloaded))
-            }
+    }
+    
+    @IBAction func downloadedSegmentedControlAction(_ sender: Any) {
+        if let downloadedIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isDownloaded }) {
+            updateOptionalToggleFilter(at: downloadedIndex, with: downloadedSegmentedControl.optionalToggleState)
         }
-
-        if unwatchedSegmentSelected != bottomSegmentedControl.isSelected(for: .unwatched) {
-            if let unwatchedIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isUnwatched }) {
-                updateToggleFilter(at: unwatchedIndex, with: bottomSegmentedControl.isSelected(for: .unwatched))
-            }
+    }
+    
+    @IBAction func watchedSegmentedControlAction(_ sender: Any) {
+        if let watchedIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isUnwatched }) {
+            updateOptionalToggleFilter(at: watchedIndex, with: watchedSegmentedControl.optionalToggleState)
         }
-
-        if bookmarksSegmentSelected != bottomSegmentedControl.isSelected(for: .bookmarks) {
-            if let annotatedIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.hasBookmarks }) {
-                updateToggleFilter(at: annotatedIndex, with: bottomSegmentedControl.isSelected(for: .bookmarks))
-            }
+    }
+    
+    @IBAction func bookmarksSegmentedControlAction(_ sender: Any) {
+        if let bookmarksIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.hasBookmarks }) {
+            updateOptionalToggleFilter(at: bookmarksIndex, with: bookmarksSegmentedControl.optionalToggleState)
         }
-
-        favoriteSegmentSelected = bottomSegmentedControl.isSelected(for: .favorite)
-        downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
-        unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
-        bookmarksSegmentSelected = bottomSegmentedControl.isSelected(for: .bookmarks)
     }
 
     @IBAction func searchFieldAction(_ sender: Any) {
@@ -179,7 +165,7 @@ final class SearchFiltersViewController: NSViewController {
     }
 
     @IBAction func filterButtonAction(_ sender: Any) {
-        setFilters(hidden: !eventsPopUp.isHidden)
+        setFilters(hidden: !filterContainer.isHidden)
     }
 
     override func viewDidLoad() {
@@ -195,10 +181,7 @@ final class SearchFiltersViewController: NSViewController {
 
     func setFilters(hidden: Bool) {
         filterButton.state = NSControl.StateValue(rawValue: hidden ? 0 : 1)
-        eventsPopUp.isHidden = hidden
-        focusesPopUp.isHidden = hidden
-        tracksPopUp.isHidden = hidden
-        bottomSegmentedControl.isHidden = hidden
+        filterContainer.isHidden = hidden
     }
 
     private func updateMultipleChoiceFilter(at filterIndex: Int, with popUp: NSPopUpButton) {
@@ -229,6 +212,19 @@ final class SearchFiltersViewController: NSViewController {
 
     private func updateToggleFilter(at filterIndex: Int, with state: Bool) {
         guard var filter = effectiveFilters[filterIndex] as? ToggleFilter else { return }
+
+        filter.isOn = state
+
+        var updatedFilters = effectiveFilters
+        updatedFilters[filterIndex] = filter
+
+        effectiveFilters = updatedFilters
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: .userInput)
+    }
+    
+    private func updateOptionalToggleFilter(at filterIndex: Int, with state: Bool?) {
+        guard var filter = effectiveFilters[filterIndex] as? OptionalToggleFilter else { return }
 
         filter.isOn = state
 
@@ -293,22 +289,13 @@ final class SearchFiltersViewController: NSViewController {
                 updatePopUp(for: filter)
             case let filter as TextualFilter:
                 searchField.stringValue = filter.value ?? ""
-            case let filter as ToggleFilter:
-                guard let segmentIndex = FilterSegment(filter.identifier)?.rawValue else {
-                    break
-                }
-
-                bottomSegmentedControl.setSelected(filter.isOn, forSegment: segmentIndex)
+            case let filter as OptionalToggleFilter:
+                updateOptionalToggle(for: filter)
 
             default:
                 break
             }
         }
-
-        favoriteSegmentSelected = bottomSegmentedControl.isSelected(for: .favorite)
-        downloadedSegmentSelected = bottomSegmentedControl.isSelected(for: .downloaded)
-        unwatchedSegmentSelected = bottomSegmentedControl.isSelected(for: .unwatched)
-        bookmarksSegmentSelected = bottomSegmentedControl.isSelected(for: .bookmarks)
     }
 
     private func updatePopUp(for filter: MultipleChoiceFilter) {
@@ -328,6 +315,21 @@ final class SearchFiltersViewController: NSViewController {
             item.representedObject = option
             item.state = filter.selectedOptions.contains(option) ? .on : .off
             popUp.menu?.addItem(item)
+        }
+    }
+    
+    private func updateOptionalToggle(for filter: OptionalToggleFilter) {
+        switch filter.identifier {
+        case .isDownloaded:
+            downloadedSegmentedControl.optionalToggleState = filter.isOn
+        case .hasBookmarks:
+            bookmarksSegmentedControl.optionalToggleState = filter.isOn
+        case .isFavorite:
+            favoritesSegmentedControl.optionalToggleState = filter.isOn
+        case .isUnwatched:
+            watchedSegmentedControl.optionalToggleState = filter.isOn
+        default:
+            break
         }
     }
 }
