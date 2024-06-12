@@ -234,19 +234,26 @@ final class SearchCoordinator: Logging {
             emptyTitle: "All Topics"
         )
 
-        let favoritePredicate = NSPredicate(format: "SUBQUERY(\(keyPathPrefix)favorites, $favorite, $favorite.isDeleted == false).@count > 0")
-        let favoriteFilter = ToggleFilter(id: .isFavorite, predicate: favoritePredicate)
+        let favoriteFilter = OptionalToggleFilter(id: .isFavorite,
+                                                  onPredicate: NSPredicate(format: "SUBQUERY(\(keyPathPrefix)favorites, $favorite, $favorite.isDeleted == false).@count > 0"),
+                                                  offPredicate: NSPredicate(format: "SUBQUERY(\(keyPathPrefix)favorites, $favorite, $favorite.isDeleted == false).@count == 0"))
 
-        let downloadedPredicate = NSPredicate(format: "\(keyPathPrefix)isDownloaded == true")
-        let downloadedFilter = ToggleFilter(id: .isDownloaded, predicate: downloadedPredicate)
+        let downloadedFilter = OptionalToggleFilter(id: .isDownloaded,
+                                                    onPredicate: NSPredicate(format: "\(keyPathPrefix)isDownloaded == true"),
+                                                    offPredicate: NSPredicate(format: "\(keyPathPrefix)isDownloaded == false"))
 
         let smallPositionPred = NSPredicate(format: "SUBQUERY(\(keyPathPrefix)progresses, $progress, $progress.relativePosition < \(Constants.watchedVideoRelativePosition)).@count > 0")
         let noPositionPred = NSPredicate(format: "\(keyPathPrefix)progresses.@count == 0")
-        let unwatchedPredicate = NSCompoundPredicate(orPredicateWithSubpredicates: [smallPositionPred, noPositionPred])
-        let unwatchedFilter = ToggleFilter(id: .isUnwatched, predicate: unwatchedPredicate)
+        let unwatchedFilter = OptionalToggleFilter(id: .isUnwatched,
+                                                   onPredicate: NSCompoundPredicate(andPredicateWithSubpredicates: [
+                                                        NSCompoundPredicate(notPredicateWithSubpredicate: smallPositionPred),
+                                                        NSCompoundPredicate(notPredicateWithSubpredicate: noPositionPred)
+                                                   ]),
+                                                   offPredicate: NSCompoundPredicate(orPredicateWithSubpredicates: [smallPositionPred, noPositionPred]))
 
-        let bookmarksPredicate = NSPredicate(format: "SUBQUERY(\(keyPathPrefix)bookmarks, $bookmark, $bookmark.isDeleted == false).@count > 0")
-        let bookmarksFilter = ToggleFilter(id: .hasBookmarks, predicate: bookmarksPredicate)
+        let bookmarksFilter = OptionalToggleFilter(id: .hasBookmarks,
+                                                   onPredicate: NSPredicate(format: "SUBQUERY(\(keyPathPrefix)bookmarks, $bookmark, $bookmark.isDeleted == false).@count > 0"),
+                                                   offPredicate: NSPredicate(format: "SUBQUERY(\(keyPathPrefix)bookmarks, $bookmark, $bookmark.isDeleted == false).@count == 0"))
 
         return IntermediateFiltersStructure(
             textual: textualFilter,
@@ -303,10 +310,10 @@ struct IntermediateFiltersStructure {
     var event: MultipleChoiceFilter
     var platform: MultipleChoiceFilter
     var track: MultipleChoiceFilter
-    var isFavorite: ToggleFilter
-    var isDownloaded: ToggleFilter
-    var isUnwatched: ToggleFilter
-    var hasBookmarks: ToggleFilter
+    var isFavorite: OptionalToggleFilter
+    var isDownloaded: OptionalToggleFilter
+    var isUnwatched: OptionalToggleFilter
+    var hasBookmarks: OptionalToggleFilter
 
     var all: [FilterType] {
         [
@@ -337,10 +344,10 @@ struct IntermediateFiltersStructure {
         event.selectedOptions = state?.event?.selectedOptions.filter { event.options.contains($0) } ?? []
         platform.selectedOptions = state?.focus?.selectedOptions.filter { platform.options.contains($0) } ?? []
         track.selectedOptions = state?.track?.selectedOptions.filter { track.options.contains($0) } ?? []
-        isFavorite.isOn = state?.isFavorite?.isOn ?? false
-        isDownloaded.isOn = state?.isDownloaded?.isOn ?? false
-        isUnwatched.isOn = state?.isUnwatched?.isOn ?? false
-        hasBookmarks.isOn = state?.hasBookmarks?.isOn ?? false
+        isFavorite.isOn = state?.isFavorite?.isOn
+        isDownloaded.isOn = state?.isDownloaded?.isOn
+        isUnwatched.isOn = state?.isUnwatched?.isOn
+        hasBookmarks.isOn = state?.hasBookmarks?.isOn
     }
 
     static func from(existingFilters: [FilterType]) -> IntermediateFiltersStructure? {
@@ -348,10 +355,10 @@ struct IntermediateFiltersStructure {
         let event: MultipleChoiceFilter? = existingFilters.find(byID: .event)
         let platform: MultipleChoiceFilter? = existingFilters.find(byID: .focus)
         let track: MultipleChoiceFilter? = existingFilters.find(byID: .track)
-        let isFavorite: ToggleFilter? = existingFilters.find(byID: .isFavorite)
-        let isDownloaded: ToggleFilter? = existingFilters.find(byID: .isDownloaded)
-        let isUnwatched: ToggleFilter? = existingFilters.find(byID: .isUnwatched)
-        let hasBookmarks: ToggleFilter? = existingFilters.find(byID: .hasBookmarks)
+        let isFavorite: OptionalToggleFilter? = existingFilters.find(byID: .isFavorite)
+        let isDownloaded: OptionalToggleFilter? = existingFilters.find(byID: .isDownloaded)
+        let isUnwatched: OptionalToggleFilter? = existingFilters.find(byID: .isUnwatched)
+        let hasBookmarks: OptionalToggleFilter? = existingFilters.find(byID: .hasBookmarks)
         guard let textual, let event, let platform, let track, let isFavorite, let isDownloaded, let isUnwatched, let hasBookmarks else {
             return nil
         }
