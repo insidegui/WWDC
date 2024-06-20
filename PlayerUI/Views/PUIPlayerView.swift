@@ -1137,7 +1137,9 @@ public final class PUIPlayerView: NSView {
         case leftArrow
         case rightArrow
         case minus
+        case lessThan
         case plus
+        case greaterThan
         case j
         case k
         case l
@@ -1162,7 +1164,9 @@ public final class PUIPlayerView: NSView {
             switch character {
             case " ": return .spaceBar
             case "-": return .minus
+            case "<": return .lessThan
             case "+": return .plus
+            case ">": return .greaterThan
             case "j": return .j
             case "k": return .k
             case "l": return .l
@@ -1214,11 +1218,11 @@ public final class PUIPlayerView: NSView {
                 self.goForwardInTime(nil)
                 return nil
  
-            case .minus:
+            case .minus, .lessThan:
                 self.reduceSpeed()
                 return nil
  
-            case .plus:
+            case .plus, .greaterThan:
                 self.increaseSpeed()
                 return nil
             }
