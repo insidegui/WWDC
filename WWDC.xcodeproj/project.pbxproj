@@ -291,6 +291,7 @@
 /* Begin PBXFileReference section */
 		012BEFA31EE8658F007E72CA /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		01B3EB491EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+SessionTableViewContextMenuActions.swift"; sourceTree = "<group>"; };
+		27DD2F402D7ACEB3003EABDE /* BackForwardSkipDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackForwardSkipDuration.swift; sourceTree = "<group>"; };
 		4D0E806E217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadManager+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
 		4D4D80C3217D281D00D1C233 /* DownloadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadViewModel.swift; sourceTree = "<group>"; };
 		4D5EB0F720598E6000D4BC52 /* SessionRowProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionRowProvider.swift; sourceTree = "<group>"; };
@@ -784,6 +785,7 @@
 				DD600ACD2487F3540071B90E /* NSColor+Hex.swift */,
 				F4FB06A02A21493B00799F84 /* PreviewSupport.swift */,
 				F422B8922C077E9600C4B337 /* UILog.swift */,
+				27DD2F402D7ACEB3003EABDE /* BackForwardSkipDuration.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1633,6 +1635,7 @@
 				F422B8B22C07CB6C00C4B337 /* CALayer+Asset.swift in Sources */,
 				F4FB06A12A21493B00799F84 /* PreviewSupport.swift in Sources */,
 				DD600ACE2487F3540071B90E /* NSColor+Hex.swift in Sources */,
+				27DD2F422D7ACF5C003EABDE /* BackForwardSkipDuration.swift in Sources */,
 				DD600AC32487F1C00071B90E /* ConfUIFoundation.swift in Sources */,
 				DD600ACB2487F2D90071B90E /* Fonts.swift in Sources */,
 				F422B8932C077E9600C4B337 /* UILog.swift in Sources */,

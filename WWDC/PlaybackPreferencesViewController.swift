@@ -21,7 +21,7 @@ final class PlaybackPreferencesViewController: WWDCWindowContentViewController {
 
     @IBOutlet weak var skipIntroStackView: NSStackView?
     @IBOutlet private var skipIntroSwitch: NSSwitch!
-    @IBOutlet private var skipBackAndForwardBy30SecondsSwitch: NSSwitch!
+    @IBOutlet weak var skipDurationDropDownMenu: NSPopUpButtonCell!
     @IBOutlet weak var includeAppBannerInClipsSwitch: NSSwitch!
 
     override var viewForWindowTopSafeAreaConstraint: NSView? { skipIntroSwitch }
@@ -30,7 +30,16 @@ final class PlaybackPreferencesViewController: WWDCWindowContentViewController {
         super.viewDidLoad()
 
         skipIntroSwitch.isOn = Preferences.shared.skipIntro
-        skipBackAndForwardBy30SecondsSwitch.isOn = Preferences.shared.skipBackAndForwardBy30Seconds
+        switch Preferences.shared.skipBackAndForwardDuration {
+        case .fiveSeconds:
+            skipDurationDropDownMenu.selectItem(at: 0)
+        case .tenSeconds:
+            skipDurationDropDownMenu.selectItem(at: 1)
+        case .fifteenSeconds:
+            skipDurationDropDownMenu.selectItem(at: 2)
+        case .thirtySeconds:
+            skipDurationDropDownMenu.selectItem(at: 3)
+        }
         includeAppBannerInClipsSwitch.isOn = Preferences.shared.includeAppBannerInSharedClips
     }
 
@@ -38,8 +47,19 @@ final class PlaybackPreferencesViewController: WWDCWindowContentViewController {
         Preferences.shared.skipIntro = skipIntroSwitch.isOn
     }
 
-    @IBAction func skipBackAndForwardBy30SecondsSwitchAction(_ sender: Any) {
-        Preferences.shared.skipBackAndForwardBy30Seconds = skipBackAndForwardBy30SecondsSwitch.isOn
+    @IBAction func skipBackAndForwardDurationChangedAction(_ sender: Any) {
+        switch skipDurationDropDownMenu?.indexOfSelectedItem {
+        case 0:
+            Preferences.shared.skipBackAndForwardDuration = .fiveSeconds
+        case 1:
+            Preferences.shared.skipBackAndForwardDuration = .tenSeconds
+        case 2:
+            Preferences.shared.skipBackAndForwardDuration = .fifteenSeconds
+        case 3:
+            Preferences.shared.skipBackAndForwardDuration = .thirtySeconds
+        default:
+            break
+        }
     }
 
     @IBAction func includeAppBannerInClipsSwitchAction(_ sender: NSSwitch) {

@@ -602,7 +602,7 @@ public final class PUIPlayerView: NSView {
 
         b.image = .PUIBack15s
         b.target = self
-        b.action = #selector(goBackInTime15)
+        b.action = #selector(goBackInTime)
         b.toolTip = "Go back 15s"
 
         return b
@@ -613,7 +613,7 @@ public final class PUIPlayerView: NSView {
 
         b.image = .PUIForward15s
         b.target = self
-        b.action = #selector(goForwardInTime15)
+        b.action = #selector(goForwardInTime)
         b.toolTip = "Go forward 15s"
 
         return b
@@ -805,26 +805,44 @@ public final class PUIPlayerView: NSView {
         .store(in: &cancellables)
     }
 
-    var isConfiguredForBackAndForward30s = false {
+    var backAndForwardSkipDuration: BackForwardSkipDuration = .thirtySeconds {
         didSet {
             invalidateTouchBar()
         }
     }
 
     var goBackInTimeImage: NSImage {
-        return isConfiguredForBackAndForward30s ? .PUIBack30s : .PUIBack15s
+        switch backAndForwardSkipDuration {
+        case .fiveSeconds:
+            .PUIBack5s
+        case .tenSeconds:
+            .PUIBack10s
+        case .fifteenSeconds:
+            .PUIBack15s
+        case .thirtySeconds:
+            .PUIBack30s
+        }
     }
 
     var goBackInTimeDescription: String {
-        return isConfiguredForBackAndForward30s ? "Go back 30s" : "Go back 15s"
+        "Go back \(backAndForwardSkipDuration.rawValue.formatted())s"
     }
 
     var goForwardInTimeImage: NSImage {
-        return isConfiguredForBackAndForward30s ? .PUIForward30s : .PUIForward15s
+        switch backAndForwardSkipDuration {
+        case .fiveSeconds:
+            .PUIForward5s
+        case .tenSeconds:
+            .PUIForward10s
+        case .fifteenSeconds:
+            .PUIForward15s
+        case .thirtySeconds:
+            .PUIForward30s
+        }
     }
 
     var goForwardInTimeDescription: String {
-        return isConfiguredForBackAndForward30s ? "Go forward 30s" : "Go forward 15s"
+        "Go forward \(backAndForwardSkipDuration.rawValue.formatted())s"
     }
 
     private func configureWithAppearanceFromDelegate() {
@@ -843,7 +861,7 @@ public final class PUIPlayerView: NSView {
         backButton.isHidden = disableBackAndForward
         forwardButton.isHidden = disableBackAndForward
 
-        isConfiguredForBackAndForward30s = d.playerViewShouldShowBackAndForward30SecondsButtons(self)
+        backAndForwardSkipDuration = d.playerViewBackAndForwardDuration(self)
         backButton.image = goBackInTimeImage
         backButton.action = #selector(goBackInTime)
         backButton.toolTip = goBackInTimeDescription
@@ -954,35 +972,11 @@ public final class PUIPlayerView: NSView {
     }
 
     @IBAction public func goBackInTime(_ sender: Any?) {
-        if isConfiguredForBackAndForward30s {
-            goBackInTime30(sender)
-        } else {
-            goBackInTime15(sender)
-        }
+        modifyCurrentTime(with: backAndForwardSkipDuration.rawValue, using: CMTimeSubtract)
     }
 
     @IBAction public func goForwardInTime(_ sender: Any?) {
-        if isConfiguredForBackAndForward30s {
-            goForwardInTime30(sender)
-        } else {
-            goForwardInTime15(sender)
-        }
-    }
-
-    @IBAction public func goBackInTime15(_ sender: Any?) {
-        modifyCurrentTime(with: 15, using: CMTimeSubtract)
-    }
-
-    @IBAction public func goForwardInTime15(_ sender: Any?) {
-        modifyCurrentTime(with: 15, using: CMTimeAdd)
-    }
-
-    @IBAction public func goBackInTime30(_ sender: Any?) {
-        modifyCurrentTime(with: 30, using: CMTimeSubtract)
-    }
-
-    @IBAction public func goForwardInTime30(_ sender: Any?) {
-        modifyCurrentTime(with: 30, using: CMTimeAdd)
+        modifyCurrentTime(with: backAndForwardSkipDuration.rawValue, using: CMTimeAdd)
     }
 
     @IBAction public func toggleSpeed(_ sender: Any?) {

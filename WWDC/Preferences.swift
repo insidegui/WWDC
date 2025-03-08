@@ -12,7 +12,7 @@ import ConfCore
 extension Notification.Name {
     static let LocalVideoStoragePathPreferenceDidChange = Notification.Name("LocalVideoStoragePathPreferenceDidChange")
     static let RefreshPeriodicallyPreferenceDidChange = Notification.Name("RefreshPeriodicallyPreferenceDidChange")
-    static let SkipBackAndForwardBy30SecondsPreferenceDidChange = Notification.Name("SkipBackAndForwardBy30SecondsPreferenceDidChange")
+    static let SkipBackAndForwardDurationPreferenceDidChange = Notification.Name("SkipBackAndForwardDurationPreferenceDidChange")
     static let SyncUserDataPreferencesDidChange = Notification.Name("SyncUserDataPreferencesDidChange")
     static let PreferredTranscriptLanguageDidChange = Notification.Name("PreferredTranscriptLanguageDidChange")
 }
@@ -160,14 +160,14 @@ final class Preferences {
         set { defaults.set(newValue, forKey: #function) }
     }
 
-    var skipBackAndForwardBy30Seconds: Bool {
+    var skipBackAndForwardDuration: BackForwardSkipDuration {
         get {
-            return defaults.bool(forKey: #function)
+            return BackForwardSkipDuration(seconds: defaults.double(forKey: #function))
         }
         set {
-            defaults.set(newValue, forKey: #function)
-
-            NotificationCenter.default.post(name: .SkipBackAndForwardBy30SecondsPreferenceDidChange, object: nil)
+            defaults.set(newValue.rawValue, forKey: #function)
+            
+            NotificationCenter.default.post(name: .SkipBackAndForwardDurationPreferenceDidChange, object: nil)
         }
     }
 
