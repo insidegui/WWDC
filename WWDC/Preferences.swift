@@ -162,6 +162,14 @@ final class Preferences {
 
     var skipBackAndForwardDuration: BackForwardSkipDuration {
         get {
+            // Migrate from legacy 30/15 preference if needed.
+            let migrationKey = "backForwardSkipMigrated"
+            if !defaults.bool(forKey: migrationKey) {
+                let duration: BackForwardSkipDuration = defaults.bool(forKey: "skipBackAndForwardBy30Seconds") ? .thirtySeconds : .fifteenSeconds
+                defaults.set(duration.rawValue, forKey: #function)
+
+                defaults.set(true, forKey: migrationKey)
+            }
             return BackForwardSkipDuration(seconds: defaults.double(forKey: #function))
         }
         set {
