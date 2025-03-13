@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22689"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -35,8 +35,8 @@
                                                     <action selector="searchInBookmarksSwitchAction:" target="9dt-pe-Bsa" id="WmO-OY-EQO"/>
                                                 </connections>
                                             </switch>
-                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gpY-Ee-hHn">
-                                                <rect key="frame" x="44" y="4" width="119" height="16"/>
+                                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gpY-Ee-hHn">
+                                                <rect key="frame" x="44" y="6" width="119" height="16"/>
                                                 <string key="toolTip">When searching in the schedule or videos tab, the search results will include any session where any of its bookmarks contains the searched phrase</string>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include bookmarks" id="KyF-jf-5DT">
                                                     <font key="font" metaFont="system"/>
@@ -63,8 +63,8 @@
                                                     <action selector="searchInTranscriptsSwitchAction:" target="9dt-pe-Bsa" id="1Sn-wi-tjw"/>
                                                 </connections>
                                             </switch>
-                                            <textField toolTip="When searching in the videos tab, the search results will include any session where the transcript contains the searched phrase" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X7h-FH-GQx">
-                                                <rect key="frame" x="44" y="4" width="117" height="16"/>
+                                            <textField toolTip="When searching in the videos tab, the search results will include any session where the transcript contains the searched phrase" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="X7h-FH-GQx">
+                                                <rect key="frame" x="44" y="6" width="117" height="16"/>
                                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include transcripts" id="ZmW-Hz-3Wv">
                                                     <font key="font" metaFont="system"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -91,7 +91,7 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
-                            <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yew-yF-ZWD">
+                            <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yew-yF-ZWD">
                                 <rect key="frame" x="146" y="315" width="50" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Search:" id="fto-X6-Q8v">
                                     <font key="font" metaFont="system"/>
@@ -108,8 +108,8 @@
                                             <action selector="refreshPeriodicallySwitchAction:" target="9dt-pe-Bsa" id="HXi-lZ-v4e"/>
                                         </connections>
                                     </switch>
-                                    <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TGp-6Z-M3P">
-                                        <rect key="frame" x="44" y="4" width="255" height="16"/>
+                                    <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TGp-6Z-M3P">
+                                        <rect key="frame" x="44" y="6" width="255" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Refresh Schedule and Videos periodically" id="IAy-ez-t4U">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -126,7 +126,7 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
-                            <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YmL-o7-wzA">
+                            <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YmL-o7-wzA">
                                 <rect key="frame" x="79" y="427" width="117" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Downloads Folder:" id="wBE-cT-TAg">
                                     <font key="font" metaFont="system"/>
@@ -137,7 +137,7 @@
                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jme-OU-7GG">
                                 <rect key="frame" x="202" y="369" width="258" height="72"/>
                                 <subviews>
-                                    <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eKi-p7-aRV">
+                                    <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eKi-p7-aRV">
                                         <rect key="frame" x="-2" y="58" width="154" height="14"/>
                                         <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" alignment="left" title="/Users/inside/Movies/WWDC" id="IRs-Ob-UjV">
                                             <font key="font" metaFont="label" size="11"/>
@@ -188,9 +188,9 @@
                                                 </connections>
                                             </switch>
                                             <stackView distribution="fill" orientation="horizontal" alignment="firstBaseline" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gkn-cy-bDG">
-                                                <rect key="frame" x="46" y="3" width="212" height="17"/>
+                                                <rect key="frame" x="46" y="5" width="212" height="17"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wbz-zD-dxx">
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wbz-zD-dxx">
                                                         <rect key="frame" x="-2" y="1" width="192" height="16"/>
                                                         <string key="toolTip">When searching in the schedule or videos tab, the search results will include any session where any of its bookmarks contains the searched phrase</string>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Download videos with subtitles" id="c7o-MT-MuG">
@@ -250,8 +250,8 @@
                                             <action selector="enableUserDataSyncSwitchAction:" target="9dt-pe-Bsa" id="dy9-Tg-Ibu"/>
                                         </connections>
                                     </switch>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goO-DA-n9P">
-                                        <rect key="frame" x="44" y="4" width="138" height="16"/>
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="goO-DA-n9P">
+                                        <rect key="frame" x="44" y="6" width="138" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enable iCloud syncing" id="CQw-ur-pVI">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -268,7 +268,7 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T2X-gb-6tZ">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="T2X-gb-6tZ">
                                 <rect key="frame" x="246" y="116" width="344" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="0Xp-88-sJv"/>
@@ -289,7 +289,7 @@
                                         <rect key="frame" x="-3" y="-4" width="39" height="25"/>
                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="3TL-Q0-crQ">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="menu"/>
+                                            <font key="font" metaFont="message"/>
                                             <menu key="menu" id="qLZ-Pj-guD"/>
                                         </popUpButtonCell>
                                         <connections>
@@ -302,7 +302,7 @@
                                     <progressIndicator wantsLayer="YES" maxValue="1" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Ume-78-MMk">
                                         <rect key="frame" x="36" y="2" width="16" height="16"/>
                                     </progressIndicator>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WMk-16-lJl">
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WMk-16-lJl">
                                         <rect key="frame" x="54" y="5" width="50" height="11"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Indexing..." id="eTm-sb-EiG">
                                             <font key="font" metaFont="label" size="9"/>
@@ -324,7 +324,7 @@
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hK9-wv-pXK">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hK9-wv-pXK">
                                 <rect key="frame" x="246" y="58" width="128" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Transcript language:" id="sYf-Uq-UWl">
                                     <font key="font" metaFont="system"/>
@@ -332,7 +332,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gny-ev-Via">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gny-ev-Via">
                                 <rect key="frame" x="246" y="20" width="344" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="7tV-eK-eZz"/>
@@ -422,16 +422,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="200"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="wN9-vw-rdh">
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="wN9-vw-rdh">
                                 <rect key="frame" x="18" y="20" width="414" height="160"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="410" id="7QR-lx-5J2"/>
                                 </constraints>
                                 <textFieldCell key="cell" selectable="YES" id="iXM-dO-dg2">
                                     <font key="font" usesAppearanceFont="YES"/>
-                                    <mutableString key="title">With this option enabled, the app will download the HLS version of the videos for offline playback. The HLS version includes all subtitles, but it has some downsides when compared to the regular HD download version that's used when this option is disabled. Downsides of the HLS version include slower seek performance and the inability to export clips from downloaded videos.
+                                    <string key="title">With this option enabled, the app will download the HLS version of the videos for offline playback. The HLS version includes all subtitles, but it has some downsides when compared to the regular HD download version that's used when this option is disabled. Downsides of the HLS version include slower seek performance and the inability to export clips from downloaded videos.
 
-This setting only applies to new downloads, any videos that have already been downloaded will remain. You can download the new version by deleting and re-downloading videos.</mutableString>
+This setting only applies to new downloads, any videos that have already been downloaded will remain. You can download the new version by deleting and re-downloading videos.</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -469,7 +469,7 @@ This setting only applies to new downloads, any videos that have already been do
                                             <action selector="skipIntroSwitchAction:" target="CaZ-mY-PLo" id="avK-yg-ROZ"/>
                                         </connections>
                                     </switch>
-                                    <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0JU-UG-yGw">
+                                    <textField toolTip="The schedule and videos will be automatically refreshed every five minutes (useful during WWDC week)" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0JU-UG-yGw">
                                         <rect key="frame" x="44" y="6" width="62" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Skip intro" id="1mW-rE-4M7">
                                             <font key="font" metaFont="system"/>
@@ -488,17 +488,18 @@ This setting only applies to new downloads, any videos that have already been do
                                 </customSpacing>
                             </stackView>
                             <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CYB-Js-nMq">
-                                <rect key="frame" x="242" y="320" width="279" height="22"/>
+                                <rect key="frame" x="242" y="326" width="203" height="16"/>
                                 <subviews>
-                                    <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="JEt-pq-hrP">
-                                        <rect key="frame" x="-2" y="-2" width="42" height="25"/>
-                                        <connections>
-                                            <action selector="skipBackAndForwardBy30SecondsSwitchAction:" target="CaZ-mY-PLo" id="jqY-el-TSJ"/>
-                                        </connections>
-                                    </switch>
-                                    <textField toolTip="Skip back or forward in a video by 30 seconds instead of 15." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UoG-II-Wca">
-                                        <rect key="frame" x="44" y="6" width="237" height="16"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Skip Back and Forward by 30 Seconds" id="ube-bZ-s5h">
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="ajg-bN-hdD" userLabel="Spacer">
+                                        <rect key="frame" x="0.0" y="6" width="38" height="10"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="10" id="bbi-sh-5BT"/>
+                                            <constraint firstAttribute="width" constant="38" id="sEa-ik-ThO"/>
+                                        </constraints>
+                                    </customView>
+                                    <textField toolTip="Skip back or forward in a video by this many seconds" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UoG-II-Wca">
+                                        <rect key="frame" x="44" y="0.0" width="161" height="16"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Skip Back and Forward by" id="ube-bZ-s5h">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -526,7 +527,7 @@ This setting only applies to new downloads, any videos that have already been do
                                             <action selector="includeAppBannerInClipsSwitchAction:" target="CaZ-mY-PLo" id="x48-78-Rag"/>
                                         </connections>
                                     </switch>
-                                    <textField toolTip="Skip back or forward in a video by 30 seconds instead of 15." horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UIT-Jh-rd5">
+                                    <textField toolTip="Skip back or forward in a video by 30 seconds instead of 15." focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UIT-Jh-rd5">
                                         <rect key="frame" x="44" y="6" width="212" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Include app banner in shared clips" id="V8N-Tx-tVG">
                                             <font key="font" metaFont="system"/>
@@ -544,9 +545,28 @@ This setting only applies to new downloads, any videos that have already been do
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
                             </stackView>
+                            <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Unv-Ws-TBT">
+                                <rect key="frame" x="450" y="320" width="112" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="5 Seconds" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="uTG-cp-cNh" id="zE2-Mi-ScL">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="Idj-tl-dTs">
+                                        <items>
+                                            <menuItem title="5 Seconds" state="on" id="uTG-cp-cNh"/>
+                                            <menuItem title="10 Seconds" id="aRY-N0-YJL"/>
+                                            <menuItem title="15 Seconds" id="UXA-ai-q90"/>
+                                            <menuItem title="30 Seconds" id="j8f-rn-bqD"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="skipBackAndForwardDurationChangedAction:" target="CaZ-mY-PLo" id="58p-fI-9ek"/>
+                                </connections>
+                            </popUpButton>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="MB9-co-AOw" firstAttribute="leading" secondItem="CYB-Js-nMq" secondAttribute="leading" id="96z-R2-U73"/>
+                            <constraint firstItem="Unv-Ws-TBT" firstAttribute="centerY" secondItem="UoG-II-Wca" secondAttribute="centerY" id="7VC-Dy-eco"/>
+                            <constraint firstItem="Unv-Ws-TBT" firstAttribute="leading" secondItem="CYB-Js-nMq" secondAttribute="trailing" constant="8" symbolic="YES" id="Ki0-Iw-cYW"/>
                             <constraint firstAttribute="trailing" secondItem="4tF-Jf-uRi" secondAttribute="trailing" id="KpR-vb-ubQ"/>
                             <constraint firstItem="EB1-cz-f3w" firstAttribute="top" secondItem="5hl-wi-FfU" secondAttribute="top" constant="22" placeholder="YES" id="L10-pu-XBx"/>
                             <constraint firstItem="4tF-Jf-uRi" firstAttribute="leading" secondItem="5hl-wi-FfU" secondAttribute="leading" constant="39" id="R85-Mx-vUo"/>
@@ -554,15 +574,16 @@ This setting only applies to new downloads, any videos that have already been do
                             <constraint firstItem="MB9-co-AOw" firstAttribute="top" secondItem="4tF-Jf-uRi" secondAttribute="bottom" constant="19" id="gXK-Yz-Lbr"/>
                             <constraint firstItem="jzw-u5-Zjs" firstAttribute="leading" secondItem="5hl-wi-FfU" secondAttribute="leading" constant="39" id="hca-zI-uZm"/>
                             <constraint firstAttribute="trailing" secondItem="jzw-u5-Zjs" secondAttribute="trailing" id="iiG-rP-bbp"/>
+                            <constraint firstItem="CYB-Js-nMq" firstAttribute="leading" secondItem="EB1-cz-f3w" secondAttribute="leading" id="jAY-zo-JUW"/>
                             <constraint firstItem="EB1-cz-f3w" firstAttribute="leading" secondItem="5hl-wi-FfU" secondAttribute="leading" constant="242" id="jit-Cb-SsI"/>
                             <constraint firstItem="4tF-Jf-uRi" firstAttribute="top" secondItem="UoG-II-Wca" secondAttribute="bottom" constant="19" id="nhW-nS-a5w"/>
-                            <constraint firstItem="CYB-Js-nMq" firstAttribute="leading" secondItem="EB1-cz-f3w" secondAttribute="leading" id="pNi-az-hV8"/>
+                            <constraint firstItem="CYB-Js-nMq" firstAttribute="leading" secondItem="MB9-co-AOw" secondAttribute="leading" id="thq-6a-ufG"/>
                             <constraint firstItem="jzw-u5-Zjs" firstAttribute="top" secondItem="EB1-cz-f3w" secondAttribute="bottom" constant="19" id="tlk-AD-sax"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="includeAppBannerInClipsSwitch" destination="Xtm-cF-96x" id="TMN-ja-MJe"/>
-                        <outlet property="skipBackAndForwardBy30SecondsSwitch" destination="JEt-pq-hrP" id="CqT-YK-nZZ"/>
+                        <outlet property="skipDurationDropDownMenu" destination="zE2-Mi-ScL" id="vyQ-V1-Ryf"/>
                         <outlet property="skipIntroStackView" destination="EB1-cz-f3w" id="dKH-G5-mrm"/>
                         <outlet property="skipIntroSwitch" destination="yfb-Pt-KGS" id="ZvD-Nu-XWb"/>
                     </connections>

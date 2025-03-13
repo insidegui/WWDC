@@ -20,11 +20,19 @@ extension NSImage {
 
     static var PUIPause: NSImage { .PUISystemSymbol(named: "pause.fill", label: "Pause") }
 
-    static var PUIBack15s: NSImage { .PUISystemSymbol(named: "gobackward.15", label: "Forward 15 Seconds") }
+    static var PUIBack5s: NSImage { .PUISystemSymbol(named: "gobackward.5", label: "Back 5 Seconds") }
 
-    static var PUIBack30s: NSImage { .PUISystemSymbol(named: "gobackward.30", label: "Forward 30 Seconds") }
+    static var PUIBack10s: NSImage { .PUISystemSymbol(named: "gobackward.10", label: "Back 10 Seconds") }
+
+    static var PUIBack15s: NSImage { .PUISystemSymbol(named: "gobackward.15", label: "Back 15 Seconds") }
+
+    static var PUIBack30s: NSImage { .PUISystemSymbol(named: "gobackward.30", label: "Back 30 Seconds") }
 
     static var PUIAnnotation: NSImage { .PUISystemSymbol(named: "bookmark.fill", label: "Add Bookmark") }
+
+    static var PUIForward5s: NSImage { .PUISystemSymbol(named: "goforward.5", label: "Forward 5 Seconds") }
+
+    static var PUIForward10s: NSImage { .PUISystemSymbol(named: "goforward.10", label: "Forward 10 Seconds") }
 
     static var PUIForward15s: NSImage { .PUISystemSymbol(named: "goforward.15", label: "Forward 15 Seconds") }
 

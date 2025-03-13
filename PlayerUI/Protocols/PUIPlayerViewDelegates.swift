@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import ConfUIFoundation
 
 public protocol PUIPlayerViewDelegate: AnyObject {
 
@@ -35,6 +36,6 @@ public protocol PUIPlayerViewAppearanceDelegate: AnyObject, PUIPlayerViewDetache
     func playerViewShouldShowBackAndForwardControls(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowTimestampLabels(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool
-    func playerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool
+    func playerViewBackAndForwardDuration(_ playerView: PUIPlayerView) -> BackForwardSkipDuration
 
 }

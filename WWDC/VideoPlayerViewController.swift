@@ -116,7 +116,7 @@ final class VideoPlayerViewController: NSViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(annotationSelected(notification:)), name: .TranscriptControllerDidSelectAnnotation, object: nil)
 
-        NotificationCenter.default.publisher(for: .SkipBackAndForwardBy30SecondsPreferenceDidChange).receive(on: DispatchQueue.main).sink { _ in
+        NotificationCenter.default.publisher(for: .SkipBackAndForwardDurationPreferenceDidChange).receive(on: DispatchQueue.main).sink { _ in
             self.playerView.invalidateAppearance()
         }.store(in: &cancellables)
     }
@@ -382,8 +382,8 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
         return !sessionViewModel.sessionInstance.isCurrentlyLive
     }
 
-    func playerViewShouldShowBackAndForward30SecondsButtons(_ playerView: PUIPlayerView) -> Bool {
-        return Preferences.shared.skipBackAndForwardBy30Seconds
+    func playerViewBackAndForwardDuration(_ playerView: PUIPlayerView) -> BackForwardSkipDuration {
+        return Preferences.shared.skipBackAndForwardDuration
     }
 
     func presentDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
