@@ -17,7 +17,7 @@ public final class ScheduleSection: Object {
     @objc public dynamic var representedDate: Date = .distantPast
     public let instances = List<SessionInstance>()
 
-    public override class func primaryKey() -> String {
+    public override static func primaryKey() -> String {
         return "identifier"
     }
 
