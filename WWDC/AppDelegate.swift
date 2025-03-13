@@ -61,7 +61,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
         urlObservationToken = NotificationCenter.default.addObserver(forName: .openWWDCURL, object: nil, queue: .main) { [weak self] note in
             guard let url = note.object as? URL else { return }
-            self?.openURL(url)
+            MainActor.assumeIsolated {
+                self?.openURL(url)
+            }
         }
 
         let item = DispatchWorkItem(block: showMigrationSplashScreen)

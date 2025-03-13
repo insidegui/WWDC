@@ -53,7 +53,7 @@ public final class Bookmark: Object, HasCloudKitFields, SoftDeletable, Decodable
     /// The session this bookmark is associated with
     public let session = LinkingObjects(fromType: Session.self, property: "bookmarks")
 
-    public override class func primaryKey() -> String? {
+    public override static func primaryKey() -> String? {
         return "identifier"
     }
 

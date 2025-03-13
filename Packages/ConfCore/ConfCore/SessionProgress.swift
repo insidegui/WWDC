@@ -37,7 +37,7 @@ public final class SessionProgress: Object, HasCloudKitFields, SoftDeletable {
     /// The session this progress is associated with
     public let session = LinkingObjects(fromType: Session.self, property: "progresses")
 
-    public override class func primaryKey() -> String? {
+    public override static func primaryKey() -> String? {
         return "identifier"
     }
 }

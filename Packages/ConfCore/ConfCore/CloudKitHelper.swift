@@ -11,7 +11,7 @@ import CloudKit
 
 public final class CloudKitHelper {
 
-    public class func subscriptionExists(with name: String, in database: CKDatabase, completion: @escaping (Bool) -> Void) {
+    public static func subscriptionExists(with name: String, in database: CKDatabase, completion: @escaping (Bool) -> Void) {
         let fetchSubscriptionOperation = CKFetchSubscriptionsOperation(subscriptionIDs: [name])
 
         fetchSubscriptionOperation.fetchSubscriptionCompletionBlock = { subscriptions, error in

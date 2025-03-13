@@ -27,7 +27,7 @@ public final class Favorite: Object, HasCloudKitFields, SoftDeletable {
     /// The session this favorite is associated with
     public let session = LinkingObjects(fromType: Session.self, property: "favorites")
 
-    public override class func primaryKey() -> String? {
+    public override static func primaryKey() -> String? {
         return "identifier"
     }
 

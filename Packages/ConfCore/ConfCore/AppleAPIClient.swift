@@ -8,6 +8,7 @@
 
 import Foundation
 import Siesta
+import OSLog
 
 // MARK: - Initialization and configuration
 

@@ -2,7 +2,7 @@ import Cocoa
 import ConfCore
 import OSLog
 
-final class DownloadedContentMonitor: Logging {
+final class DownloadedContentMonitor: Logging, @unchecked Sendable {
     static let log = makeLogger()
 
     var storage: Storage?
@@ -118,8 +118,6 @@ final class DownloadedContentMonitor: Logging {
         var files: [String] = []
 
         while let url = enumerator.nextObject() as? URL {
-            let path = url.path
-
             if enumerator.level > 2 { enumerator.skipDescendants() }
 
             /// Special handling for HLS downloads, which are a movpkg bundle.
