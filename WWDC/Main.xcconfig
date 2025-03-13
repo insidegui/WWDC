@@ -12,3 +12,6 @@ VERSIONING_SYSTEM = apple-generic
 COPYRIGHT=© 2017-2023 Buddy Software LTD
 
 CODE_SIGN_STYLE = Automatic
+
+// This setting slows down debug builds significantly and has no tangible benefit
+ENABLE_MODULE_VERIFIER = NO
