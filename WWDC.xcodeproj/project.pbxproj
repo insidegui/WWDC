@@ -191,6 +191,7 @@
 		F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DEC826737EFA00B28B31 /* SharePlayManager.swift */; };
 		F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474DECC2673801500B28B31 /* WatchWWDCActivity.swift */; };
 		F4777ABA2A2A2F6C00A09179 /* WWDCAgentRemover.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4777AB92A2A2F6C00A09179 /* WWDCAgentRemover.swift */; };
+		F48075BB2D830EE200FCD70E /* BackForwardSkipDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DD2F402D7ACEB3003EABDE /* BackForwardSkipDuration.swift */; };
 		F486B3072C0E69E60066749F /* MediaDownloadProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2F82C0E69E60066749F /* MediaDownloadProtocols.swift */; };
 		F486B3082C0E69E60066749F /* FSMediaDownloadMetadataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2F92C0E69E60066749F /* FSMediaDownloadMetadataStore.swift */; };
 		F486B3092C0E69E60066749F /* MediaDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486B2FA2C0E69E60066749F /* MediaDownloadManager.swift */; };
@@ -1635,7 +1636,7 @@
 				F422B8B22C07CB6C00C4B337 /* CALayer+Asset.swift in Sources */,
 				F4FB06A12A21493B00799F84 /* PreviewSupport.swift in Sources */,
 				DD600ACE2487F3540071B90E /* NSColor+Hex.swift in Sources */,
-				27DD2F422D7ACF5C003EABDE /* BackForwardSkipDuration.swift in Sources */,
+				F48075BB2D830EE200FCD70E /* BackForwardSkipDuration.swift in Sources */,
 				DD600AC32487F1C00071B90E /* ConfUIFoundation.swift in Sources */,
 				DD600ACB2487F2D90071B90E /* Fonts.swift in Sources */,
 				F422B8932C077E9600C4B337 /* UILog.swift in Sources */,
