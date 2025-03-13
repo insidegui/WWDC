@@ -234,7 +234,7 @@ final class ImageCacheProvider {
 
 }
 
-private final class ImageDownloadOperation: Operation {
+private final class ImageDownloadOperation: Operation, @unchecked Sendable {
 
     private var completionHandlers: [ImageDownloadCompletionBlock] = []
 

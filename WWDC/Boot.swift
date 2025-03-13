@@ -238,4 +238,4 @@ extension NSApplication {
     }
 }
 
-extension NSWorkspace: @unchecked Sendable { }
+extension NSWorkspace: @retroactive @unchecked Sendable { }

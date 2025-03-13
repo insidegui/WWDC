@@ -155,7 +155,6 @@ public final class Storage: Logging, Signposting {
             // add instances and sessions to events
             let instancesToEvents = Self.signposter.beginInterval("store content result", id: Self.signposter.makeSignpostID(), "add instances and sessions to events")
             backgroundRealm.objects(Event.self).forEach { event in
-                let instances = backgroundRealm.objects(SessionInstance.self).filter("eventIdentifier == %@", event.identifier)
                 let sessions = backgroundRealm.objects(Session.self).filter("eventIdentifier == %@", event.identifier)
 
                 event.sessionInstances.removeAll()

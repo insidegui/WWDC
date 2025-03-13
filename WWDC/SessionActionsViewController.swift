@@ -11,8 +11,8 @@ import PlayerUI
 import ConfCore
 import Combine
 
+@MainActor
 protocol SessionActionsViewControllerDelegate: AnyObject {
-
     func sessionActionsDidSelectSlides(_ sender: NSView?)
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
     func sessionActionsDidSelectDownload(_ sender: NSView?)
