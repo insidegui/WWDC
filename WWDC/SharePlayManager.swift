@@ -12,7 +12,7 @@ import Combine
 import ConfCore
 import OSLog
 
-final class SharePlayManager: ObservableObject, Logging {
+final class SharePlayManager: ObservableObject, Logging, @unchecked Sendable {
     
     enum State {
         case idle

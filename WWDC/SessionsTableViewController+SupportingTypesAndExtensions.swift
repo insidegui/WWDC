@@ -33,8 +33,8 @@ extension SessionViewModel: SessionIdentifiable {
     }
 }
 
+@MainActor
 protocol SessionsTableViewControllerDelegate: AnyObject {
-
     func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel])
     func sessionTableViewContextMenuActionUnWatch(viewModels: [SessionViewModel])
     func sessionTableViewContextMenuActionFavorite(viewModels: [SessionViewModel])

@@ -68,7 +68,7 @@ extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate
 
 }
 
-extension Bookmark: PUITimelineAnnotation {
+extension Bookmark: @retroactive PUITimelineAnnotation {
 
     public var isEmpty: Bool {
         return body.isEmpty
