@@ -111,7 +111,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-WWDCEnvironmentBaseURL &quot;http://localhost:3131&quot;"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--enable-updates"
