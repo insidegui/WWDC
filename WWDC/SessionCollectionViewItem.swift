@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SwiftUI
 
 final class SessionCollectionViewItem: NSCollectionViewItem {
 
@@ -17,27 +18,25 @@ final class SessionCollectionViewItem: NSCollectionViewItem {
 
     var viewModel: SessionViewModel? {
         get {
-            return cellView.viewModel
+            return cellViewModel.viewModel
         }
         set {
-            cellView.viewModel = newValue
+            cellViewModel.viewModel = newValue
         }
     }
 
     var onClicked: ((SessionViewModel) -> Void)?
 
-    private lazy var cellView: SessionCellView = {
-        return SessionCellView(frame: view.bounds)
+    private lazy var cellViewModel = SessionCellViewModel()
+    
+    private lazy var hostingView: NSHostingView<SessionCellView> = {
+        let swiftUIView = SessionCellView(cellViewModel: cellViewModel, style: .rounded)
+        return NSHostingView(rootView: swiftUIView)
     }()
 
     private func setup() {
-        cellView.autoresizingMask = [.width, .height]
-        view.addSubview(cellView)
-
-        cellView.layer?.masksToBounds = true
-        cellView.layer?.backgroundColor = NSColor.roundedCellBackground.cgColor
-        cellView.layer?.cornerRadius = 6
-        cellView.layer?.cornerCurve = .continuous
+        hostingView.autoresizingMask = [.width, .height]
+        view.addSubview(hostingView)
 
         let click = NSClickGestureRecognizer(target: self, action: #selector(clickRecognized))
         view.addGestureRecognizer(click)

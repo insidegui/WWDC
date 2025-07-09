@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import SwiftUI
 
 final class SessionTableCellView: NSTableCellView {
 
@@ -18,10 +19,10 @@ final class SessionTableCellView: NSTableCellView {
 
     var viewModel: SessionViewModel? {
         get {
-            return cellView.viewModel
+            return cellViewModel.viewModel
         }
         set {
-            cellView.viewModel = newValue
+            cellViewModel.viewModel = newValue
         }
     }
 
@@ -29,13 +30,16 @@ final class SessionTableCellView: NSTableCellView {
         fatalError()
     }
 
-    private lazy var cellView: SessionCellView = {
-        return SessionCellView(frame: bounds)
+    private lazy var cellViewModel = SessionCellViewModel()
+    
+    private lazy var hostingView: NSHostingView<SessionCellView> = {
+        let swiftUIView = SessionCellView(cellViewModel: cellViewModel, style: .flat)
+        return NSHostingView(rootView: swiftUIView)
     }()
 
     private func setup() {
-        cellView.autoresizingMask = [.width, .height]
-        addSubview(cellView)
+        hostingView.autoresizingMask = [.width, .height]
+        addSubview(hostingView)
     }
 
 }

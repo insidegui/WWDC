@@ -6,78 +6,53 @@
 //  Copyright © 2017 Guilherme Rambo. All rights reserved.
 //
 
-import Cocoa
+import SwiftUI
 
-final class TrackColorView: NSView {
-
-    private lazy var progressLayer: WWDCLayer = {
-        let l = WWDCLayer()
-
-        l.autoresizingMask = [.layerWidthSizable]
-
-        return l
-    }()
-
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-
-        wantsLayer = true
-        layer?.cornerRadius = 2
-        layer?.masksToBounds = true
-
-        progressLayer.frame = bounds
-
-        layer?.addSublayer(progressLayer)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    var hasValidProgress = false {
-        didSet {
-            needsLayout = true
-        }
-    }
-
-    var progress: Double = 0.5 {
-        didSet {
-            // hide when fully watched
-            alphaValue = progress >= Constants.watchedVideoRelativePosition ? 0 : 1
-
-            if hasValidProgress && progress < 1 {
-                layer?.borderWidth = 1
-            } else {
-                layer?.borderWidth = 0
+struct TrackColorProgressViewStyle: ProgressViewStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        RoundedRectangle(cornerRadius: 2)
+            .stroke(.foreground, lineWidth: shouldShowBorder(for: configuration.fractionCompleted) ? 1 : 0)
+            .overlay {
+                GeometryReader { geometry in
+                    VStack {
+                        Rectangle()
+                            .fill(.foreground)
+                            .frame(height: geometry.size.height * (configuration.fractionCompleted ?? 1))
+                    }
+                    .frame(maxHeight: .infinity, alignment: .bottom)
+                }
             }
+            .frame(width: 4)
+            .clipShape(RoundedRectangle(cornerRadius: 2))
+    }
+    
+    private func shouldShowBorder(for progress: Double?) -> Bool {
+        guard let progress = progress else { return false }
+        return progress < 1.0
+    }
+}
 
-            needsLayout = true
+#Preview {
+    VStack(spacing: 10) {
+        Text("Track Color Progress View")
+            .font(.headline)
+
+        HStack(spacing: 30) {
+            ProgressView(value: 0.0, total: 1.0)
+                .foregroundStyle(.blue)
+
+            ProgressView(value: 0.3, total: 1.0)
+                .foregroundStyle(.green)
+
+            ProgressView(value: 0.7, total: 1.0)
+                .foregroundStyle(.orange)
+
+            ProgressView(value: 0.98, total: 1.0)
+                .foregroundStyle(.red)
         }
+        .frame(height: 50)
+        .padding()
     }
-
-    var color: NSColor = .black {
-        didSet {
-            layer?.borderColor = color.cgColor
-            progressLayer.backgroundColor = color.cgColor
-        }
-    }
-
-    override var intrinsicContentSize: NSSize {
-        return NSSize(width: 4, height: -1)
-    }
-
-    override func layout() {
-        super.layout()
-
-        let progressHeight = hasValidProgress ? bounds.height * CGFloat(progress) : bounds.height
-
-        guard !progressHeight.isNaN && !progressHeight.isInfinite else { return }
-
-        let progressFrame = NSRect(x: 0, y: 0, width: bounds.width, height: progressHeight)
-        progressLayer.frame = progressFrame
-    }
-
-    override func makeBackingLayer() -> CALayer {
-        return WWDCLayer()
-    }
+    .padding()
+    .progressViewStyle(TrackColorProgressViewStyle())
 }

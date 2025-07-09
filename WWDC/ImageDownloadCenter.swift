@@ -34,6 +34,7 @@ final class ImageDownloadCenter: Logging {
     
     func cachedThumbnail(from url: URL) -> NSImage? { cache.cachedImage(for: url, thumbnailOnly: true).thumbnail }
 
+    /// The completion handler is always called on the main thread
     @discardableResult
     func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
         if thumbnailOnly {
