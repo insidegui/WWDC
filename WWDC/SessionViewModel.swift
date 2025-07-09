@@ -66,7 +66,7 @@ final class SessionViewModel {
         guard sessionInstance.startTime > today() else { return Just(nil).setFailureType(to: Error.self).eraseToAnyPublisher() }
         guard actionLinkURL != nil else { return Just(nil).setFailureType(to: Error.self).eraseToAnyPublisher() }
 
-        return rxSessionInstance.map { $0.actionLinkPrompt }.eraseToAnyPublisher()
+        return rxSessionInstance.map { /*$0.actionLinkPrompt*/ _ in "Schedule an Appointment" }.eraseToAnyPublisher()
     }()
 
     var actionLinkURL: URL? {

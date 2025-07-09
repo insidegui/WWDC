@@ -107,6 +107,8 @@ public class SessionInstance: Object, ConditionallyDecodable {
         trackIdentifier = other.trackIdentifier
         eventIdentifier = other.eventIdentifier
         calendarEventIdentifier = other.calendarEventIdentifier
+        actionLinkPrompt = other.actionLinkPrompt
+        actionLinkURL = other.actionLinkURL
 
         if let otherSession = other.session, let session = session {
             session.merge(with: otherSession, in: realm)
@@ -124,7 +126,7 @@ public class SessionInstance: Object, ConditionallyDecodable {
 
     private enum CodingKeys: String, CodingKey {
         case id, keywords, startTime, endTime, type
-        case eventId, actionLinkPrompt, actionLinkURL
+        case eventId, actionLinkPrompt, actionLinkURL = "webPermalink"
         case room = "roomId"
         case track = "trackId"
         /// These are used during decoding in order to normalize
