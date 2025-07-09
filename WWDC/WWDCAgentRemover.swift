@@ -67,7 +67,7 @@ struct WWDCAgentRemover {
             proc.waitUntilExit()
 
             guard proc.terminationStatus == 0 else {
-                let output = (try? errPipe.fileHandleForReading.readToEnd().flatMap { String(decoding: $0, as: UTF8.self) }) ?? "<nil>"
+                let output = (try? errPipe.fileHandleForReading.readToEnd().flatMap { String(data: $0, encoding: .utf8) }) ?? "<nil>"
                 logger.error("launchctl operation failed with exit code \(proc.terminationStatus, privacy: .public): \(output, privacy: .public)")
                 return
             }

@@ -28,6 +28,7 @@
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
 		914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */; };
+		914C83B42E1ECBFF001AEE5C /* SessionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */; };
 		91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */; };
 		91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
@@ -313,6 +314,7 @@
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
 		911C72C82A52169A00CB3757 /* CombineLatestMany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineLatestMany.swift; sourceTree = "<group>"; };
 		9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+GroupedBy.swift"; sourceTree = "<group>"; };
+		914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailsView.swift; sourceTree = "<group>"; };
 		91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+Combine.swift"; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
@@ -1102,6 +1104,7 @@
 		DDFA10C71EBFD897001DCF66 /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */,
 				DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */,
 				DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */,
 				DD6E06F91EDBC636000EAEA4 /* Tabs */,
@@ -1538,6 +1541,7 @@
 				DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */,
 				DDA60E1720A9083E002EECF5 /* RelatedSessionsViewController.swift in Sources */,
 				F44C82312A2285AC00FDE980 /* OffsetObservingScrollView.swift in Sources */,
+				914C83B42E1ECBFF001AEE5C /* SessionDetailsView.swift in Sources */,
 				DDA60E1520A907B6002EECF5 /* SessionCollectionViewItem.swift in Sources */,
 				DD7F38881EAC2275002D8C00 /* PathUtil.swift in Sources */,
 				DDB352821EC7C55300254815 /* DateProvider.swift in Sources */,

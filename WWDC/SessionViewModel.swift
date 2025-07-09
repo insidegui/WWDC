@@ -26,6 +26,10 @@ final class SessionViewModel {
     var imageUrl: URL?
     let trackName: String
 
+    lazy var rxTranscriptUpdated: some Publisher<String, Error> = {
+        return rxSession.map(\.transcriptText).removeDuplicates()
+    }()
+
     lazy var rxSession: some Publisher<Session, Error> = {
         return session.valuePublisher()
     }()

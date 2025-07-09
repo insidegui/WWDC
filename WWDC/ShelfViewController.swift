@@ -11,6 +11,7 @@ import Combine
 import CoreMedia
 import PlayerUI
 import AVFoundation
+import SwiftUI
 
 protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
@@ -268,4 +269,17 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         detachedPlayer.updateLayout(guide: videoLayoutGuide, container: view, constraints: &videoLayoutGuideConstraints)
     }
 
+}
+
+struct ShelfViewControllerWrapper: NSViewControllerRepresentable {
+    let controller: ShelfViewController
+
+    func makeNSViewController(context: Context) -> ShelfViewController {
+        controller.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+        return controller
+    }
+
+    func updateNSViewController(_ nsViewController: ShelfViewController, context: Context) {
+        // No updates needed - controller manages its own state
+    }
 }

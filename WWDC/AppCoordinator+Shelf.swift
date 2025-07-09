@@ -19,9 +19,9 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         var shelfViewController: ShelfViewController?
         switch tab {
         case .schedule:
-            shelfViewController = scheduleController.splitViewController.detailViewController.shelfController
+            shelfViewController = scheduleController.splitViewController.detailViewController.detailsViewModel.shelfController
         case .videos:
-            shelfViewController = videosController.detailViewController.shelfController
+            shelfViewController = videosController.detailViewController.detailsViewModel.shelfController
         default: ()
         }
 

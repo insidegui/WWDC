@@ -9,6 +9,7 @@
 import Cocoa
 import ConfCore
 import Combine
+import SwiftUI
 
 class SessionSummaryViewController: NSViewController {
 
@@ -217,6 +218,8 @@ class SessionSummaryViewController: NSViewController {
         relatedSessionsViewController.scrollToBeginningOfDocument(nil)
 
         // TODO: Not even sure what this does
+        // I believe this is a dead feature, it appears to have been showing a link to sign up for a lab.
+        // The API has since been updated, we could restore the feature because there's other data available now.
         viewModel.rxActionPrompt.replaceNilAndError(with: "").driveUI(\.stringValue, on: actionLinkLabel).store(in: &cancellables)
     }
 
@@ -226,4 +229,24 @@ class SessionSummaryViewController: NSViewController {
         NSWorkspace.shared.open(url)
     }
 
+}
+
+struct SessionSummaryViewControllerWrapper: NSViewControllerRepresentable {
+    let controller: SessionSummaryViewController
+
+    func makeNSViewController(context: Context) -> SessionSummaryViewController {
+        return controller
+    }
+
+    func updateNSViewController(_ nsViewController: SessionSummaryViewController, context: Context) {
+        // No updates needed - controller manages its own state
+    }
+}
+
+@available(macOS 13.0, *)
+extension SessionSummaryViewControllerWrapper {
+    func sizeThatFits(_ proposal: ProposedViewSize, nsViewController: Self.NSViewControllerType, context: Self.Context) -> CGSize? {
+        // Ensure the summary view fits its content
+        .init(width: proposal.width ?? .zero, height: nsViewController.view.fittingSize.height)
+    }
 }

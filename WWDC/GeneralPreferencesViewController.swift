@@ -236,7 +236,7 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
 
         var rootFileCount = 0
 
-        while enumerator.nextObject() as? String != nil {
+        while enumerator.nextObject() is String {
             rootFileCount += 1
         }
 
