@@ -217,7 +217,7 @@ class SessionSummaryViewController: NSViewController {
 
         relatedSessionsViewController.scrollToBeginningOfDocument(nil)
 
-        // TODO: Not even sure what this does
+        // https://github.com/insidegui/WWDC/issues/724
         // I believe this is a dead feature, it appears to have been showing a link to sign up for a lab.
         // The API has since been updated, we could restore the feature because there's other data available now.
         viewModel.rxActionPrompt.replaceNilAndError(with: "").driveUI(\.stringValue, on: actionLinkLabel).store(in: &cancellables)
@@ -245,8 +245,12 @@ struct SessionSummaryViewControllerWrapper: NSViewControllerRepresentable {
 
 @available(macOS 13.0, *)
 extension SessionSummaryViewControllerWrapper {
+    /// Without this, the VStack in ``SessionDetailsView`` always equally distributes available space to the shelf and the summary.
+    ///
+    /// But the AppKit implementation was set up to allow and uneven distribution of space. Since our deployment target is macOS 12, there will
+    /// be a slight change in behavior when running on macOS 12. But I don't *think* it's going to be a big deal. And once more SwiftUI conversion is done
+    /// I think we'll be able to get the proper behavior natively in SwiftUI.
     func sizeThatFits(_ proposal: ProposedViewSize, nsViewController: Self.NSViewControllerType, context: Self.Context) -> CGSize? {
-        // Ensure the summary view fits its content
         .init(width: proposal.width ?? .zero, height: nsViewController.view.fittingSize.height)
     }
 }

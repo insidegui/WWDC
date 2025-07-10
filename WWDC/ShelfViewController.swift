@@ -275,7 +275,6 @@ struct ShelfViewControllerWrapper: NSViewControllerRepresentable {
     let controller: ShelfViewController
 
     func makeNSViewController(context: Context) -> ShelfViewController {
-        controller.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         return controller
     }
 

@@ -10,9 +10,8 @@ import Cocoa
 import SwiftUI
 
 struct WWDCTextButtonStyle: ButtonStyle {
-    let isSelected: Bool
-
     @State var isHovering = false
+    @Environment(\.isSelected) private var isSelected
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -30,7 +29,9 @@ struct WWDCTextButtonStyle: ButtonStyle {
                         .fill(Color.gray.opacity(0.2))
                 }
             }
+            .contentShape(.rect(cornerRadius: 8))
             .drawingGroup()
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     func foregroundColor(_ configuration: Configuration) -> any ShapeStyle {

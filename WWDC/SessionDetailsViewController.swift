@@ -14,13 +14,6 @@ class SessionDetailsViewModel: ObservableObject {
 
     var viewModel: SessionViewModel? {
         didSet {
-            cancellables = []
-
-            viewModel?.rxTranscriptUpdated.replaceError(with: "").sink { [weak self] _ in
-                self?.isTranscriptAvailable = self?.viewModel?.session.transcript() != nil
-            }
-            .store(in: &cancellables)
-
             shelfController.viewModel = viewModel
             summaryController.viewModel = viewModel
             transcriptController.viewModel = viewModel
@@ -32,8 +25,11 @@ class SessionDetailsViewModel: ObservableObject {
             if viewModel.identifier != oldValue?.identifier {
                 selectedTab = .overview
             }
+            viewModel.rxTranscript.replaceError(with: nil).map {
+                $0 != nil
+            }
+            .assign(to: &$isTranscriptAvailable)
 
-            isTranscriptAvailable = viewModel.session.transcript() != nil
             isBookmarksAvailable = false
         }
     }
@@ -46,12 +42,14 @@ class SessionDetailsViewModel: ObservableObject {
     let summaryController: SessionSummaryViewController
     let transcriptController: SessionTranscriptViewController
     
-    private var cancellables = Set<AnyCancellable>()
-    
-    init() {
-        shelfController = ShelfViewController()
-        summaryController = SessionSummaryViewController()
-        transcriptController = SessionTranscriptViewController()
+    init(session: SessionViewModel? = nil) {
+        self.shelfController = ShelfViewController()
+        self.summaryController = SessionSummaryViewController()
+        self.transcriptController = SessionTranscriptViewController()
+
+        defer {
+            self.viewModel = session
+        }
     }
 }
 
@@ -63,11 +61,7 @@ extension SessionDetailsViewModel {
 
 final class SessionDetailsViewController: NSViewController {
 
-    private struct Metrics {
-        static let padding: CGFloat = 46
-    }
-
-    let detailsViewModel = SessionDetailsViewModel()
+    private let detailsViewModel = SessionDetailsViewModel()
 
     var viewModel: SessionViewModel? {
         didSet {

@@ -43,16 +43,14 @@ struct SessionDetailsView: View {
                 .frame(minHeight: 280, maxHeight: .infinity)
                 .padding(.top, 22)
 
-            VStack(spacing: 0) {
-                if detailsViewModel.isTranscriptAvailable || detailsViewModel.isBookmarksAvailable {
-                    tabButtons
-                }
-
-                Divider()
-
-                tabContent
-                    .padding(.top, 16)
+            if detailsViewModel.isTranscriptAvailable || detailsViewModel.isBookmarksAvailable {
+                tabButtons
             }
+
+            Divider()
+
+            tabContent
+                .padding(.top, 16)
         }
         .padding([.bottom, .horizontal], 46)
     }
@@ -62,24 +60,25 @@ struct SessionDetailsView: View {
             Button("Overview") {
                 detailsViewModel.selectedTab = .overview
             }
-            .buttonStyle(WWDCTextButtonStyle(isSelected: detailsViewModel.selectedTab == .overview))
-            
+            .selected(detailsViewModel.selectedTab == .overview)
+
             if detailsViewModel.isTranscriptAvailable {
                 Button("Transcript") {
                     detailsViewModel.selectedTab = .transcript
                 }
-                .buttonStyle(WWDCTextButtonStyle(isSelected: detailsViewModel.selectedTab == .transcript))
+                .selected(detailsViewModel.selectedTab == .transcript)
             }
             
             if detailsViewModel.isBookmarksAvailable {
                 Button("Bookmarks") {
                     detailsViewModel.selectedTab = .bookmarks
                 }
-                .buttonStyle(WWDCTextButtonStyle(isSelected: detailsViewModel.selectedTab == .bookmarks))
+                .selected(detailsViewModel.selectedTab == .bookmarks)
             }
         }
+        .buttonStyle(WWDCTextButtonStyle())
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
+        .padding(.vertical, 8)
     }
 
     @ViewBuilder
@@ -93,5 +92,11 @@ struct SessionDetailsView: View {
             Text("Bookmarks view coming soon")
                 .foregroundColor(.secondary)
         }
+    }
+}
+
+struct SessionDetailsView_Previews: PreviewProvider {
+    static var previews: some View {
+        SessionDetailsView(detailsViewModel: SessionDetailsViewModel(session: .preview))
     }
 }

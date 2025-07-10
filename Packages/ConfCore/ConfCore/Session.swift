@@ -69,10 +69,17 @@ public class Session: Object, Decodable {
 
     /// Fetches and returns the transcript object associated with the session
     public func transcript() -> Transcript? {
+        guard let transcripts = transcripts() else { return nil }
+
+        return transcripts.first
+    }
+
+    /// Fetches and returns the transcripts associated with the session. There should only ever be one.
+    public func transcripts() -> Results<Transcript>? {
         guard let realm = realm else { return nil }
         guard !transcriptIdentifier.isEmpty else { return nil }
 
-        return realm.objects(Transcript.self).filter("identifier == %@ AND annotations.@count > 0", transcriptIdentifier).first
+        return realm.objects(Transcript.self).filter("identifier == %@ AND annotations.@count > 0", transcriptIdentifier)
     }
 
     /// The session's track
