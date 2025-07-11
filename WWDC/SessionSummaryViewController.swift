@@ -56,13 +56,13 @@ class SessionSummaryViewController: NSViewController {
         return v
     }()
 
-    lazy var relatedSessionsViewController: RelatedSessionsViewController = {
-        let c = RelatedSessionsViewController()
-        c.view.translatesAutoresizingMaskIntoConstraints = false
+    lazy var relatedSessionsViewModel = RelatedSessionsViewModel()
 
-        c.title = "Related Sessions"
-
-        return c
+    private lazy var relatedSessionsHostingView: NSHostingView<RelatedSessionsView> = {
+        let view = RelatedSessionsView(viewModel: relatedSessionsViewModel)
+        let hostingView = NSHostingView(rootView: view)
+        hostingView.translatesAutoresizingMaskIntoConstraints = false
+        return hostingView
     }()
 
     private func attributedSummaryString(from string: String) -> NSAttributedString {
@@ -171,11 +171,10 @@ class SessionSummaryViewController: NSViewController {
         stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         summaryScrollView.heightAnchor.constraint(equalToConstant: Metrics.summaryHeight).isActive = true
 
-        addChild(relatedSessionsViewController)
-        stackView.addArrangedSubview(relatedSessionsViewController.view)
-        relatedSessionsViewController.view.heightAnchor.constraint(equalToConstant: RelatedSessionsViewController.Metrics.height).isActive = true
-        relatedSessionsViewController.view.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
-        relatedSessionsViewController.view.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
+        stackView.addArrangedSubview(relatedSessionsHostingView)
+        relatedSessionsHostingView.heightAnchor.constraint(equalToConstant: RelatedSessionsView.Metrics.height).isActive = true
+        relatedSessionsHostingView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor).isActive = true
+        relatedSessionsHostingView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor).isActive = true
     }
 
     override func viewDidLoad() {
@@ -211,11 +210,9 @@ class SessionSummaryViewController: NSViewController {
 
         viewModel.rxRelatedSessions.driveUI { [weak self] relatedResources in
             let relatedSessions = relatedResources.compactMap({ $0.session })
-            self?.relatedSessionsViewController.sessions = relatedSessions.compactMap(SessionViewModel.init)
+            self?.relatedSessionsViewModel.sessions = relatedSessions.compactMap(SessionViewModel.init)
         }
         .store(in: &cancellables)
-
-        relatedSessionsViewController.scrollToBeginningOfDocument(nil)
 
         // https://github.com/insidegui/WWDC/issues/724
         // I believe this is a dead feature, it appears to have been showing a link to sign up for a lab.
@@ -241,6 +238,15 @@ struct SessionSummaryViewControllerWrapper: NSViewControllerRepresentable {
     func updateNSViewController(_ nsViewController: SessionSummaryViewController, context: Context) {
         // No updates needed - controller manages its own state
     }
+
+    class Coordinator {
+        var lastWidth: CGFloat = 0
+        var lastHeight: CGFloat = 0
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
 }
 
 @available(macOS 13.0, *)
@@ -251,6 +257,15 @@ extension SessionSummaryViewControllerWrapper {
     /// be a slight change in behavior when running on macOS 12. But I don't *think* it's going to be a big deal. And once more SwiftUI conversion is done
     /// I think we'll be able to get the proper behavior natively in SwiftUI.
     func sizeThatFits(_ proposal: ProposedViewSize, nsViewController: Self.NSViewControllerType, context: Self.Context) -> CGSize? {
-        .init(width: proposal.width ?? .zero, height: nsViewController.view.fittingSize.height)
+        let newWidth = (proposal.width ?? .zero).rounded(.towardZero)
+
+        // SwiftUI likes to ask the same questions a lot and fittingSize is pretty expensive.
+        // We can avoid unnecessary updates by checking if the width has changed.
+        if !newWidth.isInfinite && !newWidth.isZero && newWidth != context.coordinator.lastWidth {
+            context.coordinator.lastWidth = newWidth
+            context.coordinator.lastHeight = nsViewController.view.fittingSize.height
+        }
+
+        return CGSize(width: proposal.width ?? .zero, height: context.coordinator.lastHeight)
     }
 }
