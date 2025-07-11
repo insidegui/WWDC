@@ -10,6 +10,7 @@ import Cocoa
 import ConfCore
 import RealmSwift
 import Combine
+import SwiftUI
 
 extension Notification.Name {
     static let TranscriptControllerDidSelectAnnotation = Notification.Name("TranscriptControllerDidSelectAnnotation")
@@ -151,7 +152,7 @@ final class SessionTranscriptViewController: NSViewController {
             .store(in: &cancellables)
     }
 
-    private func updateAnnotations(with newAnnotations: List<TranscriptAnnotation>) {
+    private func updateAnnotations(with newAnnotations: RealmSwift.List<TranscriptAnnotation>) {
         annotations = newAnnotations
         updateFilter(with: searchController.searchTerm)
     }
@@ -309,4 +310,16 @@ extension SessionTranscriptViewController: NSTableViewDataSource, NSTableViewDel
         return rowView
     }
 
+}
+
+struct SessionTranscriptViewControllerWrapper: NSViewControllerRepresentable {
+    let controller: SessionTranscriptViewController
+
+    func makeNSViewController(context: Context) -> SessionTranscriptViewController {
+        return controller
+    }
+
+    func updateNSViewController(_ nsViewController: SessionTranscriptViewController, context: Context) {
+        // No updates needed - controller manages its own state
+    }
 }

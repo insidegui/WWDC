@@ -7,53 +7,44 @@
 //
 
 import Cocoa
+import SwiftUI
 
-class WWDCTextButton: NSButton {
+struct WWDCTextButtonStyle: ButtonStyle {
+    @State var isHovering = false
+    @Environment(\.isSelected) private var isSelected
 
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-
-        configure()
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 16, weight: isSelected ? .medium : .regular))
+            .foregroundStyle(AnyShapeStyle(foregroundColor(configuration)))
+            .padding(.vertical, 8)
+            .padding(.horizontal, 8)
+            .animation(.snappy, value: configuration.isPressed)
+            .onHover { isHovering in
+                self.isHovering = isHovering
+            }
+            .background {
+                if isHovering {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.gray.opacity(0.2))
+                }
+            }
+            .contentShape(.rect(cornerRadius: 8))
+            .drawingGroup()
+            .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
-    override var title: String {
-        didSet {
-            configure()
-        }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func configure() {
-        isBordered = false
-
-        if state == .on {
-            let attrs: [NSAttributedString.Key: Any] = [
-                .font: NSFont.systemFont(ofSize: 16, weight: .medium),
-                .foregroundColor: NSColor.primary
-            ]
-
-            attributedTitle = NSAttributedString(string: title, attributes: attrs)
+    func foregroundColor(_ configuration: Configuration) -> any ShapeStyle {
+        let baseColor: any ShapeStyle = if isSelected {
+            Color(nsColor: .primary)
         } else {
-            let attrs: [NSAttributedString.Key: Any] = [
-                .font: NSFont.systemFont(ofSize: 16),
-                .foregroundColor: NSColor.tertiaryText
-            ]
-
-            attributedTitle = NSAttributedString(string: title, attributes: attrs)
+            .tertiary
         }
 
-        sizeToFit()
-
-        cell?.backgroundStyle = .emphasized
-    }
-
-    override var state: NSControl.StateValue {
-        didSet {
-            configure()
+        if configuration.isPressed {
+            return baseColor.opacity(0.5)
+        } else {
+            return baseColor
         }
     }
-
 }

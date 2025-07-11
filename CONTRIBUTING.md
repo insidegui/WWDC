@@ -159,6 +159,15 @@ Do not add dependencies to the project. In an ideal world, we would be masters o
 
 Do not bring in assets (icons, images) for which you don't have an appropriate license. Icons and images must have a Creative Commons or similar license to be used in this project. A good place to find free icons is [Icon Finder](https://iconfinder.com).
 
+#### VIII. AI-Assisted Contributions
+
+If you use AI assistance (ChatGPT, GitHub Copilot, etc.) when writing code, please disclose this in your pull request description.
+
+- **Understand your code**: Review and understand all AI-generated code before submitting
+- **Follow project patterns**: Adapt AI suggestions to match existing conventions and architecture
+- **Test thoroughly**: AI-generated code must still pass all quality standards and testing requirements
+- **No blind copy-paste**: Don't submit code you don't understand or haven't reviewed
+
 ## 3. Conduct
 
 The project has a [code of conduct](./CODE_OF_CONDUCT.md) that should be kept in mind when contributing -- whether that contribution is in the form of issues, comments, documentation or code. We reckon the fact that we've never had to enforce this is a pretty good sign of a healthy community, so let's keep it that way. 😉

@@ -21,6 +21,7 @@ opt_in_rules:
 
 excluded:
   - Carthage
+  - Packages/ConfCore/.build
 
 force_cast:
   severity: warning
