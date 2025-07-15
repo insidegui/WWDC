@@ -47,13 +47,14 @@ class SessionSummaryViewController: NSViewController {
         return l
     }()
 
-    lazy var actionsViewController: SessionActionsViewController = {
-        let v = SessionActionsViewController()
-
-        v.view.isHidden = true
-        v.view.translatesAutoresizingMaskIntoConstraints = false
-
-        return v
+    lazy var actionsViewModel = SessionActionsViewModel()
+    
+    private lazy var actionsHostingView: NSHostingView<SessionActionsView> = {
+        let view = SessionActionsView(viewModel: actionsViewModel)
+        let hostingView = NSHostingView(rootView: view)
+        hostingView.translatesAutoresizingMaskIntoConstraints = false
+        hostingView.isHidden = true
+        return hostingView
     }()
 
     lazy var relatedSessionsViewModel = RelatedSessionsViewModel()
@@ -152,16 +153,16 @@ class SessionSummaryViewController: NSViewController {
         view.wantsLayer = true
 
         view.addSubview(titleLabel)
-        view.addSubview(actionsViewController.view)
+        view.addSubview(actionsHostingView)
         view.addSubview(stackView)
 
         titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
-        actionsViewController.view.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
-        actionsViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        actionsHostingView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
+        actionsHostingView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 
         titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: actionsViewController.view.leadingAnchor, constant: -24).isActive = true
+        titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: actionsHostingView.leadingAnchor, constant: -24).isActive = true
         titleLabel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
         stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24).isActive = true
@@ -184,8 +185,8 @@ class SessionSummaryViewController: NSViewController {
     }
 
     private func updateBindings() {
-        actionsViewController.view.isHidden = (viewModel == nil)
-        actionsViewController.viewModel = viewModel
+        actionsHostingView.isHidden = (viewModel == nil)
+        actionsViewModel.viewModel = viewModel
         self.summaryScrollView.scroll(.zero)
 
         guard let viewModel = viewModel else { return }
