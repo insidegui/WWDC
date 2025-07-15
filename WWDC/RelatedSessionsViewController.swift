@@ -14,7 +14,13 @@ protocol RelatedSessionsDelegate: AnyObject {
 }
 
 final class RelatedSessionsViewModel: ObservableObject {
-    @Published var sessions: [SessionViewModel] = []
+    @Published var sessions: [SessionViewModel] = [] {
+        didSet {
+            seed &+= 1 // increment with overflow
+        }
+    }
+    /// Used to track when our session array changed without doing a bunch of string comparisons
+    @Published var seed: UInt32 = 0
     var isHidden: Bool { sessions.isEmpty }
 
     weak var delegate: RelatedSessionsDelegate?
@@ -61,8 +67,8 @@ struct RelatedSessionsView: View {
                     .padding(.horizontal, 0)
                     .padding(.bottom, Metrics.scrollerOffset)
                 }
-                .onChange(of: viewModel.sessions.map(\.identifier)) { _, newValue in
-                    scrollView.scrollTo(newValue.first, anchor: .leading)
+                .onChange(of: viewModel.seed) { _, newValue in
+                    scrollView.scrollTo(viewModel.sessions.first?.identifier, anchor: .leading)
                 }
             }
             .frame(height: Metrics.scrollViewHeight)

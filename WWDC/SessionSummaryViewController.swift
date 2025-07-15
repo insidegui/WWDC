@@ -47,13 +47,14 @@ class SessionSummaryViewController: NSViewController {
         return l
     }()
 
-    lazy var actionsViewController: SessionActionsViewController = {
-        let v = SessionActionsViewController()
-
-        v.view.isHidden = true
-        v.view.translatesAutoresizingMaskIntoConstraints = false
-
-        return v
+    lazy var actionsViewModel = SessionActionsViewModel()
+    
+    private lazy var actionsHostingView: NSHostingView<SessionActionsView> = {
+        let view = SessionActionsView(viewModel: actionsViewModel)
+        let hostingView = NSHostingView(rootView: view)
+        hostingView.translatesAutoresizingMaskIntoConstraints = false
+        hostingView.isHidden = true
+        return hostingView
     }()
 
     lazy var relatedSessionsViewModel = RelatedSessionsViewModel()
@@ -152,16 +153,16 @@ class SessionSummaryViewController: NSViewController {
         view.wantsLayer = true
 
         view.addSubview(titleLabel)
-        view.addSubview(actionsViewController.view)
+        view.addSubview(actionsHostingView)
         view.addSubview(stackView)
 
         titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
-        actionsViewController.view.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
-        actionsViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        actionsHostingView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
+        actionsHostingView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 
         titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: actionsViewController.view.leadingAnchor, constant: -24).isActive = true
+        titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: actionsHostingView.leadingAnchor, constant: -24).isActive = true
         titleLabel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
         stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24).isActive = true
@@ -184,8 +185,8 @@ class SessionSummaryViewController: NSViewController {
     }
 
     private func updateBindings() {
-        actionsViewController.view.isHidden = (viewModel == nil)
-        actionsViewController.viewModel = viewModel
+        actionsHostingView.isHidden = (viewModel == nil)
+        actionsViewModel.viewModel = viewModel
         self.summaryScrollView.scroll(.zero)
 
         guard let viewModel = viewModel else { return }
@@ -237,35 +238,5 @@ struct SessionSummaryViewControllerWrapper: NSViewControllerRepresentable {
 
     func updateNSViewController(_ nsViewController: SessionSummaryViewController, context: Context) {
         // No updates needed - controller manages its own state
-    }
-
-    class Coordinator {
-        var lastWidth: CGFloat = 0
-        var lastHeight: CGFloat = 0
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator()
-    }
-}
-
-@available(macOS 13.0, *)
-extension SessionSummaryViewControllerWrapper {
-    /// Without this, the VStack in ``SessionDetailsView`` always equally distributes available space to the shelf and the summary.
-    ///
-    /// But the AppKit implementation was set up to allow and uneven distribution of space. Since our deployment target is macOS 12, there will
-    /// be a slight change in behavior when running on macOS 12. But I don't *think* it's going to be a big deal. And once more SwiftUI conversion is done
-    /// I think we'll be able to get the proper behavior natively in SwiftUI.
-    func sizeThatFits(_ proposal: ProposedViewSize, nsViewController: Self.NSViewControllerType, context: Self.Context) -> CGSize? {
-        let newWidth = (proposal.width ?? .zero).rounded(.towardZero)
-
-        // SwiftUI likes to ask the same questions a lot and fittingSize is pretty expensive.
-        // We can avoid unnecessary updates by checking if the width has changed.
-        if !newWidth.isInfinite && !newWidth.isZero && newWidth != context.coordinator.lastWidth {
-            context.coordinator.lastWidth = newWidth
-            context.coordinator.lastHeight = nsViewController.view.fittingSize.height
-        }
-
-        return CGSize(width: proposal.width ?? .zero, height: context.coordinator.lastHeight)
     }
 }

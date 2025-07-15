@@ -82,7 +82,7 @@ final class SessionTranscriptViewController: NSViewController {
         view.heightAnchor.constraint(equalToConstant: 180)
     }()
 
-    var enforcesHeight: Bool = true {
+    var enforcesHeight: Bool = false {
         didSet {
             heightConstraint.isActive = enforcesHeight
         }

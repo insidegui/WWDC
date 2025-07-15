@@ -6,13 +6,13 @@
 //  Copyright © 2017 Guilherme Rambo. All rights reserved.
 //
 
-import Cocoa
+import SwiftUI
 import PlayerUI
 import ConfCore
 import Combine
 
 @MainActor
-protocol SessionActionsViewControllerDelegate: AnyObject {
+protocol SessionActionsDelegate: AnyObject {
     func sessionActionsDidSelectSlides(_ sender: NSView?)
     func sessionActionsDidSelectFavorite(_ sender: NSView?)
     func sessionActionsDidSelectDownload(_ sender: NSView?)
@@ -23,354 +23,177 @@ protocol SessionActionsViewControllerDelegate: AnyObject {
     func sessionActionsDidSelectShareClip(_ sender: NSView?)
 }
 
-class SessionActionsViewController: NSViewController {
-
-    init() {
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private lazy var cancellables: Set<AnyCancellable> = []
-
-    var viewModel: SessionViewModel? {
+@MainActor
+final class SessionActionsViewModel: ObservableObject {
+    @Published var viewModel: SessionViewModel? {
         didSet {
-            resetDownloadButton()
             updateBindings()
         }
     }
 
-    weak var delegate: SessionActionsViewControllerDelegate?
+    weak var delegate: SessionActionsDelegate?
 
-    private lazy var favoriteButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
+    private var cancellables: Set<AnyCancellable> = []
 
-        b.image = #imageLiteral(resourceName: "favorite")
-        b.alternateImage = #imageLiteral(resourceName: "favorite-filled")
-        b.target = self
-        b.action = #selector(toggleFavorite)
-        b.isToggle = true
-        b.shouldAlwaysDrawHighlighted = true
+    @Published var slidesButtonIsHidden: Bool = false
+    @Published var calendarButtonIsHidden: Bool = false
+    @Published var downloadState: DownloadState = .notDownloadable
+    @Published var isFavorited = false
 
-        return b
-    }()
-
-    private lazy var slidesButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
-        b.image = #imageLiteral(resourceName: "slides")
-        b.target = self
-        b.action = #selector(showSlides)
-        b.shouldAlwaysDrawHighlighted = true
-        b.toolTip = "Open slides"
-
-        return b
-    }()
-
-    private lazy var downloadButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
-        b.image = #imageLiteral(resourceName: "download")
-        b.target = self
-        b.action = #selector(download)
-        b.shouldAlwaysDrawHighlighted = true
-
-        return b
-    }()
-
-    private lazy var calendarButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
-        b.image = #imageLiteral(resourceName: "calendar")
-        b.target = self
-        b.action = #selector(addCalendar(_:))
-        b.shouldAlwaysDrawHighlighted = true
-        b.toolTip = "Add to Calendar"
-
-        return b
-    }()
-
-    private lazy var downloadIndicator: WWDCProgressIndicator = {
-        let pi = WWDCProgressIndicator(frame: NSRect(x: 0, y: 0, width: 24, height: 24))
-
-        pi.isIndeterminate = false
-        pi.translatesAutoresizingMaskIntoConstraints = false
-        pi.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        pi.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        pi.isHidden = true
-        pi.addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(cancelDownload)))
-        pi.toolTip = "Click to cancel"
-
-        return pi
-    }()
-
-    private lazy var clipButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
-        b.image = #imageLiteral(resourceName: "clip")
-        b.target = self
-        b.action = #selector(shareClip)
-        b.shouldAlwaysDrawHighlighted = true
-        b.sendsActionOnMouseDown = true
-        b.toolTip = "Share a Clip"
-
-        return b
-    }()
-
-    private lazy var shareButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
-        b.image = #imageLiteral(resourceName: "share")
-        b.target = self
-        b.action = #selector(share)
-        b.shouldAlwaysDrawHighlighted = true
-        b.sendsActionOnMouseDown = true
-        b.toolTip = "Share session"
-
-        return b
-    }()
-
-    private lazy var stackView: NSStackView = {
-        let v = NSStackView(views: [
-            self.slidesButton,
-            self.favoriteButton,
-            self.downloadButton,
-            self.downloadIndicator,
-            self.shareButton,
-            self.clipButton,
-            self.calendarButton
-            ])
-
-        v.orientation = .horizontal
-        v.spacing = 22
-        v.alignment = .centerY
-        v.distribution = .equalSpacing
-
-        return v
-    }()
-
-    override func loadView() {
-        view = stackView
-        view.wantsLayer = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-
-        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    init(session: SessionViewModel? = nil) {
+        self.viewModel = session
 
         updateBindings()
     }
 
-    private struct DownloadButtonConfig {
-        var hasDownloadableContent: Bool
-        var isDownloaded: Bool
-        var inFlightDownload: MediaDownload?
+    enum DownloadState: Equatable {
+        case notDownloadable
+        case downloadable
+        case pending
+        case downloading(progress: Double)
+        case downloaded
+
+        var isDownloading: Bool {
+            if case .downloading = self { true } else { false }
+        }
+
+        var isPending: Bool {
+            if case .pending = self { true } else { false }
+        }
+
+        var showsButton: Bool {
+            switch self {
+            case .downloadable, .downloaded: true
+            case .notDownloadable, .pending, .downloading: false
+            }
+        }
+
+        var allocatesSpace: Bool {
+            switch self {
+            case .downloadable, .pending, .downloading, .downloaded: true
+            case .notDownloadable: false
+            }
+        }
+
+        var downloadProgress: Double? {
+            if case .downloading(let progress) = self { progress } else { nil }
+        }
     }
 
     private func updateBindings() {
         cancellables = []
-        downloadStateCancellable = nil
 
         guard let viewModel = viewModel else { return }
 
-        slidesButton.isHidden = (viewModel.session.asset(ofType: .slides) == nil)
-        calendarButton.isHidden = (viewModel.sessionInstance.startTime < today())
+        slidesButtonIsHidden = (viewModel.session.asset(ofType: .slides) == nil)
+        calendarButtonIsHidden = (viewModel.sessionInstance.startTime < today())
 
-        viewModel.rxIsFavorite.replaceError(with: false).sink { [weak self] isFavorite in
-            self?.favoriteButton.state = isFavorite ? .on : .off
-
-            if isFavorite {
-                self?.favoriteButton.toolTip = "Remove from favorites"
-            } else {
-                self?.favoriteButton.toolTip = "Add to favorites"
-            }
-        }
-        .store(in: &cancellables)
+        isFavorited = viewModel.session.isFavorite
+        viewModel.rxIsFavorite.replaceError(with: false).assign(to: \.isFavorited, on: self).store(in: &cancellables)
 
         let downloadID = viewModel.session.downloadIdentifier
 
-        /// Download state for existing in-flight download, or `nil` if there's no in-flight download for the session.
-        let inFlightDownloadSignal: AnyPublisher<MediaDownload?, Never> = MediaDownloadManager.shared.$downloads
-            .map { $0.first(where: { $0.id == downloadID }) }
-            .eraseToAnyPublisher()
-        
+        /// Initial state
+        downloadState = Self.downloadState(
+            session: viewModel.session,
+            downloadState: MediaDownloadManager.shared.downloads.first { $0.id == downloadID }?.state
+        )
+
         /// `true` if the session has already been downloaded.
         let alreadyDownloaded: AnyPublisher<Session, Never> = viewModel.session
             .valuePublisher(keyPaths: ["isDownloaded"])
             .replaceErrorWithEmpty()
             .eraseToAnyPublisher()
 
-        /// This publisher includes a flag indicating whether the session can be downloaded, as well as the current download state, if any.
-        let downloadButtonConfig: AnyPublisher<DownloadButtonConfig, Never> = Publishers.CombineLatest(inFlightDownloadSignal, alreadyDownloaded)
-            .map { inFlightDownload, session in
-                if session.isDownloaded, MediaDownloadManager.shared.hasDownloadedMedia(for: session) {
-                    return DownloadButtonConfig(hasDownloadableContent: true, isDownloaded: true)
-                } else {
-                    guard !session.assets(matching: Session.mediaDownloadVariants).isEmpty else {
-                        return DownloadButtonConfig(hasDownloadableContent: false, isDownloaded: false)
-                    }
-                    if let inFlightDownload {
-                        return DownloadButtonConfig(hasDownloadableContent: true, isDownloaded: false, inFlightDownload: inFlightDownload)
-                    } else {
-                        return DownloadButtonConfig(hasDownloadableContent: true, isDownloaded: false)
-                    }
+        /// Emits subscribes to the downloads and then if 1 is added that matches our session, subscribes to the state of that download
+        let downloadStateSignal: AnyPublisher<MediaDownloadState?, Never> = MediaDownloadManager.shared.$downloads
+            .map { $0.first(where: { $0.id == downloadID }) }
+            .removeDuplicates()
+            .map { download in
+                guard let download else {
+                    // no download -> no state
+                    return Just<MediaDownloadState?>(nil).eraseToAnyPublisher()
                 }
+
+                return download.$state.map(Optional.some).eraseToAnyPublisher()
             }
+            .switchToLatest()
             .eraseToAnyPublisher()
 
-        downloadButtonConfig
-            .throttle(for: .milliseconds(800), scheduler: DispatchQueue.main, latest: true)
-            .sink { [weak self] config in
-                self?.configureDownloadButton(with: config)
+        /// Combined stream that emits whenever any relevant state changes
+        Publishers.CombineLatest(alreadyDownloaded, downloadStateSignal)
+            .map(Self.downloadState(session:downloadState:))
+            .sink { [weak self] newState in
+                self?.downloadState = newState
             }
             .store(in: &cancellables)
     }
 
-    private var downloadStateCancellable: AnyCancellable?
-
-    private func configureDownloadButton(with config: DownloadButtonConfig) {
-        downloadStateCancellable = nil
-        
-        guard config.hasDownloadableContent else {
-            /// Session can't be downloaded (maybe Lab or download not available yet)
-            downloadIndicator.isHidden = true
-            downloadButton.isHidden = true
-            clipButton.isHidden = true
-            resetDownloadButton()
-            return
-        }
-
-        guard !config.isDownloaded else {
-            updateDownloadButton(with: .completed)
-            return
-        }
-
-        guard let inFlightDownload = config.inFlightDownload else {
-            updateDownloadButton(with: nil)
-            return
-        }
-
-        downloadStateCancellable = inFlightDownload.$state.receive(on: DispatchQueue.main).sink { [weak self] state in
-            self?.updateDownloadButton(with: state)
-        }
-    }
-
-    private func updateDownloadButton(with state: MediaDownloadState?) {
-        guard let session = viewModel?.session else { return }
-
-        func applyStartDownloadState() {
-            resetDownloadButton()
-            downloadIndicator.isHidden = true
-            downloadButton.isHidden = false
-            clipButton.isHidden = true
-            if case .failed(let message) = state {
-                downloadButton.toolTip = message
-            } else {
-                downloadButton.toolTip = nil
+    /// There is a small gap in the logic here. Because the download manager will have a completed task before
+    /// Realm writes and then publishes the new `isDownloaded` state.
+    ///
+    /// This means the button will show the download button briefly before switching to the delete button.
+    private static func downloadState(session: Session, downloadState: MediaDownloadState?) -> DownloadState {
+        if let downloadState {
+            switch downloadState {
+            case .waiting:
+                return .pending
+            case .downloading(let progress):
+                return .downloading(progress: progress)
+            case .paused(let progress):
+                return .downloading(progress: progress)
+            case .failed, .cancelled:
+                return .downloadable
+            case .completed:
+                // Even if completed, we still need to verify it exists on disk
+                // because the user may have deleted the file after download
+                // Fall through to filesystem check below
+                break
             }
         }
 
-        /// We may have a download that's in completed state, but where the file has already been deleted,
-        /// in which case we show the button state to start the download.
-        if case .completed = state {
-            guard MediaDownloadManager.shared.hasDownloadedMedia(for: session) else {
-                applyStartDownloadState()
-                return
-            }
+        // Only check filesystem when there's no active download (or download completed)
+        if session.isDownloaded, MediaDownloadManager.shared.hasDownloadedMedia(for: session) {
+            return .downloaded
         }
 
-        switch state {
-        case .waiting:
-            downloadIndicator.isHidden = false
-            downloadButton.isHidden = true
-            downloadButton.toolTip = "Preparing download"
-            clipButton.isHidden = true
-            downloadIndicator.isIndeterminate = true
-            downloadIndicator.startAnimating()
-        case .downloading(let progress):
-            downloadButton.toolTip = "Downloading: \(progress.formattedDownloadPercentage())"
-            downloadIndicator.isHidden = false
-            downloadButton.isHidden = true
-            clipButton.isHidden = true
-
-            if progress < 0 {
-                downloadIndicator.isIndeterminate = true
-                downloadIndicator.startAnimating()
-            } else {
-                downloadIndicator.isIndeterminate = false
-                downloadIndicator.progress = Float(progress)
-            }
-        case .paused, .cancelled, .none, .failed:
-            applyStartDownloadState()
-        case .completed:
-            downloadButton.toolTip = "Delete downloaded video"
-            downloadButton.isHidden = false
-            downloadIndicator.isHidden = true
-            downloadButton.image = #imageLiteral(resourceName: "trash")
-            downloadButton.action = #selector(SessionActionsViewController.deleteDownload)
-            clipButton.isHidden = false
+        // Check if content is downloadable
+        guard !session.assets(matching: Session.mediaDownloadVariants).isEmpty else {
+            return .notDownloadable
         }
+
+        return .downloadable
     }
 
-    private func resetDownloadButton() {
-        downloadButton.toolTip = "Download video for offline watching"
-        downloadButton.image = #imageLiteral(resourceName: "download")
-        downloadButton.action = #selector(SessionActionsViewController.download)
+    func toggleFavorite() {
+        delegate?.sessionActionsDidSelectFavorite(nil)
     }
 
-    @IBAction func toggleFavorite(_ sender: NSView?) {
-        delegate?.sessionActionsDidSelectFavorite(sender)
+    func showSlides() {
+        delegate?.sessionActionsDidSelectSlides(nil)
     }
 
-    @IBAction func showSlides(_ sender: NSView?) {
-        delegate?.sessionActionsDidSelectSlides(sender)
+    func download() {
+        delegate?.sessionActionsDidSelectDownload(nil)
     }
 
-    @IBAction func download(_ sender: NSView?) {
-        downloadButton.isHidden = true
-        downloadIndicator.isIndeterminate = true
-        downloadIndicator.startAnimating()
-        downloadIndicator.isHidden = false
-
-        delegate?.sessionActionsDidSelectDownload(sender)
+    func addCalendar() {
+        delegate?.sessionActionsDidSelectCalendar(nil)
     }
 
-    @IBAction func addCalendar(_ sender: NSView?) {
-        delegate?.sessionActionsDidSelectCalendar(sender)
+    func deleteDownload() {
+        delegate?.sessionActionsDidSelectDeleteDownload(nil)
     }
 
-    @IBAction func deleteDownload(_ sender: NSView?) {
-        delegate?.sessionActionsDidSelectDeleteDownload(sender)
+    func share() {
+        delegate?.sessionActionsDidSelectShare(nil)
     }
 
-    @IBAction func share(_ sender: NSView?) {
-        delegate?.sessionActionsDidSelectShare(sender)
+    func shareClip() {
+        delegate?.sessionActionsDidSelectShareClip(nil)
     }
 
-    @IBAction func shareClip(_ sender: NSView?) {
-        delegate?.sessionActionsDidSelectShareClip(sender)
-    }
-
-    @IBAction func cancelDownload(_ sender: NSView?) {
-        delegate?.sessionActionsDidSelectCancelDownload(sender)
-    }
-}
-
-extension NumberFormatter {
-    static let downloadPercent: NumberFormatter = {
-        let f = NumberFormatter()
-        f.maximumFractionDigits = 0
-        f.numberStyle = .percent
-        return f
-    }()
-}
-
-extension Double {
-    func formattedDownloadPercentage() -> String {
-        NumberFormatter.downloadPercent.string(from: NSNumber(value: self)) ?? ""
+    func cancelDownload() {
+        delegate?.sessionActionsDidSelectCancelDownload(nil)
     }
 }
