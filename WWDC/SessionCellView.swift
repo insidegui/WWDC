@@ -7,41 +7,44 @@
 //
 
 import Cocoa
+import SwiftUI
 import Combine
 import RealmSwift
+import ConfCore
 
-final class SessionCellView: NSView {
+final class SessionCellViewModel: ObservableObject {
+    @Published var title: String = ""
+    @Published var subtitle: String = ""
+    @Published var context: String = ""
+    @Published var isFavorite: Bool = false
+    @Published var isDownloaded: Bool = false
+    @Published var contextColor: NSColor = .clear
+    @Published var imageUrl: URL?
+    @Published var thumbnailImage: NSImage = #imageLiteral(resourceName: "noimage")
 
+    @Published private var sessionProgress: SessionProgress?
+    var progress: Double { sessionProgress.flatMap(\.relativePosition) ?? 1 }
+
+    var isWatched: Bool {
+        sessionProgress != nil && progress >= Constants.watchedVideoRelativePosition
+    }
+    
     private var cancellables: Set<AnyCancellable> = []
-
+    private weak var imageDownloadOperation: Operation?
+    
     var viewModel: SessionViewModel? {
         didSet {
             guard viewModel !== oldValue else { return }
 
-            thumbnailImageView.image = #imageLiteral(resourceName: "noimage")
+            thumbnailImage = #imageLiteral(resourceName: "noimage")
             bindUI()
         }
     }
 
-    private weak var imageDownloadOperation: Operation?
-
-    override init(frame frameRect: NSRect) {
-        super.init(frame: frameRect)
-
-        buildUI()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
-        imageDownloadOperation?.cancel()
-
-        downloadedImageView.isHidden = true
-        favoritedImageView.isHidden = true
+    init(session: SessionViewModel? = nil) {
+        defer {
+            self.viewModel = session
+        }
     }
 
     private func bindUI() {
@@ -49,183 +52,123 @@ final class SessionCellView: NSView {
 
         guard let viewModel = viewModel else { return }
 
-        titleLabel.stringValue = viewModel.title
-        viewModel.rxTitle.replaceError(with: "").driveUI(\.stringValue, on: titleLabel).store(in: &cancellables)
-        viewModel.rxSubtitle.replaceError(with: "").driveUI(\.stringValue, on: subtitleLabel).store(in: &cancellables)
-        viewModel.rxContext.replaceError(with: "").driveUI(\.stringValue, on: contextLabel).store(in: &cancellables)
-
-        viewModel.rxIsFavorite.toggled().replaceError(with: true).driveUI(\.isHidden, on: favoritedImageView).store(in: &cancellables)
-        viewModel.rxIsDownloaded.toggled().replaceError(with: true).driveUI(\.isHidden, on: downloadedImageView).store(in: &cancellables)
+        // While it might seem like we can do `.assign(to: &$title)`, we actually can't because
+        // both SessionViewModel and SessionCellViewModel are long lived items.
+        //
+        // SessionCellViewModel is recycled, so when a new SessionViewModel is attached, we need to break the
+        // bindings with the previous one. Which means we MUST have a cancellables for as long as this is the architecture we have
+        viewModel.rxTitle.replaceError(with: "").assign(to: \.title, on: self).store(in: &cancellables)
+        viewModel.rxSubtitle.replaceError(with: "").assign(to: \.subtitle, on: self).store(in: &cancellables)
+        viewModel.rxContext.replaceError(with: "").assign(to: \.context, on: self).store(in: &cancellables)
+        viewModel.rxIsFavorite.replaceError(with: false).assign(to: \.isFavorite, on: self).store(in: &cancellables)
+        viewModel.rxIsDownloaded.replaceError(with: false).assign(to: \.isDownloaded, on: self).store(in: &cancellables)
+        viewModel.rxColor.removeDuplicates().replaceError(with: .clear).assign(to: \.contextColor, on: self).store(in: &cancellables)
 
         viewModel.rxImageUrl.removeDuplicates().replaceErrorWithEmpty().compacted().sink { [weak self] imageUrl in
+            self?.imageUrl = imageUrl
             self?.imageDownloadOperation?.cancel()
 
             self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight, thumbnailOnly: true) { [weak self] url, result in
-                guard url == imageUrl, result.thumbnail != nil else { return }
+                guard url == imageUrl, let thumbnail = result.thumbnail else { return }
 
-                self?.thumbnailImageView.image = result.thumbnail
+                self?.thumbnailImage = thumbnail
             }
         }
         .store(in: &cancellables)
 
-        viewModel.rxColor.removeDuplicates().replaceErrorWithEmpty().sink(receiveValue: { [weak self] color in
-            self?.contextColorView.color = color
-        }).store(in: &cancellables)
+        viewModel.rxProgresses.replaceErrorWithEmpty().map(\.first).assign(to: \.sessionProgress, on: self).store(in: &cancellables)
+    }
+}
 
-        viewModel.rxDarkColor.removeDuplicates().replaceErrorWithEmpty().sink(receiveValue: { [weak self] color in
-            self?.snowFlakeView.backgroundColor = color
-        }).store(in: &cancellables)
+struct SessionCellView: View {
+    @ObservedObject var cellViewModel: SessionCellViewModel
+    let style: Style
 
-        viewModel.rxProgresses.replaceErrorWithEmpty().sink(receiveValue: { [weak self] progresses in
-            if let progress = progresses.first {
-                self?.contextColorView.hasValidProgress = true
-                self?.contextColorView.progress = progress.relativePosition
-            } else {
-                self?.contextColorView.hasValidProgress = false
-                self?.contextColorView.progress = 0
-            }
-        }).store(in: &cancellables)
+    var body: some View {
+        HStack(spacing: 0) {
+            ProgressView(value: cellViewModel.progress, total: 1.0)
+                .progressViewStyle(TrackColorProgressViewStyle())
+                .foregroundStyle(Color(cellViewModel.contextColor))
+                .opacity(cellViewModel.isWatched ? 0 : 1)
+
+            Image(nsImage: cellViewModel.thumbnailImage)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 85, height: 48)
+                .clipped()
+                .padding(.horizontal, 8)
+
+            informationLabels
+
+            statusIcons
+        }
+        .padding(.leading, 10)
+        .padding(.vertical, 8)
+        .background(style == .rounded ? Color(.roundedCellBackground) : Color.clear)
+        .cornerRadius(style == .rounded ? 6 : 0)
+        .frame(height: 64)
     }
 
-    private lazy var titleLabel: NSTextField = {
-        let l = NSTextField(labelWithString: "")
-        l.font = .systemFont(ofSize: 14, weight: .medium)
-        l.textColor = .primaryText
-        l.cell?.backgroundStyle = .emphasized
-        l.lineBreakMode = .byTruncatingTail
+    /// Discover Apple-Hosted Background Assets
+    /// WWDC25 • Session 325
+    /// System Services
+    private var informationLabels: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(cellViewModel.title)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Color(.primaryText))
 
-        return l
-    }()
+            Text(cellViewModel.subtitle)
+                .font(.system(size: 12))
+                .foregroundStyle(Color(.secondaryText))
 
-    private lazy var subtitleLabel: NSTextField = {
-        let l = NSTextField(labelWithString: "")
-        l.font = .systemFont(ofSize: 12)
-        l.textColor = .secondaryText
-        l.cell?.backgroundStyle = .emphasized
-        l.lineBreakMode = .byTruncatingTail
-
-        return l
-    }()
-
-    private lazy var contextLabel: NSTextField = {
-        let l = NSTextField(labelWithString: "")
-        l.font = .systemFont(ofSize: 12)
-        l.textColor = .tertiaryText
-        l.cell?.backgroundStyle = .emphasized
-        l.lineBreakMode = .byTruncatingTail
-
-        return l
-    }()
-
-    private lazy var thumbnailImageView: WWDCImageView = {
-        let v = WWDCImageView()
-
-        v.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        v.widthAnchor.constraint(equalToConstant: 85).isActive = true
-        v.backgroundColor = .black
-
-        return v
-    }()
-
-    private lazy var snowFlakeView: WWDCImageView = {
-        let v = WWDCImageView()
-
-        v.heightAnchor.constraint(equalToConstant: 48).isActive = true
-        v.widthAnchor.constraint(equalToConstant: 85).isActive = true
-        v.isHidden = true
-        v.image = #imageLiteral(resourceName: "lab-indicator")
-
-        return v
-    }()
-
-    private lazy var contextColorView: TrackColorView = {
-        let v = TrackColorView()
-
-        v.widthAnchor.constraint(equalToConstant: 4).isActive = true
-
-        return v
-    }()
-
-    private lazy var textStackView: NSStackView = {
-        let v = NSStackView(views: [self.titleLabel, self.subtitleLabel, self.contextLabel])
-
-        v.orientation = .vertical
-        v.alignment = .leading
-        v.distribution = .equalSpacing
-        v.spacing = 0
-
-        return v
-    }()
-
-    private lazy var favoritedImageView: WWDCImageView = {
-        let v = WWDCImageView()
-
-        v.heightAnchor.constraint(equalToConstant: 14).isActive = true
-        v.drawsBackground = false
-        v.image = #imageLiteral(resourceName: "star-small")
-
-        return v
-    }()
-
-    private lazy var downloadedImageView: WWDCImageView = {
-        let v = WWDCImageView()
-
-        v.heightAnchor.constraint(equalToConstant: 11).isActive = true
-        v.drawsBackground = false
-        v.image = #imageLiteral(resourceName: "download-small")
-
-        return v
-    }()
-
-    private lazy var iconsStackView: NSStackView = {
-        let v = NSStackView(views: [])
-
-        v.distribution = .gravityAreas
-        v.orientation = .vertical
-        v.spacing = 4
-        v.addView(self.favoritedImageView, in: .top)
-        v.addView(self.downloadedImageView, in: .bottom)
-        v.translatesAutoresizingMaskIntoConstraints = false
-
-        v.widthAnchor.constraint(equalToConstant: 12).isActive = true
-
-        return v
-    }()
-
-    private func buildUI() {
-        wantsLayer = true
-
-        contextColorView.translatesAutoresizingMaskIntoConstraints = false
-        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
-        snowFlakeView.translatesAutoresizingMaskIntoConstraints = false
-        textStackView.translatesAutoresizingMaskIntoConstraints = false
-        iconsStackView.translatesAutoresizingMaskIntoConstraints = false
-
-        addSubview(contextColorView)
-        addSubview(thumbnailImageView)
-        addSubview(snowFlakeView)
-        addSubview(textStackView)
-        addSubview(iconsStackView)
-
-        contextColorView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
-        contextColorView.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
-        contextColorView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8).isActive = true
-
-        thumbnailImageView.centerYAnchor.constraint(equalTo: contextColorView.centerYAnchor).isActive = true
-        thumbnailImageView.leadingAnchor.constraint(equalTo: contextColorView.trailingAnchor, constant: 8).isActive = true
-        snowFlakeView.centerYAnchor.constraint(equalTo: thumbnailImageView.centerYAnchor).isActive = true
-        snowFlakeView.centerXAnchor.constraint(equalTo: thumbnailImageView.centerXAnchor).isActive = true
-
-        textStackView.centerYAnchor.constraint(equalTo: thumbnailImageView.centerYAnchor, constant: -1).isActive = true
-        textStackView.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 8).isActive = true
-        textStackView.trailingAnchor.constraint(equalTo: iconsStackView.leadingAnchor, constant: -2).isActive = true
-
-        iconsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4).isActive = true
-        iconsStackView.topAnchor.constraint(equalTo: textStackView.topAnchor).isActive = true
-        iconsStackView.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor).isActive = true
-
-        downloadedImageView.isHidden = true
-        favoritedImageView.isHidden = true
+            Text(cellViewModel.context)
+                .font(.system(size: 12))
+                .foregroundStyle(Color(.tertiaryText))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .lineLimit(1)
+        .truncationMode(.tail)
     }
 
+    private var statusIcons: some View {
+        // Icons
+        VStack(spacing: 0) {
+            Image(.starSmall)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 14)
+                .opacity(cellViewModel.isFavorite ? 1 : 0)
+
+            Spacer()
+
+            Image(.downloadSmall)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 11)
+                .opacity(cellViewModel.isDownloaded ? 1 : 0)
+        }
+    }
+}
+
+extension SessionCellView {
+    enum Style {
+        /// Used for session lists
+        case flat
+        /// Used for related sessions
+        case rounded
+    }
+}
+
+#Preview {
+    VStack {
+        SessionCellView(cellViewModel: SessionCellViewModel(session: .preview), style: .flat)
+            .padding()
+
+        Divider()
+
+        SessionCellView(cellViewModel: SessionCellViewModel(session: .preview), style: .rounded)
+            .padding()
+    }
+    .padding()
 }
