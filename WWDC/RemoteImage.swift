@@ -34,7 +34,7 @@ struct RemoteImage<Content: View, Placeholder: View>: View {
             switch size {
             case .thumbnail(let height):
                 ImageDownloadCenter.shared.downloadImage(from: url, thumbnailHeight: height, thumbnailOnly: true) { _, result in
-                    continuation.resume(returning: result.thumbnail)
+                    continuation.resume(returning: nil/*result.thumbnail*/)
                 }
             case .large:
                 ImageDownloadCenter.shared.downloadImage(from: url, thumbnailHeight: 400, thumbnailOnly: true) { _, result in

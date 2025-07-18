@@ -13,6 +13,7 @@ import PlayerUI
 import AVFoundation
 import SwiftUI
 
+@MainActor
 protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
     func shelfViewController(_ controller: ShelfViewController, didBeginClipSharingWithHost hostView: NSView)
@@ -101,10 +102,12 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         super.viewWillLayout()
     }
 
-    private weak var currentImageDownloadOperation: Operation?
+    private var currentImageDownloadOperation: Task<Void, Never>?
 
     private func updateBindings() {
         cancellables = []
+        currentImageDownloadOperation?.cancel()
+        currentImageDownloadOperation = nil
 
         if detachedSessionID != nil {
             UILog("📚 Selected session: \(viewModel?.sessionIdentifier ?? "<nil>"), detached session: \(detachedSessionID ?? "<nil>")")
@@ -123,7 +126,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
         viewModel.rxCanBePlayed.toggled().replaceError(with: true).driveUI(\.isHidden, on: playButton).store(in: &cancellables)
 
-        viewModel.rxImageUrl.replaceErrorWithEmpty().sink { [weak self] imageUrl in
+        viewModel.$imageURL.removeDuplicates().sink { [weak self] imageUrl in
             self?.currentImageDownloadOperation?.cancel()
             self?.currentImageDownloadOperation = nil
 
@@ -132,8 +135,18 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
                 return
             }
 
-            self?.currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, result in
-                self?.shelfView.image = result.original
+            let sessionIdentifier = viewModel.session.identifier
+            self?.currentImageDownloadOperation = Task.detached(priority: .low) { [weak self] in
+                let (url, result) = await ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight)
+                guard url == imageUrl else { return }
+
+                Task { @MainActor in
+                    guard sessionIdentifier == self?.viewModel?.session.identifier else {
+                        debugPrint("Session changed while downloading image, ignoring 2")
+                        return
+                    }
+                    self?.shelfView.image = result.original
+                }
             }
         }
         .store(in: &cancellables)

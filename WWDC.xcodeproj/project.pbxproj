@@ -28,16 +28,19 @@
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
 		910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106374F2E26B68700E917F0 /* PUIButtonView.swift */; };
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
+		912EEC412E2AB0F80019664D /* SessionDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912EEC402E2AB0F80019664D /* SessionDetailsViewModel.swift */; };
 		914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */; };
 		914C83B42E1ECBFF001AEE5C /* SessionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */; };
 		916AA6252E37085C00492185 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 916AA6242E37085C00492185 /* Realm */; };
 		916AA6282E37086700492185 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 916AA6272E37086700492185 /* RealmSwift */; };
+		91AAC48E2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AAC48D2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift */; };
 		91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */; };
 		91DB93E82E1FF610002E8716 /* IsSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB93E72E1FF60C002E8716 /* IsSelected.swift */; };
 		91DB9FD02E21777E002E8716 /* CursorShapeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */; };
 		91DB9FD22E2177A6002E8716 /* SetScrollerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */; };
 		91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */; };
 		91F235CD2E299C660061432C /* SessionActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F235CC2E299C660061432C /* SessionActionsView.swift */; };
+		91F6D3392E2EABB800DE3D11 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 91F6D3382E2EABB800DE3D11 /* Algorithms */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */; };
@@ -266,6 +269,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				91B07F002E3557C900ABD1B4 /* RealmSwift in Embed Frameworks */,
 				DD600AB82487F1730071B90E /* ConfUIFoundation.framework in Embed Frameworks */,
 				DDB1A2642577E67A00995FF1 /* ConfCore in Embed Frameworks */,
 				DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */,
@@ -320,8 +324,10 @@
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
 		9106374F2E26B68700E917F0 /* PUIButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIButtonView.swift; sourceTree = "<group>"; };
 		911C72C82A52169A00CB3757 /* CombineLatestMany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineLatestMany.swift; sourceTree = "<group>"; };
+		912EEC402E2AB0F80019664D /* SessionDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailsViewModel.swift; sourceTree = "<group>"; };
 		9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+GroupedBy.swift"; sourceTree = "<group>"; };
 		914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailsView.swift; sourceTree = "<group>"; };
+		91AAC48D2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkWrapTextLayout.swift; sourceTree = "<group>"; };
 		91DB93E72E1FF60C002E8716 /* IsSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsSelected.swift; sourceTree = "<group>"; };
 		91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorShapeViewModifier.swift; sourceTree = "<group>"; };
 		91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetScrollerStyle.swift; sourceTree = "<group>"; };
@@ -537,6 +543,7 @@
 				DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */,
 				916AA6282E37086700492185 /* RealmSwift in Frameworks */,
 				DDB1A26A2577E7E900995FF1 /* Sparkle in Frameworks */,
+				91F6D3392E2EABB800DE3D11 /* Algorithms in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
 				91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */,
 				916AA6252E37085C00492185 /* Realm in Frameworks */,
@@ -847,6 +854,7 @@
 		DD7F387E1EAC15A1002D8C00 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				91AAC48D2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift */,
 				91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */,
 				91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */,
 				91DB93E72E1FF60C002E8716 /* IsSelected.swift */,
@@ -1125,6 +1133,7 @@
 			isa = PBXGroup;
 			children = (
 				914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */,
+				912EEC402E2AB0F80019664D /* SessionDetailsViewModel.swift */,
 				DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */,
 				DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */,
 				DD6E06F91EDBC636000EAEA4 /* Tabs */,
@@ -1304,6 +1313,7 @@
 				91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */,
 				916AA6242E37085C00492185 /* Realm */,
 				916AA6272E37086700492185 /* RealmSwift */,
+				91F6D3382E2EABB800DE3D11 /* Algorithms */,
 			);
 			productName = WWDC;
 			productReference = DD36A4AC1E478C6A00B2EA88 /* WWDC.app */;
@@ -1434,6 +1444,7 @@
 				F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */,
 				916AA6232E37085C00492185 /* XCLocalSwiftPackageReference "Packages/RealmBinary" */,
 				916AA6262E37086700492185 /* XCLocalSwiftPackageReference "Packages/RealmSwiftBinary" */,
+				91F6D3372E2EABB800DE3D11 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = DD36A4AD1E478C6A00B2EA88 /* Products */;
 			projectDirPath = "";
@@ -1593,6 +1604,7 @@
 				DD78588124C3594B008C1C22 /* SlowMigrationView.swift in Sources */,
 				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
 				DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */,
+				912EEC412E2AB0F80019664D /* SessionDetailsViewModel.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				F44C823A2A22B8DD00FDE980 /* ExploreTabContent.swift in Sources */,
 				4D0E806F217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift in Sources */,
@@ -1632,6 +1644,7 @@
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
+				91AAC48E2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift in Sources */,
 				F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
@@ -2557,12 +2570,28 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		91B07EFD2E35574900ABD1B4 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 20.0.3;
+			};
+		};
 		91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-collections.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
+			};
+		};
+		91F6D3372E2EABB800DE3D11 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
 			};
 		};
 		DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
@@ -2596,6 +2625,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = OrderedCollections;
+		};
+		91F6D3382E2EABB800DE3D11 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 91F6D3372E2EABB800DE3D11 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
 		};
 		DDB1A2622577E67A00995FF1 /* ConfCore */ = {
 			isa = XCSwiftPackageProductDependency;

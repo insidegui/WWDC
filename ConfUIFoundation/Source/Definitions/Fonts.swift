@@ -23,16 +23,6 @@ public extension NSFont {
 
 public extension NSAttributedString {
 
-    static func attributedBoldTitle(with string: String) -> NSAttributedString {
-        let attrs: [NSAttributedString.Key: Any] = [
-            .font: NSFont.boldTitleFont,
-            .foregroundColor: NSColor.primaryText,
-            .kern: -0.5
-        ]
-
-        return NSAttributedString(string: string, attributes: attrs)
-    }
-
     static func create(with string: String,
                        font: NSFont,
                        color: NSColor,

@@ -51,6 +51,8 @@ struct SetScrollerStyle: NSViewRepresentable {
         override func viewDidMoveToSuperview() {
             super.viewDidMoveToSuperview()
 
+            heightAnchor.constraint(equalToConstant: 0).isActive = true
+
             CATransaction.begin()
             CATransaction.setCompletionBlock { [weak self] in
                 self?.enclosingScrollView?.scrollerStyle = .overlay
