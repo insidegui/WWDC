@@ -9,9 +9,9 @@
 import Cocoa
 import ConfCore
 
-extension AppCoordinator: RelatedSessionsViewControllerDelegate {
+extension AppCoordinator: RelatedSessionsDelegate {
 
-    func relatedSessionsViewController(_ controller: RelatedSessionsViewController, didSelectSession viewModel: SessionViewModel) {
+    func relatedSessions(_ relatedSessions: RelatedSessionsViewModel, didSelectSession viewModel: SessionViewModel) {
         selectSessionOnAppropriateTab(with: viewModel)
     }
 

@@ -110,7 +110,7 @@ private struct PlaybackSpeedToggle: View {
             .multilineTextAlignment(.trailing)
         }
         .disabled(!controller.isEnabled)
-        .onChange(of: speedFieldFocused) { fieldFocused in
+        .onChange(of: speedFieldFocused) { _, fieldFocused in
             if !fieldFocused {
                 controller.isEditingCustomSpeed = false
             }
@@ -182,7 +182,7 @@ private struct PlaybackSpeedToggle: View {
                 speedFieldFocused = false
                 controller.isEditingCustomSpeed = false
             }
-            .onChange(of: customSpeedValue) { _ in
+            .onChange(of: customSpeedValue) {
                 customSpeedInvalid = false
             }
     }

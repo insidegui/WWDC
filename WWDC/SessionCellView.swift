@@ -102,7 +102,7 @@ struct SessionCellView: View {
 
             statusIcons
         }
-        .padding(.leading, 10)
+        .padding(.horizontal, 10)
         .padding(.vertical, 8)
         .background(style == .rounded ? Color(.roundedCellBackground) : Color.clear)
         .cornerRadius(style == .rounded ? 6 : 0)
