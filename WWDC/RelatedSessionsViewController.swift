@@ -15,7 +15,7 @@ protocol RelatedSessionsDelegate: AnyObject {
 
 final class RelatedSessionsViewModel: ObservableObject {
     @Published var sessions: [SessionViewModel] = []
-    @Published var isHidden: Bool = true
+    var isHidden: Bool { sessions.isEmpty }
 
     weak var delegate: RelatedSessionsDelegate?
 
@@ -25,10 +25,6 @@ final class RelatedSessionsViewModel: ObservableObject {
 
     init(sessions: [SessionViewModel] = []) {
         self.sessions = sessions
-
-        self.$sessions
-            .map { $0.isEmpty }
-            .assign(to: &$isHidden)
     }
 }
 
@@ -41,7 +37,7 @@ struct RelatedSessionsView: View {
         static let scrollerOffset: CGFloat = 15
         static let scrollViewHeight: CGFloat = itemHeight + scrollerOffset
         static let itemWidth: CGFloat = 360
-        static let padding: CGFloat = 24
+        static let itemSpacing: CGFloat = 10
     }
 
     var body: some View {
@@ -56,7 +52,7 @@ struct RelatedSessionsView: View {
                 ScrollView(.horizontal, showsIndicators: true) {
                     SetScrollerStyle(.overlay)
 
-                    HStack(spacing: Metrics.padding) {
+                    HStack(spacing: Metrics.itemSpacing) {
                         ForEach(viewModel.sessions, id: \.identifier) { session in
                             sessionButton(for: session, in: scrollView)
                         }
@@ -64,13 +60,15 @@ struct RelatedSessionsView: View {
                     .padding(.horizontal, 0)
                     .padding(.bottom, Metrics.scrollerOffset)
                 }
+                .onChange(of: viewModel.sessions.map(\.identifier)) { _, _ in
+                    scrollView.scrollTo(viewModel.sessions.first?.identifier, anchor: .leading)
+                }
             }
             .frame(height: Metrics.scrollViewHeight)
             .background(Color(.darkWindowBackground))
         }
-        .frame(height: Metrics.height)
+        .frame(height: viewModel.isHidden ? 0 : Metrics.height)
         .opacity(viewModel.isHidden ? 0 : 1)
-        .allowsHitTesting(!viewModel.isHidden)
     }
 
     func sessionButton(for session: SessionViewModel, in scrollView: ScrollViewProxy) -> some View {
@@ -84,11 +82,6 @@ struct RelatedSessionsView: View {
             .frame(width: Metrics.itemWidth, height: Metrics.itemHeight)
         }
         .buttonStyle(.plain)
-        .onAppear {
-            if session.identifier == viewModel.sessions.first?.identifier {
-                scrollView.scrollTo(session.identifier, anchor: .leading)
-            }
-        }
     }
 }
 
