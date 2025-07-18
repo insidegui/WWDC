@@ -52,17 +52,20 @@ struct RelatedSessionsView: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
 
-            ScrollViewReader { scrollView in
-                ScrollView(.horizontal, showsIndicators: true) {
-                    SetScrollerStyle(.overlay)
+            GeometryReader { geometry in
+                ScrollViewReader { scrollView in
+                    ScrollView(.horizontal, showsIndicators: true) {
+                        SetScrollerStyle(.overlay)
 
-                    HStack(spacing: Metrics.padding) {
-                        ForEach(viewModel.sessions, id: \.identifier) { session in
-                            sessionButton(for: session, in: scrollView)
+                        HStack(spacing: Metrics.padding) {
+                            ForEach(viewModel.sessions, id: \.identifier) { session in
+                                sessionButton(for: session, in: scrollView)
+                            }
                         }
+                        .padding(.horizontal, 0)
+                        .padding(.bottom, Metrics.scrollerOffset)
                     }
-                    .padding(.horizontal, 0)
-                    .padding(.bottom, Metrics.scrollerOffset)
+                    .containerRelativeFrame(.horizontal)
                 }
             }
             .frame(height: Metrics.scrollViewHeight)

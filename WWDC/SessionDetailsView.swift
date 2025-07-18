@@ -27,7 +27,7 @@ import SwiftUI
  │                                                 │
  │              Tab Content Area                   │
  │                                                 │
- │  • Overview: SessionSummaryViewControllerWrapper│
+ │  • Overview: SessionSummaryView                 │
  │  • Transcript: SessionTranscriptViewController  │
  │  • Bookmarks: Placeholder text                  │
  │                                                 │
@@ -85,7 +85,7 @@ struct SessionDetailsView: View {
     private var tabContent: some View {
         switch detailsViewModel.selectedTab {
         case .overview:
-            SessionSummaryViewControllerWrapper(controller: detailsViewModel.summaryController)
+            SessionSummaryView(viewModel: detailsViewModel.summaryViewModel)
         case .transcript:
             SessionTranscriptViewControllerWrapper(controller: detailsViewModel.transcriptController)
         case .bookmarks:
