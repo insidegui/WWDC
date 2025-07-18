@@ -17,10 +17,10 @@ final class SessionCellViewModel: ObservableObject {
     @Published var subtitle: String = ""
     @Published var context: String = ""
     @Published var isFavorite: Bool = false
+    @Published var hasBookmarks: Bool = false
     @Published var isDownloaded: Bool = false
     @Published var contextColor: NSColor = .clear
-    @Published var imageUrl: URL?
-    @Published var thumbnailImage: NSImage = #imageLiteral(resourceName: "noimage")
+    @Published var thumbnailImage: NSImage?
 
     @Published private var sessionProgress: SessionProgress?
     var progress: Double { sessionProgress.flatMap(\.relativePosition) ?? 1 }
@@ -30,53 +30,102 @@ final class SessionCellViewModel: ObservableObject {
     }
     
     private var cancellables: Set<AnyCancellable> = []
-    private weak var imageDownloadOperation: Operation?
-    
+    private var imageDownloadOperation: DownloadOperation?
+
+    static let placeholderImage = NSImage(resource: .noImageAvailable)
+
+    @MainActor
     var viewModel: SessionViewModel? {
         didSet {
             guard viewModel !== oldValue else { return }
 
-            thumbnailImage = #imageLiteral(resourceName: "noimage")
             bindUI()
         }
     }
 
+    @MainActor
     init(session: SessionViewModel? = nil) {
         defer {
             self.viewModel = session
         }
     }
 
+    @MainActor
     private func bindUI() {
         cancellables = []
+        thumbnailImage = nil
 
-        guard let viewModel = viewModel else { return }
-
-        // While it might seem like we can do `.assign(to: &$title)`, we actually can't because
-        // both SessionViewModel and SessionCellViewModel are long lived items.
-        //
-        // SessionCellViewModel is recycled, so when a new SessionViewModel is attached, we need to break the
-        // bindings with the previous one. Which means we MUST have a cancellables for as long as this is the architecture we have
-        viewModel.rxTitle.replaceError(with: "").weakAssign(to: \.title, on: self).store(in: &cancellables)
-        viewModel.rxSubtitle.replaceError(with: "").weakAssign(to: \.subtitle, on: self).store(in: &cancellables)
-        viewModel.rxContext.replaceError(with: "").weakAssign(to: \.context, on: self).store(in: &cancellables)
-        viewModel.rxIsFavorite.replaceError(with: false).weakAssign(to: \.isFavorite, on: self).store(in: &cancellables)
-        viewModel.rxIsDownloaded.replaceError(with: false).weakAssign(to: \.isDownloaded, on: self).store(in: &cancellables)
-        viewModel.rxColor.removeDuplicates().replaceError(with: .clear).weakAssign(to: \.contextColor, on: self).store(in: &cancellables)
-
-        viewModel.rxImageUrl.removeDuplicates().replaceErrorWithEmpty().compacted().sink { [weak self] imageUrl in
-            self?.imageUrl = imageUrl
-            self?.imageDownloadOperation?.cancel()
-
-            self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight, thumbnailOnly: true) { [weak self] result in
-                guard result.sourceURL == imageUrl, let thumbnail = result.thumbnail else { return }
-
-                self?.thumbnailImage = thumbnail
-            }
+        guard let viewModel = viewModel else {
+            imageDownloadOperation?.task.cancel()
+            imageDownloadOperation = nil
+            return
         }
-        .store(in: &cancellables)
 
-        viewModel.rxProgresses.replaceErrorWithEmpty().map(\.first).weakAssignIfDifferent(to: \.sessionProgress, on: self).store(in: &cancellables)
+        // Immediate values
+        self.title = viewModel.title
+        self.subtitle = viewModel.subtitle
+        self.context = viewModel.context
+        self.isFavorite = viewModel.isFavorite
+        self.isDownloaded = viewModel.isDownloaded
+        self.contextColor = viewModel.color ?? .clear
+        self.sessionProgress = viewModel.progress
+
+        loadSessionImage(at: viewModel.imageURL, for: viewModel.identifier)
+
+        // Reactive updates
+
+        viewModel.connect()
+        viewModel.$title.dropFirst().weakAssignIfDifferent(to: \.title, on: self).store(in: &self.cancellables)
+        viewModel.$subtitle.dropFirst().weakAssignIfDifferent(to: \.subtitle, on: self).store(in: &self.cancellables)
+        viewModel.$context.dropFirst().weakAssignIfDifferent(to: \.context, on: self).store(in: &self.cancellables)
+        viewModel.$isFavorite.dropFirst().weakAssignIfDifferent(to: \.isFavorite, on: self).store(in: &self.cancellables)
+        viewModel.$hasBookmarks.dropFirst().weakAssignIfDifferent(to: \.hasBookmarks, on: self).store(in: &self.cancellables)
+        viewModel.$isDownloaded.dropFirst().weakAssignIfDifferent(to: \.isDownloaded, on: self).store(in: &self.cancellables)
+        viewModel.$color.dropFirst().map { $0 ?? .clear }.weakAssignIfDifferent(to: \.contextColor, on: self).store(in: &self.cancellables)
+        viewModel.$progress.dropFirst().weakAssignIfDifferent(to: \.sessionProgress, on: self).store(in: &self.cancellables)
+
+        viewModel.$imageURL.dropFirst().sink { [weak self] imageUrl in
+            self?.loadSessionImage(at: imageUrl, for: viewModel.identifier)
+        }
+        .store(in: &self.cancellables)
+    }
+
+    @MainActor
+    func loadSessionImage(at imageURL: URL?, for sessionIdentifier: String) {
+        guard imageDownloadOperation?.url != imageURL else {
+            // Already downloading this image
+            return
+        }
+
+        if let imageDownloadOperation {
+            imageDownloadOperation.task.cancel()
+            self.imageDownloadOperation = nil
+        }
+
+        guard let imageURL else {
+            self.thumbnailImage = nil
+            return
+        }
+
+        let task = Task { [weak self] in
+            let result = await ImageDownloadCenter.shared.downloadImage(from: imageURL, thumbnailHeight: Constants.thumbnailHeight, thumbnailOnly: true)
+            guard let thumbnail = result.thumbnail else {
+                return
+            }
+
+            guard sessionIdentifier == self?.viewModel?.session.identifier else {
+                return
+            }
+
+            self?.thumbnailImage = thumbnail
+        }
+
+        self.imageDownloadOperation = DownloadOperation(url: imageURL, task: task)
+    }
+
+    struct DownloadOperation {
+        let url: URL
+        let task: Task<Void, Never>
     }
 }
 
@@ -91,18 +140,32 @@ struct SessionCellView: View {
                 .foregroundStyle(Color(cellViewModel.contextColor))
                 .opacity(cellViewModel.isWatched ? 0 : 1)
 
-            Image(nsImage: cellViewModel.thumbnailImage)
+            Image(nsImage: SessionCellViewModel.placeholderImage)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 85, height: 48)
-                .clipped()
+                .drawingGroup()
+                .overlay {
+                    // Use an overlay for the real thumbnail, this avoids re-drawing the placeholder image during
+                    // cell recycling in the table view. 🏎️
+                    if let thumbnailImage = cellViewModel.thumbnailImage {
+                        Image(nsImage: thumbnailImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 85, height: 48)
+                            .drawingGroup()
+                    }
+                }
+                .animation(cellViewModel.thumbnailImage == nil ? nil : .snappy.speed(2), value: cellViewModel.thumbnailImage)
+                .clipShape(.rect(cornerRadius: 4))
                 .padding(.horizontal, 8)
 
             informationLabels
 
             statusIcons
         }
-        .padding(.horizontal, 10)
+        .padding(.leading, 10)
+        .padding(.trailing, 4)
         .padding(.vertical, 8)
         .background(style == .rounded ? Color(.roundedCellBackground) : Color.clear)
         .cornerRadius(style == .rounded ? 6 : 0)
@@ -126,7 +189,7 @@ struct SessionCellView: View {
                 .font(.system(size: 12))
                 .foregroundStyle(Color(.tertiaryText))
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .lineLimit(1)
         .truncationMode(.tail)
     }
@@ -137,17 +200,23 @@ struct SessionCellView: View {
             Image(.starSmall)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 14)
                 .opacity(cellViewModel.isFavorite ? 1 : 0)
+
+            Spacer()
+
+            Image(systemName: "bookmark.fill")
+                .resizable()
+                .scaledToFit()
+                .opacity(cellViewModel.hasBookmarks ? 1 : 0)
 
             Spacer()
 
             Image(.downloadSmall)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 11)
                 .opacity(cellViewModel.isDownloaded ? 1 : 0)
         }
+        .frame(width: 12)
     }
 }
 

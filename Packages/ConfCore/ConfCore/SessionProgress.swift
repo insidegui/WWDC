@@ -48,8 +48,33 @@ extension Session: Logging {
     private static let positionUpdateQueue = DispatchQueue(label: "PositionUpdate", qos: .background)
 
     public func setCurrentPosition(_ position: Double, _ duration: Double) {
+        guard !duration.isNaN, !duration.isZero, !duration.isInfinite else {
+            assertionFailure("Invalid duration: \(duration)")
+            return
+        }
+        guard !position.isNaN, !position.isZero, !position.isInfinite else {
+            assertionFailure("Invalid position: \(position)")
+            return
+        }
+
         guard let config = self.realm?.configuration else { return }
         let sessionId = identifier
+
+        // Explanation for the ``isInWriteTransaction`` check:
+        //
+        // The context menu uses Storage.modify to update progresses
+        //
+        // But video playback relies on this background queue to update the position off the main thread.
+        // Which was a change made here: https://github.com/insidegui/WWDC/pull/602/files
+        //
+        // So isInWriteTransaction == true means that the context menu is currently updating the progresses,
+        // and we're already on a background queue, so we just do the update.
+        //
+        // I *think* that video playback should just be updated to use Storage.modify instead of relying on all this queue stuff in here.
+        if self.realm?.isInWriteTransaction == true {
+            Self.doSetCurrentPosition(on: self, position, duration)
+            return
+        }
 
         Self.positionUpdateQueue.async {
             Self.onQueueSetCurrentPosition(configuration: config, for: sessionId, position, duration)
@@ -70,29 +95,30 @@ extension Session: Logging {
 
         guard let session = queueRealm.object(ofType: Session.self, forPrimaryKey: sessionId) else { return }
 
-        guard !duration.isNaN, !duration.isZero, !duration.isInfinite else { return }
-        guard !position.isNaN, !position.isZero, !position.isInfinite else { return }
-
         do {
             queueRealm.beginWrite()
 
-            var progress: SessionProgress
-
-            if let p = session.progresses.first {
-                progress = p
-            } else {
-                progress = SessionProgress()
-                session.progresses.append(progress)
-            }
-
-            progress.currentPosition = position
-            progress.relativePosition = position / duration
-            progress.updatedAt = Date()
+            doSetCurrentPosition(on: session, position, duration)
 
             try queueRealm.commitWrite()
         } catch {
             log.error("Error updating session progress: \(String(describing: error), privacy: .public)")
         }
+    }
+
+    private static func doSetCurrentPosition(on session: Session, _ position: Double, _ duration: Double) {
+        let progress: SessionProgress
+
+        if let p = session.progresses.first {
+            progress = p
+        } else {
+            progress = SessionProgress()
+            session.progresses.append(progress)
+        }
+
+        progress.currentPosition = position
+        progress.relativePosition = position / duration
+        progress.updatedAt = Date()
     }
 
     public func resetProgress() {

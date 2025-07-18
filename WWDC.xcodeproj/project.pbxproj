@@ -28,17 +28,18 @@
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
 		910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106374F2E26B68700E917F0 /* PUIButtonView.swift */; };
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
+		912EEC412E2AB0F80019664D /* SessionDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912EEC402E2AB0F80019664D /* SessionDetailsViewModel.swift */; };
 		914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */; };
 		914C83B42E1ECBFF001AEE5C /* SessionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */; };
 		916228EE2E561B5700232DE6 /* ConcurrencyExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 916228ED2E561B5700232DE6 /* ConcurrencyExtras */; };
 		916C66EA2E55088000D0CAF1 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 916C66E92E55088000D0CAF1 /* Algorithms */; };
 		9171CEFC2E5391CF0063BBA7 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 91973A9B2E538BE200C4A644 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		91973A9C2E538BE200C4A644 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 91973A9B2E538BE200C4A644 /* RealmSwift */; };
+		91AAC48E2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AAC48D2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift */; };
 		91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */; };
 		91DB93E82E1FF610002E8716 /* IsSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB93E72E1FF60C002E8716 /* IsSelected.swift */; };
 		91DB9FD02E21777E002E8716 /* CursorShapeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */; };
 		91DB9FD22E2177A6002E8716 /* SetScrollerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */; };
-		91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */; };
 		91F235CD2E299C660061432C /* SessionActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F235CC2E299C660061432C /* SessionActionsView.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
@@ -323,12 +324,13 @@
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
 		9106374F2E26B68700E917F0 /* PUIButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIButtonView.swift; sourceTree = "<group>"; };
 		911C72C82A52169A00CB3757 /* CombineLatestMany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineLatestMany.swift; sourceTree = "<group>"; };
+		912EEC402E2AB0F80019664D /* SessionDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailsViewModel.swift; sourceTree = "<group>"; };
 		9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+GroupedBy.swift"; sourceTree = "<group>"; };
 		914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailsView.swift; sourceTree = "<group>"; };
+		91AAC48D2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShrinkWrapTextLayout.swift; sourceTree = "<group>"; };
 		91DB93E72E1FF60C002E8716 /* IsSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsSelected.swift; sourceTree = "<group>"; };
 		91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorShapeViewModifier.swift; sourceTree = "<group>"; };
 		91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetScrollerStyle.swift; sourceTree = "<group>"; };
-		91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+Combine.swift"; sourceTree = "<group>"; };
 		91F235CC2E299C660061432C /* SessionActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionActionsView.swift; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
@@ -849,6 +851,7 @@
 		DD7F387E1EAC15A1002D8C00 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				91AAC48D2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift */,
 				91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */,
 				91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */,
 				91DB93E72E1FF60C002E8716 /* IsSelected.swift */,
@@ -861,7 +864,6 @@
 				DDC927FD20B7A259004C784D /* NSImage+Compression.swift */,
 				DDA7B7332484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.h */,
 				DDA7B7342484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m */,
-				91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */,
 				9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */,
 				911C72C82A52169A00CB3757 /* CombineLatestMany.swift */,
 			);
@@ -1125,6 +1127,7 @@
 			isa = PBXGroup;
 			children = (
 				914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */,
+				912EEC402E2AB0F80019664D /* SessionDetailsViewModel.swift */,
 				DD7F38771EAC0C98002D8C00 /* ShelfViewController.swift */,
 				DD7F38631EABD6DF002D8C00 /* SessionDetailsViewController.swift */,
 				DD6E06F91EDBC636000EAEA4 /* Tabs */,
@@ -1595,6 +1598,7 @@
 				DD78588124C3594B008C1C22 /* SlowMigrationView.swift in Sources */,
 				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
 				DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */,
+				912EEC412E2AB0F80019664D /* SessionDetailsViewModel.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				F44C823A2A22B8DD00FDE980 /* ExploreTabContent.swift in Sources */,
 				4D0E806F217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift in Sources */,
@@ -1634,6 +1638,7 @@
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
+				91AAC48E2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift in Sources */,
 				F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,
@@ -1643,7 +1648,6 @@
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
 				91F235CD2E299C660061432C /* SessionActionsView.swift in Sources */,
-				91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */,
 				F46E0AE42C0E6EF80077A5E0 /* MediaDownloadManager+.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
 				DD4873D320AE5FF3005033CE /* AppCoordinator+RelatedSessions.swift in Sources */,

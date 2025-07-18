@@ -21,7 +21,7 @@ struct WWDCFiltersState: Codable {
 extension WWDCFiltersState {
     struct Tab: Codable {
         let focus, event, track: MultipleChoiceFilter.State?
-        let isDownloaded, isFavorite, hasBookmarks, isUnwatched: ToggleFilter.State?
+        let isDownloaded, isFavorite, hasBookmarks, isUnwatched: OptionalToggleFilter.State?
         let text: TextualFilter.State?
     }
 }
@@ -32,10 +32,10 @@ extension WWDCFiltersState.Tab {
             focus: filters.find(MultipleChoiceFilter.self, byID: .focus)?.state,
             event: filters.find(MultipleChoiceFilter.self, byID: .event)?.state,
             track: filters.find(MultipleChoiceFilter.self, byID: .track)?.state,
-            isDownloaded: filters.find(ToggleFilter.self, byID: .isDownloaded)?.state,
-            isFavorite: filters.find(ToggleFilter.self, byID: .isFavorite)?.state,
-            hasBookmarks: filters.find(ToggleFilter.self, byID: .hasBookmarks)?.state,
-            isUnwatched: filters.find(ToggleFilter.self, byID: .isUnwatched)?.state,
+            isDownloaded: filters.find(OptionalToggleFilter.self, byID: .isDownloaded)?.state,
+            isFavorite: filters.find(OptionalToggleFilter.self, byID: .isFavorite)?.state,
+            hasBookmarks: filters.find(OptionalToggleFilter.self, byID: .hasBookmarks)?.state,
+            isUnwatched: filters.find(OptionalToggleFilter.self, byID: .isUnwatched)?.state,
             text: filters.find(TextualFilter.self, byID: .text)?.state
         )
     }

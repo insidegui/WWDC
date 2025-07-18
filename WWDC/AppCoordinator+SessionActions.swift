@@ -185,6 +185,7 @@ extension AppCoordinator {
         #endif
     }
 
+    @MainActor
     private func saveCalendarEvent(viewModel: SessionViewModel, eventStore: EKEventStore) {
         if let storedEvent = eventStore.event(withIdentifier: viewModel.sessionInstance.calendarEventIdentifier) {
             let alert = WWDCAlert.create()
@@ -237,13 +238,14 @@ extension AppCoordinator {
 }
 
 private extension SessionViewModel {
+    @MainActor
     func calendarEvent(in store: EKEventStore) -> EKEvent {
         let event = EKEvent(eventStore: store)
         event.startDate = sessionInstance.startTime
         event.endDate = sessionInstance.endTime
         event.title = session.title
         event.location = sessionInstance.roomName
-        event.url = webUrl
+        event.url = webURL
         return event
     }
 }

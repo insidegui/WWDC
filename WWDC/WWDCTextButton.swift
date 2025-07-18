@@ -38,7 +38,7 @@ struct WWDCTextButtonStyle: ButtonStyle {
         let baseColor: any ShapeStyle = if isSelected {
             Color(nsColor: .primary)
         } else {
-            .tertiary
+            Color(nsColor: .tertiaryText)
         }
 
         if configuration.isPressed {
