@@ -12,10 +12,11 @@ import Combine
 
 class SessionDetailsViewModel: ObservableObject {
 
+    @MainActor
     var viewModel: SessionViewModel? {
         didSet {
             shelfController.viewModel = viewModel
-            summaryController.viewModel = viewModel
+            summaryViewModel.sessionViewModel = viewModel
             transcriptController.viewModel = viewModel
 
             guard let viewModel = viewModel else {
@@ -39,12 +40,13 @@ class SessionDetailsViewModel: ObservableObject {
     @Published var selectedTab: SessionTab = .overview
     
     let shelfController: ShelfViewController
-    let summaryController: SessionSummaryViewController
+    let summaryViewModel: SessionSummaryViewModel
     let transcriptController: SessionTranscriptViewController
-    
+
+    @MainActor
     init(session: SessionViewModel? = nil) {
         self.shelfController = ShelfViewController()
-        self.summaryController = SessionSummaryViewController()
+        self.summaryViewModel = SessionSummaryViewModel()
         self.transcriptController = SessionTranscriptViewController()
 
         defer {
@@ -71,7 +73,7 @@ final class SessionDetailsViewController: NSViewController {
     }
 
     var shelfController: ShelfViewController { detailsViewModel.shelfController }
-    var summaryController: SessionSummaryViewController { detailsViewModel.summaryController }
+    var summaryController: SessionSummaryViewModel { detailsViewModel.summaryViewModel }
     var transcriptController: SessionTranscriptViewController { detailsViewModel.transcriptController }
 
     init() {
