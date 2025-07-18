@@ -59,7 +59,6 @@ struct SessionActionsView: View {
             .opacity(viewModel.calendarButtonIsHidden ? 0 : 1)
             .frame(width: viewModel.calendarButtonIsHidden ? 0 : nil, alignment: .trailing)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
     }
 
     /// States managed by DownloadState enum:

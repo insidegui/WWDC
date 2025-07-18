@@ -23,7 +23,7 @@ final class ImageDownloadCenter: Logging {
 
     static let log = makeLogger(subsystem: ImageDownload.subsystemName, category: "ImageDownloadCenter")
 
-    private let dispatchQueue = DispatchQueue(label: "ImageDownloadCenter", qos: .userInitiated, attributes: .concurrent)
+    private let dispatchQueue = DispatchQueue(label: "ImageDownloadCenter", qos: .userInteractive, attributes: .concurrent)
     private lazy var queue: OperationQueue = {
         let q = OperationQueue()
         
@@ -37,20 +37,6 @@ final class ImageDownloadCenter: Logging {
     /// The completion handler is always called on the main thread
     @discardableResult
     func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
-        if thumbnailOnly {
-            if let thumbnailImage = cache.cachedImage(for: url, thumbnailOnly: true).thumbnail {
-                completion(url, (nil, thumbnailImage))
-                return nil
-            }
-        }
-
-        let cachedResult = cache.cachedImage(for: url)
-
-        guard cachedResult.original == nil && cachedResult.thumbnail == nil else {
-            completion(url, cachedResult)
-            return nil
-        }
-
         if let pendingOperation = activeOperation(for: url) {
             log.debug("A valid download operation already exists for the URL \(url.absoluteString)")
 
@@ -58,6 +44,7 @@ final class ImageDownloadCenter: Logging {
 
             return nil
         }
+
 
         let operation = ImageDownloadOperation(url: url, cache: cache, thumbnailHeight: thumbnailHeight)
         operation.addCompletionHandler(with: completion)
@@ -245,13 +232,15 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
 
     let url: URL
     let thumbnailHeight: CGFloat
+    let thumbnailOnly: Bool
 
     let cacheProvider: ImageCacheProvider
 
-    init(url: URL, cache: ImageCacheProvider, thumbnailHeight: CGFloat = Constants.thumbnailHeight) {
+    init(url: URL, cache: ImageCacheProvider, thumbnailHeight: CGFloat = Constants.thumbnailHeight, thumbnailOnly: Bool = false) {
         self.url = url
         cacheProvider = cache
         self.thumbnailHeight = thumbnailHeight
+        self.thumbnailOnly = thumbnailOnly
     }
 
     public override var isAsynchronous: Bool {
@@ -307,6 +296,26 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
 
     override func start() {
         _executing = true
+
+        if thumbnailOnly {
+            if let thumbnailImage = cacheProvider.cachedImage(for: url, thumbnailOnly: true).thumbnail {
+//                completion(url, (nil, thumbnailImage))
+                self.callCompletionHandlers(with: nil, thumbnail: thumbnailImage)
+                self._executing = false
+                self._finished = true
+                return
+            }
+        }
+
+        let cachedResult = cacheProvider.cachedImage(for: url)
+
+        guard cachedResult.original == nil && cachedResult.thumbnail == nil else {
+//            completion(url, cachedResult)
+            self.callCompletionHandlers(with: cachedResult.original, thumbnail: cachedResult.thumbnail)
+            self._executing = false
+            self._finished = true
+            return
+        }
 
         inFlightTask = session.downloadTask(with: url) { [weak self] fileURL, response, error in
             guard let self = self else { return }

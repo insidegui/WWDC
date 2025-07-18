@@ -151,7 +151,7 @@ final class SessionActionsViewModel: ObservableObject {
         }
 
         // Only check filesystem when there's no active download (or download completed)
-        if session.isDownloaded, MediaDownloadManager.shared.hasDownloadedMedia(for: session) {
+        if session.isDownloaded/*, MediaDownloadManager.shared.hasDownloadedMedia(for: session)*/ {
             return .downloaded
         }
 

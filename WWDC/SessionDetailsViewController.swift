@@ -10,55 +10,6 @@ import Cocoa
 import SwiftUI
 import Combine
 
-class SessionDetailsViewModel: ObservableObject {
-
-    var viewModel: SessionViewModel? {
-        didSet {
-            shelfController.viewModel = viewModel
-            summaryController.viewModel = viewModel
-            transcriptController.viewModel = viewModel
-
-            guard let viewModel = viewModel else {
-                return
-            }
-
-            if viewModel.identifier != oldValue?.identifier {
-                selectedTab = .overview
-            }
-            viewModel.rxTranscript.replaceError(with: nil).map {
-                $0 != nil
-            }
-            .assign(to: &$isTranscriptAvailable)
-
-            isBookmarksAvailable = false
-        }
-    }
-
-    @Published var isTranscriptAvailable: Bool = false
-    @Published var isBookmarksAvailable: Bool = false
-    @Published var selectedTab: SessionTab = .overview
-    
-    let shelfController: ShelfViewController
-    let summaryController: SessionSummaryViewController
-    let transcriptController: SessionTranscriptViewController
-    
-    init(session: SessionViewModel? = nil) {
-        self.shelfController = ShelfViewController()
-        self.summaryController = SessionSummaryViewController()
-        self.transcriptController = SessionTranscriptViewController()
-
-        defer {
-            self.viewModel = session
-        }
-    }
-}
-
-extension SessionDetailsViewModel {
-    enum SessionTab {
-        case overview, transcript, bookmarks
-    }
-}
-
 final class SessionDetailsViewController: NSViewController {
 
     private let detailsViewModel = SessionDetailsViewModel()
@@ -71,7 +22,7 @@ final class SessionDetailsViewController: NSViewController {
     }
 
     var shelfController: ShelfViewController { detailsViewModel.shelfController }
-    var summaryController: SessionSummaryViewController { detailsViewModel.summaryController }
+    var summaryController: SessionSummaryViewModel { detailsViewModel.summaryViewModel }
     var transcriptController: SessionTranscriptViewController { detailsViewModel.transcriptController }
 
     init() {
@@ -85,6 +36,8 @@ final class SessionDetailsViewController: NSViewController {
     override func loadView() {
         let swiftUIView = SessionDetailsView(detailsViewModel: detailsViewModel)
         view = NSHostingView(rootView: swiftUIView)
+        view.setContentCompressionResistancePriority(.required, for: .horizontal)
+        view.setContentCompressionResistancePriority(.required, for: .vertical)
         view.frame = NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height)
         view.wantsLayer = true
     }

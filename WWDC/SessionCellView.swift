@@ -95,14 +95,15 @@ struct SessionCellView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 85, height: 48)
-                .clipped()
+                .clipShape(.rect(cornerRadius: 4))
                 .padding(.horizontal, 8)
 
             informationLabels
 
             statusIcons
         }
-        .padding(.horizontal, 10)
+        .padding(.leading, 10)
+        .padding(.trailing, 4)
         .padding(.vertical, 8)
         .background(style == .rounded ? Color(.roundedCellBackground) : Color.clear)
         .cornerRadius(style == .rounded ? 6 : 0)
@@ -126,7 +127,7 @@ struct SessionCellView: View {
                 .font(.system(size: 12))
                 .foregroundStyle(Color(.tertiaryText))
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .lineLimit(1)
         .truncationMode(.tail)
     }
@@ -137,7 +138,6 @@ struct SessionCellView: View {
             Image(.starSmall)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 14)
                 .opacity(cellViewModel.isFavorite ? 1 : 0)
 
             Spacer()
@@ -145,9 +145,9 @@ struct SessionCellView: View {
             Image(.downloadSmall)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 11)
                 .opacity(cellViewModel.isDownloaded ? 1 : 0)
         }
+        .frame(width: 12)
     }
 }
 

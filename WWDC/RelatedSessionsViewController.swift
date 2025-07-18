@@ -13,27 +13,8 @@ protocol RelatedSessionsDelegate: AnyObject {
     func relatedSessions(_ controller: RelatedSessionsViewModel, didSelectSession viewModel: SessionViewModel)
 }
 
-final class RelatedSessionsViewModel: ObservableObject {
-    @Published var sessions: [SessionViewModel] = []
-    @Published var isHidden: Bool = true
-
-    weak var delegate: RelatedSessionsDelegate?
-
-    func selectSession(_ viewModel: SessionViewModel) {
-        delegate?.relatedSessions(self, didSelectSession: viewModel)
-    }
-
-    init(sessions: [SessionViewModel] = []) {
-        self.sessions = sessions
-
-        self.$sessions
-            .map { $0.isEmpty }
-            .assign(to: &$isHidden)
-    }
-}
-
 struct RelatedSessionsView: View {
-    @ObservedObject var viewModel: RelatedSessionsViewModel
+    var sessions: [SessionViewModel]
 
     struct Metrics {
         static let height: CGFloat = 96 + scrollerOffset
@@ -41,10 +22,12 @@ struct RelatedSessionsView: View {
         static let scrollerOffset: CGFloat = 15
         static let scrollViewHeight: CGFloat = itemHeight + scrollerOffset
         static let itemWidth: CGFloat = 360
-        static let padding: CGFloat = 24
+        static let itemSpacing: CGFloat = 10
     }
 
     var body: some View {
+//        if viewModel.isHidden {
+//        }
         VStack(alignment: .leading, spacing: 0) {
             Text("Related Sessions")
                 .font(Font(NSFont.wwdcRoundedSystemFont(ofSize: 20, weight: .semibold) as CTFont))
@@ -52,25 +35,34 @@ struct RelatedSessionsView: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
 
-            ScrollViewReader { scrollView in
-                ScrollView(.horizontal, showsIndicators: true) {
-                    SetScrollerStyle(.overlay)
+            GeometryReader { geometry in
+                ScrollViewReader { scrollView in
+                    ScrollView(.horizontal, showsIndicators: true) {
+                        SetScrollerStyle(.overlay)
 
-                    HStack(spacing: Metrics.padding) {
-                        ForEach(viewModel.sessions, id: \.identifier) { session in
-                            sessionButton(for: session, in: scrollView)
+                        HStack(spacing: Metrics.itemSpacing) {
+                            ForEach(sessions, id: \.identifier) { session in
+                                sessionButton(for: session, in: scrollView)
+                            }
                         }
+                        .padding(.horizontal, 0)
+                        .padding(.bottom, Metrics.scrollerOffset)
+
                     }
-                    .padding(.horizontal, 0)
-                    .padding(.bottom, Metrics.scrollerOffset)
+                    .frame(maxWidth: geometry.size.width, alignment: .leading)
+                    //                    .containerRelativeFrame(.horizontal, alignment: .leading)
+                    .border(.blue)
+                    .scrollIndicatorsFlash(trigger: sessions.map(\.identifier))
+                    .onChange(of: sessions.map(\.identifier)) {
+                        scrollView.scrollTo(sessions.first?.identifier, anchor: .leading)
+                    }
                 }
             }
             .frame(height: Metrics.scrollViewHeight)
             .background(Color(.darkWindowBackground))
         }
-        .frame(height: Metrics.height)
-        .opacity(viewModel.isHidden ? 0 : 1)
-        .allowsHitTesting(!viewModel.isHidden)
+        .frame(height: sessions.isEmpty? 0 : Metrics.height)
+        .opacity(sessions.isEmpty ? 0 : 1)
     }
 
     func sessionButton(for session: SessionViewModel, in scrollView: ScrollViewProxy) -> some View {
@@ -84,11 +76,6 @@ struct RelatedSessionsView: View {
             .frame(width: Metrics.itemWidth, height: Metrics.itemHeight)
         }
         .buttonStyle(.plain)
-        .onAppear {
-            if session.identifier == viewModel.sessions.first?.identifier {
-                scrollView.scrollTo(session.identifier, anchor: .leading)
-            }
-        }
     }
 }
 

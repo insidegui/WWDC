@@ -27,7 +27,7 @@ import SwiftUI
  │                                                 │
  │              Tab Content Area                   │
  │                                                 │
- │  • Overview: SessionSummaryViewControllerWrapper│
+ │  • Overview: SessionSummaryView                 │
  │  • Transcript: SessionTranscriptViewController  │
  │  • Bookmarks: Placeholder text                  │
  │                                                 │
@@ -37,34 +37,45 @@ struct SessionDetailsView: View {
     @ObservedObject var detailsViewModel: SessionDetailsViewModel
     
     var body: some View {
-        VStack(spacing: 0) {
-            ShelfViewControllerWrapper(controller: detailsViewModel.shelfController)
-                .layoutPriority(1)
-                .frame(minHeight: 280, maxHeight: .infinity)
-                .padding(.top, 22)
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                ShelfViewControllerWrapper(controller: detailsViewModel.shelfController)
+                    .layoutPriority(1)
+                    .frame(minHeight: 280, maxHeight: .infinity)
+                    .padding(.top, 22)
 
-            if detailsViewModel.isTranscriptAvailable || detailsViewModel.isBookmarksAvailable {
-                tabButtons
+                if detailsViewModel.isTranscriptAvailable || detailsViewModel.isBookmarksAvailable {
+                    tabButtons
+                }
+
+                Divider()
+
+                tabContent(geometry: geometry)
+                    .border(.purple, width: 3)
+//                    .frame(maxHeight: geometry.size.height / 2)
+//                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, 16)
             }
-
-            Divider()
-
-            tabContent
-                .padding(.top, 16)
+//            .frame(maxHeight: geometry.size.height)
+            .padding([.bottom, .horizontal], 46)
         }
-        .padding([.bottom, .horizontal], 46)
+        .border(.yellow, width: 5)
     }
     
     private var tabButtons: some View {
-        HStack(spacing: 32) {
+        HStack(spacing: 28) {
             Button("Overview") {
-                detailsViewModel.selectedTab = .overview
+                withAnimation(.snappy) {
+                    detailsViewModel.selectedTab = .overview
+                }
             }
             .selected(detailsViewModel.selectedTab == .overview)
 
             if detailsViewModel.isTranscriptAvailable {
                 Button("Transcript") {
-                    detailsViewModel.selectedTab = .transcript
+                    withAnimation(.snappy) {
+                        detailsViewModel.selectedTab = .transcript
+                    }
                 }
                 .selected(detailsViewModel.selectedTab == .transcript)
             }
@@ -77,21 +88,30 @@ struct SessionDetailsView: View {
             }
         }
         .buttonStyle(WWDCTextButtonStyle())
-        .frame(maxWidth: .infinity)
+//        .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
     }
 
     @ViewBuilder
-    private var tabContent: some View {
-        switch detailsViewModel.selectedTab {
-        case .overview:
-            SessionSummaryViewControllerWrapper(controller: detailsViewModel.summaryController)
-        case .transcript:
-            SessionTranscriptViewControllerWrapper(controller: detailsViewModel.transcriptController)
-        case .bookmarks:
-            Text("Bookmarks view coming soon")
-                .foregroundColor(.secondary)
+    private func tabContent(geometry: GeometryProxy) -> some View {
+        if let session = detailsViewModel.viewModel {
+            SessionSummaryView(viewModel: session)
+                .opacity(detailsViewModel.selectedTab == .transcript ? 0 : 1)
+                .overlay {
+                    SessionTranscriptViewControllerWrapper(controller: detailsViewModel.transcriptController)
+                        .opacity(detailsViewModel.selectedTab == .transcript ? 1 : 0)
+                }
         }
+        //        switch detailsViewModel.selectedTab {
+        //        case .overview:
+        //
+        //        case .transcript:
+        //
+        //                .frame(maxHeight: geometry.size.height / 3)
+        //        case .bookmarks:
+        //            Text("Bookmarks view coming soon")
+        //                .foregroundColor(.secondary)
+        //        }
     }
 }
 

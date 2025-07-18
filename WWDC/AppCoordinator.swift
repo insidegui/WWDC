@@ -199,7 +199,9 @@ final class AppCoordinator: Logging, Signposting {
 
     func startup() {
         setupBindings()
-        setupDelegation()
+        MainActor.assumeIsolated {
+            setupDelegation()
+        }
         setupObservations()
 
         NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification).sink { _ in
@@ -270,6 +272,7 @@ final class AppCoordinator: Logging, Signposting {
             .store(in: &cancellables)
     }
 
+    @MainActor
     private func setupDelegation() {
         let videoDetail = videosController.detailViewController
 

@@ -12,10 +12,14 @@ import Combine
 import RealmSwift
 import PlayerUI
 
-final class SessionViewModel {
+final class SessionViewModel: ObservableObject {
 
     let style: SessionsListStyle
-    var title: String
+    @Published var title: String
+    @Published var summary: String
+    @Published var footer: String
+    @Published var actionPrompt: String
+    @Published var relatedSessions: [SessionViewModel] = []
     let session: Session
     let sessionInstance: SessionInstance
     let track: Track
@@ -198,8 +202,19 @@ final class SessionViewModel {
 
         trackName = track.name
         sessionInstance = instance ?? session.instances.first ?? SessionInstance()
-        title = session.title
         identifier = session.identifier
+
+        title = session.title
+        summary = session.summary
+        footer = SessionViewModel.footer(for: session, at: session.event.first)
+        actionPrompt = sessionInstance.actionLinkPrompt ?? ""
+        relatedSessions = []
+
+        rxTitle.replaceError(with: "").assign(to: &$title)
+        rxSummary.replaceError(with: "").assign(to: &$summary)
+        rxFooter.replaceError(with: "").assign(to: &$footer)
+        rxActionPrompt.replaceNilAndError(with: "").assign(to: &$actionPrompt)
+        rxRelatedSessions.map { $0.compactMap({ $0.session }).compactMap(SessionViewModel.init) }.replaceError(with: []).assign(to: &$relatedSessions)
     }
 
     static func subtitle(from session: Session, at event: ConfCore.Event?) -> String {
