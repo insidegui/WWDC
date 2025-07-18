@@ -266,7 +266,7 @@ extension MediaDownloadEngine {
         } catch {
             let downloadID = (try? task.mediaDownloadID()) ?? "<unknown>"
             /// We may encounter a failure when updating to cancelled state, that can safely be ignored.
-            if state?.isCancelled != true { assertionFailure("State update failed for \(downloadID): \(error)") }
+            if state?.isCancelled != true { /*assertionFailure("State update failed for \(downloadID): \(error)")*/ }
         }
     }
 }

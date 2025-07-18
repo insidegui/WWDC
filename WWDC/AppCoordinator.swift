@@ -274,13 +274,13 @@ final class AppCoordinator: Logging, Signposting {
         let videoDetail = videosController.detailViewController
 
         videoDetail.shelfController.delegate = self
-        videoDetail.summaryController.actionsViewController.delegate = self
+        videoDetail.summaryController.actionsViewModel.delegate = self
         videoDetail.summaryController.relatedSessionsViewModel.delegate = self
 
         let scheduleDetail = scheduleController.splitViewController.detailViewController
 
         scheduleDetail.shelfController.delegate = self
-        scheduleDetail.summaryController.actionsViewController.delegate = self
+        scheduleDetail.summaryController.actionsViewModel.delegate = self
         scheduleDetail.summaryController.relatedSessionsViewModel.delegate = self
 
         videosController.listViewController.delegate = self

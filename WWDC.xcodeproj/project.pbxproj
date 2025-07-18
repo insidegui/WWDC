@@ -26,6 +26,7 @@
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
 		557221042C190BC0002B42C9 /* OptionalToggleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557221032C190BC0002B42C9 /* OptionalToggleFilter.swift */; };
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
+		910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106374F2E26B68700E917F0 /* PUIButtonView.swift */; };
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
 		914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */; };
 		914C83B42E1ECBFF001AEE5C /* SessionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */; };
@@ -34,6 +35,7 @@
 		91DB9FD02E21777E002E8716 /* CursorShapeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */; };
 		91DB9FD22E2177A6002E8716 /* SetScrollerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */; };
 		91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */; };
+		91F235CD2E299C660061432C /* SessionActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91F235CC2E299C660061432C /* SessionActionsView.swift */; };
 		DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A61ECFE26200F980F1 /* DeepLink.swift */; };
 		DD0159A91ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */; };
 		DD0159CF1ED0CD3A00F980F1 /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */; };
@@ -314,6 +316,7 @@
 		557221032C190BC0002B42C9 /* OptionalToggleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalToggleFilter.swift; sourceTree = "<group>"; };
 		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
+		9106374F2E26B68700E917F0 /* PUIButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIButtonView.swift; sourceTree = "<group>"; };
 		911C72C82A52169A00CB3757 /* CombineLatestMany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineLatestMany.swift; sourceTree = "<group>"; };
 		9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+GroupedBy.swift"; sourceTree = "<group>"; };
 		914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionDetailsView.swift; sourceTree = "<group>"; };
@@ -321,6 +324,7 @@
 		91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorShapeViewModifier.swift; sourceTree = "<group>"; };
 		91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetScrollerStyle.swift; sourceTree = "<group>"; };
 		91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+Combine.swift"; sourceTree = "<group>"; };
+		91F235CC2E299C660061432C /* SessionActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionActionsView.swift; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
 		DD0159A81ED09F5D00F980F1 /* AppCoordinator+Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppCoordinator+Bookmarks.swift"; sourceTree = "<group>"; };
 		DD0159CE1ED0CD3A00F980F1 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
@@ -813,6 +817,7 @@
 			children = (
 				DD7F38791EAC0CE3002D8C00 /* SessionSummaryViewController.swift */,
 				DDA60E1620A9083E002EECF5 /* RelatedSessionsViewController.swift */,
+				91F235CC2E299C660061432C /* SessionActionsView.swift */,
 				DDF32EB21EBE5C4D0028E39D /* SessionActionsViewController.swift */,
 			);
 			name = Summary;
@@ -1097,6 +1102,7 @@
 				F4F189722C068561006EA9A2 /* PUITimelineFloatingLayer.swift */,
 				DDED75561ED3C1BF000BA817 /* PUIScrimView.swift */,
 				DDF721C21ECA12A40054C503 /* PUIButton.swift */,
+				9106374F2E26B68700E917F0 /* PUIButtonView.swift */,
 				4DA83FE122AC3F2F0062DB8B /* PUIVibrantBackgroundButton.swift */,
 				DDF721C31ECA12A40054C503 /* PUIPlayerView.swift */,
 				DDF721C41ECA12A40054C503 /* PUIPlayerWindow.swift */,
@@ -1622,6 +1628,7 @@
 				01B3EB4A1EEDD23100DE1003 /* AppCoordinator+SessionTableViewContextMenuActions.swift in Sources */,
 				DD2E27881EAC2CCB0009D7B6 /* ShelfView.swift in Sources */,
 				DDEDFCF51ED9FF8A002477C8 /* WWDCSegmentedControl.swift in Sources */,
+				91F235CD2E299C660061432C /* SessionActionsView.swift in Sources */,
 				91EF6A2A2A33FBF8003A71A3 /* Realm+Combine.swift in Sources */,
 				F46E0AE42C0E6EF80077A5E0 /* MediaDownloadManager+.swift in Sources */,
 				DDF32EB71EBE65930028E39D /* AppCoordinator+UserActivity.swift in Sources */,
@@ -1701,6 +1708,7 @@
 				DDEA82FC20909A4C00D36BE0 /* PUIRemoteCommandCoordinator.swift in Sources */,
 				DDF721D91ECA12A40054C503 /* String+CMTime.swift in Sources */,
 				DDF721DC1ECA12A40054C503 /* PUIBufferLayer.swift in Sources */,
+				910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1870,6 +1878,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1898,6 +1907,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDC.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1987,6 +1997,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDCDebug_iCloud.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -2070,6 +2081,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = WWDC/WWDCRelease_iCloud.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;

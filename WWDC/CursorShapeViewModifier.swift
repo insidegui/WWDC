@@ -14,7 +14,7 @@ import SwiftUI
 ///
 /// It may be possible to work around this via onContinuousHover and some cancelling delay shenanigans,
 /// but it seems like a lot of effort for a minor issue.
-struct CursorShapeViewModifier: ViewModifier {
+private struct CursorShapeViewModifier: ViewModifier {
     let shape: NSCursor.Shape
 
     func body(content: Content) -> some View {
@@ -49,7 +49,7 @@ extension NSCursor {
         case contextualMenu
         case iBeam
 
-        var cursor: NSCursor {
+        fileprivate var cursor: NSCursor {
             return switch self {
             case .arrow: .arrow
             case .pointingHand: .pointingHand
