@@ -38,7 +38,15 @@ final class SessionsSplitViewController: NSSplitViewController {
         }.store(in: &cancellables)
 
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(syncSplitView(notification:)), name: .sideBarSizeSyncNotification, object: nil)
+
+        NotificationCenter
+            .default
+            .publisher(for: .sideBarSizeSyncNotification)
+            .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] notification in
+                self?.syncSplitView(notification: notification)
+            }
+            .store(in: &cancellables)
     }
 
     required init?(coder: NSCoder) {
