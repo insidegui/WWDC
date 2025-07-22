@@ -269,11 +269,11 @@ final class SearchCoordinator: Logging {
 
     fileprivate func activateSearchField() {
         if let window = scheduleSearchController.view.window {
-            window.makeFirstResponder(scheduleSearchController.searchField)
+            scheduleSearchController.isSearchFieldFocused = true
         }
 
         if let window = videosSearchController.view.window {
-            window.makeFirstResponder(videosSearchController.searchField)
+            videosSearchController.isSearchFieldFocused = true
         }
     }
 
@@ -292,12 +292,12 @@ final class SearchCoordinator: Logging {
 
 extension SearchCoordinator: SearchFiltersViewControllerDelegate {
 
-    func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType], context: FilterChangeReason) {
-        if controller == scheduleSearchController {
-            scheduleFilterPredicate = .init(predicate: scheduleSearchController.currentPredicate, changeReason: context)
-        } else {
+    func searchFiltersViewController(_ controller: SearchFiltersViewModel, didChangeFilters filters: [FilterType], context: FilterChangeReason) {
+//        if controller == scheduleSearchController {
+//            scheduleFilterPredicate = .init(predicate: scheduleSearchController.currentPredicate, changeReason: context)
+//        } else {
             videosFilterPredicate = .init(predicate: videosSearchController.currentPredicate, changeReason: context)
-        }
+//        }
     }
 }
 

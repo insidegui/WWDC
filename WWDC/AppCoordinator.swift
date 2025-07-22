@@ -104,8 +104,8 @@ final class AppCoordinator: Logging, Signposting {
         self.storage = storage
         self.syncEngine = syncEngine
 
-        let scheduleSearchController = SearchFiltersViewController.loadFromStoryboard()
-        let videosSearchController = SearchFiltersViewController.loadFromStoryboard()
+        let scheduleSearchController = SearchFiltersViewController()
+        let videosSearchController = SearchFiltersViewController()
 
         let searchCoordinator = SearchCoordinator(
             self.storage,
