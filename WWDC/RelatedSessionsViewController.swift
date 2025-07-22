@@ -55,13 +55,14 @@ struct RelatedSessionsView: View {
                     HStack(spacing: Metrics.itemSpacing) {
                         ForEach(viewModel.sessions, id: \.identifier) { session in
                             sessionButton(for: session, in: scrollView)
+                                .id(session.identifier)
                         }
                     }
                     .padding(.horizontal, 0)
                     .padding(.bottom, Metrics.scrollerOffset)
                 }
-                .onChange(of: viewModel.sessions.map(\.identifier)) { _, _ in
-                    scrollView.scrollTo(viewModel.sessions.first?.identifier, anchor: .leading)
+                .onChange(of: viewModel.sessions.map(\.identifier)) { _, newValue in
+                    scrollView.scrollTo(newValue.first, anchor: .leading)
                 }
             }
             .frame(height: Metrics.scrollViewHeight)
