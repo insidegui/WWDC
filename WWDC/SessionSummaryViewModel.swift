@@ -1,5 +1,5 @@
 //
-//  SessionSummaryViewController.swift
+//  SessionSummaryViewModel.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 22/04/17.

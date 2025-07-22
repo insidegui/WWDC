@@ -29,14 +29,6 @@ final class SessionsSplitViewController: NSSplitViewController {
         let detailViewController = SessionDetailsViewController()
         self.detailViewController = detailViewController
 
-        listViewController.$selectedSession.receive(on: DispatchQueue.main).sink { viewModel in
-            NSAnimationContext.runAnimationGroup { context in
-                context.duration = 0.35
-
-                detailViewController.viewModel = viewModel
-            }
-        }.store(in: &cancellables)
-
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter
@@ -84,22 +76,32 @@ final class SessionsSplitViewController: NSSplitViewController {
         guard let notificationSourceSplitView = notification.object as? NSSplitView else {
             return
         }
+        // Xcode 16 + macOS 15: 0
+        // Xcode 16 + macOS 26: 0
+        // Xcode 26 + macOS 15: 0
+        // Xcode 26 + macOS 26: 3
+#if compiler(>=6.2) // Xcode 26+
+        let targetSubviewIndex = if #available(macOS 26.0, *) { 3 } else { 0 }
+#else
+        let targetSubviewIndex = if #available(macOS 26.0, *) { 2 } else { 0 }
+#endif
+
         guard notificationSourceSplitView !== splitView else {
             // If own split view is altered, change split view initialisation width for other tabs
-            windowController.sidebarInitWidth = notificationSourceSplitView.subviews[0].bounds.width
+            windowController.sidebarInitWidth = notificationSourceSplitView.subviews[targetSubviewIndex].bounds.width
             return
         }
         guard splitView.subviews.count > 0, notificationSourceSplitView.subviews.count > 0 else {
             return
         }
-        guard splitView.subviews[0].bounds.width != notificationSourceSplitView.subviews[0].bounds.width else {
+        guard splitView.subviews[targetSubviewIndex].bounds.width != notificationSourceSplitView.subviews[targetSubviewIndex].bounds.width else {
             return
         }
 
         // Prevent a split view sync notification from being sent to the other controllers
         // in response to this programmatic resize
         isResizingSplitView = true
-        splitView.setPosition(notificationSourceSplitView.subviews[0].bounds.width, ofDividerAt: 0)
+        splitView.setPosition(notificationSourceSplitView.subviews[targetSubviewIndex].bounds.width, ofDividerAt: 0)
         isResizingSplitView = false
     }
 

@@ -24,8 +24,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     static let log = makeLogger(subsystem: "io.wwdc.app")
 
     private lazy var commandsReceiver = AppCommandsReceiver()
-    
-    private(set) var coordinator: AppCoordinator? {
+
+    /// The main app coordinator, responsible for driving the app's UI.
+    ///
+    /// This is @Published to facilitate some SwiftUI previews that currently need Realm to operate.
+    @Published private(set) var coordinator: AppCoordinator? {
         didSet {
             if coordinator != nil {
                 openPendingDeepLinkIfNeeded()

@@ -11,7 +11,7 @@ import Cocoa
 final class PathUtil {
     
     /// The bundle identifier to be used for constructing paths in Application Support.
-    static var bundleIdentifier = Bundle.main.bundleIdentifier
+    static let bundleIdentifier = Bundle.main.bundleIdentifier
 
     /// The WWDCUseDebugStorage flag can be used to force debug builds to use
     /// a separate storage from release builds

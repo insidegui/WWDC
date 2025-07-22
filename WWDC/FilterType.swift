@@ -30,10 +30,15 @@ protocol FilterType {
 
 extension Array where Element == FilterType {
     func find<T: FilterType>(_ type: T.Type = T.self, byID identifier: FilterIdentifier) -> T? {
-        let result = self.first { (filter) -> Bool in
+        findIndexed(type, byID: identifier)?.element
+    }
+
+    func findIndexed<T: FilterType>(_ type: T.Type = T.self, byID identifier: FilterIdentifier) -> (offset: Index, element: T)? {
+        let index = self.firstIndex { (filter) -> Bool in
             return filter.identifier == identifier && filter is T
         }
+        guard let index, let item = self[index] as? T else { return nil }
 
-        return result as? T
+        return (index, item)
     }
 }

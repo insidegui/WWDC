@@ -16,7 +16,7 @@ import Cocoa
 
     static let secondaryText = NSColor(calibratedWhite: 0.75, alpha: 1.0)
 
-    static var tertiaryText = NSColor(calibratedWhite: 0.55, alpha: 1.0)
+    static let tertiaryText = NSColor(calibratedWhite: 0.55, alpha: 1.0)
 
     private static var isAccentColorGraphite: Bool { NSColorGetUserAccentColor() == kGraphiteAccentColor }
 

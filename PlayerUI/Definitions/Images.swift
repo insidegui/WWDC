@@ -126,8 +126,8 @@ extension NSImage {
 }
 
 private extension NSImage.SymbolConfiguration {
-    static let PUIMedium = NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.medium.symbolSize, weight: .medium, scale: .medium)
-    static let PUILarge = NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.large.symbolSize, weight: .medium, scale: .large)
+    nonisolated(unsafe) static let PUIMedium = NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.medium.symbolSize, weight: .medium, scale: .medium)
+    nonisolated(unsafe) static let PUILarge = NSImage.SymbolConfiguration(pointSize: PUIControlMetrics.large.symbolSize, weight: .medium, scale: .large)
 }
 
 // MARK: - Touch Bar

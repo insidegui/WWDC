@@ -62,6 +62,29 @@ final class MainWindowController: WWDCWindowController {
         NotificationCenter.default.post(name: .MainWindowWantsToSelectSearchField, object: nil)
     }
 
+    /// Outlet that attempt to extract the current text selection from the firstResponder (naively only supports NSTextView).
+    /// Puts the contents in the find pasteboard and triggers the search field to become first responder.
+    ///
+    /// This handles the targeted UX which is selecting text in a session description and then hitting `⌘ + E`
+    ///
+    /// This is attached via Main.storyboard
+    @IBAction func useSelectionForFind(_ sender: Any?) {
+        guard let textView = NSApp.keyWindow?.firstResponder as? NSTextView else { return }
+
+        let selectedNSRange = textView.selectedRange()
+        let completeString = textView.string
+
+        guard selectedNSRange.length > 0, let selectedRange = Range(selectedNSRange, in: completeString) else { return }
+
+        let selectedString = String(completeString[selectedRange])
+
+        let findPasteboard = NSPasteboard(name: .find)
+        findPasteboard.clearContents()
+        findPasteboard.setString(selectedString, forType: .string)
+
+        NotificationCenter.default.post(name: .MainWindowWantsToSelectSearchField, object: selectedString)
+    }
+
     override func makeTouchBar() -> NSTouchBar? {
         return touchBarProvider?.makeTouchBar()
     }

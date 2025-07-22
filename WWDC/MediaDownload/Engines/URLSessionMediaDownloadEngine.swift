@@ -3,7 +3,7 @@ import OSLog
 import ConfCore
 
 public final class URLSessionMediaDownloadEngine: NSObject, MediaDownloadEngine, Logging {
-    public static var log = makeLogger()
+    public static let log = makeLogger()
 
     public let supportedExtensions: Set<String> = ["mp4", "mov", "m4v"]
 

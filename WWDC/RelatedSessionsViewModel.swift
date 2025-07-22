@@ -1,5 +1,5 @@
 //
-//  RelatedSessionsViewController.swift
+//  RelatedSessionsViewModel.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 13/05/18.

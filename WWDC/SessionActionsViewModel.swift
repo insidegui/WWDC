@@ -1,5 +1,5 @@
 //
-//  SessionActionsViewController.swift
+//  SessionActionsViewModel.swift
 //  WWDC
 //
 //  Created by Guilherme Rambo on 06/05/17.
