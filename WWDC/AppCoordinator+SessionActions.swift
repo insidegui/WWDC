@@ -13,7 +13,7 @@ import PlayerUI
 import EventKit
 import OSLog
 
-extension AppCoordinator: SessionActionsViewControllerDelegate {
+extension AppCoordinator: SessionActionsDelegate {
 
     @MainActor
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
