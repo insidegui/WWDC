@@ -16,7 +16,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.0.4"),
         .package(url: "https://github.com/bustoutsolutions/siesta", from: "1.5.2"),
-        .package(url: "https://github.com/realm/realm-swift", from: "10.0.0"),
+        .package(url: "https://github.com/insidegui/realm-swift.git", exact: "20.0.3"),
         .package(url: "https://github.com/insidegui/CloudKitCodable", branch: "spm"),
         .package(path: "../Transcripts")
 	],
