@@ -46,10 +46,11 @@ final class PlaybackViewModel {
 
     @Published var nowPlayingInfo: PUINowPlayingInfo?
 
+    @MainActor
     init(sessionViewModel: SessionViewModel, storage: Storage) throws {
         self.storage = storage
         title = sessionViewModel.title
-        imageURL = sessionViewModel.imageUrl
+        imageURL = sessionViewModel.imageURL
 
         self.sessionViewModel = sessionViewModel
         remoteMediaURL = nil

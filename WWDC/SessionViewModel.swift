@@ -11,23 +11,62 @@ import ConfCore
 import Combine
 import RealmSwift
 import PlayerUI
+import Algorithms
 
 final class SessionViewModel {
-
     let style: SessionsListStyle
-    var title: String
+
+    // MARK: - Relayed Session Properties
+
+    /*@MainActor */@Published var title: String
+    @MainActor @Published var subtitle: String
+    @MainActor @Published var summary: String
+    @MainActor @Published var footer: String
+    @MainActor @Published var color: NSColor?
+    @MainActor @Published var darkColor: NSColor?
+    @MainActor @Published var imageURL: URL?
+    @MainActor @Published var webURL: URL?
+    @MainActor @Published var isDownloaded: Bool
+
+    private(set) var isFavorite: Bool
+    private(set) var progress: SessionProgress?
+    private(set) var context: String
+
     let session: Session
     let sessionInstance: SessionInstance
-    let track: Track
-    let identifier: String
-    lazy var webUrl: URL? = {
-        SessionViewModel.webUrl(for: session)
-    }()
-    var imageUrl: URL?
+    private let track: Track
     let trackName: String
+    let identifier: String
 
-    lazy var rxSession: some Publisher<Session, Error> = {
-        return session.valuePublisher()
+    private var cancellables: Set<AnyCancellable> = []
+
+    /// The implementation of this is a performance optimization and part of an effort to reduce
+    /// the exposure of Realm directly to the view layer.
+    private lazy var rxSession: some Publisher<Session, Error> = {
+        let rxSession = valuePublisher(session)
+            .multicast(subject: CurrentValueSubject(session))
+            .autoconnect()
+
+        rxSession
+            .replaceErrorWithEmpty()
+            .sink { [weak self] session in
+                guard let self else { return }
+
+                MainActor.assumeIsolated {
+                    self.title = session.title
+                    self.subtitle = SessionViewModel.subtitle(from: session, at: session.event.first)
+                    self.summary = session.summary
+                    self.footer = SessionViewModel.footer(for: session, at: session.event.first)
+                    self.color = SessionViewModel.trackColor(for: session)
+                    self.darkColor = SessionViewModel.darkTrackColor(for: session)
+                    self.imageURL = SessionViewModel.imageUrl(for: session)
+                    self.webURL = SessionViewModel.webUrl(for: session)
+                    self.isDownloaded = session.isDownloaded
+                }
+            }
+            .store(in: &cancellables)
+
+        return rxSession
     }()
 
     lazy var rxTranscript: some Publisher<Transcript?, Error> = {
@@ -59,27 +98,27 @@ final class SessionViewModel {
     }()
 
     lazy var rxSessionInstance: some Publisher<SessionInstance, Error> = {
-        return sessionInstance.valuePublisher()
+        let rxSessionInstance = valuePublisher(sessionInstance)
+            .multicast(subject: CurrentValueSubject(sessionInstance))
+            .autoconnect()
+
+        rxSessionInstance.subscribe(PassthroughSubject()).store(in: &cancellables)
+
+        return rxSessionInstance
     }()
 
     lazy var rxTrack: some Publisher<Track, Error> = {
-        return track.valuePublisher()
-    }()
+        let rxTrack = valuePublisher(track)
+            .multicast(subject: CurrentValueSubject(track))
+            .autoconnect()
 
-    lazy var rxTitle: some Publisher<String, Error> = {
-        return rxSession.map { $0.title }
-    }()
+        rxTrack.subscribe(PassthroughSubject()).store(in: &cancellables)
 
-    lazy var rxSubtitle: some Publisher<String, Error> = {
-        return rxSession.map { SessionViewModel.subtitle(from: $0, at: $0.event.first) }
+        return rxTrack
     }()
 
     lazy var rxTrackName: some Publisher<String, Error> = {
         return rxTrack.map { $0.name }
-    }()
-
-    lazy var rxSummary: some Publisher<String, Error> = {
-        return rxSession.map { $0.summary }
     }()
 
     lazy var rxActionPrompt: AnyPublisher<String?, Error> = {
@@ -96,66 +135,43 @@ final class SessionViewModel {
     }
 
     lazy var rxContext: AnyPublisher<String, Error> = {
-        if self.style == .schedule {
-
-            return Publishers.CombineLatest(rxSession, rxSessionInstance).map {
+        var rxContext = if self.style == .schedule {
+            Publishers.CombineLatest(rxSession, rxSessionInstance).map {
                 SessionViewModel.context(for: $0.0, instance: $0.1)
             }.eraseToAnyPublisher()
         } else {
-            return Publishers.CombineLatest(rxSession, rxTrack).map {
+            Publishers.CombineLatest(rxSession, rxTrack).map {
                 SessionViewModel.context(for: $0.0, track: $0.1)
             }.eraseToAnyPublisher()
         }
-    }()
 
-    lazy var rxFooter: some Publisher<String, Error> = {
-        return rxSession.map { SessionViewModel.footer(for: $0, at: $0.event.first) }
-    }()
+        rxContext = rxContext
+            .do { [weak self] in
+                self?.context = $0
+            }
+            .multicast(subject: CurrentValueSubject(context))
+            .autoconnect()
+            .eraseToAnyPublisher()
 
-    lazy var rxColor: some Publisher<NSColor, Error> = {
-        return rxSession.compactMap { SessionViewModel.trackColor(for: $0) }
-    }()
-
-    lazy var rxDarkColor: some Publisher<NSColor, Error> = {
-        return rxSession.compactMap { SessionViewModel.darkTrackColor(for: $0) }
-    }()
-
-    lazy var rxImageUrl: some Publisher<URL?, Error> = {
-        return rxSession.map { SessionViewModel.imageUrl(for: $0) }
-    }()
-
-    lazy var rxWebUrl: some Publisher<URL?, Error> = {
-        return rxSession.map { SessionViewModel.webUrl(for: $0) }
-    }()
-
-    lazy var rxIsDownloaded: some Publisher<Bool, Error> = {
-        return rxSession.map { $0.isDownloaded }
+        return rxContext
     }()
 
     lazy var rxIsFavorite: some Publisher<Bool, Error> = {
-        // While scrolling the favorites publisher won't be able to fire
-        // because the events are tracking. I'm guessing because it's using the main
-        // runloop? Regardless, putting the subscription on a background queue fixes it
-        return self.session.favorites.filter("isDeleted == false")
-            .changesetPublisherShallow(keyPaths: ["identifier"])
-            .subscribe(on: DispatchQueue(label: #function))
-            .threadSafeReference()
-            .receive(on: DispatchQueue.main)
-            .map { $0.count > 0 }
-    }()
+        let favorites = session.favorites.filter("isDeleted == false")
 
-    lazy var rxIsCurrentlyLive: some Publisher<Bool, Error> = {
-        guard self.sessionInstance.realm != nil else {
-            return Just(false).setFailureType(to: Error.self).eraseToAnyPublisher()
-        }
+        let rxIsFavorite = favorites
+            .collectionPublisher
+            .map { [weak self] in
+                let isFavorite = !$0.isEmpty
 
-        return rxSessionInstance.map { $0.isCurrentlyLive }.eraseToAnyPublisher()
-    }()
+                self?.isFavorite = isFavorite
 
-    lazy var rxPlayableContent: some Publisher<Results<SessionAsset>, Error> = {
-        let playableAssets = self.session.assets(matching: [.streamingVideo, .liveStreamVideo])
+                return isFavorite
+            }
+            .multicast(subject: CurrentValueSubject(!favorites.isEmpty))
+            .autoconnect()
 
-        return playableAssets.collectionPublisher
+        return rxIsFavorite
     }()
 
     lazy var rxCanBePlayed: some Publisher<Bool, Error> = {
@@ -168,16 +184,35 @@ final class SessionViewModel {
     lazy var rxProgresses: some Publisher<Results<SessionProgress>, Error> = {
         let progresses = self.session.progresses.filter(NSPredicate(value: true))
 
-        return progresses.collectionPublisher
+        let rxProgresses = progresses
+            .collectionPublisher
+            .multicast(subject: CurrentValueSubject(progresses))
+            .autoconnect()
+            .do { [weak self] in
+                self?.progress = $0.first
+            }
+
+        return rxProgresses
     }()
 
-    lazy var rxRelatedSessions: some Publisher<Results<RelatedResource>, Error> = {
+    lazy var rxRelatedSessions: some Publisher<Array<Session>, Error> = {
         // Return sessions with videos, or any session that hasn't yet occurred
         let predicateFormat = "type == %@ AND (ANY session.assets.rawAssetType == %@ OR ANY session.instances.startTime >= %@)"
         let relatedPredicate = NSPredicate(format: predicateFormat, RelatedResourceType.session.rawValue, SessionAssetType.streamingVideo.rawValue, today() as NSDate)
         let validRelatedSessions = self.session.related.filter(relatedPredicate)
+        let initialValue = Array(validRelatedSessions.compactMap(\.session).uniqued(on: \.identifier))
 
-        return validRelatedSessions.collectionPublisher
+        let relatedSessions = validRelatedSessions
+            .collectionPublisher
+            .map {
+                Array($0.compactMap(\.session).uniqued(on: \.identifier))
+            }
+            .multicast(subject: CurrentValueSubject(initialValue))
+            .autoconnect()
+
+        relatedSessions.subscribe(PassthroughSubject()).store(in: &cancellables)
+
+        return relatedSessions
     }()
 
     convenience init?(session: Session) {
@@ -198,8 +233,25 @@ final class SessionViewModel {
 
         trackName = track.name
         sessionInstance = instance ?? session.instances.first ?? SessionInstance()
-        title = session.title
         identifier = session.identifier
+
+        _title = Published(initialValue: session.title)
+        _subtitle = Published(initialValue: SessionViewModel.subtitle(from: session, at: session.event.first))
+        _summary = Published(initialValue: session.summary)
+        _footer = Published(initialValue: SessionViewModel.footer(for: session, at: session.event.first))
+        _color = Published(initialValue: SessionViewModel.trackColor(for: session))
+        _darkColor = Published(initialValue: SessionViewModel.darkTrackColor(for: session))
+        _imageURL = Published(initialValue: SessionViewModel.imageUrl(for: session))
+        _webURL = Published(initialValue: SessionViewModel.webUrl(for: session))
+        _isDownloaded = Published(initialValue: session.isDownloaded)
+
+        self.isFavorite = session.isFavorite
+        self.progress = session.progresses.filter(NSPredicate(value: true)).first
+        self.context = if self.style == .schedule {
+            SessionViewModel.context(for: session, instance: sessionInstance)
+        } else {
+            SessionViewModel.context(for: session, track: track)
+        }
     }
 
     static func subtitle(from session: Session, at event: ConfCore.Event?) -> String {
@@ -360,12 +412,6 @@ final class SessionViewModel {
 }
 
 extension SessionViewModel: UserActivityRepresentable { }
-
-extension SessionViewModel {
-
-    var isFavorite: Bool { session.isFavorite }
-
-}
 
 extension SessionViewModel {
     /// Challenges with previews

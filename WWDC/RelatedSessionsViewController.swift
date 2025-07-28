@@ -14,7 +14,7 @@ protocol RelatedSessionsDelegate: AnyObject {
 }
 
 final class RelatedSessionsViewModel: ObservableObject {
-    @Published var sessions: [SessionViewModel] = [] {
+    @Published var sessions: [SessionCellViewModel] = [] {
         didSet {
             seed &+= 1 // increment with overflow
         }
@@ -29,7 +29,7 @@ final class RelatedSessionsViewModel: ObservableObject {
         delegate?.relatedSessions(self, didSelectSession: viewModel)
     }
 
-    init(sessions: [SessionViewModel] = []) {
+    init(sessions: [SessionCellViewModel] = []) {
         self.sessions = sessions
     }
 }
@@ -54,36 +54,49 @@ struct RelatedSessionsView: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
 
-            ScrollViewReader { scrollView in
-                ScrollView(.horizontal, showsIndicators: true) {
-                    SetScrollerStyle(.overlay)
-
-                    HStack(spacing: Metrics.itemSpacing) {
-                        ForEach(viewModel.sessions, id: \.identifier) { session in
-                            sessionButton(for: session, in: scrollView)
-                                .id(session.identifier)
-                        }
-                    }
-                    .padding(.horizontal, 0)
-                    .padding(.bottom, Metrics.scrollerOffset)
-                }
-                .onChange(of: viewModel.seed) { _, newValue in
-                    scrollView.scrollTo(viewModel.sessions.first?.identifier, anchor: .leading)
-                }
-            }
-            .frame(height: Metrics.scrollViewHeight)
-            .background(Color(.darkWindowBackground))
+            scrollView()
         }
-        .frame(height: viewModel.isHidden ? 0 : Metrics.height)
-        .opacity(viewModel.isHidden ? 0 : 1)
+        .frame(height: viewModel.sessions.isEmpty ? 0 : nil/*Metrics.height*/)
+        .opacity(viewModel.sessions.isEmpty ? 0 : 1)
     }
 
-    func sessionButton(for session: SessionViewModel, in scrollView: ScrollViewProxy) -> some View {
+    func scrollView() -> some View {
+        GeometryReader { geometry in
+            ScrollViewReader { scrollView in
+                ScrollView(.horizontal, showsIndicators: true) {
+                    hStack(scrollView: scrollView)
+                        .background {
+                            SetScrollerStyle(.overlay)
+                        }
+                        .padding(.bottom, Metrics.scrollerOffset)
+                }
+                .frame(maxWidth: geometry.size.width, alignment: .leading)
+                .frame(height: Metrics.itemHeight)
+                .onChange(of: viewModel.seed) { _, newValue in
+                    scrollView.scrollTo(viewModel.sessions.first?.viewModel?.identifier, anchor: .leading)
+                }
+            }
+        }
+        .frame(height: Metrics.scrollViewHeight)
+        .background(Color(.darkWindowBackground))
+        .padding(.top, Metrics.scrollerOffset)
+    }
+
+    func hStack(scrollView: ScrollViewProxy) -> some View {
+        LazyHStack(spacing: Metrics.itemSpacing) {
+            ForEach(viewModel.sessions, id: \.viewModel?.identifier) { session in
+                sessionButton(for: session, in: scrollView)
+            }
+        }
+        .frame(height: Metrics.itemHeight)
+    }
+
+    func sessionButton(for session: SessionCellViewModel, in scrollView: ScrollViewProxy) -> some View {
         Button {
-            viewModel.selectSession(session)
+            viewModel.selectSession(session.viewModel!)
         } label: {
             SessionCellView(
-                cellViewModel: SessionCellViewModel(session: session),
+                cellViewModel: session,
                 style: .rounded
             )
             .frame(width: Metrics.itemWidth, height: Metrics.itemHeight)
@@ -93,5 +106,5 @@ struct RelatedSessionsView: View {
 }
 
 #Preview {
-    RelatedSessionsView(viewModel: RelatedSessionsViewModel(sessions: [.preview]))
+    RelatedSessionsView(viewModel: RelatedSessionsViewModel(sessions: [SessionCellViewModel(session: .preview)]))
 }

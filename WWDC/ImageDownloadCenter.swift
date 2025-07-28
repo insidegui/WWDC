@@ -34,7 +34,29 @@ final class ImageDownloadCenter: Logging {
     
     func cachedThumbnail(from url: URL) -> NSImage? { cache.cachedImage(for: url, thumbnailOnly: true).thumbnail }
 
-    /// The completion handler is always called on the main thread
+    func downloadImage(
+        from url: URL,
+        thumbnailHeight: CGFloat,
+        thumbnailOnly: Bool = false
+    ) async -> (sourceURL: URL, result: (original: NSImage?, thumbnail: NSImage?)) {
+        // TODO: Provide a lock
+        var operation: Operation?
+
+        return await withTaskCancellationHandler {
+            await withCheckedContinuation { continuation in
+                operation = downloadImage(from: url, thumbnailHeight: thumbnailHeight, thumbnailOnly: thumbnailOnly) { sourceURL, result in
+                    continuation.resume(returning: (sourceURL, result))
+                }
+            }
+        } onCancel: {
+            log.debug("Task cancelled")
+            operation?.cancel()
+        }
+    }
+
+    /// The completion handler is always called on the main thread if it's downloaded, but it's called on the callers thread if it comes from the cache
+    /// Cache retrieval happens synchronously, so the completion handler is called immediately if the image is cached. But that means you're hitting
+    /// the file system on the main thread.
     @discardableResult
     func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
         if thumbnailOnly {
@@ -240,7 +262,9 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
     private var completionHandlers: [ImageDownloadCompletionBlock] = []
 
     func addCompletionHandler(with block: @escaping ImageDownloadCompletionBlock) {
+        self.inFlightTask?.suspend()
         completionHandlers.append(block)
+        self.inFlightTask?.resume()
     }
 
     let url: URL
@@ -248,7 +272,11 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
 
     let cacheProvider: ImageCacheProvider
 
-    init(url: URL, cache: ImageCacheProvider, thumbnailHeight: CGFloat = Constants.thumbnailHeight) {
+    init(
+        url: URL,
+        cache: ImageCacheProvider,
+        thumbnailHeight: CGFloat = Constants.thumbnailHeight
+    ) {
         self.url = url
         cacheProvider = cache
         self.thumbnailHeight = thumbnailHeight
@@ -290,7 +318,7 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
         super.cancel()
     }
 
-    private lazy var session: URLSession = {
+    private static let session: URLSession = {
         let config = URLSessionConfiguration.default
         config.waitsForConnectivity = true
 
@@ -306,12 +334,19 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
     }
 
     override func start() {
+        guard !self.isCancelled else {
+            self._executing = false
+            self._finished = true
+            return
+        }
+
         _executing = true
 
-        inFlightTask = session.downloadTask(with: url) { [weak self] fileURL, response, error in
+        inFlightTask = Self.session.downloadTask(with: url) { [weak self] fileURL, response, error in
             guard let self = self else { return }
 
             guard !self.isCancelled else {
+                self.callCompletionHandlers()
                 self._executing = false
                 self._finished = true
                 return
@@ -332,6 +367,7 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
             }
 
             guard !self.isCancelled else {
+                self.callCompletionHandlers()
                 self._executing = false
                 self._finished = true
                 return
@@ -355,7 +391,6 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
         }
         inFlightTask?.resume()
     }
-
 }
 
 fileprivate extension URL {

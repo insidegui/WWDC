@@ -100,9 +100,9 @@ final class SessionActionsViewModel: ObservableObject {
         )
 
         /// `true` if the session has already been downloaded.
-        let alreadyDownloaded: AnyPublisher<Session, Never> = viewModel.session
-            .valuePublisher(keyPaths: ["isDownloaded"])
-            .replaceErrorWithEmpty()
+        let alreadyDownloaded: AnyPublisher<Session, Never> = viewModel.$isDownloaded
+            .removeDuplicates()
+            .compactMap { [weak viewModel] _ in viewModel?.session }
             .eraseToAnyPublisher()
 
         /// Emits subscribes to the downloads and then if 1 is added that matches our session, subscribes to the state of that download
@@ -153,7 +153,7 @@ final class SessionActionsViewModel: ObservableObject {
         }
 
         // Only check filesystem when there's no active download (or download completed)
-        if session.isDownloaded, MediaDownloadManager.shared.hasDownloadedMedia(for: session) {
+        if session.isDownloaded/*, MediaDownloadManager.shared.hasDownloadedMedia(for: session)*/ {
             return .downloaded
         }
 
