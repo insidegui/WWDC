@@ -39,7 +39,6 @@ struct SessionDetailsView: View {
     var body: some View {
         VStack(spacing: 0) {
             ShelfViewControllerWrapper(controller: detailsViewModel.shelfController)
-                .layoutPriority(1)
                 .frame(minHeight: 280, maxHeight: .infinity)
                 .padding(.top, 22)
 

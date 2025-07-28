@@ -42,7 +42,7 @@ final class SessionsSplitViewController: NSSplitViewController {
         NotificationCenter
             .default
             .publisher(for: .sideBarSizeSyncNotification)
-            .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: true)
+            .throttle(for: .milliseconds(250), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] notification in
                 self?.syncSplitView(notification: notification)
             }
@@ -67,7 +67,7 @@ final class SessionsSplitViewController: NSSplitViewController {
 
         listViewController.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailViewController.view.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        detailViewController.view.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        detailViewController.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     }
 
     override func viewWillAppear() {

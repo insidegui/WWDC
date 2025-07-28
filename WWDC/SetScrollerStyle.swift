@@ -12,6 +12,8 @@ import SwiftUI
 ///
 /// Place this in a ScrollView to set the scroller style.
 ///
+/// note: This is currently incompatible with ``View.scrollIndicatorsFlash(trigger:)``, :sad-panda:
+///
 /// - SeeAlso:
 /// [https://developer.apple.com/documentation/appkit/nsscrollview/scrollerstyle](https://developer.apple.com/documentation/appkit/nsscrollview/scrollerstyle)
 struct SetScrollerStyle: NSViewRepresentable {
