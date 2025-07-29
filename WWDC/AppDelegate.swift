@@ -85,6 +85,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         }
 
         ImageDownloadCenter.shared.deleteLegacyImageCacheIfNeeded()
+        // setup liquid glass feature settings
+#if compiler(>=6.2)
+        if #available(macOS 26.0, *) {
+            guard
+                let aboutMenu = NSApp.menu?.items.first?.submenu,
+                let firstSeparatorIndex = aboutMenu.items.firstIndex(where: { $0.isSeparatorItem }), // under About
+                aboutMenu.items.count > firstSeparatorIndex + 1
+            else {
+                return
+            }
+
+            let liquidGlassItem = NSMenuItem(title: "Try Liquid Glass", action: #selector(tryLiquidGlass(_:)), keyEquivalent: "")
+            liquidGlassItem.indentationLevel = 1
+            liquidGlassItem.state = TahoeFeatureFlag.isLiquidGlassEnabled ? .on : .mixed
+            aboutMenu.insertItem(liquidGlassItem, at: firstSeparatorIndex + 1)
+        }
+#endif
     }
     
     private var storage: Storage?
@@ -220,6 +237,26 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     @IBAction func reload(_ sender: Any) {
         coordinator?.refresh(sender)
     }
+
+#if compiler(>=6.2)
+    @objc private func tryLiquidGlass(_ sender: NSMenuItem) {
+        defer {
+            sender.state = TahoeFeatureFlag.isLiquidGlassEnabled ? .on : .mixed
+        }
+        guard sender.state != .on else {
+            TahoeFeatureFlag.isLiquidGlassEnabled.toggle()
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = "This feature is still under development. Are you sure you want to try it out?"
+        alert.informativeText = "Please restart the app after changing this setting."
+        alert.addButton(withTitle: "YES")
+        alert.addButton(withTitle: "NO")
+        if alert.runModal() == .alertFirstButtonReturn {
+            TahoeFeatureFlag.isLiquidGlassEnabled.toggle()
+        }
+    }
+#endif
 
     @IBAction func showAboutWindow(_ sender: Any) {
         coordinator?.showAboutWindow()
