@@ -66,6 +66,7 @@ public final class PUIPlayerView: NSView {
             guard let player else { return }
 
             setupPlayer(player)
+            setupObservers()
         }
     }
 
@@ -99,6 +100,7 @@ public final class PUIPlayerView: NSView {
 
         setupPlayer(player)
         setupControls()
+        setupObservers()
     }
 
     public required init?(coder: NSCoder) {
@@ -200,6 +202,40 @@ public final class PUIPlayerView: NSView {
         playerLayer.player = player
         playerLayer.videoGravity = .resizeAspect
 
+        Task { [weak self] in
+            guard let asset = self?.asset else { return }
+            async let duration = asset.load(.duration)
+            async let legible = asset.loadMediaSelectionGroup(for: .legible)
+            self?.timelineView.mediaDuration = Double(CMTimeGetSeconds(try await duration))
+            self?.updateSubtitleSelectionMenu(subtitlesGroup: try await legible)
+        }
+
+        player.allowsExternalPlayback = true
+        routeButton.player = player
+
+        setupNowPlayingCoordinatorIfSupported()
+        setupRemoteCommandCoordinator()
+    }
+
+    private func setupObservers() {
+        speedButton.$speed.removeDuplicates().sink { [weak self] speed in
+            guard let self else { return }
+            self.playbackSpeed = speed
+        }
+        .store(in: &cancellables)
+
+        speedButton.$isEditingCustomSpeed.sink { [weak self] isEditing in
+            guard let self else { return }
+
+            showControls(animated: false)
+            resetMouseIdleTimer()
+        }
+        .store(in: &cancellables)
+
+        guard let player else {
+            return
+        }
+
         let options: NSKeyValueObservingOptions = [.initial, .new]
         player.publisher(for: \.status, options: options).sink { [weak self] change in
             self?.playerStatusChanged()
@@ -224,14 +260,6 @@ public final class PUIPlayerView: NSView {
             self?.needsLayout = true
         }.store(in: &cancellables)
 
-        Task { [weak self] in
-            guard let asset = self?.asset else { return }
-            async let duration = asset.load(.duration)
-            async let legible = asset.loadMediaSelectionGroup(for: .legible)
-            self?.timelineView.mediaDuration = Double(CMTimeGetSeconds(try await duration))
-            self?.updateSubtitleSelectionMenu(subtitlesGroup: try await legible)
-        }
-
         playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, preferredTimescale: 9000), queue: .main) { [weak self] currentTime in
             self?.playerTimeDidChange(time: currentTime)
         }
@@ -239,14 +267,7 @@ public final class PUIPlayerView: NSView {
         annotationTimeDistanceObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1, preferredTimescale: 9000), queue: .main) { [weak self] _ in
             self?.validateAnnotationButton()
         }
-
-        player.allowsExternalPlayback = true
-        routeButton.player = player
-
-        setupNowPlayingCoordinatorIfSupported()
-        setupRemoteCommandCoordinator()
     }
-
     private func teardown(player oldValue: AVPlayer) {
         oldValue.pause()
         oldValue.cancelPendingPrerolls()
@@ -789,20 +810,6 @@ public final class PUIPlayerView: NSView {
 
         topTrailingMenuContainerView.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor, constant: -12).isActive = true
         updateTopTrailingMenuPosition()
-
-        speedButton.$speed.removeDuplicates().sink { [weak self] speed in
-            guard let self else { return }
-            self.playbackSpeed = speed
-        }
-        .store(in: &cancellables)
-
-        speedButton.$isEditingCustomSpeed.sink { [weak self] isEditing in
-            guard let self else { return }
-            
-            showControls(animated: false)
-            resetMouseIdleTimer()
-        }
-        .store(in: &cancellables)
     }
 
     var backAndForwardSkipDuration: BackForwardSkipDuration = .thirtySeconds {
