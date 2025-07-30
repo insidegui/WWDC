@@ -62,13 +62,15 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         }
     }
 
-    @MainActor func _replaceSidebarIfNeeded(newItems: [NSSplitViewItem]) async {
+    @MainActor
+    func _replaceSidebarIfNeeded(newItems: [NSSplitViewItem]) async {
         if newItems.count == 2 {
             await sidebarContainer.replaceContent(newItems[0].viewController)
         }
     }
 
-    @MainActor func _replaceDetailIfNeeded(newItems: [NSSplitViewItem]) async {
+    @MainActor
+    func _replaceDetailIfNeeded(newItems: [NSSplitViewItem]) async {
         if let last = newItems.last { // suppose there were at most 2 items
             await detailContainer.replaceContent(last.viewController)
         }
@@ -154,7 +156,8 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
 }
 
 private class SplitContainer: NSViewController {
-    @MainActor func replaceContent(_ content: NSViewController) async {
+    @MainActor
+    func replaceContent(_ content: NSViewController) async {
         await NSAnimationContext.runAnimationGroup { _ in
             view.animator().alphaValue = 0
         }

@@ -13,6 +13,7 @@ import PlayerUI
 import AVFoundation
 import SwiftUI
 
+@MainActor
 protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
     func shelfViewController(_ controller: ShelfViewController, didBeginClipSharingWithHost hostView: NSView)

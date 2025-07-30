@@ -25,7 +25,6 @@ private enum CalendarChoice: NSApplication.ModalResponse.RawValue {
 
 extension WWDCCoordinator/*: SessionActionsDelegate */{
 
-    @MainActor
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
@@ -48,7 +47,6 @@ extension WWDCCoordinator/*: SessionActionsDelegate */{
         NSWorkspace.shared.open(url)
     }
 
-    @MainActor
     func sessionActionsDidSelectDownload(_ sender: NSView?) {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 

@@ -40,7 +40,6 @@ extension WWDCCoordinator/*: SessionsTableViewControllerDelegate */{
         storage.setFavorite(false, onSessionsWithIDs: viewModels.map({ $0.session.identifier }))
     }
 
-    @MainActor
     func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel]) {
         if viewModels.count > 5 {
             // asking to download many videos, warn
@@ -60,21 +59,18 @@ extension WWDCCoordinator/*: SessionsTableViewControllerDelegate */{
         MediaDownloadManager.shared.download(viewModels.map(\.session))
     }
 
-    @MainActor
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel]) {
         let cancellableDownloads = viewModels.map(\.session).filter { MediaDownloadManager.shared.isDownloadingMedia(for: $0) }
         
         MediaDownloadManager.shared.cancelDownload(for: cancellableDownloads)
     }
 
-    @MainActor
     func sessionTableViewContextMenuActionRemoveDownload(viewModels: [SessionViewModel]) {
         let deletableDownloads = viewModels.map(\.session).filter { MediaDownloadManager.shared.hasDownloadedMedia(for: $0) }
 
         MediaDownloadManager.shared.delete(deletableDownloads)
     }
 
-    @MainActor
     func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel]) {
         guard let firstSession = viewModels.first?.session else { return }
         guard let localURL = MediaDownloadManager.shared.downloadedFileURL(for: firstSession) else { return }

@@ -162,7 +162,6 @@ private extension NewMainWindowController {
     }
 }
 
-
 private extension NewMainWindowController {
     var coordinator: AppCoordinator? {
         (NSApp.delegate as? AppDelegate)?.coordinator

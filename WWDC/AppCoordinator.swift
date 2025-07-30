@@ -16,8 +16,8 @@ import AVFoundation
 
 final class AppCoordinator: WWDCCoordinator {
 
-    static let log = makeLogger()
-    static let signposter: OSSignposter = makeSignposter()
+    nonisolated static let log = makeLogger()
+    nonisolated static let signposter: OSSignposter = makeSignposter()
 
     private lazy var cancellables = Set<AnyCancellable>()
 
@@ -518,7 +518,9 @@ final class AppCoordinator: WWDCCoordinator {
         activityScheduler.repeats = true
         activityScheduler.qualityOfService = .utility
         activityScheduler.schedule { [weak self] completion in
-            self?.refresh(self?.autorefreshActivity)
+            DispatchQueue.main.async {
+                self?.refresh(self?.autorefreshActivity)
+            }
             completion(.finished)
         }
 

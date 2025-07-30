@@ -152,10 +152,12 @@ extension WWDCCoordinator/*: ShelfViewControllerDelegate*/ {
         }
     }
 
+    @MainActor
     private var playerTouchBarContainer: MainWindowController? {
         return currentPlayerController?.view.window?.windowController as? MainWindowController
     }
 
+    @MainActor
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
         guard let playerController = currentPlayerController else { return }
 

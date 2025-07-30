@@ -11,6 +11,7 @@ import Combine
 import ConfCore
 import PlayerUI
 
+@MainActor
 protocol WWDCCoordinator: Logging, Signposting, ShelfViewControllerDelegate, PUITimelineDelegate, VideoPlayerViewControllerDelegate, SessionActionsDelegate, RelatedSessionsDelegate, SessionsTableViewControllerDelegate {
     var liveObserver: LiveObserver { get }
 
