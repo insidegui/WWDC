@@ -112,11 +112,19 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         self.storage = storage
         self.syncEngine = syncEngine
 
-        coordinator = AppCoordinator(
-            windowController: TahoeFeatureFlag.isLiquidGlassEnabled ? NewMainWindowController() : MainWindowController(),
-            storage: storage,
-            syncEngine: syncEngine
-        )
+        if TahoeFeatureFlag.isLiquidGlassEnabled {
+            coordinator = NewAppCoordinator(
+                windowController: NewMainWindowController(),
+                storage: storage,
+                syncEngine: syncEngine
+            )
+        } else {
+            coordinator = AppCoordinator(
+                windowController: MainWindowController(),
+                storage: storage,
+                syncEngine: syncEngine
+            )
+        }
     }
 
     private func handleBootstrapError(_ error: Boot.BootstrapError) {
