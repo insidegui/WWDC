@@ -40,7 +40,7 @@ extension Notification.Name {
     static let MainWindowWantsToSelectSearchField = Notification.Name("MainWindowWantsToSelectSearchField")
 }
 
-final class MainWindowController: NewWWDCWindowController {
+final class MainWindowController: WWDCWindowController {
 
     weak var touchBarProvider: NSResponder? {
         didSet {
@@ -53,11 +53,10 @@ final class MainWindowController: NewWWDCWindowController {
                NSRect(x: 0, y: 0, width: 1200, height: 600)
     }
     public var sidebarInitWidth: CGFloat?
-    var searchPopover: NSPopover?
 
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
-        let window = NSWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
+        let window = WWDCWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
 
         window.title = "WWDC"
 
@@ -68,13 +67,6 @@ final class MainWindowController: NewWWDCWindowController {
         window.minSize = NSSize(width: 1060, height: 700)
 
         self.window = window
-    }
-
-    override func windowDidLoad() {
-        super.windowDidLoad()
-        if TahoeFeatureFlag.isLiquidGlassEnabled {
-            setupWindowAndToolbar()
-        }
     }
 
     @IBAction func performFindPanelAction(_ sender: Any) {

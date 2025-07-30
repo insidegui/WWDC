@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol WWDCWindowController: NSWindowController {
+protocol WWDCWindowControllerObject: NSWindowController {
     var titleBarViewController: TitleBarViewController { get }
 }
 
-class DeprecatedWWDCWindowController: NSWindowController, WWDCWindowController {
+class WWDCWindowController: NSWindowController, WWDCWindowControllerObject {
     lazy var titleBarViewController = TitleBarViewController()
 
     override var windowNibName: NSNib.Name? {
@@ -39,7 +39,7 @@ class DeprecatedWWDCWindowController: NSWindowController, WWDCWindowController {
     }
 }
 
-class NewWWDCWindowController: NSWindowController, WWDCWindowController {
+class NewWWDCWindowController: NSWindowController, WWDCWindowControllerObject {
     lazy var titleBarViewController = TitleBarViewController()
 
     override var windowNibName: NSNib.Name? {

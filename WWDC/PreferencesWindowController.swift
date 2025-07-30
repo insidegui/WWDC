@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class PreferencesWindowController: DeprecatedWWDCWindowController {
+class PreferencesWindowController: WWDCWindowController {
 
     static var defaultRect: NSRect {
         return NSRect(x: 0, y: 0, width: 650, height: 500)
