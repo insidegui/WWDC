@@ -73,6 +73,15 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
         view.wantsLayer = true
 
+        let shelfView: NSView
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            let extensionView = NSBackgroundExtensionView()
+            extensionView.contentView = self.shelfView
+            extensionView.translatesAutoresizingMaskIntoConstraints = false
+            shelfView = extensionView
+        } else {
+            shelfView = self.shelfView
+        }
         view.addSubview(shelfView)
         shelfView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         shelfView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -80,14 +89,14 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         shelfView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
         view.addSubview(playButton)
-        playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        playButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        playButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        playButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
 
         view.addSubview(playerContainer)
-        playerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        playerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        playerContainer.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        playerContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        playerContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        playerContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+        playerContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        playerContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
 
     override func viewDidLoad() {

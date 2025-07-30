@@ -95,6 +95,9 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         sidebarItem.canCollapse = false
         addSplitViewItem(sidebarItem)
         detailItem = NSSplitViewItem(viewController: SplitContainer(nibName: nil, bundle: nil))
+        if #available(macOS 26.0, *) {
+            detailItem.automaticallyAdjustsSafeAreaInsets = true
+        }
         addSplitViewItem(detailItem)
         sidebarContainer.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailContainer.view.setContentHuggingPriority(.defaultLow, for: .horizontal)
