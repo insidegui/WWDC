@@ -22,12 +22,6 @@ protocol WWDCCoordinator: Logging, Signposting, ShelfViewControllerDelegate, PUI
     // - Top level controllers
     var windowController: WWDCWindowControllerObject { get }
     var tabController: TabController { get }
-    var searchCoordinator: SearchCoordinator { get }
-
-    // - The 3 tabs
-    var exploreController: ExploreViewController { get }
-    var scheduleController: ScheduleContainerViewController { get }
-    var videosController: SessionsSplitViewController { get }
 
     var currentPlayerController: VideoPlayerViewController? { get set }
 
@@ -47,9 +41,6 @@ protocol WWDCCoordinator: Logging, Signposting, ShelfViewControllerDelegate, PUI
     /// Whether we were playing the video when a clip sharing session begin, to restore state later.
     var wasPlayingWhenClipSharingBegan: Bool { get set }
 
-    /// The list controller for the active tab
-    var currentListController: SessionsTableViewController? { get }
-
     var exploreTabLiveSession: AnyPublisher<SessionViewModel?, Never> { get }
 
     /// The session that is currently selected on the videos tab (observable)
@@ -66,7 +57,9 @@ protocol WWDCCoordinator: Logging, Signposting, ShelfViewControllerDelegate, PUI
 
     // MARK: - Shelf
 
+    func select(session: SessionIdentifiable, removingFiltersIfNeeded: Bool)
     func shelf(for tab: MainWindowTab) -> ShelfViewController?
+    func showClipUI()
 
     // MARK: - Related Sessions
 

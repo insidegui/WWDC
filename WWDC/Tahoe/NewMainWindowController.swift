@@ -140,17 +140,17 @@ private extension NewMainWindowController {
             }
             return
         }
-        guard let searchCoordinator = (NSApp.delegate as? AppDelegate)?.coordinator?.searchCoordinator else { return }
-        let popover = NSPopover()
-        searchCoordinator.videosSearchController.showFilterButton = false
-        popover.contentViewController = searchCoordinator.videosSearchController
-        popover.behavior = .applicationDefined
-        popover.show(relativeTo: item)
-        searchPopover = popover
-
-        if #available(macOS 15.0, *) {
-            item.toolbar?.items.first(where: { $0.itemIdentifier == .downloadItem })?.isHidden = true
-        }
+//        guard let searchCoordinator = (NSApp.delegate as? AppDelegate)?.coordinator?.searchCoordinator else { return }
+//        let popover = NSPopover()
+//        searchCoordinator.videosSearchController.showFilterButton = false
+//        popover.contentViewController = searchCoordinator.videosSearchController
+//        popover.behavior = .applicationDefined
+//        popover.show(relativeTo: item)
+//        searchPopover = popover
+//
+//        if #available(macOS 15.0, *) {
+//            item.toolbar?.items.first(where: { $0.itemIdentifier == .downloadItem })?.isHidden = true
+//        }
     }
 
     @objc func toggleDownloadPanel(_ item: NSToolbarItem) {}

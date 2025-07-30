@@ -92,6 +92,12 @@ extension WWDCCoordinator/*: SessionActionsDelegate */{
     }
 
     func sessionActionsDidSelectShareClip(_ sender: NSView?) {
+        showClipUI()
+    }
+}
+
+extension AppCoordinator {
+    func showClipUI() {
         switch activeTab {
         case .schedule:
             scheduleController.splitViewController.detailViewController.shelfController.showClipUI()
@@ -101,7 +107,6 @@ extension WWDCCoordinator/*: SessionActionsDelegate */{
             break
         }
     }
-
 }
 
 final class PickerDelegate: NSObject, NSSharingServicePickerDelegate, Logging {

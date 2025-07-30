@@ -31,6 +31,7 @@
 		8181E27E2E3A6CC70033126E /* NewAppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */; };
 		81AACF162E39232E000A2319 /* ToolbarSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AACF152E39231D000A2319 /* ToolbarSetup.swift */; };
 		81CE115D2E3919ED002A0475 /* TahoeFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */; };
+		81E050552E3A854B007274FB /* NewSessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */; };
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
 		910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106374F2E26B68700E917F0 /* PUIButtonView.swift */; };
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
@@ -326,6 +327,7 @@
 		8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAppCoordinator.swift; sourceTree = "<group>"; };
 		81AACF152E39231D000A2319 /* ToolbarSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSetup.swift; sourceTree = "<group>"; };
 		81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeFeatureFlag.swift; sourceTree = "<group>"; };
+		81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionsTableViewController.swift; sourceTree = "<group>"; };
 		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
 		9106374F2E26B68700E917F0 /* PUIButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIButtonView.swift; sourceTree = "<group>"; };
@@ -599,6 +601,7 @@
 				8181E2652E39F0710033126E /* FakeTabViewController.swift */,
 				8181E2792E3A5E620033126E /* NewMainWindowController.swift */,
 				8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */,
+				81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */,
 			);
 			path = Tahoe;
 			sourceTree = "<group>";
@@ -1649,6 +1652,7 @@
 				DDDF807E20BA4FFA007284F8 /* WWDCHorizontalScrollView.swift in Sources */,
 				F4F2792A2C0F777200A029A3 /* DownloadManagerView.swift in Sources */,
 				DD7F387D1EAC113A002D8C00 /* WWDCTextField.swift in Sources */,
+				81E050552E3A854B007274FB /* NewSessionsTableViewController.swift in Sources */,
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,

@@ -26,6 +26,10 @@ extension AppCoordinator {
 
         return shelfViewController
     }
+
+    func select(session: any SessionIdentifiable, removingFiltersIfNeeded: Bool) {
+        currentListController?.select(session: session, removingFiltersIfNeeded: removingFiltersIfNeeded)
+    }
 }
 
 extension WWDCCoordinator/*: ShelfViewControllerDelegate*/ {
@@ -68,7 +72,7 @@ extension WWDCCoordinator/*: ShelfViewControllerDelegate*/ {
 
         // Reveal the session
         if playerOwnerSessionIdentifier != activeTabSelectedSessionViewModel?.identifier {
-            currentListController?.select(session: SessionIdentifier(identifier))
+            select(session: SessionIdentifier(identifier), removingFiltersIfNeeded: true)
         }
 
         // Show the container

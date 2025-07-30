@@ -21,7 +21,6 @@ protocol WWDCTabController: NSViewController {
     associatedtype Tab: WWDCTab
     var activeTab: Tab { get set }
     var activeTabPublisher: AnyPublisher<Tab, Never> { get }
-    func addTabViewItem(_ tabViewItem: NSTabViewItem)
     func showLoading()
     func hideLoading()
 }

@@ -27,6 +27,7 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
     }
 
     private var items = [[NSSplitViewItem]]()
+    private var sessionSelectObserver: AnyCancellable?
 
     var activatedItems: [NSSplitViewItem] {
         guard
@@ -38,6 +39,7 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
     }
 
     @MainActor private func changeContent() async {
+        sessionSelectObserver?.cancel()
         let newItems = activatedItems
 
         Task { // along with sidebar
@@ -59,6 +61,17 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         if #available(macOS 15.0, *) {
             topSearchItem?.isHidden = activeTab == .explore
             topDownloadItem?.isHidden = activeTab == .explore
+        }
+
+        if
+            let list = newItems.first?.viewController as? NewSessionsTableViewController,
+            let detail = newItems.dropFirst().first?.viewController as? SessionDetailsViewController {
+            sessionSelectObserver = list.$selectedSession.receive(on: DispatchQueue.main).sink { [weak detail] viewModel in
+                NSAnimationContext.runAnimationGroup { context in
+                    context.duration = 0.35
+                    detail?.viewModel = viewModel
+                }
+            }
         }
     }
 
@@ -109,16 +122,11 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func addTabViewItem(_ tabViewItem: NSTabViewItem) {
-        guard let content = tabViewItem.viewController else {
-            return
-        }
-        if let split = content as? NSSplitViewController {
-            items.append(split.splitViewItems)
-            split.splitViewItems.forEach(split.removeSplitViewItem(_:))
-        } else {
-            items.append([NSSplitViewItem(viewController: content)])
-        }
+    func add(list: NSViewController?, detail: NSViewController) {
+        items.append([
+            list.flatMap(NSSplitViewItem.init(sidebarWithViewController:)),
+            NSSplitViewItem(viewController: detail)
+        ].compactMap({ $0 }))
     }
 
     private var loadingView: ModalLoadingView?
