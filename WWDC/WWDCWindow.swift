@@ -33,7 +33,6 @@ final class WWDCWindow: NSWindow {
 
     fileprivate var _storedTitlebarContainerView: NSView?
     public var titlebarContainerView: NSView? {
-        guard !TahoeFeatureFlag.isLiquidGlassEnabled else { return nil }
         guard _storedTitlebarContainerView == nil else { return _storedTitlebarContainerView }
         guard let containerClass = NSClassFromString("NSTitlebarContainerView") else { return nil }
 
@@ -67,7 +66,6 @@ final class WWDCWindow: NSWindow {
     }()
 
     func setTitleBarHidden(_ hidden: Bool, animated: Bool = true) {
-        guard !TahoeFeatureFlag.isLiquidGlassEnabled else { return }
         NSAnimationContext.runAnimationGroup { ctx in
             if !hidden { titlebarLook.isHidden = false }
             
@@ -83,7 +81,6 @@ final class WWDCWindow: NSWindow {
     }
 
     fileprivate func applyCustomizations(_ note: Notification? = nil) {
-        guard !TahoeFeatureFlag.isLiquidGlassEnabled else { return }
         backgroundColor = .darkWindowBackground
 
         titleVisibility = .hidden
@@ -109,7 +106,6 @@ final class WWDCWindow: NSWindow {
     private var uiMaskView: WWDCUIMaskView?
 
     @objc func maskUI(preserving view: NSView) {
-        guard !TahoeFeatureFlag.isLiquidGlassEnabled else { return }
         guard let contentView = contentView else { return }
         guard let frame = view.superview?.convert(view.frame, to: nil) else { return }
 
@@ -129,7 +125,6 @@ final class WWDCWindow: NSWindow {
     }
 
     @objc func hideUIMask() {
-        guard !TahoeFeatureFlag.isLiquidGlassEnabled else { return }
         NotificationCenter.default.post(name: .WWDCWindowWillHideUIMask, object: self)
 
         NSAnimationContext.runAnimationGroup { ctx in
@@ -170,9 +165,7 @@ private final class WWDCUIMaskView: NSView {
             return
         }
 
-        if !TahoeFeatureFlag.isLiquidGlassEnabled {
-            NSApp.sendAction(#selector(WWDCWindow.hideUIMask), to: nil, from: nil)
-        }
+        NSApp.sendAction(#selector(WWDCWindow.hideUIMask), to: nil, from: nil)
     }
 
 }

@@ -40,7 +40,7 @@ extension Notification.Name {
     static let MainWindowWantsToSelectSearchField = Notification.Name("MainWindowWantsToSelectSearchField")
 }
 
-final class MainWindowController: WWDCWindowController {
+final class MainWindowController: NewWWDCWindowController {
 
     weak var touchBarProvider: NSResponder? {
         didSet {
@@ -57,7 +57,7 @@ final class MainWindowController: WWDCWindowController {
 
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
-        let window = WWDCWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
+        let window = NSWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
 
         window.title = "WWDC"
 
