@@ -120,11 +120,7 @@ final class AppCoordinator: WWDCCoordinator {
 
         // Primary UI Initialization
 
-        if #available(macOS 15.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
-            tabController = FakeTabViewController(windowController: windowController)
-        } else {
-            tabController = WWDCTabViewController<MainWindowTab>(windowController: windowController)
-        }
+        tabController = WWDCTabViewController<MainWindowTab>(windowController: windowController)
 
         // Explore
         exploreController = ExploreViewController(provider: ExploreTabProvider(storage: storage))

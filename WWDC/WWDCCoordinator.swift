@@ -70,4 +70,15 @@ protocol WWDCCoordinator: Logging, Signposting, ShelfViewControllerDelegate, PUI
     // MARK: - Related Sessions
 
     func selectSessionOnAppropriateTab(with viewModel: SessionViewModel)
+
+    // MARK: - App Delegate
+    @discardableResult func receiveNotification(with userInfo: [String: Any]) -> Bool
+    func handle(link: DeepLink)
+    func showPreferences(_ sender: Any?)
+    func showAboutWindow()
+    func showExplore()
+    func showSchedule()
+    func showVideos()
+    func refresh(_ sender: Any?)
+    func applyFilter(state: WWDCFiltersState)
 }

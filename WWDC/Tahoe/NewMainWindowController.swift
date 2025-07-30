@@ -163,7 +163,7 @@ private extension NewMainWindowController {
 }
 
 private extension NewMainWindowController {
-    var coordinator: AppCoordinator? {
+    var coordinator: WWDCCoordinator? {
         (NSApp.delegate as? AppDelegate)?.coordinator
     }
 }
