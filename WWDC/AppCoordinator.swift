@@ -14,7 +14,7 @@ import PlayerUI
 import OSLog
 import AVFoundation
 
-final class AppCoordinator: Logging, Signposting {
+final class AppCoordinator: WWDCCoordinator {
 
     static let log = makeLogger()
     static let signposter: OSSignposter = makeSignposter()
@@ -67,7 +67,7 @@ final class AppCoordinator: Logging, Signposting {
         }
     }
 
-    var exploreTabLiveSession: some Publisher<SessionViewModel?, Never> {
+    var exploreTabLiveSession: AnyPublisher<SessionViewModel?, Never> {
         let liveInstances = storage.realm.objects(SessionInstance.self)
             .filter("rawSessionType == 'Special Event' AND isCurrentlyLive == true")
             .sorted(byKeyPath: "startTime", ascending: false)
@@ -76,6 +76,7 @@ final class AppCoordinator: Logging, Signposting {
             .map({ $0.toArray().first?.session })
             .map({ SessionViewModel(session: $0, instance: $0?.instances.first, track: nil, style: .schedule) })
             .replaceErrorWithEmpty()
+            .eraseToAnyPublisher()
     }
 
     /// The session that is currently selected on the videos tab (observable)

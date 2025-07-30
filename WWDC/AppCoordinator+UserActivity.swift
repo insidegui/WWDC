@@ -11,7 +11,7 @@ import RealmSwift
 import ConfCore
 import PlayerUI
 
-extension AppCoordinator {
+extension WWDCCoordinator {
 
     func updateCurrentActivity(with item: UserActivityRepresentable?) {
         guard let item = item else {

@@ -13,7 +13,17 @@ import PlayerUI
 import EventKit
 import OSLog
 
-extension AppCoordinator: SessionActionsDelegate {
+private enum SessionActionChoice: Int {
+    case yes = 1001
+    case no = 1000
+}
+
+private enum CalendarChoice: NSApplication.ModalResponse.RawValue {
+    case removeCalendar = 1000
+    case cancel = 1001
+}
+
+extension WWDCCoordinator/*: SessionActionsDelegate */{
 
     @MainActor
     func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
@@ -56,12 +66,7 @@ extension AppCoordinator: SessionActionsDelegate {
         alert.addButton(withTitle: "No")
         alert.addButton(withTitle: "Yes")
 
-        enum Choice: Int {
-            case yes = 1001
-            case no = 1000
-        }
-
-        guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
+        guard let choice = SessionActionChoice(rawValue: alert.runModal().rawValue) else { return }
 
         switch choice {
         case .yes:
@@ -146,8 +151,8 @@ extension Storage {
 
 // MARK: - Calendar Integration
 
-extension AppCoordinator {
-    @objc func sessionActionsDidSelectCalendar(_ sender: NSView?) {
+extension WWDCCoordinator {
+    func sessionActionsDidSelectCalendar(_ sender: NSView?) {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         Task { @MainActor in
@@ -196,12 +201,7 @@ extension AppCoordinator {
             alert.addButton(withTitle: "Cancel")
             alert.window.center()
 
-            enum Choice: NSApplication.ModalResponse.RawValue {
-                case removeCalendar = 1000
-                case cancel = 1001
-            }
-
-            guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
+            guard let choice = CalendarChoice(rawValue: alert.runModal().rawValue) else { return }
 
             switch choice {
             case .removeCalendar:

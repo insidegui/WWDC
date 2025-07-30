@@ -375,7 +375,7 @@ extension SessionViewModel {
     ///
     /// I think we can build a preview helper that does a Boot().bootstrapDependencies(then:), but it's async
     /// so it's a bit of effort. For now, just brute force to get a session.
-    static var preview: SessionViewModel {
+    @MainActor static var preview: SessionViewModel {
         let delegate = (NSApplication.shared.delegate as! AppDelegate) // swiftlint:disable:this force_cast
         Thread.sleep(forTimeInterval: 0.5) // TODO: Get access to storage in a better way
         let coordinator = delegate.coordinator!

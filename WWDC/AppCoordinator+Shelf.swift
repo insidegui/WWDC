@@ -12,9 +12,8 @@ import ConfCore
 import PlayerUI
 import CoreMedia
 
-extension AppCoordinator: ShelfViewControllerDelegate {
-
-    private func shelf(for tab: MainWindowTab) -> ShelfViewController? {
+extension AppCoordinator {
+    func shelf(for tab: MainWindowTab) -> ShelfViewController? {
 
         var shelfViewController: ShelfViewController?
         switch tab {
@@ -27,6 +26,9 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         return shelfViewController
     }
+}
+
+extension WWDCCoordinator/*: ShelfViewControllerDelegate*/ {
 
     func updateShelfBasedOnSelectionChange() {
         guard !isTransitioningPlayerContext else { return }

@@ -11,7 +11,12 @@ import RealmSwift
 import ConfCore
 import PlayerUI
 
-extension AppCoordinator: SessionsTableViewControllerDelegate {
+private enum SessionChoice: Int {
+    case yes = 1001
+    case no = 1000
+}
+
+extension WWDCCoordinator/*: SessionsTableViewControllerDelegate */{
 
     func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel]) {
         storage.modify(viewModels.map({ $0.session })) { sessions in
@@ -47,12 +52,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
             alert.addButton(withTitle: "No")
             alert.addButton(withTitle: "Yes")
 
-            enum Choice: Int {
-                case yes = 1001
-                case no = 1000
-            }
-
-            guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
+            guard let choice = SessionChoice(rawValue: alert.runModal().rawValue) else { return }
 
             guard case .yes = choice else { return }
         }

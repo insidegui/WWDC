@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
     private lazy var commandsReceiver = AppCommandsReceiver()
     
-    private(set) var coordinator: AppCoordinator? {
+    @MainActor private(set) var coordinator: AppCoordinator? {
         didSet {
             if coordinator != nil {
                 openPendingDeepLinkIfNeeded()
@@ -203,7 +203,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     
     private var pendingDeepLink: DeepLink?
     
-    private func openDeepLink(_ link: DeepLink) {
+    @MainActor private func openDeepLink(_ link: DeepLink) {
         guard let coordinator = coordinator else {
             pendingDeepLink = link
             return
@@ -212,7 +212,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         coordinator.handle(link: link)
     }
     
-    private func openPendingDeepLinkIfNeeded() {
+    @MainActor private func openPendingDeepLinkIfNeeded() {
         guard let deepLink = pendingDeepLink else { return }
         
         coordinator?.handle(link: deepLink)
@@ -274,7 +274,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         coordinator?.showVideos()
     }
 
-    @objc func applyFilterState(_ sender: Any?) {
+    @MainActor @objc func applyFilterState(_ sender: Any?) {
         guard let state = sender as? WWDCFiltersState else { return }
 
         coordinator?.applyFilter(state: state)
