@@ -20,6 +20,10 @@ public final class PUIPlayerView: NSView {
 
     private let log = Logger(subsystem: "PlayerUI", category: "PUIPlayerView")
     private var cancellables: Set<AnyCancellable> = []
+    /// Bindings that only need to be established once and are not dependent on the player (model).
+    /// The nature of Combine forces us to store them somewhere, though. And as long as they only capture `self`
+    /// weakly, the ui bindings don't need to be reset when the player changes.
+    private var uiBindings: Set<AnyCancellable> = []
 
     // MARK: - Public API
 
@@ -794,7 +798,7 @@ public final class PUIPlayerView: NSView {
             guard let self else { return }
             self.playbackSpeed = speed
         }
-        .store(in: &cancellables)
+        .store(in: &uiBindings)
 
         speedButton.$isEditingCustomSpeed.sink { [weak self] isEditing in
             guard let self else { return }
@@ -802,7 +806,7 @@ public final class PUIPlayerView: NSView {
             showControls(animated: false)
             resetMouseIdleTimer()
         }
-        .store(in: &cancellables)
+        .store(in: &uiBindings)
     }
 
     var backAndForwardSkipDuration: BackForwardSkipDuration = .thirtySeconds {
