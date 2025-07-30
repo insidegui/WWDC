@@ -28,7 +28,7 @@ final class AppCoordinator: WWDCCoordinator {
 
     // - Top level controllers
     var windowController: WWDCWindowControllerObject
-    var tabController: any WWDCTabController
+    var tabController: WWDCTabViewController<MainWindowTab>
     var searchCoordinator: SearchCoordinator
 
     // - The 3 tabs

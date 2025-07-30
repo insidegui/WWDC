@@ -13,6 +13,7 @@ import PlayerUI
 
 @MainActor
 protocol WWDCCoordinator: Logging, Signposting, ShelfViewControllerDelegate, PUITimelineDelegate, VideoPlayerViewControllerDelegate, SessionActionsDelegate, RelatedSessionsDelegate, SessionsTableViewControllerDelegate {
+    associatedtype TabController: WWDCTabController
     var liveObserver: LiveObserver { get }
 
     var storage: Storage { get }
@@ -20,7 +21,7 @@ protocol WWDCCoordinator: Logging, Signposting, ShelfViewControllerDelegate, PUI
 
     // - Top level controllers
     var windowController: WWDCWindowControllerObject { get }
-    var tabController: any WWDCTabController { get }
+    var tabController: TabController { get }
     var searchCoordinator: SearchCoordinator { get }
 
     // - The 3 tabs
