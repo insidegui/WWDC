@@ -49,8 +49,10 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
-        view.wantsLayer = true
-        view.layer?.backgroundColor = NSColor.darkWindowBackground.cgColor
+        if !TahoeFeatureFlag.isLiquidGlassEnabled {
+            view.wantsLayer = true
+            view.layer?.backgroundColor = NSColor.darkWindowBackground.cgColor
+        }
         view.widthAnchor.constraint(lessThanOrEqualToConstant: 675).isActive = true
 
         scrollView.frame = view.bounds
@@ -59,18 +61,36 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 320).isActive = true
 
         view.addSubview(scrollView)
-        view.addSubview(searchController.view)
 
         scrollView.contentView.automaticallyAdjustsContentInsets = false
-
-        searchController.view.translatesAutoresizingMaskIntoConstraints = false
 
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        guard !TahoeFeatureFlag.isLiquidGlassEnabled else {
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+            return
+#if compiler(>=6.2)
+            if #available(macOS 26.0, *), let splitItem = (parent as? NSSplitViewController)?.splitViewItem(for: self) {
+                let accessory = NSSplitViewItemAccessoryViewController()
+                accessory.view.addSubview(searchController.view)
+                searchController.view.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    searchController.view.topAnchor.constraint(equalTo: accessory.view.safeAreaLayoutGuide.topAnchor),
+                    searchController.view.leadingAnchor.constraint(equalTo: accessory.view.safeAreaLayoutGuide.leadingAnchor),
+                    searchController.view.bottomAnchor.constraint(equalTo: accessory.view.safeAreaLayoutGuide.bottomAnchor),
+                    searchController.view.trailingAnchor.constraint(equalTo: accessory.view.safeAreaLayoutGuide.trailingAnchor)
+                ])
 
+                splitItem.addTopAlignedAccessoryViewController(accessory)
+            }
+#endif
+            return
+        }
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        view.addSubview(searchController.view)
+        searchController.view.translatesAutoresizingMaskIntoConstraints = false
         searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         searchController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -78,6 +98,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
     override func viewWillLayout() {
         super.viewWillLayout()
+        guard !TahoeFeatureFlag.isLiquidGlassEnabled else { return }
 
         let topInset = searchController.view.fittingSize.height
 
@@ -331,16 +352,22 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         // We control the initial selection during initialization
         v.allowsEmptySelection = true
 
-        v.wantsLayer = true
         v.focusRingType = .none
         v.allowsMultipleSelection = true
-        v.backgroundColor = .listBackground
         v.headerView = nil
         v.rowHeight = Metrics.sessionRowHeight
         v.autoresizingMask = [.width, .height]
         v.floatsGroupRows = true
+        if !TahoeFeatureFlag.isLiquidGlassEnabled {
+            v.wantsLayer = true
+            v.backgroundColor = .listBackground
+            v.gridColor = .darkGridColor
+        } else {
+            v.wantsLayer = false
+            v.backgroundColor = .clear
+//            v.gridColor = .darkGridColor // use default
+        }
         v.gridStyleMask = .solidHorizontalGridLineMask
-        v.gridColor = .darkGridColor
         v.style = .plain
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
@@ -353,7 +380,8 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         let v = NSScrollView()
 
         v.focusRingType = .none
-        v.backgroundColor = .listBackground
+        //v.backgroundColor = .listBackground
+        v.drawsBackground = false
         v.borderType = .noBorder
         v.documentView = self.tableView
         v.hasVerticalScroller = true

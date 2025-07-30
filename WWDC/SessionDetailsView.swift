@@ -51,7 +51,7 @@ struct SessionDetailsView: View {
             tabContent
                 .padding(.top, 16)
         }
-        .padding([.bottom, .horizontal], 46)
+        .padding([.bottom, .horizontal])
     }
     
     private var tabButtons: some View {

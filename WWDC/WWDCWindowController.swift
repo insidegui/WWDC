@@ -10,7 +10,7 @@ import Foundation
 
 class WWDCWindowController: NSWindowController {
 
-    var titleBarViewController = TitleBarViewController()
+    lazy var titleBarViewController = TitleBarViewController()
 
     override var windowNibName: NSNib.Name? {
         // Triggers `loadWindow` to be called so we can override it
@@ -31,7 +31,8 @@ class WWDCWindowController: NSWindowController {
 
     override func windowDidLoad() {
         super.windowDidLoad()
-
-        window?.addTitlebarAccessoryViewController(titleBarViewController)
+        if !TahoeFeatureFlag.isLiquidGlassEnabled {
+            window?.addTitlebarAccessoryViewController(titleBarViewController)
+        }
     }
 }

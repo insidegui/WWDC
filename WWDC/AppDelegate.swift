@@ -149,6 +149,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         let viewController = NSHostingController(rootView: SlowMigrationView())
         let windowController = NSWindowController(window: NSWindow(contentRect: .zero, styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: false))
 
+        if TahoeFeatureFlag.isLiquidGlassEnabled {
+            windowController.window?.styleMask = [.unifiedTitleAndToolbar, .fullSizeContentView]
+            windowController.window?.titleVisibility = .hidden
+        }
         windowController.contentViewController = viewController
         windowController.window?.center()
         windowController.window?.isReleasedWhenClosed = true

@@ -17,7 +17,29 @@ extension WWDCTab {
     var hidesWindowTitleBar: Bool { false }
 }
 
-class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValue == Int {
+protocol WWDCTabController: NSViewController {
+    associatedtype Tab: WWDCTab
+    var activeTab: Tab { get set }
+    var activeTabPublisher: AnyPublisher<Tab, Never> { get }
+    func addTabViewItem(_ tabViewItem: NSTabViewItem)
+    func showLoading()
+    func hideLoading()
+}
+
+extension WWDCTabController {
+    func setActiveTab<T: WWDCTab>(_ tab: T) {
+        guard let t = tab as? Tab else {
+            return
+        }
+        activeTab = t
+    }
+
+    func activeTabPublisher<T: WWDCTab>(for: T.Type) -> AnyPublisher<T, Never> {
+        activeTabPublisher.compactMap({ $0 as? T }).eraseToAnyPublisher()
+    }
+}
+
+class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController, WWDCTabController where Tab.RawValue == Int {
 
     var activeTab: Tab {
         get {
@@ -28,6 +50,9 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValu
         }
     }
 
+    var activeTabPublisher: AnyPublisher<Tab, Never> {
+        $activeTabVar.eraseToAnyPublisher()
+    }
     @Published
     private(set) var activeTabVar = Tab(rawValue: 0)!
 
@@ -67,7 +92,9 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController where Tab.RawValu
     init(windowController: WWDCWindowController) {
         super.init(nibName: nil, bundle: nil)
 
-        windowController.titleBarViewController.tabBar = tabBar
+        if !TahoeFeatureFlag.isLiquidGlassEnabled {
+            windowController.titleBarViewController.tabBar = tabBar
+        }
 
         // Preserve the window's size, essentially passing in saved window frame sizes
         let superFrame = view.frame

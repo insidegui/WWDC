@@ -60,6 +60,7 @@ final class SearchFiltersViewController: NSViewController {
         // swiftlint:disable:next force_cast
         return storyboard.instantiateController(withIdentifier: "SearchFiltersViewController") as! SearchFiltersViewController
     }
+    var showFilterButton = true
 
     @IBOutlet var filterContainer: NSView!
     @IBOutlet weak var eventsPopUp: NSPopUpButton!
@@ -170,9 +171,11 @@ final class SearchFiltersViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        filterButton.isHidden = !showFilterButton
         /// Move background and content from behind the title bar.
         vfxView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        vfxView.blendingMode = .behindWindow
+        vfxView.material = .menu
 
         setFilters(hidden: true)
 
@@ -180,6 +183,9 @@ final class SearchFiltersViewController: NSViewController {
     }
 
     func setFilters(hidden: Bool) {
+        guard !filterButton.isHidden else {
+            return
+        }
         filterButton.state = NSControl.StateValue(rawValue: hidden ? 0 : 1)
         filterContainer.isHidden = hidden
     }

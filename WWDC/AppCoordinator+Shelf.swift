@@ -62,7 +62,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         // Always reveal the tab to avoid the case of the session selected
         // on tab that isn't the player owner tab
-        tabController.activeTab = playerOwnerTab
+        tabController.setActiveTab(playerOwnerTab)
 
         // Reveal the session
         if playerOwnerSessionIdentifier != activeTabSelectedSessionViewModel?.identifier {

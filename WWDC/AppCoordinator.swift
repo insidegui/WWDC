@@ -28,7 +28,7 @@ final class AppCoordinator: Logging, Signposting {
 
     // - Top level controllers
     var windowController: MainWindowController
-    var tabController: WWDCTabViewController<MainWindowTab>
+    var tabController: any WWDCTabController
     var searchCoordinator: SearchCoordinator
 
     // - The 3 tabs
@@ -119,7 +119,11 @@ final class AppCoordinator: Logging, Signposting {
 
         // Primary UI Initialization
 
-        tabController = WWDCTabViewController(windowController: windowController)
+        if #available(macOS 15.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            tabController = FakeTabViewController(windowController: windowController)
+        } else {
+            tabController = WWDCTabViewController<MainWindowTab>(windowController: windowController)
+        }
 
         // Explore
         exploreController = ExploreViewController(provider: ExploreTabProvider(storage: storage))
@@ -147,7 +151,7 @@ final class AppCoordinator: Logging, Signposting {
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
         scheduleController.splitViewController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
         scheduleController.splitViewController.splitView.autosaveName = "ScheduleSplitView"
-        let scheduleItem = NSTabViewItem(viewController: scheduleController)
+        let scheduleItem = NSTabViewItem(viewController: scheduleController.splitViewController)
         scheduleItem.label = "Schedule"
         scheduleItem.initialFirstResponder = scheduleController.splitViewController.listViewController.tableView
         tabController.addTabViewItem(scheduleItem)
@@ -174,18 +178,20 @@ final class AppCoordinator: Logging, Signposting {
         tabController.addTabViewItem(videosItem)
 
         self.windowController = windowController
-        tabController.activeTab = Preferences.shared.activeTab
+        tabController.setActiveTab(Preferences.shared.activeTab)
 
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
-        
-        let buttonsController = TitleBarButtonsViewController(
-            downloadManager: .shared,
-            storage: storage
-        )
-        windowController.titleBarViewController.statusViewController = buttonsController
-        
-        buttonsController.handleSharePlayClicked = { [weak self] in
-            DispatchQueue.main.async { self?.startSharePlay() }
+
+        if !TahoeFeatureFlag.isLiquidGlassEnabled {
+            let buttonsController = TitleBarButtonsViewController(
+                downloadManager: .shared,
+                storage: storage
+            )
+            windowController.titleBarViewController.statusViewController = buttonsController
+
+            buttonsController.handleSharePlayClicked = { [weak self] in
+                DispatchQueue.main.async { self?.startSharePlay() }
+            }
         }
 
         MediaDownloadManager.shared.activate()
@@ -248,7 +254,7 @@ final class AppCoordinator: Logging, Signposting {
         scheduleController.splitViewController.listViewController.$selectedSession.assign(to: &self.$scheduleSelectedSessionViewModel)
 
         Publishers.CombineLatest3(
-            tabController.$activeTabVar,
+            tabController.activeTabPublisher(for: MainWindowTab.self),
             $videosSelectedSessionViewModel,
             $scheduleSelectedSessionViewModel
         ).receive(on: DispatchQueue.main)
@@ -371,11 +377,11 @@ final class AppCoordinator: Logging, Signposting {
 
         if videosController.listViewController.canDisplay(session: viewModel) {
             videosController.listViewController.select(session: viewModel)
-            tabController.activeTab = .videos
+            tabController.setActiveTab(MainWindowTab.videos)
 
         } else if scheduleController.splitViewController.listViewController.canDisplay(session: viewModel) {
             scheduleController.splitViewController.listViewController.select(session: viewModel)
-            tabController.activeTab = .schedule
+            tabController.setActiveTab(MainWindowTab.schedule)
         }
     }
 
@@ -417,16 +423,16 @@ final class AppCoordinator: Logging, Signposting {
 
     func handle(link: DeepLink) {
         if link.isForCurrentYear {
-            tabController.activeTab = .schedule
+            tabController.setActiveTab(MainWindowTab.schedule)
             scheduleController.splitViewController.listViewController.select(session: link)
         } else {
-            tabController.activeTab = .videos
+            tabController.setActiveTab(MainWindowTab.videos)
             videosController.listViewController.select(session: link)
         }
     }
 
     func applyFilter(state: WWDCFiltersState) {
-        tabController.activeTab = .videos
+        tabController.setActiveTab(MainWindowTab.videos)
 
         DispatchQueue.main.async {
             self.searchCoordinator.apply(state)
@@ -466,15 +472,15 @@ final class AppCoordinator: Logging, Signposting {
     }
 
     func showExplore() {
-        tabController.activeTab = .explore
+        tabController.setActiveTab(MainWindowTab.explore)
     }
 
     func showSchedule() {
-        tabController.activeTab = .schedule
+        tabController.setActiveTab(MainWindowTab.schedule)
     }
 
     func showVideos() {
-        tabController.activeTab = .videos
+        tabController.setActiveTab(MainWindowTab.videos)
     }
 
     // MARK: - Refresh
