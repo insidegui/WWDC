@@ -151,7 +151,7 @@ final class AppCoordinator: Logging, Signposting {
         scheduleController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Schedule")
         scheduleController.splitViewController.splitView.identifier = NSUserInterfaceItemIdentifier(rawValue: "ScheduleSplitView")
         scheduleController.splitViewController.splitView.autosaveName = "ScheduleSplitView"
-        let scheduleItem = NSTabViewItem(viewController: scheduleController.splitViewController)
+        let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
         scheduleItem.initialFirstResponder = scheduleController.splitViewController.listViewController.tableView
         tabController.addTabViewItem(scheduleItem)
@@ -182,16 +182,14 @@ final class AppCoordinator: Logging, Signposting {
 
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
 
-        if !TahoeFeatureFlag.isLiquidGlassEnabled {
-            let buttonsController = TitleBarButtonsViewController(
-                downloadManager: .shared,
-                storage: storage
-            )
-            windowController.titleBarViewController.statusViewController = buttonsController
+        let buttonsController = TitleBarButtonsViewController(
+            downloadManager: .shared,
+            storage: storage
+        )
+        windowController.titleBarViewController.statusViewController = buttonsController
 
-            buttonsController.handleSharePlayClicked = { [weak self] in
-                DispatchQueue.main.async { self?.startSharePlay() }
-            }
+        buttonsController.handleSharePlayClicked = { [weak self] in
+            DispatchQueue.main.async { self?.startSharePlay() }
         }
 
         MediaDownloadManager.shared.activate()
