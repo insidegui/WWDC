@@ -19,11 +19,11 @@ final class SessionsSplitViewController: NSSplitViewController {
     let listViewController: SessionsTableViewController
     let detailViewController: SessionDetailsViewController
     var isResizingSplitView = false
-    let windowController: MainWindowController
+    let windowController: WWDCWindowControllerObject
     var setupDone = false
     private var cancellables: Set<AnyCancellable> = []
 
-    init(windowController: MainWindowController, listViewController: SessionsTableViewController) {
+    init(windowController: WWDCWindowControllerObject, listViewController: SessionsTableViewController) {
         self.windowController = windowController
         self.listViewController = listViewController
         let detailViewController = SessionDetailsViewController()

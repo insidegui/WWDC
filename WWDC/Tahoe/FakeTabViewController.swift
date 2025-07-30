@@ -85,8 +85,8 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
     }
 
     private var previousSidebarWidth: CGFloat?
-    private weak var windowController: MainWindowController?
-    init(windowController: MainWindowController) {
+    private weak var windowController: WWDCWindowControllerObject?
+    init(windowController: WWDCWindowControllerObject) {
         self.windowController = windowController
         super.init(nibName: nil, bundle: nil)
         sidebarItem = NSSplitViewItem(sidebarWithViewController: SplitContainer(nibName: nil, bundle: nil))

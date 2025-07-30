@@ -52,7 +52,6 @@ final class MainWindowController: WWDCWindowController {
         return NSScreen.main?.visibleFrame.insetBy(dx: 50, dy: 120) ??
                NSRect(x: 0, y: 0, width: 1200, height: 600)
     }
-    public var sidebarInitWidth: CGFloat?
 
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]

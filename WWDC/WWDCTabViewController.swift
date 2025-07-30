@@ -89,7 +89,7 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController, WWDCTabControlle
 
     private(set) lazy var tabBar = WWDCTabViewControllerTabBar()
 
-    init(windowController: WWDCWindowController) {
+    init(windowController: WWDCWindowControllerObject) {
         super.init(nibName: nil, bundle: nil)
 
         windowController.titleBarViewController.tabBar = tabBar

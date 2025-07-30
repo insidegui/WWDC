@@ -9,10 +9,12 @@
 import Foundation
 
 protocol WWDCWindowControllerObject: NSWindowController {
+    var sidebarInitWidth: CGFloat? { get set }
     var titleBarViewController: TitleBarViewController { get }
 }
 
 class WWDCWindowController: NSWindowController, WWDCWindowControllerObject {
+    public var sidebarInitWidth: CGFloat?
     lazy var titleBarViewController = TitleBarViewController()
 
     override var windowNibName: NSNib.Name? {
@@ -40,6 +42,7 @@ class WWDCWindowController: NSWindowController, WWDCWindowControllerObject {
 }
 
 class NewWWDCWindowController: NSWindowController, WWDCWindowControllerObject {
+    public var sidebarInitWidth: CGFloat?
     lazy var titleBarViewController = TitleBarViewController()
 
     override var windowNibName: NSNib.Name? {

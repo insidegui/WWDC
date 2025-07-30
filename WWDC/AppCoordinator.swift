@@ -27,7 +27,7 @@ final class AppCoordinator: Logging, Signposting {
     var syncEngine: SyncEngine
 
     // - Top level controllers
-    var windowController: MainWindowController
+    var windowController: WWDCWindowControllerObject
     var tabController: any WWDCTabController
     var searchCoordinator: SearchCoordinator
 
@@ -99,7 +99,7 @@ final class AppCoordinator: Logging, Signposting {
     private lazy var downloadMonitor = DownloadedContentMonitor()
 
     @MainActor
-    init(windowController: MainWindowController, storage: Storage, syncEngine: SyncEngine) {
+    init(windowController: WWDCWindowControllerObject, storage: Storage, syncEngine: SyncEngine) {
         let signpostState = Self.signposter.beginInterval("initialization", id: Self.signposter.makeSignpostID(), "begin init")
         self.storage = storage
         self.syncEngine = syncEngine
