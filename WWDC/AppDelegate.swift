@@ -86,8 +86,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
         ImageDownloadCenter.shared.deleteLegacyImageCacheIfNeeded()
         // setup liquid glass feature settings
-#if compiler(>=6.2)
-        if #available(macOS 26.0, *) {
+        if TahoeFeatureFlag.isLiquidGlassAvailable {
             guard
                 let aboutMenu = NSApp.menu?.items.first?.submenu,
                 let firstSeparatorIndex = aboutMenu.items.firstIndex(where: { $0.isSeparatorItem }), // under About
@@ -96,12 +95,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
                 return
             }
 
-            let liquidGlassItem = NSMenuItem(title: "Try Liquid Glass", action: #selector(tryLiquidGlass(_:)), keyEquivalent: "")
+            let liquidGlassItem = NSMenuItem(title: "Try Liquid Glass", action: #selector(AppDelegate.tryLiquidGlass(_:)), keyEquivalent: "")
             liquidGlassItem.indentationLevel = 1
             liquidGlassItem.state = TahoeFeatureFlag.isLiquidGlassEnabled ? .on : .mixed
             aboutMenu.insertItem(liquidGlassItem, at: firstSeparatorIndex + 1)
         }
-#endif
     }
     
     private var storage: Storage?
@@ -246,8 +244,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         coordinator?.refresh(sender)
     }
 
-#if compiler(>=6.2)
     @objc private func tryLiquidGlass(_ sender: NSMenuItem) {
+        guard TahoeFeatureFlag.isLiquidGlassAvailable else {
+            return
+        }
         defer {
             sender.state = TahoeFeatureFlag.isLiquidGlassEnabled ? .on : .mixed
         }
@@ -264,7 +264,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
             TahoeFeatureFlag.isLiquidGlassEnabled.toggle()
         }
     }
-#endif
 
     @IBAction func showAboutWindow(_ sender: Any) {
         coordinator?.showAboutWindow()
