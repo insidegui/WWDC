@@ -52,7 +52,6 @@ extension MainWindowController: NSToolbarDelegate {
             return
         }
         window.styleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
-        window.backgroundColor = .darkWindowBackground
         window.isMovableByWindowBackground = true
         window.titlebarAppearsTransparent = true
         window.titleVisibility = .hidden
@@ -67,6 +66,7 @@ extension MainWindowController: NSToolbarDelegate {
 
     func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
         let toolbarItem = NSToolbarItem(itemIdentifier: itemIdentifier)
+        toolbarItem.autovalidates = false
         switch itemIdentifier {
         case .searchItem:
             toolbarItem.image = NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")

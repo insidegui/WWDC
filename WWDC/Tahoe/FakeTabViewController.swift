@@ -56,8 +56,10 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         sidebarItem.canCollapse = false
 
         topSegmentControl?.selectedSegment = activeTab.rawValue
-        topSearchItem?.isEnabled = activeTab != .explore
-        topDownloadItem?.isEnabled = activeTab != .explore
+        if #available(macOS 15.0, *) {
+            topSearchItem?.isHidden = activeTab == .explore
+            topDownloadItem?.isHidden = activeTab == .explore
+        }
     }
 
     @MainActor func _replaceSidebarIfNeeded(newItems: [NSSplitViewItem]) async {
@@ -83,7 +85,9 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
     }
 
     private var previousSidebarWidth: CGFloat?
-    init(windowController: WWDCWindowController) {
+    private weak var windowController: MainWindowController?
+    init(windowController: MainWindowController) {
+        self.windowController = windowController
         super.init(nibName: nil, bundle: nil)
         sidebarItem = NSSplitViewItem(sidebarWithViewController: SplitContainer(nibName: nil, bundle: nil))
         sidebarItem.canCollapse = false
@@ -135,7 +139,7 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         super.viewWillAppear()
         Task {
             await changeContent()
-            for item in [topTabItem, topSearchItem, topDownloadItem] {
+            for item in [topTabItem/*, topSearchItem, topDownloadItem*/] {
                 if #available(macOS 15.0, *) {
                     item?.isHidden = false
                 }
@@ -154,10 +158,9 @@ private class SplitContainer: NSViewController {
         await NSAnimationContext.runAnimationGroup { _ in
             view.animator().alphaValue = 0
         }
+        children.forEach { $0.removeFromParent() }
         view.subviews.forEach { $0.removeFromSuperview() }
-        if !children.contains(content) {
-            addChild(content)
-        }
+        addChild(content)
         view.addSubview(content.view)
         content.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
