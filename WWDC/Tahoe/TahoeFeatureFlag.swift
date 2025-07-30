@@ -9,17 +9,13 @@
 import Foundation
 import SwiftUI
 
-final class TahoeFeatureFlag: ObservableObject {
-    /*@MainActor */static var isLiquidGlassEnabled: Bool {
+enum TahoeFeatureFlag {
+    static var isLiquidGlassEnabled: Bool {
         get {
-            shared.isLiquidGlassEnabled
+            UserDefaults.standard.bool(forKey: "TahoeFeatureFlag.isLiquidGlassEnabled")
         }
         set {
-            shared.isLiquidGlassEnabled = newValue
+            UserDefaults.standard.set(newValue, forKey: "TahoeFeatureFlag.isLiquidGlassEnabled")
         }
     }
-    /*@MainActor */private static let shared = TahoeFeatureFlag()
-
-    @AppStorage("TahoeFeatureFlag.isLiquidGlassEnabled")
-    var isLiquidGlassEnabled = false
 }
