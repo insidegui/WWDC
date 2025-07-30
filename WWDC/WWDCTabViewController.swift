@@ -92,9 +92,7 @@ class WWDCTabViewController<Tab: WWDCTab>: NSTabViewController, WWDCTabControlle
     init(windowController: WWDCWindowController) {
         super.init(nibName: nil, bundle: nil)
 
-        if !TahoeFeatureFlag.isLiquidGlassEnabled {
-            windowController.titleBarViewController.tabBar = tabBar
-        }
+        windowController.titleBarViewController.tabBar = tabBar
 
         // Preserve the window's size, essentially passing in saved window frame sizes
         let superFrame = view.frame
