@@ -100,7 +100,7 @@ final class AppCoordinator: WWDCCoordinator {
     private lazy var downloadMonitor = DownloadedContentMonitor()
 
     @MainActor
-    init(windowController: WWDCWindowControllerObject, storage: Storage, syncEngine: SyncEngine) {
+    init(windowController: MainWindowController, storage: Storage, syncEngine: SyncEngine) {
         let signpostState = Self.signposter.beginInterval("initialization", id: Self.signposter.makeSignpostID(), "begin init")
         self.storage = storage
         self.syncEngine = syncEngine
@@ -120,7 +120,7 @@ final class AppCoordinator: WWDCCoordinator {
 
         // Primary UI Initialization
 
-        tabController = WWDCTabViewController<MainWindowTab>(windowController: windowController)
+        tabController = WWDCTabViewController(windowController: windowController)
 
         // Explore
         exploreController = ExploreViewController(provider: ExploreTabProvider(storage: storage))
@@ -175,16 +175,16 @@ final class AppCoordinator: WWDCCoordinator {
         tabController.addTabViewItem(videosItem)
 
         self.windowController = windowController
-        tabController.setActiveTab(Preferences.shared.activeTab)
+        tabController.activeTab = Preferences.shared.activeTab
 
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
-
+        
         let buttonsController = TitleBarButtonsViewController(
             downloadManager: .shared,
             storage: storage
         )
         windowController.titleBarViewController.statusViewController = buttonsController
-
+        
         buttonsController.handleSharePlayClicked = { [weak self] in
             DispatchQueue.main.async { self?.startSharePlay() }
         }
@@ -249,7 +249,7 @@ final class AppCoordinator: WWDCCoordinator {
         scheduleController.splitViewController.listViewController.$selectedSession.assign(to: &self.$scheduleSelectedSessionViewModel)
 
         Publishers.CombineLatest3(
-            tabController.activeTabPublisher(for: MainWindowTab.self),
+            tabController.$activeTabVar,
             $videosSelectedSessionViewModel,
             $scheduleSelectedSessionViewModel
         ).receive(on: DispatchQueue.main)
@@ -372,11 +372,11 @@ final class AppCoordinator: WWDCCoordinator {
 
         if videosController.listViewController.canDisplay(session: viewModel) {
             videosController.listViewController.select(session: viewModel)
-            tabController.setActiveTab(MainWindowTab.videos)
+            tabController.activeTab = .videos
 
         } else if scheduleController.splitViewController.listViewController.canDisplay(session: viewModel) {
             scheduleController.splitViewController.listViewController.select(session: viewModel)
-            tabController.setActiveTab(MainWindowTab.schedule)
+            tabController.activeTab = .schedule
         }
     }
 
@@ -418,16 +418,16 @@ final class AppCoordinator: WWDCCoordinator {
 
     func handle(link: DeepLink) {
         if link.isForCurrentYear {
-            tabController.setActiveTab(MainWindowTab.schedule)
+            tabController.activeTab = .schedule
             scheduleController.splitViewController.listViewController.select(session: link)
         } else {
-            tabController.setActiveTab(MainWindowTab.videos)
+            tabController.activeTab = .videos
             videosController.listViewController.select(session: link)
         }
     }
 
     func applyFilter(state: WWDCFiltersState) {
-        tabController.setActiveTab(MainWindowTab.videos)
+        tabController.activeTab = .videos
 
         DispatchQueue.main.async {
             self.searchCoordinator.apply(state)
@@ -467,15 +467,15 @@ final class AppCoordinator: WWDCCoordinator {
     }
 
     func showExplore() {
-        tabController.setActiveTab(MainWindowTab.explore)
+        tabController.activeTab = .explore
     }
 
     func showSchedule() {
-        tabController.setActiveTab(MainWindowTab.schedule)
+        tabController.activeTab = .schedule
     }
 
     func showVideos() {
-        tabController.setActiveTab(MainWindowTab.videos)
+        tabController.activeTab = .videos
     }
 
     // MARK: - Refresh
