@@ -14,6 +14,7 @@ import OSLog
 import PlayerUI
 import RealmSwift
 
+@available(macOS 26.0, *)
 final class NewAppCoordinator: WWDCCoordinator {
     nonisolated static let log = makeLogger()
     nonisolated static let signposter: OSSignposter = makeSignposter()
@@ -27,7 +28,7 @@ final class NewAppCoordinator: WWDCCoordinator {
 
     // - Top level controllers
     var windowController: WWDCWindowControllerObject
-    var tabController: FakeTabViewController
+    var tabController: ReplaceableSplitViewController
     var searchCoordinator: SearchCoordinator
 
     // - The 3 tabs
@@ -121,7 +122,7 @@ final class NewAppCoordinator: WWDCCoordinator {
 
         // Primary UI Initialization
 
-        tabController = FakeTabViewController(windowController: windowController)
+        tabController = ReplaceableSplitViewController(windowController: windowController)
 
         // Explore
         exploreController = ExploreViewController(provider: ExploreTabProvider(storage: storage))

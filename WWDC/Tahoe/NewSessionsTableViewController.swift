@@ -14,10 +14,12 @@ import OSLog
 
 // MARK: - Sessions Table View Controller
 
+@available(macOS 26.0, *)
 class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
 
     static var log = makeLogger()
 
+    private lazy var searchController = SessionSearchAccessoryViewController(nibName: nil, bundle: nil)
     private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?
@@ -142,7 +144,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     private var displayedRows: [SessionRow] = []
 
     private lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
-
 
     private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow], allRows: [SessionRow]) -> Bool {
         displayedRowsLock.suspend()
@@ -484,6 +485,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     }
 }
 
+@available(macOS 26.0, *)
 private extension NSMenuItem {
 
     var option: NewSessionsTableViewController.ContextualMenuOption {
@@ -510,6 +512,7 @@ private extension NSUserInterfaceItemIdentifier {
     static let sessionCell = NSUserInterfaceItemIdentifier(rawValue: "sessionCell")
 }
 
+@available(macOS 26.0, *)
 extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
 
     struct Metrics {

@@ -8,8 +8,8 @@
 
 import AppKit
 
+@available(macOS 26.0, *)
 final class NewMainWindowController: NewWWDCWindowController {
-
     weak var touchBarProvider: NSResponder? {
         didSet {
             touchBar = nil
@@ -18,8 +18,9 @@ final class NewMainWindowController: NewWWDCWindowController {
 
     static var defaultRect: NSRect {
         return NSScreen.main?.visibleFrame.insetBy(dx: 50, dy: 120) ??
-               NSRect(x: 0, y: 0, width: 1200, height: 600)
+            NSRect(x: 0, y: 0, width: 1200, height: 600)
     }
+
     var searchPopover: NSPopover?
 
     override func loadWindow() {
@@ -43,15 +44,15 @@ final class NewMainWindowController: NewWWDCWindowController {
     }
 
     @objc func performFindPanelAction(_ sender: Any) {
-        // TODO 
+        // TODO:
     }
 
     override func makeTouchBar() -> NSTouchBar? {
         return touchBarProvider?.makeTouchBar()
     }
-
 }
 
+@available(macOS 26.0, *)
 extension NewMainWindowController: NSToolbarDelegate {
     private func setupWindowAndToolbar(tab: MainWindowTab = .explore) {
         guard let window else {
@@ -124,33 +125,22 @@ extension NewMainWindowController: NSToolbarDelegate {
     }
 }
 
+@available(macOS 26.0, *)
 private extension NewMainWindowController {
     @objc func toggleSearchPanel(_ item: NSToolbarItem) {
         if let searchPopover {
             if searchPopover.isShown {
                 searchPopover.close()
-                if #available(macOS 15.0, *) {
-                    item.toolbar?.items.first(where: { $0.itemIdentifier == .downloadItem })?.isHidden = false
-                }
             } else {
                 searchPopover.show(relativeTo: item)
-                if #available(macOS 15.0, *) {
-                    item.toolbar?.items.first(where: { $0.itemIdentifier == .downloadItem })?.isHidden = true
-                }
             }
             return
         }
-//        guard let searchCoordinator = (NSApp.delegate as? AppDelegate)?.coordinator?.searchCoordinator else { return }
-//        let popover = NSPopover()
-//        searchCoordinator.videosSearchController.showFilterButton = false
-//        popover.contentViewController = searchCoordinator.videosSearchController
-//        popover.behavior = .applicationDefined
-//        popover.show(relativeTo: item)
-//        searchPopover = popover
-//
-//        if #available(macOS 15.0, *) {
-//            item.toolbar?.items.first(where: { $0.itemIdentifier == .downloadItem })?.isHidden = true
-//        }
+        let popover = NSPopover()
+        popover.contentViewController = SessionSearchAccessoryViewController()
+        popover.behavior = .applicationDefined
+        popover.show(relativeTo: item)
+        searchPopover = popover
     }
 
     @objc func toggleDownloadPanel(_ item: NSToolbarItem) {}
@@ -162,6 +152,7 @@ private extension NewMainWindowController {
     }
 }
 
+@available(macOS 26.0, *)
 private extension NewMainWindowController {
     var coordinator: (any WWDCCoordinator)? {
         (NSApp.delegate as? AppDelegate)?.coordinator

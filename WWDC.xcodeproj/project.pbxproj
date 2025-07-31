@@ -25,13 +25,14 @@
 		4DDF6A782177A00C008E5539 /* DownloadsManagementTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */; };
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
 		557221042C190BC0002B42C9 /* OptionalToggleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557221032C190BC0002B42C9 /* OptionalToggleFilter.swift */; };
-		8181E2662E39F0770033126E /* FakeTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E2652E39F0710033126E /* FakeTabViewController.swift */; };
+		8181E2662E39F0770033126E /* ReplaceableSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E2652E39F0710033126E /* ReplaceableSplitViewController.swift */; };
 		8181E27A2E3A5E6E0033126E /* NewMainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E2792E3A5E620033126E /* NewMainWindowController.swift */; };
 		8181E27C2E3A63550033126E /* WWDCCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E27B2E3A634D0033126E /* WWDCCoordinator.swift */; };
 		8181E27E2E3A6CC70033126E /* NewAppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */; };
 		81AACF162E39232E000A2319 /* ToolbarSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AACF152E39231D000A2319 /* ToolbarSetup.swift */; };
 		81CE115D2E3919ED002A0475 /* TahoeFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */; };
 		81E050552E3A854B007274FB /* NewSessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */; };
+		81E050572E3BFFC8007274FB /* SessionSearchAccessoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050562E3BFFBF007274FB /* SessionSearchAccessoryViewController.swift */; };
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
 		910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106374F2E26B68700E917F0 /* PUIButtonView.swift */; };
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
@@ -321,13 +322,14 @@
 		4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsManagementTableCellView.swift; sourceTree = "<group>"; };
 		4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionsTableViewController+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
 		557221032C190BC0002B42C9 /* OptionalToggleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalToggleFilter.swift; sourceTree = "<group>"; };
-		8181E2652E39F0710033126E /* FakeTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTabViewController.swift; sourceTree = "<group>"; };
+		8181E2652E39F0710033126E /* ReplaceableSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceableSplitViewController.swift; sourceTree = "<group>"; };
 		8181E2792E3A5E620033126E /* NewMainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMainWindowController.swift; sourceTree = "<group>"; };
 		8181E27B2E3A634D0033126E /* WWDCCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCCoordinator.swift; sourceTree = "<group>"; };
 		8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAppCoordinator.swift; sourceTree = "<group>"; };
 		81AACF152E39231D000A2319 /* ToolbarSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSetup.swift; sourceTree = "<group>"; };
 		81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeFeatureFlag.swift; sourceTree = "<group>"; };
 		81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionsTableViewController.swift; sourceTree = "<group>"; };
+		81E050562E3BFFBF007274FB /* SessionSearchAccessoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSearchAccessoryViewController.swift; sourceTree = "<group>"; };
 		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
 		9106374F2E26B68700E917F0 /* PUIButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIButtonView.swift; sourceTree = "<group>"; };
@@ -598,10 +600,11 @@
 			children = (
 				81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */,
 				81AACF152E39231D000A2319 /* ToolbarSetup.swift */,
-				8181E2652E39F0710033126E /* FakeTabViewController.swift */,
+				8181E2652E39F0710033126E /* ReplaceableSplitViewController.swift */,
 				8181E2792E3A5E620033126E /* NewMainWindowController.swift */,
 				8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */,
 				81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */,
+				81E050562E3BFFBF007274FB /* SessionSearchAccessoryViewController.swift */,
 			);
 			path = Tahoe;
 			sourceTree = "<group>";
@@ -1531,7 +1534,7 @@
 				F486B30A2C0E69E60066749F /* AVAssetMediaDownloadEngine.swift in Sources */,
 				DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */,
 				DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */,
-				8181E2662E39F0770033126E /* FakeTabViewController.swift in Sources */,
+				8181E2662E39F0770033126E /* ReplaceableSplitViewController.swift in Sources */,
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
 				DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */,
 				F486B30C2C0E69E60066749F /* URLSessionMediaDownloadEngine.swift in Sources */,
@@ -1616,6 +1619,7 @@
 				DDA60E1320A90655002EECF5 /* SessionCellView.swift in Sources */,
 				8181E27A2E3A5E6E0033126E /* NewMainWindowController.swift in Sources */,
 				DD7E2907248000AA00A58370 /* FullBleedImageView.swift in Sources */,
+				81E050572E3BFFC8007274FB /* SessionSearchAccessoryViewController.swift in Sources */,
 				DDF32EAD1EBE2F9F0028E39D /* SessionRow.swift in Sources */,
 				F44C823A2A22B8DD00FDE980 /* ExploreTabContent.swift in Sources */,
 				4D0E806F217A2D6E00B24237 /* DownloadManager+SupportingTypesAndExtensions.swift in Sources */,

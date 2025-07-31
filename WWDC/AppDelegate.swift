@@ -110,7 +110,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         self.storage = storage
         self.syncEngine = syncEngine
 
-        if TahoeFeatureFlag.isLiquidGlassEnabled {
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
             coordinator = NewAppCoordinator(
                 windowController: NewMainWindowController(),
                 storage: storage,

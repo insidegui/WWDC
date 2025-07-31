@@ -1,5 +1,5 @@
 //
-//  FakeTabViewController.swift
+//  ReplaceableSplitViewController.swift
 //  WWDC
 //
 //  Created by luca on 30.07.2025.
@@ -9,7 +9,13 @@
 import AppKit
 import Combine
 
-class FakeTabViewController: NSSplitViewController, WWDCTabController {
+protocol ReplaceableSplitViewTopAccessoryProvider {
+    @available(macOS 26.0, *)
+    func topAccessoryViewController() -> NSSplitViewItemAccessoryViewController?
+}
+
+@available(macOS 26.0, *)
+class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     typealias Tab = MainWindowTab
     @Published var activeTab: Tab = .explore {
         didSet {
@@ -58,10 +64,8 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         sidebarItem.canCollapse = false
 
         topSegmentControl?.selectedSegment = activeTab.rawValue
-        if #available(macOS 15.0, *) {
-            topSearchItem?.isHidden = activeTab == .explore
-            topDownloadItem?.isHidden = activeTab == .explore
-        }
+        topSearchItem?.isHidden = activeTab == .explore
+        topDownloadItem?.isHidden = activeTab == .explore
 
         if
             let list = newItems.first?.viewController as? NewSessionsTableViewController,
@@ -78,7 +82,11 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
     @MainActor
     func _replaceSidebarIfNeeded(newItems: [NSSplitViewItem]) async {
         if newItems.count == 2 {
-            await sidebarContainer.replaceContent(newItems[0].viewController)
+            let content = newItems[0].viewController
+            await sidebarContainer.replaceContent(content)
+            if let provider = content as? ReplaceableSplitViewTopAccessoryProvider, let accessory = provider.topAccessoryViewController() {
+                splitViewItem(for: sidebarContainer)?.addTopAlignedAccessoryViewController(accessory)
+            }
         }
     }
 
@@ -108,9 +116,7 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         sidebarItem.canCollapse = false
         addSplitViewItem(sidebarItem)
         detailItem = NSSplitViewItem(viewController: SplitContainer(nibName: nil, bundle: nil))
-        if #available(macOS 26.0, *) {
-            detailItem.automaticallyAdjustsSafeAreaInsets = true
-        }
+        detailItem.automaticallyAdjustsSafeAreaInsets = true
         addSplitViewItem(detailItem)
         sidebarContainer.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailContainer.view.setContentHuggingPriority(.defaultLow, for: .horizontal)
@@ -143,9 +149,7 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
     override func viewDidLoad() {
         super.viewDidLoad()
         for item in [topTabItem, topSearchItem, topDownloadItem] {
-            if #available(macOS 15.0, *) {
-                item?.isHidden = true
-            }
+            item?.isHidden = true
         }
     }
     override func viewWillAppear() {
@@ -153,9 +157,7 @@ class FakeTabViewController: NSSplitViewController, WWDCTabController {
         Task {
             await changeContent()
             for item in [topTabItem/*, topSearchItem, topDownloadItem*/] {
-                if #available(macOS 15.0, *) {
-                    item?.isHidden = false
-                }
+                item?.isHidden = false
             }
         }
     }
