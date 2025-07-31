@@ -75,8 +75,8 @@ extension NewMainWindowController: NSToolbarDelegate {
         toolbarItem.autovalidates = false
         switch itemIdentifier {
         case .searchItem:
-            toolbarItem.image = NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: "Search")
-            toolbarItem.toolTip = "Search"
+            toolbarItem.image = NSImage(systemSymbolName: "line.3.horizontal.decrease", accessibilityDescription: "Filter")
+            toolbarItem.toolTip = "Filter"
             toolbarItem.target = self
             toolbarItem.action = #selector(toggleSearchPanel)
         case .tabSelectionItem:
