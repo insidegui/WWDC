@@ -50,7 +50,18 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         return v
     }()
 
-    lazy var playButton: VibrantButton = {
+    lazy var playButton: NSView = {
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            let b = NSButton(title: "Play", image: NSImage(systemSymbolName: "play.fill", accessibilityDescription: "Play")!, target: self, action: #selector(play))
+            b.isBordered = true
+            b.bezelStyle = .glass
+            b.controlSize = .extraLarge
+            b.tintProminence = .automatic
+            b.contentTintColor = .clear
+            b.borderShape = .roundedRectangle
+            b.translatesAutoresizingMaskIntoConstraints = false
+            return b
+        }
         let b = VibrantButton(frame: .zero)
 
         b.title = "Play"
