@@ -265,7 +265,17 @@ final class AppCoordinator: Logging, Signposting {
                     activeTabSelectedSessionViewModel = nil
                 }
 
+                // pip detail view controller if needed
                 updateShelfBasedOnSelectionChange()
+                // then update with newest view model
+                switch activeTab {
+                case .schedule:
+                    scheduleController.splitViewController.detailViewController.viewModel = activeTabSelectedSessionViewModel
+                case .videos:
+                    videosController.detailViewController.viewModel = activeTabSelectedSessionViewModel
+                default:
+                    break
+                }
                 updateCurrentActivity(with: activeTabSelectedSessionViewModel)
             }
             .store(in: &cancellables)

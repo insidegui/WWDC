@@ -28,7 +28,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     var viewModel: SessionViewModel? {
         didSet {
-            updateBindings()
+            updateBindings() // changes along with $selectedSession
         }
     }
 

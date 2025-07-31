@@ -29,14 +29,6 @@ final class SessionsSplitViewController: NSSplitViewController {
         let detailViewController = SessionDetailsViewController()
         self.detailViewController = detailViewController
 
-        listViewController.$selectedSession.receive(on: DispatchQueue.main).sink { viewModel in
-            NSAnimationContext.runAnimationGroup { context in
-                context.duration = 0.35
-
-                detailViewController.viewModel = viewModel
-            }
-        }.store(in: &cancellables)
-
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter
