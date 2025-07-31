@@ -16,6 +16,10 @@ public struct DetachedPlaybackStatus: Identifiable {
     var title: String
     var subtitle: String
     var snapshot: PUISnapshotClosure?
+
+    public var isFullScreen: Bool {
+        id == "fullScreen"
+    }
 }
 
 public extension DetachedPlaybackStatus {

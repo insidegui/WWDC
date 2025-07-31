@@ -237,7 +237,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         self.detachedSessionID = viewModel?.sessionIdentifier
         self.detachedPlayer = player
 
-        installDetachedStatusControllerIfNeeded()
+        installDetachedStatusControllerIfNeeded(status)
 
         detachedStatusController.status = status
         
@@ -258,25 +258,33 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     private lazy var detachedStatusController = PUIDetachedPlaybackStatusViewController()
 
-    private func installDetachedStatusControllerIfNeeded() {
-        guard detachedStatusController.parent == nil else { return }
-        guard let playerView else { return }
-
-        addChild(detachedStatusController)
-
+    private func installDetachedStatusControllerIfNeeded(_ status: DetachedPlaybackStatus) {
+        guard let playerView else { return } // make sure already played once, otherwise no need to insert this status view
+        if detachedStatusController.parent == nil {
+            // add child once, move views based on the status
+            addChild(detachedStatusController)
+        }
         let statusView = detachedStatusController.view
         statusView.wantsLayer = true
         statusView.translatesAutoresizingMaskIntoConstraints = false
-        playerView.addSubview(statusView, positioned: .above, relativeTo: playerView.subviews.first)
-
         statusView.layer?.zPosition = 9 // only works with siblings, for more info: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/BuildingaLayerHierarchy/BuildingaLayerHierarchy.html?utm_source=chatgpt.com#:~:text=top%20of%20any-,siblings,-with%20the%20same
-
+        // for simplicity, just re-add this view to avoid all those buggy checks
+        statusView.removeFromSuperview()
+        let parent: NSView
+        if status.isFullScreen {
+            // add to playerContainer
+            parent = playerContainer
+        } else {
+            // add between AVPlayer and controls
+            parent = playerView
+        }
+        parent.addSubview(statusView, positioned: .above, relativeTo: parent.subviews.first)
         // The status view is placed inside the player view, so layout guide constraints are unnecessary
         NSLayoutConstraint.activate([
-            statusView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor),
-            statusView.trailingAnchor.constraint(equalTo: playerView.trailingAnchor),
-            statusView.topAnchor.constraint(equalTo: playerView.topAnchor),
-            statusView.bottomAnchor.constraint(equalTo: playerView.bottomAnchor)
+            statusView.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+            statusView.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
+            statusView.topAnchor.constraint(equalTo: parent.topAnchor),
+            statusView.bottomAnchor.constraint(equalTo: parent.bottomAnchor)
         ])
     }
 
