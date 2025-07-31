@@ -72,6 +72,9 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         tableView.delegate = self
 
         setupContextualMenu()
+        if let rows = sessionRowProvider.rows {
+            updateWith(rows: rows, animated: true)
+        }
     }
 
     override func viewDidAppear() {
@@ -140,12 +143,8 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
     private lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
 
-    @Published
-    private(set) var hasPerformedInitialRowDisplay = false
 
     private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow], allRows: [SessionRow]) -> Bool {
-        guard !hasPerformedInitialRowDisplay else { return true }
-
         displayedRowsLock.suspend()
 
         displayedRows = rows
@@ -171,7 +170,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             self.tableView.allowsEmptySelection = false
         } completionHandler: {
             self.displayedRowsLock.resume()
-            self.hasPerformedInitialRowDisplay = true
         }
 
         return false

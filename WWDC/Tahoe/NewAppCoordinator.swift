@@ -293,16 +293,16 @@ final class NewAppCoordinator: WWDCCoordinator {
         // this avoids some jittery UI. Technically this could be changed to only watch
         // the tab that will be visible during startup.
         Publishers.CombineLatest(
-            videosListController.$hasPerformedInitialRowDisplay,
-            scheduleListController.$hasPerformedInitialRowDisplay,
-            //scheduleController.$isShowingHeroView
+            videosListController.sessionRowProvider.rowsPublisher,
+            scheduleListController.sessionRowProvider.rowsPublisher,
+//            scheduleController.$isShowingHeroView
         )
         .replaceErrorWithEmpty()
-        .drop {
+        .drop { (videoRows, scheduleRows) in
             /// The videos tab has content.
-            let videosAvailable = true //$0.0
+            let videosAvailable = !videoRows.all.isEmpty
             /// The schedule tab has content.
-            let scheduleAvailable = $0.1
+            let scheduleAvailable = !scheduleRows.all.isEmpty
             /// The schedule tab has an event hero landing screen.
             let scheduleHeroAvailable = true //$0.2
             /// We want to reveal the UI once the videos tab has content and the schedule tab has content, be it a schedule or a landing screen.
