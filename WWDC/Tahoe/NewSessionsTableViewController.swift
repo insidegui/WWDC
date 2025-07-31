@@ -317,7 +317,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         v.autoresizingMask = [.width, .height]
         v.floatsGroupRows = true
         v.gridStyleMask = .solidHorizontalGridLineMask
-        v.style = .automatic
+        v.style = .fullWidth
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
         v.addTableColumn(column)
