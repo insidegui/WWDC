@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,6 +30,8 @@
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
 		914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */; };
 		914C83B42E1ECBFF001AEE5C /* SessionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */; };
+		916AA6252E37085C00492185 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 916AA6242E37085C00492185 /* Realm */; };
+		916AA6282E37086700492185 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 916AA6272E37086700492185 /* RealmSwift */; };
 		91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */; };
 		91DB93E82E1FF610002E8716 /* IsSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB93E72E1FF60C002E8716 /* IsSelected.swift */; };
 		91DB9FD02E21777E002E8716 /* CursorShapeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */; };
@@ -323,6 +325,8 @@
 		91DB93E72E1FF60C002E8716 /* IsSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsSelected.swift; sourceTree = "<group>"; };
 		91DB9FCF2E21777E002E8716 /* CursorShapeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CursorShapeViewModifier.swift; sourceTree = "<group>"; };
 		91DB9FD12E2177A6002E8716 /* SetScrollerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetScrollerStyle.swift; sourceTree = "<group>"; };
+		91DC2FAB2E370833002C3BCA /* RealmBinary */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RealmBinary; path = Packages/RealmBinary; sourceTree = "<group>"; };
+		91DC2FAC2E370833002C3BCA /* RealmSwiftBinary */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RealmSwiftBinary; path = Packages/RealmSwiftBinary; sourceTree = "<group>"; };
 		91EF6A292A33FBF8003A71A3 /* Realm+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+Combine.swift"; sourceTree = "<group>"; };
 		91F235CC2E299C660061432C /* SessionActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionActionsView.swift; sourceTree = "<group>"; };
 		DD0159A61ECFE26200F980F1 /* DeepLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLink.swift; sourceTree = "<group>"; };
@@ -531,9 +535,11 @@
 				012BEFA41EE8658F007E72CA /* EventKit.framework in Frameworks */,
 				DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */,
 				DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */,
+				916AA6282E37086700492185 /* RealmSwift in Frameworks */,
 				DDB1A26A2577E7E900995FF1 /* Sparkle in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
 				91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */,
+				916AA6252E37085C00492185 /* Realm in Frameworks */,
 				DD600AB72487F1730071B90E /* ConfUIFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -895,6 +901,8 @@
 		DDB1A25D2577E51200995FF1 /* LocalDependencies */ = {
 			isa = PBXGroup;
 			children = (
+				91DC2FAB2E370833002C3BCA /* RealmBinary */,
+				91DC2FAC2E370833002C3BCA /* RealmSwiftBinary */,
 				91037C8C2A32AF62009AF15E /* Transcripts */,
 				DDB1A25E2577E51E00995FF1 /* ConfCore */,
 			);
@@ -1294,6 +1302,8 @@
 				DDB1A2622577E67A00995FF1 /* ConfCore */,
 				DDB1A2692577E7E900995FF1 /* Sparkle */,
 				91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */,
+				916AA6242E37085C00492185 /* Realm */,
+				916AA6272E37086700492185 /* RealmSwift */,
 			);
 			productName = WWDC;
 			productReference = DD36A4AC1E478C6A00B2EA88 /* WWDC.app */;
@@ -1422,6 +1432,8 @@
 				DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */,
+				916AA6232E37085C00492185 /* XCLocalSwiftPackageReference "Packages/RealmBinary" */,
+				916AA6262E37086700492185 /* XCLocalSwiftPackageReference "Packages/RealmSwiftBinary" */,
 			);
 			productRefGroup = DD36A4AD1E478C6A00B2EA88 /* Products */;
 			projectDirPath = "";
@@ -2533,6 +2545,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		916AA6232E37085C00492185 /* XCLocalSwiftPackageReference "Packages/RealmBinary" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/RealmBinary;
+		};
+		916AA6262E37086700492185 /* XCLocalSwiftPackageReference "Packages/RealmSwiftBinary" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/RealmSwiftBinary;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -2561,6 +2584,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		916AA6242E37085C00492185 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Realm;
+		};
+		916AA6272E37086700492185 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RealmSwift;
+		};
 		91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */;
