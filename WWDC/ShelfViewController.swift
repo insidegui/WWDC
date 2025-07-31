@@ -33,6 +33,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         }
     }
 
+    private var containerView: NSView! // view bridging for background extension effects
     lazy var shelfView: ShelfView = {
         let v = ShelfView()
 
@@ -70,33 +71,40 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     }
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
-        view.wantsLayer = true
-
-        let shelfView: NSView
         if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
-            let extensionView = NSBackgroundExtensionView()
-            extensionView.contentView = self.shelfView
-            extensionView.translatesAutoresizingMaskIntoConstraints = false
-            shelfView = extensionView
+            let extensionView = NSBackgroundExtensionView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
+            containerView = NSView()
+            containerView.translatesAutoresizingMaskIntoConstraints = false
+            extensionView.contentView = containerView
+            extensionView.automaticallyPlacesContentView = false
+            // only enable reflection effect on leading edge
+            NSLayoutConstraint.activate([
+                containerView.topAnchor.constraint(equalTo: extensionView.topAnchor),
+                containerView.leadingAnchor.constraint(equalTo: extensionView.safeAreaLayoutGuide.leadingAnchor),
+                containerView.bottomAnchor.constraint(equalTo: extensionView.bottomAnchor),
+                containerView.trailingAnchor.constraint(equalTo: extensionView.trailingAnchor)
+            ])
+            view = extensionView
         } else {
-            shelfView = self.shelfView
+            containerView = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
+            view = containerView
         }
-        view.addSubview(shelfView)
-        shelfView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        shelfView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        shelfView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        shelfView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        containerView.addSubview(shelfView)
+        shelfView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
+        shelfView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+        shelfView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        shelfView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
 
-        view.addSubview(playButton)
-        playButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        playButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        containerView.addSubview(playButton)
+        playButton.centerXAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        playButton.centerYAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.centerYAnchor).isActive = true
 
-        view.addSubview(playerContainer)
-        playerContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        playerContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-        playerContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        playerContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        containerView.addSubview(playerContainer)
+        // reflect player's leading
+        playerContainer.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor).isActive = true
+        playerContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
+        playerContainer.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        playerContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
     }
 
     override func viewDidLoad() {
@@ -221,7 +229,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
         shelfView.isHidden = true
 
-        view.needsLayout = true
+        containerView.needsLayout = true
     }
 
     /// Hides detached status view without resetting state.

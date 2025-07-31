@@ -28,8 +28,8 @@ public extension AVPlayer {
         constraints = [
             guide.widthAnchor.constraint(equalToConstant: videoRect.width),
             guide.heightAnchor.constraint(equalToConstant: videoRect.height),
-            guide.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            guide.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+            guide.centerYAnchor.constraint(equalTo: container.safeAreaLayoutGuide.centerYAnchor),
+            guide.centerXAnchor.constraint(equalTo: container.safeAreaLayoutGuide.centerXAnchor)
         ]
 
         NSLayoutConstraint.activate(constraints)
