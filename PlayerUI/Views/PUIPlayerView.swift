@@ -1375,11 +1375,21 @@ public final class PUIPlayerView: NSView {
     }
 
     private var isTransitioningFromFullScreenPlayback = false
+    private var currentDetachedStatus: DetachedPlaybackStatus?
+
+    public func resumeDetachedStatusIfNeeded() {
+        guard let currentDetachedStatus else { return }
+        appearanceDelegate?.dismissDetachedStatus(currentDetachedStatus, for: self) // this gives the delegate the chance to reset some state variables
+        appearanceDelegate?.presentDetachedStatus(currentDetachedStatus, for: self)
+
+    }
 
     @objc private func windowWillEnterFullScreen() {
         guard window is PUIPlayerWindow else { return }
 
-        appearanceDelegate?.presentDetachedStatus(.fullScreen.snapshot(using: snapshotClosure), for: self)
+        let status = DetachedPlaybackStatus.fullScreen.snapshot(using: snapshotClosure)
+        appearanceDelegate?.presentDetachedStatus(status, for: self)
+        currentDetachedStatus = status
 
         fullScreenButton.isHidden = true
         updateTopTrailingMenuPosition()
@@ -1412,6 +1422,7 @@ public final class PUIPlayerView: NSView {
 
         /// The detached status presentation takes care of leaving a black background before we finish the full screen transition.
         appearanceDelegate?.dismissDetachedStatus(.fullScreen, for: self)
+        currentDetachedStatus = nil
     }
 
     @objc private func windowDidBecomeMain() {
@@ -1595,7 +1606,9 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
     public func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         delegate?.playerViewWillEnterPictureInPictureMode(self)
 
-        appearanceDelegate?.presentDetachedStatus(.pictureInPicture.snapshot(using: snapshotClosure), for: self)
+        let status = DetachedPlaybackStatus.pictureInPicture.snapshot(using: snapshotClosure)
+        appearanceDelegate?.presentDetachedStatus(status, for: self)
+        currentDetachedStatus = status
     }
 
     public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
@@ -1647,6 +1660,7 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
     // Called Last
     public func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         appearanceDelegate?.dismissDetachedStatus(.pictureInPicture, for: self)
+        currentDetachedStatus = nil
         pipButton.state = .off
         invalidateTouchBar()
     }

@@ -28,7 +28,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     var viewModel: SessionViewModel? {
         didSet {
-            updateBindings()
+            updateBindings() // changes along with $selectedSession
         }
     }
 
@@ -143,6 +143,26 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         self.delegate?.shelfViewControllerDidSelectPlay(self)
     }
 
+    private var playerView: PUIPlayerView?
+    func addPlayerViewIfNeeded(_ playerController: VideoPlayerViewController) {
+
+        // Already attached
+        guard playerController.view.superview != playerContainer else { return }
+        playerView = playerController.playerView
+        playerController.view.frame = playerContainer.bounds
+        playerController.view.alphaValue = 0
+        playerController.view.isHidden = false
+
+        playerController.view.translatesAutoresizingMaskIntoConstraints = false
+
+        playerContainer.addSubview(playerController.view)
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+
+        playerController.view.alphaValue = 1
+    }
+
     private var sharingController: ClipSharingViewController?
 
     func showClipUI() {
@@ -217,7 +237,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         self.detachedSessionID = viewModel?.sessionIdentifier
         self.detachedPlayer = player
 
-        installDetachedStatusControllerIfNeeded()
+        installDetachedStatusControllerIfNeeded(status)
 
         detachedStatusController.status = status
         
@@ -238,25 +258,33 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     private lazy var detachedStatusController = PUIDetachedPlaybackStatusViewController()
 
-    private func installDetachedStatusControllerIfNeeded() {
-        guard detachedStatusController.parent == nil else { return }
-
-        updateVideoLayoutGuide()
-
-        addChild(detachedStatusController)
-
+    private func installDetachedStatusControllerIfNeeded(_ status: DetachedPlaybackStatus) {
+        guard let playerView else { return } // make sure already played once, otherwise no need to insert this status view
+        if detachedStatusController.parent == nil {
+            // add child once, move views based on the status
+            addChild(detachedStatusController)
+        }
         let statusView = detachedStatusController.view
         statusView.wantsLayer = true
         statusView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(statusView, positioned: .above, relativeTo: view.subviews.first)
-
-        statusView.layer?.zPosition = 9
-
+        statusView.layer?.zPosition = 9 // only works with siblings, for more info: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/BuildingaLayerHierarchy/BuildingaLayerHierarchy.html?utm_source=chatgpt.com#:~:text=top%20of%20any-,siblings,-with%20the%20same
+        // for simplicity, just re-add this view to avoid all those buggy checks
+        statusView.removeFromSuperview()
+        let parent: NSView
+        if status.isFullScreen {
+            // add to playerContainer
+            parent = playerContainer
+        } else {
+            // add between AVPlayer and controls
+            parent = playerView
+        }
+        parent.addSubview(statusView, positioned: .above, relativeTo: parent.subviews.first)
+        // The status view is placed inside the player view, so layout guide constraints are unnecessary
         NSLayoutConstraint.activate([
-            statusView.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor),
-            statusView.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor),
-            statusView.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor),
-            statusView.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor)
+            statusView.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+            statusView.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
+            statusView.topAnchor.constraint(equalTo: parent.topAnchor),
+            statusView.bottomAnchor.constraint(equalTo: parent.bottomAnchor)
         ])
     }
 
