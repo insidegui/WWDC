@@ -157,23 +157,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
         guard let playerController = currentPlayerController else { return }
 
-        let playerContainer = shelf.playerContainer
-
-        // Already attached
-        guard playerController.view.superview != playerContainer else { return }
-
-        playerController.view.frame = playerContainer.bounds
-        playerController.view.alphaValue = 0
-        playerController.view.isHidden = false
-
-        playerController.view.translatesAutoresizingMaskIntoConstraints = false
-
-        playerContainer.addSubview(playerController.view)
-        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
-
-        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
-
-        playerController.view.alphaValue = 1
+        shelf.addPlayerViewIfNeeded(playerController)
 
         playerTouchBarContainer?.touchBarProvider = playerController.playerView
     }

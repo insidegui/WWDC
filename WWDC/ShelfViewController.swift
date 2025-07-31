@@ -143,6 +143,26 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         self.delegate?.shelfViewControllerDidSelectPlay(self)
     }
 
+    private var playerView: PUIPlayerView?
+    func addPlayerViewIfNeeded(_ playerController: VideoPlayerViewController) {
+
+        // Already attached
+        guard playerController.view.superview != playerContainer else { return }
+        playerView = playerController.playerView
+        playerController.view.frame = playerContainer.bounds
+        playerController.view.alphaValue = 0
+        playerController.view.isHidden = false
+
+        playerController.view.translatesAutoresizingMaskIntoConstraints = false
+
+        playerContainer.addSubview(playerController.view)
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+
+        playerController.view.alphaValue = 1
+    }
+
     private var sharingController: ClipSharingViewController?
 
     func showClipUI() {
@@ -240,23 +260,23 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     private func installDetachedStatusControllerIfNeeded() {
         guard detachedStatusController.parent == nil else { return }
-
-        updateVideoLayoutGuide()
+        guard let playerView else { return }
 
         addChild(detachedStatusController)
 
         let statusView = detachedStatusController.view
         statusView.wantsLayer = true
         statusView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(statusView, positioned: .above, relativeTo: view.subviews.first)
+        playerView.addSubview(statusView, positioned: .above, relativeTo: playerView.subviews.first)
 
-        statusView.layer?.zPosition = 9
+        statusView.layer?.zPosition = 9 // only works with siblings, for more info: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/BuildingaLayerHierarchy/BuildingaLayerHierarchy.html?utm_source=chatgpt.com#:~:text=top%20of%20any-,siblings,-with%20the%20same
 
+        // The status view is placed inside the player view, so layout guide constraints are unnecessary
         NSLayoutConstraint.activate([
-            statusView.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor),
-            statusView.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor),
-            statusView.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor),
-            statusView.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor)
+            statusView.leadingAnchor.constraint(equalTo: playerView.leadingAnchor),
+            statusView.trailingAnchor.constraint(equalTo: playerView.trailingAnchor),
+            statusView.topAnchor.constraint(equalTo: playerView.topAnchor),
+            statusView.bottomAnchor.constraint(equalTo: playerView.bottomAnchor)
         ])
     }
 
