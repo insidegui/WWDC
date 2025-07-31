@@ -116,7 +116,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
             shelfController.playButton.isHidden = true
             shelfController.playerContainer.isHidden = false
-
+            currentPlayerController?.playerView.resumeDetachedStatusIfNeeded()
         } catch {
             WWDCAlert.show(with: error)
         }
