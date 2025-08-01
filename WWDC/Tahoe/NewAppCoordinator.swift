@@ -13,6 +13,7 @@ import ConfCore
 import OSLog
 import PlayerUI
 import RealmSwift
+import SwiftUI
 
 @available(macOS 26.0, *)
 final class NewAppCoordinator: WWDCCoordinator {
@@ -32,7 +33,7 @@ final class NewAppCoordinator: WWDCCoordinator {
     var searchCoordinator: SearchCoordinator
 
     // - The 3 tabs
-    var exploreController: ExploreViewController
+    var exploreController: NSViewController
     var scheduleListController: NewSessionsTableViewController
     var scheduleDetailController: SessionDetailsViewController
     var videosListController: NewSessionsTableViewController
@@ -125,9 +126,11 @@ final class NewAppCoordinator: WWDCCoordinator {
         tabController = ReplaceableSplitViewController(windowController: windowController)
 
         // Explore
-        exploreController = ExploreViewController(provider: ExploreTabProvider(storage: storage))
+        let provider = ExploreTabProvider(storage: storage)
+        let viewModel = NewExploreViewModel(provider: provider)
+        exploreController = NSHostingController(rootView: NewExploreTabRootView(viewModel: viewModel))
         exploreController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
-        tabController.add(list: nil, detail: exploreController)
+        tabController.add(list: NSHostingController(rootView: NewExploreCategoryList(viewModel: viewModel)), detail: exploreController)
 
         _playerOwnerSessionIdentifier = .init(initialValue: nil)
 

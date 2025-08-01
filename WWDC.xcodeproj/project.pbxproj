@@ -33,6 +33,7 @@
 		81CE115D2E3919ED002A0475 /* TahoeFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */; };
 		81E050552E3A854B007274FB /* NewSessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */; };
 		81E050572E3BFFC8007274FB /* SessionSearchAccessoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050562E3BFFBF007274FB /* SessionSearchAccessoryViewController.swift */; };
+		81E050592E3C9791007274FB /* NewExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050582E3C9789007274FB /* NewExploreView.swift */; };
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
 		910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106374F2E26B68700E917F0 /* PUIButtonView.swift */; };
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
@@ -330,6 +331,7 @@
 		81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeFeatureFlag.swift; sourceTree = "<group>"; };
 		81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionsTableViewController.swift; sourceTree = "<group>"; };
 		81E050562E3BFFBF007274FB /* SessionSearchAccessoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSearchAccessoryViewController.swift; sourceTree = "<group>"; };
+		81E050582E3C9789007274FB /* NewExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExploreView.swift; sourceTree = "<group>"; };
 		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
 		9106374F2E26B68700E917F0 /* PUIButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIButtonView.swift; sourceTree = "<group>"; };
@@ -605,6 +607,7 @@
 				8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */,
 				81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */,
 				81E050562E3BFFBF007274FB /* SessionSearchAccessoryViewController.swift */,
+				81E050582E3C9789007274FB /* NewExploreView.swift */,
 			);
 			path = Tahoe;
 			sourceTree = "<group>";
@@ -1550,6 +1553,7 @@
 				DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */,
 				DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */,
 				F4578D572A2659B3005B311A /* ExploreTabItemView.swift in Sources */,
+				81E050592E3C9791007274FB /* NewExploreView.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
 				F4CCF942265ED24500A69E62 /* AppCommandsReceiver.swift in Sources */,
 				F486B30B2C0E69E60066749F /* SimulatedMediaDownloadEngine.swift in Sources */,

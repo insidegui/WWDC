@@ -49,13 +49,13 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     }
 
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
+        view = NSView(frame: NSRect(x: 0, y: 0, width: 320, height: MainWindowController.defaultRect.height))
         view.widthAnchor.constraint(lessThanOrEqualToConstant: 675).isActive = true
+
+        view.widthAnchor.constraint(greaterThanOrEqualToConstant: 320).isActive = true
 
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
-
-        scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 320).isActive = true
 
         view.addSubview(scrollView)
 
