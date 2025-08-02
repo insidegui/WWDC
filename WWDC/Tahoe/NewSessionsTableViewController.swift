@@ -19,7 +19,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
     static var log = makeLogger()
 
-    private lazy var searchController = SessionSearchAccessoryViewController(nibName: nil, bundle: nil)
     private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?

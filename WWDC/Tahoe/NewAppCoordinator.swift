@@ -30,7 +30,7 @@ final class NewAppCoordinator: WWDCCoordinator {
     // - Top level controllers
     var windowController: WWDCWindowControllerObject
     var tabController: ReplaceableSplitViewController
-    var searchCoordinator: SearchCoordinator
+    var searchCoordinator: NewGlobalSearchCoordinator
 
     // - The 3 tabs
     var exploreController: NSViewController
@@ -108,13 +108,8 @@ final class NewAppCoordinator: WWDCCoordinator {
         self.storage = storage
         self.syncEngine = syncEngine
 
-        let scheduleSearchController = SearchFiltersViewController.loadFromStoryboard()
-        let videosSearchController = SearchFiltersViewController.loadFromStoryboard()
-
-        let searchCoordinator = SearchCoordinator(
+        let searchCoordinator = NewGlobalSearchCoordinator(
             self.storage,
-            scheduleSearchController: scheduleSearchController,
-            videosSearchController: videosSearchController,
             restorationFiltersState: Preferences.shared.filtersState
         )
         self.searchCoordinator = searchCoordinator
@@ -130,7 +125,7 @@ final class NewAppCoordinator: WWDCCoordinator {
         let viewModel = NewExploreViewModel(provider: provider)
         exploreController = NSHostingController(rootView: NewExploreTabRootView(viewModel: viewModel))
         exploreController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
-        tabController.add(list: NSHostingController(rootView: NewExploreCategoryList(viewModel: viewModel)), detail: exploreController)
+        tabController.add(list: NSHostingController(rootView: NewExploreCategoryList(viewModel: viewModel).environment(searchCoordinator)), detail: exploreController)
 
         _playerOwnerSessionIdentifier = .init(initialValue: nil)
 
