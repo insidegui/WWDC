@@ -71,7 +71,7 @@ private class HeaderRowViewModel {
     }
 }
 
-struct TopicHeaderRowContent: View {
+private struct TopicHeaderRowContent: View {
     @Environment(HeaderRowViewModel.self) private var viewModel
     var body: some View {
         HStack {
