@@ -7,6 +7,7 @@
 //
 
 import AppKit
+import Combine
 
 @available(macOS 26.0, *)
 final class NewMainWindowController: NewWWDCWindowController {
@@ -22,6 +23,7 @@ final class NewMainWindowController: NewWWDCWindowController {
     }
 
     var searchPopover: NSPopover?
+    private var searchFieldObservers = Set<AnyCancellable>()
 
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
@@ -66,6 +68,7 @@ extension NewMainWindowController: NSToolbarDelegate {
 
         toolbar.delegate = self
         toolbar.displayMode = .iconOnly
+        toolbar.allowsDisplayModeCustomization = false
         toolbar.allowsUserCustomization = false
         toolbar.centeredItemIdentifiers = [.tabSelectionItem]
         window.toolbar = toolbar
@@ -76,7 +79,11 @@ extension NewMainWindowController: NSToolbarDelegate {
         toolbarItem.autovalidates = false
         switch itemIdentifier {
         case .searchItem:
+            let item = NSSearchToolbarItem(itemIdentifier: itemIdentifier)
+            return item
+        case .searchPlaceholderItem:
             toolbarItem.image = NSImage(systemSymbolName: "line.3.horizontal.decrease", accessibilityDescription: "Filter")
+            toolbarItem.badge = .count(10)
             toolbarItem.toolTip = "Filter"
             toolbarItem.target = self
             toolbarItem.action = #selector(toggleSearchPanel)
@@ -112,11 +119,12 @@ extension NewMainWindowController: NSToolbarDelegate {
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         return [
             .flexibleSpace,
-            .searchItem,
+            .searchPlaceholderItem,
             .sidebarTrackingSeparator,
             .tabSelectionItem,
+            .downloadItem,
             .flexibleSpace,
-            .downloadItem
+            .searchItem,
         ]
     }
 
@@ -126,21 +134,45 @@ extension NewMainWindowController: NSToolbarDelegate {
 }
 
 @available(macOS 26.0, *)
-private extension NewMainWindowController {
-    @objc func toggleSearchPanel(_ item: NSToolbarItem) {
-        if let searchPopover {
-            if searchPopover.isShown {
-                searchPopover.close()
-            } else {
-                searchPopover.show(relativeTo: item)
-            }
+extension NewMainWindowController: NSSearchFieldDelegate {
+    func controlTextDidBeginEditing(_ obj: Notification) {
+        guard let window else {
             return
         }
-        let popover = NSPopover()
-        popover.contentViewController = SessionSearchAccessoryViewController()
-        popover.behavior = .applicationDefined
-        popover.show(relativeTo: item)
-        searchPopover = popover
+        NSAnimationContext.runAnimationGroup { _ in
+            window.titlebarAccessoryViewControllers.first?.animator().isHidden = false
+        }
+    }
+
+    func controlTextDidEndEditing(_ obj: Notification) {
+        NSAnimationContext.runAnimationGroup { _ in
+            window?.titlebarAccessoryViewControllers.first?.animator().isHidden = true
+        }
+        (window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem)?.endSearchInteraction()
+    }
+
+    func searchFieldDidStartSearching(_ sender: NSSearchField) {
+        print(sender)
+    }
+}
+
+@available(macOS 26.0, *)
+private extension NewMainWindowController {
+    @objc func searchBarDidBeginEditing(_ notification: Notification) {}
+
+    @objc func toggleSearchPanel(_ item: NSToolbarItem) {
+        guard let searchItem = window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem else {
+            return
+        }
+
+        searchItem.isHidden.toggle()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if searchItem.isHidden {
+                searchItem.endSearchInteraction()
+            } else {
+                searchItem.beginSearchInteraction()
+            }
+        }
     }
 
     @objc func toggleDownloadPanel(_ item: NSToolbarItem) {}
@@ -149,6 +181,14 @@ private extension NewMainWindowController {
         if let tab = MainWindowTab(rawValue: control.selectedSegment) {
             coordinator?.tabController.setActiveTab(tab)
         }
+    }
+
+    @objc func toggleSearchGroup(_ group: NSToolbarItemGroup) {
+        group.controlRepresentation = .expanded
+    }
+
+    @objc func selectWWDC(_ group: NSToolbarItemGroup) {
+        group.selectedIndex
     }
 }
 

@@ -58,12 +58,12 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
         view.addSubview(scrollView)
 
-        scrollView.contentView.automaticallyAdjustsContentInsets = false
+        scrollView.contentView.automaticallyAdjustsContentInsets = true
 
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     }
 
     override func viewDidLoad() {
@@ -314,7 +314,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         v.rowHeight = Metrics.sessionRowHeight
         v.autoresizingMask = [.width, .height]
         v.floatsGroupRows = true
-        v.gridStyleMask = .solidHorizontalGridLineMask
+        v.gridStyleMask = []
         v.style = .fullWidth
 
         let column = NSTableColumn(identifier: NSUserInterfaceItemIdentifier(rawValue: "session"))
@@ -334,7 +334,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         v.hasHorizontalScroller = false
         v.translatesAutoresizingMaskIntoConstraints = false
         v.alphaValue = 0
-        v.automaticallyAdjustsContentInsets = false
+        v.automaticallyAdjustsContentInsets = true
 
         return v
     }()
@@ -559,11 +559,10 @@ extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDele
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
 
         switch displayedRows[row].kind {
-        case .sectionHeader(let content):
-            let rowView: TopicHeaderRow? = rowView(with: .headerRow)
-
-            rowView?.content = content
-
+        case .sectionHeader(let title, let symbol):
+            let rowView: NewTopicHeaderRow? = rowView(with: .headerRow)
+            rowView?.title = title
+            rowView?.symbolName = symbol
             return rowView
         default:
             return rowView(with: .sessionRow)

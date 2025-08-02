@@ -39,7 +39,6 @@ struct NewExploreCategoryList: View {
                 proxy.scrollTo(newValue, anchor: .bottom)
             }
         }
-        .frame(width: 320)
         .onReceive(viewModel.provider.$content.receive(on: DispatchQueue.main)) { newContent in
             sections = newContent?.sections ?? []
             if viewModel.selectedCategory == nil {

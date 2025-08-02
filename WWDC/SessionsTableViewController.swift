@@ -583,10 +583,10 @@ extension SessionsTableViewController: NSTableViewDataSource, NSTableViewDelegat
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
 
         switch displayedRows[row].kind {
-        case .sectionHeader(let content):
+        case .sectionHeader(let title, let symbol):
             let rowView: TopicHeaderRow? = rowView(with: .headerRow)
 
-            rowView?.content = content
+            rowView?.content = .init(title: title, symbolName: symbol)
 
             return rowView
         default:

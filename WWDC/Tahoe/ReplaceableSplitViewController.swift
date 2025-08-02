@@ -64,8 +64,6 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
         sidebarItem.canCollapse = false
 
         topSegmentControl?.selectedSegment = activeTab.rawValue
-        topSearchItem?.isHidden = activeTab == .explore
-        topDownloadItem?.isHidden = activeTab == .explore
 
         if
             let list = newItems.first?.viewController as? NewSessionsTableViewController,
@@ -109,6 +107,7 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
 
     private var previousSidebarWidth: CGFloat?
     private weak var windowController: WWDCWindowControllerObject?
+
     init(windowController: WWDCWindowControllerObject) {
         self.windowController = windowController
         super.init(nibName: nil, bundle: nil)
@@ -149,15 +148,21 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     override func viewDidLoad() {
         super.viewDidLoad()
         for item in [topTabItem, topSearchItem, topDownloadItem] {
-            item?.isHidden = true
+            item?.isEnabled = false
         }
     }
     override func viewWillAppear() {
         super.viewWillAppear()
+//        if view.window?.titlebarAccessoryViewControllers.contains(accessory) == false {
+//            view.window?.addTitlebarAccessoryViewController(accessory)
+//        }
+//        NSAnimationContext.runAnimationGroup { _ in
+//            accessory.animator().isHidden = true
+//        }
         Task {
             await changeContent()
-            for item in [topTabItem/*, topSearchItem, topDownloadItem*/] {
-                item?.isHidden = false
+            for item in [topTabItem, topSearchItem, topDownloadItem] {
+                item?.isEnabled = true
             }
         }
     }
