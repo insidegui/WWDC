@@ -110,22 +110,14 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
         // This allows using the arrow keys to navigate
         view.window?.makeFirstResponder(tableView)
-        [filterItem].forEach {
-            $0?.target = self
-            $0?.isHidden = false
-        }
-        filterItem?.action = #selector(didTapSearchItem)
-        filterItem?.menu.removeAllItems()
-        filterItem?.menu.addItem(withTitle: "Clear All Filters", action: #selector(didTapClearItem), keyEquivalent: "").tag = ContextualMenuOption.clearFiler.rawValue
+        prepareForDisplayingFilterItem()
     }
 
     override func viewWillDisappear() {
         super.viewWillDisappear()
-        [filterItem].forEach {
-            $0?.target = nil
-            $0?.action = nil
-        }
+        prepareForHidingFilterItem()
     }
+
     override func viewWillLayout() {
         super.viewWillLayout()
         let count = searchCoordinator[keyPath: searchTarget].effectiveFilters.filter { !$0.isEmpty }.count
@@ -667,6 +659,28 @@ extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDele
             return true
         case .session:
             return false
+        }
+    }
+}
+
+@available(macOS 26.0, *)
+private extension NewSessionsTableViewController {
+    func prepareForDisplayingFilterItem() {
+        for item in [filterItem] {
+            item?.target = self
+            item?.isHidden = false
+        }
+        filterItem?.action = #selector(didTapSearchItem)
+        filterItem?.menu.removeAllItems()
+        filterItem?.menu.addItem(withTitle: "Clear All Filters", action: #selector(didTapClearItem), keyEquivalent: "").tag = ContextualMenuOption.clearFiler.rawValue
+        filterItem?.image = NSImage(systemSymbolName: header.isHidden ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: header.isHidden ? "Show Filter Options" : "Hide Filter Options")
+        filterItem?.toolTip = filterItem?.image?.accessibilityDescription
+    }
+
+    func prepareForHidingFilterItem() {
+        for item in [filterItem] {
+            item?.target = nil
+            item?.isHidden = true
         }
     }
 }
