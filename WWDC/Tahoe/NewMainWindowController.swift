@@ -81,11 +81,12 @@ extension NewMainWindowController: NSToolbarDelegate {
             let item = NSSearchToolbarItem(itemIdentifier: itemIdentifier)
             return item
         case .filterItem:
-            toolbarItem.image = NSImage(systemSymbolName: "line.3.horizontal.decrease", accessibilityDescription: "Filter")
-            toolbarItem.badge = .count(10)
-            toolbarItem.toolTip = "Filter"
-            toolbarItem.target = self
-            toolbarItem.action = #selector(toggleSearchPanel)
+            let item = NSMenuToolbarItem(itemIdentifier: itemIdentifier)
+            item.image = NSImage(systemSymbolName: "line.3.horizontal.decrease.circle", accessibilityDescription: "Filter")
+            item.showsIndicator = false
+            item.menu.addItem(withTitle: "Action 1", action: nil, keyEquivalent: "")
+            item.toolTip = "Filter"
+            return item
         case .tabSelectionItem:
             let segmentControl = NSSegmentedControl()
             segmentControl.segmentCount = MainWindowTab.allCases.count

@@ -56,6 +56,16 @@ struct ListContentFilterHeaderView: View {
             guard newValue != oldValue else { return }
             updateEffectiveFilters()
         }
+        .onReceive(coordinator.resetAction.receive(on: DispatchQueue.main)) { _ in
+            withAnimation {
+                withTransaction(\.changeReason, .reset) {
+                    selectedEventOptions.removeAll()
+                    selectedFocusOptions.removeAll()
+                    selectedTrackOptions.removeAll()
+                    selectedToggleOptions.removeAll()
+                }
+            }
+        }
         .task {
             withAnimation {
                 isExpanded = true

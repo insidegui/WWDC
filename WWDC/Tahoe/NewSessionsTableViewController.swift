@@ -9,10 +9,10 @@
 import Cocoa
 import Combine
 import ConfCore
+import Observation
 import OSLog
 import RealmSwift
 import SwiftUI
-import Observation
 
 // MARK: - Sessions Table View Controller
 
@@ -53,16 +53,13 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         fatalError("init(coder:) has not been implemented")
     }
 
-    var filterItem: NSToolbarItem? {
-        viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .filterItem })
+    var filterItem: NSMenuToolbarItem? {
+        viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .filterItem }) as? NSMenuToolbarItem
     }
 
     private var header: NSView!
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 320, height: MainWindowController.defaultRect.height))
-        view.widthAnchor.constraint(lessThanOrEqualToConstant: 675).isActive = true
-
-        view.widthAnchor.constraint(greaterThanOrEqualToConstant: 320).isActive = true
+        view = NSView(frame: NSRect(x: 0, y: 0, width: 100, height: MainWindowController.defaultRect.height))
 
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
@@ -83,8 +80,10 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         NSLayoutConstraint.activate([
             header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             header.topAnchor.constraint(equalTo: view.topAnchor),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            header.widthAnchor.constraint(lessThanOrEqualToConstant: 675)
         ])
+        header.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
 
     override func viewDidLoad() {
@@ -111,23 +110,42 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
         // This allows using the arrow keys to navigate
         view.window?.makeFirstResponder(tableView)
-        filterItem?.target = self
+        [filterItem].forEach {
+            $0?.target = self
+            $0?.isHidden = false
+        }
         filterItem?.action = #selector(didTapSearchItem)
+        filterItem?.menu.removeAllItems()
+        filterItem?.menu.addItem(withTitle: "Clear All Filters", action: #selector(didTapClearItem), keyEquivalent: "").tag = ContextualMenuOption.clearFiler.rawValue
     }
 
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        [filterItem].forEach {
+            $0?.target = nil
+            $0?.action = nil
+        }
+    }
     override func viewWillLayout() {
         super.viewWillLayout()
         let count = searchCoordinator[keyPath: searchTarget].effectiveFilters.filter { !$0.isEmpty }.count
         filterItem?.badge = count > 0 ? .count(count) : nil
+        filterItem?.showsIndicator = count > 0
     }
 
     @objc private func didTapSearchItem(_ item: NSToolbarItem) {
-        let newTopInset = header.isHidden ? header.bounds.height - header.safeAreaInsets.top : 0
-        scrollView.scroll(.zero)
+        let isHeaderHiddenNext = !header.isHidden
+        let nextTopInset = isHeaderHiddenNext ? 0 : (header.bounds.height - header.safeAreaInsets.top)
+        item.image = NSImage(systemSymbolName: isHeaderHiddenNext ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: isHeaderHiddenNext ? "Show Filter Options" : "Hide Filter Options")
+        item.toolTip = item.image?.accessibilityDescription
         NSAnimationContext.runAnimationGroup { _ in
-            header.animator().isHidden = !header.isHidden
-            scrollView.animator().additionalSafeAreaInsets.top = newTopInset
+            header.animator().isHidden = isHeaderHiddenNext
+            scrollView.animator().additionalSafeAreaInsets.top = nextTopInset
         }
+    }
+
+    @objc private func didTapClearItem(_ item: Any) {
+        searchCoordinator.resetAction.send()
     }
 
     // MARK: - Selection
@@ -393,6 +411,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         case cancelDownload = 1005
         case removeDownload = 1006
         case revealInFinder = 1007
+        case clearFiler = 1008 // lives in tool bar
     }
 
     private func setupContextualMenu() {
@@ -476,6 +495,8 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             delegate?.sessionTableViewContextMenuActionRemoveDownload(viewModels: viewModels)
         case .revealInFinder:
             delegate?.sessionTableViewContextMenuActionRevealInFinder(viewModels: viewModels)
+        case .clearFiler:
+            break
         }
     }
 
@@ -488,7 +509,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             if shouldEnableMenuItem(menuItem: menuItem, viewModel: viewModel) { return true }
         }
 
-        return false
+        return menuItem.option == .clearFiler
     }
 
     private func shouldEnableMenuItem(menuItem: NSMenuItem, viewModel: SessionViewModel) -> Bool {
@@ -519,6 +540,8 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             return MediaDownloadManager.shared.canDownloadMedia(for: viewModel.session) && MediaDownloadManager.shared.isDownloadingMedia(for: viewModel.session)
         case .revealInFinder:
             return MediaDownloadManager.shared.hasDownloadedMedia(for: viewModel.session)
+        case .clearFiler:
+            return true
         default: ()
         }
 

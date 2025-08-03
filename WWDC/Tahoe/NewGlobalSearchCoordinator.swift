@@ -45,6 +45,8 @@ final class NewGlobalSearchCoordinator: Logging {
     /// The desired state of the filters upon configuration
     @ObservationIgnored private var restorationFiltersState: WWDCFiltersState?
 
+    // view action caller, to avoid two way bindings
+    let resetAction = PassthroughSubject<Void, Never>()
     var scheduleState = GlobalSearchTabState(
         additionalPredicates: [
             NSPredicate(format: "ANY session.event.isCurrent == true"),
