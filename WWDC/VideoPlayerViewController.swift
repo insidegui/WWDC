@@ -281,7 +281,9 @@ final class VideoPlayerViewController: NSViewController {
             let ct = CMTimeGetSeconds(self.player.currentTime())
             let roundedTimecode = Transcript.roundedStringFromTimecode(ct)
 
-            NotificationCenter.default.post(name: .HighlightTranscriptAtCurrentTimecode, object: roundedTimecode)
+            NotificationCenter.default.post(name: .HighlightTranscriptAtCurrentTimecode, object: roundedTimecode, userInfo: [
+                "session_id": sessionViewModel.sessionIdentifier
+            ])
         }
     }
 

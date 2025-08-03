@@ -70,6 +70,9 @@ final class SessionDetailsViewController: NSViewController {
                 view.animator().alphaValue = (viewModel == nil) ? 0 : 1
             }
             detailsViewModel.viewModel = viewModel
+            if #available(macOS 26.0, *), let viewModel {
+                showInspector(NSHostingController(rootView: NewTranscriptView(viewModel: viewModel)), width: 200)
+            }
         }
     }
 
@@ -90,5 +93,15 @@ final class SessionDetailsViewController: NSViewController {
         view = NSHostingView(rootView: swiftUIView)
         view.frame = NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height)
         view.wantsLayer = true
+    }
+
+    var searchCoordinator: NewGlobalSearchCoordinator!
+    override func viewWillDisappear() {
+        super.viewWillDisappear()
+        if #available(macOS 26.0, *) {
+            hideInspector()
+        } else {
+            // Fallback on earlier versions
+        }
     }
 }
