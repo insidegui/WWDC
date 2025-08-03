@@ -146,6 +146,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             searchField.stringValue = ""
             updateTextFilter(sender: searchField)
         }
+        view.window?.makeFirstResponder(tableView)
     }
 
     // MARK: - Selection
@@ -411,7 +412,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         case cancelDownload = 1005
         case removeDownload = 1006
         case revealInFinder = 1007
-        case clearFiler = 1008 // lives in tool bar
     }
 
     private func setupContextualMenu() {
@@ -495,8 +495,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             delegate?.sessionTableViewContextMenuActionRemoveDownload(viewModels: viewModels)
         case .revealInFinder:
             delegate?.sessionTableViewContextMenuActionRevealInFinder(viewModels: viewModels)
-        case .clearFiler:
-            break
         }
     }
 
@@ -509,7 +507,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             if shouldEnableMenuItem(menuItem: menuItem, viewModel: viewModel) { return true }
         }
 
-        return menuItem.option == .clearFiler
+        return false
     }
 
     private func shouldEnableMenuItem(menuItem: NSMenuItem, viewModel: SessionViewModel) -> Bool {
@@ -540,8 +538,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             return MediaDownloadManager.shared.canDownloadMedia(for: viewModel.session) && MediaDownloadManager.shared.isDownloadingMedia(for: viewModel.session)
         case .revealInFinder:
             return MediaDownloadManager.shared.hasDownloadedMedia(for: viewModel.session)
-        case .clearFiler:
-            return true
         default: ()
         }
 
@@ -680,7 +676,8 @@ private extension NewSessionsTableViewController {
         }
         filterItem?.action = #selector(didTapSearchItem)
         filterItem?.menu.removeAllItems()
-        filterItem?.menu.addItem(withTitle: "Clear All Filters", action: #selector(didTapClearItem), keyEquivalent: "").tag = ContextualMenuOption.clearFiler.rawValue
+        filterItem?.menu.autoenablesItems = false
+        filterItem?.menu.addItem(withTitle: "Clear All Filters", action: #selector(didTapClearItem), keyEquivalent: "").target = self
         filterItem?.image = NSImage(systemSymbolName: header.isHidden ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: header.isHidden ? "Show Filter Options" : "Hide Filter Options")
         filterItem?.toolTip = filterItem?.image?.accessibilityDescription
 
@@ -698,7 +695,6 @@ private extension NewSessionsTableViewController {
     }
 }
 
-
 @available(macOS 26.0, *)
 extension NewSessionsTableViewController: NSSearchFieldDelegate {
     func controlTextDidChange(_ obj: Notification) {
@@ -709,6 +705,9 @@ extension NewSessionsTableViewController: NSSearchFieldDelegate {
     }
 
     private func updateTextFilter(sender: NSSearchField) {
+        if sender.stringValue.isEmpty {
+            view.window?.makeFirstResponder(tableView)
+        }
         let filters = searchCoordinator[keyPath: searchTarget].effectiveFilters
         guard
             let textIdx = filters.firstIndex(where: { $0.identifier == .text }),
