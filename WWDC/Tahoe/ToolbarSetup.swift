@@ -10,7 +10,7 @@ import AppKit
 
 extension NSToolbarItem.Identifier {
     static let searchItem = NSToolbarItem.Identifier("wwdc.sidebar.search")
-    static let searchPlaceholderItem = NSToolbarItem.Identifier("wwdc.sidebar.search.placeholder")
+    static let filterItem = NSToolbarItem.Identifier("wwdc.sidebar.search.filter")
     static let tabSelectionItem = NSToolbarItem.Identifier("wwdc.main.centered.tab")
     static let downloadItem = NSToolbarItem.Identifier("wwdc.main.download")
 }

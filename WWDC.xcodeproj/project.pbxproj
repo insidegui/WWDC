@@ -35,7 +35,7 @@
 		8196CAF82E3DE117008482E3 /* CapsuleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CAF72E3DE112008482E3 /* CapsuleButtonStyle.swift */; };
 		8196CAFA2E3DE355008482E3 /* View+CapsuleBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CAF92E3DE34E008482E3 /* View+CapsuleBackground.swift */; };
 		8196CAFC2E3DE5AA008482E3 /* PickAny.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CAFB2E3DE5A7008482E3 /* PickAny.swift */; };
-		8196CB072E3DF2AD008482E3 /* ScheduleContentFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CB062E3DF2A4008482E3 /* ScheduleContentFilterView.swift */; };
+		8196CB072E3DF2AD008482E3 /* ListContentFilterHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CB062E3DF2A4008482E3 /* ListContentFilterHeaderView.swift */; };
 		8196CB092E3DF4F2008482E3 /* ContentFilterOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CB082E3DF4F2008482E3 /* ContentFilterOption.swift */; };
 		8196CB142E3E5168008482E3 /* FilterResetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CB132E3E5168008482E3 /* FilterResetButton.swift */; };
 		8196CB162E3E62CB008482E3 /* SelectAnySegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CB152E3E62CB008482E3 /* SelectAnySegmentControl.swift */; };
@@ -342,7 +342,7 @@
 		8196CAF72E3DE112008482E3 /* CapsuleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButtonStyle.swift; sourceTree = "<group>"; };
 		8196CAF92E3DE34E008482E3 /* View+CapsuleBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CapsuleBackground.swift"; sourceTree = "<group>"; };
 		8196CAFB2E3DE5A7008482E3 /* PickAny.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickAny.swift; sourceTree = "<group>"; };
-		8196CB062E3DF2A4008482E3 /* ScheduleContentFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleContentFilterView.swift; sourceTree = "<group>"; };
+		8196CB062E3DF2A4008482E3 /* ListContentFilterHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListContentFilterHeaderView.swift; sourceTree = "<group>"; };
 		8196CB082E3DF4F2008482E3 /* ContentFilterOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentFilterOption.swift; sourceTree = "<group>"; };
 		8196CB132E3E5168008482E3 /* FilterResetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterResetButton.swift; sourceTree = "<group>"; };
 		8196CB152E3E62CB008482E3 /* SelectAnySegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAnySegmentControl.swift; sourceTree = "<group>"; };
@@ -624,7 +624,7 @@
 				8196CAFB2E3DE5A7008482E3 /* PickAny.swift */,
 				8196CB152E3E62CB008482E3 /* SelectAnySegmentControl.swift */,
 				8196CB132E3E5168008482E3 /* FilterResetButton.swift */,
-				8196CB062E3DF2A4008482E3 /* ScheduleContentFilterView.swift */,
+				8196CB062E3DF2A4008482E3 /* ListContentFilterHeaderView.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -1705,7 +1705,7 @@
 				DDB352801EC7C4CA00254815 /* Arguments.swift in Sources */,
 				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
-				8196CB072E3DF2AD008482E3 /* ScheduleContentFilterView.swift in Sources */,
+				8196CB072E3DF2AD008482E3 /* ListContentFilterHeaderView.swift in Sources */,
 				F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,

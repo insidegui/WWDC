@@ -80,7 +80,7 @@ extension NewMainWindowController: NSToolbarDelegate {
         case .searchItem:
             let item = NSSearchToolbarItem(itemIdentifier: itemIdentifier)
             return item
-        case .searchPlaceholderItem:
+        case .filterItem:
             toolbarItem.image = NSImage(systemSymbolName: "line.3.horizontal.decrease", accessibilityDescription: "Filter")
             toolbarItem.badge = .count(10)
             toolbarItem.toolTip = "Filter"
@@ -118,7 +118,7 @@ extension NewMainWindowController: NSToolbarDelegate {
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         return [
             .flexibleSpace,
-            .searchPlaceholderItem,
+            .filterItem,
             .sidebarTrackingSeparator,
             .tabSelectionItem,
             .downloadItem,

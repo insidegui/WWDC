@@ -131,6 +131,8 @@ final class NewAppCoordinator: WWDCCoordinator {
 
         // Schedule
         scheduleListController = NewSessionsTableViewController(
+            searchCoordinator: searchCoordinator,
+            searchTarget: \.scheduleState,
             rowProvider: ScheduleSessionRowProvider(
                 scheduleSections: storage.scheduleSections,
                 filterPredicate: searchCoordinator.$scheduleFilterPredicate,
@@ -143,6 +145,8 @@ final class NewAppCoordinator: WWDCCoordinator {
 
         // Videos
         videosListController = NewSessionsTableViewController(
+            searchCoordinator: searchCoordinator,
+            searchTarget: \.videosState,
             rowProvider: VideosSessionRowProvider(
                 tracks: storage.tracks,
                 filterPredicate: searchCoordinator.$videosFilterPredicate,

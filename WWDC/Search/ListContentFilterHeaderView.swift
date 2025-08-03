@@ -1,5 +1,5 @@
 //
-//  ScheduleContentFilterView.swift
+//  ListContentFilterHeaderView.swift
 //  WWDC
 //
 //  Created by luca on 02.08.2025.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(macOS 26.0, *)
-struct ScheduleContentFilterView: View {
+struct ListContentFilterHeaderView: View {
     @State private var isExpanded: Bool = false
     @State private var controlSize: CGSize? = CGSize(width: 0, height: 20)
     @Environment(NewGlobalSearchCoordinator.self) var coordinator
@@ -18,27 +18,27 @@ struct ScheduleContentFilterView: View {
     @State private var selectedTrackOptions = [ContentFilterOption]()
     @State private var selectedToggleOptions = [OptionalToggleFilter]()
 
+    let stateKeyPath: ReferenceWritableKeyPath<NewGlobalSearchCoordinator, GlobalSearchTabState>
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            if isExpanded, let filter = coordinator.scheduleState.eventFilter {
+            if isExpanded, let filter = coordinator[keyPath: stateKeyPath].eventFilter {
                 PickAnyMenuPicker(title: filter.emptyTitle, options: filter.pickerOptions, selectedItems: $selectedEventOptions)
                     .frame(height: controlSize?.height)
             }
-            if isExpanded, let filter = coordinator.scheduleState.focusFilter {
+            if isExpanded, let filter = coordinator[keyPath: stateKeyPath].focusFilter {
                 PickAnyMenuPicker(title: filter.emptyTitle, options: filter.pickerOptions, selectedItems: $selectedFocusOptions)
                     .frame(height: controlSize?.height)
             }
-            if isExpanded, let filter = coordinator.scheduleState.trackFilter {
+            if isExpanded, let filter = coordinator[keyPath: stateKeyPath].trackFilter {
                 PickAnyMenuPicker(title: filter.emptyTitle, options: filter.pickerOptions, selectedItems: $selectedTrackOptions)
                     .frame(height: controlSize?.height)
             }
 
-            if isExpanded, let toggleFilters = coordinator.scheduleState.bottomFilters {
+            if isExpanded, let toggleFilters = coordinator[keyPath: stateKeyPath].bottomFilters {
                 PickAnyPicker(options: toggleFilters, selectedItems: $selectedToggleOptions, controlSize: $controlSize)
             }
         }
         .padding(.horizontal, 5)
-        .padding(.bottom)
         .frame(maxWidth: .infinity)
         .onChange(of: selectedEventOptions) { oldValue, newValue in
             guard newValue != oldValue else { return }
@@ -61,10 +61,15 @@ struct ScheduleContentFilterView: View {
                 isExpanded = true
             }
         }
+        .onDisappear {
+            withAnimation {
+                isExpanded = false
+            }
+        }
     }
 
     private func updateEffectiveFilters() {
-        var currentFilters = coordinator.scheduleState.effectiveFilters
+        var currentFilters = coordinator[keyPath: stateKeyPath].effectiveFilters
         for idx in currentFilters.indices {
             if currentFilters[idx].identifier == .event, var eventFilter = currentFilters[idx] as? MultipleChoiceFilter {
                 eventFilter.selectedOptions = eventFilter.options.filter({ selectedEventOptions.compactMap(\.label).contains($0.title) })
@@ -84,8 +89,8 @@ struct ScheduleContentFilterView: View {
             }
         }
 
-        coordinator.scheduleState.effectiveFilters = currentFilters
-        coordinator.scheduleState.updatePredicate(.userInput)
+        coordinator[keyPath: stateKeyPath].effectiveFilters = currentFilters
+        coordinator[keyPath: stateKeyPath].updatePredicate(.userInput)
     }
 }
 

@@ -8,22 +8,27 @@
 
 import Cocoa
 import Combine
-import RealmSwift
 import ConfCore
 import OSLog
+import RealmSwift
+import SwiftUI
+import Observation
 
 // MARK: - Sessions Table View Controller
 
 @available(macOS 26.0, *)
 class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
-
     static var log = makeLogger()
 
     private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    init(rowProvider: SessionRowProvider, initialSelection: SessionIdentifiable?) {
+    private let searchCoordinator: NewGlobalSearchCoordinator
+    private let searchTarget: ReferenceWritableKeyPath<NewGlobalSearchCoordinator, GlobalSearchTabState>
+    init(searchCoordinator: NewGlobalSearchCoordinator, searchTarget: ReferenceWritableKeyPath<NewGlobalSearchCoordinator, GlobalSearchTabState>, rowProvider: SessionRowProvider, initialSelection: SessionIdentifiable?) {
+        self.searchCoordinator = searchCoordinator
+        self.searchTarget = searchTarget
         var config = Self.defaultLoggerConfig()
         config.category += ": \(String(reflecting: type(of: rowProvider)))"
         Self.log = Self.makeLogger(config: config)
@@ -43,10 +48,16 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             .store(in: &cancellables)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    var filterItem: NSToolbarItem? {
+        viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .filterItem })
+    }
+
+    private var header: NSView!
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 320, height: MainWindowController.defaultRect.height))
         view.widthAnchor.constraint(lessThanOrEqualToConstant: 675).isActive = true
@@ -55,7 +66,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
-
         view.addSubview(scrollView)
 
         scrollView.contentView.automaticallyAdjustsContentInsets = true
@@ -64,6 +74,17 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+
+        let header = NSHostingView(rootView: ListContentFilterHeaderView(stateKeyPath: searchTarget).environment(searchCoordinator))
+        header.isHidden = true
+        self.header = header
+        header.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(header)
+        NSLayoutConstraint.activate([
+            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            header.topAnchor.constraint(equalTo: view.topAnchor),
+            header.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
     }
 
     override func viewDidLoad() {
@@ -78,11 +99,35 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         }
     }
 
+    override func viewDidLayout() {
+        super.viewDidLayout()
+        let additionalTopInset = header.isHidden ? 0 : header.bounds.height - header.safeAreaInsets.top
+        guard additionalTopInset > 0 else { return }
+        scrollView.additionalSafeAreaInsets.top = additionalTopInset
+    }
+
     override func viewDidAppear() {
         super.viewDidAppear()
 
         // This allows using the arrow keys to navigate
         view.window?.makeFirstResponder(tableView)
+        filterItem?.target = self
+        filterItem?.action = #selector(didTapSearchItem)
+    }
+
+    override func viewWillLayout() {
+        super.viewWillLayout()
+        let count = searchCoordinator[keyPath: searchTarget].effectiveFilters.filter { !$0.isEmpty }.count
+        filterItem?.badge = count > 0 ? .count(count) : nil
+    }
+
+    @objc private func didTapSearchItem(_ item: NSToolbarItem) {
+        let newTopInset = header.isHidden ? header.bounds.height - header.safeAreaInsets.top : 0
+        scrollView.scroll(.zero)
+        NSAnimationContext.runAnimationGroup { _ in
+            header.animator().isHidden = !header.isHidden
+            scrollView.animator().additionalSafeAreaInsets.top = newTopInset
+        }
     }
 
     // MARK: - Selection
@@ -95,7 +140,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     private var pendingSelection: SessionIdentifiable?
 
     private func selectSessionImmediately(with identifier: SessionIdentifiable) {
-
         guard let index = displayedRows.firstIndex(where: { $0.represents(session: identifier) }) else {
             log.debug("Can't select session \(identifier.sessionIdentifier)")
             return
@@ -161,8 +205,8 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
             // Ensure an initial selection
             if self.tableView.selectedRow == -1,
-               let defaultIndex = rows.firstIndex(where: { $0.isSession }) {
-
+               let defaultIndex = rows.firstIndex(where: { $0.isSession })
+            {
                 self.tableView.selectRowIndexes(IndexSet(integer: defaultIndex), byExtendingSelection: false)
             }
 
@@ -202,11 +246,11 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             // cell contents from flashing when cells are unnecessarily reloaded
             var needReloadedIndexes = IndexSet()
 
-            let sortedOldRows = oldRowsSet.intersection(newRowsSet).sorted(by: { (row1, row2) -> Bool in
+            let sortedOldRows = oldRowsSet.intersection(newRowsSet).sorted(by: { row1, row2 -> Bool in
                 return row1.index < row2.index
             })
 
-            let sortedNewRows = newRowsSet.intersection(oldRowsSet).sorted(by: { (row1, row2) -> Bool in
+            let sortedNewRows = newRowsSet.intersection(oldRowsSet).sorted(by: { row1, row2 -> Bool in
                 return row1.index < row2.index
             })
 
@@ -217,15 +261,14 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             self.log.trace("setDisplayedRows: removed[\(removedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] added[\(addedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)] reload[\(needReloadedIndexes.map { "\($0)" }.joined(separator: ",").count, privacy: .public)]")
 
             DispatchQueue.main.sync {
-
                 var selectedIndexes = IndexSet()
                 if let sessionToSelect,
-                   let overrideIndex = newValue.firstIndex(where: { $0.sessionViewModel?.identifier == sessionToSelect.sessionIdentifier }) {
-
+                   let overrideIndex = newValue.firstIndex(where: { $0.sessionViewModel?.identifier == sessionToSelect.sessionIdentifier })
+                {
                     selectedIndexes.insert(overrideIndex)
                 } else {
                     // Preserve selected rows if possible
-                    let previouslySelectedRows = self.tableView.selectedRowIndexes.compactMap { (index) -> IndexedSessionRow? in
+                    let previouslySelectedRows = self.tableView.selectedRowIndexes.compactMap { index -> IndexedSessionRow? in
                         guard index < oldValue.endIndex else { return nil }
                         return IndexedSessionRow(sessionRow: oldValue[index], index: index)
                     }
@@ -235,7 +278,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
                         // The update has removed the selected row(s).
                         // e.g. You have the unwatched filter active and then mark the selection as watched
                         stride(from: topOfPreviousSelection.index, to: -1, by: -1).lazy.compactMap {
-                            return IndexedSessionRow(sessionRow: oldValue[$0], index: $0)
+                            IndexedSessionRow(sessionRow: oldValue[$0], index: $0)
                         }.first { (indexedRow: IndexedSessionRow) -> Bool in
                             newRowsSet.contains(indexedRow) && indexedRow.sessionRow.isSession
                         }.flatMap {
@@ -259,7 +302,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
                 context.duration = animated ? 0.35 : 0
 
                 context.completionHandler = {
-                    NSAnimationContext.runAnimationGroup({ (context) in
+                    NSAnimationContext.runAnimationGroup({ context in
                         context.allowsImplicitAnimation = animated
                         self.tableView.scrollRowToCenter(selectedIndexes.first ?? 0)
                     }, completionHandler: nil)
@@ -408,8 +451,8 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     @objc private func tableViewMenuItemClicked(_ menuItem: NSMenuItem) {
         var viewModels = [SessionViewModel]()
 
-        selectedAndClickedRowIndexes().forEach { row in
-            guard case .session(let viewModel) = displayedRows[row].kind else { return }
+        for row in selectedAndClickedRowIndexes() {
+            guard case .session(let viewModel) = displayedRows[row].kind else { continue }
 
             viewModels.append(viewModel)
         }
@@ -449,7 +492,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     }
 
     private func shouldEnableMenuItem(menuItem: NSMenuItem, viewModel: SessionViewModel) -> Bool {
-
         switch menuItem.option {
         case .watched:
             let canMarkAsWatched = !viewModel.session.isWatched
@@ -469,8 +511,8 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         switch menuItem.option {
         case .download:
             return MediaDownloadManager.shared.canDownloadMedia(for: viewModel.session) &&
-                   !MediaDownloadManager.shared.isDownloadingMedia(for: viewModel.session) &&
-                   !MediaDownloadManager.shared.hasDownloadedMedia(for: viewModel.session)
+                !MediaDownloadManager.shared.isDownloadingMedia(for: viewModel.session) &&
+                !MediaDownloadManager.shared.hasDownloadedMedia(for: viewModel.session)
         case .removeDownload:
             return viewModel.session.isDownloaded
         case .cancelDownload:
@@ -486,7 +528,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
 @available(macOS 26.0, *)
 private extension NSMenuItem {
-
     var option: NewSessionsTableViewController.ContextualMenuOption {
         get {
             guard let value = NewSessionsTableViewController.ContextualMenuOption(rawValue: tag) else {
@@ -499,7 +540,6 @@ private extension NSMenuItem {
             tag = newValue.rawValue
         }
     }
-
 }
 
 // MARK: - Datasource / Delegate
@@ -513,8 +553,7 @@ private extension NSUserInterfaceItemIdentifier {
 
 @available(macOS 26.0, *)
 extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
-
-    struct Metrics {
+    enum Metrics {
         static let headerRowHeight: CGFloat = 32
         static let sessionRowHeight: CGFloat = 64
     }
@@ -557,7 +596,6 @@ extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDele
     }
 
     func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-
         switch displayedRows[row].kind {
         case .sectionHeader(let title, let symbol):
             let rowView: NewTopicHeaderRow? = rowView(with: .headerRow)
@@ -608,5 +646,4 @@ extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDele
             return false
         }
     }
-
 }
