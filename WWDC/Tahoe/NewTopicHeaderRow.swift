@@ -9,24 +9,25 @@
 import Cocoa
 import SwiftUI
 
+@available(macOS 15.0, *)
 final class NewTopicHeaderRow: NSTableRowView {
-    private lazy var content = RowContent(title: "", symbolName: nil)
+    private lazy var viewModel = HeaderRowViewModel(title: "")
 
     var title: String {
         get {
-            content.title
+            viewModel.title
         }
         set {
-            content.title = newValue
+            viewModel.title = newValue
         }
     }
 
     var symbolName: String? {
         get {
-            content.symbolName
+            viewModel.symbolName
         }
         set {
-            content.symbolName = newValue
+            viewModel.symbolName = newValue
         }
     }
 
@@ -47,7 +48,7 @@ final class NewTopicHeaderRow: NSTableRowView {
     private var contentView: NSHostingView<NewTopicHeaderRowContent>?
 
     private func update() {
-        let v = NSHostingView(rootView: NewTopicHeaderRowContent().environment(content))
+        let v = NSHostingView(rootView: NewTopicHeaderRowContent().environment(viewModel))
         v.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(v)
@@ -62,7 +63,7 @@ final class NewTopicHeaderRow: NSTableRowView {
 }
 
 @Observable
-private class RowContent {
+private class HeaderRowViewModel {
     var title: String
     var symbolName: String?
 
@@ -72,21 +73,38 @@ private class RowContent {
     }
 }
 
-struct NewTopicHeaderRowContent: View {
-    @Environment(RowContent.self) private var content
+@available(macOS 15.0, *)
+private struct NewTopicHeaderRowContent: View {
+    @Environment(HeaderRowViewModel.self) private var viewModel
+    @State private var isAppearing = false
     var body: some View {
         HStack {
-            if let symbolName = content.symbolName {
+            if isAppearing, let symbolName = viewModel.symbolName {
                 Image(systemName: symbolName)
                     .foregroundStyle(.secondary)
                     .symbolVariant(.fill)
+                    .contentTransition(.symbolEffect(.replace.magic(fallback: .offUp.wholeSymbol), options: .nonRepeating))
+                    .transition(.blurReplace)
             }
 
-            Text(content.title)
-                .font(.headline)
-                .foregroundStyle(.primary)
+            if isAppearing {
+                Text(viewModel.title)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                    .transition(.blurReplace)
+            }
         }
         .padding(.horizontal)
         .frame(maxWidth: .infinity, minHeight: SessionsTableViewController.Metrics.headerRowHeight, maxHeight: SessionsTableViewController.Metrics.headerRowHeight, alignment: .leading)
+        .task {
+            withAnimation {
+                isAppearing = true
+            }
+        }
+        .onDisappear {
+            withAnimation {
+                isAppearing = false
+            }
+        }
     }
 }
