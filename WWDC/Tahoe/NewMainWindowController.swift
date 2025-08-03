@@ -22,9 +22,6 @@ final class NewMainWindowController: NewWWDCWindowController {
             NSRect(x: 0, y: 0, width: 1200, height: 600)
     }
 
-    var searchPopover: NSPopover?
-    private var searchFieldObservers = Set<AnyCancellable>()
-
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
         let window = NSWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
@@ -46,7 +43,10 @@ final class NewMainWindowController: NewWWDCWindowController {
     }
 
     @objc func performFindPanelAction(_ sender: Any) {
-        // TODO:
+        guard let searchItem = window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem else {
+            return
+        }
+        searchItem.beginSearchInteraction()
     }
 
     override func makeTouchBar() -> NSTouchBar? {
@@ -79,6 +79,7 @@ extension NewMainWindowController: NSToolbarDelegate {
         switch itemIdentifier {
         case .searchItem:
             let item = NSSearchToolbarItem(itemIdentifier: itemIdentifier)
+            item.resignsFirstResponderWithCancel = true
             return item
         case .filterItem:
             let item = NSMenuToolbarItem(itemIdentifier: itemIdentifier)
@@ -124,7 +125,7 @@ extension NewMainWindowController: NSToolbarDelegate {
             .tabSelectionItem,
             .downloadItem,
             .flexibleSpace,
-            .searchItem,
+            .searchItem
         ]
     }
 
@@ -134,61 +135,13 @@ extension NewMainWindowController: NSToolbarDelegate {
 }
 
 @available(macOS 26.0, *)
-extension NewMainWindowController: NSSearchFieldDelegate {
-    func controlTextDidBeginEditing(_ obj: Notification) {
-        guard let window else {
-            return
-        }
-        NSAnimationContext.runAnimationGroup { _ in
-            window.titlebarAccessoryViewControllers.first?.animator().isHidden = false
-        }
-    }
-
-    func controlTextDidEndEditing(_ obj: Notification) {
-        NSAnimationContext.runAnimationGroup { _ in
-            window?.titlebarAccessoryViewControllers.first?.animator().isHidden = true
-        }
-        (window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem)?.endSearchInteraction()
-    }
-
-    func searchFieldDidStartSearching(_ sender: NSSearchField) {
-        print(sender)
-    }
-}
-
-@available(macOS 26.0, *)
 private extension NewMainWindowController {
-    @objc func searchBarDidBeginEditing(_ notification: Notification) {}
-
-    @objc func toggleSearchPanel(_ item: NSToolbarItem) {
-        guard let searchItem = window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem else {
-            return
-        }
-
-        searchItem.isHidden.toggle()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            if searchItem.isHidden {
-                searchItem.endSearchInteraction()
-            } else {
-                searchItem.beginSearchInteraction()
-            }
-        }
-    }
-
     @objc func toggleDownloadPanel(_ item: NSToolbarItem) {}
 
     @objc func selectTabControl(_ control: NSSegmentedControl) {
         if let tab = MainWindowTab(rawValue: control.selectedSegment) {
             coordinator?.tabController.setActiveTab(tab)
         }
-    }
-
-    @objc func toggleSearchGroup(_ group: NSToolbarItemGroup) {
-        group.controlRepresentation = .expanded
-    }
-
-    @objc func selectWWDC(_ group: NSToolbarItemGroup) {
-        group.selectedIndex
     }
 }
 

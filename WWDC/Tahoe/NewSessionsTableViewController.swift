@@ -57,6 +57,10 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .filterItem }) as? NSMenuToolbarItem
     }
 
+    var searchItem: NSSearchToolbarItem? {
+        viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem
+    }
+
     private var header: NSView!
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 100, height: MainWindowController.defaultRect.height))
@@ -110,12 +114,12 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
         // This allows using the arrow keys to navigate
         view.window?.makeFirstResponder(tableView)
-        prepareForDisplayingFilterItem()
+        prepareForDisplayingFilterItems()
     }
 
     override func viewWillDisappear() {
         super.viewWillDisappear()
-        prepareForHidingFilterItem()
+        prepareForHidingFilterItems()
     }
 
     override func viewWillLayout() {
@@ -138,6 +142,10 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
     @objc private func didTapClearItem(_ item: Any) {
         searchCoordinator.resetAction.send()
+        if let searchField = searchItem?.searchField {
+            searchField.stringValue = ""
+            updateTextFilter(sender: searchField)
+        }
     }
 
     // MARK: - Selection
@@ -665,8 +673,8 @@ extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDele
 
 @available(macOS 26.0, *)
 private extension NewSessionsTableViewController {
-    func prepareForDisplayingFilterItem() {
-        for item in [filterItem] {
+    func prepareForDisplayingFilterItems() {
+        for item in [filterItem, searchItem] {
             item?.target = self
             item?.isHidden = false
         }
@@ -675,12 +683,42 @@ private extension NewSessionsTableViewController {
         filterItem?.menu.addItem(withTitle: "Clear All Filters", action: #selector(didTapClearItem), keyEquivalent: "").tag = ContextualMenuOption.clearFiler.rawValue
         filterItem?.image = NSImage(systemSymbolName: header.isHidden ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: header.isHidden ? "Show Filter Options" : "Hide Filter Options")
         filterItem?.toolTip = filterItem?.image?.accessibilityDescription
+
+        let currentTextFilter = searchCoordinator[keyPath: searchTarget].effectiveFilters.first(where: { $0.identifier == .text }) as? TextualFilter
+        searchItem?.searchField.stringValue = currentTextFilter?.value ?? ""
+        searchItem?.searchField.delegate = self // set delegate after restoring state
     }
 
-    func prepareForHidingFilterItem() {
-        for item in [filterItem] {
+    func prepareForHidingFilterItems() {
+        for item in [filterItem, searchItem] {
             item?.target = nil
             item?.isHidden = true
         }
+        searchItem?.searchField.delegate = nil
+    }
+}
+
+
+@available(macOS 26.0, *)
+extension NewSessionsTableViewController: NSSearchFieldDelegate {
+    func controlTextDidChange(_ obj: Notification) {
+        guard let sender = obj.object as? NSSearchField else {
+            return
+        }
+        updateTextFilter(sender: sender)
+    }
+
+    private func updateTextFilter(sender: NSSearchField) {
+        let filters = searchCoordinator[keyPath: searchTarget].effectiveFilters
+        guard
+            let textIdx = filters.firstIndex(where: { $0.identifier == .text }),
+            var currentFilter = filters[textIdx] as? TextualFilter,
+            currentFilter.value != sender.stringValue
+        else {
+            return
+        }
+        currentFilter.value = sender.stringValue
+        searchCoordinator[keyPath: searchTarget].effectiveFilters[textIdx] = currentFilter
+        searchCoordinator[keyPath: searchTarget].updatePredicate(.userInput)
     }
 }
