@@ -26,9 +26,10 @@ struct NewTranscriptView: View {
     }()
 
     @State private var maskHeight: CGFloat?
+    @State private var readyToPlay: Bool = false
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: 10) {
+            LazyVStack(alignment: .leading, spacing: 5) {
                 ForEach(lines) { line in
                     Button {
                         seekVideoTo(line: line)
@@ -42,16 +43,15 @@ struct NewTranscriptView: View {
                                 .font(.title)
                                 .fontWeight(.medium)
                                 .lineLimit(nil)
-                                .foregroundStyle(selectedLine == line ? .primary : .secondary)
-                                .scaleEffect(selectedLine == line ? 1 : 0.95)
-                                .transition(.blurReplace)
                         }
+                        .foregroundStyle(selectedLine == line ? .primary : .secondary)
+                        .scaleEffect(selectedLine == line ? 1 : 0.95)
+                        .transition(.blurReplace)
                     }
                     .buttonStyle(LineButtonStyle())
                     .id(line)
                     .scrollTransition { content, phase in
                         content
-                            .scaleEffect(phase.isIdentity ? 1 : 0.95)
                             .opacity(phase.isIdentity ? 1 : 0.7)
                             .blur(radius: phase.isIdentity ? 0 : 0.5)
                     }
@@ -61,13 +61,17 @@ struct NewTranscriptView: View {
         }
         .scrollPosition($scrollPosition, anchor: .center)
         .safeAreaPadding([.top, .bottom], 100)
+        .opacity(readyToPlay ? 1 : 0)
+        .disabled(!readyToPlay)
         .onReceive(linesUpdate) { newValue in
-            guard newValue != lines else {
+            let filtered = newValue.filter { !$0.body.isEmpty }
+            guard filtered != lines else {
                 return
             }
             withAnimation {
-                lines = newValue
+                lines = filtered
             }
+            updateCurrentLineIfNeeded()
         }
         .onReceive(highlightChange) { newValue in
             guard newValue != selectedLine else {
@@ -77,6 +81,9 @@ struct NewTranscriptView: View {
                 selectedLine = newValue
                 scrollPosition.scrollTo(id: newValue, anchor: .center)
             }
+        }
+        .task {
+            updateCurrentLineIfNeeded()
         }
     }
 
@@ -88,9 +95,9 @@ struct NewTranscriptView: View {
         NotificationCenter.default.publisher(for: .HighlightTranscriptAtCurrentTimecode)
             .filter { ($0.userInfo?["session_id"] as? String) == sessionID }
             .compactMap { note in
-                guard let timecode = note.object as? String else { return nil }
+                guard let timecode = note.object as? NSString else { return nil }
 
-                guard let annotation = lines.first(where: { Transcript.roundedStringFromTimecode($0.timecode) == timecode }) else {
+                guard let annotation = lines.findNearestLine(to: timecode.doubleValue, flipLastToFirst: false) else {
                     return nil
                 }
                 return annotation
@@ -124,6 +131,25 @@ struct NewTranscriptView: View {
 
         NotificationCenter.default.post(name: NSNotification.Name.TranscriptControllerDidSelectAnnotation, object: notificationObject)
     }
+
+    private func updateCurrentLineIfNeeded() {
+        guard
+            let currentPosition = viewModel.session.progresses.first?.currentPosition,
+            let line = lines.findNearestLine(to: currentPosition)
+        else {
+            return
+        }
+        withAnimation {
+            selectedLine = line
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + (readyToPlay ? 0 : 1)) {
+            // wait until content fully appears
+            scrollPosition.scrollTo(id: line, anchor: .bottom)
+            withAnimation {
+                readyToPlay = true
+            }
+        }
+    }
 }
 
 private struct TranscriptLine: Identifiable, Hashable {
@@ -140,10 +166,51 @@ private struct TranscriptLine: Identifiable, Hashable {
 private struct LineButtonStyle: ButtonStyle {
     func makeBody(configuration: ButtonStyleConfiguration) -> some View {
         configuration.label
-            .padding()
+            .padding(.horizontal)
+            .padding(.vertical, 5)
             .frame(maxWidth: .infinity, alignment: .leading)
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .scaleEffect(configuration.isPressed ? 0.9 : 1)
             .animation(.bouncy, value: configuration.isPressed)
+    }
+}
+
+private extension Array where Element == TranscriptLine {
+    /// Assumes lines are sorted by timecode.
+    ///
+    /// - Parameters:
+    ///   - timecode: The target timecode in seconds to search for.
+    ///   - flipLastToFirst: If true, when playback has reached the end and restarts, the first line will be considered the closest for a smoother replay experience.
+    /// - Returns: The transcript line closest to the given timecode, or `nil` if the array is empty.
+    func findNearestLine(to timecode: Double, flipLastToFirst: Bool = true) -> TranscriptLine? {
+        guard !isEmpty else { return nil }
+        var low = 0
+        var high = count - 1
+
+        while low <= high {
+            let mid = (low + high) / 2
+            if self[mid].timecode == timecode {
+                return self[mid]
+            } else if self[mid].timecode < timecode {
+                low = mid + 1
+            } else {
+                high = mid - 1
+            }
+        }
+
+        // Now low is the index of the smallest number >= target
+        // high is the largest number < target
+        let lowDiff = (low < count) ? abs(self[low].timecode - timecode) : .greatestFiniteMagnitude
+        let highDiff = (high >= 0) ? abs(self[high].timecode - timecode) : .greatestFiniteMagnitude
+
+        if lowDiff < highDiff {
+            return self[low]
+        } else {
+            if high == count - 1 && flipLastToFirst {
+                return self[0]
+            } else {
+                return self[high]
+            }
+        }
     }
 }
