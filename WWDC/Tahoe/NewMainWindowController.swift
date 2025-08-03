@@ -61,8 +61,7 @@ extension NewMainWindowController: NSToolbarDelegate {
             return
         }
         window.styleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
-        window.isMovableByWindowBackground = true
-//        window.titlebarAppearsTransparent = true // based on tabs
+        window.isMovableByWindowBackground = false
         window.titleVisibility = .hidden
         let toolbar = NSToolbar(identifier: "LiquidToolbar-\(tab.rawValue)")
 
