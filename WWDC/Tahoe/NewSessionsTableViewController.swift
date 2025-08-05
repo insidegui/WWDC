@@ -62,7 +62,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     }
 
     private var header: NSView!
-    private var scrollTopConstraint: NSLayoutConstraint!
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 100, height: MainWindowController.defaultRect.height))
 
@@ -75,8 +74,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        scrollTopConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
-        scrollTopConstraint.isActive = true
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
         let header = NSHostingView(rootView: ListContentFilterHeaderView(stateKeyPath: searchTarget).environment(searchCoordinator))
         header.isHidden = true
@@ -127,14 +125,12 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     @objc private func didTapFilterItem(_ item: NSToolbarItem) {
         let isHeaderHiddenNext = !header.isHidden
         let nextTopInset = isHeaderHiddenNext ? 0 : (header.bounds.height - header.safeAreaInsets.top)
-        let nextTopConstraintConstant = isHeaderHiddenNext ? 0 : (header.bounds.height)
         item.image = NSImage(systemSymbolName: isHeaderHiddenNext ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: isHeaderHiddenNext ? "Show Filter Options" : "Hide Filter Options")
         item.toolTip = item.image?.accessibilityDescription
+        scrollView.additionalSafeAreaInsets.top = nextTopInset
         NSAnimationContext.runAnimationGroup { _ in
             header.animator().alphaValue = isHeaderHiddenNext ? 0 : 1
-            scrollTopConstraint.animator().constant = nextTopConstraintConstant
         } completionHandler: {
-            self.scrollView.contentInsets.top = nextTopInset
             self.header.isHidden = isHeaderHiddenNext
         }
     }
