@@ -466,17 +466,14 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     @objc private func tableViewMenuItemClicked(_ menuItem: NSMenuItem) {
         var viewModels = [SessionViewModel]()
-
         for row in selectedAndClickedRowIndexes() {
             guard case .session(let viewModel) = displayedRows[row].kind else { continue }
-
             viewModels.append(viewModel)
         }
-
         guard !viewModels.isEmpty else { return }
-
         switch menuItem.option {
         case .watched:
             delegate?.sessionTableViewContextMenuActionWatch(viewModels: viewModels)
