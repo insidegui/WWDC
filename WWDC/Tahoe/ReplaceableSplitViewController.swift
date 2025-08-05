@@ -132,18 +132,12 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        for item in [topTabItem, topSearchItem, topDownloadItem] {
-            item?.isEnabled = false
-        }
     }
 
     override func viewWillAppear() {
         super.viewWillAppear()
         Task {
             await changeContent()
-            for item in [topTabItem, topSearchItem, topDownloadItem] {
-                item?.isEnabled = true
-            }
         }
     }
 

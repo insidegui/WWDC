@@ -27,14 +27,6 @@ extension ToolbarItemAccessor {
     var topTabItem: NSToolbarItem? {
         toolbarWindow?.toolbar?.items.first(where: { $0.itemIdentifier == .tabSelectionItem })
     }
-
-    var topSearchItem: NSToolbarItem? {
-        toolbarWindow?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem })
-    }
-
-    var topDownloadItem: NSToolbarItem? {
-        toolbarWindow?.toolbar?.items.first(where: { $0.itemIdentifier == .downloadItem })
-    }
 }
 
 extension NSViewController: ToolbarItemAccessor {

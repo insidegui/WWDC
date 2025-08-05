@@ -125,8 +125,7 @@ extension NewMainWindowController: NSToolbarDelegate {
             .tabSelectionItem,
             .downloadItem,
             .flexibleSpace,
-            .searchItem,
-            .inspectorTrackingSeparator
+            .searchItem
         ]
     }
 
