@@ -141,6 +141,7 @@ final class NewAppCoordinator: WWDCCoordinator {
             initialSelection: Preferences.shared.selectedScheduleItemIdentifier.map(SessionIdentifier.init)
         )
         scheduleDetailController = .init()
+        scheduleDetailController.searchCoordinator = searchCoordinator
         tabController.add(list: scheduleListController, detail: scheduleDetailController)
 
         // Videos
@@ -155,6 +156,7 @@ final class NewAppCoordinator: WWDCCoordinator {
             initialSelection: Preferences.shared.selectedVideoItemIdentifier.map(SessionIdentifier.init)
         )
         videosDetailController = .init()
+        videosDetailController.searchCoordinator = searchCoordinator
         tabController.add(list: videosListController, detail: videosDetailController)
 
         self.windowController = windowController
