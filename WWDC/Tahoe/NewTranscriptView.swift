@@ -17,13 +17,6 @@ struct NewTranscriptView: View {
     @State private var selectedLine: TranscriptLine?
     @State private var scrollPosition = ScrollPosition(idType: TranscriptLine.self)
     let viewModel: SessionViewModel
-    let videoTimeFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.minute, .second]
-        formatter.unitsStyle = .positional
-        formatter.zeroFormattingBehavior = [.pad]
-        return formatter
-    }()
 
     @State private var maskHeight: CGFloat?
     @State private var readyToPlay: Bool = false
@@ -31,24 +24,10 @@ struct NewTranscriptView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 5) {
                 ForEach(lines) { line in
-                    Button {
+                    Button("") {
                         seekVideoTo(line: line)
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(videoTimeFormatter.string(from: line.timecode) ?? "")
-                                .font(.caption2)
-                                .fontDesign(.monospaced)
-                                .foregroundStyle(.tertiary)
-                            Text(line.body)
-                                .font(.title)
-                                .fontWeight(.medium)
-                                .lineLimit(nil)
-                        }
-                        .foregroundStyle(selectedLine == line ? .primary : .secondary)
-                        .scaleEffect(selectedLine == line ? 1 : 0.95)
-                        .transition(.blurReplace)
                     }
-                    .buttonStyle(LineButtonStyle())
+                    .buttonStyle(LineButtonStyle(line: line, selectedLine: selectedLine))
                     .id(line)
                     .scrollTransition { content, phase in
                         content
@@ -164,14 +143,46 @@ private struct TranscriptLine: Identifiable, Hashable {
 }
 
 private struct LineButtonStyle: ButtonStyle {
+    let videoTimeFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute, .second]
+        formatter.unitsStyle = .positional
+        formatter.zeroFormattingBehavior = [.pad]
+        return formatter
+    }()
+    @State private var isHovered = false
+    let line: TranscriptLine
+    let selectedLine: TranscriptLine?
     func makeBody(configuration: ButtonStyleConfiguration) -> some View {
-        configuration.label
+            VStack(alignment: .leading) {
+                Text(line.body)
+                    .font(.title)
+                    .fontWeight(.medium)
+                    .lineLimit(nil)
+                    .transition(.blurReplace)
+            }
             .padding(.horizontal)
             .padding(.vertical, 5)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .clipShape(RoundedRectangle(cornerRadius: 5))
+            .clipShape(RoundedRectangle(cornerRadius: 5)) // clip first 
+            .overlay(alignment: .topLeading, content: {
+                Text(videoTimeFormatter.string(from: line.timecode) ?? "")
+                    .font(.caption2)
+                    .fontDesign(.monospaced)
+                    .foregroundStyle(.tertiary)
+                    .opacity(isHovered ? 1 : 0)
+                    .transition(.blurReplace)
+                    .padding(.horizontal)
+                    .offset(y: -5)
+            })
+            .foregroundStyle(selectedLine == line ? .primary : .secondary)
+            .scaleEffect(selectedLine == line ? 1 : 0.95)
             .scaleEffect(configuration.isPressed ? 0.9 : 1)
             .animation(.bouncy, value: configuration.isPressed)
+            .animation(.bouncy, value: isHovered)
+            .onHover { isHovering in
+                isHovered = isHovering
+            }
     }
 }
 
