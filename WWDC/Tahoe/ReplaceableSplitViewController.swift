@@ -33,8 +33,6 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     }
 
     private var items = [[NSViewController?]]()
-    private var sessionSelectObserver: AnyCancellable?
-    private var transcriptObserver: AnyCancellable?
 
     var activatedItems: [NSViewController?] {
         guard
@@ -46,7 +44,6 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     }
 
     @MainActor private func changeContent() async {
-        sessionSelectObserver?.cancel()
         let newItems = activatedItems
         let sidebarContainer = sidebarItem.container
         let detailContainer = detailItem.container
@@ -67,26 +64,12 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
         }
         sidebarItem.canCollapse = false
         topSegmentControl?.selectedSegment = activeTab.rawValue
-
-        if
-            let list = newItems[0] as? NewSessionsTableViewController
-        {
-            if let detail = newItems[1] as? SessionDetailsViewController {
-                sessionSelectObserver = list.$selectedSession.receive(on: DispatchQueue.main).sink { [weak detail] viewModel in
-                    NSAnimationContext.runAnimationGroup { context in
-                        context.duration = 0.35
-                        detail?.viewModel = viewModel
-                    }
-                }
-            }
-        }
-
         sidebarItem.isCollapsed = newItems[0] == nil
         inspectorItem.isCollapsed = newItems[2] == nil
     }
 
-    private var sidebarItem: NSSplitViewItem!
-    private var detailItem: NSSplitViewItem!
+    fileprivate var sidebarItem: NSSplitViewItem!
+    fileprivate var detailItem: NSSplitViewItem!
     fileprivate var inspectorItem: NSSplitViewItem!
 
     private var previousSidebarWidth: CGFloat?
@@ -111,7 +94,7 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func add(list: NSViewController?, detail: NSViewController, inspector: NSViewController? = nil) {
+    func add(list: NSViewController?, detail: NSViewController? = nil, inspector: NSViewController? = nil) {
         items.append([
             list,
             detail,
@@ -146,7 +129,11 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
 @available(macOS 26.0, *)
 extension NSViewController {
     private var replaceableSplit: ReplaceableSplitViewController? {
-        (parent as? SplitContainer)?.parent as? ReplaceableSplitViewController
+        if let split = self as? ReplaceableSplitViewController {
+            return split
+        } else {
+            return parent?.replaceableSplit
+        }
     }
 
     func hideInspector() {
@@ -174,6 +161,18 @@ extension NSViewController {
                 splitView.animator().setPosition(width, ofDividerAt: 2)
             }
             inspectorItem.canCollapse = false
+        }
+    }
+
+    func updateDetail(_ content: NSViewController) {
+        guard
+            let item = replaceableSplit?.detailItem
+        else {
+            return
+        }
+        let container = item.container
+        Task {
+            await container.replaceContent(content)
         }
     }
 }

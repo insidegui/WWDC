@@ -142,7 +142,7 @@ final class NewAppCoordinator: WWDCCoordinator {
         )
         scheduleDetailController = .init()
         scheduleDetailController.searchCoordinator = searchCoordinator
-        tabController.add(list: scheduleListController, detail: scheduleDetailController)
+        tabController.add(list: scheduleListController, detail: nil)
 
         // Videos
         videosListController = NewSessionsTableViewController(
@@ -157,7 +157,7 @@ final class NewAppCoordinator: WWDCCoordinator {
         )
         videosDetailController = .init()
         videosDetailController.searchCoordinator = searchCoordinator
-        tabController.add(list: videosListController, detail: videosDetailController)
+        tabController.add(list: videosListController, detail: nil)
 
         self.windowController = windowController
         tabController.setActiveTab(Preferences.shared.activeTab)
@@ -238,15 +238,21 @@ final class NewAppCoordinator: WWDCCoordinator {
             $videosSelectedSessionViewModel,
             $scheduleSelectedSessionViewModel
         ).receive(on: DispatchQueue.main)
-            .sink { [weak self] activeTab, _, _ in
+            .sink { [weak self] activeTab, newVideoModel, newScheduleModel in
                 guard let self else { return }
                 self.activeTab = activeTab
 
                 switch activeTab {
                 case .schedule:
                     activeTabSelectedSessionViewModel = scheduleSelectedSessionViewModel
+                    if let model = newScheduleModel {
+                        tabController.updateDetail(NSHostingController(rootView: NewSessionDetailView(viewModel: model)))
+                    }
                 case .videos:
                     activeTabSelectedSessionViewModel = videosSelectedSessionViewModel
+                    if let model = newVideoModel {
+                        tabController.updateDetail(NSHostingController(rootView: NewSessionDetailView(viewModel: model)))
+                    }
                 default:
                     activeTabSelectedSessionViewModel = nil
                 }

@@ -15,13 +15,13 @@ struct NewTranscriptView: View {
 //    @Environment(NewGlobalSearchCoordinator.self) var coordinator
     @State private var lines: [TranscriptLine] = []
     @State private var selectedLine: TranscriptLine?
-    @State private var scrollPosition = ScrollPosition(idType: TranscriptLine.self)
     let viewModel: SessionViewModel
+    @State private var scrollPosition = ScrollPosition(idType: TranscriptLine.self)
 
     @State private var maskHeight: CGFloat?
     @State private var readyToPlay: Bool = false
     var body: some View {
-        ScrollView {
+        ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: 5) {
                 ForEach(lines) { line in
                     Button("") {
@@ -38,10 +38,17 @@ struct NewTranscriptView: View {
                 .scrollTargetLayout()
             }
         }
-        .scrollPosition($scrollPosition, anchor: .center)
-        .safeAreaPadding([.top, .bottom], 100)
+        .scrollPosition($scrollPosition, anchor: .top)
+        .frame(height: 150)
+        .padding()
         .opacity(readyToPlay ? 1 : 0)
         .disabled(!readyToPlay)
+        .transition(.blurReplace)
+        .overlay(alignment: .top) {
+            ProgressView().progressViewStyle(.circular)
+                .opacity(readyToPlay ? 0 : 1)
+                .transition(.blurReplace)
+        }
         .onReceive(linesUpdate) { newValue in
             let filtered = newValue.filter { !$0.body.isEmpty }
             guard filtered != lines else {
@@ -58,7 +65,7 @@ struct NewTranscriptView: View {
             }
             withAnimation {
                 selectedLine = newValue
-                scrollPosition.scrollTo(id: newValue, anchor: .center)
+                scrollPosition.scrollTo(id: newValue, anchor: .top)
             }
         }
         .task {
@@ -98,7 +105,7 @@ struct NewTranscriptView: View {
     private func seekVideoTo(line: TranscriptLine) {
         withAnimation(.bouncy) {
             selectedLine = line
-            scrollPosition.scrollTo(id: line, anchor: .center)
+            scrollPosition.scrollTo(id: line, anchor: .top)
         }
         guard let transcript = viewModel.session.transcript() else { return }
 
@@ -121,9 +128,9 @@ struct NewTranscriptView: View {
         withAnimation {
             selectedLine = line
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + (readyToPlay ? 0 : 1)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + (readyToPlay ? 0 : 0.5)) {
             // wait until content fully appears
-            scrollPosition.scrollTo(id: line, anchor: .bottom)
+            scrollPosition.scrollTo(id: line, anchor: .top)
             withAnimation {
                 readyToPlay = true
             }
@@ -150,36 +157,36 @@ private struct LineButtonStyle: ButtonStyle {
         formatter.zeroFormattingBehavior = [.pad]
         return formatter
     }()
+
     @State private var isHovered = false
     let line: TranscriptLine
     let selectedLine: TranscriptLine?
     func makeBody(configuration: ButtonStyleConfiguration) -> some View {
-            VStack(alignment: .leading) {
-                Text(line.body)
-                    .font(.title)
-                    .fontWeight(.medium)
-                    .lineLimit(nil)
-                    .transition(.blurReplace)
-            }
-            .padding(.horizontal)
+        Text(line.body)
+            .font(.title)
+            .fontWeight(.medium)
+            .lineLimit(nil)
+            .transition(.blurReplace)
             .padding(.vertical, 5)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .clipShape(RoundedRectangle(cornerRadius: 5)) // clip first 
-            .overlay(alignment: .topLeading, content: {
+            .clipShape(RoundedRectangle(cornerRadius: 5)) // clip first
+            .overlay(alignment: .trailing, content: {
                 Text(videoTimeFormatter.string(from: line.timecode) ?? "")
-                    .font(.caption2)
+                    .font(.title2)
                     .fontDesign(.monospaced)
                     .foregroundStyle(.tertiary)
-                    .opacity(isHovered ? 1 : 0)
                     .transition(.blurReplace)
-                    .padding(.horizontal)
-                    .offset(y: -5)
+                    .background {
+                        Color.black.opacity(0.2)
+                            .blur(radius: 5)
+                    }
+                    .opacity(isHovered ? 1 : 0)
             })
             .foregroundStyle(selectedLine == line ? .primary : .secondary)
-            .scaleEffect(selectedLine == line ? 1 : 0.95)
-            .scaleEffect(configuration.isPressed ? 0.9 : 1)
+            .scaleEffect(configuration.isPressed ? 0.96 : 1)
             .animation(.bouncy, value: configuration.isPressed)
             .animation(.bouncy, value: isHovered)
+            .contentShape(Rectangle()) // make the whole line hoverable
             .onHover { isHovering in
                 isHovered = isHovering
             }

@@ -54,7 +54,7 @@ class SessionDetailsViewModel: ObservableObject {
 }
 
 extension SessionDetailsViewModel {
-    enum SessionTab {
+    enum SessionTab: CaseIterable {
         case overview, transcript, bookmarks
     }
 }
@@ -70,9 +70,6 @@ final class SessionDetailsViewController: NSViewController {
                 view.animator().alphaValue = (viewModel == nil) ? 0 : 1
             }
             detailsViewModel.viewModel = viewModel
-            if #available(macOS 26.0, *), let viewModel {
-                showInspector(NSHostingController(rootView: NewTranscriptView(viewModel: viewModel)), width: 200)
-            }
         }
     }
 
