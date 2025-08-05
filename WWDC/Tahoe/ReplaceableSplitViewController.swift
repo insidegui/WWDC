@@ -130,10 +130,6 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
         loadingView = nil
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
     override func viewWillAppear() {
         super.viewWillAppear()
         Task {
