@@ -25,10 +25,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
     private lazy var commandsReceiver = AppCommandsReceiver()
     
-    @MainActor private(set) var coordinator: (any WWDCCoordinator)? {
+    private(set) var coordinator: (any WWDCCoordinator)? {
         didSet {
             if coordinator != nil {
-                openPendingDeepLinkIfNeeded()
+                DispatchQueue.main.async {
+                    self.openPendingDeepLinkIfNeeded()
+                }
             }
         }
     }

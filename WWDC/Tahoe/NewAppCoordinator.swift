@@ -16,6 +16,21 @@ import RealmSwift
 import SwiftUI
 
 @available(macOS 26.0, *)
+extension EnvironmentValues {
+    var coordinator: NewAppCoordinator?{
+        get {
+            self[KeyCoordinator.self]
+        }
+    }
+    
+    private struct KeyCoordinator: SwiftUICore.EnvironmentKey {
+        static var defaultValue: NewAppCoordinator? {
+            (NSApp.delegate as? AppDelegate)?.coordinator as? NewAppCoordinator
+        }
+    }
+}
+
+@available(macOS 26.0, *)
 final class NewAppCoordinator: WWDCCoordinator {
     nonisolated static let log = makeLogger()
     nonisolated static let signposter: OSSignposter = makeSignposter()

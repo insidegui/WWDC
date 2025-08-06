@@ -88,22 +88,34 @@ private extension SessionDetailsViewModel.SessionTab {
 @available(macOS 26.0, *)
 private struct OverviewContentView: View {
     let viewModel: SessionViewModel
+    private let actionsViewModel: SessionActionsViewModel
+    init(viewModel: SessionViewModel) {
+        self.viewModel = viewModel
+        self.actionsViewModel = SessionActionsViewModel(session: viewModel)
+    }
     @State private var title = ""
     @State private var summary = ""
     @State private var footer = ""
+    @Environment(\.coordinator) private var appCoordinator
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
-            Text(title)
-                .font(.init(NSFont.boldTitleFont))
-                .foregroundStyle(.primary)
-                .kerning(-0.5)
-                .textSelection(.enabled)
-                .transition(.blurReplace)
-                .onReceive(updates(for: \.rxTitle)) { newValue in
-                    withAnimation {
-                        title = newValue
+            HStack {
+                Text(title)
+                    .font(.init(NSFont.boldTitleFont))
+                    .foregroundStyle(.primary)
+                    .kerning(-0.5)
+                    .textSelection(.enabled)
+                    .transition(.blurReplace)
+                    .onReceive(updates(for: \.rxTitle)) { newValue in
+                        withAnimation {
+                            title = newValue
+                        }
                     }
-                }
+                SessionActionsView(viewModel: actionsViewModel, alignment: .trailing)
+                    .task {
+                        actionsViewModel.delegate = appCoordinator
+                    }
+            }
             Text(summary)
                 .font(.system(size: 15))
                 .foregroundStyle(.secondary)

@@ -79,7 +79,7 @@ extension WWDCCoordinator/*: SessionActionsDelegate */{
     }
 
     func sessionActionsDidSelectShare(_ sender: NSView?) {
-        guard let sender = sender else { return }
+        guard let sender = sender ?? getNSViewUnderTheMouse() else { return }
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         guard let webpageAsset = viewModel.session.asset(ofType: .webpage) else { return }
@@ -93,6 +93,19 @@ extension WWDCCoordinator/*: SessionActionsDelegate */{
 
     func sessionActionsDidSelectShareClip(_ sender: NSView?) {
         showClipUI()
+    }
+
+    private func getNSViewUnderTheMouse() -> NSView? {
+        let mouseLocation = NSEvent.mouseLocation
+        guard
+            let window = windowController.window,
+            let vc = windowController.contentViewController
+        else {
+            return nil
+        }
+        let mouseLocationInWindow = window.convertPoint(fromScreen: mouseLocation)
+        let mouseLocationInView = vc.view.convert(mouseLocationInWindow, from: nil)
+        return vc.view.hitTest(mouseLocationInView)
     }
 }
 
