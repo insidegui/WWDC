@@ -644,6 +644,7 @@
 		81CE115B2E3919DC002A0475 /* Tahoe */ = {
 			isa = PBXGroup;
 			children = (
+				81E172762E4268E900BC1E5C /* SessionDetail */,
 				81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */,
 				81AACF152E39231D000A2319 /* ToolbarSetup.swift */,
 				8181E2652E39F0710033126E /* ReplaceableSplitViewController.swift */,
@@ -792,7 +793,6 @@
 				F4FB069D2A2148D800799F84 /* ExploreTab */,
 				DD2E27871EAC2CCB0009D7B6 /* ShelfView.swift */,
 				DD382B7D1EAC3565009760C4 /* TabItemView.swift */,
-				81E172762E4268E900BC1E5C /* SessionDetail */,
 				DDB28F6E1EACFCDB0077703F /* VibrantButton.swift */,
 				DDB3529B1EC8AB5D00254815 /* WWDCLayer.swift */,
 				DD7F387C1EAC113A002D8C00 /* WWDCTextField.swift */,
