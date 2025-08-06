@@ -32,7 +32,7 @@ extension NewSessionDetailView {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Related Sessions")
                     .font(Font(NSFont.wwdcRoundedSystemFont(ofSize: 20, weight: .semibold) as CTFont))
-                    .foregroundColor(Color(.secondaryText))
+                    .foregroundColor(.secondary)
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .padding(.horizontal)

@@ -119,8 +119,8 @@ struct NewTranscriptView: View {
     }
 
     private func updateCurrentLineIfNeeded() {
+        let currentPosition = viewModel.session.progresses.first?.currentPosition ?? 0
         guard
-            let currentPosition = viewModel.session.progresses.first?.currentPosition,
             let line = lines.findNearestLine(to: currentPosition)
         else {
             return
@@ -174,12 +174,9 @@ private struct LineButtonStyle: ButtonStyle {
                 Text(videoTimeFormatter.string(from: line.timecode) ?? "")
                     .font(.title2)
                     .fontDesign(.monospaced)
-                    .foregroundStyle(.tertiary)
-                    .transition(.blurReplace)
-                    .background {
-                        Color.black.opacity(0.2)
-                            .blur(radius: 5)
-                    }
+                    .foregroundStyle(.secondary)
+                    .transition(.blurReplace.combined(with: .scale))
+                    .shadow(radius: 10)
                     .opacity(isHovered ? 1 : 0)
             })
             .foregroundStyle(selectedLine == line ? .primary : .secondary)
