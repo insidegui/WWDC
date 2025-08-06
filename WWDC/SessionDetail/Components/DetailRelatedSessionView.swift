@@ -10,8 +10,10 @@ import Combine
 import SwiftUI
 
 extension NewSessionDetailView {
+    @available(macOS 26.0, *)
     struct RelatedSessionsView: View {
         @State private var sessions: [SessionViewModel] = []
+        @Environment(\.coordinator) private var coordinator
         let currentSession: SessionViewModel
 
         enum Metrics {
@@ -40,7 +42,7 @@ extension NewSessionDetailView {
                 LazyVGrid(columns: columns) {
                     ForEach(sessions, id: \.identifier) { session in
                         Button {
-//                                viewModel.selectSession(session)
+                            coordinator?.selectSessionOnAppropriateTab(with: session)
                         } label: {
                             SessionCellView(
                                 cellViewModel: SessionCellViewModel(session: session),
