@@ -22,6 +22,9 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
                 return
             }
             changeContent()
+            NSAnimationContext.runAnimationGroup { _ in
+                topSegmentControl?.animator().selectedSegment = activeTab.rawValue
+            }
         }
     }
 

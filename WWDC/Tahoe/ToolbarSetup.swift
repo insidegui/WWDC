@@ -32,3 +32,7 @@ extension ToolbarItemAccessor {
 extension NSViewController: ToolbarItemAccessor {
     var toolbarWindow: NSWindow? { viewIfLoaded?.window }
 }
+
+extension NSWindowController: ToolbarItemAccessor {
+    var toolbarWindow: NSWindow? { window }
+}
