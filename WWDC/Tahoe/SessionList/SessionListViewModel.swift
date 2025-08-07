@@ -13,6 +13,7 @@ struct SessionListSection: Identifiable, Equatable {
     var id: [String?] {
         [systemSymbol, title]
     }
+
     let title: String
     let systemSymbol: String?
     var sessions: [Session]
@@ -60,16 +61,24 @@ struct SessionListSection: Identifiable, Equatable {
     func prepareForDisplay() {
         rowsObserver = rowProvider
             .rowsPublisher
-            .map({ $0.visibleRows.grouped() })
+            .map { $0.visibleRows.grouped() }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
-                self?.sections = $0
-                if self?.selectedSession == nil {
-                    self?.selectedSession = $0.flatMap(\.sessions).first(where: { $0.id == self?.initialSelection?.sessionIdentifier })
-                }
+                self?.updateSections($0)
             }
         rowProvider.startup()
+    }
+
+    private func updateSections(_ newSections: [SessionListSection]) {
+        sections = newSections
+        if selectedSession == nil {
+            selectedSession = newSections.flatMap(\.sessions)
+                .first(where: { $0.id == initialSelection?.sessionIdentifier })
+        }
+        if selectedSession == nil {
+            selectedSession = newSections.first?.sessions.first
+        }
     }
 }
 

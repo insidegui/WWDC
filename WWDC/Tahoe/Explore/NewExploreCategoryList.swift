@@ -26,10 +26,6 @@ struct NewExploreCategoryList: View {
                 proxy.scrollTo(newValue, anchor: .bottom)
             }
         }
-        .frame(width: 300)
-        .navigationDestination(isPresented: $showDetail) {
-            NewExploreTabDetailView(viewModel: viewModel)
-        }
         .onAppear {
             showDetail = true
         }

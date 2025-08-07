@@ -17,11 +17,6 @@ final class NewMainWindowController: NewWWDCWindowController {
         }
     }
 
-    static var defaultRect: NSRect {
-        return NSScreen.main?.visibleFrame.insetBy(dx: 50, dy: 120) ??
-            NSRect(x: 0, y: 0, width: 1200, height: 600)
-    }
-
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
         let window = NSWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)
@@ -32,7 +27,7 @@ final class NewMainWindowController: NewWWDCWindowController {
 
         window.identifier = .mainWindow
         window.setFrameAutosaveName("main")
-        window.minSize = NSSize(width: 1060, height: 700)
+        window.minSize = NSSize(width: 1060, height: Constants.minimumWindowHeight)
 
         self.window = window
     }
@@ -122,12 +117,12 @@ extension NewMainWindowController: NSToolbarDelegate {
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         return [
             .flexibleSpace,
-            .toggleSidebar,
-//            .sidebarTrackingSeparator,
+            .filterItem,
+            .sidebarTrackingSeparator,
             .tabSelectionItem,
             .downloadItem,
-//            .flexibleSpace,
-//            .searchItem
+            .flexibleSpace,
+            .searchItem
         ]
     }
 

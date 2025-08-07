@@ -22,3 +22,16 @@ struct NewSessionDetailView: View {
         .scrollEdgeEffectStyle(.soft, for: .vertical)
     }
 }
+
+@available(macOS 26.0, *)
+struct NewSessionDetailWrapperView: View {
+    @Bindable var viewModel: SessionListViewModel
+    var body: some View {
+        if let session = viewModel.selectedSession {
+            NewSessionDetailView(viewModel: session.model)
+                .transition(.blurReplace)
+        } else {
+            Color.clear
+        }
+    }
+}

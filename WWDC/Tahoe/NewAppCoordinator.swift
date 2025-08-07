@@ -42,7 +42,7 @@ final class NewAppCoordinator: WWDCCoordinator {
 
     // - Top level controllers
     var windowController: WWDCWindowControllerObject
-    var tabController: SplitViewController
+    var tabController: ReplaceableSplitViewController
     var searchCoordinator: NewGlobalSearchCoordinator
 
     // - The 3 tabs
@@ -158,7 +158,7 @@ final class NewAppCoordinator: WWDCCoordinator {
                 )
             )
         )
-        tabController = SplitViewController(exploreViewModel: exploreViewModel, scheduleViewModel: scheduleViewModel, videosViewModel: videosViewModel)
+        tabController = ReplaceableSplitViewController(windowController: windowController, exploreViewModel: exploreViewModel, scheduleViewModel: scheduleViewModel, videosViewModel: videosViewModel)
 
         _playerOwnerSessionIdentifier = .init(initialValue: nil)
         self.windowController = windowController

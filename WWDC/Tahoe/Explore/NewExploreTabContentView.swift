@@ -75,7 +75,8 @@ struct NewExploreTabContentView: View {
             .blur(radius: isPresentingLiveEvent ? 24 : 0)
             .scrollTargetLayout()
         }
-        .scrollPosition(id: $currentPosition, anchor: .top)
+        .scrollPosition(id: $currentPosition, anchor: .center)
+        .animation(.smooth, value: currentPosition)
     }
 
     @ViewBuilder

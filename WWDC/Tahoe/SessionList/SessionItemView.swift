@@ -42,9 +42,8 @@ struct SessionItemView: View {
         .task {
             viewModel.prepareForDisplay()
         }
-        .onDisappear {
-            viewModel.prepareForDisplay()
-        }
+        .contentShape(Rectangle()) // quick hover
+        .help([viewModel.title, viewModel.subtitle, viewModel.context].joined(separator: "\n"))
     }
 
     /// Discover Apple-Hosted Background Assets

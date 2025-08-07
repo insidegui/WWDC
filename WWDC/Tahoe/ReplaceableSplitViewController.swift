@@ -11,32 +11,48 @@ import Combine
 import SwiftUI
 
 @available(macOS 26.0, *)
-class SplitViewController: NSViewController, WWDCTabController {
-    init(exploreViewModel: NewExploreViewModel, scheduleViewModel: SessionListViewModel, videosViewModel: SessionListViewModel) {
-        self.exploreViewModel = exploreViewModel
-        self.scheduleViewModel = scheduleViewModel
-        self.videosViewModel = videosViewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     typealias Tab = MainWindowTab
     let exploreViewModel: NewExploreViewModel
     let scheduleViewModel: SessionListViewModel
     let videosViewModel: SessionListViewModel
-
     @Published var activeTab: Tab = .explore {
         didSet {
-            switchContent()
+            guard activeTab != oldValue else {
+                return
+            }
+            changeContent()
         }
     }
 
     var activeTabPublisher: AnyPublisher<Tab, Never> {
         $activeTab.eraseToAnyPublisher()
+    }
+
+    fileprivate var sidebarItem: NSSplitViewItem!
+    fileprivate var detailItem: NSSplitViewItem!
+
+    private var previousSidebarWidth: CGFloat?
+    private weak var windowController: WWDCWindowControllerObject?
+
+    init(windowController: WWDCWindowControllerObject, exploreViewModel: NewExploreViewModel, scheduleViewModel: SessionListViewModel, videosViewModel: SessionListViewModel) {
+        self.windowController = windowController
+        self.exploreViewModel = exploreViewModel
+        self.scheduleViewModel = scheduleViewModel
+        self.videosViewModel = videosViewModel
+        super.init(nibName: nil, bundle: nil)
+        sidebarItem = NSSplitViewItem(sidebarWithViewController: SplitContainer(nibName: nil, bundle: nil))
+        sidebarItem.container.isSidebar = true
+        sidebarItem.canCollapse = false
+        addSplitViewItem(sidebarItem)
+        detailItem = NSSplitViewItem(viewController: SplitContainer(nibName: nil, bundle: nil))
+        detailItem.automaticallyAdjustsSafeAreaInsets = true
+        addSplitViewItem(detailItem)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     private var loadingView: ModalLoadingView?
@@ -50,59 +66,61 @@ class SplitViewController: NSViewController, WWDCTabController {
         loadingView = nil
     }
 
-    private lazy var explore = NSHostingView(rootView: ExploreView(viewModel: exploreViewModel))
-    private lazy var schedule = NSHostingView(rootView: SessionListContentView(viewModel: scheduleViewModel))
-    private lazy var videos = NSHostingView(rootView: SessionListContentView(viewModel: videosViewModel))
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        switchContent()
+        changeContent()
     }
 
-    private var currentContent: NSView?
-    private func switchContent(duration: Double = 0.3) {
-        guard viewIfLoaded != nil else {
-            return
-        }
-        let newContent: NSView = {
+    private func changeContent() {
+        let sidebarContent: NSView = {
             switch activeTab {
-            case .explore: return explore
-            case .schedule: return schedule
-            case .videos: return videos
+            case .explore: return NSHostingView(rootView: NewExploreCategoryList(viewModel: exploreViewModel))
+            case .schedule: return NSHostingView(rootView: SessionListView(viewModel: scheduleViewModel))
+            case .videos: return NSHostingView(rootView: SessionListView(viewModel: videosViewModel))
             }
         }()
-
-        guard currentContent != newContent else {
-            return
-        }
-        let newView = newContent
-        let oldView = currentContent
-
-        newView.alphaValue = 0
-        newView.isHidden = false
-
-        // Add the new view if not already in the container
-        if newView.superview == nil {
-            add(content: newView)
+        let sidebarContainer = sidebarItem.container
+        Task {
+            await sidebarContainer.replaceContent(sidebarContent)
         }
 
-        NSAnimationContext.runAnimationGroup({ context in
-            context.duration = duration
-            context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-
-            // Animate out the old view
-            oldView?.animator().alphaValue = 0
-
-            // Animate in the new view
-            newView.animator().alphaValue = 1
-
-        }, completionHandler: {
-            oldView?.removeFromSuperview()
-            self.currentContent = newView
-        })
+        let detailContent: NSView = {
+            switch activeTab {
+            case .explore: return NSHostingView(rootView: NewExploreTabDetailView(viewModel: exploreViewModel))
+            case .schedule: return NSHostingView(rootView: NewSessionDetailWrapperView(viewModel: scheduleViewModel))
+            case .videos: return NSHostingView(rootView: NewSessionDetailWrapperView(viewModel: videosViewModel))
+            }
+        }()
+        let detailContainer = detailItem.container
+        Task {
+            await detailContainer.replaceContent(detailContent)
+        }
     }
 
-    private func add(content: NSView) {
+    override func splitViewDidResizeSubviews(_ notification: Notification) {
+        guard sidebarItem.isCollapsed == false else { return }
+        previousSidebarWidth = splitView.arrangedSubviews[0].bounds.width
+    }
+}
+
+private class SplitContainer: NSViewController, Sendable {
+    var isSidebar = false
+    override func loadView() {
+        super.loadView()
+        guard isSidebar else {
+            return
+        }
+        NSLayoutConstraint.activate([
+            view.widthAnchor.constraint(equalToConstant: Constants.sidebarWidth),
+            view.heightAnchor.constraint(greaterThanOrEqualToConstant: Constants.minimumWindowHeight)
+        ])
+    }
+
+    func replaceContent(_ content: NSView) async {
+        await NSAnimationContext.runAnimationGroup { _ in
+            view.animator().alphaValue = 0
+        }
+        view.subviews.forEach { $0.removeFromSuperview() }
         view.addSubview(content)
         content.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -111,31 +129,15 @@ class SplitViewController: NSViewController, WWDCTabController {
             content.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             content.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        await NSAnimationContext.runAnimationGroup { _ in
+            view.animator().alphaValue = 1
+        }
     }
 }
 
-@available(macOS 26.0, *)
-private struct ExploreView: View {
-    @Bindable var viewModel: NewExploreViewModel
-    var body: some View {
-        NavigationSplitView {
-            NewExploreCategoryList(viewModel: viewModel)
-        } detail: {
-            NewExploreTabDetailView(viewModel: viewModel)
-        }
-        .navigationSplitViewStyle(.balanced)
-    }
-}
-
-@available(macOS 26.0, *)
-private struct SessionListContentView: View {
-    @Bindable var viewModel: SessionListViewModel
-    var body: some View {
-        NavigationSplitView {
-            SessionListView(viewModel: viewModel)
-        } detail: {
-            Text("Select a session to see more information.")
-        }
-        .navigationSplitViewStyle(.balanced)
+private extension NSSplitViewItem {
+    var container: SplitContainer {
+        // swiftlint:disable:next force_cast
+        viewController as! SplitContainer
     }
 }

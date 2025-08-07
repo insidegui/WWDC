@@ -13,7 +13,7 @@ import SwiftUI
 struct SessionListView: View {
     @Bindable var viewModel: SessionListViewModel
 
-    private let columns = [GridItem(.flexible(minimum: 200, maximum: 650), alignment: .leading)]
+    private let columns = [GridItem(.flexible(), alignment: .leading)]
 
     var body: some View {
         ScrollView(.vertical) {
@@ -23,10 +23,6 @@ struct SessionListView: View {
                 }
             }
         }
-        .navigationDestination(item: $viewModel.selectedSession) { session in
-            NewSessionDetailView(viewModel: session.model)
-        }
-        .frame(minWidth: 300, maxWidth: 675)
         .task {
             viewModel.prepareForDisplay()
         }
