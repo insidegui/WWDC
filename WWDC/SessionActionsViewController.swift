@@ -68,6 +68,13 @@ final class SessionActionsViewModel: ObservableObject {
             }
         }
 
+        var showsInlineButton: Bool {
+            switch self {
+            case .downloadable, .downloaded, .pending, .downloading: true
+            case .notDownloadable: false
+            }
+        }
+
         var allocatesSpace: Bool {
             switch self {
             case .downloadable, .pending, .downloading, .downloaded: true

@@ -21,10 +21,17 @@ extension EnvironmentValues {
         self[KeyCoordinator.self]
     }
 
-    private struct KeyCoordinator: SwiftUICore.EnvironmentKey {
+    fileprivate struct KeyCoordinator: SwiftUICore.EnvironmentKey {
         static var defaultValue: NewAppCoordinator? {
             (NSApp.delegate as? AppDelegate)?.coordinator as? NewAppCoordinator
         }
+    }
+}
+
+@available(macOS 26.0, *)
+extension Observable {
+    var coordinator: NewAppCoordinator? {
+        EnvironmentValues.KeyCoordinator.defaultValue
     }
 }
 

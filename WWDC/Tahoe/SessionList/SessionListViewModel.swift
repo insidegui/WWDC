@@ -45,7 +45,11 @@ struct SessionListSection: Identifiable, Equatable {
     @ObservationIgnored private var rowsObserver: AnyCancellable?
 
     var sections: [SessionListSection] = []
-    var selectedSession: SessionListSection.Session?
+    var selectedSession: SessionListSection.Session? {
+        didSet {
+            syncSelectedSession()
+        }
+    }
 
     init(
         rowProvider: SessionRowProvider,
@@ -78,6 +82,14 @@ struct SessionListSection: Identifiable, Equatable {
         }
         if selectedSession == nil {
             selectedSession = newSections.first?.sessions.first
+        }
+    }
+
+    private func syncSelectedSession() {
+        if #available(macOS 26.0, *) {
+            DispatchQueue.main.async {
+                self.coordinator?.activeTabSelectedSessionViewModel = self.selectedSession?.model
+            }
         }
     }
 }
