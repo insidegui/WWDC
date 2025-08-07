@@ -9,6 +9,7 @@
 import Combine
 import SwiftUI
 
+@available(macOS 26.0, *)
 extension NewSessionDetailView {
     struct SessionDescriptionView: View {
         let viewModel: SessionViewModel

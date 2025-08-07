@@ -38,7 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
 
-        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+//        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
 
         #if ICLOUD
         ConfCoreCapabilities.isCloudKitEnabled = true
@@ -113,11 +113,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         self.syncEngine = syncEngine
 
         if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
-            coordinator = NewAppCoordinator(
+            let newAppCoordinator = NewAppCoordinator(
                 windowController: NewMainWindowController(),
                 storage: storage,
                 syncEngine: syncEngine
             )
+            coordinator = newAppCoordinator
+            newAppCoordinator.startup()
         } else {
             coordinator = AppCoordinator(
                 windowController: MainWindowController(),

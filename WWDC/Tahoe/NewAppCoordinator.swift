@@ -17,12 +17,10 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 extension EnvironmentValues {
-    var coordinator: NewAppCoordinator?{
-        get {
-            self[KeyCoordinator.self]
-        }
+    var coordinator: NewAppCoordinator? {
+        self[KeyCoordinator.self]
     }
-    
+
     private struct KeyCoordinator: SwiftUICore.EnvironmentKey {
         static var defaultValue: NewAppCoordinator? {
             (NSApp.delegate as? AppDelegate)?.coordinator as? NewAppCoordinator
@@ -44,15 +42,13 @@ final class NewAppCoordinator: WWDCCoordinator {
 
     // - Top level controllers
     var windowController: WWDCWindowControllerObject
-    var tabController: ReplaceableSplitViewController
+    var tabController: SplitViewController
     var searchCoordinator: NewGlobalSearchCoordinator
 
     // - The 3 tabs
-    var exploreController: NSViewController
-    var scheduleListController: NewSessionsTableViewController
-    var scheduleDetailController: SessionDetailsViewController
-    var videosListController: NewSessionsTableViewController
-    var videosDetailController: SessionDetailsViewController
+    let exploreViewModel: NewExploreViewModel
+    let scheduleViewModel: SessionListViewModel
+    let videosViewModel: SessionListViewModel
 
     var currentPlayerController: VideoPlayerViewController?
 
@@ -75,14 +71,7 @@ final class NewAppCoordinator: WWDCCoordinator {
 
     /// The list controller for the active tab
     var currentListController: NewSessionsTableViewController? {
-        switch activeTab {
-        case .schedule:
-            return scheduleListController
-        case .videos:
-            return videosListController
-        default:
-            return nil
-        }
+        nil
     }
 
     var exploreTabLiveSession: AnyPublisher<SessionViewModel?, Never> {
@@ -133,47 +122,45 @@ final class NewAppCoordinator: WWDCCoordinator {
 
         // Primary UI Initialization
 
-        tabController = ReplaceableSplitViewController(windowController: windowController)
-
         // Explore
         let provider = ExploreTabProvider(storage: storage)
-        let viewModel = NewExploreViewModel(provider: provider)
-        exploreController = NSHostingController(rootView: NewExploreTabRootView(viewModel: viewModel))
-        exploreController.identifier = NSUserInterfaceItemIdentifier(rawValue: "Featured")
-        tabController.add(list: NSHostingController(rootView: NewExploreCategoryList(viewModel: viewModel).environment(searchCoordinator)), detail: exploreController)
-
-        _playerOwnerSessionIdentifier = .init(initialValue: nil)
-
-        // Schedule
-        scheduleListController = NewSessionsTableViewController(
-            searchCoordinator: searchCoordinator,
-            searchTarget: \.scheduleState,
+        exploreViewModel = NewExploreViewModel(provider: provider)
+        scheduleViewModel = SessionListViewModel(
             rowProvider: ScheduleSessionRowProvider(
                 scheduleSections: storage.scheduleSections,
                 filterPredicate: searchCoordinator.$scheduleFilterPredicate,
                 playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
             ),
-            initialSelection: Preferences.shared.selectedScheduleItemIdentifier.map(SessionIdentifier.init)
+            initialSelection: Preferences.shared.selectedScheduleItemIdentifier.map(SessionIdentifier.init),
+            searchCoordinator: ScheduleSearchCoordinator(
+                storage,
+                tabState: GlobalSearchTabState(
+                    additionalPredicates: [
+                        NSPredicate(format: "ANY session.event.isCurrent == true"),
+                        NSPredicate(format: "session.instances.@count > 0")
+                    ],
+                    filterPredicate: .init(predicate: nil, changeReason: .initialValue)
+                )
+            )
         )
-        scheduleDetailController = .init()
-        scheduleDetailController.searchCoordinator = searchCoordinator
-        tabController.add(list: scheduleListController, detail: nil)
-
-        // Videos
-        videosListController = NewSessionsTableViewController(
-            searchCoordinator: searchCoordinator,
-            searchTarget: \.videosState,
+        videosViewModel = SessionListViewModel(
             rowProvider: VideosSessionRowProvider(
                 tracks: storage.tracks,
                 filterPredicate: searchCoordinator.$videosFilterPredicate,
                 playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
             ),
-            initialSelection: Preferences.shared.selectedVideoItemIdentifier.map(SessionIdentifier.init)
+            initialSelection: Preferences.shared.selectedVideoItemIdentifier.map(SessionIdentifier.init),
+            searchCoordinator: ScheduleSearchCoordinator(
+                storage,
+                tabState: GlobalSearchTabState(
+                    additionalPredicates: [Session.videoPredicate],
+                    filterPredicate: .init(predicate: nil, changeReason: .initialValue)
+                )
+            )
         )
-        videosDetailController = .init()
-        videosDetailController.searchCoordinator = searchCoordinator
-        tabController.add(list: videosListController, detail: nil)
+        tabController = SplitViewController(exploreViewModel: exploreViewModel, scheduleViewModel: scheduleViewModel, videosViewModel: videosViewModel)
 
+        _playerOwnerSessionIdentifier = .init(initialValue: nil)
         self.windowController = windowController
         tabController.setActiveTab(Preferences.shared.activeTab)
 
@@ -192,7 +179,6 @@ final class NewAppCoordinator: WWDCCoordinator {
         MediaDownloadManager.shared.activate()
         downloadMonitor.activate(with: storage)
 
-        startup()
         Self.signposter.endInterval("initialization", signpostState, "end init")
     }
 
@@ -201,8 +187,6 @@ final class NewAppCoordinator: WWDCCoordinator {
     @MainActor
     func startup() {
         setupBindings()
-        setupDelegation()
-        setupObservations()
 
         NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification).sink { _ in
             self.saveApplicationState()
@@ -231,13 +215,7 @@ final class NewAppCoordinator: WWDCCoordinator {
         refresh(nil)
         windowController.contentViewController = tabController
         windowController.showWindow(self)
-        tabController.showLoading()
-
-        // Allow the window time to display before pulling the data from realm
-        DispatchQueue.main.async {
-            self.videosListController.sessionRowProvider.startup()
-            self.scheduleListController.sessionRowProvider.startup()
-        }
+        //tabController.showLoading()
 
         if Arguments.showPreferences {
             showPreferences(nil)
@@ -245,9 +223,6 @@ final class NewAppCoordinator: WWDCCoordinator {
     }
 
     private func setupBindings() {
-        videosListController.$selectedSession.assign(to: &$videosSelectedSessionViewModel)
-        scheduleListController.$selectedSession.assign(to: &$scheduleSelectedSessionViewModel)
-
         Publishers.CombineLatest3(
             tabController.activeTabPublisher(for: MainWindowTab.self),
             $videosSelectedSessionViewModel,
@@ -261,12 +236,12 @@ final class NewAppCoordinator: WWDCCoordinator {
                 case .schedule:
                     activeTabSelectedSessionViewModel = scheduleSelectedSessionViewModel
                     if let model = newScheduleModel {
-                        tabController.updateDetail(NSHostingController(rootView: NewSessionDetailView(viewModel: model)))
+//                        tabController.updateDetail(NSHostingController(rootView: NewSessionDetailView(viewModel: model)))
                     }
                 case .videos:
                     activeTabSelectedSessionViewModel = videosSelectedSessionViewModel
                     if let model = newVideoModel {
-                        tabController.updateDetail(NSHostingController(rootView: NewSessionDetailView(viewModel: model)))
+//                        tabController.updateDetail(NSHostingController(rootView: NewSessionDetailView(viewModel: model)))
                     }
                 default:
                     activeTabSelectedSessionViewModel = nil
@@ -276,24 +251,6 @@ final class NewAppCoordinator: WWDCCoordinator {
                 updateCurrentActivity(with: activeTabSelectedSessionViewModel)
             }
             .store(in: &cancellables)
-    }
-
-    @MainActor
-    private func setupDelegation() {
-        let videoDetail = videosDetailController
-
-        videoDetail.shelfController.delegate = self
-        videoDetail.summaryController.actionsViewModel.delegate = self
-        videoDetail.summaryController.relatedSessionsViewModel.delegate = self
-
-        let scheduleDetail = scheduleDetailController
-
-        scheduleDetail.shelfController.delegate = self
-        scheduleDetail.summaryController.actionsViewModel.delegate = self
-        scheduleDetail.summaryController.relatedSessionsViewModel.delegate = self
-
-        videosListController.delegate = self
-        scheduleListController.delegate = self
     }
 
     func checkSyncEngineOperationSucceededAndShowError(note: Notification) -> Bool {
@@ -313,66 +270,20 @@ final class NewAppCoordinator: WWDCCoordinator {
         return false
     }
 
-    /// This should only be called once during startup, all other data updates should flow through observations on that that data
-    private func setupObservations() {
-        // Wait for the data to be loaded to hide the loading spinner
-        // this avoids some jittery UI. Technically this could be changed to only watch
-        // the tab that will be visible during startup.
-        Publishers.CombineLatest(
-            videosListController.sessionRowProvider.rowsPublisher,
-            scheduleListController.sessionRowProvider.rowsPublisher,
-//            scheduleController.$isShowingHeroView
-        )
-        .replaceErrorWithEmpty()
-        .drop { (videoRows, scheduleRows) in
-            /// The videos tab has content.
-            let videosAvailable = !videoRows.all.isEmpty
-            /// The schedule tab has content.
-            let scheduleAvailable = !scheduleRows.all.isEmpty
-            /// The schedule tab has an event hero landing screen.
-            let scheduleHeroAvailable = true //$0.2
-            /// We want to reveal the UI once the videos tab has content and the schedule tab has content, be it a schedule or a landing screen.
-            return videosAvailable == false || (scheduleAvailable == false && scheduleHeroAvailable == false)
-        }
-        .prefix(1) // Happens once then automatically completes
-        .receive(on: DispatchQueue.main)
-        .sink { [weak self] _ in
-            guard let self else { return }
-
-            self.signposter.emitEvent("Hide loading", "Hide loading")
-            self.tabController.hideLoading()
-
-            if liveObserver.isWWDCWeek {
-                self.scheduleListController.scrollToToday()
-            }
-        }
-        .store(in: &cancellables)
-
-//        storage.eventHeroObservable.map { $0 != nil }
-//            .replaceError(with: false)
-//            .receive(on: DispatchQueue.main)
-//            .assign(to: &scheduleController.$isShowingHeroView)
-//
-//        storage.eventHeroObservable
-//            .replaceError(with: nil)
-//            .driveUI(\.heroController.hero, on: scheduleController)
-//            .store(in: &cancellables)
-    }
-
     func selectSessionOnAppropriateTab(with viewModel: SessionViewModel) {
         if currentListController?.canDisplay(session: viewModel) == true {
             currentListController?.select(session: viewModel)
             return
         }
 
-        if videosListController.canDisplay(session: viewModel) {
-            videosListController.select(session: viewModel)
-            tabController.setActiveTab(MainWindowTab.videos)
-
-        } else if scheduleListController.canDisplay(session: viewModel) {
-            scheduleListController.select(session: viewModel)
-            tabController.setActiveTab(MainWindowTab.schedule)
-        }
+//        if videosListController.canDisplay(session: viewModel) {
+//            videosListController.select(session: viewModel)
+//            tabController.setActiveTab(MainWindowTab.videos)
+//
+//        } else if scheduleListController.canDisplay(session: viewModel) {
+//            scheduleListController.select(session: viewModel)
+//            tabController.setActiveTab(MainWindowTab.schedule)
+//        }
     }
 
     @discardableResult func receiveNotification(with userInfo: [String: Any]) -> Bool {
@@ -414,10 +325,10 @@ final class NewAppCoordinator: WWDCCoordinator {
     func handle(link: DeepLink) {
         if link.isForCurrentYear {
             tabController.setActiveTab(MainWindowTab.schedule)
-            scheduleListController.select(session: link)
+//            scheduleListController.select(session: link)
         } else {
             tabController.setActiveTab(MainWindowTab.videos)
-            videosListController.select(session: link)
+//            videosListController.select(session: link)
         }
     }
 
@@ -564,7 +475,7 @@ final class NewAppCoordinator: WWDCCoordinator {
             self.selectSessionOnAppropriateTab(with: viewModel)
 
             DispatchQueue.main.async {
-                self.videosDetailController.shelfController.play(nil)
+//                self.videosDetailController.shelfController.play(nil)
             }
         }.store(in: &cancellables)
 
@@ -611,23 +522,12 @@ final class NewAppCoordinator: WWDCCoordinator {
     // MARK: - Shelf
 
     func shelf(for tab: MainWindowTab) -> ShelfViewController? {
-        var shelfViewController: ShelfViewController?
-        switch tab {
-        case .schedule:
-            shelfViewController = scheduleDetailController.shelfController
-        case .videos:
-            shelfViewController = videosDetailController.shelfController
-        default: ()
-        }
-
-        return shelfViewController
+        nil
     }
 
     func select(session: any SessionIdentifiable, removingFiltersIfNeeded: Bool) {
         currentListController?.select(session: session, removingFiltersIfNeeded: removingFiltersIfNeeded)
     }
 
-    func showClipUI() {
-
-    }
+    func showClipUI() {}
 }

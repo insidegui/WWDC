@@ -81,7 +81,7 @@ private struct NewTopicHeaderRowContent: View {
         HStack {
             if isAppearing, let symbolName = viewModel.symbolName {
                 Image(systemName: symbolName)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color(nsColor: .secondaryText))
                     .symbolVariant(.fill)
                     .contentTransition(.symbolEffect(.replace.magic(fallback: .offUp.wholeSymbol), options: .nonRepeating))
                     .transition(.blurReplace)

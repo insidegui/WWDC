@@ -9,18 +9,18 @@
 import Combine
 import SwiftUI
 
+@available(macOS 26.0, *)
 extension NewSessionDetailView {
     struct SessionDetailThumbnailView: View {
         let viewModel: SessionViewModel
         @State private var thumbnailURL: URL?
 
         var body: some View {
-            LazyAsyncImage(url: thumbnailURL, animation: .bouncy) { newImg in
+            LazyAsyncImage(url: thumbnailURL, greedy: false, animation: .bouncy) { newImg in
                 newImg
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .extendBackground()
-                    .transition(.blurReplace)
             } placeholder: {
                 Image("noimage")
                     .resizable()

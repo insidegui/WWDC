@@ -63,6 +63,7 @@ extension NewMainWindowController: NSToolbarDelegate {
         window.styleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
         window.isMovableByWindowBackground = false
         window.titleVisibility = .hidden
+        window.tabbingMode = .disallowed
         let toolbar = NSToolbar(identifier: "LiquidToolbar-\(tab.rawValue)")
 
         toolbar.delegate = self
@@ -80,6 +81,7 @@ extension NewMainWindowController: NSToolbarDelegate {
         case .searchItem:
             let item = NSSearchToolbarItem(itemIdentifier: itemIdentifier)
             item.resignsFirstResponderWithCancel = true
+            item.preferredWidthForSearchField = 200
             return item
         case .filterItem:
             let item = NSMenuToolbarItem(itemIdentifier: itemIdentifier)
@@ -120,12 +122,12 @@ extension NewMainWindowController: NSToolbarDelegate {
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
         return [
             .flexibleSpace,
-            .filterItem,
-            .sidebarTrackingSeparator,
+            .toggleSidebar,
+//            .sidebarTrackingSeparator,
             .tabSelectionItem,
             .downloadItem,
-            .flexibleSpace,
-            .searchItem
+//            .flexibleSpace,
+//            .searchItem
         ]
     }
 

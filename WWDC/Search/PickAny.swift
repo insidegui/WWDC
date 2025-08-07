@@ -137,6 +137,7 @@ struct PickAnyMenuPicker<Item: PickAnyPickerItem>: View {
                     .transition(.blurReplace)
             }
         }
+        .foregroundStyle(.primary)
         .animation(.default, value: selectedItems)
     }
 }

@@ -34,6 +34,7 @@ struct CapsuleButtonStyle: ButtonStyle {
 
                 HStack {
                     configuration.label
+                        .foregroundStyle(.primary)
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)
                     if let trailingIcon {
@@ -66,7 +67,7 @@ private extension View {
     @ViewBuilder
     func addClearGlassEffectIfAvailable(_ tint: Color?, isHidden: Bool = false) -> some View {
         if #available(macOS 26.0, *), !isHidden {
-            glassEffect(Glass.clear.tint(tint))
+            glassEffect(Glass.regular.tint(tint))
                 .background(.black.opacity(0.3))
         } else {
             self

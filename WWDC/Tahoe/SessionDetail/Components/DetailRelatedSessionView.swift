@@ -9,8 +9,8 @@
 import Combine
 import SwiftUI
 
+@available(macOS 26.0, *)
 extension NewSessionDetailView {
-    @available(macOS 26.0, *)
     struct RelatedSessionsView: View {
         @State private var sessions: [SessionViewModel] = []
         @Environment(\.coordinator) private var coordinator
@@ -44,13 +44,9 @@ extension NewSessionDetailView {
                         Button {
                             coordinator?.selectSessionOnAppropriateTab(with: session)
                         } label: {
-                            SessionCellView(
-                                cellViewModel: SessionCellViewModel(session: session),
-                                style: .rounded
-                            )
-                            .frame(height: Metrics.itemHeight)
+                            SessionItemView(session: session)
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(SessionItemButtonStyle(style: .rounded))
                         .id(session.identifier)
                     }
                 }

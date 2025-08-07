@@ -42,8 +42,16 @@
 		8196CB162E3E62CB008482E3 /* SelectAnySegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CB152E3E62CB008482E3 /* SelectAnySegmentControl.swift */; };
 		81AACF162E39232E000A2319 /* ToolbarSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AACF152E39231D000A2319 /* ToolbarSetup.swift */; };
 		81CE115D2E3919ED002A0475 /* TahoeFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */; };
+		81CE57982E43DA260006C9B9 /* NewExploreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57972E43DA260006C9B9 /* NewExploreViewModel.swift */; };
+		81CE579A2E43DA370006C9B9 /* NewExploreCategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57992E43DA370006C9B9 /* NewExploreCategoryList.swift */; };
+		81CE579C2E43DA8F0006C9B9 /* NewExploreTabContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE579B2E43DA8F0006C9B9 /* NewExploreTabContentView.swift */; };
+		81CE579E2E43DADF0006C9B9 /* NewExploreTabDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE579D2E43DADF0006C9B9 /* NewExploreTabDetailView.swift */; };
+		81CE57A02E43DB590006C9B9 /* SessionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE579F2E43DB530006C9B9 /* SessionListView.swift */; };
+		81CE57A22E43DB640006C9B9 /* SessionListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57A12E43DB600006C9B9 /* SessionListViewModel.swift */; };
+		81CE57A42E43DC570006C9B9 /* GlobalSearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57A32E43DC4D0006C9B9 /* GlobalSearchCoordinator.swift */; };
+		81CE57A62E4484D60006C9B9 /* SessionItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57A52E4484D60006C9B9 /* SessionItemView.swift */; };
+		81CE57A82E44850C0006C9B9 /* SessionItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57A72E44850C0006C9B9 /* SessionItemViewModel.swift */; };
 		81E050552E3A854B007274FB /* NewSessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */; };
-		81E050592E3C9791007274FB /* NewExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050582E3C9789007274FB /* NewExploreView.swift */; };
 		81E172732E42469600BC1E5C /* NewSessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E172722E42469100BC1E5C /* NewSessionDetailView.swift */; };
 		81E172752E42504E00BC1E5C /* LazyAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E172742E42503A00BC1E5C /* LazyAsyncImage.swift */; };
 		81E172792E42693200BC1E5C /* DetailThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E172782E42692900BC1E5C /* DetailThumbnailView.swift */; };
@@ -355,8 +363,16 @@
 		8196CB152E3E62CB008482E3 /* SelectAnySegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAnySegmentControl.swift; sourceTree = "<group>"; };
 		81AACF152E39231D000A2319 /* ToolbarSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSetup.swift; sourceTree = "<group>"; };
 		81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeFeatureFlag.swift; sourceTree = "<group>"; };
+		81CE57972E43DA260006C9B9 /* NewExploreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExploreViewModel.swift; sourceTree = "<group>"; };
+		81CE57992E43DA370006C9B9 /* NewExploreCategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExploreCategoryList.swift; sourceTree = "<group>"; };
+		81CE579B2E43DA8F0006C9B9 /* NewExploreTabContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExploreTabContentView.swift; sourceTree = "<group>"; };
+		81CE579D2E43DADF0006C9B9 /* NewExploreTabDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExploreTabDetailView.swift; sourceTree = "<group>"; };
+		81CE579F2E43DB530006C9B9 /* SessionListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListView.swift; sourceTree = "<group>"; };
+		81CE57A12E43DB600006C9B9 /* SessionListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionListViewModel.swift; sourceTree = "<group>"; };
+		81CE57A32E43DC4D0006C9B9 /* GlobalSearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchCoordinator.swift; sourceTree = "<group>"; };
+		81CE57A52E4484D60006C9B9 /* SessionItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionItemView.swift; sourceTree = "<group>"; };
+		81CE57A72E44850C0006C9B9 /* SessionItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionItemViewModel.swift; sourceTree = "<group>"; };
 		81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionsTableViewController.swift; sourceTree = "<group>"; };
-		81E050582E3C9789007274FB /* NewExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExploreView.swift; sourceTree = "<group>"; };
 		81E172722E42469100BC1E5C /* NewSessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionDetailView.swift; sourceTree = "<group>"; };
 		81E172742E42503A00BC1E5C /* LazyAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyAsyncImage.swift; sourceTree = "<group>"; };
 		81E172782E42692900BC1E5C /* DetailThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailThumbnailView.swift; sourceTree = "<group>"; };
@@ -644,6 +660,8 @@
 		81CE115B2E3919DC002A0475 /* Tahoe */ = {
 			isa = PBXGroup;
 			children = (
+				81CE57962E43DA150006C9B9 /* Explore */,
+				81CE57952E43DA040006C9B9 /* SessionList */,
 				81E172762E4268E900BC1E5C /* SessionDetail */,
 				81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */,
 				81AACF152E39231D000A2319 /* ToolbarSetup.swift */,
@@ -652,17 +670,39 @@
 				8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */,
 				81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */,
 				812EB5802E3E973F00FE869F /* NewTopicHeaderRow.swift */,
-				81E050582E3C9789007274FB /* NewExploreView.swift */,
 				8196CAF22E3D634A008482E3 /* NewGlobalSearchCoordinator.swift */,
-				812EB5822E3F59F300FE869F /* NewTranscriptView.swift */,
+				81CE57A32E43DC4D0006C9B9 /* GlobalSearchCoordinator.swift */,
 			);
 			path = Tahoe;
+			sourceTree = "<group>";
+		};
+		81CE57952E43DA040006C9B9 /* SessionList */ = {
+			isa = PBXGroup;
+			children = (
+				81CE579F2E43DB530006C9B9 /* SessionListView.swift */,
+				81CE57A72E44850C0006C9B9 /* SessionItemViewModel.swift */,
+				81CE57A52E4484D60006C9B9 /* SessionItemView.swift */,
+				81CE57A12E43DB600006C9B9 /* SessionListViewModel.swift */,
+			);
+			path = SessionList;
+			sourceTree = "<group>";
+		};
+		81CE57962E43DA150006C9B9 /* Explore */ = {
+			isa = PBXGroup;
+			children = (
+				81CE579D2E43DADF0006C9B9 /* NewExploreTabDetailView.swift */,
+				81CE579B2E43DA8F0006C9B9 /* NewExploreTabContentView.swift */,
+				81CE57992E43DA370006C9B9 /* NewExploreCategoryList.swift */,
+				81CE57972E43DA260006C9B9 /* NewExploreViewModel.swift */,
+			);
+			path = Explore;
 			sourceTree = "<group>";
 		};
 		81E172762E4268E900BC1E5C /* SessionDetail */ = {
 			isa = PBXGroup;
 			children = (
 				81E172722E42469100BC1E5C /* NewSessionDetailView.swift */,
+				812EB5822E3F59F300FE869F /* NewTranscriptView.swift */,
 				81E172772E42691000BC1E5C /* Components */,
 			);
 			path = SessionDetail;
@@ -1607,6 +1647,7 @@
 				DDB28F8E1EAD257B0077703F /* PlaybackViewModel.swift in Sources */,
 				DD4648491ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m in Sources */,
 				8181E2662E39F0770033126E /* ReplaceableSplitViewController.swift in Sources */,
+				81CE579E2E43DADF0006C9B9 /* NewExploreTabDetailView.swift in Sources */,
 				DDF32EAB1EBE2E240028E39D /* WWDCTableRowView.swift in Sources */,
 				DD7E2902247FEA3900A58370 /* EventHeroViewController.swift in Sources */,
 				F486B30C2C0E69E60066749F /* URLSessionMediaDownloadEngine.swift in Sources */,
@@ -1622,7 +1663,6 @@
 				DDDAA40C1EC798B600DF9D02 /* Preferences.swift in Sources */,
 				DDB352A01EC9088000254815 /* WWDCTableView.swift in Sources */,
 				F4578D572A2659B3005B311A /* ExploreTabItemView.swift in Sources */,
-				81E050592E3C9791007274FB /* NewExploreView.swift in Sources */,
 				DDB28F861EAD20A10077703F /* UIDebugger.m in Sources */,
 				F4CCF942265ED24500A69E62 /* AppCommandsReceiver.swift in Sources */,
 				F486B30B2C0E69E60066749F /* SimulatedMediaDownloadEngine.swift in Sources */,
@@ -1639,6 +1679,7 @@
 				81E172732E42469600BC1E5C /* NewSessionDetailView.swift in Sources */,
 				F4D0F0362A2012C700C74B50 /* VisualEffectDebugger.m in Sources */,
 				8196CB162E3E62CB008482E3 /* SelectAnySegmentControl.swift in Sources */,
+				81CE57A22E43DB640006C9B9 /* SessionListViewModel.swift in Sources */,
 				DDC678191EDB2CD300A4E19C /* ActionLabel.swift in Sources */,
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
 				DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */,
@@ -1648,6 +1689,7 @@
 				F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */,
 				F486B3122C0E69E60066749F /* URLSessionTask+Media.swift in Sources */,
 				DDF32EB31EBE5C4D0028E39D /* SessionActionsViewController.swift in Sources */,
+				81CE579A2E43DA370006C9B9 /* NewExploreCategoryList.swift in Sources */,
 				81AACF162E39232E000A2319 /* ToolbarSetup.swift in Sources */,
 				DDA7B7352484416B00F86668 /* CompositionalLayoutBackgroundSwizzler.m in Sources */,
 				F46E0AE72C0E7B780077A5E0 /* DownloadedContentMonitor.swift in Sources */,
@@ -1664,6 +1706,7 @@
 				F486B3092C0E69E60066749F /* MediaDownloadManager.swift in Sources */,
 				81CE115D2E3919ED002A0475 /* TahoeFeatureFlag.swift in Sources */,
 				8196CAF62E3DE0A2008482E3 /* CapsuleToggleStyle.swift in Sources */,
+				81CE57A42E43DC570006C9B9 /* GlobalSearchCoordinator.swift in Sources */,
 				9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */,
 				DDFA10BF1EBEAAAD001DCF66 /* DownloadManager.swift in Sources */,
 				DD0159A71ECFE26200F980F1 /* DeepLink.swift in Sources */,
@@ -1685,6 +1728,8 @@
 				8196CAF32E3D6353008482E3 /* NewGlobalSearchCoordinator.swift in Sources */,
 				DDDF807420BA3124007284F8 /* ExploreViewController.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
+				81CE579C2E43DA8F0006C9B9 /* NewExploreTabContentView.swift in Sources */,
+				81CE57A82E44850C0006C9B9 /* SessionItemViewModel.swift in Sources */,
 				DD7F385F1EABD631002D8C00 /* WWDCTabViewController.swift in Sources */,
 				F474DEC926737EFA00B28B31 /* SharePlayManager.swift in Sources */,
 				4D66CA50217E2C800006A8C9 /* DownloadsManagementTableRowView.swift in Sources */,
@@ -1716,13 +1761,16 @@
 				DD6E06FC1EDBCA7E000EAEA4 /* TranscriptTableCellView.swift in Sources */,
 				4D66CA52217E2C9B0006A8C9 /* DownloadsManagementTableView.swift in Sources */,
 				DD3D14F42486C90B00FCBBBD /* ClipSharingViewController.swift in Sources */,
+				81CE57982E43DA260006C9B9 /* NewExploreViewModel.swift in Sources */,
 				DDF32EB91EBE65B50028E39D /* AppCoordinator+Shelf.swift in Sources */,
 				DDDF808020BA53A4007284F8 /* FlippedClipView.swift in Sources */,
+				81CE57A62E4484D60006C9B9 /* SessionItemView.swift in Sources */,
 				DDB3529C1EC8AB5D00254815 /* WWDCLayer.swift in Sources */,
 				DDA7B7142482A4A500F86668 /* TranscriptSearchController.swift in Sources */,
 				DD7F38651EABD6DF002D8C00 /* SessionDetailsViewController.swift in Sources */,
 				F4A882882673AD2D00BAB7F5 /* SharePlayStatusView.swift in Sources */,
 				DD34A79B1EC3CD5900E0B575 /* Constants.swift in Sources */,
+				81CE57A02E43DB590006C9B9 /* SessionListView.swift in Sources */,
 				4DA9C4D120EC098800710354 /* DownloadsManagementViewController.swift in Sources */,
 				DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,

@@ -93,12 +93,4 @@ final class SessionDetailsViewController: NSViewController {
     }
 
     var searchCoordinator: NewGlobalSearchCoordinator!
-    override func viewWillDisappear() {
-        super.viewWillDisappear()
-        if #available(macOS 26.0, *) {
-            hideInspector()
-        } else {
-            // Fallback on earlier versions
-        }
-    }
 }

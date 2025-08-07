@@ -25,6 +25,7 @@ struct FilterResetButton: View {
                 Text("\(count)")
                     .fontDesign(.monospaced)
                     .padding(.horizontal, 4)
+                    .foregroundStyle(.primary)
                     .capsuleBackground(Color.secondary)
             }
             .onGeometryChange(for: CGFloat.self) { proxy in

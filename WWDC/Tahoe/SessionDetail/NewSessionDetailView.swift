@@ -9,17 +9,16 @@
 import Combine
 import SwiftUI
 
+@available(macOS 26.0, *)
 struct NewSessionDetailView: View {
     let viewModel: SessionViewModel
     @State private var tab: SessionDetailsViewModel.SessionTab = .overview
     var body: some View {
-        if #available(macOS 26.0, *) {
-            ScrollView {
-                SessionDetailThumbnailView(viewModel: viewModel)
-                SessionDescriptionView(viewModel: viewModel)
-            }
-            .ignoresSafeArea(edges: .top)
-            .scrollEdgeEffectStyle(.soft, for: .vertical)
+        ScrollView {
+            SessionDetailThumbnailView(viewModel: viewModel)
+            SessionDescriptionView(viewModel: viewModel)
         }
+        .ignoresSafeArea(edges: .top)
+        .scrollEdgeEffectStyle(.soft, for: .vertical)
     }
 }

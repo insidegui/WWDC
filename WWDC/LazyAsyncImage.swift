@@ -16,8 +16,8 @@ public struct LazyAsyncImage<I: View, P: View>: View {
     private let placeholder: () -> P
     private let downloader: ImageDownloader
     private let animation: Animation?
-    public init(url: URL?, height: CGFloat = 400, animation: Animation? = nil, @ViewBuilder content: @escaping (Image) -> I, @ViewBuilder placeholder: @escaping () -> P) {
-        self.downloader = .init(url: url, height: height)
+    public init(url: URL?, height: CGFloat = 400, greedy: Bool = true, animation: Animation? = nil, @ViewBuilder content: @escaping (Image) -> I, @ViewBuilder placeholder: @escaping () -> P) {
+        downloader = .init(url: url, height: height, greedy: greedy)
         self.placeholder = placeholder
         self.content = content
         self.animation = animation
@@ -41,22 +41,35 @@ public struct LazyAsyncImage<I: View, P: View>: View {
     }
 }
 
+public extension LazyAsyncImage where I == P {
+    init(url: URL?, height: CGFloat = 400, greedy: Bool = true, animation: Animation? = nil, placeholder: Image, @ViewBuilder content: @escaping (Image) -> I) {
+        self.init(url: url, height: height, greedy: greedy, animation: animation, content: content) {
+            content(placeholder)
+        }
+    }
+}
+
 @Observable
 private class ImageDownloader {
     @ObservationIgnored private weak var currentImageDownloadOperation: Operation?
     @ObservationIgnored let url: URL?
     @ObservationIgnored let height: CGFloat
+    @ObservationIgnored let greedy: Bool
     var image: NSImage?
 
-    init(url: URL?, height: CGFloat) {
+    init(url: URL?, height: CGFloat, greedy: Bool) {
         self.url = url
         if let url {
-            image = ImageDownloadCenter.shared.cachedThumbnail(from: url)
+            image = ImageDownloadCenter.shared.cachedImage(from: url, thumbnailOnly: height <= Constants.thumbnailHeight)
         }
         self.height = height
+        self.greedy = greedy
     }
 
     func downloadImage() {
+        guard greedy || image == nil else {
+            return
+        }
         currentImageDownloadOperation?.cancel()
         currentImageDownloadOperation = nil
 
@@ -65,7 +78,7 @@ private class ImageDownloader {
             return
         }
 
-        currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: height) { [weak self] url, result in
+        currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: height) { [weak self] _, result in
             self?.image = result.original
         }
     }
