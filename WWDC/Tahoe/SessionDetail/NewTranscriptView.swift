@@ -16,30 +16,26 @@ struct NewTranscriptView: View {
     @State private var lines: [TranscriptLine] = []
     @State private var selectedLine: TranscriptLine?
     let viewModel: SessionViewModel
-    @State private var scrollPosition = ScrollPosition(idType: TranscriptLine.self)
+    @Binding var scrollPosition: ScrollPosition
 
     @State private var maskHeight: CGFloat?
     @State private var readyToPlay: Bool = false
     var body: some View {
-        ScrollView(.vertical) {
-            LazyVStack(alignment: .leading, spacing: 5) {
-                ForEach(lines) { line in
-                    Button("") {
-                        seekVideoTo(line: line)
-                    }
-                    .buttonStyle(LineButtonStyle(line: line, selectedLine: selectedLine))
-                    .id(line)
-                    .scrollTransition { content, phase in
-                        content
-                            .opacity(phase.isIdentity ? 1 : 0.7)
-                            .blur(radius: phase.isIdentity ? 0 : 0.5)
-                    }
+        LazyVStack(alignment: .leading, spacing: 5) {
+            ForEach(lines) { line in
+                Button("") {
+                    seekVideoTo(line: line)
                 }
-                .scrollTargetLayout()
+                .buttonStyle(LineButtonStyle(line: line, selectedLine: selectedLine))
+                .id(line)
+                .scrollTransition { content, phase in
+                    content
+                        .opacity(phase.isIdentity ? 1 : 0.7)
+                        .blur(radius: phase.isIdentity ? 0 : 0.5)
+                }
             }
+            .scrollTargetLayout()
         }
-        .scrollPosition($scrollPosition, anchor: .top)
-        .frame(height: 150)
         .padding()
         .opacity(readyToPlay ? 1 : 0)
         .disabled(!readyToPlay)
@@ -138,7 +134,7 @@ struct NewTranscriptView: View {
     }
 }
 
-private struct TranscriptLine: Identifiable, Hashable {
+struct TranscriptLine: Identifiable, Hashable {
     var id: String {
         "\(timecode)-\(body)"
     }

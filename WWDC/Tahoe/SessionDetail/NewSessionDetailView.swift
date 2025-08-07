@@ -10,20 +10,6 @@ import Combine
 import SwiftUI
 
 @available(macOS 26.0, *)
-struct NewSessionDetailView: View {
-    let viewModel: SessionViewModel
-    @State private var tab: SessionDetailsViewModel.SessionTab = .overview
-    var body: some View {
-        ScrollView {
-            SessionDetailThumbnailView(viewModel: viewModel)
-            SessionDescriptionView(viewModel: viewModel)
-        }
-        .ignoresSafeArea(edges: .top)
-        .scrollEdgeEffectStyle(.soft, for: .vertical)
-    }
-}
-
-@available(macOS 26.0, *)
 struct NewSessionDetailWrapperView: View {
     @Bindable var viewModel: SessionListViewModel
     var body: some View {
@@ -32,6 +18,76 @@ struct NewSessionDetailWrapperView: View {
                 .transition(.blurReplace)
         } else {
             Color.clear
+        }
+    }
+}
+
+@available(macOS 26.0, *)
+struct NewSessionDetailView: View {
+    let viewModel: SessionViewModel
+    @State private var availableTabs: [SessionDetailsViewModel.SessionTab] = [.overview]
+    @State private var tab: SessionDetailsViewModel.SessionTab = .overview
+    @State private var isTranscriptAvailable = false
+    @State private var isBookmarksAvailable = false
+    @State private var transcriptPosition = ScrollPosition(idType: TranscriptLine.self)
+    var body: some View {
+        ScrollView {
+            SessionDescriptionView(viewModel: viewModel, tab: $tab, transcriptPosition: $transcriptPosition)
+        }
+        .scrollPosition($transcriptPosition, anchor: .top)
+        .safeAreaBar(edge: .top) {
+            VStack(alignment: .leading, spacing: 0) {
+                SessionDetailThumbnailView(viewModel: viewModel)
+                if availableTabs.count > 1 {
+                    tabBar
+                }
+            }
+        }
+        .ignoresSafeArea(edges: .top)
+        .scrollEdgeEffectStyle(.soft, for: .vertical)
+        .onReceive(transcriptAvailabilityUpdate) {
+            if $0, !availableTabs.contains(.transcript) {
+                availableTabs.append(.transcript)
+            } else if !$0 {
+                availableTabs.removeAll(where: { $0 == .transcript })
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var tabBar: some View {
+        HStack(spacing: 32) {
+            ForEach(availableTabs, id: \.self) { t in
+                Button(t.title) {
+                    tab = t
+                }
+                .selected(tab == t)
+            }
+        }
+        .buttonStyle(WWDCTextButtonStyle())
+        .frame(maxWidth: .infinity)
+        .padding(.top, 8)
+    }
+
+    private var transcriptAvailabilityUpdate: AnyPublisher<Bool, Never> {
+        viewModel.rxTranscript.replaceError(with: nil).map {
+            $0 != nil
+        }
+        .removeDuplicates()
+        .receive(on: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+}
+
+private extension SessionDetailsViewModel.SessionTab {
+    var title: String {
+        switch self {
+        case .overview:
+            return "Overview"
+        case .transcript:
+            return "Transcript"
+        case .bookmarks:
+            return "Bookmarks"
         }
     }
 }

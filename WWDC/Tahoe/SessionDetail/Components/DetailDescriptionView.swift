@@ -13,16 +13,11 @@ import SwiftUI
 extension NewSessionDetailView {
     struct SessionDescriptionView: View {
         let viewModel: SessionViewModel
-        @State private var availableTabs: [SessionDetailsViewModel.SessionTab] = [.overview]
-        @State private var tab: SessionDetailsViewModel.SessionTab = .overview
-        @State private var isTranscriptAvailable = false
-        @State private var isBookmarksAvailable = false
+        @Binding var tab: SessionDetailsViewModel.SessionTab
+        let transcriptPosition: Binding<ScrollPosition>
 
         var body: some View {
             Group {
-                if availableTabs.count > 1 {
-                    tabBar
-                }
                 switch tab {
                 case .overview:
                     if #available(macOS 26.0, *) {
@@ -31,57 +26,13 @@ extension NewSessionDetailView {
                     }
                 case .transcript:
                     if #available(macOS 26.0, *) {
-                        NewTranscriptView(viewModel: viewModel)
+                        NewTranscriptView(viewModel: viewModel, scrollPosition: transcriptPosition)
                     }
                 case .bookmarks:
                     Text("Bookmarks view coming soon")
                         .foregroundColor(.secondary)
                 }
             }
-            .onReceive(transcriptAvailabilityUpdate) {
-                if $0, !availableTabs.contains(.transcript) {
-                    availableTabs.append(.transcript)
-                } else if !$0 {
-                    availableTabs.removeAll(where: { $0 == .transcript })
-                }
-            }
-        }
-
-        @ViewBuilder
-        private var tabBar: some View {
-            HStack(spacing: 32) {
-                ForEach(availableTabs, id: \.self) { t in
-                    Button(t.title) {
-                        tab = t
-                    }
-                    .selected(tab == t)
-                }
-            }
-            .buttonStyle(WWDCTextButtonStyle())
-            .frame(maxWidth: .infinity)
-            .padding(.top, 8)
-        }
-
-        private var transcriptAvailabilityUpdate: AnyPublisher<Bool, Never> {
-            viewModel.rxTranscript.replaceError(with: nil).map {
-                $0 != nil
-            }
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
-        }
-    }
-}
-
-private extension SessionDetailsViewModel.SessionTab {
-    var title: String {
-        switch self {
-        case .overview:
-            return "Overview"
-        case .transcript:
-            return "Transcript"
-        case .bookmarks:
-            return "Bookmarks"
         }
     }
 }
