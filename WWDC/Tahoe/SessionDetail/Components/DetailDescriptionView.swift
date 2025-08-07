@@ -167,6 +167,9 @@ private struct NewSessionActionsView: View {
                 .transition(.scale.combined(with: .opacity))
             }
         }
+        .animation(.bouncy, value: viewModel.slidesButtonIsHidden)
+        .animation(.bouncy, value: viewModel.calendarButtonIsHidden)
+        .animation(.bouncy, value: viewModel.downloadState)
         .frame(height: 24)
     }
 

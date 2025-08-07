@@ -50,6 +50,9 @@ struct NewSessionDetailView: View {
                 availableTabs.append(.transcript)
             } else if !$0 {
                 availableTabs.removeAll(where: { $0 == .transcript })
+                if tab == .transcript {
+                    tab = availableTabs.first ?? .overview
+                }
             }
         }
     }

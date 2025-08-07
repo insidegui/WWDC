@@ -43,7 +43,6 @@ struct NewTranscriptView: View {
         .overlay(alignment: .top) {
             ProgressView().progressViewStyle(.circular)
                 .opacity(readyToPlay ? 0 : 1)
-                .transition(.blurReplace)
         }
         .onReceive(linesUpdate) { newValue in
             let filtered = newValue.filter { !$0.body.isEmpty }
@@ -124,12 +123,12 @@ struct NewTranscriptView: View {
         withAnimation {
             selectedLine = line
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + (readyToPlay ? 0 : 0.5)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             // wait until content fully appears
             scrollPosition.scrollTo(id: line, anchor: .top)
-            withAnimation {
-                readyToPlay = true
-            }
+        }
+        withAnimation(.bouncy.delay(0.3)) {
+            readyToPlay = true
         }
     }
 }
