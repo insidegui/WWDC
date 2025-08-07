@@ -83,6 +83,7 @@ struct SessionListSection: Identifiable, Equatable {
         if selectedSession == nil {
             selectedSession = newSections.first?.sessions.first
         }
+        syncSelectedSession()
     }
 
     private func syncSelectedSession() {

@@ -680,9 +680,9 @@
 			isa = PBXGroup;
 			children = (
 				81CE579F2E43DB530006C9B9 /* SessionListView.swift */,
+				81CE57A12E43DB600006C9B9 /* SessionListViewModel.swift */,
 				81CE57A72E44850C0006C9B9 /* SessionItemViewModel.swift */,
 				81CE57A52E4484D60006C9B9 /* SessionItemView.swift */,
-				81CE57A12E43DB600006C9B9 /* SessionListViewModel.swift */,
 			);
 			path = SessionList;
 			sourceTree = "<group>";

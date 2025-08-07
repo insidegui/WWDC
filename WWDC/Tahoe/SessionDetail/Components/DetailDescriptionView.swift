@@ -65,7 +65,7 @@ private struct OverviewContentView: View {
                         }
                     }
                 Spacer()
-                NewSessionActionsView(viewModel: actionsViewModel, alignment: .trailing)
+                NewSessionActionsView(viewModel: actionsViewModel)
                     .task {
                         actionsViewModel.delegate = appCoordinator
                     }
@@ -111,7 +111,6 @@ private struct OverviewContentView: View {
 @available(macOS 26.0, *)
 private struct NewSessionActionsView: View {
     @ObservedObject var viewModel: SessionActionsViewModel
-    var alignment = Alignment.leading
 
     var body: some View {
         HStack(spacing: 22) {
@@ -120,20 +119,25 @@ private struct NewSessionActionsView: View {
                     viewModel.showSlides()
                 } label: {
                     Image(systemName: "play.rectangle.on.rectangle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 }
                 .buttonStyle(SymbolButtonStyle())
                 .help("Open slides")
-                .transition(.blurReplace)
+                .transition(.scale.combined(with: .opacity))
             }
 
             Button {
                 viewModel.toggleFavorite()
             } label: {
                 Image(systemName: viewModel.isFavorited ? "star.fill" : "star")
+                    .resizable()
+                    .contentTransition(.symbolEffect(.replace.magic(fallback: .downUp.byLayer), options: .nonRepeating))
+                    .aspectRatio(contentMode: .fit)
             }
             .buttonStyle(SymbolButtonStyle())
             .help(viewModel.isFavorited ? "Remove from favorites" : "Add to favorites")
-            .transition(.blurReplace)
+            .transition(.scale.combined(with: .opacity))
 
             downloadButton
 
@@ -142,10 +146,12 @@ private struct NewSessionActionsView: View {
                     viewModel.shareClip()
                 } label: {
                     Image(systemName: "scissors")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 }
                 .buttonStyle(SymbolButtonStyle())
                 .help("Share a Clip")
-                .transition(.blurReplace)
+                .transition(.scale.combined(with: .opacity))
             }
 
             if !viewModel.calendarButtonIsHidden {
@@ -153,12 +159,15 @@ private struct NewSessionActionsView: View {
                     viewModel.addCalendar()
                 } label: {
                     Image(systemName: "calendar.badge.plus")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 }
                 .buttonStyle(SymbolButtonStyle())
                 .help("Add to Calendar")
-                .transition(.blurReplace)
+                .transition(.scale.combined(with: .opacity))
             }
         }
+        .frame(height: 24)
     }
 
     /// States managed by DownloadState enum:
@@ -170,17 +179,35 @@ private struct NewSessionActionsView: View {
     @ViewBuilder var downloadButton: some View {
         if viewModel.downloadState.showsInlineButton {
             Button {
-                if viewModel.downloadState == .downloaded {
-                    viewModel.deleteDownload()
-                } else {
+                switch viewModel.downloadState {
+                case .notDownloadable:
+                    break
+                case .downloadable:
                     viewModel.download()
+                case .pending, .downloading:
+                    viewModel.cancelDownload()
+                case .downloaded:
+                    viewModel.deleteDownload()
                 }
             } label: {
-                Image(systemName: viewModel.downloadState == .downloaded ? "trash" : "arrow.down.circle", variableValue: viewModel.downloadState.downloadProgress ?? 0)
+                switch viewModel.downloadState {
+                case .notDownloadable, .downloadable:
+                    Image(systemName: "arrow.down.document.fill").resizable()
+                        .aspectRatio(contentMode: .fit)
+                case .pending, .downloading:
+                    let value = min(1.0, viewModel.downloadState.downloadProgress ?? 0)
+                    Image(systemName: "xmark.circle", variableValue: value)
+                        .resizable()
+                        .symbolVariableValueMode(.draw)
+                        .aspectRatio(contentMode: .fit)
+                    // magical replace will crash somehow
+                case .downloaded:
+                    Image(systemName: "trash").resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
             }
             .buttonStyle(SymbolButtonStyle())
             .help(downloadButtonHelp)
-            .transition(.blurReplace)
         }
     }
 
@@ -205,18 +232,12 @@ private struct SymbolButtonStyle: ButtonStyle {
     @State private var isHovered = false
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .symbolVariableValueMode(.draw)
-            .contentTransition(.symbolEffect(.replace.magic(fallback: .offUp.wholeSymbol), options: .nonRepeating))
             .font(.title)
             .foregroundStyle(Color.accentColor)
             .scaleEffect(configuration.isPressed ? 0.9 : 1) // scale content only
             .opacity((isHovered || configuration.isPressed) ? 0.7 : 1)
             .animation(.bouncy(extraBounce: 0.3), value: configuration.isPressed)
             .animation(.smooth, value: isHovered)
-            .padding(5)
-            .frame(width: 30, height: 30)
-            .contentShape(Rectangle())
-            .clipShape(RoundedRectangle(cornerRadius: 6))
             .onHover { isHovering in
                 withAnimation {
                     isHovered = isHovering

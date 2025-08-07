@@ -126,9 +126,9 @@ struct SessionItemButtonStyle: ButtonStyle {
 }
 
 extension View {
-    func blurBackground() -> some View {
+    func blurBackground(opacity: Double = 0.5) -> some View {
         background {
-            Rectangle().fill(.background.opacity(0.5))
+            Rectangle().fill(.background.opacity(opacity))
                 .blur(radius: 5)
         }
     }
