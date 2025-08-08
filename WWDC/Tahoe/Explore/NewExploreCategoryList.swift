@@ -13,6 +13,7 @@ struct NewExploreCategoryList: View {
     @Environment(NewExploreViewModel.self) var viewModel
     @State private var sections: [ExploreTabContent.Section] = []
     @State private var showDetail = false
+    @FocusState private var isListFocused: Bool
     var body: some View {
         ScrollViewReader { proxy in
             @Bindable var viewModel = viewModel
@@ -23,12 +24,14 @@ struct NewExploreCategoryList: View {
                     section.icon
                 }
             }
+            .focused($isListFocused)
             .onChange(of: viewModel.selectedCategory) { _, newValue in
                 proxy.scrollTo(newValue, anchor: .bottom)
             }
         }
         .onAppear {
             showDetail = true
+            isListFocused = true
         }
         .onReceive(viewModel.provider.$content.receive(on: DispatchQueue.main)) { newContent in
             sections = newContent?.sections ?? []

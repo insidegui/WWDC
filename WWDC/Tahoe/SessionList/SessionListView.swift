@@ -13,6 +13,7 @@ import SwiftUI
 struct SessionListView: View {
     @Environment(SessionListViewModel.self) var viewModel
     @Environment(\.coordinator) var coordinator
+    @FocusState private var isListFocused: Bool
 
     var body: some View {
         @Bindable var viewModel = viewModel
@@ -37,11 +38,13 @@ struct SessionListView: View {
             }
             .listRowInsets(.all, 0)
         }
+        .focused($isListFocused)
         .contextMenu(forSelectionType: SessionListSection.Session.self) { items in
             contextMenus(for: items)
         }
         .task {
             viewModel.prepareForDisplay()
+            isListFocused = true
         }
     }
 
