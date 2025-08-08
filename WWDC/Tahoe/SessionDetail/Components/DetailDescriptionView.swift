@@ -238,7 +238,7 @@ private struct SymbolButtonStyle: ButtonStyle {
             .font(.title)
             .foregroundStyle(Color.accentColor)
             .scaleEffect(configuration.isPressed ? 0.9 : 1) // scale content only
-            .opacity((isHovered || configuration.isPressed) ? 0.7 : 1)
+            .scaleEffect(isHovered ? 1.2 : 1)
             .animation(.bouncy(extraBounce: 0.3), value: configuration.isPressed)
             .animation(.smooth, value: isHovered)
             .onHover { isHovering in

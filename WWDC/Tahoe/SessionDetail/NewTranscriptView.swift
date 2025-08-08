@@ -165,6 +165,8 @@ private struct LineButtonStyle: ButtonStyle {
             .padding(.vertical, 5)
             .frame(maxWidth: .infinity, alignment: .leading)
             .clipShape(RoundedRectangle(cornerRadius: 5)) // clip first
+            .scaleEffect(configuration.isPressed ? 0.98 : 1, anchor: .leading)
+            .scaleEffect(selectedLine == line ? 1.02 : 1, anchor: .leading)
             .overlay(alignment: .trailing, content: {
                 Text(videoTimeFormatter.string(from: line.timecode) ?? "")
                     .font(.title2)
@@ -177,7 +179,6 @@ private struct LineButtonStyle: ButtonStyle {
                     .opacity(isHovered ? 1 : 0)
             })
             .foregroundStyle(selectedLine == line ? .primary : .secondary)
-            .scaleEffect(configuration.isPressed ? 0.96 : 1)
             .animation(.bouncy, value: configuration.isPressed)
             .animation(.bouncy, value: isHovered)
             .contentShape(Rectangle()) // make the whole line hoverable
