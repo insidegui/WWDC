@@ -11,10 +11,11 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 struct NewSessionDetailWrapperView: View {
-    @Bindable var viewModel: SessionListViewModel
+    @Environment(SessionListViewModel.self) var viewModel
     var body: some View {
         if let session = viewModel.selectedSession {
-            NewSessionDetailView(viewModel: session.model)
+            NewSessionDetailView()
+                .environment(session.model)
                 .transition(.blurReplace)
         } else {
             Color.clear
@@ -24,7 +25,7 @@ struct NewSessionDetailWrapperView: View {
 
 @available(macOS 26.0, *)
 struct NewSessionDetailView: View {
-    let viewModel: SessionItemViewModel
+    @Environment(SessionItemViewModel.self) var viewModel
     @State private var availableTabs: [SessionDetailsViewModel.SessionTab] = [.overview]
     @State private var tab: SessionDetailsViewModel.SessionTab = .overview
     @State private var isTranscriptAvailable = false
@@ -32,7 +33,7 @@ struct NewSessionDetailView: View {
     @State private var transcriptPosition = ScrollPosition(idType: TranscriptLine.self)
     var body: some View {
         ScrollView {
-            SessionDescriptionView(viewModel: viewModel, tab: $tab, transcriptPosition: $transcriptPosition)
+            SessionDescriptionView(tab: $tab, transcriptPosition: $transcriptPosition)
         }
         .scrollPosition($transcriptPosition, anchor: .top)
         .safeAreaBar(edge: .top) {

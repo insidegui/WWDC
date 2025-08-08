@@ -10,13 +10,14 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 struct NewExploreTabDetailView: View {
-    @Bindable var viewModel: NewExploreViewModel
+    @Environment(NewExploreViewModel.self) var viewModel
     @State private var content: ExploreTabContent?
 
     var body: some View {
         Group {
             if let content = content {
-                NewExploreTabContentView(content: content, currentPosition: $viewModel.selectedCategory)
+                @Bindable var model = viewModel
+                NewExploreTabContentView(content: content)
                     .environment(viewModel)
                 #if DEBUG
                     .contextMenu { Button("Export JSON…", action: content.exportJSON) }

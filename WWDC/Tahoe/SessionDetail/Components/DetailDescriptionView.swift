@@ -12,7 +12,7 @@ import SwiftUI
 @available(macOS 26.0, *)
 extension NewSessionDetailView {
     struct SessionDescriptionView: View {
-        let viewModel: SessionItemViewModel
+        @Environment(SessionItemViewModel.self) var viewModel
         @Binding var tab: SessionDetailsViewModel.SessionTab
         let transcriptPosition: Binding<ScrollPosition>
 
@@ -21,8 +21,8 @@ extension NewSessionDetailView {
                 switch tab {
                 case .overview:
                     if #available(macOS 26.0, *) {
-                        OverviewContentView(viewModel: viewModel.session)
-                        RelatedSessionsView(currentSession: viewModel)
+                        OverviewContentView()
+                        RelatedSessionsView()
                     }
                 case .transcript:
                     if #available(macOS 26.0, *) {
@@ -39,78 +39,47 @@ extension NewSessionDetailView {
 
 @available(macOS 26.0, *)
 private struct OverviewContentView: View {
-    let viewModel: SessionViewModel
-    private let actionsViewModel: SessionActionsViewModel
-    init(viewModel: SessionViewModel) {
-        self.viewModel = viewModel
-        self.actionsViewModel = SessionActionsViewModel(session: viewModel)
-    }
+    @Environment(SessionItemViewModel.self) var viewModel
 
-    @State private var title = ""
-    @State private var summary = ""
-    @State private var footer = ""
     @Environment(\.coordinator) private var appCoordinator
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             HStack {
-                Text(title)
+                Text(viewModel.title)
                     .font(.init(NSFont.boldTitleFont))
                     .foregroundStyle(.primary)
                     .kerning(-0.5)
                     .textSelection(.enabled)
                     .transition(.blurReplace)
-                    .onReceive(updates(for: \.rxTitle)) { newValue in
-                        withAnimation {
-                            title = newValue
-                        }
-                    }
                 Spacer()
-                NewSessionActionsView(viewModel: actionsViewModel)
-                    .task {
-                        actionsViewModel.delegate = appCoordinator
-                    }
+                NewSessionActionsView()
             }
-            Text(summary)
+            Text(viewModel.summary)
                 .font(.system(size: 15))
                 .foregroundStyle(.secondary)
                 .lineHeight(.multiple(factor: 1.2))
                 .textSelection(.enabled)
                 .transition(.blurReplace)
-                .onReceive(updates(for: \.rxSummary)) { newValue in
-                    withAnimation {
-                        summary = newValue
-                    }
-                }
-            Text(footer)
+            Text(viewModel.footer)
                 .font(.system(size: 16))
                 .foregroundStyle(.tertiary)
                 .allowsTightening(true)
                 .truncationMode(.tail)
                 .textSelection(.enabled)
                 .transition(.blurReplace)
-                .onReceive(updates(for: \.rxFooter)) { newValue in
-                    withAnimation {
-                        footer = newValue
-                    }
-                }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding([.bottom, .horizontal])
         .padding(.top, 8) // incase tabs are hidden
-    }
-
-    private func updates(for keyPath: KeyPath<SessionViewModel, some Publisher<String, any Error>>) -> AnyPublisher<String, Never> {
-        viewModel[keyPath: keyPath]
-            .replaceError(with: "")
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .eraseToAnyPublisher()
+        .animation(.bouncy, value: viewModel.title)
+        .animation(.bouncy, value: viewModel.summary)
+        .animation(.bouncy, value: viewModel.footer)
     }
 }
 
 @available(macOS 26.0, *)
 private struct NewSessionActionsView: View {
-    @ObservedObject var viewModel: SessionActionsViewModel
+    @Environment(SessionItemViewModel.self) var viewModel
 
     var body: some View {
         HStack(spacing: 22) {
@@ -130,13 +99,13 @@ private struct NewSessionActionsView: View {
             Button {
                 viewModel.toggleFavorite()
             } label: {
-                Image(systemName: viewModel.isFavorited ? "star.fill" : "star")
+                Image(systemName: viewModel.isFavorite ? "star.fill" : "star")
                     .resizable()
                     .contentTransition(.symbolEffect(.replace.magic(fallback: .downUp.byLayer), options: .nonRepeating))
                     .aspectRatio(contentMode: .fit)
             }
             .buttonStyle(SymbolButtonStyle())
-            .help(viewModel.isFavorited ? "Remove from favorites" : "Add to favorites")
+            .help(viewModel.isFavorite ? "Remove from favorites" : "Add to favorites")
             .transition(.scale.combined(with: .opacity))
 
             downloadButton

@@ -14,7 +14,7 @@ extension NewSessionDetailView {
     struct RelatedSessionsView: View {
         @State private var sessions: [SessionItemViewModel] = []
         @Environment(\.coordinator) private var coordinator
-        let currentSession: SessionItemViewModel
+        @Environment(SessionItemViewModel.self) var currentSession
 
         enum Metrics {
             static let height: CGFloat = 96 + scrollerOffset
@@ -44,7 +44,8 @@ extension NewSessionDetailView {
                         Button {
                             coordinator?.selectSessionOnAppropriateTab(with: session.session)
                         } label: {
-                            SessionItemView(viewModel: session)
+                            SessionItemView(horizontalPadding: 5)
+                                .environment(session)
                         }
                         .buttonStyle(SessionItemButtonStyle(style: .rounded))
                         .id(session.id)

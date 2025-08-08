@@ -77,9 +77,9 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     private func changeContent() {
         let sidebarContent: NSView = {
             switch activeTab {
-            case .explore: return NSHostingView(rootView: NewExploreCategoryList(viewModel: exploreViewModel))
-            case .schedule: return NSHostingView(rootView: SessionListView(viewModel: scheduleViewModel))
-            case .videos: return NSHostingView(rootView: SessionListView(viewModel: videosViewModel))
+            case .explore: return NSHostingView(rootView: NewExploreCategoryList().environment(exploreViewModel))
+            case .schedule: return NSHostingView(rootView: SessionListView().environment(scheduleViewModel))
+            case .videos: return NSHostingView(rootView: SessionListView().environment(videosViewModel))
             }
         }()
         let sidebarContainer = sidebarItem.container
@@ -89,9 +89,9 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
 
         let detailContent: NSView = {
             switch activeTab {
-            case .explore: return NSHostingView(rootView: NewExploreTabDetailView(viewModel: exploreViewModel))
-            case .schedule: return NSHostingView(rootView: NewSessionDetailWrapperView(viewModel: scheduleViewModel))
-            case .videos: return NSHostingView(rootView: NewSessionDetailWrapperView(viewModel: videosViewModel))
+            case .explore: return NSHostingView(rootView: NewExploreTabDetailView().environment(exploreViewModel))
+            case .schedule: return NSHostingView(rootView: NewSessionDetailWrapperView().environment(scheduleViewModel))
+            case .videos: return NSHostingView(rootView: NewSessionDetailWrapperView().environment(videosViewModel))
             }
         }()
         let detailContainer = detailItem.container

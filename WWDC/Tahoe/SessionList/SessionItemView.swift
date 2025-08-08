@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct SessionItemView: View {
-    @Bindable var viewModel: SessionItemViewModel
+    @Environment(SessionItemViewModel.self) var viewModel
+    var horizontalPadding: CGFloat = 0
 
     var body: some View {
         HStack(spacing: 0) {
@@ -32,6 +33,7 @@ struct SessionItemView: View {
         .overlay(alignment: .trailing) {
             statusIcons
         }
+        .padding(.horizontal, horizontalPadding)
         .padding(.vertical, 8)
         .frame(height: 64) // Metrics.itemHeight
         .task {
@@ -66,25 +68,31 @@ struct SessionItemView: View {
 
     private var statusIcons: some View {
         // Icons
-        VStack(spacing: 0) {
-            Image(.starSmall)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 14)
-                .padding(3)
-                .blurBackground()
-                .opacity(viewModel.isFavorite ? 1 : 0)
+        VStack(alignment: .trailing, spacing: 0) {
+            if viewModel.isFavorite {
+                Image(systemName: "star.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 14)
+                    .padding(3)
+                    .blurBackground()
+                    .transition(.scale)
+            }
 
             Spacer()
 
-            Image(.downloadSmall)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 11)
-                .padding(3)
-                .blurBackground()
-                .opacity(viewModel.isDownloaded ? 1 : 0)
+            if viewModel.isDownloaded {
+                Image(systemName: "arrowshape.down.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 11)
+                    .padding(3)
+                    .blurBackground()
+                    .transition(.scale)
+            }
         }
+        .animation(.bouncy, value: viewModel.isFavorite)
+        .animation(.bouncy, value: viewModel.isDownloaded)
     }
 }
 
@@ -94,10 +102,10 @@ struct SessionItemButtonStyle: ButtonStyle {
     let style: SessionCellView.Style
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.9 : 1) // scale content only
+            .scaleEffect(configuration.isPressed ? 0.95 : 1) // scale content only
             .contentShape(Rectangle())
             .background(background, in: .rect)
-            .animation(.bouncy(extraBounce: 0.3), value: configuration.isPressed)
+            .animation(.bouncy, value: configuration.isPressed)
             .animation(.smooth, value: isHovered)
             .animation(.smooth, value: isSelected)
             .transition(.blurReplace)

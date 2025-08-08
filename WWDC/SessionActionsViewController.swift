@@ -142,7 +142,7 @@ final class SessionActionsViewModel: ObservableObject {
     /// Realm writes and then publishes the new `isDownloaded` state.
     ///
     /// This means the button will show the download button briefly before switching to the delete button.
-    private static func downloadState(session: Session, downloadState: MediaDownloadState?) -> DownloadState {
+    static func downloadState(session: Session, downloadState: MediaDownloadState?) -> DownloadState {
         if let downloadState {
             switch downloadState {
             case .waiting:

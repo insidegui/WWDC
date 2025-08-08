@@ -10,11 +10,12 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 struct NewExploreCategoryList: View {
-    @Bindable var viewModel: NewExploreViewModel
+    @Environment(NewExploreViewModel.self) var viewModel
     @State private var sections: [ExploreTabContent.Section] = []
     @State private var showDetail = false
     var body: some View {
         ScrollViewReader { proxy in
+            @Bindable var viewModel = viewModel
             List(sections, selection: $viewModel.selectedCategory) { section in
                 Label {
                     Text(section.title)

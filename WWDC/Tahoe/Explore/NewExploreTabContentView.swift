@@ -18,7 +18,6 @@ struct NewExploreTabContentView: View {
     var content: ExploreTabContent
 
     @Environment(NewExploreViewModel.self) var viewModel
-    @Binding var currentPosition: ExploreTabContent.Section.ID?
 
     @State private var isPresentingLiveEvent = false
 
@@ -37,12 +36,12 @@ struct NewExploreTabContentView: View {
                 if content.isLiveEventStreaming {
                     isPresentingLiveEvent = true
                 }
-                currentPosition = currentPosition
             }
     }
 
     @ViewBuilder
     private var scrollView: some View {
+        @Bindable var viewModel = viewModel
         ScrollView(.vertical) {
             LazyVStack(alignment: .leading, spacing: 42) {
                 liveHeader
@@ -75,8 +74,8 @@ struct NewExploreTabContentView: View {
             .blur(radius: isPresentingLiveEvent ? 24 : 0)
             .scrollTargetLayout()
         }
-        .scrollPosition(id: $currentPosition, anchor: .center)
-        .animation(.smooth, value: currentPosition)
+        .scrollPosition(id: $viewModel.selectedCategory, anchor: .center)
+        .animation(.smooth, value: viewModel.selectedCategory)
     }
 
     @ViewBuilder

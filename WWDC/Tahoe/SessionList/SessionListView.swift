@@ -11,13 +11,15 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 struct SessionListView: View {
-    @Bindable var viewModel: SessionListViewModel
+    @Environment(SessionListViewModel.self) var viewModel
 
     var body: some View {
+        @Bindable var viewModel = viewModel
         List(viewModel.sections, selection: $viewModel.selectedSessions) { section in
             Section {
                 ForEach(section.sessions) { session in
-                    SessionItemView(viewModel: session.model)
+                    SessionItemView()
+                        .environment(session.model)
                         .id(session)
                         .contextMenu { contextMenus(for: session.model) }
                 }
