@@ -18,7 +18,7 @@ struct SessionItemView: View {
         HStack(spacing: 0) {
             ProgressView(value: viewModel.progress, total: 1.0)
                 .progressViewStyle(TrackColorProgressViewStyle())
-                .foregroundStyle(Color(viewModel.contextColor))
+                .foregroundStyle(.primary)
                 .opacity(viewModel.isWatched ? 0 : 1)
 
             LazyAsyncImage(url: viewModel.thumbnailURL, height: Constants.thumbnailHeight, greedy: false, animation: .bouncy, placeholder: Image(.noimage)) { newImg in
@@ -36,7 +36,6 @@ struct SessionItemView: View {
         .overlay(alignment: .trailing) {
             statusIcons
         }
-        .padding(.horizontal, 10)
         .padding(.vertical, 8)
         .frame(height: 64) // Metrics.itemHeight
         .task {

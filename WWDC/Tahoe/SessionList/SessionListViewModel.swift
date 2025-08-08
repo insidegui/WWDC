@@ -21,10 +21,12 @@ struct SessionListSection: Identifiable, Equatable {
     struct Session: Hashable, Identifiable {
         let id: String
         let model: SessionViewModel
+        let indexOfAllSessions: Int // section+items
 
-        init(model: SessionViewModel) {
+        init(model: SessionViewModel, index indexOfAllSessions: Int) {
             id = model.sessionIdentifier
             self.model = model
+            self.indexOfAllSessions = indexOfAllSessions
         }
 
         func hash(into hasher: inout Hasher) {
@@ -45,9 +47,17 @@ struct SessionListSection: Identifiable, Equatable {
     @ObservationIgnored private var rowsObserver: AnyCancellable?
 
     var sections: [SessionListSection] = []
+    /// for detail view
     var selectedSession: SessionListSection.Session? {
         didSet {
             syncSelectedSession()
+        }
+    }
+
+    /// for list view
+    var selectedSessions: Set<SessionListSection.Session> = [] {
+        willSet {
+            updateSelectedSession(with: newValue)
         }
     }
 
@@ -76,12 +86,13 @@ struct SessionListSection: Identifiable, Equatable {
 
     private func updateSections(_ newSections: [SessionListSection]) {
         sections = newSections
-        if selectedSession == nil {
-            selectedSession = newSections.flatMap(\.sessions)
-                .first(where: { $0.id == initialSelection?.sessionIdentifier })
+        if selectedSessions.isEmpty, let selection = newSections.flatMap(\.sessions)
+            .first(where: { $0.id == initialSelection?.sessionIdentifier })
+        {
+            selectedSessions.insert(selection)
         }
-        if selectedSession == nil {
-            selectedSession = newSections.first?.sessions.first
+        if selectedSessions.isEmpty, let firstSession = newSections.first?.sessions.first {
+            selectedSessions.insert(firstSession)
         }
         syncSelectedSession()
     }
@@ -93,12 +104,33 @@ struct SessionListSection: Identifiable, Equatable {
             }
         }
     }
+
+    private func updateSelectedSession(with newValue: Set<SessionListSection.Session>) {
+        let difference = newValue.symmetricDifference(selectedSessions)
+        guard let lastChange = difference.sorted(by: { $0.indexOfAllSessions < $1.indexOfAllSessions }).last else {
+            return
+        }
+        if selectedSessions.contains(lastChange) {
+            // removed
+            if lastChange.id == selectedSession?.id {
+                // removed the session current showing
+                // select last in the section row
+                selectedSession = newValue.sorted(by: { $0.indexOfAllSessions < $1.indexOfAllSessions }).last
+            } else {
+                // no need to change what's showing in detail
+            }
+        } else {
+            // newly inserted
+            selectedSession = lastChange
+        }
+    }
 }
 
 private extension Array where Element == SessionRow {
     func grouped() -> [SessionListSection] {
         var sections = [SessionListSection]()
         var currentSection: SessionListSection?
+        var currentSessionIndex = 0
 
         for row in self {
             switch row.kind {
@@ -106,7 +138,8 @@ private extension Array where Element == SessionRow {
                 currentSection.flatMap { sections.append($0) }
                 currentSection = .init(title: title, systemSymbol: symbol, sessions: [])
             case let .session(viewModel):
-                currentSection?.sessions.append(.init(model: viewModel))
+                currentSection?.sessions.append(.init(model: viewModel, index: currentSessionIndex))
+                currentSessionIndex += 1
             }
         }
         currentSection.flatMap { sections.append($0) }
