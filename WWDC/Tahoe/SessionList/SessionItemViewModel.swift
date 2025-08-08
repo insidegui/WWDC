@@ -9,8 +9,9 @@
 import SwiftUI
 import Combine
 
-@Observable class SessionItemViewModel {
-    @ObservationIgnored private let session: SessionViewModel
+@Observable class SessionItemViewModel: Identifiable {
+    var id: String { session.identifier }
+    @ObservationIgnored let session: SessionViewModel
     @ObservationIgnored private var observers = Set<AnyCancellable>()
 
     var progress: Double = 0

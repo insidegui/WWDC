@@ -8,11 +8,7 @@
 import SwiftUI
 
 struct SessionItemView: View {
-    @State var viewModel: SessionItemViewModel
-
-    init(session: SessionViewModel) {
-        self.viewModel = .init(session: session)
-    }
+    @Bindable var viewModel: SessionItemViewModel
 
     var body: some View {
         HStack(spacing: 0) {

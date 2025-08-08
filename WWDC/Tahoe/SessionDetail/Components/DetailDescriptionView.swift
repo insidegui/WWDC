@@ -12,7 +12,7 @@ import SwiftUI
 @available(macOS 26.0, *)
 extension NewSessionDetailView {
     struct SessionDescriptionView: View {
-        let viewModel: SessionViewModel
+        let viewModel: SessionItemViewModel
         @Binding var tab: SessionDetailsViewModel.SessionTab
         let transcriptPosition: Binding<ScrollPosition>
 
@@ -21,12 +21,12 @@ extension NewSessionDetailView {
                 switch tab {
                 case .overview:
                     if #available(macOS 26.0, *) {
-                        OverviewContentView(viewModel: viewModel)
+                        OverviewContentView(viewModel: viewModel.session)
                         RelatedSessionsView(currentSession: viewModel)
                     }
                 case .transcript:
                     if #available(macOS 26.0, *) {
-                        NewTranscriptView(viewModel: viewModel, scrollPosition: transcriptPosition)
+                        NewTranscriptView(viewModel: viewModel.session, scrollPosition: transcriptPosition)
                     }
                 case .bookmarks:
                     Text("Bookmarks view coming soon")

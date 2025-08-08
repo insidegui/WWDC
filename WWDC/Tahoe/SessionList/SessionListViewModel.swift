@@ -20,12 +20,12 @@ struct SessionListSection: Identifiable, Equatable {
 
     struct Session: Hashable, Identifiable {
         let id: String
-        let model: SessionViewModel
+        let model: SessionItemViewModel
         let indexOfAllSessions: Int // section+items
 
         init(model: SessionViewModel, index indexOfAllSessions: Int) {
             id = model.sessionIdentifier
-            self.model = model
+            self.model = .init(session: model)
             self.indexOfAllSessions = indexOfAllSessions
         }
 
@@ -100,7 +100,7 @@ struct SessionListSection: Identifiable, Equatable {
     private func syncSelectedSession() {
         if #available(macOS 26.0, *) {
             DispatchQueue.main.async {
-                self.coordinator?.activeTabSelectedSessionViewModel = self.selectedSession?.model
+                self.coordinator?.activeTabSelectedSessionViewModel = self.selectedSession?.model.session
             }
         }
     }

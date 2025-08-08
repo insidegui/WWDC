@@ -24,7 +24,7 @@ struct NewSessionDetailWrapperView: View {
 
 @available(macOS 26.0, *)
 struct NewSessionDetailView: View {
-    let viewModel: SessionViewModel
+    let viewModel: SessionItemViewModel
     @State private var availableTabs: [SessionDetailsViewModel.SessionTab] = [.overview]
     @State private var tab: SessionDetailsViewModel.SessionTab = .overview
     @State private var isTranscriptAvailable = false
@@ -37,7 +37,7 @@ struct NewSessionDetailView: View {
         .scrollPosition($transcriptPosition, anchor: .top)
         .safeAreaBar(edge: .top) {
             VStack(alignment: .leading, spacing: 0) {
-                SessionDetailThumbnailView(viewModel: viewModel)
+                SessionDetailThumbnailView(viewModel: viewModel.session)
                 if availableTabs.count > 1 {
                     tabBar
                 }
@@ -73,7 +73,7 @@ struct NewSessionDetailView: View {
     }
 
     private var transcriptAvailabilityUpdate: AnyPublisher<Bool, Never> {
-        viewModel.rxTranscript.replaceError(with: nil).map {
+        viewModel.session.rxTranscript.replaceError(with: nil).map {
             $0 != nil
         }
         .removeDuplicates()

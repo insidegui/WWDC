@@ -12,9 +12,9 @@ import SwiftUI
 @available(macOS 26.0, *)
 extension NewSessionDetailView {
     struct RelatedSessionsView: View {
-        @State private var sessions: [SessionViewModel] = []
+        @State private var sessions: [SessionItemViewModel] = []
         @Environment(\.coordinator) private var coordinator
-        let currentSession: SessionViewModel
+        let currentSession: SessionItemViewModel
 
         enum Metrics {
             static let height: CGFloat = 96 + scrollerOffset
@@ -40,31 +40,32 @@ extension NewSessionDetailView {
                     .padding(.horizontal)
 
                 LazyVGrid(columns: columns) {
-                    ForEach(sessions, id: \.identifier) { session in
+                    ForEach(sessions) { session in
                         Button {
-                            coordinator?.selectSessionOnAppropriateTab(with: session)
+                            coordinator?.selectSessionOnAppropriateTab(with: session.session)
                         } label: {
-                            SessionItemView(session: session)
+                            SessionItemView(viewModel: session)
                         }
                         .buttonStyle(SessionItemButtonStyle(style: .rounded))
-                        .id(session.identifier)
+                        .id(session.id)
                     }
                 }
                 .padding([.bottom, .horizontal])
             }
             .opacity(sessions.isEmpty ? 0 : 1)
             .onReceive(sessionsUpdate) {
-                if $0.map(\.identifier) != sessions.map(\.identifier) {
+                if $0.map(\.id) != sessions.map(\.id) {
                     sessions = $0
                 }
             }
         }
 
-        private var sessionsUpdate: AnyPublisher<[SessionViewModel], Never> {
-            currentSession.rxRelatedSessions
+        private var sessionsUpdate: AnyPublisher<[SessionItemViewModel], Never> {
+            currentSession.session.rxRelatedSessions
                 .replaceErrorWithEmpty()
                 .map { $0.compactMap { $0.session }.compactMap(SessionViewModel.init(session:)) }
                 .removeDuplicates(by: { $0.map(\.identifier) == $1.map(\.identifier) })
+                .map { $0.map(SessionItemViewModel.init(session:)) }
                 .eraseToAnyPublisher()
         }
     }
