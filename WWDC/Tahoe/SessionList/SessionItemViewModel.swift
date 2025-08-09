@@ -14,9 +14,6 @@ import SwiftUI
     var id: String { session.identifier }
     @ObservationIgnored let session: SessionViewModel
     @ObservationIgnored private var observers = Set<AnyCancellable>()
-    @ObservationIgnored private(set) var coverImageURL: URL?
-    @ObservationIgnored private weak var smallImageDownloadOperation: Operation?
-    @ObservationIgnored private weak var fullImageDownloadOperation: Operation?
 
     var progress: Double = 0
     var isWatched: Bool {
@@ -26,16 +23,12 @@ import SwiftUI
     var contextColor: NSColor = .clear
     var title = ""
     var subtitle = ""
+    var coverImageURL: URL?
     var summary = ""
     var footer = ""
     var context = ""
     var isFavorite = false
     var isDownloaded = false
-
-    // MARK: - Cover Caches
-
-    var smallCover: NSImage?
-    var fullCover: NSImage?
 
     // MARK: - Actions
 
@@ -181,37 +174,6 @@ private extension Array where Element == SessionItemViewModel {
     }
 }
 
-// MARK: - Image Tasks
-
-extension SessionItemViewModel {
-    @ImageDownloadActor
-    private func downloadCover(height: CGFloat, image: ReferenceWritableKeyPath<SessionItemViewModel, NSImage?>, operation: ReferenceWritableKeyPath<SessionItemViewModel, Operation?>) async {
-        guard let url = coverImageURL else {
-            return
-        }
-        self[keyPath: image] = ImageDownloadCenter.shared.cachedImage(from: url, thumbnailOnly: height <= Constants.thumbnailHeight)
-        self[keyPath: operation]?.cancel()
-        self[keyPath: operation] = nil
-        self[keyPath: operation] = ImageDownloadCenter.shared.downloadImage(from: url, thumbnailHeight: height) { [weak self] _, result in
-            self?[keyPath: image] = result.original
-        }
-    }
-
-    func downloadSmallCoverIfNeeded() async {
-        guard smallCover == nil else {
-            return
-        }
-        await downloadCover(height: Constants.thumbnailHeight, image: \.smallCover, operation: \.smallImageDownloadOperation)
-    }
-
-    func downloadFullCoverIfNeeded() async {
-        guard fullCover == nil else {
-            return
-        }
-        await downloadCover(height: 400, image: \.fullCover, operation: \.fullImageDownloadOperation)
-    }
-}
-
 // MARK: - Actions
 
 private extension SessionItemViewModel {
@@ -295,10 +257,4 @@ extension SessionItemViewModel {
     @MainActor func cancelDownload() {
         coordinator?.sessionActionsDidSelectCancelDownload(nil)
     }
-}
-
-/// isolate ImageDownloadCenter caching to this actor
-@globalActor
-actor ImageDownloadActor {
-    static let shared = ImageDownloadActor()
 }

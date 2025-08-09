@@ -29,9 +29,6 @@ struct SessionItemView: View {
 
             informationLabels
         }
-        .task(id: viewModel.coverImageURL) {
-            await viewModel.downloadSmallCoverIfNeeded()
-        }
         .overlay(alignment: .trailing) {
             statusIcons
         }
