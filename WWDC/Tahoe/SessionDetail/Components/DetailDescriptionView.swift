@@ -20,20 +20,21 @@ extension NewSessionDetailView {
             Group {
                 switch tab {
                 case .overview:
-                    if #available(macOS 26.0, *) {
+                    Group {
                         OverviewContentView()
                         @Bindable var viewModel = viewModel
                         RelatedSessionsView(sessions: $viewModel.relatedSessions, scrollPosition: scrollPosition)
                     }
+                    .transition(.blurReplace)
                 case .transcript:
-                    if #available(macOS 26.0, *) {
-                        NewTranscriptView(viewModel: viewModel.session, scrollPosition: scrollPosition)
-                    }
+                    NewTranscriptView(viewModel: viewModel.session, scrollPosition: scrollPosition)
+                        .transition(.blurReplace)
                 case .bookmarks:
                     Text("Bookmarks view coming soon")
                         .foregroundColor(.secondary)
                 }
             }
+            .animation(.bouncy, value: tab)
         }
     }
 }

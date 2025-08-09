@@ -66,20 +66,15 @@ struct NewSessionDetailView: View {
 
     @ViewBuilder
     private var tabBar: some View {
-        HStack(spacing: 32) {
+        Picker("", selection: $tab) {
             ForEach(availableTabs, id: \.self) { t in
-                Button {
-                    tab = t
-                } label: {
-                    Text(t.title)
-                        .shadow(radius: 5)
-                }
-                .selected(tab == t)
+                Text(t.title)
             }
         }
-        .buttonStyle(WWDCTextButtonStyle())
+        .pickerStyle(.segmented)
+        .controlSize(.large)
         .frame(maxWidth: .infinity)
-        .padding(.top, 8)
+        .padding(.vertical, 8)
     }
 
     private var transcriptAvailabilityUpdate: AnyPublisher<Bool, Never> {

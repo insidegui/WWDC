@@ -37,13 +37,9 @@ struct NewTranscriptView: View {
             .scrollTargetLayout()
         }
         .padding()
-        .opacity(readyToPlay ? 1 : 0)
+        .opacity(readyToPlay ? 1 : 0.5)
         .disabled(!readyToPlay)
         .transition(.blurReplace)
-        .overlay(alignment: .top) {
-            ProgressView().progressViewStyle(.circular)
-                .opacity(readyToPlay ? 0 : 1)
-        }
         .onReceive(linesUpdate) { newValue in
             let filtered = newValue.filter { !$0.body.isEmpty }
             guard filtered != lines else {
