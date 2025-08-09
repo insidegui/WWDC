@@ -53,8 +53,7 @@
 		81CE57A82E44850C0006C9B9 /* SessionItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57A72E44850C0006C9B9 /* SessionItemViewModel.swift */; };
 		81E050552E3A854B007274FB /* NewSessionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */; };
 		81E172732E42469600BC1E5C /* NewSessionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E172722E42469100BC1E5C /* NewSessionDetailView.swift */; };
-		81E172752E42504E00BC1E5C /* LazyAsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E172742E42503A00BC1E5C /* LazyAsyncImage.swift */; };
-		81E172792E42693200BC1E5C /* DetailThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E172782E42692900BC1E5C /* DetailThumbnailView.swift */; };
+		81E172792E42693200BC1E5C /* SessionCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E172782E42692900BC1E5C /* SessionCoverView.swift */; };
 		81E1727B2E42695900BC1E5C /* DetailDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E1727A2E42695400BC1E5C /* DetailDescriptionView.swift */; };
 		81E1727D2E42698E00BC1E5C /* DetailRelatedSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E1727C2E42698800BC1E5C /* DetailRelatedSessionView.swift */; };
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
@@ -374,8 +373,7 @@
 		81CE57A72E44850C0006C9B9 /* SessionItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionItemViewModel.swift; sourceTree = "<group>"; };
 		81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionsTableViewController.swift; sourceTree = "<group>"; };
 		81E172722E42469100BC1E5C /* NewSessionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionDetailView.swift; sourceTree = "<group>"; };
-		81E172742E42503A00BC1E5C /* LazyAsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyAsyncImage.swift; sourceTree = "<group>"; };
-		81E172782E42692900BC1E5C /* DetailThumbnailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailThumbnailView.swift; sourceTree = "<group>"; };
+		81E172782E42692900BC1E5C /* SessionCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCoverView.swift; sourceTree = "<group>"; };
 		81E1727A2E42695400BC1E5C /* DetailDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescriptionView.swift; sourceTree = "<group>"; };
 		81E1727C2E42698800BC1E5C /* DetailRelatedSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRelatedSessionView.swift; sourceTree = "<group>"; };
 		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
@@ -690,9 +688,9 @@
 		81CE57962E43DA150006C9B9 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
+				81CE57992E43DA370006C9B9 /* NewExploreCategoryList.swift */,
 				81CE579D2E43DADF0006C9B9 /* NewExploreTabDetailView.swift */,
 				81CE579B2E43DA8F0006C9B9 /* NewExploreTabContentView.swift */,
-				81CE57992E43DA370006C9B9 /* NewExploreCategoryList.swift */,
 				81CE57972E43DA260006C9B9 /* NewExploreViewModel.swift */,
 			);
 			path = Explore;
@@ -711,7 +709,7 @@
 		81E172772E42691000BC1E5C /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				81E172782E42692900BC1E5C /* DetailThumbnailView.swift */,
+				81E172782E42692900BC1E5C /* SessionCoverView.swift */,
 				81E1727A2E42695400BC1E5C /* DetailDescriptionView.swift */,
 				81E1727C2E42698800BC1E5C /* DetailRelatedSessionView.swift */,
 			);
@@ -1163,7 +1161,6 @@
 			isa = PBXGroup;
 			children = (
 				DD4648481ECA5EC0005C57C6 /* NSToolbarItemViewer+Overrides.m */,
-				81E172742E42503A00BC1E5C /* LazyAsyncImage.swift */,
 			);
 			name = Base;
 			sourceTree = "<group>";
@@ -1684,7 +1681,6 @@
 				DD876D351EC2A7410058EE3B /* ImageDownloadCenter.swift in Sources */,
 				DD6E06F61EDBC379000EAEA4 /* WWDCBottomBorderView.swift in Sources */,
 				DDAE001D1EC534BF0036C7E9 /* TrackColorView.swift in Sources */,
-				81E172752E42504E00BC1E5C /* LazyAsyncImage.swift in Sources */,
 				DD0159D91ED11A9800F980F1 /* ModalLoadingView.swift in Sources */,
 				F44C82352A22921300FDE980 /* ExploreTabProvider.swift in Sources */,
 				F486B3122C0E69E60066749F /* URLSessionTask+Media.swift in Sources */,
@@ -1809,7 +1805,7 @@
 				DDEDFCEF1ED92785002477C8 /* MultipleChoiceFilter.swift in Sources */,
 				F486B3112C0E69E60066749F /* URL+FileHelpers.swift in Sources */,
 				812EB5832E3F59FC00FE869F /* NewTranscriptView.swift in Sources */,
-				81E172792E42693200BC1E5C /* DetailThumbnailView.swift in Sources */,
+				81E172792E42693200BC1E5C /* SessionCoverView.swift in Sources */,
 				DDEA85FB1EB52AB5002AE0EB /* VideoPlayerViewController.swift in Sources */,
 				812EB5812E3E973F00FE869F /* NewTopicHeaderRow.swift in Sources */,
 				DDA50E3524AA5090007C77C6 /* Boot.swift in Sources */,

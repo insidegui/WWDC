@@ -178,8 +178,8 @@ struct NewSessionDetailsView: View {
 
 extension View {
     @ViewBuilder
-    func extendBackground() -> some View {
-        if #available(macOS 26.0, *) {
+    func extendBackground(isHidden: Bool = false) -> some View {
+        if #available(macOS 26.0, *), !isHidden {
             backgroundExtensionEffect()
         } else {
             self

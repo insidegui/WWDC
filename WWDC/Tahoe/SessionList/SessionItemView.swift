@@ -18,17 +18,19 @@ struct SessionItemView: View {
                 .foregroundStyle(.primary)
                 .opacity(viewModel.isWatched ? 0 : 1)
 
-            LazyAsyncImage(url: viewModel.thumbnailURL, height: Constants.thumbnailHeight, greedy: false, animation: .bouncy, placeholder: Image(.noimage)) { newImg in
+            SessionCoverView(isThumbnail: true) { newImg, isPlaceHolder in
                 newImg
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 85, height: 48)
                     .clipped()
                     .padding(.horizontal, 8)
-                    .transition(.blurReplace)
             }
 
             informationLabels
+        }
+        .task(id: viewModel.coverImageURL) {
+            await viewModel.downloadSmallCoverIfNeeded()
         }
         .overlay(alignment: .trailing) {
             statusIcons

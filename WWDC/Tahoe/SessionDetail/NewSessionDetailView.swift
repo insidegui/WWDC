@@ -36,7 +36,11 @@ struct NewSessionDetailView: View {
         .scrollPosition($scrollPosition, anchor: .top)
         .safeAreaBar(edge: .top) {
             VStack(alignment: .leading, spacing: 0) {
-                SessionDetailThumbnailView(viewModel: viewModel.session)
+                SessionCoverView { image, isPlaceholder in
+                    image.resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .extendBackground(isHidden: isPlaceholder)
+                }
                 if availableTabs.count > 1 {
                     tabBar
                 }
