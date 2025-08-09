@@ -14,8 +14,9 @@ import SwiftUI
 class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     typealias Tab = MainWindowTab
     let exploreViewModel: NewExploreViewModel
-    let scheduleViewModel: SessionListViewModel
-    let videosViewModel: SessionListViewModel
+    let scheduleTable: NewSessionsTableViewController
+    let videosTable: NewSessionsTableViewController
+    let detailViewModel: SessionItemViewModel
     @Published var activeTab: Tab = .explore {
         didSet {
             guard activeTab != oldValue else {
@@ -35,18 +36,19 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     fileprivate var sidebarItem: NSSplitViewItem!
     fileprivate var detailItem: NSSplitViewItem!
 
-    private var previousSidebarWidth: CGFloat?
     private weak var windowController: WWDCWindowControllerObject?
 
-    init(windowController: WWDCWindowControllerObject, exploreViewModel: NewExploreViewModel, scheduleViewModel: SessionListViewModel, videosViewModel: SessionListViewModel) {
+    init(windowController: WWDCWindowControllerObject, exploreViewModel: NewExploreViewModel, scheduleTable: NewSessionsTableViewController, videosTable: NewSessionsTableViewController, detailViewModel: SessionItemViewModel) {
         self.windowController = windowController
         self.exploreViewModel = exploreViewModel
-        self.scheduleViewModel = scheduleViewModel
-        self.videosViewModel = videosViewModel
+        self.scheduleTable = scheduleTable
+        self.videosTable = videosTable
+        self.detailViewModel = detailViewModel
         super.init(nibName: nil, bundle: nil)
         sidebarItem = NSSplitViewItem(sidebarWithViewController: SplitContainer(nibName: nil, bundle: nil))
         sidebarItem.container.isSidebar = true
         sidebarItem.canCollapse = false
+        sidebarItem.automaticallyAdjustsSafeAreaInsets = true
         addSplitViewItem(sidebarItem)
         detailItem = NSSplitViewItem(viewController: SplitContainer(nibName: nil, bundle: nil))
         detailItem.automaticallyAdjustsSafeAreaInsets = true
@@ -78,8 +80,8 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
         let sidebarContent: NSView = {
             switch activeTab {
             case .explore: return NSHostingView(rootView: NewExploreCategoryList().environment(exploreViewModel))
-            case .schedule: return NSHostingView(rootView: SessionListView().environment(scheduleViewModel))
-            case .videos: return NSHostingView(rootView: SessionListView().environment(videosViewModel))
+            case .schedule: return scheduleTable.view
+            case .videos: return videosTable.view
             }
         }()
         let sidebarContainer = sidebarItem.container
@@ -90,19 +92,13 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
         let detailContent: NSView = {
             switch activeTab {
             case .explore: return NSHostingView(rootView: NewExploreTabDetailView().environment(exploreViewModel))
-            case .schedule: return NSHostingView(rootView: NewSessionDetailWrapperView().environment(scheduleViewModel))
-            case .videos: return NSHostingView(rootView: NewSessionDetailWrapperView().environment(videosViewModel))
+            case .schedule, .videos: return NSHostingView(rootView: NewSessionDetailView().environment(detailViewModel))
             }
         }()
         let detailContainer = detailItem.container
         Task {
             await detailContainer.replaceContent(detailContent)
         }
-    }
-
-    override func splitViewDidResizeSubviews(_ notification: Notification) {
-        guard sidebarItem.isCollapsed == false else { return }
-        previousSidebarWidth = splitView.arrangedSubviews[0].bounds.width
     }
 }
 
@@ -142,5 +138,33 @@ private extension NSSplitViewItem {
     var container: SplitContainer {
         // swiftlint:disable:next force_cast
         viewController as! SplitContainer
+    }
+}
+
+@available(macOS 26.0, *)
+class SplitViewItemAccessoryView<Content: View>: NSSplitViewItemAccessoryViewController {
+    let content: Content
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func loadView() {
+        super.loadView()
+        let label = NSHostingView(rootView: content)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: view.topAnchor),
+            label.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            label.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            label.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        automaticallyAppliesContentInsets = false
     }
 }

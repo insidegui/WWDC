@@ -36,19 +36,15 @@ struct NewSessionDetailView: View {
         .scrollPosition($scrollPosition, anchor: .top)
         .safeAreaBar(edge: .top) {
             VStack(alignment: .leading, spacing: 0) {
-                SessionCoverView { image, isPlaceholder in
+                SessionCoverView(coverImageURL: viewModel.coverImageURL) { image, isPlaceholder in
                     image.resizable()
                         .aspectRatio(contentMode: .fit)
-                        .extendBackground(isHidden: isPlaceholder)
+                        .extendBackground()
                 }
                 if availableTabs.count > 1 {
                     tabBar
                 }
             }
-        }
-        .onChange(of: viewModel.id) { _, _ in
-            // reuse
-            viewModel.prepareForDisplay()
         }
         .ignoresSafeArea(edges: .top)
         .scrollEdgeEffectStyle(.soft, for: .vertical)
@@ -78,12 +74,12 @@ struct NewSessionDetailView: View {
     }
 
     private var transcriptAvailabilityUpdate: AnyPublisher<Bool, Never> {
-        viewModel.session.rxTranscript.replaceError(with: nil).map {
+        viewModel.session?.rxTranscript.replaceError(with: nil).map {
             $0 != nil
         }
         .removeDuplicates()
         .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher()
+        .eraseToAnyPublisher() ?? Just(false).eraseToAnyPublisher()
     }
 }
 

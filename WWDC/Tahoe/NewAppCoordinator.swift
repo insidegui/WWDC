@@ -54,8 +54,8 @@ final class NewAppCoordinator: WWDCCoordinator {
 
     // - The 3 tabs
     let exploreViewModel: NewExploreViewModel
-    let scheduleViewModel: SessionListViewModel
-    let videosViewModel: SessionListViewModel
+    let scheduleTable: NewSessionsTableViewController
+    let videosTable: NewSessionsTableViewController
 
     var currentPlayerController: VideoPlayerViewController?
 
@@ -77,14 +77,14 @@ final class NewAppCoordinator: WWDCCoordinator {
     var wasPlayingWhenClipSharingBegan = false
 
     /// The list controller for the active tab
-    var currentListModel: SessionListViewModel? {
+    var currentTable: NewSessionsTableViewController? {
         switch activeTab {
         case .explore:
             return nil
         case .schedule:
-            return scheduleViewModel
+            return scheduleTable
         case .videos:
-            return videosViewModel
+            return videosTable
         }
     }
 
@@ -101,15 +101,14 @@ final class NewAppCoordinator: WWDCCoordinator {
     }
 
     /// The session that is currently selected on the videos tab (observable)
-    @Published
-    var videosSelectedSessionViewModel: SessionViewModel?
+    var videosSelectedSessionViewModel: SessionViewModel? { videosTable.selectedSession }
 
     /// The session that is currently selected on the schedule tab (observable)
-    @Published
-    var scheduleSelectedSessionViewModel: SessionViewModel?
+    var scheduleSelectedSessionViewModel: SessionViewModel? { scheduleTable.selectedSession }
 
     /// The selected session's view model, regardless of which tab it is selected in
-    var activeTabSelectedSessionViewModel: SessionViewModel?
+    var activeTabSelectedSessionViewModel: SessionViewModel? { detailViewModel.session }
+    var detailViewModel: SessionItemViewModel
 
     /// The viewModel for the current playback session
     var currentPlaybackViewModel: PlaybackViewModel? {
@@ -139,13 +138,23 @@ final class NewAppCoordinator: WWDCCoordinator {
         // Explore
         let provider = ExploreTabProvider(storage: storage)
         exploreViewModel = NewExploreViewModel(provider: provider)
-        scheduleViewModel = SessionListViewModel(
-            rowProvider: ScheduleSessionRowProvider(
-                scheduleSections: storage.scheduleSections,
-                filterPredicate: searchCoordinator.$scheduleFilterPredicate,
+
+        videosTable = NewSessionsTableViewController(
+            searchCoordinator: VideosSearchCoordinator(
+                storage,
+                tabState: GlobalSearchTabState(
+                    additionalPredicates: [Session.videoPredicate],
+                    filterPredicate: .init(predicate: nil, changeReason: .initialValue)
+                )
+            ),
+            rowProvider: VideosSessionRowProvider(
+                tracks: storage.tracks,
+                filterPredicate: searchCoordinator.$videosFilterPredicate,
                 playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
             ),
-            initialSelection: Preferences.shared.selectedScheduleItemIdentifier.map(SessionIdentifier.init),
+            initialSelection: Preferences.shared.selectedVideoItemIdentifier.map(SessionIdentifier.init)
+        )
+        scheduleTable = NewSessionsTableViewController(
             searchCoordinator: ScheduleSearchCoordinator(
                 storage,
                 tabState: GlobalSearchTabState(
@@ -155,28 +164,19 @@ final class NewAppCoordinator: WWDCCoordinator {
                     ],
                     filterPredicate: .init(predicate: nil, changeReason: .initialValue)
                 )
-            )
-        )
-        videosViewModel = SessionListViewModel(
-            rowProvider: VideosSessionRowProvider(
-                tracks: storage.tracks,
-                filterPredicate: searchCoordinator.$videosFilterPredicate,
+            ),
+            rowProvider: ScheduleSessionRowProvider(
+                scheduleSections: storage.scheduleSections,
+                filterPredicate: searchCoordinator.$scheduleFilterPredicate,
                 playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
             ),
-            initialSelection: Preferences.shared.selectedVideoItemIdentifier.map(SessionIdentifier.init),
-            searchCoordinator: ScheduleSearchCoordinator(
-                storage,
-                tabState: GlobalSearchTabState(
-                    additionalPredicates: [Session.videoPredicate],
-                    filterPredicate: .init(predicate: nil, changeReason: .initialValue)
-                )
-            )
+            initialSelection: Preferences.shared.selectedScheduleItemIdentifier.map(SessionIdentifier.init)
         )
-        tabController = ReplaceableSplitViewController(windowController: windowController, exploreViewModel: exploreViewModel, scheduleViewModel: scheduleViewModel, videosViewModel: videosViewModel)
+        detailViewModel = .init()
+        tabController = ReplaceableSplitViewController(windowController: windowController, exploreViewModel: exploreViewModel, scheduleTable: scheduleTable, videosTable: videosTable, detailViewModel: detailViewModel)
 
         _playerOwnerSessionIdentifier = .init(initialValue: nil)
         self.windowController = windowController
-        tabController.setActiveTab(Preferences.shared.activeTab)
 
         NSApp.isAutomaticCustomizeTouchBarMenuItemEnabled = true
 
@@ -229,8 +229,12 @@ final class NewAppCoordinator: WWDCCoordinator {
         refresh(nil)
         windowController.contentViewController = tabController
         windowController.showWindow(self)
-        //tabController.showLoading()
+//        tabController.showLoading()
+        tabController.setActiveTab(Preferences.shared.activeTab)
 
+        [videosTable, scheduleTable].forEach {
+            $0.sessionRowProvider.startup()
+        }
         if Arguments.showPreferences {
             showPreferences(nil)
         }
@@ -239,8 +243,8 @@ final class NewAppCoordinator: WWDCCoordinator {
     private func setupBindings() {
         Publishers.CombineLatest3(
             tabController.activeTabPublisher(for: MainWindowTab.self),
-            $videosSelectedSessionViewModel,
-            $scheduleSelectedSessionViewModel
+            videosTable.$selectedSession,
+            scheduleTable.$selectedSession
         ).receive(on: DispatchQueue.main)
             .sink { [weak self] activeTab, newVideoModel, newScheduleModel in
                 guard let self else { return }
@@ -248,17 +252,11 @@ final class NewAppCoordinator: WWDCCoordinator {
 
                 switch activeTab {
                 case .schedule:
-                    activeTabSelectedSessionViewModel = scheduleSelectedSessionViewModel
-                    if let model = newScheduleModel {
-//                        tabController.updateDetail(NSHostingController(rootView: NewSessionDetailView(viewModel: model)))
-                    }
+                    detailViewModel.session = newScheduleModel
                 case .videos:
-                    activeTabSelectedSessionViewModel = videosSelectedSessionViewModel
-                    if let model = newVideoModel {
-//                        tabController.updateDetail(NSHostingController(rootView: NewSessionDetailView(viewModel: model)))
-                    }
+                    detailViewModel.session = newVideoModel
                 default:
-                    activeTabSelectedSessionViewModel = nil
+                    detailViewModel.session = nil
                 }
 
                 updateShelfBasedOnSelectionChange()
@@ -285,12 +283,12 @@ final class NewAppCoordinator: WWDCCoordinator {
     }
 
     func selectSessionOnAppropriateTab(with viewModel: SessionViewModel) {
-        if currentListModel?.canDisplay(session: viewModel) == true {
-            currentListModel?.select(session: viewModel, removingFiltersIfNeeded: true)
+        if currentTable?.canDisplay(session: viewModel) == true {
+            currentTable?.select(session: viewModel, removingFiltersIfNeeded: true)
             return
         }
         // always to videos
-        videosViewModel.select(session: viewModel, removingFiltersIfNeeded: true)
+        videosTable.select(session: viewModel, removingFiltersIfNeeded: true)
         tabController.setActiveTab(MainWindowTab.videos)
     }
 
@@ -534,7 +532,7 @@ final class NewAppCoordinator: WWDCCoordinator {
     }
 
     func select(session: any SessionIdentifiable, removingFiltersIfNeeded: Bool) {
-        currentListModel?.select(session: session, removingFiltersIfNeeded: removingFiltersIfNeeded)
+        currentTable?.select(session: session, removingFiltersIfNeeded: removingFiltersIfNeeded)
     }
 
     func showClipUI() {}

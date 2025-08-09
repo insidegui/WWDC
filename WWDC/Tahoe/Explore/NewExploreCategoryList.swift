@@ -28,6 +28,7 @@ struct NewExploreCategoryList: View {
                 proxy.scrollTo(newValue, anchor: .bottom)
             }
         }
+        .scrollEdgeEffectStyle(.soft, for: .all)
         .onAppear {
             isListFocused = true
         }

@@ -1,5 +1,5 @@
 //
-//  ListContentFilterHeaderView.swift
+//  ListContentFilterAccessoryView.swift
 //  WWDC
 //
 //  Created by luca on 02.08.2025.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(macOS 26.0, *)
-struct ListContentFilterHeaderView: View {
+struct ListContentFilterAccessoryView: View {
     @State private var isExpanded: Bool = false
     @State private var controlSize: CGSize? = CGSize(width: 0, height: 20)
     @Environment(NewGlobalSearchCoordinator.self) var coordinator
@@ -38,8 +38,9 @@ struct ListContentFilterHeaderView: View {
                 PickAnyPicker(options: toggleFilters, selectedItems: $selectedToggleOptions, controlSize: $controlSize)
             }
         }
-        .padding(.horizontal, 5)
+        .padding(.horizontal)
         .frame(maxWidth: .infinity)
+        .background()
         .onChange(of: selectedEventOptions) { oldValue, newValue in
             guard newValue != oldValue else { return }
             updateEffectiveFilters()

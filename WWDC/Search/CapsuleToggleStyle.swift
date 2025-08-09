@@ -8,12 +8,14 @@
 
 import SwiftUI
 
+@available(macOS 26.0, *)
 extension ToggleStyle where Self == CapsuleToggleStyle {
     static func capsuleToggle(tint: Color? = nil, trailingIcon: Image? = nil, glassy: Bool = true, hoveringAlpha: CGFloat = 0.3, horizontalPadding: CGFloat = 10) -> CapsuleToggleStyle {
         CapsuleToggleStyle(tint: tint, trailingIcon: trailingIcon, glassy: glassy, hoveringAlpha: hoveringAlpha, horizontalPadding: horizontalPadding)
     }
 }
 
+@available(macOS 26.0, *)
 struct CapsuleToggleStyle: ToggleStyle {
     var tint: Color?
     var trailingIcon: Image?

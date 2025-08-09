@@ -45,8 +45,6 @@ final class NewTopicHeaderRow: NSTableRowView {
 
     override func drawBackground(in dirtyRect: NSRect) {}
 
-    private var contentView: NSHostingView<NewTopicHeaderRowContent>?
-
     private func update() {
         let v = NSHostingView(rootView: NewTopicHeaderRowContent().environment(viewModel))
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -76,35 +74,21 @@ private class HeaderRowViewModel {
 @available(macOS 15.0, *)
 private struct NewTopicHeaderRowContent: View {
     @Environment(HeaderRowViewModel.self) private var viewModel
-    @State private var isAppearing = false
     var body: some View {
         HStack {
-            if isAppearing, let symbolName = viewModel.symbolName {
+            if let symbolName = viewModel.symbolName {
                 Image(systemName: symbolName)
-                    .foregroundStyle(Color(nsColor: .secondaryText))
                     .symbolVariant(.fill)
                     .contentTransition(.symbolEffect(.replace.magic(fallback: .offUp.wholeSymbol), options: .nonRepeating))
                     .transition(.blurReplace)
             }
 
-            if isAppearing {
-                Text(viewModel.title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                    .transition(.blurReplace)
-            }
+            Text(viewModel.title)
+                .font(.headline)
+                .foregroundStyle(.primary)
+                .transition(.blurReplace)
         }
         .padding(.horizontal)
         .frame(maxWidth: .infinity, minHeight: SessionsTableViewController.Metrics.headerRowHeight, maxHeight: SessionsTableViewController.Metrics.headerRowHeight, alignment: .leading)
-        .task {
-            withAnimation {
-                isAppearing = true
-            }
-        }
-        .onDisappear {
-            withAnimation {
-                isAppearing = false
-            }
-        }
     }
 }

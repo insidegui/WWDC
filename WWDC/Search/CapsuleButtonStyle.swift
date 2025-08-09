@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+@available(macOS 26.0, *)
 extension ButtonStyle where Self == CapsuleButtonStyle {
     static var capsuleButton: CapsuleButtonStyle {
         capsuleButton(glassy: false)
@@ -18,6 +19,7 @@ extension ButtonStyle where Self == CapsuleButtonStyle {
     }
 }
 
+@available(macOS 26.0, *)
 struct CapsuleButtonStyle: ButtonStyle {
     var tint: Color?
     var trailingIcon: Image?
@@ -30,7 +32,8 @@ struct CapsuleButtonStyle: ButtonStyle {
             ZStack {
                 backgroundColor(isPressed: configuration.isPressed)
                     .contentShape(Rectangle()) // expand hit test rect for menus
-                    .clipShape(RoundedRectangle(cornerRadius: geometry.size.height * 0.5))
+//                    .clipShape(RoundedRectangle(cornerRadius: geometry.size.height * 0.5))
+                    .clipShape(ConcentricRectangle(corners: .concentric(minimum: 10), isUniform: true))
 
                 HStack {
                     configuration.label
@@ -42,7 +45,7 @@ struct CapsuleButtonStyle: ButtonStyle {
                         trailingIcon
                     }
                 }
-                .padding(.horizontal, horizontalPadding)
+//                .padding(.horizontal, horizontalPadding)
             }
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
             .animation(.bouncy, value: configuration.isPressed)

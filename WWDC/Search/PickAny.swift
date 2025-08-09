@@ -23,7 +23,7 @@ extension Transaction {
     @Entry var changeReason: PickAnyPickerChangeReason?
 }
 
-@available(macOS 15.0, *)
+@available(macOS 26.0, *)
 struct PickAnyPicker<Item: PickAnyPickerItem>: View {
     private let showClearButton: Bool
     private let options: [Item]
@@ -60,12 +60,12 @@ struct PickAnyPicker<Item: PickAnyPickerItem>: View {
             }
             .padding(.bottom, 10)
         }
-        .frame(minWidth: segmentSize?.width)
+//        .frame(minWidth: segmentSize?.width)
         .scrollDisabled(selectedItems.isEmpty)
     }
 }
 
-@available(macOS 15.0, *)
+@available(macOS 26.0, *)
 struct PickAnyMenuPicker<Item: PickAnyPickerItem>: View {
     let title: String
     let showClearButton: Bool

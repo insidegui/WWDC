@@ -63,6 +63,8 @@ struct SessionListSection: Identifiable, Equatable {
         }
     }
 
+    @ObservationIgnored @Published var isReady = false
+
     init(
         rowProvider: SessionRowProvider,
         initialSelection: SessionIdentifiable?,
@@ -88,6 +90,7 @@ struct SessionListSection: Identifiable, Equatable {
 
     private func updateSections(_ newSections: [SessionListSection]) {
         sections = newSections
+        isReady = true
         if selectedSessions.isEmpty, let selection = newSections.flatMap(\.sessions)
             .first(where: { $0.id == initialSelection?.sessionIdentifier })
         {
@@ -104,7 +107,7 @@ struct SessionListSection: Identifiable, Equatable {
     private func syncSelectedSession() {
         if #available(macOS 26.0, *) {
             DispatchQueue.main.async {
-                self.coordinator?.activeTabSelectedSessionViewModel = self.selectedSession?.model.session
+                self.coordinator?.detailViewModel.session = self.selectedSession?.model.session
             }
         }
     }

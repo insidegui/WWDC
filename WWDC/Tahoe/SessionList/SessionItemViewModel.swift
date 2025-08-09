@@ -11,8 +11,12 @@ import ConfCore
 import SwiftUI
 
 @Observable class SessionItemViewModel: Identifiable {
-    var id: String { session.identifier }
-    @ObservationIgnored let session: SessionViewModel
+    var id: String { session?.identifier ?? ""  }
+    @ObservationIgnored var session: SessionViewModel? {
+        didSet {
+            prepareForDisplay()
+        }
+    }
     @ObservationIgnored private var observers = Set<AnyCancellable>()
 
     var progress: Double = 0
@@ -36,13 +40,12 @@ import SwiftUI
     var calendarButtonIsHidden: Bool = false
     var downloadState: SessionActionsViewModel.DownloadState = .notDownloadable
 
-    var relatedSessions: [SessionItemViewModel] = []
-    init(session: SessionViewModel) {
+    var relatedSessions: [SessionViewModel] = []
+    init(session: SessionViewModel? = nil) {
         self.session = session
     }
 
     func prepareForDisplay() {
-        guard observers.isEmpty else { return }
         updateOverviewBindings()
         updateActionBindings()
     }
@@ -52,6 +55,9 @@ import SwiftUI
 
 private extension SessionItemViewModel {
     func updateOverviewBindings() {
+        guard let session else {
+            return
+        }
         session.rxProgresses.replaceErrorWithEmpty()
             .compactMap(\.first?.relativePosition)
             .removeDuplicates()
@@ -148,8 +154,8 @@ private extension SessionItemViewModel {
         session.rxRelatedSessions
             .replaceErrorWithEmpty()
             .map {
-                $0.compactMap { $0.session.flatMap(SessionViewModel.init(session:))
-                    .flatMap(SessionItemViewModel.init(session:))
+                $0.compactMap {
+                    $0.session.flatMap(SessionViewModel.init(session:))
                 }
             }
             .receive(on: DispatchQueue.main)
@@ -162,11 +168,11 @@ private extension SessionItemViewModel {
     }
 }
 
-private extension Array where Element == SessionItemViewModel {
-    func uniqueSessions() -> [SessionItemViewModel] {
-        var results: [SessionItemViewModel] = []
+private extension Array where Element == SessionViewModel {
+    func uniqueSessions() -> [SessionViewModel] {
+        var results: [SessionViewModel] = []
         for session in self {
-            if !results.contains(where: { $0.id == session.id }) {
+            if !results.contains(where: { $0.identifier == session.identifier }) {
                 results.append(session)
             }
         }
@@ -178,6 +184,9 @@ private extension Array where Element == SessionItemViewModel {
 
 private extension SessionItemViewModel {
     func updateActionBindings() {
+        guard let session else {
+            return
+        }
         slidesButtonIsHidden = (session.session.asset(ofType: .slides) == nil)
         calendarButtonIsHidden = (session.sessionInstance.startTime < today())
 

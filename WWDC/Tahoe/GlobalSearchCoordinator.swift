@@ -25,6 +25,11 @@ class GlobalSearchCoordinator: Logging {
 
     @ObservationIgnored fileprivate var tabState: GlobalSearchTabState
 
+    @ObservationIgnored var effectiveFilters: [FilterType] {
+        get { tabState.effectiveFilters }
+        set { tabState.effectiveFilters = newValue }
+    }
+
     var filterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue)
 
     init(
@@ -61,6 +66,10 @@ class GlobalSearchCoordinator: Logging {
             )
         }
         .store(in: &cancellables)
+    }
+
+    func updatePredicate(_ reason: FilterChangeReason) {
+        tabState.updatePredicate(reason)
     }
 
     /// Updates the selected filter options with the ones in the provided state

@@ -12,7 +12,7 @@ import SwiftUI
 @available(macOS 26.0, *)
 extension NewSessionDetailView {
     struct RelatedSessionsView: View {
-        @Binding var sessions: [SessionItemViewModel]
+        @Binding var sessions: [SessionViewModel]
         @Environment(\.coordinator) private var coordinator
         let scrollPosition: Binding<ScrollPosition>
 
@@ -40,17 +40,16 @@ extension NewSessionDetailView {
                     .padding(.horizontal)
 
                 LazyVGrid(columns: columns) {
-                    ForEach(sessions) { session in
+                    ForEach(sessions, id: \.identifier) { session in
                         Button {
 //                            sessions.removeAll() // reload
                             scrollPosition.wrappedValue.scrollTo(edge: .top)
-                            coordinator?.selectSessionOnAppropriateTab(with: session.session)
+                            coordinator?.selectSessionOnAppropriateTab(with: session)
                         } label: {
-                            SessionItemView(horizontalPadding: 5)
-                                .environment(session)
+                            SessionItemViewForDetail(session: session)
                         }
                         .buttonStyle(SessionItemButtonStyle(style: .rounded))
-                        .id(session.id)
+                        .id(session.identifier)
                     }
                 }
                 .padding([.bottom, .horizontal])

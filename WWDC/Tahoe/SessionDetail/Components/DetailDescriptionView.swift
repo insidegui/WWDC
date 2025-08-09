@@ -27,7 +27,7 @@ extension NewSessionDetailView {
                     }
                     .transition(.blurReplace)
                 case .transcript:
-                    NewTranscriptView(viewModel: viewModel.session, scrollPosition: scrollPosition)
+                    NewTranscriptView(viewModel: viewModel.session!, scrollPosition: scrollPosition)
                         .transition(.blurReplace)
                 case .bookmarks:
                     Text("Bookmarks view coming soon")

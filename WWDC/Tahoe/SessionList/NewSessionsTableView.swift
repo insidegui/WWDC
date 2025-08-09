@@ -1,8 +1,8 @@
 //
-//  NewSessionsTableViewController.swift
+//  NewSessionsTableView.swift
 //  WWDC
 //
-//  Created by luca on 30.07.2025.
+//  Created by luca on 09.08.2025.
 //  Copyright © 2025 Guilherme Rambo. All rights reserved.
 //
 
@@ -14,19 +14,31 @@ import OSLog
 import RealmSwift
 import SwiftUI
 
+struct ViewControllerWrapper: NSViewControllerRepresentable {
+    let viewController: NSViewController
+    func makeNSViewController(context: Context) -> NSViewController {
+        viewController
+    }
+
+    func updateNSViewController(_ nsViewController: NSViewController, context: Context) {
+
+    }
+}
 // MARK: - Sessions Table View Controller
 
 @available(macOS 26.0, *)
-class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
+class NewSessionsUnderlyingTableViewController: NSViewController, NSMenuItemValidation, Logging {
     static var log = makeLogger()
 
     private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    private let searchCoordinator: GlobalSearchCoordinator
-    init(searchCoordinator: GlobalSearchCoordinator, rowProvider: SessionRowProvider, initialSelection: SessionIdentifiable?) {
+    private let searchCoordinator: NewGlobalSearchCoordinator
+    private let searchTarget: ReferenceWritableKeyPath<NewGlobalSearchCoordinator, GlobalSearchTabState>
+    init(searchCoordinator: NewGlobalSearchCoordinator, searchTarget: ReferenceWritableKeyPath<NewGlobalSearchCoordinator, GlobalSearchTabState>, rowProvider: SessionRowProvider, initialSelection: SessionIdentifiable?) {
         self.searchCoordinator = searchCoordinator
+        self.searchTarget = searchTarget
         var config = Self.defaultLoggerConfig()
         config.category += ": \(String(reflecting: type(of: rowProvider)))"
         Self.log = Self.makeLogger(config: config)
@@ -61,20 +73,18 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
     private var footer: NSView!
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 100, height: MainWindowController.defaultRect.height))
+        super.loadView()
 
-        scrollView.frame = view.bounds
-        tableView.frame = view.bounds
-        view.addSubview(scrollView)
+//        tableView.frame = view.bounds
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
 
-        scrollView.contentView.automaticallyAdjustsContentInsets = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
-        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-
-        let footer = NSView()
+        let footer = NSHostingView(rootView: ListContentFilterAccessoryView(stateKeyPath: searchTarget).environment(searchCoordinator))
         footer.isHidden = true
         self.footer = footer
 //        footer.translatesAutoresizingMaskIntoConstraints = false
@@ -114,7 +124,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
     override func viewWillLayout() {
         super.viewWillLayout()
-        let count = searchCoordinator.effectiveFilters.filter { !$0.isEmpty }.count
+        let count = searchCoordinator[keyPath: searchTarget].effectiveFilters.filter { !$0.isEmpty }.count
         filterItem?.badge = count > 0 ? .count(count) : nil
         filterItem?.showsIndicator = count > 0
     }
@@ -220,7 +230,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
                 self.tableView.selectRowIndexes(IndexSet(integer: defaultIndex), byExtendingSelection: false)
             }
 
-            self.scrollView.alphaValue = 1
             self.tableView.allowsEmptySelection = false
         } completionHandler: {
             self.displayedRowsLock.resume()
@@ -376,22 +385,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         return v
     }()
 
-    lazy var scrollView: NSScrollView = {
-        let v = NSScrollView()
-
-        v.focusRingType = .none
-        v.drawsBackground = false
-        v.borderType = .noBorder
-        v.documentView = self.tableView
-        v.hasVerticalScroller = true
-        v.hasHorizontalScroller = false
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.alphaValue = 0
-        v.automaticallyAdjustsContentInsets = true
-
-        return v
-    }()
-
     // MARK: - Contextual menu
 
     fileprivate enum ContextualMenuOption: Int {
@@ -535,9 +528,9 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
 @available(macOS 26.0, *)
 private extension NSMenuItem {
-    var option: NewSessionsTableViewController.ContextualMenuOption {
+    var option: NewSessionsUnderlyingTableViewController.ContextualMenuOption {
         get {
-            guard let value = NewSessionsTableViewController.ContextualMenuOption(rawValue: tag) else {
+            guard let value = NewSessionsUnderlyingTableViewController.ContextualMenuOption(rawValue: tag) else {
                 fatalError("Invalid ContextualMenuOption: \(tag)")
             }
 
@@ -559,7 +552,7 @@ private extension NSUserInterfaceItemIdentifier {
 }
 
 @available(macOS 26.0, *)
-extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDelegate {
+extension NewSessionsUnderlyingTableViewController: NSTableViewDataSource, NSTableViewDelegate {
     enum Metrics {
         static let headerRowHeight: CGFloat = 32
         static let sessionRowHeight: CGFloat = 64
@@ -656,7 +649,7 @@ extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDele
 }
 
 @available(macOS 26.0, *)
-private extension NewSessionsTableViewController {
+private extension NewSessionsUnderlyingTableViewController {
     func prepareForDisplayingFilterItems() {
         for item in [filterItem, searchItem] {
             item?.target = self
@@ -669,7 +662,7 @@ private extension NewSessionsTableViewController {
         filterItem?.image = NSImage(systemSymbolName: footer.isHidden ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: footer.isHidden ? "Show Filter Options" : "Hide Filter Options")
         filterItem?.toolTip = filterItem?.image?.accessibilityDescription
 
-        let currentTextFilter = searchCoordinator.effectiveFilters.first(where: { $0.identifier == .text }) as? TextualFilter
+        let currentTextFilter = searchCoordinator[keyPath: searchTarget].effectiveFilters.first(where: { $0.identifier == .text }) as? TextualFilter
         searchItem?.searchField.stringValue = currentTextFilter?.value ?? ""
         searchItem?.searchField.delegate = self // set delegate after restoring state
     }
@@ -684,7 +677,7 @@ private extension NewSessionsTableViewController {
 }
 
 @available(macOS 26.0, *)
-extension NewSessionsTableViewController: NSSearchFieldDelegate {
+extension NewSessionsUnderlyingTableViewController: NSSearchFieldDelegate {
     func controlTextDidChange(_ obj: Notification) {
         guard let sender = obj.object as? NSSearchField else {
             return
@@ -696,7 +689,7 @@ extension NewSessionsTableViewController: NSSearchFieldDelegate {
         if sender.stringValue.isEmpty {
             view.window?.makeFirstResponder(tableView)
         }
-        let filters = searchCoordinator.effectiveFilters
+        let filters = searchCoordinator[keyPath: searchTarget].effectiveFilters
         guard
             let textIdx = filters.firstIndex(where: { $0.identifier == .text }),
             var currentFilter = filters[textIdx] as? TextualFilter,
@@ -705,7 +698,7 @@ extension NewSessionsTableViewController: NSSearchFieldDelegate {
             return
         }
         currentFilter.value = sender.stringValue
-        searchCoordinator.effectiveFilters[textIdx] = currentFilter
-        searchCoordinator.updatePredicate(.userInput)
+        searchCoordinator[keyPath: searchTarget].effectiveFilters[textIdx] = currentFilter
+        searchCoordinator[keyPath: searchTarget].updatePredicate(.userInput)
     }
 }

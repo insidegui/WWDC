@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-@available(macOS 15.0, *)
+@available(macOS 26.0, *)
 struct FilterResetButton: View {
     let count: Int
     let action: () -> Void

@@ -10,7 +10,7 @@ import Combine
 import SwiftUI
 
 struct SessionCoverView<Content: View>: View {
-    @Environment(SessionItemViewModel.self) var viewModel
+    var coverImageURL: URL?
     var isThumbnail: Bool = false
     @ViewBuilder let decoration: (_ image: Image, _ isPlaceHolder: Bool) -> Content
     private let image = State<NSImage>(initialValue: .noimage)
@@ -19,7 +19,7 @@ struct SessionCoverView<Content: View>: View {
     var body: some View {
         decoration(Image(nsImage: image.wrappedValue), isPlaceholder)
             .transition(.blurReplace)
-            .task(id: viewModel.coverImageURL, priority: .background) {
+            .task(id: coverImageURL) {
                 if isThumbnail {
                     await downloadCover(height: 50)
                 } else {
@@ -39,7 +39,7 @@ struct SessionCoverView<Content: View>: View {
 private extension SessionCoverView {
     @ImageDownloadActor
     private func downloadCover(height: CGFloat) async {
-        guard let url = await viewModel.coverImageURL else {
+        guard let url = coverImageURL else {
             return
         }
         let thumbnailOnly = height <= Constants.thumbnailHeight
@@ -91,7 +91,7 @@ private class AsyncImageOperation {
                 defer {
                     oneTimeContinuation = nil
                 }
-                guard let img = thumbnailOnly ? result.thumbnail : result.original else {
+                guard let img = thumbnailOnly ? (result.thumbnail ?? result.original) : result.original else {
                     oneTimeContinuation?.resume(returning: nil)
                     return
                 }
