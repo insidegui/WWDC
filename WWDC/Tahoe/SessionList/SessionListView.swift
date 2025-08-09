@@ -16,31 +16,39 @@ struct SessionListView: View {
     @FocusState private var isListFocused: Bool
 
     var body: some View {
-        @Bindable var viewModel = viewModel
-        List(viewModel.sections, selection: $viewModel.selectedSessions) { section in
-            Section {
-                ForEach(section.sessions) { session in
-                    SessionItemView()
-                        .environment(session.model)
-                        .id(session)
-                }
-            } header: {
-                Group {
-                    if let symbol = section.systemSymbol {
-                        Label(section.title, systemImage: symbol)
-                            .labelIconToTitleSpacing(5)
-                    } else {
-                        Text(section.title)
+        ScrollViewReader { proxy in
+            @Bindable var viewModel = viewModel
+            List(viewModel.sections, selection: $viewModel.selectedSessions) { section in
+                Section {
+                    ForEach(section.sessions) { session in
+                        SessionItemView()
+                            .environment(session.model)
+                            .id(session)
                     }
+                } header: {
+                    Group {
+                        if let symbol = section.systemSymbol {
+                            Label(section.title, systemImage: symbol)
+                                .labelIconToTitleSpacing(5)
+                        } else {
+                            Text(section.title)
+                        }
+                    }
+                    .lineLimit(1)
+                    .font(.headline)
                 }
-                .lineLimit(1)
-                .font(.headline)
+                .listRowInsets(.all, 0)
             }
-            .listRowInsets(.all, 0)
-        }
-        .focused($isListFocused)
-        .contextMenu(forSelectionType: SessionListSection.Session.self) { items in
-            contextMenus(for: items)
+            .focused($isListFocused)
+            .contextMenu(forSelectionType: SessionListSection.Session.self) { items in
+                contextMenus(for: items)
+            }
+            .onChange(of: viewModel.focusedSession) { oldValue, newValue in
+                if let newValue {
+                    proxy.scrollTo(newValue, anchor: .center)
+                    viewModel.focusedSession = nil
+                }
+            }
         }
         .task {
             viewModel.prepareForDisplay()

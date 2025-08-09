@@ -77,8 +77,15 @@ final class NewAppCoordinator: WWDCCoordinator {
     var wasPlayingWhenClipSharingBegan = false
 
     /// The list controller for the active tab
-    var currentListController: NewSessionsTableViewController? {
-        nil
+    var currentListModel: SessionListViewModel? {
+        switch activeTab {
+        case .explore:
+            return nil
+        case .schedule:
+            return scheduleViewModel
+        case .videos:
+            return videosViewModel
+        }
     }
 
     var exploreTabLiveSession: AnyPublisher<SessionViewModel?, Never> {
@@ -278,19 +285,13 @@ final class NewAppCoordinator: WWDCCoordinator {
     }
 
     func selectSessionOnAppropriateTab(with viewModel: SessionViewModel) {
-        if currentListController?.canDisplay(session: viewModel) == true {
-            currentListController?.select(session: viewModel)
+        if currentListModel?.canDisplay(session: viewModel) == true {
+            currentListModel?.select(session: viewModel, removingFiltersIfNeeded: true)
             return
         }
-
-//        if videosListController.canDisplay(session: viewModel) {
-//            videosListController.select(session: viewModel)
-//            tabController.setActiveTab(MainWindowTab.videos)
-//
-//        } else if scheduleListController.canDisplay(session: viewModel) {
-//            scheduleListController.select(session: viewModel)
-//            tabController.setActiveTab(MainWindowTab.schedule)
-//        }
+        // always to videos
+        videosViewModel.select(session: viewModel, removingFiltersIfNeeded: true)
+        tabController.setActiveTab(MainWindowTab.videos)
     }
 
     @discardableResult func receiveNotification(with userInfo: [String: Any]) -> Bool {
@@ -533,7 +534,7 @@ final class NewAppCoordinator: WWDCCoordinator {
     }
 
     func select(session: any SessionIdentifiable, removingFiltersIfNeeded: Bool) {
-        currentListController?.select(session: session, removingFiltersIfNeeded: removingFiltersIfNeeded)
+        currentListModel?.select(session: session, removingFiltersIfNeeded: removingFiltersIfNeeded)
     }
 
     func showClipUI() {}

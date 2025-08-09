@@ -28,14 +28,12 @@ struct NewSessionDetailView: View {
     @Environment(SessionItemViewModel.self) var viewModel
     @State private var availableTabs: [SessionDetailsViewModel.SessionTab] = [.overview]
     @State private var tab: SessionDetailsViewModel.SessionTab = .overview
-    @State private var isTranscriptAvailable = false
-    @State private var isBookmarksAvailable = false
-    @State private var transcriptPosition = ScrollPosition(idType: TranscriptLine.self)
+    @State private var scrollPosition = ScrollPosition()
     var body: some View {
         ScrollView {
-            SessionDescriptionView(tab: $tab, transcriptPosition: $transcriptPosition)
+            SessionDescriptionView(tab: $tab, scrollPosition: $scrollPosition)
         }
-        .scrollPosition($transcriptPosition, anchor: .top)
+        .scrollPosition($scrollPosition, anchor: .top)
         .safeAreaBar(edge: .top) {
             VStack(alignment: .leading, spacing: 0) {
                 SessionDetailThumbnailView(viewModel: viewModel.session)
@@ -43,6 +41,10 @@ struct NewSessionDetailView: View {
                     tabBar
                 }
             }
+        }
+        .onChange(of: viewModel.id) { _, _ in
+            // reuse
+            viewModel.prepareForDisplay()
         }
         .ignoresSafeArea(edges: .top)
         .scrollEdgeEffectStyle(.soft, for: .vertical)
@@ -62,8 +64,11 @@ struct NewSessionDetailView: View {
     private var tabBar: some View {
         HStack(spacing: 32) {
             ForEach(availableTabs, id: \.self) { t in
-                Button(t.title) {
+                Button {
                     tab = t
+                } label: {
+                    Text(t.title)
+                        .shadow(radius: 5)
                 }
                 .selected(tab == t)
             }

@@ -6,9 +6,9 @@
 //  Copyright © 2025 Guilherme Rambo. All rights reserved.
 //
 
-import SwiftUI
 import Combine
 import ConfCore
+import SwiftUI
 
 @Observable class SessionItemViewModel: Identifiable {
     var id: String { session.identifier }
@@ -36,11 +36,13 @@ import ConfCore
     var calendarButtonIsHidden: Bool = false
     var downloadState: SessionActionsViewModel.DownloadState = .notDownloadable
 
+    var relatedSessions: [SessionItemViewModel] = []
     init(session: SessionViewModel) {
         self.session = session
     }
 
     func prepareForDisplay() {
+        guard observers.isEmpty else { return }
         updateOverviewBindings()
         updateActionBindings()
     }
@@ -77,13 +79,12 @@ private extension SessionItemViewModel {
             }
             .store(in: &observers)
 
+        title = session.session.title
         session.rxTitle.replaceError(with: "")
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
-                withAnimation {
-                    self?.title = newValue
-                }
+                self?.title = newValue
             }
             .store(in: &observers)
         session.rxSubtitle.replaceError(with: "")
@@ -95,6 +96,7 @@ private extension SessionItemViewModel {
                 }
             }
             .store(in: &observers)
+        summary = session.session.summary
         session.rxSummary.replaceError(with: "")
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
@@ -133,6 +135,7 @@ private extension SessionItemViewModel {
                 }
             }
             .store(in: &observers)
+        isDownloaded = session.session.isDownloaded
         session.rxIsDownloaded.replaceError(with: false)
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
@@ -142,6 +145,32 @@ private extension SessionItemViewModel {
                 }
             }
             .store(in: &observers)
+        session.rxRelatedSessions
+            .replaceErrorWithEmpty()
+            .map {
+                $0.compactMap { $0.session.flatMap(SessionViewModel.init(session:))
+                    .flatMap(SessionItemViewModel.init(session:))
+                }
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] newValue in
+                withAnimation {
+                    self?.relatedSessions = newValue.uniqueSessions()
+                }
+            }
+            .store(in: &observers)
+    }
+}
+
+private extension Array where Element == SessionItemViewModel {
+    func uniqueSessions() -> [SessionItemViewModel] {
+        var results: [SessionItemViewModel] = []
+        for session in self {
+            if !results.contains(where: { $0.id == session.id }) {
+                results.append(session)
+            }
+        }
+        return results
     }
 }
 // MARK: - Actions
@@ -154,12 +183,12 @@ private extension SessionItemViewModel {
         let downloadID = session.session.downloadIdentifier
 
         /// Initial state
-        DispatchQueue.main.async {
-            self.downloadState = SessionActionsViewModel.downloadState(
-                session: self.session.session,
-                downloadState: MediaDownloadManager.shared.downloads.first { $0.id == downloadID }?.state
-            )
-        }
+//        DispatchQueue.main.async {
+//            self.downloadState = SessionActionsViewModel.downloadState(
+//                session: self.session.session,
+//                downloadState: MediaDownloadManager.shared.downloads.first { $0.id == downloadID }?.state
+//            )
+//        }
 
         /// `true` if the session has already been downloaded.
         let alreadyDownloaded: AnyPublisher<Session, Never> = session.session

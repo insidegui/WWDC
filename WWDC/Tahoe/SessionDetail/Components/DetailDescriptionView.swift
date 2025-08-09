@@ -14,7 +14,7 @@ extension NewSessionDetailView {
     struct SessionDescriptionView: View {
         @Environment(SessionItemViewModel.self) var viewModel
         @Binding var tab: SessionDetailsViewModel.SessionTab
-        let transcriptPosition: Binding<ScrollPosition>
+        let scrollPosition: Binding<ScrollPosition>
 
         var body: some View {
             Group {
@@ -22,11 +22,12 @@ extension NewSessionDetailView {
                 case .overview:
                     if #available(macOS 26.0, *) {
                         OverviewContentView()
-                        RelatedSessionsView()
+                        @Bindable var viewModel = viewModel
+                        RelatedSessionsView(sessions: $viewModel.relatedSessions, scrollPosition: scrollPosition)
                     }
                 case .transcript:
                     if #available(macOS 26.0, *) {
-                        NewTranscriptView(viewModel: viewModel.session, scrollPosition: transcriptPosition)
+                        NewTranscriptView(viewModel: viewModel.session, scrollPosition: scrollPosition)
                     }
                 case .bookmarks:
                     Text("Bookmarks view coming soon")

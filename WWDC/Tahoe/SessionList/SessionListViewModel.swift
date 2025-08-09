@@ -41,7 +41,7 @@ struct SessionListSection: Identifiable, Equatable {
 
 @Observable class SessionListViewModel {
     @ObservationIgnored let rowProvider: SessionRowProvider
-    @ObservationIgnored let initialSelection: SessionIdentifiable?
+    @ObservationIgnored var initialSelection: SessionIdentifiable?
     @ObservationIgnored let searchCoordinator: GlobalSearchCoordinator
 
     @ObservationIgnored private var rowsObserver: AnyCancellable?
@@ -53,6 +53,8 @@ struct SessionListSection: Identifiable, Equatable {
             syncSelectedSession()
         }
     }
+    /// for auto scroll
+    var focusedSession: SessionListSection.Session?
 
     /// for list view
     var selectedSessions: Set<SessionListSection.Session> = [] {
@@ -69,10 +71,10 @@ struct SessionListSection: Identifiable, Equatable {
         self.rowProvider = rowProvider
         self.initialSelection = initialSelection
         self.searchCoordinator = searchCoordinator
-        sections = rowProvider.rows?.visibleRows.grouped() ?? []
     }
 
     func prepareForDisplay() {
+        updateSections(rowProvider.rows?.visibleRows.grouped() ?? [])
         rowsObserver = rowProvider
             .rowsPublisher
             .map { $0.visibleRows.grouped() }
@@ -90,6 +92,8 @@ struct SessionListSection: Identifiable, Equatable {
             .first(where: { $0.id == initialSelection?.sessionIdentifier })
         {
             selectedSessions.insert(selection)
+            focusedSession = selection
+            initialSelection = nil
         }
         if selectedSessions.isEmpty, let firstSession = newSections.first?.sessions.first {
             selectedSessions.insert(firstSession)
@@ -122,6 +126,31 @@ struct SessionListSection: Identifiable, Equatable {
         } else {
             // newly inserted
             selectedSession = lastChange
+        }
+    }
+}
+
+// MARK: - Selection
+
+extension SessionListViewModel {
+    private func targetSession(for identifier: String) -> SessionListSection.Session? {
+        sections.flatMap(\.sessions).first(where: { $0.id == identifier })
+    }
+
+    func canDisplay(session: SessionIdentifiable) -> Bool {
+        targetSession(for: session.sessionIdentifier) != nil
+    }
+
+    func select(session: SessionIdentifiable, removingFiltersIfNeeded: Bool) {
+        guard let target = targetSession(for: session.sessionIdentifier) else {
+            // not yet loaded
+            initialSelection = session
+            return
+        }
+        selectedSessions = [target]
+        focusedSession = target
+        if removingFiltersIfNeeded {
+            searchCoordinator.resetAction.send()
         }
     }
 }

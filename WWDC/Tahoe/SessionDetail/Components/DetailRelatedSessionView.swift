@@ -12,9 +12,9 @@ import SwiftUI
 @available(macOS 26.0, *)
 extension NewSessionDetailView {
     struct RelatedSessionsView: View {
-        @State private var sessions: [SessionItemViewModel] = []
+        @Binding var sessions: [SessionItemViewModel]
         @Environment(\.coordinator) private var coordinator
-        @Environment(SessionItemViewModel.self) var currentSession
+        let scrollPosition: Binding<ScrollPosition>
 
         enum Metrics {
             static let height: CGFloat = 96 + scrollerOffset
@@ -42,6 +42,8 @@ extension NewSessionDetailView {
                 LazyVGrid(columns: columns) {
                     ForEach(sessions) { session in
                         Button {
+//                            sessions.removeAll() // reload
+                            scrollPosition.wrappedValue.scrollTo(edge: .top)
                             coordinator?.selectSessionOnAppropriateTab(with: session.session)
                         } label: {
                             SessionItemView(horizontalPadding: 5)
@@ -54,20 +56,6 @@ extension NewSessionDetailView {
                 .padding([.bottom, .horizontal])
             }
             .opacity(sessions.isEmpty ? 0 : 1)
-            .onReceive(sessionsUpdate) {
-                if $0.map(\.id) != sessions.map(\.id) {
-                    sessions = $0
-                }
-            }
-        }
-
-        private var sessionsUpdate: AnyPublisher<[SessionItemViewModel], Never> {
-            currentSession.session.rxRelatedSessions
-                .replaceErrorWithEmpty()
-                .map { $0.compactMap { $0.session }.compactMap(SessionViewModel.init(session:)) }
-                .removeDuplicates(by: { $0.map(\.identifier) == $1.map(\.identifier) })
-                .map { $0.map(SessionItemViewModel.init(session:)) }
-                .eraseToAnyPublisher()
         }
     }
 }

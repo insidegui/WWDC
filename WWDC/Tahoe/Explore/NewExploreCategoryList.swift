@@ -12,7 +12,6 @@ import SwiftUI
 struct NewExploreCategoryList: View {
     @Environment(NewExploreViewModel.self) var viewModel
     @State private var sections: [ExploreTabContent.Section] = []
-    @State private var showDetail = false
     @FocusState private var isListFocused: Bool
     var body: some View {
         ScrollViewReader { proxy in
@@ -30,7 +29,6 @@ struct NewExploreCategoryList: View {
             }
         }
         .onAppear {
-            showDetail = true
             isListFocused = true
         }
         .onReceive(viewModel.provider.$content.receive(on: DispatchQueue.main)) { newContent in
