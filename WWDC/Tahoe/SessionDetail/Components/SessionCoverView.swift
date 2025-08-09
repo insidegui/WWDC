@@ -13,11 +13,11 @@ struct SessionCoverView<Content: View>: View {
     @Environment(SessionItemViewModel.self) var viewModel
     var isThumbnail: Bool = false
     @ViewBuilder let decoration: (_ image: Image, _ isPlaceHolder: Bool) -> Content
-    private let image = State<ImageTest>(initialValue: .init(.noimage))
+    private let image = State<NSImage>(initialValue: .noimage)
     @State private var isPlaceholder = true
     private let operation = State<AsyncImageOperation>(initialValue: .init())
     var body: some View {
-        decoration(Image(nsImage: image.wrappedValue.image), isPlaceholder)
+        decoration(Image(nsImage: image.wrappedValue), isPlaceholder)
             .transition(.blurReplace)
             .task(id: viewModel.coverImageURL, priority: .background) {
                 if isThumbnail {
@@ -31,24 +31,9 @@ struct SessionCoverView<Content: View>: View {
 
     @MainActor
     private func updateImage(_ img: NSImage?) {
-        image.wrappedValue.image = img ?? .noimage
+        image.wrappedValue = img ?? .noimage
         isPlaceholder = img == nil
     }
-}
-
-// private var currentVisibleImages = 0
-private class ImageTest {
-    var image: NSImage
-
-    init(_ image: NSImage) {
-        self.image = image
-//        currentVisibleImages += 1
-    }
-
-//    deinit {
-//        currentVisibleImages -= 1
-//        print("ImageTest deinit, current count: \(currentVisibleImages)")
-//    }
 }
 
 private extension SessionCoverView {
