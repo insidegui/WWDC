@@ -79,11 +79,12 @@ private struct PlaybackSpeedToggle: View {
             shape
                 .strokeBorder(controller.isEditingCustomSpeed ? .primary : .secondary, lineWidth: 1)
 
-            if controller.isEditingCustomSpeed {
-                customSpeedEditor
-            } else {
-                toggleButton
-            }
+            customSpeedEditor
+                .opacity(controller.isEditingCustomSpeed ? 1 : 0)
+                .matchedGeometryEffect(id: "text", in: transition, isSource: false)
+            toggleButton
+                .opacity(controller.isEditingCustomSpeed ? 0 : 1)
+                .matchedGeometryEffect(id: "text", in: transition, isSource: true)
         }
         .font(.system(size: 12, weight: .medium))
         .monospacedDigit()
@@ -133,7 +134,6 @@ private struct PlaybackSpeedToggle: View {
                         .numericContentTransition(value: Double(controller.speed.rawValue))
                     Text("×")
                 }
-                .matchedGeometryEffect(id: "text", in: transition)
                 .foregroundStyle(.primary)
                 .animation(.smooth, value: controller.speed)
             }
@@ -165,7 +165,6 @@ private struct PlaybackSpeedToggle: View {
     @ViewBuilder
     private var customSpeedEditor: some View {
         TextField("Speed", value: $customSpeedValue, formatter: PUIPlaybackSpeed.buttonTitleFormatter)
-            .matchedGeometryEffect(id: "text", in: transition)
             .textFieldStyle(.plain)
             .onEscapePressed { speedFieldFocused = false }
             .multilineTextAlignment(.center)
