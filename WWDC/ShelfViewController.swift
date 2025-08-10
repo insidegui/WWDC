@@ -33,7 +33,6 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         }
     }
 
-    private var containerView: NSView! // view bridging for background extension effects
     lazy var shelfView: ShelfView = {
         let v = ShelfView()
 
@@ -82,40 +81,40 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     }
 
     override func loadView() {
+        view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
+        let shelfView: NSView
         if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
-            let extensionView = NSBackgroundExtensionView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
-            containerView = NSView()
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-            extensionView.contentView = containerView
+            let extensionView = NSBackgroundExtensionView()
+            extensionView.contentView = self.shelfView
             extensionView.automaticallyPlacesContentView = false
+            extensionView.translatesAutoresizingMaskIntoConstraints = false
+            shelfView = extensionView
             // only enable reflection effect on leading edge
             NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: extensionView.topAnchor),
-                containerView.leadingAnchor.constraint(equalTo: extensionView.safeAreaLayoutGuide.leadingAnchor),
-                containerView.bottomAnchor.constraint(equalTo: extensionView.bottomAnchor),
-                containerView.trailingAnchor.constraint(equalTo: extensionView.trailingAnchor)
+                self.shelfView.topAnchor.constraint(equalTo: extensionView.topAnchor),
+                self.shelfView.leadingAnchor.constraint(equalTo: extensionView.safeAreaLayoutGuide.leadingAnchor),
+                self.shelfView.bottomAnchor.constraint(equalTo: extensionView.bottomAnchor),
+                self.shelfView.trailingAnchor.constraint(equalTo: extensionView.trailingAnchor)
             ])
-            view = extensionView
         } else {
-            containerView = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
-            view = containerView
+            shelfView = self.shelfView
         }
-        containerView.addSubview(shelfView)
-        shelfView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
-        shelfView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-        shelfView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        shelfView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        view.addSubview(shelfView)
+        shelfView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        shelfView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        shelfView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        shelfView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        containerView.addSubview(playButton)
-        playButton.centerXAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        playButton.centerYAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        view.addSubview(playButton)
+        playButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        playButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
 
-        containerView.addSubview(playerContainer)
+        view.addSubview(playerContainer)
         // reflect player's leading
-        playerContainer.leadingAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.leadingAnchor).isActive = true
-        playerContainer.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-        playerContainer.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        playerContainer.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        playerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        playerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        playerContainer.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        playerContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     override func viewDidLoad() {
@@ -240,7 +239,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
         shelfView.isHidden = true
 
-        containerView.needsLayout = true
+        view.needsLayout = true
     }
 
     /// Hides detached status view without resetting state.
@@ -307,10 +306,10 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
             // add between AVPlayer and controls
             parent = playerView
         }
-        parent.addSubview(statusView, positioned: .above, relativeTo: parent.subviews.first)
+        parent.addSubview(statusView.backgroundExtensionEffect(reflect: .leading, isEnabled: TahoeFeatureFlag.isLiquidGlassEnabled), positioned: .above, relativeTo: parent.subviews.first)
         // The status view is placed inside the player view, so layout guide constraints are unnecessary
         NSLayoutConstraint.activate([
-            statusView.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+            statusView.leadingAnchor.constraint(equalTo: parent.safeAreaLayoutGuide.leadingAnchor),
             statusView.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
             statusView.topAnchor.constraint(equalTo: parent.topAnchor),
             statusView.bottomAnchor.constraint(equalTo: parent.bottomAnchor)

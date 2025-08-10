@@ -56,6 +56,7 @@ final class NewAppCoordinator: WWDCCoordinator {
     let exploreViewModel: NewExploreViewModel
     let scheduleTable: NewSessionsTableViewController
     let videosTable: NewSessionsTableViewController
+    var currentShelfViewController: ShelfViewController?
 
     var currentPlayerController: VideoPlayerViewController?
 
@@ -528,7 +529,7 @@ final class NewAppCoordinator: WWDCCoordinator {
     // MARK: - Shelf
 
     func shelf(for tab: MainWindowTab) -> ShelfViewController? {
-        nil
+        currentShelfViewController
     }
 
     func select(session: any SessionIdentifiable, removingFiltersIfNeeded: Bool) {

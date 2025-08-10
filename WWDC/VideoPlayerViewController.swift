@@ -66,7 +66,7 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     lazy var playerView: PUIPlayerView = {
-        return PUIPlayerView(player: self.player, shouldAdoptLiquidGlass: false)
+        return PUIPlayerView(player: self.player, shouldAdoptLiquidGlass: TahoeFeatureFlag.isLiquidGlassEnabled)
     }()
 
     fileprivate lazy var progressIndicator: NSProgressIndicator = {

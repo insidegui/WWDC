@@ -10,16 +10,22 @@ import Combine
 import SwiftUI
 
 struct SessionCoverView<Content: View>: View {
-    var preferredImage: NSImage?
     var coverImageURL: URL?
     var isThumbnail: Bool = false
     @ViewBuilder let decoration: (_ image: Image, _ isPlaceHolder: Bool) -> Content
-    private let image = State<NSImage>(initialValue: .noimage)
+    let image: State<NSImage>
     @State private var isPlaceholder = true
     private let operation = State<AsyncImageOperation>(initialValue: .init())
+
+    init(coverImageURL: URL? = nil, placeholder: NSImage? = nil, isThumbnail: Bool = false, @ViewBuilder decoration: @escaping (_ image: Image, _ isPlaceHolder: Bool) -> Content) {
+        self.coverImageURL = coverImageURL
+        self.isThumbnail = isThumbnail
+        self.decoration = decoration
+        self.image = .init(initialValue: placeholder ?? .noimage)
+    }
+
     var body: some View {
-        decoration(Image(nsImage: preferredImage ?? image.wrappedValue), preferredImage.flatMap { _ in false } ?? isPlaceholder)
-            .transition(.blurReplace)
+        decoration(Image(nsImage: image.wrappedValue), isPlaceholder)
             .task(id: coverImageURL) {
                 if isThumbnail {
                     await downloadCover(height: 50)
@@ -27,7 +33,6 @@ struct SessionCoverView<Content: View>: View {
                     await downloadCover()
                 }
             }
-            .animation(.smooth, value: isThumbnail)
     }
 
     @MainActor
@@ -40,6 +45,7 @@ struct SessionCoverView<Content: View>: View {
 private extension SessionCoverView {
     @ImageDownloadActor
     private func downloadCover(height: CGFloat? = nil) async {
+        await updateImage(nil)
         guard let url = coverImageURL else {
             return
         }

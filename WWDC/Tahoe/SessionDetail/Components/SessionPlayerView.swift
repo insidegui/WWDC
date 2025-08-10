@@ -14,16 +14,28 @@ struct SessionPlayerView: View {
     @Environment(\.coordinator) private var coordinator
     @State private var coverRatio: CGFloat?
     @State private var isPlaying = false
+    @State private var isLoadingThumbnail = true
 
     var body: some View {
-        if isPlaying, let controller = coordinator?.currentPlayerController {
-            GeometryReader { proxy in
-                ViewControllerWrapper(viewController: controller, additionalSafeAreaInsets: proxy.safeAreaInsets)
-                    .ignoresSafeArea()
-            }.transition(.blurReplace)
-            .aspectRatio(coverRatio, contentMode: .fit)
-        } else {
-            cover
+        Group {
+            if
+                isPlaying,
+                let controller = coordinator?.currentShelfViewController,
+                controller.viewModel?.identifier == viewModel.session?.identifier // check again when reusing
+            {
+                GeometryReader { proxy in
+                    ViewControllerWrapper(viewController: controller, additionalSafeAreaInsets: proxy.safeAreaInsets)
+                        .ignoresSafeArea()
+                }
+                .transition(.blurReplace)
+                .aspectRatio(coverRatio, contentMode: .fit)
+            } else {
+                cover
+                    .transition(.blurReplace)
+            }
+        }
+        .task(id: viewModel.session?.identifier) { [weak coordinator, weak viewModel] in
+            isPlaying = coordinator?.currentShelfViewController?.viewModel?.identifier == viewModel?.session?.identifier
         }
     }
 
@@ -33,6 +45,9 @@ struct SessionPlayerView: View {
             image.resizable()
                 .aspectRatio(contentMode: .fit)
                 .extendBackground()
+                .task(id: isPlaceholder) {
+                    isLoadingThumbnail = isPlaceholder
+                }
         }
         .onGeometryChange(for: CGSize.self, of: { proxy in
             proxy.size
@@ -43,21 +58,24 @@ struct SessionPlayerView: View {
         })
         .overlay(alignment: .center) {
             Button {
-                guard let session = viewModel.session, let storage = coordinator?.storage else {
+                guard let session = viewModel.session else {
                     return
                 }
-                do {
-                    let model = try PlaybackViewModel(sessionViewModel: session, storage: storage)
-                    let viewController = VideoPlayerViewController(player: model.player, session: model.sessionViewModel, shelf: nil)
-                    viewController.delegate = coordinator
-                    viewController.playerView.timelineDelegate = coordinator
-                    coordinator?.currentPlayerController = viewController
-                    withAnimation {
-                        isPlaying = true
-                    }
-                } catch {
-                    print("failed to create player: \(error)")
+                defer {
+                    isPlaying = true
                 }
+                if let existing = coordinator?.currentShelfViewController {
+                    existing.viewModel = session
+                    existing.playButton.isHidden = true
+                    existing.play(nil)
+                    return
+                }
+                let viewController = ShelfViewController()
+                viewController.viewModel = session
+                viewController.delegate = coordinator
+                viewController.playButton.isHidden = true
+                coordinator?.currentShelfViewController = viewController
+                viewController.play(nil)
             } label: {
                 Label("Play", systemImage: "play.fill")
             }
@@ -65,6 +83,7 @@ struct SessionPlayerView: View {
             .buttonStyle(.glass)
             .tint(.black.opacity(0.3)) // make the label more readable
             .hoverEffect(scale: 1.1)
+            .disabled(isLoadingThumbnail)
         }
     }
 }

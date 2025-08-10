@@ -27,6 +27,7 @@
 		557221042C190BC0002B42C9 /* OptionalToggleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557221032C190BC0002B42C9 /* OptionalToggleFilter.swift */; };
 		81057FFA2E489E8F006ACCE7 /* InteractionEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81057FF92E489E8C006ACCE7 /* InteractionEffects.swift */; };
 		81057FFC2E489F74006ACCE7 /* SessionPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81057FFB2E489F70006ACCE7 /* SessionPlayerView.swift */; };
+		810580012E495B09006ACCE7 /* NSView+BackgroundExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810580002E495B00006ACCE7 /* NSView+BackgroundExtension.swift */; };
 		812EB5812E3E973F00FE869F /* NewTopicHeaderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812EB5802E3E973F00FE869F /* NewTopicHeaderRow.swift */; };
 		812EB5832E3F59FC00FE869F /* NewTranscriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812EB5822E3F59F300FE869F /* NewTranscriptView.swift */; };
 		8181E2662E39F0770033126E /* ReplaceableSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E2652E39F0710033126E /* ReplaceableSplitViewController.swift */; };
@@ -351,6 +352,7 @@
 		557221032C190BC0002B42C9 /* OptionalToggleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalToggleFilter.swift; sourceTree = "<group>"; };
 		81057FF92E489E8C006ACCE7 /* InteractionEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionEffects.swift; sourceTree = "<group>"; };
 		81057FFB2E489F70006ACCE7 /* SessionPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionPlayerView.swift; sourceTree = "<group>"; };
+		810580002E495B00006ACCE7 /* NSView+BackgroundExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+BackgroundExtension.swift"; sourceTree = "<group>"; };
 		812EB5802E3E973F00FE869F /* NewTopicHeaderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTopicHeaderRow.swift; sourceTree = "<group>"; };
 		812EB5822E3F59F300FE869F /* NewTranscriptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTranscriptView.swift; sourceTree = "<group>"; };
 		8181E2652E39F0710033126E /* ReplaceableSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceableSplitViewController.swift; sourceTree = "<group>"; };
@@ -1239,6 +1241,7 @@
 				F4FE95AB2C08FD6E005E76EC /* AVPlayer+Layout.swift */,
 				4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */,
 				DDF721BB1ECA12A40054C503 /* NSEvent+ForceTouch.swift */,
+				810580002E495B00006ACCE7 /* NSView+BackgroundExtension.swift */,
 				DDF721BD1ECA12A40054C503 /* String+CMTime.swift */,
 				F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */,
 				F422B8AF2C079DEA00C4B337 /* PUISettings.swift */,
@@ -1886,6 +1889,7 @@
 				DDC678241EDBA25A00A4E19C /* PUIAnnotationWindow.swift in Sources */,
 				DDF721C71ECA12A40054C503 /* PUIDetachedPlaybackStatusViewController.swift in Sources */,
 				DDF721E11ECA12A40054C503 /* PUITimelineView.swift in Sources */,
+				810580012E495B09006ACCE7 /* NSView+BackgroundExtension.swift in Sources */,
 				DDF721DF1ECA12A40054C503 /* PUIPlayerWindow.swift in Sources */,
 				DDF721CB1ECA12A40054C503 /* Speeds.swift in Sources */,
 				DDF721DB1ECA12A40054C503 /* PUIBoringLayer.swift in Sources */,

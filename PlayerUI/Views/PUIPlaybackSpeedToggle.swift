@@ -83,13 +83,15 @@ private struct PlaybackSpeedToggle: View {
                 .opacity(controller.isEditingCustomSpeed ? 1 : 0)
                 .matchedGeometryEffect(id: "text", in: transition, isSource: false)
             toggleButton
+                .buttonStyle(.playerControlStatic)
                 .opacity(controller.isEditingCustomSpeed ? 0 : 1)
                 .matchedGeometryEffect(id: "text", in: transition, isSource: true)
+                .frame(width: 40, height: 20)
+                .contentShape(shape)
         }
         .font(.system(size: 12, weight: .medium))
         .monospacedDigit()
         .frame(width: 40, height: 20)
-        .buttonStyle(.playerControlStatic)
         .contentShape(shape)
         .overlay {
             if controller.isEditingCustomSpeed, customSpeedInvalid {
@@ -137,6 +139,7 @@ private struct PlaybackSpeedToggle: View {
                 .foregroundStyle(.primary)
                 .animation(.smooth, value: controller.speed)
             }
+            .frame(maxWidth: .infinity, alignment: .center) // fix clicking spaces inside the border
             .contentShape(Rectangle())
         }
     }

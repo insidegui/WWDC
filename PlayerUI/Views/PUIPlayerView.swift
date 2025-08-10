@@ -687,7 +687,7 @@ public final class PUIPlayerView: NSView {
     private var topTrailingMenuTopConstraint: NSLayoutConstraint!
 
     private func setupControls() {
-
+        addLayoutGuide(videoLayoutGuide)
         let playerView = NSView()
         playerView.translatesAutoresizingMaskIntoConstraints = false
         playerView.wantsLayer = true
@@ -1694,11 +1694,16 @@ private extension PUIPlayerView {
         playerView.wantsLayer = true
         playerView.layer = playerLayer
         playerLayer.backgroundColor = .clear
-        addSubview(playerView)
-        playerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        playerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        playerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        playerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+
+        let extensionView = playerView.backgroundExtensionEffect(reflect: .leading)
+
+        addSubview(extensionView)
+        NSLayoutConstraint.activate([
+            extensionView.topAnchor.constraint(equalTo: topAnchor),
+            extensionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            extensionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            extensionView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
 
         // Volume controls
         volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
@@ -1790,9 +1795,9 @@ private extension PUIPlayerView {
         addSubview(controlsContainerView)
 
         /// Ensure a minimum amount of padding between the control area leading and trailing edges and the container.
-        let scrimLeading = scrimContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16)
+        let scrimLeading = scrimContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16)
         scrimLeading.priority = .defaultLow
-        let scrimTrailing = scrimContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+        let scrimTrailing = scrimContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16)
         scrimTrailing.priority = .defaultLow
 
         /// Define an absolute maximum width for the control area so that it doesn't look comically wide in full screen,
@@ -1804,8 +1809,8 @@ private extension PUIPlayerView {
             scrimMaxWidth,
             scrimLeading,
             scrimTrailing,
-            scrimContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            scrimContainerView.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
+            scrimContainerView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
             controlsContainerView.leadingAnchor.constraint(equalTo: scrimContainerView.leadingAnchor, constant: 16),
             controlsContainerView.trailingAnchor.constraint(equalTo: scrimContainerView.trailingAnchor, constant: -16),
             controlsContainerView.topAnchor.constraint(equalTo: scrimContainerView.topAnchor, constant: 16),
@@ -1823,7 +1828,7 @@ private extension PUIPlayerView {
 
         addSubview(topTrailingMenuContainerView)
 
-        topTrailingMenuContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
+        topTrailingMenuContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -12).isActive = true
         updateTopTrailingMenuPosition()
 
         speedButton.$speed.removeDuplicates().sink { [weak self] speed in
@@ -1855,7 +1860,7 @@ private struct PUIPlayerViewPreviewWrapper: NSViewRepresentable {
 
     func makeNSView(context: Context) -> PUIPlayerView {
         let player = AVPlayer(url: .previewVideoURL)
-        let view = PUIPlayerView(player: player)
+        let view = PUIPlayerView(player: player, shouldAdoptLiquidGlass: true)
         player.seek(to: CMTimeMakeWithSeconds(30, preferredTimescale: 9000))
         return view
     }
