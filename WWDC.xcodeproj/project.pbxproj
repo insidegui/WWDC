@@ -25,6 +25,8 @@
 		4DDF6A782177A00C008E5539 /* DownloadsManagementTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */; };
 		4DF6641620C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */; };
 		557221042C190BC0002B42C9 /* OptionalToggleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557221032C190BC0002B42C9 /* OptionalToggleFilter.swift */; };
+		81057FFA2E489E8F006ACCE7 /* InteractionEffects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81057FF92E489E8C006ACCE7 /* InteractionEffects.swift */; };
+		81057FFC2E489F74006ACCE7 /* SessionPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81057FFB2E489F70006ACCE7 /* SessionPlayerView.swift */; };
 		812EB5812E3E973F00FE869F /* NewTopicHeaderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812EB5802E3E973F00FE869F /* NewTopicHeaderRow.swift */; };
 		812EB5832E3F59FC00FE869F /* NewTranscriptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812EB5822E3F59F300FE869F /* NewTranscriptView.swift */; };
 		8181E2662E39F0770033126E /* ReplaceableSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E2652E39F0710033126E /* ReplaceableSplitViewController.swift */; };
@@ -347,6 +349,8 @@
 		4DDF6A772177A00C008E5539 /* DownloadsManagementTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsManagementTableCellView.swift; sourceTree = "<group>"; };
 		4DF6641520C8A85000FD1684 /* SessionsTableViewController+SupportingTypesAndExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SessionsTableViewController+SupportingTypesAndExtensions.swift"; sourceTree = "<group>"; };
 		557221032C190BC0002B42C9 /* OptionalToggleFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalToggleFilter.swift; sourceTree = "<group>"; };
+		81057FF92E489E8C006ACCE7 /* InteractionEffects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionEffects.swift; sourceTree = "<group>"; };
+		81057FFB2E489F70006ACCE7 /* SessionPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionPlayerView.swift; sourceTree = "<group>"; };
 		812EB5802E3E973F00FE869F /* NewTopicHeaderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTopicHeaderRow.swift; sourceTree = "<group>"; };
 		812EB5822E3F59F300FE869F /* NewTranscriptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTranscriptView.swift; sourceTree = "<group>"; };
 		8181E2652E39F0710033126E /* ReplaceableSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceableSplitViewController.swift; sourceTree = "<group>"; };
@@ -671,6 +675,7 @@
 				8181E2792E3A5E620033126E /* NewMainWindowController.swift */,
 				8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */,
 				81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */,
+				81057FF92E489E8C006ACCE7 /* InteractionEffects.swift */,
 				8196CAF22E3D634A008482E3 /* NewGlobalSearchCoordinator.swift */,
 				81CE57A32E43DC4D0006C9B9 /* GlobalSearchCoordinator.swift */,
 			);
@@ -718,6 +723,7 @@
 				81E172782E42692900BC1E5C /* SessionCoverView.swift */,
 				81E1727A2E42695400BC1E5C /* DetailDescriptionView.swift */,
 				81E1727C2E42698800BC1E5C /* DetailRelatedSessionView.swift */,
+				81057FFB2E489F70006ACCE7 /* SessionPlayerView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1739,6 +1745,7 @@
 				8181E27E2E3A6CC70033126E /* NewAppCoordinator.swift in Sources */,
 				F486B3072C0E69E60066749F /* MediaDownloadProtocols.swift in Sources */,
 				DDCE7ED91EA7A86600C7A3CA /* AppCoordinator.swift in Sources */,
+				81057FFA2E489E8F006ACCE7 /* InteractionEffects.swift in Sources */,
 				DD0159D11ED0CEF500F980F1 /* PreferencesCoordinator.swift in Sources */,
 				DDEDFCF31ED92F2A002477C8 /* TextualFilter.swift in Sources */,
 				F486B3102C0E69E60066749F /* String+Error.swift in Sources */,
@@ -1777,6 +1784,7 @@
 				4DA9C4D120EC098800710354 /* DownloadsManagementViewController.swift in Sources */,
 				DD90CDCD1ED7A5ED00CADE86 /* SearchCoordinator.swift in Sources */,
 				DDB28F6F1EACFCDB0077703F /* VibrantButton.swift in Sources */,
+				81057FFC2E489F74006ACCE7 /* SessionPlayerView.swift in Sources */,
 				914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */,
 				F486B30D2C0E69E60066749F /* Bundle+URLSessionID.swift in Sources */,
 				4D7482CA20FF735D008D156C /* WWDCWindowController.swift in Sources */,

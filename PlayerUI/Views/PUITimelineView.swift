@@ -30,14 +30,16 @@ public final class PUITimelineView: NSView {
 
     public override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-
-        buildUI()
+        NSAppearance(named: .darkAqua)?.performAsCurrentDrawingAppearance {
+            buildUI()
+        }
     }
 
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
-
-        buildUI()
+        NSAppearance(named: .darkAqua)?.performAsCurrentDrawingAppearance {
+            buildUI()
+        }
     }
 
     public override var intrinsicContentSize: NSSize {

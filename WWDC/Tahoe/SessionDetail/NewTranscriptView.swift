@@ -54,9 +54,9 @@ struct NewTranscriptView: View {
             guard newValue != selectedLine else {
                 return
             }
-            withAnimation {
+            withAnimation(.bouncy) {
                 selectedLine = newValue
-                scrollPosition.scrollTo(id: newValue, anchor: .top)
+                scrollPosition.scrollTo(id: newValue, anchor: .center)
             }
         }
         .task {
@@ -96,7 +96,7 @@ struct NewTranscriptView: View {
     private func seekVideoTo(line: TranscriptLine) {
         withAnimation(.bouncy) {
             selectedLine = line
-            scrollPosition.scrollTo(id: line, anchor: .top)
+            scrollPosition.scrollTo(id: line, anchor: .center)
         }
         guard let transcript = viewModel.session.transcript() else { return }
 
@@ -121,7 +121,7 @@ struct NewTranscriptView: View {
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             // wait until content fully appears
-            scrollPosition.scrollTo(id: line, anchor: .top)
+            scrollPosition.scrollTo(id: line, anchor: .center)
         }
         withAnimation(.bouncy.delay(0.3)) {
             readyToPlay = true

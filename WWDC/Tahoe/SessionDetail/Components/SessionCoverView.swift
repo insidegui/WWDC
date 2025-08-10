@@ -10,6 +10,7 @@ import Combine
 import SwiftUI
 
 struct SessionCoverView<Content: View>: View {
+    var preferredImage: NSImage?
     var coverImageURL: URL?
     var isThumbnail: Bool = false
     @ViewBuilder let decoration: (_ image: Image, _ isPlaceHolder: Bool) -> Content
@@ -17,7 +18,7 @@ struct SessionCoverView<Content: View>: View {
     @State private var isPlaceholder = true
     private let operation = State<AsyncImageOperation>(initialValue: .init())
     var body: some View {
-        decoration(Image(nsImage: image.wrappedValue), isPlaceholder)
+        decoration(Image(nsImage: preferredImage ?? image.wrappedValue), preferredImage.flatMap { _ in false } ?? isPlaceholder)
             .transition(.blurReplace)
             .task(id: coverImageURL) {
                 if isThumbnail {

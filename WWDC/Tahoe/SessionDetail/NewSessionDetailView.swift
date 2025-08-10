@@ -33,14 +33,10 @@ struct NewSessionDetailView: View {
         ScrollView {
             SessionDescriptionView(tab: $tab, scrollPosition: $scrollPosition)
         }
-        .scrollPosition($scrollPosition, anchor: .top)
+        .scrollPosition($scrollPosition, anchor: .center)
         .safeAreaBar(edge: .top) {
             VStack(alignment: .leading, spacing: 0) {
-                SessionCoverView(coverImageURL: viewModel.coverImageURL) { image, isPlaceholder in
-                    image.resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .extendBackground()
-                }
+                SessionPlayerView()
                 if availableTabs.count > 1 {
                     tabBar
                 }
@@ -62,11 +58,12 @@ struct NewSessionDetailView: View {
 
     @ViewBuilder
     private var tabBar: some View {
-        Picker("", selection: $tab) {
+        Picker("Tabs", selection: $tab) {
             ForEach(availableTabs, id: \.self) { t in
                 Text(t.title)
             }
         }
+        .labelsHidden()
         .pickerStyle(.segmented)
         .controlSize(.large)
         .frame(maxWidth: .infinity)

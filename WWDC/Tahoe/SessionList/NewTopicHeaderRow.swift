@@ -85,10 +85,12 @@ private struct NewTopicHeaderRowContent: View {
 
             Text(viewModel.title)
                 .font(.headline)
-                .foregroundStyle(.primary)
                 .transition(.blurReplace)
         }
+        .foregroundStyle(.secondary)
         .padding(.horizontal)
+        .animation(.smooth, value: viewModel.title)
+        .animation(.smooth, value: viewModel.symbolName)
         .frame(maxWidth: .infinity, minHeight: SessionsTableViewController.Metrics.headerRowHeight, maxHeight: SessionsTableViewController.Metrics.headerRowHeight, alignment: .leading)
     }
 }

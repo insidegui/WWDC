@@ -59,7 +59,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem
     }
 
-    private var footer: NSView!
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 100, height: MainWindowController.defaultRect.height))
 
@@ -73,18 +72,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-
-        let footer = NSView()
-        footer.isHidden = true
-        self.footer = footer
-//        footer.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(footer)
-//        NSLayoutConstraint.activate([
-//            footer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            footer.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-//            footer.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-//        ])
-//        footer.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
 
     override func viewDidLoad() {
@@ -120,15 +107,15 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     }
 
     @objc private func didTapFilterItem(_ item: NSToolbarItem) {
-        let isHeaderHiddenNext = !footer.isHidden
-        let nextTopInset = isHeaderHiddenNext ? 0 : (footer.bounds.height - footer.safeAreaInsets.top)
-        item.image = NSImage(systemSymbolName: isHeaderHiddenNext ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: isHeaderHiddenNext ? "Show Filter Options" : "Hide Filter Options")
-        item.toolTip = item.image?.accessibilityDescription
-        NSAnimationContext.runAnimationGroup { _ in
-            footer.animator().alphaValue = isHeaderHiddenNext ? 0 : 1
-        } completionHandler: {
-            self.footer.isHidden = isHeaderHiddenNext
-        }
+//        let isHeaderHiddenNext = !footer.isHidden
+//        let nextTopInset = isHeaderHiddenNext ? 0 : (footer.bounds.height - footer.safeAreaInsets.top)
+//        item.image = NSImage(systemSymbolName: isHeaderHiddenNext ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: isHeaderHiddenNext ? "Show Filter Options" : "Hide Filter Options")
+//        item.toolTip = item.image?.accessibilityDescription
+//        NSAnimationContext.runAnimationGroup { _ in
+//            footer.animator().alphaValue = isHeaderHiddenNext ? 0 : 1
+//        } completionHandler: {
+//            self.footer.isHidden = isHeaderHiddenNext
+//        }
     }
 
     @objc private func didTapClearItem(_ item: Any) {
@@ -366,7 +353,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         v.headerView = nil
         v.rowHeight = Metrics.sessionRowHeight
         v.autoresizingMask = [.width, .height]
-        v.floatsGroupRows = true
+        v.floatsGroupRows = false
         v.gridStyleMask = []
         v.style = .fullWidth
 
@@ -666,7 +653,7 @@ private extension NewSessionsTableViewController {
         filterItem?.menu.removeAllItems()
         filterItem?.menu.autoenablesItems = false
         filterItem?.menu.addItem(withTitle: "Clear All Filters", action: #selector(didTapClearItem), keyEquivalent: "").target = self
-        filterItem?.image = NSImage(systemSymbolName: footer.isHidden ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: footer.isHidden ? "Show Filter Options" : "Hide Filter Options")
+//        filterItem?.image = NSImage(systemSymbolName: footer.isHidden ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: footer.isHidden ? "Show Filter Options" : "Hide Filter Options")
         filterItem?.toolTip = filterItem?.image?.accessibilityDescription
 
         let currentTextFilter = searchCoordinator.effectiveFilters.first(where: { $0.identifier == .text }) as? TextualFilter

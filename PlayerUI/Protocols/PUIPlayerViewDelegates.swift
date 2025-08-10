@@ -27,7 +27,7 @@ public protocol PUIPlayerViewDetachedStatusPresenter: AnyObject {
 }
 
 public protocol PUIPlayerViewAppearanceDelegate: AnyObject, PUIPlayerViewDetachedStatusPresenter {
-
+    func playerViewShouldAdoptLiquidGlass(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowTimelineView(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowSubtitlesControl(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowPictureInPictureControl(_ playerView: PUIPlayerView) -> Bool
@@ -38,4 +38,10 @@ public protocol PUIPlayerViewAppearanceDelegate: AnyObject, PUIPlayerViewDetache
     func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool
     func playerViewBackAndForwardDuration(_ playerView: PUIPlayerView) -> BackForwardSkipDuration
 
+}
+
+public extension PUIPlayerViewAppearanceDelegate {
+    func playerViewShouldAdoptLiquidGlass(_ playerView: PUIPlayerView) -> Bool {
+        true
+    }
 }

@@ -37,6 +37,8 @@ public final class PUIPlayerView: NSView {
         }
     }
 
+    var shouldAdoptLiquidGlass = false
+
     public var timelineDelegate: PUITimelineDelegate? {
         get {
             return timelineView.delegate
@@ -87,13 +89,14 @@ public final class PUIPlayerView: NSView {
         set { layer?.backgroundColor = newValue?.cgColor }
     }
 
-    public init(player: AVPlayer) {
+    public init(player: AVPlayer, shouldAdoptLiquidGlass: Bool = false) {
         self.player = player
         if AVPictureInPictureController.isPictureInPictureSupported() {
             self.pipController = AVPictureInPictureController(contentSource: .init(playerLayer: playerLayer))
         } else {
             self.pipController = nil
         }
+        self.shouldAdoptLiquidGlass = shouldAdoptLiquidGlass
 
         super.init(frame: .zero)
 
@@ -102,7 +105,11 @@ public final class PUIPlayerView: NSView {
         backgroundColor = .black
 
         setupPlayer(player)
-        setupControls()
+        if #available(macOS 26.0, *), shouldAdoptLiquidGlass {
+            setupTahoeControls()
+        } else {
+            setupControls()
+        }
     }
 
     public required init?(coder: NSCoder) {
@@ -285,17 +292,25 @@ public final class PUIPlayerView: NSView {
         settings.playerVolume = Double(player.volume)
 
         if player.volume.isZero {
-            volumeButton.image = .PUIVolumeMuted
+            if shouldAdoptLiquidGlass {
+                volumeButton.image = NSImage(systemSymbolName: "speaker.wave.3.fill", variableValue: 0, accessibilityDescription: "Volume")
+            } else {
+                volumeButton.image = .PUIVolumeMuted
+            }
             volumeButton.toolTip = "Unmute"
             volumeSlider.doubleValue = 0
         } else {
-            switch player.volume {
-            case 0..<0.33:
-                volumeButton.image = .PUIVolume1
-            case 0.33..<0.66:
-                volumeButton.image = .PUIVolume2
-            default:
-                volumeButton.image = .PUIVolume3
+            if shouldAdoptLiquidGlass {
+                volumeButton.image = NSImage(systemSymbolName: "speaker.wave.3.fill", variableValue: Double(player.volume), accessibilityDescription: "Volume")
+            } else {
+                switch player.volume {
+                case 0..<0.33:
+                    volumeButton.image = .PUIVolume1
+                case 0.33..<0.66:
+                    volumeButton.image = .PUIVolume2
+                default:
+                    volumeButton.image = .PUIVolume3
+                }
             }
 
             volumeButton.toolTip = "Mute"
@@ -418,6 +433,9 @@ public final class PUIPlayerView: NSView {
     private var currentBounds: CGRect?
 
     private func updateVideoLayoutGuide() {
+        guard !shouldAdoptLiquidGlass else {
+            return
+        }
         guard let player else { return }
 
         guard bounds != currentBounds else { return }
@@ -487,7 +505,7 @@ public final class PUIPlayerView: NSView {
     fileprivate var wasPlayingBeforeStartingInteractiveSeek = false
 
     private var topTrailingMenuContainerView: NSStackView!
-    fileprivate var scrimContainerView: PUIScrimView!
+    fileprivate var scrimContainerView: NSView!
     private var controlsContainerView: NSStackView!
     private var volumeControlsContainerView: NSStackView!
     private var centerButtonsContainerView: NSStackView!
@@ -669,7 +687,6 @@ public final class PUIPlayerView: NSView {
     private var topTrailingMenuTopConstraint: NSLayoutConstraint!
 
     private func setupControls() {
-        addLayoutGuide(videoLayoutGuide)
 
         let playerView = NSView()
         playerView.translatesAutoresizingMaskIntoConstraints = false
@@ -899,6 +916,9 @@ public final class PUIPlayerView: NSView {
     }
 
     private func updateTopTrailingMenuPosition() {
+        guard !shouldAdoptLiquidGlass else {
+            return
+        }
         let topConstant: CGFloat = isDominantViewInWindow ? 34 : 12
 
         if topTrailingMenuTopConstraint == nil {
@@ -1663,6 +1683,162 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
         currentDetachedStatus = nil
         pipButton.state = .off
         invalidateTouchBar()
+    }
+}
+
+@available(macOS 26.0, *)
+private extension PUIPlayerView {
+    private func setupTahoeControls() {
+        let playerView = NSView()
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        playerView.wantsLayer = true
+        playerView.layer = playerLayer
+        playerLayer.backgroundColor = .clear
+        addSubview(playerView)
+        playerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        playerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        playerView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        playerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+
+        // Volume controls
+        volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
+        volumeButton.image = NSImage(systemSymbolName: "speaker.wave.3.fill", variableValue: 1, accessibilityDescription: "Volume")
+        volumeButton.contentTintColor = .white
+        volumeSlider.tintProminence = .secondary
+
+        volumeControlsContainerView.orientation = .horizontal
+        volumeControlsContainerView.spacing = 6
+        volumeControlsContainerView.alignment = .centerY
+
+        // Center Buttons
+        centerButtonsContainerView = NSStackView(frame: bounds)
+
+        // Leading controls (volume, subtitles)
+        centerButtonsContainerView.addView(volumeButton, in: .leading)
+        centerButtonsContainerView.addView(volumeSlider, in: .leading)
+        centerButtonsContainerView.addView(subtitlesButton, in: .leading)
+
+        centerButtonsContainerView.setCustomSpacing(6, after: volumeButton)
+
+        // Center controls (play, forward, backward)
+        [backButton, playButton, forwardButton].forEach {
+            $0.tintColor = .white.withAlphaComponent(0.8)
+            $0.activeTintColor = .white
+        }
+        centerButtonsContainerView.addView(backButton, in: .center)
+        centerButtonsContainerView.addView(playButton, in: .center)
+        centerButtonsContainerView.addView(forwardButton, in: .center)
+
+        // Trailing controls (speed, add annotation, AirPlay, PiP)
+        centerButtonsContainerView.addView(speedButton, in: .trailing)
+        centerButtonsContainerView.addView(addAnnotationButton, in: .trailing)
+        centerButtonsContainerView.addView(routeButton, in: .trailing)
+        centerButtonsContainerView.addView(pipButton, in: .trailing)
+
+        centerButtonsContainerView.orientation = .horizontal
+        centerButtonsContainerView.spacing = 16
+        centerButtonsContainerView.distribution = .gravityAreas
+        centerButtonsContainerView.alignment = .centerY
+
+        // Visibility priorities
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: volumeButton)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: volumeSlider)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: subtitlesButton)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: backButton)
+        centerButtonsContainerView.setVisibilityPriority(.mustHold, for: playButton)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: forwardButton)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: speedButton)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: addAnnotationButton)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: routeButton)
+        centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: pipButton)
+        centerButtonsContainerView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+        timelineContainerView = NSStackView(views: [
+            leadingTimeButton,
+            timelineView,
+            trailingTimeButton
+        ])
+        [leadingTimeButton, trailingTimeButton].forEach {
+            $0.contentTintColor = .white
+        }
+        timelineContainerView.distribution = .equalSpacing
+        timelineContainerView.orientation = .horizontal
+        timelineContainerView.alignment = .centerY
+
+        // Main stack view and background scrim
+        controlsContainerView = NSStackView(views: [
+            timelineContainerView,
+            centerButtonsContainerView
+            ])
+
+        controlsContainerView.orientation = .vertical
+        controlsContainerView.spacing = 12
+        controlsContainerView.distribution = .fill
+        controlsContainerView.translatesAutoresizingMaskIntoConstraints = false
+        controlsContainerView.wantsLayer = true
+        controlsContainerView.layer?.masksToBounds = false
+        controlsContainerView.layer?.zPosition = 10
+
+        let effectView = NSGlassEffectView()
+        effectView.cornerRadius = 12
+        effectView.style = .clear
+        effectView.tintColor = NSColor.black.withAlphaComponent(0.6)
+        scrimContainerView = effectView
+        scrimContainerView.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(scrimContainerView)
+        addSubview(controlsContainerView)
+
+        /// Ensure a minimum amount of padding between the control area leading and trailing edges and the container.
+        let scrimLeading = scrimContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16)
+        scrimLeading.priority = .defaultLow
+        let scrimTrailing = scrimContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+        scrimTrailing.priority = .defaultLow
+
+        /// Define an absolute maximum width for the control area so that it doesn't look comically wide in full screen,
+        /// set as lower priority so that it can potentially expand beyond this size if needed due to content size.
+        let scrimMaxWidth = scrimContainerView.widthAnchor.constraint(lessThanOrEqualToConstant: 600)
+        scrimMaxWidth.priority = .defaultLow
+
+        NSLayoutConstraint.activate([
+            scrimMaxWidth,
+            scrimLeading,
+            scrimTrailing,
+            scrimContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            controlsContainerView.leadingAnchor.constraint(equalTo: scrimContainerView.leadingAnchor, constant: 16),
+            controlsContainerView.trailingAnchor.constraint(equalTo: scrimContainerView.trailingAnchor, constant: -16),
+            controlsContainerView.topAnchor.constraint(equalTo: scrimContainerView.topAnchor, constant: 16),
+            controlsContainerView.bottomAnchor.constraint(equalTo: scrimContainerView.bottomAnchor, constant: -16)
+        ])
+
+        centerButtonsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
+        centerButtonsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
+
+        topTrailingMenuContainerView = NSStackView(views: [fullScreenButton])
+        topTrailingMenuContainerView.orientation = .horizontal
+        topTrailingMenuContainerView.alignment = .centerY
+        topTrailingMenuContainerView.distribution = .equalSpacing
+        topTrailingMenuContainerView.spacing = 30
+
+        addSubview(topTrailingMenuContainerView)
+
+        topTrailingMenuContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12).isActive = true
+        updateTopTrailingMenuPosition()
+
+        speedButton.$speed.removeDuplicates().sink { [weak self] speed in
+            guard let self else { return }
+            self.playbackSpeed = speed
+        }
+        .store(in: &uiBindings)
+
+        speedButton.$isEditingCustomSpeed.sink { [weak self] isEditing in
+            guard let self else { return }
+
+            showControls(animated: false)
+            resetMouseIdleTimer()
+        }
+        .store(in: &uiBindings)
     }
 }
 

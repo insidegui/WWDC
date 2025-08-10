@@ -115,6 +115,7 @@ private struct PlaybackSpeedToggle: View {
                 controller.isEditingCustomSpeed = false
             }
         }
+        .colorScheme(.dark) // preferred not working
     }
 
     @ViewBuilder
