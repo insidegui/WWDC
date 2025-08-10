@@ -44,7 +44,7 @@ final class ImageDownloadCenter: Logging {
 
     /// The completion handler is always called on the main thread
     @discardableResult
-    func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
+    func downloadImage(from url: URL, thumbnailHeight: CGFloat?, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
         if thumbnailOnly {
             if let thumbnailImage = cache.cachedImage(for: url, thumbnailOnly: true).thumbnail {
                 completion(url, (nil, thumbnailImage))
@@ -252,11 +252,11 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
     }
 
     let url: URL
-    let thumbnailHeight: CGFloat
+    let thumbnailHeight: CGFloat?
 
     let cacheProvider: ImageCacheProvider
 
-    init(url: URL, cache: ImageCacheProvider, thumbnailHeight: CGFloat = Constants.thumbnailHeight) {
+    init(url: URL, cache: ImageCacheProvider, thumbnailHeight: CGFloat?) {
         self.url = url
         cacheProvider = cache
         self.thumbnailHeight = thumbnailHeight

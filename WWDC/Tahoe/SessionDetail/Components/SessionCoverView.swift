@@ -23,7 +23,7 @@ struct SessionCoverView<Content: View>: View {
                 if isThumbnail {
                     await downloadCover(height: 50)
                 } else {
-                    await downloadCover(height: 400)
+                    await downloadCover()
                 }
             }
             .animation(.smooth, value: isThumbnail)
@@ -38,11 +38,11 @@ struct SessionCoverView<Content: View>: View {
 
 private extension SessionCoverView {
     @ImageDownloadActor
-    private func downloadCover(height: CGFloat) async {
+    private func downloadCover(height: CGFloat? = nil) async {
         guard let url = coverImageURL else {
             return
         }
-        let thumbnailOnly = height <= Constants.thumbnailHeight
+        let thumbnailOnly = (height ?? 999) <= Constants.thumbnailHeight
         let cached = ImageDownloadCenter.shared.cachedImage(from: url, thumbnailOnly: thumbnailOnly)
         if let cached {
             await updateImage(cached)
@@ -79,7 +79,7 @@ private class AsyncImageOperation {
         operation = nil
     }
 
-    func download(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false) async -> NSImage? {
+    func download(from url: URL, thumbnailHeight: CGFloat?, thumbnailOnly: Bool = false) async -> NSImage? {
         guard !Task.isCancelled else {
             return nil
         }
