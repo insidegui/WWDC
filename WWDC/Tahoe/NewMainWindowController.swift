@@ -76,7 +76,6 @@ extension NewMainWindowController: NSToolbarDelegate {
         case .searchItem:
             let item = NSSearchToolbarItem(itemIdentifier: itemIdentifier)
             item.resignsFirstResponderWithCancel = true
-            item.preferredWidthForSearchField = 200
             return item
         case .filterItem:
             let item = NSMenuToolbarItem(itemIdentifier: itemIdentifier)

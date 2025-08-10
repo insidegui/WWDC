@@ -46,6 +46,7 @@ import SwiftUI
     }
 
     func prepareForDisplay() {
+        observers = []
         updateOverviewBindings()
         updateActionBindings()
     }
