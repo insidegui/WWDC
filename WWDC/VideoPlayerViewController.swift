@@ -53,7 +53,7 @@ final class VideoPlayerViewController: NSViewController {
 
     private weak var shelf: ShelfViewController?
 
-    init(player: AVPlayer, session: SessionViewModel, shelf: ShelfViewController?) {
+    init(player: AVPlayer, session: SessionViewModel, shelf: ShelfViewController) {
         sessionViewModel = session
         self.player = player
         self.shelf = shelf
@@ -66,7 +66,7 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     lazy var playerView: PUIPlayerView = {
-        return PUIPlayerView(player: self.player, shouldAdoptLiquidGlass: TahoeFeatureFlag.isLiquidGlassEnabled)
+        return PUIPlayerView(player: self.player, shouldAdoptLiquidGlass: false)
     }()
 
     fileprivate lazy var progressIndicator: NSProgressIndicator = {
@@ -85,39 +85,22 @@ final class VideoPlayerViewController: NSViewController {
     }()
 
     override func loadView() {
-        let containerView: NSView
-        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
-            let extensionView = NSBackgroundExtensionView()
-            containerView = NSView()
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-            extensionView.contentView = containerView
-            extensionView.automaticallyPlacesContentView = false
-            // only enable reflection effect on leading edge
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: extensionView.topAnchor),
-                containerView.leadingAnchor.constraint(equalTo: extensionView.safeAreaLayoutGuide.leadingAnchor),
-                containerView.bottomAnchor.constraint(equalTo: extensionView.bottomAnchor),
-                containerView.trailingAnchor.constraint(equalTo: extensionView.trailingAnchor)
-            ])
-            view = extensionView
-        } else {
-            containerView = NSView()
-            view = containerView
-        }
+        view = NSView(frame: NSRect.zero)
+        view.wantsLayer = true
 
         playerView.translatesAutoresizingMaskIntoConstraints = false
         playerView.frame = view.bounds
-        containerView.addSubview(playerView)
+        view.addSubview(playerView)
 
-        playerView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
-        playerView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-        playerView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        playerView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        playerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        playerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        containerView.addSubview(progressIndicator)
-        containerView.addConstraints([
-            NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: containerView.safeAreaLayoutGuide, attribute: .centerX, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: progressIndicator, attribute: .centerY, relatedBy: .equal, toItem: containerView.safeAreaLayoutGuide, attribute: .centerY, multiplier: 1.0, constant: 0.0)
+        view.addSubview(progressIndicator)
+        view.addConstraints([
+            NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: progressIndicator, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0)
             ])
 
         progressIndicator.layer?.zPosition = 999
