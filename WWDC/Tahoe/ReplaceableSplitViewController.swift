@@ -36,23 +36,15 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     fileprivate var sidebarItem: NSSplitViewItem!
     fileprivate var detailItem: NSSplitViewItem!
 
-    private weak var windowController: WWDCWindowControllerObject?
+    private weak var windowController: NewMainWindowController?
 
     init(windowController: WWDCWindowControllerObject, exploreViewModel: NewExploreViewModel, scheduleTable: NewSessionsTableViewController, videosTable: NewSessionsTableViewController, detailViewModel: SessionItemViewModel) {
-        self.windowController = windowController
+        self.windowController = windowController as? NewMainWindowController
         self.exploreViewModel = exploreViewModel
         self.scheduleTable = scheduleTable
         self.videosTable = videosTable
         self.detailViewModel = detailViewModel
         super.init(nibName: nil, bundle: nil)
-        sidebarItem = NSSplitViewItem(sidebarWithViewController: SplitContainer(nibName: nil, bundle: nil))
-        sidebarItem.container.isSidebar = true
-        sidebarItem.canCollapse = false
-        sidebarItem.automaticallyAdjustsSafeAreaInsets = true
-        addSplitViewItem(sidebarItem)
-        detailItem = NSSplitViewItem(viewController: SplitContainer(nibName: nil, bundle: nil))
-        detailItem.automaticallyAdjustsSafeAreaInsets = true
-        addSplitViewItem(detailItem)
     }
 
     @available(*, unavailable)
@@ -69,14 +61,28 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     func hideLoading() {
         loadingView?.hide()
         loadingView = nil
+        if windowController?.window?.toolbar == nil {
+            windowController?.setupToolbar(tab: activeTab)
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        changeContent()
+        sidebarItem = NSSplitViewItem(sidebarWithViewController: SplitContainer(nibName: nil, bundle: nil))
+        sidebarItem.container.isSidebar = true
+        sidebarItem.canCollapse = false
+        sidebarItem.automaticallyAdjustsSafeAreaInsets = true
+        addSplitViewItem(sidebarItem)
+        detailItem = NSSplitViewItem(viewController: SplitContainer(nibName: nil, bundle: nil))
+        detailItem.automaticallyAdjustsSafeAreaInsets = true
+        addSplitViewItem(detailItem)
+        showLoading()
     }
 
     private func changeContent() {
+        guard sidebarItem != nil else {
+            return
+        }
         let sidebarContent: NSView = {
             switch activeTab {
             case .explore: return NSHostingView(rootView: NewExploreCategoryList().environment(exploreViewModel))
@@ -92,7 +98,9 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
         let detailContent: NSView = {
             switch activeTab {
             case .explore: return NSHostingView(rootView: NewExploreTabDetailView().environment(exploreViewModel))
-            case .schedule, .videos: return NSHostingView(rootView: NewSessionDetailView().environment(detailViewModel))
+            case .schedule, .videos: return NSHostingView(rootView: NewSessionDetailView().environment(detailViewModel).onAppear { [weak self] in
+                self?.hideLoading()
+            })
             }
         }()
         let detailContainer = detailItem.container

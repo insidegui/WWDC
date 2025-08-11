@@ -28,13 +28,12 @@ final class NewMainWindowController: NewWWDCWindowController {
         window.identifier = .mainWindow
         window.setFrameAutosaveName("main")
         window.minSize = NSSize(width: 1060, height: Constants.minimumWindowHeight)
+        window.styleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
+        window.isMovableByWindowBackground = false
+        window.titleVisibility = .hidden
+        window.tabbingMode = .disallowed
 
         self.window = window
-    }
-
-    override func windowDidLoad() {
-        super.windowDidLoad()
-        setupWindowAndToolbar()
     }
 
     @objc func performFindPanelAction(_ sender: Any) {
@@ -51,14 +50,10 @@ final class NewMainWindowController: NewWWDCWindowController {
 
 @available(macOS 26.0, *)
 extension NewMainWindowController: NSToolbarDelegate {
-    private func setupWindowAndToolbar(tab: MainWindowTab = .explore) {
+    func setupToolbar(tab: MainWindowTab = .explore) {
         guard let window else {
             return
         }
-        window.styleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
-        window.isMovableByWindowBackground = false
-        window.titleVisibility = .hidden
-        window.tabbingMode = .disallowed
         let toolbar = NSToolbar(identifier: "LiquidToolbar-\(tab.rawValue)")
 
         toolbar.delegate = self

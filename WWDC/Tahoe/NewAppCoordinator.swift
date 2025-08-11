@@ -230,7 +230,6 @@ final class NewAppCoordinator: WWDCCoordinator {
         refresh(nil)
         windowController.contentViewController = tabController
         windowController.showWindow(self)
-//        tabController.showLoading()
         tabController.setActiveTab(Preferences.shared.activeTab)
 
         [videosTable, scheduleTable].forEach {

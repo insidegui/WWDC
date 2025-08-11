@@ -36,14 +36,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         super.init(nibName: nil, bundle: nil)
 
         identifier = NSUserInterfaceItemIdentifier(rawValue: "videosList")
-
-        rowProvider
-            .rowsPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.updateWith(rows: $0, animated: true)
-            }
-            .store(in: &cancellables)
     }
 
     @available(*, unavailable)
@@ -84,6 +76,14 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         if let rows = sessionRowProvider.rows {
             updateWith(rows: rows, animated: true)
         }
+
+        sessionRowProvider
+            .rowsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.updateWith(rows: $0, animated: true)
+            }
+            .store(in: &cancellables)
     }
 
     override func viewDidAppear() {
