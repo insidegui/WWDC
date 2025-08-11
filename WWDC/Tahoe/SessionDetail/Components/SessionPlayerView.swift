@@ -78,12 +78,23 @@ struct SessionPlayerView: View {
                 viewController.play(nil)
             } label: {
                 Label("Play", systemImage: "play.fill")
+                    .foregroundColor(.white)
+                    .font(.body)
             }
-            .controlSize(.extraLarge)
-            .buttonStyle(.glass)
-            .tint(.black.opacity(0.3)) // make the label more readable
+            .buttonStyle(ClearGlassButtonStyle())
             .hoverEffect(scale: 1.1)
             .disabled(isLoadingThumbnail)
         }
+    }
+}
+
+@available(macOS 26.0, *)
+private struct ClearGlassButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.vertical, 8)
+            .padding(.horizontal)
+            .glassEffect(.clear, in: .capsule)
+            .tint(.black.opacity(0.3)) // make the label more readable
     }
 }

@@ -10,11 +10,24 @@ import Cocoa
 import SwiftUI
 import AVKit
 
-public final class PUIButton: NSControl, ObservableObject {
+public protocol StatefulControl: NSControl {
+    var state: NSControl.StateValue { get set }
+}
+
+extension NSButton: StatefulControl {}
+extension NSSwitch: StatefulControl {}
+
+public final class PUIButton: NSControl, ObservableObject, StatefulControl {
 
     public override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
+        setup()
+    }
+
+    init(metrics: PUIControlMetrics = .medium) {
+        _metrics = .init(initialValue: metrics)
+        super.init(frame: .zero)
         setup()
     }
 
@@ -41,6 +54,7 @@ public final class PUIButton: NSControl, ObservableObject {
     public var showsMenuOnRightClick = false
     public var sendsActionOnMouseDown = false
 
+
     @Published public var image: NSImage?
 
     @Published public var alternateImage: NSImage?
@@ -58,7 +72,12 @@ public final class PUIButton: NSControl, ObservableObject {
     }
 
     private func setup() {
-        let host = PUIFirstMouseHostingView(rootView: PUIButtonContent(button: self))
+        let host: NSView
+        if #available(macOS 26.0, *), metrics.glass != nil {
+            host = PUIFirstMouseHostingView(rootView: PUIGlassyButtonContent(button: self))
+        } else {
+            host = PUIFirstMouseHostingView(rootView: PUIButtonContent(button: self))
+        }
         host.translatesAutoresizingMaskIntoConstraints = false
         addSubview(host)
         NSLayoutConstraint.activate([
@@ -206,6 +225,64 @@ private struct PUIButtonContent: View {
                 .foregroundColor(foregroundColor)
                 .opacity(opacity)
                 .scaleEffect(scale)
+        }
+    }
+}
+
+@available(macOS 26.0, *)
+private struct PUIGlassyButtonContent: View {
+    @ObservedObject var button: PUIButton
+
+    private var currentImage: Image? {
+        if let alternateImage = button.alternateImage, button.state == .on {
+            return Image(nsImage: alternateImage.withPlayerMetrics(button.metrics))
+        } else if let image = button.image {
+            return Image(nsImage: image.withPlayerMetrics(button.metrics))
+        } else {
+            return nil
+        }
+    }
+
+    private var opacity: CGFloat {
+        guard button.isEnabled else { return 0.5 }
+
+        guard !button.shouldAlwaysDrawHighlighted else { return 1.0 }
+
+        return button.shouldDrawHighlighted ? 0.8 : 1.0
+    }
+
+    private var scale: CGFloat {
+        guard button.isEnabled, !button.shouldAlwaysDrawHighlighted else { return 1 }
+
+        return button.shouldDrawHighlighted ? 0.9 : 1.0
+    }
+
+    var body: some View {
+        ZStack {
+            if button.isToggle {
+                glyph
+                    .id(button.state)
+                    .transition(.scale(scale: 0.2).combined(with: .opacity))
+            } else {
+                glyph
+            }
+        }
+        .padding(.all, button.metrics.padding)
+        .opacity(opacity)
+        .glassEffect(button.metrics.glass.flatMap({ $0 == .clear ? Glass.clear : .regular }) ?? .identity, in: .circle)
+        .tint(button.metrics.glass.flatMap { _ in Color.black.opacity(0.3) }) // make the label more readable
+        .animation(.snappy(extraBounce: button.state == .on ? 0.25 : 0), value: button.state)
+    }
+
+    @ViewBuilder
+    private var glyph: some View {
+        if let currentImage {
+            currentImage
+                .resizable()
+                .foregroundStyle(.white)
+                .aspectRatio(contentMode: .fit)
+                .scaleEffect(scale)
+                .frame(width: button.metrics.controlSize, height: button.metrics.controlSize)
         }
     }
 }

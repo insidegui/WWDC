@@ -80,6 +80,8 @@ extension NewMainWindowController: NSToolbarDelegate {
             item.toolTip = "Filter"
             return item
         case .tabSelectionItem:
+            let group = NSToolbarItemGroup()
+            group.backgroundTintColor
             let segmentControl = NSSegmentedControl()
             segmentControl.segmentCount = MainWindowTab.allCases.count
             segmentControl.trackingMode = .selectOne
@@ -93,6 +95,7 @@ extension NewMainWindowController: NSToolbarDelegate {
             segmentControl.selectedSegment = coordinator?.activeTab.rawValue ?? 0
             toolbarItem.view = segmentControl
             toolbarItem.title = "Explore|Schedule|Videos"
+            toolbarItem.backgroundTintColor = .clear
         case .downloadItem:
             toolbarItem.image = NSImage(systemSymbolName: "arrow.down", accessibilityDescription: "Dowloads")
             toolbarItem.toolTip = "Downloads"
