@@ -33,6 +33,11 @@ public final class PUITimelineView: NSView {
         buildUI()
     }
 
+    init(adoptLiquidGlass: Bool) {
+        super.init(frame: .zero)
+        buildUI(adoptLiquidGlass: adoptLiquidGlass)
+    }
+
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         buildUI()
@@ -100,8 +105,10 @@ public final class PUITimelineView: NSView {
     private var annotationsContainerLayer = CALayer()
 
     private lazy var floatingTimeLayer = PUITimelineFloatingLayer()
+    private var floatingModel: PUITimelineFloatingModel?
+    private var floatingGlassView: NSView?
 
-    private func buildUI() {
+    private func buildUI(adoptLiquidGlass: Bool = false) {
         wantsLayer = true
         layer = PUIBoringLayer()
         layer?.masksToBounds = false
@@ -142,7 +149,16 @@ public final class PUITimelineView: NSView {
 
         // Floating time
 
-        layer?.addSublayer(floatingTimeLayer)
+        if #available(macOS 26.0, *), adoptLiquidGlass {
+            let model = PUITimelineFloatingModel()
+            let glassView = NSHostingView(rootView: PUITimelineGlassFloatingView().environment(model))
+            floatingGlassView = glassView
+            floatingModel = model
+            glassView.frame = .zero
+            addSubview(glassView)
+        } else {
+            layer?.addSublayer(floatingTimeLayer)
+        }
 
         // Annotations container
 
@@ -267,6 +283,8 @@ public final class PUITimelineView: NSView {
 
         floatingTimeLayer.show(animated: false)
         floatingTimeLayer.attributedText = text
+        floatingModel?.attributedText = text
+        floatingModel?.show(animated: false)
 
         var floatingTimeRect = floatingTimeLayer.frame
 
@@ -276,6 +294,7 @@ public final class PUITimelineView: NSView {
         )
 
         floatingTimeLayer.frame = floatingTimeRect
+        floatingGlassView?.frame = floatingTimeRect
     }
 
     public override var mouseDownCanMoveWindow: Bool {
@@ -336,6 +355,7 @@ public final class PUITimelineView: NSView {
             case .leftMouseDragged?:
                 if !startedInteractiveSeek {
                     floatingTimeLayer.hide()
+                    floatingModel?.hide()
                     startedInteractiveSeek = true
                     self.viewDelegate?.timelineViewWillBeginInteractiveSeek()
                 }
@@ -359,7 +379,10 @@ public final class PUITimelineView: NSView {
         } else {
             borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.preferredCGColor(in: .darkAqua) }
             seekProgressLayer.animate { seekProgressLayer.opacity = 0 }
-            if selectedAnnotation == nil { floatingTimeLayer.hide() }
+            if selectedAnnotation == nil {
+                floatingTimeLayer.hide()
+                floatingModel?.hide()
+            }
         }
     }
 
@@ -518,6 +541,7 @@ public final class PUITimelineView: NSView {
         layer.isHighlighted = true
 
         floatingTimeLayer.show()
+        floatingModel?.show()
     }
 
     private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -642,6 +666,7 @@ public final class PUITimelineView: NSView {
                 
                 if mode == .delete {
                     floatingTimeLayer.hide()
+                    floatingModel?.hide()
                 }
             case .keyUp?:
                 // cancel with ESC
@@ -669,6 +694,7 @@ public final class PUITimelineView: NSView {
         guard let controller = delegate?.viewControllerForTimelineAnnotation(annotation) else { return }
 
         floatingTimeLayer.show()
+        floatingModel?.show()
         updateFloatingTime(with: annotationLayer.position)
 
         currentAnnotationEditor = controller
@@ -743,6 +769,7 @@ public final class PUITimelineView: NSView {
         UILog(#function)
 
         floatingTimeLayer.hide()
+        floatingModel?.hide()
 
         if let monitor = annotationCommandsMonitor {
             NSEvent.removeMonitor(monitor)
@@ -785,6 +812,7 @@ private extension PUITimelineView {
         if forceTimePreviewVisible {
             self.updateFloatingTime(with: CGPoint(x: 100, y: 0))
             self.floatingTimeLayer.show()
+            floatingModel?.show()
         }
 
         if addAnnotations {

@@ -1838,6 +1838,8 @@ private extension PUIPlayerView {
             scrimMarginGuide.trailingAnchor.constraint(equalTo: scrimContainerView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
         ])
 
+        timelineView = PUITimelineView(adoptLiquidGlass: true)
+        timelineView.viewDelegate = self
         let timelineContainerView = NSStackView(views: [
             leadingTimeButton,
             timelineView,
