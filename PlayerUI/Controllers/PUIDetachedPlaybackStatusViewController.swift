@@ -69,6 +69,7 @@ public final class PUIDetachedPlaybackStatusViewController: NSViewController {
         v.imageScaling = .scaleProportionallyUpOrDown
         v.widthAnchor.constraint(equalToConstant: 74).isActive = true
         v.heightAnchor.constraint(equalToConstant: 74).isActive = true
+        v.contentTintColor = .labelColor.preferred(in: .darkAqua)
 
         return v
     }()
@@ -77,7 +78,7 @@ public final class PUIDetachedPlaybackStatusViewController: NSViewController {
         let f = NSTextField(labelWithString: "")
 
         f.font = .systemFont(ofSize: 20, weight: .medium)
-        f.textColor = .labelColor
+        f.textColor = .labelColor.preferred(in: .darkAqua)
         f.alignment = .center
 
         return f
@@ -87,7 +88,7 @@ public final class PUIDetachedPlaybackStatusViewController: NSViewController {
         let f = NSTextField(labelWithString: "")
 
         f.font = .systemFont(ofSize: 16)
-        f.textColor = .secondaryLabelColor
+        f.textColor = .secondaryLabelColor.preferred(in: .darkAqua)
         f.alignment = .center
 
         return f

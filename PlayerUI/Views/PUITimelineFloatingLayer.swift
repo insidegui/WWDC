@@ -152,7 +152,7 @@ extension PUITimelineFloatingLayer {
 
         let timeTextAttributes: [NSAttributedString.Key: Any] = [
             .font: font,
-            .foregroundColor: NSColor.white,
+            .foregroundColor: NSColor.labelColor,
             .paragraphStyle: pStyle
         ]
 

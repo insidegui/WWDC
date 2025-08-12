@@ -30,16 +30,12 @@ public final class PUITimelineView: NSView {
 
     public override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-        NSAppearance(named: .darkAqua)?.performAsCurrentDrawingAppearance {
-            buildUI()
-        }
+        buildUI()
     }
 
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
-        NSAppearance(named: .darkAqua)?.performAsCurrentDrawingAppearance {
-            buildUI()
-        }
+        buildUI()
     }
 
     public override var intrinsicContentSize: NSSize {
@@ -113,7 +109,7 @@ public final class PUITimelineView: NSView {
         // Main border
 
         borderLayer = PUIBoringLayer()
-        borderLayer.borderColor = NSColor.playerBorder.cgColor
+        borderLayer.borderColor = NSColor.playerBorder.preferredCGColor(in: .darkAqua)
         borderLayer.borderWidth = 1.0
         borderLayer.frame = bounds
 
@@ -130,7 +126,7 @@ public final class PUITimelineView: NSView {
         // Playback bar
 
         playbackProgressLayer = PUIBoringLayer()
-        playbackProgressLayer.backgroundColor = NSColor.playerProgress.cgColor
+        playbackProgressLayer.backgroundColor = NSColor.playerProgress.preferredCGColor(in: .darkAqua)
         playbackProgressLayer.frame = bounds
         playbackProgressLayer.masksToBounds = true
 
@@ -139,7 +135,7 @@ public final class PUITimelineView: NSView {
         // Ghost bar
 
         seekProgressLayer = PUIBoringLayer()
-        seekProgressLayer.backgroundColor = NSColor.seekProgress.cgColor
+        seekProgressLayer.backgroundColor = NSColor.seekProgress.preferredCGColor(in: .darkAqua)
         seekProgressLayer.frame = bounds
 
         layer?.addSublayer(seekProgressLayer)
@@ -356,11 +352,12 @@ public final class PUITimelineView: NSView {
 
     private func reactToMouse() {
         if hasMouseInside {
-            borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor }
+            borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.preferredCGColor(in: .darkAqua) }
             seekProgressLayer.animate { seekProgressLayer.opacity = 1 }
             floatingTimeLayer.show()
+            floatingModel?.show()
         } else {
-            borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.cgColor }
+            borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.preferredCGColor(in: .darkAqua) }
             seekProgressLayer.animate { seekProgressLayer.opacity = 0 }
             if selectedAnnotation == nil { floatingTimeLayer.hide() }
         }
