@@ -110,7 +110,6 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         playButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
 
         view.addSubview(playerContainer)
-        // reflect player's leading
         playerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         playerContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         playerContainer.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -210,7 +209,8 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
         addChild(controller)
         controller.view.autoresizingMask = [.width, .height]
-        controller.view.frame = playerContainer.bounds
+
+        controller.view.frame = playerContainer.safeAreaRect(including: .leading)
         playerContainer.addSubview(controller.view)
 
         sharingController = controller
@@ -336,5 +336,27 @@ struct ShelfViewControllerWrapper: NSViewControllerRepresentable {
 
     func updateNSViewController(_ nsViewController: ShelfViewController, context: Context) {
         // No updates needed - controller manages its own state
+    }
+}
+
+private extension NSView {
+    func safeAreaRect(including edges: Edge.Set = .all) -> CGRect {
+        let insets = self.safeAreaInsets
+        var rect = self.bounds
+        if edges.contains(.bottom) {
+            rect.origin.y += insets.bottom
+            rect.size.height -= insets.bottom
+        }
+        if edges.contains(.top) {
+            rect.size.height -= insets.top
+        }
+        if edges.contains(.leading) {
+            rect.origin.x += insets.left
+            rect.size.width -= insets.left
+        }
+        if edges.contains(.trailing) {
+            rect.size.width -= insets.right
+        }
+        return rect
     }
 }

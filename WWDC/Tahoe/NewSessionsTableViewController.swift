@@ -353,7 +353,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         v.headerView = nil
         v.rowHeight = Metrics.sessionRowHeight
         v.autoresizingMask = [.width, .height]
-        v.floatsGroupRows = false
+        v.floatsGroupRows = true
         v.gridStyleMask = []
         v.style = .fullWidth
 

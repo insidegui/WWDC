@@ -46,6 +46,7 @@ final class ClipSharingViewController: NSViewController {
         AVPlayer(playerItem: AVPlayerItem(asset: asset))
     }()
 
+    private var progressIndicatorLayoutContainer: NSView!
     private lazy var progressIndicator: NSProgressIndicator = {
         let v = NSProgressIndicator()
 
@@ -57,7 +58,7 @@ final class ClipSharingViewController: NSViewController {
         return v
     }()
 
-    private lazy var exportingBackgroundView: NSVisualEffectView = {
+    private lazy var exportingBackgroundView: NSView = {
         let v = NSVisualEffectView(frame: view.bounds)
 
         v.autoresizingMask = [.width, .height]
@@ -102,7 +103,19 @@ final class ClipSharingViewController: NSViewController {
         view = NSView()
         view.wantsLayer = true
 
+        var progressIndicator: NSView = self.progressIndicator
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            cancelButton.controlSize = .large
+            cancelButton.toolTip = "Cancel"
+            cancelButton.isBordered = false
+            cancelButton.isHidden = true
+            progressIndicator = NSView.verticalGlassContainer(padding: 10, spacing: 10, groups: [
+                [self.progressIndicator], [cancelButton]
+            ])
+            progressIndicator.translatesAutoresizingMaskIntoConstraints = false
+        }
         view.addSubview(progressIndicator)
+        progressIndicatorLayoutContainer = progressIndicator
 
         NSLayoutConstraint.activate([
             progressIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -168,7 +181,7 @@ final class ClipSharingViewController: NSViewController {
     }
 
     private func beginTrimming() {
-        view.addSubview(playerView, positioned: .below, relativeTo: progressIndicator)
+        view.addSubview(playerView, positioned: .below, relativeTo: progressIndicatorLayoutContainer)
 
         guard playerView.canBeginTrimming else {
             hide()
@@ -176,6 +189,7 @@ final class ClipSharingViewController: NSViewController {
         }
 
         progressIndicator.stopAnimation(nil)
+        progressIndicator.isHidden = true
 
         if let suggestedTime = initialBeginTime {
             configureClipForSuggestedTime(suggestedTime)
@@ -229,7 +243,11 @@ final class ClipSharingViewController: NSViewController {
             return
         }
 
-        showProgressUI()
+        if TahoeFeatureFlag.isLiquidGlassEnabled {
+            showTahoeProgressUI()
+        } else {
+            showProgressUI()
+        }
 
         renderer = ClipRenderer(
             playerItem: item,
@@ -278,11 +296,33 @@ final class ClipSharingViewController: NSViewController {
         ])
     }
 
+    private func showTahoeProgressUI() {
+        playerView.controlsStyle = .none
+
+        progressIndicator.isIndeterminate = false
+        progressIndicator.minValue = 0
+        progressIndicator.maxValue = 1
+        progressIndicator.startAnimation(nil)
+
+        exportingBackgroundView = NSView(frame: view.bounds)
+        exportingBackgroundView.wantsLayer = true
+        exportingBackgroundView.layer?.backgroundColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+        let indicator = progressIndicatorLayoutContainer!
+        view.addSubview(exportingBackgroundView, positioned: .below, relativeTo: indicator)
+        cancelButton.isHidden = false
+        progressIndicator.isHidden = false
+    }
+
     private func updateProgress(with progress: Float) {
+        progressIndicator.isHidden = false
         progressIndicator.doubleValue = Double(progress)
 
         if progress >= 0.97 {
             cancelButton.isEnabled = false
+            if TahoeFeatureFlag.isLiquidGlassEnabled {
+                progressIndicator.doubleValue = 1
+                cancelButton.isHidden = true
+            }
             exportingLabel.stringValue = "Done!"
             progressIndicator.stopAnimation(nil)
         }

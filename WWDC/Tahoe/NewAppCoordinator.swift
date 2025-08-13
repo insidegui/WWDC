@@ -535,5 +535,7 @@ final class NewAppCoordinator: WWDCCoordinator {
         currentTable?.select(session: session, removingFiltersIfNeeded: removingFiltersIfNeeded)
     }
 
-    func showClipUI() {}
+    func showClipUI() {
+        currentShelfViewController?.showClipUI()
+    }
 }
