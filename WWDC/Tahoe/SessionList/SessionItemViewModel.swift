@@ -12,7 +12,7 @@ import SwiftUI
 
 @Observable class SessionItemViewModel: Identifiable {
     var id: String { session?.identifier ?? ""  }
-    @ObservationIgnored var session: SessionViewModel? {
+    var session: SessionViewModel? {
         didSet {
             prepareForDisplay()
         }
@@ -33,6 +33,8 @@ import SwiftUI
     var context = ""
     var isFavorite = false
     var isDownloaded = false
+
+    var isPlaying = false
 
     // MARK: - Actions
 

@@ -13,13 +13,12 @@ struct SessionPlayerView: View {
     @Environment(SessionItemViewModel.self) private var viewModel
     @Environment(\.coordinator) private var coordinator
     @State private var coverRatio: CGFloat?
-    @State private var isPlaying = false
     @State private var isLoadingThumbnail = true
 
     var body: some View {
         Group {
             if
-                isPlaying,
+                viewModel.isPlaying,
                 let controller = coordinator?.currentShelfViewController,
                 controller.viewModel?.identifier == viewModel.session?.identifier // check again when reusing
             {
@@ -28,14 +27,14 @@ struct SessionPlayerView: View {
                         .ignoresSafeArea()
                 }
                 .transition(.blurReplace)
-                .aspectRatio(coverRatio, contentMode: .fit)
             } else {
                 cover
                     .transition(.blurReplace)
             }
         }
+        .aspectRatio(coverRatio, contentMode: .fit)
         .task(id: viewModel.session?.identifier) { [weak coordinator, weak viewModel] in
-            isPlaying = coordinator?.currentShelfViewController?.viewModel?.identifier == viewModel?.session?.identifier
+            viewModel?.isPlaying = coordinator?.currentShelfViewController?.viewModel?.identifier == viewModel?.session?.identifier
         }
     }
 
@@ -45,6 +44,8 @@ struct SessionPlayerView: View {
             image.resizable()
                 .aspectRatio(contentMode: .fit)
                 .extendBackground()
+                .transition(.blurReplace)
+                .animation(.smooth, value: isPlaceholder)
                 .task(id: isPlaceholder) {
                     isLoadingThumbnail = isPlaceholder
                 }
@@ -62,7 +63,7 @@ struct SessionPlayerView: View {
                     return
                 }
                 defer {
-                    isPlaying = true
+                    viewModel.isPlaying = true
                 }
                 if let existing = coordinator?.currentShelfViewController {
                     existing.viewModel = session

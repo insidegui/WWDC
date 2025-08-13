@@ -112,7 +112,7 @@ private struct NewSessionActionsView: View {
 
             downloadButton
 
-            if viewModel.downloadState == .downloaded {
+            if viewModel.downloadState == .downloaded, viewModel.isPlaying {
                 Button {
                     viewModel.shareClip()
                 } label: {
@@ -141,6 +141,7 @@ private struct NewSessionActionsView: View {
         .animation(.bouncy, value: viewModel.slidesButtonIsHidden)
         .animation(.bouncy, value: viewModel.calendarButtonIsHidden)
         .animation(.bouncy, value: viewModel.downloadState)
+        .animation(.bouncy, value: viewModel.isPlaying)
         .frame(height: 24)
     }
 
