@@ -24,7 +24,7 @@ Watch this year’s videos as they’re released and access videos from previous
 
 ### Features
 
-- Watch videos in 0.5x, 1x, 1.25x, 1.5x, 1.75x or 2x speeds
+- Watch videos in 0.5x, 1x, 1.25x, 1.5x, 1.75x, 2x and custom speeds
 - Fullscreen and native picture-in-picture support
 - Navigate video contents easily with the help of transcripts
 
@@ -67,8 +67,6 @@ A number of third-party libraries are used by the app:
 - [Sparkle](https://sparkle-project.org/): automatic updates
 - [CloudKitCodable](https://github.com/insidegui/CloudKitCodable): sync support
 - [Siesta](http://bustoutsolutions.github.io/siesta/): networking
-- [RxSwift](https://github.com/ReactiveX/RxSwift): reactive extensions
-- [RxRealm](https://github.com/RxSwiftCommunity/RxRealm): reactive extensions for Realm
 
 ### Internal libraries
 
@@ -78,7 +76,7 @@ A number of third-party libraries are used by the app:
 
 ## Building the app
 
-**Building requires Xcode 14 or later.**
+**Building requires Xcode 16 or later.**
 
 **Clone this branch and before opening the project, run `./bootstrap.sh`** to setup the environment. The script will ask for your Apple Developer team ID in order to configure the project. There's no need to change any code signing settings in Xcode. The bootstrap script will also install `swiftlint` for you using `brew` if you don’t have it yet.
 
@@ -90,6 +88,6 @@ Since the app uses CloudKit, when you build it yourself, all CloudKit-related fu
 
 ### Clearing app data during development
 
-If you need to clear the app’s preferences and stored data during development, you can run `./cleardata.sh` in the project folder. **This will delete all of your preferences and data like favorites, bookmarks and progress in videos, so be careful**.
+If you need to clear the app’s preferences and stored data during development, you can run `./cleardata.sh` or `./cleardebugdata.sh` (if using -WWDCUseDebugStorage YES) in the project folder. **This will delete all of your preferences and data like favorites, bookmarks and progress in videos, so be careful**.
 
 <a href="https://macstadium.com" title="The unofficial WWDC app is using MacStadium"><img src="./img/MacStadiumOSS.png" alt="Powered by MacStadium"></a>
