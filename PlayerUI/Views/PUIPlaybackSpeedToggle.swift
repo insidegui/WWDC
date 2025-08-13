@@ -9,6 +9,12 @@ final class PUIPlaybackSpeedToggle: NSView, ObservableObject {
 
     @Published var isEditingCustomSpeed = false
 
+    var borderWidth: CGFloat = 1
+    var labelColor: NSColor = .secondaryLabelColor
+    var editingBackgroundColor: NSColor = .tertiaryLabelColor
+    var editingBorderColor: NSColor = .labelColor
+    var cornerRadius: CGFloat = 6
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
@@ -73,11 +79,11 @@ private struct PlaybackSpeedToggle: View {
     var body: some View {
         ZStack {
             shape
-                .fill(.tertiary)
+                .fill(Color(nsColor: controller.editingBackgroundColor))
                 .opacity(controller.isEditingCustomSpeed ? 1 : 0)
 
             shape
-                .strokeBorder(controller.isEditingCustomSpeed ? .primary : .secondary, lineWidth: 1)
+                .strokeBorder(controller.isEditingCustomSpeed ? Color(nsColor: controller.editingBorderColor) : Color(nsColor: controller.labelColor), lineWidth: controller.borderWidth)
 
             customSpeedEditor
                 .opacity(controller.isEditingCustomSpeed ? 1 : 0)
@@ -118,7 +124,6 @@ private struct PlaybackSpeedToggle: View {
                 controller.isEditingCustomSpeed = false
             }
         }
-        .colorScheme(.dark) // preferred not working
     }
 
     @ViewBuilder
@@ -136,7 +141,7 @@ private struct PlaybackSpeedToggle: View {
                         .numericContentTransition(value: Double(controller.speed.rawValue))
                     Text("×")
                 }
-                .foregroundStyle(.primary)
+                .foregroundStyle(Color(nsColor: controller.labelColor))
                 .animation(.smooth, value: controller.speed)
             }
             .frame(maxWidth: .infinity, alignment: .center) // fix clicking spaces inside the border
@@ -168,6 +173,7 @@ private struct PlaybackSpeedToggle: View {
     @ViewBuilder
     private var customSpeedEditor: some View {
         TextField("Speed", value: $customSpeedValue, formatter: PUIPlaybackSpeed.buttonTitleFormatter)
+            .foregroundStyle(Color(nsColor: controller.labelColor))
             .textFieldStyle(.plain)
             .onEscapePressed { speedFieldFocused = false }
             .multilineTextAlignment(.center)
@@ -191,7 +197,7 @@ private struct PlaybackSpeedToggle: View {
     }
 
     private var shape: some InsettableShape {
-        RoundedRectangle(cornerRadius: 6, style: .continuous)
+        RoundedRectangle(cornerRadius: controller.cornerRadius, style: .continuous)
     }
 }
 

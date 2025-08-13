@@ -204,8 +204,8 @@ extension CASpringAnimation {
 
 @Observable
 class PUITimelineFloatingModel {
-    var attributedText: NSAttributedString?
-    fileprivate var isHidden = false
+    var text: String?
+    fileprivate var isHidden = true
 
     func setIsHidden(_ isHidden: Bool, animated: Bool = true) {
         guard animated else {
@@ -231,12 +231,15 @@ struct PUITimelineGlassFloatingView: View {
     @Environment(PUITimelineFloatingModel.self) var model
     var body: some View {
         Group {
-            if !model.isHidden, let label = model.attributedText {
-                Text(AttributedString(label))
-                    .foregroundStyle(.clear)
+            if !model.isHidden, let label = model.text {
+                Text(label)
+                    .font(.system(size: PUITimelineView.Metrics.floatingLayerTextSize))
+                    .fontDesign(.monospaced)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.white)
                     .fixedSize()
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 8)
+                    .padding(.vertical, PUITimelineView.Metrics.floatingLayerMargin)
+                    .padding(.horizontal, PUITimelineView.Metrics.floatingLayerMargin)
                     .glassEffect(.clear, in: .capsule)
                     .tint(.black.opacity(0.3))
                     .transition(.scale.combined(with: .opacity))

@@ -54,7 +54,6 @@ public final class PUIButton: NSControl, ObservableObject, StatefulControl {
     public var showsMenuOnRightClick = false
     public var sendsActionOnMouseDown = false
 
-
     @Published public var image: NSImage?
 
     @Published public var alternateImage: NSImage?
@@ -295,4 +294,54 @@ private final class PUIFirstMouseHostingView<RootView: View>: NSHostingView<Root
 
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
 
+}
+
+final class PUIAVRoutPickerView: NSView {
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setup()
+    }
+
+    var player: AVPlayer? {
+        get { routePicker.player }
+        set { routePicker.player = newValue }
+    }
+
+    private lazy var routePicker = AVRoutePickerView()
+
+    private func setup() {
+        let metrics = PUIControlMetrics.medium
+        let imagView = NSImageView(image: .PUIAirPlay.withPlayerMetrics(metrics))
+        imagView.contentTintColor = .white.withAlphaComponent(0.9)
+        imagView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(imagView)
+        NSLayoutConstraint.activate([
+            imagView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imagView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+        bounds.size = CGSize(width: metrics.controlSize, height: metrics.controlSize)
+
+        [AVRoutePickerView.ButtonState.normal, .normalHighlighted, .active, .activeHighlighted].forEach {
+            routePicker.setRoutePickerButtonColor(.clear, for: $0)
+        }
+        routePicker.removeFromSuperview()
+        routePicker.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(routePicker)
+        NSLayoutConstraint.activate([
+            routePicker.leadingAnchor.constraint(equalTo: leadingAnchor),
+            routePicker.trailingAnchor.constraint(equalTo: trailingAnchor),
+            routePicker.topAnchor.constraint(equalTo: topAnchor),
+            routePicker.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+
+        // Hack alert
+        routePicker.alphaValue = 0.01
+    }
 }

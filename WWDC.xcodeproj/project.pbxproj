@@ -62,6 +62,7 @@
 		81E172792E42693200BC1E5C /* SessionCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E172782E42692900BC1E5C /* SessionCoverView.swift */; };
 		81E1727B2E42695900BC1E5C /* DetailDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E1727A2E42695400BC1E5C /* DetailDescriptionView.swift */; };
 		81E1727D2E42698E00BC1E5C /* DetailRelatedSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E1727C2E42698800BC1E5C /* DetailRelatedSessionView.swift */; };
+		81F328792E4B59FE0077F682 /* NSView+Glass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F328782E4B59F90077F682 /* NSView+Glass.swift */; };
 		9104BDFE2A25165A00860C08 /* Combine+UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9104BDFD2A25165A00860C08 /* Combine+UI.swift */; };
 		910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9106374F2E26B68700E917F0 /* PUIButtonView.swift */; };
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
@@ -388,6 +389,7 @@
 		81E172782E42692900BC1E5C /* SessionCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionCoverView.swift; sourceTree = "<group>"; };
 		81E1727A2E42695400BC1E5C /* DetailDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescriptionView.swift; sourceTree = "<group>"; };
 		81E1727C2E42698800BC1E5C /* DetailRelatedSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRelatedSessionView.swift; sourceTree = "<group>"; };
+		81F328782E4B59F90077F682 /* NSView+Glass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Glass.swift"; sourceTree = "<group>"; };
 		91037C8C2A32AF62009AF15E /* Transcripts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Transcripts; path = Packages/Transcripts; sourceTree = "<group>"; };
 		9104BDFD2A25165A00860C08 /* Combine+UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Combine+UI.swift"; sourceTree = "<group>"; };
 		9106374F2E26B68700E917F0 /* PUIButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PUIButtonView.swift; sourceTree = "<group>"; };
@@ -1244,6 +1246,7 @@
 				4DBFA4D920E160CB00BDF34B /* AVAsset+AsyncHelpers.swift */,
 				DDF721BB1ECA12A40054C503 /* NSEvent+ForceTouch.swift */,
 				810580002E495B00006ACCE7 /* NSView+BackgroundExtension.swift */,
+				81F328782E4B59F90077F682 /* NSView+Glass.swift */,
 				DDF721BD1ECA12A40054C503 /* String+CMTime.swift */,
 				8115CEA62E4B2C41001C0FE4 /* NSColor+AppearanceCustomization.swift */,
 				F4F189792C0775C5006EA9A2 /* NumericContentTransition.swift */,
@@ -1904,6 +1907,7 @@
 				DDF721D91ECA12A40054C503 /* String+CMTime.swift in Sources */,
 				DDF721DC1ECA12A40054C503 /* PUIBufferLayer.swift in Sources */,
 				8115CEA72E4B2C4F001C0FE4 /* NSColor+AppearanceCustomization.swift in Sources */,
+				81F328792E4B59FE0077F682 /* NSView+Glass.swift in Sources */,
 				910637502E26B68700E917F0 /* PUIButtonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
