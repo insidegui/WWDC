@@ -318,15 +318,17 @@ final class PUIAVRoutPickerView: NSView {
 
     private func setup() {
         let metrics = PUIControlMetrics.medium
-        let imagView = NSImageView(image: .PUIAirPlay.withPlayerMetrics(metrics))
-        imagView.contentTintColor = .white.withAlphaComponent(0.9)
-        imagView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(imagView)
+        let imageView = NSImageView(image: .PUIAirPlay.withPlayerMetrics(metrics))
+        imageView.contentTintColor = .white.withAlphaComponent(0.9)
+        imageView.imageScaling = .scaleNone
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(imageView)
         NSLayoutConstraint.activate([
-            imagView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            imagView.centerYAnchor.constraint(equalTo: centerYAnchor)
+            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-        bounds.size = CGSize(width: metrics.controlSize, height: metrics.controlSize)
 
         [AVRoutePickerView.ButtonState.normal, .normalHighlighted, .active, .activeHighlighted].forEach {
             routePicker.setRoutePickerButtonColor(.clear, for: $0)

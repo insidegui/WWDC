@@ -37,8 +37,8 @@ public extension NSView {
     }
 
     @available(macOS 26.0, *)
-    static func horizontalGlassContainer(_ glass: Glass = .regular, tint: Color? = nil, padding: CGFloat? = nil, spacing: CGFloat? = nil, groups: [[NSView]]) -> NSView {
-        NSHostingView(rootView: GroupedHorizontalGlassContainer(subviewGroups: groups, spacing: spacing, glass: glass, tint: tint, padding: padding))
+    static func horizontalGlassContainer(_ glass: Glass = .regular, tint: Color? = nil, paddingEdge: Edge.Set = .all, padding: CGFloat? = nil, spacing: CGFloat? = nil, groups: [[NSView]]) -> NSView {
+        NSHostingView(rootView: GroupedHorizontalGlassContainer(subviewGroups: groups, spacing: spacing, glass: glass, tint: tint, paddingEdge: paddingEdge, padding: padding))
     }
 }
 
@@ -48,6 +48,7 @@ private struct GroupedHorizontalGlassContainer: View {
     let spacing: CGFloat?
     let glass: Glass
     let tint: Color?
+    let paddingEdge: Edge.Set
     let padding: CGFloat?
     @Namespace private var namespace
     var body: some View {
@@ -59,6 +60,7 @@ private struct GroupedHorizontalGlassContainer: View {
                         spacing: spacing,
                         glass: glass,
                         tint: tint,
+                        paddingEdge: paddingEdge,
                         padding: padding,
                         id: "\(groupIdx)",
                         namespace: namespace
@@ -74,15 +76,17 @@ private struct GroupedHorizontalGlassContainer: View {
         let spacing: CGFloat?
         let glass: Glass
         let tint: Color?
+        let paddingEdge: Edge.Set
         let padding: CGFloat?
         let id: String
         let namespace: Namespace.ID
         @State private var isSubviewsHidden: [Bool]
-        init(subviews: [NSView], spacing: CGFloat?, glass: Glass, tint: Color?, padding: CGFloat?, id: String, namespace: Namespace.ID) {
+        init(subviews: [NSView], spacing: CGFloat?, glass: Glass, tint: Color?, paddingEdge: Edge.Set, padding: CGFloat?, id: String, namespace: Namespace.ID) {
             self.subviews = subviews
             self.spacing = spacing
             self.glass = glass
             self.tint = tint
+            self.paddingEdge = paddingEdge
             self.padding = padding
             self.isSubviewsHidden = subviews.map(\.isHidden)
             self.id = id
@@ -91,12 +95,12 @@ private struct GroupedHorizontalGlassContainer: View {
 
         var body: some View {
             if isSubviewsHidden.contains(where: { !$0 }) { // not all is hidden
-                HStack {
+                HStack(spacing: spacing) {
                     ForEach(subviews.indices, id: \.self) { idx in
                         ConditionalViewWrapper(subview: subviews[idx], isHidden: $isSubviewsHidden[idx])
                     }
                 }
-                .padding(.all, padding)
+                .padding(paddingEdge, padding)
                 .glassEffect(glass, in: .capsule)
                 .glassEffectID(id, in: namespace)
                 .tint(tint)

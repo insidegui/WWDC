@@ -1842,11 +1842,11 @@ private extension PUIPlayerView {
         volumeButton = PUIFirstMouseButton(image: NSImage(systemSymbolName: "speaker.wave.3.fill", variableValue: 1, accessibilityDescription: "Volume")!, target: self, action: #selector(toggleMute))
         volumeButton.isBordered = false
         volumeButton.contentTintColor = .white.withAlphaComponent(0.9)
-        volumeButton.imageScaling = .scaleProportionallyUpOrDown
+        volumeButton.imageScaling = .scaleNone
         volumeSlider.controlSize = .mini
         volumeSlider.trackFillColor = .white.withAlphaComponent(0.9)
 
-        let volumeControlsContainerView = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), padding: 10, spacing: 6, groups: [[volumeButton, volumeSlider]])
+        let volumeControlsContainerView = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), paddingEdge: .horizontal, padding: 5, spacing: 2, groups: [[volumeButton, volumeSlider]])
         self.volumeControlsContainerView = volumeControlsContainerView
 
         let volumeGlass = volumeControlsContainerView.glassCapsuleEffect(.clear, tint: .black.opacity(0.7))
@@ -1877,11 +1877,21 @@ private extension PUIPlayerView {
         pipButton.toolTip = "Toggle picture in picture"
         self.pipButton = pipButton
 
+        _ = routeButton
+        let picker = PUIAVRoutPickerView()
+        picker.toolTip = "AirPlay"
+        self.routeButton = picker
+
         [subtitlesButton, addAnnotationButton, fullScreenButton, pipButton].forEach {
             $0.isBordered = false
-            $0.imageScaling = .scaleProportionallyUpOrDown
+            $0.imageScaling = .scaleNone
             $0.contentTintColor = .white.withAlphaComponent(0.9)
+        }
+
+        [subtitlesButton, addAnnotationButton, fullScreenButton, pipButton, picker].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.widthAnchor.constraint(equalToConstant: PUIControlMetrics.medium.controlSize).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: PUIControlMetrics.medium.controlSize).isActive = true
         }
 
         speedButton.labelColor = .white.withAlphaComponent(0.9)
@@ -1889,7 +1899,7 @@ private extension PUIPlayerView {
         speedButton.editingBorderColor = .white.withAlphaComponent(0.9)
         speedButton.editingBackgroundColor = .clear
         speedButton.cornerRadius = 10
-        let bottomTrailingGroup = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), padding: 10, spacing: 10, groups: [
+        let bottomTrailingGroup = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), padding: 5, spacing: 2, groups: [
             [subtitlesButton, addAnnotationButton, speedButton]
         ])
 
@@ -1907,13 +1917,7 @@ private extension PUIPlayerView {
         glassView.frame = .zero
         addSubview(glassView)
 
-        // doesn't support glass very well for now, will be moved to toolbar, and fullscreen will hide
-        _ = routeButton
-        let picker = PUIAVRoutPickerView()
-        picker.toolTip = "AirPlay"
-        self.routeButton = picker
-
-        let topLeadingGroups = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), padding: 10, spacing: 10, groups: [
+        let topLeadingGroups = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), padding: 5, spacing: 2, groups: [
             [fullScreenButton, pipButton, routeButton]
         ])
         topLeadingGroups.translatesAutoresizingMaskIntoConstraints = false
@@ -1922,27 +1926,6 @@ private extension PUIPlayerView {
             topLeadingGroups.leadingAnchor.constraint(equalTo: scrimMarginGuide.leadingAnchor),
             topLeadingGroups.topAnchor.constraint(equalTo: scrimMarginGuide.topAnchor)
         ])
-
-        /*
-
-         // Leading controls (volume, subtitles)
-         centerButtonsContainerView.addView(volumeButton, in: .leading)
-         centerButtonsContainerView.addView(volumeSlider, in: .leading)
-         centerButtonsContainerView.addView(subtitlesButton, in: .leading)
-
-         centerButtonsContainerView.setCustomSpacing(6, after: volumeButton)
-
-         // Center controls (play, forward, backward)
-         centerButtonsContainerView.addView(backButton, in: .center)
-         centerButtonsContainerView.addView(playButton, in: .center)
-         centerButtonsContainerView.addView(forwardButton, in: .center)
-
-         // Trailing controls (speed, add annotation, AirPlay, PiP)
-         centerButtonsContainerView.addView(speedButton, in: .trailing)
-         centerButtonsContainerView.addView(addAnnotationButton, in: .trailing)
-         centerButtonsContainerView.addView(routeButton, in: .trailing)
-         centerButtonsContainerView.addView(pipButton, in: .trailing)
-         */
 
         // Timeline
         timelineView = PUITimelineView(adoptLiquidGlass: true)
@@ -1976,7 +1959,7 @@ private extension PUIPlayerView {
             $0.centerYAnchor.constraint(equalTo: scrimContainerView.centerYAnchor).isActive = true
         }
 
-        let spacing = CGFloat(24)
+        let spacing = CGFloat(30)
         NSLayoutConstraint.activate([
             playButton.centerXAnchor.constraint(equalTo: scrimMarginGuide.centerXAnchor),
             backButton.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -spacing),
