@@ -341,7 +341,10 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
     }
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
-
+        // when entering pip, automatically exit full screen if needed
+        if playerView.isInFullScreenPlayerWindow, let playerWindow = playerView.window as? PUIPlayerWindow {
+            playerWindow.toggleFullScreen(self)
+        }
     }
 
     func playerViewDidSelectLike(_ playerView: PUIPlayerView) {

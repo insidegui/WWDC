@@ -30,6 +30,7 @@ public final class PUIPlayerView: NSView {
     public weak var delegate: PUIPlayerViewDelegate?
 
     public var isInPictureInPictureMode: Bool { pipController?.isPictureInPictureActive == true }
+    private var enteringPipAfterExitFullscreen: Bool = false
 
     public weak var appearanceDelegate: PUIPlayerViewAppearanceDelegate? {
         didSet {
@@ -1082,6 +1083,7 @@ public final class PUIPlayerView: NSView {
             pipController?.stopPictureInPicture()
         } else {
             pipController?.startPictureInPicture()
+            enteringPipAfterExitFullscreen = windowIsInFullScreen
         }
     }
 
@@ -1524,6 +1526,11 @@ public final class PUIPlayerView: NSView {
         /// The detached status presentation takes care of leaving a black background before we finish the full screen transition.
         appearanceDelegate?.dismissDetachedStatus(.fullScreen, for: self)
         currentDetachedStatus = nil
+        if enteringPipAfterExitFullscreen {
+            let status = DetachedPlaybackStatus.pictureInPicture.snapshot(using: snapshotClosure)
+            appearanceDelegate?.presentDetachedStatus(status, for: self)
+            currentDetachedStatus = status
+        }
     }
 
     @objc private func windowDidBecomeMain() {
