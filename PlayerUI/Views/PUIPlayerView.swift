@@ -1853,7 +1853,7 @@ private extension PUIPlayerView {
         volumeSlider.controlSize = .mini
         volumeSlider.trackFillColor = .white.withAlphaComponent(0.9)
 
-        let volumeControlsContainerView = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), paddingEdge: .horizontal, padding: 5, spacing: 2, groups: [[volumeButton, volumeSlider]])
+        let volumeControlsContainerView = NSView.horizontalGlassContainer(.clear, background: .black.opacity(0.2), paddingEdge: .horizontal, padding: 5, spacing: 2, groups: [[volumeButton, volumeSlider]])
         self.volumeControlsContainerView = volumeControlsContainerView
         volumeControlsContainerView.translatesAutoresizingMaskIntoConstraints = false
         scrimContainerView.addSubview(volumeControlsContainerView, positioned: .below, relativeTo: timelineContainerView)
@@ -1904,7 +1904,7 @@ private extension PUIPlayerView {
         speedButton.editingBorderColor = .white.withAlphaComponent(0.9)
         speedButton.editingBackgroundColor = .clear
         speedButton.cornerRadius = 10
-        let bottomTrailingGroup = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), padding: 5, spacing: 2, groups: [
+        let bottomTrailingGroup = NSView.horizontalGlassContainer(.clear, background: .black.opacity(0.2), padding: 5, spacing: 2, groups: [
             [subtitlesButton, addAnnotationButton, speedButton]
         ])
 
@@ -1922,7 +1922,7 @@ private extension PUIPlayerView {
         glassView.frame = .zero
         addSubview(glassView)
 
-        let topLeadingGroups = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), padding: 5, spacing: 2, groups: [
+        let topLeadingGroups = NSView.horizontalGlassContainer(.clear, background: .black.opacity(0.2), padding: 5, spacing: 2, groups: [
             [fullScreenButton, pipButton, routeButton]
         ])
         topLeadingGroups.translatesAutoresizingMaskIntoConstraints = false

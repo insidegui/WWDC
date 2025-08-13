@@ -65,15 +65,3 @@ struct CapsuleButtonStyle: ButtonStyle {
         }
     }
 }
-
-private extension View {
-    @ViewBuilder
-    func addClearGlassEffectIfAvailable(_ tint: Color?, isHidden: Bool = false) -> some View {
-        if #available(macOS 26.0, *), !isHidden {
-            glassEffect(Glass.regular.tint(tint))
-                .background(.black.opacity(0.3))
-        } else {
-            self
-        }
-    }
-}

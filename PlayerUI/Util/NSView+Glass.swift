@@ -26,44 +26,54 @@ public extension NSView {
 
     // will be bridged to swiftui and back
     @available(macOS 26.0, *)
-    func glassCapsuleEffect(_ glass: Glass = .regular, tint: Color? = nil) -> NSView {
-        NSHostingView(rootView: ConditionalGlassViewWrapper(subview: self, glass: glass, tint: tint, padding: nil, shape: .capsule))
+    func glassCapsuleEffect(_ glass: Glass = .regular, background: Color? = nil) -> NSView {
+        NSHostingView(rootView: ConditionalGlassViewWrapper(subview: self, glass: glass, background: background, padding: nil, shape: .capsule))
     }
 
     // will be bridged to swiftui and back
     @available(macOS 26.0, *)
     func glassCircleEffect(_ glass: Glass = .regular, tint: Color? = nil, padding: CGFloat? = nil) -> NSView {
-        NSHostingView(rootView: ConditionalGlassViewWrapper(subview: self, glass: glass, tint: tint, padding: padding, shape: .circle))
+        NSHostingView(rootView: ConditionalGlassViewWrapper(subview: self, glass: glass, background: tint, padding: padding, shape: .circle))
     }
 
     @available(macOS 26.0, *)
-    static func horizontalGlassContainer(_ glass: Glass = .regular, tint: Color? = nil, paddingEdge: Edge.Set = .all, padding: CGFloat? = nil, spacing: CGFloat? = nil, groups: [[NSView]]) -> NSView {
-        NSHostingView(rootView: GroupedHorizontalGlassContainer(subviewGroups: groups, spacing: spacing, glass: glass, tint: tint, paddingEdge: paddingEdge, padding: padding))
+    static func horizontalGlassContainer(_ glass: Glass = .regular, background: Color? = nil, paddingEdge: Edge.Set = .all, padding: CGFloat? = nil, containerSpacing: CGFloat? = nil, spacing: CGFloat? = nil, groups: [[NSView]]) -> NSView {
+        NSHostingView(rootView: GroupedHorizontalGlassContainer(axis: .horizontal, subviewGroups: groups, containerSpacing: containerSpacing, spacing: spacing, glass: glass, background: background, paddingEdge: paddingEdge, padding: padding, shape: .capsule))
+    }
+
+    @available(macOS 26.0, *)
+    static func verticalGlassContainer(_ glass: Glass = .regular, tint: Color? = nil, paddingEdge: Edge.Set = .all, padding: CGFloat? = nil, containerSpacing: CGFloat? = nil, spacing: CGFloat? = nil, groups: [[NSView]]) -> NSView {
+        NSHostingView(rootView: GroupedHorizontalGlassContainer(axis: .vertical, subviewGroups: groups, containerSpacing: containerSpacing, spacing: spacing, glass: glass, background: tint, paddingEdge: paddingEdge, padding: padding, shape: .capsule))
     }
 }
 
 @available(macOS 26.0, *)
-private struct GroupedHorizontalGlassContainer: View {
+private struct GroupedHorizontalGlassContainer<S: Shape>: View {
+    let axis: Axis.Set
     let subviewGroups: [[NSView]]
+    let containerSpacing: CGFloat?
     let spacing: CGFloat?
     let glass: Glass
-    let tint: Color?
+    let background: Color?
     let paddingEdge: Edge.Set
     let padding: CGFloat?
+    let shape: S
     @Namespace private var namespace
     var body: some View {
-        GlassEffectContainer(spacing: spacing) {
-            HStack(spacing: spacing) {
+        GlassEffectContainer(spacing: containerSpacing ?? spacing) {
+            Stack(axis: axis, spacing: spacing) {
                 ForEach(subviewGroups.indices, id: \.self) { groupIdx in
                     ConditionalHorizontalGlassViewWrapper(
+                        axis: axis,
                         subviews: subviewGroups[groupIdx],
                         spacing: spacing,
                         glass: glass,
-                        tint: tint,
+                        tint: background,
                         paddingEdge: paddingEdge,
                         padding: padding,
                         id: "\(groupIdx)",
-                        namespace: namespace
+                        namespace: namespace,
+                        shape: shape
                     )
                 }
             }
@@ -72,39 +82,54 @@ private struct GroupedHorizontalGlassContainer: View {
 
     @available(macOS 26.0, *)
     private struct ConditionalHorizontalGlassViewWrapper: View {
+        let axis: Axis.Set
         let subviews: [NSView]
         let spacing: CGFloat?
         let glass: Glass
-        let tint: Color?
+        let background: Color?
         let paddingEdge: Edge.Set
         let padding: CGFloat?
         let id: String
         let namespace: Namespace.ID
+        let shape: S
         @State private var isSubviewsHidden: [Bool]
-        init(subviews: [NSView], spacing: CGFloat?, glass: Glass, tint: Color?, paddingEdge: Edge.Set, padding: CGFloat?, id: String, namespace: Namespace.ID) {
+        init(axis: Axis.Set, subviews: [NSView], spacing: CGFloat?, glass: Glass, tint: Color?, paddingEdge: Edge.Set, padding: CGFloat?, id: String, namespace: Namespace.ID, shape: S) {
+            self.axis = axis
             self.subviews = subviews
             self.spacing = spacing
             self.glass = glass
-            self.tint = tint
+            self.background = tint
             self.paddingEdge = paddingEdge
             self.padding = padding
             self.isSubviewsHidden = subviews.map(\.isHidden)
             self.id = id
             self.namespace = namespace
+            self.shape = shape
         }
 
         var body: some View {
-            if isSubviewsHidden.contains(where: { !$0 }) { // not all is hidden
-                HStack(spacing: spacing) {
-                    ForEach(subviews.indices, id: \.self) { idx in
-                        ConditionalViewWrapper(subview: subviews[idx], isHidden: $isSubviewsHidden[idx])
-                    }
+            Stack(axis: axis, spacing: spacing) {
+                ForEach(subviews.indices, id: \.self) { idx in
+                    ConditionalViewWrapper(subview: subviews[idx], isHidden: $isSubviewsHidden[idx])
                 }
-                .padding(paddingEdge, padding)
-                .glassEffect(glass, in: .capsule)
-                .glassEffectID(id, in: namespace)
-                .tint(tint)
             }
+            .padding(paddingEdge, padding)
+            .background(background)
+            .clipShape(shape)
+            .glassEffect(isSubviewsHidden.allSatisfy({ $0 }) ? .identity : glass, in: .capsule)
+            .glassEffectID(id, in: namespace)
+            .opacity(isSubviewsHidden.allSatisfy({ $0 }) ? 0 : 1)
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func Stack<Content: View>(axis: Axis.Set, spacing: CGFloat? = nil, @ViewBuilder content: () -> Content) -> some View {
+        if axis.contains(.vertical) {
+            VStack(spacing: spacing, content: content)
+        } else {
+            HStack(spacing: spacing, content: content)
         }
     }
 }
@@ -134,7 +159,7 @@ private struct ConditionalViewWrapper: View {
 private struct ConditionalGlassViewWrapper<S: Shape>: View {
     let subview: NSView
     let glass: Glass
-    let tint: Color?
+    let background: Color?
     let padding: CGFloat?
     let shape: S
     @State private var isSubviewHidden: Bool = false
@@ -144,8 +169,8 @@ private struct ConditionalGlassViewWrapper<S: Shape>: View {
             if !isSubviewHidden {
                 ViewWrapper(view: subview)
                     .padding(.all, padding)
+                    .background(background)
                     .glassEffect(glass, in: shape)
-                    .tint(tint)
                     .help(subview.toolTip ?? "")
                     .transition(.blurReplace)
             }

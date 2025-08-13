@@ -240,8 +240,9 @@ struct PUITimelineGlassFloatingView: View {
                     .fixedSize()
                     .padding(.vertical, PUITimelineView.Metrics.floatingLayerMargin)
                     .padding(.horizontal, PUITimelineView.Metrics.floatingLayerMargin)
+                    .background(Color.black.opacity(0.3))
+                    .clipShape(.capsule)
                     .glassEffect(.clear, in: .capsule)
-                    .tint(.black.opacity(0.3))
                     .transition(.scale.combined(with: .opacity))
             }
         }

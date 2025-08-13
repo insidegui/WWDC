@@ -268,8 +268,9 @@ private struct PUIGlassyButtonContent: View {
         }
         .padding(.all, button.metrics.padding)
         .opacity(opacity)
+        .background(button.metrics.glass.flatMap { _ in Color.black.opacity(0.2) }) // make the label more readable
+        .clipShape(.circle)
         .glassEffect(button.metrics.glass.flatMap({ $0 == .clear ? Glass.clear : .regular }) ?? .identity, in: .circle)
-        .tint(button.metrics.glass.flatMap { _ in Color.black.opacity(0.3) }) // make the label more readable
         .animation(.snappy(extraBounce: button.state == .on ? 0.25 : 0), value: button.state)
     }
 
