@@ -27,13 +27,13 @@ public extension NSView {
     // will be bridged to swiftui and back
     @available(macOS 26.0, *)
     func glassCapsuleEffect(_ glass: Glass = .regular, tint: Color? = nil) -> NSView {
-        NSHostingView(rootView: ViewWrapper(view: self).glassEffect(glass, in: .capsule).tint(tint))
+        NSHostingView(rootView: ConditionalGlassViewWrapper(subview: self, glass: glass, tint: tint, padding: nil, shape: .capsule))
     }
 
     // will be bridged to swiftui and back
     @available(macOS 26.0, *)
     func glassCircleEffect(_ glass: Glass = .regular, tint: Color? = nil, padding: CGFloat? = nil) -> NSView {
-        NSHostingView(rootView: ViewWrapper(view: self).padding(.all, padding).glassEffect(glass, in: .circle).tint(tint))
+        NSHostingView(rootView: ConditionalGlassViewWrapper(subview: self, glass: glass, tint: tint, padding: padding, shape: .circle))
     }
 
     @available(macOS 26.0, *)
@@ -119,6 +119,35 @@ private struct ConditionalViewWrapper: View {
             if !isSubviewHidden {
                 ViewWrapper(view: subview)
                     .help(subview.toolTip ?? "")
+            }
+        }
+        .onReceive(subview.publisher(for: \.isHidden).removeDuplicates()) { newValue in
+            withAnimation {
+                isSubviewHidden = newValue
+                isHidden?.wrappedValue = newValue
+            }
+        }
+    }
+}
+
+@available(macOS 26.0, *)
+private struct ConditionalGlassViewWrapper<S: Shape>: View {
+    let subview: NSView
+    let glass: Glass
+    let tint: Color?
+    let padding: CGFloat?
+    let shape: S
+    @State private var isSubviewHidden: Bool = false
+    var isHidden: Binding<Bool>?
+    var body: some View {
+        Group {
+            if !isSubviewHidden {
+                ViewWrapper(view: subview)
+                    .padding(.all, padding)
+                    .glassEffect(glass, in: shape)
+                    .tint(tint)
+                    .help(subview.toolTip ?? "")
+                    .transition(.blurReplace)
             }
         }
         .onReceive(subview.publisher(for: \.isHidden).removeDuplicates()) { newValue in

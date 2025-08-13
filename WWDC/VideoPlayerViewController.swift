@@ -97,9 +97,18 @@ final class VideoPlayerViewController: NSViewController {
         playerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         playerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
+        var progressIndicator: NSView = self.progressIndicator
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            progressIndicator = self.progressIndicator.glassCircleEffect()
+            progressIndicator.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                progressIndicator.widthAnchor.constraint(equalToConstant: 40),
+                progressIndicator.heightAnchor.constraint(equalToConstant: 40)
+            ])
+        }
         view.addSubview(progressIndicator)
         view.addConstraints([
-            NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .centerX, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: progressIndicator, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0)
             ])
 

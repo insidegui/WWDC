@@ -1855,14 +1855,12 @@ private extension PUIPlayerView {
 
         let volumeControlsContainerView = NSView.horizontalGlassContainer(.clear, tint: .black.opacity(0.7), paddingEdge: .horizontal, padding: 5, spacing: 2, groups: [[volumeButton, volumeSlider]])
         self.volumeControlsContainerView = volumeControlsContainerView
-
-        let volumeGlass = volumeControlsContainerView.glassCapsuleEffect(.clear, tint: .black.opacity(0.7))
-        volumeGlass.translatesAutoresizingMaskIntoConstraints = false
-        scrimContainerView.addSubview(volumeGlass, positioned: .below, relativeTo: timelineContainerView)
+        volumeControlsContainerView.translatesAutoresizingMaskIntoConstraints = false
+        scrimContainerView.addSubview(volumeControlsContainerView, positioned: .below, relativeTo: timelineContainerView)
         NSLayoutConstraint.activate([
-            volumeGlass.leadingAnchor.constraint(equalTo: scrimMarginGuide.leadingAnchor),
-            volumeGlass.bottomAnchor.constraint(equalTo: scrimMarginGuide.bottomAnchor),
-            volumeGlass.heightAnchor.constraint(equalToConstant: 30)
+            volumeControlsContainerView.leadingAnchor.constraint(equalTo: scrimMarginGuide.leadingAnchor),
+            volumeControlsContainerView.bottomAnchor.constraint(equalTo: scrimMarginGuide.bottomAnchor),
+            volumeControlsContainerView.heightAnchor.constraint(equalToConstant: 30)
         ])
 
         let subtitlesButton = PUIFirstMouseButton(image: .PUISubtitles.withPlayerMetrics(.medium), target: self, action: #selector(showSubtitlesMenu))
@@ -1913,7 +1911,7 @@ private extension PUIPlayerView {
         bottomTrailingGroup.translatesAutoresizingMaskIntoConstraints = false
         scrimContainerView.addSubview(bottomTrailingGroup)
         NSLayoutConstraint.activate([
-            bottomTrailingGroup.centerYAnchor.constraint(equalTo: volumeGlass.centerYAnchor),
+            bottomTrailingGroup.centerYAnchor.constraint(equalTo: volumeControlsContainerView.centerYAnchor),
             bottomTrailingGroup.trailingAnchor.constraint(equalTo: scrimMarginGuide.trailingAnchor)
         ])
 
