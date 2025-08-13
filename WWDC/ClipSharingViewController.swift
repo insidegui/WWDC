@@ -105,12 +105,8 @@ final class ClipSharingViewController: NSViewController {
 
         var progressIndicator: NSView = self.progressIndicator
         if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
-            cancelButton.controlSize = .large
-            cancelButton.toolTip = "Cancel"
-            cancelButton.isBordered = false
-            cancelButton.isHidden = true
-            progressIndicator = NSView.verticalGlassContainer(padding: 10, spacing: 10, groups: [
-                [self.progressIndicator], [cancelButton]
+            progressIndicator = NSView.verticalGlassContainer(.clear, background: .init(nsColor: .textBackgroundColor).opacity(0.5), padding: 10, groups: [
+                [self.progressIndicator]
             ])
             progressIndicator.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -243,7 +239,7 @@ final class ClipSharingViewController: NSViewController {
             return
         }
 
-        if TahoeFeatureFlag.isLiquidGlassEnabled {
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
             showTahoeProgressUI()
         } else {
             showProgressUI()
@@ -296,6 +292,7 @@ final class ClipSharingViewController: NSViewController {
         ])
     }
 
+    @available(macOS 26.0, *)
     private func showTahoeProgressUI() {
         playerView.controlsStyle = .none
 
@@ -309,6 +306,19 @@ final class ClipSharingViewController: NSViewController {
         exportingBackgroundView.layer?.backgroundColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.3)
         let indicator = progressIndicatorLayoutContainer!
         view.addSubview(exportingBackgroundView, positioned: .below, relativeTo: indicator)
+        cancelButton.controlSize = .large
+        cancelButton.toolTip = "Cancel"
+        cancelButton.isBordered = false
+        let cancelContainer = NSView.verticalGlassContainer(.clear, background: .init(nsColor: .textBackgroundColor).opacity(0.5), padding: 10, groups: [
+            [cancelButton]
+        ])
+        cancelContainer.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cancelContainer)
+
+        NSLayoutConstraint.activate([
+            cancelContainer.topAnchor.constraint(equalTo: indicator.bottomAnchor, constant: 6),
+            cancelContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
         cancelButton.isHidden = false
         progressIndicator.isHidden = false
     }

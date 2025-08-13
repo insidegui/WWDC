@@ -76,7 +76,7 @@ final class VideoPlayerViewController: NSViewController {
         p.style = .spinning
         p.isIndeterminate = true
         p.translatesAutoresizingMaskIntoConstraints = false
-        p.appearance = NSAppearance(named: NSAppearance.Name(rawValue: "WhiteSpinner"))
+        p.appearance = NSAppearance(named: .darkAqua)
         p.isHidden = true
 
         p.sizeToFit()
@@ -99,7 +99,7 @@ final class VideoPlayerViewController: NSViewController {
 
         var progressIndicator: NSView = self.progressIndicator
         if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
-            progressIndicator = self.progressIndicator.glassCircleEffect()
+            progressIndicator = self.progressIndicator.glassCircleEffect(.clear, background: .init(nsColor: .textBackgroundColor).opacity(0.5))
             progressIndicator.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 progressIndicator.widthAnchor.constraint(equalToConstant: 40),
@@ -252,6 +252,7 @@ final class VideoPlayerViewController: NSViewController {
                 guard self?.player.timeControlStatus == .waitingToPlayAtSpecifiedRate else { return }
                 self?.progressIndicator.startAnimation(nil)
                 self?.progressIndicator.isHidden = false
+                self?.playerView.hideAllControls = true
             }
         }
 
@@ -259,6 +260,7 @@ final class VideoPlayerViewController: NSViewController {
             if !progressIndicator.isHidden {
                 progressIndicator.stopAnimation(nil)
                 progressIndicator.isHidden = true
+                playerView.hideAllControls = false
             }
         }
 

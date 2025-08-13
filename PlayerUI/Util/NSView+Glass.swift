@@ -32,8 +32,8 @@ public extension NSView {
 
     // will be bridged to swiftui and back
     @available(macOS 26.0, *)
-    func glassCircleEffect(_ glass: Glass = .regular, tint: Color? = nil, padding: CGFloat? = nil) -> NSView {
-        NSHostingView(rootView: ConditionalGlassViewWrapper(subview: self, glass: glass, background: tint, padding: padding, shape: .circle))
+    func glassCircleEffect(_ glass: Glass = .regular, background: Color? = nil, padding: CGFloat? = nil) -> NSView {
+        NSHostingView(rootView: ConditionalGlassViewWrapper(subview: self, glass: glass, background: background, padding: padding, shape: .circle))
     }
 
     @available(macOS 26.0, *)
@@ -42,8 +42,8 @@ public extension NSView {
     }
 
     @available(macOS 26.0, *)
-    static func verticalGlassContainer(_ glass: Glass = .regular, tint: Color? = nil, paddingEdge: Edge.Set = .all, padding: CGFloat? = nil, containerSpacing: CGFloat? = nil, spacing: CGFloat? = nil, groups: [[NSView]]) -> NSView {
-        NSHostingView(rootView: GroupedHorizontalGlassContainer(axis: .vertical, subviewGroups: groups, containerSpacing: containerSpacing, spacing: spacing, glass: glass, background: tint, paddingEdge: paddingEdge, padding: padding, shape: .capsule))
+    static func verticalGlassContainer(_ glass: Glass = .regular, background: Color? = nil, paddingEdge: Edge.Set = .all, padding: CGFloat? = nil, containerSpacing: CGFloat? = nil, spacing: CGFloat? = nil, groups: [[NSView]]) -> NSView {
+        NSHostingView(rootView: GroupedHorizontalGlassContainer(axis: .vertical, subviewGroups: groups, containerSpacing: containerSpacing, spacing: spacing, glass: glass, background: background, paddingEdge: paddingEdge, padding: padding, shape: .capsule))
     }
 }
 
@@ -114,7 +114,7 @@ private struct GroupedHorizontalGlassContainer<S: Shape>: View {
                 }
             }
             .padding(paddingEdge, padding)
-            .background(background)
+            .background(isSubviewsHidden.allSatisfy({ $0 }) ? .clear : background)
             .clipShape(shape)
             .glassEffect(isSubviewsHidden.allSatisfy({ $0 }) ? .identity : glass, in: .capsule)
             .glassEffectID(id, in: namespace)
@@ -170,6 +170,7 @@ private struct ConditionalGlassViewWrapper<S: Shape>: View {
                 ViewWrapper(view: subview)
                     .padding(.all, padding)
                     .background(background)
+                    .clipShape(shape)
                     .glassEffect(glass, in: shape)
                     .help(subview.toolTip ?? "")
                     .transition(.blurReplace)

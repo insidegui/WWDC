@@ -168,6 +168,7 @@ public final class PUIPlayerView: NSView {
         didSet {
             controlsContainerView.isHidden = hideAllControls
             topTrailingMenuContainerView.isHidden = hideAllControls
+            scrimContainerView.isHidden = hideAllControls
         }
     }
 
