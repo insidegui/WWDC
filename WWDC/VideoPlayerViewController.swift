@@ -412,6 +412,9 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
 
     func playerViewWillHidePlayControls(_ playerView: PUIPlayerView) {
         guard TahoeFeatureFlag.isLiquidGlassEnabled else { return }
+        guard searchItem?.searchField.currentEditor() == nil else {
+            return
+        }
         [searchItem, topTabItem, downloadItem].forEach {
             if #available(macOS 15.0, *) {
                 $0?.isHidden = true

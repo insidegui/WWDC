@@ -12,8 +12,9 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 struct NewTranscriptView: View {
-//    @Environment(NewGlobalSearchCoordinator.self) var coordinator
+    @SwiftUI.Environment(GlobalSearchCoordinator.self) var searchCoordinator
     @State private var lines: [TranscriptLine] = []
+    private let originalLines = State<[TranscriptLine]>(initialValue: [])
     @State private var selectedLine: TranscriptLine?
     let viewModel: SessionViewModel
     @Binding var scrollPosition: ScrollPosition
@@ -42,16 +43,29 @@ struct NewTranscriptView: View {
         .transition(.blurReplace)
         .onReceive(linesUpdate) { newValue in
             let filtered = newValue.filter { !$0.body.isEmpty }
-            guard filtered != lines else {
+            guard filtered != originalLines.wrappedValue else {
                 return
             }
+            originalLines.wrappedValue = filtered
             withAnimation {
                 lines = filtered
             }
             updateCurrentLineIfNeeded()
         }
+        .onChange(of: searchCoordinator.searchTermForTranscript, { oldValue, newValue in
+            guard let newValue, !newValue.isEmpty else {
+                lines = originalLines.wrappedValue
+                updateCurrentLineIfNeeded()
+                return
+            }
+            lines = originalLines.wrappedValue.filter({ $0.body.lowercased().contains(newValue.lowercased()) })
+            updateCurrentLineIfNeeded()
+        })
         .onReceive(highlightChange) { newValue in
             guard newValue != selectedLine else {
+                return
+            }
+            guard searchCoordinator.searchTermForTranscript == nil else {
                 return
             }
             withAnimation(.bouncy) {
@@ -126,6 +140,15 @@ struct NewTranscriptView: View {
         withAnimation(.bouncy.delay(0.3)) {
             readyToPlay = true
         }
+    }
+}
+
+private extension GlobalSearchCoordinator {
+    var searchTermForTranscript: String? {
+        guard searchTarget == .transcripts else {
+            return nil
+        }
+        return (effectiveFilters.first(where: { $0.identifier == .text }) as? TextualFilter)?.value
     }
 }
 

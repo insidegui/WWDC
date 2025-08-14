@@ -102,12 +102,21 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
 
         let detailContent: NSView = {
             switch activeTab {
-            case .explore: return NSHostingView(rootView: NewExploreTabDetailView().environment(exploreViewModel).onAppear { [weak self] in
-                self?.hideLoading()
-            })
-            case .schedule, .videos: return NSHostingView(rootView: NewSessionDetailView().environment(detailViewModel).onAppear { [weak self] in
-                self?.hideLoading()
-            })
+            case .explore: return NSHostingView(rootView: NewExploreTabDetailView()
+                    .environment(exploreViewModel)
+                    .onAppear { [weak self] in
+                        self?.hideLoading()
+                    }
+                )
+            case .schedule, .videos:
+                let searchCoordinator = activeTab == .schedule ? scheduleTable.searchCoordinator : videosTable.searchCoordinator
+                return NSHostingView(rootView: NewSessionDetailView()
+                    .environment(detailViewModel)
+                    .environment(searchCoordinator)
+                    .onAppear { [weak self] in
+                        self?.hideLoading()
+                    }
+                )
             }
         }()
         let detailContainer = detailItem.container

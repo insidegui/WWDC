@@ -11,7 +11,7 @@ import ConfCore
 import SwiftUI
 
 @Observable class SessionItemViewModel: Identifiable {
-    var id: String { session?.identifier ?? ""  }
+    var id: String { session?.identifier ?? "" }
     var session: SessionViewModel? {
         didSet {
             if session?.identifier != oldValue?.identifier {
@@ -19,6 +19,7 @@ import SwiftUI
             }
         }
     }
+
     @ObservationIgnored private var observers = Set<AnyCancellable>()
 
     var progress: Double = 0
@@ -37,6 +38,8 @@ import SwiftUI
     var isDownloaded = false
 
     var isPlaying = false
+
+    var isTranscriptAvailable: Bool = false
 
     // MARK: - Actions
 
@@ -66,7 +69,6 @@ private extension SessionItemViewModel {
         session.rxProgresses.replaceErrorWithEmpty()
             .compactMap(\.first?.relativePosition)
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.progress = newValue
@@ -75,7 +77,6 @@ private extension SessionItemViewModel {
             .store(in: &observers)
         session.rxColor.removeDuplicates()
             .replaceError(with: .clear)
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.contextColor = newValue
@@ -84,7 +85,6 @@ private extension SessionItemViewModel {
             .store(in: &observers)
         session.rxImageUrl.replaceErrorWithEmpty()
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 self?.coverImageURL = newValue
             }
@@ -93,14 +93,12 @@ private extension SessionItemViewModel {
         title = session.session.title
         session.rxTitle.replaceError(with: "")
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 self?.title = newValue
             }
             .store(in: &observers)
         session.rxSubtitle.replaceError(with: "")
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.subtitle = newValue
@@ -110,7 +108,6 @@ private extension SessionItemViewModel {
         summary = session.session.summary
         session.rxSummary.replaceError(with: "")
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.summary = newValue
@@ -119,7 +116,6 @@ private extension SessionItemViewModel {
             .store(in: &observers)
         session.rxFooter.replaceError(with: "")
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.footer = newValue
@@ -128,7 +124,6 @@ private extension SessionItemViewModel {
             .store(in: &observers)
         session.rxContext.replaceError(with: "")
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.context = newValue
@@ -139,7 +134,6 @@ private extension SessionItemViewModel {
         isFavorite = session.session.isFavorite
         session.rxIsFavorite.replaceError(with: false)
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.isFavorite = newValue
@@ -149,7 +143,6 @@ private extension SessionItemViewModel {
         isDownloaded = session.session.isDownloaded
         session.rxIsDownloaded.replaceError(with: false)
             .removeDuplicates()
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.isDownloaded = newValue
@@ -163,11 +156,17 @@ private extension SessionItemViewModel {
                     $0.session.flatMap(SessionViewModel.init(session:))
                 }
             }
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] newValue in
                 withAnimation {
                     self?.relatedSessions = newValue.uniqueSessions()
                 }
+            }
+            .store(in: &observers)
+        session.rxTranscript
+            .replaceError(with: nil)
+            .map {  $0 != nil }
+            .sink { [weak self] newValue in
+                self?.isTranscriptAvailable = newValue
             }
             .store(in: &observers)
     }
@@ -198,12 +197,12 @@ private extension SessionItemViewModel {
         let downloadID = session.session.downloadIdentifier
 
         /// Initial state
-//        DispatchQueue.main.async {
-//            self.downloadState = SessionActionsViewModel.downloadState(
-//                session: self.session.session,
-//                downloadState: MediaDownloadManager.shared.downloads.first { $0.id == downloadID }?.state
-//            )
-//        }
+        DispatchQueue.main.async {
+            self.downloadState = SessionActionsViewModel.downloadState(
+                session: session.session,
+                downloadState: MediaDownloadManager.shared.downloads.first { $0.id == downloadID }?.state
+            )
+        }
 
         /// `true` if the session has already been downloaded.
         let alreadyDownloaded: AnyPublisher<Session, Never> = session.session

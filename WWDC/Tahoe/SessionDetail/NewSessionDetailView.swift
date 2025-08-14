@@ -10,22 +10,9 @@ import Combine
 import SwiftUI
 
 @available(macOS 26.0, *)
-struct NewSessionDetailWrapperView: View {
-    @Environment(SessionListViewModel.self) var viewModel
-    var body: some View {
-        if let session = viewModel.selectedSession {
-            NewSessionDetailView()
-                .environment(session.model)
-                .transition(.blurReplace)
-        } else {
-            Color.clear
-        }
-    }
-}
-
-@available(macOS 26.0, *)
 struct NewSessionDetailView: View {
     @Environment(SessionItemViewModel.self) var viewModel
+    @Environment(GlobalSearchCoordinator.self) var searchCoordinator
     @State private var availableTabs: [SessionDetailsViewModel.SessionTab] = [.overview]
     @State private var tab: SessionDetailsViewModel.SessionTab = .overview
     @State private var scrollPosition = ScrollPosition()
@@ -44,13 +31,30 @@ struct NewSessionDetailView: View {
         }
         .ignoresSafeArea(edges: .top)
         .scrollEdgeEffectStyle(.soft, for: .vertical)
-        .onReceive(transcriptAvailabilityUpdate) {
-            if $0, !availableTabs.contains(.transcript) {
+        .task(id: viewModel.isTranscriptAvailable) {
+            let newValue = viewModel.isTranscriptAvailable
+            if newValue, !availableTabs.contains(.transcript) {
                 availableTabs.append(.transcript)
-            } else if !$0 {
+                searchCoordinator.availableSearchTargets = [.sessions, .transcripts]
+            } else if !newValue {
                 availableTabs.removeAll(where: { $0 == .transcript })
+                searchCoordinator.availableSearchTargets = [.sessions]
                 if tab == .transcript {
                     tab = availableTabs.first ?? .overview
+                }
+            }
+        }
+        .onChange(of: tab) { oldValue, newValue in
+            if newValue == .transcript {
+                searchCoordinator.searchTarget = .transcripts
+            } else {
+                searchCoordinator.searchTarget = .sessions
+            }
+        }
+        .onChange(of: searchCoordinator.searchTarget) { oldValue, newValue in
+            if newValue == .transcripts, tab != .transcript, availableTabs.contains(.transcript) {
+                withAnimation {
+                    tab = .transcript
                 }
             }
         }
@@ -68,15 +72,6 @@ struct NewSessionDetailView: View {
         .controlSize(.large)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
-    }
-
-    private var transcriptAvailabilityUpdate: AnyPublisher<Bool, Never> {
-        viewModel.session?.rxTranscript.replaceError(with: nil).map {
-            $0 != nil
-        }
-        .removeDuplicates()
-        .receive(on: DispatchQueue.main)
-        .eraseToAnyPublisher() ?? Just(false).eraseToAnyPublisher()
     }
 }
 

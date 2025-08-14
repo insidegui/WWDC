@@ -13,6 +13,11 @@ import RealmSwift
 
 @Observable
 class GlobalSearchCoordinator: Logging {
+    enum SearchTarget: String, CaseIterable {
+        case sessions = "Sessions"
+        case transcripts = "Transcripts"
+    }
+
     @ObservationIgnored private var cancellables: Set<AnyCancellable> = []
 
     @ObservationIgnored static let log = makeLogger()
@@ -33,6 +38,9 @@ class GlobalSearchCoordinator: Logging {
         get { tabState.effectiveFilters }
         set { tabState.effectiveFilters = newValue }
     }
+
+    var availableSearchTargets = [SearchTarget.sessions]
+    var searchTarget = SearchTarget.sessions
 
     @ObservationIgnored @Published var predicate = FilterPredicate(predicate: nil, changeReason: .initialValue)
 
@@ -73,12 +81,20 @@ class GlobalSearchCoordinator: Logging {
     }
 
     func updatePredicate(_ reason: FilterChangeReason) {
+        guard searchTarget == .sessions else {
+            // transcript will handle changes on its own
+            return
+        }
         tabState.updatePredicate(reason)
     }
 
     /// Updates the selected filter options with the ones in the provided state
     /// Useful for programmatically changing the selected filters
     func apply(for tab: WWDCFiltersState.Tab) {
+        guard searchTarget == .sessions else {
+            // transcript will handle changes on its own
+            return
+        }
         if var filters = IntermediateFiltersStructure.from(existingFilters: tabState.effectiveFilters) {
             filters.apply(tab)
             tabState.effectiveFilters = filters.all

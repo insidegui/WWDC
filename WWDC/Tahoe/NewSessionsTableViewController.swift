@@ -24,7 +24,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    private let searchCoordinator: GlobalSearchCoordinator
+    let searchCoordinator: GlobalSearchCoordinator
     init(searchCoordinator: GlobalSearchCoordinator, rowProvider: SessionRowProvider, initialSelection: SessionIdentifiable?) {
         self.searchCoordinator = searchCoordinator
         var config = Self.defaultLoggerConfig()
@@ -41,14 +41,6 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    var filterItem: NSMenuToolbarItem? {
-        viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .filterItem }) as? NSMenuToolbarItem
-    }
-
-    var searchItem: NSSearchToolbarItem? {
-        viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem
     }
 
     lazy var searchHeader: NSView = NSHostingView(rootView: ListContentFilterAccessoryView().environment(searchCoordinator))
@@ -116,6 +108,11 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         super.viewWillLayout()
         prepareForDisplayingFilterItems()
         // tracking observations
+        guard searchCoordinator.searchTarget == .sessions else {
+            filterItem?.badge = nil
+            filterItem?.showsIndicator = false
+            return
+        }
         let count = searchCoordinator.effectiveFilters.filter { !$0.isEmpty }.count
         filterItem?.badge = count > 0 ? .count(count) : nil
         filterItem?.showsIndicator = count > 0
@@ -661,6 +658,7 @@ private extension NewSessionsTableViewController {
         let currentTextFilter = searchCoordinator.effectiveFilters.first(where: { $0.identifier == .text }) as? TextualFilter
         searchItem?.searchField.stringValue = currentTextFilter?.value ?? ""
         searchItem?.searchField.delegate = self // set delegate after restoring state
+        searchItem?.searchField.suggestionsDelegate = self
     }
 
     func prepareForHidingFilterItems() {
@@ -669,6 +667,7 @@ private extension NewSessionsTableViewController {
             item?.isHidden = true
         }
         searchItem?.searchField.delegate = nil
+        searchItem?.searchField.suggestionsDelegate = nil
     }
 
     @objc private func didTapFilterItem(_ item: NSToolbarItem) {
@@ -708,10 +707,7 @@ extension NewSessionsTableViewController: NSSearchFieldDelegate {
         updateTextFilter(sender: sender)
     }
 
-    private func updateTextFilter(sender: NSSearchField) {
-        if sender.stringValue.isEmpty {
-            view.window?.makeFirstResponder(tableView)
-        }
+    private func updateTextFilter(sender: NSTextField) {
         let filters = searchCoordinator.effectiveFilters
         guard
             let textIdx = filters.firstIndex(where: { $0.identifier == .text }),
@@ -723,5 +719,39 @@ extension NewSessionsTableViewController: NSSearchFieldDelegate {
         currentFilter.value = sender.stringValue
         searchCoordinator.effectiveFilters[textIdx] = currentFilter
         searchCoordinator.updatePredicate(.userInput)
+    }
+}
+
+@available(macOS 26.0, *)
+extension NewSessionsTableViewController: NSTextSuggestionsDelegate {
+    typealias SuggestionItemType = GlobalSearchCoordinator.SearchTarget
+
+    func textField(_ textField: NSTextField, provideUpdatedSuggestions responseHandler: @escaping (ItemResponse) -> Void) {
+        var items = searchCoordinator.availableSearchTargets.map { target in
+            var item = NSSuggestionItem(representedValue: target, title: target.rawValue)
+            item.image = searchCoordinator.searchTarget == target ? NSImage(systemSymbolName: "checkmark", accessibilityDescription: nil) : nil
+            return item
+        }
+        if items.count == 1 {
+            items = []
+        }
+        var response = ItemResponse(items: items)
+        response.phase = .final
+        responseHandler(response)
+    }
+
+    func textField(_ textField: NSTextField, textCompletionFor item: Item) -> String? {
+        nil
+    }
+
+    func textField(_ textField: NSTextField, didSelect item: Item) {
+        var filters = searchCoordinator.effectiveFilters
+        for idx in filters.indices {
+            filters[idx].reset()
+        }
+        searchCoordinator.effectiveFilters = filters
+        searchCoordinator.updatePredicate(.configurationChange)
+        searchCoordinator.searchTarget = item.representedValue
+        updateTextFilter(sender: textField)
     }
 }
