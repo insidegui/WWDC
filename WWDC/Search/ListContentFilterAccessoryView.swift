@@ -9,38 +9,37 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 struct ListContentFilterAccessoryView: View {
-    @State private var isExpanded: Bool = false
-    @State private var controlSize: CGSize? = CGSize(width: 0, height: 20)
-    @Environment(NewGlobalSearchCoordinator.self) var coordinator
+    @State private var controlSize: CGSize? = CGSize(width: 0, height: 30)
+    @Environment(GlobalSearchCoordinator.self) var coordinator
 
     @State private var selectedEventOptions = [ContentFilterOption]()
     @State private var selectedFocusOptions = [ContentFilterOption]()
     @State private var selectedTrackOptions = [ContentFilterOption]()
     @State private var selectedToggleOptions = [OptionalToggleFilter]()
 
-    let stateKeyPath: ReferenceWritableKeyPath<NewGlobalSearchCoordinator, GlobalSearchTabState>
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            if isExpanded, let filter = coordinator[keyPath: stateKeyPath].eventFilter {
+            if let filter = coordinator.eventFilter {
                 PickAnyMenuPicker(title: filter.emptyTitle, options: filter.pickerOptions, selectedItems: $selectedEventOptions)
                     .frame(height: controlSize?.height)
             }
-            if isExpanded, let filter = coordinator[keyPath: stateKeyPath].focusFilter {
+            if let filter = coordinator.focusFilter {
                 PickAnyMenuPicker(title: filter.emptyTitle, options: filter.pickerOptions, selectedItems: $selectedFocusOptions)
                     .frame(height: controlSize?.height)
             }
-            if isExpanded, let filter = coordinator[keyPath: stateKeyPath].trackFilter {
+            if let filter = coordinator.trackFilter {
                 PickAnyMenuPicker(title: filter.emptyTitle, options: filter.pickerOptions, selectedItems: $selectedTrackOptions)
                     .frame(height: controlSize?.height)
             }
 
-            if isExpanded, let toggleFilters = coordinator[keyPath: stateKeyPath].bottomFilters {
-                PickAnyPicker(options: toggleFilters, selectedItems: $selectedToggleOptions, controlSize: $controlSize)
+            if let toggleFilters = coordinator.bottomFilters {
+                Divider()
+                    .frame(height: 10)
+                PickAnyMenuPicker(title: "All Results", options: toggleFilters, selectedItems: $selectedToggleOptions)
+                    .frame(height: controlSize?.height)
             }
         }
-        .padding(.horizontal)
-        .frame(maxWidth: .infinity)
-        .background()
+        .padding([.horizontal, .bottom])
         .onChange(of: selectedEventOptions) { oldValue, newValue in
             guard newValue != oldValue else { return }
             updateEffectiveFilters()
@@ -67,20 +66,10 @@ struct ListContentFilterAccessoryView: View {
                 }
             }
         }
-        .task {
-            withAnimation {
-                isExpanded = true
-            }
-        }
-        .onDisappear {
-            withAnimation {
-                isExpanded = false
-            }
-        }
     }
 
     private func updateEffectiveFilters() {
-        var currentFilters = coordinator[keyPath: stateKeyPath].effectiveFilters
+        var currentFilters = coordinator.effectiveFilters
         for idx in currentFilters.indices {
             if currentFilters[idx].identifier == .event, var eventFilter = currentFilters[idx] as? MultipleChoiceFilter {
                 eventFilter.selectedOptions = eventFilter.options.filter({ selectedEventOptions.compactMap(\.label).contains($0.title) })
@@ -100,12 +89,12 @@ struct ListContentFilterAccessoryView: View {
             }
         }
 
-        coordinator[keyPath: stateKeyPath].effectiveFilters = currentFilters
-        coordinator[keyPath: stateKeyPath].updatePredicate(.userInput)
+        coordinator.effectiveFilters = currentFilters
+        coordinator.updatePredicate(.userInput)
     }
 }
 
-private extension GlobalSearchTabState {
+private extension GlobalSearchCoordinator {
     var eventFilter: MultipleChoiceFilter? {
         effectiveFilters.first(where: { $0.identifier == .event }) as? MultipleChoiceFilter
     }

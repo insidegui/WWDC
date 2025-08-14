@@ -25,9 +25,9 @@ struct FilterResetButton: View {
                 Text("\(count)")
                     .fontDesign(.monospaced)
                     .padding(.horizontal, 4)
-                    .foregroundStyle(.primary)
                     .capsuleBackground(Color.secondary)
             }
+            .foregroundStyle(.white)
             .onGeometryChange(for: CGFloat.self) { proxy in
                 proxy.size.width
             } action: { newValue in
@@ -36,7 +36,7 @@ struct FilterResetButton: View {
         }
         .help("Clear")
         .frame(width: contentWidth.flatMap { $0 + 15 } ?? 70)
-        .buttonStyle(.capsuleButton(tint: filterTint, glassy: true, hoveringAlpha: 1, horizontalPadding: 0))
+        .buttonStyle(.capsuleButton(highlighted: true, highlightedColor: filterTint, hoveringAlpha: 1, horizontalPadding: 0))
         .onHover { isHovering in
             withAnimation {
                 showClearIcon = isHovering
@@ -48,6 +48,6 @@ struct FilterResetButton: View {
         guard count > 0 else {
             return nil
         }
-        return showClearIcon ? .red.opacity(0.5) : .accentColor.opacity(0.5)
+        return showClearIcon ? .red : .accentColor
     }
 }

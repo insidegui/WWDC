@@ -66,9 +66,9 @@ struct SessionListSection: Identifiable, Equatable {
     @ObservationIgnored @Published var isReady = false
 
     init(
+        searchCoordinator: GlobalSearchCoordinator,
         rowProvider: SessionRowProvider,
-        initialSelection: SessionIdentifiable?,
-        searchCoordinator: GlobalSearchCoordinator
+        initialSelection: SessionIdentifiable?
     ) {
         self.rowProvider = rowProvider
         self.initialSelection = initialSelection

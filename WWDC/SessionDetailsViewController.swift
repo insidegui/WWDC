@@ -91,6 +91,4 @@ final class SessionDetailsViewController: NSViewController {
         view.frame = NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height)
         view.wantsLayer = true
     }
-
-    var searchCoordinator: NewGlobalSearchCoordinator!
 }

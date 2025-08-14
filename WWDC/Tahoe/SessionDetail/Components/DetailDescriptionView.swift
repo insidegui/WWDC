@@ -22,13 +22,14 @@ extension NewSessionDetailView {
                 case .overview:
                     Group {
                         OverviewContentView()
-                        @Bindable var viewModel = viewModel
-                        RelatedSessionsView(sessions: $viewModel.relatedSessions, scrollPosition: scrollPosition)
+                        RelatedSessionsView(sessions: viewModel.relatedSessions, scrollPosition: scrollPosition)
                     }
                     .transition(.blurReplace)
                 case .transcript:
-                    NewTranscriptView(viewModel: viewModel.session!, scrollPosition: scrollPosition)
-                        .transition(.blurReplace)
+                    if let session = viewModel.session {
+                        NewTranscriptView(viewModel: session, scrollPosition: scrollPosition)
+                            .transition(.blurReplace)
+                    }
                 case .bookmarks:
                     Text("Bookmarks view coming soon")
                         .foregroundColor(.secondary)

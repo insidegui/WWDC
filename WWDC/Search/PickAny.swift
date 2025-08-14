@@ -38,7 +38,7 @@ struct PickAnyPicker<Item: PickAnyPickerItem>: View {
     }
 
     var body: some View {
-        ScrollView(.horizontal) {
+//        ScrollView(.horizontal) {
             HStack(spacing: 5) {
                 if showClearButton && !selectedItems.isEmpty {
                     FilterResetButton(count: selectedItems.count) {
@@ -58,10 +58,9 @@ struct PickAnyPicker<Item: PickAnyPickerItem>: View {
                         controlSize = newValue
                     }
             }
-            .padding(.bottom, 10)
-        }
-//        .frame(minWidth: segmentSize?.width)
-        .scrollDisabled(selectedItems.isEmpty)
+//            .padding(.bottom, 10)
+//        }
+//        .scrollDisabled(selectedItems.isEmpty)
     }
 }
 
@@ -104,7 +103,7 @@ struct PickAnyMenuPicker<Item: PickAnyPickerItem>: View {
                 titleView
                     .contentShape(Rectangle())
             }
-            .buttonStyle(.capsuleButton(tint: selectedItems.isEmpty ? nil : .accentColor.opacity(0.5), trailingIcon: Image(systemName: "chevron.up.chevron.down"), glassy: true))
+            .buttonStyle(.capsuleButton(highlighted: !selectedItems.isEmpty, trailingIcon: Image(systemName: "chevron.up.chevron.down")))
         }
         .frame(maxWidth: .infinity)
         .onChange(of: options) { oldValue, newValue in

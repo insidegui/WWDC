@@ -80,8 +80,6 @@ extension NewMainWindowController: NSToolbarDelegate {
             item.toolTip = "Filter"
             return item
         case .tabSelectionItem:
-            let group = NSToolbarItemGroup()
-            group.backgroundTintColor
             let segmentControl = NSSegmentedControl()
             segmentControl.segmentCount = MainWindowTab.allCases.count
             segmentControl.trackingMode = .selectOne

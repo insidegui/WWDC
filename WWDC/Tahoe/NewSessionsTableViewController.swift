@@ -51,8 +51,19 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         viewIfLoaded?.window?.toolbar?.items.first(where: { $0.itemIdentifier == .searchItem }) as? NSSearchToolbarItem
     }
 
+    lazy var searchHeader: NSView = NSHostingView(rootView: ListContentFilterAccessoryView().environment(searchCoordinator))
+
+    var scrollTopConstraint: NSLayoutConstraint!
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 100, height: MainWindowController.defaultRect.height))
+        super.loadView()
+        view.addSubview(searchHeader)
+        searchHeader.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            searchHeader.topAnchor.constraint(equalTo: view.topAnchor),
+            searchHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        searchHeader.isHidden = true
 
         scrollView.frame = view.bounds
         tableView.frame = view.bounds
@@ -63,7 +74,8 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollTopConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+        scrollTopConstraint.isActive = true
     }
 
     override func viewDidLoad() {
@@ -84,6 +96,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
                 self?.updateWith(rows: $0, animated: true)
             }
             .store(in: &cancellables)
+        searchCoordinator.updatePredicate(.configurationChange) // trigger row updates
     }
 
     override func viewDidAppear() {
@@ -101,30 +114,11 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
     override func viewWillLayout() {
         super.viewWillLayout()
+        prepareForDisplayingFilterItems()
+        // tracking observations
         let count = searchCoordinator.effectiveFilters.filter { !$0.isEmpty }.count
         filterItem?.badge = count > 0 ? .count(count) : nil
         filterItem?.showsIndicator = count > 0
-    }
-
-    @objc private func didTapFilterItem(_ item: NSToolbarItem) {
-//        let isHeaderHiddenNext = !footer.isHidden
-//        let nextTopInset = isHeaderHiddenNext ? 0 : (footer.bounds.height - footer.safeAreaInsets.top)
-//        item.image = NSImage(systemSymbolName: isHeaderHiddenNext ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: isHeaderHiddenNext ? "Show Filter Options" : "Hide Filter Options")
-//        item.toolTip = item.image?.accessibilityDescription
-//        NSAnimationContext.runAnimationGroup { _ in
-//            footer.animator().alphaValue = isHeaderHiddenNext ? 0 : 1
-//        } completionHandler: {
-//            self.footer.isHidden = isHeaderHiddenNext
-//        }
-    }
-
-    @objc private func didTapClearItem(_ item: Any) {
-        searchCoordinator.resetAction.send()
-        if let searchField = searchItem?.searchField {
-            searchField.stringValue = ""
-            updateTextFilter(sender: searchField)
-        }
-        view.window?.makeFirstResponder(tableView)
     }
 
     // MARK: - Selection
@@ -185,7 +179,11 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
 
     private lazy var displayedRowsLock = DispatchQueue(label: "io.wwdc.sessiontable.displayedrows.lock\(self.hashValue)", qos: .userInteractive)
 
+    @Published
+    private(set) var hasPerformedInitialRowDisplay = false
+
     private func performInitialRowDisplayIfNeeded(displaying rows: [SessionRow], allRows: [SessionRow]) -> Bool {
+        guard !hasPerformedInitialRowDisplay else { return true }
         displayedRowsLock.suspend()
 
         displayedRows = rows
@@ -211,6 +209,7 @@ class NewSessionsTableViewController: NSViewController, NSMenuItemValidation, Lo
             self.tableView.allowsEmptySelection = false
         } completionHandler: {
             self.displayedRowsLock.resume()
+            self.hasPerformedInitialRowDisplay = true
         }
 
         return false
@@ -645,6 +644,9 @@ extension NewSessionsTableViewController: NSTableViewDataSource, NSTableViewDele
 @available(macOS 26.0, *)
 private extension NewSessionsTableViewController {
     func prepareForDisplayingFilterItems() {
+        guard filterItem?.target !== self else {
+            return
+        }
         for item in [filterItem, searchItem] {
             item?.target = self
             item?.isHidden = false
@@ -653,7 +655,7 @@ private extension NewSessionsTableViewController {
         filterItem?.menu.removeAllItems()
         filterItem?.menu.autoenablesItems = false
         filterItem?.menu.addItem(withTitle: "Clear All Filters", action: #selector(didTapClearItem), keyEquivalent: "").target = self
-//        filterItem?.image = NSImage(systemSymbolName: footer.isHidden ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: footer.isHidden ? "Show Filter Options" : "Hide Filter Options")
+        filterItem?.image = NSImage(systemSymbolName: searchHeader.isHidden ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: searchHeader.isHidden ? "Show Filter Options" : "Hide Filter Options")
         filterItem?.toolTip = filterItem?.image?.accessibilityDescription
 
         let currentTextFilter = searchCoordinator.effectiveFilters.first(where: { $0.identifier == .text }) as? TextualFilter
@@ -667,6 +669,33 @@ private extension NewSessionsTableViewController {
             item?.isHidden = true
         }
         searchItem?.searchField.delegate = nil
+    }
+
+    @objc private func didTapFilterItem(_ item: NSToolbarItem) {
+        let isHeaderHiddenNext = !searchHeader.isHidden
+        setFilterView(isHidden: isHeaderHiddenNext, item: item)
+    }
+
+    private func setFilterView(isHidden isHeaderHiddenNext: Bool, item: NSToolbarItem) {
+        let nextTopInset = isHeaderHiddenNext ? 0 : searchHeader.bounds.height
+        item.image = NSImage(systemSymbolName: isHeaderHiddenNext ? "line.3.horizontal.decrease.circle" : "line.3.horizontal.decrease.circle.fill", accessibilityDescription: isHeaderHiddenNext ? "Show Filter Options" : "Hide Filter Options")
+        item.toolTip = item.image?.accessibilityDescription
+        NSAnimationContext.runAnimationGroup { _ in
+            searchHeader.animator().alphaValue = isHeaderHiddenNext ? 0 : 1
+            scrollTopConstraint.animator().constant = nextTopInset
+        } completionHandler: {
+            self.searchHeader.isHidden = isHeaderHiddenNext
+        }
+    }
+
+    @objc private func didTapClearItem(_ item: Any) {
+        searchCoordinator.resetAction.send()
+        if let item = filterItem, let searchField = searchItem?.searchField {
+            searchField.stringValue = ""
+            updateTextFilter(sender: searchField)
+            setFilterView(isHidden: true, item: item)
+        }
+        view.window?.makeFirstResponder(tableView)
     }
 }
 

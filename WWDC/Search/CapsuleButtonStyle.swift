@@ -10,46 +10,38 @@ import SwiftUI
 
 @available(macOS 26.0, *)
 extension ButtonStyle where Self == CapsuleButtonStyle {
-    static var capsuleButton: CapsuleButtonStyle {
-        capsuleButton(glassy: false)
-    }
-
-    static func capsuleButton(tint: Color? = nil, trailingIcon: Image? = nil, glassy: Bool, hoveringAlpha: CGFloat = 0.3, horizontalPadding: CGFloat = 10) -> CapsuleButtonStyle {
-        CapsuleButtonStyle(tint: tint, trailingIcon: trailingIcon, glassy: glassy, hoveringAlpha: hoveringAlpha, horizontalPadding: horizontalPadding)
+    static func capsuleButton(highlighted: Bool, highlightedColor: Color? = nil, trailingIcon: Image? = nil, hoveringAlpha: CGFloat = 0.3, horizontalPadding: CGFloat = 10) -> CapsuleButtonStyle {
+        CapsuleButtonStyle(highlighted: highlighted, highlightedColor: highlightedColor, trailingIcon: trailingIcon, hoveringAlpha: hoveringAlpha, horizontalPadding: horizontalPadding)
     }
 }
 
 @available(macOS 26.0, *)
 struct CapsuleButtonStyle: ButtonStyle {
-    var tint: Color?
+    var highlighted: Bool
+    var highlightedColor: Color?
     var trailingIcon: Image?
-    var glassy: Bool = false
     var hoveringAlpha: CGFloat = 0.3
     var horizontalPadding: CGFloat = 10
     @State private var isHovered = false
     func makeBody(configuration: Configuration) -> some View {
-        GeometryReader { geometry in
-            ZStack {
-                backgroundColor(isPressed: configuration.isPressed)
-                    .contentShape(Rectangle()) // expand hit test rect for menus
-//                    .clipShape(RoundedRectangle(cornerRadius: geometry.size.height * 0.5))
-                    .clipShape(ConcentricRectangle(corners: .concentric(minimum: 10), isUniform: true))
+        ZStack {
+            backgroundColor(isPressed: configuration.isPressed)
+                .contentShape(.capsule) // expand hit test rect for menus
+                .clipShape(.capsule)
 
-                HStack {
-                    configuration.label
-                        .foregroundStyle(.primary)
-                        .multilineTextAlignment(.leading)
-                        .lineLimit(1)
-                    if let trailingIcon {
-                        Spacer()
-                        trailingIcon
-                    }
+            HStack {
+                configuration.label
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(1)
+                if let trailingIcon {
+                    Spacer()
+                    trailingIcon
                 }
-//                .padding(.horizontal, horizontalPadding)
             }
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
-            .animation(.bouncy, value: configuration.isPressed)
+            .foregroundStyle(highlighted ? .white : .primary)
+            .padding(.horizontal, horizontalPadding)
         }
+        .animation(.bouncy, value: configuration.isPressed)
         .onHover { isHovering in
             withAnimation {
                 isHovered = isHovering
@@ -57,11 +49,9 @@ struct CapsuleButtonStyle: ButtonStyle {
         }
     }
 
-    private func backgroundColor(isPressed: Bool) -> Color {
-        if isHovered || isPressed {
-            return (tint ?? .secondary).opacity(hoveringAlpha)
-        } else {
-            return tint ?? .clear
-        }
+    @ViewBuilder
+    private func backgroundColor(isPressed: Bool) -> some View {
+        (highlighted ? (highlightedColor ?? Color.accentColor) : Color.secondary.opacity(0.3))
+            .opacity((isHovered || isPressed) ? hoveringAlpha : 1)
     }
 }

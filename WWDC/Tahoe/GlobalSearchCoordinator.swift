@@ -23,14 +23,18 @@ class GlobalSearchCoordinator: Logging {
     // view action caller, to avoid two way bindings
     @ObservationIgnored let resetAction = PassthroughSubject<Void, Never>()
 
-    @ObservationIgnored fileprivate var tabState: GlobalSearchTabState
+    fileprivate var tabState: GlobalSearchTabState {
+        willSet {
+            predicate = newValue.filterPredicate
+        }
+    }
 
-    @ObservationIgnored var effectiveFilters: [FilterType] {
+    var effectiveFilters: [FilterType] {
         get { tabState.effectiveFilters }
         set { tabState.effectiveFilters = newValue }
     }
 
-    var filterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue)
+    @ObservationIgnored @Published var predicate = FilterPredicate(predicate: nil, changeReason: .initialValue)
 
     init(
         _ storage: Storage,

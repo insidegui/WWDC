@@ -50,11 +50,24 @@ final class NewAppCoordinator: WWDCCoordinator {
     // - Top level controllers
     var windowController: WWDCWindowControllerObject
     var tabController: ReplaceableSplitViewController
-    var searchCoordinator: NewGlobalSearchCoordinator
+    var searchCoordinator: GlobalSearchCoordinator? {
+        switch activeTab {
+        case .explore:
+            return nil
+        case .schedule:
+            return scheduleSearchCoordinator
+        case .videos:
+            return videosSearchCoordinator
+        }
+    }
 
     // - The 3 tabs
     let exploreViewModel: NewExploreViewModel
+
+    let scheduleSearchCoordinator: GlobalSearchCoordinator
     let scheduleTable: NewSessionsTableViewController
+
+    let videosSearchCoordinator: GlobalSearchCoordinator
     let videosTable: NewSessionsTableViewController
     var currentShelfViewController: ShelfViewController?
 
@@ -126,12 +139,6 @@ final class NewAppCoordinator: WWDCCoordinator {
         self.storage = storage
         self.syncEngine = syncEngine
 
-        let searchCoordinator = NewGlobalSearchCoordinator(
-            self.storage,
-            restorationFiltersState: Preferences.shared.filtersState
-        )
-        self.searchCoordinator = searchCoordinator
-
         liveObserver = LiveObserver(dateProvider: today, storage: storage, syncEngine: syncEngine)
 
         // Primary UI Initialization
@@ -140,35 +147,37 @@ final class NewAppCoordinator: WWDCCoordinator {
         let provider = ExploreTabProvider(storage: storage)
         exploreViewModel = NewExploreViewModel(provider: provider)
 
+        videosSearchCoordinator = VideosSearchCoordinator(
+            storage,
+            tabState: GlobalSearchTabState(
+                additionalPredicates: [Session.videoPredicate],
+                filterPredicate: .init(predicate: nil, changeReason: .initialValue)
+            )
+        )
         videosTable = NewSessionsTableViewController(
-            searchCoordinator: VideosSearchCoordinator(
-                storage,
-                tabState: GlobalSearchTabState(
-                    additionalPredicates: [Session.videoPredicate],
-                    filterPredicate: .init(predicate: nil, changeReason: .initialValue)
-                )
-            ),
+            searchCoordinator: videosSearchCoordinator,
             rowProvider: VideosSessionRowProvider(
                 tracks: storage.tracks,
-                filterPredicate: searchCoordinator.$videosFilterPredicate,
+                filterPredicate: videosSearchCoordinator.$predicate,
                 playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
             ),
             initialSelection: Preferences.shared.selectedVideoItemIdentifier.map(SessionIdentifier.init)
         )
+        scheduleSearchCoordinator = ScheduleSearchCoordinator(
+            storage,
+            tabState: GlobalSearchTabState(
+                additionalPredicates: [
+                    NSPredicate(format: "ANY session.event.isCurrent == true"),
+                    NSPredicate(format: "session.instances.@count > 0")
+                ],
+                filterPredicate: .init(predicate: nil, changeReason: .initialValue)
+            )
+        )
         scheduleTable = NewSessionsTableViewController(
-            searchCoordinator: ScheduleSearchCoordinator(
-                storage,
-                tabState: GlobalSearchTabState(
-                    additionalPredicates: [
-                        NSPredicate(format: "ANY session.event.isCurrent == true"),
-                        NSPredicate(format: "session.instances.@count > 0")
-                    ],
-                    filterPredicate: .init(predicate: nil, changeReason: .initialValue)
-                )
-            ),
+            searchCoordinator: scheduleSearchCoordinator,
             rowProvider: ScheduleSessionRowProvider(
                 scheduleSections: storage.scheduleSections,
-                filterPredicate: searchCoordinator.$scheduleFilterPredicate,
+                filterPredicate: scheduleSearchCoordinator.$predicate,
                 playingSessionIdentifier: _playerOwnerSessionIdentifier.projectedValue
             ),
             initialSelection: Preferences.shared.selectedScheduleItemIdentifier.map(SessionIdentifier.init)
@@ -323,7 +332,12 @@ final class NewAppCoordinator: WWDCCoordinator {
         Preferences.shared.activeTab = activeTab
         Preferences.shared.selectedScheduleItemIdentifier = scheduleSelectedSessionViewModel?.identifier
         Preferences.shared.selectedVideoItemIdentifier = videosSelectedSessionViewModel?.identifier
-        Preferences.shared.filtersState = searchCoordinator.restorationSnapshot()
+        let uiState = WWDCFiltersState(
+            scheduleTab: WWDCFiltersState.Tab(filters: scheduleSearchCoordinator.effectiveFilters),
+            videosTab: WWDCFiltersState.Tab(filters: videosSearchCoordinator.effectiveFilters)
+        )
+        Preferences.shared.filtersState = (try? JSONEncoder().encode(uiState))
+            .flatMap { String(bytes: $0, encoding: .utf8) }
     }
 
     // MARK: - Deep linking
@@ -331,10 +345,10 @@ final class NewAppCoordinator: WWDCCoordinator {
     func handle(link: DeepLink) {
         if link.isForCurrentYear {
             tabController.setActiveTab(MainWindowTab.schedule)
-//            scheduleListController.select(session: link)
+            scheduleTable.select(session: link)
         } else {
             tabController.setActiveTab(MainWindowTab.videos)
-//            videosListController.select(session: link)
+            videosTable.select(session: link)
         }
     }
 
@@ -342,7 +356,7 @@ final class NewAppCoordinator: WWDCCoordinator {
         tabController.setActiveTab(MainWindowTab.videos)
 
         DispatchQueue.main.async {
-            self.searchCoordinator.apply(state)
+            self.videosSearchCoordinator.apply(for: .init(filters: self.videosSearchCoordinator.effectiveFilters))
         }
     }
 
@@ -481,7 +495,7 @@ final class NewAppCoordinator: WWDCCoordinator {
             self.selectSessionOnAppropriateTab(with: viewModel)
 
             DispatchQueue.main.async {
-//                self.videosDetailController.shelfController.play(nil)
+                self.currentShelfViewController?.play(nil)
             }
         }.store(in: &cancellables)
 

@@ -14,6 +14,7 @@ import SwiftUI
 class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
     typealias Tab = MainWindowTab
     let exploreViewModel: NewExploreViewModel
+    var scheduleViewModel: SessionListViewModel!
     let scheduleTable: NewSessionsTableViewController
     let videosTable: NewSessionsTableViewController
     let detailViewModel: SessionItemViewModel
@@ -70,12 +71,16 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
         super.viewDidLoad()
         sidebarItem = NSSplitViewItem(sidebarWithViewController: SplitContainer(nibName: nil, bundle: nil))
         sidebarItem.container.isSidebar = true
-        sidebarItem.canCollapse = false
+        sidebarItem.canCollapse = true
         sidebarItem.automaticallyAdjustsSafeAreaInsets = true
         addSplitViewItem(sidebarItem)
         detailItem = NSSplitViewItem(viewController: SplitContainer(nibName: nil, bundle: nil))
         detailItem.automaticallyAdjustsSafeAreaInsets = true
         addSplitViewItem(detailItem)
+        sidebarItem.viewController.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        detailItem.viewController.view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        detailItem.viewController.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+
         showLoading()
     }
 
@@ -97,7 +102,9 @@ class ReplaceableSplitViewController: NSSplitViewController, WWDCTabController {
 
         let detailContent: NSView = {
             switch activeTab {
-            case .explore: return NSHostingView(rootView: NewExploreTabDetailView().environment(exploreViewModel))
+            case .explore: return NSHostingView(rootView: NewExploreTabDetailView().environment(exploreViewModel).onAppear { [weak self] in
+                self?.hideLoading()
+            })
             case .schedule, .videos: return NSHostingView(rootView: NewSessionDetailView().environment(detailViewModel).onAppear { [weak self] in
                 self?.hideLoading()
             })

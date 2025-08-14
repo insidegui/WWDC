@@ -14,7 +14,9 @@ import SwiftUI
     var id: String { session?.identifier ?? ""  }
     var session: SessionViewModel? {
         didSet {
-            prepareForDisplay()
+            if session?.identifier != oldValue?.identifier {
+                prepareForDisplay()
+            }
         }
     }
     @ObservationIgnored private var observers = Set<AnyCancellable>()

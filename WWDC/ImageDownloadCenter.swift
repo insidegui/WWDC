@@ -320,6 +320,7 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
             guard let self = self else { return }
 
             guard !self.isCancelled else {
+                self.callCompletionHandlers() // make sure checked continuation is always called
                 self._executing = false
                 self._finished = true
                 return
@@ -340,6 +341,7 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
             }
 
             guard !self.isCancelled else {
+                self.callCompletionHandlers() // make sure checked continuation is always called
                 self._executing = false
                 self._finished = true
                 return

@@ -35,7 +35,7 @@
 		8181E27A2E3A5E6E0033126E /* NewMainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E2792E3A5E620033126E /* NewMainWindowController.swift */; };
 		8181E27C2E3A63550033126E /* WWDCCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E27B2E3A634D0033126E /* WWDCCoordinator.swift */; };
 		8181E27E2E3A6CC70033126E /* NewAppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */; };
-		8196CAF32E3D6353008482E3 /* NewGlobalSearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CAF22E3D634A008482E3 /* NewGlobalSearchCoordinator.swift */; };
+		8196CAF32E3D6353008482E3 /* GlobalSearchTabState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CAF22E3D634A008482E3 /* GlobalSearchTabState.swift */; };
 		8196CAF62E3DE0A2008482E3 /* CapsuleToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CAF52E3DE09C008482E3 /* CapsuleToggleStyle.swift */; };
 		8196CAF82E3DE117008482E3 /* CapsuleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CAF72E3DE112008482E3 /* CapsuleButtonStyle.swift */; };
 		8196CAFA2E3DE355008482E3 /* View+CapsuleBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CAF92E3DE34E008482E3 /* View+CapsuleBackground.swift */; };
@@ -46,7 +46,7 @@
 		8196CB162E3E62CB008482E3 /* SelectAnySegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8196CB152E3E62CB008482E3 /* SelectAnySegmentControl.swift */; };
 		81AACF162E39232E000A2319 /* ToolbarSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AACF152E39231D000A2319 /* ToolbarSetup.swift */; };
 		81C8451E2E47CA7A0065E647 /* NewSessionTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C8451D2E47CA7A0065E647 /* NewSessionTableCellView.swift */; };
-		81C845202E47DD7B0065E647 /* NewSessionsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C8451F2E47DD750065E647 /* NewSessionsTableView.swift */; };
+		81C845202E47DD7B0065E647 /* ViewControllerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C8451F2E47DD750065E647 /* ViewControllerWrapper.swift */; };
 		81CE115D2E3919ED002A0475 /* TahoeFeatureFlag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */; };
 		81CE57982E43DA260006C9B9 /* NewExploreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57972E43DA260006C9B9 /* NewExploreViewModel.swift */; };
 		81CE579A2E43DA370006C9B9 /* NewExploreCategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CE57992E43DA370006C9B9 /* NewExploreCategoryList.swift */; };
@@ -362,7 +362,7 @@
 		8181E2792E3A5E620033126E /* NewMainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMainWindowController.swift; sourceTree = "<group>"; };
 		8181E27B2E3A634D0033126E /* WWDCCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCCoordinator.swift; sourceTree = "<group>"; };
 		8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAppCoordinator.swift; sourceTree = "<group>"; };
-		8196CAF22E3D634A008482E3 /* NewGlobalSearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGlobalSearchCoordinator.swift; sourceTree = "<group>"; };
+		8196CAF22E3D634A008482E3 /* GlobalSearchTabState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchTabState.swift; sourceTree = "<group>"; };
 		8196CAF52E3DE09C008482E3 /* CapsuleToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleToggleStyle.swift; sourceTree = "<group>"; };
 		8196CAF72E3DE112008482E3 /* CapsuleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButtonStyle.swift; sourceTree = "<group>"; };
 		8196CAF92E3DE34E008482E3 /* View+CapsuleBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CapsuleBackground.swift"; sourceTree = "<group>"; };
@@ -373,7 +373,7 @@
 		8196CB152E3E62CB008482E3 /* SelectAnySegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAnySegmentControl.swift; sourceTree = "<group>"; };
 		81AACF152E39231D000A2319 /* ToolbarSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarSetup.swift; sourceTree = "<group>"; };
 		81C8451D2E47CA7A0065E647 /* NewSessionTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionTableCellView.swift; sourceTree = "<group>"; };
-		81C8451F2E47DD750065E647 /* NewSessionsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSessionsTableView.swift; sourceTree = "<group>"; };
+		81C8451F2E47DD750065E647 /* ViewControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerWrapper.swift; sourceTree = "<group>"; };
 		81CE115C2E3919E6002A0475 /* TahoeFeatureFlag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TahoeFeatureFlag.swift; sourceTree = "<group>"; };
 		81CE57972E43DA260006C9B9 /* NewExploreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExploreViewModel.swift; sourceTree = "<group>"; };
 		81CE57992E43DA370006C9B9 /* NewExploreCategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewExploreCategoryList.swift; sourceTree = "<group>"; };
@@ -682,7 +682,7 @@
 				8181E27D2E3A6CC20033126E /* NewAppCoordinator.swift */,
 				81E050542E3A854B007274FB /* NewSessionsTableViewController.swift */,
 				81057FF92E489E8C006ACCE7 /* InteractionEffects.swift */,
-				8196CAF22E3D634A008482E3 /* NewGlobalSearchCoordinator.swift */,
+				8196CAF22E3D634A008482E3 /* GlobalSearchTabState.swift */,
 				81CE57A32E43DC4D0006C9B9 /* GlobalSearchCoordinator.swift */,
 			);
 			path = Tahoe;
@@ -697,7 +697,7 @@
 				81CE57A72E44850C0006C9B9 /* SessionItemViewModel.swift */,
 				81CE57A52E4484D60006C9B9 /* SessionItemView.swift */,
 				81C8451D2E47CA7A0065E647 /* NewSessionTableCellView.swift */,
-				81C8451F2E47DD750065E647 /* NewSessionsTableView.swift */,
+				81C8451F2E47DD750065E647 /* ViewControllerWrapper.swift */,
 			);
 			path = SessionList;
 			sourceTree = "<group>";
@@ -1743,7 +1743,7 @@
 				81E1727D2E42698E00BC1E5C /* DetailRelatedSessionView.swift in Sources */,
 				81E1727B2E42695900BC1E5C /* DetailDescriptionView.swift in Sources */,
 				DDB352841EC7C74C00254815 /* LiveObserver.swift in Sources */,
-				8196CAF32E3D6353008482E3 /* NewGlobalSearchCoordinator.swift in Sources */,
+				8196CAF32E3D6353008482E3 /* GlobalSearchTabState.swift in Sources */,
 				DDDF807420BA3124007284F8 /* ExploreViewController.swift in Sources */,
 				DDF32EAF1EBE34CB0028E39D /* TitleTableCellView.swift in Sources */,
 				81CE579C2E43DA8F0006C9B9 /* NewExploreTabContentView.swift in Sources */,
@@ -1812,7 +1812,7 @@
 				4D9EE96424BCE097001B1720 /* FilterState.swift in Sources */,
 				DD7F387A1EAC0CE3002D8C00 /* SessionSummaryViewController.swift in Sources */,
 				8196CB072E3DF2AD008482E3 /* ListContentFilterAccessoryView.swift in Sources */,
-				81C845202E47DD7B0065E647 /* NewSessionsTableView.swift in Sources */,
+				81C845202E47DD7B0065E647 /* ViewControllerWrapper.swift in Sources */,
 				F474DECD2673801500B28B31 /* WatchWWDCActivity.swift in Sources */,
 				DD382B7E1EAC3565009760C4 /* TabItemView.swift in Sources */,
 				DDCE7ECD1EA7A0F800C7A3CA /* MainWindowController.swift in Sources */,

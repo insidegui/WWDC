@@ -9,6 +9,7 @@
 import AppKit
 import SwiftUI
 
+@available(macOS 26.0, *)
 struct SelectAnySegmentControl<Item: PickAnyPickerItem>: NSViewRepresentable {
     let options: [Item]
     @Binding var selectedItems: [Item]
@@ -37,6 +38,8 @@ struct SelectAnySegmentControl<Item: PickAnyPickerItem>: NSViewRepresentable {
         let control = NSSegmentedControl(labels: options.compactMap(\.label).map(String.init(_:)), trackingMode: .selectAny, target: context.coordinator, action: #selector(Coordinator.selectionDidChange))
         control.segmentStyle = .roundRect
         context.coordinator.onSelectionChange = onSelectionChange(_:)
+        control.borderShape = .capsule
+        control.segmentDistribution = .fillProportionally
         return control
     }
 
@@ -60,5 +63,17 @@ struct SelectAnySegmentControl<Item: PickAnyPickerItem>: NSViewRepresentable {
         @objc func selectionDidChange(_ control: NSSegmentedControl) {
             onSelectionChange?(control)
         }
+    }
+}
+
+#Preview {
+    @Previewable @State var selectedItems: [ContentFilterOption] = []
+    if #available(macOS 26.0, *) {
+        PickAnyPicker(options: [
+            "Favorites",
+            "Downloaded",
+            "UnWatched",
+            "Bookmarks"
+        ], selectedItems: $selectedItems)
     }
 }
