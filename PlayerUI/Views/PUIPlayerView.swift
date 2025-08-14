@@ -1378,26 +1378,13 @@ public final class PUIPlayerView: NSView {
         hideControls(animated: true)
     }
 
-    private func hideControls(animated: Bool) {
+    private func hideControls(animated: Bool, isMouseInToolbar: Bool = false) {
         guard canHideControls else { return }
 
-        setControls(opacity: 0, animated: animated)
-        hideToolbarItems()
-    }
-
-    private func hideToolbarItems() {
-        guard shouldAdoptLiquidGlass, let window else { return }
-        let windowMouseLocation = window.convertPoint(fromScreen: NSEvent.mouseLocation)
-        let hideItems = !isMouseInToolbarArea(windowMouseLocation)
-        window.toolbar?.items.filter({
-            ["wwdc.sidebar.search", "wwdc.main.centered.tab", "wwdc.main.download"].contains($0.itemIdentifier.rawValue)
-        }).forEach {
-            if #available(macOS 15.0, *) {
-                $0.isHidden = hideItems
-            } else {
-                // Fallback on earlier versions
-            }
+        if !isMouseInToolbar {
+            appearanceDelegate?.playerViewWillHidePlayControls(self)
         }
+        setControls(opacity: 0, animated: animated)
     }
 
     private func showControls(animated: Bool) {
@@ -1405,32 +1392,8 @@ public final class PUIPlayerView: NSView {
 
         guard isEnabled else { return }
 
+        appearanceDelegate?.playerViewWillShowPlayControls(self)
         setControls(opacity: 1, animated: animated)
-        showToolbarItems(hidePiPItem: false, window: window)
-    }
-
-    private func showToolbarItems(hidePiPItem: Bool, window: NSWindow?) {
-        guard shouldAdoptLiquidGlass, let window else { return }
-        window.toolbar?.items.filter({
-            ["wwdc.main.centered.tab", "wwdc.main.download"].contains($0.itemIdentifier.rawValue)
-        }).forEach {
-            if #available(macOS 15.0, *) {
-                $0.isHidden = false
-            } else {
-                // Fallback on earlier versions
-            }
-        }
-
-        window.toolbar?.items.filter({
-            ["wwdc.sidebar.search"].contains($0.itemIdentifier.rawValue)
-        }).forEach {
-            if #available(macOS 15.0, *) {
-                $0.isHidden = hidePiPItem
-            } else {
-                // Fallback on earlier versions
-            }
-        }
-
     }
 
     private func setControls(opacity: CGFloat, animated: Bool) {
@@ -1456,7 +1419,11 @@ public final class PUIPlayerView: NSView {
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidExitFullScreen), name: NSWindow.didExitFullScreenNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidResignMain), name: NSWindow.didResignMainNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeMain), name: NSWindow.didBecomeMainNotification, object: newWindow)
-        showToolbarItems(hidePiPItem: newWindow == nil, window: newWindow ?? window)
+        if newWindow == nil {
+            appearanceDelegate?.playerViewWillShowPlayControls(self)
+        } else {
+            appearanceDelegate?.playerViewWillHidePlayControls(self)
+        }
     }
 
     public override func viewDidMoveToWindow() {
@@ -1613,7 +1580,7 @@ public final class PUIPlayerView: NSView {
             }
         }
         if shouldAdoptLiquidGlass, isMouseInToolbarArea(event.locationInWindow) {
-            hideControls(animated: true)
+            hideControls(animated: true, isMouseInToolbar: true)
         }
     }
 

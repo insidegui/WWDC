@@ -16,7 +16,12 @@ extension NSToolbarItem.Identifier {
 }
 
 protocol ToolbarItemAccessor {
-    var toolbarWindow: NSWindow? { get }
+}
+
+extension ToolbarItemAccessor {
+    var toolbarWindow: NSWindow? {
+        NSApp.keyWindow
+    }
 }
 
 extension ToolbarItemAccessor {
@@ -42,9 +47,7 @@ extension ToolbarItemAccessor {
 }
 
 extension NSViewController: ToolbarItemAccessor {
-    var toolbarWindow: NSWindow? { viewIfLoaded?.window }
 }
 
 extension NSWindowController: ToolbarItemAccessor {
-    var toolbarWindow: NSWindow? { window }
 }

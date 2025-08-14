@@ -409,6 +409,24 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
     func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
         shelf?.dismissDetachedStatus(status, for: playerView)
     }
+
+    func playerViewWillHidePlayControls(_ playerView: PUIPlayerView) {
+        guard TahoeFeatureFlag.isLiquidGlassEnabled else { return }
+        [searchItem, topTabItem, downloadItem].forEach {
+            if #available(macOS 15.0, *) {
+                $0?.isHidden = true
+            }
+        }
+    }
+
+    func playerViewWillShowPlayControls(_ playerView: PUIPlayerView) {
+        guard TahoeFeatureFlag.isLiquidGlassEnabled else { return }
+        [searchItem, topTabItem, downloadItem].forEach {
+            if #available(macOS 15.0, *) {
+                $0?.isHidden = false
+            }
+        }
+    }
 }
 
 extension Transcript {
