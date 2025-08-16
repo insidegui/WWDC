@@ -1890,16 +1890,6 @@ private extension PUIPlayerView {
         glassView.frame = .zero
         addSubview(glassView)
 
-        let topLeadingGroups = NSView.horizontalGlassContainer(.clear, background: .black.opacity(0.2), padding: 5, spacing: 2, groups: [
-            [fullScreenButton, pipButton, routeButton]
-        ])
-        topLeadingGroups.translatesAutoresizingMaskIntoConstraints = false
-        scrimContainerView.addSubview(topLeadingGroups)
-        NSLayoutConstraint.activate([
-            topLeadingGroups.leadingAnchor.constraint(equalTo: scrimMarginGuide.leadingAnchor),
-            topLeadingGroups.topAnchor.constraint(equalTo: scrimMarginGuide.topAnchor)
-        ])
-
         // Timeline
         timelineView = PUITimelineView(adoptLiquidGlass: true)
         timelineView.viewDelegate = self
@@ -1941,6 +1931,16 @@ private extension PUIPlayerView {
 
         // Center Buttons
         centerButtonsContainerView = NSView() // placeholder
+
+        let topLeadingGroups = NSView.horizontalGlassContainer(.clear, background: .black.opacity(0.2), padding: 5, spacing: 2, groups: [
+            [fullScreenButton, pipButton, routeButton]
+        ])
+        topLeadingGroups.translatesAutoresizingMaskIntoConstraints = false
+        scrimContainerView.addSubview(topLeadingGroups)
+        NSLayoutConstraint.activate([
+            topLeadingGroups.leadingAnchor.constraint(equalTo: scrimMarginGuide.leadingAnchor),
+            topLeadingGroups.topAnchor.constraint(equalTo: scrimMarginGuide.topAnchor)
+        ])
 
         speedButton.$speed.removeDuplicates().sink { [weak self] speed in
             guard let self else { return }
