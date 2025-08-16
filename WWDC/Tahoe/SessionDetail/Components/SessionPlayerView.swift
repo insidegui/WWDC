@@ -29,6 +29,7 @@ struct SessionPlayerView: View {
                 .transition(.blurReplace)
             } else {
                 cover
+                    .opacity(viewModel.isMediaAvailable ? 1 : 0)
                     .transition(.blurReplace)
             }
         }
@@ -58,33 +59,41 @@ struct SessionPlayerView: View {
             }
         })
         .overlay(alignment: .center) {
-            Button {
-                guard let session = viewModel.session else {
-                    return
-                }
-                defer {
-                    viewModel.isPlaying = true
-                }
-                if let existing = coordinator?.currentShelfViewController {
-                    existing.viewModel = session
-                    existing.playButton.isHidden = true
-                    existing.play(nil)
-                    return
-                }
-                let viewController = ShelfViewController()
-                viewController.viewModel = session
-                viewController.delegate = coordinator
-                viewController.playButton.isHidden = true
-                coordinator?.currentShelfViewController = viewController
-                viewController.play(nil)
-            } label: {
-                Label("Play", systemImage: "play.fill")
+            if viewModel.isMediaAvailable {
+                playButton
+                    .transition(.scale.combined(with: .opacity))
             }
-            .controlSize(.extraLarge)
-            .buttonBorderShape(.capsule)
-            .buttonStyle(.glass)
-            .hoverEffect(scale: 1.1)
-            .disabled(isLoadingThumbnail)
         }
+    }
+
+    @ViewBuilder
+    private var playButton: some View {
+        Button {
+            guard let session = viewModel.session else {
+                return
+            }
+            defer {
+                viewModel.isPlaying = true
+            }
+            if let existing = coordinator?.currentShelfViewController {
+                existing.viewModel = session
+                existing.playButton.isHidden = true
+                existing.play(nil)
+                return
+            }
+            let viewController = ShelfViewController()
+            viewController.viewModel = session
+            viewController.delegate = coordinator
+            viewController.playButton.isHidden = true
+            coordinator?.currentShelfViewController = viewController
+            viewController.play(nil)
+        } label: {
+            Label("Play", systemImage: "play.fill")
+        }
+        .controlSize(.extraLarge)
+        .buttonBorderShape(.capsule)
+        .buttonStyle(.glass)
+        .hoverEffect(scale: 1.1)
+        .disabled(isLoadingThumbnail)
     }
 }

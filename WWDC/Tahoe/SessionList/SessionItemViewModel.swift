@@ -37,6 +37,7 @@ import SwiftUI
     var isFavorite = false
     var isDownloaded = false
 
+    var isMediaAvailable: Bool = false
     var isPlaying = false
 
     var isTranscriptAvailable: Bool = false
@@ -167,6 +168,12 @@ private extension SessionItemViewModel {
             .map {  $0 != nil }
             .sink { [weak self] newValue in
                 self?.isTranscriptAvailable = newValue
+            }
+            .store(in: &observers)
+        session.rxCanBePlayed
+            .replaceError(with: false)
+            .sink { [weak self] newValue in
+                self?.isMediaAvailable = newValue
             }
             .store(in: &observers)
     }
