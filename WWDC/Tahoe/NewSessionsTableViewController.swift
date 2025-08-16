@@ -735,7 +735,8 @@ extension NewSessionsTableViewController: NSTextSuggestionsDelegate {
         if items.count == 1 {
             items = []
         }
-        var response = ItemResponse(items: items)
+        let section = NSSuggestionItemSection(title: "Search in", items: items)
+        var response = ItemResponse(itemSections: [section])
         response.phase = .final
         responseHandler(response)
     }
