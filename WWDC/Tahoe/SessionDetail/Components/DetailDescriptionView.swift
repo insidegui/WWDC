@@ -138,6 +138,16 @@ private struct NewSessionActionsView: View {
                 .help("Add to Calendar")
                 .transition(.scale.combined(with: .opacity))
             }
+
+            if let shareLink {
+                ShareLink(items: [shareLink]) {
+                    Image(systemName: "square.and.arrow.up")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                }
+                .buttonStyle(SymbolButtonStyle())
+                .help("Share session")
+            }
         }
         .animation(.bouncy, value: viewModel.slidesButtonIsHidden)
         .animation(.bouncy, value: viewModel.calendarButtonIsHidden)
@@ -176,7 +186,7 @@ private struct NewSessionActionsView: View {
                         .resizable()
                         .symbolVariableValueMode(.draw)
                         .aspectRatio(contentMode: .fit)
-                    // magical replace will crash somehow
+                // magical replace will crash somehow
                 case .downloaded:
                     Image(systemName: "trash").resizable()
                         .aspectRatio(contentMode: .fit)
@@ -201,6 +211,15 @@ private struct NewSessionActionsView: View {
             ""
         }
     }
+
+    var shareLink: URL? {
+        guard
+            let webpageAsset = viewModel.session?.session.asset(ofType: .webpage),
+            let url = URL(string: webpageAsset.remoteURL)
+        else { return nil }
+
+        return url.replacingAppleDeveloperHostWithNativeHost
+    }
 }
 
 @available(macOS 26.0, *)
@@ -214,6 +233,7 @@ private struct SymbolButtonStyle: ButtonStyle {
             .scaleEffect(isHovered ? 1.2 : 1)
             .animation(.bouncy(extraBounce: 0.3), value: configuration.isPressed)
             .animation(.smooth, value: isHovered)
+            .contentShape(.rect)
             .onHover { isHovering in
                 withAnimation {
                     isHovered = isHovering

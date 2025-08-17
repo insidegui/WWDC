@@ -141,7 +141,7 @@ struct SessionItemView: View {
         .padding(.vertical, 8)
         .frame(height: 64) // Metrics.itemHeight
         .task {
-            await viewModel.prepareForDisplay()
+            viewModel.prepareForDisplay()
         }
         .contentShape(Rectangle()) // quick hover
         .help([viewModel.title, viewModel.subtitle, viewModel.context].joined(separator: "\n"))
