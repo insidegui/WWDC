@@ -9,7 +9,7 @@
 import Foundation
 
 enum SessionRowKind {
-    case sectionHeader(TopicHeaderRowContent)
+    case sectionHeader(_ title: String, _ symbolName: String?)
     case session(SessionViewModel)
 
     var isHeader: Bool {
@@ -18,15 +18,6 @@ enum SessionRowKind {
             return true
         default:
             return false
-        }
-    }
-
-    var headerContent: TopicHeaderRowContent? {
-        switch self {
-        case .sectionHeader(let content):
-            return content
-        default:
-            return nil
         }
     }
 
@@ -57,18 +48,17 @@ final class SessionRow: CustomDebugStringConvertible {
         kind = .session(viewModel)
     }
 
-    init(content: TopicHeaderRowContent) {
-        kind = .sectionHeader(content)
+    init(title: String, symbolName: String? = nil) {
+        kind = .sectionHeader(title, symbolName)
     }
 
     convenience init(date: Date, showTimeZone: Bool = false) {
         let title = SessionViewModel.standardFormatted(date: date, withTimeZoneName: showTimeZone)
 
-        self.init(content: .init(title: title))
+        self.init(title: title)
     }
 
     var isHeader: Bool { kind.isHeader }
-    var headerContent: TopicHeaderRowContent? { kind.headerContent }
     var isSession: Bool { kind.isSession }
     var sessionViewModel: SessionViewModel? { kind.sessionViewModel }
     func represents(session: SessionIdentifiable) -> Bool {
@@ -77,8 +67,8 @@ final class SessionRow: CustomDebugStringConvertible {
 
     var debugDescription: String {
         switch kind {
-        case .sectionHeader(let content):
-            return "Header: " + content.title
+        case .sectionHeader(let title, _):
+            return "Header: " + title
         case .session(let viewModel):
             return "Session: " + viewModel.identifier + " " + viewModel.title
         }
@@ -90,8 +80,9 @@ extension SessionRow: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(String(reflecting: kind))
         switch kind {
-        case let .sectionHeader(title):
+        case let .sectionHeader(title, symbol):
             hasher.combine(title)
+            hasher.combine(symbol)
         case let .session(viewModel):
             hasher.combine(viewModel.identifier)
             hasher.combine(viewModel.trackName)
@@ -102,7 +93,7 @@ extension SessionRow: Hashable {
     /// each view is bound to a realm object so there is no need to create a new row
     static func == (lhs: SessionRow, rhs: SessionRow) -> Bool {
         switch (lhs.kind, rhs.kind) {
-        case let (.sectionHeader(lhsTitle), .sectionHeader(rhsTitle)) where lhsTitle == rhsTitle:
+        case let (.sectionHeader(lhsTitle, lhsSymbol), .sectionHeader(rhsTitle, rhsSymbol)) where lhsTitle == rhsTitle && lhsSymbol == rhsSymbol:
             return true
         case let (.session(lhsViewModel), .session(rhsViewModel))
             where lhsViewModel.identifier == rhsViewModel.identifier && lhsViewModel.trackName == rhsViewModel.trackName:
