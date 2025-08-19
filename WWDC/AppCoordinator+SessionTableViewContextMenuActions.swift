@@ -11,7 +11,12 @@ import RealmSwift
 import ConfCore
 import PlayerUI
 
-extension AppCoordinator: SessionsTableViewControllerDelegate {
+private enum SessionChoice: Int {
+    case yes = 1001
+    case no = 1000
+}
+
+extension WWDCCoordinator/*: SessionsTableViewControllerDelegate */{
 
     func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel]) {
         storage.modify(viewModels.map({ $0.session })) { sessions in
@@ -35,7 +40,6 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
         storage.setFavorite(false, onSessionsWithIDs: viewModels.map({ $0.session.identifier }))
     }
 
-    @MainActor
     func sessionTableViewContextMenuActionDownload(viewModels: [SessionViewModel]) {
         if viewModels.count > 5 {
             // asking to download many videos, warn
@@ -47,12 +51,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
             alert.addButton(withTitle: "No")
             alert.addButton(withTitle: "Yes")
 
-            enum Choice: Int {
-                case yes = 1001
-                case no = 1000
-            }
-
-            guard let choice = Choice(rawValue: alert.runModal().rawValue) else { return }
+            guard let choice = SessionChoice(rawValue: alert.runModal().rawValue) else { return }
 
             guard case .yes = choice else { return }
         }
@@ -60,21 +59,18 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
         MediaDownloadManager.shared.download(viewModels.map(\.session))
     }
 
-    @MainActor
     func sessionTableViewContextMenuActionCancelDownload(viewModels: [SessionViewModel]) {
         let cancellableDownloads = viewModels.map(\.session).filter { MediaDownloadManager.shared.isDownloadingMedia(for: $0) }
         
         MediaDownloadManager.shared.cancelDownload(for: cancellableDownloads)
     }
 
-    @MainActor
     func sessionTableViewContextMenuActionRemoveDownload(viewModels: [SessionViewModel]) {
         let deletableDownloads = viewModels.map(\.session).filter { MediaDownloadManager.shared.hasDownloadedMedia(for: $0) }
 
         MediaDownloadManager.shared.delete(deletableDownloads)
     }
 
-    @MainActor
     func sessionTableViewContextMenuActionRevealInFinder(viewModels: [SessionViewModel]) {
         guard let firstSession = viewModels.first?.session else { return }
         guard let localURL = MediaDownloadManager.shared.downloadedFileURL(for: firstSession) else { return }

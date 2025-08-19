@@ -12,7 +12,7 @@ import PlayerUI
 import RealmSwift
 import ConfCore
 
-extension AppCoordinator: PUITimelineDelegate, VideoPlayerViewControllerDelegate {
+extension WWDCCoordinator/*: PUITimelineDelegate, VideoPlayerViewControllerDelegate*/ {
 
     func createBookmark(at timecode: Double, with snapshot: NSImage?) {
         guard let session = currentPlayerController?.sessionViewModel.session else { return }

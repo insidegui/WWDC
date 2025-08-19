@@ -9,6 +9,7 @@
 import SwiftUI
 import Combine
 
+@MainActor
 protocol RelatedSessionsDelegate: AnyObject {
     func relatedSessions(_ controller: RelatedSessionsViewModel, didSelectSession viewModel: SessionViewModel)
 }
@@ -25,6 +26,7 @@ final class RelatedSessionsViewModel: ObservableObject {
 
     weak var delegate: RelatedSessionsDelegate?
 
+    @MainActor
     func selectSession(_ viewModel: SessionViewModel) {
         delegate?.relatedSessions(self, didSelectSession: viewModel)
     }

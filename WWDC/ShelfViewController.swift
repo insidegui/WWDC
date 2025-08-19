@@ -13,6 +13,7 @@ import PlayerUI
 import AVFoundation
 import SwiftUI
 
+@MainActor
 protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
     func shelfViewController(_ controller: ShelfViewController, didBeginClipSharingWithHost hostView: NSView)
@@ -28,7 +29,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     var viewModel: SessionViewModel? {
         didSet {
-            updateBindings()
+            updateBindings() // changes along with $selectedSession
         }
     }
 
@@ -48,7 +49,18 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         return v
     }()
 
-    lazy var playButton: VibrantButton = {
+    lazy var playButton: NSView = {
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            let b = NSButton(title: "Play", image: NSImage(systemSymbolName: "play.fill", accessibilityDescription: "Play")!, target: self, action: #selector(play))
+            b.isBordered = true
+            b.bezelStyle = .glass
+            b.controlSize = .extraLarge
+            b.tintProminence = .automatic
+            b.contentTintColor = .clear
+            b.borderShape = .roundedRectangle
+            b.translatesAutoresizingMaskIntoConstraints = false
+            return b
+        }
         let b = VibrantButton(frame: .zero)
 
         b.title = "Play"
@@ -70,8 +82,23 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: MainWindowController.defaultRect.width - 300, height: MainWindowController.defaultRect.height / 2))
-        view.wantsLayer = true
-
+        let shelfView: NSView
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            let extensionView = NSBackgroundExtensionView()
+            extensionView.contentView = self.shelfView
+            extensionView.automaticallyPlacesContentView = false
+            extensionView.translatesAutoresizingMaskIntoConstraints = false
+            shelfView = extensionView
+            // only enable reflection effect on leading edge
+            NSLayoutConstraint.activate([
+                self.shelfView.topAnchor.constraint(equalTo: extensionView.topAnchor),
+                self.shelfView.leadingAnchor.constraint(equalTo: extensionView.safeAreaLayoutGuide.leadingAnchor),
+                self.shelfView.bottomAnchor.constraint(equalTo: extensionView.bottomAnchor),
+                self.shelfView.trailingAnchor.constraint(equalTo: extensionView.trailingAnchor)
+            ])
+        } else {
+            shelfView = self.shelfView
+        }
         view.addSubview(shelfView)
         shelfView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         shelfView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -79,8 +106,8 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         shelfView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
         view.addSubview(playButton)
-        playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        playButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        playButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        playButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
 
         view.addSubview(playerContainer)
         playerContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -143,6 +170,26 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         self.delegate?.shelfViewControllerDidSelectPlay(self)
     }
 
+    private var playerView: PUIPlayerView?
+    func addPlayerViewIfNeeded(_ playerController: VideoPlayerViewController) {
+
+        // Already attached
+        guard playerController.view.superview != playerContainer else { return }
+        playerView = playerController.playerView
+        playerController.view.frame = playerContainer.bounds
+        playerController.view.alphaValue = 0
+        playerController.view.isHidden = false
+
+        playerController.view.translatesAutoresizingMaskIntoConstraints = false
+
+        playerContainer.addSubview(playerController.view)
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+
+        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
+
+        playerController.view.alphaValue = 1
+    }
+
     private var sharingController: ClipSharingViewController?
 
     func showClipUI() {
@@ -162,7 +209,8 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
         addChild(controller)
         controller.view.autoresizingMask = [.width, .height]
-        controller.view.frame = playerContainer.bounds
+
+        controller.view.frame = playerContainer.safeAreaRect(including: .leading)
         playerContainer.addSubview(controller.view)
 
         sharingController = controller
@@ -217,7 +265,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         self.detachedSessionID = viewModel?.sessionIdentifier
         self.detachedPlayer = player
 
-        installDetachedStatusControllerIfNeeded()
+        installDetachedStatusControllerIfNeeded(status)
 
         detachedStatusController.status = status
         
@@ -238,25 +286,33 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
     private lazy var detachedStatusController = PUIDetachedPlaybackStatusViewController()
 
-    private func installDetachedStatusControllerIfNeeded() {
-        guard detachedStatusController.parent == nil else { return }
-
-        updateVideoLayoutGuide()
-
-        addChild(detachedStatusController)
-
+    private func installDetachedStatusControllerIfNeeded(_ status: DetachedPlaybackStatus) {
+        guard let playerView else { return } // make sure already played once, otherwise no need to insert this status view
+        if detachedStatusController.parent == nil {
+            // add child once, move views based on the status
+            addChild(detachedStatusController)
+        }
         let statusView = detachedStatusController.view
         statusView.wantsLayer = true
         statusView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(statusView, positioned: .above, relativeTo: view.subviews.first)
-
-        statusView.layer?.zPosition = 9
-
+        statusView.layer?.zPosition = 9 // only works with siblings, for more info: https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/CoreAnimation_guide/BuildingaLayerHierarchy/BuildingaLayerHierarchy.html?utm_source=chatgpt.com#:~:text=top%20of%20any-,siblings,-with%20the%20same
+        // for simplicity, just re-add this view to avoid all those buggy checks
+        statusView.removeFromSuperview()
+        let parent: NSView
+        if status.isFullScreen {
+            // add to playerContainer
+            parent = playerContainer
+        } else {
+            // add between AVPlayer and controls
+            parent = playerView
+        }
+        parent.addSubview(statusView.backgroundExtensionEffect(reflect: .leading, isEnabled: TahoeFeatureFlag.isLiquidGlassEnabled), positioned: .above, relativeTo: parent.subviews.first)
+        // The status view is placed inside the player view, so layout guide constraints are unnecessary
         NSLayoutConstraint.activate([
-            statusView.leadingAnchor.constraint(equalTo: videoLayoutGuide.leadingAnchor),
-            statusView.trailingAnchor.constraint(equalTo: videoLayoutGuide.trailingAnchor),
-            statusView.topAnchor.constraint(equalTo: videoLayoutGuide.topAnchor),
-            statusView.bottomAnchor.constraint(equalTo: videoLayoutGuide.bottomAnchor)
+            statusView.leadingAnchor.constraint(equalTo: parent.safeAreaLayoutGuide.leadingAnchor),
+            statusView.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
+            statusView.topAnchor.constraint(equalTo: parent.topAnchor),
+            statusView.bottomAnchor.constraint(equalTo: parent.bottomAnchor)
         ])
     }
 
@@ -280,5 +336,27 @@ struct ShelfViewControllerWrapper: NSViewControllerRepresentable {
 
     func updateNSViewController(_ nsViewController: ShelfViewController, context: Context) {
         // No updates needed - controller manages its own state
+    }
+}
+
+private extension NSView {
+    func safeAreaRect(including edges: Edge.Set = .all) -> CGRect {
+        let insets = self.safeAreaInsets
+        var rect = self.bounds
+        if edges.contains(.bottom) {
+            rect.origin.y += insets.bottom
+            rect.size.height -= insets.bottom
+        }
+        if edges.contains(.top) {
+            rect.size.height -= insets.top
+        }
+        if edges.contains(.leading) {
+            rect.origin.x += insets.left
+            rect.size.width -= insets.left
+        }
+        if edges.contains(.trailing) {
+            rect.size.width -= insets.right
+        }
+        return rect
     }
 }

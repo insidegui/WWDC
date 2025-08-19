@@ -25,10 +25,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
     private lazy var commandsReceiver = AppCommandsReceiver()
     
-    private(set) var coordinator: AppCoordinator? {
+    private(set) var coordinator: (any WWDCCoordinator)? {
         didSet {
             if coordinator != nil {
-                openPendingDeepLinkIfNeeded()
+                DispatchQueue.main.async {
+                    self.openPendingDeepLinkIfNeeded()
+                }
             }
         }
     }
@@ -36,7 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     func applicationWillFinishLaunching(_ notification: Notification) {
         NSAppleEventManager.shared().setEventHandler(self, andSelector: #selector(handleURLEvent(_:replyEvent:)), forEventClass: UInt32(kInternetEventClass), andEventID: UInt32(kAEGetURL))
 
-        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
+//        NSApplication.shared.appearance = NSAppearance(named: .darkAqua)
 
         #if ICLOUD
         ConfCoreCapabilities.isCloudKitEnabled = true
@@ -85,6 +87,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         }
 
         ImageDownloadCenter.shared.deleteLegacyImageCacheIfNeeded()
+        // setup liquid glass feature settings
+        if TahoeFeatureFlag.isLiquidGlassAvailable {
+            guard
+                let aboutMenu = NSApp.menu?.items.first?.submenu,
+                let firstSeparatorIndex = aboutMenu.items.firstIndex(where: { $0.isSeparatorItem }), // under About
+                aboutMenu.items.count > firstSeparatorIndex + 1
+            else {
+                return
+            }
+
+            let liquidGlassItem = NSMenuItem(title: "Try Liquid Glass", action: #selector(AppDelegate.tryLiquidGlass(_:)), keyEquivalent: "")
+            liquidGlassItem.indentationLevel = 1
+            liquidGlassItem.state = TahoeFeatureFlag.isLiquidGlassEnabled ? .on : .mixed
+            aboutMenu.insertItem(liquidGlassItem, at: firstSeparatorIndex + 1)
+        }
     }
     
     private var storage: Storage?
@@ -95,11 +112,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         self.storage = storage
         self.syncEngine = syncEngine
 
-        coordinator = AppCoordinator(
-            windowController: MainWindowController(),
-            storage: storage,
-            syncEngine: syncEngine
-        )
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            let newAppCoordinator = NewAppCoordinator(
+                windowController: NewMainWindowController(),
+                storage: storage,
+                syncEngine: syncEngine
+            )
+            coordinator = newAppCoordinator
+            newAppCoordinator.startup()
+        } else {
+            coordinator = AppCoordinator(
+                windowController: MainWindowController(),
+                storage: storage,
+                syncEngine: syncEngine
+            )
+        }
     }
 
     private func handleBootstrapError(_ error: Boot.BootstrapError) {
@@ -186,7 +213,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     
     private var pendingDeepLink: DeepLink?
     
-    private func openDeepLink(_ link: DeepLink) {
+    @MainActor private func openDeepLink(_ link: DeepLink) {
         guard let coordinator = coordinator else {
             pendingDeepLink = link
             return
@@ -195,7 +222,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         coordinator.handle(link: link)
     }
     
-    private func openPendingDeepLinkIfNeeded() {
+    @MainActor private func openPendingDeepLinkIfNeeded() {
         guard let deepLink = pendingDeepLink else { return }
         
         coordinator?.handle(link: deepLink)
@@ -221,6 +248,27 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         coordinator?.refresh(sender)
     }
 
+    @objc private func tryLiquidGlass(_ sender: NSMenuItem) {
+        guard TahoeFeatureFlag.isLiquidGlassAvailable else {
+            return
+        }
+        defer {
+            sender.state = TahoeFeatureFlag.isLiquidGlassEnabled ? .on : .mixed
+        }
+        guard sender.state != .on else {
+            TahoeFeatureFlag.isLiquidGlassEnabled.toggle()
+            return
+        }
+        let alert = NSAlert()
+        alert.messageText = "This feature is still under development. Are you sure you want to try it out?"
+        alert.informativeText = "Please restart the app after changing this setting."
+        alert.addButton(withTitle: "YES")
+        alert.addButton(withTitle: "NO")
+        if alert.runModal() == .alertFirstButtonReturn {
+            TahoeFeatureFlag.isLiquidGlassEnabled.toggle()
+        }
+    }
+
     @IBAction func showAboutWindow(_ sender: Any) {
         coordinator?.showAboutWindow()
     }
@@ -237,7 +285,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
         coordinator?.showVideos()
     }
 
-    @objc func applyFilterState(_ sender: Any?) {
+    @MainActor @objc func applyFilterState(_ sender: Any?) {
         guard let state = sender as? WWDCFiltersState else { return }
 
         coordinator?.applyFilter(state: state)

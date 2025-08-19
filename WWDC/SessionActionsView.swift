@@ -11,7 +11,8 @@ import SwiftUI
 
 struct SessionActionsView: View {
     @ObservedObject var viewModel: SessionActionsViewModel
-    
+    var alignment = Alignment.leading
+
     var body: some View {
         HStack(spacing: 0) {
             PUIButtonView(.alwaysHighlighted(image: .slides)) {
@@ -59,7 +60,7 @@ struct SessionActionsView: View {
             .opacity(viewModel.calendarButtonIsHidden ? 0 : 1)
             .frame(width: viewModel.calendarButtonIsHidden ? 0 : nil, alignment: .trailing)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
     }
 
     /// States managed by DownloadState enum:

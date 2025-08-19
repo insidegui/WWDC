@@ -202,8 +202,59 @@ extension CASpringAnimation {
     }
 }
 
+@Observable
+class PUITimelineFloatingModel {
+    var text: String?
+    fileprivate var isHidden = true
+
+    func setIsHidden(_ isHidden: Bool, animated: Bool = true) {
+        guard animated else {
+            self.isHidden = isHidden
+            return
+        }
+        withAnimation(.bouncy) {
+            self.isHidden = isHidden
+        }
+    }
+
+    func show(animated: Bool = true) {
+        setIsHidden(false, animated: animated)
+    }
+
+    func hide(animated: Bool = true) {
+        setIsHidden(true, animated: animated)
+    }
+}
+
+@available(macOS 26.0, *)
+struct PUITimelineGlassFloatingView: View {
+    @Environment(PUITimelineFloatingModel.self) var model
+    var body: some View {
+        Group {
+            if !model.isHidden, let label = model.text {
+                Text(label)
+                    .font(.system(size: PUITimelineView.Metrics.floatingLayerTextSize))
+                    .fontDesign(.monospaced)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.white)
+                    .fixedSize()
+                    .padding(.vertical, PUITimelineView.Metrics.floatingLayerMargin)
+                    .padding(.horizontal, PUITimelineView.Metrics.floatingLayerMargin)
+                    .background(Color.black.opacity(0.3))
+                    .clipShape(.capsule)
+                    .glassEffect(.clear, in: .capsule)
+                    .transition(.scale.combined(with: .opacity))
+            }
+        }
+    }
+}
+
 #if DEBUG
 struct PUITimelineFloatingLayer_Previews: PreviewProvider {
-    static var previews: some View { PUIPlayerView_Previews.previews }
+    static var previews: some View {
+        if #available(macOS 26.0, *) {
+            PUITimelineGlassFloatingView()
+        }
+    }
 }
 #endif

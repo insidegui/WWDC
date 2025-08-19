@@ -30,12 +30,15 @@ public final class PUIPlayerView: NSView {
     public weak var delegate: PUIPlayerViewDelegate?
 
     public var isInPictureInPictureMode: Bool { pipController?.isPictureInPictureActive == true }
+    private var enteringPipAfterExitFullscreen: Bool = false
 
     public weak var appearanceDelegate: PUIPlayerViewAppearanceDelegate? {
         didSet {
             invalidateAppearance()
         }
     }
+
+    var shouldAdoptLiquidGlass = false
 
     public var timelineDelegate: PUITimelineDelegate? {
         get {
@@ -87,13 +90,14 @@ public final class PUIPlayerView: NSView {
         set { layer?.backgroundColor = newValue?.cgColor }
     }
 
-    public init(player: AVPlayer) {
+    public init(player: AVPlayer, shouldAdoptLiquidGlass: Bool = false) {
         self.player = player
         if AVPictureInPictureController.isPictureInPictureSupported() {
             self.pipController = AVPictureInPictureController(contentSource: .init(playerLayer: playerLayer))
         } else {
             self.pipController = nil
         }
+        self.shouldAdoptLiquidGlass = shouldAdoptLiquidGlass
 
         super.init(frame: .zero)
 
@@ -102,7 +106,11 @@ public final class PUIPlayerView: NSView {
         backgroundColor = .black
 
         setupPlayer(player)
-        setupControls()
+        if #available(macOS 26.0, *), shouldAdoptLiquidGlass {
+            setupTahoeControls()
+        } else {
+            setupControls()
+        }
     }
 
     public required init?(coder: NSCoder) {
@@ -160,6 +168,7 @@ public final class PUIPlayerView: NSView {
         didSet {
             controlsContainerView.isHidden = hideAllControls
             topTrailingMenuContainerView.isHidden = hideAllControls
+            scrimContainerView.isHidden = hideAllControls
         }
     }
 
@@ -181,6 +190,7 @@ public final class PUIPlayerView: NSView {
     }
 
     private let playerLayer = PUIBoringPlayerLayer()
+    private var dimmingView: NSView?
 
     private func setupPlayer(_ player: AVPlayer) {
         /// User settings are applied before setting up player observations, avoiding accidental overrides when initial values come in.
@@ -245,7 +255,8 @@ public final class PUIPlayerView: NSView {
         }
 
         player.allowsExternalPlayback = true
-        routeButton.player = player
+        (routeButton as? PUIButton)?.player = player
+        (routeButton as? PUIAVRoutPickerView)?.player = player
 
         setupNowPlayingCoordinatorIfSupported()
         setupRemoteCommandCoordinator()
@@ -285,17 +296,25 @@ public final class PUIPlayerView: NSView {
         settings.playerVolume = Double(player.volume)
 
         if player.volume.isZero {
-            volumeButton.image = .PUIVolumeMuted
+            if shouldAdoptLiquidGlass {
+                volumeButton.image = NSImage(systemSymbolName: "speaker.wave.3.fill", variableValue: 0, accessibilityDescription: "Volume")
+            } else {
+                volumeButton.image = .PUIVolumeMuted
+            }
             volumeButton.toolTip = "Unmute"
             volumeSlider.doubleValue = 0
         } else {
-            switch player.volume {
-            case 0..<0.33:
-                volumeButton.image = .PUIVolume1
-            case 0.33..<0.66:
-                volumeButton.image = .PUIVolume2
-            default:
-                volumeButton.image = .PUIVolume3
+            if shouldAdoptLiquidGlass {
+                volumeButton.image = NSImage(systemSymbolName: "speaker.wave.3.fill", variableValue: Double(player.volume), accessibilityDescription: "Volume")
+            } else {
+                switch player.volume {
+                case 0..<0.33:
+                    volumeButton.image = .PUIVolume1
+                case 0.33..<0.66:
+                    volumeButton.image = .PUIVolume2
+                default:
+                    volumeButton.image = .PUIVolume3
+                }
             }
 
             volumeButton.toolTip = "Mute"
@@ -406,10 +425,15 @@ public final class PUIPlayerView: NSView {
             trailingTimeButton.title = "−" + (String(time: remainingTime) ?? timeRemainingPlaceholder)
         }
     }
-
+    lazy var trackingArea = NSTrackingArea(rect: bounds, options: [.activeInKeyWindow, .mouseMoved, .mouseEnteredAndExited], owner: self, userInfo: nil)
     public override func layout() {
         updateVideoLayoutGuide()
 
+        if shouldAdoptLiquidGlass {
+            if !trackingAreas.contains(trackingArea) {
+                addTrackingArea(trackingArea)
+            }
+        }
         super.layout()
     }
 
@@ -418,6 +442,9 @@ public final class PUIPlayerView: NSView {
     private var currentBounds: CGRect?
 
     private func updateVideoLayoutGuide() {
+        guard !shouldAdoptLiquidGlass else {
+            return
+        }
         guard let player else { return }
 
         guard bounds != currentBounds else { return }
@@ -486,12 +513,14 @@ public final class PUIPlayerView: NSView {
 
     fileprivate var wasPlayingBeforeStartingInteractiveSeek = false
 
-    private var topTrailingMenuContainerView: NSStackView!
-    fileprivate var scrimContainerView: PUIScrimView!
-    private var controlsContainerView: NSStackView!
-    private var volumeControlsContainerView: NSStackView!
-    private var centerButtonsContainerView: NSStackView!
-    private var timelineContainerView: NSStackView!
+    private var topTrailingMenuContainerView: NSView!
+    fileprivate var scrimContainerView: NSView!
+    private var controlsContainerView: NSView!
+    private var volumeControlsContainerView: NSView!
+    private var centerButtonsContainerView: NSView!
+    private var timelineContainerView: NSView!
+    private var floatingTimestampView: NSView?
+    private var floatingTimestampModel: PUITimelineFloatingModel?
 
     fileprivate lazy var timelineView: PUITimelineView = {
         let v = PUITimelineView(frame: .zero)
@@ -533,14 +562,12 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    private lazy var fullScreenButton: PUIVibrantButton = {
+    private lazy var fullScreenButton: NSView = {
         let b = PUIVibrantButton(frame: .zero)
-
         b.button.image = .PUIFullScreen
         b.button.target = self
         b.button.action = #selector(toggleFullscreen)
         b.button.toolTip = "Toggle full screen"
-
         return b
     }()
 
@@ -574,7 +601,7 @@ public final class PUIPlayerView: NSView {
         return s
     }()
 
-    private lazy var subtitlesButton: PUIButton = {
+    private lazy var subtitlesButton: NSControl = {
         let b = PUIButton(frame: .zero)
 
         b.image = .PUISubtitles
@@ -586,7 +613,14 @@ public final class PUIPlayerView: NSView {
     }()
 
     fileprivate lazy var playButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
+        let b: PUIButton
+        if shouldAdoptLiquidGlass {
+            var metrics = PUIControlMetrics.large
+            metrics.glass = .clear
+            b = PUIButton(metrics: metrics)
+        } else {
+            b = PUIButton(metrics: .large)
+        }
 
         b.isToggle = true
         b.image = .PUIPlay
@@ -596,14 +630,20 @@ public final class PUIPlayerView: NSView {
         b.target = self
         b.action = #selector(togglePlaying)
         b.toolTip = "Play/pause"
-        b.metrics = .large
 
         return b
     }()
 
     private lazy var backButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
-
+        let b: PUIButton
+        if shouldAdoptLiquidGlass {
+            var metrics = PUIControlMetrics.medium
+            metrics.glass = .clear
+            metrics.padding = 5
+            b = PUIButton(metrics: metrics)
+        } else {
+            b = PUIButton(frame: .zero)
+        }
         b.image = .PUIBack15s
         b.target = self
         b.action = #selector(goBackInTime)
@@ -613,7 +653,15 @@ public final class PUIPlayerView: NSView {
     }()
 
     private lazy var forwardButton: PUIButton = {
-        let b = PUIButton(frame: .zero)
+        let b: PUIButton
+        if shouldAdoptLiquidGlass {
+            var metrics = PUIControlMetrics.medium
+            metrics.glass = .clear
+            metrics.padding = 5
+            b = PUIButton(metrics: metrics)
+        } else {
+            b = PUIButton(frame: .zero)
+        }
 
         b.image = .PUIForward15s
         b.target = self
@@ -625,7 +673,7 @@ public final class PUIPlayerView: NSView {
 
     fileprivate lazy var speedButton = PUIPlaybackSpeedToggle(frame: .zero)
 
-    private lazy var addAnnotationButton: PUIButton = {
+    private lazy var addAnnotationButton: NSControl = {
         let b = PUIButton(frame: .zero)
 
         b.image = .PUIAnnotation
@@ -637,7 +685,7 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    private lazy var pipButton: PUIButton = {
+    private lazy var pipButton: StatefulControl = {
         let b = PUIButton(frame: .zero)
 
         b.isToggle = true
@@ -652,7 +700,7 @@ public final class PUIPlayerView: NSView {
         return b
     }()
 
-    private lazy var routeButton: PUIButton = {
+    private lazy var routeButton: NSView = {
         let b = PUIButton(frame: .zero)
 
         b.isToggle = true
@@ -670,7 +718,6 @@ public final class PUIPlayerView: NSView {
 
     private func setupControls() {
         addLayoutGuide(videoLayoutGuide)
-
         let playerView = NSView()
         playerView.translatesAutoresizingMaskIntoConstraints = false
         playerView.wantsLayer = true
@@ -683,14 +730,16 @@ public final class PUIPlayerView: NSView {
         playerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
         // Volume controls
-        volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
+        let volumeControlsContainerView = NSStackView(views: [volumeButton, volumeSlider])
+        self.volumeControlsContainerView = volumeControlsContainerView
 
         volumeControlsContainerView.orientation = .horizontal
         volumeControlsContainerView.spacing = 6
         volumeControlsContainerView.alignment = .centerY
 
         // Center Buttons
-        centerButtonsContainerView = NSStackView(frame: bounds)
+        let centerButtonsContainerView = NSStackView(frame: bounds)
+        self.centerButtonsContainerView = centerButtonsContainerView
 
         // Leading controls (volume, subtitles)
         centerButtonsContainerView.addView(volumeButton, in: .leading)
@@ -728,20 +777,22 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.setVisibilityPriority(.detachOnlyIfNecessary, for: pipButton)
         centerButtonsContainerView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
-        timelineContainerView = NSStackView(views: [
+        let timelineContainerView = NSStackView(views: [
             leadingTimeButton,
             timelineView,
             trailingTimeButton
         ])
+        self.timelineContainerView = timelineContainerView
         timelineContainerView.distribution = .equalSpacing
         timelineContainerView.orientation = .horizontal
         timelineContainerView.alignment = .centerY
 
         // Main stack view and background scrim
-        controlsContainerView = NSStackView(views: [
+        let controlsContainerView = NSStackView(views: [
             timelineContainerView,
             centerButtonsContainerView
             ])
+        self.controlsContainerView = controlsContainerView
 
         controlsContainerView.orientation = .vertical
         controlsContainerView.spacing = 12
@@ -783,7 +834,8 @@ public final class PUIPlayerView: NSView {
         centerButtonsContainerView.leadingAnchor.constraint(equalTo: controlsContainerView.leadingAnchor).isActive = true
         centerButtonsContainerView.trailingAnchor.constraint(equalTo: controlsContainerView.trailingAnchor).isActive = true
 
-        topTrailingMenuContainerView = NSStackView(views: [fullScreenButton])
+        let topTrailingMenuContainerView = NSStackView(views: [fullScreenButton])
+        self.topTrailingMenuContainerView = topTrailingMenuContainerView
         topTrailingMenuContainerView.orientation = .horizontal
         topTrailingMenuContainerView.alignment = .centerY
         topTrailingMenuContainerView.distribution = .equalSpacing
@@ -899,6 +951,9 @@ public final class PUIPlayerView: NSView {
     }
 
     private func updateTopTrailingMenuPosition() {
+        guard !shouldAdoptLiquidGlass else {
+            return
+        }
         let topConstant: CGFloat = isDominantViewInWindow ? 34 : 12
 
         if topTrailingMenuTopConstraint == nil {
@@ -1029,6 +1084,7 @@ public final class PUIPlayerView: NSView {
             pipController?.stopPictureInPicture()
         } else {
             pipController?.startPictureInPicture()
+            enteringPipAfterExitFullscreen = windowIsInFullScreen
         }
     }
 
@@ -1292,7 +1348,11 @@ public final class PUIPlayerView: NSView {
         let viewMouseRect = convert(windowMouseRect, from: nil)
 
         // don't hide the controls when the mouse is over them
-        return !viewMouseRect.intersects(controlsContainerView.frame)
+        if shouldAdoptLiquidGlass {
+            return hitTest(CGPoint(x: viewMouseRect.minX, y: viewMouseRect.midY)) == controlsContainerView || !viewMouseRect.intersects(controlsContainerView.frame)
+        } else {
+            return !viewMouseRect.intersects(controlsContainerView.frame)
+        }
     }
 
     fileprivate var mouseIdleTimer: Timer!
@@ -1318,9 +1378,12 @@ public final class PUIPlayerView: NSView {
         hideControls(animated: true)
     }
 
-    private func hideControls(animated: Bool) {
+    private func hideControls(animated: Bool, isMouseInToolbar: Bool = false) {
         guard canHideControls else { return }
 
+        if !isMouseInToolbar {
+            appearanceDelegate?.playerViewWillHidePlayControls(self)
+        }
         setControls(opacity: 0, animated: animated)
     }
 
@@ -1329,15 +1392,18 @@ public final class PUIPlayerView: NSView {
 
         guard isEnabled else { return }
 
+        appearanceDelegate?.playerViewWillShowPlayControls(self)
         setControls(opacity: 1, animated: animated)
     }
 
     private func setControls(opacity: CGFloat, animated: Bool) {
         NSAnimationContext.runAnimationGroup({ ctx in
             ctx.duration = animated ? 0.4 : 0.0
+
             scrimContainerView.animator().alphaValue = opacity
             controlsContainerView.animator().alphaValue = opacity
             topTrailingMenuContainerView.animator().alphaValue = opacity
+            dimmingView?.animator().alphaValue = opacity
         }, completionHandler: nil)
     }
 
@@ -1353,6 +1419,11 @@ public final class PUIPlayerView: NSView {
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidExitFullScreen), name: NSWindow.didExitFullScreenNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidResignMain), name: NSWindow.didResignMainNotification, object: newWindow)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeMain), name: NSWindow.didBecomeMainNotification, object: newWindow)
+        if newWindow == nil {
+            appearanceDelegate?.playerViewWillShowPlayControls(self)
+        } else {
+            appearanceDelegate?.playerViewWillHidePlayControls(self)
+        }
     }
 
     public override func viewDidMoveToWindow() {
@@ -1375,11 +1446,21 @@ public final class PUIPlayerView: NSView {
     }
 
     private var isTransitioningFromFullScreenPlayback = false
+    private var currentDetachedStatus: DetachedPlaybackStatus?
+
+    public func resumeDetachedStatusIfNeeded() {
+        guard let currentDetachedStatus else { return }
+        appearanceDelegate?.dismissDetachedStatus(currentDetachedStatus, for: self) // this gives the delegate the chance to reset some state variables
+        appearanceDelegate?.presentDetachedStatus(currentDetachedStatus, for: self)
+
+    }
 
     @objc private func windowWillEnterFullScreen() {
         guard window is PUIPlayerWindow else { return }
 
-        appearanceDelegate?.presentDetachedStatus(.fullScreen.snapshot(using: snapshotClosure), for: self)
+        let status = DetachedPlaybackStatus.fullScreen.snapshot(using: snapshotClosure)
+        appearanceDelegate?.presentDetachedStatus(status, for: self)
+        currentDetachedStatus = status
 
         fullScreenButton.isHidden = true
         updateTopTrailingMenuPosition()
@@ -1412,6 +1493,12 @@ public final class PUIPlayerView: NSView {
 
         /// The detached status presentation takes care of leaving a black background before we finish the full screen transition.
         appearanceDelegate?.dismissDetachedStatus(.fullScreen, for: self)
+        currentDetachedStatus = nil
+        if enteringPipAfterExitFullscreen {
+            let status = DetachedPlaybackStatus.pictureInPicture.snapshot(using: snapshotClosure)
+            appearanceDelegate?.presentDetachedStatus(status, for: self)
+            currentDetachedStatus = status
+        }
     }
 
     @objc private func windowDidBecomeMain() {
@@ -1458,6 +1545,12 @@ public final class PUIPlayerView: NSView {
         isPointInsideTimelineArea(convert(event.locationInWindow, from: nil))
     }
 
+    private func isMouseInToolbarArea(_ mouseLocationInWindow: NSPoint) -> Bool {
+        let viewMouseLocation = convert(mouseLocationInWindow, from: nil)
+        let topRect = CGRect(x: controlsContainerView.safeAreaRect.minX, y: controlsContainerView.safeAreaRect.maxY, width: controlsContainerView.safeAreaRect.width, height: controlsContainerView.safeAreaInsets.top)
+        return topRect.contains(viewMouseLocation)
+    }
+
     private func isPointInsideTimelineArea(_ pointInViewCoordinates: CGPoint) -> Bool {
         let point = convert(pointInViewCoordinates, to: timelineView)
         return timelineView.hoverBounds.contains(point)
@@ -1485,6 +1578,9 @@ public final class PUIPlayerView: NSView {
 
                 timelineView.mouseExited(with: event)
             }
+        }
+        if shouldAdoptLiquidGlass, isMouseInToolbarArea(event.locationInWindow) {
+            hideControls(animated: true, isMouseInToolbar: true)
         }
     }
 
@@ -1574,6 +1670,16 @@ extension PUIPlayerView: PUITimelineViewDelegate {
         }
     }
 
+    func timelineViewFloatingTimeIndicatorDidUpdate(at timestamp: Double?, suggestedFrame: CGRect?, isHidden: Bool) {
+        if let suggestedFrame {
+            let localeFrame = convert(suggestedFrame, from: timelineView)
+            floatingTimestampView?.frame = localeFrame
+        }
+        if let text = timestamp.flatMap(String.init(timestamp:)) {
+            floatingTimestampModel?.text = text
+        }
+        floatingTimestampModel?.setIsHidden(isHidden)
+    }
 }
 
 // MARK: - PiP delegate
@@ -1595,7 +1701,9 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
     public func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         delegate?.playerViewWillEnterPictureInPictureMode(self)
 
-        appearanceDelegate?.presentDetachedStatus(.pictureInPicture.snapshot(using: snapshotClosure), for: self)
+        let status = DetachedPlaybackStatus.pictureInPicture.snapshot(using: snapshotClosure)
+        appearanceDelegate?.presentDetachedStatus(status, for: self)
+        currentDetachedStatus = status
     }
 
     public func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
@@ -1647,8 +1755,206 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
     // Called Last
     public func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
         appearanceDelegate?.dismissDetachedStatus(.pictureInPicture, for: self)
+        currentDetachedStatus = nil
         pipButton.state = .off
         invalidateTouchBar()
+    }
+}
+
+@available(macOS 26.0, *)
+private extension PUIPlayerView {
+    private func setupTahoeControls() {
+        let playerView = NSView()
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        playerView.wantsLayer = true
+        playerView.layer = playerLayer
+        playerLayer.backgroundColor = .clear
+
+        let extensionView = playerView.backgroundExtensionEffect(reflect: .leading)
+
+        addSubview(extensionView)
+        let dimmingView = NSView()
+        dimmingView.translatesAutoresizingMaskIntoConstraints = false
+        dimmingView.wantsLayer = true
+        dimmingView.layer?.backgroundColor = CGColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+        dimmingView.alphaValue = 0
+        self.dimmingView = dimmingView
+        addSubview(dimmingView)
+        NSLayoutConstraint.activate([
+            extensionView.topAnchor.constraint(equalTo: topAnchor),
+            extensionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            extensionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            extensionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            dimmingView.topAnchor.constraint(equalTo: topAnchor),
+            dimmingView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            dimmingView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            dimmingView.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
+
+        scrimContainerView = NSView() // full content
+        scrimContainerView.translatesAutoresizingMaskIntoConstraints = false
+
+        controlsContainerView = scrimContainerView // alias
+        topTrailingMenuContainerView = NSView() // placeholder
+
+        let scrimMarginGuide = NSLayoutGuide()
+        scrimContainerView.addLayoutGuide(scrimMarginGuide)
+        addSubview(scrimContainerView)
+
+        NSLayoutConstraint.activate([
+            scrimContainerView.topAnchor.constraint(equalTo: topAnchor),
+            scrimContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrimContainerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            scrimContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+            scrimMarginGuide.topAnchor.constraint(equalTo: scrimContainerView.safeAreaLayoutGuide.topAnchor, constant: 16),
+            scrimMarginGuide.leadingAnchor.constraint(equalTo: scrimContainerView.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            scrimMarginGuide.bottomAnchor.constraint(equalTo: scrimContainerView.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            scrimMarginGuide.trailingAnchor.constraint(equalTo: scrimContainerView.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
+
+        // Volume controls
+        volumeButton = PUIFirstMouseButton(image: NSImage(systemSymbolName: "speaker.wave.3.fill", variableValue: 1, accessibilityDescription: "Volume")!, target: self, action: #selector(toggleMute))
+        volumeButton.isBordered = false
+        volumeButton.contentTintColor = .white.withAlphaComponent(0.9)
+        volumeButton.imageScaling = .scaleNone
+        volumeSlider.controlSize = .mini
+        volumeSlider.trackFillColor = .white.withAlphaComponent(0.9)
+
+        let volumeControlsContainerView = NSView.horizontalGlassContainer(.clear, background: .black.opacity(0.2), paddingEdge: .horizontal, padding: 5, spacing: 2, groups: [[volumeButton, volumeSlider]])
+        self.volumeControlsContainerView = volumeControlsContainerView
+        volumeControlsContainerView.translatesAutoresizingMaskIntoConstraints = false
+        scrimContainerView.addSubview(volumeControlsContainerView, positioned: .below, relativeTo: timelineContainerView)
+        NSLayoutConstraint.activate([
+            volumeControlsContainerView.leadingAnchor.constraint(equalTo: scrimMarginGuide.leadingAnchor),
+            volumeControlsContainerView.bottomAnchor.constraint(equalTo: scrimMarginGuide.bottomAnchor),
+            volumeControlsContainerView.heightAnchor.constraint(equalToConstant: 30)
+        ])
+
+        let subtitlesButton = PUIFirstMouseButton(image: .PUISubtitles.withPlayerMetrics(.medium), target: self, action: #selector(showSubtitlesMenu))
+        subtitlesButton.toolTip = "Subtitles"
+        self.subtitlesButton = subtitlesButton
+
+        let addAnnotationButton = PUIFirstMouseButton(image: .PUIAnnotation.withPlayerMetrics(.medium), target: self, action: #selector(addAnnotation))
+        addAnnotationButton.toolTip = "Add bookmark"
+        self.addAnnotationButton = addAnnotationButton
+
+        let fullScreenButton = PUIFirstMouseButton(image: .PUIFullScreen.withPlayerMetrics(.medium), target: self, action: #selector(toggleFullscreen))
+        fullScreenButton.toolTip = "Toggle full screen"
+        self.fullScreenButton = fullScreenButton
+
+        let pipButton = PUIFirstMouseButton(image: AVPictureInPictureController.pictureInPictureButtonStartImage.withPlayerMetrics(.medium), target: self, action: #selector(togglePip))
+        pipButton.setButtonType(.toggle)
+        pipButton.state = .on
+        pipButton.alternateImage = AVPictureInPictureController.pictureInPictureButtonStopImage.withPlayerMetrics(.medium)
+        pipButton.toolTip = "Toggle picture in picture"
+        self.pipButton = pipButton
+
+        _ = routeButton
+        let picker = PUIAVRoutPickerView()
+        picker.toolTip = "AirPlay"
+        self.routeButton = picker
+
+        [subtitlesButton, addAnnotationButton, fullScreenButton, pipButton].forEach {
+            $0.isBordered = false
+            $0.imageScaling = .scaleNone
+            $0.contentTintColor = .white.withAlphaComponent(0.9)
+        }
+
+        [subtitlesButton, addAnnotationButton, fullScreenButton, pipButton, picker].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.widthAnchor.constraint(equalToConstant: PUIControlMetrics.medium.controlSize).isActive = true
+            $0.heightAnchor.constraint(equalToConstant: PUIControlMetrics.medium.controlSize).isActive = true
+        }
+
+        speedButton.labelColor = .white.withAlphaComponent(0.9)
+        speedButton.borderWidth = 2
+        speedButton.editingBorderColor = .white.withAlphaComponent(0.9)
+        speedButton.editingBackgroundColor = .clear
+        speedButton.cornerRadius = 10
+        let bottomTrailingGroup = NSView.horizontalGlassContainer(.clear, background: .black.opacity(0.2), padding: 5, spacing: 2, groups: [
+            [subtitlesButton, addAnnotationButton, speedButton]
+        ])
+
+        bottomTrailingGroup.translatesAutoresizingMaskIntoConstraints = false
+        scrimContainerView.addSubview(bottomTrailingGroup)
+        NSLayoutConstraint.activate([
+            bottomTrailingGroup.centerYAnchor.constraint(equalTo: volumeControlsContainerView.centerYAnchor),
+            bottomTrailingGroup.trailingAnchor.constraint(equalTo: scrimMarginGuide.trailingAnchor)
+        ])
+
+        let model = PUITimelineFloatingModel()
+        let glassView = NSHostingView(rootView: PUITimelineGlassFloatingView().environment(model))
+        floatingTimestampView = glassView
+        floatingTimestampModel = model
+        glassView.frame = .zero
+        addSubview(glassView)
+
+        // Timeline
+        timelineView = PUITimelineView(adoptLiquidGlass: true)
+        timelineView.viewDelegate = self
+        let timelineContainerView = NSStackView(views: [
+            leadingTimeButton,
+            timelineView,
+            trailingTimeButton
+        ])
+        [leadingTimeButton, trailingTimeButton].forEach {
+            $0.contentTintColor = .white
+        }
+        timelineContainerView.distribution = .equalSpacing
+        timelineContainerView.orientation = .horizontal
+        timelineContainerView.alignment = .centerY
+        self.timelineContainerView = timelineContainerView
+
+        scrimContainerView.addSubview(timelineContainerView)
+        timelineContainerView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            timelineContainerView.leadingAnchor.constraint(equalTo: scrimMarginGuide.leadingAnchor),
+            timelineContainerView.bottomAnchor.constraint(equalTo: bottomTrailingGroup.topAnchor, constant: -12),
+            timelineContainerView.trailingAnchor.constraint(equalTo: scrimMarginGuide.trailingAnchor)
+        ])
+
+        // Center controls (play, forward, backward)
+        [backButton, playButton, forwardButton].forEach {
+            scrimContainerView.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.centerYAnchor.constraint(equalTo: scrimContainerView.centerYAnchor).isActive = true
+        }
+
+        let spacing = CGFloat(30)
+        NSLayoutConstraint.activate([
+            playButton.centerXAnchor.constraint(equalTo: scrimMarginGuide.centerXAnchor),
+            backButton.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -spacing),
+            forwardButton.leadingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: spacing)
+        ])
+
+        // Center Buttons
+        centerButtonsContainerView = NSView() // placeholder
+
+        let topLeadingGroups = NSView.horizontalGlassContainer(.clear, background: .black.opacity(0.2), padding: 5, spacing: 2, groups: [
+            [fullScreenButton, pipButton, routeButton]
+        ])
+        topLeadingGroups.translatesAutoresizingMaskIntoConstraints = false
+        scrimContainerView.addSubview(topLeadingGroups)
+        NSLayoutConstraint.activate([
+            topLeadingGroups.leadingAnchor.constraint(equalTo: scrimMarginGuide.leadingAnchor),
+            topLeadingGroups.topAnchor.constraint(equalTo: scrimMarginGuide.topAnchor)
+        ])
+
+        speedButton.$speed.removeDuplicates().sink { [weak self] speed in
+            guard let self else { return }
+            self.playbackSpeed = speed
+        }
+        .store(in: &uiBindings)
+
+        speedButton.$isEditingCustomSpeed.sink { [weak self] isEditing in
+            guard let self else { return }
+
+            showControls(animated: false)
+            resetMouseIdleTimer()
+        }
+        .store(in: &uiBindings)
     }
 }
 
@@ -1665,7 +1971,7 @@ private struct PUIPlayerViewPreviewWrapper: NSViewRepresentable {
 
     func makeNSView(context: Context) -> PUIPlayerView {
         let player = AVPlayer(url: .previewVideoURL)
-        let view = PUIPlayerView(player: player)
+        let view = PUIPlayerView(player: player, shouldAdoptLiquidGlass: true)
         player.seek(to: CMTimeMakeWithSeconds(30, preferredTimescale: 9000))
         return view
     }
@@ -1696,3 +2002,4 @@ private extension URL {
     }()
 }
 #endif
+

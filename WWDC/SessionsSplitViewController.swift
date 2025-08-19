@@ -19,23 +19,15 @@ final class SessionsSplitViewController: NSSplitViewController {
     let listViewController: SessionsTableViewController
     let detailViewController: SessionDetailsViewController
     var isResizingSplitView = false
-    let windowController: MainWindowController
+    let windowController: WWDCWindowControllerObject
     var setupDone = false
     private var cancellables: Set<AnyCancellable> = []
 
-    init(windowController: MainWindowController, listViewController: SessionsTableViewController) {
+    init(windowController: WWDCWindowControllerObject, listViewController: SessionsTableViewController) {
         self.windowController = windowController
         self.listViewController = listViewController
         let detailViewController = SessionDetailsViewController()
         self.detailViewController = detailViewController
-
-        listViewController.$selectedSession.receive(on: DispatchQueue.main).sink { viewModel in
-            NSAnimationContext.runAnimationGroup { context in
-                context.duration = 0.35
-
-                detailViewController.viewModel = viewModel
-            }
-        }.store(in: &cancellables)
 
         super.init(nibName: nil, bundle: nil)
 

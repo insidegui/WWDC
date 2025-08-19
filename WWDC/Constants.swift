@@ -55,3 +55,8 @@ struct Constants {
     static let exploreTabSpecialEventLiveSoonInterval: TimeInterval = 12 * 60 * 60
 
 }
+
+extension Constants {
+    static let sidebarWidth: CGFloat = 300
+    static let minimumWindowHeight: CGFloat = 700
+}

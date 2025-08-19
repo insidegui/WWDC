@@ -8,9 +8,14 @@
 
 import Foundation
 
-class WWDCWindowController: NSWindowController {
+protocol WWDCWindowControllerObject: NSWindowController {
+    var sidebarInitWidth: CGFloat? { get set }
+    var titleBarViewController: TitleBarViewController { get }
+}
 
-    var titleBarViewController = TitleBarViewController()
+class WWDCWindowController: NSWindowController, WWDCWindowControllerObject {
+    public var sidebarInitWidth: CGFloat?
+    lazy var titleBarViewController = TitleBarViewController()
 
     override var windowNibName: NSNib.Name? {
         // Triggers `loadWindow` to be called so we can override it
@@ -21,6 +26,7 @@ class WWDCWindowController: NSWindowController {
         super.init(window: nil)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -31,7 +37,33 @@ class WWDCWindowController: NSWindowController {
 
     override func windowDidLoad() {
         super.windowDidLoad()
-
         window?.addTitlebarAccessoryViewController(titleBarViewController)
+    }
+}
+
+class NewWWDCWindowController: NSWindowController, WWDCWindowControllerObject {
+    static var defaultRect: NSRect {
+        return NSScreen.main?.visibleFrame.insetBy(dx: 50, dy: 120) ??
+            NSRect(x: 0, y: 0, width: 1200, height: 600)
+    }
+    public var sidebarInitWidth: CGFloat?
+    lazy var titleBarViewController = TitleBarViewController()
+
+    override var windowNibName: NSNib.Name? {
+        // Triggers `loadWindow` to be called so we can override it
+        return NSNib.Name("")
+    }
+
+    init() {
+        super.init(window: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func loadWindow() {
+        fatalError("loadWindow must be overriden by subclasses")
     }
 }

@@ -8,6 +8,7 @@
 
 import Cocoa
 
+@MainActor
 public protocol PUITimelineDelegate: AnyObject {
 
     func viewControllerForTimelineAnnotation(_ annotation: PUITimelineAnnotation) -> NSViewController?

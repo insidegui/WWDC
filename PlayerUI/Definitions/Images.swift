@@ -103,6 +103,11 @@ extension NSImage {
 struct PUIControlMetrics: Hashable {
     var symbolSize: CGFloat
     var controlSize: CGFloat
+    var padding: CGFloat?
+    var glass: GlassStyle?
+    enum GlassStyle: Hashable {
+        case regular, clear
+    }
 
     static let medium = PUIControlMetrics(symbolSize: 16, controlSize: 26)
     static let large = PUIControlMetrics(symbolSize: 28, controlSize: 38)

@@ -54,7 +54,7 @@ class SessionDetailsViewModel: ObservableObject {
 }
 
 extension SessionDetailsViewModel {
-    enum SessionTab {
+    enum SessionTab: CaseIterable {
         case overview, transcript, bookmarks
     }
 }
@@ -65,7 +65,10 @@ final class SessionDetailsViewController: NSViewController {
 
     var viewModel: SessionViewModel? {
         didSet {
-            view.animator().alphaValue = (viewModel == nil) ? 0 : 1
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = 0.35
+                view.animator().alphaValue = (viewModel == nil) ? 0 : 1
+            }
             detailsViewModel.viewModel = viewModel
         }
     }

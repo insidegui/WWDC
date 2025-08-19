@@ -21,7 +21,7 @@ final class SearchCoordinator: Logging {
     /// The desired state of the filters upon configuration
     private var restorationFiltersState: WWDCFiltersState?
 
-    fileprivate let scheduleSearchController: SearchFiltersViewController
+    let scheduleSearchController: SearchFiltersViewController
     @Published var scheduleFilterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue) {
         willSet {
             log.debug(
@@ -30,7 +30,7 @@ final class SearchCoordinator: Logging {
         }
     }
 
-    fileprivate let videosSearchController: SearchFiltersViewController
+    let videosSearchController: SearchFiltersViewController
     @Published var videosFilterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue) {
         willSet {
             log.debug("Videos new predicate: \(newValue.predicate?.description ?? "nil", privacy: .public)")

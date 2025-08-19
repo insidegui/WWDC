@@ -17,7 +17,7 @@ protocol PUITimelineViewDelegate: AnyObject {
     func timelineViewDidSeek(to progress: Double)
     func timelineViewDidFinishInteractiveSeek()
     func timelineDidReceiveForceTouch(at timestamp: Double)
-
+    func timelineViewFloatingTimeIndicatorDidUpdate(at timestamp: Double?, suggestedFrame: CGRect?, isHidden: Bool)
 }
 
 public final class PUITimelineView: NSView {
@@ -30,13 +30,16 @@ public final class PUITimelineView: NSView {
 
     public override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-
         buildUI()
+    }
+
+    init(adoptLiquidGlass: Bool) {
+        super.init(frame: .zero)
+        buildUI(adoptLiquidGlass: adoptLiquidGlass)
     }
 
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
-
         buildUI()
     }
 
@@ -103,7 +106,7 @@ public final class PUITimelineView: NSView {
 
     private lazy var floatingTimeLayer = PUITimelineFloatingLayer()
 
-    private func buildUI() {
+    private func buildUI(adoptLiquidGlass: Bool = false) {
         wantsLayer = true
         layer = PUIBoringLayer()
         layer?.masksToBounds = false
@@ -111,7 +114,7 @@ public final class PUITimelineView: NSView {
         // Main border
 
         borderLayer = PUIBoringLayer()
-        borderLayer.borderColor = NSColor.playerBorder.cgColor
+        borderLayer.borderColor = NSColor.playerBorder.preferredCGColor(in: .darkAqua)
         borderLayer.borderWidth = 1.0
         borderLayer.frame = bounds
 
@@ -128,7 +131,7 @@ public final class PUITimelineView: NSView {
         // Playback bar
 
         playbackProgressLayer = PUIBoringLayer()
-        playbackProgressLayer.backgroundColor = NSColor.playerProgress.cgColor
+        playbackProgressLayer.backgroundColor = NSColor.playerProgress.preferredCGColor(in: .darkAqua)
         playbackProgressLayer.frame = bounds
         playbackProgressLayer.masksToBounds = true
 
@@ -137,20 +140,23 @@ public final class PUITimelineView: NSView {
         // Ghost bar
 
         seekProgressLayer = PUIBoringLayer()
-        seekProgressLayer.backgroundColor = NSColor.seekProgress.cgColor
+        seekProgressLayer.backgroundColor = NSColor.seekProgress.preferredCGColor(in: .darkAqua)
         seekProgressLayer.frame = bounds
 
         layer?.addSublayer(seekProgressLayer)
 
         // Floating time
 
-        layer?.addSublayer(floatingTimeLayer)
+        if !adoptLiquidGlass {
+            layer?.addSublayer(floatingTimeLayer)
+        }
 
         // Annotations container
 
         annotationsContainerLayer.frame = bounds
         annotationsContainerLayer.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
         annotationsContainerLayer.masksToBounds = false
+        annotationsContainerLayer.zPosition = 30
         layer?.addSublayer(annotationsContainerLayer)
 
         #if DEBUG
@@ -278,6 +284,7 @@ public final class PUITimelineView: NSView {
         )
 
         floatingTimeLayer.frame = floatingTimeRect
+        viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: timestamp, suggestedFrame: floatingTimeRect, isHidden: false)
     }
 
     public override var mouseDownCanMoveWindow: Bool {
@@ -338,6 +345,7 @@ public final class PUITimelineView: NSView {
             case .leftMouseDragged?:
                 if !startedInteractiveSeek {
                     floatingTimeLayer.hide()
+                    viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: nil, suggestedFrame: nil, isHidden: true)
                     startedInteractiveSeek = true
                     self.viewDelegate?.timelineViewWillBeginInteractiveSeek()
                 }
@@ -354,13 +362,17 @@ public final class PUITimelineView: NSView {
 
     private func reactToMouse() {
         if hasMouseInside {
-            borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.cgColor }
+            borderLayer.animate { borderLayer.borderColor = NSColor.highlightedPlayerBorder.preferredCGColor(in: .darkAqua) }
             seekProgressLayer.animate { seekProgressLayer.opacity = 1 }
             floatingTimeLayer.show()
+            viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: nil, suggestedFrame: nil, isHidden: false)
         } else {
-            borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.cgColor }
+            borderLayer.animate { borderLayer.borderColor = NSColor.playerBorder.preferredCGColor(in: .darkAqua) }
             seekProgressLayer.animate { seekProgressLayer.opacity = 0 }
-            if selectedAnnotation == nil { floatingTimeLayer.hide() }
+            if selectedAnnotation == nil {
+                floatingTimeLayer.hide()
+                viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: nil, suggestedFrame: nil, isHidden: true)
+            }
         }
     }
 
@@ -519,6 +531,7 @@ public final class PUITimelineView: NSView {
         layer.isHighlighted = true
 
         floatingTimeLayer.show()
+        viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: nil, suggestedFrame: nil, isHidden: false)
     }
 
     private func mouseOut(_ annotation: PUITimelineAnnotation, layer: PUIAnnotationLayer) {
@@ -643,6 +656,7 @@ public final class PUITimelineView: NSView {
                 
                 if mode == .delete {
                     floatingTimeLayer.hide()
+                    viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: nil, suggestedFrame: nil, isHidden: true)
                 }
             case .keyUp?:
                 // cancel with ESC
@@ -670,6 +684,7 @@ public final class PUITimelineView: NSView {
         guard let controller = delegate?.viewControllerForTimelineAnnotation(annotation) else { return }
 
         floatingTimeLayer.show()
+        viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: nil, suggestedFrame: nil, isHidden: false)
         updateFloatingTime(with: annotationLayer.position)
 
         currentAnnotationEditor = controller
@@ -744,6 +759,7 @@ public final class PUITimelineView: NSView {
         UILog(#function)
 
         floatingTimeLayer.hide()
+        viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: nil, suggestedFrame: nil, isHidden: true)
 
         if let monitor = annotationCommandsMonitor {
             NSEvent.removeMonitor(monitor)
@@ -786,6 +802,7 @@ private extension PUITimelineView {
         if forceTimePreviewVisible {
             self.updateFloatingTime(with: CGPoint(x: 100, y: 0))
             self.floatingTimeLayer.show()
+            viewDelegate?.timelineViewFloatingTimeIndicatorDidUpdate(at: nil, suggestedFrame: nil, isHidden: false)
         }
 
         if addAnnotations {

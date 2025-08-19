@@ -9,6 +9,12 @@ final class PUIPlaybackSpeedToggle: NSView, ObservableObject {
 
     @Published var isEditingCustomSpeed = false
 
+    var borderWidth: CGFloat = 1
+    var labelColor: NSColor = .secondaryLabelColor
+    var editingBackgroundColor: NSColor = .tertiaryLabelColor
+    var editingBorderColor: NSColor = .labelColor
+    var cornerRadius: CGFloat = 6
+
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
 
@@ -73,22 +79,25 @@ private struct PlaybackSpeedToggle: View {
     var body: some View {
         ZStack {
             shape
-                .fill(.tertiary)
+                .fill(Color(nsColor: controller.editingBackgroundColor))
                 .opacity(controller.isEditingCustomSpeed ? 1 : 0)
 
             shape
-                .strokeBorder(controller.isEditingCustomSpeed ? .primary : .secondary, lineWidth: 1)
+                .strokeBorder(controller.isEditingCustomSpeed ? Color(nsColor: controller.editingBorderColor) : Color(nsColor: controller.labelColor), lineWidth: controller.borderWidth)
 
-            if controller.isEditingCustomSpeed {
-                customSpeedEditor
-            } else {
-                toggleButton
-            }
+            customSpeedEditor
+                .opacity(controller.isEditingCustomSpeed ? 1 : 0)
+                .matchedGeometryEffect(id: "text", in: transition, isSource: false)
+            toggleButton
+                .buttonStyle(.playerControlStatic)
+                .opacity(controller.isEditingCustomSpeed ? 0 : 1)
+                .matchedGeometryEffect(id: "text", in: transition, isSource: true)
+                .frame(width: 40, height: 20)
+                .contentShape(shape)
         }
         .font(.system(size: 12, weight: .medium))
         .monospacedDigit()
         .frame(width: 40, height: 20)
-        .buttonStyle(.playerControlStatic)
         .contentShape(shape)
         .overlay {
             if controller.isEditingCustomSpeed, customSpeedInvalid {
@@ -132,10 +141,10 @@ private struct PlaybackSpeedToggle: View {
                         .numericContentTransition(value: Double(controller.speed.rawValue))
                     Text("×")
                 }
-                .matchedGeometryEffect(id: "text", in: transition)
-                .foregroundStyle(.primary)
+                .foregroundStyle(Color(nsColor: controller.labelColor))
                 .animation(.smooth, value: controller.speed)
             }
+            .frame(maxWidth: .infinity, alignment: .center) // fix clicking spaces inside the border
             .contentShape(Rectangle())
         }
     }
@@ -164,7 +173,7 @@ private struct PlaybackSpeedToggle: View {
     @ViewBuilder
     private var customSpeedEditor: some View {
         TextField("Speed", value: $customSpeedValue, formatter: PUIPlaybackSpeed.buttonTitleFormatter)
-            .matchedGeometryEffect(id: "text", in: transition)
+            .foregroundStyle(Color(nsColor: controller.labelColor))
             .textFieldStyle(.plain)
             .onEscapePressed { speedFieldFocused = false }
             .multilineTextAlignment(.center)
@@ -188,7 +197,7 @@ private struct PlaybackSpeedToggle: View {
     }
 
     private var shape: some InsettableShape {
-        RoundedRectangle(cornerRadius: 6, style: .continuous)
+        RoundedRectangle(cornerRadius: controller.cornerRadius, style: .continuous)
     }
 }
 

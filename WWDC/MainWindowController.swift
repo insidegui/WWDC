@@ -9,7 +9,7 @@
 import Cocoa
 import PlayerUI
 
-enum MainWindowTab: Int, WWDCTab {
+enum MainWindowTab: Int, CaseIterable, Sendable, WWDCTab {
     case explore
     case schedule
     case videos
@@ -23,6 +23,17 @@ enum MainWindowTab: Int, WWDCTab {
     }
 
     var hidesWindowTitleBar: Bool { self == .explore }
+
+    var toolbarItemImage: NSImage? {
+        switch self {
+        case .explore:
+            return NSImage(systemSymbolName: "star.square.fill", accessibilityDescription: "Explore")
+        case .schedule:
+            return NSImage(systemSymbolName: "calendar", accessibilityDescription: "Schedule")
+        case .videos:
+            return NSImage(systemSymbolName: "play.square.fill", accessibilityDescription: "Videos")
+        }
+    }
 }
 
 extension Notification.Name {
@@ -41,7 +52,6 @@ final class MainWindowController: WWDCWindowController {
         return NSScreen.main?.visibleFrame.insetBy(dx: 50, dy: 120) ??
                NSRect(x: 0, y: 0, width: 1200, height: 600)
     }
-    public var sidebarInitWidth: CGFloat?
 
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]

@@ -66,7 +66,7 @@ final class VideoPlayerViewController: NSViewController {
     }
 
     lazy var playerView: PUIPlayerView = {
-        return PUIPlayerView(player: self.player)
+        return PUIPlayerView(player: self.player, shouldAdoptLiquidGlass: TahoeFeatureFlag.isLiquidGlassEnabled)
     }()
 
     fileprivate lazy var progressIndicator: NSProgressIndicator = {
@@ -76,7 +76,7 @@ final class VideoPlayerViewController: NSViewController {
         p.style = .spinning
         p.isIndeterminate = true
         p.translatesAutoresizingMaskIntoConstraints = false
-        p.appearance = NSAppearance(named: NSAppearance.Name(rawValue: "WhiteSpinner"))
+        p.appearance = NSAppearance(named: .darkAqua)
         p.isHidden = true
 
         p.sizeToFit()
@@ -97,9 +97,18 @@ final class VideoPlayerViewController: NSViewController {
         playerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         playerView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
+        var progressIndicator: NSView = self.progressIndicator
+        if #available(macOS 26.0, *), TahoeFeatureFlag.isLiquidGlassEnabled {
+            progressIndicator = self.progressIndicator.glassCircleEffect(.clear, background: .init(nsColor: .textBackgroundColor).opacity(0.5))
+            progressIndicator.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                progressIndicator.widthAnchor.constraint(equalToConstant: 40),
+                progressIndicator.heightAnchor.constraint(equalToConstant: 40)
+            ])
+        }
         view.addSubview(progressIndicator)
         view.addConstraints([
-            NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: progressIndicator, attribute: .centerX, relatedBy: .equal, toItem: view.safeAreaLayoutGuide, attribute: .centerX, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: progressIndicator, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1.0, constant: 0.0)
             ])
 
@@ -243,6 +252,7 @@ final class VideoPlayerViewController: NSViewController {
                 guard self?.player.timeControlStatus == .waitingToPlayAtSpecifiedRate else { return }
                 self?.progressIndicator.startAnimation(nil)
                 self?.progressIndicator.isHidden = false
+                self?.playerView.hideAllControls = true
             }
         }
 
@@ -250,6 +260,7 @@ final class VideoPlayerViewController: NSViewController {
             if !progressIndicator.isHidden {
                 progressIndicator.stopAnimation(nil)
                 progressIndicator.isHidden = true
+                playerView.hideAllControls = false
             }
         }
 
@@ -281,7 +292,9 @@ final class VideoPlayerViewController: NSViewController {
             let ct = CMTimeGetSeconds(self.player.currentTime())
             let roundedTimecode = Transcript.roundedStringFromTimecode(ct)
 
-            NotificationCenter.default.post(name: .HighlightTranscriptAtCurrentTimecode, object: roundedTimecode)
+            NotificationCenter.default.post(name: .HighlightTranscriptAtCurrentTimecode, object: roundedTimecode, userInfo: [
+                "session_id": sessionViewModel.sessionIdentifier
+            ])
         }
     }
 
@@ -339,7 +352,10 @@ extension VideoPlayerViewController: PUIPlayerViewDelegate {
     }
 
     func playerViewWillEnterPictureInPictureMode(_ playerView: PUIPlayerView) {
-
+        // when entering pip, automatically exit full screen if needed
+        if playerView.isInFullScreenPlayerWindow, let playerWindow = playerView.window as? PUIPlayerWindow {
+            playerWindow.toggleFullScreen(self)
+        }
     }
 
     func playerViewDidSelectLike(_ playerView: PUIPlayerView) {
@@ -392,6 +408,27 @@ extension VideoPlayerViewController: PUIPlayerViewAppearanceDelegate {
 
     func dismissDetachedStatus(_ status: DetachedPlaybackStatus, for playerView: PUIPlayerView) {
         shelf?.dismissDetachedStatus(status, for: playerView)
+    }
+
+    func playerViewWillHidePlayControls(_ playerView: PUIPlayerView) {
+        guard TahoeFeatureFlag.isLiquidGlassEnabled else { return }
+        guard searchItem?.searchField.currentEditor() == nil else {
+            return
+        }
+        [searchItem, topTabItem, downloadItem].forEach {
+            if #available(macOS 15.0, *) {
+                $0?.isHidden = true
+            }
+        }
+    }
+
+    func playerViewWillShowPlayControls(_ playerView: PUIPlayerView) {
+        guard TahoeFeatureFlag.isLiquidGlassEnabled else { return }
+        [searchItem, topTabItem, downloadItem].forEach {
+            if #available(macOS 15.0, *) {
+                $0?.isHidden = false
+            }
+        }
     }
 }
 

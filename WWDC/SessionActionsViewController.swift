@@ -23,11 +23,12 @@ protocol SessionActionsDelegate: AnyObject {
     func sessionActionsDidSelectShareClip(_ sender: NSView?)
 }
 
-@MainActor
 final class SessionActionsViewModel: ObservableObject {
     @Published var viewModel: SessionViewModel? {
         didSet {
-            updateBindings()
+            DispatchQueue.main.async {
+                self.updateBindings()
+            }
         }
     }
 
@@ -42,8 +43,9 @@ final class SessionActionsViewModel: ObservableObject {
 
     init(session: SessionViewModel? = nil) {
         self.viewModel = session
-
-        updateBindings()
+        DispatchQueue.main.async {
+            self.updateBindings()
+        }
     }
 
     enum DownloadState: Equatable {
@@ -68,6 +70,13 @@ final class SessionActionsViewModel: ObservableObject {
             }
         }
 
+        var showsInlineButton: Bool {
+            switch self {
+            case .downloadable, .downloaded, .pending, .downloading: true
+            case .notDownloadable: false
+            }
+        }
+
         var allocatesSpace: Bool {
             switch self {
             case .downloadable, .pending, .downloading, .downloaded: true
@@ -80,7 +89,7 @@ final class SessionActionsViewModel: ObservableObject {
         }
     }
 
-    private func updateBindings() {
+    @MainActor private func updateBindings() {
         cancellables = []
 
         guard let viewModel = viewModel else { return }
@@ -133,7 +142,7 @@ final class SessionActionsViewModel: ObservableObject {
     /// Realm writes and then publishes the new `isDownloaded` state.
     ///
     /// This means the button will show the download button briefly before switching to the delete button.
-    private static func downloadState(session: Session, downloadState: MediaDownloadState?) -> DownloadState {
+    static func downloadState(session: Session, downloadState: MediaDownloadState?) -> DownloadState {
         if let downloadState {
             switch downloadState {
             case .waiting:
@@ -165,35 +174,35 @@ final class SessionActionsViewModel: ObservableObject {
         return .downloadable
     }
 
-    func toggleFavorite() {
+    @MainActor func toggleFavorite() {
         delegate?.sessionActionsDidSelectFavorite(nil)
     }
 
-    func showSlides() {
+    @MainActor func showSlides() {
         delegate?.sessionActionsDidSelectSlides(nil)
     }
 
-    func download() {
+    @MainActor func download() {
         delegate?.sessionActionsDidSelectDownload(nil)
     }
 
-    func addCalendar() {
+    @MainActor func addCalendar() {
         delegate?.sessionActionsDidSelectCalendar(nil)
     }
 
-    func deleteDownload() {
+    @MainActor func deleteDownload() {
         delegate?.sessionActionsDidSelectDeleteDownload(nil)
     }
 
-    func share() {
+    @MainActor func share() {
         delegate?.sessionActionsDidSelectShare(nil)
     }
 
-    func shareClip() {
+    @MainActor func shareClip() {
         delegate?.sessionActionsDidSelectShareClip(nil)
     }
 
-    func cancelDownload() {
+    @MainActor func cancelDownload() {
         delegate?.sessionActionsDidSelectCancelDownload(nil)
     }
 }

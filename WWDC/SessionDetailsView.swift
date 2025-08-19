@@ -35,6 +35,18 @@ import SwiftUI
  */
 struct SessionDetailsView: View {
     @ObservedObject var detailsViewModel: SessionDetailsViewModel
+
+    var body: some View {
+        if TahoeFeatureFlag.isLiquidGlassEnabled {
+            NewSessionDetailsView(detailsViewModel: detailsViewModel)
+        } else {
+            DeprecatedSessionDetailsView(detailsViewModel: detailsViewModel)
+        }
+    }
+}
+
+struct DeprecatedSessionDetailsView: View {
+    @ObservedObject var detailsViewModel: SessionDetailsViewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -51,7 +63,7 @@ struct SessionDetailsView: View {
             tabContent
                 .padding(.top, 16)
         }
-        .padding([.bottom, .horizontal], 46)
+        .padding([.bottom, .horizontal])
     }
     
     private var tabButtons: some View {
@@ -97,5 +109,80 @@ struct SessionDetailsView: View {
 struct SessionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         SessionDetailsView(detailsViewModel: SessionDetailsViewModel(session: .preview))
+    }
+}
+
+struct NewSessionDetailsView: View {
+    @ObservedObject var detailsViewModel: SessionDetailsViewModel
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                ShelfViewControllerWrapper(controller: detailsViewModel.shelfController)
+                    .frame(minHeight: 280, maxHeight: .infinity)
+
+                if detailsViewModel.isBookmarksAvailable {
+                    tabButtons
+                        .safeAreaPadding(.leading, geometry.safeAreaInsets.leading)
+                        .safeAreaPadding(.trailing, geometry.safeAreaInsets.trailing)
+                        .padding([.bottom, .horizontal])
+                }
+
+                Divider()
+                    .safeAreaPadding(.leading, geometry.safeAreaInsets.leading)
+                    .safeAreaPadding(.trailing, geometry.safeAreaInsets.trailing)
+                    .padding([.bottom, .horizontal])
+
+                tabContent
+                    .padding(.top, 16)
+                    .safeAreaPadding(.leading, geometry.safeAreaInsets.leading)
+                    .safeAreaPadding(.trailing, geometry.safeAreaInsets.trailing)
+                    .padding([.bottom, .horizontal])
+            }
+            .ignoresSafeArea()
+        }
+    }
+
+    private var tabButtons: some View {
+        HStack(spacing: 32) {
+            Button("Overview") {
+                detailsViewModel.selectedTab = .overview
+            }
+            .selected(detailsViewModel.selectedTab == .overview)
+
+            if detailsViewModel.isBookmarksAvailable {
+                Button("Bookmarks") {
+                    detailsViewModel.selectedTab = .bookmarks
+                }
+                .selected(detailsViewModel.selectedTab == .bookmarks)
+            }
+        }
+        .buttonStyle(WWDCTextButtonStyle())
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+    }
+
+    @ViewBuilder
+    private var tabContent: some View {
+        switch detailsViewModel.selectedTab {
+        case .overview:
+            SessionSummaryViewControllerWrapper(controller: detailsViewModel.summaryController)
+        case .transcript:
+            Text("See inspector for transcript")
+                .foregroundColor(.secondary)
+        case .bookmarks:
+            Text("Bookmarks view coming soon")
+                .foregroundColor(.secondary)
+        }
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func extendBackground(isHidden: Bool = false) -> some View {
+        if #available(macOS 26.0, *), !isHidden {
+            backgroundExtensionEffect()
+        } else {
+            self
+        }
     }
 }

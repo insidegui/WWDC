@@ -12,9 +12,8 @@ import ConfCore
 import PlayerUI
 import CoreMedia
 
-extension AppCoordinator: ShelfViewControllerDelegate {
-
-    private func shelf(for tab: MainWindowTab) -> ShelfViewController? {
+extension AppCoordinator {
+    func shelf(for tab: MainWindowTab) -> ShelfViewController? {
 
         var shelfViewController: ShelfViewController?
         switch tab {
@@ -27,6 +26,13 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         return shelfViewController
     }
+
+    func select(session: any SessionIdentifiable, removingFiltersIfNeeded: Bool) {
+        currentListController?.select(session: session, removingFiltersIfNeeded: removingFiltersIfNeeded)
+    }
+}
+
+extension WWDCCoordinator/*: ShelfViewControllerDelegate*/ {
 
     func updateShelfBasedOnSelectionChange() {
         guard !isTransitioningPlayerContext else { return }
@@ -62,11 +68,11 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
         // Always reveal the tab to avoid the case of the session selected
         // on tab that isn't the player owner tab
-        tabController.activeTab = playerOwnerTab
+        tabController.setActiveTab(playerOwnerTab)
 
         // Reveal the session
         if playerOwnerSessionIdentifier != activeTabSelectedSessionViewModel?.identifier {
-            currentListController?.select(session: SessionIdentifier(identifier))
+            select(session: SessionIdentifier(identifier), removingFiltersIfNeeded: true)
         }
 
         // Show the container
@@ -116,7 +122,7 @@ extension AppCoordinator: ShelfViewControllerDelegate {
 
             shelfController.playButton.isHidden = true
             shelfController.playerContainer.isHidden = false
-
+            currentPlayerController?.playerView.resumeDetachedStatusIfNeeded()
         } catch {
             WWDCAlert.show(with: error)
         }
@@ -150,30 +156,16 @@ extension AppCoordinator: ShelfViewControllerDelegate {
         }
     }
 
+    @MainActor
     private var playerTouchBarContainer: MainWindowController? {
         return currentPlayerController?.view.window?.windowController as? MainWindowController
     }
 
+    @MainActor
     private func attachPlayerToShelf(_ shelf: ShelfViewController) {
         guard let playerController = currentPlayerController else { return }
 
-        let playerContainer = shelf.playerContainer
-
-        // Already attached
-        guard playerController.view.superview != playerContainer else { return }
-
-        playerController.view.frame = playerContainer.bounds
-        playerController.view.alphaValue = 0
-        playerController.view.isHidden = false
-
-        playerController.view.translatesAutoresizingMaskIntoConstraints = false
-
-        playerContainer.addSubview(playerController.view)
-        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
-
-        playerContainer.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-(0)-[playerView]-(0)-|", options: [], metrics: nil, views: ["playerView": playerController.view]))
-
-        playerController.view.alphaValue = 1
+        shelf.addPlayerViewIfNeeded(playerController)
 
         playerTouchBarContainer?.touchBarProvider = playerController.playerView
     }

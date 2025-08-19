@@ -14,10 +14,10 @@ import PlayerUI
 import OSLog
 import AVFoundation
 
-final class AppCoordinator: Logging, Signposting {
+final class AppCoordinator: WWDCCoordinator {
 
-    static let log = makeLogger()
-    static let signposter: OSSignposter = makeSignposter()
+    nonisolated static let log = makeLogger()
+    nonisolated static let signposter: OSSignposter = makeSignposter()
 
     private lazy var cancellables = Set<AnyCancellable>()
 
@@ -27,7 +27,7 @@ final class AppCoordinator: Logging, Signposting {
     var syncEngine: SyncEngine
 
     // - Top level controllers
-    var windowController: MainWindowController
+    var windowController: WWDCWindowControllerObject
     var tabController: WWDCTabViewController<MainWindowTab>
     var searchCoordinator: SearchCoordinator
 
@@ -67,7 +67,7 @@ final class AppCoordinator: Logging, Signposting {
         }
     }
 
-    var exploreTabLiveSession: some Publisher<SessionViewModel?, Never> {
+    var exploreTabLiveSession: AnyPublisher<SessionViewModel?, Never> {
         let liveInstances = storage.realm.objects(SessionInstance.self)
             .filter("rawSessionType == 'Special Event' AND isCurrentlyLive == true")
             .sorted(byKeyPath: "startTime", ascending: false)
@@ -76,6 +76,7 @@ final class AppCoordinator: Logging, Signposting {
             .map({ $0.toArray().first?.session })
             .map({ SessionViewModel(session: $0, instance: $0?.instances.first, track: nil, style: .schedule) })
             .replaceErrorWithEmpty()
+            .eraseToAnyPublisher()
     }
 
     /// The session that is currently selected on the videos tab (observable)
@@ -265,7 +266,17 @@ final class AppCoordinator: Logging, Signposting {
                     activeTabSelectedSessionViewModel = nil
                 }
 
+                // pip detail view controller if needed
                 updateShelfBasedOnSelectionChange()
+                // then update with newest view model
+                switch activeTab {
+                case .schedule:
+                    scheduleController.splitViewController.detailViewController.viewModel = activeTabSelectedSessionViewModel
+                case .videos:
+                    videosController.detailViewController.viewModel = activeTabSelectedSessionViewModel
+                default:
+                    break
+                }
                 updateCurrentActivity(with: activeTabSelectedSessionViewModel)
             }
             .store(in: &cancellables)
@@ -503,7 +514,9 @@ final class AppCoordinator: Logging, Signposting {
         activityScheduler.repeats = true
         activityScheduler.qualityOfService = .utility
         activityScheduler.schedule { [weak self] completion in
-            self?.refresh(self?.autorefreshActivity)
+            DispatchQueue.main.async {
+                self?.refresh(self?.autorefreshActivity)
+            }
             completion(.finished)
         }
 

@@ -33,10 +33,18 @@ final class ImageDownloadCenter: Logging {
     }()
     
     func cachedThumbnail(from url: URL) -> NSImage? { cache.cachedImage(for: url, thumbnailOnly: true).thumbnail }
+    func cachedImage(from url: URL, thumbnailOnly: Bool) -> NSImage? {
+        let result = cache.cachedImage(for: url, thumbnailOnly: thumbnailOnly)
+        if thumbnailOnly {
+            return result.thumbnail
+        } else {
+            return result.original
+        }
+    }
 
     /// The completion handler is always called on the main thread
     @discardableResult
-    func downloadImage(from url: URL, thumbnailHeight: CGFloat, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
+    func downloadImage(from url: URL, thumbnailHeight: CGFloat?, thumbnailOnly: Bool = false, completion: @escaping ImageDownloadCompletionBlock) -> Operation? {
         if thumbnailOnly {
             if let thumbnailImage = cache.cachedImage(for: url, thumbnailOnly: true).thumbnail {
                 completion(url, (nil, thumbnailImage))
@@ -244,11 +252,11 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
     }
 
     let url: URL
-    let thumbnailHeight: CGFloat
+    let thumbnailHeight: CGFloat?
 
     let cacheProvider: ImageCacheProvider
 
-    init(url: URL, cache: ImageCacheProvider, thumbnailHeight: CGFloat = Constants.thumbnailHeight) {
+    init(url: URL, cache: ImageCacheProvider, thumbnailHeight: CGFloat?) {
         self.url = url
         cacheProvider = cache
         self.thumbnailHeight = thumbnailHeight
@@ -312,6 +320,7 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
             guard let self = self else { return }
 
             guard !self.isCancelled else {
+                self.callCompletionHandlers() // make sure checked continuation is always called
                 self._executing = false
                 self._finished = true
                 return
@@ -332,6 +341,7 @@ private final class ImageDownloadOperation: Operation, @unchecked Sendable {
             }
 
             guard !self.isCancelled else {
+                self.callCompletionHandlers() // make sure checked continuation is always called
                 self._executing = false
                 self._finished = true
                 return

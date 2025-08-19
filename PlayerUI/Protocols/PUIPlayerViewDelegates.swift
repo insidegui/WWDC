@@ -37,5 +37,11 @@ public protocol PUIPlayerViewAppearanceDelegate: AnyObject, PUIPlayerViewDetache
     func playerViewShouldShowTimestampLabels(_ playerView: PUIPlayerView) -> Bool
     func playerViewShouldShowFullScreenButton(_ playerView: PUIPlayerView) -> Bool
     func playerViewBackAndForwardDuration(_ playerView: PUIPlayerView) -> BackForwardSkipDuration
+    func playerViewWillHidePlayControls(_ playerView: PUIPlayerView)
+    func playerViewWillShowPlayControls(_ playerView: PUIPlayerView)
+}
 
+public extension PUIPlayerViewAppearanceDelegate {
+    func playerViewWillHidePlayControls(_ playerView: PUIPlayerView) {}
+    func playerViewWillShowPlayControls(_ playerView: PUIPlayerView) {}
 }

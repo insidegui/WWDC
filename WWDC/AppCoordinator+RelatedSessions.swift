@@ -9,7 +9,7 @@
 import Cocoa
 import ConfCore
 
-extension AppCoordinator: RelatedSessionsDelegate {
+extension WWDCCoordinator/*: RelatedSessionsDelegate*/ {
 
     func relatedSessions(_ relatedSessions: RelatedSessionsViewModel, didSelectSession viewModel: SessionViewModel) {
         selectSessionOnAppropriateTab(with: viewModel)

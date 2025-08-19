@@ -56,7 +56,7 @@ extension Array where Element == FilterOption {
 
 }
 
-struct MultipleChoiceFilter: FilterType {
+struct MultipleChoiceFilter: FilterType, Equatable {
     private static func optionsWithClear(_ newValue: [FilterOption]) -> [FilterOption] {
         if !newValue.contains(.clear) {
             var withClear = newValue
