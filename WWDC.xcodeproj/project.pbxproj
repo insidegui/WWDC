@@ -30,6 +30,8 @@
 		911C72C92A52169A00CB3757 /* CombineLatestMany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911C72C82A52169A00CB3757 /* CombineLatestMany.swift */; };
 		914367202A4C6B0E004E4392 /* Sequence+GroupedBy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9143671F2A4C6B0E004E4392 /* Sequence+GroupedBy.swift */; };
 		914C83B42E1ECBFF001AEE5C /* SessionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C83B32E1ECBFF001AEE5C /* SessionDetailsView.swift */; };
+		916228EE2E561B5700232DE6 /* ConcurrencyExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 916228ED2E561B5700232DE6 /* ConcurrencyExtras */; };
+		916C66EA2E55088000D0CAF1 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 916C66E92E55088000D0CAF1 /* Algorithms */; };
 		9171CEFC2E5391CF0063BBA7 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 91973A9B2E538BE200C4A644 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		91973A9C2E538BE200C4A644 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 91973A9B2E538BE200C4A644 /* RealmSwift */; };
 		91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */; };
@@ -531,10 +533,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				916C66EA2E55088000D0CAF1 /* Algorithms in Frameworks */,
 				91973A9C2E538BE200C4A644 /* RealmSwift in Frameworks */,
 				012BEFA41EE8658F007E72CA /* EventKit.framework in Frameworks */,
 				DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */,
 				DDB1A2632577E67A00995FF1 /* ConfCore in Frameworks */,
+				916228EE2E561B5700232DE6 /* ConcurrencyExtras in Frameworks */,
 				DDB1A26A2577E7E900995FF1 /* Sparkle in Frameworks */,
 				DD5910701ECA0C3B003C32A4 /* CloudKit.framework in Frameworks */,
 				91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */,
@@ -1299,6 +1303,8 @@
 				DDB1A2692577E7E900995FF1 /* Sparkle */,
 				91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */,
 				91973A9B2E538BE200C4A644 /* RealmSwift */,
+				916C66E92E55088000D0CAF1 /* Algorithms */,
+				916228ED2E561B5700232DE6 /* ConcurrencyExtras */,
 			);
 			productName = WWDC;
 			productReference = DD36A4AC1E478C6A00B2EA88 /* WWDC.app */;
@@ -1428,6 +1434,8 @@
 				91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */,
 				91973A9A2E538BE200C4A644 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				916C66E82E55088000D0CAF1 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				916228EC2E561B5700232DE6 /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */,
 			);
 			productRefGroup = DD36A4AD1E478C6A00B2EA88 /* Products */;
 			projectDirPath = "";
@@ -2540,6 +2548,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		916228EC2E561B5700232DE6 /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-concurrency-extras.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.1;
+			};
+		};
+		916C66E82E55088000D0CAF1 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
 		91973A9A2E538BE200C4A644 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/insidegui/realm-swift.git";
@@ -2575,6 +2599,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		916228ED2E561B5700232DE6 /* ConcurrencyExtras */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 916228EC2E561B5700232DE6 /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */;
+			productName = ConcurrencyExtras;
+		};
+		916C66E92E55088000D0CAF1 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 916C66E82E55088000D0CAF1 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
 		91973A9B2E538BE200C4A644 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 91973A9A2E538BE200C4A644 /* XCRemoteSwiftPackageReference "realm-swift" */;

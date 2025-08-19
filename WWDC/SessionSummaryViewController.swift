@@ -209,9 +209,8 @@ class SessionSummaryViewController: NSViewController {
         }
         .store(in: &cancellables)
 
-        viewModel.rxRelatedSessions.driveUI { [weak self] relatedResources in
-            let relatedSessions = relatedResources.compactMap({ $0.session })
-            self?.relatedSessionsViewModel.sessions = relatedSessions.compactMap(SessionViewModel.init)
+        viewModel.rxRelatedSessions.removeDuplicates().driveUI { [weak self] relatedSessions in
+            self?.relatedSessionsViewModel.sessions = relatedSessions.compactMap(SessionViewModel.init).map(SessionCellViewModel.init)
         }
         .store(in: &cancellables)
 

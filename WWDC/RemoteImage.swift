@@ -30,18 +30,11 @@ struct RemoteImage<Content: View, Placeholder: View>: View {
 
     @MainActor
     private func load() async -> NSImage? {
-        await withCheckedContinuation { continuation in
-            switch size {
-            case .thumbnail(let height):
-                ImageDownloadCenter.shared.downloadImage(from: url, thumbnailHeight: height, thumbnailOnly: true) { _, result in
-                    continuation.resume(returning: result.thumbnail)
-                }
-            case .large:
-                ImageDownloadCenter.shared.downloadImage(from: url, thumbnailHeight: 400, thumbnailOnly: true) { _, result in
-                    continuation.resume(returning: result.original)
-                }
-            }
-
+        return switch size {
+        case .thumbnail(let height):
+            await ImageDownloadCenter.shared.downloadImage(from: url, thumbnailHeight: height, thumbnailOnly: true).thumbnail
+        case .large:
+            await ImageDownloadCenter.shared.downloadImage(from: url, thumbnailHeight: 400, thumbnailOnly: true).original
         }
     }
 }

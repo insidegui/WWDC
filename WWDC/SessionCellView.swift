@@ -57,26 +57,26 @@ final class SessionCellViewModel: ObservableObject {
         //
         // SessionCellViewModel is recycled, so when a new SessionViewModel is attached, we need to break the
         // bindings with the previous one. Which means we MUST have a cancellables for as long as this is the architecture we have
-        viewModel.rxTitle.replaceError(with: "").assign(to: \.title, on: self).store(in: &cancellables)
-        viewModel.rxSubtitle.replaceError(with: "").assign(to: \.subtitle, on: self).store(in: &cancellables)
-        viewModel.rxContext.replaceError(with: "").assign(to: \.context, on: self).store(in: &cancellables)
-        viewModel.rxIsFavorite.replaceError(with: false).assign(to: \.isFavorite, on: self).store(in: &cancellables)
-        viewModel.rxIsDownloaded.replaceError(with: false).assign(to: \.isDownloaded, on: self).store(in: &cancellables)
-        viewModel.rxColor.removeDuplicates().replaceError(with: .clear).assign(to: \.contextColor, on: self).store(in: &cancellables)
+        viewModel.rxTitle.replaceError(with: "").weakAssign(to: \.title, on: self).store(in: &cancellables)
+        viewModel.rxSubtitle.replaceError(with: "").weakAssign(to: \.subtitle, on: self).store(in: &cancellables)
+        viewModel.rxContext.replaceError(with: "").weakAssign(to: \.context, on: self).store(in: &cancellables)
+        viewModel.rxIsFavorite.replaceError(with: false).weakAssign(to: \.isFavorite, on: self).store(in: &cancellables)
+        viewModel.rxIsDownloaded.replaceError(with: false).weakAssign(to: \.isDownloaded, on: self).store(in: &cancellables)
+        viewModel.rxColor.removeDuplicates().replaceError(with: .clear).weakAssign(to: \.contextColor, on: self).store(in: &cancellables)
 
         viewModel.rxImageUrl.removeDuplicates().replaceErrorWithEmpty().compacted().sink { [weak self] imageUrl in
             self?.imageUrl = imageUrl
             self?.imageDownloadOperation?.cancel()
 
-            self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight, thumbnailOnly: true) { [weak self] url, result in
-                guard url == imageUrl, let thumbnail = result.thumbnail else { return }
+            self?.imageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight, thumbnailOnly: true) { [weak self] result in
+                guard result.sourceURL == imageUrl, let thumbnail = result.thumbnail else { return }
 
                 self?.thumbnailImage = thumbnail
             }
         }
         .store(in: &cancellables)
 
-        viewModel.rxProgresses.replaceErrorWithEmpty().map(\.first).assign(to: \.sessionProgress, on: self).store(in: &cancellables)
+        viewModel.rxProgresses.replaceErrorWithEmpty().map(\.first).weakAssignIfDifferent(to: \.sessionProgress, on: self).store(in: &cancellables)
     }
 }
 

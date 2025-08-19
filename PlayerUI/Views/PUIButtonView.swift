@@ -57,18 +57,18 @@ import SwiftUI
 /// **Future Direction**: This will eventually be replaced by a pure SwiftUI implementation
 /// once all complex AppKit dependencies are resolved.
 public struct PUIButtonView: View {
-    @State private var button: PUIButton
+    @StateObject private var button: PUIButton
     public var configuration = Configuration()
     public var action: () -> Void
 
     @Environment(\.isEnabled) private var isEnabled
 
     public init(
-        button: @autoclosure () -> PUIButton = PUIButton(frame: .zero),
+        button: @escaping @autoclosure () -> PUIButton = PUIButton(frame: .zero),
         _ configuration: Configuration = Configuration(),
         action: @escaping () -> Void
     ) {
-        self._button = State(initialValue: button())
+        self._button = StateObject(wrappedValue: button())
         self.configuration = configuration
         self.action = action
     }
