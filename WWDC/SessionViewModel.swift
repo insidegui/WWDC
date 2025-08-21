@@ -11,6 +11,7 @@ import ConfCore
 import Combine
 import RealmSwift
 import PlayerUI
+import Algorithms
 
 final class SessionViewModel {
 
@@ -171,13 +172,22 @@ final class SessionViewModel {
         return progresses.collectionPublisher
     }()
 
-    lazy var rxRelatedSessions: some Publisher<Results<RelatedResource>, Error> = {
+    lazy var rxRelatedSessions: some Publisher<Array<Session>, Error> = {
         // Return sessions with videos, or any session that hasn't yet occurred
         let predicateFormat = "type == %@ AND (ANY session.assets.rawAssetType == %@ OR ANY session.instances.startTime >= %@)"
         let relatedPredicate = NSPredicate(format: predicateFormat, RelatedResourceType.session.rawValue, SessionAssetType.streamingVideo.rawValue, today() as NSDate)
         let validRelatedSessions = self.session.related.filter(relatedPredicate)
+        let initialValue = Array(validRelatedSessions.compactMap(\.session).uniqued(on: \.identifier))
 
-        return validRelatedSessions.collectionPublisher
+        let relatedSessions = validRelatedSessions
+            .collectionPublisher
+            .map {
+                Array($0.compactMap(\.session).uniqued(on: \.identifier))
+            }
+            .multicast(subject: CurrentValueSubject(initialValue))
+            .autoconnect()
+
+        return relatedSessions
     }()
 
     convenience init?(session: Session) {

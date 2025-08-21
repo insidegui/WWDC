@@ -14,7 +14,7 @@ protocol RelatedSessionsDelegate: AnyObject {
 }
 
 final class RelatedSessionsViewModel: ObservableObject {
-    @Published var sessions: [SessionViewModel] = [] {
+    @Published var sessions: [SessionCellViewModel] = [] {
         didSet {
             seed &+= 1 // increment with overflow
         }
@@ -29,7 +29,7 @@ final class RelatedSessionsViewModel: ObservableObject {
         delegate?.relatedSessions(self, didSelectSession: viewModel)
     }
 
-    init(sessions: [SessionViewModel] = []) {
+    init(sessions: [SessionCellViewModel] = []) {
         self.sessions = sessions
     }
 }
@@ -59,16 +59,16 @@ struct RelatedSessionsView: View {
                     SetScrollerStyle(.overlay)
 
                     HStack(spacing: Metrics.itemSpacing) {
-                        ForEach(viewModel.sessions, id: \.identifier) { session in
+                        ForEach(viewModel.sessions, id: \.viewModel?.identifier) { session in
                             sessionButton(for: session, in: scrollView)
-                                .id(session.identifier)
+                                .id(session.viewModel?.identifier)
                         }
                     }
                     .padding(.horizontal, 0)
                     .padding(.bottom, Metrics.scrollerOffset)
                 }
                 .onChange(of: viewModel.seed) { _, newValue in
-                    scrollView.scrollTo(viewModel.sessions.first?.identifier, anchor: .leading)
+                    scrollView.scrollTo(viewModel.sessions.first?.viewModel?.identifier, anchor: .leading)
                 }
             }
             .frame(height: Metrics.scrollViewHeight)
@@ -78,12 +78,13 @@ struct RelatedSessionsView: View {
         .opacity(viewModel.isHidden ? 0 : 1)
     }
 
-    func sessionButton(for session: SessionViewModel, in scrollView: ScrollViewProxy) -> some View {
+    func sessionButton(for session: SessionCellViewModel, in scrollView: ScrollViewProxy) -> some View {
         Button {
+            guard let session = session.viewModel else { return }
             viewModel.selectSession(session)
         } label: {
             SessionCellView(
-                cellViewModel: SessionCellViewModel(session: session),
+                cellViewModel: session,
                 style: .rounded
             )
             .frame(width: Metrics.itemWidth, height: Metrics.itemHeight)
@@ -93,5 +94,5 @@ struct RelatedSessionsView: View {
 }
 
 #Preview {
-    RelatedSessionsView(viewModel: RelatedSessionsViewModel(sessions: [.preview]))
+    RelatedSessionsView(viewModel: RelatedSessionsViewModel(sessions: [SessionCellViewModel(session: .preview)]))
 }

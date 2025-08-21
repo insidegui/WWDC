@@ -6,8 +6,8 @@ struct RemoteGlyph: View {
     @State private var image: NSImage?
 
     private var displayImage: NSImage? {
-        guard let url else { return nil }
-        return cache.cachedImage(for: url, thumbnailOnly: false).original ?? image
+        guard url != nil else { return nil }
+        return image
     }
 
     var body: some View {
@@ -29,8 +29,6 @@ struct RemoteGlyph: View {
         }
     }
 
-    private let cache = ImageDownloadCenter.shared.cache
-
     private func load(_ url: URL) async {
         guard let (data, res) = try? await URLSession.shared.data(from: url) else { return }
 
@@ -42,7 +40,7 @@ struct RemoteGlyph: View {
 
         self.image = loadedImage
 
-        cache.cacheImage(for: url, original: nil, completion: { _ in })
+        // TODO: Consider caching this image
     }
 
 }

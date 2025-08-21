@@ -89,3 +89,33 @@ extension Publisher where Output == Bool {
         map { !$0 }
     }
 }
+
+extension Publisher {
+    /// Assigns values to a property using a weak reference to avoid retain cycles.
+    ///
+    /// Unlike `assign(to:on:)`, this method captures the object weakly. The returned
+    /// `AnyCancellable` is not automatically cancelled when the object is deallocated -
+    /// it assumes the object will store and release it.
+    ///
+    /// **Future:** Could auto-cancel on object deinit using associated objects or a
+    /// lifecycle-aware subscriber.
+    func weakAssign<Root: AnyObject>(
+        to keyPath: ReferenceWritableKeyPath<Root, Output>,
+        on object: Root
+    ) -> AnyCancellable where Failure == Never {
+        sink { [weak object] value in
+            object?[keyPath: keyPath] = value
+        }
+    }
+
+    func weakAssignIfDifferent<Root: AnyObject>(
+        to keyPath: ReferenceWritableKeyPath<Root, Output>,
+        on object: Root
+    ) -> AnyCancellable where Failure == Never, Output: Equatable {
+        sink { [weak object] value in
+            if object?[keyPath: keyPath] != value {
+                object?[keyPath: keyPath] = value
+            }
+        }
+    }
+}

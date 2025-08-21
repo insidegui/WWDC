@@ -101,7 +101,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
         super.viewWillLayout()
     }
 
-    private weak var currentImageDownloadOperation: Operation?
+    private var currentImageSessionIdentifier: String?
 
     private func updateBindings() {
         cancellables = []
@@ -118,25 +118,60 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
 
         guard let viewModel = viewModel else {
             shelfView.image = nil
+            currentImageSessionIdentifier = nil
             return
         }
 
         viewModel.rxCanBePlayed.toggled().replaceError(with: true).driveUI(\.isHidden, on: playButton).store(in: &cancellables)
 
-        viewModel.rxImageUrl.replaceErrorWithEmpty().sink { [weak self] imageUrl in
-            self?.currentImageDownloadOperation?.cancel()
-            self?.currentImageDownloadOperation = nil
+        viewModel.rxImageUrl.replaceErrorWithEmpty()
+            .sink { [sessionIdentifier = viewModel.session.identifier, weak self] imageUrl in
+                self?.loadSessionImage(at: imageUrl, for: sessionIdentifier)
+            }
+            .store(in: &cancellables)
+    }
 
-            guard let imageUrl = imageUrl else {
-                self?.shelfView.image = #imageLiteral(resourceName: "noimage")
+    /// The logic/bookkeeping around the current image session identifier is to allow
+    /// images to be updated continuously while quickly navigating through sessions via arrow keys.
+    ///
+    /// Since the loads are concurrent, it means in order to achieve the effect of the image updating live
+    /// while navigating, but still ensure that an out-of-order image load doesn't clobber the _correct_ image,
+    /// we need to know the session ID for the image that is currently being displayed.
+    private func loadSessionImage(at imageUrl: URL?, for sessionIdentifier: String) {
+        guard let imageUrl else {
+            shelfView.image = NSImage(resource: .noimage)
+            currentImageSessionIdentifier = nil
+            return
+        }
+
+        // TODO: Use Task.immediate when available
+        let task = Task { [weak self] in
+            guard let self else { return }
+
+            let result = await ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight)
+
+            guard let image = result.original else { return }
+
+            @MainActor func setImage() {
+                shelfView.image = image
+                currentImageSessionIdentifier = sessionIdentifier
+            }
+
+            guard let currentImageSessionIdentifier else {
+                // No image for the current session, might be placeholder
+                setImage()
                 return
             }
 
-            self?.currentImageDownloadOperation = ImageDownloadCenter.shared.downloadImage(from: imageUrl, thumbnailHeight: Constants.thumbnailHeight) { url, result in
-                self?.shelfView.image = result.original
+            // Current image is for a session that is not currently selected, so it's safe to update it.
+            if currentImageSessionIdentifier != self.viewModel?.session.identifier {
+                setImage()
+            } else {
+                // The current image is for the currently selected session, so we don't update it.
             }
         }
-        .store(in: &cancellables)
+
+        cancellables.insert(AnyCancellable(task.cancel))
     }
 
     @objc func play(_ sender: Any?) {
