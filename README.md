@@ -64,6 +64,7 @@ Please read the [contribution guidelines](CONTRIBUTING.md) before opening an iss
 A number of third-party libraries are used by the app:
 
 - [Realm](https://realm.io): data storage and caching
+    - **Note**: We have a [fork](https://github.com/insidegui/realm-swift) that swaps a `target` for a [`binaryTarget`](https://github.com/insidegui/realm-swift/pull/1). If this causes trouble in the future, consider switching back to the "normal" realm-swift. @SeeAlso: [PR 732](https://github.com/insidegui/WWDC/pull/732)
 - [Sparkle](https://sparkle-project.org/): automatic updates
 - [CloudKitCodable](https://github.com/insidegui/CloudKitCodable): sync support
 - [Siesta](http://bustoutsolutions.github.io/siesta/): networking
