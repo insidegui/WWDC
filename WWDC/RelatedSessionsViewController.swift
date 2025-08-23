@@ -54,34 +54,43 @@ struct RelatedSessionsView: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
 
-            ScrollViewReader { scrollView in
-                ScrollView(.horizontal, showsIndicators: true) {
-                    SetScrollerStyle(.overlay)
-
-                    HStack(spacing: Metrics.itemSpacing) {
-                        ForEach(viewModel.sessions, id: \.viewModel?.identifier) { session in
-                            sessionButton(for: session, in: scrollView)
-                                .id(session.viewModel?.identifier)
-                        }
-                    }
-                    .padding(.horizontal, 0)
-                    .padding(.bottom, Metrics.scrollerOffset)
-                }
-                .onChange(of: viewModel.seed) { _, newValue in
-                    scrollView.scrollTo(viewModel.sessions.first?.viewModel?.identifier, anchor: .leading)
-                }
-            }
-            .frame(height: Metrics.scrollViewHeight)
-            .background(Color(.darkWindowBackground))
+            scrollView()
         }
-        .frame(height: viewModel.isHidden ? 0 : Metrics.height)
-        .opacity(viewModel.isHidden ? 0 : 1)
+        .frame(height: viewModel.sessions.isEmpty ? 0 : nil)
+        .opacity(viewModel.sessions.isEmpty ? 0 : 1)
     }
 
-    func sessionButton(for session: SessionCellViewModel, in scrollView: ScrollViewProxy) -> some View {
+    func scrollView() -> some View {
+        ScrollViewReader { scrollView in
+            ScrollView(.horizontal, showsIndicators: true) {
+                hStack(scrollView: scrollView)
+                    .background {
+                        SetScrollerStyle(.overlay)
+                    }
+                    .padding(.bottom, Metrics.scrollerOffset)
+            }
+            .frame(height: Metrics.itemHeight)
+            .onChange(of: viewModel.seed) { _, newValue in
+                scrollView.scrollTo(viewModel.sessions.first?.viewModel?.identifier, anchor: .leading)
+            }
+        }
+        .frame(height: Metrics.scrollViewHeight)
+        .background(Color(.darkWindowBackground))
+        .padding(.top, Metrics.scrollerOffset)
+    }
+
+    func hStack(scrollView: ScrollViewProxy) -> some View {
+        LazyHStack(spacing: Metrics.itemSpacing) {
+            ForEach(viewModel.sessions, id: \.viewModel?.identifier) { session in
+                sessionButton(for: session)
+            }
+        }
+        .frame(height: Metrics.itemHeight)
+    }
+
+    func sessionButton(for session: SessionCellViewModel) -> some View {
         Button {
-            guard let session = session.viewModel else { return }
-            viewModel.selectSession(session)
+            viewModel.selectSession(session.viewModel!)
         } label: {
             SessionCellView(
                 cellViewModel: session,

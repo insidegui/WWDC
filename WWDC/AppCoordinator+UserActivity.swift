@@ -23,7 +23,7 @@ extension AppCoordinator {
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
 
         activity.title = item.title
-        activity.webpageURL = item.webUrl?.replacingAppleDeveloperHostWithNativeHost
+        activity.webpageURL = item.webURL?.replacingAppleDeveloperHostWithNativeHost
 
         activity.becomeCurrent()
 

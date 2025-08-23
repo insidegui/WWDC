@@ -13,6 +13,7 @@ import PlayerUI
 import AVFoundation
 import SwiftUI
 
+@MainActor
 protocol ShelfViewControllerDelegate: AnyObject {
     func shelfViewControllerDidSelectPlay(_ controller: ShelfViewController)
     func shelfViewController(_ controller: ShelfViewController, didBeginClipSharingWithHost hostView: NSView)
@@ -116,15 +117,15 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
             showDetachedStatus()
         }
 
-        guard let viewModel = viewModel else {
+        guard let viewModel else {
             shelfView.image = nil
             currentImageSessionIdentifier = nil
             return
         }
+        viewModel.connect()
 
-        viewModel.rxCanBePlayed.toggled().replaceError(with: true).driveUI(\.isHidden, on: playButton).store(in: &cancellables)
-
-        viewModel.rxImageUrl.replaceErrorWithEmpty()
+        viewModel.$canBePlayed.toggled().driveUI(\.isHidden, on: playButton).store(in: &cancellables)
+        viewModel.$imageURL.removeDuplicates()
             .sink { [sessionIdentifier = viewModel.session.identifier, weak self] imageUrl in
                 self?.loadSessionImage(at: imageUrl, for: sessionIdentifier)
             }
@@ -139,7 +140,7 @@ final class ShelfViewController: NSViewController, PUIPlayerViewDetachedStatusPr
     /// we need to know the session ID for the image that is currently being displayed.
     private func loadSessionImage(at imageUrl: URL?, for sessionIdentifier: String) {
         guard let imageUrl else {
-            shelfView.image = NSImage(resource: .noimage)
+            shelfView.image = NSImage(resource: .noImageAvailable)
             currentImageSessionIdentifier = nil
             return
         }

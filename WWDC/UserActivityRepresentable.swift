@@ -10,5 +10,5 @@ import Foundation
 
 protocol UserActivityRepresentable {
     var title: String { get }
-    var webUrl: URL? { get }
+    var webURL: URL? { get }
 }
