@@ -67,7 +67,6 @@ final class SessionsSplitViewController: NSSplitViewController {
 
         listViewController.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailViewController.view.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        detailViewController.view.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     }
 
     override func viewWillAppear() {

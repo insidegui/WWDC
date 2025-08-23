@@ -14,37 +14,77 @@ import PlayerUI
 import Algorithms
 
 final class SessionViewModel {
+    static let updateQueue = DispatchQueue(label: "io.wwdc.session-view-model-updates", qos: .userInteractive)
 
     let style: SessionsListStyle
-    var title: String
+
+    // MARK: - Relayed Session Properties
+
+    /*@MainActor */@Published private(set) var title: String
+    @MainActor @Published private(set) var subtitle: String
+    @MainActor @Published private(set) var summary: String
+    @MainActor @Published private(set) var footer: String
+    @MainActor @Published private(set) var color: NSColor?
+    @MainActor @Published private(set) var darkColor: NSColor?
+    @MainActor @Published private(set) var imageURL: URL?
+    @MainActor @Published private(set) var webURL: URL?
+    @MainActor @Published private(set) var isDownloaded: Bool
+    @MainActor @Published private(set) var transcriptText: String
+
+    // MARK: - More Complex Properties
+
+    @MainActor @Published private(set) var isFavorite: Bool
+    @MainActor @Published private(set) var hasBookmarks: Bool
+    @MainActor @Published private(set) var progress: SessionProgress?
+    @MainActor @Published private(set) var context: String
+    @MainActor @Published private(set) var canBePlayed = false
+    @MainActor @Published private(set) var relatedSessions: [Session] = []
+
     let session: Session
     let sessionInstance: SessionInstance
-    let track: Track
-    let identifier: String
-    lazy var webUrl: URL? = {
-        SessionViewModel.webUrl(for: session)
-    }()
-    var imageUrl: URL?
+    private let track: Track
     let trackName: String
+    let identifier: String
 
-    lazy var rxSession: some Publisher<Session, Error> = {
-        return session.valuePublisher()
-    }()
+    @MainActor
+    private var connections: Set<AnyCancellable> = []
 
-    lazy var rxTranscript: some Publisher<Transcript?, Error> = {
-        return rxSession
-            .map(\.transcriptIdentifier)
-            .compacted()
-            .removeDuplicates()
-            .flatMap { [weak self] _ in
-                guard let results = self?.session.transcripts() else {
-                    return Just<Transcript?>(nil).setFailureType(to: Error.self).eraseToAnyPublisher()
+    /// The implementation of this is a performance optimization and part of an effort to reduce
+    /// the exposure of Realm directly to the view layer.
+    @MainActor
+    private lazy var rxSession: some Publisher<Session, Error> = {
+        let rxSession = valuePublisher(session)
+            .subscribe(on: Self.updateQueue)
+            .freeze()
+            .multicast(subject: CurrentValueSubject(session.freeze()))
+            .autoconnect()
+
+        rxSession
+            .replaceErrorWithEmpty()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] session in
+                guard let self else { return }
+
+                MainActor.assumeIsolated {
+                    self.title = session.title
+                    self.subtitle = SessionViewModel.subtitle(from: session, at: session.event.first)
+                    self.summary = session.summary
+                    self.footer = SessionViewModel.footer(for: session, at: session.event.first)
+                    self.color = SessionViewModel.trackColor(for: session)
+                    self.darkColor = SessionViewModel.darkTrackColor(for: session)
+                    self.imageURL = SessionViewModel.imageUrl(for: session)
+                    self.webURL = SessionViewModel.webUrl(for: session)
+                    self.isDownloaded = session.isDownloaded
+                    self.transcriptText = session.transcriptText
                 }
-
-                return results.collectionPublisher.map(\.first).eraseToAnyPublisher()
             }
+            .store(in: &connections)
+
+        return rxSession
     }()
 
+    // TODO: Can this be moved to an @Published relay?
+    @MainActor
     lazy var rxTranscriptAnnotations: some Publisher<List<TranscriptAnnotation>, Error> = {
         return rxSession
             .map(\.transcriptIdentifier)
@@ -59,35 +99,59 @@ final class SessionViewModel {
             }
     }()
 
-    lazy var rxSessionInstance: some Publisher<SessionInstance, Error> = {
-        return sessionInstance.valuePublisher()
+    @MainActor
+    private lazy var rxSessionInstance: some Publisher<SessionInstance, Error> = {
+        let rxSessionInstance = valuePublisher(sessionInstance)
+            .subscribe(on: Self.updateQueue)
+            .freeze()
+            .multicast(subject: CurrentValueSubject(sessionInstance.freeze()))
+            .autoconnect()
+
+        return rxSessionInstance
     }()
 
-    lazy var rxTrack: some Publisher<Track, Error> = {
-        return track.valuePublisher()
-    }()
-
-    lazy var rxTitle: some Publisher<String, Error> = {
-        return rxSession.map { $0.title }
-    }()
-
-    lazy var rxSubtitle: some Publisher<String, Error> = {
-        return rxSession.map { SessionViewModel.subtitle(from: $0, at: $0.event.first) }
-    }()
-
-    lazy var rxTrackName: some Publisher<String, Error> = {
-        return rxTrack.map { $0.name }
-    }()
-
-    lazy var rxSummary: some Publisher<String, Error> = {
-        return rxSession.map { $0.summary }
-    }()
-
+    @MainActor
     lazy var rxActionPrompt: AnyPublisher<String?, Error> = {
         guard sessionInstance.startTime > today() else { return Just(nil).setFailureType(to: Error.self).eraseToAnyPublisher() }
         guard actionLinkURL != nil else { return Just(nil).setFailureType(to: Error.self).eraseToAnyPublisher() }
 
         return rxSessionInstance.map { $0.actionLinkPrompt }.eraseToAnyPublisher()
+    }()
+
+    /// Depends on ``rxSession``, ``rxSessionInstance``, and ``rxTrack``
+    @MainActor
+    private lazy var rxContext: AnyPublisher<String, Error> = {
+        var rxContext = if self.style == .schedule {
+            Publishers.CombineLatest(rxSession, rxSessionInstance).map {
+                SessionViewModel.context(for: $0.0, instance: $0.1)
+            }.eraseToAnyPublisher()
+        } else {
+            Publishers.CombineLatest(rxSession, rxTrack).map {
+                SessionViewModel.context(for: $0.0, track: $0.1)
+            }.eraseToAnyPublisher()
+        }
+
+        rxContext
+            .replaceError(with: "")
+            .sink { [weak self] context in
+                DispatchQueue.main.async {
+                    self?.context = context
+                }
+            }
+            .store(in: &connections)
+
+        return rxContext
+    }()
+
+    @MainActor
+    private lazy var rxTrack: some Publisher<Track, Error> = {
+        let rxTrack = valuePublisher(track)
+            .subscribe(on: Self.updateQueue)
+            .freeze()
+            .multicast(subject: CurrentValueSubject(track.freeze()))
+            .autoconnect()
+
+        return rxTrack
     }()
 
     var actionLinkURL: URL? {
@@ -96,83 +160,92 @@ final class SessionViewModel {
         return URL(string: candidateURL)
     }
 
-    lazy var rxContext: AnyPublisher<String, Error> = {
-        if self.style == .schedule {
+    @MainActor
+    private lazy var rxIsFavorite: some Publisher<Bool, Error> = {
+        let favorites = session.favorites.filter("isDeleted == false")
 
-            return Publishers.CombineLatest(rxSession, rxSessionInstance).map {
-                SessionViewModel.context(for: $0.0, instance: $0.1)
-            }.eraseToAnyPublisher()
-        } else {
-            return Publishers.CombineLatest(rxSession, rxTrack).map {
-                SessionViewModel.context(for: $0.0, track: $0.1)
-            }.eraseToAnyPublisher()
-        }
+        let rxIsFavorite = favorites
+            .collectionPublisher
+            .subscribe(on: Self.updateQueue)
+            .map(\.isEmpty)
+            .toggled()
+
+        rxIsFavorite
+            .replaceError(with: false)
+            .sink { [weak self] isFavorite in
+                DispatchQueue.main.async {
+                    self?.isFavorite = isFavorite
+                }
+            }
+            .store(in: &connections)
+
+        return rxIsFavorite
     }()
 
-    lazy var rxFooter: some Publisher<String, Error> = {
-        return rxSession.map { SessionViewModel.footer(for: $0, at: $0.event.first) }
+    @MainActor
+    private lazy var rxHasBookmarks: some Publisher<Bool, Error> = {
+        let bookmarks = session.bookmarks.filter("isDeleted == false")
+
+        let rxHasBookmarks = bookmarks
+            .collectionPublisher
+            .subscribe(on: Self.updateQueue)
+            .map(\.isEmpty)
+            .toggled()
+
+        rxHasBookmarks
+            .replaceError(with: false)
+            .sink { [weak self] hasBookmarks in
+                DispatchQueue.main.async {
+                    self?.hasBookmarks = hasBookmarks
+                }
+            }
+            .store(in: &connections)
+
+        return rxHasBookmarks
     }()
 
-    lazy var rxColor: some Publisher<NSColor, Error> = {
-        return rxSession.compactMap { SessionViewModel.trackColor(for: $0) }
-    }()
-
-    lazy var rxDarkColor: some Publisher<NSColor, Error> = {
-        return rxSession.compactMap { SessionViewModel.darkTrackColor(for: $0) }
-    }()
-
-    lazy var rxImageUrl: some Publisher<URL?, Error> = {
-        return rxSession.map { SessionViewModel.imageUrl(for: $0) }
-    }()
-
-    lazy var rxWebUrl: some Publisher<URL?, Error> = {
-        return rxSession.map { SessionViewModel.webUrl(for: $0) }
-    }()
-
-    lazy var rxIsDownloaded: some Publisher<Bool, Error> = {
-        return rxSession.map { $0.isDownloaded }
-    }()
-
-    lazy var rxIsFavorite: some Publisher<Bool, Error> = {
-        // While scrolling the favorites publisher won't be able to fire
-        // because the events are tracking. I'm guessing because it's using the main
-        // runloop? Regardless, putting the subscription on a background queue fixes it
-        return self.session.favorites.filter("isDeleted == false")
-            .changesetPublisherShallow(keyPaths: ["identifier"])
-            .subscribe(on: DispatchQueue(label: #function))
-            .threadSafeReference()
-            .receive(on: DispatchQueue.main)
-            .map { $0.count > 0 }
-    }()
-
-    lazy var rxIsCurrentlyLive: some Publisher<Bool, Error> = {
-        guard self.sessionInstance.realm != nil else {
-            return Just(false).setFailureType(to: Error.self).eraseToAnyPublisher()
-        }
-
-        return rxSessionInstance.map { $0.isCurrentlyLive }.eraseToAnyPublisher()
-    }()
-
-    lazy var rxPlayableContent: some Publisher<Results<SessionAsset>, Error> = {
-        let playableAssets = self.session.assets(matching: [.streamingVideo, .liveStreamVideo])
-
-        return playableAssets.collectionPublisher
-    }()
-
-    lazy var rxCanBePlayed: some Publisher<Bool, Error> = {
+    @MainActor
+    private lazy var rxCanBePlayed: some Publisher<Bool, Error> = {
         let validAssets = self.session.assets.filter("(rawAssetType == %@ AND remoteURL != '') OR (rawAssetType == %@ AND SUBQUERY(session.instances, $instance, $instance.isCurrentlyLive == true).@count > 0)", SessionAssetType.streamingVideo.rawValue, SessionAssetType.liveStreamVideo.rawValue)
-        let validAssetsObservable = validAssets.collectionPublisher
+        let rxCanBePlayed = validAssets.collectionPublisher.map(\.isEmpty).toggled()
 
-        return validAssetsObservable.map { $0.count > 0 }
+        rxCanBePlayed
+            .replaceError(with: false)
+            .sink { [weak self] canBePlayed in
+                DispatchQueue.main.async {
+                    self?.canBePlayed = canBePlayed
+                }
+            }
+            .store(in: &connections)
+
+        return rxCanBePlayed
     }()
 
-    lazy var rxProgresses: some Publisher<Results<SessionProgress>, Error> = {
+    @MainActor
+    private lazy var rxProgresses: some Publisher<Results<SessionProgress>, Error> = {
         let progresses = self.session.progresses.filter(NSPredicate(value: true))
 
-        return progresses.collectionPublisher
+        let rxProgresses = progresses
+            .collectionPublisher
+            .subscribe(on: Self.updateQueue)
+            .freeze()
+            .multicast(subject: CurrentValueSubject(progresses.freeze()))
+            .autoconnect()
+
+        rxProgresses
+            .replaceErrorWithEmpty()
+            .sink { [weak self] progresses in
+                DispatchQueue.main.async {
+                    self?.progress = progresses.first
+                }
+            }
+            .store(in: &connections)
+
+        return rxProgresses
     }()
 
-    lazy var rxRelatedSessions: some Publisher<Array<Session>, Error> = {
+    @MainActor
+    private lazy var rxRelatedSessions: some Publisher<Array<Session>, Error> = {
         // Return sessions with videos, or any session that hasn't yet occurred
         let predicateFormat = "type == %@ AND (ANY session.assets.rawAssetType == %@ OR ANY session.instances.startTime >= %@)"
         let relatedPredicate = NSPredicate(format: predicateFormat, RelatedResourceType.session.rawValue, SessionAssetType.streamingVideo.rawValue, today() as NSDate)
@@ -181,11 +254,25 @@ final class SessionViewModel {
 
         let relatedSessions = validRelatedSessions
             .collectionPublisher
+            .subscribe(on: Self.updateQueue)
+            .freeze()
             .map {
                 Array($0.compactMap(\.session).uniqued(on: \.identifier))
             }
+            .removeDuplicates { previous, new in
+                previous.map(\.identifier) == new.map(\.identifier)
+            }
             .multicast(subject: CurrentValueSubject(initialValue))
             .autoconnect()
+
+        relatedSessions
+            .replaceErrorWithEmpty()
+            .sink { [weak self] relatedSessions in
+                DispatchQueue.main.async {
+                    self?.relatedSessions = relatedSessions
+                }
+            }
+            .store(in: &connections)
 
         return relatedSessions
     }()
@@ -201,15 +288,54 @@ final class SessionViewModel {
     init?(session: Session?, instance: SessionInstance?, track: Track?, style: SessionsListStyle) {
         self.style = style
 
-        guard let session = session ?? instance?.session else { return nil }
+        guard let session = session?.thaw() ?? session ?? instance?.session else { return nil }
         guard let track = track ?? session.track.first ?? instance?.track.first else { return nil }
         self.session = session
         self.track = track
 
         trackName = track.name
         sessionInstance = instance ?? session.instances.first ?? SessionInstance()
-        title = session.title
         identifier = session.identifier
+
+        _title = Published(initialValue: session.title)
+        _subtitle = Published(initialValue: SessionViewModel.subtitle(from: session, at: session.event.first))
+        _summary = Published(initialValue: session.summary)
+        _footer = Published(initialValue: SessionViewModel.footer(for: session, at: session.event.first))
+        _color = Published(initialValue: SessionViewModel.trackColor(for: session))
+        _darkColor = Published(initialValue: SessionViewModel.darkTrackColor(for: session))
+        _imageURL = Published(initialValue: SessionViewModel.imageUrl(for: session))
+        _webURL = Published(initialValue: SessionViewModel.webUrl(for: session))
+        _isDownloaded = Published(initialValue: session.isDownloaded)
+        _transcriptText = Published(initialValue: session.transcriptText)
+
+        _isFavorite = Published(initialValue: session.isFavorite)
+        _hasBookmarks = Published(initialValue: !session.bookmarks.filter("isDeleted == false").isEmpty)
+        _progress = Published(initialValue: session.progresses.filter(NSPredicate(value: true)).first)
+        _context = if self.style == .schedule {
+            Published(initialValue: SessionViewModel.context(for: session, instance: sessionInstance))
+        } else {
+            Published(initialValue: SessionViewModel.context(for: session, track: track))
+        }
+    }
+
+    /// Establishes a reactive connection from Realm to the view model's properties so they can be consumed via @Published.
+    ///
+    /// This needs to happen lazily, because when doing from inside the initializer, it causes too much work to be done
+    /// during app launch.
+    ///
+    /// The reason we want this is so that we can move toward isolating Realm from the view layer, hopefully assisting in
+    /// one day switching away from Realm as our storage solution.
+    @MainActor
+    func connect() {
+        guard connections.isEmpty else { return }
+
+        _ = rxSession
+        _ = rxIsFavorite
+        _ = rxHasBookmarks
+        _ = rxProgresses
+        _ = rxCanBePlayed
+        _ = rxContext
+        _ = rxRelatedSessions
     }
 
     static func subtitle(from session: Session, at event: ConfCore.Event?) -> String {
@@ -370,12 +496,6 @@ final class SessionViewModel {
 }
 
 extension SessionViewModel: UserActivityRepresentable { }
-
-extension SessionViewModel {
-
-    var isFavorite: Bool { session.isFavorite }
-
-}
 
 extension SessionViewModel {
     /// Challenges with previews

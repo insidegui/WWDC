@@ -27,22 +27,22 @@ import SwiftUI
  │                                                 │
  │              Tab Content Area                   │
  │                                                 │
- │  • Overview: SessionSummaryViewControllerWrapper│
+ │  • Overview: SessionSummaryView                 │
  │  • Transcript: SessionTranscriptViewController  │
  │  • Bookmarks: Placeholder text                  │
  │                                                 │
  └─────────────────────────────────────────────────┘
  */
 struct SessionDetailsView: View {
-    @ObservedObject var detailsViewModel: SessionDetailsViewModel
-    
+    @ObservedObject var viewModel: SessionDetailsViewModel
+
     var body: some View {
         VStack(spacing: 0) {
-            ShelfViewControllerWrapper(controller: detailsViewModel.shelfController)
+            ShelfViewControllerWrapper(controller: viewModel.shelfController)
                 .frame(minHeight: 280, maxHeight: .infinity)
                 .padding(.top, 22)
 
-            if detailsViewModel.isTranscriptAvailable || detailsViewModel.isBookmarksAvailable {
+            if viewModel.isTranscriptAvailable || viewModel.isBookmarksAvailable {
                 tabButtons
             }
 
@@ -55,38 +55,41 @@ struct SessionDetailsView: View {
     }
     
     private var tabButtons: some View {
-        HStack(spacing: 32) {
+        HStack(spacing: 28) {
             Button("Overview") {
-                detailsViewModel.selectedTab = .overview
-            }
-            .selected(detailsViewModel.selectedTab == .overview)
-
-            if detailsViewModel.isTranscriptAvailable {
-                Button("Transcript") {
-                    detailsViewModel.selectedTab = .transcript
+                withAnimation(.snappy) {
+                    viewModel.selectedTab = .overview
                 }
-                .selected(detailsViewModel.selectedTab == .transcript)
+            }
+            .selected(viewModel.selectedTab == .overview)
+
+            if viewModel.isTranscriptAvailable {
+                Button("Transcript") {
+                    withAnimation(.snappy) {
+                        viewModel.selectedTab = .transcript
+                    }
+                }
+                .selected(viewModel.selectedTab == .transcript)
             }
             
-            if detailsViewModel.isBookmarksAvailable {
+            if viewModel.isBookmarksAvailable {
                 Button("Bookmarks") {
-                    detailsViewModel.selectedTab = .bookmarks
+                    viewModel.selectedTab = .bookmarks
                 }
-                .selected(detailsViewModel.selectedTab == .bookmarks)
+                .selected(viewModel.selectedTab == .bookmarks)
             }
         }
         .buttonStyle(WWDCTextButtonStyle())
-        .frame(maxWidth: .infinity)
         .padding(.vertical, 8)
     }
 
     @ViewBuilder
     private var tabContent: some View {
-        switch detailsViewModel.selectedTab {
+        switch viewModel.selectedTab {
         case .overview:
-            SessionSummaryViewControllerWrapper(controller: detailsViewModel.summaryController)
+            SessionSummaryView(viewModel: viewModel.summaryViewModel)
         case .transcript:
-            SessionTranscriptViewControllerWrapper(controller: detailsViewModel.transcriptController)
+            SessionTranscriptViewControllerWrapper(controller: viewModel.transcriptController)
         case .bookmarks:
             Text("Bookmarks view coming soon")
                 .foregroundColor(.secondary)
@@ -96,6 +99,6 @@ struct SessionDetailsView: View {
 
 struct SessionDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        SessionDetailsView(detailsViewModel: SessionDetailsViewModel(session: .preview))
+        SessionDetailsView(viewModel: SessionDetailsViewModel(session: .preview))
     }
 }

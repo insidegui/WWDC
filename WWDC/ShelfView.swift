@@ -29,6 +29,7 @@ final class ShelfView: NSView {
         imageLayer.contentsGravity = .resizeAspectFill
         imageLayer.autoresizingMask = [.layerHeightSizable, .layerWidthSizable]
         imageLayer.frame = bounds
+        imageLayer.drawsAsynchronously = true
 
         layer?.addSublayer(imageLayer)
     }

@@ -133,7 +133,8 @@ final class SessionTranscriptViewController: NSViewController {
     private lazy var filteredAnnotations: [TranscriptAnnotation] = []
 
     private func updateUI() {
-        guard let viewModel = viewModel else { return }
+        guard let viewModel else { return }
+        viewModel.connect()
 
         cancellables = []
 
