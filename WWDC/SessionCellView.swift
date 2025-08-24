@@ -66,6 +66,7 @@ final class SessionCellViewModel: ObservableObject {
         self.subtitle = viewModel.subtitle
         self.context = viewModel.context
         self.isFavorite = viewModel.isFavorite
+        self.hasBookmarks = viewModel.hasBookmarks
         self.isDownloaded = viewModel.isDownloaded
         self.contextColor = viewModel.color ?? .clear
         self.sessionProgress = viewModel.progress
