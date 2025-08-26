@@ -21,7 +21,7 @@ final class SearchCoordinator: Logging {
     /// The desired state of the filters upon configuration
     private var restorationFiltersState: WWDCFiltersState?
 
-    fileprivate let scheduleSearchController: SearchFiltersViewController
+    fileprivate let scheduleSearchController: SearchFiltersViewModel
     @Published var scheduleFilterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue) {
         willSet {
             log.debug(
@@ -30,7 +30,7 @@ final class SearchCoordinator: Logging {
         }
     }
 
-    fileprivate let videosSearchController: SearchFiltersViewController
+    fileprivate let videosSearchController: SearchFiltersViewModel
     @Published var videosFilterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue) {
         willSet {
             log.debug("Videos new predicate: \(newValue.predicate?.description ?? "nil", privacy: .public)")
@@ -39,8 +39,8 @@ final class SearchCoordinator: Logging {
 
     init(
         _ storage: Storage,
-        scheduleSearchController: SearchFiltersViewController,
-        videosSearchController: SearchFiltersViewController,
+        scheduleSearchController: SearchFiltersViewModel,
+        videosSearchController: SearchFiltersViewModel,
         restorationFiltersState: String? = nil
     ) {
         self.scheduleSearchController = scheduleSearchController
@@ -58,7 +58,10 @@ final class SearchCoordinator: Logging {
             .flatMap { $0.data(using: .utf8) }
             .flatMap { try? JSONDecoder().decode(WWDCFiltersState.self, from: $0) }
 
-        NotificationCenter.default.publisher(for: .MainWindowWantsToSelectSearchField).sink { [weak self] _ in
+        NotificationCenter.default.publisher(for: .MainWindowWantsToSelectSearchField).sink { [weak self] notification in
+            if let searchString = (notification.object as? String) {
+                self?.videosSearchController.searchText = searchString
+            }
             self?.activateSearchField()
         }.store(in: &cancellables)
 
@@ -141,7 +144,7 @@ final class SearchCoordinator: Logging {
             emptyTitle: "All Content"
         )
         let textualFilter = TextualFilter(identifier: .text, value: nil) { value in
-            let modelKeys: [String] = ["title"]
+            let modelKeys: [String] = ["title", "summary"]
 
             guard let value = value else { return nil }
             guard value.count >= 2 else { return nil }
@@ -184,7 +187,7 @@ final class SearchCoordinator: Logging {
             emptyTitle: "All Content"
         )
         let textualFilter = TextualFilter(identifier: .text, value: nil) { value in
-            let modelKeys: [String] = ["title"]
+            let modelKeys: [String] = ["title", "summary"]
 
             guard let value = value else { return nil }
             guard value.count >= 2 else { return nil }
@@ -268,13 +271,13 @@ final class SearchCoordinator: Logging {
     }
 
     fileprivate func activateSearchField() {
-        if let window = scheduleSearchController.view.window {
+//        if let window = scheduleSearchController.view.window {
             scheduleSearchController.isSearchFieldFocused = true
-        }
+//        }
 
-        if let window = videosSearchController.view.window {
+//        if let window = videosSearchController.view.window {
             videosSearchController.isSearchFieldFocused = true
-        }
+//        }
     }
 
     private var uiState: WWDCFiltersState {

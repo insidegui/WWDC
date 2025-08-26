@@ -9,6 +9,37 @@
 import Cocoa
 import ConfCore
 
+struct SizeReader: View {
+    var onChange: (CGSize) -> Void
+    var body: some View {
+        GeometryReader { proxy in
+            Color.clear
+                .onAppear {
+                    report(Geometry(proxy))
+                }
+                .onChange(of: Geometry(proxy)) { _, new in report(new) }
+        }
+    }
+
+    func report(_ geometry: Geometry) {
+        var size = geometry.size
+        size.height += geometry.safeAreaInsets.top + geometry.safeAreaInsets.bottom
+        size.width += geometry.safeAreaInsets.leading + geometry.safeAreaInsets.trailing
+
+        onChange(size)
+    }
+
+    struct Geometry: Equatable {
+        var size: CGSize
+        var safeAreaInsets: EdgeInsets
+
+        init(_ proxy: GeometryProxy) {
+            self.size = proxy.size
+            self.safeAreaInsets = proxy.safeAreaInsets
+        }
+    }
+}
+
 enum FilterChangeReason: Equatable {
     case initialValue
     case configurationChange
@@ -54,8 +85,52 @@ extension NSSegmentedControl {
 
 import SwiftUI
 
+final class MyNSHostingView<Content>: NSHostingView<Content> where Content: View {
+}
+
 final class SearchFiltersViewController: NSViewController {
-    private let viewModel = SearchFiltersViewModel()
+    let viewModel = SearchFiltersViewModel()
+
+//    init() {
+//        super.init(rootView: SearchFiltersView(viewModel: viewModel))
+//
+//        view.wantsLayer = true
+//        view.layer?.borderWidth = 0.5
+//        view.layer?.borderColor = NSColor.red.cgColor
+//    }
+
+    var heightConstraint: NSLayoutConstraint!
+
+    override func loadView() {
+        let view = MyNSHostingView(
+            rootView: SearchFiltersView(viewModel: viewModel) { [weak self] size in
+                self?.updateHeight(to: size.height)
+            }
+        )
+        view.sizingOptions = []
+        self.view = view
+        self.heightConstraint = view.heightAnchor.constraint(equalToConstant: 0)
+        self.heightConstraint.isActive = true
+        view.wantsLayer = true
+        view.layer?.borderWidth = 0.5
+        view.layer?.borderColor = NSColor.red.cgColor
+        view.clipsToBounds = true
+    }
+
+    func updateHeight(to newHeight: CGFloat) {
+        NSAnimationContext.runAnimationGroup { ctx in
+            ctx.duration = 0.22
+            ctx.timingFunction = CAMediaTimingFunction(name: .linear)
+            heightConstraint.animator().constant = newHeight
+            // If needed to animate siblings’ layout too:
+            view.superview?.layoutSubtreeIfNeeded()
+        }
+    }
+
+//    @MainActor @preconcurrency required dynamic init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+
     var filters: [FilterType] {
         get { viewModel.filters }
         set { viewModel.filters = newValue }
@@ -79,22 +154,23 @@ final class SearchFiltersViewController: NSViewController {
         viewModel.clearAllFilters(reason: reason)
     }
 
-    override func loadView() {
-        view = NSHostingView(
-            rootView: SearchFiltersView(viewModel: viewModel)
-        )
-    }
+//    override func loadView() {
+//        view = NSHostingView(
+//            rootView: SearchFiltersView(viewModel: viewModel)
+//        )
+//    }
 }
 
 struct SearchFiltersView: View {
     @ObservedObject var viewModel: SearchFiltersViewModel
+    var onSizeChange: (CGSize) -> Void = { _ in }
     @FocusState private var isSearchFieldFocused: Bool
 
     @State var isStatusesPopoverPresented = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
+            HStack(alignment: .center) {
                 TextField("Search", text: $viewModel.searchText)
                     .textFieldStyle(.roundedBorder)
                     .focused($isSearchFieldFocused)
@@ -105,10 +181,77 @@ struct SearchFiltersView: View {
                         isSearchFieldFocused = newValue
                     }
 
-                Toggle(isOn: $viewModel.areFiltersVisible) {
-                    Text("Filters")
+                if viewModel.areFiltersVisible {
+                    let toggleFilters: [(index: Int, element: OptionalToggleFilter)] = viewModel.effectiveFilters.indexed().compactMap {
+                        if let filter = $0.element as? OptionalToggleFilter {
+                            return (index: $0.index, element: filter)
+                        } else {
+                            return nil
+                        }
+                    }
+
+                    Button {
+                        isStatusesPopoverPresented.toggle()
+                    } label: {
+                        Label {
+                            Text("Status")
+                        } icon: {
+                            Image(systemName: "switch.2")
+                                .padding(.trailing, 8)
+                                .padding(.top, 8)
+                        }
+                        .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                    .labelStyle(.iconOnly)
+                    .foregroundStyle(toggleFilters.contains { $0.element.isOn != nil } ? AnyShapeStyle(.tint) : AnyShapeStyle(.foreground))
+                    .popover(isPresented: $isStatusesPopoverPresented) {
+                        Grid {
+                            ForEach(toggleFilters, id: \.element.identifier) { (offset, filter) in
+                                let title = switch filter.identifier {
+                                case .isFavorite: "Favorites"
+                                case .isDownloaded: "Downloaded"
+                                case .isUnwatched: "Unwatched"
+                                case .hasBookmarks: "Bookmarked"
+                                default: ""
+                                }
+
+                                let image: SwiftUI.Image = switch filter.identifier {
+                                case .isFavorite: Image(systemName: "star")
+                                case .isDownloaded: Image(systemName: "arrow.down.square")
+                                case .isUnwatched: Image(systemName: "eyeglasses")
+                                case .hasBookmarks: Image(systemName: "bookmark")
+                                default: Image(.account)
+                                }
+
+                                GridRow {
+                                    Toggle("", isOn: .init(get: {
+                                        filter.isOn != nil
+                                    }, set: { newValue in
+                                        var filter = filter
+                                        filter.isOn = newValue ? true : nil
+                                        viewModel.effectiveFilters[offset] = filter
+                                    }))
+
+                                    Text(title)
+                                        .gridColumnAlignment(.leading)
+
+                                    image
+                                        .gridColumnAlignment(.trailing)
+                                }
+                            }
+                        }
+                        .padding()
+                    }
                 }
-                .toggleStyle(.button)
+
+                //                    Toggle(isOn: $viewModel.areFiltersVisible) {
+                //                        Text("Filters")
+                //                    }
+                //                    .toggleStyle(.button)
+                Button("Filters") {
+                    viewModel.areFiltersVisible.toggle()
+                }
             }
 
             if viewModel.areFiltersVisible {
@@ -126,13 +269,13 @@ struct SearchFiltersView: View {
                                 Divider()
                             case .clear:
                                 Button("Clear") {
-//                                    var filter = viewModel.effectiveFilters[offset] as! MultipleChoiceFilter
-//
-//                                    filter.selectedOptions = []
-//
-//                                    viewModel.effectiveFilters[offset] = filter
-//
-//                                    viewModel.delegate?.searchFiltersViewController(viewModel, didChangeFilters: viewModel.effectiveFilters, context: .userInput)
+                                    //                                    var filter = viewModel.effectiveFilters[offset] as! MultipleChoiceFilter
+                                    //
+                                    //                                    filter.selectedOptions = []
+                                    //
+                                    //                                    viewModel.effectiveFilters[offset] = filter
+                                    //
+                                    //                                    viewModel.delegate?.searchFiltersViewController(viewModel, didChangeFilters: viewModel.effectiveFilters, context: .userInput)
                                 }
                             case .option(let menuOption):
                                 Toggle(menuOption.title, isOn: menuOption.isOn)
@@ -152,58 +295,6 @@ struct SearchFiltersView: View {
                     }
                 }
 
-                Button {
-                    isStatusesPopoverPresented.toggle()
-                } label: {
-                    Label {
-                        Text("Status")
-                    } icon: {
-                        Image(systemName: "switch.2")
-                            .frame(width: 44, height: 44)
-                    }
-                    .contentShape(.rect)
-                }
-                .buttonStyle(.plain)
-                .labelStyle(.iconOnly)
-                .foregroundStyle(toggleFilters.contains { $0.element.isOn != nil } ? AnyShapeStyle(.tint) : AnyShapeStyle(.foreground))
-                .popover(isPresented: $isStatusesPopoverPresented) {
-                    Grid {
-                        ForEach(toggleFilters, id: \.element.identifier) { (offset, filter) in
-                            let title = switch filter.identifier {
-                            case .isFavorite: "Favorites"
-                            case .isDownloaded: "Downloaded"
-                            case .isUnwatched: "Unwatched"
-                            case .hasBookmarks: "Bookmarked"
-                            default: ""
-                            }
-
-                            let image: SwiftUI.Image = switch filter.identifier {
-                            case .isFavorite: Image(systemName: "star")
-                            case .isDownloaded: Image(systemName: "arrow.down.square")
-                            case .isUnwatched: Image(systemName: "eyeglasses")
-                            case .hasBookmarks: Image(systemName: "bookmark")
-                            default: Image(.account)
-                            }
-
-                            GridRow {
-                                Toggle("", isOn: .init(get: {
-                                    filter.isOn != nil
-                                }, set: { newValue in
-                                    var filter = filter
-                                    filter.isOn = newValue ? true : nil
-                                    viewModel.effectiveFilters[offset] = filter
-                                }))
-
-                                Text(title)
-                                    .gridColumnAlignment(.leading)
-
-                                image
-                                    .gridColumnAlignment(.trailing)
-                            }
-                        }
-                    }
-                    .padding()
-                }
                 Grid {
                     ForEach(toggleFilters, id: \.element.identifier) { (offset, filter) in
                         if filter.isOn != nil {
@@ -249,12 +340,11 @@ struct SearchFiltersView: View {
                         }
                     }
                 }
-
-
             }
         }
         .padding()
         .background(Material.bar)
+        .background(SizeReader(onChange: self.onSizeChange))
     }
 }
 

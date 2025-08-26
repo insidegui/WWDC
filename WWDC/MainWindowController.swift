@@ -62,6 +62,22 @@ final class MainWindowController: WWDCWindowController {
         NotificationCenter.default.post(name: .MainWindowWantsToSelectSearchField, object: nil)
     }
 
+    @IBAction func useSelectionForFind(_ sender: Any?) {
+        guard
+            let tv = NSApp.keyWindow?.firstResponder as? NSTextView
+        else { return }
+
+        let range = tv.selectedRange()
+        guard range.length > 0 else { return }
+
+        let s = (tv.string as NSString).substring(with: range)
+        let pb = NSPasteboard(name: .find)
+        pb.clearContents()
+        pb.writeObjects([s as NSString])
+
+        NotificationCenter.default.post(name: .MainWindowWantsToSelectSearchField, object: s)
+    }
+
     override func makeTouchBar() -> NSTouchBar? {
         return touchBarProvider?.makeTouchBar()
     }

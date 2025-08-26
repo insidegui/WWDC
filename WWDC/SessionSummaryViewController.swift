@@ -90,6 +90,7 @@ struct SessionSummaryView: View {
                         .allowsTightening(true)
                         .truncationMode(.tail)
                         .textSelection(.enabled)
+                        .keyboardShortcut("e", modifiers: .command)
                 }
 
                 Spacer()
