@@ -91,8 +91,6 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         dividerE.fillColor = .separatorColor
 
         preferHLSDownloadsSwitch.isOn = Preferences.shared.preferHLSVideoDownload
-        searchInTranscriptsSwitch.isOn = Preferences.shared.searchInTranscripts
-        searchInBookmarksSwitch.isOn = Preferences.shared.searchInBookmarks
         refreshPeriodicallySwitch.isOn = Preferences.shared.refreshPeriodically
         enableUserDataSyncSwitch.isOn = Preferences.shared.syncUserData
 
@@ -101,6 +99,13 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
         bindSyncEngine()
         bindLanguages()
         bindTranscriptIndexingState()
+    }
+
+    override func viewWillAppear() {
+        super.viewWillAppear()
+
+        searchInTranscriptsSwitch.isOn = Preferences.shared.searchInTranscripts
+        searchInBookmarksSwitch.isOn = Preferences.shared.searchInBookmarks
     }
 
     override func viewDidAppear() {

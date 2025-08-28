@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import ConfCore
+//import ConfCore
 
 struct SizeReader: View {
     var onChange: (CGSize) -> Void
@@ -197,6 +197,9 @@ struct SearchFiltersView: View {
     var onSizeChange: (CGSize) -> Void = { _ in }
     @FocusState private var isSearchFieldFocused: Bool
 
+    @AppStorage("searchInBookmarks") var searchInBookmarks = false
+    @AppStorage("searchInTranscripts") var searchInTranscripts = false
+
     @State var isStatusesPopoverPresented = false
 
     var body: some View {
@@ -204,89 +207,26 @@ struct SearchFiltersView: View {
     }
 
     @ViewBuilder
-    // swiftlint:disable:next cyclomatic_complexity
     func visibleBody(areFiltersVisible: Binding<Bool>) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .center) {
                 SearchField(text: $viewModel.searchText)
-                //                TextField("Search", text: $viewModel.searchText)
-                //                    .focused($isSearchFieldFocused)
-                //                    .onChange(of: isSearchFieldFocused) { oldValue, newValue in
-                //                        viewModel.isSearchFieldFocused = newValue
-                //                    }
-                //                    .onChange(of: viewModel.isSearchFieldFocused) { oldValue, newValue in
-                //                        isSearchFieldFocused = newValue
-                //                    }
-                //                    .onAppear {
-                //                        viewModel.isSearchFieldVisible = true
-                //                    }
-                //                    .onDisappear {
-                //                        viewModel.isSearchFieldVisible = false
-                //                    }
-
-                //                if viewModel.areFiltersVisible {
-                let toggleFilters: [(index: Int, element: OptionalToggleFilter)] = viewModel.effectiveFilters.indexed().compactMap {
-                    if let filter = $0.element as? OptionalToggleFilter {
-                        return (index: $0.index, element: filter)
-                    } else {
-                        return nil
+                    .focused($isSearchFieldFocused)
+                    .onChange(of: isSearchFieldFocused) { oldValue, newValue in
+                        viewModel.isSearchFieldFocused = newValue
                     }
-                }
-
-                Button {
-                    isStatusesPopoverPresented.toggle()
-                } label: {
-                    Label {
-                        Text("Status")
-                    } icon: {
-                        Image(systemName: "switch.2")
-                            .padding(.trailing, 8)
-                            .padding(.top, 8)
+                    .onChange(of: viewModel.isSearchFieldFocused) { oldValue, newValue in
+                        isSearchFieldFocused = newValue
                     }
-                    .contentShape(.rect)
-                }
-                .buttonStyle(.plain)
-                .labelStyle(.iconOnly)
-                .foregroundStyle(toggleFilters.contains { $0.element.isOn != nil } ? AnyShapeStyle(.tint) : AnyShapeStyle(.foreground))
-                .popover(isPresented: $isStatusesPopoverPresented) {
-                    Grid {
-                        ForEach(toggleFilters, id: \.element.identifier) { (offset, filter) in
-                            let title = switch filter.identifier {
-                            case .isFavorite: "Favorites"
-                            case .isDownloaded: "Downloaded"
-                            case .isUnwatched: "Unwatched"
-                            case .hasBookmarks: "Bookmarked"
-                            default: ""
-                            }
-
-                            let image: SwiftUI.Image = switch filter.identifier {
-                            case .isFavorite: Image(systemName: "star")
-                            case .isDownloaded: Image(systemName: "arrow.down.square")
-                            case .isUnwatched: Image(systemName: "eyeglasses")
-                            case .hasBookmarks: Image(systemName: "bookmark")
-                            default: Image(.account)
-                            }
-
-                            GridRow {
-                                Toggle("", isOn: .init(get: {
-                                    filter.isOn != nil
-                                }, set: { newValue in
-                                    var filter = filter
-                                    filter.isOn = newValue ? true : nil
-                                    viewModel.effectiveFilters[offset] = filter
-                                }))
-
-                                Text(title)
-                                    .gridColumnAlignment(.leading)
-
-                                image
-                                    .gridColumnAlignment(.trailing)
-                            }
-                        }
+                    .onAppear {
+                        // TODO: Classically, not reliable
+                        viewModel.isSearchFieldVisible = true
                     }
-                    .padding()
-                }
-                .transition(.opacity.animation(.linear))
+                    .onDisappear {
+                        viewModel.isSearchFieldVisible = false
+                    }
+
+                configurationButton
                 //                }
 
                 //                    Toggle(isOn: $viewModel.areFiltersVisible) {
@@ -294,100 +234,14 @@ struct SearchFiltersView: View {
                 //                    }
                 //                    .toggleStyle(.button)
                 Button("Filters") {
-//                    withAnimation(.linear(duration: 0.22)) {
-                        areFiltersVisible.wrappedValue.toggle()
-//                    }
+                    areFiltersVisible.wrappedValue.toggle()
                 }
             }
 
-            VStack(spacing: 0) {
-                // TODO: Dividers need unique identifiers
-                ForEach(viewModel.multipleChoiceFilters, id: \.0) { (identifier, filterMenu) in
-                    let (filter, menuItems) = filterMenu
+            VStack(alignment: .leading, spacing: 6) {
+                dropDowns
 
-                    Menu(filter.title) {
-
-                        //                }
-                        //                Picker("Events", selection: $viewModel.selectedEvents) {
-                        ForEach(menuItems) { menuItem in
-                            switch menuItem {
-                            case .divider:
-                                Divider()
-                            case .clear:
-                                Button("Clear") {
-                                    //                                    var filter = viewModel.effectiveFilters[offset] as! MultipleChoiceFilter
-                                    //
-                                    //                                    filter.selectedOptions = []
-                                    //
-                                    //                                    viewModel.effectiveFilters[offset] = filter
-                                    //
-                                    //                                    viewModel.delegate?.searchFiltersViewController(viewModel, didChangeFilters: viewModel.effectiveFilters, context: .userInput)
-                                }
-                            case .option(let menuOption):
-                                Toggle(menuOption.title, isOn: menuOption.isOn)
-                            }
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .menuStyle(.automatic)
-                    .controlSize(.small)
-                }
-                .transition(.opacity.animation(.linear))
-
-                let toggleFilters: [(index: Int, element: OptionalToggleFilter)] = viewModel.effectiveFilters.indexed().compactMap {
-                    if let filter = $0.element as? OptionalToggleFilter {
-                        return (index: $0.index, element: filter)
-                    } else {
-                        return nil
-                    }
-                }
-
-                Grid {
-                    ForEach(toggleFilters, id: \.element.identifier) { (offset, filter) in
-                        if filter.isOn != nil {
-                            GridRow {
-                                let title = switch filter.identifier {
-                                case .isFavorite: "Favorites"
-                                case .isDownloaded: "Downloaded"
-                                case .isUnwatched: "Unwatched"
-                                case .hasBookmarks: "Bookmarked"
-                                default: ""
-                                }
-                                Text(title)
-                                    .gridColumnAlignment(.trailing)
-
-                                Picker(
-                                    "",
-                                    selection: .init(
-                                        get: {
-                                            (viewModel.effectiveFilters[offset] as! OptionalToggleFilter).isOn
-                                        },
-                                        set: { state in
-                                            var updatedFilter = filter
-                                            updatedFilter.isOn = state
-
-                                            var updatedFilters = viewModel.effectiveFilters
-                                            updatedFilters[offset] = updatedFilter
-
-                                            //                                popUp.title = filter.title
-
-                                            viewModel.effectiveFilters = updatedFilters
-
-                                        }
-                                    )
-                                ) {
-                                    //                        Text("Any").tag(nil as Bool?)
-                                    Text("Yes").tag(true as Bool?)
-                                    Text("No").tag(false as Bool?)
-                                }
-                                .pickerStyle(.segmented)
-                                .gridColumnAlignment(.leading)
-                                .fixedSize(horizontal: true, vertical: false)
-                            }
-                        }
-                    }
-                }
-                .transition(.opacity.animation(.linear))
+                sessionStateFilters
             }
             .disabled(!areFiltersVisible.wrappedValue)
             .frame(height: areFiltersVisible.wrappedValue ? nil : 0)
@@ -397,6 +251,117 @@ struct SearchFiltersView: View {
         .background(Material.bar)
         .background(SizeReader(onChange: self.onSizeChange))
         //        .animation(.linear(duration: 0.22), value: viewModel.areFiltersVisible)
+    }
+
+    @ViewBuilder
+    var dropDowns: some View {
+        ForEach(viewModel.pullDownMenus) { menu in
+            Menu {
+                ForEach(menu.items) { menuItem in
+                    switch menuItem {
+                    case .divider:
+                        Divider()
+                    case .clear:
+                        Button("Clear") {
+                            viewModel.clearMultipleChoiceFilter(id: menu.id)
+                        }
+                    case .option(let menuOption):
+                        Toggle(menuOption.title, isOn: menuOption.isOn)
+                    }
+                }
+            } label: {
+                Text(menu.filter.title/* + String(repeating: "\u{00a0}", count: 1000)*/)
+                    .frame(maxWidth: .infinity)
+                    .border(.red)
+            }
+            .menuStyle(.automatic)
+            .controlSize(.regular)
+            .controlGroupStyle(.menu)
+        }
+    }
+
+    /// Filters that represent session states, like favorite, downloaded, unwatched, contains bookmarks
+    @ViewBuilder
+    var sessionStateFilters: some View {
+        VStack(alignment: .leading, spacing: 6) {
+//        Grid {
+            ForEach(viewModel.toggles) { toggle in
+                if toggle.isEnabled.wrappedValue {
+//                    GridRow {
+//                        Text(toggle.title)
+//                            .gridColumnAlignment(.trailing)
+
+                        let affirmativeTitle = switch toggle.filter.identifier {
+                        case .isFavorite: "Favorite"
+                        case .isDownloaded: "Downloaded"
+                        case .isUnwatched: "Watched"
+                        case .hasBookmarks: "Has bookmarks"
+                        default: ""
+                        }
+
+                        let negativeTitle = switch toggle.filter.identifier {
+                        case .isFavorite: "Not a favorite"
+                        case .isDownloaded: "Not downloaded"
+                        case .isUnwatched: "Unwatched"
+                        case .hasBookmarks: "No bookmarks"
+                        default: ""
+                        }
+
+                        Picker("", selection: toggle.isAffirmative) {
+                            Text(affirmativeTitle/*"Yes"*/).frame(maxWidth: .infinity).tag(true)
+                            Text(negativeTitle/*"No"*/).frame(maxWidth: .infinity).tag(false)
+                        }
+                        .pickerStyle(.segmented)
+                        .gridColumnAlignment(.leading)
+                        .padding(.leading, -8) // nobody's perfect
+//                        .fixedSize(horizontal: true, vertical: false)
+//                    }
+                }
+            }
+        }
+    }
+
+    var configurationButton: some View {
+        Button {
+            isStatusesPopoverPresented.toggle()
+        } label: {
+            Label {
+                Text("Status")
+            } icon: {
+                Image(systemName: "switch.2")
+                    .padding(4)
+            }
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .labelStyle(.iconOnly)
+        .foregroundStyle(viewModel.toggles.contains { $0.isEnabled.wrappedValue } ? AnyShapeStyle(.tint) : AnyShapeStyle(.foreground))
+        .border(.red)
+        .popover(isPresented: $isStatusesPopoverPresented) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Search in:")
+
+                Toggle("Bookmarks", isOn: $searchInBookmarks)
+                Toggle("Transcripts", isOn: $searchInTranscripts)
+                    .padding(.bottom, 8)
+
+                Text("Filter by:")
+
+                Grid(alignment: .leading) {
+                    ForEach(viewModel.toggles) { toggle in
+                        GridRow {
+                            Toggle(toggle.title, isOn: toggle.isEnabled)
+
+                            toggle.image
+                                .padding(.leading, 8)
+                                .gridColumnAlignment(.trailing)
+                        }
+                    }
+                }
+            }
+            .padding()
+        }
+        .transition(.opacity.animation(.linear))
     }
 }
 
@@ -409,25 +374,32 @@ final class SearchFiltersViewModel: ObservableObject {
 
     var isSearchFieldVisible = false
 
-    struct MenuOption {
-        let title: String
-        let isOn: Binding<Bool>
-    }
+    struct PullDownMenu: Identifiable {
+        var id: FilterIdentifier { filter.identifier }
 
-    enum MenuItem: Identifiable {
-        case clear(UUID)
-        case divider(UUID)
-        case option(MenuOption)
+        var filter: MultipleChoiceFilter
+        var items: [Item]
 
-        var id: String {
-            switch self {
-            case .clear(let uuid), .divider(let uuid): uuid.uuidString
-            case .option(let filterOption): filterOption.title
+        enum Item: Identifiable {
+            case clear(UUID)
+            case divider(UUID)
+            case option(Option)
+
+            var id: String {
+                switch self {
+                case .clear(let uuid), .divider(let uuid): uuid.uuidString
+                case .option(let filterOption): filterOption.title
+                }
             }
+        }
+
+        struct Option {
+            let title: String
+            let isOn: Binding<Bool>
         }
     }
 
-    var multipleChoiceFilters: [(FilterIdentifier, (MultipleChoiceFilter, [MenuItem]))] {
+    var pullDownMenus: [PullDownMenu] {
         let multipleChoiceFilters: [(index: Int, element: MultipleChoiceFilter)] = effectiveFilters.indexed().compactMap {
             if let filter = $0.element as? MultipleChoiceFilter {
                 return (index: $0.index, element: filter)
@@ -436,15 +408,15 @@ final class SearchFiltersViewModel: ObservableObject {
             }
         }
 
-        let keysAndValues: [(FilterIdentifier, (MultipleChoiceFilter, [MenuItem]))] = multipleChoiceFilters.map { (index, filter) in
-            let options = filter.options.map { option in
+        let menus: [PullDownMenu] = multipleChoiceFilters.map { (index, filter) in
+            let items: [PullDownMenu.Item] = filter.options.map { option in
                 if option.isSeparator {
-                    MenuItem.divider(UUID())
+                    .divider(UUID())
                 } else if option.isClear {
-                    MenuItem.clear(UUID())
+                    .clear(UUID())
                 } else {
-                    MenuItem.option(
-                        MenuOption(
+                    .option(
+                        PullDownMenu.Option(
                             title: option.title,
                             isOn: Binding {
                                 guard let filter = self.effectiveFilters[index] as? MultipleChoiceFilter else { return false }
@@ -458,10 +430,82 @@ final class SearchFiltersViewModel: ObservableObject {
                 }
             }
 
-            return (filter.identifier, (filter, options))
+            return PullDownMenu(filter: filter, items: items)
         }
 
-        return keysAndValues
+        return menus
+    }
+
+    struct Toggle: Identifiable {
+        var id: FilterIdentifier { filter.identifier }
+        var title: String
+        var image: Image
+        var filter: OptionalToggleFilter
+        var isEnabled: Binding<Bool>
+        var isAffirmative: Binding<Bool>
+    }
+
+    var toggles: [Toggle] {
+        let toggleFilters = effectiveFilters.indexed().compactMap {
+            if let filter = $0.element as? OptionalToggleFilter {
+                return (index: $0.index, element: filter)
+            } else {
+                return nil
+            }
+        }
+
+        let toggles = toggleFilters.map { (index, filter) in
+            let title = switch filter.identifier {
+            case .isFavorite: "Favorites"
+            case .isDownloaded: "Downloaded"
+            case .isUnwatched: "Unwatched"
+            case .hasBookmarks: "Bookmarked"
+            default: ""
+            }
+
+            let image: SwiftUI.Image = switch filter.identifier {
+            case .isFavorite: Image(systemName: "star")
+            case .isDownloaded: Image(systemName: "arrow.down.square")
+            case .isUnwatched: Image(systemName: "eyeglasses")
+            case .hasBookmarks: Image(systemName: "bookmark")
+            default: Image(.account)
+            }
+
+            let isAffirmative = Binding<Bool>(
+                get: {
+                    self.effectiveFilters.find(OptionalToggleFilter.self, byID: filter.identifier)?.isOn ?? true
+                },
+                set: { state in
+                    var updatedFilter = filter
+                    updatedFilter.isOn = state
+
+                    var updatedFilters = self.effectiveFilters
+                    updatedFilters[index] = updatedFilter
+
+                    self.effectiveFilters = updatedFilters
+                }
+            )
+
+            let isEnabled = Binding<Bool>(
+                get: {
+                    filter.isOn != nil
+                }, set: { newValue in
+                    var filter = filter
+                    filter.isOn = newValue ? true : nil
+                    self.effectiveFilters[index] = filter
+                }
+            )
+
+            return Toggle(
+                title: title,
+                image: image,
+                filter: filter,
+                isEnabled: isEnabled,
+                isAffirmative: isAffirmative
+            )
+        }
+
+        return toggles
     }
 
 //    static func loadFromStoryboard() -> SearchFiltersViewController {
@@ -525,7 +569,7 @@ final class SearchFiltersViewModel: ObservableObject {
 
         filters = updatedFilters
 
-//        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: reason)
+        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: reason)
     }
 
     weak var delegate: SearchFiltersViewControllerDelegate?
@@ -599,13 +643,23 @@ final class SearchFiltersViewModel: ObservableObject {
         self.areFiltersVisible = !hidden
     }
 
+    func clearMultipleChoiceFilter(id: FilterIdentifier) {
+        guard var (index, filter) = effectiveFilters.findIndexed(MultipleChoiceFilter.self, byID: id) else { return }
+
+        filter.selectedOptions = []
+
+        effectiveFilters[index] = filter
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: effectiveFilters, context: .userInput)
+    }
+
     private func updateMultipleChoiceFilter(at filterIndex: Int, option: FilterOption, isOn: Bool) {
         guard var filter = effectiveFilters[filterIndex] as? MultipleChoiceFilter else { return }
 
         if isOn {
             filter.selectedOptions.append(option)
         } else {
-            filter.selectedOptions.removeAll(where: { $0 == option } )
+            filter.selectedOptions.removeAll { $0 == option }
         }
 
         effectiveFilters[filterIndex] = filter

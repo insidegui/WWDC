@@ -36,4 +36,13 @@ extension Array where Element == FilterType {
 
         return result as? T
     }
+
+    func findIndexed<T: FilterType>(_ type: T.Type = T.self, byID identifier: FilterIdentifier) -> (Index, T)? {
+        let index = self.firstIndex { (filter) -> Bool in
+            return filter.identifier == identifier && filter is T
+        }
+        guard let index, let item = self[index] as? T else { return nil }
+
+        return (index, item)
+    }
 }
