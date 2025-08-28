@@ -56,65 +56,49 @@ protocol SearchFiltersViewControllerDelegate: AnyObject {
     )
 }
 
-extension NSSegmentedControl {
-
-    var optionalToggleState: Bool? {
-        get { 
-            switch selectedSegment {
-            case 1: 
-                return true
-            case 2:
-                return false
-            default:
-                return nil
-            }
-        }
-        set { 
-            switch newValue {
-            case true: 
-                selectedSegment = 1
-            case false:
-                selectedSegment = 2
-            default:
-                selectedSegment = 0
-            }
-        }
-    }
-
-}
-
 import SwiftUI
 
 final class MyNSHostingView<Content>: NSHostingView<Content> where Content: View {
+    override var frame: NSRect {
+        didSet {
+            print("didSet frame: \(frame)")
+        }
+    }
 }
 
-final class SearchFiltersViewController: NSViewController {
+final class SearchFiltersViewController: NSHostingController<SearchFiltersView> {
     let viewModel = SearchFiltersViewModel()
 
-//    init() {
-//        super.init(rootView: SearchFiltersView(viewModel: viewModel))
-//
-//        view.wantsLayer = true
-//        view.layer?.borderWidth = 0.5
-//        view.layer?.borderColor = NSColor.red.cgColor
-//    }
+    init() {
+        super.init(
+            rootView: SearchFiltersView(viewModel: viewModel) { size in
+                //                self?.updateHeight(to: size.height)
+            }
+        )
 
+        view.wantsLayer = true
+        view.layer?.borderWidth = 0.5
+        view.layer?.borderColor = NSColor.red.cgColor
+    }
+    
+    @MainActor @preconcurrency required dynamic init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     var heightConstraint: NSLayoutConstraint!
 
     override func loadView() {
         let view = MyNSHostingView(
-            rootView: SearchFiltersView(viewModel: viewModel) { [weak self] size in
-                self?.updateHeight(to: size.height)
-            }
+            rootView: self.rootView
         )
-        view.sizingOptions = []
-        self.view = view
-        self.heightConstraint = view.heightAnchor.constraint(equalToConstant: 0)
-        self.heightConstraint.isActive = true
-        view.wantsLayer = true
-        view.layer?.borderWidth = 0.5
-        view.layer?.borderColor = NSColor.red.cgColor
-        view.clipsToBounds = true
+////        view.sizingOptions = []
+//        self.view = view
+////        self.heightConstraint = view.heightAnchor.constraint(equalToConstant: 0)
+////        self.heightConstraint.isActive = true
+//        view.wantsLayer = true
+//        view.layer?.borderWidth = 0.5
+//        view.layer?.borderColor = NSColor.red.cgColor
+//        view.clipsToBounds = true
     }
 
     func updateHeight(to newHeight: CGFloat) {
@@ -154,11 +138,58 @@ final class SearchFiltersViewController: NSViewController {
         viewModel.clearAllFilters(reason: reason)
     }
 
+    var searchText: String {
+        get { viewModel.searchText }
+        set { viewModel.searchText = newValue }
+    }
+
 //    override func loadView() {
 //        view = NSHostingView(
 //            rootView: SearchFiltersView(viewModel: viewModel)
 //        )
 //    }
+}
+
+struct SearchField: NSViewRepresentable {
+    @Binding var text: String
+    var placeholder: String = "Search"
+
+    func makeNSView(context: Context) -> NSSearchField {
+        let searchField = NSSearchField(frame: .zero)
+        searchField.delegate = context.coordinator
+        updateNSView(searchField, context: context)
+        return searchField
+    }
+
+    func updateNSView(_ nsView: NSSearchField, context: Context) {
+        if nsView.stringValue != text {
+            nsView.stringValue = text
+        }
+        nsView.placeholderString = placeholder
+        context.coordinator.parent = self
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    final class Coordinator: NSObject, NSSearchFieldDelegate {
+        var parent: SearchField
+
+        init(_ parent: SearchField) {
+            self.parent = parent
+        }
+
+        func controlTextDidChange(_ obj: Notification) {
+            let value = (obj.object as? NSSearchField)?.stringValue ?? ""
+            if parent.text != value {
+                DispatchQueue.main.async { [parent] in
+                    parent.text = value
+                }
+            }
+        }
+    }
+
 }
 
 struct SearchFiltersView: View {
@@ -169,92 +200,107 @@ struct SearchFiltersView: View {
     @State var isStatusesPopoverPresented = false
 
     var body: some View {
+        visibleBody(areFiltersVisible: $viewModel.areFiltersVisible)
+    }
+
+    @ViewBuilder
+    // swiftlint:disable:next cyclomatic_complexity
+    func visibleBody(areFiltersVisible: Binding<Bool>) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center) {
-                TextField("Search", text: $viewModel.searchText)
-                    .textFieldStyle(.roundedBorder)
-                    .focused($isSearchFieldFocused)
-                    .onChange(of: isSearchFieldFocused) { oldValue, newValue in
-                        viewModel.isSearchFieldFocused = newValue
-                    }
-                    .onChange(of: viewModel.isSearchFieldFocused) { oldValue, newValue in
-                        isSearchFieldFocused = newValue
-                    }
+                SearchField(text: $viewModel.searchText)
+                //                TextField("Search", text: $viewModel.searchText)
+                //                    .focused($isSearchFieldFocused)
+                //                    .onChange(of: isSearchFieldFocused) { oldValue, newValue in
+                //                        viewModel.isSearchFieldFocused = newValue
+                //                    }
+                //                    .onChange(of: viewModel.isSearchFieldFocused) { oldValue, newValue in
+                //                        isSearchFieldFocused = newValue
+                //                    }
+                //                    .onAppear {
+                //                        viewModel.isSearchFieldVisible = true
+                //                    }
+                //                    .onDisappear {
+                //                        viewModel.isSearchFieldVisible = false
+                //                    }
 
-                if viewModel.areFiltersVisible {
-                    let toggleFilters: [(index: Int, element: OptionalToggleFilter)] = viewModel.effectiveFilters.indexed().compactMap {
-                        if let filter = $0.element as? OptionalToggleFilter {
-                            return (index: $0.index, element: filter)
-                        } else {
-                            return nil
-                        }
-                    }
-
-                    Button {
-                        isStatusesPopoverPresented.toggle()
-                    } label: {
-                        Label {
-                            Text("Status")
-                        } icon: {
-                            Image(systemName: "switch.2")
-                                .padding(.trailing, 8)
-                                .padding(.top, 8)
-                        }
-                        .contentShape(.rect)
-                    }
-                    .buttonStyle(.plain)
-                    .labelStyle(.iconOnly)
-                    .foregroundStyle(toggleFilters.contains { $0.element.isOn != nil } ? AnyShapeStyle(.tint) : AnyShapeStyle(.foreground))
-                    .popover(isPresented: $isStatusesPopoverPresented) {
-                        Grid {
-                            ForEach(toggleFilters, id: \.element.identifier) { (offset, filter) in
-                                let title = switch filter.identifier {
-                                case .isFavorite: "Favorites"
-                                case .isDownloaded: "Downloaded"
-                                case .isUnwatched: "Unwatched"
-                                case .hasBookmarks: "Bookmarked"
-                                default: ""
-                                }
-
-                                let image: SwiftUI.Image = switch filter.identifier {
-                                case .isFavorite: Image(systemName: "star")
-                                case .isDownloaded: Image(systemName: "arrow.down.square")
-                                case .isUnwatched: Image(systemName: "eyeglasses")
-                                case .hasBookmarks: Image(systemName: "bookmark")
-                                default: Image(.account)
-                                }
-
-                                GridRow {
-                                    Toggle("", isOn: .init(get: {
-                                        filter.isOn != nil
-                                    }, set: { newValue in
-                                        var filter = filter
-                                        filter.isOn = newValue ? true : nil
-                                        viewModel.effectiveFilters[offset] = filter
-                                    }))
-
-                                    Text(title)
-                                        .gridColumnAlignment(.leading)
-
-                                    image
-                                        .gridColumnAlignment(.trailing)
-                                }
-                            }
-                        }
-                        .padding()
+                //                if viewModel.areFiltersVisible {
+                let toggleFilters: [(index: Int, element: OptionalToggleFilter)] = viewModel.effectiveFilters.indexed().compactMap {
+                    if let filter = $0.element as? OptionalToggleFilter {
+                        return (index: $0.index, element: filter)
+                    } else {
+                        return nil
                     }
                 }
+
+                Button {
+                    isStatusesPopoverPresented.toggle()
+                } label: {
+                    Label {
+                        Text("Status")
+                    } icon: {
+                        Image(systemName: "switch.2")
+                            .padding(.trailing, 8)
+                            .padding(.top, 8)
+                    }
+                    .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .labelStyle(.iconOnly)
+                .foregroundStyle(toggleFilters.contains { $0.element.isOn != nil } ? AnyShapeStyle(.tint) : AnyShapeStyle(.foreground))
+                .popover(isPresented: $isStatusesPopoverPresented) {
+                    Grid {
+                        ForEach(toggleFilters, id: \.element.identifier) { (offset, filter) in
+                            let title = switch filter.identifier {
+                            case .isFavorite: "Favorites"
+                            case .isDownloaded: "Downloaded"
+                            case .isUnwatched: "Unwatched"
+                            case .hasBookmarks: "Bookmarked"
+                            default: ""
+                            }
+
+                            let image: SwiftUI.Image = switch filter.identifier {
+                            case .isFavorite: Image(systemName: "star")
+                            case .isDownloaded: Image(systemName: "arrow.down.square")
+                            case .isUnwatched: Image(systemName: "eyeglasses")
+                            case .hasBookmarks: Image(systemName: "bookmark")
+                            default: Image(.account)
+                            }
+
+                            GridRow {
+                                Toggle("", isOn: .init(get: {
+                                    filter.isOn != nil
+                                }, set: { newValue in
+                                    var filter = filter
+                                    filter.isOn = newValue ? true : nil
+                                    viewModel.effectiveFilters[offset] = filter
+                                }))
+
+                                Text(title)
+                                    .gridColumnAlignment(.leading)
+
+                                image
+                                    .gridColumnAlignment(.trailing)
+                            }
+                        }
+                    }
+                    .padding()
+                }
+                .transition(.opacity.animation(.linear))
+                //                }
 
                 //                    Toggle(isOn: $viewModel.areFiltersVisible) {
                 //                        Text("Filters")
                 //                    }
                 //                    .toggleStyle(.button)
                 Button("Filters") {
-                    viewModel.areFiltersVisible.toggle()
+//                    withAnimation(.linear(duration: 0.22)) {
+                        areFiltersVisible.wrappedValue.toggle()
+//                    }
                 }
             }
 
-            if viewModel.areFiltersVisible {
+            VStack(spacing: 0) {
                 // TODO: Dividers need unique identifiers
                 ForEach(viewModel.multipleChoiceFilters, id: \.0) { (identifier, filterMenu) in
                     let (filter, menuItems) = filterMenu
@@ -286,6 +332,7 @@ struct SearchFiltersView: View {
                     .menuStyle(.automatic)
                     .controlSize(.small)
                 }
+                .transition(.opacity.animation(.linear))
 
                 let toggleFilters: [(index: Int, element: OptionalToggleFilter)] = viewModel.effectiveFilters.indexed().compactMap {
                     if let filter = $0.element as? OptionalToggleFilter {
@@ -340,11 +387,16 @@ struct SearchFiltersView: View {
                         }
                     }
                 }
+                .transition(.opacity.animation(.linear))
             }
+            .disabled(!areFiltersVisible.wrappedValue)
+            .frame(height: areFiltersVisible.wrappedValue ? nil : 0)
+            .clipped()
         }
         .padding()
         .background(Material.bar)
         .background(SizeReader(onChange: self.onSizeChange))
+        //        .animation(.linear(duration: 0.22), value: viewModel.areFiltersVisible)
     }
 }
 
@@ -354,10 +406,8 @@ final class SearchFiltersViewModel: ObservableObject {
         didSet { searchFieldAction() }
     }
     @Published var areFiltersVisible = false
-    @Published var selectedEvents: [String] = []
-    var events: [String] {
-        filters.compactMap { $0 as? MultipleChoiceFilter }.first { $0.identifier == .event }?.options.map(\.title) ?? []
-    }
+
+    var isSearchFieldVisible = false
 
     struct MenuOption {
         let title: String

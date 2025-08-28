@@ -13,6 +13,30 @@ import ConfCore
 import OSLog
 import SwiftUI
 
+struct AnyNSViewRepresentable: NSViewRepresentable {
+    let view: NSView
+
+    func makeNSView(context: Context) -> NSView {
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        // No op
+    }
+}
+
+struct AnyNSViewController: NSViewControllerRepresentable {
+    let viewController: NSViewController
+
+    func makeNSViewController(context: Context) -> NSViewController {
+        return viewController
+    }
+
+    func updateNSViewController(_ nsViewController: NSViewController, context: Context) {
+        // No op
+    }
+}
+
 // MARK: - Sessions Table View Controller
 
 class SessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
@@ -48,42 +72,95 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         fatalError("init(coder:) has not been implemented")
     }
 
+    var heightConstraint: NSLayoutConstraint!
+
+    var height = CurrentValueSubject<CGFloat, Never>(0)
+
+    struct ObservyDingus<Content: View>: View {
+        @ObservedObject var searchController: SearchFiltersViewModel
+
+        @ViewBuilder var content: Content
+
+        var body: some View {
+            content
+                .animation(.default, value: searchController.areFiltersVisible)
+        }
+    }
+
     override func loadView() {
-        view = NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
+        view = NSHostingView(
+            rootView:
+                ObservyDingus(searchController: searchController) {
+                    VStack(spacing: 0) {
+                        SearchFiltersView(viewModel: searchController)
+                            .zIndex(1)
+
+                        AnyNSViewRepresentable(view: scrollView)
+                    }
+                }
+        )//NSView(frame: NSRect(x: 0, y: 0, width: 300, height: MainWindowController.defaultRect.height))
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor.darkWindowBackground.cgColor
         view.widthAnchor.constraint(lessThanOrEqualToConstant: 675).isActive = true
 
         scrollView.frame = view.bounds
+        scrollView.contentView.wantsLayer = true
+        scrollView.contentView.layer?.masksToBounds = false
+
         tableView.frame = view.bounds
 
         scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 320).isActive = true
 
-        view.addSubview(scrollView)
+//        view.addSubview(scrollView)
 
-        let searchView = NSHostingView(rootView: SearchFiltersView(viewModel: searchController) { [scrollView] in
-            let topInset = $0.height
+//        self.height.debounce(for: 0.5, scheduler: DispatchQueue.main).sink { [weak self] in
+//            Self.log.debug("\($0)")
+//            self?.heightConstraint.animator().constant = $0
+//        }.store(in: &cancellables)
 
-            let insets = NSEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
-            scrollView.scrollerInsets = insets
-            scrollView.contentView.contentInsets = insets
-            scrollView.contentView.needsLayout = true
-        })
-        view.addSubview(searchView)
+//        let searchView = searchController.view
+//        let searchView = MyNSHostingView(rootView: SearchFiltersView(viewModel: searchController) { [scrollView] in
+//            return
+//            let topInset = $0.height
 
-        scrollView.contentView.automaticallyAdjustsContentInsets = false
 
-        searchView.translatesAutoresizingMaskIntoConstraints = false
+//            NSAnimationContext.runAnimationGroup { ctx in
+//                ctx.duration = 5
+//                ctx.timingFunction = CAMediaTimingFunction(name: .easeIn)
+//                self.heightConstraint/*.animator()*/.constant = topInset
+//            self.height.send(topInset)
+                // If needed to animate siblings’ layout too:
+//                self.view.layoutSubtreeIfNeeded()
 
-        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//                let insets = NSEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+//                scrollView.scrollerInsets = insets
+//                scrollView.contentView/*.animator()*/.contentInsets = insets
+//                scrollView.contentView.needsLayout = true
+//            }
+//        })
+//        searchView.setContentCompressionResistancePriority(.required, for: .vertical)
+//        searchView.wantsLayer = true
+//        searchView.layer?.borderColor = NSColor.red.cgColor
+//        searchView.layer?.borderWidth = 1
+//        self.heightConstraint = searchView.heightAnchor.constraint(equalToConstant: 300)
+//        self.heightConstraint.isActive = true
+//        view.addSubview(searchView)
 
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        (scrollView.contentView as? NSClipView)?.wantsDefaultClipping = false
+//        scrollView.contentView.automaticallyAdjustsContentInsets = false
 
-        searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        searchView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        searchView.translatesAutoresizingMaskIntoConstraints = false
+
+//        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+//        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+//        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+
+//        heightConstraint = scrollView.topAnchor.constraint(equalTo: view.topAnchor)
+//        heightConstraint.isActive = true
+
+//        searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+//        searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+//        searchView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     }
 
     override func viewDidLoad() {

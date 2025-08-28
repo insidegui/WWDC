@@ -296,11 +296,11 @@ final class SearchCoordinator: Logging {
 extension SearchCoordinator: SearchFiltersViewControllerDelegate {
 
     func searchFiltersViewController(_ controller: SearchFiltersViewModel, didChangeFilters filters: [FilterType], context: FilterChangeReason) {
-//        if controller == scheduleSearchController {
-//            scheduleFilterPredicate = .init(predicate: scheduleSearchController.currentPredicate, changeReason: context)
-//        } else {
+        if controller === scheduleSearchController {
+            scheduleFilterPredicate = .init(predicate: scheduleSearchController.currentPredicate, changeReason: context)
+        } else {
             videosFilterPredicate = .init(predicate: videosSearchController.currentPredicate, changeReason: context)
-//        }
+        }
     }
 }
 

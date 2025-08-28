@@ -149,7 +149,7 @@ final class AppCoordinator: Logging, Signposting {
         scheduleController.splitViewController.splitView.autosaveName = "ScheduleSplitView"
         let scheduleItem = NSTabViewItem(viewController: scheduleController)
         scheduleItem.label = "Schedule"
-        scheduleItem.initialFirstResponder = scheduleController.splitViewController.listViewController.tableView
+//        scheduleItem.initialFirstResponder = scheduleController.splitViewController.listViewController.tableView
         tabController.addTabViewItem(scheduleItem)
 
         // Videos
@@ -170,7 +170,7 @@ final class AppCoordinator: Logging, Signposting {
         videosController.splitView.autosaveName = "VideosSplitView"
         let videosItem = NSTabViewItem(viewController: videosController)
         videosItem.label = "Videos"
-        videosItem.initialFirstResponder = videosController.listViewController.tableView
+//        videosItem.initialFirstResponder = videosController.listViewController.tableView
         tabController.addTabViewItem(videosItem)
 
         self.windowController = windowController

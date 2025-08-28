@@ -34,7 +34,7 @@ extension NSTableView {
         guard let clipView = superview as? NSClipView,
               let scrollView = clipView.superview as? NSScrollView else {
 
-                assertionFailure("Unexpected NSTableView view hiearchy")
+//                assertionFailure("Unexpected NSTableView view hierarchy")
                 return
         }
 
