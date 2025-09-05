@@ -3,7 +3,7 @@ import OSLog
 import ConfCore
 
 public final class FSMediaDownloadMetadataStore: MediaDownloadMetadataStorage, Logging {
-    public static var log = makeLogger()
+    public static let log = makeLogger()
 
     public let directoryURL: URL
     private let fileManager = FileManager()

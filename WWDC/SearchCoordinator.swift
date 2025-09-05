@@ -21,7 +21,7 @@ final class SearchCoordinator: Logging {
     /// The desired state of the filters upon configuration
     private var restorationFiltersState: WWDCFiltersState?
 
-    fileprivate let scheduleSearchController: SearchFiltersViewController
+    fileprivate let scheduleSearchController: SearchFiltersViewModel
     @Published var scheduleFilterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue) {
         willSet {
             log.debug(
@@ -30,7 +30,7 @@ final class SearchCoordinator: Logging {
         }
     }
 
-    fileprivate let videosSearchController: SearchFiltersViewController
+    let videosSearchController: SearchFiltersViewModel
     @Published var videosFilterPredicate: FilterPredicate = .init(predicate: nil, changeReason: .initialValue) {
         willSet {
             log.debug("Videos new predicate: \(newValue.predicate?.description ?? "nil", privacy: .public)")
@@ -39,8 +39,8 @@ final class SearchCoordinator: Logging {
 
     init(
         _ storage: Storage,
-        scheduleSearchController: SearchFiltersViewController,
-        videosSearchController: SearchFiltersViewController,
+        scheduleSearchController: SearchFiltersViewModel,
+        videosSearchController: SearchFiltersViewModel,
         restorationFiltersState: String? = nil
     ) {
         self.scheduleSearchController = scheduleSearchController
@@ -58,9 +58,29 @@ final class SearchCoordinator: Logging {
             .flatMap { $0.data(using: .utf8) }
             .flatMap { try? JSONDecoder().decode(WWDCFiltersState.self, from: $0) }
 
-        NotificationCenter.default.publisher(for: .MainWindowWantsToSelectSearchField).sink { [weak self] _ in
+        NotificationCenter.default.publisher(for: .MainWindowWantsToSelectSearchField).sink { [weak self] notification in
+            // Populated if their is a search string we should fill in, see MainWindowController.useSelectionForFind(_:)
+            if let searchString = (notification.object as? String) {
+                self?.videosSearchController.searchText = searchString
+            }
             self?.activateSearchField()
         }.store(in: &cancellables)
+
+        // React to changes in the preferences that affect the search predicates. User can change these preferences from
+        // the prefs window or the search filters popover.
+        NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
+            .map { _ in
+                (Preferences.shared.searchInBookmarks, Preferences.shared.searchInTranscripts)
+            }
+            .removeDuplicates { $0 == $1 }
+            .sink { [weak self] _ in
+                guard let self else { return }
+
+                // Small cheat
+                self.searchFiltersViewController(self.videosSearchController, didChangeFilters: self.videosSearchController.filters, context: .userDefaultsChange)
+                self.searchFiltersViewController(self.scheduleSearchController, didChangeFilters: self.scheduleSearchController.filters, context: .userDefaultsChange)
+            }
+            .store(in: &cancellables)
 
         Publishers.CombineLatest4(
             storage.eventsForFiltering,
@@ -141,7 +161,7 @@ final class SearchCoordinator: Logging {
             emptyTitle: "All Content"
         )
         let textualFilter = TextualFilter(identifier: .text, value: nil) { value in
-            let modelKeys: [String] = ["title"]
+            let modelKeys: [String] = ["title", "summary"]
 
             guard let value = value else { return nil }
             guard value.count >= 2 else { return nil }
@@ -184,7 +204,7 @@ final class SearchCoordinator: Logging {
             emptyTitle: "All Content"
         )
         let textualFilter = TextualFilter(identifier: .text, value: nil) { value in
-            let modelKeys: [String] = ["title"]
+            let modelKeys: [String] = ["title", "summary"]
 
             guard let value = value else { return nil }
             guard value.count >= 2 else { return nil }
@@ -268,12 +288,12 @@ final class SearchCoordinator: Logging {
     }
 
     fileprivate func activateSearchField() {
-        if let window = scheduleSearchController.view.window {
-            window.makeFirstResponder(scheduleSearchController.searchField)
+        if scheduleSearchController.isInWindow {
+            scheduleSearchController.isSearchFieldFocused = true
         }
 
-        if let window = videosSearchController.view.window {
-            window.makeFirstResponder(videosSearchController.searchField)
+        if videosSearchController.isInWindow {
+            videosSearchController.isSearchFieldFocused = true
         }
     }
 
@@ -292,8 +312,8 @@ final class SearchCoordinator: Logging {
 
 extension SearchCoordinator: SearchFiltersViewControllerDelegate {
 
-    func searchFiltersViewController(_ controller: SearchFiltersViewController, didChangeFilters filters: [FilterType], context: FilterChangeReason) {
-        if controller == scheduleSearchController {
+    func searchFiltersViewController(_ controller: SearchFiltersViewModel, didChangeFilters filters: [FilterType], context: FilterChangeReason) {
+        if controller === scheduleSearchController {
             scheduleFilterPredicate = .init(predicate: scheduleSearchController.currentPredicate, changeReason: context)
         } else {
             videosFilterPredicate = .init(predicate: videosSearchController.currentPredicate, changeReason: context)

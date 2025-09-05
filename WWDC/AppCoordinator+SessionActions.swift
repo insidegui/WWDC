@@ -16,19 +16,19 @@ import OSLog
 extension AppCoordinator: SessionActionsDelegate {
 
     @MainActor
-    func sessionActionsDidSelectCancelDownload(_ sender: NSView?) {
+    func sessionActionsDidSelectCancelDownload() {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         MediaDownloadManager.shared.cancelDownload(for: [viewModel.session])
     }
 
-    func sessionActionsDidSelectFavorite(_ sender: NSView?) {
+    func sessionActionsDidSelectFavorite() {
         guard let session = activeTabSelectedSessionViewModel?.session else { return }
 
         storage.toggleFavorite(on: session)
     }
 
-    func sessionActionsDidSelectSlides(_ sender: NSView?) {
+    func sessionActionsDidSelectSlides() {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         guard let slidesAsset = viewModel.session.asset(ofType: .slides) else { return }
@@ -39,13 +39,13 @@ extension AppCoordinator: SessionActionsDelegate {
     }
 
     @MainActor
-    func sessionActionsDidSelectDownload(_ sender: NSView?) {
+    func sessionActionsDidSelectDownload() {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         MediaDownloadManager.shared.download([viewModel.session])
     }
 
-    func sessionActionsDidSelectDeleteDownload(_ sender: NSView?) {
+    func sessionActionsDidSelectDeleteDownload() {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         let alert = WWDCAlert.create()
@@ -88,7 +88,7 @@ extension AppCoordinator: SessionActionsDelegate {
         picker.show(relativeTo: .zero, of: sender, preferredEdge: .minY)
     }
 
-    func sessionActionsDidSelectShareClip(_ sender: NSView?) {
+    func sessionActionsDidSelectShareClip() {
         switch activeTab {
         case .schedule:
             scheduleController.splitViewController.detailViewController.shelfController.showClipUI()
@@ -147,7 +147,7 @@ extension Storage {
 // MARK: - Calendar Integration
 
 extension AppCoordinator {
-    @objc func sessionActionsDidSelectCalendar(_ sender: NSView?) {
+    @objc func sessionActionsDidSelectCalendar() {
         guard let viewModel = activeTabSelectedSessionViewModel else { return }
 
         Task { @MainActor in

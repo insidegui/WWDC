@@ -104,8 +104,8 @@ final class AppCoordinator: Logging, Signposting {
         self.storage = storage
         self.syncEngine = syncEngine
 
-        let scheduleSearchController = SearchFiltersViewController.loadFromStoryboard()
-        let videosSearchController = SearchFiltersViewController.loadFromStoryboard()
+        let scheduleSearchController = SearchFiltersViewModel()
+        let videosSearchController = SearchFiltersViewModel()
 
         let searchCoordinator = SearchCoordinator(
             self.storage,
@@ -265,8 +265,19 @@ final class AppCoordinator: Logging, Signposting {
                     activeTabSelectedSessionViewModel = nil
                 }
 
+                // This function basically enters PiP
                 updateShelfBasedOnSelectionChange()
-                updateCurrentActivity(with: activeTabSelectedSessionViewModel)
+                // Then we update the detail view model, this currently has to happen after
+                // PiP is started, otherwise the detached player status gets confused.
+                NSAnimationContext
+                    .runAnimationGroup { context in
+                        context.duration = 0.35
+
+                        self.videosController.detailViewController.viewModel = self.videosSelectedSessionViewModel
+                        self.scheduleController.splitViewController.detailViewController.viewModel = self.scheduleSelectedSessionViewModel
+                    } completionHandler: {
+                        self.updateCurrentActivity(with: self.activeTabSelectedSessionViewModel)
+                    }
             }
             .store(in: &cancellables)
     }

@@ -46,5 +46,5 @@ public extension NSAttributedString {
 }
 
 public extension NSFont {
-    static let boldTitleFont = NSFont.wwdcRoundedSystemFont(ofSize: 24, weight: .semibold)
+    nonisolated(unsafe) static let boldTitleFont = NSFont.wwdcRoundedSystemFont(ofSize: 24, weight: .semibold)
 }

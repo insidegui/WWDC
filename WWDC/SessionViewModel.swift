@@ -122,19 +122,20 @@ final class SessionViewModel {
     @MainActor
     private lazy var rxContext: AnyPublisher<String, Error> = {
         var rxContext = if self.style == .schedule {
-            Publishers.CombineLatest(rxSession, rxSessionInstance).map {
+            Publishers.CombineLatest(rxSession, rxSessionInstance).map { @Sendable in
                 SessionViewModel.context(for: $0.0, instance: $0.1)
             }.eraseToAnyPublisher()
         } else {
-            Publishers.CombineLatest(rxSession, rxTrack).map {
+            Publishers.CombineLatest(rxSession, rxTrack).map { @Sendable in
                 SessionViewModel.context(for: $0.0, track: $0.1)
             }.eraseToAnyPublisher()
         }
 
         rxContext
             .replaceError(with: "")
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] context in
-                DispatchQueue.main.async {
+                MainActor.assumeIsolated {
                     self?.context = context
                 }
             }
@@ -172,8 +173,9 @@ final class SessionViewModel {
 
         rxIsFavorite
             .replaceError(with: false)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] isFavorite in
-                DispatchQueue.main.async {
+                MainActor.assumeIsolated {
                     self?.isFavorite = isFavorite
                 }
             }
@@ -194,8 +196,9 @@ final class SessionViewModel {
 
         rxHasBookmarks
             .replaceError(with: false)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] hasBookmarks in
-                DispatchQueue.main.async {
+                MainActor.assumeIsolated {
                     self?.hasBookmarks = hasBookmarks
                 }
             }
@@ -234,8 +237,9 @@ final class SessionViewModel {
 
         rxProgresses
             .replaceErrorWithEmpty()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] progresses in
-                DispatchQueue.main.async {
+                MainActor.assumeIsolated {
                     self?.progress = progresses.first
                 }
             }
@@ -256,10 +260,10 @@ final class SessionViewModel {
             .collectionPublisher
             .subscribe(on: Self.updateQueue)
             .freeze()
-            .map {
+            .map { @Sendable in
                 Array($0.compactMap(\.session).uniqued(on: \.identifier))
             }
-            .removeDuplicates { previous, new in
+            .removeDuplicates { @Sendable previous, new in
                 previous.map(\.identifier) == new.map(\.identifier)
             }
             .multicast(subject: CurrentValueSubject(initialValue))
@@ -267,8 +271,9 @@ final class SessionViewModel {
 
         relatedSessions
             .replaceErrorWithEmpty()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] relatedSessions in
-                DispatchQueue.main.async {
+                MainActor.assumeIsolated {
                     self?.relatedSessions = relatedSessions
                 }
             }

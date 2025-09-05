@@ -205,4 +205,14 @@ final class Preferences {
         }
     }
 
+    static let searchShowsPredicateInfoToolTipKey = "searchShowsPredicateInfoToolTip"
+    /// Controls whether the little info icon in the search configuration popover is shown or not.
+    /// Useful for the curious user who wants to see the raw predicate being used for searching, and debugging.
+    ///
+    /// It can be enabled via Terminal:
+    ///     `defaults write io.wwdc.app searchShowsPredicateInfoToolTip -bool YES`
+    var searchShowsPredicateInfoToolTip: Bool {
+        get { defaults.bool(forKey: Self.searchShowsPredicateInfoToolTipKey) }
+        set { defaults.set(newValue, forKey: Self.searchShowsPredicateInfoToolTipKey) }
+    }
 }

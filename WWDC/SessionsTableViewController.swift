@@ -8,24 +8,25 @@
 
 import Cocoa
 import Combine
-import RealmSwift
 import ConfCore
 import OSLog
+import SwiftUI
 
 // MARK: - Sessions Table View Controller
 
 class SessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
 
     static var log = makeLogger()
+    let log: Logger
 
     private lazy var cancellables: Set<AnyCancellable> = []
 
     weak var delegate: SessionsTableViewControllerDelegate?
 
-    init(rowProvider: SessionRowProvider, searchController: SearchFiltersViewController, initialSelection: SessionIdentifiable?) {
+    init(rowProvider: SessionRowProvider, searchController: SearchFiltersViewModel, initialSelection: SessionIdentifiable?) {
         var config = Self.defaultLoggerConfig()
         config.category += ": \(String(reflecting: type(of: rowProvider)))"
-        Self.log = Self.makeLogger(config: config)
+        self.log = Self.makeLogger(config: config)
         self.sessionRowProvider = rowProvider
         self.searchController = searchController
         self.stateRestorationSelection = initialSelection
@@ -59,11 +60,9 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         scrollView.widthAnchor.constraint(greaterThanOrEqualToConstant: 320).isActive = true
 
         view.addSubview(scrollView)
-        view.addSubview(searchController.view)
+        view.addSubview(searchView)
 
         scrollView.contentView.automaticallyAdjustsContentInsets = false
-
-        searchController.view.translatesAutoresizingMaskIntoConstraints = false
 
         scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
@@ -71,15 +70,15 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
-        searchController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        searchController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        searchController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        searchView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        searchView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        searchView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
     }
 
     override func viewWillLayout() {
         super.viewWillLayout()
 
-        let topInset = searchController.view.fittingSize.height
+        let topInset = searchView.fittingSize.height
 
         let insets = NSEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         scrollView.scrollerInsets = insets
@@ -323,7 +322,7 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
 
     // MARK: - UI
 
-    let searchController: SearchFiltersViewController
+    let searchController: SearchFiltersViewModel
 
     lazy var tableView: WWDCTableView = {
         let v = WWDCTableView()
@@ -363,6 +362,12 @@ class SessionsTableViewController: NSViewController, NSMenuItemValidation, Loggi
         v.automaticallyAdjustsContentInsets = false
 
         return v
+    }()
+
+    lazy var searchView: NSHostingView<SearchFiltersView> = {
+        let searchView = NSHostingView(rootView: SearchFiltersView(viewModel: searchController))
+        searchView.translatesAutoresizingMaskIntoConstraints = false
+        return searchView
     }()
 
     // MARK: - Contextual menu

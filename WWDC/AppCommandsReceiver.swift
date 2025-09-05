@@ -30,13 +30,13 @@ final class AppCommandsReceiver: Logging {
         case .watch:
             guard let session = command.session(in: storage) else { return nil }
             
-            storage.setWatched(true, on: session)
-            
+            Storage.setWatched(true, on: session)
+
             return nil
         case .unwatch:
             guard let session = command.session(in: storage) else { return nil }
             
-            storage.setWatched(false, on: session)
+            Storage.setWatched(false, on: session)
             
             return nil
         case .download:

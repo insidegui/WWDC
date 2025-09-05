@@ -7,11 +7,12 @@
 //
 
 import Cocoa
-import ConfCore
+import SwiftUI
 
 enum FilterChangeReason: Equatable {
     case initialValue
     case configurationChange
+    case userDefaultsChange
     case userInput
     case allowSelection
 }
@@ -19,73 +20,35 @@ enum FilterChangeReason: Equatable {
 protocol SearchFiltersViewControllerDelegate: AnyObject {
 
     func searchFiltersViewController(
-        _ controller: SearchFiltersViewController,
+        _ controller: SearchFiltersViewModel,
         didChangeFilters filters: [FilterType],
         context: FilterChangeReason
     )
 }
 
-extension NSSegmentedControl {
+final class SearchFiltersViewModel: ObservableObject {
+    @Published var isSearchFieldFocused = false
+    @Published var searchText = ""
+    @Published var areFiltersVisible = false
+    /// note: probably not really needed anymore
+    var isInWindow = false
 
-    var optionalToggleState: Bool? {
-        get { 
-            switch selectedSegment {
-            case 1: 
-                return true
-            case 2:
-                return false
-            default:
-                return nil
-            }
-        }
-        set { 
-            switch newValue {
-            case true: 
-                selectedSegment = 1
-            case false:
-                selectedSegment = 2
-            default:
-                selectedSegment = 0
-            }
-        }
-    }
-
-}
-
-final class SearchFiltersViewController: NSViewController {
-
-    static func loadFromStoryboard() -> SearchFiltersViewController {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-
-        // swiftlint:disable:next force_cast
-        return storyboard.instantiateController(withIdentifier: "SearchFiltersViewController") as! SearchFiltersViewController
-    }
-
-    @IBOutlet var filterContainer: NSView!
-    @IBOutlet weak var eventsPopUp: NSPopUpButton!
-    @IBOutlet weak var focusesPopUp: NSPopUpButton!
-    @IBOutlet weak var tracksPopUp: NSPopUpButton!
-    @IBOutlet weak var favoritesSegmentedControl: NSSegmentedControl!
-    @IBOutlet weak var downloadedSegmentedControl: NSSegmentedControl!
-    @IBOutlet weak var watchedSegmentedControl: NSSegmentedControl!
-    @IBOutlet weak var bookmarksSegmentedControl: NSSegmentedControl!
-    @IBOutlet weak var filterButton: NSButton!
-    @IBOutlet weak var searchField: NSSearchField!
-    @IBOutlet weak var vfxView: NSVisualEffectView!
-
+    /// External representation of the filters. Historically, the separation of internal/external
+    /// is likely not needed anymore, but it's kept for now to avoid unintended consequences.
+    ///
+    /// It's existence is tied up in the SearchCoordinator, filter state persistence, the async nature
+    /// of app startup, etc, etc
     var filters: [FilterType] {
-        get {
-            return effectiveFilters
-        }
+        get { effectiveFilters }
         set {
-
             effectiveFilters = newValue
 
-            updateUI()
+            handleExternalUpdatesToFilters()
         }
     }
 
-    private var effectiveFilters: [FilterType] = []
+    /// This is an internal, side effect-free representation of the filters
+    @Published private var effectiveFilters: [FilterType] = []
 
     var additionalPredicates: [NSPredicate] = []
     var currentPredicate: NSPredicate? {
@@ -101,6 +64,8 @@ final class SearchFiltersViewController: NSViewController {
         return predicate
     }
 
+    weak var delegate: SearchFiltersViewControllerDelegate?
+
     func clearAllFilters(reason: FilterChangeReason) {
         let updatedFilters = filters.map {
             var resetFilter = $0
@@ -114,130 +79,37 @@ final class SearchFiltersViewController: NSViewController {
         delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: reason)
     }
 
-    weak var delegate: SearchFiltersViewControllerDelegate?
+    func clearMultipleChoiceFilter(id: FilterIdentifier) {
+        guard let indexAndFilter = effectiveFilters.findIndexed(MultipleChoiceFilter.self, byID: id) else { return }
+        let index = indexAndFilter.0
+        var filter = indexAndFilter.1
 
-    @IBAction func eventsPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.event }) else { return }
+        filter.selectedOptions = []
 
-        updateMultipleChoiceFilter(at: filterIndex, with: eventsPopUp)
+        effectiveFilters[index] = filter
+
+        delegate?.searchFiltersViewController(self, didChangeFilters: effectiveFilters, context: .userInput)
     }
 
-    @IBAction func focusesPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.focus }) else { return }
-
-        updateMultipleChoiceFilter(at: filterIndex, with: focusesPopUp)
-    }
-
-    @IBAction func tracksPopUpAction(_ sender: Any) {
-        guard let filterIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.track }) else { return }
-
-        updateMultipleChoiceFilter(at: filterIndex, with: tracksPopUp)
-    }
-    
-    @IBAction func favoritesSegmentedControlAction(_ sender: Any) {
-        if let favoriteIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isFavorite }) {
-            updateOptionalToggleFilter(at: favoriteIndex, with: favoritesSegmentedControl.optionalToggleState)
-        }
-    }
-    
-    @IBAction func downloadedSegmentedControlAction(_ sender: Any) {
-        if let downloadedIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isDownloaded }) {
-            updateOptionalToggleFilter(at: downloadedIndex, with: downloadedSegmentedControl.optionalToggleState)
-        }
-    }
-    
-    @IBAction func watchedSegmentedControlAction(_ sender: Any) {
-        if let watchedIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.isUnwatched }) {
-            updateOptionalToggleFilter(at: watchedIndex, with: watchedSegmentedControl.optionalToggleState)
-        }
-    }
-    
-    @IBAction func bookmarksSegmentedControlAction(_ sender: Any) {
-        if let bookmarksIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.hasBookmarks }) {
-            updateOptionalToggleFilter(at: bookmarksIndex, with: bookmarksSegmentedControl.optionalToggleState)
-        }
-    }
-
-    @IBAction func searchFieldAction(_ sender: Any) {
-        guard let textIndex = effectiveFilters.firstIndex(where: { $0.identifier == FilterIdentifier.text }) else { return }
-
-        updateTextualFilter(at: textIndex, with: searchField.stringValue)
-    }
-
-    @IBAction func filterButtonAction(_ sender: Any) {
-        setFilters(hidden: !filterContainer.isHidden)
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        /// Move background and content from behind the title bar.
-        vfxView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-
-        setFilters(hidden: true)
-
-        updateUI()
-    }
-
-    func setFilters(hidden: Bool) {
-        filterButton.state = NSControl.StateValue(rawValue: hidden ? 0 : 1)
-        filterContainer.isHidden = hidden
-    }
-
-    private func updateMultipleChoiceFilter(at filterIndex: Int, with popUp: NSPopUpButton) {
-        guard let selectedItem = popUp.selectedItem else { return }
-        guard let menu = popUp.menu else { return }
+    private func updateMultipleChoiceFilter(at filterIndex: Int, option: FilterOption, isOn: Bool) {
         guard var filter = effectiveFilters[filterIndex] as? MultipleChoiceFilter else { return }
 
-        if let option = selectedItem.representedObject as? FilterOption, option.isClear {
-            filter.selectedOptions = []
-            menu.items.forEach { $0.state = .off }
+        if isOn {
+            filter.selectedOptions.append(option)
         } else {
-            selectedItem.state = (selectedItem.state == .off) ? .on : .off
-
-            let selected = menu.items.filter({ $0.state == .on }).compactMap({ $0.representedObject as? FilterOption })
-
-            filter.selectedOptions = selected
+            filter.selectedOptions.removeAll { $0 == option }
         }
 
-        var updatedFilters = effectiveFilters
-        updatedFilters[filterIndex] = filter
+        effectiveFilters[filterIndex] = filter
 
-        popUp.title = filter.title
-
-        effectiveFilters = updatedFilters
-
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: .userInput)
+        delegate?.searchFiltersViewController(self, didChangeFilters: effectiveFilters, context: .userInput)
     }
 
-    private func updateToggleFilter(at filterIndex: Int, with state: Bool) {
-        guard var filter = effectiveFilters[filterIndex] as? ToggleFilter else { return }
-
-        filter.isOn = state
-
-        var updatedFilters = effectiveFilters
-        updatedFilters[filterIndex] = filter
-
-        effectiveFilters = updatedFilters
-
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: .userInput)
-    }
-    
-    private func updateOptionalToggleFilter(at filterIndex: Int, with state: Bool?) {
-        guard var filter = effectiveFilters[filterIndex] as? OptionalToggleFilter else { return }
-
-        filter.isOn = state
-
-        var updatedFilters = effectiveFilters
-        updatedFilters[filterIndex] = filter
-
-        effectiveFilters = updatedFilters
-
-        delegate?.searchFiltersViewController(self, didChangeFilters: updatedFilters, context: .userInput)
-    }
-
-    private func updateTextualFilter(at filterIndex: Int, with text: String) {
-        guard var filter = effectiveFilters[filterIndex] as? TextualFilter else { return }
+    func performTextSearch() {
+        guard let indexAndFilter = effectiveFilters.findIndexed(TextualFilter.self, byID: .text) else { return }
+        let filterIndex = indexAndFilter.0
+        var filter = indexAndFilter.1
+        let text = self.searchText
         guard filter.value != text else { return }
 
         filter.value = text
@@ -253,83 +125,178 @@ final class SearchFiltersViewController: NSViewController {
         NSPasteboard(name: .find).setString(text, forType: .string)
     }
 
-    private func popUpButton(for filter: MultipleChoiceFilter) -> NSPopUpButton? {
-        switch filter.identifier {
-        case .event:
-            return eventsPopUp
-        case .focus:
-            return focusesPopUp
-        case .track:
-            return tracksPopUp
-        default: return nil
-        }
-    }
-
-    /// Updates the UI to match the active filters
-    private func updateUI() {
-        guard isViewLoaded else { return }
-
+    /// Primary purpose is that is shows the filters if needed as part of filter restoration
+    /// and also updates the textual filter. The textual filter binding could be changed to allow the UI
+    /// to be bound directly to the filter struct just like the toggles and pull downs are.
+    private func handleExternalUpdatesToFilters() {
         let activeFilters = filters.filter { !$0.isEmpty }
         let count = activeFilters.count
         if count == 0 {
-            setFilters(hidden: true)
-
+            areFiltersVisible = false
         } else if count == 1 && activeFilters[0] is TextualFilter {
-
-            setFilters(hidden: true)
+            areFiltersVisible = false
         } else {
-            setFilters(hidden: false)
+            areFiltersVisible = true
         }
 
-        for filter in filters {
-
-            switch filter {
-
-            case let filter as MultipleChoiceFilter:
-                updatePopUp(for: filter)
-            case let filter as TextualFilter:
-                searchField.stringValue = filter.value ?? ""
-            case let filter as OptionalToggleFilter:
-                updateOptionalToggle(for: filter)
-
-            default:
-                break
-            }
+        if let textualFilter = effectiveFilters.find(TextualFilter.self, byID: .text) {
+            searchText = textualFilter.value ?? ""
         }
     }
 
-    private func updatePopUp(for filter: MultipleChoiceFilter) {
-        guard let popUp = popUpButton(for: filter) else { return }
+}
 
-        popUp.removeAllItems()
+// MARK: - Transformations for menus, toggles, etc
 
-        popUp.addItem(withTitle: filter.title)
+extension SearchFiltersViewModel {
+    var pullDownMenus: [PullDownMenu] {
+        let multipleChoiceFilters: [(index: Int, element: MultipleChoiceFilter)] = effectiveFilters.indexed().compactMap {
+            if let filter = $0.element as? MultipleChoiceFilter {
+                return (index: $0.index, element: filter)
+            } else {
+                return nil
+            }
+        }
 
-        filter.options.forEach { option in
-            guard !option.isSeparator else {
-                popUp.menu?.addItem(.separator())
-                return
+        let menus: [PullDownMenu] = multipleChoiceFilters.map { (index, filter) in
+            let items: [PullDownMenu.Item] = filter.options.map { option in
+                if option.isSeparator {
+                    .divider(UUID())
+                } else if option.isClear {
+                    .clear(UUID())
+                } else {
+                    .option(
+                        PullDownMenu.Option(
+                            title: option.title,
+                            isOn: Binding {
+                                guard let filter = self.effectiveFilters[index] as? MultipleChoiceFilter else { return false }
+
+                                return filter.selectedOptions.contains(option)
+                            } set: { isOn in
+                                self.updateMultipleChoiceFilter(at: index, option: option, isOn: isOn)
+                            }
+                        )
+                    )
+                }
             }
 
-            let item = NSMenuItem(title: option.title, action: nil, keyEquivalent: "")
-            item.representedObject = option
-            item.state = filter.selectedOptions.contains(option) ? .on : .off
-            popUp.menu?.addItem(item)
+            return PullDownMenu(filter: filter, items: items)
+        }
+
+        return menus
+    }
+
+    var toggles: [Toggle] {
+        let toggleFilters = effectiveFilters.indexed().compactMap {
+            if let filter = $0.element as? OptionalToggleFilter {
+                return (index: $0.index, element: filter)
+            } else {
+                return nil
+            }
+        }
+
+        let toggles = toggleFilters.map { (index, filter) in
+            let title = switch filter.identifier {
+            case .isFavorite: "Favorites"
+            case .isDownloaded: "Downloaded"
+            case .isUnwatched: "Unwatched"
+            case .hasBookmarks: "Bookmarked"
+            default: ""
+            }
+
+            let image: SwiftUI.Image = switch filter.identifier {
+            case .isFavorite: Image(systemName: "star")
+            case .isDownloaded: Image(systemName: "arrow.down.square")
+            case .isUnwatched: Image(systemName: "eyeglasses")
+            case .hasBookmarks: Image(systemName: "bookmark")
+            default: Image(.account)
+            }
+
+            let isAffirmative = Binding<Bool>(
+                get: {
+                    self.effectiveFilters.find(OptionalToggleFilter.self, byID: filter.identifier)?.isOn ?? true
+                },
+                set: { state in
+                    var updatedFilter = filter
+                    updatedFilter.isOn = state
+
+                    var updatedFilters = self.effectiveFilters
+                    updatedFilters[index] = updatedFilter
+
+                    CATransaction.begin()
+                    CATransaction.setCompletionBlock {
+                        self.effectiveFilters = updatedFilters
+                        self.delegate?.searchFiltersViewController(self, didChangeFilters: self.effectiveFilters, context: .userInput)
+                    }
+                    CATransaction.commit()
+                }
+            )
+
+            let isEnabled = Binding<Bool>(
+                get: {
+                    filter.isOn != nil
+                },
+                set: { newValue in
+                    var filter = filter
+                    filter.isOn = newValue ? true : nil
+                    self.effectiveFilters[index] = filter
+
+                    self.delegate?.searchFiltersViewController(self, didChangeFilters: self.effectiveFilters, context: .userInput)
+
+                    // If the filters are collapsed, and a property filter is being enabled,
+                    // expand the filters so the user can see what they did
+                    if newValue && !self.areFiltersVisible {
+                        self.areFiltersVisible = true
+                    }
+                }
+            )
+
+            return Toggle(
+                title: title,
+                image: image,
+                filter: filter,
+                isEnabled: isEnabled,
+                isAffirmative: isAffirmative
+            )
+        }
+
+        return toggles
+    }
+
+    /// Model for multiple choice filters that are presented as pull-down menus
+    struct PullDownMenu: Identifiable {
+        var id: FilterIdentifier { filter.identifier }
+
+        var filter: MultipleChoiceFilter
+        var items: [Item]
+
+        enum Item: Identifiable {
+            case clear(UUID)
+            case divider(UUID)
+            case option(Option)
+
+            var id: String {
+                switch self {
+                case .clear(let uuid), .divider(let uuid): uuid.uuidString
+                case .option(let filterOption): filterOption.title
+                }
+            }
+        }
+
+        struct Option {
+            let title: String
+            let isOn: Binding<Bool>
         }
     }
-    
-    private func updateOptionalToggle(for filter: OptionalToggleFilter) {
-        switch filter.identifier {
-        case .isDownloaded:
-            downloadedSegmentedControl.optionalToggleState = filter.isOn
-        case .hasBookmarks:
-            bookmarksSegmentedControl.optionalToggleState = filter.isOn
-        case .isFavorite:
-            favoritesSegmentedControl.optionalToggleState = filter.isOn
-        case .isUnwatched:
-            watchedSegmentedControl.optionalToggleState = filter.isOn
-        default:
-            break
-        }
+
+    /// Model for true/false/any filters that are presented as checkboxes in the popover and
+    /// segmented controls in the main view when enabled
+    struct Toggle: Identifiable {
+        var id: FilterIdentifier { filter.identifier }
+        var title: String
+        var image: Image
+        var filter: OptionalToggleFilter
+        var isEnabled: Binding<Bool>
+        var isAffirmative: Binding<Bool>
     }
 }

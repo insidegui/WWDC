@@ -11,17 +11,17 @@ import Cocoa
 
 extension NSColor {
 
-    static var timeLabel = NSColor.labelColor
+    static let timeLabel = NSColor.labelColor
 
     static let playerBorder = NSColor.quaternaryLabelColor
 
-    static var highlightedPlayerBorder = NSColor.tertiaryLabelColor
+    static let highlightedPlayerBorder = NSColor.tertiaryLabelColor
 
     static let bufferProgress = NSColor.tertiaryLabelColor
 
-    static var playerProgress = NSColor.secondaryLabelColor
+    static let playerProgress = NSColor.secondaryLabelColor
 
-    static var seekProgress = NSColor.labelColor
+    static let seekProgress = NSColor.labelColor
 
     static var playerHighlight: NSColor { .primary }
 

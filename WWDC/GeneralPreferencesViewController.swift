@@ -98,6 +98,7 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
 
         downloadsFolderLabel.stringValue = Preferences.shared.localVideoStorageURL.path
 
+        bindSearchPreferences()
         bindSyncEngine()
         bindLanguages()
         bindTranscriptIndexingState()
@@ -110,6 +111,22 @@ final class GeneralPreferencesViewController: WWDCWindowContentViewController {
     }
 
     private var cancellables: Set<AnyCancellable> = []
+
+    private func bindSearchPreferences() {
+        // Relay changes to search preferences to the UI. These are now changeable from the search filters popover.
+        NotificationCenter.default.publisher(for: UserDefaults.didChangeNotification)
+            .map { _ in
+                (Preferences.shared.searchInBookmarks, Preferences.shared.searchInTranscripts)
+            }
+            .removeDuplicates { $0 == $1 }
+            .sink { [weak self] _ in
+                guard let self else { return }
+
+                searchInTranscriptsSwitch.animator().isOn = Preferences.shared.searchInTranscripts
+                searchInBookmarksSwitch.animator().isOn = Preferences.shared.searchInBookmarks
+            }
+            .store(in: &cancellables)
+    }
 
     private func bindSyncEngine() {
         #if ICLOUD

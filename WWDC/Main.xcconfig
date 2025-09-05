@@ -15,3 +15,20 @@ CODE_SIGN_STYLE = Automatic
 
 // This setting slows down debug builds significantly and has no tangible benefit
 ENABLE_MODULE_VERIFIER = NO
+
+// Settings for getting to Swift 6
+SWIFT_APPROACHABLE_CONCURRENCY = YES
+SWIFT_STRICT_CONCURRENCY = targeted
+SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES
+
+// This one is very aggressive and you can't opt out when compiling in Swift 6 mode
+// The application will trap if an isolation violation is detected at runtime
+//
+// Example stack trace of such a trap:
+//    #0    0x0000000102787ba4 in _dispatch_assert_queue_fail ()
+//    #1    0x00000001027c2cfc in dispatch_assert_queue$V2.cold.1 ()
+//    #2    0x0000000102787b28 in dispatch_assert_queue ()
+//    #3    0x000000027b77b0a4 in _swift_task_checkIsolatedSwift ()
+//    #4    0x000000027b7dbdf4 in swift_task_isCurrentExecutorWithFlagsImpl ()
+SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION[config=Debug] = YES
+SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION[config=Debug_iCloud] = YES

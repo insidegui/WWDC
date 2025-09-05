@@ -14,25 +14,25 @@ import PlayerUI
 extension AppCoordinator: SessionsTableViewControllerDelegate {
 
     func sessionTableViewContextMenuActionWatch(viewModels: [SessionViewModel]) {
-        storage.modify(viewModels.map({ $0.session })) { sessions in
+        storage.modify(viewModels.map(\.session)) { @Sendable sessions in
             sessions.forEach { session in
-                self.storage.setWatched(true, on: session)
+                Storage.setWatched(true, on: session)
             }
         }
     }
 
     func sessionTableViewContextMenuActionUnWatch(viewModels: [SessionViewModel]) {
-        storage.modify(viewModels.map({ $0.session })) { sessions in
-            sessions.forEach { self.storage.setWatched(false, on: $0) }
+        storage.modify(viewModels.map(\.session)) { @Sendable sessions in
+            sessions.forEach { Storage.setWatched(false, on: $0) }
         }
     }
 
     func sessionTableViewContextMenuActionFavorite(viewModels: [SessionViewModel]) {
-        storage.setFavorite(true, onSessionsWithIDs: viewModels.map({ $0.session.identifier }))
+        storage.setFavorite(true, onSessionsWithIDs: viewModels.map(\.session.identifier))
     }
 
     func sessionTableViewContextMenuActionRemoveFavorite(viewModels: [SessionViewModel]) {
-        storage.setFavorite(false, onSessionsWithIDs: viewModels.map({ $0.session.identifier }))
+        storage.setFavorite(false, onSessionsWithIDs: viewModels.map(\.session.identifier))
     }
 
     @MainActor
@@ -85,7 +85,7 @@ extension AppCoordinator: SessionsTableViewControllerDelegate {
 }
 
 extension Storage {
-    func setWatched(_ watched: Bool, on session: Session) {
+    static func setWatched(_ watched: Bool, on session: Session) {
         if let instance = session.instances.first {
             guard !instance.isCurrentlyLive else { return }
 
@@ -101,7 +101,7 @@ extension Storage {
         }
     }
     
-    func toggleWatched(on session: Session) {
+    static func toggleWatched(on session: Session) {
         setWatched(!session.isWatched, on: session)
     }
 }
