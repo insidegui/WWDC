@@ -61,8 +61,10 @@ public final class TranscriptIndexer: Logging {
 
     public static let minTranscriptableSessionLimit: Int = 30
 
+    @MainActor
     public static let transcriptableSessionsPredicate: NSPredicate = NSPredicate(format: "transcriptIdentifier == '' AND SUBQUERY(assets, $asset, $asset.rawAssetType == %@).@count > 0", SessionAssetType.streamingVideo.rawValue)
 
+    @MainActor
     public static func needsUpdate(in storage: Storage) -> Bool {
         // Manifest-based updates.
         guard !shouldFetchRemoteManifest else {

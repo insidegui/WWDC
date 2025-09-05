@@ -14,9 +14,9 @@ import SwiftUI
 
 // MARK: - Sessions Table View Controller
 
-class SessionsTableViewController: NSViewController, NSMenuItemValidation, Logging {
+class SessionsTableViewController: NSViewController, NSMenuItemValidation, nonisolated Logging {
 
-    static var log = makeLogger()
+    static let log = makeLogger()
     let log: Logger
 
     private lazy var cancellables: Set<AnyCancellable> = []

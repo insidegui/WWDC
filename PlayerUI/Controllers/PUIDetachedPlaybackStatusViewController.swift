@@ -10,6 +10,7 @@ import Cocoa
 
 public typealias PUISnapshotClosure = (@escaping (CGImage?) -> Void) -> Void
 
+@MainActor
 public struct DetachedPlaybackStatus: Identifiable {
     public internal(set) var id: String
     var icon: NSImage

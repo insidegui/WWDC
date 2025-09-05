@@ -59,9 +59,9 @@ final class DownloadedContentMonitor: Logging, @unchecked Sendable {
         subfoldersMonitors.removeAll()
 
         mainDirURL.subDirectories.forEach { subdir in
-            guard let monitor = DTFolderMonitor(for: subdir, block: { [unowned self] in
+            let monitor = DTFolderMonitor(for: subdir) { [unowned self] in
                 self.updateDownloadedFlagsByEnumeratingFilesAtPath(mainDirURL.path)
-            }) else { return }
+            }
 
             subfoldersMonitors.append(monitor)
 

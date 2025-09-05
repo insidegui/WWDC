@@ -280,12 +280,14 @@ private class PUIPlayerWindowOverlayView: NSView {
             mouseIdleTimer = nil
         }
 
-        mouseIdleTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] in
-            self?.mouseIdleTimerAction($0)
+        mouseIdleTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
+            Task { @MainActor in
+                self?.mouseIdleTimerAction()
+            }
         }
     }
 
-    @objc fileprivate func mouseIdleTimerAction(_ sender: Timer) {
+    @objc fileprivate func mouseIdleTimerAction() {
         PUIPlayerWindow?.hideTitlebar()
     }
 
@@ -318,7 +320,7 @@ private class PUIPlayerWindowOverlayView: NSView {
         return
     }
 
-    deinit {
+    isolated deinit {
         NotificationCenter.default.removeObserver(self)
         mouseIdleTimer.invalidate()
         mouseIdleTimer = nil

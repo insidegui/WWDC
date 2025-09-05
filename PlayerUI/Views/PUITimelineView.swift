@@ -11,6 +11,7 @@ import AVFoundation
 import OSLog
 import ConfUIFoundation
 
+@MainActor
 protocol PUITimelineViewDelegate: AnyObject {
 
     func timelineViewWillBeginInteractiveSeek()

@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol, Logging {
 
     static let log = makeLogger()
@@ -24,6 +25,7 @@ final class TranscriptIndexingClient: NSObject, TranscriptIndexingClientProtocol
     private let storage: Storage
     private let appleClient: AppleAPIClient
 
+    @MainActor
     init(language: String, storage: Storage, appleClient: AppleAPIClient = AppleAPIClient(environment: .current)) {
         self.transcriptLanguage = language
         self.storage = storage

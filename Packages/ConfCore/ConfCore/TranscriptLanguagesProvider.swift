@@ -10,12 +10,14 @@ import Foundation
 import Combine
 import OSLog
 
+@MainActor
 public final class TranscriptLanguagesProvider: Logging {
 
     public static let log = makeLogger()
 
     let client: AppleAPIClient
 
+    @MainActor
     public init(client: AppleAPIClient = AppleAPIClient(environment: .current)) {
         self.client = client
     }

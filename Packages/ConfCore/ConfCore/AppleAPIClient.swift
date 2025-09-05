@@ -12,9 +12,10 @@ import OSLog
 
 // MARK: - Initialization and configuration
 
-public final class AppleAPIClient: Logging, Signposting {
-    public static let log = makeLogger()
-    public static let signposter = makeSignposter()
+@MainActor
+public final class AppleAPIClient: nonisolated Logging, nonisolated Signposting {
+    public static nonisolated let log = makeLogger()
+    public static nonisolated let signposter = makeSignposter()
 
     fileprivate var environment: Environment
     fileprivate var service: Service
@@ -32,7 +33,7 @@ public final class AppleAPIClient: Logging, Signposting {
         }
     }
 
-    deinit {
+    isolated deinit {
         if let token = environmentChangeToken {
             NotificationCenter.default.removeObserver(token)
         }
@@ -47,7 +48,7 @@ public final class AppleAPIClient: Logging, Signposting {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .formatted(.confCoreFormatter)
 
-        service.configureTransformer(environment.newsPath) { (entity: Entity<Data>) throws -> [NewsItem]? in
+        service.configureTransformer(environment.newsPath) { @Sendable (entity: Entity<Data>) throws -> [NewsItem]? in
             struct NewsItemWrapper: Decodable {
                 let items: [NewsItem]
             }
@@ -56,7 +57,7 @@ public final class AppleAPIClient: Logging, Signposting {
             return result
         }
 
-        service.configureTransformer(environment.featuredSectionsPath) { (entity: Entity<Data>) throws -> [FeaturedSection]? in
+        service.configureTransformer(environment.featuredSectionsPath) { @Sendable (entity: Entity<Data>) throws -> [FeaturedSection]? in
             struct FeaturedContentWrapper: Decodable {
                 let sections: [FeaturedSection]
             }
@@ -65,17 +66,17 @@ public final class AppleAPIClient: Logging, Signposting {
             return result
         }
 
-        service.configureTransformer(environment.configPath) { (entity: Entity<Data>) throws -> ConfigResponse? in
+        service.configureTransformer(environment.configPath) { @Sendable (entity: Entity<Data>) throws -> ConfigResponse? in
             return try decoder.decode(ConfigResponse.self, from: entity.content)
         }
 
-        service.configureTransformer(environment.sessionsPath) { (entity: Entity<Data>) throws -> ContentsResponse? in
+        service.configureTransformer(environment.sessionsPath) { @Sendable (entity: Entity<Data>) throws -> ContentsResponse? in
             try Self.signposter.withIntervalSignpost("decode contents", id: Self.signposter.makeSignpostID()) {
                 try decoder.decode(ContentsResponse.self, from: entity.content)
             }
         }
 
-        service.configureTransformer(environment.liveVideosPath) { (entity: Entity<Data>) throws -> [SessionAsset]? in
+        service.configureTransformer(environment.liveVideosPath) { @Sendable (entity: Entity<Data>) throws -> [SessionAsset]? in
             return try decoder.decode(LiveVideosWrapper.self, from: entity.content).liveAssets
         }
     }

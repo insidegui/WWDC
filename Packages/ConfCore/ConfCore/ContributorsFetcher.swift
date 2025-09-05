@@ -9,11 +9,12 @@
 import Cocoa
 import OSLog
 
+@MainActor
 public final class ContributorsFetcher: Logging {
 
     public static let shared: ContributorsFetcher = ContributorsFetcher()
 
-    public static let log = makeLogger()
+    public nonisolated static let log = makeLogger()
 
     fileprivate struct Constants {
         static let contributorsURL = "https://api.github.com/repos/insidegui/WWDC/contributors"

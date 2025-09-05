@@ -134,6 +134,7 @@ private extension NSImage.SymbolConfiguration {
 
 extension NSImage {
 
+    @MainActor
     func touchBarImage(with scale: CGFloat) -> NSImage {
         let image = PUITouchBarImageCache.shared.touchBarImage(for: self, with: scale)
 
@@ -144,6 +145,7 @@ extension NSImage {
 
 }
 
+@MainActor
 private final class PUITouchBarImageCache {
 
     static let shared = PUITouchBarImageCache()

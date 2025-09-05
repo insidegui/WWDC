@@ -19,7 +19,7 @@ public final class Storage: Logging, Signposting {
 
     private var disposeBag: Set<AnyCancellable> = []
     public static let log = makeLogger()
-    public static var signposter = makeSignposter()
+    public static let signposter = makeSignposter()
 
     public init(_ realm: Realm) {
         self.realmConfig = realm.configuration

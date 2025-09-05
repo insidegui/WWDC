@@ -16,10 +16,40 @@ CODE_SIGN_STYLE = Automatic
 // This setting slows down debug builds significantly and has no tangible benefit
 ENABLE_MODULE_VERIFIER = NO
 
-// Settings for getting to Swift 6
-SWIFT_APPROACHABLE_CONCURRENCY = YES
+SWIFT_VERSION = 6.0
+
 SWIFT_STRICT_CONCURRENCY = targeted
+// Settings for getting to Swift 6
+// 6.2 features, non-default
+//.enableUpcomingFeature("InferIsolatedConformances"),
+SWIFT_UPCOMING_FEATURE_INFER_ISOLATED_CONFORMANCES[config=Debug] = $(SWIFT_APPROACHABLE_CONCURRENCY)
+
+//.enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+SWIFT_UPCOMING_FEATURE_NONISOLATED_NONSENDING_BY_DEFAULT[config=Debug] = $(SWIFT_APPROACHABLE_CONCURRENCY)
+
+// swift 6 defaults
+//.enableUpcomingFeature("IsolatedDefaultValues"),
+SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES[config=Debug] = $(SWIFT_UPCOMING_FEATURE_6_0)
+
+//.enableUpcomingFeature("DisableOutwardActorInference"),
+SWIFT_UPCOMING_FEATURE_DISABLE_OUTWARD_ACTOR_ISOLATION[config=Debug] = $(SETTING_DefaultValue_$(SWIFT_UPCOMING_FEATURE_6_0)_$(SWIFT_APPROACHABLE_CONCURRENCY))
+
+//.enableUpcomingFeature("InferSendableFromCaptures"),
+SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES[config=Debug] = $(SETTING_DefaultValue_$(SWIFT_UPCOMING_FEATURE_6_0)_$(SWIFT_APPROACHABLE_CONCURRENCY))
+
+//.enableUpcomingFeature("GlobalActorIsolatedTypesUsability"),
+SWIFT_UPCOMING_FEATURE_GLOBAL_ACTOR_ISOLATED_TYPES_USABILITY[config=Debug] = $(SETTING_DefaultValue_$(SWIFT_UPCOMING_FEATURE_6_0)_$(SWIFT_APPROACHABLE_CONCURRENCY))
+
+//.enableUpcomingFeature("DynamicActorIsolation", .when(configuration: .debug))
+SWIFT_UPCOMING_FEATURE_DYNAMIC_ACTOR_ISOLATION[config=Debug] = $(SWIFT_UPCOMING_FEATURE_6_0)
+
+
 SWIFT_UPCOMING_FEATURE_GLOBAL_CONCURRENCY = YES
+SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES
+
+//InferSendableFromCaptures
+SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES[config=Debug] = $(SETTING_DefaultValue_$(SWIFT_UPCOMING_FEATURE_6_0)_$(SWIFT_APPROACHABLE_CONCURRENCY))
+
 
 // This one is very aggressive and you can't opt out when compiling in Swift 6 mode
 // The application will trap if an isolation violation is detected at runtime

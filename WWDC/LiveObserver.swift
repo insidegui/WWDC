@@ -70,6 +70,7 @@ final class LiveObserver: NSObject, Logging {
         }
     }
 
+    @MainActor
     func refresh() {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
         perform(#selector(checkForLiveSessions), with: nil, afterDelay: 0)
@@ -79,6 +80,7 @@ final class LiveObserver: NSObject, Logging {
         return storage.realm.objects(SessionInstance.self).filter("isCurrentlyLive == true")
     }
 
+    @MainActor
     @objc private func checkForLiveSessions() {
         log.debug("checkForLiveSessions()")
 

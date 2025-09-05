@@ -15,9 +15,6 @@ public extension CALayer {
 
 public extension CALayer {
 
-    /// Temporary storage for animations that have been disabled by `disableAllAnimations`
-    private static var _animationStorage: [Int: [String: CAAnimation]] = [:]
-
     /// Loads a `CALayer` from a Core Animation Archive asset.
     ///
     /// - Parameters:
@@ -68,36 +65,6 @@ public extension CALayer {
             target = target?.sublayer(named: component, of: CALayer.self)
         }
         return target as? T
-    }
-
-    /// Disables all animations on the layer, but allows them to be re-enabled later by `enableAllAnimations`.
-    func disableAllAnimations() {
-        guard let keys = animationKeys() else { return }
-
-        keys.forEach { key in
-            guard let animation = animation(forKey: key) else { return }
-
-            if CALayer._animationStorage[hash] == nil {
-                CALayer._animationStorage[hash] = [:]
-            }
-
-            CALayer._animationStorage[hash]?[key] = animation
-        }
-
-        removeAllAnimations()
-    }
-
-    /// Re-enables animations previously disabled by `disableAllAnimations`.
-    func enableAllAnimations() {
-        guard let keys = CALayer._animationStorage[hash]?.keys.map({$0}) else { return }
-
-        keys.forEach { key in
-            guard let animation = CALayer._animationStorage[hash]?[key] else { return }
-
-            add(animation, forKey: key)
-        }
-
-        CALayer._animationStorage.removeValue(forKey: hash)
     }
 
 }

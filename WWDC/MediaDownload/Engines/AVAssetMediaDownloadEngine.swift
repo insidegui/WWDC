@@ -4,7 +4,7 @@ import OSLog
 import ConfCore
 
 public final class AVAssetMediaDownloadEngine: NSObject, MediaDownloadEngine, Logging {
-    public static var log = makeLogger()
+    public static let log = makeLogger()
 
     public let supportedExtensions: Set<String> = ["movpkg"]
 

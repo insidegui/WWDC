@@ -8,6 +8,7 @@
 
 import Cocoa
 
+@MainActor
 final class PUITouchBarController: NSObject {
 
     weak var playerView: PUIPlayerView?

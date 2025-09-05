@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 public struct ConfCoreCapabilities {
     /// Set this to `true` to enable CloudKit-based features (requires entitlements).
     public static var isCloudKitEnabled = false

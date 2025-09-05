@@ -14,6 +14,7 @@ import PlayerUI
 import OSLog
 import AVFoundation
 
+@MainActor
 final class AppCoordinator: Logging, Signposting {
 
     static let log = makeLogger()
