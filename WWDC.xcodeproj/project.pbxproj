@@ -36,6 +36,7 @@
 		9171CEFC2E5391CF0063BBA7 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 91973A9B2E538BE200C4A644 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		918C44F12E69296800E83498 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918C44F02E69296200E83498 /* View+Extensions.swift */; };
 		91973A9C2E538BE200C4A644 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 91973A9B2E538BE200C4A644 /* RealmSwift */; };
+		91A7D4302E6B340300D0D8FB /* ConcurrencyExtras in Frameworks */ = {isa = PBXBuildFile; productRef = 91A7D42F2E6B340300D0D8FB /* ConcurrencyExtras */; };
 		91AAC48E2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91AAC48D2E3298AB00AAF7D5 /* ShrinkWrapTextLayout.swift */; };
 		91C2A0BC2A4DE9B60049B6B7 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */; };
 		91C57AE62E673EFD001102B3 /* SearchField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91C57AE52E673EFC001102B3 /* SearchField.swift */; };
@@ -575,6 +576,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD600ACF2487F4570071B90E /* ConfUIFoundation.framework in Frameworks */,
+				91A7D4302E6B340300D0D8FB /* ConcurrencyExtras in Frameworks */,
 				DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2633,6 +2635,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 91973A9A2E538BE200C4A644 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
+		};
+		91A7D42F2E6B340300D0D8FB /* ConcurrencyExtras */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 916228EC2E561B5700232DE6 /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */;
+			productName = ConcurrencyExtras;
 		};
 		91C2A0BB2A4DE9B60049B6B7 /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
