@@ -46,7 +46,7 @@ struct SessionActionsView: View {
 
             downloadButton
 
-            PUIButtonView(.alwaysHighlighted(image: Self.shareImage)) {
+            PUIButtonView(button: viewModel.shareButton, .alwaysHighlighted(image: Self.shareImage)) {
                 viewModel.share()
             }
             .help("Share session")

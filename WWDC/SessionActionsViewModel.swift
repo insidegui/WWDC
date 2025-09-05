@@ -13,14 +13,14 @@ import Combine
 
 @MainActor
 protocol SessionActionsDelegate: AnyObject {
-    func sessionActionsDidSelectSlides(_ sender: NSView?)
-    func sessionActionsDidSelectFavorite(_ sender: NSView?)
-    func sessionActionsDidSelectDownload(_ sender: NSView?)
-    func sessionActionsDidSelectCalendar(_ sender: NSView?)
-    func sessionActionsDidSelectDeleteDownload(_ sender: NSView?)
-    func sessionActionsDidSelectCancelDownload(_ sender: NSView?)
+    func sessionActionsDidSelectSlides()
+    func sessionActionsDidSelectFavorite()
+    func sessionActionsDidSelectDownload()
+    func sessionActionsDidSelectCalendar()
+    func sessionActionsDidSelectDeleteDownload()
+    func sessionActionsDidSelectCancelDownload()
     func sessionActionsDidSelectShare(_ sender: NSView?)
-    func sessionActionsDidSelectShareClip(_ sender: NSView?)
+    func sessionActionsDidSelectShareClip()
 }
 
 @MainActor
@@ -167,34 +167,35 @@ final class SessionActionsViewModel: ObservableObject {
     }
 
     func toggleFavorite() {
-        delegate?.sessionActionsDidSelectFavorite(nil)
+        delegate?.sessionActionsDidSelectFavorite()
     }
 
     func showSlides() {
-        delegate?.sessionActionsDidSelectSlides(nil)
+        delegate?.sessionActionsDidSelectSlides()
     }
 
     func download() {
-        delegate?.sessionActionsDidSelectDownload(nil)
+        delegate?.sessionActionsDidSelectDownload()
     }
 
     func addCalendar() {
-        delegate?.sessionActionsDidSelectCalendar(nil)
+        delegate?.sessionActionsDidSelectCalendar()
     }
 
     func deleteDownload() {
-        delegate?.sessionActionsDidSelectDeleteDownload(nil)
+        delegate?.sessionActionsDidSelectDeleteDownload()
     }
 
+    let shareButton = PUIButton()
     func share() {
-        delegate?.sessionActionsDidSelectShare(nil)
+        delegate?.sessionActionsDidSelectShare(shareButton)
     }
 
     func shareClip() {
-        delegate?.sessionActionsDidSelectShareClip(nil)
+        delegate?.sessionActionsDidSelectShareClip()
     }
 
     func cancelDownload() {
-        delegate?.sessionActionsDidSelectCancelDownload(nil)
+        delegate?.sessionActionsDidSelectCancelDownload()
     }
 }

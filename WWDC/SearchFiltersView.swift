@@ -150,7 +150,7 @@ struct SearchFiltersView: View {
                 Text("Search in:")
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                if let currentPredicate = viewModel.currentPredicate {
+                if Preferences.shared.searchShowsPredicateInfoToolTip, let currentPredicate = viewModel.currentPredicate {
                     Image(systemName: "info")
                         .symbolVariant(.circle)
                         .contentShape(.circle)
