@@ -38,13 +38,28 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
 
         originalContainer?.layer?.backgroundColor = .black
 
-        let styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
+        var styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView]
+
+        if fullscreenOnly {
+            // fullscreen_transition: Remove these so we can make the window appear without any noticeable transition
+            styleMask.remove(.titled)
+            styleMask.insert(.borderless)
+        }
 
         var rect = PUIPlayerWindow.bestScreenRectFromDetachingContainer(playerViewController.view, layoutGuide: playerViewController.playerView.videoLayoutGuide)
         if rect == NSRect.zero { rect = PUIPlayerWindow.centerRectForProposedContentRect(playerViewController.view.bounds) }
 
         let window = PUIPlayerWindow(contentRect: rect, styleMask: styleMask, backing: .buffered, defer: false)
         window.isReleasedWhenClosed = true
+
+        if fullscreenOnly {
+            // We must insert this behavior because `styleMask.remove(.titled)` above disables it
+            window.collectionBehavior.insert(.fullScreenPrimary)
+            // fullscreen_transition: So we can make the window appear without any noticeable transition
+            // calling showWindow() has a default animation that makes it scale slightly
+            window.animationBehavior = .none
+            window.hasShadow = false
+        }
 
         super.init(window: window)
 
@@ -62,13 +77,31 @@ final class VideoPlayerWindowController: NSWindowController, NSWindowDelegate {
         fatalError("VideoPlayerWindowController can't be initialized with a coder")
     }
 
+    /// `fullscreen_transition`: This exists because `showWindow(_:)` returns well before the window is actually visible on screen.
+    /// Which means when we want to enter fullscreen right away, the animation starts at screen (0,0) and looks bad.
+    ///
+    /// So we use ``windowDidChangeOcclusionState`` to detect when the window is actually visible and only then enter fullscreen.
+    ///
+    /// This API behavior may be OS version dependent. Currently confirmed on 26.0
+    weak var deferredEnterFullScreenSender: AnyObject?
     override func showWindow(_ sender: Any?) {
         super.showWindow(sender)
 
         if !fullscreenOnly {
             playerWindow?.applySizePreset(.half)
+        } else if let sender = sender as? AnyObject {
+            deferredEnterFullScreenSender = sender
         } else {
             window?.toggleFullScreen(sender)
+        }
+    }
+
+    func windowDidChangeOcclusionState(_ notification: Notification) {
+        guard let window else { return }
+
+        if let deferredEnterFullScreenSender, fullscreenOnly && window.occlusionState.contains(.visible) {
+            self.deferredEnterFullScreenSender = nil
+            window.toggleFullScreen(deferredEnterFullScreenSender)
         }
     }
 

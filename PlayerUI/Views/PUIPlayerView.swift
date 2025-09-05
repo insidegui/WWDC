@@ -13,6 +13,7 @@ import AVKit
 import Combine
 import SwiftUI
 import ConfUIFoundation
+import ObjectiveC
 
 public final class PUIPlayerView: NSView {
 
@@ -88,6 +89,8 @@ public final class PUIPlayerView: NSView {
     }
 
     public init(player: AVPlayer) {
+        PIPFixUp.installPIPReturnRectInterposer()
+
         self.player = player
         if AVPictureInPictureController.isPictureInPictureSupported() {
             self.pipController = AVPictureInPictureController(contentSource: .init(playerLayer: playerLayer))
@@ -179,8 +182,6 @@ public final class PUIPlayerView: NSView {
     fileprivate var asset: AVAsset? {
         return player?.currentItem?.asset
     }
-
-    private let playerLayer = PUIBoringPlayerLayer()
 
     private func setupPlayer(_ player: AVPlayer) {
         /// User settings are applied before setting up player observations, avoiding accidental overrides when initial values come in.
@@ -505,6 +506,16 @@ public final class PUIPlayerView: NSView {
     private var timeRemainingPlaceholder = "−00:00"
     private var durationPlaceholder = "00:00"
 
+    private let playerLayer = PUIBoringPlayerLayer()
+    private lazy var playerView: NSView = {
+        let playerView = NSView()
+        playerView.translatesAutoresizingMaskIntoConstraints = false
+        playerView.wantsLayer = true
+        playerView.layer = playerLayer
+        playerLayer.backgroundColor = .clear
+        return playerView
+    }()
+
     /// Displays the elapsed time.
     /// This is a button for consistency with `trailingTimeButton`, but it doesn't have an action.
     private lazy var leadingTimeButton: NSButton = {
@@ -671,11 +682,6 @@ public final class PUIPlayerView: NSView {
     private func setupControls() {
         addLayoutGuide(videoLayoutGuide)
 
-        let playerView = NSView()
-        playerView.translatesAutoresizingMaskIntoConstraints = false
-        playerView.wantsLayer = true
-        playerView.layer = playerLayer
-        playerLayer.backgroundColor = .clear
         addSubview(playerView)
         playerView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         playerView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
@@ -741,7 +747,7 @@ public final class PUIPlayerView: NSView {
         controlsContainerView = NSStackView(views: [
             timelineContainerView,
             centerButtonsContainerView
-            ])
+        ])
 
         controlsContainerView.orientation = .vertical
         controlsContainerView.spacing = 12
@@ -802,7 +808,7 @@ public final class PUIPlayerView: NSView {
 
         speedButton.$isEditingCustomSpeed.sink { [weak self] isEditing in
             guard let self else { return }
-            
+
             showControls(animated: false)
             resetMouseIdleTimer()
         }
@@ -1382,6 +1388,9 @@ public final class PUIPlayerView: NSView {
         appearanceDelegate?.presentDetachedStatus(.fullScreen.snapshot(using: snapshotClosure), for: self)
 
         fullScreenButton.isHidden = true
+        // when the player is in full screen, PiP doesn't make any sense
+        // this does not prevent the scenario of the app being full screen and entering PiP
+        pipButton.isHidden = true
         updateTopTrailingMenuPosition()
     }
 
@@ -1394,7 +1403,9 @@ public final class PUIPlayerView: NSView {
         /// The transition looks nicer if there's no background color, otherwise the player looks like it attaches
         /// to the whole shelf area with black bars depending on the aspect ratio.
         backgroundColor = .clear
-        
+
+        pipButton.isHidden = false
+
         if let d = appearanceDelegate {
             fullScreenButton.isHidden = !d.playerViewShouldShowFullScreenButton(self)
         }
@@ -1641,7 +1652,16 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
 
         fullScreenButton.isHidden = false
 
-        completionHandler(true)
+        let videoRectInWindow = playerView.convert(playerLayer.videoRect, to: nil)
+        let videoRectInScreen = playerView.window?.convertToScreen(videoRectInWindow)
+
+        if let videoRectInScreen {
+            PIPFixUp.withReturnRect(videoRectInScreen) {
+                completionHandler(true)
+            }
+        } else {
+            completionHandler(false)
+        }
     }
 
     // Called Last
@@ -1649,6 +1669,81 @@ extension PUIPlayerView: AVPictureInPictureControllerDelegate {
         appearanceDelegate?.dismissDetachedStatus(.pictureInPicture, for: self)
         pipButton.state = .off
         invalidateTouchBar()
+    }
+}
+
+/// The PIPFixUp swizzles ``NSWindow.convertToScreen`` so that we can inject a corrected return value to work around an
+/// issue introduced in macOS 26.
+///
+/// The issue is that the pip return animation always animates the PiP window to the window's origin (0,0) which is bottom left
+/// instead of to the position of the PiP's source AVPlayerLayer.
+///
+/// The fix up is applied as narrowly as possible to avoid unintended side effects.
+///
+/// We only override the return value while the `completionHandler(true)` in
+/// `restoreUserInterfaceForPictureInPictureStopWithCompletionHandler` is being invoked. (Interestingly, this precludes us using the
+/// the `async` overlay)
+///
+/// And we only install the swizzled method if we're on a platform version that is affected by the issue (26+ currently, with a feedback filed)
+///
+/// FB20159253
+///
+@available(macOS, deprecated: 26, message: "Check to make sure this still works, then raise the deprecation")
+private final class PIPFixUp {
+    static private let lock = NSRecursiveLock()
+    static nonisolated(unsafe) private var _pipReturnDestination: NSRect?
+    static var pipReturnDestination: NSRect? {
+        lock.withLock {
+            _pipReturnDestination
+        }
+    }
+
+    static func withReturnRect(_ rect: NSRect, _ whileLocked: () -> Void) {
+        lock.withLock {
+            _pipReturnDestination = rect
+
+            whileLocked()
+
+            _pipReturnDestination = nil
+        }
+    }
+
+    @MainActor
+    static func installPIPReturnRectInterposer() {
+        // ensure one-time
+        struct Did {
+            @MainActor
+            static var once = false
+        }
+        guard !Did.once else { return }
+        Did.once = true
+
+        guard #available(macOS 26.0, *) else { return }
+
+        let targetClass: AnyClass = NSWindow.self
+        let originalSelector = #selector(NSWindow.convertToScreen)
+        let swizzledSelector = #selector(NSWindow.swz_convertToScreen)
+
+        guard
+            let original = class_getInstanceMethod(targetClass, originalSelector),
+            let swizzled = class_getInstanceMethod(targetClass, swizzledSelector)
+        else {
+            assertionFailure("convertRectToScreen: not found on NSWindow")
+            return
+        }
+
+        method_exchangeImplementations(original, swizzled)
+    }
+}
+
+extension NSWindow {
+    @objc
+    func swz_convertToScreen(_ rect: NSRect) -> NSRect {
+        guard let pipReturnRect = PIPFixUp.pipReturnDestination else {
+            return swz_convertToScreen(rect)
+        }
+
+        return pipReturnRect
     }
 }
 
