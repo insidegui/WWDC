@@ -243,8 +243,7 @@ struct InMemoryImageCache: Sendable {
                 return
             }
 
-            nonisolated(unsafe) let image = newValue
-            inMemoryCache.withValue { $0.setObject(image, forKey: key as NSString) }
+            inMemoryCache.withValue { $0.setObject(newValue, forKey: key as NSString) }
         }
     }
 
@@ -296,17 +295,16 @@ final class ImageCacheProvider: Sendable, Logging {
 
                 try self.fileManager.withValue { try $0.copyItem(at: original, to: url) }
 
-                guard let nsImage = NSImage(contentsOf: url) else {
+                guard let image = NSImage(contentsOf: url) else {
                     self.log.error("Failed to initialize image with \(url.path)")
                     completion(nil)
                     return
                 }
 
-                nonisolated(unsafe) let image = nsImage
                 let thumbImage: NSImage
 
                 if let thumbnailHeight {
-                    nonisolated(unsafe) let thumb = image.resized(to: thumbnailHeight)
+                    let thumb = image.resized(to: thumbnailHeight)
                     guard let thumbData = thumb.pngRepresentation else {
                         self.log.fault("Failed to create thumbnail")
                         completion(nil)

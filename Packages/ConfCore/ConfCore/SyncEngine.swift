@@ -15,6 +15,7 @@ extension Notification.Name {
     public static let SyncEngineDidSyncFeaturedSections = Notification.Name("SyncEngineDidSyncFeaturedSections")
 }
 
+@MainActor
 public final class SyncEngine: Logging {
 
     public static let log = makeLogger()

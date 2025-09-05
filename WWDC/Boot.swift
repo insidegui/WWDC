@@ -11,7 +11,8 @@ import ConfCore
 import RealmSwift
 import OSLog
 
-final class Boot: Logging {
+@MainActor
+final class Boot: nonisolated Logging {
 
     struct BootstrapError: LocalizedError {
         var localizedDescription: String
@@ -69,8 +70,8 @@ final class Boot: Logging {
             realmConfig.schemaVersion = Constants.coreSchemaVersion
 
             if !readOnly {
-                realmConfig.shouldCompactOnLaunch = { [unowned self] totalBytes, usedBytes in
-                    guard Self.isCompactOnLaunchEnabled else {
+                realmConfig.shouldCompactOnLaunch = { [isCompactOnLaunchEnabled = Self.isCompactOnLaunchEnabled, unowned self] totalBytes, usedBytes in
+                    guard isCompactOnLaunchEnabled else {
                         self.log.log("Database compression disabled by flag")
                         return false
                     }

@@ -16,6 +16,8 @@ CODE_SIGN_STYLE = Automatic
 // This setting slows down debug builds significantly and has no tangible benefit
 ENABLE_MODULE_VERIFIER = NO
 
+SWIFT_VERSION = 6.0
+
 // Settings for getting to Swift 6
 SWIFT_APPROACHABLE_CONCURRENCY = YES
 SWIFT_STRICT_CONCURRENCY = targeted

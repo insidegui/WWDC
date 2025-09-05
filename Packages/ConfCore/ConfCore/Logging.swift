@@ -13,8 +13,8 @@ public struct LoggingConfig {
 }
 
 public protocol Logging {
-    static var log: Logger { get }
-    var log: Logger { get }
+    static nonisolated var log: Logger { get }
+    nonisolated var log: Logger { get }
     static func defaultLoggerConfig() -> LoggingConfig
     static func makeLogger(config: LoggingConfig) -> Logger
 }
@@ -55,8 +55,8 @@ public protocol Signposting: Logging {
 }
 
 public extension Signposting {
-    static func makeSignposter() -> OSSignposter { OSSignposter(logger: log) }
-    var signposter: OSSignposter { Self.signposter }
+    static nonisolated func makeSignposter() -> OSSignposter { OSSignposter(logger: log) }
+    nonisolated var signposter: OSSignposter { Self.signposter }
 }
 
 public extension OSSignposter {

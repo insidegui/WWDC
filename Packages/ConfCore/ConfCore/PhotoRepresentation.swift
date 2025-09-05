@@ -9,7 +9,7 @@
 import Cocoa
 import RealmSwift
 
-public enum PhotoRepresentationSize: Int {
+public enum PhotoRepresentationSize: Int, Sendable {
     case mini = 256
     case small = 512
     case medium = 1024

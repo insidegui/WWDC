@@ -13,10 +13,13 @@ extension AVAsset {
     public var durationIfLoaded: CMTime? {
 
         let error: NSErrorPointer = nil
-        let durationStatus = statusOfValue(forKey: "duration", error: error)
+        let durationStatus = status(of: .duration)
 
-        guard durationStatus == .loaded, error?.pointee == nil else { return nil }
-
-        return duration
+        switch durationStatus {
+        case .loaded(let time):
+            return time
+        case .failed, .notYetLoaded, .loading:
+            return nil
+        }
     }
 }

@@ -36,6 +36,7 @@ public struct Environment: Equatable {
         self.featuredSectionsPath = featuredSectionsPath
     }
 
+    @MainActor
     public static func setCurrent(_ environment: Environment) {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
@@ -59,6 +60,7 @@ public struct Environment: Equatable {
 
 private let _storedEnvDefaultsKey = "_confCoreEnvironmentBaseURL"
 
+@MainActor
 private var _storedEnvironment: Environment? = Environment.readFromDefaults()
 
 extension Environment {
@@ -76,6 +78,7 @@ extension Environment {
         )
     }
 
+    @MainActor
     public static var current: Environment {
         #if DEBUG
         if let baseURL = UserDefaults.standard.string(forKey: "WWDCEnvironmentBaseURL") {
@@ -98,6 +101,7 @@ extension Environment {
         }
     }
 
+    @MainActor
     public static let test = Environment(baseURL: "http://localhost:9042",
                                          configPath: "/config.json",
                                          sessionsPath: "/contents.json",
@@ -105,6 +109,7 @@ extension Environment {
                                          liveVideosPath: "/videos_live.json",
                                          featuredSectionsPath: "/explore.json")
 
+    @MainActor
     public static let production = Environment(baseURL: "https://api2024.wwdc.io",
                                                configPath: "/config.json",
                                                sessionsPath: "/contents.json",

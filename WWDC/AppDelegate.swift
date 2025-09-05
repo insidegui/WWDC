@@ -19,6 +19,7 @@ extension Notification.Name {
     static let openWWDCURL = Notification.Name(rawValue: "OpenWWDCURLNotification")
 }
 
+@MainActor
 class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     
     static let log = makeLogger(subsystem: "io.wwdc.app")
@@ -50,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
     private let boot = Boot()
 
-    private var migrationSplashScreenWorkItem: DispatchWorkItem?
+    private var migrationSplashScreenWorkItem: Task<Void, Never>?
     private let slowMigrationToleranceInSeconds: TimeInterval = 1.5
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -69,10 +70,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
             }
         }
 
-        let item = DispatchWorkItem(block: showMigrationSplashScreen)
-        migrationSplashScreenWorkItem = item
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + slowMigrationToleranceInSeconds, execute: item)
+        migrationSplashScreenWorkItem = Task {
+            try? await Task.sleep(for: .seconds(slowMigrationToleranceInSeconds))
+            guard !Task.isCancelled else { return }
+            showMigrationSplashScreen()
+        }
 
         boot.bootstrapDependencies { [unowned self] result in
             self.migrationSplashScreenWorkItem?.cancel()

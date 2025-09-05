@@ -102,6 +102,7 @@ public class Session: Object, Decodable {
     //        return realm.objects(Transcript.self).filter("identifier == %@", self.transcriptIdentifier).first
     //    }
 
+    @MainActor
     public static let videoPredicate: NSPredicate = NSPredicate(format: "ANY assets.rawAssetType == %@", SessionAssetType.streamingVideo.rawValue)
 
     public static func sameTrackSortDescriptors() -> [RealmSwift.SortDescriptor] {

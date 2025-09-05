@@ -13,6 +13,7 @@ import RealmSwift
 import Combine
 import struct OSLog.Logger
 
+@MainActor
 public final class UserDataSyncEngine: Logging {
 
     public init(storage: Storage, container: CKContainer = .default()) {
@@ -78,6 +79,7 @@ public final class UserDataSyncEngine: Logging {
 
     private var isWaitingForAccountAvailabilityToStart = false
 
+    @MainActor
     public var isEnabled = false {
         didSet {
             guard oldValue != isEnabled else { return }
@@ -100,6 +102,7 @@ public final class UserDataSyncEngine: Logging {
 
     private var canStart = false
 
+    @MainActor
     public func start() {
         canStart = true
 
@@ -159,15 +162,15 @@ public final class UserDataSyncEngine: Logging {
         
         isStopping = true
 
-        workQueue.async { [unowned self] in
+        workQueue.async { [unowned self, cloudOperationQueue] in
             defer {
-                DispatchQueue.main.async {
+                Task { @MainActor in
                     self.isStopping = false
                     self.isRunning = false
                 }
             }
 
-            self.cloudOperationQueue.waitUntilAllOperationsAreFinished()
+            cloudOperationQueue.waitUntilAllOperationsAreFinished()
 
             DispatchQueue.main.async {
                 self.stopObservingSyncOperations()
@@ -224,7 +227,7 @@ public final class UserDataSyncEngine: Logging {
 
     // MARK: - Cloud environment management
 
-    private func prepareCloudEnvironment(then block: @escaping () -> Void) {
+    private func prepareCloudEnvironment(then block: @MainActor @escaping () -> Void) {
         workQueue.async { [unowned self] in
             self.createCustomZoneIfNeeded()
             self.cloudOperationQueue.waitUntilAllOperationsAreFinished()
@@ -327,6 +330,7 @@ public final class UserDataSyncEngine: Logging {
 
     // MARK: - Silent notifications
 
+    @MainActor
     public func processSubscriptionNotification(with userInfo: [String: Any]) -> Bool {
         guard isEnabled, isRunning else { return false }
 

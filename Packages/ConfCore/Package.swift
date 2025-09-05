@@ -1,4 +1,4 @@
-// swift-tools-version:5.8
+// swift-tools-version:6.2
 
 import PackageDescription
 
@@ -30,6 +30,19 @@ let package = Package(
                 .product(name: "Siesta", package: "siesta"),
                 "Transcripts"
 			],
-			path: "ConfCore/")
-    ]
+			path: "ConfCore/",
+            swiftSettings: [
+                // 6.2 features, non-default
+                .enableUpcomingFeature("InferIsolatedConformances"),
+                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+                // swift 6 defaults
+                .enableUpcomingFeature("IsolatedDefaultValues"),
+                .enableUpcomingFeature("DisableOutwardActorInference"),
+                .enableUpcomingFeature("InferSendableFromCaptures"),
+                .enableUpcomingFeature("GlobalActorIsolatedTypesUsability"),
+                .enableUpcomingFeature("DynamicActorIsolation", .when(configuration: .debug))
+            ]
+        )
+    ],
+    swiftLanguageModes: [.v5]
 )

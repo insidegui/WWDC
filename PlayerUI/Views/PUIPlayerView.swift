@@ -14,6 +14,7 @@ import Combine
 import SwiftUI
 import ConfUIFoundation
 
+@MainActor
 public final class PUIPlayerView: NSView {
 
     private let settings = PUISettings()
@@ -230,10 +231,10 @@ public final class PUIPlayerView: NSView {
 
         Task { [weak self] in
             guard let asset = self?.asset else { return }
-            async let duration = asset.load(.duration)
-            async let legible = asset.loadMediaSelectionGroup(for: .legible)
-            self?.timelineView.mediaDuration = Double(CMTimeGetSeconds(try await duration))
-            self?.updateSubtitleSelectionMenu(subtitlesGroup: try await legible)
+            let duration = try await asset.load(.duration)
+            let legible = try await asset.loadMediaSelectionGroup(for: .legible)
+            self?.timelineView.mediaDuration = Double(CMTimeGetSeconds(duration))
+            self?.updateSubtitleSelectionMenu(subtitlesGroup: legible)
         }
 
         playerTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, preferredTimescale: 9000), queue: .main) { [weak self] currentTime in
@@ -427,7 +428,7 @@ public final class PUIPlayerView: NSView {
         currentBounds = bounds
     }
 
-    deinit {
+    isolated deinit {
         if let player = player {
             teardown(player: player)
         }

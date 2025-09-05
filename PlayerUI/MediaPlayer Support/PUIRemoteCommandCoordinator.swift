@@ -9,6 +9,7 @@
 import Foundation
 import MediaPlayer
 
+@MainActor
 final class PUIRemoteCommandCoordinator: NSObject {
 
     var pauseHandler: (() -> Void)? {
