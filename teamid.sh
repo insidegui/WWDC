@@ -8,6 +8,22 @@ function print_team_ids() {
   echo ""
   
   XCODEPREFS="$HOME/Library/Preferences/com.apple.dt.Xcode.plist"
+
+  # Get all team infos and format as key-value pairs
+  local all_keys=($(/usr/libexec/PlistBuddy -c "Print :IDEProvisioningTeamByIdentifier" "$XCODEPREFS" | grep ' = Array' | awk '{print $1}'))
+  local result=""
+  for key in "${all_keys[@]}"; do
+      local teamID=$(/usr/libexec/PlistBuddy -c "Print :IDEProvisioningTeamByIdentifier:$key:0:teamID" "$XCODEPREFS" 2>/dev/null)
+      local teamName=$(/usr/libexec/PlistBuddy -c "Print :IDEProvisioningTeamByIdentifier:$key:0:teamName" "$XCODEPREFS" 2>/dev/null)
+      if [ -n "$teamID" ]; then
+          result+="$teamID - $teamName\n"
+      fi
+  done
+  if [ -n "$result" ]; then
+      printf "%b" "$result"
+      return 0
+  fi
+  
   TEAM_KEYS=(`/usr/libexec/PlistBuddy -c "Print :IDEProvisioningTeams" "$XCODEPREFS" | perl -lne 'print $1 if /^    (\S*) =/'`)
   
   for KEY in $TEAM_KEYS 
