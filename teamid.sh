@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEAM_ID_FILE=WWDC/TeamID.xcconfig
+TEAM_ID_FILE=WWDC/Config/TeamID.xcconfig
 
 function print_team_ids() {
   echo ""
