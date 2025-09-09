@@ -106,7 +106,6 @@
 		DD59106E1ECA0C2F003C32A4 /* WWDC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WWDC.entitlements; sourceTree = "<group>"; };
 		DD59106F1ECA0C3B003C32A4 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		DD600AB02487F1720071B90E /* ConfUIFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ConfUIFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */ = {isa = PBXFileReference; lastKnownFileType = file; name = WhiteSpinner.car; path = Design/WhiteSpinner.car; sourceTree = SOURCE_ROOT; };
 		DDB1A25E2577E51E00995FF1 /* ConfCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ConfCore; path = Packages/ConfCore; sourceTree = "<group>"; };
 		DDC677F21EDA76A100A4E19C /* TranscriptIndexingService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = TranscriptIndexingService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDCE7ECF1EA7A1D300C7A3CA /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -453,7 +452,6 @@
 				91F376902E6F6866009468EC /* Definitions */,
 				91F376642E6F6758009468EC /* Helpers */,
 				91F3768A2E6F67DF009468EC /* Util */,
-				DDCE7ECE1EA7A1A600C7A3CA /* Look */,
 				91F3768C2E6F67FE009468EC /* Resources */,
 				91F3768E2E6F681E009468EC /* Bootstrap */,
 				91F3778D2E6F6B8C009468EC /* ViewModels */,
@@ -481,14 +479,6 @@
 				DDB1A25E2577E51E00995FF1 /* ConfCore */,
 			);
 			name = LocalDependencies;
-			sourceTree = "<group>";
-		};
-		DDCE7ECE1EA7A1A600C7A3CA /* Look */ = {
-			isa = PBXGroup;
-			children = (
-				DDA5E4931EDCD6E7003B1780 /* WhiteSpinner.car */,
-			);
-			name = Look;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -77,7 +77,6 @@ final class VideoPlayerViewController: NSViewController {
         p.style = .spinning
         p.isIndeterminate = true
         p.translatesAutoresizingMaskIntoConstraints = false
-        p.appearance = NSAppearance(named: NSAppearance.Name(rawValue: "WhiteSpinner"))
         p.isHidden = true
 
         p.sizeToFit()
