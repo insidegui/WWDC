@@ -25,7 +25,7 @@ final class TopicHeaderRow: NSTableRowView {
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
-        update()
+        buildUI()
     }
 
     required init?(coder: NSCoder) {
@@ -36,7 +36,7 @@ final class TopicHeaderRow: NSTableRowView {
 
     override func drawBackground(in dirtyRect: NSRect) { }
 
-    private func update() {
+    private func buildUI() {
 
         let bg = NSVisualEffectView(frame: bounds)
         bg.appearance = NSAppearance(named: .darkAqua)
