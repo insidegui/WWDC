@@ -17,6 +17,7 @@ extension Notification.Name {
     static let HighlightTranscriptAtCurrentTimecode = Notification.Name("HighlightTranscriptAtCurrentTimecode")
 }
 
+@MainActor
 protocol VideoPlayerViewControllerDelegate: AnyObject {
 
     func createBookmark(at timecode: Double, with snapshot: NSImage?)

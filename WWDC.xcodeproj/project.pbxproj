@@ -25,7 +25,6 @@
 		DDF7219D1ECA12780054C503 /* PlayerUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721961ECA12780054C503 /* PlayerUI.framework */; };
 		DDF7219E1ECA12780054C503 /* PlayerUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721961ECA12780054C503 /* PlayerUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DDF721E31ECA12FC0054C503 /* PIP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF721E21ECA12FC0054C503 /* PIP.framework */; };
-		F4F189762C0773C9006EA9A2 /* MacPreviewUtils in Frameworks */ = {isa = PBXBuildFile; productRef = F4F189752C0773C9006EA9A2 /* MacPreviewUtils */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -383,7 +382,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F189762C0773C9006EA9A2 /* MacPreviewUtils in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,7 +564,6 @@
 			);
 			name = ConfUIFoundation;
 			packageProductDependencies = (
-				F4F189752C0773C9006EA9A2 /* MacPreviewUtils */,
 			);
 			productName = ConfUIFoundation;
 			productReference = DD600AB02487F1720071B90E /* ConfUIFoundation.framework */;
@@ -675,7 +672,6 @@
 			packageReferences = (
 				DDB1A2682577E7E900995FF1 /* XCRemoteSwiftPackageReference "Sparkle" */,
 				91C2A0BA2A4DE9B60049B6B7 /* XCRemoteSwiftPackageReference "swift-collections" */,
-				F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */,
 				91973A9A2E538BE200C4A644 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				916C66E82E55088000D0CAF1 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				916228EC2E561B5700232DE6 /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */,
@@ -1622,14 +1618,6 @@
 				kind = branch;
 			};
 		};
-		F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:insidegui/MacPreviewUtils.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1669,11 +1657,6 @@
 		DDB1A2972577EF1A00995FF1 /* ConfCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ConfCore;
-		};
-		F4F189752C0773C9006EA9A2 /* MacPreviewUtils */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F4F189742C0773C9006EA9A2 /* XCRemoteSwiftPackageReference "MacPreviewUtils" */;
-			productName = MacPreviewUtils;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
