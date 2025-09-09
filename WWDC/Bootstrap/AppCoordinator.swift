@@ -14,10 +14,11 @@ import PlayerUI
 import OSLog
 import AVFoundation
 
+@MainActor
 final class AppCoordinator: Logging, Signposting {
 
-    static let log = makeLogger()
-    static let signposter: OSSignposter = makeSignposter()
+    static nonisolated let log = makeLogger()
+    static nonisolated let signposter: OSSignposter = makeSignposter()
 
     private lazy var cancellables = Set<AnyCancellable>()
 
@@ -514,8 +515,10 @@ final class AppCoordinator: Logging, Signposting {
         activityScheduler.repeats = true
         activityScheduler.qualityOfService = .utility
         activityScheduler.schedule { [weak self] completion in
-            self?.refresh(self?.autorefreshActivity)
-            completion(.finished)
+            Task { @MainActor in
+                self?.refresh(self?.autorefreshActivity)
+                completion(.finished)
+            }
         }
 
         return activityScheduler

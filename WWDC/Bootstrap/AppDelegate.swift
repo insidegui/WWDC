@@ -19,9 +19,10 @@ extension Notification.Name {
     static let openWWDCURL = Notification.Name(rawValue: "OpenWWDCURLNotification")
 }
 
+@MainActor
 class AppDelegate: NSObject, NSApplicationDelegate, Logging {
     
-    static let log = makeLogger(subsystem: "io.wwdc.app")
+    static nonisolated let log = makeLogger(subsystem: "io.wwdc.app")
 
     private lazy var commandsReceiver = AppCommandsReceiver()
 
@@ -50,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
     private let boot = Boot()
 
-    private var migrationSplashScreenWorkItem: DispatchWorkItem?
+    private var migrationSplashScreenWorkItem: Task<Void, Never>?
     private let slowMigrationToleranceInSeconds: TimeInterval = 1.5
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -69,10 +70,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
             }
         }
 
-        let item = DispatchWorkItem(block: showMigrationSplashScreen)
-        migrationSplashScreenWorkItem = item
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + slowMigrationToleranceInSeconds, execute: item)
+        migrationSplashScreenWorkItem = Task { @MainActor in
+            do {
+                try await Task.sleep(for: .seconds(slowMigrationToleranceInSeconds))
+                self.showMigrationSplashScreen()
+            } catch {}
+        }
 
         boot.bootstrapDependencies { [unowned self] result in
             self.migrationSplashScreenWorkItem?.cancel()
@@ -275,7 +278,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
 extension AppDelegate: SUUpdaterDelegate {
 
-    func updaterMayCheck(forUpdates updater: SUUpdater) -> Bool {
+    nonisolated func updaterMayCheck(forUpdates updater: SUUpdater) -> Bool {
         #if DEBUG
             return ProcessInfo.processInfo.arguments.contains("--enable-updates")
         #else
