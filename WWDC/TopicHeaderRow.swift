@@ -11,22 +11,21 @@ import SwiftUI
 
 final class TopicHeaderRow: NSTableRowView {
 
-    var content: TopicHeaderRowContent? {
-        didSet {
-            guard content != oldValue else { return }
+    private lazy var viewModel = HeaderRowViewModel(title: "")
 
-            update()
-        }
+    var title: String {
+        get { viewModel.title }
+        set { viewModel.title = newValue }
     }
 
-    var title: String? {
-        didSet {
-            guard title != oldValue else { return }
-        }
+    var symbolName: String? {
+        get { viewModel.symbolName }
+        set { viewModel.symbolName = newValue }
     }
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
+        buildUI()
     }
 
     required init?(coder: NSCoder) {
@@ -37,19 +36,7 @@ final class TopicHeaderRow: NSTableRowView {
 
     override func drawBackground(in dirtyRect: NSRect) { }
 
-    private var contentView: NSHostingView<TopicHeaderRowContent>?
-
-    private func update() {
-        guard let content else {
-            contentView?.isHidden = true
-            return
-        }
-
-        if let contentView {
-            contentView.rootView = content
-            contentView.isHidden = false
-            return
-        }
+    private func buildUI() {
 
         let bg = NSVisualEffectView(frame: bounds)
         bg.appearance = NSAppearance(named: .darkAqua)
@@ -59,7 +46,7 @@ final class TopicHeaderRow: NSTableRowView {
         bg.autoresizingMask = [.width, .height]
         addSubview(bg)
 
-        let v = NSHostingView(rootView: content)
+        let v = NSHostingView(rootView: TopicHeaderRowContent().environment(viewModel))
         v.translatesAutoresizingMaskIntoConstraints = false
 
         bg.addSubview(v)
@@ -70,25 +57,31 @@ final class TopicHeaderRow: NSTableRowView {
             v.topAnchor.constraint(equalTo: topAnchor),
             v.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-
-        contentView = v
     }
 
 }
 
-struct TopicHeaderRowContent: View, Hashable {
+@Observable
+private class HeaderRowViewModel {
     var title: String
     var symbolName: String?
+    init(title: String, symbolName: String? = nil) {
+        self.title = title
+        self.symbolName = symbolName
+    }
+}
 
+private struct TopicHeaderRowContent: View {
+    @Environment(HeaderRowViewModel.self) private var viewModel
     var body: some View {
         HStack {
-            if let symbolName {
+            if let symbolName = viewModel.symbolName {
                 Image(systemName: symbolName)
                     .foregroundStyle(.secondary)
                     .symbolVariant(.fill)
             }
 
-            Text(title)
+            Text(viewModel.title)
                 .font(.headline)
                 .foregroundStyle(.primary)
         }

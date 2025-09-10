@@ -134,7 +134,7 @@ final class VideosSessionRowProvider: SessionRowProvider, Logging, Signposting {
             uniqueKeysWithValues: trackToSortedSessions.compactMap { (track, trackSessions) -> (SessionRow, (Results<Session>, OrderedDictionary<String, SessionRow>))? in
                 guard !trackSessions.isEmpty else { return nil }
 
-                let titleRow = SessionRow(content: .init(title: track.name, symbolName: track.symbolName))
+                let titleRow = SessionRow(title: track.name, symbolName: track.symbolName)
 
                 let sessionRows = trackSessions.compactMap { session -> (String, SessionRow)? in
                     guard let viewModel = SessionViewModel(session: session, track: track) else { return nil }
