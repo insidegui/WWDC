@@ -5,7 +5,7 @@ fi
 
 echo ""
 
-./teamid.sh
+$(dirname "${BASH_SOURCE[0]}")/teamid.sh
 
 lessThanOrEqual() {
     [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]

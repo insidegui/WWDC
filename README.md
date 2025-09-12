@@ -79,7 +79,7 @@ A number of third-party libraries are used by the app:
 
 **Building requires Xcode 16 or later.**
 
-**Clone this branch and before opening the project, run `./bootstrap.sh`** to setup the environment. The script will ask for your Apple Developer team ID in order to configure the project. There's no need to change any code signing settings in Xcode. The bootstrap script will also install `swiftlint` for you using `brew` if you don’t have it yet.
+**Clone this branch and before opening the project, run `scripts/bootstrap.sh`** to setup the environment. The script will ask for your Apple Developer team ID in order to configure the project. There's no need to change any code signing settings in Xcode. The bootstrap script will also install `swiftlint` for you using `brew` if you don’t have it yet.
 
 Since the app uses CloudKit, when you build it yourself, all CloudKit-related functionality will be disabled.
 
@@ -89,6 +89,6 @@ Since the app uses CloudKit, when you build it yourself, all CloudKit-related fu
 
 ### Clearing app data during development
 
-If you need to clear the app’s preferences and stored data during development, you can run `./cleardata.sh` or `./cleardebugdata.sh` (if using -WWDCUseDebugStorage YES) in the project folder. **This will delete all of your preferences and data like favorites, bookmarks and progress in videos, so be careful**.
+If you need to clear the app’s preferences and stored data during development, you can run `scripts/cleardata.sh` or `scripts/cleardebugdata.sh` (if using -WWDCUseDebugStorage YES) in the project folder. **This will delete all of your preferences and data like favorites, bookmarks and progress in videos, so be careful**.
 
 <a href="https://macstadium.com" title="The unofficial WWDC app is using MacStadium"><img src="./img/MacStadiumOSS.png" alt="Powered by MacStadium"></a>
