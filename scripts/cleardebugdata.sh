@@ -3,7 +3,8 @@
 echo ""
 
 # Check if TeamID.xcconfig exists and extract team ID
-TEAM_ID_CONFIG="WWDC/TeamID.xcconfig"
+TEAM_ID_CONFIG=$(dirname "${BASH_SOURCE[0]}")/../WWDC/Config/TeamID.xcconfig
+
 if [ -f "$TEAM_ID_CONFIG" ]; then
     # Extract team ID from the config file
     TEAM_ID=$(grep "DEVELOPMENT_TEAM=" "$TEAM_ID_CONFIG" | cut -d'=' -f2)

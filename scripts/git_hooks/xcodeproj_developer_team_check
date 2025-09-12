@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+# runs pbxproj check against the git diff
+
+made_changes = false
+
+`git status --porcelain`.split('\n').each do |line|
+    components = line.split(' ')
+    next if components.count < 2
+    code = components[0]
+    next if code != 'M'
+    file = components[1]
+    extension = file.split('.').last
+    next if extension != 'pbxproj'
+    
+    pattern = /^[[:blank:]]*DEVELOPMENT_TEAM[[:blank:]]*=[[:blank:]]*[A-Za-z0-9]*;[[:blank:]]*$/
+
+    original = File.read(file)
+    filtered = original.lines.reject { |line| line.match(pattern) }.join
+
+    if filtered != original
+        File.write(file, filtered)
+        made_changes = true
+    end
+end
+
+if made_changes
+  puts "Had to remove DEVELOPMENT_TEAM from the pbxproj file - verify them and re-commit."
+  abort()
+end

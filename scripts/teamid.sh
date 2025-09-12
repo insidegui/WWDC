@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEAM_ID_FILE=WWDC/Config/TeamID.xcconfig
+TEAM_ID_FILE=$(dirname "${BASH_SOURCE[0]}")/../WWDC/Config/TeamID.xcconfig
 
 function print_team_ids() {
   echo ""
