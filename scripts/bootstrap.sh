@@ -5,7 +5,11 @@ fi
 
 echo ""
 
-$(dirname "${BASH_SOURCE[0]}")/teamid.sh
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
+
+$SCRIPT_DIR/teamid.sh
+
+$SCRIPT_DIR/setup_git_hooks.sh
 
 lessThanOrEqual() {
     [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
