@@ -15,6 +15,7 @@ disabled_rules:
   - for_where
   - opening_brace
   - vertical_parameter_alignment
+  - redundant_optional_initialization
 
 opt_in_rules:
   - redundant_nil_coalescing
