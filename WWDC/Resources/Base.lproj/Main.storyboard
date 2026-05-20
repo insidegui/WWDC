@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24123.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24123.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -25,7 +25,7 @@
                                         <menuItem title="Check for Updates" id="6Ut-4M-G2I">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="checkForUpdates:" target="IGa-MZ-Wn5" id="Q5e-Wt-mW3"/>
+                                                <action selector="checkForUpdates:" target="B4S-iL-LHC" id="aIe-uq-G8S"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
@@ -253,8 +253,8 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Transformations" id="c8a-y6-VQd">
                                                 <items>
-                                                    <menuItem title="Make Upper Case" id="vmV-6d-7jI">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <menuItem title="Make Upper Case" keyEquivalent="u" id="vmV-6d-7jI">
+                                                        <modifierMask key="keyEquivalentModifierMask" shift="YES" option="YES" command="YES"/>
                                                         <connections>
                                                             <action selector="uppercaseWord:" target="Ady-hI-5gd" id="sPh-Tk-edu"/>
                                                         </connections>
@@ -624,12 +624,8 @@
                     </connections>
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WWDC" customModuleProvider="target"/>
-                <customObject id="IGa-MZ-Wn5" customClass="SUUpdater">
-                    <connections>
-                        <outlet property="delegate" destination="Voe-Tx-rLC" id="J4V-C9-2KN"/>
-                    </connections>
-                </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="B4S-iL-LHC" customClass="SPUStandardUpdaterController"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
         </scene>

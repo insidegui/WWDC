@@ -276,17 +276,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, Logging {
 
 }
 
-extension AppDelegate: SUUpdaterDelegate {
-
-    nonisolated func updaterMayCheck(forUpdates updater: SUUpdater) -> Bool {
-        #if DEBUG
-            return ProcessInfo.processInfo.arguments.contains("--enable-updates")
-        #else
-            return true
-        #endif
-    }
-}
-
 extension AppDelegate {
     @MainActor
     static func run(_ command: WWDCAppCommand) {
