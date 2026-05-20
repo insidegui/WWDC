@@ -88,5 +88,7 @@
 	<string>https://github.com/insidegui/WWDC/raw/master/Releases/appcast_v5.xml</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 </dict>
 </plist>
