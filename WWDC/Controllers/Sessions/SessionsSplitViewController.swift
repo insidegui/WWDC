@@ -49,7 +49,7 @@ final class SessionsSplitViewController: NSSplitViewController {
 
         NotificationCenter
             .default
-            .publisher(for: .sidebarCollapseSyncNotification)
+            .publisher(for: .sideBarCollapseSyncNotification)
             .sink { [weak self] notification in
                 self?.applyCollapseSync(notification: notification)
             }
@@ -87,7 +87,7 @@ final class SessionsSplitViewController: NSSplitViewController {
                 // Record the shared session state so the other (possibly not-yet-loaded) tab adopts it.
                 self.windowController.sidebarState.collapsed = collapsed
                 NotificationCenter.default.post(
-                    name: .sidebarCollapseSyncNotification,
+                    name: .sideBarCollapseSyncNotification,
                     object: self.splitView,
                     userInfo: ["collapsed": collapsed]
                 )
@@ -181,5 +181,5 @@ final class SessionsSplitViewController: NSSplitViewController {
 
 extension Notification.Name {
     public static let sideBarSizeSyncNotification = NSNotification.Name("WWDCSplitViewSizeSyncNotification")
-    public static let sidebarCollapseSyncNotification = NSNotification.Name("WWDCSidebarCollapseSyncNotification")
+    public static let sideBarCollapseSyncNotification = NSNotification.Name("WWDCSidebarCollapseSyncNotification")
 }

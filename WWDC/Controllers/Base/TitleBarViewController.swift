@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import OSLog
 
 final class TitleBarViewController: NSTitlebarAccessoryViewController {
 
@@ -48,14 +49,34 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
         return v
     }()
 
+    private static let log = Logger(subsystem: Bundle.main.bundleIdentifier ?? "io.wwdc.app", category: "TitleBarViewController")
+
     private static func makeToggleSymbol() -> NSImage {
         guard let image = NSImage(systemSymbolName: "sidebar.left", accessibilityDescription: "Toggle Sidebar") else {
             assertionFailure("Missing system symbol: sidebar.left")
-            return NSImage()
+            log.error("Missing system symbol sidebar.left; falling back to a text glyph for the sidebar toggle")
+            return fallbackToggleSymbol()
         }
         // withSymbolConfiguration returns nil if the configuration can't be applied;
         // fall back to the unconfigured symbol rather than a blank image.
         return image.withSymbolConfiguration(.init(pointSize: 15, weight: .regular)) ?? image
+    }
+
+    /// Visible last-resort glyph so the toggle button never renders blank if the
+    /// system symbol is unavailable.
+    private static func fallbackToggleSymbol() -> NSImage {
+        let glyph = "◧" as NSString
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: 15, weight: .regular),
+            .foregroundColor: NSColor.labelColor
+        ]
+        let glyphSize = glyph.size(withAttributes: attributes)
+        let image = NSImage(size: NSSize(width: ceil(glyphSize.width), height: ceil(glyphSize.height)))
+        image.lockFocus()
+        glyph.draw(at: .zero, withAttributes: attributes)
+        image.unlockFocus()
+        image.isTemplate = true
+        return image
     }
 
     /// Sidebar collapse/expand toggle. Fires `toggleSidebar:` up the responder chain
