@@ -48,14 +48,21 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
         return v
     }()
 
+    private static func makeToggleSymbol() -> NSImage {
+        guard let image = NSImage(systemSymbolName: "sidebar.left", accessibilityDescription: "Toggle Sidebar") else {
+            assertionFailure("Missing system symbol: sidebar.left")
+            return NSImage()
+        }
+        // withSymbolConfiguration returns nil if the configuration can't be applied;
+        // fall back to the unconfigured symbol rather than a blank image.
+        return image.withSymbolConfiguration(.init(pointSize: 15, weight: .regular)) ?? image
+    }
+
     /// Sidebar collapse/expand toggle. Fires `toggleSidebar:` up the responder chain
     /// so it reaches the active tab's split view controller. Exposed so the coordinator
     /// can disable it on tabs that have no sidebar (Explore).
     lazy var sidebarToggleButton: NSButton = {
-        let symbol = NSImage(systemSymbolName: "sidebar.left", accessibilityDescription: "Toggle Sidebar")
-        let configured = symbol?.withSymbolConfiguration(.init(pointSize: 15, weight: .regular))
-
-        let b = NSButton(image: configured ?? NSImage(), target: nil, action: #selector(NSSplitViewController.toggleSidebar(_:)))
+        let b = NSButton(image: Self.makeToggleSymbol(), target: nil, action: #selector(NSSplitViewController.toggleSidebar(_:)))
         b.translatesAutoresizingMaskIntoConstraints = false
         b.isBordered = false
         b.imagePosition = .imageOnly
@@ -134,10 +141,14 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
         centerOffset = localWindowBounds.midX - view.bounds.midX
 
         // Tuck the sidebar toggle right up against the rightmost traffic-light (zoom) button.
-        if let zoomButton = window.standardWindowButton(.zoomButton), let buttonSuperview = zoomButton.superview {
+        if let constraint = leadingButtonConstraint,
+           let zoomButton = window.standardWindowButton(.zoomButton),
+           let buttonSuperview = zoomButton.superview {
             let frameInWindow = buttonSuperview.convert(zoomButton.frame, to: nil)
-            let maxXInView = view.convert(frameInWindow, from: nil).maxX
-            leadingButtonConstraint?.constant = maxXInView + Self.trafficLightGap
+            let newConstant = view.convert(frameInWindow, from: nil).maxX + Self.trafficLightGap
+            if abs(constraint.constant - newConstant) > 0.5 {
+                constraint.constant = newConstant
+            }
         }
     }
 
