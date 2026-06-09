@@ -130,7 +130,7 @@ final class SessionsSplitViewController: NSSplitViewController {
         guard notificationSourceSplitView !== splitView else {
             // If own split view is altered, change split view initialisation width for other tabs.
             // Skip while collapsed so the ~0pt collapsed width is never persisted as the sidebar width.
-            if !sidebarItem.isCollapsed {
+            if !sidebarItem.isCollapsed, notificationSourceSplitView.subviews.indices.contains(targetSubviewIndex) {
                 windowController.sidebarState.initialWidth = notificationSourceSplitView.subviews[targetSubviewIndex].bounds.width
             }
             return
@@ -139,7 +139,8 @@ final class SessionsSplitViewController: NSSplitViewController {
         // Width-sync is throttled 250 ms so a trailing notification can arrive after
         // the collapse-sync; calling setPosition here would re-expand the sidebar.
         guard !sidebarItem.isCollapsed else { return }
-        guard splitView.subviews.count > 0, notificationSourceSplitView.subviews.count > 0 else {
+        guard splitView.subviews.indices.contains(targetSubviewIndex),
+              notificationSourceSplitView.subviews.indices.contains(targetSubviewIndex) else {
             return
         }
         guard splitView.subviews[targetSubviewIndex].bounds.width != notificationSourceSplitView.subviews[targetSubviewIndex].bounds.width else {
