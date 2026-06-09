@@ -12,8 +12,14 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
 
     private var horizontalPositioningConstraints = [NSLayoutConstraint]()
 
-    /// Approximate inset that clears the window's traffic-light controls.
+    /// Fallback leading inset used until the traffic-light buttons can be measured.
     private static let trafficLightInset: CGFloat = 76
+
+    /// Gap between the rightmost traffic-light (zoom) button and the sidebar toggle.
+    private static let trafficLightGap: CGFloat = 8
+
+    /// Leading constraint for the toggle button; its constant tracks the traffic lights.
+    private var leadingButtonConstraint: NSLayoutConstraint?
 
     private var centerOffset: CGFloat = 0 {
         didSet {
@@ -91,7 +97,9 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
 
         leadingContainer.addSubview(sidebarToggleButton)
 
-        leadingContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.trafficLightInset).isActive = true
+        let leadingConstraint = leadingContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.trafficLightInset)
+        leadingConstraint.isActive = true
+        leadingButtonConstraint = leadingConstraint
         leadingContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         leadingContainer.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
 
@@ -124,6 +132,13 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
         let windowBounds = window.convertFromScreen(window.frame)
         let localWindowBounds = view.convert(windowBounds, from: nil)
         centerOffset = localWindowBounds.midX - view.bounds.midX
+
+        // Tuck the sidebar toggle right up against the rightmost traffic-light (zoom) button.
+        if let zoomButton = window.standardWindowButton(.zoomButton), let buttonSuperview = zoomButton.superview {
+            let frameInWindow = buttonSuperview.convert(zoomButton.frame, to: nil)
+            let maxXInView = view.convert(frameInWindow, from: nil).maxX
+            leadingButtonConstraint?.constant = maxXInView + Self.trafficLightGap
+        }
     }
 
     func replace(child: NSViewController?, with newChild: NSViewController?, inContainer container: NSView) {

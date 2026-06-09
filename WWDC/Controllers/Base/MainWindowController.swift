@@ -41,11 +41,14 @@ final class MainWindowController: WWDCWindowController {
         return NSScreen.main?.visibleFrame.insetBy(dx: 50, dy: 120) ??
                NSRect(x: 0, y: 0, width: 1200, height: 600)
     }
-    public var sidebarInitWidth: CGFloat?
 
-    /// Shared, session-only collapsed state for the session-list sidebar, so both
-    /// tabs agree and a lazily-loaded tab adopts the current state. Not persisted.
-    public var sidebarCollapsed = false
+    /// Shared, session-only sidebar layout state so both tabs agree and a
+    /// lazily-loaded tab adopts the current state. Not persisted across launches.
+    struct SidebarState {
+        var initialWidth: CGFloat?
+        var collapsed = false
+    }
+    var sidebarState = SidebarState()
 
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
