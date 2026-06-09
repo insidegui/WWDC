@@ -6,11 +6,14 @@
 //  Copyright © 2018 Guilherme Rambo. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 final class TitleBarViewController: NSTitlebarAccessoryViewController {
 
     private var horizontalPositioningConstraints = [NSLayoutConstraint]()
+
+    /// Approximate inset that clears the window's traffic-light controls.
+    private static let trafficLightInset: CGFloat = 76
 
     private var centerOffset: CGFloat = 0 {
         didSet {
@@ -30,6 +33,31 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
 
         return v
+    }()
+
+    private lazy var leadingContainer: NSView = {
+        let v = NSView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+
+        return v
+    }()
+
+    /// Sidebar collapse/expand toggle. Fires `toggleSidebar:` up the responder chain
+    /// so it reaches the active tab's split view controller. Exposed so the coordinator
+    /// can disable it on tabs that have no sidebar (Explore).
+    lazy var sidebarToggleButton: NSButton = {
+        let symbol = NSImage(systemSymbolName: "sidebar.left", accessibilityDescription: "Toggle Sidebar")
+        let configured = symbol?.withSymbolConfiguration(.init(pointSize: 15, weight: .regular))
+
+        let b = NSButton(image: configured ?? NSImage(), target: nil, action: #selector(NSSplitViewController.toggleSidebar(_:)))
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.isBordered = false
+        b.imagePosition = .imageOnly
+        b.setButtonType(.momentaryChange)
+        b.imageScaling = .scaleProportionallyDown
+        b.toolTip = "Toggle Sidebar"
+
+        return b
     }()
 
     var statusViewController: NSViewController? {
@@ -57,14 +85,25 @@ final class TitleBarViewController: NSTitlebarAccessoryViewController {
     override func loadView() {
         let view = NSView()
 
+        view.addSubview(leadingContainer)
         view.addSubview(tabBarContainer)
         view.addSubview(statusContainer)
+
+        leadingContainer.addSubview(sidebarToggleButton)
+
+        leadingContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Self.trafficLightInset).isActive = true
+        leadingContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        leadingContainer.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+
+        sidebarToggleButton.leadingAnchor.constraint(equalTo: leadingContainer.leadingAnchor).isActive = true
+        sidebarToggleButton.trailingAnchor.constraint(equalTo: leadingContainer.trailingAnchor).isActive = true
+        sidebarToggleButton.centerYAnchor.constraint(equalTo: leadingContainer.centerYAnchor).isActive = true
 
         let centerXConstraint = tabBarContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         centerXConstraint.isActive = true
         horizontalPositioningConstraints.append(centerXConstraint)
         tabBarContainer.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        tabBarContainer.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor).isActive = true
+        tabBarContainer.leadingAnchor.constraint(greaterThanOrEqualTo: leadingContainer.trailingAnchor, constant: 8).isActive = true
         tabBarContainer.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor).isActive = true
 
         statusContainer.leadingAnchor.constraint(equalTo: tabBarContainer.trailingAnchor).isActive = true

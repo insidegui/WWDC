@@ -43,6 +43,10 @@ final class MainWindowController: WWDCWindowController {
     }
     public var sidebarInitWidth: CGFloat?
 
+    /// Shared, session-only collapsed state for the session-list sidebar, so both
+    /// tabs agree and a lazily-loaded tab adopts the current state. Not persisted.
+    public var sidebarCollapsed = false
+
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
         let window = WWDCWindow(contentRect: MainWindowController.defaultRect, styleMask: mask, backing: .buffered, defer: false)

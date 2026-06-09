@@ -257,6 +257,10 @@ final class AppCoordinator: Logging, Signposting {
                 guard let self else { return }
                 self.activeTab = activeTab
 
+                // The sidebar toggle only applies to tabs that have a session-list sidebar.
+                let hasSidebar = (activeTab == .schedule || activeTab == .videos)
+                self.windowController.titleBarViewController.sidebarToggleButton.isEnabled = hasSidebar
+
                 switch activeTab {
                 case .schedule:
                     activeTabSelectedSessionViewModel = scheduleSelectedSessionViewModel
