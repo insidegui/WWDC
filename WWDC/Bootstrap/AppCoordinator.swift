@@ -248,6 +248,15 @@ final class AppCoordinator: Logging, Signposting {
         videosController.listViewController.$selectedSession.assign(to: &self.$videosSelectedSessionViewModel)
         scheduleController.splitViewController.listViewController.$selectedSession.assign(to: &self.$scheduleSelectedSessionViewModel)
 
+        // Enable the sidebar toggle only on tabs that have a session-list sidebar.
+        tabController.$activeTabVar
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] activeTab in
+                guard let self else { return }
+                self.windowController.titleBarViewController.sidebarToggleButton.isEnabled = activeTab.hasSidebar
+            }
+            .store(in: &cancellables)
+
         Publishers.CombineLatest3(
             tabController.$activeTabVar,
             $videosSelectedSessionViewModel,
@@ -256,10 +265,6 @@ final class AppCoordinator: Logging, Signposting {
             .sink { [weak self] (activeTab, _, _) in
                 guard let self else { return }
                 self.activeTab = activeTab
-
-                // The sidebar toggle only applies to tabs that have a session-list sidebar.
-                let hasSidebar = (activeTab == .schedule || activeTab == .videos)
-                self.windowController.titleBarViewController.sidebarToggleButton.isEnabled = hasSidebar
 
                 switch activeTab {
                 case .schedule:

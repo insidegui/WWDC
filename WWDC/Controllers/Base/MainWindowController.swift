@@ -23,6 +23,9 @@ enum MainWindowTab: Int, WWDCTab {
     }
 
     var hidesWindowTitleBar: Bool { self == .explore }
+
+    /// Whether this tab shows the collapsible session-list sidebar.
+    var hasSidebar: Bool { self == .schedule || self == .videos }
 }
 
 extension Notification.Name {
