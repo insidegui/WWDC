@@ -464,12 +464,16 @@ final class SessionViewModel {
         return df
     }()
 
-    static let dayOfTheWeekFormatter: DateFormatter = {
+    static let dayFormatter: DateFormatter = {
         let df = DateFormatter()
 
         df.locale = Locale.current
         df.timeZone = TimeZone.current
-        df.dateFormat = "EEEE"
+        /// The date ends up becoming a key in an `OrderedDictionary`,
+        /// so to be safe we must include month and day of the month,
+        /// otherwise if Apple has events post-WWDC week, we end up
+        /// with duplicate dictionary keys that cause a crash at runtime.
+        df.dateFormat = "EEEE MMM d"
 
         return df
     }()
@@ -493,7 +497,7 @@ final class SessionViewModel {
     }
 
     static func standardFormatted(date: Date, withTimeZoneName: Bool) -> String {
-        let result = dayOfTheWeekFormatter.string(from: date) + ", " + timeFormatter.string(from: date)
+        let result = dayFormatter.string(from: date) + ", " + timeFormatter.string(from: date)
 
         return withTimeZoneName ? result + timeZoneNameSuffix : result
     }
