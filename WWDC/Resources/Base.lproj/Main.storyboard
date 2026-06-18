@@ -557,6 +557,13 @@
                                                 <action selector="viewVideos:" target="Ady-hI-5gd" id="xWC-aO-kEM"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="wwd-c0-sb0"/>
+                                        <menuItem title="Hide Sidebar" keyEquivalent="s" id="wwd-c0-sb1">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="toggleSidebar:" target="Ady-hI-5gd" id="wwd-c0-sb2"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="eT5-6l-QRY"/>
                                         <menuItem title="Reload" keyEquivalent="r" id="VAB-X3-ZCo">
                                             <connections>

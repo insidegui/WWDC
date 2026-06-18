@@ -23,6 +23,13 @@ final class SessionsSplitViewController: NSSplitViewController {
     var setupDone = false
     private var cancellables: Set<AnyCancellable> = []
 
+    /// The split view item hosting the session list sidebar. Retained so its
+    /// collapsed state can be toggled, observed and synced across tabs.
+    private var sidebarItem: NSSplitViewItem!
+
+    /// Guards against feedback loops while mirroring collapse state from another tab.
+    private var isSyncingCollapse = false
+
     init(windowController: MainWindowController, listViewController: SessionsTableViewController) {
         self.windowController = windowController
         self.listViewController = listViewController
@@ -39,6 +46,14 @@ final class SessionsSplitViewController: NSSplitViewController {
                 self?.syncSplitView(notification: notification)
             }
             .store(in: &cancellables)
+
+        NotificationCenter
+            .default
+            .publisher(for: .sideBarCollapseSyncNotification)
+            .sink { [weak self] notification in
+                self?.applyCollapseSync(notification: notification)
+            }
+            .store(in: &cancellables)
     }
 
     required init?(coder: NSCoder) {
@@ -51,7 +66,8 @@ final class SessionsSplitViewController: NSSplitViewController {
         view.wantsLayer = true
 
         let listItem = NSSplitViewItem(sidebarWithViewController: listViewController)
-        listItem.canCollapse = false
+        listItem.canCollapse = true
+        sidebarItem = listItem
         let detailItem = NSSplitViewItem(viewController: detailViewController)
 
         addSplitViewItem(listItem)
@@ -59,14 +75,39 @@ final class SessionsSplitViewController: NSSplitViewController {
 
         listViewController.view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailViewController.view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+
+        // Mirror collapse state to the other tab's split view so both stay consistent
+        // during a session. Catches both the toggleSidebar: action and drag-to-collapse.
+        listItem
+            .publisher(for: \.isCollapsed)
+            .dropFirst()
+            .removeDuplicates()
+            .sink { [weak self] collapsed in
+                guard let self, !self.isSyncingCollapse else { return }
+                // Record the shared session state so the other (possibly not-yet-loaded) tab adopts it.
+                self.windowController.sidebarState.collapsed = collapsed
+                NotificationCenter.default.post(
+                    name: .sideBarCollapseSyncNotification,
+                    object: self.splitView,
+                    userInfo: ["collapsed": collapsed]
+                )
+            }
+            .store(in: &cancellables)
     }
 
     override func viewWillAppear() {
         super.viewWillAppear()
 
         if !setupDone {
-            if let sidebarInitWidth = windowController.sidebarInitWidth {
-                splitView.setPosition(sidebarInitWidth, ofDividerAt: 0)
+            if let initWidth = windowController.sidebarState.initialWidth {
+                splitView.setPosition(initWidth, ofDividerAt: 0)
+            }
+            // Adopt the shared collapsed state in case it changed in another tab before
+            // this one was lazily loaded.
+            if sidebarItem.isCollapsed != windowController.sidebarState.collapsed {
+                isSyncingCollapse = true
+                sidebarItem.isCollapsed = windowController.sidebarState.collapsed
+                isSyncingCollapse = false
             }
             setupDone = true
         }
@@ -87,11 +128,19 @@ final class SessionsSplitViewController: NSSplitViewController {
 #endif
 
         guard notificationSourceSplitView !== splitView else {
-            // If own split view is altered, change split view initialisation width for other tabs
-            windowController.sidebarInitWidth = notificationSourceSplitView.subviews[targetSubviewIndex].bounds.width
+            // If own split view is altered, change split view initialisation width for other tabs.
+            // Skip while collapsed so the ~0pt collapsed width is never persisted as the sidebar width.
+            if !sidebarItem.isCollapsed, notificationSourceSplitView.subviews.indices.contains(targetSubviewIndex) {
+                windowController.sidebarState.initialWidth = notificationSourceSplitView.subviews[targetSubviewIndex].bounds.width
+            }
             return
         }
-        guard splitView.subviews.count > 0, notificationSourceSplitView.subviews.count > 0 else {
+        // If THIS tab's sidebar is already collapsed, skip applying the incoming width.
+        // Width-sync is throttled 250 ms so a trailing notification can arrive after
+        // the collapse-sync; calling setPosition here would re-expand the sidebar.
+        guard !sidebarItem.isCollapsed else { return }
+        guard splitView.subviews.indices.contains(targetSubviewIndex),
+              notificationSourceSplitView.subviews.indices.contains(targetSubviewIndex) else {
             return
         }
         guard splitView.subviews[targetSubviewIndex].bounds.width != notificationSourceSplitView.subviews[targetSubviewIndex].bounds.width else {
@@ -108,12 +157,30 @@ final class SessionsSplitViewController: NSSplitViewController {
     override func splitViewDidResizeSubviews(_ notification: Notification) {
         guard isResizingSplitView == false else { return }
         guard setupDone else { return }
+        // Don't broadcast a width sync for a collapse/expand; collapse state has its own sync.
+        guard !sidebarItem.isCollapsed else { return }
 
         // This notification should only be posted in response to user input
         NotificationCenter.default.post(name: .sideBarSizeSyncNotification, object: splitView, userInfo: nil)
+    }
+
+    /// Mirrors a collapse/expand performed in another tab's split view onto this one.
+    private func applyCollapseSync(notification: Notification) {
+        // The split view item only exists once this tab's view has loaded. A not-yet-loaded
+        // tab will adopt the shared state via windowController.sidebarState.collapsed in viewWillAppear.
+        guard let sidebarItem else { return }
+        guard let sourceSplitView = notification.object as? NSSplitView, sourceSplitView !== splitView else { return }
+        guard let collapsed = notification.userInfo?["collapsed"] as? Bool else { return }
+        guard sidebarItem.isCollapsed != collapsed else { return }
+
+        // The inactive tab isn't visible, so apply directly without animation.
+        isSyncingCollapse = true
+        sidebarItem.isCollapsed = collapsed
+        isSyncingCollapse = false
     }
 }
 
 extension Notification.Name {
     public static let sideBarSizeSyncNotification = NSNotification.Name("WWDCSplitViewSizeSyncNotification")
+    public static let sideBarCollapseSyncNotification = NSNotification.Name("WWDCSidebarCollapseSyncNotification")
 }

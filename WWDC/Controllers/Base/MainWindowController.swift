@@ -23,6 +23,9 @@ enum MainWindowTab: Int, WWDCTab {
     }
 
     var hidesWindowTitleBar: Bool { self == .explore }
+
+    /// Whether this tab shows the collapsible session-list sidebar.
+    var hasSidebar: Bool { self == .schedule || self == .videos }
 }
 
 extension Notification.Name {
@@ -41,7 +44,14 @@ final class MainWindowController: WWDCWindowController {
         return NSScreen.main?.visibleFrame.insetBy(dx: 50, dy: 120) ??
                NSRect(x: 0, y: 0, width: 1200, height: 600)
     }
-    public var sidebarInitWidth: CGFloat?
+
+    /// Shared, session-only sidebar layout state so both tabs agree and a
+    /// lazily-loaded tab adopts the current state. Not persisted across launches.
+    struct SidebarState {
+        var initialWidth: CGFloat?
+        var collapsed = false
+    }
+    var sidebarState = SidebarState()
 
     override func loadWindow() {
         let mask: NSWindow.StyleMask = [.titled, .resizable, .miniaturizable, .closable, .fullSizeContentView]
